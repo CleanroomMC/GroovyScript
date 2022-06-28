@@ -60,6 +60,9 @@ repositories {
     maven {
         url = 'https://repo.spongepowered.org/maven'
     }
+	maven {
+		url = 'https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all'
+	}
 }
 
 dependencies {
@@ -70,7 +73,8 @@ dependencies {
 	if (project.use_mixins.toBoolean()) {
 		deobfCompile 'zone.rong:mixinbooter:4.2'
     }
-	
+
+	compile 'org.codehaus.groovy:groovy-all:3.0.11'
 }
 
 sourceSets {
