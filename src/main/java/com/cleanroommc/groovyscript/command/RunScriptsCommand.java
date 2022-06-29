@@ -1,35 +1,33 @@
 package com.cleanroommc.groovyscript.command;
 
-import com.cleanroommc.groovyscript.GroovyScript;
-import groovy.util.ResourceException;
-import groovy.util.ScriptException;
+import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
-import java.io.IOException;
+import javax.annotation.Nonnull;
 
 public class RunScriptsCommand extends CommandBase {
 
     @Override
+    @Nonnull
     public String getName() {
         return "run";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    @Nonnull
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "/gs run";
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        try {
-            GroovyScript.runScript();
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
+        if (SandboxRunner.run()) {
             sender.sendMessage(new TextComponentString("Successfully ran scripts"));
-        } catch (IOException | ScriptException | ResourceException e) {
-            e.printStackTrace();
+        } else {
             sender.sendMessage(new TextComponentString("Error executing scripts!"));
         }
     }
