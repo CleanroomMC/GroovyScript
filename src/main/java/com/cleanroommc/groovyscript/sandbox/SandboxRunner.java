@@ -26,17 +26,18 @@ public class SandboxRunner {
         try {
             runScript();
             return true;
-        } catch (SandboxSecurityException e) {
-            GroovyScript.LOGGER.error(e.getMessage());
+        } catch (IOException | ScriptException | ResourceException e) {
+            GroovyLog.LOG.error("An Exception occurred trying to run groovy!");
+            e.printStackTrace();
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
+            GroovyLog.LOG.exception(e);
             return false;
         }
     }
 
     public static void runScript() throws IOException, ScriptException, ResourceException, SandboxSecurityException {
-        GroovyScript.LOGGER.info("Running scripts");
+        GroovyLog.LOG.info("Running scripts");
         URL[] urls = getURLs();
         GroovyScript.LOGGER.info("URLs: {}", Arrays.toString(urls));
         GroovyScriptEngine engine = new GroovyScriptEngine(urls);
@@ -47,7 +48,7 @@ public class SandboxRunner {
         Binding binding = new Binding();
 
         for (File file : getStartupFiles()) {
-            GroovyScript.LOGGER.info(" - executing {}", file.toString());
+            GroovyLog.LOG.info(" - executing %s", file.toString());
             engine.run(file.toString(), binding);
         }
     }
