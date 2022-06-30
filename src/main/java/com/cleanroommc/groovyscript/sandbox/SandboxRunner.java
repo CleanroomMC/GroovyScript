@@ -93,7 +93,7 @@ public class SandboxRunner {
     public static String relativizeSource(String source) {
         try {
             Path path = Paths.get(new URL(source).toURI());
-            Path mainPath = new File(GroovyScript.scriptPath).toPath().getParent();
+            Path mainPath = new File(GroovyScript.scriptPath).toPath();
             return mainPath.relativize(path).toString();
         } catch (URISyntaxException | MalformedURLException e) {
             GroovyLog.LOG.error("Error parsing script source '%s'", source);

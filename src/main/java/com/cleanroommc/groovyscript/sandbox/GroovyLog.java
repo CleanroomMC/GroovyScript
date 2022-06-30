@@ -4,6 +4,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.kohsuke.groovy.sandbox.impl.Checker;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,29 +45,95 @@ public class GroovyLog {
         }
     }
 
+    /**
+     * Logs a info msg to the groovy log AND Minecraft's log
+     *
+     * @param msg  message
+     * @param args arguments
+     */
+    public void infoMC(String msg, Object... args) {
+        info(msg, args);
+        logger.info(msg, args);
+    }
+
+    /**
+     * Logs a info msg to the groovy log
+     *
+     * @param msg  message
+     * @param args arguments
+     */
     public void info(String msg, Object... args) {
         String line = String.format(msg, args);
         writeLogLine(formatLine("INFO ", line));
     }
 
-    public void debug(String msg, Object... args) {
+    /**
+     * Logs a debug msg to the groovy log AND Minecraft's log
+     *
+     * @param msg  message
+     * @param args arguments
+     */
+    public void debugMC(String msg, Object... args) {
         if (debug) {
-            String line = String.format(msg, args);
-            writeLogLine(formatLine("INFO ", line));
+            debug(msg, args);
+            logger.info(msg, args);
         }
     }
 
+    /**
+     * Logs a debug msg to the groovy log
+     *
+     * @param msg  message
+     * @param args arguments
+     */
+    public void debug(String msg, Object... args) {
+        if (debug) {
+            String line = String.format(msg, args);
+            writeLogLine(formatLine("DEBUG", line));
+        }
+    }
+
+    /**
+     * Logs a warn msg to the groovy log AND Minecraft's log
+     *
+     * @param msg  message
+     * @param args arguments
+     */
+    public void warnMC(String msg, Object... args) {
+        warn(msg, args);
+        logger.warn(msg, args);
+    }
+
+    /**
+     * Logs a warn msg to the groovy log
+     *
+     * @param msg  message
+     * @param args arguments
+     */
     public void warn(String msg, Object... args) {
         String line = String.format(msg, args);
         writeLogLine(formatLine("WARN ", line));
     }
 
+    /**
+     * Logs a error msg to the groovy log AND Minecraft's log
+     *
+     * @param msg  message
+     * @param args arguments
+     */
     public void error(String msg, Object... args) {
         String line = String.format(msg, args);
         logger.error(line);
         writeLogLine(formatLine("ERROR", line));
     }
 
+    /**
+     * Logs an exception to the groovy log AND Minecraft's log.
+     * It does NOT throw the exception!
+     * The stacktrace for the groovy log will be stripped for better readability.
+     *
+     * @param throwable exception
+     */
     public void exception(Throwable throwable) {
         writeLogLine(formatLine("ERROR", throwable.toString()));
         throwable.printStackTrace();
@@ -93,7 +160,15 @@ public class GroovyLog {
     }
 
     private String formatLine(String level, String msg) {
-        return timeFormat.format(new Date()) + " " + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? "[CLIENT]" : "[SERVER]") + " [" + level + "] " + msg;
+        return timeFormat.format(new Date()) + " [" + getSource() + "] " + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? "[CLIENT]" : "[SERVER]") + " [" + level + "] " + msg;
+    }
+
+    private String getSource() {
+        String source = Checker.getSource();
+        if (source == Checker.UNKNOWN_SOURCE) {
+            return Loader.instance().activeModContainer().getModId();
+        }
+        return SandboxRunner.relativizeSource(source) + ":" + Checker.getLineNumber();
     }
 
     private void writeLogLine(String line) {

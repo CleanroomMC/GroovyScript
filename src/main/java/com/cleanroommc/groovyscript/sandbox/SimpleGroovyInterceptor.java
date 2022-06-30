@@ -4,6 +4,8 @@ import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 
+import java.util.Arrays;
+
 public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     public static void makeSureExists() {
@@ -19,6 +21,13 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onMethodCall(Invoker invoker, Object receiver, String method, Object... args) throws Throwable {
+        if (method.equals("print") || method.equals("println") || method.equals("printf")) {
+            Object msg = args.length == 0 ? "" : args[0];
+            Object[] args2 = args.length < 2 ? new Object[0] : Arrays.copyOfRange(args, 1, args.length);
+            GroovyLog.LOG.info(msg.toString(), args2);
+            return null;
+        }
+
         if (!InterceptionManager.INSTANCE.isValid(receiver.getClass(), method)) {
             throw SandboxSecurityException.format("Prohibited method call on class '" + receiver.getClass().getName() + "'!");
         }

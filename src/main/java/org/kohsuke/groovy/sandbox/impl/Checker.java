@@ -28,12 +28,13 @@ import static org.kohsuke.groovy.sandbox.impl.ClosureSupport.BUILTIN_PROPERTIES;
  */
 public class Checker {
 
+    public static final String UNKNOWN_SOURCE = "Unknown";
     private static final ThreadLocal<String> sourceVar = new ThreadLocal<>();
     private static final ThreadLocal<Integer> lineNumberVar = new ThreadLocal<>();
 
     public static String getSource() {
         String source;
-        return (source = sourceVar.get()) == null ? "Unknown" : source;
+        return (source = sourceVar.get()) == null ? UNKNOWN_SOURCE : source;
     }
 
     public static int getLineNumber() {
