@@ -10,8 +10,8 @@ public class InterceptionManager {
     public static final InterceptionManager INSTANCE = new InterceptionManager();
 
     private final List<String> bannedPackages = new ArrayList<>();
-    private final Set<String> bannedClasses = new HashSet<>();
-    private final Map<String, Set<String>> bannedMethods = new HashMap<>();
+    private final Set<Class<?>> bannedClasses = new HashSet<>();
+    private final Map<Class<?>, Set<String>> bannedMethods = new HashMap<>();
 
     private static final Logger LOG = LogManager.getLogger("GroovySecurity");
 
@@ -37,7 +37,7 @@ public class InterceptionManager {
     }
 
     public void banClass(Class<?> clazz) {
-        bannedClasses.add(clazz.getName());
+        bannedClasses.add(clazz);
     }
 
     public void banClasses(Class<?>... classes) {
@@ -51,41 +51,31 @@ public class InterceptionManager {
     }
 
     public void banMethods(Class<?> clazz, Collection<String> method) {
-        bannedMethods.computeIfAbsent(clazz.getName(), key -> new HashSet<>()).addAll(method);
+        bannedMethods.computeIfAbsent(clazz, key -> new HashSet<>()).addAll(method);
     }
 
-    public boolean isValid(String className) {
+    public boolean isValid(Class<?> clazz, String methodName) {
+        return isValidPackage(clazz) &&
+                isValidClass(clazz) &&
+                isValidMethod(clazz, methodName);
+    }
+
+    public boolean isValidPackage(Class<?> clazz) {
+        String className = clazz.getName();
         for (String bannedPackage : bannedPackages) {
             if (className.startsWith(bannedPackage)) {
-                LOG.error("Calls to classes from the '{}' package are prohibited!", bannedPackage);
                 return false;
             }
-        }
-
-        if (bannedClasses.contains(className)) {
-            LOG.error("Calls to the class '{}' are prohibited!", className);
-            return false;
         }
         return true;
     }
 
-    public boolean isValid(String sourceName, int lineNumber, String className, String methodName, boolean isGroovyObject) throws SandboxSecurityException {
-        for (String bannedPackage : bannedPackages) {
-            if (className.startsWith(bannedPackage)) {
-                LOG.error("Calls to classes from the '{}' package are prohibited!", bannedPackage);
-                return false;
-            }
-        }
+    public boolean isValidClass(Class<?> clazz) {
+        return !bannedClasses.contains(clazz);
+    }
 
-        if (bannedClasses.contains(className)) {
-            LOG.error("Calls to the class '{}' are prohibited!", className);
-            return false;
-        }
-
-        Set<String> methods = bannedMethods.get(className);
-
-        if (methods == null || !methods.contains(methodName)) return true;
-        LOG.error("Calls to the method '{}' in class '{}' are prohibited!", methodName, className);
-        return false;
+    public boolean isValidMethod(Class<?> receiver, String method) {
+        Set<String> methods = bannedMethods.get(receiver);
+        return methods == null || !methods.contains(method);
     }
 }

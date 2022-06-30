@@ -3,11 +3,13 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import groovy.lang.Binding;
+import groovy.lang.Closure;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
 import net.minecraft.client.Minecraft;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.kohsuke.groovy.sandbox.SandboxTransformer;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +42,7 @@ public class SandboxRunner {
         GroovyLog.LOG.info("Running scripts");
         URL[] urls = getURLs();
         GroovyScript.LOGGER.info("URLs: {}", Arrays.toString(urls));
+        SimpleGroovyInterceptor.makeSureExists();
         GroovyScriptEngine engine = new GroovyScriptEngine(urls);
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
         config.addCompilationCustomizers(new SandboxTransformer());
@@ -90,11 +93,21 @@ public class SandboxRunner {
     public static String relativizeSource(String source) {
         try {
             Path path = Paths.get(new URL(source).toURI());
-            Path mainPath = new File(GroovyScript.scriptPath).toPath();
+            Path mainPath = new File(GroovyScript.scriptPath).toPath().getParent();
             return mainPath.relativize(path).toString();
         } catch (URISyntaxException | MalformedURLException e) {
-            e.printStackTrace();
+            GroovyLog.LOG.error("Error parsing script source '%s'", source);
             return source;
         }
+    }
+
+    public static Object runClosure(Closure<?> closure, Object... args) {
+        try {
+            SimpleGroovyInterceptor.makeSureExists();
+            return closure.call(args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

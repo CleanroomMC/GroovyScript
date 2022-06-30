@@ -1,5 +1,8 @@
 package com.cleanroommc.groovyscript.sandbox.interception;
 
+import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
+import org.kohsuke.groovy.sandbox.impl.Checker;
+
 public class SandboxSecurityException extends Exception {
 
     private static final long serialVersionUID = 1L;
@@ -8,22 +11,9 @@ public class SandboxSecurityException extends Exception {
         super(msg);
     }
 
-    public SandboxSecurityException(Type type, String target, String method) {
-        super(createMsg(type, target, method));
+    public static SandboxSecurityException format(String msg) {
+        String source = SandboxRunner.relativizeSource(Checker.getSource());
+        int line = Checker.getLineNumber();
+        return new SandboxSecurityException(msg + " in script '" + source + "' in line '" + line + "'!");
     }
-
-    private static String createMsg(Type type, String target, String method) {
-        if (type == Type.CONSTRUCTOR) {
-            return "Prohibited constructor call on class '" + target + "'!";
-        }
-        if (type == Type.CLASS) {
-            return "Prohibited class reference at '" + target + "'!";
-        }
-        return "Prohibited method call '" + method + "' on class '" + target + "'!";
-    }
-
-    public enum Type {
-        CONSTRUCTOR, METHOD, CLASS
-    }
-
 }
