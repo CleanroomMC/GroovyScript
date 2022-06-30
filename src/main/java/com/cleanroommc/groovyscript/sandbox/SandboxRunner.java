@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.event.EventHandler;
+import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
@@ -40,6 +42,7 @@ public class SandboxRunner {
 
     public static void runScript() throws IOException, ScriptException, ResourceException, SandboxSecurityException {
         GroovyLog.LOG.info("Running scripts");
+        GroovyEventManager.clearListeners();
         URL[] urls = getURLs();
         GroovyScript.LOGGER.info("URLs: {}", Arrays.toString(urls));
         SimpleGroovyInterceptor.makeSureExists();
@@ -49,6 +52,7 @@ public class SandboxRunner {
 
         engine.setConfig(config);
         Binding binding = new Binding();
+        binding.setVariable("events", new EventHandler());
 
         for (File file : getStartupFiles()) {
             GroovyLog.LOG.info(" - executing %s", file.toString());

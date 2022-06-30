@@ -1,10 +1,15 @@
 package com.cleanroommc.groovyscript.sandbox;
 
+import com.cleanroommc.groovyscript.event.EventHandler;
+import com.cleanroommc.groovyscript.event.GroovyEvent;
+import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
+import groovy.lang.Closure;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
@@ -28,6 +33,15 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
             return null;
         }
 
+        if (receiver.getClass() == EventHandler.class && args.length >= 1 && args[0] instanceof Closure) {
+            GroovyEventManager.registerListener("", method, (Closure<Object>) args[0]);
+            return null;
+        }
+        if (receiver instanceof GroovyEvent.Group && args.length >= 1 && args[0] instanceof Closure) {
+            ((GroovyEvent.Group) receiver).registerListener(method, (Closure<Object>) args[0]);
+            return null;
+        }
+
         if (!InterceptionManager.INSTANCE.isValid(receiver.getClass(), method)) {
             throw SandboxSecurityException.format("Prohibited method call on class '" + receiver.getClass().getName() + "'!");
         }
@@ -48,5 +62,17 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
             throw SandboxSecurityException.format("Prohibited static method call on class '" + receiver.getName() + "'!");
         }
         return super.onStaticCall(invoker, receiver, method, args);
+    }
+
+    @Override
+    public Object onGetProperty(Invoker invoker, Object receiver, String property) throws Throwable {
+        if (receiver.getClass() == EventHandler.class) {
+            GroovyEvent.Group group = GroovyEventManager.getEventGroup(property);
+            if (group == null) {
+                throw new NoSuchElementException("There is no such event group '" + property + "'!");
+            }
+            return group;
+        }
+        return super.onGetProperty(invoker, receiver, property);
     }
 }
