@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript;
 
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.event.Events;
+import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -28,6 +29,7 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
+        NetworkHandler.init();
         scriptPath = Loader.instance().getConfigDir().toPath().getParent().toString() + "/scripts";
         startupPath = new File(scriptPath + "/startup");
         Events.init();
