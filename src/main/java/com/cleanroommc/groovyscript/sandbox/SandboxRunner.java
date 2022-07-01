@@ -12,6 +12,9 @@ import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.kohsuke.groovy.sandbox.SandboxTransformer;
 
@@ -44,6 +47,7 @@ public class SandboxRunner {
 
     public static void runScript() throws IOException, ScriptException, ResourceException, SandboxSecurityException {
         GroovyLog.LOG.info("Running scripts");
+        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         GroovyEventManager.clearListeners();
         ReloadableRegistryManager.onReload();
         URL[] urls = getURLs();
@@ -62,6 +66,7 @@ public class SandboxRunner {
             GroovyLog.LOG.info(" - executing %s", file.toString());
             engine.run(file.toString(), binding);
         }
+        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
     }
 
     private static File[] getStartupFiles() throws IOException {
