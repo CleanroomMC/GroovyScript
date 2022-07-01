@@ -1,10 +1,8 @@
 package org.kohsuke.groovy.sandbox.impl;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.BracketHandler;
-import com.cleanroommc.groovyscript.api.Recipes;
+import com.cleanroommc.groovyscript.api.wrapper.ItemStack;
 import groovy.lang.*;
-import net.minecraft.item.ItemStack;
 import org.codehaus.groovy.classgen.asm.BinaryExpressionHelper;
 import org.codehaus.groovy.reflection.ParameterTypes;
 import org.codehaus.groovy.runtime.InvokerHelper;
@@ -683,6 +681,10 @@ public class Checker {
      * @see BinaryExpressionHelper#evaluateBinaryExpressionWithAssignment
      */
     public static Object checkedBinaryOp(Object lhs, int op, Object rhs) throws Throwable {
+        if (lhs instanceof ItemStack && op == Types.MULTIPLY && rhs instanceof Integer) {
+            ((ItemStack) lhs).setCount((Integer) rhs);
+            return lhs;
+        }
         return checkedCall(lhs, false, false, Ops.binaryOperatorMethods(op), new Object[]{rhs});
     }
 
