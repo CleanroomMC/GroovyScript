@@ -1,5 +1,7 @@
 package org.kohsuke.groovy.sandbox;
 
+import com.cleanroommc.groovyscript.GroovyScript;
+import com.google.common.base.Joiner;
 import groovy.lang.Script;
 import org.codehaus.groovy.GroovyBugError;
 import org.codehaus.groovy.ast.*;
@@ -391,6 +393,13 @@ public class SandboxTransformer extends CompilationCustomizer {
         }
 
         private Expression innerTransform(Expression exp) {
+            if(exp instanceof ConstantExpression && ((ConstantExpression) exp).getValue() instanceof String) {
+                return makeCheckedCall("checkedString",
+                        constExp(((ConstantExpression) exp).getValue()),
+                        constExp(sourceUnit.getName()),
+                        constExp(exp.getLineNumber()));
+            }
+
             if (exp instanceof ClosureExpression) {
                 // ClosureExpression.transformExpression doesn't visit the code inside
                 ClosureExpression ce = (ClosureExpression) exp;

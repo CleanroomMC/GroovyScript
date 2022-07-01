@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript;
 
+import com.cleanroommc.groovyscript.api.BracketHandler;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.event.Events;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
@@ -33,6 +34,7 @@ public class GroovyScript {
         scriptPath = Loader.instance().getConfigDir().toPath().getParent().toString() + "/scripts";
         startupPath = new File(scriptPath + "/startup");
         Events.init();
+        BracketHandler.init();
     }
 
     @Mod.EventHandler

@@ -66,6 +66,10 @@ repositories {
     maven {
         url 'https://dvs1.progwml6.com/files/maven/'
     }
+    maven {
+        name = "CurseForge"
+        url = 'https://www.cursemaven.com'
+    }
 }
 
 dependencies {
@@ -81,6 +85,7 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:3.0.11'
 
     compile 'mezz.jei:jei_1.12.2:4.16.1.302'
+    compile 'curse.maven:crafttweaker-239197:3523955'
 }
 
 sourceSets {

@@ -1,6 +1,10 @@
 package org.kohsuke.groovy.sandbox.impl;
 
+import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.BracketHandler;
+import com.cleanroommc.groovyscript.api.Recipes;
 import groovy.lang.*;
+import net.minecraft.item.ItemStack;
 import org.codehaus.groovy.classgen.asm.BinaryExpressionHelper;
 import org.codehaus.groovy.reflection.ParameterTypes;
 import org.codehaus.groovy.runtime.InvokerHelper;
@@ -354,6 +358,17 @@ public class Checker {
                 throw new SecurityException("Rejecting unexpected invocation of constructor: " + c + ". Expected to invoke synthetic constructor: " + expectedConstructor);
             }
         }
+    }
+
+    public static Object checkedString(String s, String source, int line) {
+        sourceVar.set(source);
+        lineNumberVar.set(line);
+
+        Object result = BracketHandler.handleBracket(s);
+
+        sourceVar.set(null);
+        lineNumberVar.set(null);
+        return result;
     }
 
     public static Object checkedGetProperty(final Object _receiver, boolean safe, boolean spread, Object _property, String source, int line) throws Throwable {
