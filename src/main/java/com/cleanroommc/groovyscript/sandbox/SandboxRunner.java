@@ -12,10 +12,9 @@ import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.kohsuke.groovy.sandbox.SandboxClassInjector;
 import org.kohsuke.groovy.sandbox.SandboxTransformer;
 
 import java.io.File;
@@ -26,10 +25,14 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Arrays;
 import java.util.Objects;
 
 public class SandboxRunner {
+
+    private static final ClassLoader CLASS_LOADER = AccessController.doPrivileged((PrivilegedAction<ClassLoader>) AliasClassLoader::create);
 
     public static boolean run() {
         try {
@@ -53,9 +56,9 @@ public class SandboxRunner {
         URL[] urls = getURLs();
         GroovyScript.LOGGER.info("URLs: {}", Arrays.toString(urls));
         SimpleGroovyInterceptor.makeSureExists();
-        GroovyScriptEngine engine = new GroovyScriptEngine(urls);
+        GroovyScriptEngine engine = new GroovyScriptEngine(urls, CLASS_LOADER);
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
-        config.addCompilationCustomizers(new SandboxTransformer());
+        config.addCompilationCustomizers(new SandboxTransformer(), new SandboxClassInjector());
 
         engine.setConfig(config);
         Binding binding = new Binding();
