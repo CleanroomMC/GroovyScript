@@ -29,7 +29,7 @@ public class BracketHandler {
     public static void init() {
         registerBracketHandler(s -> {
             try {
-                return new com.cleanroommc.groovyscript.api.wrapper.ItemStack(getItemStack(s));
+                return new com.cleanroommc.groovyscript.wrapper.ItemStack(getItemStack(s));
             } catch (Exception e) {
                 return null;
             }

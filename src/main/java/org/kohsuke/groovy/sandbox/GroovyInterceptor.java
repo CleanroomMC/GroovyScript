@@ -31,28 +31,28 @@ public abstract class GroovyInterceptor {
      * method calls whose receivers are {@link Class} can invoke static methods, too
      * (that is, {@code x=Integer.class;x.valueOf(5)} results in {@code onMethodCall(invoker,Integer.class,"valueOf",5)}
      */
-    public Object onStaticCall(Invoker invoker, Class receiver, String method, Object... args) throws Throwable {
+    public Object onStaticCall(Invoker invoker, Class<?> receiver, String method, Object... args) throws Throwable {
         return invoker.call(receiver,method,args);
     }
 
     /**
      * Intercepts an object instantiation, like "new Receiver(...)"
      */
-    public Object onNewInstance(Invoker invoker, Class receiver, Object... args) throws Throwable {
+    public Object onNewInstance(Invoker invoker, Class<?> receiver, Object... args) throws Throwable {
         return invoker.call(receiver,null,args);
     }
 
     /**
      * Intercepts an super method call, like "super.foo(...)"
      */
-    public Object onSuperCall(Invoker invoker, Class senderType, Object receiver, String method, Object... args) throws Throwable {
+    public Object onSuperCall(Invoker invoker, Class<?> senderType, Object receiver, String method, Object... args) throws Throwable {
         return invoker.call(new Super(senderType,receiver),method,args);
     }
 
     /**
      * Intercepts a {@code super(…)} call from a constructor.
      */
-    public void onSuperConstructor(Invoker invoker, Class receiver, Object... args) throws Throwable {
+    public void onSuperConstructor(Invoker invoker, Class<?> receiver, Object... args) throws Throwable {
         onNewInstance(invoker, receiver, args);
     }
 

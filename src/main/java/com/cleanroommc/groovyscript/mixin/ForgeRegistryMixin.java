@@ -43,7 +43,8 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     @Shadow
     public abstract V getValue(ResourceLocation key);
 
-    @Shadow private boolean isFrozen;
+    @Shadow
+    boolean isFrozen;
     @Unique
     private Set<ResourceLocation> removedEntries;
     @Unique

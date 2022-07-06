@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.mixin.JeiProxyAccessor;
 import com.cleanroommc.groovyscript.mixin.RegistryManagerAccessor;
 import mezz.jei.JustEnoughItems;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,6 +38,10 @@ public class ReloadableRegistryManager {
         ((IReloadableForgeRegistry<V>) registry).registerReloadableEntry(value);
     }
 
+    public static <V extends IForgeRegistryEntry<V>> void removeEntry(IForgeRegistry<V> registry, ResourceLocation rl) {
+        ((IReloadableForgeRegistry<V>) registry).removeEntry(rl);
+    }
+
     /**
      * Registers a reloadable recipe
      *
@@ -44,6 +49,10 @@ public class ReloadableRegistryManager {
      */
     public static void registerRecipe(IRecipe recipe) {
         registerEntry(ForgeRegistries.RECIPES, recipe);
+    }
+
+    public static void removeRecipe(String name) {
+        removeEntry(ForgeRegistries.RECIPES, new ResourceLocation(name));
     }
 
     /**
