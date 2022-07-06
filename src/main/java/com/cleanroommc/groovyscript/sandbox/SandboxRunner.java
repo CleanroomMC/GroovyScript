@@ -1,20 +1,22 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.api.Recipes;
+import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
+import com.cleanroommc.groovyscript.wrapper.Recipes;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import org.codehaus.groovy.control.CompilerConfiguration;
-import org.kohsuke.groovy.sandbox.SandboxClassInjector;
 import org.kohsuke.groovy.sandbox.SandboxTransformer;
 
 import java.io.File;
@@ -25,14 +27,41 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class SandboxRunner {
 
-    private static final ClassLoader CLASS_LOADER = AccessController.doPrivileged((PrivilegedAction<ClassLoader>) AliasClassLoader::create);
+    private static final Pattern packagePattern = Pattern.compile("[a-zA-Z_]+[a-zA-Z0-9_$]*(.[a-zA-Z_]+[a-zA-Z0-9_$]*)*");
+    private static URL[] scriptEnvironment;
+
+    public static void init() {
+        scriptEnvironment = new URL[1];
+        try {
+            scriptEnvironment[0] = new File(GroovyScript.scriptPath).toURI().toURL();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        for (ModContainer modContainer : Loader.instance().getActiveModList()) {
+            Object mod = modContainer.getMod();
+            if (mod instanceof IGroovyEnvironmentRegister) {
+                IGroovyEnvironmentRegister environmentRegister = (IGroovyEnvironmentRegister) mod;
+                for (Class<?> clazz : environmentRegister.getBannedClasses()) {
+                    InterceptionManager.INSTANCE.banClass(clazz);
+                }
+                for (String package0 : environmentRegister.getBannedPackages()) {
+                    InterceptionManager.INSTANCE.banPackage(package0);
+                }
+                for (Map.Entry<Class<?>, Collection<String>> entry : environmentRegister.getBannedMethods().entrySet()) {
+                    InterceptionManager.INSTANCE.banMethods(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+    }
 
     public static boolean run() {
         try {
@@ -50,21 +79,23 @@ public class SandboxRunner {
 
     public static void runScript() throws IOException, ScriptException, ResourceException, SandboxSecurityException {
         GroovyLog.LOG.info("Running scripts");
+        // prepare script running
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         GroovyEventManager.clearListeners();
         ReloadableRegistryManager.onReload();
-        URL[] urls = getURLs();
-        GroovyScript.LOGGER.info("URLs: {}", Arrays.toString(urls));
         SimpleGroovyInterceptor.makeSureExists();
-        GroovyScriptEngine engine = new GroovyScriptEngine(urls, CLASS_LOADER);
-        CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
-        config.addCompilationCustomizers(new SandboxTransformer(), new SandboxClassInjector());
 
+        GroovyScript.LOGGER.info("Script environments: {}", Arrays.toString(scriptEnvironment));
+        // initialise script engine
+        GroovyScriptEngine engine = new GroovyScriptEngine(scriptEnvironment);
+        CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
+        config.addCompilationCustomizers(new SandboxTransformer());
         engine.setConfig(config);
         Binding binding = new Binding();
         binding.setVariable("events", new EventHandler());
         binding.setVariable("recipes", new Recipes());
 
+        // find and run scripts
         for (File file : getStartupFiles()) {
             GroovyLog.LOG.info(" - executing %s", file.toString());
             engine.run(file.toString(), binding);
@@ -86,19 +117,21 @@ public class SandboxRunner {
         return Arrays.stream(files).map(file -> mainPath.relativize(file.toPath()).toFile()).toArray(File[]::new);
     }
 
-    public static URL[] getURLs() throws MalformedURLException {
-        return new URL[]{
-                new File(GroovyScript.scriptPath).toURI().toURL(),
-                getBasePathFor(GroovyScript.class),
-                getBasePathFor(Minecraft.class)
-        };
+    public static URL getBasePathFor(Class<?> clazz) throws MalformedURLException {
+        return getBasePathFor(clazz, null);
     }
 
-    public static URL getBasePathFor(Class<?> clazz) throws MalformedURLException {
-        String className = clazz.getName().replace(".", "/") + ".class";
+    public static URL getBasePathFor(Class<?> clazz, String subPackage) throws MalformedURLException {
+        if (subPackage != null && !clazz.getName().startsWith(subPackage)) {
+            throw new MalformedURLException("The class must exist in the given package!");
+        }
+        String className = clazz.getName().replace('.', '/') + ".class";
         ClassLoader loader = clazz.getClassLoader();
         String url = Objects.requireNonNull(loader.getResource(className)).toString();
         url = url.substring(0, url.indexOf(className));
+        if (subPackage != null) {
+            url += subPackage.replace('.', '/') + "/";
+        }
         return new URL(url);
     }
 

@@ -1,8 +1,19 @@
 package com.cleanroommc.groovyscript.sandbox.interception;
 
+import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.sandbox.SimpleGroovyInterceptor;
+import groovy.lang.GroovySystem;
+import groovy.lang.MetaClass;
+import groovy.lang.MetaClassImpl;
+import groovy.lang.MetaMethod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.codehaus.groovy.reflection.CachedMethod;
+import org.codehaus.groovy.runtime.metaclass.ReflectionMetaMethod;
 
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class InterceptionManager {
@@ -71,11 +82,65 @@ public class InterceptionManager {
     }
 
     public boolean isValidClass(Class<?> clazz) {
-        return !bannedClasses.contains(clazz);
+        return !bannedClasses.contains(clazz) && !isBlacklistedClass(clazz);
     }
 
     public boolean isValidMethod(Class<?> receiver, String method) {
         Set<String> methods = bannedMethods.get(receiver);
         return methods == null || !methods.contains(method);
+    }
+
+    public boolean isBlacklistedClass(Class<?> receiver) {
+        return receiver.isAnnotationPresent(GroovyBlacklist.class);
+    }
+
+    public boolean isBlacklistedMethod(Class<?> receiver, String method, Object... args) {
+        AnnotatedElement method1 = findMethod(receiver, method, args);
+        if (method1 == null) {
+            GroovyScript.LOGGER.error("Could not find method {} in {}", method, receiver.getName());
+        }
+        return method1 != null && method1.isAnnotationPresent(GroovyBlacklist.class);
+    }
+
+    public boolean isBlacklistedField(Class<?> receiver, String field) throws NoSuchFieldException {
+        Field field1 = receiver.getField(field);
+        return field1.isAnnotationPresent(GroovyBlacklist.class);
+    }
+
+    private static Class<?>[] argsToClassArray(Object... args) {
+        Class<?>[] types = new Class[args.length];
+        for (int i = 0; i < args.length; i++) {
+            types[i] = args[i].getClass();
+        }
+        return types;
+    }
+
+    private AnnotatedElement findMethod(Class<?> receiver, String methodName, Object[] args) {
+        MetaClass metaClass = GroovySystem.getMetaClassRegistry().getMetaClass(receiver);
+        MetaMethod method;
+        if (methodName.equals(SimpleGroovyInterceptor.CONSTRUCTOR_METHOD)) {
+            if (metaClass instanceof MetaClassImpl) {
+                method = ((MetaClassImpl) metaClass).retrieveConstructor(args);
+                if (method instanceof MetaClassImpl.MetaConstructor) {
+                    return ((MetaClassImpl.MetaConstructor) method).getCachedConstrcutor().getCachedConstructor();
+                }
+            }
+            return null;
+        }
+        method = metaClass.getMetaMethod(methodName, args);
+        if (method == null) {
+            method = metaClass.getStaticMetaMethod(methodName, args);
+        }
+        if (method == null) {
+            return null;
+        }
+
+        while (method instanceof ReflectionMetaMethod) {
+            method = ((ReflectionMetaMethod) method).getCachedMethod();
+        }
+        if (method instanceof CachedMethod) {
+            return ((CachedMethod) method).getCachedMethod();
+        }
+        return null;
     }
 }

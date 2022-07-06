@@ -13,6 +13,8 @@ import java.util.NoSuchElementException;
 
 public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
+    public static final String CONSTRUCTOR_METHOD = "<init>";
+
     public static void makeSureExists() {
         if (!getApplicableInterceptors().isEmpty()) {
             for (GroovyInterceptor interceptor : getApplicableInterceptors()) {
@@ -42,24 +44,24 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
             return null;
         }
 
-        if (!InterceptionManager.INSTANCE.isValid(receiver.getClass(), method)) {
-            throw SandboxSecurityException.format("Prohibited method call on class '" + receiver.getClass().getName() + "'!");
+        if (!InterceptionManager.INSTANCE.isValid(receiver.getClass(), method) || InterceptionManager.INSTANCE.isBlacklistedMethod(receiver.getClass(), method, args)) {
+            throw SandboxSecurityException.format("Prohibited method call '" + method + "' on class '" + receiver.getClass().getName() + "'!");
         }
         return super.onMethodCall(invoker, receiver, method, args);
     }
 
     @Override
-    public Object onNewInstance(Invoker invoker, Class receiver, Object... args) throws Throwable {
-        if (!InterceptionManager.INSTANCE.isValid(receiver, "<init>")) {
+    public Object onNewInstance(Invoker invoker, Class<?> receiver, Object... args) throws Throwable {
+        if (!InterceptionManager.INSTANCE.isValid(receiver, CONSTRUCTOR_METHOD) || InterceptionManager.INSTANCE.isBlacklistedMethod(receiver, CONSTRUCTOR_METHOD, args)) {
             throw SandboxSecurityException.format("Prohibited constructor call on class '" + receiver.getName() + "'!");
         }
         return super.onNewInstance(invoker, receiver, args);
     }
 
     @Override
-    public Object onStaticCall(Invoker invoker, Class receiver, String method, Object... args) throws Throwable {
-        if (!InterceptionManager.INSTANCE.isValid(receiver, method)) {
-            throw SandboxSecurityException.format("Prohibited static method call on class '" + receiver.getName() + "'!");
+    public Object onStaticCall(Invoker invoker, Class<?> receiver, String method, Object... args) throws Throwable {
+        if (!InterceptionManager.INSTANCE.isValid(receiver, method) || InterceptionManager.INSTANCE.isBlacklistedMethod(receiver, method, args)) {
+            throw SandboxSecurityException.format("Prohibited static method call '" + method + "' on class '" + receiver.getName() + "'!");
         }
         return super.onStaticCall(invoker, receiver, method, args);
     }

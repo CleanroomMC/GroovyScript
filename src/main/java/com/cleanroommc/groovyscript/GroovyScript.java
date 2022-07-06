@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript;
 
 import com.cleanroommc.groovyscript.api.BracketHandler;
+import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.event.Events;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
@@ -14,10 +15,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 
 @Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION)
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
-public class GroovyScript {
+public class GroovyScript implements IGroovyEnvironmentRegister {
 
     public static final String ID = "groovyscript";
     public static final String NAME = "GroovyScript";
@@ -33,6 +36,7 @@ public class GroovyScript {
         NetworkHandler.init();
         scriptPath = Loader.instance().getConfigDir().toPath().getParent().toString() + "/scripts";
         startupPath = new File(scriptPath + "/startup");
+        SandboxRunner.init();
         Events.init();
         BracketHandler.init();
     }
@@ -45,5 +49,16 @@ public class GroovyScript {
     @Mod.EventHandler
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new GSCommand());
+    }
+
+    @Override
+    public Collection<String> getBannedPackages() {
+        return Arrays.asList(
+                "com.cleanroommc.groovyscript.api",
+                "com.cleanroommc.groovyscript.command",
+                "com.cleanroommc.groovyscript.mixin",
+                "com.cleanroommc.groovyscript.registry",
+                "com.cleanroommc.groovyscript.sandbox"
+        );
     }
 }
