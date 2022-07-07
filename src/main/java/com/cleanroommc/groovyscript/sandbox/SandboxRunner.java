@@ -4,10 +4,10 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
+import com.cleanroommc.groovyscript.helper.recipe.CraftingRecipeHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
-import com.cleanroommc.groovyscript.wrapper.Recipes;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
 import groovy.util.GroovyScriptEngine;
@@ -93,7 +93,7 @@ public class SandboxRunner {
         engine.setConfig(config);
         Binding binding = new Binding();
         binding.setVariable("events", new EventHandler());
-        binding.setVariable("recipes", new Recipes());
+        binding.setVariable("recipes", new CraftingRecipeHelper());
 
         // find and run scripts
         for (File file : getStartupFiles()) {

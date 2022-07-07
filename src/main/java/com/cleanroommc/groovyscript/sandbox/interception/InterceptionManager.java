@@ -49,6 +49,7 @@ public class InterceptionManager {
         banClasses(Runtime.class, ClassLoader.class);
         banMethods(System.class, "exit");
         banMethods(System.class, "gc");
+        // TODO wrap and/or ban Minecraft and MinecraftServer
     }
 
     public void banPackage(String packageName) {
