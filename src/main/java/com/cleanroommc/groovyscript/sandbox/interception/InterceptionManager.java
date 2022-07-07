@@ -39,8 +39,16 @@ public class InterceptionManager {
         banPackage("java.rmi");
         banPackage("java.security");
         banPackage("groovy");
+        banPackage("org.codehaus.groovy");
+        banPackage("sun"); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
+        banPackage("javax.net");
+        banPackage("javax.security");
+        banPackage("javax.script");
+        banPackage("org.spongepowered");
+        banPackage("zone.rong.mixinbooter");
         banClasses(Runtime.class, ClassLoader.class);
         banMethods(System.class, "exit");
+        banMethods(System.class, "gc");
     }
 
     public void banPackage(String packageName) {
