@@ -19,9 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.BitSet;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Mixin(value = ForgeRegistry.class, remap = false)
 public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> implements IReloadableForgeRegistry<V> {
@@ -53,6 +51,8 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     private BiMap<ResourceLocation, V> namesBackup;
     @Unique
     private BitSet availabilityMapBackup;
+    @Unique
+    private List<V> reloadableEntries;
 
     private boolean isReloadableEntry = false;
 
@@ -74,6 +74,7 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
         idsBackup = HashBiMap.create();
         namesBackup = HashBiMap.create();
         availabilityMapBackup = new BitSet();
+        reloadableEntries = new ArrayList<>();
     }
 
     @Override
@@ -85,6 +86,7 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
         names.putAll(namesBackup);
         availabilityMap.clear();
         availabilityMap.or(availabilityMapBackup);
+        reloadableEntries.clear();
     }
 
     @Override
@@ -105,6 +107,11 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
         }
     }
 
+    @Override
+    public List<V> getReloadableEntries() {
+        return Collections.unmodifiableList(reloadableEntries);
+    }
+
     @Inject(
             method = "add(ILnet/minecraftforge/registries/IForgeRegistryEntry;Ljava/lang/String;)I",
             locals = LocalCapture.CAPTURE_FAILSOFT,
@@ -115,6 +122,8 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
             this.namesBackup.put(key, value);
             this.idsBackup.put(idToUse, value);
             this.availabilityMapBackup.set(idToUse);
+        } else {
+            this.reloadableEntries.add(value);
         }
     }
 

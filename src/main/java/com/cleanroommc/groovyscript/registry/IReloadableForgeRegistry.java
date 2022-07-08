@@ -6,6 +6,9 @@ import net.minecraftforge.fml.common.InjectedModContainer;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Collection;
 
 public interface IReloadableForgeRegistry<V extends IForgeRegistryEntry<V>> {
 
@@ -24,4 +27,7 @@ public interface IReloadableForgeRegistry<V extends IForgeRegistryEntry<V>> {
     int addReloadableEntry(int i, V value, String owner);
 
     void removeEntry(ResourceLocation rl);
+
+    @Unmodifiable
+    Collection<V> getReloadableEntries();
 }

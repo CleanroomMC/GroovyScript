@@ -13,6 +13,9 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Collection;
 
 public class ReloadableRegistryManager {
 
@@ -40,6 +43,11 @@ public class ReloadableRegistryManager {
 
     public static <V extends IForgeRegistryEntry<V>> void removeEntry(IForgeRegistry<V> registry, ResourceLocation rl) {
         ((IReloadableForgeRegistry<V>) registry).removeEntry(rl);
+    }
+
+    @Unmodifiable
+    public static <V extends IForgeRegistryEntry<V>> Collection<V> getReloadableEntries(IForgeRegistry<V> registry) {
+        return ((IReloadableForgeRegistry<V>) registry).getReloadableEntries();
     }
 
     /**
