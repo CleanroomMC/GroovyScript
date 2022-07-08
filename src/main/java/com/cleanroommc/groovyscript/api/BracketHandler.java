@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.api;
 
 import com.cleanroommc.groovyscript.helper.recipe.ItemStack;
+import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,13 @@ public class BracketHandler {
     }
 
     public static void init() {
+        registerBracketHandler(s -> {
+            String[] parts = s.split(":");
+            if (parts.length == 2 && parts[0].equals("ore")) {
+                return new OreDictIngredient(parts[1]);
+            }
+            return null;
+        });
         registerBracketHandler(s -> {
             try {
                 return ItemStack.parse(s);
