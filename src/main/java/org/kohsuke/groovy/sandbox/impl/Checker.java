@@ -362,7 +362,10 @@ public class Checker {
         sourceVar.set(source);
         lineNumberVar.set(line);
 
-        Object result = BracketHandler.handleBracket(s);
+        Object result = s;
+        if (s.startsWith("<") && s.endsWith(">")) {
+            result = BracketHandler.handleBracket(s.substring(1, s.length() - 1));
+        }
 
         sourceVar.set(null);
         lineNumberVar.set(null);
