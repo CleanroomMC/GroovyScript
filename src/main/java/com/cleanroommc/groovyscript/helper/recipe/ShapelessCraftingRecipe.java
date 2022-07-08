@@ -18,15 +18,19 @@ public class ShapelessCraftingRecipe extends CraftingRecipe {
     @Override
     public boolean matches(InventoryCrafting inv, @NotNull World worldIn) {
         List<ItemStack> givenInputs = new ArrayList<>();
+        // collect all items from the crafting matrix
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (!itemstack.isEmpty()) {
                 givenInputs.add(itemstack);
             }
         }
+        // check if expected and given inputs have the same count
         if (givenInputs.isEmpty() || givenInputs.size() != input.size()) return false;
         List<IIngredient> input = new ArrayList<>(this.input);
+        // go through each expected input and try to match it to an given input
         Iterator<IIngredient> ingredientIterator = input.iterator();
+        main:
         while (ingredientIterator.hasNext()) {
             IIngredient ingredient = ingredientIterator.next();
 
@@ -34,11 +38,16 @@ public class ShapelessCraftingRecipe extends CraftingRecipe {
             while (itemStackIterator.hasNext()) {
                 ItemStack itemStack = itemStackIterator.next();
                 if (matches(ingredient, itemStack)) {
+                    // expected input matches given input so both get removed so they dont get checked again
                     ingredientIterator.remove();
                     itemStackIterator.remove();
+                    if (givenInputs.isEmpty()) break main;
+                    // skip to next expected ingredient
+                    continue main;
                 }
             }
-            if (givenInputs.isEmpty()) break;
+            // at this point no given input could be matched for this expected input so return false
+            return false;
         }
         return input.isEmpty();
     }
