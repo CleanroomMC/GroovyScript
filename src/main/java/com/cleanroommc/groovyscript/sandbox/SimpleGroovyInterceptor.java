@@ -1,14 +1,17 @@
 package com.cleanroommc.groovyscript.sandbox;
 
+import com.cleanroommc.groovyscript.api.BracketHandler;
 import com.cleanroommc.groovyscript.event.GroovyEvent;
 import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import groovy.lang.Closure;
+import groovy.lang.Script;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
 
 public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
@@ -27,6 +30,13 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onMethodCall(Invoker invoker, Object receiver, String method, Object... args) throws Throwable {
+        if (receiver.getClass().getSuperclass() == Script.class && args.length == 1 && args[0] instanceof String) {
+            Function<String, Object> bracketHandler = BracketHandler.getBracketHandler(method);
+            if (bracketHandler != null) {
+                return bracketHandler.apply((String) args[0]);
+            }
+        }
+
         if (method.equals("print") || method.equals("println") || method.equals("printf")) {
             Object msg = args.length == 0 ? "" : args[0];
             Object[] args2 = args.length < 2 ? new Object[0] : Arrays.copyOfRange(args, 1, args.length);

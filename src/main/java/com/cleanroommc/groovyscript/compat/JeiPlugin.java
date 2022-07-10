@@ -16,6 +16,7 @@ public class JeiPlugin implements IModPlugin {
     public void register(IModRegistry registry) {
         IJeiHelpers jeiHelpers = registry.getJeiHelpers();
 
+        // jei can't handle custom recipe classes on its own
         registry.handleRecipes(ShapedCraftingRecipe.class, recipe -> new ShapedRecipeWrapper(jeiHelpers, recipe), VanillaRecipeCategoryUid.CRAFTING);
         registry.handleRecipes(ShapelessCraftingRecipe.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe), VanillaRecipeCategoryUid.CRAFTING);
     }

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.api;
 import com.cleanroommc.groovyscript.helper.recipe.FluidStack;
 import com.cleanroommc.groovyscript.helper.recipe.ItemStack;
 import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,11 @@ public class BracketHandler {
             throw new NoSuchElementException("Could not find game object for <" + s + ">!");
         }
         return result;
+    }
+
+    @Nullable
+    public static Function<String, Object> getBracketHandler(String key) {
+        return bracketHandlers.get(key);
     }
 
     public static void init() {
