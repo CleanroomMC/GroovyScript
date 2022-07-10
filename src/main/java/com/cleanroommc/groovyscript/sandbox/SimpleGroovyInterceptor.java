@@ -1,8 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
-import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.event.GroovyEvent;
-import com.cleanroommc.groovyscript.event.GroovyEventManager;
+import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import groovy.lang.Closure;
@@ -35,10 +34,11 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
             return null;
         }
 
-        if (receiver.getClass() == EventHandler.class && args.length >= 1 && args[0] instanceof Closure) {
-            GroovyEventManager.registerListener("", method, (Closure<Object>) args[0]);
+        if (receiver instanceof IGroovyEventHandler && args.length >= 1 && args[0] instanceof Closure) {
+            ((IGroovyEventHandler) receiver).getEventManager().registerListener(method, (Closure<Object>) args[0]);
             return null;
         }
+
         if (receiver instanceof GroovyEvent.Group && args.length >= 1 && args[0] instanceof Closure) {
             ((GroovyEvent.Group) receiver).registerListener(method, (Closure<Object>) args[0]);
             return null;
@@ -68,8 +68,14 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onGetProperty(Invoker invoker, Object receiver, String property) throws Throwable {
-        if (receiver.getClass() == EventHandler.class) {
-            GroovyEvent.Group group = GroovyEventManager.getEventGroup(property);
+        GroovyEvent.Group eventGroup = null;
+        if (receiver instanceof IGroovyEventHandler) {
+            eventGroup = ((IGroovyEventHandler) receiver).getEventManager();
+        } else if (receiver instanceof GroovyEvent.Group) {
+            eventGroup = (GroovyEvent.Group) receiver;
+        }
+        if (eventGroup != null) {
+            GroovyEvent.Group group = eventGroup.getEventGroup(property);
             if (group == null) {
                 throw new NoSuchElementException("There is no such event group '" + property + "'!");
             }

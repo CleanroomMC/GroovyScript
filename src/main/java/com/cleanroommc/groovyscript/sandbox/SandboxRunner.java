@@ -2,8 +2,8 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
-import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
+import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.helper.recipe.CraftingRecipeHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
@@ -81,7 +81,7 @@ public class SandboxRunner {
         GroovyLog.LOG.info("Running scripts");
         // prepare script running
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
-        GroovyEventManager.clearListeners();
+        GroovyEventManager.clearAllListeners();
         ReloadableRegistryManager.onReload();
         SimpleGroovyInterceptor.makeSureExists();
 
@@ -92,7 +92,7 @@ public class SandboxRunner {
         config.addCompilationCustomizers(new SandboxTransformer());
         engine.setConfig(config);
         Binding binding = new Binding();
-        binding.setVariable("events", new EventHandler());
+        binding.setVariable("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
         binding.setVariable("recipes", new CraftingRecipeHelper());
 
         // find and run scripts
