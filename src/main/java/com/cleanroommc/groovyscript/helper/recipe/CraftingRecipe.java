@@ -5,10 +5,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
@@ -21,7 +25,10 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         this.output = output;
         this.input = input;
         this.ingredients = NonNullList.create();
-        for (IIngredient ingredient : input) {
+        for (int i = 0; i < this.input.size(); i++) {
+            if (this.input.get(i) == null) this.input.set(i, IIngredient.EMPTY);
+        }
+        for (IIngredient ingredient : this.input) {
             this.ingredients.add(ingredient == null ? Ingredient.EMPTY : ingredient.toMcIngredient());
         }
     }
@@ -43,5 +50,48 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     @Override
     public @NotNull NonNullList<Ingredient> getIngredients() {
         return this.ingredients;
+    }
+
+    @Override
+    public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull InventoryCrafting inv) {
+        NonNullList<ItemStack> result = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        for (Triple<IIngredient, ItemStack, Integer> pair : getMatchingList(inv)) {
+            ItemStack itemStack = pair.getLeft().applyTransform(pair.getMiddle().copy());
+            result.set(pair.getRight(), itemStack == null ? ItemStack.EMPTY : itemStack);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean matches(@NotNull InventoryCrafting inv, @NotNull World worldIn) {
+        return !getMatchingList(inv).isEmpty();
+    }
+
+    @NotNull
+    public abstract MatchList getMatchingList(InventoryCrafting inv);
+
+    public static class MatchList implements Iterable<Triple<IIngredient, ItemStack, Integer>> {
+        public static final MatchList EMPTY = new MatchList() {
+            @Override
+            public void addMatch(IIngredient ingredient, ItemStack itemStack, int itemSlotIndex) {
+                throw new UnsupportedOperationException();
+            }
+        };
+
+        private final List<Triple<IIngredient, ItemStack, Integer>> matches = new ArrayList<>();
+
+        public void addMatch(IIngredient ingredient, ItemStack itemStack, int itemSlotIndex) {
+            matches.add(Triple.of(ingredient, itemStack, itemSlotIndex));
+        }
+
+        public boolean isEmpty() {
+            return matches.isEmpty();
+        }
+
+        @NotNull
+        @Override
+        public Iterator<Triple<IIngredient, ItemStack, Integer>> iterator() {
+            return matches.iterator();
+        }
     }
 }

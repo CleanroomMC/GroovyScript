@@ -155,6 +155,7 @@ public class SandboxRunner {
             SimpleGroovyInterceptor.makeSureExists();
             return closure.call(args);
         } catch (Exception e) {
+            GroovyScript.LOGGER.error("Caught an exception trying to run a closure:");
             e.printStackTrace();
         }
         return null;

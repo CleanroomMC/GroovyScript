@@ -10,7 +10,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.NoSuchElementException;
 
-public class ItemStack implements IIngredient {
+public class ItemStack extends IngredientBase {
+
+    public static final ItemStack EMPTY = new ItemStack(net.minecraft.item.ItemStack.EMPTY, false) {
+        @Override
+        public net.minecraft.item.ItemStack createMcItemStack() {
+            return net.minecraft.item.ItemStack.EMPTY;
+        }
+
+        @Override
+        public ItemStack exactCopy() {
+            return this;
+        }
+    };
 
     public static ItemStack parse(String raw) {
         String[] parts = raw.split(":");
@@ -72,8 +84,8 @@ public class ItemStack implements IIngredient {
     }
 
     @Override
-    public boolean test(net.minecraft.item.ItemStack stack) {
-        return OreDictionary.itemMatches(internal, stack, false);
+    public boolean matches(net.minecraft.item.ItemStack itemStack) {
+        return OreDictionary.itemMatches(internal, itemStack, false);
     }
 
     public net.minecraft.item.ItemStack getInternal() {

@@ -1,0 +1,36 @@
+package com.cleanroommc.groovyscript.helper.recipe;
+
+import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import groovy.lang.Closure;
+import net.minecraft.item.ItemStack;
+
+public abstract class IngredientBase implements IIngredient {
+
+    protected Closure<Object> matchCondition;
+    protected Closure<Object> transformer;
+
+    public IngredientBase when(Closure<Object> matchCondition) {
+        this.matchCondition = matchCondition;
+        return this;
+    }
+
+    public IngredientBase transform(Closure<Object> transformer) {
+        this.transformer = transformer;
+        return this;
+    }
+
+    @Override
+    public boolean test(ItemStack itemStack) {
+        return (matchCondition == null || ClosureHelper.call(true, matchCondition, new com.cleanroommc.groovyscript.helper.recipe.ItemStack(itemStack))) && matches(itemStack);
+    }
+
+    public abstract boolean matches(ItemStack itemStack);
+
+    @Override
+    public ItemStack applyTransform(ItemStack matchedInput) {
+        if (transformer != null) {
+            return ClosureHelper.call(com.cleanroommc.groovyscript.helper.recipe.ItemStack.EMPTY, transformer, new com.cleanroommc.groovyscript.helper.recipe.ItemStack(matchedInput)).createMcItemStack();
+        }
+        return ItemStack.EMPTY;
+    }
+}

@@ -2,10 +2,9 @@ package com.cleanroommc.groovyscript.helper.recipe;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.IShapedRecipe;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 public class ShapedCraftingRecipe extends CraftingRecipe implements IShapedRecipe {
@@ -17,50 +16,6 @@ public class ShapedCraftingRecipe extends CraftingRecipe implements IShapedRecip
         super(output, input);
         this.width = width;
         this.height = height;
-    }
-
-    @Override
-    public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World world) {
-        for (int x = 0; x <= inv.getWidth() - width; x++) {
-            for (int y = 0; y <= inv.getHeight() - height; ++y) {
-                if (checkMatch(inv, x, y, false)) {
-                    return true;
-                }
-
-                if (mirrored && checkMatch(inv, x, y, true)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Based on {@link net.minecraft.item.crafting.ShapedRecipes#checkMatch(InventoryCrafting, int, int, boolean)}
-     */
-    protected boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
-        for (int x = 0; x < inv.getWidth(); x++) {
-            for (int y = 0; y < inv.getHeight(); y++) {
-                int subX = x - startX;
-                int subY = y - startY;
-                IIngredient target = null;
-
-                if (subX >= 0 && subY >= 0 && subX < width && subY < height) {
-                    if (mirror) {
-                        target = input.get(width - subX - 1 + subY * width);
-                    } else {
-                        target = input.get(subX + subY * width);
-                    }
-                }
-
-                if (!matches(target, inv.getStackInRowAndColumn(x, y))) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 
     @Override
@@ -80,5 +35,54 @@ public class ShapedCraftingRecipe extends CraftingRecipe implements IShapedRecip
 
     public boolean isMirrored() {
         return mirrored;
+    }
+
+    @Override
+    public @NotNull MatchList getMatchingList(InventoryCrafting inv) {
+        for (int x = 0; x <= inv.getWidth() - width; x++) {
+            for (int y = 0; y <= inv.getHeight() - height; ++y) {
+                MatchList matches = checkMatch(inv, x, y, false);
+                if (!matches.isEmpty()) return matches;
+                if (mirrored) {
+                    matches = checkMatch(inv, x, y, true);
+                    if (matches.isEmpty()) return matches;
+                }
+            }
+        }
+
+        return MatchList.EMPTY;
+    }
+
+    /**
+     * Based on {@link net.minecraft.item.crafting.ShapedRecipes#checkMatch(InventoryCrafting, int, int, boolean)}
+     */
+    protected MatchList checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
+        MatchList matches = new MatchList();
+        for (int x = 0; x < inv.getWidth(); x++) {
+            for (int y = 0; y < inv.getHeight(); y++) {
+                int subX = x - startX;
+                int subY = y - startY;
+                IIngredient target = IIngredient.EMPTY;
+
+                if (subX >= 0 && subY >= 0 && subX < width && subY < height) {
+                    if (mirror) {
+                        target = input.get(width - subX - 1 + subY * width);
+                    } else {
+                        target = input.get(subX + subY * width);
+                    }
+                }
+
+                ItemStack itemStack = inv.getStackInRowAndColumn(x, y);
+                if (target.test(itemStack)) {
+                    if (!itemStack.isEmpty()) {
+                        matches.addMatch(target, itemStack, x + y * inv.getWidth());
+                    }
+                } else {
+                    return MatchList.EMPTY;
+                }
+            }
+        }
+
+        return matches;
     }
 }

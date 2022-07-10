@@ -1,14 +1,16 @@
 package com.cleanroommc.groovyscript.api;
 
+import com.cleanroommc.groovyscript.helper.recipe.FluidStack;
 import com.cleanroommc.groovyscript.helper.recipe.ItemStack;
 import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 public class BracketHandler {
 
-    public static final List<Function<String, Object>> handlers = new ArrayList<>();
     private static final Map<String, Function<String, Object>> bracketHandlers = new HashMap<>();
     public static final Function<String, Object> itemStackBracketHandler = s -> {
         try {
@@ -40,5 +42,7 @@ public class BracketHandler {
     public static void init() {
         registerBracketHandler("ore", OreDictIngredient::new);
         registerBracketHandler("item", itemStackBracketHandler);
+        registerBracketHandler("liquid", FluidStack::parse);
+        registerBracketHandler("fluid", FluidStack::parse);
     }
 }

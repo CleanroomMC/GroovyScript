@@ -6,11 +6,15 @@ import net.minecraft.item.crafting.Ingredient;
 
 import java.util.function.Predicate;
 
-public interface IIngredient extends ICountable, Predicate<ItemStack> {
+interface IIngredient extends ICountable, Predicate<ItemStack> {
 
     IIngredient exactCopy();
 
     Ingredient toMcIngredient();
+
+    default ItemStack applyTransform(ItemStack matchedInput) {
+        return matchedInput.getItem().hasContainerItem(matchedInput) ? matchedInput.getItem().getContainerItem(matchedInput) : ItemStack.EMPTY;
+    }
 
     IIngredient EMPTY = new IIngredient() {
         @Override
@@ -35,7 +39,7 @@ public interface IIngredient extends ICountable, Predicate<ItemStack> {
 
         @Override
         public boolean test(ItemStack stack) {
-            return true;
+            return stack.isEmpty();
         }
     };
 }
