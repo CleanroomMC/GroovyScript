@@ -16,10 +16,12 @@ buildscript {
         if (project.use_mixins.toBoolean()) {
             classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
         }
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 if (project.use_mixins.toBoolean()) {
     apply plugin: 'org.spongepowered.mixin'
@@ -33,11 +35,6 @@ sourceCompatibility = targetCompatibility = '1.8'
 
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
-}
-
-configurations {
-    embed
-    implementation.extendsFrom(embed)
 }
 
 minecraft {
@@ -86,10 +83,22 @@ dependencies {
     }
 
     compile 'org.jetbrains:annotations:23.0.0'
-    compile 'org.codehaus.groovy:groovy-all:3.0.11'
+
+    // compile 'org.codehaus.groovy:groovy-all:3.0.11'
+    compile 'org.codehaus.groovy:groovy-ant:3.0.11'
+    compile 'org.codehaus.groovy:groovy-astbuilder:3.0.11'
+    compile 'org.codehaus.groovy:groovy-jsr223:3.0.11'
+    compile 'org.codehaus.groovy:groovy-macro:3.0.11'
+    // compile 'org.codehaus.plexus:plexus-utils:3.1.0'
 
     compile 'mezz.jei:jei_1.12.2:4.16.1.302'
     compile 'curse.maven:crafttweaker-239197:3523955'
+
+    shadow 'org.codehaus.groovy:groovy-ant:3.0.11'
+    shadow 'org.codehaus.groovy:groovy-astbuilder:3.0.11'
+    shadow 'org.codehaus.groovy:groovy-jsr223:3.0.11'
+    shadow 'org.codehaus.groovy:groovy-macro:3.0.11'
+    // shadow 'org.codehaus.plexus:plexus-utils:3.1.0'
 }
 
 sourceSets {
@@ -133,4 +142,16 @@ jar {
         }
         attributes(attribute_map)
     }
+}
+
+shadowJar {
+    baseName = archivesBaseName
+    version = version
+    configurations = [project.configurations.shadow]
+}
+
+tasks.build.dependsOn shadowJar
+
+artifacts {
+    archives shadowJar
 }
