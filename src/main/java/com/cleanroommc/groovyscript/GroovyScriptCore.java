@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-@IFMLLoadingPlugin.Name("BogoSorter-Core")
+@IFMLLoadingPlugin.Name("GroovyScript-Core")
 @IFMLLoadingPlugin.MCVersion(ForgeVersion.mcVersion)
 public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
