@@ -1,6 +1,10 @@
 buildscript {
     repositories {
         maven {
+            name = "forge"
+            url = "https://maven.minecraftforge.net/"
+        }
+        maven {
             url = 'https://maven.cleanroommc.com'
         }
         maven {
@@ -85,6 +89,7 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:3.0.11'
 
     compile 'mezz.jei:jei_1.12.2:4.16.1.302'
+    compile 'curse.maven:crafttweaker-239197:3523955'
 }
 
 sourceSets {
@@ -124,7 +129,7 @@ jar {
         if (project.use_mixins.toBoolean()) {
             attribute_map['TweakClass'] = 'org.spongepowered.asm.launch.MixinTweaker'
             // false for dev and true for non dev
-            attribute_map['ForceLoadAsMod'] = false
+            attribute_map['ForceLoadAsMod'] = project.gradle.startParameter.taskNames[0] == "build"
         }
         attributes(attribute_map)
     }
