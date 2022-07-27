@@ -6,7 +6,7 @@ import net.minecraft.item.crafting.Ingredient;
 
 import java.util.function.Predicate;
 
-interface IIngredient extends ICountable, Predicate<ItemStack> {
+public interface IIngredient extends ICountable, Predicate<ItemStack> {
 
     IIngredient exactCopy();
 

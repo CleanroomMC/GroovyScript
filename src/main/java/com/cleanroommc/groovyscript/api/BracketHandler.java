@@ -1,8 +1,11 @@
 package com.cleanroommc.groovyscript.api;
 
 import com.cleanroommc.groovyscript.helper.recipe.FluidStack;
-import com.cleanroommc.groovyscript.helper.recipe.ItemStack;
 import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -15,7 +18,7 @@ public class BracketHandler {
     private static final Map<String, Function<String, Object>> bracketHandlers = new HashMap<>();
     public static final Function<String, Object> itemStackBracketHandler = s -> {
         try {
-            return ItemStack.parse(s);
+            return parseItemStack(s);
         } catch (Exception e) {
             return null;
         }
@@ -50,5 +53,22 @@ public class BracketHandler {
         registerBracketHandler("item", itemStackBracketHandler);
         registerBracketHandler("liquid", FluidStack::parse);
         registerBracketHandler("fluid", FluidStack::parse);
+    }
+
+    public static ItemStack parseItemStack(String raw) {
+        String[] parts = raw.split(":");
+        if (parts.length < 2) throw new IllegalArgumentException();
+        Item item1 = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
+        if (item1 == null) {
+            throw new NoSuchElementException("Can't find item for " + raw);
+        }
+        int meta = 0;
+        if (parts.length > 2) {
+            try {
+                meta = Integer.parseInt(parts[2]);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return new net.minecraft.item.ItemStack(item1, 1, meta);
     }
 }

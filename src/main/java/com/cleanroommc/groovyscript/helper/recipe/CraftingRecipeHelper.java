@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +18,13 @@ public class CraftingRecipeHelper {
             w = row.size();
             inputs.addAll(row);
         }
-        ShapedCraftingRecipe recipe = new ShapedCraftingRecipe(output.createMcItemStack(), inputs, w, input.size());
+        ShapedCraftingRecipe recipe = new ShapedCraftingRecipe(output.copy(), inputs, w, input.size());
         recipe.setRegistryName(name);
         ReloadableRegistryManager.registerRecipe(recipe);
     }
 
     public void addShapeless(String name, ItemStack output, List<IIngredient> input) {
-        ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.createMcItemStack(), input);
+        ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), input);
         recipe.setRegistryName(name);
         ReloadableRegistryManager.registerRecipe(recipe);
     }
