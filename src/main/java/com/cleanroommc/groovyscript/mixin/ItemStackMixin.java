@@ -1,13 +1,15 @@
 package com.cleanroommc.groovyscript.mixin;
 
-import com.cleanroommc.groovyscript.api.ICountable;
+import com.cleanroommc.groovyscript.api.INBTResourceStack;
 import com.cleanroommc.groovyscript.helper.recipe.IIngredient;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -16,12 +18,22 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements IIngredient {
+public abstract class ItemStackMixin implements IIngredient, INBTResourceStack {
 
-    @Shadow private boolean isEmpty;
-    @Shadow private int stackSize;
+    @Shadow
+    public abstract Item getItem();
 
-    @Shadow public abstract Item getItem();
+    @Shadow
+    public abstract int getCount();
+
+    @Shadow
+    public abstract void setCount(int size);
+
+    @Shadow
+    private NBTTagCompound stackTagCompound;
+
+    @Shadow
+    public abstract ItemStack copy();
 
     @Unique
     protected Closure<Object> matchCondition;
@@ -33,19 +45,28 @@ public abstract class ItemStackMixin implements IIngredient {
     }
 
     @Override
-    public ICountable setCount(int amount) {
-        getThis().setCount(amount);
-        return this;
+    public int getAmount() {
+        return getCount();
     }
 
     @Override
-    public int getCount() {
-        return isEmpty ? 0 : stackSize;
+    public void setAmount(int amount) {
+        setCount(amount);
+    }
+
+    @Override
+    public @Nullable NBTTagCompound getNbt() {
+        return stackTagCompound;
+    }
+
+    @Override
+    public void setNbt(NBTTagCompound nbt) {
+        stackTagCompound = nbt;
     }
 
     @Override
     public IIngredient exactCopy() {
-        return (IIngredient) (Object) getThis().copy();
+        return (IIngredient) (Object) copy();
     }
 
     @Override
@@ -77,7 +98,7 @@ public abstract class ItemStackMixin implements IIngredient {
     }
 
     @Inject(method = "copy", at = @At("RETURN"), cancellable = true)
-    public void copy(CallbackInfoReturnable<ItemStack> cir) {
+    public void injectCopy(CallbackInfoReturnable<ItemStack> cir) {
         ItemStackMixin ingredient = (ItemStackMixin) (Object) cir.getReturnValue();
         ingredient.when(matchCondition);
         ingredient.transform(transformer);

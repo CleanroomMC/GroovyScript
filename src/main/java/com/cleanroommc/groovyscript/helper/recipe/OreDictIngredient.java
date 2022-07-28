@@ -15,14 +15,13 @@ public class OreDictIngredient implements IIngredient {
     }
 
     @Override
-    public OreDictIngredient setCount(int amount) {
-        count = amount;
-        return this;
+    public int getAmount() {
+        return count;
     }
 
     @Override
-    public int getCount() {
-        return count;
+    public void setAmount(int amount) {
+        count = amount;
     }
 
     @Override
@@ -39,9 +38,7 @@ public class OreDictIngredient implements IIngredient {
 
     @Override
     public IIngredient exactCopy() {
-        OreDictIngredient ingredient = new OreDictIngredient(oreDict);
-        ingredient.setCount(count);
-        return ingredient;
+        return (IIngredient) new OreDictIngredient(oreDict).withAmount(count);
     }
 
     @Override

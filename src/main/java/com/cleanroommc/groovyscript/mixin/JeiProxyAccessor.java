@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin(ProxyCommonClient.class)
+@Mixin(value = ProxyCommonClient.class, remap = false)
 public interface JeiProxyAccessor {
 
     @Accessor

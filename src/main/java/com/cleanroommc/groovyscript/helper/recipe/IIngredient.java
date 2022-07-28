@@ -1,12 +1,12 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
-import com.cleanroommc.groovyscript.api.ICountable;
+import com.cleanroommc.groovyscript.api.IResourceStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 
 import java.util.function.Predicate;
 
-public interface IIngredient extends ICountable, Predicate<ItemStack> {
+public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
 
     IIngredient exactCopy();
 
@@ -18,6 +18,15 @@ public interface IIngredient extends ICountable, Predicate<ItemStack> {
 
     IIngredient EMPTY = new IIngredient() {
         @Override
+        public int getAmount() {
+            return 0;
+        }
+
+        @Override
+        public void setAmount(int amount) {
+        }
+
+        @Override
         public IIngredient exactCopy() {
             return this;
         }
@@ -25,16 +34,6 @@ public interface IIngredient extends ICountable, Predicate<ItemStack> {
         @Override
         public Ingredient toMcIngredient() {
             return Ingredient.EMPTY;
-        }
-
-        @Override
-        public IIngredient setCount(int amount) {
-            return this;
-        }
-
-        @Override
-        public int getCount() {
-            return 0;
         }
 
         @Override

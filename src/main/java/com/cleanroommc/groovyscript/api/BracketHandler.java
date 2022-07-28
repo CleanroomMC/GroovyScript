@@ -1,10 +1,11 @@
 package com.cleanroommc.groovyscript.api;
 
-import com.cleanroommc.groovyscript.helper.recipe.FluidStack;
 import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,8 +52,8 @@ public class BracketHandler {
     public static void init() {
         registerBracketHandler("ore", OreDictIngredient::new);
         registerBracketHandler("item", itemStackBracketHandler);
-        registerBracketHandler("liquid", FluidStack::parse);
-        registerBracketHandler("fluid", FluidStack::parse);
+        registerBracketHandler("liquid", BracketHandler::parseFluidStack);
+        registerBracketHandler("fluid", BracketHandler::parseFluidStack);
     }
 
     public static ItemStack parseItemStack(String raw) {
@@ -70,5 +71,9 @@ public class BracketHandler {
             }
         }
         return new net.minecraft.item.ItemStack(item1, 1, meta);
+    }
+
+    public static FluidStack parseFluidStack(String s) {
+        return FluidRegistry.getFluidStack(s, 1000);
     }
 }
