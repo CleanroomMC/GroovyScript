@@ -40,7 +40,7 @@ public class InterceptionManager {
         banPackage("java.security");
         banPackage("groovy");
         banPackage("org.codehaus.groovy");
-        banPackage("sun"); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
+        banPackage("sun."); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
         banPackage("javax.net");
         banPackage("javax.security");
         banPackage("javax.script");

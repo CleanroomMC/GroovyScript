@@ -80,6 +80,7 @@ public class SandboxRunner {
     public static void runScript() throws IOException, ScriptException, ResourceException, SandboxSecurityException {
         GroovyLog.LOG.info("Running scripts");
         // prepare script running
+        ReloadableRegistryManager.setShouldRegisterAsReloadable(true);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         GroovyEventManager.clearAllListeners();
         ReloadableRegistryManager.onReload();
@@ -101,6 +102,7 @@ public class SandboxRunner {
             engine.run(file.toString(), binding);
         }
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
+        ReloadableRegistryManager.setShouldRegisterAsReloadable(false);
     }
 
     private static File[] getStartupFiles() throws IOException {

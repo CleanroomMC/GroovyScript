@@ -1,23 +1,33 @@
 package com.cleanroommc.groovyscript.registry;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.mixin.JeiProxyAccessor;
-import com.cleanroommc.groovyscript.mixin.RegistryManagerAccessor;
 import mezz.jei.JustEnoughItems;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import net.minecraftforge.registries.RegistryManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
 
+@GroovyBlacklist
 public class ReloadableRegistryManager {
+
+    private static boolean shouldRegisterAsReloadable = false;
+
+    public static boolean isShouldRegisterAsReloadable() {
+        return shouldRegisterAsReloadable;
+    }
+
+    public static void setShouldRegisterAsReloadable(boolean shouldRegisterAsReloadable) {
+        ReloadableRegistryManager.shouldRegisterAsReloadable = shouldRegisterAsReloadable;
+    }
 
     /**
      * Reloads all forge registries, removing all reloadable entries.
@@ -25,9 +35,12 @@ public class ReloadableRegistryManager {
      */
     @ApiStatus.Internal
     public static void onReload() {
-        ((RegistryManagerAccessor) RegistryManager.ACTIVE).getRegistries().values().forEach(registry -> ((IReloadableForgeRegistry<?>) registry).onReload());
-        ((RegistryManagerAccessor) RegistryManager.VANILLA).getRegistries().values().forEach(registry -> ((IReloadableForgeRegistry<?>) registry).onReload());
-        ((RegistryManagerAccessor) RegistryManager.FROZEN).getRegistries().values().forEach(registry -> ((IReloadableForgeRegistry<?>) registry).onReload());
+        reloadRegistry(ForgeRegistries.RECIPES);
+    }
+
+    public static void reloadRegistry(IForgeRegistry<?> registry) {
+        if (!(registry instanceof ForgeRegistry)) throw new IllegalArgumentException();
+        ((IReloadableForgeRegistry<?>) registry).onReload();
     }
 
     /**
@@ -38,11 +51,14 @@ public class ReloadableRegistryManager {
      * @param <V>      type of the registry
      */
     public static <V extends IForgeRegistryEntry<V>> void registerEntry(IForgeRegistry<V> registry, V value) {
-        ((IReloadableForgeRegistry<V>) registry).registerReloadableEntry(value);
+        boolean old = isShouldRegisterAsReloadable();
+        setShouldRegisterAsReloadable(true);
+        registry.register(value);
+        setShouldRegisterAsReloadable(old);
     }
 
-    public static <V extends IForgeRegistryEntry<V>> void removeEntry(IForgeRegistry<V> registry, ResourceLocation rl) {
-        ((IReloadableForgeRegistry<V>) registry).removeEntry(rl);
+    public static <V extends IForgeRegistryEntry<V>> void removeEntry(IForgeRegistry<V> registry, ResourceLocation rl, V dummy) {
+        ((IReloadableForgeRegistry<V>) registry).removeEntry(dummy.setRegistryName(rl));
     }
 
     @Unmodifiable
@@ -50,17 +66,8 @@ public class ReloadableRegistryManager {
         return ((IReloadableForgeRegistry<V>) registry).getReloadableEntries();
     }
 
-    /**
-     * Registers a reloadable recipe
-     *
-     * @param recipe recipe to register
-     */
-    public static void registerRecipe(IRecipe recipe) {
-        registerEntry(ForgeRegistries.RECIPES, recipe);
-    }
-
     public static void removeRecipe(String name) {
-        removeEntry(ForgeRegistries.RECIPES, new ResourceLocation(name));
+        removeEntry(ForgeRegistries.RECIPES, new ResourceLocation(name), new DummyRecipe());
     }
 
     /**
