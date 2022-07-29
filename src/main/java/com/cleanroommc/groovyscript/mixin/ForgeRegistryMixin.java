@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.mixin;
 
-import com.cleanroommc.groovyscript.registry.IReloadableForgeRegistry;
+import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -20,10 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.*;
+import java.util.BitSet;
 
 @Mixin(value = ForgeRegistry.class, remap = false)
-public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> implements IReloadableForgeRegistry<V> {
+public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> implements IReloadableRegistry<V> {
 
     @Shadow
     @Final
@@ -35,26 +35,18 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     @Shadow
     @Final
     private BiMap<ResourceLocation, V> names;
-
     @Shadow
     boolean isFrozen;
 
     @Shadow
     public abstract void register(V value);
 
-    @Shadow
-    public abstract Class<V> getRegistrySuperType();
-
-    @Unique
-    private Set<ResourceLocation> removedEntries;
     @Unique
     private BiMap<Integer, V> idsBackup;
     @Unique
     private BiMap<ResourceLocation, V> namesBackup;
     @Unique
     private BitSet availabilityMapBackup;
-    @Unique
-    private List<V> reloadableEntries;
     @Unique
     private BitSet reloadableEntryIds;
 
@@ -72,35 +64,26 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
                           IForgeRegistry.DummyFactory<V> dummyFactory,
                           IForgeRegistry.MissingFactory<V> missing,
                           CallbackInfo ci) {
-        removedEntries = new HashSet<>();
         idsBackup = HashBiMap.create();
         namesBackup = HashBiMap.create();
         availabilityMapBackup = new BitSet();
-        reloadableEntries = new ArrayList<>();
         reloadableEntryIds = new BitSet();
     }
 
     @Override
     public void onReload() {
-        removedEntries.clear();
         ids.clear();
         ids.putAll(idsBackup);
         names.clear();
         names.putAll(namesBackup);
         availabilityMap.clear();
         availabilityMap.or(availabilityMapBackup);
-        reloadableEntries.clear();
         reloadableEntryIds.clear();
     }
 
     @Override
     public void removeEntry(V dummy) {
         register(dummy);
-    }
-
-    @Override
-    public List<V> getReloadableEntries() {
-        return Collections.unmodifiableList(reloadableEntries);
     }
 
     @Inject(
@@ -112,7 +95,6 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
         boolean registered = false;
         if (ReloadableRegistryManager.isShouldRegisterAsReloadable() || (registered = reloadableEntryIds.get(idToUse))) {
             if (!registered) {
-                this.reloadableEntries.add(value);
                 this.reloadableEntryIds.set(idToUse);
             }
         } else {
