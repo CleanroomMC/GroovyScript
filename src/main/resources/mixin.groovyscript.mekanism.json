@@ -1,0 +1,11 @@
+{
+  "package": "com.cleanroommc.groovyscript.mixin.mekanism",
+  "refmap": "mixins.bogosorter.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "GasStackMixin",
+    "RecipeMixin"
+  ]
+}

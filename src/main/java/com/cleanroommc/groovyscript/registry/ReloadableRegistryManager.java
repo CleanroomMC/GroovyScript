@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.mixin.JeiProxyAccessor;
+import mekanism.common.recipe.RecipeHandler;
 import mezz.jei.JustEnoughItems;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
@@ -26,13 +27,12 @@ public class ReloadableRegistryManager {
         ReloadableRegistryManager.shouldRegisterAsReloadable = shouldRegisterAsReloadable;
     }
 
-    /**
-     * Reloads all forge registries, removing all reloadable entries.
-     * Is called before groovy scripts are ran.
-     */
     @ApiStatus.Internal
     public static void onReload() {
         reloadRegistry(ForgeRegistries.RECIPES);
+        if (Loader.isModLoaded("mekanism")) {
+            RecipeHandler.Recipe.values().forEach(recipe -> ((IReloadableRegistry<?>) recipe).onReload());
+        }
     }
 
     public static void reloadRegistry(IForgeRegistry<?> registry) {
