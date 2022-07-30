@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
+import com.cleanroommc.groovyscript.compat.ModHandler;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.helper.recipe.CraftingRecipeHelper;
@@ -95,6 +96,7 @@ public class SandboxRunner {
         Binding binding = new Binding();
         binding.setVariable("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
         binding.setVariable("recipes", new CraftingRecipeHelper());
+        binding.setVariable("mods", ModHandler.INSTANCE);
 
         // find and run scripts
         for (File file : getStartupFiles()) {
@@ -113,28 +115,10 @@ public class SandboxRunner {
         File[] files = GroovyScript.startupPath.listFiles();
         if (files == null || files.length == 0) {
             Files.createFile(new File(path + "/main.groovy").toPath());
+            return new File[0];
         }
-        files = GroovyScript.startupPath.listFiles();
         Path mainPath = new File(GroovyScript.scriptPath).toPath();
         return Arrays.stream(files).map(file -> mainPath.relativize(file.toPath()).toFile()).toArray(File[]::new);
-    }
-
-    public static URL getBasePathFor(Class<?> clazz) throws MalformedURLException {
-        return getBasePathFor(clazz, null);
-    }
-
-    public static URL getBasePathFor(Class<?> clazz, String subPackage) throws MalformedURLException {
-        if (subPackage != null && !clazz.getName().startsWith(subPackage)) {
-            throw new MalformedURLException("The class must exist in the given package!");
-        }
-        String className = clazz.getName().replace('.', '/') + ".class";
-        ClassLoader loader = clazz.getClassLoader();
-        String url = Objects.requireNonNull(loader.getResource(className)).toString();
-        url = url.substring(0, url.indexOf(className));
-        if (subPackage != null) {
-            url += subPackage.replace('.', '/') + "/";
-        }
-        return new URL(url);
     }
 
     public static void logError(String msg, String sourceName, int lineNumber) throws SandboxSecurityException {
