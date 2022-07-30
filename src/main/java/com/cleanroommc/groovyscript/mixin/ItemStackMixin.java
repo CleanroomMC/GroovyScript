@@ -75,6 +75,11 @@ public abstract class ItemStackMixin implements IIngredient, INBTResourceStack {
     }
 
     @Override
+    public ItemStack[] getMatchingStacks() {
+        return new ItemStack[]{copy()};
+    }
+
+    @Override
     public boolean test(ItemStack stack) {
         return (matchCondition == null || ClosureHelper.call(true, matchCondition, stack)) && OreDictionary.itemMatches(getThis(), stack, false);
     }

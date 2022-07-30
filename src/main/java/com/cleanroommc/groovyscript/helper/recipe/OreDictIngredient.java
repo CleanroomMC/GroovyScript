@@ -14,6 +14,10 @@ public class OreDictIngredient implements IIngredient {
         this.oreDict = oreDict;
     }
 
+    public String getOreDict() {
+        return oreDict;
+    }
+
     @Override
     public int getAmount() {
         return count;
@@ -43,7 +47,12 @@ public class OreDictIngredient implements IIngredient {
 
     @Override
     public Ingredient toMcIngredient() {
-        return Ingredient.fromStacks(OreDictionary.getOres(oreDict).toArray(new ItemStack[0]));
+        return Ingredient.fromStacks(getMatchingStacks());
+    }
+
+    @Override
+    public ItemStack[] getMatchingStacks() {
+        return OreDictionary.getOres(oreDict).toArray(new ItemStack[0]);
     }
 
     @Override

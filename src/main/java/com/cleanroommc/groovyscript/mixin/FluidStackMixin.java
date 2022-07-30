@@ -31,6 +31,9 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
     @Shadow
     public abstract FluidStack copy();
 
+    @Shadow
+    public abstract boolean isFluidEqual(FluidStack other);
+
     @Unique
     protected Closure<Object> matchCondition;
     @Unique
@@ -47,6 +50,11 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
     }
 
     @Override
+    public ItemStack[] getMatchingStacks() {
+        return new ItemStack[0];
+    }
+
+    @Override
     public boolean test(ItemStack stack) {
         if (matchCondition == null || ClosureHelper.call(true, matchCondition, stack)) {
             IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
@@ -55,6 +63,11 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
             return result != null && result.amount == getAmount();
         }
         return false;
+    }
+
+    @Override
+    public boolean test(FluidStack fluidStack) {
+        return isFluidEqual(fluidStack);
     }
 
     @Override
