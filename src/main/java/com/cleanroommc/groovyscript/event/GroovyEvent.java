@@ -1,14 +1,12 @@
 package com.cleanroommc.groovyscript.event;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.IGroovyPropertyGetter;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GroovyEvent {
 
@@ -35,7 +33,7 @@ public class GroovyEvent {
     }
 
     @GroovyBlacklist
-    public static class Group {
+    public static class Group implements IGroovyPropertyGetter {
 
         private static final String pathSeparator = "\\.";
         private final Map<String, GroovyEvent> events = new HashMap<>();
@@ -145,6 +143,15 @@ public class GroovyEvent {
 
         public boolean isEventHere(String event) {
             return events.containsKey(event);
+        }
+
+        @Override
+        public @Nullable Object getProperty(String name) {
+            Group group = getEventGroup(name);
+            if (group == null) {
+                throw new NoSuchElementException("There is no such event group '" + name + "' in event group '" + namespace + "' !");
+            }
+            return group;
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.BracketHandler;
+import com.cleanroommc.groovyscript.api.IGroovyPropertyGetter;
 import com.cleanroommc.groovyscript.event.GroovyEvent;
 import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
@@ -10,7 +11,6 @@ import groovy.lang.Script;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 public class SimpleGroovyInterceptor extends GroovyInterceptor {
@@ -78,18 +78,12 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onGetProperty(Invoker invoker, Object receiver, String property) throws Throwable {
-        GroovyEvent.Group eventGroup = null;
-        if (receiver instanceof IGroovyEventHandler) {
-            eventGroup = ((IGroovyEventHandler) receiver).getEventManager();
-        } else if (receiver instanceof GroovyEvent.Group) {
-            eventGroup = (GroovyEvent.Group) receiver;
+        if (receiver instanceof IGroovyPropertyGetter) {
+            Object r = ((IGroovyPropertyGetter) receiver).getProperty(property);
+            return r != null ? r : super.onGetProperty(invoker, receiver, property);
         }
-        if (eventGroup != null) {
-            GroovyEvent.Group group = eventGroup.getEventGroup(property);
-            if (group == null) {
-                throw new NoSuchElementException("There is no such event group '" + property + "'!");
-            }
-            return group;
+        if (receiver instanceof IGroovyEventHandler) {
+            return onGetProperty(invoker, ((IGroovyEventHandler) receiver).getEventManager(), property);
         }
         return super.onGetProperty(invoker, receiver, property);
     }
