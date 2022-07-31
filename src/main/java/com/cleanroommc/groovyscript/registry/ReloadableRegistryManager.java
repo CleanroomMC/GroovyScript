@@ -2,6 +2,8 @@ package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.mixin.JeiProxyAccessor;
+import crazypants.enderio.base.recipe.MachineRecipeRegistry;
+import crazypants.enderio.base.recipe.alloysmelter.AlloyRecipeManager;
 import mekanism.common.recipe.RecipeHandler;
 import mezz.jei.JustEnoughItems;
 import net.minecraft.util.ResourceLocation;
@@ -32,6 +34,20 @@ public class ReloadableRegistryManager {
         reloadRegistry(ForgeRegistries.RECIPES);
         if (Loader.isModLoaded("mekanism")) {
             RecipeHandler.Recipe.values().forEach(recipe -> ((IReloadableRegistry<?>) recipe).onReload());
+        }
+        if (Loader.isModLoaded("enderio")) {
+            ((IReloadableRegistry<?>) AlloyRecipeManager.getInstance()).onReload();
+            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.SOULBINDER)).onReload();
+            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.ENCHANTER)).onReload();
+            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_EMPTYING)).onReload();
+            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_FILLING)).onReload();
+        }
+    }
+
+    @ApiStatus.Internal
+    public static void afterScriptRun() {
+        if (Loader.isModLoaded("enderio")) {
+            ((IReloadableRegistry<?>) AlloyRecipeManager.getInstance()).afterScript();
         }
     }
 

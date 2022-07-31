@@ -94,6 +94,8 @@ dependencies {
     compile 'mezz.jei:jei_1.12.2:4.16.1.302'
     compile 'curse.maven:crafttweaker-239197:3523955'
     deobfProvided 'curse.maven:mekanism-268560:2835175'
+    deobfProvided 'curse.maven:ender_io-64578:3328811'
+    deobfProvided 'curse.maven:endercore-231868:2972849'
 
     shadow 'org.codehaus.groovy:groovy-ant:3.0.11'
     shadow 'org.codehaus.groovy:groovy-astbuilder:3.0.11'

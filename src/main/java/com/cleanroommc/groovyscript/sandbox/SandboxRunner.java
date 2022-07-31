@@ -105,6 +105,7 @@ public class SandboxRunner {
         }
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
         ReloadableRegistryManager.setShouldRegisterAsReloadable(false);
+        ReloadableRegistryManager.afterScriptRun();
     }
 
     private static File[] getStartupFiles() throws IOException {

@@ -5,4 +5,7 @@ public interface IReloadableRegistry<T> {
     void onReload();
 
     void removeEntry(T t);
+
+    default void afterScript() {
+    }
 }
