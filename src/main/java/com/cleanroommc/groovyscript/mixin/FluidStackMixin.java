@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.mixin;
 
 import com.cleanroommc.groovyscript.api.INBTResourceStack;
-import com.cleanroommc.groovyscript.helper.recipe.IIngredient;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import net.minecraft.item.ItemStack;

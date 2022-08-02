@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
-import com.cleanroommc.groovyscript.helper.recipe.IIngredient;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.IRecipeInput;
 import crazypants.enderio.base.recipe.RecipeOutput;

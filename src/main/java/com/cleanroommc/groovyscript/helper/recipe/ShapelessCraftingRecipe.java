@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
+import com.cleanroommc.groovyscript.api.IIngredient;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;

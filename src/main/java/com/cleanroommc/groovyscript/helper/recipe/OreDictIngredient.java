@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
+import com.cleanroommc.groovyscript.api.IIngredient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;

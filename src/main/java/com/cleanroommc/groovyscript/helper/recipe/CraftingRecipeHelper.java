@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
