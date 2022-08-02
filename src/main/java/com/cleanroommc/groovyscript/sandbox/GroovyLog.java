@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.kohsuke.groovy.sandbox.impl.Checker;
@@ -14,9 +15,11 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class GroovyLog {
@@ -42,6 +45,34 @@ public class GroovyLog {
             writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void log(Msg msg) {
+        if (msg.level == Level.OFF || !msg.hasMessages()) return;
+        String level = msg.level.name();
+        String main = msg.messages.get(0);
+        if (msg.messages.size() == 1) {
+            writeLogLine(formatLine(level, main));
+            if (msg.logToMcLog) {
+                logger.log(msg.level, main + " in line " + Checker.getLineNumber());
+            }
+        } else if (msg.messages.size() == 2) {
+            writeLogLine(formatLine(level, main + ": - " + msg.messages.get(1)));
+            if (msg.logToMcLog) {
+                logger.log(msg.level, main + ": - " + msg.messages.get(1) + "  in line " + Checker.getLineNumber());
+            }
+        } else {
+            writeLogLine(formatLine(level, main + ": "));
+            for (int i = 1; i < msg.messages.size(); i++) {
+                writeLogLine(formatLine(level, " - " + msg.messages.get(i)));
+            }
+            if (msg.logToMcLog) {
+                logger.log(msg.level, main + " in line " + Checker.getLineNumber() + " : - ");
+                for (int i = 1; i < msg.messages.size(); i++) {
+                    logger.log(msg.level, " - " + msg.messages.get(i));
+                }
+            }
         }
     }
 
@@ -177,6 +208,72 @@ public class GroovyLog {
             Files.write(logFilePath, line.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static class Msg {
+
+        private final List<String> messages = new ArrayList<>();
+        private Level level = Level.INFO;
+        private boolean logToMcLog = false;
+
+        public Msg(String msg, Object... data) {
+            this.messages.add(String.format(msg, data));
+        }
+
+        public Msg(String msg) {
+            this.messages.add(msg);
+        }
+
+        public Msg add(String msg, Object... data) {
+            this.messages.add(String.format(msg, data));
+            return this;
+        }
+
+        public Msg add(String msg) {
+            this.messages.add(msg);
+            return this;
+        }
+
+        public Msg add(boolean condition, Supplier<String> msg) {
+            if (condition) {
+                this.messages.add(msg.get());
+            }
+            return this;
+        }
+
+        public Msg level(Level level) {
+            this.level = level;
+            return this;
+        }
+
+        public Msg info() {
+            return level(Level.ERROR);
+        }
+
+        public Msg debug() {
+            return level(Level.DEBUG);
+        }
+
+        public Msg warn() {
+            return level(Level.WARN);
+        }
+
+        public Msg error() {
+            return level(Level.ERROR);
+        }
+
+        public Msg logToMc() {
+            this.logToMcLog = true;
+            return this;
+        }
+
+        public boolean hasMessages() {
+            return !this.messages.isEmpty();
+        }
+
+        public boolean hasSubMessages() {
+            return this.messages.size() > 1;
         }
     }
 }
