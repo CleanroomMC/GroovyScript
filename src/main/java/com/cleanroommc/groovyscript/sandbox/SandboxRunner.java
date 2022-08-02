@@ -39,6 +39,12 @@ public class SandboxRunner {
     private static final Pattern packagePattern = Pattern.compile("[a-zA-Z_]+[a-zA-Z0-9_$]*(.[a-zA-Z_]+[a-zA-Z0-9_$]*)*");
     private static URL[] scriptEnvironment;
 
+    private static boolean running = false;
+
+    public static boolean isCurrentlyRunning() {
+        return running;
+    }
+
     public static void init() {
         scriptEnvironment = new URL[1];
         try {
@@ -99,10 +105,12 @@ public class SandboxRunner {
         binding.setVariable("mods", ModHandler.INSTANCE);
 
         // find and run scripts
+        running = true;
         for (File file : getStartupFiles()) {
             GroovyLog.LOG.info(" - executing %s", file.toString());
             engine.run(file.toString(), binding);
         }
+        running = false;
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
         ReloadableRegistryManager.setShouldRegisterAsReloadable(false);
         ReloadableRegistryManager.afterScriptRun();

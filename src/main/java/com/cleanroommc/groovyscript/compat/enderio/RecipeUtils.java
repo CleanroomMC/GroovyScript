@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
-import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.IRecipeInput;
 import crazypants.enderio.base.recipe.RecipeOutput;
@@ -12,7 +12,7 @@ import java.util.List;
 public class RecipeUtils {
 
     public static IRecipeInput[] toEIOInputs(IIngredient[] inputs) {
-        return ArrayUtils.map(inputs, RecipeUtils::toInput);
+        return ArrayUtils.map(inputs, RecipeUtils::toInput, new IRecipeInput[0]);
     }
 
     public static NNList<IRecipeInput> toEIOInputsNN(List<IIngredient> inputs) {

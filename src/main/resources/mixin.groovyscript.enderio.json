@@ -6,6 +6,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AlloyRecipeManagerMixin",
-    "RecipeGroupHolderMixin"
+    "RecipeGroupHolderMixin",
+    "SagMillRecipeManagerMixin"
   ]
 }
