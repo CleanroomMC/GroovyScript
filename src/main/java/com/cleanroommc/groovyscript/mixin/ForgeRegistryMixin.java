@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -41,6 +42,9 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     @Shadow
     public abstract void register(V value);
 
+    @Shadow
+    @Final
+    private Class<V> superType;
     @Unique
     private BiMap<Integer, V> idsBackup;
     @Unique
@@ -49,6 +53,8 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     private BitSet availabilityMapBackup;
     @Unique
     private BitSet reloadableEntryIds;
+    @Unique
+    private boolean reloadable;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void construct(Class<V> superType,
@@ -68,10 +74,14 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
         namesBackup = HashBiMap.create();
         availabilityMapBackup = new BitSet();
         reloadableEntryIds = new BitSet();
+        reloadable = superType == IRecipe.class;
     }
 
     @Override
     public void onReload() {
+        if (!reloadable) {
+            throw new IllegalStateException("Registry of type " + superType.getName() + " is not reloadable!");
+        }
         ids.clear();
         ids.putAll(idsBackup);
         names.clear();
@@ -83,6 +93,9 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
 
     @Override
     public void removeEntry(V dummy) {
+        if (!reloadable) {
+            throw new IllegalStateException("Registry of type " + superType.getName() + " is not reloadable!");
+        }
         register(dummy);
     }
 
@@ -92,6 +105,7 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
             at = @At(value = "INVOKE", target = "Ljava/util/BitSet;set(I)V")
     )
     public void cacheEntry(int id, V value, String owner, CallbackInfoReturnable<Integer> cir, ResourceLocation key, int idToUse, IForgeRegistryEntry<V> oldEntry, Integer foundId) {
+        if (!reloadable) return;
         boolean registered = false;
         if (ReloadableRegistryManager.isShouldRegisterAsReloadable() || (registered = reloadableEntryIds.get(idToUse))) {
             if (!registered) {
@@ -109,6 +123,6 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
             at = @At(value = "INVOKE", target = "Lnet/minecraftforge/registries/ForgeRegistry;isLocked()Z")
     )
     public boolean lateAdditionCheck(ForgeRegistry<V> instance) {
-        return isFrozen && !ReloadableRegistryManager.isShouldRegisterAsReloadable();
+        return isFrozen && (reloadable && !ReloadableRegistryManager.isShouldRegisterAsReloadable());
     }
 }
