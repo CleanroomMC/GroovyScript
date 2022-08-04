@@ -179,14 +179,17 @@ public class GroovyLog {
         String engineCause = "groovy.util.GroovyScriptEngine.run";
         int i = 0;
         for (String line : lines) {
+            i++;
             if (line.startsWith(engineCause)) {
                 break;
             }
-            i++;
         }
-        if (i < lines.size()) {
-            lines = lines.subList(0, i + 1);
+        if (i > 0 && i <= lines.size()) {
+            lines = lines.subList(0, i);
         }
+        String groovyInternal = "org.codehaus.groovy.runtime";
+        String groovySandbox = "org.kohsuke";
+        lines.removeIf(s -> s.startsWith(groovyInternal) || s.startsWith(groovySandbox));
         return lines;
     }
 

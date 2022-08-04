@@ -80,7 +80,7 @@ public class SagMill {
 
         @Override
         public boolean validate() {
-            GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Soul Binder recipe").error();
+            GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Sag Mill recipe").error();
             msg.add(input.size() != 1, () -> "Must have exactly 1 input, but found " + input.size());
             msg.add(output.size() < 1 || output.size() > 4, () -> "Must have 1 - 4 outputs, but found " + output.size());
 
