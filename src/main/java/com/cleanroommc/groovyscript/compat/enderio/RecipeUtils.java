@@ -4,12 +4,22 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.IRecipeInput;
+import crazypants.enderio.base.recipe.MachineRecipeInput;
 import crazypants.enderio.base.recipe.RecipeOutput;
 import net.minecraft.item.ItemStack;
 
+import java.util.Collection;
 import java.util.List;
 
 public class RecipeUtils {
+
+    public static NNList<MachineRecipeInput> getMachineInputs(Collection<ItemStack> itemStacks) {
+        NNList<MachineRecipeInput> inputs = new NNList<>();
+        for (ItemStack itemStack : itemStacks) {
+            inputs.add(new MachineRecipeInput(-1, itemStack));
+        }
+        return inputs;
+    }
 
     public static IRecipeInput[] toEIOInputs(IIngredient[] inputs) {
         return ArrayUtils.map(inputs, RecipeUtils::toInput, new IRecipeInput[0]);
