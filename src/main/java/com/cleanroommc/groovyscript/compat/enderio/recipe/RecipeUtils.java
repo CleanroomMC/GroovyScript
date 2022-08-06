@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.enderio.recipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.enderio.core.common.util.NNList;
+import com.enderio.core.common.util.stackable.Things;
 import crazypants.enderio.base.recipe.IRecipeInput;
 import crazypants.enderio.base.recipe.MachineRecipeInput;
 import crazypants.enderio.base.recipe.RecipeOutput;
@@ -41,14 +42,6 @@ public class RecipeUtils {
         return ret;
     }
 
-    /*public static RecipeOutput[] toEIOOutputs(WeightedItemStack[] inputs, float[] xp) {
-        RecipeOutput[] ret = new RecipeOutput[inputs.length];
-        for (int i = 0; i < ret.length; i++) {
-            ret[i] = new RecipeOutput(CraftTweakerMC.getItemStack(inputs[i].getStack()), inputs[i].getChance(), xp[i]);
-        }
-        return ret;
-    }*/
-
     public static String getDisplayString(IIngredient... ings) {
         StringBuilder sb = new StringBuilder("[");
         for (IIngredient i : ings)
@@ -57,11 +50,11 @@ public class RecipeUtils {
         return sb.append("]").toString();
     }
 
-    /*public static String getDisplayString(WeightedItemStack... ings) {
-        StringBuilder sb = new StringBuilder("[");
-        for (WeightedItemStack i : ings)
-            sb.append(i == null ? i : i.getStack().toCommandString() + " % " + i.getPercent() + ",");
-        sb.replace(sb.length() - 1, sb.length(), "");
-        return sb.append("]").toString();
-    }*/
+    public static Things toThings(IIngredient ingredient) {
+        Things thing = new Things();
+        for (ItemStack itemStack : ingredient.getMatchingStacks()) {
+            thing.add(itemStack);
+        }
+        return thing;
+    }
 }

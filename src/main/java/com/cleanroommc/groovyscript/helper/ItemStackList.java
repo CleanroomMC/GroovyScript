@@ -23,4 +23,13 @@ public class ItemStackList extends ArrayList<ItemStack> {
             removeIf(IngredientHelper::isEmpty);
         }
     }
+
+    public void copyElements() {
+        for (int i = 0; i < size(); i++) {
+            ItemStack itemStack = get(i);
+            if (!IngredientHelper.isEmpty(itemStack)) {
+                set(i, itemStack.copy());
+            }
+        }
+    }
 }
