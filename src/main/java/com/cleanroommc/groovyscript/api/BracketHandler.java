@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.api;
 import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -65,6 +66,7 @@ public class BracketHandler {
         registerBracketHandler("item", itemStackBracketHandler);
         registerBracketHandler("liquid", BracketHandler::parseFluidStack);
         registerBracketHandler("fluid", BracketHandler::parseFluidStack);
+        registerBracketHandler("enchantment", Enchantment::getEnchantmentByLocation);
         if (Loader.isModLoaded("mekanism")) {
             registerBracketHandler("gas", s -> new GasStack(GasRegistry.getGas(s), 1000));
         }
