@@ -35,7 +35,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(IIngredient ingredient) {
-        return ingredient == null || ingredient.getAmount() == 0;
+        return ingredient == null || ingredient.getMatchingStacks().length == 0 || ingredient.getAmount() == 0;
     }
 
     public static boolean isEmpty(ItemStack itemStack) {

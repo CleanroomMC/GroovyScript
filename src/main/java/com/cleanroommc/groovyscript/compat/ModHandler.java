@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat;
 import com.cleanroommc.groovyscript.api.IGroovyPropertyGetter;
 import com.cleanroommc.groovyscript.compat.enderio.EnderIO;
 import com.cleanroommc.groovyscript.compat.mekanism.Mekanism;
+import com.cleanroommc.groovyscript.compat.thermal.Thermal;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.fml.common.Loader;
 import org.jetbrains.annotations.Nullable;
@@ -46,5 +47,6 @@ public class ModHandler implements IGroovyPropertyGetter {
     public void initDefaults() {
         registerMod("mekanism", Mekanism::new);
         registerMod("enderio", EnderIO::new);
+        registerMod("thermal", Thermal::new, Loader.isModLoaded("thermalexpansion"));
     }
 }

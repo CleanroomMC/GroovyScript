@@ -96,6 +96,8 @@ dependencies {
     deobfProvided 'curse.maven:mekanism-268560:2835175'
     deobfProvided 'curse.maven:ender_io-64578:3328811'
     deobfProvided 'curse.maven:endercore-231868:2972849'
+    deobfCompile 'curse.maven:thermal_expansion-69163:2926431'
+    deobfCompile 'curse.maven:cofh_core-69162:2920433'
 
     shadow 'org.codehaus.groovy:groovy-ant:3.0.11'
     shadow 'org.codehaus.groovy:groovy-astbuilder:3.0.11'

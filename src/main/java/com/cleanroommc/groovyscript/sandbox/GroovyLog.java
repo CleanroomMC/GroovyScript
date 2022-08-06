@@ -278,5 +278,13 @@ public class GroovyLog {
         public boolean hasSubMessages() {
             return this.messages.size() > 1;
         }
+
+        public boolean logIfNotEmpty() {
+            if (hasSubMessages()) {
+                LOG.log(this);
+                return true;
+            }
+            return false;
+        }
     }
 }

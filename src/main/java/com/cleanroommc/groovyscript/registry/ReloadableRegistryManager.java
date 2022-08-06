@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.compat.thermal.Pulverizer;
 import com.cleanroommc.groovyscript.mixin.JeiProxyAccessor;
 import crazypants.enderio.base.fluid.FluidFuelRegister;
 import crazypants.enderio.base.recipe.MachineRecipeRegistry;
@@ -49,6 +50,9 @@ public class ReloadableRegistryManager {
             ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_EMPTYING)).onReload();
             ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_FILLING)).onReload();
             ((IReloadableRegistry<?>) FluidFuelRegister.instance).onReload();
+        }
+        if (Loader.isModLoaded("thermalexpansion")) {
+            Pulverizer.onReload();
         }
     }
 
