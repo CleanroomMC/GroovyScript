@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -21,8 +22,15 @@ public class BracketHandler {
 
     private static final Map<String, Function<String, Object>> bracketHandlers = new HashMap<>();
     public static final Function<String, Object> itemStackBracketHandler = s -> {
+        String[] parts = s.split(":");
+        if (parts.length == 0) return null;
+        if (parts.length == 1) {
+            if (parts[0].equals("empty")) return IIngredient.EMPTY;
+            if (parts[0].equals("any")) return IIngredient.ANY;
+            return null;
+        }
         try {
-            return parseItemStack(s);
+            return parseItemStack(parts);
         } catch (Exception e) {
             return null;
         }
@@ -62,17 +70,15 @@ public class BracketHandler {
         }
     }
 
-    public static ItemStack parseItemStack(String raw) {
-        String[] parts = raw.split(":");
-        if (parts.length < 2) throw new IllegalArgumentException();
-        Item item1 = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
+    public static ItemStack parseItemStack(String[] raw) {
+        Item item1 = ForgeRegistries.ITEMS.getValue(new ResourceLocation(raw[0], raw[1]));
         if (item1 == null) {
-            throw new NoSuchElementException("Can't find item for " + raw);
+            throw new NoSuchElementException("Can't find item for " + Arrays.toString(raw));
         }
         int meta = 0;
-        if (parts.length > 2) {
+        if (raw.length > 2) {
             try {
-                meta = Integer.parseInt(parts[2]);
+                meta = Integer.parseInt(raw[2]);
             } catch (NumberFormatException ignored) {
             }
         }

@@ -18,14 +18,14 @@ public class IngredientWrapper {
     }
 
     public IngredientWrapper(IIngredient left, IIngredient middle, IIngredient right) {
-        this.left = IngredientHelper.optionalIngredient(left);
-        this.middle = IngredientHelper.optionalIngredient(middle);
-        this.right = IngredientHelper.optionalIngredient(right);
+        this.left = MekanismIngredientHelper.optionalIngredient(left);
+        this.middle = MekanismIngredientHelper.optionalIngredient(middle);
+        this.right = MekanismIngredientHelper.optionalIngredient(right);
         this.infuseType = "";
     }
 
     public IngredientWrapper(IIngredient ingredient, String infuseType) {
-        this.left = IngredientHelper.optionalIngredient(ingredient);
+        this.left = MekanismIngredientHelper.optionalIngredient(ingredient);
         this.middle = IIngredient.ANY;
         this.right = IIngredient.ANY;
         this.infuseType = infuseType == null ? "" : infuseType;

@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
+import com.cleanroommc.groovyscript.compat.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -83,6 +84,8 @@ public class SoulBinder {
         @Override
         public boolean validate() {
             GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Soul Binder recipe").error();
+            input.trim();
+            output.trim();
             msg.add(input.size() != 1, () -> "Must have exactly 1 input, but found " + input.size());
             msg.add(output.size() != 1, () -> "Must have exactly 1 output, but found " + output.size());
             if (!entityErrors.isEmpty()) {

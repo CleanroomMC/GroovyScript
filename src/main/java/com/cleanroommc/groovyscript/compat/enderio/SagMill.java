@@ -1,5 +1,7 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
+import com.cleanroommc.groovyscript.compat.enderio.recipe.EnderIORecipeBuilder;
+import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.SagRecipe;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
@@ -81,6 +83,8 @@ public class SagMill {
         @Override
         public boolean validate() {
             GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Sag Mill recipe").error();
+            input.trim();
+            output.trim();
             msg.add(input.size() != 1, () -> "Must have exactly 1 input, but found " + input.size());
             msg.add(output.size() < 1 || output.size() > 4, () -> "Must have 1 - 4 outputs, but found " + output.size());
 

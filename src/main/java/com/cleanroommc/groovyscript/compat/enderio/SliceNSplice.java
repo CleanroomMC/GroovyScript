@@ -1,7 +1,11 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.ManyToOneRecipe;
+import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeInput;
+import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeUtils;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import crazypants.enderio.base.recipe.*;
 import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
@@ -9,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SliceNSplice {
@@ -54,7 +59,9 @@ public class SliceNSplice {
         @Override
         public boolean validate() {
             GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Slice'n'Splice recipe").error();
-            msg.add(input.size() < 1 || input.size() > 6, () -> "Must have 1 - 6 inputs, but found " + input.size());
+            int inputSize = input.getRealSize();
+            output.trim();
+            msg.add(inputSize < 1 || inputSize > 6, () -> "Must have 1 - 6 inputs, but found " + input.size());
             msg.add(output.size() != 1, () -> "Must have exactly 1 output, but found " + output.size());
 
             if (energy <= 0) energy = 5000;
@@ -71,11 +78,13 @@ public class SliceNSplice {
         public @Nullable IRecipe register() {
             if (!validate()) return null;
             RecipeOutput recipeOutput = new RecipeOutput(output.get(0), 1, xp);
-            IRecipeInput[] inputs = new IRecipeInput[input.size()];
+            List<IRecipeInput> inputs = new ArrayList<>();
             for (int i = 0; i < input.size(); i++) {
-                inputs[i] = new RecipeInput(input.get(i), i);
+                IIngredient ingredient = input.get(i);
+                if (IngredientHelper.isEmpty(ingredient)) continue;
+                inputs.add(new RecipeInput(ingredient, i));
             }
-            Recipe recipe = new ManyToOneRecipe(recipeOutput, energy, RecipeBonusType.NONE, RecipeLevel.IGNORE, inputs);
+            Recipe recipe = new ManyToOneRecipe(recipeOutput, energy, RecipeBonusType.NONE, RecipeLevel.IGNORE, inputs.toArray(new IRecipeInput[0]));
             SliceAndSpliceRecipeManager.getInstance().addRecipe(recipe);
             return recipe;
         }

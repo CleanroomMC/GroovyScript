@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.mixin.enderio;
 
-import com.cleanroommc.groovyscript.compat.enderio.IEnderIORecipes;
+import com.cleanroommc.groovyscript.compat.enderio.recipe.IEnderIORecipes;
 import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;

@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.enderio;
+package com.cleanroommc.groovyscript.compat.enderio.recipe;
 
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import crazypants.enderio.base.recipe.RecipeLevel;

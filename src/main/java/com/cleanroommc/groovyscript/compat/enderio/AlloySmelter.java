@@ -1,5 +1,8 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
+import com.cleanroommc.groovyscript.compat.enderio.recipe.EnderIORecipeBuilder;
+import com.cleanroommc.groovyscript.compat.enderio.recipe.IEnderIORecipes;
+import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import com.enderio.core.common.util.NNList;
@@ -29,6 +32,8 @@ public class AlloySmelter {
         @Override
         public boolean validate() {
             GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Alloy Smelter recipe").error();
+            input.trim();
+            output.trim();
             msg.add(input.size() < 1 || input.size() > 3, () -> "Must have 1 - 3 inputs, but found " + input.size());
             msg.add(output.size() != 1, () -> "Must have exactly 1 output, but found " + output.size());
 

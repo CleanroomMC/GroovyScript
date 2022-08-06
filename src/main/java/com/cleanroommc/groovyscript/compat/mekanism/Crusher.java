@@ -15,7 +15,7 @@ public class Crusher {
 
     public void remove(ItemStack input, ItemStack output) {
         RecipeHandler.Recipe.CRUSHER.get().entrySet().removeIf(entry ->
-                IngredientHelper.matches(entry.getValue().recipeInput, new IngredientWrapper((IIngredient) (Object) input)) &&
-                        IngredientHelper.matches(entry.getValue().recipeOutput, new IngredientWrapper((IIngredient) (Object) output)));
+                MekanismIngredientHelper.matches(entry.getValue().recipeInput, new IngredientWrapper((IIngredient) (Object) input)) &&
+                        MekanismIngredientHelper.matches(entry.getValue().recipeOutput, new IngredientWrapper((IIngredient) (Object) output)));
     }
 }

@@ -1,17 +1,17 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.IngredientList;
+import com.cleanroommc.groovyscript.helper.ItemStackList;
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
-    protected final List<IIngredient> input = new ArrayList<>();
-    protected final List<ItemStack> output = new ArrayList<>();
+    protected final IngredientList<IIngredient> input = new IngredientList<>();
+    protected final ItemStackList output = new ItemStackList();
 
     public AbstractRecipeBuilder<T> input(IIngredient ingredient) {
         this.input.add(ingredient);

@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.enderio;
+package com.cleanroommc.groovyscript.compat.enderio.recipe;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;

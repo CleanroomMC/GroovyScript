@@ -1,12 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mekanism;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.api.gas.Gas;
-import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
-import mekanism.common.integration.crafttweaker.gas.IGasStack;
 import mekanism.common.recipe.ingredients.IMekanismIngredient;
 import mekanism.common.recipe.ingredients.IngredientMekIngredientWrapper;
 import mekanism.common.recipe.ingredients.ItemStackMekIngredient;
@@ -17,9 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-public class IngredientHelper {
+public class MekanismIngredientHelper {
 
-    private IngredientHelper() {
+    private MekanismIngredientHelper() {
     }
 
     public static IIngredient optionalIngredient(IIngredient ingredient) {
@@ -133,8 +132,8 @@ public class IngredientHelper {
         if (ingredient instanceof OreDictIngredient) {
             return new OredictMekIngredient(((OreDictIngredient) ingredient).getOreDict());
         }
-        if ((Object) ingredient instanceof ItemStack) {
-            return new ItemStackMekIngredient((ItemStack) (Object) ingredient);
+        if (IngredientHelper.isItem(ingredient)) {
+            return new ItemStackMekIngredient(IngredientHelper.toItemStack(ingredient));
         }
         return new IngredientMekIngredientWrapper(ingredient.toMcIngredient());
     }
@@ -150,17 +149,5 @@ public class IngredientHelper {
             return ((GasStack) ingredient).isGasEqual(gasStack);
         }
         return false;
-    }
-
-    public static GasStack toGas(IGasStack iStack) {
-        return iStack == null ? null : new GasStack(GasRegistry.getGas(iStack.getName()), iStack.getAmount());
-    }
-
-    public static GasStack[] toGases(IGasStack[] iStack) {
-        GasStack[] stack = new GasStack[iStack.length];
-        for (int i = 0; i < stack.length; i++) {
-            stack[i] = toGas(iStack[i]);
-        }
-        return stack;
     }
 }
