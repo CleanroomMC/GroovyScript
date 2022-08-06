@@ -26,7 +26,7 @@ public class OreDictIngredient implements IIngredient {
 
     @Override
     public void setAmount(int amount) {
-        count = amount;
+        count = Math.max(0, amount);
     }
 
     @Override

@@ -4,24 +4,25 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import crazypants.enderio.base.recipe.IRecipeInput;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 
 public class RecipeInput implements IRecipeInput {
 
-    protected final Ingredient ing;
+    protected final IIngredient ing;
+    protected final int slot;
 
-    public RecipeInput(IIngredient ingredient) {
-        this(ingredient.toMcIngredient());
+    public RecipeInput(IIngredient ing) {
+        this(ing, -1);
     }
 
-    public RecipeInput(Ingredient ing) {
-        this.ing = ing;
-        if (ing.getMatchingStacks().length == 0) {
+    public RecipeInput(IIngredient ing, int slot) {
+        this.ing = ing == null ? IIngredient.EMPTY : ing.exactCopy();
+        this.slot = slot;
+        if (this.ing.getMatchingStacks().length == 0) {
             GroovyLog.LOG.warn("EnderTweaker received an empty ingredient. This may cause problems.");
-            GroovyLog.LOG.warn(ing.toString());
+            GroovyLog.LOG.warn(this.ing.toString());
         }
     }
 
@@ -33,7 +34,7 @@ public class RecipeInput implements IRecipeInput {
 
     @Override
     public boolean isFluid() {
-        return false;
+        return ing instanceof FluidStack;
     }
 
     @Nonnull
@@ -44,27 +45,27 @@ public class RecipeInput implements IRecipeInput {
 
     @Override
     public FluidStack getFluidInput() {
-        return null;
+        return ing instanceof FluidStack ? ((FluidStack) ing).copy() : null;
     }
 
     @Override
     public float getMulitplier() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getSlotNumber() {
-        return -1;
+        return slot;
     }
 
     @Override
     public boolean isInput(@Nonnull ItemStack test) {
-        return ing.apply(test);
+        return ing.test(test);
     }
 
     @Override
     public boolean isInput(FluidStack test) {
-        return false;
+        return test != null && ing.test(test);
     }
 
     @Override
@@ -83,11 +84,12 @@ public class RecipeInput implements IRecipeInput {
 
     @Override
     public void shrinkStack(int count) {
+        ing.setAmount(ing.getAmount() - count);
     }
 
     @Override
     public int getStackSize() {
-        return ing.getMatchingStacks().length == 0 ? 0 : ing.getMatchingStacks()[0].getCount();
+        return ing.getAmount();
     }
 
 }

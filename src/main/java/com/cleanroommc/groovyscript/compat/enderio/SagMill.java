@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
-import com.cleanroommc.groovyscript.helper.ArrayUtils;
+import com.cleanroommc.groovyscript.compat.enderio.recipe.SagRecipe;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -100,7 +100,7 @@ public class SagMill {
             for (int i = 0; i < outputs.length; i++) {
                 outputs[i] = new RecipeOutput(output.get(i), chances.get(i));
             }
-            Recipe recipe = new Recipe(ArrayUtils.map(input, RecipeInput::new, new RecipeInput[0]), outputs, energy, bonusType, level);
+            Recipe recipe = new SagRecipe(new RecipeInput(input.get(0)), energy, bonusType, level, outputs);
             SagMillRecipeManager.getInstance().addRecipe(recipe);
             return recipe;
         }

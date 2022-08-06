@@ -22,13 +22,13 @@ public class RecipeUtils {
     }
 
     public static IRecipeInput[] toEIOInputs(IIngredient[] inputs) {
-        return ArrayUtils.map(inputs, RecipeUtils::toInput, new IRecipeInput[0]);
+        return ArrayUtils.map(inputs, RecipeInput::new, new IRecipeInput[0]);
     }
 
     public static NNList<IRecipeInput> toEIOInputsNN(List<IIngredient> inputs) {
         NNList<IRecipeInput> ret = new NNList<>();
         for (IIngredient input : inputs) {
-            ret.add(toInput(input));
+            ret.add(new RecipeInput(input));
         }
         return ret;
     }
@@ -48,10 +48,6 @@ public class RecipeUtils {
         }
         return ret;
     }*/
-
-    public static RecipeInput toInput(IIngredient ing) {
-        return new RecipeInput(ing.exactCopy());
-    }
 
     public static String getDisplayString(IIngredient... ings) {
         StringBuilder sb = new StringBuilder("[");

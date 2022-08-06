@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.helper.ArrayUtils;
+import com.cleanroommc.groovyscript.compat.enderio.recipe.ManyToOneRecipe;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import crazypants.enderio.base.recipe.*;
 import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 
 public class SliceNSplice {
@@ -71,8 +70,12 @@ public class SliceNSplice {
         @Override
         public @Nullable IRecipe register() {
             if (!validate()) return null;
-            RecipeOutput recipeOutput = new RecipeOutput(output.get(0), xp);
-            Recipe recipe = new Recipe(ArrayUtils.map(input, RecipeInput::new, new RecipeInput[0]), new RecipeOutput[]{recipeOutput}, energy, RecipeBonusType.NONE, RecipeLevel.IGNORE);
+            RecipeOutput recipeOutput = new RecipeOutput(output.get(0), 1, xp);
+            IRecipeInput[] inputs = new IRecipeInput[input.size()];
+            for (int i = 0; i < input.size(); i++) {
+                inputs[i] = new RecipeInput(input.get(i), i);
+            }
+            Recipe recipe = new ManyToOneRecipe(recipeOutput, energy, RecipeBonusType.NONE, RecipeLevel.IGNORE, inputs);
             SliceAndSpliceRecipeManager.getInstance().addRecipe(recipe);
             return recipe;
         }
