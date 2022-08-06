@@ -8,4 +8,5 @@ public class EnderIO {
     public final SliceNSplice SliceNSplice = new SliceNSplice();
     public final CombustionGen CombustionGen = new CombustionGen();
     public final Enchanter Enchanter = new Enchanter();
+    public final Vat Vat = new Vat();
 }

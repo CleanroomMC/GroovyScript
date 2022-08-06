@@ -9,6 +9,7 @@
     "FluidFuelsRegistryMixin",
     "RecipeGroupHolderMixin",
     "SagMillRecipeManagerMixin",
-    "SliceNSpliceRecipeManagerMixin"
+    "SliceNSpliceRecipeManagerMixin",
+    "VatRecipeManagerMixin"
   ]
 }

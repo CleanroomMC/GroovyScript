@@ -42,4 +42,8 @@ public class IngredientHelper {
         return itemStack == null || itemStack.isEmpty();
     }
 
+    public static boolean isEmpty(FluidStack itemStack) {
+        return itemStack == null || itemStack.amount <= 0;
+    }
+
 }

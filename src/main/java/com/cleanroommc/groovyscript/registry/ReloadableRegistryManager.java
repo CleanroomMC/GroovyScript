@@ -7,6 +7,7 @@ import crazypants.enderio.base.recipe.MachineRecipeRegistry;
 import crazypants.enderio.base.recipe.alloysmelter.AlloyRecipeManager;
 import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
 import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
+import crazypants.enderio.base.recipe.vat.VatRecipeManager;
 import mekanism.common.recipe.RecipeHandler;
 import mezz.jei.JustEnoughItems;
 import net.minecraft.util.ResourceLocation;
@@ -42,6 +43,7 @@ public class ReloadableRegistryManager {
             ((IReloadableRegistry<?>) AlloyRecipeManager.getInstance()).onReload();
             ((IReloadableRegistry<?>) (Object) SagMillRecipeManager.getInstance()).onReload();
             ((IReloadableRegistry<?>) SliceAndSpliceRecipeManager.getInstance()).onReload();
+            ((IReloadableRegistry<?>) VatRecipeManager.getInstance()).onReload();
             ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.SOULBINDER)).onReload();
             ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.ENCHANTER)).onReload();
             ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_EMPTYING)).onReload();
