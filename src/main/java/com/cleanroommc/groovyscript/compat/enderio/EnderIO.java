@@ -6,4 +6,5 @@ public class EnderIO {
     public final SoulBinder SoulBinder = new SoulBinder();
     public final SagMill SagMill = new SagMill();
     public final SliceNSplice SliceNSplice = new SliceNSplice();
+    public final CombustionGen CombustionGen = new CombustionGen();
 }
