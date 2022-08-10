@@ -27,7 +27,7 @@ public class SliceNSplice {
                 .energy(energy)
                 .output(output)
                 .input(input)
-                .register();
+                .buildAndRegister();
     }
 
     public void remove(ItemStack output) {
@@ -73,7 +73,7 @@ public class SliceNSplice {
         }
 
         @Override
-        public @Nullable IRecipe register() {
+        public @Nullable IRecipe buildAndRegister() {
             if (!validate()) return null;
             RecipeOutput recipeOutput = new RecipeOutput(output.get(0), 1, xp);
             List<IRecipeInput> inputs = new ArrayList<>();

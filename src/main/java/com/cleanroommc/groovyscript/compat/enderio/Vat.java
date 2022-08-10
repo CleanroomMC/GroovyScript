@@ -113,7 +113,7 @@ public class Vat {
         }
 
         @Override
-        public @Nullable Recipe register() {
+        public @Nullable Recipe buildAndRegister() {
             if (!validate()) return null;
             List<IRecipeInput> inputs = new ArrayList<>();
             for (int i = 0; i < itemInputs1.size(); i++) {

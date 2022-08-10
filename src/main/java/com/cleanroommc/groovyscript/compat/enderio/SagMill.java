@@ -93,7 +93,7 @@ public class SagMill {
         }
 
         @Override
-        public @Nullable Recipe register() {
+        public @Nullable Recipe buildAndRegister() {
             if (!validate()) return null;
             RecipeOutput[] outputs = new RecipeOutput[output.size()];
             for (int i = 0; i < outputs.length; i++) {

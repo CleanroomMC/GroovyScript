@@ -86,7 +86,7 @@ public class Pulverizer {
         }
 
         @Override
-        public @Nullable PulverizerManager.PulverizerRecipe register() {
+        public @Nullable PulverizerManager.PulverizerRecipe buildAndRegister() {
             if (!validate()) return null;
             PulverizerManager.PulverizerRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {

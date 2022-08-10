@@ -43,7 +43,7 @@ public class AlloySmelter {
         }
 
         @Override
-        public @Nullable Void register() {
+        public @Nullable Void buildAndRegister() {
             if (!validate()) return null;
             AlloyRecipeManager.getInstance().addRecipe(true, ArrayUtils.mapToList(input, RecipeInput::new, new NNList<>()), output.get(0), energy, xp, level);
             return null;

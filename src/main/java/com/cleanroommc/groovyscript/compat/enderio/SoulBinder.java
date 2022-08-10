@@ -101,7 +101,7 @@ public class SoulBinder {
         }
 
         @Override
-        public @Nullable BasicSoulBinderRecipe register() {
+        public @Nullable BasicSoulBinderRecipe buildAndRegister() {
             if (!validate()) return null;
             BasicSoulBinderRecipe recipe = new BasicSoulBinderRecipe(
                     input.get(0).getMatchingStacks()[0],

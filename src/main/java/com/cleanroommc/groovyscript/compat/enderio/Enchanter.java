@@ -20,7 +20,7 @@ public class Enchanter {
         recipeBuilder()
                 .enchantment(enchantment)
                 .input(input)
-                .register();
+                .buildAndRegister();
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -102,7 +102,7 @@ public class Enchanter {
         }
 
         @Override
-        public @Nullable EnchanterRecipe register() {
+        public @Nullable EnchanterRecipe buildAndRegister() {
             if (!validate()) return null;
             EnchanterRecipe recipe = new CustomEnchanterRecipe(input, amount, enchantment, costMultiplier, lapis, book);
             MachineRecipeRegistry.instance.registerRecipe(recipe);
