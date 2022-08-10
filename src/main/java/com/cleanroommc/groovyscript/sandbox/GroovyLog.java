@@ -166,7 +166,8 @@ public class GroovyLog {
      * @param throwable exception
      */
     public void exception(Throwable throwable) {
-        writeLogLine(formatLine("ERROR", throwable.toString()));
+        writeLogLine(formatLine("ERROR", "An exception occurred while running scripts. Look at latest.log for a full stacktrace:"));
+        writeLogLine("\t" + throwable.toString());
         throwable.printStackTrace();
         for (String line : prepareStackTrace(throwable.getStackTrace())) {
             writeLogLine("\t\tat " + line);
@@ -245,7 +246,7 @@ public class GroovyLog {
             return this;
         }
 
-        public Msg level(Level level) {
+        private Msg level(Level level) {
             this.level = level;
             return this;
         }

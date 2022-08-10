@@ -18,6 +18,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.jetbrains.annotations.Nullable;
 import org.kohsuke.groovy.sandbox.SandboxTransformer;
 
 import java.io.File;
@@ -31,7 +32,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class SandboxRunner {
@@ -70,17 +70,18 @@ public class SandboxRunner {
         }
     }
 
-    public static boolean run() {
+    @Nullable
+    public static Throwable run() {
         try {
             runScript();
-            return true;
+            return null;
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.LOG.error("An Exception occurred trying to run groovy!");
             e.printStackTrace();
-            return false;
+            return e;
         } catch (Exception e) {
             GroovyLog.LOG.exception(e);
-            return false;
+            return e;
         }
     }
 
