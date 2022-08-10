@@ -2,8 +2,8 @@ package com.cleanroommc.groovyscript.compat.thermal;
 
 import cofh.core.inventory.ComparableItemStackValidated;
 import cofh.thermalexpansion.util.managers.machine.PulverizerManager;
+import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.mixin.thermal.PulverizerManagerAccessor;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -46,11 +46,10 @@ public class Pulverizer {
         }
     }
 
-    public static class RecipeBuilder extends AbstractRecipeBuilder<PulverizerManager.PulverizerRecipe> {
+    public static class RecipeBuilder extends EnergyRecipeBuilder<PulverizerManager.PulverizerRecipe> {
 
         private ItemStack secOutput;
         private int chance;
-        private int energy;
 
         public RecipeBuilder secondaryOutput(ItemStack itemStack, int chance) {
             this.secOutput = itemStack;
@@ -60,11 +59,6 @@ public class Pulverizer {
 
         public RecipeBuilder secondaryOutput(ItemStack itemStack) {
             return secondaryOutput(itemStack, 100);
-        }
-
-        public RecipeBuilder energy(int energy) {
-            this.energy = energy;
-            return this;
         }
 
         @Override
