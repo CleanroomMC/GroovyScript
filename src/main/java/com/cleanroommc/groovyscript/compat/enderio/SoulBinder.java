@@ -82,27 +82,22 @@ public class SoulBinder {
         }
 
         @Override
-        public boolean validate() {
-            GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Soul Binder recipe").error();
-            input.trim();
-            output.trim();
-            msg.add(input.size() != 1, () -> "Must have exactly 1 input, but found " + input.size());
-            msg.add(output.size() != 1, () -> "Must have exactly 1 output, but found " + output.size());
+        public String getErrorMsg() {
+            return "Error adding EnderIO Soul Binder recipe";
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
+            validateItems(msg, 1, 1, 1, 1);
+            validateFluids(msg);
             if (!entityErrors.isEmpty()) {
                 for (String error : entityErrors) {
                     msg.add("could not find entity with name %s", error);
                 }
             }
-
             if (energy <= 0) energy = 5000;
             if (xp <= 0) xp = 2;
             if (name == null || name.isEmpty()) name = RecipeName.generate();
-
-            if (msg.hasSubMessages()) {
-                GroovyLog.LOG.log(msg);
-                return false;
-            }
-            return true;
         }
 
         @Override

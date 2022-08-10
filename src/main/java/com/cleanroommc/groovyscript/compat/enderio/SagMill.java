@@ -81,20 +81,15 @@ public class SagMill {
         }
 
         @Override
-        public boolean validate() {
-            GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Sag Mill recipe").error();
-            input.trim();
-            output.trim();
-            msg.add(input.size() != 1, () -> "Must have exactly 1 input, but found " + input.size());
-            msg.add(output.size() < 1 || output.size() > 4, () -> "Must have 1 - 4 outputs, but found " + output.size());
+        public String getErrorMsg() {
+            return "Error adding EnderIO Sag Mill recipe";
+        }
 
+        @Override
+        public void validate(GroovyLog.Msg msg) {
+            validateItems(msg, 1, 1, 1, 4);
+            validateFluids(msg);
             if (energy <= 0) energy = 5000;
-
-            if (msg.hasSubMessages()) {
-                GroovyLog.LOG.log(msg);
-                return false;
-            }
-            return true;
         }
 
         @Override

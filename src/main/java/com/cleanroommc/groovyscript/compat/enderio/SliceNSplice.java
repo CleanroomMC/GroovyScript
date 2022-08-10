@@ -57,21 +57,19 @@ public class SliceNSplice {
         }
 
         @Override
-        public boolean validate() {
-            GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Slice'n'Splice recipe").error();
+        public String getErrorMsg() {
+            return "Error adding EnderIO Slice'n'Splice recipe";
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
             int inputSize = input.getRealSize();
             output.trim();
             msg.add(inputSize < 1 || inputSize > 6, () -> "Must have 1 - 6 inputs, but found " + input.size());
             msg.add(output.size() != 1, () -> "Must have exactly 1 output, but found " + output.size());
-
+            validateFluids(msg);
             if (energy <= 0) energy = 5000;
             if (xp < 0) xp = 0;
-
-            if (msg.hasSubMessages()) {
-                GroovyLog.LOG.log(msg);
-                return false;
-            }
-            return true;
         }
 
         @Override

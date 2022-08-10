@@ -3,11 +3,19 @@ package com.cleanroommc.groovyscript.helper;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * A item stack list with helpers to handle empty stacks
  */
 public class ItemStackList extends ArrayList<ItemStack> {
+
+    public ItemStackList() {
+    }
+
+    public ItemStackList(Collection<ItemStack> collection) {
+        super(collection);
+    }
 
     public int getRealSize() {
         if (isEmpty()) return 0;
