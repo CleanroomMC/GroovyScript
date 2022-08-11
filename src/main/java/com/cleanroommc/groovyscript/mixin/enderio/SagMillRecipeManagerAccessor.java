@@ -6,7 +6,7 @@ import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(SagMillRecipeManager.class)
+@Mixin(value = SagMillRecipeManager.class, remap = false)
 public interface SagMillRecipeManagerAccessor {
 
     @Accessor

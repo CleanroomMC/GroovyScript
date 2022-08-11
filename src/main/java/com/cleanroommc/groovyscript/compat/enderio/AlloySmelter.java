@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.compat.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.mixin.enderio.AlloyRecipeManagerAccessor;
-import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import com.enderio.core.common.util.NNList;

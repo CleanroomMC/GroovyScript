@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.BitSet;
 
+// TODO
 @Mixin(value = ForgeRegistry.class, remap = false)
 public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> implements IReloadableRegistry<V> {
 
@@ -107,7 +108,7 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     public void cacheEntry(int id, V value, String owner, CallbackInfoReturnable<Integer> cir, ResourceLocation key, int idToUse, IForgeRegistryEntry<V> oldEntry, Integer foundId) {
         if (!reloadable) return;
         boolean registered = false;
-        if (ReloadableRegistryManager.isShouldRegisterAsReloadable() || (registered = reloadableEntryIds.get(idToUse))) {
+        if (!ReloadableRegistryManager.isFirstLoad() || (registered = reloadableEntryIds.get(idToUse))) {
             if (!registered) {
                 this.reloadableEntryIds.set(idToUse);
             }
@@ -123,6 +124,6 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
             at = @At(value = "INVOKE", target = "Lnet/minecraftforge/registries/ForgeRegistry;isLocked()Z")
     )
     public boolean lateAdditionCheck(ForgeRegistry<V> instance) {
-        return isFrozen && (reloadable && !ReloadableRegistryManager.isShouldRegisterAsReloadable());
+        return isFrozen && (reloadable && ReloadableRegistryManager.isFirstLoad());
     }
 }

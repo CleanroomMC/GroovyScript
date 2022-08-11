@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin(FluidFuelRegister.class)
+@Mixin(value = FluidFuelRegister.class, remap = false)
 public interface FluidFuelRegisterAccessor {
 
     @Accessor

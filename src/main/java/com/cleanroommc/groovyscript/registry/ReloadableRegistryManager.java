@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.compat.ModSupport;
+import com.cleanroommc.groovyscript.compat.enderio.EnderIO;
 import com.cleanroommc.groovyscript.compat.thermalexpansion.ThermalExpansion;
 import com.cleanroommc.groovyscript.mixin.JeiProxyAccessor;
 import crazypants.enderio.base.fluid.FluidFuelRegister;
@@ -74,18 +75,18 @@ public class ReloadableRegistryManager {
         // TODO: reloadableRegistries.forEach(IReloadableVirtualizedRegistry::onReload);
         reloadForgeRegistry(ForgeRegistries.RECIPES);
         if (ModSupport.MEKANISM.isLoaded()) {
-            RecipeHandler.Recipe.values().forEach(recipe -> ((IReloadableRegistry<?>) recipe).onReload());
+            // RecipeHandler.Recipe.values().forEach(recipe -> ((IReloadableRegistry<?>) recipe).onReload());
         }
         if (ModSupport.ENDER_IO.isLoaded()) {
-            ((IReloadableRegistry<?>) AlloyRecipeManager.getInstance()).onReload();
-            ((IReloadableRegistry<?>) (Object) SagMillRecipeManager.getInstance()).onReload();
-            ((IReloadableRegistry<?>) SliceAndSpliceRecipeManager.getInstance()).onReload();
-            ((IReloadableRegistry<?>) VatRecipeManager.getInstance()).onReload();
-            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.SOULBINDER)).onReload();
-            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.ENCHANTER)).onReload();
-            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_EMPTYING)).onReload();
-            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_FILLING)).onReload();
-            ((IReloadableRegistry<?>) FluidFuelRegister.instance).onReload();
+            EnderIO enderIO = ModSupport.ENDER_IO.get();
+            enderIO.AlloySmelter.onReload();
+            enderIO.CombustionGen.onReload();
+            enderIO.Enchanter.onReload();
+            enderIO.SagMill.onReload();
+            enderIO.SliceNSplice.onReload();
+            enderIO.SoulBinder.onReload();
+            enderIO.Tank.onReload();
+            enderIO.Vat.onReload();
         }
         if (ModSupport.THERMAL_EXPANSION.isLoaded()) {
             ModSupport.THERMAL_EXPANSION.get().Pulverizer.onReload();
@@ -95,7 +96,7 @@ public class ReloadableRegistryManager {
     @ApiStatus.Internal
     public static void afterScriptRun() {
         if (ModSupport.ENDER_IO.isLoaded()) {
-            ((IReloadableRegistry<?>) AlloyRecipeManager.getInstance()).afterScript();
+            // ((IReloadableRegistry<?>) AlloyRecipeManager.getInstance()).afterScript();
         }
     }
 
