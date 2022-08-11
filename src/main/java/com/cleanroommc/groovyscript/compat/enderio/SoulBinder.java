@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.IMachineRecipe;
@@ -35,9 +37,20 @@ public class SoulBinder {
         if (recipes.isEmpty()) {
             GroovyLog.LOG.error("No Soul Binder recipe found for " + output.getDisplayName());
         } else {
-            IReloadableRegistry<IMachineRecipe> registry = (IReloadableRegistry<IMachineRecipe>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.SOULBINDER);
-            recipes.forEach(registry::removeEntry);
+            for (IMachineRecipe recipe : recipes) {
+                MachineRecipeRegistry.instance.removeRecipe(recipe);
+                ReloadableRegistryManager.addRecipeForRecovery(SoulBinder.class, recipe);
+            }
         }
+    }
+
+    @GroovyBlacklist
+    public void onReload() {
+        ReloadableRegistryManager.unmarkScriptRecipes(SoulBinder.class).forEach(MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.SOULBINDER)::remove);
+        ReloadableRegistryManager.recoverRecipes(SoulBinder.class)
+                .stream()
+                .map(IMachineRecipe.class::cast)
+                .forEach(MachineRecipeRegistry.instance::registerRecipe);
     }
 
     public static class RecipeBuilder extends EnderIORecipeBuilder<BasicSoulBinderRecipe> {
@@ -118,6 +131,7 @@ public class SoulBinder {
                     entities,
                     new BasicSoulBinderRecipe.OutputFilter() {
                     });
+            ReloadableRegistryManager.markScriptRecipe(SoulBinder.class, recipe);
             MachineRecipeRegistry.instance.registerRecipe(recipe);
             return recipe;
         }

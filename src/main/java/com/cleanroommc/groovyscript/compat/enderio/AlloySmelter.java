@@ -1,23 +1,89 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.compat.ModSupport;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.EnderIORecipeBuilder;
-import com.cleanroommc.groovyscript.compat.enderio.recipe.IEnderIORecipes;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
+import com.cleanroommc.groovyscript.mixin.enderio.AlloyRecipeManagerAccessor;
+import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import com.enderio.core.common.util.NNList;
+import crazypants.enderio.base.recipe.IManyToOneRecipe;
 import crazypants.enderio.base.recipe.alloysmelter.AlloyRecipeManager;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
+import java.util.List;
+
 public class AlloySmelter {
+
+    @GroovyBlacklist
+    private final ThreadLocal<Boolean> captureRecipe = ThreadLocal.withInitial(() -> false);
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
     public void remove(ItemStack output) {
-        ((IEnderIORecipes) AlloyRecipeManager.getInstance()).removeRecipes(output);
+        IManyToOneRecipe recipe = find(output);
+        if (recipe != null) {
+            remove(recipe);
+        }
+    }
+
+    public void remove(IManyToOneRecipe recipe) {
+        ReloadableRegistryManager.addRecipeForRecovery(AlloySmelter.class, recipe);
+        Iterator<IManyToOneRecipe> iter = ((AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance()).getLookup().iterator();
+        while (iter.hasNext()) {
+            if (iter.next() == recipe) {
+                iter.remove();
+            }
+        }
+    }
+
+    @Nullable
+    public IManyToOneRecipe find(ItemStack output) {
+        for (IManyToOneRecipe recipe : ((AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance()).getLookup()) {
+            if (OreDictionary.itemMatches(output, recipe.getOutput(), false)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
+
+    @GroovyBlacklist
+    public void onReload() {
+        AlloyRecipeManagerAccessor manager = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
+        List<Object> markedList = ReloadableRegistryManager.unmarkScriptRecipes(AlloySmelter.class);
+        if (!markedList.isEmpty()) {
+            Iterator<IManyToOneRecipe> iter = manager.getLookup().iterator();
+            outer: while (iter.hasNext()) {
+                IManyToOneRecipe recipe = iter.next();
+                for (Object marked : markedList) {
+                    if (marked == recipe) {
+                        iter.remove();
+                        continue outer;
+                    }
+                }
+            }
+        }
+        List<Object> recoveredList = ReloadableRegistryManager.recoverRecipes(AlloySmelter.class);
+        if (!recoveredList.isEmpty()) {
+            for (Object recovered : recoveredList) {
+                IManyToOneRecipe recipe = (IManyToOneRecipe) recovered;
+                AlloyRecipeManagerAccessor.invokeAddRecipeToLookup(manager.getLookup(), recipe);
+                manager.invokeAddJEIIntegration(recipe);
+            }
+        }
+    }
+
+    @GroovyBlacklist
+    public boolean isCapturingRecipe() {
+        return captureRecipe.get();
     }
 
     public static class RecipeBuilder extends EnderIORecipeBuilder<Void> {
@@ -50,7 +116,10 @@ public class AlloySmelter {
         @Override
         public @Nullable Void register() {
             if (!validate()) return null;
+            ThreadLocal<Boolean> captureRecipe = ModSupport.ENDER_IO.getProperty(EnderIO.class).AlloySmelter.captureRecipe;
+            captureRecipe.set(true);
             AlloyRecipeManager.getInstance().addRecipe(true, ArrayUtils.mapToList(input, RecipeInput::new, new NNList<>()), output.get(0), energy, xp, level);
+            captureRecipe.set(false);
             return null;
         }
     }

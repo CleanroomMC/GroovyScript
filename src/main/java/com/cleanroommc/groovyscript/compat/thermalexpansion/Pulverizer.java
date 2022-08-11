@@ -1,11 +1,14 @@
-package com.cleanroommc.groovyscript.compat.thermal;
+package com.cleanroommc.groovyscript.compat.thermalexpansion;
 
 import cofh.core.inventory.ComparableItemStackValidated;
 import cofh.thermalexpansion.util.managers.machine.PulverizerManager;
+import cofh.thermalexpansion.util.managers.machine.PulverizerManager.PulverizerRecipe;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
-import com.cleanroommc.groovyscript.mixin.thermal.PulverizerManagerAccessor;
+import com.cleanroommc.groovyscript.mixin.thermalexpansion.PulverizerManagerAccessor;
+import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -14,26 +17,32 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class Pulverizer {
-
-    private static final Map<ComparableItemStackValidated, PulverizerManager.PulverizerRecipe> backupRecipeMap = new Object2ObjectOpenHashMap<>();
-
-    public static void addRecipe(ComparableItemStackValidated input, PulverizerManager.PulverizerRecipe recipe) {
-        if (!ReloadableRegistryManager.isShouldRegisterAsReloadable()) {
-            backupRecipeMap.put(input, recipe);
-        }
-    }
-
-    public static void onReload() {
-        PulverizerManagerAccessor.getRecipeMap().clear();
-        PulverizerManagerAccessor.getRecipeMap().putAll(backupRecipeMap);
-    }
+public class Pulverizer implements IReloadableRegistry<PulverizerRecipe> {
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    public static class RecipeBuilder implements IRecipeBuilder<PulverizerManager.PulverizerRecipe> {
+    @Override
+    @GroovyBlacklist
+    public void onReload() {
+        Map<ComparableItemStackValidated, PulverizerRecipe> currentMap = PulverizerManagerAccessor.getRecipeMap();
+        Map<ComparableItemStackValidated, PulverizerRecipe> newMap = new Object2ObjectOpenHashMap<>(currentMap);
+        ReloadableRegistryManager.unmarkScriptRecipes(Pulverizer.class).forEach(recipe -> newMap.values().removeIf(r -> r == recipe));
+        ReloadableRegistryManager.recoverRecipes(Pulverizer.class)
+                .stream()
+                .map(recipe -> (PulverizerRecipe) recipe)
+                .forEach(recipe -> newMap.put(PulverizerManagerAccessor.invokeConvertInput(recipe.getInput()), recipe));
+        PulverizerManagerAccessor.setRecipeMap(newMap);
+    }
+
+    @Override
+    public void removeEntry(PulverizerRecipe recipe) {
+        ReloadableRegistryManager.addRecipeForRecovery(Pulverizer.class, recipe);
+        PulverizerManagerAccessor.getRecipeMap().values().removeIf(r -> r == recipe);
+    }
+
+    public static class RecipeBuilder implements IRecipeBuilder<PulverizerRecipe> {
 
         private IIngredient input;
         private ItemStack output;
@@ -87,6 +96,7 @@ public class Pulverizer {
             PulverizerManager.PulverizerRecipe recipe = null;
             for (ItemStack itemStack : input.getMatchingStacks()) {
                 PulverizerManager.PulverizerRecipe recipe1 = PulverizerManager.addRecipe(energy, itemStack, output, secOutput, chance);
+                ReloadableRegistryManager.markScriptRecipe(Pulverizer.class, recipe1);
                 if (recipe == null) recipe = recipe1;
             }
             return recipe;

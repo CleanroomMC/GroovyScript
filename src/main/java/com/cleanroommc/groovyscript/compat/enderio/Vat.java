@@ -1,11 +1,15 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.IngredientList;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
+import com.cleanroommc.groovyscript.mixin.enderio.VatRecipeManagerAccessor;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.*;
 import crazypants.enderio.base.recipe.vat.VatRecipeManager;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
@@ -35,6 +39,13 @@ public class Vat {
         if (oldSize == VatRecipeManager.getInstance().getRecipes().size()) {
             GroovyLog.LOG.error("Could not find EnderIO Vat recipes with fluid output {}", output.getFluid().getName());
         }
+    }
+
+    @GroovyBlacklist
+    public void onReload() {
+        VatRecipeManagerAccessor accessor = (VatRecipeManagerAccessor) VatRecipeManager.getInstance();
+        ReloadableRegistryManager.unmarkScriptRecipes(Vat.class).forEach(accessor.getRecipes()::remove);
+        ReloadableRegistryManager.recoverRecipes(Vat.class).stream().map(Recipe.class::cast).forEach(accessor.getRecipes()::add);
     }
 
     public static class RecipeBuilder implements IRecipeBuilder<Recipe> {
@@ -132,6 +143,8 @@ public class Vat {
 
             Recipe recipe = new Recipe(new RecipeOutput(output), energy, RecipeBonusType.NONE, level, inputs.toArray(new IRecipeInput[0]));
             VatRecipeManager.getInstance().addRecipe(recipe);
+            NNList<Recipe> recipes = ((VatRecipeManagerAccessor) VatRecipeManager.getInstance()).getRecipes();
+            ReloadableRegistryManager.markScriptRecipe(Vat.class, recipes.get(recipes.size() - 1)); // VatRecipeManager wraps the Recipe
             return recipe;
         }
     }

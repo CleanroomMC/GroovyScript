@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.api;
 
+import com.cleanroommc.groovyscript.compat.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
@@ -67,7 +68,7 @@ public class BracketHandler {
         registerBracketHandler("liquid", BracketHandler::parseFluidStack);
         registerBracketHandler("fluid", BracketHandler::parseFluidStack);
         registerBracketHandler("enchantment", Enchantment::getEnchantmentByLocation);
-        if (Loader.isModLoaded("mekanism")) {
+        if (ModSupport.MEKANISM.isLoaded()) {
             registerBracketHandler("gas", s -> new GasStack(GasRegistry.getGas(s), 1000));
         }
     }
@@ -84,7 +85,7 @@ public class BracketHandler {
             } catch (NumberFormatException ignored) {
             }
         }
-        return new net.minecraft.item.ItemStack(item1, 1, meta);
+        return new ItemStack(item1, 1, meta);
     }
 
     public static FluidStack parseFluidStack(String s) {

@@ -1,10 +1,12 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.CustomEnchanterRecipe;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import crazypants.enderio.base.recipe.IMachineRecipe;
 import crazypants.enderio.base.recipe.MachineRecipeRegistry;
@@ -43,7 +45,17 @@ public class Enchanter {
             GroovyLog.LOG.error("Can't find EnderIO Enchanter recipe for " + enchantment.getName() + " enchantment!");
         } else {
             MachineRecipeRegistry.instance.removeRecipe(removedRecipe);
+            ReloadableRegistryManager.addRecipeForRecovery(Enchanter.class, removedRecipe);
         }
+    }
+
+    @GroovyBlacklist
+    public void onReload() {
+        ReloadableRegistryManager.unmarkScriptRecipes(Enchanter.class).forEach(MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ENCHANTER)::remove);
+        ReloadableRegistryManager.recoverRecipes(Enchanter.class)
+                .stream()
+                .map(IMachineRecipe.class::cast)
+                .forEach(MachineRecipeRegistry.instance::registerRecipe);
     }
 
     public static class RecipeBuilder implements IRecipeBuilder<EnchanterRecipe> {
@@ -105,6 +117,7 @@ public class Enchanter {
         public @Nullable EnchanterRecipe register() {
             if (!validate()) return null;
             EnchanterRecipe recipe = new CustomEnchanterRecipe(input, amount, enchantment, costMultiplier, lapis, book);
+            ReloadableRegistryManager.markScriptRecipe(Enchanter.class, recipe);
             MachineRecipeRegistry.instance.registerRecipe(recipe);
             return recipe;
         }

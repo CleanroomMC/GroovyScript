@@ -2,7 +2,7 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
-import com.cleanroommc.groovyscript.compat.ModHandler;
+import com.cleanroommc.groovyscript.compat.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.helper.recipe.CraftingRecipeHelper;
@@ -31,7 +31,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class SandboxRunner {
@@ -70,9 +69,9 @@ public class SandboxRunner {
         }
     }
 
-    public static boolean run() {
+    public static boolean run(boolean reload) {
         try {
-            runScript();
+            runScript(reload);
             return true;
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.LOG.error("An Exception occurred trying to run groovy!");
@@ -84,13 +83,15 @@ public class SandboxRunner {
         }
     }
 
-    public static void runScript() throws IOException, ScriptException, ResourceException, SandboxSecurityException {
+    public static void runScript(boolean reload) throws IOException, ScriptException, ResourceException, SandboxSecurityException {
         GroovyLog.LOG.info("Running scripts");
         // prepare script running
-        ReloadableRegistryManager.setShouldRegisterAsReloadable(true);
+        // ReloadableRegistryManager.setShouldRegisterAsReloadable(true);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         GroovyEventManager.clearAllListeners();
-        ReloadableRegistryManager.onReload();
+        if (reload) {
+            ReloadableRegistryManager.onReload();
+        }
         SimpleGroovyInterceptor.makeSureExists();
 
         GroovyScript.LOGGER.info("Script environments: {}", Arrays.toString(scriptEnvironment));
@@ -102,7 +103,7 @@ public class SandboxRunner {
         Binding binding = new Binding();
         binding.setVariable("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
         binding.setVariable("recipes", new CraftingRecipeHelper());
-        binding.setVariable("mods", ModHandler.INSTANCE);
+        ModSupport.initBindings(binding);
 
         // find and run scripts
         running = true;
@@ -112,8 +113,10 @@ public class SandboxRunner {
         }
         running = false;
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
-        ReloadableRegistryManager.setShouldRegisterAsReloadable(false);
         ReloadableRegistryManager.afterScriptRun();
+        if (!reload) {
+            ReloadableRegistryManager.setLoaded();
+        }
     }
 
     private static File[] getStartupFiles() throws IOException {

@@ -28,7 +28,7 @@ public class RunScriptsCommand extends CommandBase {
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
-        if (SandboxRunner.run()) {
+        if (SandboxRunner.run(true)) {
             sender.sendMessage(new TextComponentString("Successfully ran scripts"));
             NetworkHandler.sendToPlayer(new SReloadJei(), (EntityPlayerMP) sender);
         } else {

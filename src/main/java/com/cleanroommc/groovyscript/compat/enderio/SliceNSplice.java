@@ -1,12 +1,15 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.ManyToOneRecipe;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeUtils;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.*;
 import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
 import net.minecraft.item.ItemStack;
@@ -45,6 +48,15 @@ public class SliceNSplice {
         } else {
             GroovyLog.LOG.error("No EnderIO Slice'n'Splice recipe found for " + input);
         }
+    }
+
+    @GroovyBlacklist
+    public void onReload() {
+        ReloadableRegistryManager.unmarkScriptRecipes(SliceNSplice.class).forEach(SliceAndSpliceRecipeManager.getInstance().getRecipes()::remove);
+        ReloadableRegistryManager.recoverRecipes(SliceNSplice.class)
+                .stream()
+                .map(IManyToOneRecipe.class::cast)
+                .forEach(SliceAndSpliceRecipeManager.getInstance().getRecipes()::add);
     }
 
     public static class RecipeBuilder extends EnderIORecipeBuilder<IRecipe> {
@@ -86,6 +98,8 @@ public class SliceNSplice {
             }
             Recipe recipe = new ManyToOneRecipe(recipeOutput, energy, RecipeBonusType.NONE, RecipeLevel.IGNORE, inputs.toArray(new IRecipeInput[0]));
             SliceAndSpliceRecipeManager.getInstance().addRecipe(recipe);
+            NNList<IManyToOneRecipe> recipes = SliceAndSpliceRecipeManager.getInstance().getRecipes();
+            ReloadableRegistryManager.markScriptRecipe(SliceNSplice.class, recipes.get(recipes.size() - 1)); // SliceAndSpliceRecipeManager wraps the Recipe
             return recipe;
         }
     }

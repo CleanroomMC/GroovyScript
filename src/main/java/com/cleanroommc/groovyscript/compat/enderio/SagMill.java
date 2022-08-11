@@ -1,10 +1,12 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.SagRecipe;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
+import com.cleanroommc.groovyscript.mixin.enderio.SagMillRecipeManagerAccessor;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import crazypants.enderio.base.recipe.Recipe;
 import crazypants.enderio.base.recipe.RecipeBonusType;
@@ -29,8 +31,15 @@ public class SagMill {
         if (recipe == null) {
             GroovyLog.LOG.error("Can't find EnderIO Sag Mill recipe for input " + input);
         } else {
-            ((IReloadableRegistry<Recipe>) (Object) SagMillRecipeManager.getInstance()).removeEntry(recipe);
+            ((SagMillRecipeManagerAccessor) (Object) SagMillRecipeManager.getInstance()).getRecipes().remove(recipe);
         }
+    }
+
+    @GroovyBlacklist
+    public void onReload() {
+        SagMillRecipeManagerAccessor accessor = (SagMillRecipeManagerAccessor) (Object) SagMillRecipeManager.getInstance();
+        ReloadableRegistryManager.unmarkScriptRecipes(SagMill.class).forEach(accessor.getRecipes()::remove);
+        ReloadableRegistryManager.recoverRecipes(SagMill.class).stream().map(Recipe.class::cast).forEach(accessor.getRecipes()::addAll);
     }
 
     public static class RecipeBuilder extends EnderIORecipeBuilder<Recipe> {
@@ -105,6 +114,7 @@ public class SagMill {
                 outputs[i] = new RecipeOutput(output.get(i), chances.get(i));
             }
             Recipe recipe = new SagRecipe(new RecipeInput(input.get(0)), energy, bonusType, level, outputs);
+            ReloadableRegistryManager.markScriptRecipe(SagMill.class, recipe);
             SagMillRecipeManager.getInstance().addRecipe(recipe);
             return recipe;
         }
