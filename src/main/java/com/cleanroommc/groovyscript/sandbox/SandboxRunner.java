@@ -69,9 +69,9 @@ public class SandboxRunner {
         }
     }
 
-    public static boolean run(boolean reload) {
+    public static boolean run() {
         try {
-            runScript(reload);
+            runScript();
             return true;
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.LOG.error("An Exception occurred trying to run groovy!");
@@ -83,13 +83,12 @@ public class SandboxRunner {
         }
     }
 
-    public static void runScript(boolean reload) throws IOException, ScriptException, ResourceException, SandboxSecurityException {
+    public static void runScript() throws IOException, ScriptException, ResourceException, SandboxSecurityException {
         GroovyLog.LOG.info("Running scripts");
         // prepare script running
-        // ReloadableRegistryManager.setShouldRegisterAsReloadable(true);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         GroovyEventManager.clearAllListeners();
-        if (reload) {
+        if (!ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
         }
         SimpleGroovyInterceptor.makeSureExists();
@@ -103,7 +102,7 @@ public class SandboxRunner {
         Binding binding = new Binding();
         binding.setVariable("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
         binding.setVariable("recipes", new CraftingRecipeHelper());
-        ModSupport.initBindings(binding);
+        binding.setVariable("mods", ModSupport.INSTANCE);
 
         // find and run scripts
         running = true;
@@ -114,9 +113,6 @@ public class SandboxRunner {
         running = false;
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
         ReloadableRegistryManager.afterScriptRun();
-        if (!reload) {
-            ReloadableRegistryManager.setLoaded();
-        }
     }
 
     private static File[] getStartupFiles() throws IOException {

@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.mekanism;
+package com.cleanroommc.groovyscript.compat.mekanism.recipe;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 

@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.enderio;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.enderio.recipe.RecipeUtils;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
@@ -95,4 +96,10 @@ public class Tank {
             recipes.forEach(MachineRecipeRegistry.instance::removeRecipe);
         }
     }
+
+    @GroovyBlacklist
+    public void onReload() {
+
+    }
+
 }

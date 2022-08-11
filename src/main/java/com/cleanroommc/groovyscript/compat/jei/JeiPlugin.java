@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat;
+package com.cleanroommc.groovyscript.compat.jei;
 
 import com.cleanroommc.groovyscript.compat.vanilla.ShapedRecipeWrapper;
 import com.cleanroommc.groovyscript.helper.recipe.ShapedCraftingRecipe;

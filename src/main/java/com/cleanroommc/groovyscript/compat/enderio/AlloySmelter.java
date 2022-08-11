@@ -116,7 +116,7 @@ public class AlloySmelter {
         @Override
         public @Nullable Void register() {
             if (!validate()) return null;
-            ThreadLocal<Boolean> captureRecipe = ModSupport.ENDER_IO.getProperty(EnderIO.class).AlloySmelter.captureRecipe;
+            ThreadLocal<Boolean> captureRecipe = ModSupport.ENDER_IO.get().AlloySmelter.captureRecipe;
             captureRecipe.set(true);
             AlloyRecipeManager.getInstance().addRecipe(true, ArrayUtils.mapToList(input, RecipeInput::new, new NNList<>()), output.get(0), energy, xp, level);
             captureRecipe.set(false);

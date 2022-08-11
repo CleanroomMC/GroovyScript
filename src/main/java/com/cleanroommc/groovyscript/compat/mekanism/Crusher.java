@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mekanism;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mekanism.recipe.IngredientWrapper;
+import com.cleanroommc.groovyscript.compat.mekanism.recipe.MekanismIngredientHelper;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.machines.CrusherRecipe;
 import net.minecraft.item.ItemStack;

@@ -88,7 +88,7 @@ public class ReloadableRegistryManager {
             ((IReloadableRegistry<?>) FluidFuelRegister.instance).onReload();
         }
         if (ModSupport.THERMAL_EXPANSION.isLoaded()) {
-            ModSupport.THERMAL_EXPANSION.getProperty(ThermalExpansion.class).Pulverizer.onReload();
+            ModSupport.THERMAL_EXPANSION.get().Pulverizer.onReload();
         }
     }
 
