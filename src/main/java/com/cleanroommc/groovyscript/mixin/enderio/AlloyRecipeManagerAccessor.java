@@ -14,6 +14,9 @@ public interface AlloyRecipeManagerAccessor {
     @Accessor
     TriItemLookup<IManyToOneRecipe> getLookup();
 
+    @Accessor
+    void setLookup(TriItemLookup<IManyToOneRecipe> lookup);
+
     @Invoker
     static void invokeAddRecipeToLookup(@NotNull TriItemLookup<IManyToOneRecipe> lookup, @NotNull IManyToOneRecipe recipe) {
         throw new AssertionError();

@@ -9,8 +9,10 @@ import com.cleanroommc.groovyscript.mixin.enderio.AlloyRecipeManagerAccessor;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import com.enderio.core.common.util.NNList;
+import com.enderio.core.common.util.NNList.NNIterator;
 import crazypants.enderio.base.recipe.IManyToOneRecipe;
 import crazypants.enderio.base.recipe.alloysmelter.AlloyRecipeManager;
+import crazypants.enderio.base.recipe.lookup.TriItemLookup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
@@ -56,28 +58,29 @@ public class AlloySmelter {
 
     @GroovyBlacklist
     public void onReload() {
-        AlloyRecipeManagerAccessor manager = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
+        AlloyRecipeManagerAccessor accessor = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
+        TriItemLookup<IManyToOneRecipe> newLookup = accessor.getLookup();
         List<Object> markedList = ReloadableRegistryManager.unmarkScriptRecipes(AlloySmelter.class);
         if (!markedList.isEmpty()) {
-            Iterator<IManyToOneRecipe> iter = manager.getLookup().iterator();
-            outer: while (iter.hasNext()) {
-                IManyToOneRecipe recipe = iter.next();
+            newLookup = new TriItemLookup<>();
+            outer: for (IManyToOneRecipe recipe : accessor.getLookup()) {
                 for (Object marked : markedList) {
                     if (marked == recipe) {
-                        iter.remove();
                         continue outer;
                     }
                 }
+                AlloyRecipeManagerAccessor.invokeAddRecipeToLookup(newLookup, recipe);
             }
         }
         List<Object> recoveredList = ReloadableRegistryManager.recoverRecipes(AlloySmelter.class);
         if (!recoveredList.isEmpty()) {
             for (Object recovered : recoveredList) {
                 IManyToOneRecipe recipe = (IManyToOneRecipe) recovered;
-                AlloyRecipeManagerAccessor.invokeAddRecipeToLookup(manager.getLookup(), recipe);
-                manager.invokeAddJEIIntegration(recipe);
+                AlloyRecipeManagerAccessor.invokeAddRecipeToLookup(newLookup, recipe);
+                accessor.invokeAddJEIIntegration(recipe);
             }
         }
+        accessor.setLookup(newLookup);
     }
 
     @GroovyBlacklist
