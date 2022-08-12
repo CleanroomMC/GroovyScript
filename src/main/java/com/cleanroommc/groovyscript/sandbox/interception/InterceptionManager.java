@@ -3,10 +3,10 @@ package com.cleanroommc.groovyscript.sandbox.interception;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.sandbox.SimpleGroovyInterceptor;
-import groovy.lang.GroovySystem;
-import groovy.lang.MetaClass;
-import groovy.lang.MetaClassImpl;
-import groovy.lang.MetaMethod;
+import groovy.lang.*;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.groovy.reflection.CachedMethod;
@@ -20,9 +20,9 @@ public class InterceptionManager {
 
     public static final InterceptionManager INSTANCE = new InterceptionManager();
 
-    private final List<String> bannedPackages = new ArrayList<>();
-    private final Set<Class<?>> bannedClasses = new HashSet<>();
-    private final Map<Class<?>, Set<String>> bannedMethods = new HashMap<>();
+    private final List<String> bannedPackages = new ObjectArrayList<>();
+    private final Set<Class<?>> bannedClasses = new ObjectOpenHashSet<>();
+    private final Map<Class<?>, Set<String>> bannedMethods = new Object2ObjectOpenHashMap<>();
 
     private static final Logger LOG = LogManager.getLogger("GroovySecurity");
 
@@ -47,8 +47,7 @@ public class InterceptionManager {
         banPackage("org.spongepowered");
         banPackage("zone.rong.mixinbooter");
         banClasses(Runtime.class, ClassLoader.class);
-        banMethods(System.class, "exit");
-        banMethods(System.class, "gc");
+        banMethods(System.class, "exit", "gc");
         // TODO wrap and/or ban Minecraft and MinecraftServer
     }
 
@@ -67,11 +66,11 @@ public class InterceptionManager {
     }
 
     public void banMethods(Class<?> clazz, String... method) {
-        banMethods(clazz, Arrays.asList(method));
+        Collections.addAll(bannedMethods.computeIfAbsent(clazz, key -> new ObjectOpenHashSet<>()), method);
     }
 
     public void banMethods(Class<?> clazz, Collection<String> method) {
-        bannedMethods.computeIfAbsent(clazz, key -> new HashSet<>()).addAll(method);
+        bannedMethods.computeIfAbsent(clazz, key -> new ObjectOpenHashSet<>()).addAll(method);
     }
 
     public boolean isValid(Class<?> clazz, String methodName) {
