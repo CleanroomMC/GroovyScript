@@ -71,6 +71,9 @@ repositories {
         name = "CurseForge"
         url = 'https://www.cursemaven.com'
     }
+    maven {
+        url "http://maven.tterrag.com"
+    }
 }
 
 dependencies {
@@ -97,8 +100,12 @@ dependencies {
     if (project.debug_load_all_mods.toBoolean()) {
         deobfCompile 'curse.maven:mekanism-268560:2835175'
 
-        deobfCompile 'curse.maven:ender_io-64578:3328811'
-        deobfCompile 'curse.maven:endercore-231868:2972849'
+        // deobfCompile 'curse.maven:ender_io-64578:3328811'
+        // deobfCompile 'curse.maven:endercore-231868:2972849'
+        deobfCompile "com.enderio.core:EnderCore:1.12.2-+"
+        deobfCompile ("com.enderio:EnderIO:1.12.2-+") {
+            transitive = false
+        }
 
         deobfCompile 'curse.maven:codechicken_lib_1_8-242818:2779848'
 
@@ -110,8 +117,12 @@ dependencies {
     } else {
         deobfProvided 'curse.maven:mekanism-268560:2835175'
 
-        deobfProvided 'curse.maven:ender_io-64578:3328811'
-        deobfProvided 'curse.maven:endercore-231868:2972849'
+        // deobfProvided 'curse.maven:ender_io-64578:3328811'
+        // deobfProvided 'curse.maven:endercore-231868:2972849'
+        deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
+        deobfProvided ("com.enderio:EnderIO:1.12.2-+") {
+            transitive = false
+        }
 
         deobfProvided 'curse.maven:codechicken_lib_1_8-242818:2779848'
 
