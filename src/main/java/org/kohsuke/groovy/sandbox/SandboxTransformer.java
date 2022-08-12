@@ -483,8 +483,8 @@ public class SandboxTransformer extends CompilationCustomizer {
                         new ClassExpression(call.getOwnerType()),
                         new ConstantExpression(call.getMethod()),
                         transformArguments(call.getArguments()),
-                        new ConstantExpression(sourceUnit.getName()),
-                        new ConstantExpression(exp.getLineNumber())
+                        constExp(sourceUnit.getName()),
+                        constExp(exp.getLineNumber())
                 );
             }
 
@@ -504,8 +504,8 @@ public class SandboxTransformer extends CompilationCustomizer {
                     return makeCheckedCall("checkedConstructor",
                             new ClassExpression(exp.getType()),
                             transformArguments(((ConstructorCallExpression) exp).getArguments()),
-                            new ConstantExpression(sourceUnit.getName()),
-                            new ConstantExpression(exp.getLineNumber())
+                            constExp(sourceUnit.getName()),
+                            constExp(exp.getLineNumber())
                     );
                 } else {
                     // we can't really intercept constructor calling super(...) or this(...),
@@ -520,7 +520,9 @@ public class SandboxTransformer extends CompilationCustomizer {
                         transform(ae.getObjectExpression()),
                         boolExp(ae.isSafe()),
                         boolExp(ae.isSpreadSafe()),
-                        transform(ae.getProperty())
+                        transform(ae.getProperty()),
+                        constExp(sourceUnit.getName()),
+                        constExp(exp.getLineNumber())
                 );
             }
 
@@ -530,7 +532,9 @@ public class SandboxTransformer extends CompilationCustomizer {
                         transformObjectExpression(pe),
                         boolExp(pe.isSafe()),
                         boolExp(pe.isSpreadSafe()),
-                        transform(pe.getProperty())
+                        transform(pe.getProperty()),
+                        constExp(sourceUnit.getName()),
+                        constExp(exp.getLineNumber())
                 );
             }
 
@@ -607,7 +611,9 @@ public class SandboxTransformer extends CompilationCustomizer {
                                 boolExp(pe.isSafe()),
                                 boolExp(pe.isSpreadSafe()),
                                 intExp(be.getOperation().getType()),
-                                transform(be.getRightExpression())
+                                transform(be.getRightExpression()),
+                                constExp(sourceUnit.getName()),
+                                constExp(exp.getLineNumber())
                         );
                     } else if (lhs instanceof FieldExpression) {
                         // while javadoc of FieldExpression isn't very clear,
@@ -651,8 +657,8 @@ public class SandboxTransformer extends CompilationCustomizer {
                                 boolExp(false),
                                 stringExp("isCase"),
                                 transform(be.getLeftExpression()),
-                                new ConstantExpression(sourceUnit.getName()),
-                                new ConstantExpression(exp.getLineNumber())
+                                constExp(sourceUnit.getName()),
+                                constExp(exp.getLineNumber())
 
                         );
                 } else if (Ops.isRegexpComparisonOperator(be.getOperation().getType())) {
