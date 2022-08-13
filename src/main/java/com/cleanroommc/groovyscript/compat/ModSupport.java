@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.compat.enderio.EnderIO;
 import com.cleanroommc.groovyscript.compat.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mekanism.Mekanism;
 import com.cleanroommc.groovyscript.compat.thermalexpansion.ThermalExpansion;
+import com.cleanroommc.groovyscript.compat.tinkersconstruct.TinkersConstruct;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -22,6 +23,7 @@ public class ModSupport implements IGroovyPropertyGetter {
     public static final Container<JustEnoughItems> JEI = new Container<>("jei", "Just Enough Items", JustEnoughItems::new);
     public static final Container<Mekanism> MEKANISM = new Container<>("mekanism", "Mekanism", Mekanism::new);
     public static final Container<ThermalExpansion> THERMAL_EXPANSION = new Container<>("thermalexpansion", "Thermal Expansion", ThermalExpansion::new);
+    public static final Container<TinkersConstruct> TINKERS_CONSTRUCT = new Container<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new);
 
     private final Map<String, Container<?>> containers = new Object2ObjectOpenHashMap<>();
 

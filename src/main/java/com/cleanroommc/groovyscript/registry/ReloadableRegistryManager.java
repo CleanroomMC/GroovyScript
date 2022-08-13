@@ -59,13 +59,13 @@ public class ReloadableRegistryManager {
     }
 
     @ApiStatus.Internal
-    public static List<Object> recoverRecipes(Class<?> clazz) {
+    public static List<?> recoverRecipes(Class<?> clazz) {
         List<Object> recoveredRecipes = recipeRecovery.remove(clazz);
         return recoveredRecipes == null ? Collections.emptyList() : recoveredRecipes;
     }
 
     @ApiStatus.Internal
-    public static List<Object> unmarkScriptRecipes(Class<?> clazz) {
+    public static List<?> unmarkScriptRecipes(Class<?> clazz) {
         List<Object> marked = scriptRecipes.remove(clazz);
         return marked == null ? Collections.emptyList() : marked;
     }
