@@ -19,18 +19,23 @@ import crazypants.enderio.base.recipe.lookup.ItemRecipeNode;
 import crazypants.enderio.base.recipe.lookup.TriItemLookup;
 import crazypants.enderio.util.NNPair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class AlloySmelter {
 
     @GroovyBlacklist
-    private final ThreadLocal<Boolean> captureRecipe = ThreadLocal.withInitial(() -> false);
+    private boolean captureRecipe = false;
+    @GroovyBlacklist
+    private Set<IManyToOneRecipe> removalQueue;
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -39,39 +44,12 @@ public class AlloySmelter {
     public void remove(ItemStack output) {
         List<IManyToOneRecipe> recipes = find(output);
         if (!recipes.isEmpty()) {
-            for (IManyToOneRecipe recipe : recipes) {
-                ReloadableRegistryManager.addRecipeForRecovery(AlloySmelter.class, recipe);
+            if (this.removalQueue == null) {
+                this.removalQueue = new ObjectOpenHashSet<>(recipes.size());
             }
-            remove(recipes);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void remove(List<IManyToOneRecipe> recipes) {
-        AlloyRecipeManagerAccessor accessor = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
-        Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>> map =
-                ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>)
-                        ((TriItemLookupAccessor<IManyToOneRecipe>) accessor.getLookup()).getRoot()).getMap();
-        for (NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>> pair : map.values()) {
-            Iterator<IManyToOneRecipe> listIter = pair.left.iterator();
-            while (listIter.hasNext()) {
-                if (recipes.contains(listIter.next())) {
-                    listIter.remove();
-                    Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeLeafNode<IManyToOneRecipe>>> nestedMap =
-                            ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>) pair.right).getMap();
-                    for (NNPair<NNList<IManyToOneRecipe>, ItemRecipeLeafNode<IManyToOneRecipe>> nestedPair : nestedMap.values()) {
-                        Iterator<IManyToOneRecipe> nestedListIter = nestedPair.left.iterator();
-                        while (nestedListIter.hasNext()) {
-                            if (recipes.contains(nestedListIter.next())) {
-                                nestedListIter.remove();
-                                Int2ObjectOpenHashMap<NNList<IManyToOneRecipe>> lastNestedMap = ((ItemRecipeLeafNodeAccessor<IManyToOneRecipe>) nestedPair.right).getMap();
-                                for (NNList<IManyToOneRecipe> lastNestedList : lastNestedMap.values()) {
-                                    lastNestedList.removeIf(recipes::contains);
-                                }
-                            }
-                        }
-                    }
-                }
+            for (IManyToOneRecipe r : recipes) {
+                ReloadableRegistryManager.addRecipeForRecovery(AlloySmelter.class, r);
+                this.removalQueue.add(r);
             }
         }
     }
@@ -92,7 +70,7 @@ public class AlloySmelter {
         TriItemLookup<IManyToOneRecipe> lookup = accessor.getLookup();
         List<?> markedList = ReloadableRegistryManager.unmarkScriptRecipes(AlloySmelter.class);
         if (!markedList.isEmpty()) {
-            remove((List<IManyToOneRecipe>) markedList);
+            removeInternal((List<IManyToOneRecipe>) markedList);
         }
         List<?> recoveredList = ReloadableRegistryManager.recoverRecipes(AlloySmelter.class);
         if (!recoveredList.isEmpty()) {
@@ -107,8 +85,52 @@ public class AlloySmelter {
     }
 
     @GroovyBlacklist
+    @ApiStatus.Internal
+    public void afterScriptLoad() {
+        if (this.removalQueue != null) {
+            removeInternal(this.removalQueue);
+            this.removalQueue = null;
+        }
+    }
+
+    @GroovyBlacklist
+    @ApiStatus.Internal
     public boolean isCapturingRecipe() {
-        return captureRecipe.get();
+        return captureRecipe;
+    }
+
+    @GroovyBlacklist
+    @ApiStatus.Internal
+    private void removeInternal(List<IManyToOneRecipe> recipes) {
+        AlloyRecipeManagerAccessor accessor = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
+        @SuppressWarnings("unchecked")
+        Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>> map =
+                ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>)
+                        ((TriItemLookupAccessor<IManyToOneRecipe>) accessor.getLookup()).getRoot()).getMap();
+        for (NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>> pair : map.values()) {
+            Iterator<IManyToOneRecipe> listIter = pair.left.iterator();
+            while (listIter.hasNext()) {
+                if (recipes.contains(listIter.next())) {
+                    listIter.remove();
+                    @SuppressWarnings("unchecked")
+                    Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeLeafNode<IManyToOneRecipe>>> nestedMap =
+                            ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>) pair.right).getMap();
+                    for (NNPair<NNList<IManyToOneRecipe>, ItemRecipeLeafNode<IManyToOneRecipe>> nestedPair : nestedMap.values()) {
+                        Iterator<IManyToOneRecipe> nestedListIter = nestedPair.left.iterator();
+                        while (nestedListIter.hasNext()) {
+                            if (recipes.contains(nestedListIter.next())) {
+                                nestedListIter.remove();
+                                @SuppressWarnings("unchecked")
+                                Int2ObjectOpenHashMap<NNList<IManyToOneRecipe>> lastNestedMap = ((ItemRecipeLeafNodeAccessor<IManyToOneRecipe>) nestedPair.right).getMap();
+                                for (NNList<IManyToOneRecipe> lastNestedList : lastNestedMap.values()) {
+                                    lastNestedList.removeIf(recipes::contains);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static class RecipeBuilder extends EnderIORecipeBuilder<Void> {
@@ -141,10 +163,10 @@ public class AlloySmelter {
         @Override
         public @Nullable Void register() {
             if (!validate()) return null;
-            ThreadLocal<Boolean> captureRecipe = ModSupport.ENDER_IO.get().AlloySmelter.captureRecipe;
-            captureRecipe.set(true);
+            AlloySmelter instance = ModSupport.ENDER_IO.get().AlloySmelter;
+            instance.captureRecipe = true;
             AlloyRecipeManager.getInstance().addRecipe(true, ArrayUtils.mapToList(input, RecipeInput::new, new NNList<>()), output.get(0), energy, xp, level);
-            captureRecipe.set(false);
+            instance.captureRecipe = false;
             return null;
         }
     }
