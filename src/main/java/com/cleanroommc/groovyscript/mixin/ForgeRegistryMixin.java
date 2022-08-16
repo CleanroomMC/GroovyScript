@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.mixin;
 
-import com.cleanroommc.groovyscript.registry.IReloadableRegistry;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

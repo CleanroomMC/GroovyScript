@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.api;
 
-import com.cleanroommc.groovyscript.compat.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 

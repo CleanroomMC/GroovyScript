@@ -10,8 +10,6 @@
     "FluidFuelRegisterAccessor",
     "ItemRecipeLeafNodeAccessor",
     "ItemRecipeNodeAccessor",
-    "SagMillRecipeManagerAccessor",
-    "TriItemLookupAccessor",
-    "VatRecipeManagerAccessor"
+    "TriItemLookupAccessor"
   ]
 }

@@ -1,18 +1,11 @@
 package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.compat.ModSupport;
-import com.cleanroommc.groovyscript.compat.enderio.EnderIO;
-import com.cleanroommc.groovyscript.compat.thermalexpansion.ThermalExpansion;
+import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport.Container;
 import com.cleanroommc.groovyscript.mixin.JeiProxyAccessor;
-import crazypants.enderio.base.fluid.FluidFuelRegister;
-import crazypants.enderio.base.recipe.MachineRecipeRegistry;
-import crazypants.enderio.base.recipe.alloysmelter.AlloyRecipeManager;
-import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
-import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
-import crazypants.enderio.base.recipe.vat.VatRecipeManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import mekanism.common.recipe.RecipeHandler;
 import mezz.jei.JustEnoughItems;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -30,7 +23,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ReloadableRegistryManager {
 
     private static final AtomicBoolean firstLoad = new AtomicBoolean(true);
-    private static final List<IReloadableVirtualizedRegistry<?>> reloadableRegistries = new ArrayList<>();
     private static final Map<Class<?>, List<Object>> recipeRecovery = new Object2ObjectOpenHashMap<>();
     private static final Map<Class<?>, List<Object>> scriptRecipes = new Object2ObjectOpenHashMap<>();
 
@@ -42,62 +34,43 @@ public class ReloadableRegistryManager {
         firstLoad.set(false);
     }
 
-    public static void addReloadableRegistry(IReloadableVirtualizedRegistry<?> registry) {
-        if (reloadableRegistries.stream().noneMatch(r -> r.getClass() == registry.getClass())) {
-            reloadableRegistries.add(registry);
-        }
-    }
-
-    @ApiStatus.Internal
-    public static void addRecipeForRecovery(Class<?> clazz, Object object) {
+    public static void backup(Class<?> clazz, Object object) {
         recipeRecovery.computeIfAbsent(clazz, k -> new ArrayList<>()).add(object);
     }
 
-    @ApiStatus.Internal
-    public static void markScriptRecipe(Class<?> clazz, Object object) {
+    public static void markScripted(Class<?> clazz, Object object) {
         scriptRecipes.computeIfAbsent(clazz, k -> new ArrayList<>()).add(object);
     }
 
-    @ApiStatus.Internal
-    public static List<?> recoverRecipes(Class<?> clazz) {
-        List<Object> recoveredRecipes = recipeRecovery.remove(clazz);
+    public static <T> List<T> restore(Class<?> registryClass, @SuppressWarnings("unused") Class<T> recipeClass) {
+        @SuppressWarnings("unchecked") List<T> recoveredRecipes = (List<T>) recipeRecovery.remove(registryClass);
         return recoveredRecipes == null ? Collections.emptyList() : recoveredRecipes;
     }
 
-    @ApiStatus.Internal
-    public static List<?> unmarkScriptRecipes(Class<?> clazz) {
-        List<Object> marked = scriptRecipes.remove(clazz);
+    public static <T> List<T> unmarkScripted(Class<?> registryClass, @SuppressWarnings("unused") Class<T> recipeClass) {
+        @SuppressWarnings("unchecked") List<T> marked = (List<T>) scriptRecipes.remove(registryClass);
         return marked == null ? Collections.emptyList() : marked;
     }
 
     @ApiStatus.Internal
     public static void onReload() {
-        // TODO: reloadableRegistries.forEach(IReloadableVirtualizedRegistry::onReload);
         reloadForgeRegistry(ForgeRegistries.RECIPES);
-        if (ModSupport.MEKANISM.isLoaded()) {
-            // RecipeHandler.Recipe.values().forEach(recipe -> ((IReloadableRegistry<?>) recipe).onReload());
-        }
-        if (ModSupport.ENDER_IO.isLoaded()) {
-            EnderIO enderIO = ModSupport.ENDER_IO.get();
-            enderIO.AlloySmelter.onReload();
-            enderIO.CombustionGen.onReload();
-            enderIO.Enchanter.onReload();
-            enderIO.SagMill.onReload();
-            enderIO.SliceNSplice.onReload();
-            enderIO.SoulBinder.onReload();
-            enderIO.Tank.onReload();
-            enderIO.Vat.onReload();
-        }
-        if (ModSupport.THERMAL_EXPANSION.isLoaded()) {
-            ModSupport.THERMAL_EXPANSION.get().Pulverizer.onReload();
-        }
+        ModSupport.getAllContainers().stream()
+                .filter(Container::isLoaded)
+                .map(Container::get)
+                .map(ModPropertyContainer::getRegistries)
+                .flatMap(Collection::stream)
+                .forEach(VirtualizedRegistry::onReload);
     }
 
     @ApiStatus.Internal
     public static void afterScriptRun() {
-        if (ModSupport.ENDER_IO.isLoaded()) {
-            // ((IReloadableRegistry<?>) AlloyRecipeManager.getInstance()).afterScript();
-        }
+        ModSupport.getAllContainers().stream()
+                .filter(Container::isLoaded)
+                .map(Container::get)
+                .map(ModPropertyContainer::getRegistries)
+                .flatMap(Collection::stream)
+                .forEach(VirtualizedRegistry::afterScriptLoad);
     }
 
     @ApiStatus.Internal
