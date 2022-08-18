@@ -18,7 +18,12 @@ public class EnderIO extends ModPropertyContainer {
         addRegistry(alloySmelter);
         addRegistry(fluidFuel);
         addRegistry(fluidCoolant);
-
+        addRegistry(enchanter);
+        addRegistry(sagMill);
+        addRegistry(sliceNSplice);
+        addRegistry(soulBinder);
+        addRegistry(tank);
+        addRegistry(vat);
     }
 
 }
