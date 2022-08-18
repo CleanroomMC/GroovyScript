@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.vanilla;
+package com.cleanroommc.groovyscript.compat.mods.jei;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;

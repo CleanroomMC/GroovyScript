@@ -18,7 +18,8 @@ public abstract class VirtualizedRegistry<R> {
         this.aliases = new ArrayList<>();
         this.aliases.add(name);
         addAlias(aliases);
-        initCollections();
+        initBackup();
+        initScripted();
     }
 
     @GroovyBlacklist
@@ -53,8 +54,13 @@ public abstract class VirtualizedRegistry<R> {
 
     @GroovyBlacklist
     @ApiStatus.Internal
-    protected void initCollections() {
+    protected void initBackup() {
         this.backup = new ArrayList<>();
+    }
+
+    @GroovyBlacklist
+    @ApiStatus.Internal
+    protected void initScripted() {
         this.scripted = new ArrayList<>();
     }
 
@@ -74,7 +80,7 @@ public abstract class VirtualizedRegistry<R> {
     @ApiStatus.Internal
     protected Collection<R> restoreFromBackup() {
         Collection<R> backup = this.backup;
-        this.backup = null;
+        initBackup();
         return backup;
     }
 
@@ -82,7 +88,7 @@ public abstract class VirtualizedRegistry<R> {
     @ApiStatus.Internal
     protected Collection<R> removeScripted() {
         Collection<R> scripted = this.scripted;
-        this.scripted = null;
+        initScripted();
         return scripted;
     }
 

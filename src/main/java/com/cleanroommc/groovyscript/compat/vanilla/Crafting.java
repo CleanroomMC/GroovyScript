@@ -1,6 +1,8 @@
-package com.cleanroommc.groovyscript.helper.recipe;
+package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.recipe.ShapedCraftingRecipe;
+import com.cleanroommc.groovyscript.helper.recipe.ShapelessCraftingRecipe;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -8,7 +10,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CraftingRecipeHelper {
+public class Crafting {
 
     public void addShaped(String name, ItemStack output, List<List<IIngredient>> input) {
         List<IIngredient> inputs = new ArrayList<>();
@@ -20,18 +22,15 @@ public class CraftingRecipeHelper {
             w = row.size();
             inputs.addAll(row);
         }
-        ShapedCraftingRecipe recipe = new ShapedCraftingRecipe(output.copy(), inputs, w, input.size());
-        recipe.setRegistryName(name);
-        ForgeRegistries.RECIPES.register(recipe);
+        ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, new ShapedCraftingRecipe(output.copy(), inputs, w, input.size()));
     }
 
     public void addShapeless(String name, ItemStack output, List<IIngredient> input) {
-        ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), input);
-        recipe.setRegistryName(name);
-        ForgeRegistries.RECIPES.register(recipe);
+        ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, new ShapelessCraftingRecipe(output.copy(), input));
     }
 
     public void remove(String name) {
-        ReloadableRegistryManager.removeRecipe(name);
+        ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name);
     }
+
 }

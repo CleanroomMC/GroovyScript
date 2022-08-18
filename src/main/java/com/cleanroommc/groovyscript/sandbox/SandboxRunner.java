@@ -3,9 +3,9 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
-import com.cleanroommc.groovyscript.helper.recipe.CraftingRecipeHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
@@ -100,8 +100,8 @@ public class SandboxRunner {
         config.addCompilationCustomizers(new SandboxTransformer());
         engine.setConfig(config);
         Binding binding = new Binding();
+        VanillaModule.initializeBinding(binding);
         binding.setVariable("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
-        binding.setVariable("recipes", new CraftingRecipeHelper());
         binding.setVariable("mods", ModSupport.INSTANCE);
 
         // find and run scripts

@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.jei;
 
-import com.cleanroommc.groovyscript.compat.vanilla.ShapedRecipeWrapper;
 import com.cleanroommc.groovyscript.helper.recipe.ShapedCraftingRecipe;
 import com.cleanroommc.groovyscript.helper.recipe.ShapelessCraftingRecipe;
 import mezz.jei.api.IJeiHelpers;

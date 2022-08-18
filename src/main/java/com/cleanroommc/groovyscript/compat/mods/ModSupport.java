@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruc
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fml.common.Loader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,8 @@ import java.util.Map;
 
 public class ModSupport implements IGroovyPropertyGetter {
 
+    private static final Map<String, Container<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
+
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
 
     public static final Container<EnderIO> ENDER_IO = new Container<>("enderio", "Ender IO", EnderIO::new, "eio");
@@ -26,10 +29,8 @@ public class ModSupport implements IGroovyPropertyGetter {
     public static final Container<ThermalExpansion> THERMAL_EXPANSION = new Container<>("thermalexpansion", "Thermal Expansion", ThermalExpansion::new, "te");
     public static final Container<TinkersConstruct> TINKERS_CONSTRUCT = new Container<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new, "ticon", "tinkersconstruct");
 
-    private static final Map<String, Container<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
-
     public static Collection<Container<? extends ModPropertyContainer>> getAllContainers() {
-        return containers.values();
+        return new ObjectOpenHashSet<>(containers.values());
     }
 
     private ModSupport() { }

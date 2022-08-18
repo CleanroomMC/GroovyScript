@@ -1,12 +1,14 @@
 package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport.Container;
-import com.cleanroommc.groovyscript.mixin.JeiProxyAccessor;
+import com.cleanroommc.groovyscript.mixin.jei.JeiProxyAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mezz.jei.JustEnoughItems;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,7 +56,7 @@ public class ReloadableRegistryManager {
 
     @ApiStatus.Internal
     public static void onReload() {
-        reloadForgeRegistry(ForgeRegistries.RECIPES);
+        reloadForgeRegistries();
         ModSupport.getAllContainers().stream()
                 .filter(Container::isLoaded)
                 .map(Container::get)
@@ -71,34 +73,23 @@ public class ReloadableRegistryManager {
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
                 .forEach(VirtualizedRegistry::afterScriptLoad);
+        unfreezeForgeRegistries();
     }
 
-    @ApiStatus.Internal
-    public static void reloadForgeRegistry(IForgeRegistry<?> registry) {
-        if (!(registry instanceof ForgeRegistry)) throw new IllegalArgumentException();
-        ((IReloadableRegistry<?>) registry).onReload();
+    public static <V extends IForgeRegistryEntry<V>> void addRegistryEntry(IForgeRegistry<V> registry, String name, V entry) {
+        addRegistryEntry(registry, new ResourceLocation(name), entry);
     }
 
-    /**
-     * Registers a reloadable entry to a forge registry
-     *
-     * @param registry registry to register too
-     * @param value    value to register
-     * @param <V>      type of the registry
-     */
-    public static <V extends IForgeRegistryEntry<V>> void registerEntry(IForgeRegistry<V> registry, V value) {
-        boolean old = firstLoad.get();
-        firstLoad.set(true);
-        registry.register(value);
-        firstLoad.set(old);
+    public static <V extends IForgeRegistryEntry<V>> void addRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name, V entry) {
+        ((IReloadableForgeRegistry<V>) registry).registerEntry(entry.setRegistryName(name));
     }
 
-    public static <V extends IForgeRegistryEntry<V>> void removeEntry(IForgeRegistry<V> registry, ResourceLocation rl, V dummy) {
-        ((IReloadableRegistry<V>) registry).removeEntry(dummy.setRegistryName(rl));
+    public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, String name) {
+        removeRegistryEntry(registry, new ResourceLocation(name));
     }
 
-    public static void removeRecipe(String name) {
-        removeEntry(ForgeRegistries.RECIPES, new ResourceLocation(name), new DummyRecipe());
+    public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name) {
+        ((IReloadableForgeRegistry<V>) registry).removeEntry(name);
     }
 
     /**
@@ -112,4 +103,13 @@ public class ReloadableRegistryManager {
             jeiProxy.getStarter().start(jeiProxy.getPlugins(), jeiProxy.getTextures());
         }
     }
+
+    private static void reloadForgeRegistries() {
+        ((IReloadableForgeRegistry<?>) ForgeRegistries.RECIPES).onReload();
+    }
+
+    private static void unfreezeForgeRegistries() {
+        ((ForgeRegistry<IRecipe>) ForgeRegistries.RECIPES).unfreeze();
+    }
+
 }

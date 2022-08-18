@@ -11,7 +11,6 @@ import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.mixin.thermalexpansion.PulverizerManagerAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -32,11 +31,9 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        Map<ComparableItemStackValidated, PulverizerRecipe> currentMap = PulverizerManagerAccessor.getRecipeMap();
-        Map<ComparableItemStackValidated, PulverizerRecipe> newMap = new Object2ObjectOpenHashMap<>(currentMap);
-        removeScripted().forEach(recipe -> newMap.values().removeIf(r -> r == recipe));
-        restoreFromBackup().forEach(r -> newMap.put(PulverizerManager.convertInput(r.getInput()), r));
-        PulverizerManagerAccessor.setRecipeMap(newMap);
+        Map<ComparableItemStackValidated, PulverizerRecipe> map = PulverizerManagerAccessor.getRecipeMap();
+        removeScripted().forEach(recipe -> map.values().removeIf(r -> r == recipe));
+        restoreFromBackup().forEach(r -> map.put(PulverizerManager.convertInput(r.getInput()), r));
     }
 
     public void add(PulverizerRecipe recipe) {

@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.mixin;
+package com.cleanroommc.groovyscript.mixin.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.gui.textures.Textures;
