@@ -30,8 +30,6 @@ import java.util.*;
 public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
 
     @GroovyBlacklist
-    private boolean captureRecipe = false;
-    @GroovyBlacklist
     private Set<IManyToOneRecipe> removalQueue;
 
     public AlloySmelter() {
@@ -95,12 +93,6 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
 
     @GroovyBlacklist
     @ApiStatus.Internal
-    public boolean isCapturingRecipe() {
-        return captureRecipe;
-    }
-
-    @GroovyBlacklist
-    @ApiStatus.Internal
     private void removeInternal(Collection<IManyToOneRecipe> recipes) {
         AlloyRecipeManagerAccessor accessor = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
         @SuppressWarnings("unchecked")
@@ -143,31 +135,24 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
         }
 
         @Override
-        public boolean validate() {
-            GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Alloy Smelter recipe").error();
-            input.trim();
-            output.trim();
-            msg.add(input.size() < 1 || input.size() > 3, () -> "Must have 1 - 3 inputs, but found " + input.size());
-            msg.add(output.size() != 1, () -> "Must have exactly 1 output, but found " + output.size());
-
-            if (energy <= 0) energy = 5000;
-            if (xp < 0) xp = 0;
-
-            if (msg.hasSubMessages()) {
-                GroovyLog.LOG.log(msg);
-                return false;
-            }
-            return true;
+        public String getErrorMsg() {
+            return "Error adding EnderIO Alloy Smelter recipe";
         }
 
         @Override
-        public @Nullable Void register() {
+        public void validate(GroovyLog.Msg msg) {
+            validateItems(msg, 1, 3, 1, 1);
+            validateFluids(msg);
+            if (energy <= 0) energy = 5000;
+            if (xp < 0) xp = 0;
+        }
+
+        @Override
+        public @Nullable Void buildAndRegister() {
             if (!validate()) return null;
-            AlloySmelter instance = ModSupport.ENDER_IO.get().alloySmelter;
-            instance.captureRecipe = true;
             AlloyRecipeManager.getInstance().addRecipe(true, ArrayUtils.mapToList(input, RecipeInput::new, new NNList<>()), output.get(0), energy, xp, level);
-            instance.captureRecipe = false;
             return null;
         }
     }
+
 }

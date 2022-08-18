@@ -15,8 +15,6 @@ import java.util.function.Function;
 
 public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
-    public static final String CONSTRUCTOR_METHOD = "<init>";
-
     public static void makeSureExists() {
         if (!getApplicableInterceptors().isEmpty()) {
             for (GroovyInterceptor interceptor : getApplicableInterceptors()) {
@@ -30,19 +28,21 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onMethodCall(Invoker invoker, Object receiver, String method, Object... args) throws Throwable {
-        if (receiver.getClass().getSuperclass() == Script.class && args.length == 1 && args[0] instanceof String) {
-            Function<String, Object> bracketHandler = BracketHandler.getBracketHandler(method);
-            if (bracketHandler != null) {
-                return bracketHandler.apply((String) args[0]);
+        if (receiver.getClass().getSuperclass() == Script.class) {
+            if (args.length == 1 && args[0] instanceof String) {
+                Function<String, Object> bracketHandler = BracketHandler.getBracketHandler(method);
+                if (bracketHandler != null) {
+                    return bracketHandler.apply((String) args[0]);
+                }
+            }
+            if (method.equals("print") || method.equals("println") || method.equals("printf")) {
+                Object msg = args.length == 0 ? "" : args[0];
+                Object[] args2 = args.length < 2 ? new Object[0] : Arrays.copyOfRange(args, 1, args.length);
+                GroovyLog.LOG.info(msg.toString(), args2);
+                return null;
             }
         }
 
-        if (method.equals("print") || method.equals("println") || method.equals("printf")) {
-            Object msg = args.length == 0 ? "" : args[0];
-            Object[] args2 = args.length < 2 ? new Object[0] : Arrays.copyOfRange(args, 1, args.length);
-            GroovyLog.LOG.info(msg.toString(), args2);
-            return null;
-        }
 
         if (receiver instanceof IGroovyEventHandler && args.length >= 1 && args[0] instanceof Closure) {
             ((IGroovyEventHandler) receiver).getEventManager().registerListener(method, (Closure<Object>) args[0]);
@@ -54,7 +54,7 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
             return null;
         }
 
-        if (!InterceptionManager.INSTANCE.isValid(receiver.getClass(), method) || InterceptionManager.INSTANCE.isBlacklistedMethod(receiver.getClass(), method, args)) {
+        if (!InterceptionManager.INSTANCE.isValid(receiver.getClass(), method, args)) {
             throw SandboxSecurityException.format("Prohibited method call '" + method + "' on class '" + receiver.getClass().getName() + "'!");
         }
         return super.onMethodCall(invoker, receiver, method, args);
@@ -62,7 +62,7 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onNewInstance(Invoker invoker, Class<?> receiver, Object... args) throws Throwable {
-        if (!InterceptionManager.INSTANCE.isValid(receiver, CONSTRUCTOR_METHOD) || InterceptionManager.INSTANCE.isBlacklistedMethod(receiver, CONSTRUCTOR_METHOD, args)) {
+        if (!InterceptionManager.INSTANCE.isValidConstructor(receiver, args)) {
             throw SandboxSecurityException.format("Prohibited constructor call on class '" + receiver.getName() + "'!");
         }
         return super.onNewInstance(invoker, receiver, args);
@@ -70,7 +70,7 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onStaticCall(Invoker invoker, Class<?> receiver, String method, Object... args) throws Throwable {
-        if (!InterceptionManager.INSTANCE.isValid(receiver, method) || InterceptionManager.INSTANCE.isBlacklistedMethod(receiver, method, args)) {
+        if (!InterceptionManager.INSTANCE.isValid(receiver, method, args)) {
             throw SandboxSecurityException.format("Prohibited static method call '" + method + "' on class '" + receiver.getName() + "'!");
         }
         return super.onStaticCall(invoker, receiver, method, args);
@@ -85,6 +85,19 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
         if (receiver instanceof IGroovyEventHandler) {
             return onGetProperty(invoker, ((IGroovyEventHandler) receiver).getEventManager(), property);
         }
+        Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
+        if (InterceptionManager.INSTANCE.isBlacklistedField(clazz, property, FieldAccess.GET)) {
+            throw SandboxSecurityException.format("Prohibited property access '" + property + "' on class '" + clazz.getName() + "'!");
+        }
         return super.onGetProperty(invoker, receiver, property);
+    }
+
+    @Override
+    public Object onSetProperty(Invoker invoker, Object receiver, String property, Object value) throws Throwable {
+        Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
+        if (InterceptionManager.INSTANCE.isBlacklistedField(clazz, property, FieldAccess.SET)) {
+            throw SandboxSecurityException.format("Prohibited property access '" + property + "' on class '" + clazz.getName() + "'!");
+        }
+        return super.onSetProperty(invoker, receiver, property, value);
     }
 }

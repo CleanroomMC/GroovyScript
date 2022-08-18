@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.mixin.thermalexpansion.PulverizerManagerAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -58,28 +59,25 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
     }
 
     public void removeByInput(IIngredient input) {
+        if (IngredientHelper.isEmpty(input)) {
+            GroovyLog.LOG.error("Error removing Thermal Expansion Pulverizer recipe for empty input!");
+            return;
+        }
         for (ItemStack stack : input.getMatchingStacks()) {
             addBackup(PulverizerManager.removeRecipe(stack));
         }
     }
 
-    public static class RecipeBuilder implements IRecipeBuilder<PulverizerRecipe> {
+    public void removeAll() {
+        for (PulverizerManager.PulverizerRecipe recipe : PulverizerManager.getRecipeList()) {
+            addBackup(PulverizerManager.removeRecipe(recipe.getInput()));
+        }
+    }
 
-        private IIngredient input;
-        private ItemStack output;
+    public static class RecipeBuilder extends EnergyRecipeBuilder<PulverizerManager.PulverizerRecipe> {
+
         private ItemStack secOutput;
         private int chance;
-        private int energy;
-
-        public RecipeBuilder input(IIngredient ingredient) {
-            this.input = ingredient;
-            return this;
-        }
-
-        public RecipeBuilder output(ItemStack itemStack) {
-            this.output = itemStack;
-            return this;
-        }
 
         public RecipeBuilder secondaryOutput(ItemStack itemStack, int chance) {
             this.secOutput = itemStack;
@@ -91,16 +89,15 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
             return secondaryOutput(itemStack, 100);
         }
 
-        public RecipeBuilder energy(int energy) {
-            this.energy = energy;
-            return this;
+        @Override
+        public String getErrorMsg() {
+            return "Error adding Thermal Pulverizer recipe";
         }
 
         @Override
-        public boolean validate() {
-            GroovyLog.Msg msg = new GroovyLog.Msg("Error adding Thermal Pulverizer recipe").error();
-            msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
-            msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
+        public void validate(GroovyLog.Msg msg) {
+            validateItems(msg, 1, 1, 1, 1);
+            validateFluids(msg);
             if (secOutput == null) secOutput = ItemStack.EMPTY;
             if (secOutput.isEmpty()) {
                 chance = 0;
@@ -108,15 +105,14 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
                 chance = 100;
             }
             if (energy <= 0) energy = 3000;
-            return !msg.logIfNotEmpty();
         }
 
         @Override
-        public @Nullable PulverizerManager.PulverizerRecipe register() {
+        public @Nullable PulverizerManager.PulverizerRecipe buildAndRegister() {
             if (!validate()) return null;
             PulverizerManager.PulverizerRecipe recipe = null;
-            for (ItemStack itemStack : input.getMatchingStacks()) {
-                PulverizerRecipe recipe1 = ModSupport.THERMAL_EXPANSION.get().pulverizer.add(energy, itemStack, output, secOutput, chance);
+            for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
+                PulverizerRecipe recipe1 = ModSupport.THERMAL_EXPANSION.get().pulverizer.add(energy, itemStack, output.get(0), secOutput, chance);
                 if (recipe == null) recipe = recipe1;
             }
             return recipe;

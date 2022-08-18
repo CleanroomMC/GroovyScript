@@ -35,7 +35,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
                 .energy(energy)
                 .output(output)
                 .input(input)
-                .register();
+                .buildAndRegister();
     }
 
     public void add(IManyToOneRecipe recipe) {
@@ -91,25 +91,23 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         }
 
         @Override
-        public boolean validate() {
-            GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Slice'n'Splice recipe").error();
+        public String getErrorMsg() {
+            return "Error adding EnderIO Slice'n'Splice recipe";
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
             int inputSize = input.getRealSize();
             output.trim();
             msg.add(inputSize < 1 || inputSize > 6, () -> "Must have 1 - 6 inputs, but found " + input.size());
             msg.add(output.size() != 1, () -> "Must have exactly 1 output, but found " + output.size());
-
+            validateFluids(msg);
             if (energy <= 0) energy = 5000;
             if (xp < 0) xp = 0;
-
-            if (msg.hasSubMessages()) {
-                GroovyLog.LOG.log(msg);
-                return false;
-            }
-            return true;
         }
 
         @Override
-        public @Nullable IRecipe register() {
+        public @Nullable IRecipe buildAndRegister() {
             if (!validate()) return null;
             RecipeOutput recipeOutput = new RecipeOutput(output.get(0), 1, xp);
             List<IRecipeInput> inputs = new ArrayList<>();

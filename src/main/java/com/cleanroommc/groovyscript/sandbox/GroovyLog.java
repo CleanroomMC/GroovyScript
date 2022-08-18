@@ -48,8 +48,13 @@ public class GroovyLog {
         }
     }
 
+    public Path getPath() {
+        return logFilePath;
+    }
+
     public void log(Msg msg) {
         if (msg.level == Level.OFF || !msg.hasMessages()) return;
+        if (msg.level == Level.DEBUG && !debug) return;
         String level = msg.level.name();
         String main = msg.messages.get(0);
         if (msg.messages.size() == 1) {
@@ -166,7 +171,8 @@ public class GroovyLog {
      * @param throwable exception
      */
     public void exception(Throwable throwable) {
-        writeLogLine(formatLine("ERROR", throwable.toString()));
+        writeLogLine(formatLine("ERROR", "An exception occurred while running scripts. Look at latest.log for a full stacktrace:"));
+        writeLogLine("\t" + throwable.toString());
         throwable.printStackTrace();
         for (String line : prepareStackTrace(throwable.getStackTrace())) {
             writeLogLine("\t\tat " + line);
@@ -245,7 +251,7 @@ public class GroovyLog {
             return this;
         }
 
-        public Msg level(Level level) {
+        private Msg level(Level level) {
             this.level = level;
             return this;
         }

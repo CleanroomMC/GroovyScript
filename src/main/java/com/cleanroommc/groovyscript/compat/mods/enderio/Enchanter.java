@@ -36,7 +36,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         recipeBuilder()
                 .enchantment(enchantment)
                 .input(input)
-                .register();
+                .buildAndRegister();
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -126,7 +126,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         }
 
         @Override
-        public @Nullable EnchanterRecipe register() {
+        public @Nullable EnchanterRecipe buildAndRegister() {
             if (!validate()) return null;
             EnchanterRecipe recipe = new CustomEnchanterRecipe(input, amount, enchantment, costMultiplier, lapis, book);
             ModSupport.ENDER_IO.get().enchanter.add(recipe);
