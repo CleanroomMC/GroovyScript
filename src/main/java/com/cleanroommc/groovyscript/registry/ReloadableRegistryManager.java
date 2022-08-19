@@ -1,18 +1,15 @@
 package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.compat.thermal.Pulverizer;
-import com.cleanroommc.groovyscript.mixin.JeiProxyAccessor;
-import crazypants.enderio.base.fluid.FluidFuelRegister;
-import crazypants.enderio.base.recipe.MachineRecipeRegistry;
-import crazypants.enderio.base.recipe.alloysmelter.AlloyRecipeManager;
-import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
-import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
-import crazypants.enderio.base.recipe.vat.VatRecipeManager;
-import mekanism.common.recipe.RecipeHandler;
+import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
+import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport.Container;
+import com.cleanroommc.groovyscript.mixin.jei.JeiProxyAccessor;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mezz.jei.JustEnoughItems;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -21,73 +18,78 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @GroovyBlacklist
 public class ReloadableRegistryManager {
 
-    private static boolean shouldRegisterAsReloadable = false;
+    private static final AtomicBoolean firstLoad = new AtomicBoolean(true);
+    private static final Map<Class<?>, List<Object>> recipeRecovery = new Object2ObjectOpenHashMap<>();
+    private static final Map<Class<?>, List<Object>> scriptRecipes = new Object2ObjectOpenHashMap<>();
 
-    public static boolean isShouldRegisterAsReloadable() {
-        return shouldRegisterAsReloadable;
+    public static boolean isFirstLoad() {
+        return firstLoad.get();
     }
 
-    public static void setShouldRegisterAsReloadable(boolean shouldRegisterAsReloadable) {
-        ReloadableRegistryManager.shouldRegisterAsReloadable = shouldRegisterAsReloadable;
+    public static void setLoaded() {
+        firstLoad.set(false);
+    }
+
+    public static void backup(Class<?> clazz, Object object) {
+        recipeRecovery.computeIfAbsent(clazz, k -> new ArrayList<>()).add(object);
+    }
+
+    public static void markScripted(Class<?> clazz, Object object) {
+        scriptRecipes.computeIfAbsent(clazz, k -> new ArrayList<>()).add(object);
+    }
+
+    public static <T> List<T> restore(Class<?> registryClass, @SuppressWarnings("unused") Class<T> recipeClass) {
+        @SuppressWarnings("unchecked") List<T> recoveredRecipes = (List<T>) recipeRecovery.remove(registryClass);
+        return recoveredRecipes == null ? Collections.emptyList() : recoveredRecipes;
+    }
+
+    public static <T> List<T> unmarkScripted(Class<?> registryClass, @SuppressWarnings("unused") Class<T> recipeClass) {
+        @SuppressWarnings("unchecked") List<T> marked = (List<T>) scriptRecipes.remove(registryClass);
+        return marked == null ? Collections.emptyList() : marked;
     }
 
     @ApiStatus.Internal
     public static void onReload() {
-        reloadRegistry(ForgeRegistries.RECIPES);
-        if (Loader.isModLoaded("mekanism")) {
-            RecipeHandler.Recipe.values().forEach(recipe -> ((IReloadableRegistry<?>) recipe).onReload());
-        }
-        if (Loader.isModLoaded("enderio")) {
-            ((IReloadableRegistry<?>) AlloyRecipeManager.getInstance()).onReload();
-            ((IReloadableRegistry<?>) (Object) SagMillRecipeManager.getInstance()).onReload();
-            ((IReloadableRegistry<?>) SliceAndSpliceRecipeManager.getInstance()).onReload();
-            ((IReloadableRegistry<?>) VatRecipeManager.getInstance()).onReload();
-            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.SOULBINDER)).onReload();
-            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.ENCHANTER)).onReload();
-            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_EMPTYING)).onReload();
-            ((IReloadableRegistry<?>) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_FILLING)).onReload();
-            ((IReloadableRegistry<?>) FluidFuelRegister.instance).onReload();
-        }
-        if (Loader.isModLoaded("thermalexpansion")) {
-            Pulverizer.onReload();
-        }
+        reloadForgeRegistries();
+        ModSupport.getAllContainers().stream()
+                .filter(Container::isLoaded)
+                .map(Container::get)
+                .map(ModPropertyContainer::getRegistries)
+                .flatMap(Collection::stream)
+                .forEach(VirtualizedRegistry::onReload);
     }
 
     @ApiStatus.Internal
     public static void afterScriptRun() {
-        if (Loader.isModLoaded("enderio")) {
-            ((IReloadableRegistry<?>) AlloyRecipeManager.getInstance()).afterScript();
-        }
+        ModSupport.getAllContainers().stream()
+                .filter(Container::isLoaded)
+                .map(Container::get)
+                .map(ModPropertyContainer::getRegistries)
+                .flatMap(Collection::stream)
+                .forEach(VirtualizedRegistry::afterScriptLoad);
+        unfreezeForgeRegistries();
     }
 
-    public static void reloadRegistry(IForgeRegistry<?> registry) {
-        if (!(registry instanceof ForgeRegistry)) throw new IllegalArgumentException();
-        ((IReloadableRegistry<?>) registry).onReload();
+    public static <V extends IForgeRegistryEntry<V>> void addRegistryEntry(IForgeRegistry<V> registry, String name, V entry) {
+        addRegistryEntry(registry, new ResourceLocation(name), entry);
     }
 
-    /**
-     * Registers a reloadable entry to a forge registry
-     *
-     * @param registry registry to register too
-     * @param value    value to register
-     * @param <V>      type of the registry
-     */
-    public static <V extends IForgeRegistryEntry<V>> void registerEntry(IForgeRegistry<V> registry, V value) {
-        boolean old = isShouldRegisterAsReloadable();
-        setShouldRegisterAsReloadable(true);
-        registry.register(value);
-        setShouldRegisterAsReloadable(old);
+    public static <V extends IForgeRegistryEntry<V>> void addRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name, V entry) {
+        ((IReloadableForgeRegistry<V>) registry).registerEntry(entry.setRegistryName(name));
     }
 
-    public static <V extends IForgeRegistryEntry<V>> void removeEntry(IForgeRegistry<V> registry, ResourceLocation rl, V dummy) {
-        ((IReloadableRegistry<V>) registry).removeEntry(dummy.setRegistryName(rl));
+    public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, String name) {
+        removeRegistryEntry(registry, new ResourceLocation(name));
     }
 
-    public static void removeRecipe(String name) {
-        removeEntry(ForgeRegistries.RECIPES, new ResourceLocation(name), new DummyRecipe());
+    public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name) {
+        ((IReloadableForgeRegistry<V>) registry).removeEntry(name);
     }
 
     /**
@@ -96,9 +98,18 @@ public class ReloadableRegistryManager {
     @ApiStatus.Internal
     @SideOnly(Side.CLIENT)
     public static void reloadJei() {
-        if (Loader.isModLoaded("jei")) {
+        if (ModSupport.JEI.isLoaded()) {
             JeiProxyAccessor jeiProxy = (JeiProxyAccessor) JustEnoughItems.getProxy();
             jeiProxy.getStarter().start(jeiProxy.getPlugins(), jeiProxy.getTextures());
         }
     }
+
+    private static void reloadForgeRegistries() {
+        ((IReloadableForgeRegistry<?>) ForgeRegistries.RECIPES).onReload();
+    }
+
+    private static void unfreezeForgeRegistries() {
+        ((ForgeRegistry<IRecipe>) ForgeRegistries.RECIPES).unfreeze();
+    }
+
 }

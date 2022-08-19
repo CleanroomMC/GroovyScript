@@ -5,11 +5,11 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "AlloyRecipeManagerAccessor",
     "AlloyRecipeManagerMixin",
-    "FluidFuelsRegistryMixin",
-    "RecipeGroupHolderMixin",
-    "SagMillRecipeManagerMixin",
-    "SliceNSpliceRecipeManagerMixin",
-    "VatRecipeManagerMixin"
+    "FluidFuelRegisterAccessor",
+    "ItemRecipeLeafNodeAccessor",
+    "ItemRecipeNodeAccessor",
+    "TriItemLookupAccessor"
   ]
 }

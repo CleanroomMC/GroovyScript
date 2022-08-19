@@ -3,9 +3,9 @@ package com.cleanroommc.groovyscript;
 import com.cleanroommc.groovyscript.api.BracketHandler;
 import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
 import com.cleanroommc.groovyscript.command.GSCommand;
-import com.cleanroommc.groovyscript.compat.ModHandler;
 import com.cleanroommc.groovyscript.event.Events;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -40,12 +40,12 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
         SandboxRunner.init();
         Events.init();
         BracketHandler.init();
-        ModHandler.INSTANCE.initDefaults();
     }
 
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
         SandboxRunner.run();
+        ReloadableRegistryManager.setLoaded();
     }
 
     @Mod.EventHandler

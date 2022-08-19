@@ -2,10 +2,10 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
-import com.cleanroommc.groovyscript.compat.ModHandler;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
-import com.cleanroommc.groovyscript.helper.recipe.CraftingRecipeHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
@@ -88,10 +88,11 @@ public class SandboxRunner {
     public static void runScript() throws IOException, ScriptException, ResourceException, SandboxSecurityException {
         GroovyLog.LOG.info("Running scripts");
         // prepare script running
-        ReloadableRegistryManager.setShouldRegisterAsReloadable(true);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         GroovyEventManager.clearAllListeners();
-        ReloadableRegistryManager.onReload();
+        if (!ReloadableRegistryManager.isFirstLoad()) {
+            ReloadableRegistryManager.onReload();
+        }
         SimpleGroovyInterceptor.makeSureExists();
 
         GroovyScript.LOGGER.info("Script environments: {}", Arrays.toString(scriptEnvironment));
@@ -101,9 +102,9 @@ public class SandboxRunner {
         config.addCompilationCustomizers(new SandboxTransformer());
         engine.setConfig(config);
         Binding binding = new Binding();
+        VanillaModule.initializeBinding(binding);
         binding.setVariable("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
-        binding.setVariable("recipes", new CraftingRecipeHelper());
-        binding.setVariable("mods", ModHandler.INSTANCE);
+        binding.setVariable("mods", ModSupport.INSTANCE);
 
         // find and run scripts
         running = true;
@@ -113,7 +114,6 @@ public class SandboxRunner {
         }
         running = false;
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
-        ReloadableRegistryManager.setShouldRegisterAsReloadable(false);
         ReloadableRegistryManager.afterScriptRun();
     }
 
