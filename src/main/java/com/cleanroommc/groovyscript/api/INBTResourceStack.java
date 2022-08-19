@@ -1,9 +1,13 @@
 package com.cleanroommc.groovyscript.api;
 
+import com.cleanroommc.groovyscript.helper.NbtHelper;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public interface INBTResourceStack extends IResourceStack {
 
@@ -31,4 +35,13 @@ public interface INBTResourceStack extends IResourceStack {
     }
 
     void setNbt(NBTTagCompound nbt);
+
+    default INBTResourceStack withNbt(NBTTagCompound nbt) {
+        setNbt(nbt);
+        return this;
+    }
+
+    default INBTResourceStack withNbt(Map<String, Object> map) {
+        return withNbt(NbtHelper.ofMap(map));
+    }
 }
