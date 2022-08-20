@@ -79,12 +79,16 @@ public class BracketHandler {
         }
         int meta = 0;
         if (raw.length > 2) {
-            try {
-                meta = Integer.parseInt(raw[2]);
-            } catch (NumberFormatException ignored) {
+            if (raw[2].equals("*")) {
+                meta = Short.MAX_VALUE; // wild card
+            } else {
+                try {
+                    meta = Integer.parseInt(raw[2]);
+                } catch (NumberFormatException ignored) {
+                }
             }
         }
-        return new net.minecraft.item.ItemStack(item1, 1, meta);
+        return new ItemStack(item1, 1, meta);
     }
 
     public static FluidStack parseFluidStack(String s) {
