@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.mixin;
 
-import com.cleanroommc.groovyscript.api.INBTResourceStack;
-import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.*;
+import com.cleanroommc.groovyscript.helper.NbtHelper;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import net.minecraft.item.Item;
@@ -17,8 +17,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.function.Predicate;
+
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements IIngredient, INBTResourceStack {
+public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
 
     @Shadow
     public abstract Item getItem();
@@ -39,6 +41,8 @@ public abstract class ItemStackMixin implements IIngredient, INBTResourceStack {
     protected Closure<Object> matchCondition;
     @Unique
     protected Closure<Object> transformer;
+    @Unique
+    protected Predicate<NBTTagCompound> nbtMatcher = NbtHelper.MATCH_ANY;
 
     public ItemStack getThis() {
         return (ItemStack) (Object) this;
@@ -81,7 +85,9 @@ public abstract class ItemStackMixin implements IIngredient, INBTResourceStack {
 
     @Override
     public boolean test(ItemStack stack) {
-        return (matchCondition == null || ClosureHelper.call(true, matchCondition, stack)) && OreDictionary.itemMatches(getThis(), stack, false);
+        return (matchCondition == null || ClosureHelper.call(true, matchCondition, stack)) &&
+                OreDictionary.itemMatches(getThis(), stack, false) &&
+                this.nbtMatcher.test(stack.getTagCompound());
     }
 
     public ItemStack when(Closure<Object> matchCondition) {
@@ -108,5 +114,25 @@ public abstract class ItemStackMixin implements IIngredient, INBTResourceStack {
         ingredient.when(matchCondition);
         ingredient.transform(transformer);
         cir.setReturnValue((ItemStack) (Object) ingredient);
+    }
+
+    @Override
+    public INBTResourceStack withNbt(NBTTagCompound nbt) {
+        setNbt(nbt);
+        this.nbtMatcher = nbt1 -> NbtHelper.containsNbt(nbt1, nbt);
+        return this;
+    }
+
+    @Override
+    public INbtIngredient withNbtExact(NBTTagCompound nbt) {
+        setNbt(nbt);
+        this.nbtMatcher = nbt1 -> nbt1.equals(nbt);
+        return this;
+    }
+
+    @Override
+    public INbtIngredient withNbtFilter(Predicate<NBTTagCompound> nbtFilter) {
+        this.nbtMatcher = nbtFilter == null ? nbt -> true : nbtFilter;
+        return this;
     }
 }
