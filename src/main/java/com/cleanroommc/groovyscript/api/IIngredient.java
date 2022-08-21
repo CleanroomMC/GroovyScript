@@ -23,6 +23,11 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
         return false;
     }
 
+    String asGroovyCode();
+
+    /**
+     * An empty ingredient with stack size 0, that matches empty item stacks
+     */
     IIngredient EMPTY = new IIngredient() {
         @Override
         public int getAmount() {
@@ -52,8 +57,16 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
         public boolean test(ItemStack stack) {
             return stack.isEmpty();
         }
+
+        @Override
+        public String asGroovyCode() {
+            return "<empty>";
+        }
     };
 
+    /**
+     * An ingredient with stack size 1, that matches any item stack
+     */
     IIngredient ANY = new IIngredient() {
 
         @Override
@@ -83,12 +96,16 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
 
         @Override
         public void setAmount(int amount) {
-
         }
 
         @Override
         public boolean test(ItemStack stack) {
             return true;
+        }
+
+        @Override
+        public String asGroovyCode() {
+            return "<any>";
         }
     };
 }

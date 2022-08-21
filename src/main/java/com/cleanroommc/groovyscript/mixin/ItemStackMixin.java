@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.mixin;
 
-import com.cleanroommc.groovyscript.api.*;
+import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.INBTResourceStack;
+import com.cleanroommc.groovyscript.api.INbtIngredient;
 import com.cleanroommc.groovyscript.helper.NbtHelper;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
@@ -36,6 +38,9 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
 
     @Shadow
     public abstract ItemStack copy();
+
+    @Shadow
+    public abstract int getMetadata();
 
     @Unique
     protected Closure<Object> matchCondition;
@@ -134,5 +139,18 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
     public INbtIngredient withNbtFilter(Predicate<NBTTagCompound> nbtFilter) {
         this.nbtMatcher = nbtFilter == null ? nbt -> true : nbtFilter;
         return this;
+    }
+
+    @Override
+    public String asGroovyCode() {
+        String code = "'<item:" + getItem().getRegistryName();
+        if (getMetadata() != 0) {
+            code += ":" + getMetadata();
+        }
+        code += ">'";
+        if (stackTagCompound != null) {
+            code += ".withNbt(" + NbtHelper.toGroovyCode(stackTagCompound, false) + ")";
+        }
+        return getCount() != 1 ? code + " * " + getCount() : code;
     }
 }

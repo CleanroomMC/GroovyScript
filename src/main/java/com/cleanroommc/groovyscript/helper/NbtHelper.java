@@ -82,6 +82,86 @@ public class NbtHelper {
         if (o instanceof Double) {
             return new NBTTagDouble((Double) o);
         }
+        if (o instanceof String) {
+            return new NBTTagString((String) o);
+        }
         throw new IllegalArgumentException("Error parsing Object to NBT: Invalid type " + o.getClass());
+    }
+
+    public static String toGroovyCode(NBTTagCompound nbt, boolean pretty) {
+        return toGroovyCode(nbt, 0, pretty);
+    }
+
+    public static String toGroovyCode(NBTTagCompound nbt, int indent, boolean pretty) {
+        StringBuilder builder = new StringBuilder();
+        newLine(builder, indent, pretty);
+        builder.append('[');
+        indent++;
+        for (String key : nbt.getKeySet()) {
+            newLine(builder, indent, pretty);
+            builder.append(key)
+                    .append(": ")
+                    .append(toGroovyCode(nbt.getTag(key), indent, pretty))
+                    .append(", ");
+        }
+        builder.delete(builder.length() - 2, builder.length());
+        indent--;
+        newLine(builder, indent, pretty);
+        builder.append(']');
+        return builder.toString();
+    }
+
+    public static String toGroovyCode(NBTTagList nbt, int indent, boolean pretty) {
+        StringBuilder builder = new StringBuilder();
+        newLine(builder, indent, pretty);
+        builder.append('[');
+        indent++;
+        for (NBTBase nbtBase : nbt) {
+            newLine(builder, indent, pretty);
+            builder.append(toGroovyCode(nbtBase, indent, pretty))
+                    .append(", ");
+        }
+        builder.delete(builder.length() - 2, builder.length());
+        indent--;
+        newLine(builder, indent, pretty);
+        builder.append(']');
+        return builder.toString();
+    }
+
+    public static String toGroovyCode(NBTBase nbt, int indent, boolean pretty) {
+        if (nbt.getId() == Constants.NBT.TAG_COMPOUND) {
+            return toGroovyCode((NBTTagCompound) nbt, indent, pretty);
+        }
+        if (nbt.getId() == Constants.NBT.TAG_LIST) {
+            return toGroovyCode((NBTTagList) nbt, indent, pretty);
+        }
+        if (nbt.getId() == Constants.NBT.TAG_INT) {
+            return String.valueOf(((NBTTagInt) nbt).getInt());
+        }
+        if (nbt.getId() == Constants.NBT.TAG_LONG) {
+            return ((NBTTagLong) nbt).getLong() + "L";
+        }
+        if (nbt.getId() == Constants.NBT.TAG_SHORT) {
+            return "(short) " + String.valueOf(((NBTTagShort) nbt).getShort());
+        }
+        if (nbt.getId() == Constants.NBT.TAG_BYTE) {
+            return "(byte) " + String.valueOf(((NBTTagByte) nbt).getByte());
+        }
+        if (nbt.getId() == Constants.NBT.TAG_FLOAT) {
+            return ((NBTTagFloat) nbt).getFloat() + "F";
+        }
+        if (nbt.getId() == Constants.NBT.TAG_DOUBLE) {
+            return ((NBTTagDouble) nbt).getDouble() + "D";
+        }
+        if (nbt.getId() == Constants.NBT.TAG_STRING) {
+            return '"' + ((NBTTagString) nbt).getString() + '"';
+        }
+        throw new IllegalArgumentException(nbt.toString());
+    }
+
+    private static void newLine(StringBuilder builder, int indents, boolean pretty) {
+        if (!pretty) return;
+        builder.append('\n');
+        for (int i = 0; i < indents; i++) builder.append('\t');
     }
 }
