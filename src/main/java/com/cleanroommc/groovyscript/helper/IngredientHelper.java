@@ -34,6 +34,10 @@ public class IngredientHelper {
         return (IIngredient) (Object) itemStack;
     }
 
+    public static IIngredient toIIngredient(FluidStack fluidStack) {
+        return (IIngredient) fluidStack;
+    }
+
     public static boolean isEmpty(IIngredient ingredient) {
         return ingredient == null || ingredient.getMatchingStacks().length == 0 || ingredient.getAmount() == 0;
     }
