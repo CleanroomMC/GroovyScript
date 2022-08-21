@@ -1,9 +1,7 @@
 package com.cleanroommc.groovyscript.command;
 
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.BracketFormatter;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
@@ -23,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class GSHandCommand {
 
     public static void itemInformation(@NotNull EntityPlayer sender, @NotNull ItemStack stack) {
-        String s = IngredientHelper.toIIngredient(stack).asGroovyCode();
+        String s = IngredientHelper.asGroovyCode(stack);
         String formatted = BracketFormatter.formatGSCode(s);
 
         sender.sendMessage(new TextComponentString("Items:").setStyle(new Style().setColor(TextFormatting.GREEN)));
@@ -47,7 +45,7 @@ public class GSHandCommand {
     }
 
     public static void fluidInformation(@NotNull EntityPlayer sender, @NotNull FluidStack stack) {
-        String s = IngredientHelper.toIIngredient(stack).asGroovyCode();
+        String s = IngredientHelper.asGroovyCode(stack);
         String formatted = BracketFormatter.formatGSCode(s);
 
         sender.sendMessage(new TextComponentString("Fluids:")
@@ -63,8 +61,7 @@ public class GSHandCommand {
             sender.sendMessage(new TextComponentString("Ore Dictionaries:")
                     .setStyle(new Style().setColor(TextFormatting.GREEN)));
             for (int id : ids) {
-                s = ((IIngredient) new OreDictIngredient(OreDictionary.getOreName(id))
-                        .withAmount(stack.getCount())).asGroovyCode();
+                s = IngredientHelper.asGroovyCode(OreDictionary.getOreName(id), stack.getCount());
                 formatted = BracketFormatter.formatGSCode(s);
 
                 sender.sendMessage(new TextComponentString(formatted));

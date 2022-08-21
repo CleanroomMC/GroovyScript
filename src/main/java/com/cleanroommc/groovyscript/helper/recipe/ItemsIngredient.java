@@ -42,11 +42,6 @@ public class ItemsIngredient extends IngredientBase {
     }
 
     @Override
-    public String asGroovyCode() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public int getAmount() {
         return itemStacks.isEmpty() ? 0 : amount;
     }

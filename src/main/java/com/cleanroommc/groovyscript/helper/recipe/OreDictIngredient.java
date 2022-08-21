@@ -58,12 +58,6 @@ public class OreDictIngredient implements IIngredient {
 
     @Override
     public String toString() {
-        return "OreDictIngredient{ " + oreDict + " } * " + count ;
-    }
-
-    @Override
-    public String asGroovyCode() {
-        String code = "'<ore:" + oreDict + ">'";
-        return count != 1 ? code + " * " + count : code;
+        return "OreDictIngredient{ " + oreDict + " } * " + count;
     }
 }

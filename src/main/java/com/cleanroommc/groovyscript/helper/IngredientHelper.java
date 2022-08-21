@@ -50,4 +50,26 @@ public class IngredientHelper {
         return itemStack == null || itemStack.amount <= 0;
     }
 
+    public static String asGroovyCode(ItemStack itemStack) {
+        String code = "'<item:" + itemStack.getItem().getRegistryName();
+        if (itemStack.getMetadata() != 0) {
+            code += ":" + itemStack.getMetadata();
+        }
+        code += ">'";
+        if (itemStack.hasTagCompound()) {
+            code += ".withNbt(" + NbtHelper.toGroovyCode(itemStack.getTagCompound(), false) + ")";
+        }
+        return itemStack.getCount() != 1 ? code + " * " + itemStack.getCount() : code;
+    }
+
+    public static String asGroovyCode(FluidStack fluidStack) {
+        String code = "'<fluid:" + fluidStack.getFluid().getName() + ">'";
+        return fluidStack.amount != 1000 ? code + " * " + fluidStack.amount : code;
+    }
+
+    public static String asGroovyCode(String oreDict, int amount) {
+        String code = "'<ore:" + oreDict + ">'";
+        return amount != 1 ? code + " * " + amount : code;
+    }
+
 }
