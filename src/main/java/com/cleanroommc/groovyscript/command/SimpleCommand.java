@@ -18,7 +18,7 @@ public class SimpleCommand extends CommandBase {
     }
 
     public SimpleCommand(String name, ICommand command) {
-        this(name, "", command);
+        this(name, "/gs " + name, command);
     }
 
     @Override

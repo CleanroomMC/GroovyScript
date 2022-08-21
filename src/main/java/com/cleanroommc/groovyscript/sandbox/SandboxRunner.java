@@ -5,7 +5,7 @@ import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
-import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
+import com.cleanroommc.groovyscript.api.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
@@ -92,6 +92,7 @@ public class SandboxRunner {
         GroovyEventManager.clearAllListeners();
         if (!ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
+            MinecraftForge.EVENT_BUS.post(new GroovyReloadEvent());
         }
         SimpleGroovyInterceptor.makeSureExists();
 
@@ -113,8 +114,8 @@ public class SandboxRunner {
             engine.run(file.toString(), binding);
         }
         running = false;
-        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
         ReloadableRegistryManager.afterScriptRun();
+        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
     }
 
     private static File[] getStartupFiles() throws IOException {

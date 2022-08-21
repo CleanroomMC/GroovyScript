@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.BracketHandler;
+import com.cleanroommc.groovyscript.api.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.api.IGroovyPropertyGetter;
 import com.cleanroommc.groovyscript.event.GroovyEvent;
-import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import groovy.lang.Closure;
@@ -78,12 +78,12 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onGetProperty(Invoker invoker, Object receiver, String property) throws Throwable {
+        if (receiver instanceof IGroovyEventHandler) {
+            receiver = ((IGroovyEventHandler) receiver).getEventManager();
+        }
         if (receiver instanceof IGroovyPropertyGetter) {
             Object r = ((IGroovyPropertyGetter) receiver).getProperty(property);
             return r != null ? r : super.onGetProperty(invoker, receiver, property);
-        }
-        if (receiver instanceof IGroovyEventHandler) {
-            return onGetProperty(invoker, ((IGroovyEventHandler) receiver).getEventManager(), property);
         }
         Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
         if (InterceptionManager.INSTANCE.isBlacklistedField(clazz, property, FieldAccess.GET)) {
