@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class GSHandCommand {
 
     public static void itemInformation(@NotNull EntityPlayer sender, @NotNull ItemStack stack) {
-        String s = IngredientHelper.asGroovyCode(stack);
+        String s = IngredientHelper.asGroovyCode(stack, true);
         String formatted = BracketFormatter.formatGSCode(s);
 
         sender.sendMessage(new TextComponentString("Items:").setStyle(new Style().setColor(TextFormatting.GREEN)));
@@ -45,7 +45,7 @@ public class GSHandCommand {
     }
 
     public static void fluidInformation(@NotNull EntityPlayer sender, @NotNull FluidStack stack) {
-        String s = IngredientHelper.asGroovyCode(stack);
+        String s = IngredientHelper.asGroovyCode(stack, true);
         String formatted = BracketFormatter.formatGSCode(s);
 
         sender.sendMessage(new TextComponentString("Fluids:")
@@ -61,7 +61,7 @@ public class GSHandCommand {
             sender.sendMessage(new TextComponentString("Ore Dictionaries:")
                     .setStyle(new Style().setColor(TextFormatting.GREEN)));
             for (int id : ids) {
-                s = IngredientHelper.asGroovyCode(OreDictionary.getOreName(id), stack.getCount());
+                s = IngredientHelper.asGroovyCode(OreDictionary.getOreName(id), stack.getCount(), true);
                 formatted = BracketFormatter.formatGSCode(s);
 
                 sender.sendMessage(new TextComponentString(formatted));

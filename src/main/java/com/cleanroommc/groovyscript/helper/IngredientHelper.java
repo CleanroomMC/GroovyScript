@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.helper;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import mekanism.api.gas.GasStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
 
@@ -50,26 +51,76 @@ public class IngredientHelper {
         return itemStack == null || itemStack.amount <= 0;
     }
 
-    public static String asGroovyCode(ItemStack itemStack) {
-        String code = "'<item:" + itemStack.getItem().getRegistryName();
+    public static String asGroovyCode(ItemStack itemStack, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("'<");
+        if (colored) builder.append(TextFormatting.DARK_GREEN);
+        builder.append("item");
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append(":");
+        if (colored) builder.append(TextFormatting.AQUA);
+        builder.append(itemStack.getItem().getRegistryName());
+        if (colored) builder.append(TextFormatting.GRAY);
         if (itemStack.getMetadata() != 0) {
-            code += ":" + itemStack.getMetadata();
+            builder.append(":");
+            if (colored) builder.append(TextFormatting.GOLD);
+            builder.append(itemStack.getMetadata());
+            if (colored) builder.append(TextFormatting.GRAY);
         }
-        code += ">'";
+        builder.append(">'");
         if (itemStack.hasTagCompound()) {
-            code += ".withNbt(" + NbtHelper.toGroovyCode(itemStack.getTagCompound(), false) + ")";
+            builder.append(".withNbt(");
+            builder.append(NbtHelper.toGroovyCode(itemStack.getTagCompound(), false, colored));
+            if (colored) builder.append(TextFormatting.GRAY);
+            builder.append(")");
         }
-        return itemStack.getCount() != 1 ? code + " * " + itemStack.getCount() : code;
+        if (itemStack.getCount() != 0) {
+            builder.append(" * ");
+            if (colored) builder.append(TextFormatting.GOLD);
+            builder.append(itemStack.getCount());
+        }
+        return builder.toString();
     }
 
-    public static String asGroovyCode(FluidStack fluidStack) {
-        String code = "'<fluid:" + fluidStack.getFluid().getName() + ">'";
-        return fluidStack.amount != 1000 ? code + " * " + fluidStack.amount : code;
+    public static String asGroovyCode(FluidStack fluidStack, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("'<");
+        if (colored) builder.append(TextFormatting.DARK_GREEN);
+        builder.append("fluid");
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append(":");
+        if (colored) builder.append(TextFormatting.AQUA);
+        builder.append(fluidStack.getFluid().getName());
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append(">'");
+        if (fluidStack.amount != 0) {
+            builder.append(" * ");
+            if (colored) builder.append(TextFormatting.GOLD);
+            builder.append(fluidStack.amount);
+        }
+        return builder.toString();
     }
 
-    public static String asGroovyCode(String oreDict, int amount) {
-        String code = "'<ore:" + oreDict + ">'";
-        return amount != 1 ? code + " * " + amount : code;
+    public static String asGroovyCode(String oreDict, int amount, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("'<");
+        if (colored) builder.append(TextFormatting.DARK_GREEN);
+        builder.append("ore");
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append(":");
+        if (colored) builder.append(TextFormatting.AQUA);
+        builder.append(oreDict);
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append(">'");
+        if (amount != 0) {
+            builder.append(" * ");
+            if (colored) builder.append(TextFormatting.GOLD);
+            builder.append(amount);
+        }
+        return builder.toString();
     }
 
 }

@@ -102,7 +102,7 @@ dependencies {
 
         // deobfCompile 'curse.maven:ender_io-64578:3328811'
         // deobfCompile 'curse.maven:endercore-231868:2972849'
-        deobfCompile "com.enderio.core:EnderCore:1.12.2-+"
+        deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
         deobfCompile ("com.enderio:EnderIO:1.12.2-+") {
             transitive = false
         }
