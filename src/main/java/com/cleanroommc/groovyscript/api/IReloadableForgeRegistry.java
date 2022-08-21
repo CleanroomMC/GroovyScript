@@ -2,6 +2,9 @@ package com.cleanroommc.groovyscript.api;
 
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * Access interface for reloadable forge registries
+ */
 public interface IReloadableForgeRegistry<V> {
 
     V registerEntry(V registryEntry);
@@ -9,5 +12,4 @@ public interface IReloadableForgeRegistry<V> {
     void removeEntry(ResourceLocation name);
 
     void onReload();
-
 }

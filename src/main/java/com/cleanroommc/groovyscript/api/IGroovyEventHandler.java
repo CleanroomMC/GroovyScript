@@ -1,6 +1,7 @@
-package com.cleanroommc.groovyscript.event;
+package com.cleanroommc.groovyscript.api;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import org.jetbrains.annotations.NotNull;
 
 /**

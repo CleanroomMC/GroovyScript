@@ -1,9 +1,12 @@
 package com.cleanroommc.groovyscript.api;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+@ApiStatus.Experimental
 public interface IGroovyEnvironmentRegister {
 
     default Map<Class<?>, Collection<String>> getBannedMethods() {

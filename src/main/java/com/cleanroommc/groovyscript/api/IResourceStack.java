@@ -1,5 +1,9 @@
 package com.cleanroommc.groovyscript.api;
 
+/**
+ * An object that has an amount.
+ * Can use '*' in groovy to set amount.
+ */
 public interface IResourceStack {
 
     int getAmount();

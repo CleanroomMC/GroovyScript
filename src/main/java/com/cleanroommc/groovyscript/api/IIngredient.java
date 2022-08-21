@@ -7,6 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
+/**
+ * Base ingredient class for every ingredient. Most useful for item stacks and ore dicts.
+ */
 public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
 
     IIngredient exactCopy();
