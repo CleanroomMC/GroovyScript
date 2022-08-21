@@ -15,7 +15,7 @@ public class AlloyRecipeManagerMixin {
     @Inject(method = "addRecipe(Lcrazypants/enderio/base/recipe/IManyToOneRecipe;)V", at = @At("RETURN"))
     private void afterAddRecipe(IManyToOneRecipe recipe, CallbackInfo ci) {
         if (SandboxRunner.isCurrentlyRunning()) {
-            ModSupport.ENDER_IO.get().alloySmelter.addBackup(recipe);
+            ModSupport.ENDER_IO.get().alloySmelter.addScripted(recipe);
         }
     }
 
