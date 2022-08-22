@@ -12,7 +12,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
@@ -53,11 +55,13 @@ public class GSCommand extends CommandTreeBase {
                 EntityPlayer player = (EntityPlayer) sender;
                 ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
                 if (stack.isEmpty()) stack = player.getHeldItem(EnumHand.OFF_HAND);
+                BlockPos pos = null;
                 IBlockState blockState = null;
                 Block block = null;
                 if (stack.isEmpty()) {
-                    blockState = getBlockLookingAt(player);
-                    if (blockState == null) return;
+                    pos = getBlockLookingAt(player);
+                    if (pos == null) return;
+                    blockState = player.world.getBlockState(pos);
                     block = blockState.getBlock();
                     stack = new ItemStack(block, 1, block.getMetaFromState(blockState));
                 }
@@ -102,7 +106,8 @@ public class GSCommand extends CommandTreeBase {
                     GSHandCommand.blockStateInformation(messages, blockState);
                 }
 
-                GsHandEvent event = new GsHandEvent(server, player, args, messages, stack, blockState, block);
+                TileEntity tileEntity = pos != null ? player.world.getTileEntity(pos) : null;
+                GsHandEvent event = new GsHandEvent(server, player, args, messages, stack, blockState, block, tileEntity);
                 MinecraftForge.EVENT_BUS.post(event);
                 for (ITextComponent msg : event.messages) {
                     player.sendMessage(msg);
@@ -140,7 +145,7 @@ public class GSCommand extends CommandTreeBase {
         return "/gs []";
     }
 
-    private static IBlockState getBlockLookingAt(EntityPlayer player) {
+    private static BlockPos getBlockLookingAt(EntityPlayer player) {
         double distance = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
         Vec3d eyes = player.getPositionEyes(0.0F);
         Vec3d look = player.getLook(0.0F);
@@ -148,7 +153,7 @@ public class GSCommand extends CommandTreeBase {
 
         RayTraceResult result = player.getEntityWorld().rayTraceBlocks(eyes, end, true);
         if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-            return player.world.getBlockState(result.getBlockPos());
+            return result.getBlockPos();
         }
         return null;
     }

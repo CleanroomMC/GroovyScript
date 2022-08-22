@@ -5,6 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +56,11 @@ public class GsHandEvent extends Event {
      */
     @Nullable
     public final Block block;
+    /**
+     * The tile entity the player is looking at
+     */
+    @Nullable
+    public final TileEntity tileEntity;
 
     public GsHandEvent(@NotNull MinecraftServer server,
                        @NotNull EntityPlayer player,
@@ -62,7 +68,7 @@ public class GsHandEvent extends Event {
                        @NotNull List<ITextComponent> messages,
                        @NotNull ItemStack stack,
                        @Nullable IBlockState blockState,
-                       @Nullable Block block) {
+                       @Nullable Block block, @Nullable TileEntity tileEntity) {
         this.server = server;
         this.player = player;
         this.commandArgs = commandArgs;
@@ -70,5 +76,6 @@ public class GsHandEvent extends Event {
         this.stack = stack;
         this.blockState = blockState;
         this.block = block;
+        this.tileEntity = tileEntity;
     }
 }
