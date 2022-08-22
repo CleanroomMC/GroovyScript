@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.command;
 
+import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import com.google.common.base.Joiner;
 import net.minecraft.block.Block;
@@ -14,11 +15,13 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -27,6 +30,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.server.command.CommandTreeBase;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,54 +53,59 @@ public class GSCommand extends CommandTreeBase {
                 EntityPlayer player = (EntityPlayer) sender;
                 ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
                 if (stack.isEmpty()) stack = player.getHeldItem(EnumHand.OFF_HAND);
+                IBlockState blockState = null;
+                Block block = null;
+                if (stack.isEmpty()) {
+                    blockState = getBlockLookingAt(player);
+                    if (blockState == null) return;
+                    block = blockState.getBlock();
+                    stack = new ItemStack(block, 1, block.getMetaFromState(blockState));
+                }
 
-                if (!stack.isEmpty()) {
-                    // add the item and oredict info
-                    GSHandCommand.itemInformation(player, stack);
-                    GSHandCommand.oredictInformation(player, stack);
+                List<ITextComponent> messages = new ArrayList<>();
 
-                    // if the item is for a block, add the block's info
-                    if (stack.getItem() instanceof ItemBlock) {
-                        GSHandCommand.blockInformation(player, ((ItemBlock) stack.getItem()).getBlock());
-                        GSHandCommand.blockStateInformation(player, ((ItemBlock) stack.getItem()).getBlock().getDefaultState());
+                if (stack.getItem() instanceof ItemBlock) {
+                    block = ((ItemBlock) stack.getItem()).getBlock();
+                    blockState = block.getStateFromMeta(stack.getMetadata());
+                }
+
+                boolean prettyNbt = false;
+                for (String arg : args) {
+                    if ("pretty".equals(arg) || "-p".equals(arg)) {
+                        prettyNbt = true;
+                        break;
+                    }
+                }
+
+                // add the item and oredict info
+                GSHandCommand.itemInformation(messages, stack, prettyNbt);
+                GSHandCommand.oredictInformation(messages, stack);
+
+                // if the item holds fluids, add that info
+                if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+                    IFluidHandler handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                    if (handler != null) {
+                        FluidStack fluidStack = handler.drain(Integer.MAX_VALUE, false);
+                        if (fluidStack != null) GSHandCommand.fluidInformation(messages, fluidStack);
+                    }
+                }
+
+                if (blockState != null) {
+                    // if the block is a fluid, add the fluid's info
+                    Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
+                    if (fluid != null) {
+                        GSHandCommand.fluidInformation(messages, new FluidStack(fluid, 1000));
                     }
 
-                    // if the item holds fluids, add that info
-                    if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
-                        IFluidHandler handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                        if (handler != null) {
-                            FluidStack fluidStack = handler.drain(Integer.MAX_VALUE, false);
-                            if (fluidStack != null) GSHandCommand.fluidInformation(player, fluidStack);
-                        }
-                    }
-                } else {
-                    double distance = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
-                    Vec3d eyes = player.getPositionEyes(0.0F);
-                    Vec3d look = player.getLook(0.0F);
-                    Vec3d end = eyes.add(look.x * distance, look.y * distance, look.z * distance);
+                    // add the block's info
+                    GSHandCommand.blockInformation(messages, block);
+                    GSHandCommand.blockStateInformation(messages, blockState);
+                }
 
-                    RayTraceResult result = player.getEntityWorld().rayTraceBlocks(eyes, end, true);
-                    if (result != null) {
-                        IBlockState state = player.world.getBlockState(result.getBlockPos());
-                        Block block = state.getBlock();
-                        stack = new ItemStack(block, 1, state.getBlock().getMetaFromState(state));
-
-                        // if the block has an item form, add that info
-                        if (!stack.isEmpty()) {
-                            GSHandCommand.itemInformation(player, stack);
-                            GSHandCommand.oredictInformation(player, stack);
-                        }
-
-                        // if the block is a fluid, add the fluid's info
-                        Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
-                        if (fluid != null) {
-                            GSHandCommand.fluidInformation(player, new FluidStack(fluid, 1000));
-                        }
-
-                        // add the block's info
-                        GSHandCommand.blockInformation(player, block);
-                        GSHandCommand.blockStateInformation(player, state);
-                    }
+                GsHandEvent event = new GsHandEvent(server, player, args, messages, stack, blockState, block);
+                MinecraftForge.EVENT_BUS.post(event);
+                for (ITextComponent msg : event.messages) {
+                    player.sendMessage(msg);
                 }
             }
         }));
@@ -129,5 +138,18 @@ public class GSCommand extends CommandTreeBase {
     @Nonnull
     public String getUsage(ICommandSender sender) {
         return "/gs []";
+    }
+
+    private static IBlockState getBlockLookingAt(EntityPlayer player) {
+        double distance = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
+        Vec3d eyes = player.getPositionEyes(0.0F);
+        Vec3d look = player.getLook(0.0F);
+        Vec3d end = eyes.add(look.x * distance, look.y * distance, look.z * distance);
+
+        RayTraceResult result = player.getEntityWorld().rayTraceBlocks(eyes, end, true);
+        if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
+            return player.world.getBlockState(result.getBlockPos());
+        }
+        return null;
     }
 }

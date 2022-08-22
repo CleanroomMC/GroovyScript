@@ -51,7 +51,7 @@ public class IngredientHelper {
         return itemStack == null || itemStack.amount <= 0;
     }
 
-    public static String asGroovyCode(ItemStack itemStack, boolean colored) {
+    public static String asGroovyCode(ItemStack itemStack, boolean colored, boolean prettyNbt) {
         StringBuilder builder = new StringBuilder();
         if (colored) builder.append(TextFormatting.GRAY);
         builder.append("'<");
@@ -71,14 +71,9 @@ public class IngredientHelper {
         builder.append(">'");
         if (itemStack.hasTagCompound()) {
             builder.append(".withNbt(");
-            builder.append(NbtHelper.toGroovyCode(itemStack.getTagCompound(), false, colored));
+            builder.append(NbtHelper.toGroovyCode(itemStack.getTagCompound(), prettyNbt, colored));
             if (colored) builder.append(TextFormatting.GRAY);
             builder.append(")");
-        }
-        if (itemStack.getCount() != 0) {
-            builder.append(" * ");
-            if (colored) builder.append(TextFormatting.GOLD);
-            builder.append(itemStack.getCount());
         }
         return builder.toString();
     }
@@ -95,15 +90,10 @@ public class IngredientHelper {
         builder.append(fluidStack.getFluid().getName());
         if (colored) builder.append(TextFormatting.GRAY);
         builder.append(">'");
-        if (fluidStack.amount != 0) {
-            builder.append(" * ");
-            if (colored) builder.append(TextFormatting.GOLD);
-            builder.append(fluidStack.amount);
-        }
         return builder.toString();
     }
 
-    public static String asGroovyCode(String oreDict, int amount, boolean colored) {
+    public static String asGroovyCode(String oreDict, boolean colored) {
         StringBuilder builder = new StringBuilder();
         if (colored) builder.append(TextFormatting.GRAY);
         builder.append("'<");
@@ -115,11 +105,6 @@ public class IngredientHelper {
         builder.append(oreDict);
         if (colored) builder.append(TextFormatting.GRAY);
         builder.append(">'");
-        if (amount != 0) {
-            builder.append(" * ");
-            if (colored) builder.append(TextFormatting.GOLD);
-            builder.append(amount);
-        }
         return builder.toString();
     }
 

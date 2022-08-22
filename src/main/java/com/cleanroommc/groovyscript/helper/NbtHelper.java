@@ -96,6 +96,7 @@ public class NbtHelper {
     public static String toGroovyCode(NBTTagCompound nbt, int indent, boolean pretty, boolean colored) {
         StringBuilder builder = new StringBuilder();
         newLine(builder, indent, pretty);
+        if (colored) builder.append(TextFormatting.GRAY);
         builder.append('[');
         indent++;
         for (String key : nbt.getKeySet()) {
