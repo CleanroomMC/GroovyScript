@@ -5,12 +5,11 @@ import cofh.thermalexpansion.util.managers.machine.PulverizerManager;
 import cofh.thermalexpansion.util.managers.machine.PulverizerManager.PulverizerRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.mixin.thermalexpansion.PulverizerManagerAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -60,11 +59,25 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
 
     public void removeByInput(IIngredient input) {
         if (IngredientHelper.isEmpty(input)) {
-            GroovyLog.LOG.error("Error removing Thermal Expansion Pulverizer recipe for empty input!");
+            GroovyLog.msg("Error removing Thermal Expansion Pulverizer recipe")
+                    .add("input must not be empty")
+                    .error()
+                    .post();
             return;
         }
+        boolean found = false;
         for (ItemStack stack : input.getMatchingStacks()) {
-            addBackup(PulverizerManager.removeRecipe(stack));
+            PulverizerRecipe recipe = PulverizerManager.removeRecipe(stack);
+            if (recipe != null) {
+                found = true;
+                addBackup(PulverizerManager.removeRecipe(stack));
+            }
+        }
+        if (!found) {
+            GroovyLog.msg("Error removing Thermal Expansion Pulverizer recipe")
+                    .add("could not find recipe for %s", input)
+                    .error()
+                    .post();
         }
     }
 

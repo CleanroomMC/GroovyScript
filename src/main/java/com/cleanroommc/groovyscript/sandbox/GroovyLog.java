@@ -220,6 +220,14 @@ public class GroovyLog {
         }
     }
 
+    public static Msg msg(String msg, Object... data) {
+        return new Msg(msg, data);
+    }
+
+    public static Msg msg(String msg) {
+        return new Msg(msg);
+    }
+
     public static class Msg {
 
         private final List<String> messages = new ArrayList<>();
@@ -285,7 +293,11 @@ public class GroovyLog {
             return this.messages.size() > 1;
         }
 
-        public boolean logIfNotEmpty() {
+        public void post() {
+            LOG.log(this);
+        }
+
+        public boolean postIfNotEmpty() {
             if (hasSubMessages()) {
                 LOG.log(this);
                 return true;
