@@ -6,10 +6,12 @@ public class ThermalExpansion extends ModPropertyContainer {
 
     public final Pulverizer pulverizer = new Pulverizer();
     public final Brewer brewer = new Brewer();
+    public final Crucible crucible = new Crucible();
 
     public ThermalExpansion() {
         addRegistry(pulverizer);
         addRegistry(brewer);
+        addRegistry(crucible);
     }
 
 }

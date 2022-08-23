@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thermalexpansion;
 import cofh.core.inventory.ComparableItemStackValidatedNBT;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.thermalexpansion.util.managers.machine.BrewerManager;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -12,6 +13,7 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class Brewer extends VirtualizedRegistry<BrewerManager.BrewerRecipe> {
             for (ItemStack itemStack : ingredient.getMatchingStacks()) {
                 BrewerManager.BrewerRecipe recipe = BrewerManager.removeRecipe(itemStack, input);
                 if (recipe != null) {
+                    addBackup(recipe);
                     validationSetBackup.add(BrewerManager.convertInput(itemStack));
                     validationFluidsBackup.add(input.getFluid().getName());
                     found = true;
@@ -58,6 +61,8 @@ public class Brewer extends VirtualizedRegistry<BrewerManager.BrewerRecipe> {
     }
 
     @Override
+    @GroovyBlacklist
+    @ApiStatus.Internal
     public void onReload() {
         Map<List<Integer>, BrewerManager.BrewerRecipe> map = BrewerManagerAccessor.getRecipeMap();
         removeScripted().forEach(recipe -> map.values().removeIf(r -> r == recipe));

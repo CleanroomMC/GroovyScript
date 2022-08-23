@@ -70,7 +70,7 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
             PulverizerRecipe recipe = PulverizerManager.removeRecipe(stack);
             if (recipe != null) {
                 found = true;
-                addBackup(PulverizerManager.removeRecipe(stack));
+                addBackup(recipe);
             }
         }
         if (!found) {
