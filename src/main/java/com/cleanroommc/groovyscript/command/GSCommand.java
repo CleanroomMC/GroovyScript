@@ -1,7 +1,10 @@
 package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.event.GsHandEvent;
+import com.cleanroommc.groovyscript.network.NetworkHandler;
+import com.cleanroommc.groovyscript.network.SReloadJei;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
 import com.google.common.base.Joiner;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -9,6 +12,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -39,7 +43,6 @@ import java.util.List;
 public class GSCommand extends CommandTreeBase {
 
     public GSCommand() {
-        addSubcommand(new RunScriptsCommand());
         addSubcommand(new SimpleCommand("log", (server, sender, args) -> {
             sender.sendMessage(new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + "Groovy Log"))
                     .setStyle(new Style()
@@ -49,6 +52,21 @@ public class GSCommand extends CommandTreeBase {
                     .setStyle(new Style()
                             .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.LOG.getPath().getParent().toString() + "/logs/latest.log"))
                             .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open Minecraft log")))));
+        }));
+        addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
+            GroovyLog.LOG.info("========== Reloading Groovy scripts ==========");
+            long time = System.currentTimeMillis();
+            Throwable throwable = SandboxRunner.run();
+            time = System.currentTimeMillis() - time;
+            if (throwable == null) {
+                sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
+                NetworkHandler.sendToPlayer(new SReloadJei(), (EntityPlayerMP) sender);
+            } else {
+                sender.sendMessage(new TextComponentString(TextFormatting.RED + "Error executing scripts:"));
+                sender.sendMessage(new TextComponentString(TextFormatting.RED + throwable.getMessage()));
+                server.commandManager.executeCommand(sender, "/gs log");
+            }
+            sender.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
         }));
         addSubcommand(new SimpleCommand("hand", (server, sender, args) -> {
             if (sender instanceof EntityPlayer) {
