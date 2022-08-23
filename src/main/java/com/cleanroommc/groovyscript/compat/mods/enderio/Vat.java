@@ -135,7 +135,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         }
 
         @Override
-        public @Nullable Recipe buildAndRegister() {
+        public @Nullable Recipe register() {
             if (!validate()) return null;
             List<IRecipeInput> inputs = new ArrayList<>();
             for (int i = 0; i < itemInputs1.size(); i++) {

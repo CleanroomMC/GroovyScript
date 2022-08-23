@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
@@ -36,7 +35,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         recipeBuilder()
                 .enchantment(enchantment)
                 .input(input)
-                .buildAndRegister();
+                .register();
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -126,7 +125,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         }
 
         @Override
-        public @Nullable EnchanterRecipe buildAndRegister() {
+        public @Nullable EnchanterRecipe register() {
             if (!validate()) return null;
             EnchanterRecipe recipe = new CustomEnchanterRecipe(input, amount, enchantment, costMultiplier, lapis, book);
             ModSupport.ENDER_IO.get().enchanter.add(recipe);

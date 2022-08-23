@@ -111,7 +111,7 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         }
 
         @Override
-        public @Nullable Recipe buildAndRegister() {
+        public @Nullable Recipe register() {
             if (!validate()) return null;
             RecipeOutput[] outputs = new RecipeOutput[output.size()];
             for (int i = 0; i < outputs.length; i++) {

@@ -108,7 +108,7 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         }
 
         @Override
-        public @Nullable PulverizerManager.PulverizerRecipe buildAndRegister() {
+        public @Nullable PulverizerManager.PulverizerRecipe register() {
             if (!validate()) return null;
             PulverizerManager.PulverizerRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {

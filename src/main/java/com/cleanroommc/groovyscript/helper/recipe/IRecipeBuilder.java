@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 public interface IRecipeBuilder<T> {
 
     /**
-     * Validates the current values. Should be called in {@link #buildAndRegister()}.
+     * Validates the current values. Should be called in {@link #register()}.
      *
      * @return if a valid recipe can be build with the current values
      */
@@ -23,5 +23,5 @@ public interface IRecipeBuilder<T> {
      * @return the built recipe or null if values are invalid
      */
     @Nullable
-    T buildAndRegister();
+    T register();
 }
