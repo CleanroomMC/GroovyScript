@@ -117,11 +117,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
             msg.add(IngredientHelper.isEmpty(lapis), () -> "custom lapis must not be empty");
             if (amount <= 0 && input != null) amount = input.getAmount();
 
-            if (msg.hasSubMessages()) {
-                GroovyLog.LOG.log(msg);
-                return false;
-            }
-            return true;
+            return !msg.postIfNotEmpty();
         }
 
         @Override

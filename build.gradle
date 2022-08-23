@@ -77,10 +77,6 @@ repositories {
 }
 
 dependencies {
-
-    if (project.use_assetmover.toBoolean()) {
-        deobfCompile 'com.cleanroommc:assetmover:0.2'
-    }
     if (project.use_mixins.toBoolean()) {
         deobfCompile 'zone.rong:mixinbooter:4.2'
     }
@@ -102,7 +98,7 @@ dependencies {
 
         // deobfCompile 'curse.maven:ender_io-64578:3328811'
         // deobfCompile 'curse.maven:endercore-231868:2972849'
-        deobfCompile "com.enderio.core:EnderCore:1.12.2-+"
+        deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
         deobfCompile ("com.enderio:EnderIO:1.12.2-+") {
             transitive = false
         }
