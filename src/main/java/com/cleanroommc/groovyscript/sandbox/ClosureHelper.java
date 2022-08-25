@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 public class ClosureHelper {
 
     @Nullable
-    public static Object call(Closure<?> closure, Object... args) {
+    public static <T> T call(Closure<T> closure, Object... args) {
         return SandboxRunner.runClosure(closure, args);
     }
 

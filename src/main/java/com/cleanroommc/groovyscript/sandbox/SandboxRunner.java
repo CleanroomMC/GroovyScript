@@ -147,7 +147,7 @@ public class SandboxRunner {
         }
     }
 
-    public static Object runClosure(Closure<?> closure, Object... args) {
+    public static <T> T runClosure(Closure<T> closure, Object... args) {
         try {
             SimpleGroovyInterceptor.makeSureExists();
             return closure.call(args);
