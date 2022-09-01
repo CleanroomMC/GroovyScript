@@ -10,6 +10,7 @@
     "ChargerManagerAccessor",
     "CompactorManagerAccessor",
     "CrucibleManagerAccessor",
+    "EnchanterManagerAccessor",
     "PulverizerManagerAccessor"
   ]
 }
