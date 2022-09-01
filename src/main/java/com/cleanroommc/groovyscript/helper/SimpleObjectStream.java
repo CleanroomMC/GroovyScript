@@ -5,59 +5,66 @@ import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import groovy.lang.Closure;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
 
-public class RecipeStream<T> {
+/**
+ * A object that acts like a {@link java.util.stream.Stream} but is just a {@link List} wrapper.
+ * Mainly used for recipes, but can be used for anything.
+ * @param <T> type of the stream elements
+ */
+public class SimpleObjectStream<T> {
 
     private final List<T> recipes;
     private Predicate<T> remover;
 
-    public RecipeStream(Collection<T> recipes) {
+    public SimpleObjectStream(Collection<T> recipes) {
         this.recipes = new ArrayList<>(recipes);
     }
 
-    private RecipeStream(List<T> recipes, boolean copy) {
+    private SimpleObjectStream(List<T> recipes, boolean copy) {
         this.recipes = copy ? new ArrayList<>(recipes) : recipes;
     }
 
     @GroovyBlacklist
-    public RecipeStream<T> setRemover(Predicate<T> remover) {
+    public SimpleObjectStream<T> setRemover(Predicate<T> remover) {
         this.remover = remover;
         return this;
     }
 
-    public RecipeStream<T> filter(Closure<Boolean> closure) {
+    public SimpleObjectStream<T> filter(Closure<Boolean> closure) {
         this.recipes.removeIf(recipe -> !ClosureHelper.call(true, closure, recipe));
         return this;
     }
 
-    public RecipeStream<T> trim() {
+    public SimpleObjectStream<T> trim() {
         this.recipes.removeIf(Objects::isNull);
         return this;
     }
 
-    public RecipeStream<T> forEach(Closure<Object> closure) {
+    public SimpleObjectStream<T> forEach(Closure<Object> closure) {
         this.recipes.forEach(recipe -> ClosureHelper.call(closure, recipe));
         return this;
     }
 
-    public <V> RecipeStream<V> map(Closure<V> closure) {
-        List<V> newList = new ArrayList<>();
-        for (T recipe : this.recipes) {
-            newList.add(ClosureHelper.call(closure, recipe));
+    public T findFirst() {
+        T recipe = getFirst();
+        if (recipe == null) {
+            throw new NoSuchElementException();
         }
-        return new RecipeStream<>(newList, false);
+        return recipe;
     }
 
-    public T findFirst() {
+    @Nullable
+    public T getFirst() {
         for (T recipe : this.recipes) {
             if (recipe != null) {
                 return recipe;
             }
         }
-        throw new NoSuchElementException();
+        return null;
     }
 
     public List<T> getList() {
@@ -68,13 +75,13 @@ public class RecipeStream<T> {
         return new ObjectOpenHashSet<>(this.recipes);
     }
 
-    public RecipeStream<T> removeAll() {
+    public SimpleObjectStream<T> removeAll() {
         Objects.requireNonNull(this.remover);
         this.recipes.removeIf(this.remover);
         return this;
     }
 
-    public RecipeStream<T> removeFirst() {
+    public SimpleObjectStream<T> removeFirst() {
         Objects.requireNonNull(this.remover);
         for (int i = 0, n = this.recipes.size(); i < n; i++) {
             T recipe = this.recipes.get(i);
@@ -85,5 +92,13 @@ public class RecipeStream<T> {
         }
         GroovyLog.LOG.error("No recipe found to remove!");
         return this;
+    }
+
+    public int size() {
+        return this.recipes.size();
+    }
+
+    public boolean isEmpty() {
+        return this.recipes.isEmpty();
     }
 }

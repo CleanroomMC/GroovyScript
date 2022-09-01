@@ -8,7 +8,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.mixin.thermalexpansion.PulverizerManagerAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -52,10 +52,12 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         return recipe;
     }
 
-    public void remove(PulverizerRecipe recipe) {
+    public boolean remove(PulverizerRecipe recipe) {
         if (PulverizerManagerAccessor.getRecipeMap().values().removeIf(r -> r == recipe)) {
             addBackup(recipe);
+            return true;
         }
+        return false;
     }
 
     public void removeByInput(IIngredient input) {
@@ -82,16 +84,8 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         }
     }
 
-    public RecipeStream<PulverizerRecipe> stream() {
-        return new RecipeStream<>(PulverizerManagerAccessor.getRecipeMap().values())
-                .setRemover(recipe -> {
-                    PulverizerRecipe recipe1 = PulverizerManagerAccessor.getRecipeMap().remove(PulverizerManager.convertInput(recipe.getInput()));
-                    if (recipe1 != null) {
-                        addBackup(recipe1);
-                        return true;
-                    }
-                    return false;
-                });
+    public SimpleObjectStream<PulverizerRecipe> stream() {
+        return new SimpleObjectStream<>(PulverizerManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
     public void removeAll() {
