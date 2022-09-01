@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion;
 
 import cofh.core.inventory.ComparableItemStackValidated;
+import cofh.thermalexpansion.util.managers.machine.ChargerManager;
 import cofh.thermalexpansion.util.managers.machine.PulverizerManager;
 import cofh.thermalexpansion.util.managers.machine.PulverizerManager.PulverizerRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -9,6 +10,7 @@ import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.mixin.thermalexpansion.ChargerManagerAccessor;
 import com.cleanroommc.groovyscript.mixin.thermalexpansion.PulverizerManagerAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -18,10 +20,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
+public class Charger extends VirtualizedRegistry<ChargerManager.ChargerRecipe> {
 
-    public Pulverizer() {
-        super("Pulverizer", "pulverizer");
+    public Charger() {
+        super("Charger", "charger");
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -32,28 +34,28 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        Map<ComparableItemStackValidated, PulverizerRecipe> map = PulverizerManagerAccessor.getRecipeMap();
+        Map<ComparableItemStackValidated, ChargerManager.ChargerRecipe> map = ChargerManagerAccessor.getRecipeMap();
         removeScripted().forEach(recipe -> map.values().removeIf(r -> r == recipe));
-        restoreFromBackup().forEach(r -> map.put(PulverizerManager.convertInput(r.getInput()), r));
+        restoreFromBackup().forEach(r -> map.put(new ComparableItemStackValidated(r.getInput()), r));
     }
 
-    public void add(PulverizerRecipe recipe) {
+    public void add(ChargerManager.ChargerRecipe recipe) {
         if (!PulverizerManager.recipeExists(recipe.getInput())) {
-            PulverizerManagerAccessor.getRecipeMap().put(PulverizerManager.convertInput(recipe.getInput()), recipe);
+            ChargerManagerAccessor.getRecipeMap().put(new ComparableItemStackValidated(recipe.getInput()), recipe);
             addScripted(recipe);
         }
     }
 
-    public PulverizerRecipe add(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
-        PulverizerRecipe recipe = PulverizerManager.addRecipe(energy, input, primaryOutput, secondaryOutput, secondaryChance);
+    public ChargerManager.ChargerRecipe add(int energy, ItemStack input, ItemStack output) {
+        ChargerManager.ChargerRecipe recipe = ChargerManager.addRecipe(energy, input, output);
         if (recipe != null) {
             addScripted(recipe);
         }
         return recipe;
     }
 
-    public boolean remove(PulverizerRecipe recipe) {
-        if (PulverizerManagerAccessor.getRecipeMap().values().removeIf(r -> r == recipe)) {
+    public boolean remove(ChargerManager.ChargerRecipe recipe) {
+        if (ChargerManagerAccessor.getRecipeMap().values().removeIf(r -> r == recipe)) {
             addBackup(recipe);
             return true;
         }
@@ -62,7 +64,7 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
 
     public void removeByInput(IIngredient input) {
         if (IngredientHelper.isEmpty(input)) {
-            GroovyLog.msg("Error removing Thermal Expansion Pulverizer recipe")
+            GroovyLog.msg("Error removing Thermal Expansion Charger recipe")
                     .add("input must not be empty")
                     .error()
                     .post();
@@ -70,63 +72,43 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         }
         boolean found = false;
         for (ItemStack stack : input.getMatchingStacks()) {
-            PulverizerRecipe recipe = PulverizerManager.removeRecipe(stack);
+            ChargerManager.ChargerRecipe recipe = ChargerManager.removeRecipe(stack);
             if (recipe != null) {
                 found = true;
                 addBackup(recipe);
             }
         }
         if (!found) {
-            GroovyLog.msg("Error removing Thermal Expansion Pulverizer recipe")
+            GroovyLog.msg("Error removing Thermal Expansion Charger recipe")
                     .add("could not find recipe for %s", input)
                     .error()
                     .post();
         }
     }
 
-    public SimpleObjectStream<PulverizerRecipe> stream() {
-        return new SimpleObjectStream<>(PulverizerManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
+    public SimpleObjectStream<ChargerManager.ChargerRecipe> stream() {
+        return new SimpleObjectStream<>(ChargerManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
-    public static class RecipeBuilder extends EnergyRecipeBuilder<PulverizerManager.PulverizerRecipe> {
-
-        private ItemStack secOutput;
-        private int chance;
-
-        public RecipeBuilder secondaryOutput(ItemStack itemStack, int chance) {
-            this.secOutput = itemStack;
-            this.chance = chance;
-            return this;
-        }
-
-        public RecipeBuilder secondaryOutput(ItemStack itemStack) {
-            return secondaryOutput(itemStack, 100);
-        }
-
+    public static class RecipeBuilder extends EnergyRecipeBuilder<ChargerManager.ChargerRecipe> {
         @Override
         public String getErrorMsg() {
-            return "Error adding Thermal Pulverizer recipe";
+            return "Error adding Thermal Charger recipe";
         }
 
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            if (secOutput == null) secOutput = ItemStack.EMPTY;
-            if (secOutput.isEmpty()) {
-                chance = 0;
-            } else if (chance <= 0) {
-                chance = 100;
-            }
             if (energy <= 0) energy = 3000;
         }
 
         @Override
-        public @Nullable PulverizerManager.PulverizerRecipe register() {
+        public @Nullable ChargerManager.ChargerRecipe register() {
             if (!validate()) return null;
-            PulverizerManager.PulverizerRecipe recipe = null;
+            ChargerManager.ChargerRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                PulverizerRecipe recipe1 = ModSupport.THERMAL_EXPANSION.get().pulverizer.add(energy, itemStack, output.get(0), secOutput, chance);
+                ChargerManager.ChargerRecipe recipe1 = ModSupport.THERMAL_EXPANSION.get().charger.add(energy, itemStack, output.get(0));
                 if (recipe == null) recipe = recipe1;
             }
             return recipe;
