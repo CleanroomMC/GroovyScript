@@ -24,7 +24,7 @@ public class SimpleObjectStream<T> {
         this.recipes = new ArrayList<>(recipes);
     }
 
-    private SimpleObjectStream(List<T> recipes, boolean copy) {
+    public SimpleObjectStream(List<T> recipes, boolean copy) {
         this.recipes = copy ? new ArrayList<>(recipes) : recipes;
     }
 

@@ -36,6 +36,15 @@ public class Brewer extends VirtualizedRegistry<BrewerManager.BrewerRecipe> {
         return new RecipeBuilder();
     }
 
+    public void add(IIngredient input, FluidStack fluidInput, FluidStack fluidOutput, int energy) {
+        recipeBuilder()
+                .energy(energy)
+                .input(input)
+                .fluidInput(fluidInput)
+                .fluidOutput(fluidOutput)
+                .register();
+    }
+
     public void removeByInput(IIngredient ingredient, FluidStack input) {
         if (new GroovyLog.Msg("Error removing Thermal Expansion Brewer recipe").error()
                 .add(IngredientHelper.isEmpty(ingredient), () -> "item input must not be empty")
