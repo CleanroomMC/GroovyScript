@@ -9,6 +9,7 @@ public class ThermalExpansion extends ModPropertyContainer {
     public final Crucible crucible = new Crucible();
     public final Centrifuge centrifuge = new Centrifuge();
     public final Charger charger = new Charger();
+    public final Compactor compactor = new Compactor();
 
     public ThermalExpansion() {
         addRegistry(pulverizer);
@@ -16,6 +17,7 @@ public class ThermalExpansion extends ModPropertyContainer {
         addRegistry(crucible);
         addRegistry(centrifuge);
         addRegistry(charger);
+        addRegistry(compactor);
     }
 
 }

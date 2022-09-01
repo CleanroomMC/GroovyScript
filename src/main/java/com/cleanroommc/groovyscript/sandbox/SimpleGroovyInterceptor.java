@@ -83,7 +83,7 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
         }
         if (receiver instanceof IGroovyPropertyGetter) {
             Object r = ((IGroovyPropertyGetter) receiver).getProperty(property);
-            return r != null ? r : super.onGetProperty(invoker, receiver, property);
+            if (r != null) return r;
         }
         Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
         if (InterceptionManager.INSTANCE.isBlacklistedField(clazz, property, FieldAccess.GET)) {

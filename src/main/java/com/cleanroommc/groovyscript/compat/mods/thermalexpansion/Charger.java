@@ -86,7 +86,7 @@ public class Charger extends VirtualizedRegistry<ChargerManager.ChargerRecipe> {
         }
     }
 
-    public SimpleObjectStream<ChargerManager.ChargerRecipe> stream() {
+    public SimpleObjectStream<ChargerManager.ChargerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ChargerManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
