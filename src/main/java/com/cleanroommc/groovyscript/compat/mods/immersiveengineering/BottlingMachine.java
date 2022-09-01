@@ -13,6 +13,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> {
+
     public BottlingMachine() {
         super("Bottling", "bottling");
     }
@@ -94,6 +95,7 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<BottlingMachineRecipe> {
+
 
         @Override
         public String getErrorMsg() {

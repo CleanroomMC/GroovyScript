@@ -17,6 +17,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
+
     public ArcFurnace() {
         super("ArcFurnace", "arcfurnace", "arc_furnace");
     }
@@ -99,12 +100,18 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     }
 
     public static class RecipeBuilder extends TimeRecipeBuilder<ArcFurnaceRecipe> {
+
         protected int energyPerTick;
         protected ItemStack slag = ItemStack.EMPTY;
         protected Object[] additives = null;
 
         public RecipeBuilder energyPerTick(int energy) {
             this.energyPerTick = energy;
+            return this;
+        }
+
+        public RecipeBuilder slag(ItemStack slag) {
+            this.slag = slag;
             return this;
         }
 
@@ -119,7 +126,6 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
             validateFluids(msg);
             if (time < 0) time = 200;
             if (energyPerTick < 0) energyPerTick = 100;
-            if (output.size() > 1) slag = output.get(1);
             if (input.size() > 1) {
                 additives = new Object[input.size()-1];
                 for (int i = 1; i < input.size(); i++) {

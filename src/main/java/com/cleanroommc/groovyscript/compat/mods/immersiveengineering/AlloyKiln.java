@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
+
     public AlloyKiln() {
         super("AlloyKiln", "alloykiln");
     }
@@ -84,6 +85,7 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
     }
 
     public static class RecipeBuilder extends TimeRecipeBuilder<AlloyRecipe> {
+
 
         @Override
         public String getErrorMsg() {

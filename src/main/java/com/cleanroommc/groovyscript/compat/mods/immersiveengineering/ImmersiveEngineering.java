@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 
 public class ImmersiveEngineering extends ModPropertyContainer {
+
     public final AlloyKiln alloyKiln = new AlloyKiln();
     public final ArcFurnace arcFurnace = new ArcFurnace();
     public final BlastFurnace blastFurnace = new BlastFurnace();

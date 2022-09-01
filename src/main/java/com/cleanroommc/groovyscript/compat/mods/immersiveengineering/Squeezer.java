@@ -16,6 +16,7 @@ import javax.annotation.Nonnull;
 import java.util.Iterator;
 
 public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
+
     public Squeezer() {
         super("Squeezer", "squeezer");
     }
@@ -50,7 +51,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
     public void removeByOutput(FluidStack fluidOutput) {
         for (Iterator<SqueezerRecipe> iterator = SqueezerRecipe.recipeList.iterator(); iterator.hasNext(); ) {
             SqueezerRecipe recipe = iterator.next();
-            if (recipe.fluidOutput.isFluidEqual(fluidOutput)) {
+            if ((fluidOutput != null && fluidOutput.isFluidEqual(recipe.fluidOutput)) || (fluidOutput == null && recipe.fluidOutput == null)) {
                 addBackup(recipe);
                 iterator.remove();
             }
@@ -60,7 +61,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
     public void removeByOutput(FluidStack fluidOutput, ItemStack itemOutput) {
         for (Iterator<SqueezerRecipe> iterator = SqueezerRecipe.recipeList.iterator(); iterator.hasNext(); ) {
             SqueezerRecipe recipe = iterator.next();
-            if (recipe.fluidOutput.isFluidEqual(fluidOutput) && ApiUtils.stackMatchesObject(itemOutput, recipe.input)) {
+            if (((fluidOutput != null && fluidOutput.isFluidEqual(recipe.fluidOutput)) || (fluidOutput == null && recipe.fluidOutput == null)) && ((recipe.input == null && itemOutput.isEmpty()) || (recipe.input != null && recipe.input.matches(itemOutput)))) {
                 addBackup(recipe);
                 iterator.remove();
             }
@@ -94,6 +95,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
     }
 
     private static class RecipeBuilder extends EnergyRecipeBuilder<SqueezerRecipe> {
+
         protected ItemStack itemOutput = ItemStack.EMPTY;
         protected FluidStack fOutput = null;
 

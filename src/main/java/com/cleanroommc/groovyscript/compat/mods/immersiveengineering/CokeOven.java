@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
+
     public CokeOven() {
         super("CokeOven", "cokeoven");
     }
@@ -86,6 +87,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
     }
 
     public static class RecipeBuilder extends TimeRecipeBuilder<CokeOvenRecipe> {
+
         protected int creosote;
 
         public RecipeBuilder creosote(int creosote) {

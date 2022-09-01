@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public class Mixer extends VirtualizedRegistry<MixerRecipe> {
+
     public Mixer() {
         super("Mixer", "mixer");
     }
@@ -38,7 +39,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
-    public MixerRecipe add(FluidStack fluidOutput, FluidStack fluidInput, Object[] itemInput, int energy) {
+    public MixerRecipe add(FluidStack fluidOutput, FluidStack fluidInput, int energy, Object... itemInput) {
         MixerRecipe recipe = create(fluidOutput, fluidInput, itemInput, energy);
         addScripted(recipe);
         return recipe;
@@ -52,6 +53,24 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
          for (Iterator<MixerRecipe> iterator = MixerRecipe.recipeList.iterator(); iterator.hasNext(); ) {
             MixerRecipe recipe = iterator.next();
             if (recipe.fluidOutput.isFluidEqual(fluidOutput)) {
+                addBackup(recipe);
+                iterator.remove();
+            }
+        }
+    }
+
+    public void removeByInput(ItemStack... itemInputs) {
+        for (Iterator<MixerRecipe> iterator = MixerRecipe.recipeList.iterator(); iterator.hasNext(); ) {
+            MixerRecipe recipe = iterator.next();
+
+            if (recipe.itemInputs.length != itemInputs.length) continue;
+
+            int i;
+            for (i = 0; i < itemInputs.length; i++) {
+                if (!recipe.itemInputs[i].matches(itemInputs[i])) break;
+            }
+
+            if (i == itemInputs.length) {
                 addBackup(recipe);
                 iterator.remove();
             }
@@ -109,7 +128,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         @Override
         public @Nullable MixerRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().mixer.add(fluidOutput.get(0), fluidInput.get(0), input.toArray(), energy);
+            return ModSupport.IMMERSIVE_ENGINEERING.get().mixer.add(fluidOutput.get(0), fluidInput.get(0), energy, input.toArray());
         }
     }
 }

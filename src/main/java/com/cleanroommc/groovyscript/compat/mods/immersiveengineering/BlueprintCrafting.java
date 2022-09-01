@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingRecipe> {
+
     public BlueprintCrafting() {
         super("Blueprint", "blueprint");
     }
@@ -146,6 +147,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlueprintCraftingRecipe> {
+
         protected String category;
 
         public RecipeBuilder category(String category) {

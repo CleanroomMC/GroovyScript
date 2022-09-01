@@ -11,9 +11,11 @@ import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
+
     public MetalPress() {
         super("MetalPress", "metalpress");
     }
@@ -75,11 +77,11 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
     }
 
     public void removeByInput(ItemStack input) {
-        for (MetalPressRecipe recipe : MetalPressRecipe.recipeList.values()) {
-            if (ApiUtils.stackMatchesObject(input, recipe.input)) {
+        for (Iterator<MetalPressRecipe> iterator = MetalPressRecipe.recipeList.values().iterator(); iterator.hasNext(); ) {
+            MetalPressRecipe recipe = iterator.next();
+            if (recipe.input.matches(input)) {
                 addBackup(recipe);
-                MetalPressRecipe.recipeList.remove(recipe.mold, recipe);
-                break;
+                iterator.remove();
             }
         }
     }

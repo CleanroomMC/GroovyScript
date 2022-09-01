@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 import java.util.Iterator;
 
 public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
+
     public Fermenter() {
         super("Fermenter", "fermenter");
     }
@@ -88,6 +89,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
     }
 
     public static class RecipeBuilder extends EnergyRecipeBuilder<FermenterRecipe> {
+
         protected ItemStack out = ItemStack.EMPTY;
 
         @Override

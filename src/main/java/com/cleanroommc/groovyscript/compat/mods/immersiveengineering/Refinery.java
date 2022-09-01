@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 
 public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
+
     public Refinery() {
         super("Refinery", "refinery");
     }

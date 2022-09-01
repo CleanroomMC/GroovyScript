@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
+
     public Crusher() {
         super("Crusher", "crusher");
     }

@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
+
     public BlastFurnace() {
         super("BlastFurnace", "blastfurnace", "blast_furnace");
     }
@@ -86,7 +87,13 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
     }
 
     public static class RecipeBuilder extends TimeRecipeBuilder<BlastFurnaceRecipe> {
-        private ItemStack slag = ItemStack.EMPTY;
+
+        protected ItemStack slag = ItemStack.EMPTY;
+
+        public RecipeBuilder slag(ItemStack slag) {
+            this.slag = slag;
+            return this;
+        }
 
         @Override
         public String getErrorMsg() {
@@ -98,7 +105,6 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
             validateItems(msg, 1, 1, 1, 2);
             validateFluids(msg);
             if (time < 0) time = 200;
-            if (output.size() > 1) slag = output.get(2);
         }
 
         @Override
