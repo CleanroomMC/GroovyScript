@@ -110,6 +110,8 @@ dependencies {
         deobfCompile 'curse.maven:redstone_flux-270789:2920436'
         deobfCompile 'curse.maven:thermal_expansion-69163:2926431'
         deobfCompile 'curse.maven:thermal_foundation-222880:2926428'
+        deobfCompile 'curse.maven:draconic_evolution-223565:3431261'
+        deobfCompile 'curse.maven:brandons_core-231382:3408276'
     } else {
         deobfProvided 'curse.maven:mekanism-268560:2835175'
 
@@ -127,6 +129,8 @@ dependencies {
         deobfProvided 'curse.maven:redstone_flux-270789:2920436'
         deobfProvided 'curse.maven:thermal_expansion-69163:2926431'
         deobfProvided 'curse.maven:thermal_foundation-222880:2926428'
+        deobfProvided 'curse.maven:draconic_evolution-223565:3431261'
+        deobfProvided 'curse.maven:brandons_core-231382:3408276'
     }
 
     shadow 'org.codehaus.groovy:groovy-ant:3.0.11'
