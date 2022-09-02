@@ -1,0 +1,41 @@
+package com.cleanroommc.groovyscript.compat.mods.mekanism.recipe;
+
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import mekanism.common.recipe.RecipeHandler;
+import mekanism.common.recipe.machines.MachineRecipe;
+
+public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, R>> extends VirtualizedRegistry<R> {
+
+    protected final RecipeHandler.Recipe<?, ?, R> recipeRegistry;
+
+    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry, String name, String... aliases) {
+        super(name, aliases);
+        this.recipeRegistry = recipeRegistry;
+    }
+
+    @Override
+    public void onReload() {
+        removeScripted().forEach(recipeRegistry::remove);
+        restoreFromBackup().forEach(recipeRegistry::put);
+    }
+
+    public boolean remove(R recipe) {
+        return recipeRegistry.get().remove(recipe) != null;
+    }
+
+    public SimpleObjectStream<R> streamRecipes() {
+        return new SimpleObjectStream<>(recipeRegistry.get().values())
+                .setRemover(this::remove);
+    }
+
+    @GroovyBlacklist
+    public void removeError(String reason, Object... data) {
+        GroovyLog.msg("Error removing Mekanism " + getAliases().get(0) + " recipe")
+                .add(reason, data)
+                .error()
+                .post();
+    }
+}
