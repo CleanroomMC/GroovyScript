@@ -84,6 +84,7 @@ public class GroovyFusionRecipe implements IFusionRecipe {
                 if (ingredient.test(craftingInjector.getStackInPedestal()) && ingredient.getAmount() <= craftingInjector.getStackInPedestal().getCount()) {
                     found++;
                     it.remove();
+                    break;
                 }
             }
         }
@@ -110,6 +111,7 @@ public class GroovyFusionRecipe implements IFusionRecipe {
 
                     found++;
                     it.remove();
+                    break;
                 }
             }
         }
