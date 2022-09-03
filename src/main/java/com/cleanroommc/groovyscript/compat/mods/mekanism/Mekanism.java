@@ -7,11 +7,14 @@ public class Mekanism extends ModPropertyContainer {
     public final ChemicalInfuser chemicalInfuser = new ChemicalInfuser();
     public final Combiner combiner = new Combiner();
     public final Crusher crusher = new Crusher();
+    public final Crystallizer crystallizer = new Crystallizer();
+    public final DissolutionChamber dissolutionChamber = new DissolutionChamber();
 
     public Mekanism() {
         addRegistry(chemicalInfuser);
         addRegistry(combiner);
         addRegistry(crusher);
+        addRegistry(crystallizer);
+        addRegistry(dissolutionChamber);
     }
-
 }
