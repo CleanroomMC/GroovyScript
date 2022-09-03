@@ -16,6 +16,7 @@ public class Mekanism extends ModPropertyContainer {
     public final ChemicalOxidizer chemicalOxidizer = new ChemicalOxidizer();
     public final PurificationChamber purificationChamber = new PurificationChamber();
     public final Sawmill sawmill = new Sawmill();
+    public final Separator separator = new Separator();
 
     public Mekanism() {
         addRegistry(chemicalInfuser);
@@ -30,5 +31,6 @@ public class Mekanism extends ModPropertyContainer {
         addRegistry(chemicalOxidizer);
         addRegistry(purificationChamber);
         addRegistry(sawmill);
+        addRegistry(separator);
     }
 }
