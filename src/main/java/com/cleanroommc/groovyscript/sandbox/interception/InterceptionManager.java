@@ -78,10 +78,14 @@ public class InterceptionManager {
     }
 
     public boolean isValid(Class<?> clazz, String methodName, Object... args) {
+        return isValid(clazz, methodName, methodName, args);
+    }
+
+    public boolean isValid(Class<?> clazz, String methodName, String obfMethodName, Object... args) {
         return isValidClass(clazz) &&
                 isValidPackage(clazz) &&
                 isValidMethod(clazz, methodName) &&
-                !isBlacklistedMethod(clazz, methodName, args);
+                !isBlacklistedMethod(clazz, obfMethodName, args);
     }
 
     public boolean isValidConstructor(Class<?> clazz, Object... args) {
