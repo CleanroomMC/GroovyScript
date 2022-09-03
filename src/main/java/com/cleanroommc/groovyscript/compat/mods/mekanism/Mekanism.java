@@ -10,6 +10,7 @@ public class Mekanism extends ModPropertyContainer {
     public final Crystallizer crystallizer = new Crystallizer();
     public final DissolutionChamber dissolutionChamber = new DissolutionChamber();
     public final EnrichmentChamber enrichmentChamber = new EnrichmentChamber();
+    public final InjectionChamber injectionChamber = new InjectionChamber();
 
     public Mekanism() {
         addRegistry(chemicalInfuser);
@@ -18,5 +19,6 @@ public class Mekanism extends ModPropertyContainer {
         addRegistry(crystallizer);
         addRegistry(dissolutionChamber);
         addRegistry(enrichmentChamber);
+        addRegistry(injectionChamber);
     }
 }
