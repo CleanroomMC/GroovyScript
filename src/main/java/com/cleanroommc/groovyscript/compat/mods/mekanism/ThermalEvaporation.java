@@ -3,35 +3,35 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
-import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
-import mekanism.common.recipe.inputs.GasInput;
-import mekanism.common.recipe.machines.SolarNeutronRecipe;
+import mekanism.common.recipe.inputs.FluidInput;
+import mekanism.common.recipe.machines.ThermalEvaporationRecipe;
+import net.minecraftforge.fluids.FluidStack;
 
-public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeutronRecipe> {
+public class ThermalEvaporation extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
 
-    public SolarNeutronActivator() {
-        super(RecipeHandler.Recipe.SOLAR_NEUTRON_ACTIVATOR, "SolarNeutronActivator");
+    public ThermalEvaporation() {
+        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, "ThermalEvaporationPlant");
     }
 
-    public SolarNeutronRecipe add(GasStack input, GasStack output) {
+    public ThermalEvaporationRecipe add(FluidStack input, FluidStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Solar Neutron Activator recipe");
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        SolarNeutronRecipe recipe = new SolarNeutronRecipe(input.copy(), output.copy());
+        ThermalEvaporationRecipe recipe = new ThermalEvaporationRecipe(input.copy(), output.copy());
         recipeRegistry.put(recipe);
         addScripted(recipe);
         return recipe;
     }
 
-    public boolean removeByInput(GasStack input) {
+    public boolean removeByInput(FluidStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Solar Neutron Activator recipe");
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 
-        SolarNeutronRecipe recipe = recipeRegistry.get().remove(new GasInput(input));
+        ThermalEvaporationRecipe recipe = recipeRegistry.get().remove(new FluidInput(input));
         if (recipe != null) {
             addBackup(recipe);
             return true;

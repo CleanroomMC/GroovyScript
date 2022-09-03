@@ -19,6 +19,7 @@ public class Mekanism extends ModPropertyContainer {
     public final Separator separator = new Separator();
     public final Smelter smelter = new Smelter();
     public final SolarNeutronActivator solarNeutronActivator = new SolarNeutronActivator();
+    public final ThermalEvaporation thermalEvaporation = new ThermalEvaporation();
 
     public Mekanism() {
         addRegistry(chemicalInfuser);
@@ -36,5 +37,6 @@ public class Mekanism extends ModPropertyContainer {
         addRegistry(separator);
         addRegistry(smelter);
         addRegistry(solarNeutronActivator);
+        addRegistry(thermalEvaporation);
     }
 }
