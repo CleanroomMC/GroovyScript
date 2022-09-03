@@ -16,12 +16,19 @@ buildscript {
         if (project.use_mixins.toBoolean()) {
             classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
         }
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+        //classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
+}
+
+plugins {
+    // this version works on gradle 4.9
+    // more recent versions of shadow work on more recent versions of gradle
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java' // java plugin is needed for the shadow plug
 
 if (project.use_mixins.toBoolean()) {
     apply plugin: 'org.spongepowered.mixin'
@@ -74,6 +81,10 @@ repositories {
     maven {
         url "http://maven.tterrag.com"
     }
+}
+
+configurations {
+    shade
 }
 
 dependencies {
@@ -129,19 +140,17 @@ dependencies {
         deobfProvided 'curse.maven:thermal_foundation-222880:2926428'
     }
 
-    shadow 'org.codehaus.groovy:groovy-ant:3.0.11'
-    shadow 'org.codehaus.groovy:groovy-astbuilder:3.0.11'
-    shadow 'org.codehaus.groovy:groovy-jsr223:3.0.11'
-    shadow 'org.codehaus.groovy:groovy-macro:3.0.11'
+    shade 'org.codehaus.groovy:groovy-ant:3.0.11'
+    shade 'org.codehaus.groovy:groovy-astbuilder:3.0.11'
+    shade 'org.codehaus.groovy:groovy-jsr223:3.0.11'
+    shade 'org.codehaus.groovy:groovy-macro:3.0.11'
     // shadow 'org.codehaus.plexus:plexus-utils:3.1.0'
 }
 
 sourceSets {
-
     main {
         ext.refMap = 'mixins.' + archives_base_name + '.refmap.json'
     }
-
 }
 
 processResources {
@@ -182,10 +191,17 @@ jar {
 shadowJar {
     baseName = archivesBaseName
     version = version
-    configurations = [project.configurations.shadow]
+    configurations = [project.configurations.shade]
+    relocate 'lib.group', "${project.group}.shadow.lib.group" // ensure repackaged packages have unique names
 }
 
-tasks.build.dependsOn shadowJar
+reobf {
+    shadowJar {}
+}
+
+// this replaces jar.finalizedBy('reobfJar') in the standard forge mod buildscript
+tasks.build.dependsOn reobfShadowJar
+jar.finalizedBy('reobfShadowJar')
 
 artifacts {
     archives shadowJar
