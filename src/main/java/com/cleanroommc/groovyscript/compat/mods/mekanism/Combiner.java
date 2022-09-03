@@ -5,48 +5,53 @@ import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekan
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
+import mekanism.common.recipe.inputs.DoubleMachineInput;
 import mekanism.common.recipe.inputs.ItemStackInput;
+import mekanism.common.recipe.machines.CombinerRecipe;
 import mekanism.common.recipe.machines.CrusherRecipe;
 import net.minecraft.item.ItemStack;
 
-public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
+public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
 
-    public Crusher() {
-        super(RecipeHandler.Recipe.CRUSHER, "Crusher", "crusher");
+    public Combiner() {
+        super(RecipeHandler.Recipe.COMBINER, "Combiner", "combiner");
     }
 
-    public CrusherRecipe add(IIngredient ingredient, ItemStack output) {
+    public CombinerRecipe add(IIngredient ingredient, ItemStack extra, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crusher recipe");
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
+        msg.add(IngredientHelper.isEmpty(extra), () -> "extra input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
+        extra = extra.copy();
         output = output.copy();
-        CrusherRecipe recipe1 = null;
+        CombinerRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            CrusherRecipe recipe = new CrusherRecipe(itemStack.copy(), output);
+            CombinerRecipe recipe = new CombinerRecipe(itemStack.copy(), extra, output);
             if (recipe1 == null) recipe1 = recipe;
-            RecipeHandler.Recipe.CRUSHER.put(recipe);
+            RecipeHandler.Recipe.COMBINER.put(recipe);
             addScripted(recipe);
         }
         return recipe1;
     }
 
-    public boolean removeByInput(IIngredient ingredient) {
-        if (IngredientHelper.isEmpty(ingredient)) {
-            removeError("input must not be empty");
-            return false;
-        }
+    public boolean removeByInput(IIngredient ingredient, ItemStack extra) {
+        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Combiner recipe");
+        msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
+        msg.add(IngredientHelper.isEmpty(extra), () -> "extra input must not be empty");
+        if (msg.postIfNotEmpty()) return false;
+
         boolean found = false;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            CrusherRecipe recipe = recipeRegistry.get().remove(new ItemStackInput(itemStack));
+            CombinerRecipe recipe = recipeRegistry.get().remove(new DoubleMachineInput(itemStack, extra));
             if (recipe != null) {
                 addBackup(recipe);
                 found = true;
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s", ingredient);
+            removeError("could not find recipe for %s and %s", ingredient, extra);
         }
         return found;
     }

@@ -23,7 +23,11 @@ public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, 
     }
 
     public boolean remove(R recipe) {
-        return recipeRegistry.get().remove(recipe) != null;
+        if(recipeRegistry.get().remove(recipe) != null) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public SimpleObjectStream<R> streamRecipes() {

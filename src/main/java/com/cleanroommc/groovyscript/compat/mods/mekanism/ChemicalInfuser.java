@@ -21,7 +21,7 @@ public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuser
         msg.add(IngredientHelper.isEmpty(output), () -> "gas output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        ChemicalInfuserRecipe recipe = new ChemicalInfuserRecipe(leftInput, rightInput, output);
+        ChemicalInfuserRecipe recipe = new ChemicalInfuserRecipe(leftInput.copy(), rightInput.copy(), output.copy());
         recipeRegistry.put(recipe);
         return recipe;
     }
