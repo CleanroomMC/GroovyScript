@@ -12,6 +12,7 @@ public class Mekanism extends ModPropertyContainer {
     public final EnrichmentChamber enrichmentChamber = new EnrichmentChamber();
     public final InjectionChamber injectionChamber = new InjectionChamber();
     public final MetallurgicInfuser metallurgicInfuser = new MetallurgicInfuser();
+    public final OsmiumCompressor osmiumCompressor = new OsmiumCompressor();
 
     public Mekanism() {
         addRegistry(chemicalInfuser);
@@ -21,5 +22,7 @@ public class Mekanism extends ModPropertyContainer {
         addRegistry(dissolutionChamber);
         addRegistry(enrichmentChamber);
         addRegistry(injectionChamber);
+        addRegistry(metallurgicInfuser);
+        addRegistry(osmiumCompressor);
     }
 }
