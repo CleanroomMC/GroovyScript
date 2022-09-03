@@ -26,7 +26,7 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
             CrusherRecipe recipe = new CrusherRecipe(itemStack.copy(), output);
             if (recipe1 == null) recipe1 = recipe;
-            RecipeHandler.Recipe.CRUSHER.put(recipe);
+            recipeRegistry.put(recipe);
             addScripted(recipe);
         }
         return recipe1;

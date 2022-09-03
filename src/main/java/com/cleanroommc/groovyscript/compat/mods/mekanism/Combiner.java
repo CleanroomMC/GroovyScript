@@ -30,7 +30,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
             CombinerRecipe recipe = new CombinerRecipe(itemStack.copy(), extra, output);
             if (recipe1 == null) recipe1 = recipe;
-            RecipeHandler.Recipe.COMBINER.put(recipe);
+            recipeRegistry.put(recipe);
             addScripted(recipe);
         }
         return recipe1;
