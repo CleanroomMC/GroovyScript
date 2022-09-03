@@ -4,28 +4,28 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
-import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
-import mekanism.common.recipe.machines.DissolutionRecipe;
+import mekanism.common.recipe.machines.CrusherRecipe;
+import mekanism.common.recipe.machines.EnrichmentRecipe;
 import net.minecraft.item.ItemStack;
 
-public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionRecipe> {
+public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRecipe> {
 
-    public DissolutionChamber() {
-        super(RecipeHandler.Recipe.CHEMICAL_DISSOLUTION_CHAMBER, "DissolutionChamber", "Dissolver", "dissolution_chamber", "dissolver");
+    public EnrichmentChamber() {
+        super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, "EnrichmentChamber", "Enricher", "enrichment_chamber", "enricher");
     }
 
-    public DissolutionRecipe add(IIngredient ingredient, GasStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Dissolution Chamber recipe");
+    public EnrichmentRecipe add(IIngredient ingredient, ItemStack output) {
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Enrichment Chamber recipe");
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
         output = output.copy();
-        DissolutionRecipe recipe1 = null;
+        EnrichmentRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            DissolutionRecipe recipe = new DissolutionRecipe(itemStack.copy(), output);
+            EnrichmentRecipe recipe = new EnrichmentRecipe(itemStack.copy(), output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -40,7 +40,7 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
         }
         boolean found = false;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            DissolutionRecipe recipe = recipeRegistry.get().remove(new ItemStackInput(itemStack));
+            EnrichmentRecipe recipe = recipeRegistry.get().remove(new ItemStackInput(itemStack));
             if (recipe != null) {
                 addBackup(recipe);
                 found = true;
