@@ -11,6 +11,7 @@ public class Mekanism extends ModPropertyContainer {
     public final DissolutionChamber dissolutionChamber = new DissolutionChamber();
     public final EnrichmentChamber enrichmentChamber = new EnrichmentChamber();
     public final InjectionChamber injectionChamber = new InjectionChamber();
+    public final MetallurgicInfuser metallurgicInfuser = new MetallurgicInfuser();
 
     public Mekanism() {
         addRegistry(chemicalInfuser);
