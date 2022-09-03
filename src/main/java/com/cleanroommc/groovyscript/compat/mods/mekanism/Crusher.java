@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
 import mekanism.common.recipe.machines.CrusherRecipe;
@@ -14,12 +15,20 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
         super(RecipeHandler.Recipe.CRUSHER, "Crusher", "crusher");
     }
 
-    public void add(IIngredient ingredient, ItemStack output) {
+    public CrusherRecipe add(IIngredient ingredient, ItemStack output) {
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crusher recipe");
+        msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
+        msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
+        if (msg.postIfNotEmpty()) return null;
+
+        CrusherRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
             CrusherRecipe recipe = new CrusherRecipe(itemStack, output);
+            if (recipe1 == null) recipe1 = recipe;
             RecipeHandler.Recipe.CRUSHER.put(recipe);
             addScripted(recipe);
         }
+        return recipe1;
     }
 
     public boolean removeByInput(IIngredient ingredient) {
