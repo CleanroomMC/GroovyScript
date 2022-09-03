@@ -49,7 +49,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
     @Unique
     protected Predicate<NBTTagCompound> nbtMatcher = NbtHelper.MATCH_ANY;
 
-    public ItemStack getThis() {
+    private ItemStack groovyscript$getThis() {
         return (ItemStack) (Object) this;
     }
 
@@ -80,7 +80,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
 
     @Override
     public Ingredient toMcIngredient() {
-        return Ingredient.fromStacks(getThis());
+        return Ingredient.fromStacks(groovyscript$getThis());
     }
 
     @Override
@@ -91,18 +91,18 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
     @Override
     public boolean test(ItemStack stack) {
         return (matchCondition == null || ClosureHelper.call(true, matchCondition, stack)) &&
-                OreDictionary.itemMatches(getThis(), stack, false) &&
+                OreDictionary.itemMatches(groovyscript$getThis(), stack, false) &&
                 this.nbtMatcher.test(stack.getTagCompound());
     }
 
     public ItemStack when(Closure<Object> matchCondition) {
         this.matchCondition = matchCondition;
-        return getThis();
+        return groovyscript$getThis();
     }
 
     public ItemStack transform(Closure<Object> transformer) {
         this.transformer = transformer;
-        return getThis();
+        return groovyscript$getThis();
     }
 
     @Override
