@@ -5,6 +5,7 @@ import blusunrize.immersiveengineering.api.crafting.MixerRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 public class Mixer extends VirtualizedRegistry<MixerRecipe> {
 
@@ -39,9 +41,10 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
-    public MixerRecipe add(FluidStack fluidOutput, FluidStack fluidInput, int energy, Object... itemInput) {
-        MixerRecipe recipe = create(fluidOutput, fluidInput, itemInput, energy);
-        addScripted(recipe);
+    public MixerRecipe add(FluidStack fluidOutput, FluidStack fluidInput, int energy, List<IIngredient> itemInput) {
+        IngredientStack[] inputs = ArrayUtils.mapToArray(itemInput, ImmersiveEngineering::toIngredientStack);
+        MixerRecipe recipe = new MixerRecipe(fluidOutput, fluidInput, inputs, energy);
+        add(recipe);
         return recipe;
     }
 
@@ -54,7 +57,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
     }
 
     public void removeByOutput(FluidStack fluidOutput) {
-         for (Iterator<MixerRecipe> iterator = MixerRecipe.recipeList.iterator(); iterator.hasNext(); ) {
+        for (Iterator<MixerRecipe> iterator = MixerRecipe.recipeList.iterator(); iterator.hasNext(); ) {
             MixerRecipe recipe = iterator.next();
             if (recipe.fluidOutput.isFluidEqual(fluidOutput)) {
                 addBackup(recipe);
@@ -80,30 +83,22 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
             }
         }
     }
-    
+
     public void removeByInput(FluidStack fluidInput, ItemStack... itemInput) {
         NonNullList<ItemStack> inputs = NonNullList.create();
         inputs.addAll(Arrays.asList(itemInput));
-        
+
         MixerRecipe recipe = MixerRecipe.findRecipe(fluidInput, inputs);
         remove(recipe);
     }
-    
+
     public SimpleObjectStream<MixerRecipe> stream() {
         return new SimpleObjectStream<>(MixerRecipe.recipeList).setRemover(this::remove);
     }
-    
+
     public void removeAll() {
         MixerRecipe.recipeList.forEach(this::addBackup);
         MixerRecipe.recipeList.clear();
-    }
-
-    private static MixerRecipe create(FluidStack fluidOutput, FluidStack fluidInput, Object[] itemInput, int energy) {
-        for (int i = 0; i < itemInput.length; i++) {
-            if (itemInput[i] instanceof IIngredient) itemInput[i] = ((IIngredient) itemInput[i]).getMatchingStacks();
-        }
-
-        return MixerRecipe.addRecipe(fluidOutput, fluidInput, itemInput, energy);
     }
 
     public static class RecipeBuilder extends EnergyRecipeBuilder<MixerRecipe> {
@@ -122,7 +117,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         @Override
         public @Nullable MixerRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().mixer.add(fluidOutput.get(0), fluidInput.get(0), energy, input.toArray());
+            return ModSupport.IMMERSIVE_ENGINEERING.get().mixer.add(fluidOutput.get(0), fluidInput.get(0), energy, input);
         }
     }
 }

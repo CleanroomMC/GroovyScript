@@ -5,6 +5,7 @@ import blusunrize.immersiveengineering.api.crafting.BlueprintCraftingRecipe;
 import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -47,8 +48,9 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
     }
 
-    public BlueprintCraftingRecipe add(String blueprintCategory, ItemStack output, Object... inputs) {
-        BlueprintCraftingRecipe recipe = create(blueprintCategory, output, inputs);
+    public BlueprintCraftingRecipe add(String blueprintCategory, ItemStack output, List<IIngredient> inputs) {
+        IngredientStack[] inputs1 = ArrayUtils.mapToArray(inputs, ImmersiveEngineering::toIngredientStack);
+        BlueprintCraftingRecipe recipe = new BlueprintCraftingRecipe(blueprintCategory, output.copy(), inputs1);
         add(recipe);
         return recipe;
     }
@@ -139,15 +141,6 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         BlueprintCraftingRecipe.recipeList.clear();
     }
 
-    private static BlueprintCraftingRecipe create(String blueprintCategory, ItemStack output, Object... inputs) {
-        for (int i = 0; i < inputs.length; i++) {
-            Object obj = inputs[i];
-            if (obj instanceof IIngredient) inputs[i] = ((IIngredient) obj).getMatchingStacks();
-        }
-
-        return new BlueprintCraftingRecipe(blueprintCategory, output, inputs);
-    }
-
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlueprintCraftingRecipe> {
 
         protected String category;
@@ -172,7 +165,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         @Override
         public @Nullable BlueprintCraftingRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().blueprint.add(category, output.get(0), input.toArray());
+            return ModSupport.IMMERSIVE_ENGINEERING.get().blueprint.add(category, output.get(0), input);
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 
-import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.SqueezerRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
@@ -38,8 +37,8 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
-    public SqueezerRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, Object input, int energy) {
-        SqueezerRecipe recipe = create(fluidOutput, itemOutput, input, energy);
+    public SqueezerRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, IIngredient input, int energy) {
+        SqueezerRecipe recipe = new SqueezerRecipe(fluidOutput, itemOutput, ImmersiveEngineering.toIngredientStack(input), energy);
         addScripted(recipe);
         return recipe;
     }
@@ -84,11 +83,6 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
     public void removeAll() {
         SqueezerRecipe.recipeList.forEach(this::addBackup);
         SqueezerRecipe.recipeList.clear();
-    }
-
-    private static SqueezerRecipe create(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, Object input, int energy) {
-        if (input instanceof IIngredient) input = ((IIngredient) input).getMatchingStacks();
-        return SqueezerRecipe.addRecipe(fluidOutput, itemOutput, input, energy);
     }
 
     private static class RecipeBuilder extends EnergyRecipeBuilder<SqueezerRecipe> {

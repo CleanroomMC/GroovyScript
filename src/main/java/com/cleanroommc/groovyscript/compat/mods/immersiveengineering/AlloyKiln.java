@@ -38,8 +38,8 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         }
     }
 
-    public AlloyRecipe add(ItemStack output, Object input0, Object input1, int time) {
-        AlloyRecipe recipe = create(output, input0, input1, time);
+    public AlloyRecipe add(ItemStack output, IIngredient input0, IIngredient input1, int time) {
+        AlloyRecipe recipe = new AlloyRecipe(output, ImmersiveEngineering.toIngredientStack(input0), ImmersiveEngineering.toIngredientStack(input1), time);
         add(recipe);
         return recipe;
     }
@@ -73,15 +73,7 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         AlloyRecipe.recipeList.clear();
     }
 
-    private static AlloyRecipe create(ItemStack output, Object input0, Object input1, int time) {
-        if (input0 instanceof IIngredient) input0 = ((IIngredient) input0).getMatchingStacks();
-        if (input1 instanceof IIngredient) input1 = ((IIngredient) input1).getMatchingStacks();
-
-        return new AlloyRecipe(output, input0, input1, time);
-    }
-
     public static class RecipeBuilder extends TimeRecipeBuilder<AlloyRecipe> {
-
 
         @Override
         public String getErrorMsg() {

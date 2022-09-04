@@ -39,9 +39,9 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         }
     }
 
-    public MetalPressRecipe add(ItemStack output, Object input, ItemStack mold, int energy) {
-        MetalPressRecipe recipe = create(output, input, mold, energy);
-        addScripted(recipe);
+    public MetalPressRecipe add(ItemStack output, IIngredient input, ItemStack mold, int energy) {
+        MetalPressRecipe recipe = MetalPressRecipe.addRecipe(output.copy(), ImmersiveEngineering.toIngredientStack(input), mold, energy);
+        add(recipe);
         return recipe;
     }
 

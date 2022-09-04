@@ -5,6 +5,7 @@ import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -41,8 +42,9 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         }
     }
 
-    public ArcFurnaceRecipe add(ItemStack output, Object input, @Nonnull ItemStack slag, int time, int energyPerTick, Object... additives) {
-        ArcFurnaceRecipe recipe = create(output, input, slag, time, energyPerTick, additives);
+    public ArcFurnaceRecipe add(ItemStack output, IIngredient input, List<IIngredient> additives, @Nonnull ItemStack slag, int time, int energyPerTick) {
+        IngredientStack[] inputs = ArrayUtils.mapToArray(additives, ImmersiveEngineering::toIngredientStack);
+        ArcFurnaceRecipe recipe = ArcFurnaceRecipe.addRecipe(output, ImmersiveEngineering.toIngredientStack(input), slag, time, energyPerTick, (Object[]) inputs);
         addScripted(recipe);
         return recipe;
     }
@@ -78,16 +80,6 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     public void removeAll() {
         ArcFurnaceRecipe.recipeList.forEach(this::addBackup);
         ArcFurnaceRecipe.recipeList.clear();
-    }
-
-    private static ArcFurnaceRecipe create(ItemStack output, Object input, @Nonnull ItemStack slag, int time, int energyPerTick, Object... additives) {
-        if (input instanceof IIngredient) input = ((IIngredient) input).getMatchingStacks();
-        for (int i = 0; i < additives.length; i++) {
-            Object obj = additives[i];
-            if (obj instanceof IIngredient) additives[i] = ((IIngredient) obj).getMatchingStacks();
-        }
-
-        return ArcFurnaceRecipe.addRecipe(output, input, slag, time, energyPerTick, additives);
     }
 
     public static class RecipeBuilder extends TimeRecipeBuilder<ArcFurnaceRecipe> {
@@ -128,7 +120,9 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         @Override
         public @Nullable ArcFurnaceRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().arcFurnace.add(output.get(0), input.get(0), slag, time, energyPerTick, additives);
+            IIngredient mainInput = input.get(0);
+            input.remove(0);
+            return ModSupport.IMMERSIVE_ENGINEERING.get().arcFurnace.add(output.get(0), mainInput, input, slag, time, energyPerTick);
         }
     }
 }
