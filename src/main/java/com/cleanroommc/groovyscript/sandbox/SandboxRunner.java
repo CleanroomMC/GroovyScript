@@ -77,6 +77,9 @@ public class SandboxRunner {
                 }
             }
         }
+
+        registerBinding("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
+        registerBinding("mods", ModSupport.INSTANCE);
     }
 
     @Nullable
@@ -112,8 +115,6 @@ public class SandboxRunner {
         config.addCompilationCustomizers(new SandboxTransformer());
         engine.setConfig(config);
         Binding binding = new Binding(BINDINGS);
-        binding.setVariable("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
-        binding.setVariable("mods", ModSupport.INSTANCE);
 
         // find and run scripts
         running = true;
