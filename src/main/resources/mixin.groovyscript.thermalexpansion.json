@@ -1,5 +1,5 @@
 {
-  "package": "com.cleanroommc.groovyscript.mixin.thermalexpansion",
+  "package": "com.cleanroommc.groovyscript.core.mixin.thermalexpansion",
   "refmap": "mixins.bogosorter.refmap.json",
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",

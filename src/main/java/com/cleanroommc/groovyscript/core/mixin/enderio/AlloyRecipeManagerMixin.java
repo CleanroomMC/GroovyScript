@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.mixin.enderio;
+package com.cleanroommc.groovyscript.core.mixin.enderio;
 
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
