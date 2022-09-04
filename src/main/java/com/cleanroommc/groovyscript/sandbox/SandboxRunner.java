@@ -4,7 +4,6 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
 import com.cleanroommc.groovyscript.api.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
@@ -14,6 +13,7 @@ import groovy.lang.Closure;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class SandboxRunner {
@@ -41,8 +42,16 @@ public class SandboxRunner {
 
     private static boolean running = false;
 
+    private static final Map<String, Object> BINDINGS = new Object2ObjectOpenHashMap<>();
+
     public static boolean isCurrentlyRunning() {
         return running;
+    }
+
+    public static void registerBinding(String name, Object obj) {
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(obj);
+        BINDINGS.put(name, obj);
     }
 
     public static void init() {
@@ -102,8 +111,7 @@ public class SandboxRunner {
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
         config.addCompilationCustomizers(new SandboxTransformer());
         engine.setConfig(config);
-        Binding binding = new Binding();
-        VanillaModule.initializeBinding(binding);
+        Binding binding = new Binding(BINDINGS);
         binding.setVariable("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
         binding.setVariable("mods", ModSupport.INSTANCE);
 
@@ -116,6 +124,9 @@ public class SandboxRunner {
         running = false;
         ReloadableRegistryManager.afterScriptRun();
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
+        if (ReloadableRegistryManager.isFirstLoad()) {
+            ReloadableRegistryManager.setLoaded();
+        }
     }
 
     private static File[] getStartupFiles() throws IOException {
@@ -150,8 +161,12 @@ public class SandboxRunner {
     public static <T> T runClosure(Closure<T> closure, Object... args) {
         try {
             SimpleGroovyInterceptor.makeSureExists();
-            return closure.call(args);
+            running = true;
+            T t = closure.call(args);
+            running = false;
+            return t;
         } catch (Exception e) {
+            running = false;
             GroovyScript.LOGGER.error("Caught an exception trying to run a closure:");
             e.printStackTrace();
         }
