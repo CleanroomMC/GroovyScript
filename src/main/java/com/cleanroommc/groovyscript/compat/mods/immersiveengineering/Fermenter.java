@@ -87,8 +87,6 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
 
     public static class RecipeBuilder extends EnergyRecipeBuilder<FermenterRecipe> {
 
-        protected ItemStack out = ItemStack.EMPTY;
-
         @Override
         public String getErrorMsg() {
             return "Error adding Immersive Engineering Fermenter recipe";
@@ -98,13 +96,12 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 1);
             validateFluids(msg, 0, 0, 1, 1);
-            if (output.size() > 0) out = output.get(0);
         }
 
         @Override
         public @Nullable FermenterRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().fermenter.add(fluidOutput.get(0), out, input.get(0), energy);
+            return ModSupport.IMMERSIVE_ENGINEERING.get().fermenter.add(fluidOutput.get(0), output.getOrEmpty(0), input.get(0), energy);
         }
     }
 }
