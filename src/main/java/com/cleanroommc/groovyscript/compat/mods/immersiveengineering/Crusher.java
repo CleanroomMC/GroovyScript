@@ -35,9 +35,9 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         }
     }
 
-    public CrusherRecipe add(ItemStack output, Object input, int energy) {
-        CrusherRecipe recipe = create(output, input, energy);
-        addScripted(recipe);
+    public CrusherRecipe add(ItemStack output, IIngredient input, int energy) {
+        CrusherRecipe recipe = new CrusherRecipe(output.copy(), ImmersiveEngineering.toIngredientStack(input), energy);
+        add(recipe);
         return recipe;
     }
 

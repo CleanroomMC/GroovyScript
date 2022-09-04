@@ -4,6 +4,7 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.BlastFurnaceRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -36,8 +37,8 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         }
     }
 
-    public BlastFurnaceRecipe add(ItemStack output, Object input, int time, @Nonnull ItemStack slag) {
-        BlastFurnaceRecipe recipe = create(output, input, time, slag);
+    public BlastFurnaceRecipe add(ItemStack output, IIngredient input, int time, @Nonnull ItemStack slag) {
+        BlastFurnaceRecipe recipe = new BlastFurnaceRecipe(output.copy(), ImmersiveEngineering.toIEInput(input), time, IngredientHelper.copy(slag));
         add(recipe);
         return recipe;
     }
@@ -69,11 +70,6 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
     public void removeAll() {
         BlastFurnaceRecipe.recipeList.forEach(this::addBackup);
         BlastFurnaceRecipe.recipeList.clear();
-    }
-
-    private static BlastFurnaceRecipe create(ItemStack output, Object input, int time, @Nonnull ItemStack slag) {
-        if (input instanceof IIngredient) input = ((IIngredient) input).getMatchingStacks();
-        return new BlastFurnaceRecipe(output, input, time, slag);
     }
 
     public static class RecipeBuilder extends TimeRecipeBuilder<BlastFurnaceRecipe> {

@@ -35,8 +35,8 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         }
     }
 
-    public BottlingMachineRecipe add(ItemStack output, Object input, FluidStack fluidInput) {
-        BottlingMachineRecipe recipe = create(output, input, fluidInput);
+    public BottlingMachineRecipe add(ItemStack output, IIngredient input, FluidStack fluidInput) {
+        BottlingMachineRecipe recipe = new BottlingMachineRecipe(output.copy(), ImmersiveEngineering.toIngredientStack(input), fluidInput);
         add(recipe);
         return recipe;
     }
@@ -84,11 +84,6 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
     public void removeAll() {
         BottlingMachineRecipe.recipeList.forEach(this::addBackup);
         BottlingMachineRecipe.recipeList.clear();
-    }
-
-    private static BottlingMachineRecipe create(ItemStack output, Object input, FluidStack fluidInput) {
-        if (input instanceof IIngredient) input = ((IIngredient) input).getMatchingStacks();
-        return new BottlingMachineRecipe(output, input, fluidInput);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<BottlingMachineRecipe> {

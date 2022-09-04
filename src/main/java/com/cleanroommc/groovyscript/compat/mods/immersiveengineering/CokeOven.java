@@ -36,9 +36,9 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         }
     }
 
-    public CokeOvenRecipe add(ItemStack output, Object input, int time, int creosoteOutput) {
-        CokeOvenRecipe recipe = create(output, input, time, creosoteOutput);
-        addScripted(recipe);
+    public CokeOvenRecipe add(ItemStack output, IIngredient input, int time, int creosoteOutput) {
+        CokeOvenRecipe recipe = new CokeOvenRecipe(output.copy(), ImmersiveEngineering.toIEInput(input), time, creosoteOutput);
+        add(recipe);
         return recipe;
     }
 
@@ -73,14 +73,6 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
     public void removeAll() {
         CokeOvenRecipe.recipeList.forEach(this::addBackup);
         CokeOvenRecipe.recipeList.clear();
-    }
-
-    private static CokeOvenRecipe create(ItemStack output, Object input, int time, int creosoteOutput) {
-        if (!(input instanceof ItemStack)) {
-            if (input instanceof IIngredient) input = Arrays.asList(((IIngredient) input).getMatchingStacks());
-        }
-
-        return new CokeOvenRecipe(output, input, time, creosoteOutput);
     }
 
     public static class RecipeBuilder extends TimeRecipeBuilder<CokeOvenRecipe> {

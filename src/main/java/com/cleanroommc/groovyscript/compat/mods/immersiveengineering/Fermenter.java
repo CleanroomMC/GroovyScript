@@ -37,9 +37,9 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         }
     }
 
-    public FermenterRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, Object input, int energy) {
-        FermenterRecipe recipe = create(fluidOutput, itemOutput, input, energy);
-        addScripted(recipe);
+    public FermenterRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, IIngredient input, int energy) {
+        FermenterRecipe recipe = new FermenterRecipe(fluidOutput.copy(), itemOutput.copy(), ImmersiveEngineering.toIngredientStack(input), energy);
+        add(recipe);
         return recipe;
     }
 
@@ -78,11 +78,6 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
     public void removeAll() {
         FermenterRecipe.recipeList.forEach(this::addBackup);
         FermenterRecipe.recipeList.clear();
-    }
-
-    private static FermenterRecipe create(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, Object input, int energy) {
-        if (input instanceof IIngredient) input = ((IIngredient) input).getMatchingStacks();
-        return FermenterRecipe.addRecipe(fluidOutput, itemOutput, input, energy);
     }
 
     public static class RecipeBuilder extends EnergyRecipeBuilder<FermenterRecipe> {
