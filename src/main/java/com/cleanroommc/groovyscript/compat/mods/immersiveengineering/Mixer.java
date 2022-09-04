@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -15,7 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
 public class Mixer extends VirtualizedRegistry<MixerRecipe> {
@@ -57,20 +58,35 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
     }
 
     public void removeByOutput(FluidStack fluidOutput) {
-        for (Iterator<MixerRecipe> iterator = MixerRecipe.recipeList.iterator(); iterator.hasNext(); ) {
-            MixerRecipe recipe = iterator.next();
+        if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
+                .add(IngredientHelper.isEmpty(fluidOutput), () -> "fluid output must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
+        if (!MixerRecipe.recipeList.removeIf(recipe -> {
             if (recipe.fluidOutput.isFluidEqual(fluidOutput)) {
                 addBackup(recipe);
-                iterator.remove();
+                return true;
             }
+            return false;
+        })) {
+            GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
+                    .add("no recipes found for %s", fluidOutput)
+                    .error()
+                    .post();
         }
     }
 
     public void removeByInput(ItemStack... itemInputs) {
-        for (Iterator<MixerRecipe> iterator = MixerRecipe.recipeList.iterator(); iterator.hasNext(); ) {
-            MixerRecipe recipe = iterator.next();
-
-            if (recipe.itemInputs.length != itemInputs.length) continue;
+        if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
+                .add(itemInputs == null || itemInputs.length == 0, () -> "item input must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
+        if (!MixerRecipe.recipeList.removeIf(recipe -> {
+            if (recipe.itemInputs.length != itemInputs.length) return false;
 
             int i;
             for (i = 0; i < itemInputs.length; i++) {
@@ -79,20 +95,38 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
 
             if (i == itemInputs.length) {
                 addBackup(recipe);
-                iterator.remove();
+                return true;
             }
+            return false;
+        })) {
+            GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
+                    .add("no recipes found for %s and %s", Arrays.toString(itemInputs))
+                    .error()
+                    .post();
         }
     }
 
     public void removeByInput(FluidStack fluidInput, ItemStack... itemInput) {
+        if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
+                .add(IngredientHelper.isEmpty(fluidInput), () -> "fluid input must not be empty")
+                .add(itemInput == null || itemInput.length == 0, () -> "item input must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
         NonNullList<ItemStack> inputs = NonNullList.create();
-        inputs.addAll(Arrays.asList(itemInput));
+        Collections.addAll(inputs, itemInput);
 
         MixerRecipe recipe = MixerRecipe.findRecipe(fluidInput, inputs);
-        remove(recipe);
+        if (recipe == null || !remove(recipe)) {
+            GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
+                    .add("no recipes found for %s and %s", fluidInput, Arrays.toString(itemInput))
+                    .error()
+                    .post();
+        }
     }
 
-    public SimpleObjectStream<MixerRecipe> stream() {
+    public SimpleObjectStream<MixerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(MixerRecipe.recipeList).setRemover(this::remove);
     }
 
