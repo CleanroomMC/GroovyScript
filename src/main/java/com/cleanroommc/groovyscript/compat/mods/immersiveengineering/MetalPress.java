@@ -6,11 +6,14 @@ import blusunrize.immersiveengineering.api.crafting.MetalPressRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,7 +26,8 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> {
-            if (MetalPressRecipe.recipeList.containsValue(recipe)) MetalPressRecipe.recipeList.remove(recipe.mold, recipe);
+            if (MetalPressRecipe.recipeList.containsValue(recipe))
+                MetalPressRecipe.recipeList.remove(recipe.mold, recipe);
         });
         restoreFromBackup().forEach(recipe -> MetalPressRecipe.recipeList.put(recipe.mold, recipe));
     }
@@ -41,8 +45,12 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         return recipe;
     }
 
-    public void remove(MetalPressRecipe recipe) {
-        if (recipe != null && MetalPressRecipe.recipeList.get(recipe.mold).removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(MetalPressRecipe recipe) {
+        if (recipe != null && MetalPressRecipe.recipeList.get(recipe.mold).removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
@@ -94,6 +102,11 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
     public void removeAll() {
         MetalPressRecipe.recipeList.values().forEach(this::addBackup);
         MetalPressRecipe.recipeList.clear();
+    }
+
+    public SimpleObjectStream<MetalPressRecipe> streamRecipes() {
+        List<MetalPressRecipe> recipes = new ArrayList<>(MetalPressRecipe.recipeList.values());
+        return new SimpleObjectStream<>(recipes).setRemover(this::remove);
     }
 
     private static MetalPressRecipe create(ItemStack output, Object input, ItemStack mold, int energy) {
