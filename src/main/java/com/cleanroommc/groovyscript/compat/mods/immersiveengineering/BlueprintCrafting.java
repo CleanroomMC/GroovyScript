@@ -5,6 +5,7 @@ import blusunrize.immersiveengineering.api.crafting.BlueprintCraftingRecipe;
 import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -39,7 +40,9 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
     public void add(BlueprintCraftingRecipe recipe) {
         if (recipe != null) {
             addScripted(recipe);
-            if (!BlueprintCraftingRecipe.blueprintCategories.contains(recipe.blueprintCategory)) BlueprintCraftingRecipe.blueprintCategories.add(recipe.blueprintCategory);
+            if (!BlueprintCraftingRecipe.blueprintCategories.contains(recipe.blueprintCategory)) {
+                BlueprintCraftingRecipe.blueprintCategories.add(recipe.blueprintCategory);
+            }
             BlueprintCraftingRecipe.recipeList.get(recipe.blueprintCategory).add(recipe);
         }
     }
@@ -50,27 +53,41 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         return recipe;
     }
 
-    public void remove(BlueprintCraftingRecipe recipe) {
-        if (recipe != null && BlueprintCraftingRecipe.recipeList.get(recipe.blueprintCategory).removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(BlueprintCraftingRecipe recipe) {
+        if (recipe != null && BlueprintCraftingRecipe.recipeList.get(recipe.blueprintCategory).removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByCategory(String blueprintCategory) {
-        if (BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory)) {
-            List<BlueprintCraftingRecipe> list = BlueprintCraftingRecipe.recipeList.removeAll(blueprintCategory);
-            if (list.size() > 0) {
-                list.forEach(this::addBackup);
-            }
+        if (!BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory)) {
+            GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
+                    .add("category %s does not exist", blueprintCategory)
+                    .error()
+                    .post();
+            return;
+        }
+        List<BlueprintCraftingRecipe> list = BlueprintCraftingRecipe.recipeList.removeAll(blueprintCategory);
+        if (list.size() > 0) {
+            list.forEach(this::addBackup);
         }
     }
 
     public void removeByOutput(String blueprintCategory, ItemStack output) {
-        if (BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory)) {
-            for (BlueprintCraftingRecipe recipe : BlueprintCraftingRecipe.recipeList.get(blueprintCategory)) {
-                if (ApiUtils.stackMatchesObject(output, recipe.output)) {
-                    addBackup(recipe);
-                    BlueprintCraftingRecipe.recipeList.remove(blueprintCategory, recipe);
-                    break;
-                }
+        if (GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
+                .add(!BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory), () -> "category " + blueprintCategory + " does not exist")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
+        for (BlueprintCraftingRecipe recipe : BlueprintCraftingRecipe.recipeList.get(blueprintCategory)) {
+            if (ApiUtils.stackMatchesObject(output, recipe.output)) {
+                addBackup(recipe);
+                BlueprintCraftingRecipe.recipeList.remove(blueprintCategory, recipe);
+                break;
             }
         }
     }
@@ -114,22 +131,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
     }
 
     public SimpleObjectStream<BlueprintCraftingRecipe> stream() {
-        return new SimpleObjectStream<>(BlueprintCraftingRecipe.recipeList.values()).setRemover(recipe -> {
-            NonNullList<ItemStack> list = NonNullList.create();
-            for (IngredientStack stack : recipe.inputs) {
-                list.add(stack.stack);
-            }
-
-            for (BlueprintCraftingRecipe r : BlueprintCraftingRecipe.recipeList.values()) {
-                if (r.inputs.length == recipe.inputs.length && ApiUtils.stacksMatchIngredientList(r.getFormattedInputs(), list)) {
-                    remove(r);
-                    addBackup(r);
-                    return true;
-                }
-            }
-
-            return false;
-        });
+        return new SimpleObjectStream<>(BlueprintCraftingRecipe.recipeList.values()).setRemover(this::remove);
     }
 
     public void removeAll() {

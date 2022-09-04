@@ -44,8 +44,12 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         return recipe;
     }
 
-    public void remove(AlloyRecipe recipe) {
-        if (AlloyRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(AlloyRecipe recipe) {
+        if (AlloyRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
@@ -61,15 +65,7 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
     }
 
     public SimpleObjectStream<AlloyRecipe> stream() {
-        return new SimpleObjectStream<>(AlloyRecipe.recipeList).setRemover(recipe -> {
-            AlloyRecipe recipe1 = AlloyRecipe.findRecipe(recipe.input0.stack, recipe.input1.stack);
-            if (recipe1 != null) {
-                remove(recipe1);
-                addBackup(recipe1);
-                return true;
-            }
-            return false;
-        });
+        return new SimpleObjectStream<>(AlloyRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {

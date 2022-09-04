@@ -43,8 +43,12 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         return recipe;
     }
 
-    public void remove(FermenterRecipe recipe) {
-        if (FermenterRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(FermenterRecipe recipe) {
+        if (FermenterRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(FluidStack fluidOutput) {
@@ -68,14 +72,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
     }
 
     public SimpleObjectStream<FermenterRecipe> stream() {
-        return new SimpleObjectStream<>(FermenterRecipe.recipeList).setRemover(r -> {
-            FermenterRecipe recipe = FermenterRecipe.findRecipe(r.input.stack);
-            if (recipe != null) {
-                remove(recipe);
-                return true;
-            }
-            return false;
-        });
+        return new SimpleObjectStream<>(FermenterRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {

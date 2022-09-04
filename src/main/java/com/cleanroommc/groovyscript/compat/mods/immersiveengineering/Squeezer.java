@@ -44,8 +44,12 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         return recipe;
     }
 
-    public void remove(SqueezerRecipe recipe) {
-        if (SqueezerRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(SqueezerRecipe recipe) {
+        if (SqueezerRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(FluidStack fluidOutput) {
@@ -74,14 +78,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
     }
 
     public SimpleObjectStream<SqueezerRecipe> stream() {
-        return new SimpleObjectStream<>(SqueezerRecipe.recipeList).setRemover(recipe -> {
-            SqueezerRecipe r = SqueezerRecipe.findRecipe(recipe.input.stack);
-            if (r != null) {
-                remove(r);
-                return true;
-            }
-            return false;
-        });
+        return new SimpleObjectStream<>(SqueezerRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {

@@ -42,8 +42,12 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         return recipe;
     }
 
-    public void remove(CokeOvenRecipe recipe) {
-        if (CokeOvenRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(CokeOvenRecipe recipe) {
+        if (CokeOvenRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
@@ -63,14 +67,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
     }
 
     public SimpleObjectStream<CokeOvenRecipe> stream() {
-        return new SimpleObjectStream<>(CokeOvenRecipe.recipeList).setRemover(recipe -> {
-            CokeOvenRecipe recipe1 = CokeOvenRecipe.findRecipe(ApiUtils.getItemStackFromObject(recipe.input));
-            if (recipe1 != null) {
-                remove(recipe1);
-                return true;
-            }
-            return false;
-        });
+        return new SimpleObjectStream<>(CokeOvenRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {

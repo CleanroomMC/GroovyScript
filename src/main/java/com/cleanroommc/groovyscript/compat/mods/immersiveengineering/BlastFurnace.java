@@ -42,15 +42,12 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         return recipe;
     }
 
-    public void remove(BlastFurnaceRecipe recipe) {
-        for (int i = 0; i < BlastFurnaceRecipe.recipeList.size(); i++) {
-            BlastFurnaceRecipe rec = BlastFurnaceRecipe.recipeList.get(i);
-            if (rec == recipe) {
-                addBackup(rec);
-                BlastFurnaceRecipe.recipeList.remove(i);
-                break;
-            }
+    public boolean remove(BlastFurnaceRecipe recipe) {
+        if (BlastFurnaceRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
         }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
@@ -66,14 +63,7 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
     }
 
     public SimpleObjectStream<BlastFurnaceRecipe> stream() {
-        return new SimpleObjectStream<>(BlastFurnaceRecipe.recipeList).setRemover(recipe -> {
-            BlastFurnaceRecipe recipe1 = BlastFurnaceRecipe.findRecipe(ApiUtils.createIngredientStack(recipe.input).stack);
-            if (recipe1 != null) {
-                remove(recipe1);
-                return true;
-            }
-            return false;
-        });
+        return new SimpleObjectStream<>(BlastFurnaceRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {

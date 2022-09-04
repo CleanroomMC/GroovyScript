@@ -45,8 +45,12 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         return recipe;
     }
 
-    public void remove(MixerRecipe recipe) {
-        if (MixerRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(MixerRecipe recipe) {
+        if (MixerRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(FluidStack fluidOutput) {
@@ -86,17 +90,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
     }
     
     public SimpleObjectStream<MixerRecipe> stream() {
-        return new SimpleObjectStream<>(MixerRecipe.recipeList).setRemover(recipe -> {
-            NonNullList<ItemStack> list = NonNullList.create();
-            for (IngredientStack ing : recipe.itemInputs) list.add(ing.stack);
-
-            MixerRecipe r = MixerRecipe.findRecipe(recipe.fluidInput, list);
-            if (r != null) {
-                remove(r);
-                return true;
-            }
-            return false;
-        });
+        return new SimpleObjectStream<>(MixerRecipe.recipeList).setRemover(this::remove);
     }
     
     public void removeAll() {
