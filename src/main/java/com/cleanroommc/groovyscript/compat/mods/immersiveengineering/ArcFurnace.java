@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -58,22 +59,50 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     }
 
     public void removeByOutput(ItemStack output) {
-        List<ArcFurnaceRecipe> list = ArcFurnaceRecipe.removeRecipes(output);
-        if (list.size() > 0) {
-            list.forEach(this::addBackup);
+        if (IngredientHelper.isEmpty(output)) {
+            GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
+                    .add("output must not be empty")
+                    .error()
+                    .post();
+            return;
         }
+        List<ArcFurnaceRecipe> list = ArcFurnaceRecipe.removeRecipes(output);
+        if (list.isEmpty()) {
+            GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
+                    .add("no recipes found for %s", output)
+                    .error()
+                    .post();
+            return;
+        }
+        list.forEach(this::addBackup);
     }
 
-    public void removeByInput(ItemStack... inputAndAdditives) {
+    public void removeByInput(List<ItemStack> inputAndAdditives) {
+        if (inputAndAdditives == null || inputAndAdditives.isEmpty()) {
+            GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
+                    .add("inputs must not be empty")
+                    .error()
+                    .post();
+            return;
+        }
+
         NonNullList<ItemStack> list = NonNullList.create();
-        for (int i = 1; i < inputAndAdditives.length; i++) list.add(inputAndAdditives[i]);
-        ArcFurnaceRecipe recipe = ArcFurnaceRecipe.findRecipe(inputAndAdditives[0], list);
+        ItemStack main = inputAndAdditives.get(0);
+        inputAndAdditives.remove(0);
+        list.addAll(inputAndAdditives);
+        ArcFurnaceRecipe recipe = ArcFurnaceRecipe.findRecipe(main, list);
         if (recipe != null) {
             remove(recipe);
+        } else {
+            inputAndAdditives.add(0, main);
+            GroovyLog.msg("Error removing Immersive Engineering Alloy Kiln recipe")
+                    .add("no recipes found for %s", inputAndAdditives)
+                    .error()
+                    .post();
         }
     }
 
-    public SimpleObjectStream<ArcFurnaceRecipe> stream() {
+    public SimpleObjectStream<ArcFurnaceRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ArcFurnaceRecipe.recipeList).setRemover(this::remove);
     }
 
@@ -85,8 +114,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     public static class RecipeBuilder extends TimeRecipeBuilder<ArcFurnaceRecipe> {
 
         protected int energyPerTick;
-        protected ItemStack slag = ItemStack.EMPTY;
-        protected Object[] additives = null;
+        protected ItemStack slag;
 
         public RecipeBuilder energyPerTick(int energy) {
             this.energyPerTick = energy;
@@ -105,16 +133,11 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 5, 1, 2);
+            validateItems(msg, 1, 5, 1, 1);
             validateFluids(msg);
             if (time < 0) time = 200;
             if (energyPerTick < 0) energyPerTick = 100;
-            if (input.size() > 1) {
-                additives = new Object[input.size()-1];
-                for (int i = 1; i < input.size(); i++) {
-                    additives[i-1] = input.get(i);
-                }
-            }
+            if (slag == null) slag = ItemStack.EMPTY;
         }
 
         @Override

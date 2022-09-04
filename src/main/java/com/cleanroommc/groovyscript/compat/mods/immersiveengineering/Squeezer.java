@@ -4,6 +4,7 @@ import blusunrize.immersiveengineering.api.crafting.SqueezerRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -12,7 +13,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.Iterator;
 
 public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
 
@@ -52,31 +52,67 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
     }
 
     public void removeByOutput(FluidStack fluidOutput) {
-        for (Iterator<SqueezerRecipe> iterator = SqueezerRecipe.recipeList.iterator(); iterator.hasNext(); ) {
-            SqueezerRecipe recipe = iterator.next();
-            if ((fluidOutput != null && fluidOutput.isFluidEqual(recipe.fluidOutput)) || (fluidOutput == null && recipe.fluidOutput == null)) {
+        if (IngredientHelper.isEmpty(fluidOutput)) {
+            GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
+                    .add("fluid output must not be empty")
+                    .error()
+                    .post();
+            return;
+        }
+        if (!SqueezerRecipe.recipeList.removeIf(recipe -> {
+            if (fluidOutput.isFluidEqual(recipe.fluidOutput)) {
                 addBackup(recipe);
-                iterator.remove();
+                return true;
             }
+            return false;
+        })) {
+            GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
+                    .add("no recipes found for %s", fluidOutput)
+                    .error()
+                    .post();
         }
     }
 
     public void removeByOutput(FluidStack fluidOutput, ItemStack itemOutput) {
-        for (Iterator<SqueezerRecipe> iterator = SqueezerRecipe.recipeList.iterator(); iterator.hasNext(); ) {
-            SqueezerRecipe recipe = iterator.next();
-            if (((fluidOutput != null && fluidOutput.isFluidEqual(recipe.fluidOutput)) || (fluidOutput == null && recipe.fluidOutput == null)) && ((recipe.input == null && itemOutput.isEmpty()) || (recipe.input != null && recipe.input.matches(itemOutput)))) {
+        if (GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
+                .add(IngredientHelper.isEmpty(fluidOutput), () -> "fluid output must not be empty")
+                .add(IngredientHelper.isEmpty(itemOutput), () -> "item input must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
+        if (!SqueezerRecipe.recipeList.removeIf(recipe -> {
+            if (fluidOutput.isFluidEqual(recipe.fluidOutput) && recipe.input.matches(itemOutput)) {
                 addBackup(recipe);
-                iterator.remove();
+                return true;
             }
+            return false;
+        })) {
+            GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
+                    .add("no recipes found for %s and %s", fluidOutput, itemOutput)
+                    .error()
+                    .post();
         }
     }
 
     public void removeByInput(ItemStack input) {
+        if (IngredientHelper.isEmpty(input)) {
+            GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
+                    .add("input must not be empty")
+                    .error()
+                    .post();
+            return;
+        }
         SqueezerRecipe recipe = SqueezerRecipe.findRecipe(input);
-        remove(recipe);
+        if (recipe == null || !remove(recipe)) {
+            GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
+                    .add("no recipes found for %s", input)
+                    .error()
+                    .post();
+        }
     }
 
-    public SimpleObjectStream<SqueezerRecipe> stream() {
+    public SimpleObjectStream<SqueezerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(SqueezerRecipe.recipeList).setRemover(this::remove);
     }
 

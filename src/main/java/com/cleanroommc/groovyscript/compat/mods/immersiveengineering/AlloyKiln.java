@@ -4,6 +4,7 @@ import blusunrize.immersiveengineering.api.crafting.AlloyRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -53,18 +54,43 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
     }
 
     public void removeByOutput(ItemStack output) {
+        if (IngredientHelper.isEmpty(output)) {
+            GroovyLog.msg("Error removing Immersive Engineering Alloy Kiln recipe")
+                    .add("output must not be empty")
+                    .error()
+                    .post();
+        }
         List<AlloyRecipe> recipes = AlloyRecipe.removeRecipes(output);
-        if (recipes.size() > 0) recipes.forEach(this::addBackup);
+        if (recipes.isEmpty()) {
+            GroovyLog.msg("Error removing Immersive Engineering Alloy Kiln recipe")
+                    .add("no recipes found for %s", output)
+                    .error()
+                    .post();
+            return;
+        }
+        recipes.forEach(this::addBackup);
     }
 
     public void removeByInput(ItemStack input, ItemStack input1) {
+        if (GroovyLog.msg("Error removing Immersive Engineering Alloy Kiln recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input 1 must not be empty")
+                .add(IngredientHelper.isEmpty(input1), () -> "input 2 must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
         AlloyRecipe recipe = AlloyRecipe.findRecipe(input, input1);
         if (recipe != null) {
             remove(recipe);
+        } else {
+            GroovyLog.msg("Error removing Immersive Engineering Alloy Kiln recipe")
+                    .add("no recipes found for %s and %s", input, input1)
+                    .error()
+                    .post();
         }
     }
 
-    public SimpleObjectStream<AlloyRecipe> stream() {
+    public SimpleObjectStream<AlloyRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AlloyRecipe.recipeList).setRemover(this::remove);
     }
 
