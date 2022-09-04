@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.helper;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -12,6 +13,13 @@ public class FluidStackList extends ArrayList<FluidStack> {
 
     public FluidStackList(Collection<FluidStack> collection) {
         super(collection);
+    }
+
+    public FluidStack getOrEmpty(int i) {
+        if (i < 0 || i >= size()) {
+            return null;
+        }
+        return get(i);
     }
 
     public int getRealSize() {

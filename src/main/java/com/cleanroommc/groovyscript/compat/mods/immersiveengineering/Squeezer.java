@@ -93,9 +93,6 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
 
     private static class RecipeBuilder extends EnergyRecipeBuilder<SqueezerRecipe> {
 
-        protected ItemStack itemOutput = ItemStack.EMPTY;
-        protected FluidStack fOutput = null;
-
         @Override
         public String getErrorMsg() {
             return "Error adding Immersive Engineering Refinery recipe";
@@ -105,13 +102,11 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 1);
             validateFluids(msg, 0, 0, 0, 1);
-            if (output.size() > 0) itemOutput = output.get(0);
-            if (fluidOutput.size() > 0) fOutput = fluidOutput.get(0);
         }
 
         @Override
         public @Nullable SqueezerRecipe register() {
-            return ModSupport.IMMERSIVE_ENGINEERING.get().squeezer.add(fOutput, itemOutput, input.get(0), energy);
+            return ModSupport.IMMERSIVE_ENGINEERING.get().squeezer.add(fluidOutput.getOrEmpty(0), output.getOrEmpty(0), input.get(0), energy);
         }
     }
 }
