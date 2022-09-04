@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.mixin.enderio;
+package com.cleanroommc.groovyscript.core.mixin.enderio;
 
 import crazypants.enderio.base.recipe.lookup.ItemRecipeLeafNode;
 import crazypants.enderio.base.recipe.lookup.ItemRecipeNode;

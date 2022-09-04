@@ -5,7 +5,7 @@ import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport.Container;
-import com.cleanroommc.groovyscript.mixin.jei.JeiProxyAccessor;
+import com.cleanroommc.groovyscript.core.mixin.jei.JeiProxyAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mezz.jei.JustEnoughItems;
 import net.minecraft.item.crafting.IRecipe;

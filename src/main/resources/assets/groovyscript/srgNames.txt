@@ -17515,7 +17515,7 @@ chunkZ;field_72816_b
 chunkArray;field_72817_c
 world;field_72815_e
 chunkArray;field_72817_c
-CLASS;com.cleanroommc.groovyscript.mixin.ItemStackMixin
+CLASS;com.cleanroommc.groovyscript.core.mixin.ItemStackMixin
 field_77990_d;field_77990_d
 field_77990_d;field_77990_d
 CLASS;net.minecraft.entity.player.PlayerCapabilities

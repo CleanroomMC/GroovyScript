@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.mixin;
+package com.cleanroommc.groovyscript.core.mixin;
 
 import com.cleanroommc.groovyscript.api.INBTResourceStack;
 import com.cleanroommc.groovyscript.api.IIngredient;

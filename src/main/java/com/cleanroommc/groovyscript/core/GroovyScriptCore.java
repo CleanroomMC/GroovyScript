@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript;
+package com.cleanroommc.groovyscript.core;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraftforge.common.ForgeVersion;

@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.mixin.mekanism;
+package com.cleanroommc.groovyscript.core.mixin.mekanism;
 
 import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.api.IIngredient;
