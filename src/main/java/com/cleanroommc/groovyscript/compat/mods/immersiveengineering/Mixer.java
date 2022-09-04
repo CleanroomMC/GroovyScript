@@ -5,7 +5,7 @@ import blusunrize.immersiveengineering.api.crafting.MixerRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -85,8 +85,8 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         remove(recipe);
     }
     
-    public RecipeStream<MixerRecipe> stream() {
-        return new RecipeStream<>(MixerRecipe.recipeList).setRemover(recipe -> {
+    public SimpleObjectStream<MixerRecipe> stream() {
+        return new SimpleObjectStream<>(MixerRecipe.recipeList).setRemover(recipe -> {
             NonNullList<ItemStack> list = NonNullList.create();
             for (IngredientStack ing : recipe.itemInputs) list.add(ing.stack);
 

@@ -4,7 +4,7 @@ import blusunrize.immersiveengineering.api.crafting.CrusherRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -55,8 +55,8 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         if (list.size() > 0) list.forEach(this::addBackup);
     }
 
-    public RecipeStream<CrusherRecipe> stream() {
-        return new RecipeStream<>(CrusherRecipe.recipeList).setRemover(r -> {
+    public SimpleObjectStream<CrusherRecipe> stream() {
+        return new SimpleObjectStream<>(CrusherRecipe.recipeList).setRemover(r -> {
             CrusherRecipe recipe = CrusherRecipe.findRecipe(r.input.stack);
             if (recipe != null) {
                 remove(recipe);

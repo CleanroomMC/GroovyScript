@@ -5,7 +5,7 @@ import blusunrize.immersiveengineering.api.crafting.BlueprintCraftingRecipe;
 import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -94,8 +94,8 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
     }
 
-    public RecipeStream<BlueprintCraftingRecipe> streamByCategory(String blueprintCategory) {
-        return new RecipeStream<>(BlueprintCraftingRecipe.recipeList.get(blueprintCategory)).setRemover(recipe -> {
+    public SimpleObjectStream<BlueprintCraftingRecipe> streamByCategory(String blueprintCategory) {
+        return new SimpleObjectStream<>(BlueprintCraftingRecipe.recipeList.get(blueprintCategory)).setRemover(recipe -> {
             NonNullList<ItemStack> list = NonNullList.create();
             for (IngredientStack stack : recipe.inputs) {
                 list.add(stack.stack);
@@ -113,8 +113,8 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         });
     }
 
-    public RecipeStream<BlueprintCraftingRecipe> stream() {
-        return new RecipeStream<>(BlueprintCraftingRecipe.recipeList.values()).setRemover(recipe -> {
+    public SimpleObjectStream<BlueprintCraftingRecipe> stream() {
+        return new SimpleObjectStream<>(BlueprintCraftingRecipe.recipeList.values()).setRemover(recipe -> {
             NonNullList<ItemStack> list = NonNullList.create();
             for (IngredientStack stack : recipe.inputs) {
                 list.add(stack.stack);

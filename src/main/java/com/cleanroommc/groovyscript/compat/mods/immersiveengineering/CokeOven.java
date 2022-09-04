@@ -4,7 +4,7 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.CokeOvenRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -62,8 +62,8 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         }
     }
 
-    public RecipeStream<CokeOvenRecipe> stream() {
-        return new RecipeStream<>(CokeOvenRecipe.recipeList).setRemover(recipe -> {
+    public SimpleObjectStream<CokeOvenRecipe> stream() {
+        return new SimpleObjectStream<>(CokeOvenRecipe.recipeList).setRemover(recipe -> {
             CokeOvenRecipe recipe1 = CokeOvenRecipe.findRecipe(ApiUtils.getItemStackFromObject(recipe.input));
             if (recipe1 != null) {
                 remove(recipe1);

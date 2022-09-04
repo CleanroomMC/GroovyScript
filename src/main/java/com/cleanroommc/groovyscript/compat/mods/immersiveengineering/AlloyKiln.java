@@ -4,7 +4,7 @@ import blusunrize.immersiveengineering.api.crafting.AlloyRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -60,8 +60,8 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         }
     }
 
-    public RecipeStream<AlloyRecipe> stream() {
-        return new RecipeStream<>(AlloyRecipe.recipeList).setRemover(recipe -> {
+    public SimpleObjectStream<AlloyRecipe> stream() {
+        return new SimpleObjectStream<>(AlloyRecipe.recipeList).setRemover(recipe -> {
             AlloyRecipe recipe1 = AlloyRecipe.findRecipe(recipe.input0.stack, recipe.input1.stack);
             if (recipe1 != null) {
                 remove(recipe1);
