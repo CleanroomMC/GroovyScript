@@ -41,8 +41,12 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         return recipe;
     }
 
-    public void remove(BottlingMachineRecipe recipe) {
-        if (BottlingMachineRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(BottlingMachineRecipe recipe) {
+        if (BottlingMachineRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
@@ -74,14 +78,7 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
     }
 
     public SimpleObjectStream<BottlingMachineRecipe> stream() {
-        return new SimpleObjectStream<>(BottlingMachineRecipe.recipeList).setRemover(recipe -> {
-            BottlingMachineRecipe recipe1 = BottlingMachineRecipe.findRecipe(recipe.input.stack, recipe.fluidInput);
-            if (recipe1 != null) {
-                remove(recipe1);
-                return true;
-            }
-            return false;
-        });
+        return new SimpleObjectStream<>(BottlingMachineRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {

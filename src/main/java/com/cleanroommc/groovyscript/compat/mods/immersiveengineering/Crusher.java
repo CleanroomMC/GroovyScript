@@ -41,8 +41,12 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         return recipe;
     }
 
-    public void remove(CrusherRecipe recipe) {
-        if (CrusherRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(CrusherRecipe recipe) {
+        if (CrusherRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
@@ -56,14 +60,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
     }
 
     public SimpleObjectStream<CrusherRecipe> stream() {
-        return new SimpleObjectStream<>(CrusherRecipe.recipeList).setRemover(r -> {
-            CrusherRecipe recipe = CrusherRecipe.findRecipe(r.input.stack);
-            if (recipe != null) {
-                remove(recipe);
-                return true;
-            }
-            return false;
-        });
+        return new SimpleObjectStream<>(CrusherRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {

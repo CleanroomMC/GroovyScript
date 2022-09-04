@@ -40,8 +40,12 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         return recipe;
     }
 
-    public void remove(RefineryRecipe recipe) {
-        if (RefineryRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(RefineryRecipe recipe) {
+        if (RefineryRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(FluidStack fluidOutput) {
@@ -60,14 +64,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
     }
 
     public SimpleObjectStream<RefineryRecipe> stream() {
-        return new SimpleObjectStream<>(RefineryRecipe.recipeList).setRemover(recipe -> {
-            RefineryRecipe r = RefineryRecipe.findRecipe(recipe.input0, recipe.input1);
-            if (r != null) {
-                remove(r);
-                return true;
-            }
-            return false;
-        });
+        return new SimpleObjectStream<>(RefineryRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {

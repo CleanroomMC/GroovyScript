@@ -47,8 +47,12 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         return recipe;
     }
 
-    public void remove(ArcFurnaceRecipe recipe) {
-        if (ArcFurnaceRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(ArcFurnaceRecipe recipe) {
+        if (ArcFurnaceRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
@@ -68,20 +72,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     }
 
     public SimpleObjectStream<ArcFurnaceRecipe> stream() {
-        return new SimpleObjectStream<>(ArcFurnaceRecipe.recipeList).setRemover(recipe -> {
-            NonNullList<ItemStack> list = NonNullList.create();
-            for (IngredientStack additive : recipe.additives) {
-                list.add(additive.stack);
-            }
-
-            ArcFurnaceRecipe recipe1 = ArcFurnaceRecipe.findRecipe(recipe.input.stack, list);
-            if (recipe1 != null) {
-                remove(recipe1);
-                addBackup(recipe1);
-                return true;
-            }
-            return false;
-        });
+        return new SimpleObjectStream<>(ArcFurnaceRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {
