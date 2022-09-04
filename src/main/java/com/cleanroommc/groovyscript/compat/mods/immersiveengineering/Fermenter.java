@@ -4,7 +4,8 @@ import blusunrize.immersiveengineering.api.crafting.FermenterRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -12,7 +13,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.Iterator;
 
 public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
 
@@ -37,45 +37,62 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         }
     }
 
-    public FermenterRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, Object input, int energy) {
-        FermenterRecipe recipe = create(fluidOutput, itemOutput, input, energy);
-        addScripted(recipe);
+    public FermenterRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, IIngredient input, int energy) {
+        FermenterRecipe recipe = new FermenterRecipe(fluidOutput.copy(), itemOutput.copy(), ImmersiveEngineering.toIngredientStack(input), energy);
+        add(recipe);
         return recipe;
     }
 
-    public void remove(FermenterRecipe recipe) {
-        if (FermenterRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(FermenterRecipe recipe) {
+        if (FermenterRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(FluidStack fluidOutput) {
-        for (Iterator<FermenterRecipe> iterator = FermenterRecipe.recipeList.iterator(); iterator.hasNext(); ) {
-            FermenterRecipe recipe = iterator.next();
+        if (IngredientHelper.isEmpty(fluidOutput)) {
+            GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
+                    .add("fluid output must not be empty")
+                    .error()
+                    .post();
+        }
+        if (!FermenterRecipe.recipeList.removeIf(recipe -> {
             if (recipe.fluidOutput.isFluidEqual(fluidOutput)) {
                 addBackup(recipe);
-                iterator.remove();
+                return true;
             }
+            return false;
+        })) {
+            GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
+                    .add("no recipes found for %s", fluidOutput)
+                    .error()
+                    .post();
         }
     }
 
     public void removeByInput(ItemStack input) {
-        for (Iterator<FermenterRecipe> iterator = FermenterRecipe.recipeList.iterator(); iterator.hasNext(); ) {
-            FermenterRecipe recipe = iterator.next();
-            if (recipe.input.matches(input)) {
-                addBackup(recipe);
-                iterator.remove();
-            }
+        if (IngredientHelper.isEmpty(input)) {
+            GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
+                    .add("input must not be empty")
+                    .error()
+                    .post();
+        }
+        FermenterRecipe recipe = FermenterRecipe.findRecipe(input);
+        if (recipe != null) {
+            FermenterRecipe.recipeList.remove(recipe);
+            addBackup(recipe);
+        } else {
+            GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
+                    .add("no recipes found for %s", input)
+                    .error()
+                    .post();
         }
     }
 
-    public RecipeStream<FermenterRecipe> stream() {
-        return new RecipeStream<>(FermenterRecipe.recipeList).setRemover(r -> {
-            FermenterRecipe recipe = FermenterRecipe.findRecipe(r.input.stack);
-            if (recipe != null) {
-                remove(recipe);
-                return true;
-            }
-            return false;
-        });
+    public SimpleObjectStream<FermenterRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(FermenterRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {
@@ -83,14 +100,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         FermenterRecipe.recipeList.clear();
     }
 
-    private static FermenterRecipe create(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, Object input, int energy) {
-        if (input instanceof IIngredient) input = ((IIngredient) input).getMatchingStacks();
-        return FermenterRecipe.addRecipe(fluidOutput, itemOutput, input, energy);
-    }
-
     public static class RecipeBuilder extends EnergyRecipeBuilder<FermenterRecipe> {
-
-        protected ItemStack out = ItemStack.EMPTY;
 
         @Override
         public String getErrorMsg() {
@@ -101,13 +111,12 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 1);
             validateFluids(msg, 0, 0, 1, 1);
-            if (output.size() > 0) out = output.get(0);
         }
 
         @Override
         public @Nullable FermenterRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().fermenter.add(fluidOutput.get(0), out, input.get(0), energy);
+            return ModSupport.IMMERSIVE_ENGINEERING.get().fermenter.add(fluidOutput.get(0), output.getOrEmpty(0), input.get(0), energy);
         }
     }
 }

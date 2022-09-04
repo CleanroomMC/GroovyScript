@@ -5,6 +5,9 @@ import mekanism.api.gas.GasStack;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class IngredientHelper {
 
@@ -46,8 +49,22 @@ public class IngredientHelper {
         return itemStack == null || itemStack.amount <= 0;
     }
 
+
     public static boolean isEmpty(GasStack gasStack) {
         return gasStack == null || gasStack.getGas() == null || gasStack.amount <= 0;
+    }
+
+    /**
+     * Useful when the item can be empty or null, but only want to copy non empty items
+     */
+    @NotNull
+    public static ItemStack copy(@Nullable ItemStack item) {
+        return item == null || item == ItemStack.EMPTY ? ItemStack.EMPTY : item.copy();
+    }
+
+    @Contract("null -> null")
+    public static FluidStack copy(FluidStack fluid) {
+        return fluid == null ? null : fluid.copy();
     }
 
 }

@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.mixin.enderio.FluidFuelRegisterAccessor;
+import com.cleanroommc.groovyscript.core.mixin.enderio.FluidFuelRegisterAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import crazypants.enderio.base.fluid.FluidFuelRegister;

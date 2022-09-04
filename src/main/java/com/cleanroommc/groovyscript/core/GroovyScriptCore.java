@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript;
+package com.cleanroommc.groovyscript.core;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraftforge.common.ForgeVersion;
@@ -31,12 +31,11 @@ public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
     public void injectData(Map<String, Object> data) {
-
     }
 
     @Override
     public String getAccessTransformerClass() {
-        return null;
+        return "com.cleanroommc.groovyscript.core.GroovyScriptTransformer";
     }
 
     @Override

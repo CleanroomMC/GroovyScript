@@ -4,7 +4,8 @@ import blusunrize.immersiveengineering.api.crafting.CrusherRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -35,45 +36,63 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         }
     }
 
-    public CrusherRecipe add(ItemStack output, Object input, int energy) {
-        CrusherRecipe recipe = create(output, input, energy);
-        addScripted(recipe);
+    public CrusherRecipe add(ItemStack output, IIngredient input, int energy) {
+        CrusherRecipe recipe = new CrusherRecipe(output.copy(), ImmersiveEngineering.toIngredientStack(input), energy);
+        add(recipe);
         return recipe;
     }
 
-    public void remove(CrusherRecipe recipe) {
-        if (CrusherRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(CrusherRecipe recipe) {
+        if (CrusherRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
+        if (IngredientHelper.isEmpty(output)) {
+            GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
+                    .add("output must not be empty")
+                    .error()
+                    .post();
+        }
         List<CrusherRecipe> list = CrusherRecipe.removeRecipesForOutput(output);
-        if (list.size() > 0) list.forEach(this::addBackup);
+        if (list.isEmpty()) {
+            GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
+                    .add("no recipes found for %s", output)
+                    .error()
+                    .post();
+            return;
+        }
+        list.forEach(this::addBackup);
     }
 
     public void removeByInput(ItemStack input) {
+        if (IngredientHelper.isEmpty(input)) {
+            GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
+                    .add("input must not be empty")
+                    .error()
+                    .post();
+        }
         List<CrusherRecipe> list = CrusherRecipe.removeRecipesForInput(input);
-        if (list.size() > 0) list.forEach(this::addBackup);
+        if (list.isEmpty()) {
+            GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
+                    .add("no recipes found for %s", input)
+                    .error()
+                    .post();
+            return;
+        }
+        list.forEach(this::addBackup);
     }
 
-    public RecipeStream<CrusherRecipe> stream() {
-        return new RecipeStream<>(CrusherRecipe.recipeList).setRemover(r -> {
-            CrusherRecipe recipe = CrusherRecipe.findRecipe(r.input.stack);
-            if (recipe != null) {
-                remove(recipe);
-                return true;
-            }
-            return false;
-        });
+    public SimpleObjectStream<CrusherRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(CrusherRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {
         CrusherRecipe.recipeList.forEach(this::addBackup);
         CrusherRecipe.recipeList.clear();
-    }
-
-    private static CrusherRecipe create(ItemStack output, Object input, int energy) {
-        if (input instanceof IIngredient) input = ((IIngredient) input).getMatchingStacks();
-        return CrusherRecipe.addRecipe(output, input, energy);
     }
 
     public static class RecipeBuilder extends EnergyRecipeBuilder<CrusherRecipe> {

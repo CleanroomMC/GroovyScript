@@ -61,7 +61,7 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
         return Arrays.asList(
                 "com.cleanroommc.groovyscript.api",
                 "com.cleanroommc.groovyscript.command",
-                "com.cleanroommc.groovyscript.mixin",
+                "com.cleanroommc.groovyscript.core.mixin",
                 "com.cleanroommc.groovyscript.registry",
                 "com.cleanroommc.groovyscript.sandbox"
         );

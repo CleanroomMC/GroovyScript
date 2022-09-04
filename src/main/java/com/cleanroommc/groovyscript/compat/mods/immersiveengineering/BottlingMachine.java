@@ -4,7 +4,8 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.BottlingMachineRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -35,53 +36,64 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         }
     }
 
-    public BottlingMachineRecipe add(ItemStack output, Object input, FluidStack fluidInput) {
-        BottlingMachineRecipe recipe = create(output, input, fluidInput);
+    public BottlingMachineRecipe add(ItemStack output, IIngredient input, FluidStack fluidInput) {
+        BottlingMachineRecipe recipe = new BottlingMachineRecipe(output.copy(), ImmersiveEngineering.toIngredientStack(input), fluidInput);
         add(recipe);
         return recipe;
     }
 
-    public void remove(BottlingMachineRecipe recipe) {
-        if (BottlingMachineRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(BottlingMachineRecipe recipe) {
+        if (BottlingMachineRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
-        for (int i = 0; i < BottlingMachineRecipe.recipeList.size(); i++) {
-            BottlingMachineRecipe recipe = BottlingMachineRecipe.recipeList.get(i);
+        if (IngredientHelper.isEmpty(output)) {
+            GroovyLog.msg("Error removing Immersive Engineering Bottling Machine recipe")
+                    .add("output must not be empty")
+                    .error()
+                    .post();
+            return;
+        }
+        if (!BottlingMachineRecipe.recipeList.removeIf(recipe -> {
             if (ApiUtils.stackMatchesObject(output, recipe.output, true)) {
                 addBackup(recipe);
-                BottlingMachineRecipe.recipeList.remove(i);
-                break;
+                return true;
             }
+            return false;
+        })) {
+            GroovyLog.msg("Error removing Immersive Engineering Bottling Machine recipe")
+                    .add("no recipes found for %s", output)
+                    .error()
+                    .post();
         }
     }
 
     public void removeByInput(ItemStack input, FluidStack inputFluid) {
+        if (GroovyLog.msg("Error removing Immersive Engineering Bottling Machine recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "item input must not be empty")
+                .add(IngredientHelper.isEmpty(inputFluid), () -> "fluid input must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
         BottlingMachineRecipe recipe = BottlingMachineRecipe.findRecipe(input, inputFluid);
         if (recipe != null) {
             addBackup(recipe);
             BottlingMachineRecipe.recipeList.remove(recipe);
+        } else {
+            GroovyLog.msg("Error removing Immersive Engineering Bottling Machine recipe")
+                    .add("no recipes found for %s and %s", input, inputFluid)
+                    .error()
+                    .post();
         }
     }
 
-    public void removeByInput(ItemStack input) {
-        for (BottlingMachineRecipe recipe : BottlingMachineRecipe.recipeList) {
-            if (recipe.input.matches(input)) {
-                addBackup(recipe);
-                BottlingMachineRecipe.recipeList.remove(recipe);
-            }
-        }
-    }
-
-    public RecipeStream<BottlingMachineRecipe> stream() {
-        return new RecipeStream<>(BottlingMachineRecipe.recipeList).setRemover(recipe -> {
-            BottlingMachineRecipe recipe1 = BottlingMachineRecipe.findRecipe(recipe.input.stack, recipe.fluidInput);
-            if (recipe1 != null) {
-                remove(recipe1);
-                return true;
-            }
-            return false;
-        });
+    public SimpleObjectStream<BottlingMachineRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(BottlingMachineRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {
@@ -89,13 +101,7 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         BottlingMachineRecipe.recipeList.clear();
     }
 
-    private static BottlingMachineRecipe create(ItemStack output, Object input, FluidStack fluidInput) {
-        if (input instanceof IIngredient) input = ((IIngredient) input).getMatchingStacks();
-        return new BottlingMachineRecipe(output, input, fluidInput);
-    }
-
     public static class RecipeBuilder extends AbstractRecipeBuilder<BottlingMachineRecipe> {
-
 
         @Override
         public String getErrorMsg() {

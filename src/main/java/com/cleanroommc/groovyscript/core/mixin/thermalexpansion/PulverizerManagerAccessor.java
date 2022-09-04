@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.mixin.thermalexpansion;
+package com.cleanroommc.groovyscript.core.mixin.thermalexpansion;
 
 import cofh.core.inventory.ComparableItemStackValidated;
 import cofh.thermalexpansion.util.managers.machine.PulverizerManager;

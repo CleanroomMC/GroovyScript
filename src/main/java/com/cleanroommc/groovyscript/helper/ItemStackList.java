@@ -17,6 +17,14 @@ public class ItemStackList extends ArrayList<ItemStack> {
         super(collection);
     }
 
+    public ItemStack getOrEmpty(int i) {
+        if (i < 0 || i >= size()) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack item = get(i);
+        return item == null ? ItemStack.EMPTY : item;
+    }
+
     public int getRealSize() {
         if (isEmpty()) return 0;
         int realSize = 0;

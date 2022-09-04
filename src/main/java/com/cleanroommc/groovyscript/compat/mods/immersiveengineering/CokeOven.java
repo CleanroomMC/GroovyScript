@@ -4,13 +4,13 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.CokeOvenRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
@@ -36,54 +36,68 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         }
     }
 
-    public CokeOvenRecipe add(ItemStack output, Object input, int time, int creosoteOutput) {
-        CokeOvenRecipe recipe = create(output, input, time, creosoteOutput);
-        addScripted(recipe);
+    public CokeOvenRecipe add(ItemStack output, IIngredient input, int time, int creosoteOutput) {
+        CokeOvenRecipe recipe = new CokeOvenRecipe(output.copy(), ImmersiveEngineering.toIEInput(input), time, creosoteOutput);
+        add(recipe);
         return recipe;
     }
 
-    public void remove(CokeOvenRecipe recipe) {
-        if (CokeOvenRecipe.recipeList.removeIf(r -> r == recipe)) addBackup(recipe);
+    public boolean remove(CokeOvenRecipe recipe) {
+        if (CokeOvenRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
+        if (IngredientHelper.isEmpty(output)) {
+            GroovyLog.msg("Error removing Immersive Engineering Coke Oven recipe")
+                    .add("output must not be empty")
+                    .error()
+                    .post();
+            return;
+        }
         List<CokeOvenRecipe> list = CokeOvenRecipe.removeRecipes(output);
-        if (list.size() > 0) list.forEach(this::addBackup);
+        if (list.isEmpty()) {
+            GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
+                    .add("no recipes found for %s", output)
+                    .error()
+                    .post();
+            return;
+        }
+        list.forEach(this::addBackup);
     }
 
     public void removeByInput(ItemStack input) {
-        for (int i = 0; i < CokeOvenRecipe.recipeList.size(); i++) {
-            CokeOvenRecipe recipe = CokeOvenRecipe.recipeList.get(i);
+        if (IngredientHelper.isEmpty(input)) {
+            GroovyLog.msg("Error removing Immersive Engineering Coke Oven recipe")
+                    .add("output must not be empty")
+                    .error()
+                    .post();
+            return;
+        }
+        if (!CokeOvenRecipe.recipeList.removeIf(recipe -> {
             if (ApiUtils.stackMatchesObject(input, recipe.input)) {
                 addBackup(recipe);
-                CokeOvenRecipe.recipeList.remove(i);
-                break;
-            }
-        }
-    }
-
-    public RecipeStream<CokeOvenRecipe> stream() {
-        return new RecipeStream<>(CokeOvenRecipe.recipeList).setRemover(recipe -> {
-            CokeOvenRecipe recipe1 = CokeOvenRecipe.findRecipe(ApiUtils.getItemStackFromObject(recipe.input));
-            if (recipe1 != null) {
-                remove(recipe1);
                 return true;
             }
             return false;
-        });
+        })) {
+            GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
+                    .add("no recipes found for %s", input)
+                    .error()
+                    .post();
+        }
+    }
+
+    public SimpleObjectStream<CokeOvenRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(CokeOvenRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {
         CokeOvenRecipe.recipeList.forEach(this::addBackup);
         CokeOvenRecipe.recipeList.clear();
-    }
-
-    private static CokeOvenRecipe create(ItemStack output, Object input, int time, int creosoteOutput) {
-        if (!(input instanceof ItemStack)) {
-            if (input instanceof IIngredient) input = Arrays.asList(((IIngredient) input).getMatchingStacks());
-        }
-
-        return new CokeOvenRecipe(output, input, time, creosoteOutput);
     }
 
     public static class RecipeBuilder extends TimeRecipeBuilder<CokeOvenRecipe> {

@@ -1,10 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 
-import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.BlastFurnaceRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -36,44 +36,60 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         }
     }
 
-    public BlastFurnaceRecipe add(ItemStack output, Object input, int time, @Nonnull ItemStack slag) {
-        BlastFurnaceRecipe recipe = create(output, input, time, slag);
+    public BlastFurnaceRecipe add(ItemStack output, IIngredient input, int time, @Nonnull ItemStack slag) {
+        BlastFurnaceRecipe recipe = new BlastFurnaceRecipe(output.copy(), ImmersiveEngineering.toIEInput(input), time, IngredientHelper.copy(slag));
         add(recipe);
         return recipe;
     }
 
-    public void remove(BlastFurnaceRecipe recipe) {
-        for (int i = 0; i < BlastFurnaceRecipe.recipeList.size(); i++) {
-            BlastFurnaceRecipe rec = BlastFurnaceRecipe.recipeList.get(i);
-            if (rec == recipe) {
-                addBackup(rec);
-                BlastFurnaceRecipe.recipeList.remove(i);
-                break;
-            }
+    public boolean remove(BlastFurnaceRecipe recipe) {
+        if (BlastFurnaceRecipe.recipeList.removeIf(r -> r == recipe)) {
+            addBackup(recipe);
+            return true;
         }
+        return false;
     }
 
     public void removeByOutput(ItemStack output) {
+        if (IngredientHelper.isEmpty(output)) {
+            GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
+                    .add("output must not be empty")
+                    .error()
+                    .post();
+            return;
+        }
         List<BlastFurnaceRecipe> list = BlastFurnaceRecipe.removeRecipes(output);
-        if (list.size() > 0) list.forEach(this::addBackup);
+        if (list.isEmpty()) {
+            GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
+                    .add("no recipes found for %s", output)
+                    .error()
+                    .post();
+            return;
+        }
+        list.forEach(this::addBackup);
     }
 
     public void removeByInput(ItemStack input) {
+        if (IngredientHelper.isEmpty(input)) {
+            GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
+                    .add("input must not be empty")
+                    .error()
+                    .post();
+            return;
+        }
         BlastFurnaceRecipe recipe = BlastFurnaceRecipe.findRecipe(input);
         if (recipe != null) {
             remove(recipe);
+        } else {
+            GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
+                    .add("no recipes found for %s", input)
+                    .error()
+                    .post();
         }
     }
 
-    public RecipeStream<BlastFurnaceRecipe> stream() {
-        return new RecipeStream<>(BlastFurnaceRecipe.recipeList).setRemover(recipe -> {
-            BlastFurnaceRecipe recipe1 = BlastFurnaceRecipe.findRecipe(ApiUtils.createIngredientStack(recipe.input).stack);
-            if (recipe1 != null) {
-                remove(recipe1);
-                return true;
-            }
-            return false;
-        });
+    public SimpleObjectStream<BlastFurnaceRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(BlastFurnaceRecipe.recipeList).setRemover(this::remove);
     }
 
     public void removeAll() {
@@ -81,14 +97,9 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         BlastFurnaceRecipe.recipeList.clear();
     }
 
-    private static BlastFurnaceRecipe create(ItemStack output, Object input, int time, @Nonnull ItemStack slag) {
-        if (input instanceof IIngredient) input = ((IIngredient) input).getMatchingStacks();
-        return new BlastFurnaceRecipe(output, input, time, slag);
-    }
-
     public static class RecipeBuilder extends TimeRecipeBuilder<BlastFurnaceRecipe> {
 
-        protected ItemStack slag = ItemStack.EMPTY;
+        protected ItemStack slag;
 
         public RecipeBuilder slag(ItemStack slag) {
             this.slag = slag;
@@ -102,9 +113,10 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 1, 1, 2);
+            validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
             if (time < 0) time = 200;
+            if (slag == null) slag = ItemStack.EMPTY;
         }
 
         @Override

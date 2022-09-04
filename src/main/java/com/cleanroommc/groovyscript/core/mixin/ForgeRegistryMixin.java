@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.mixin;
+package com.cleanroommc.groovyscript.core.mixin;
 
 import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
 import com.google.common.collect.BiMap;
