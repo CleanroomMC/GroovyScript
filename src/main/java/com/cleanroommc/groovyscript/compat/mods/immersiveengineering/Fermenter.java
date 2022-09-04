@@ -4,7 +4,7 @@ import blusunrize.immersiveengineering.api.crafting.FermenterRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -67,8 +67,8 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         }
     }
 
-    public RecipeStream<FermenterRecipe> stream() {
-        return new RecipeStream<>(FermenterRecipe.recipeList).setRemover(r -> {
+    public SimpleObjectStream<FermenterRecipe> stream() {
+        return new SimpleObjectStream<>(FermenterRecipe.recipeList).setRemover(r -> {
             FermenterRecipe recipe = FermenterRecipe.findRecipe(r.input.stack);
             if (recipe != null) {
                 remove(recipe);

@@ -5,7 +5,7 @@ import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -67,8 +67,8 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         }
     }
 
-    public RecipeStream<ArcFurnaceRecipe> stream() {
-        return new RecipeStream<>(ArcFurnaceRecipe.recipeList).setRemover(recipe -> {
+    public SimpleObjectStream<ArcFurnaceRecipe> stream() {
+        return new SimpleObjectStream<>(ArcFurnaceRecipe.recipeList).setRemover(recipe -> {
             NonNullList<ItemStack> list = NonNullList.create();
             for (IngredientStack additive : recipe.additives) {
                 list.add(additive.stack);

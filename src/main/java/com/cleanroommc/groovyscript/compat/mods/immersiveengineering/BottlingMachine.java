@@ -4,7 +4,7 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.BottlingMachineRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
@@ -73,8 +73,8 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         }
     }
 
-    public RecipeStream<BottlingMachineRecipe> stream() {
-        return new RecipeStream<>(BottlingMachineRecipe.recipeList).setRemover(recipe -> {
+    public SimpleObjectStream<BottlingMachineRecipe> stream() {
+        return new SimpleObjectStream<>(BottlingMachineRecipe.recipeList).setRemover(recipe -> {
             BottlingMachineRecipe recipe1 = BottlingMachineRecipe.findRecipe(recipe.input.stack, recipe.fluidInput);
             if (recipe1 != null) {
                 remove(recipe1);

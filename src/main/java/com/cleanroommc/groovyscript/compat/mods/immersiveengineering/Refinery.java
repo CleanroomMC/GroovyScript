@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 import blusunrize.immersiveengineering.api.crafting.RefineryRecipe;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraftforge.fluids.FluidStack;
@@ -59,8 +59,8 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         remove(recipe);
     }
 
-    public RecipeStream<RefineryRecipe> stream() {
-        return new RecipeStream<>(RefineryRecipe.recipeList).setRemover(recipe -> {
+    public SimpleObjectStream<RefineryRecipe> stream() {
+        return new SimpleObjectStream<>(RefineryRecipe.recipeList).setRemover(recipe -> {
             RefineryRecipe r = RefineryRecipe.findRecipe(recipe.input0, recipe.input1);
             if (r != null) {
                 remove(r);

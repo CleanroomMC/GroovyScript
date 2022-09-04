@@ -5,7 +5,7 @@ import blusunrize.immersiveengineering.api.crafting.SqueezerRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -73,8 +73,8 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         remove(recipe);
     }
 
-    public RecipeStream<SqueezerRecipe> stream() {
-        return new RecipeStream<>(SqueezerRecipe.recipeList).setRemover(recipe -> {
+    public SimpleObjectStream<SqueezerRecipe> stream() {
+        return new SimpleObjectStream<>(SqueezerRecipe.recipeList).setRemover(recipe -> {
             SqueezerRecipe r = SqueezerRecipe.findRecipe(recipe.input.stack);
             if (r != null) {
                 remove(r);

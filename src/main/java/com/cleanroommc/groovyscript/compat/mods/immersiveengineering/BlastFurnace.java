@@ -4,7 +4,7 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.BlastFurnaceRecipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.RecipeStream;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -65,8 +65,8 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         }
     }
 
-    public RecipeStream<BlastFurnaceRecipe> stream() {
-        return new RecipeStream<>(BlastFurnaceRecipe.recipeList).setRemover(recipe -> {
+    public SimpleObjectStream<BlastFurnaceRecipe> stream() {
+        return new SimpleObjectStream<>(BlastFurnaceRecipe.recipeList).setRemover(recipe -> {
             BlastFurnaceRecipe recipe1 = BlastFurnaceRecipe.findRecipe(ApiUtils.createIngredientStack(recipe.input).stack);
             if (recipe1 != null) {
                 remove(recipe1);
