@@ -126,7 +126,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         validateFluids(msg, 0, 0, 0, 0);
     }
 
-    private static String getRequiredString(int min, int max, String type) {
+    protected static String getRequiredString(int min, int max, String type) {
         if (max <= 0) {
             return "No " + type + "s allowed";
         }

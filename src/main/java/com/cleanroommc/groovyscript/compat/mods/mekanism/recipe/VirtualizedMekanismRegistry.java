@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.machines.MachineRecipe;
+import org.jetbrains.annotations.ApiStatus;
 
 public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, R>> extends VirtualizedRegistry<R> {
 
@@ -16,6 +17,8 @@ public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, 
         this.recipeRegistry = recipeRegistry;
     }
 
+    @GroovyBlacklist
+    @ApiStatus.Internal
     @Override
     public void onReload() {
         removeScripted().forEach(recipeRegistry::remove);
