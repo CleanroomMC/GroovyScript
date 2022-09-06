@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.mixin.draconicevolution;
+package com.cleanroommc.groovyscript.core.mixin.draconicevolution;
 
 import com.brandon3055.draconicevolution.api.fusioncrafting.IFusionRecipe;
 import com.brandon3055.draconicevolution.lib.FusionRecipeRegistry;
