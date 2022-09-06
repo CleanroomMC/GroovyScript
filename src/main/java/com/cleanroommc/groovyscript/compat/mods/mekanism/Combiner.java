@@ -6,9 +6,7 @@ import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.DoubleMachineInput;
-import mekanism.common.recipe.inputs.ItemStackInput;
 import mekanism.common.recipe.machines.CombinerRecipe;
-import mekanism.common.recipe.machines.CrusherRecipe;
 import net.minecraft.item.ItemStack;
 
 public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
@@ -18,7 +16,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
     }
 
     public CombinerRecipe add(IIngredient ingredient, ItemStack extra, ItemStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crusher recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crusher recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(extra), () -> "extra input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
@@ -37,7 +35,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
     }
 
     public boolean removeByInput(IIngredient ingredient, ItemStack extra) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Combiner recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Combiner recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(extra), () -> "extra input must not be empty");
         if (msg.postIfNotEmpty()) return false;

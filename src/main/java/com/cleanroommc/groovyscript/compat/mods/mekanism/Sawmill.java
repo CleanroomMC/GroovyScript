@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
-import mekanism.common.recipe.machines.CrusherRecipe;
 import mekanism.common.recipe.machines.SawmillRecipe;
 import net.minecraft.item.ItemStack;
 
@@ -17,7 +16,7 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
     }
 
     public SawmillRecipe add(IIngredient ingredient, ItemStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Sawmill recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Sawmill recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;

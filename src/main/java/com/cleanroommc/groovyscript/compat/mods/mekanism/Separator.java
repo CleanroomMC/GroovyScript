@@ -5,9 +5,7 @@ import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
-import mekanism.common.recipe.inputs.ChemicalPairInput;
 import mekanism.common.recipe.inputs.FluidInput;
-import mekanism.common.recipe.machines.ChemicalInfuserRecipe;
 import mekanism.common.recipe.machines.SeparatorRecipe;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -18,7 +16,7 @@ public class Separator extends VirtualizedMekanismRegistry<SeparatorRecipe> {
     }
 
     public SeparatorRecipe add(FluidStack input, GasStack leftOutput, GasStack rightOutput, double energy) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Electrolytic Separator recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Electrolytic Separator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(leftOutput), () -> "left gas output must not be empty");
         msg.add(IngredientHelper.isEmpty(rightOutput), () -> "right gas output must not be empty");
@@ -30,7 +28,7 @@ public class Separator extends VirtualizedMekanismRegistry<SeparatorRecipe> {
     }
 
     public boolean removeByInput(FluidStack input) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Electrolytic Separator recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Electrolytic Separator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 

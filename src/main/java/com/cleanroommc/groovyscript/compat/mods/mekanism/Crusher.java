@@ -16,7 +16,7 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
     }
 
     public CrusherRecipe add(IIngredient ingredient, ItemStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crusher recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crusher recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;

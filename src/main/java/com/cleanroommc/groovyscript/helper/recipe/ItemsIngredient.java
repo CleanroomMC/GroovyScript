@@ -38,7 +38,13 @@ public class ItemsIngredient extends IngredientBase {
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        return itemStacks.toArray(new ItemStack[0]);
+        ItemStack[] stacks = itemStacks.toArray(new ItemStack[0]);
+        for (int i = 0; i < stacks.length; i++) {
+            ItemStack stack = stacks[i].copy();
+            stack.setCount(getAmount());
+            stacks[i] = stack;
+        }
+        return stacks;
     }
 
     @Override

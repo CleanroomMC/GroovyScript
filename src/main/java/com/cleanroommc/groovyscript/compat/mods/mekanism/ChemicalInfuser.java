@@ -15,7 +15,7 @@ public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuser
     }
 
     public ChemicalInfuserRecipe add(GasStack leftInput, GasStack rightInput, GasStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Chemical Infuser recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Chemical Infuser recipe").error();
         msg.add(IngredientHelper.isEmpty(leftInput), () -> "left gas input must not be empty");
         msg.add(IngredientHelper.isEmpty(rightInput), () -> "right gas input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "gas output must not be empty");
@@ -27,7 +27,7 @@ public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuser
     }
 
     public boolean removeByInput(GasStack leftInput, GasStack rightInput) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Chemical Infuser recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Chemical Infuser recipe").error();
         msg.add(IngredientHelper.isEmpty(leftInput), () -> "left gas input must not be empty");
         msg.add(IngredientHelper.isEmpty(rightInput), () -> "right gas input must not be empty");
         if (msg.postIfNotEmpty()) return false;

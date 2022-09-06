@@ -7,7 +7,6 @@ import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
-import mekanism.common.recipe.machines.DissolutionRecipe;
 import mekanism.common.recipe.machines.OxidationRecipe;
 import net.minecraft.item.ItemStack;
 
@@ -18,7 +17,7 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
     }
 
     public OxidationRecipe add(IIngredient ingredient, GasStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Oxidizer recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Oxidizer recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;

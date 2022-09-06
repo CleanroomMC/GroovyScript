@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.GasInput;
-import mekanism.common.recipe.machines.SolarNeutronRecipe;
 import mekanism.common.recipe.machines.WasherRecipe;
 
 public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
@@ -16,7 +15,7 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
     }
 
     public WasherRecipe add(GasStack input, GasStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Washer recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Washer recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
@@ -28,7 +27,7 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
     }
 
     public boolean removeByInput(GasStack input) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Washer recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Washer recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 

@@ -6,10 +6,8 @@ import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.api.infuse.InfuseRegistry;
 import mekanism.api.infuse.InfuseType;
-import mekanism.common.InfuseStorage;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.InfusionInput;
-import mekanism.common.recipe.inputs.ItemStackInput;
 import mekanism.common.recipe.machines.MetallurgicInfuserRecipe;
 import net.minecraft.item.ItemStack;
 
@@ -21,7 +19,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
 
     public MetallurgicInfuserRecipe add(IIngredient ingredient, String infuseType, int infuseAmount, ItemStack output) {
         InfuseType infuseType1 = InfuseRegistry.get(infuseType);
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Metallurgic Infuser recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Metallurgic Infuser recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         msg.add(infuseType1 == null, () -> infuseType + " is not a valid infuse type");
@@ -41,7 +39,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
 
     public boolean removeByInput(IIngredient ingredient, String infuseType) {
         InfuseType infuseType1 = InfuseRegistry.get(infuseType);
-        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Metallurgic Infuser recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Metallurgic Infuser recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(infuseType1 == null, () -> infuseType + " is not a valid infuse type");
         if (msg.postIfNotEmpty()) return false;

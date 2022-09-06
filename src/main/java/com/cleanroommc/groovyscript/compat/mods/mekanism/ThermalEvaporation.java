@@ -15,7 +15,7 @@ public class ThermalEvaporation extends VirtualizedMekanismRegistry<ThermalEvapo
     }
 
     public ThermalEvaporationRecipe add(FluidStack input, FluidStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Solar Neutron Activator recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Solar Neutron Activator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
@@ -27,7 +27,7 @@ public class ThermalEvaporation extends VirtualizedMekanismRegistry<ThermalEvapo
     }
 
     public boolean removeByInput(FluidStack input) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Solar Neutron Activator recipe");
+        GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Solar Neutron Activator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 
