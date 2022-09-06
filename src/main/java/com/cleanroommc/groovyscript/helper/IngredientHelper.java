@@ -38,7 +38,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(IIngredient ingredient) {
-        return ingredient == null || ingredient.getMatchingStacks().length == 0 || ingredient.getAmount() == 0;
+        return ingredient == null || ingredient.getMatchingStacks().length == 0 || ingredient.getAmount() <= 0;
     }
 
     public static boolean isEmpty(ItemStack itemStack) {
@@ -47,6 +47,11 @@ public class IngredientHelper {
 
     public static boolean isEmpty(FluidStack itemStack) {
         return itemStack == null || itemStack.amount <= 0;
+    }
+
+
+    public static boolean isEmpty(GasStack gasStack) {
+        return gasStack == null || gasStack.getGas() == null || gasStack.amount <= 0;
     }
 
     /**

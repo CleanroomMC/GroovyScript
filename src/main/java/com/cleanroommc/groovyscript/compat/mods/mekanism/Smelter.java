@@ -6,25 +6,25 @@ import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
-import mekanism.common.recipe.machines.CrusherRecipe;
+import mekanism.common.recipe.machines.SmeltingRecipe;
 import net.minecraft.item.ItemStack;
 
-public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
+public class Smelter extends VirtualizedMekanismRegistry<SmeltingRecipe> {
 
-    public Crusher() {
-        super(RecipeHandler.Recipe.CRUSHER, "Crusher", "crusher");
+    public Smelter() {
+        super(RecipeHandler.Recipe.ENERGIZED_SMELTER, "Smelter", "smelter", "Furnace", "furnace");
     }
 
-    public CrusherRecipe add(IIngredient ingredient, ItemStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crusher recipe").error();
+    public SmeltingRecipe add(IIngredient ingredient, ItemStack output) {
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Smelter recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
         output = output.copy();
-        CrusherRecipe recipe1 = null;
+        SmeltingRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            CrusherRecipe recipe = new CrusherRecipe(itemStack.copy(), output);
+            SmeltingRecipe recipe = new SmeltingRecipe(itemStack.copy(), output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -39,7 +39,7 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
         }
         boolean found = false;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            CrusherRecipe recipe = recipeRegistry.get().remove(new ItemStackInput(itemStack));
+            SmeltingRecipe recipe = recipeRegistry.get().remove(new ItemStackInput(itemStack));
             if (recipe != null) {
                 addBackup(recipe);
                 found = true;
