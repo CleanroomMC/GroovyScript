@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript;
+package com.cleanroommc.groovyscript.core;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraftforge.fml.common.Loader;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class LateMixin implements ILateMixinLoader {
 
-    public static final List<String> modMixins = ImmutableList.of("jei", "mekanism", "enderio", "thermalexpansion");
+    public static final List<String> modMixins = ImmutableList.of("jei", "mekanism", "enderio", "thermalexpansion", "draconicevolution");
 
     @Override
     public List<String> getMixinConfigs() {
