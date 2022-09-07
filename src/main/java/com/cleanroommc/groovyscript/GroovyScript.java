@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript;
 
-import com.cleanroommc.groovyscript.api.BracketHandler;
 import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
+import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.event.Events;
@@ -41,7 +41,7 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
         startupPath = new File(scriptPath + "/startup");
         SandboxRunner.init();
         Events.init();
-        BracketHandler.init();
+        BracketHandlerManager.init();
         VanillaModule.initializeBinding();
     }
 

@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.core.mixin;
 
-import com.cleanroommc.groovyscript.api.INBTResourceStack;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.INBTResourceStack;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import net.minecraft.item.ItemStack;
@@ -35,7 +35,8 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
     @Shadow
     public abstract boolean isFluidEqual(FluidStack other);
 
-    @Shadow public abstract Fluid getFluid();
+    @Shadow
+    public abstract Fluid getFluid();
 
     @Unique
     protected Closure<Object> matchCondition;
@@ -109,12 +110,6 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
     @Override
     public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    @Override
-    public String asGroovyCode() {
-        String code = "'<fluid:" + getFluid().getName() + ">'";
-        return amount != 1000 ? code + " * " + amount : code;
     }
 
     @Inject(method = "copy", at = @At("RETURN"), cancellable = true)
