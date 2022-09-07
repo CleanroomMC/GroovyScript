@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class ThermalEvaporation extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
 
     public ThermalEvaporation() {
-        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, "ThermalEvaporationPlant");
+        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, "ThermalEvaporationPlant", "thermal_evaporation_plant", "TEP");
     }
 
     public ThermalEvaporationRecipe add(FluidStack input, FluidStack output) {

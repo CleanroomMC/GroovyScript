@@ -93,13 +93,13 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
         }
 
         public RecipeBuilder gasOutput(GasStack gas) {
-            this.gasInput.add(gas);
+            this.gasOutput.add(gas);
             return this;
         }
 
         public RecipeBuilder gasOutput(Collection<GasStack> gases) {
             if (gases != null && !gases.isEmpty()) {
-                for (GasStack gas : gasInput) {
+                for (GasStack gas : gasOutput) {
                     gasOutput(gas);
                 }
             }
@@ -108,7 +108,7 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
 
         public RecipeBuilder gasOutput(GasStack... gases) {
             if (gases != null && gases.length > 0) {
-                for (GasStack gas : gasInput) {
+                for (GasStack gas : gasOutput) {
                     gasOutput(gas);
                 }
             }

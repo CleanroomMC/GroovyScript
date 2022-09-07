@@ -16,15 +16,33 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
     }
 
     public SawmillRecipe add(IIngredient ingredient, ItemStack output) {
+        return add(ingredient, output, null, 0.0);
+    }
+
+    public SawmillRecipe add(IIngredient ingredient, ItemStack output, ItemStack secondary) {
+        return add(ingredient, output, secondary, 1.0);
+    }
+
+    public SawmillRecipe add(IIngredient ingredient, ItemStack output, ItemStack secondary, double chance) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Sawmill recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
+        boolean withSecondary = !IngredientHelper.isEmpty(secondary);
+        if (withSecondary) {
+            if (chance <= 0) chance = 1;
+            secondary = secondary.copy();
+        }
+
         output = output.copy();
         SawmillRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            SawmillRecipe recipe = new SawmillRecipe(itemStack.copy(), output);
+            SawmillRecipe recipe;
+            if (withSecondary)
+                recipe = new SawmillRecipe(itemStack.copy(), output);
+            else
+                recipe = new SawmillRecipe(itemStack.copy(), output, secondary, chance);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
