@@ -22,6 +22,7 @@ public class NetworkHandler {
 
     public static void init() {
         registerS2C(SReloadJei.class);
+        registerS2C(SCopy.class);
     }
 
     private static void registerC2S(Class<? extends IPacket> clazz) {

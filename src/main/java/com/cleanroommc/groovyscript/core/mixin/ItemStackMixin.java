@@ -140,17 +140,4 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
         this.nbtMatcher = nbtFilter == null ? nbt -> true : nbtFilter;
         return this;
     }
-
-    @Override
-    public String asGroovyCode() {
-        String code = "'<item:" + getItem().getRegistryName();
-        if (getMetadata() != 0) {
-            code += ":" + getMetadata();
-        }
-        code += ">'";
-        if (stackTagCompound != null) {
-            code += ".withNbt(" + NbtHelper.toGroovyCode(stackTagCompound, false) + ")";
-        }
-        return getCount() != 1 ? code + " * " + getCount() : code;
-    }
 }
