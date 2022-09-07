@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.helper;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -93,6 +94,21 @@ public class IngredientHelper {
         builder.append(":");
         if (colored) builder.append(TextFormatting.AQUA);
         builder.append(fluidStack.getFluid().getName());
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append(">'");
+        return builder.toString();
+    }
+
+    public static String asGroovyCode(Gas gasStack, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("'<");
+        if (colored) builder.append(TextFormatting.DARK_GREEN);
+        builder.append("gas");
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append(":");
+        if (colored) builder.append(TextFormatting.AQUA);
+        builder.append(gasStack.getName());
         if (colored) builder.append(TextFormatting.GRAY);
         builder.append(">'");
         return builder.toString();

@@ -6,20 +6,26 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class SimpleCommand extends CommandBase {
 
     private final String name;
     private final String usage;
     private final ICommand command;
+    private final List<String> aliases = new ArrayList<>();
 
-    public SimpleCommand(String name, String usage, ICommand command) {
+    public SimpleCommand(String name, String usage, ICommand command, String... aliases) {
         this.name = name;
         this.usage = usage;
         this.command = command;
+        Collections.addAll(this.aliases, aliases);
     }
 
-    public SimpleCommand(String name, ICommand command) {
-        this(name, "", command);
+    public SimpleCommand(String name, ICommand command, String... aliases) {
+        this(name, "", command, aliases);
     }
 
     @Override
@@ -39,5 +45,10 @@ public class SimpleCommand extends CommandBase {
 
     public interface ICommand {
         void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException;
+    }
+
+    @Override
+    public @NotNull List<String> getAliases() {
+        return aliases;
     }
 }

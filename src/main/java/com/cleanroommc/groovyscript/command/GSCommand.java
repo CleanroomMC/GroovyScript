@@ -131,6 +131,7 @@ public class GSCommand extends CommandTreeBase {
                 }
             }
         }));
+        addSubcommand(new GSMekanismCommand());
     }
 
     @Override
