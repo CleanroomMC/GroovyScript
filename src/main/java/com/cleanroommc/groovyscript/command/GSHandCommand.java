@@ -22,11 +22,11 @@ import java.util.List;
 public class GSHandCommand {
 
     public static void itemInformation(List<ITextComponent> messages, @NotNull ItemStack stack, boolean prettyNbt) {
-        String s = IngredientHelper.asGroovyCode(stack, true, prettyNbt);
+        String itemNbt = IngredientHelper.asGroovyCode(stack, true, prettyNbt);
+        String item = IngredientHelper.asGroovyCode(stack, true);
 
-        messages.add(new TextComponentString("Items:").setStyle(new Style().setColor(TextFormatting.GREEN)));
-        messages.add(new TextComponentString(s));
-        GuiScreen.setClipboardString(s);
+        messages.add(TextCopyable.string(item, itemNbt).build());
+        GuiScreen.setClipboardString(item);
     }
 
     public static void blockInformation(List<ITextComponent> messages, @NotNull Block block) {
@@ -49,20 +49,20 @@ public class GSHandCommand {
 
         messages.add(new TextComponentString("Fluids:")
                 .setStyle(new Style().setColor(TextFormatting.GREEN)));
-        messages.add(new TextComponentString(s));
+        messages.add(TextCopyable.string(s, " - " + stack.getFluid().getName()).build());
     }
 
     public static void oredictInformation(List<ITextComponent> messages, ItemStack stack) {
         String s;
-        String formatted;
         int[] ids = OreDictionary.getOreIDs(stack);
         if (ids.length > 0) {
             messages.add(new TextComponentString("Ore Dictionaries:")
                     .setStyle(new Style().setColor(TextFormatting.GREEN)));
             for (int id : ids) {
-                s = IngredientHelper.asGroovyCode(OreDictionary.getOreName(id), true);
+                String oreName = OreDictionary.getOreName(id);
+                s = IngredientHelper.asGroovyCode(oreName, true);
 
-                messages.add(new TextComponentString(s));
+                messages.add(TextCopyable.string(s, " - " + oreName).build());
             }
         }
     }

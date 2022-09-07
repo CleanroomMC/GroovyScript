@@ -51,7 +51,7 @@ public class IngredientHelper {
         return itemStack == null || itemStack.amount <= 0;
     }
 
-    public static String asGroovyCode(ItemStack itemStack, boolean colored, boolean prettyNbt) {
+    public static String asGroovyCode(ItemStack itemStack, boolean colored) {
         StringBuilder builder = new StringBuilder();
         if (colored) builder.append(TextFormatting.GRAY);
         builder.append("'<");
@@ -69,6 +69,11 @@ public class IngredientHelper {
             if (colored) builder.append(TextFormatting.GRAY);
         }
         builder.append(">'");
+        return builder.toString();
+    }
+
+    public static String asGroovyCode(ItemStack itemStack, boolean colored, boolean prettyNbt) {
+        StringBuilder builder = new StringBuilder().append(asGroovyCode(itemStack, colored));
         if (itemStack.hasTagCompound()) {
             builder.append(".withNbt(");
             builder.append(NbtHelper.toGroovyCode(itemStack.getTagCompound(), prettyNbt, colored));

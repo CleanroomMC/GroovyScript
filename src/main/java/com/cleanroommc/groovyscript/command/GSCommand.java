@@ -2,13 +2,12 @@ package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
+import com.cleanroommc.groovyscript.network.SCopy;
 import com.cleanroommc.groovyscript.network.SReloadJei;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
-import com.google.common.base.Joiner;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -137,8 +136,8 @@ public class GSCommand extends CommandTreeBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (args.length > 0) {
-            if (args[0].equals("copy")) {
-                GuiScreen.setClipboardString(Joiner.on(' ').join(Arrays.copyOfRange(args, 1, args.length)));
+            if (sender instanceof EntityPlayerMP && args[0].equals("copy")) {
+                NetworkHandler.sendToPlayer(new SCopy(Arrays.copyOfRange(args, 1, args.length)), (EntityPlayerMP) sender);
                 return;
             }
         }
