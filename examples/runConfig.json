@@ -1,0 +1,23 @@
+{
+  "packName": "",
+  "version": "0.0.1",
+  "loaders": {
+    "preInit": [
+      "preInit/"
+    ],
+    "init": [
+    ],
+    "postInit": [
+      "startup/"
+    ]
+  },
+  "packmodes": {
+    "normal": [
+      "normal/"
+    ],
+    "expert": [
+      "expert"
+    ]
+  },
+  "asm": null
+}
