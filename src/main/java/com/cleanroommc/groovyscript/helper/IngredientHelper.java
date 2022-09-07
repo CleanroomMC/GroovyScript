@@ -7,6 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class IngredientHelper {
 
@@ -41,7 +44,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(IIngredient ingredient) {
-        return ingredient == null || ingredient.getMatchingStacks().length == 0 || ingredient.getAmount() == 0;
+        return ingredient == null || ingredient.getMatchingStacks().length == 0 || ingredient.getAmount() <= 0;
     }
 
     public static boolean isEmpty(ItemStack itemStack) {
@@ -50,6 +53,24 @@ public class IngredientHelper {
 
     public static boolean isEmpty(FluidStack itemStack) {
         return itemStack == null || itemStack.amount <= 0;
+    }
+
+
+    public static boolean isEmpty(GasStack gasStack) {
+        return gasStack == null || gasStack.getGas() == null || gasStack.amount <= 0;
+    }
+
+    /**
+     * Useful when the item can be empty or null, but only want to copy non empty items
+     */
+    @NotNull
+    public static ItemStack copy(@Nullable ItemStack item) {
+        return item == null || item == ItemStack.EMPTY ? ItemStack.EMPTY : item.copy();
+    }
+
+    @Contract("null -> null")
+    public static FluidStack copy(FluidStack fluid) {
+        return fluid == null ? null : fluid.copy();
     }
 
     public static String asGroovyCode(ItemStack itemStack, boolean colored) {

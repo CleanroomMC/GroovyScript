@@ -1,14 +1,15 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.IBracketHandler;
+import com.cleanroommc.groovyscript.api.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.api.IGroovyPropertyGetter;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.event.GroovyEvent;
-import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import groovy.lang.Closure;
 import groovy.lang.Script;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 
 import java.util.Arrays;
@@ -39,6 +40,10 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
             }
             if (method.equals(PRINT) || method.equals(PRINTLN) || method.equals(PRINTF)) {
                 Object msg = args.length == 0 ? "" : args[0];
+                if (msg == null) {
+                    GroovyLog.LOG.info("null");
+                    return null;
+                }
                 Object[] args2 = args.length < 2 ? new Object[0] : Arrays.copyOfRange(args, 1, args.length);
                 GroovyLog.LOG.info(msg.toString(), args2);
                 return null;
@@ -56,10 +61,15 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
             return null;
         }
 
-        if (!InterceptionManager.INSTANCE.isValid(receiver.getClass(), method, args)) {
-            throw SandboxSecurityException.format("Prohibited method call '" + method + "' on class '" + receiver.getClass().getName() + "'!");
+        Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
+        String obfMethodName = method;
+        if (!FMLLaunchHandler.isDeobfuscatedEnvironment()) {
+            obfMethodName = GroovyDeobfuscationMapper.getObfuscatedMethodName(clazz, method);
         }
-        return super.onMethodCall(invoker, receiver, method, args);
+        if (!InterceptionManager.INSTANCE.isValid(clazz, method, obfMethodName, args)) {
+            throw SandboxSecurityException.format("Prohibited method call '" + method + "' on class '" + clazz.getName() + "'!");
+        }
+        return super.onMethodCall(invoker, receiver, obfMethodName, args);
     }
 
     @Override
@@ -72,34 +82,46 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onStaticCall(Invoker invoker, Class<?> receiver, String method, Object... args) throws Throwable {
-        if (!InterceptionManager.INSTANCE.isValid(receiver, method, args)) {
+        String obfMethodName = method;
+        if (!FMLLaunchHandler.isDeobfuscatedEnvironment()) {
+            obfMethodName = GroovyDeobfuscationMapper.getObfuscatedMethodName(receiver, method);
+        }
+        if (!InterceptionManager.INSTANCE.isValid(receiver, method, obfMethodName, args)) {
             throw SandboxSecurityException.format("Prohibited static method call '" + method + "' on class '" + receiver.getName() + "'!");
         }
-        return super.onStaticCall(invoker, receiver, method, args);
+        return super.onStaticCall(invoker, receiver, obfMethodName, args);
     }
 
     @Override
     public Object onGetProperty(Invoker invoker, Object receiver, String property) throws Throwable {
+        if (receiver instanceof IGroovyEventHandler) {
+            receiver = ((IGroovyEventHandler) receiver).getEventManager();
+        }
         if (receiver instanceof IGroovyPropertyGetter) {
             Object r = ((IGroovyPropertyGetter) receiver).getProperty(property);
             return r != null ? r : super.onGetProperty(invoker, receiver, property);
         }
-        if (receiver instanceof IGroovyEventHandler) {
-            return onGetProperty(invoker, ((IGroovyEventHandler) receiver).getEventManager(), property);
-        }
         Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
-        if (InterceptionManager.INSTANCE.isBlacklistedField(clazz, property, FieldAccess.GET)) {
+        String obfPropertyName = property;
+        if (!FMLLaunchHandler.isDeobfuscatedEnvironment()) {
+            obfPropertyName = GroovyDeobfuscationMapper.getObfuscatedMethodName(clazz, property);
+        }
+        if (InterceptionManager.INSTANCE.isBlacklistedField(clazz, obfPropertyName, FieldAccess.GET)) {
             throw SandboxSecurityException.format("Prohibited property access '" + property + "' on class '" + clazz.getName() + "'!");
         }
-        return super.onGetProperty(invoker, receiver, property);
+        return super.onGetProperty(invoker, receiver, obfPropertyName);
     }
 
     @Override
     public Object onSetProperty(Invoker invoker, Object receiver, String property, Object value) throws Throwable {
         Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
-        if (InterceptionManager.INSTANCE.isBlacklistedField(clazz, property, FieldAccess.SET)) {
+        String obfPropertyName = property;
+        if (!FMLLaunchHandler.isDeobfuscatedEnvironment()) {
+            obfPropertyName = GroovyDeobfuscationMapper.getObfuscatedMethodName(clazz, property);
+        }
+        if (InterceptionManager.INSTANCE.isBlacklistedField(clazz, obfPropertyName, FieldAccess.SET)) {
             throw SandboxSecurityException.format("Prohibited property access '" + property + "' on class '" + clazz.getName() + "'!");
         }
-        return super.onSetProperty(invoker, receiver, property, value);
+        return super.onSetProperty(invoker, receiver, obfPropertyName, value);
     }
 }

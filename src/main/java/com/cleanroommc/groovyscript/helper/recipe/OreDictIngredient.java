@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
@@ -32,6 +33,7 @@ public class OreDictIngredient implements IIngredient {
     @Override
     public boolean test(ItemStack stack) {
         // TODO this sucks
+        if (IngredientHelper.isEmpty(stack)) return false;
         for (int id : OreDictionary.getOreIDs(stack)) {
             String oreName = OreDictionary.getOreName(id);
             if (oreDict.equals(oreName)) {
@@ -53,7 +55,13 @@ public class OreDictIngredient implements IIngredient {
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        return OreDictionary.getOres(oreDict).toArray(new ItemStack[0]);
+        ItemStack[] stacks = OreDictionary.getOres(oreDict).toArray(new ItemStack[0]);
+        for (int i = 0; i < stacks.length; i++) {
+            ItemStack stack = stacks[i].copy();
+            stack.setCount(getAmount());
+            stacks[i] = stack;
+        }
+        return stacks;
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
 import com.cleanroommc.groovyscript.api.IGroovyPropertyGetter;
+import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolution;
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
+import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
 import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
@@ -26,8 +28,10 @@ public class ModSupport implements IGroovyPropertyGetter {
     public static final Container<EnderIO> ENDER_IO = new Container<>("enderio", "Ender IO", EnderIO::new, "eio");
     public static final Container<JustEnoughItems> JEI = new Container<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
     public static final Container<Mekanism> MEKANISM = new Container<>("mekanism", "Mekanism", Mekanism::new);
-    public static final Container<ThermalExpansion> THERMAL_EXPANSION = new Container<>("thermalexpansion", "Thermal Expansion", ThermalExpansion::new, "te");
+    public static final Container<ThermalExpansion> THERMAL_EXPANSION = new Container<>("thermalexpansion", "Thermal Expansion", ThermalExpansion::new, "te", "thermal");
     public static final Container<TinkersConstruct> TINKERS_CONSTRUCT = new Container<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new, "ticon", "tinkersconstruct");
+    public static final Container<DraconicEvolution> DRACONIC_EVO = new Container<>("draconicevolution", "Draconic Evolution", DraconicEvolution::new, "de");
+    public static final Container<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new Container<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
 
     public static Collection<Container<? extends ModPropertyContainer>> getAllContainers() {
         return new ObjectOpenHashSet<>(containers.values());

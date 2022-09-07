@@ -120,7 +120,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
         }
 
         @Override
-        public @Nullable BasicSoulBinderRecipe buildAndRegister() {
+        public @Nullable BasicSoulBinderRecipe register() {
             if (!validate()) return null;
             BasicSoulBinderRecipe recipe = new BasicSoulBinderRecipe(
                     input.get(0).getMatchingStacks()[0],

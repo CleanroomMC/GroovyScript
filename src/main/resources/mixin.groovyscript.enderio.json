@@ -1,6 +1,6 @@
 {
-  "package": "com.cleanroommc.groovyscript.mixin.enderio",
-  "refmap": "mixins.bogosorter.refmap.json",
+  "package": "com.cleanroommc.groovyscript.core.mixin.enderio",
+  "refmap": "mixins.groovyscript.refmap.json",
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",

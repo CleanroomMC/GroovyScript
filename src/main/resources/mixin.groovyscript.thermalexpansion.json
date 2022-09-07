@@ -1,10 +1,12 @@
 {
-  "package": "com.cleanroommc.groovyscript.mixin.thermalexpansion",
-  "refmap": "mixins.bogosorter.refmap.json",
+  "package": "com.cleanroommc.groovyscript.core.mixin.thermalexpansion",
+  "refmap": "mixins.groovyscript.refmap.json",
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BrewerManagerAccessor",
+    "CrucibleManagerAccessor",
     "PulverizerManagerAccessor"
   ]
 }

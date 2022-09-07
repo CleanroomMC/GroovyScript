@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
-import groovy.lang.Binding;
+import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
 
 public class VanillaModule {
 
-    public static void initializeBinding(Binding binding) {
-        binding.setVariable("crafting", new Crafting());
+    public static void initializeBinding() {
+        SandboxRunner.registerBinding("crafting", new Crafting());
     }
 
 }

@@ -67,22 +67,6 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
             return output(output, 1f);
         }
 
-        @Override
-        public AbstractRecipeBuilder<Recipe> output(ItemStack... outputs) {
-            for (ItemStack output : outputs) {
-                output(output);
-            }
-            return this;
-        }
-
-        @Override
-        public AbstractRecipeBuilder<Recipe> output(Collection<ItemStack> outputs) {
-            for (ItemStack output : outputs) {
-                output(output);
-            }
-            return this;
-        }
-
         public RecipeBuilder bonusTypeNone() {
             this.bonusType = RecipeBonusType.NONE;
             return this;
@@ -111,7 +95,7 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         }
 
         @Override
-        public @Nullable Recipe buildAndRegister() {
+        public @Nullable Recipe register() {
             if (!validate()) return null;
             RecipeOutput[] outputs = new RecipeOutput[output.size()];
             for (int i = 0; i < outputs.length; i++) {

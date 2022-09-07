@@ -3,12 +3,14 @@ package com.cleanroommc.groovyscript.api;
 import com.cleanroommc.groovyscript.helper.NbtHelper;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+/**
+ * An object that holds an amount and a NBT tag
+ */
 public interface INBTResourceStack extends IResourceStack {
 
     default boolean hasNbt() {

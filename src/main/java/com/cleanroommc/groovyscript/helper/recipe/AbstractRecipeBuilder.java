@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Collection;
-import java.util.Collections;
 
 public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
@@ -24,12 +23,16 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     }
 
     public AbstractRecipeBuilder<T> input(IIngredient... ingredients) {
-        Collections.addAll(input, ingredients);
+        for (IIngredient ingredient : ingredients) {
+            input(ingredient);
+        }
         return this;
     }
 
     public AbstractRecipeBuilder<T> input(Collection<IIngredient> ingredients) {
-        this.input.addAll(ingredients);
+        for (IIngredient ingredient : ingredients) {
+            input(ingredient);
+        }
         return this;
     }
 
@@ -39,12 +42,16 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     }
 
     public AbstractRecipeBuilder<T> output(ItemStack... outputs) {
-        Collections.addAll(output, outputs);
+        for (ItemStack output : outputs) {
+            output(output);
+        }
         return this;
     }
 
     public AbstractRecipeBuilder<T> output(Collection<ItemStack> outputs) {
-        this.output.addAll(outputs);
+        for (ItemStack output : outputs) {
+            output(output);
+        }
         return this;
     }
 
@@ -54,12 +61,16 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     }
 
     public AbstractRecipeBuilder<T> fluidInput(FluidStack... ingredients) {
-        Collections.addAll(fluidInput, ingredients);
+        for (FluidStack ingredient : ingredients) {
+            fluidInput(ingredient);
+        }
         return this;
     }
 
     public AbstractRecipeBuilder<T> fluidInput(Collection<FluidStack> ingredients) {
-        this.fluidInput.addAll(ingredients);
+        for (FluidStack ingredient : ingredients) {
+            fluidInput(ingredient);
+        }
         return this;
     }
 
@@ -69,12 +80,16 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     }
 
     public AbstractRecipeBuilder<T> fluidOutput(FluidStack... outputs) {
-        Collections.addAll(fluidOutput, outputs);
+        for (FluidStack output : outputs) {
+            fluidOutput(output);
+        }
         return this;
     }
 
     public AbstractRecipeBuilder<T> fluidOutput(Collection<FluidStack> outputs) {
-        this.fluidOutput.addAll(outputs);
+        for (FluidStack output : outputs) {
+            fluidOutput(output);
+        }
         return this;
     }
 
@@ -82,7 +97,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     public boolean validate() {
         GroovyLog.Msg msg = new GroovyLog.Msg(getErrorMsg()).error();
         validate(msg);
-        return !msg.logIfNotEmpty();
+        return !msg.postIfNotEmpty();
     }
 
     public abstract String getErrorMsg();
@@ -99,8 +114,8 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     public void validateItems(GroovyLog.Msg msg, int minInput, int maxInput, int minOutput, int maxOutput) {
         input.trim();
         output.trim();
-        msg.add(input.size() < minInput || input.size() > maxInput, () -> getRequiredString(minInput, maxInput, "input") + ", but found " + input.size());
-        msg.add(output.size() < minOutput || output.size() > maxOutput, () -> getRequiredString(minOutput, maxOutput, "output") + ", but found " + output.size());
+        msg.add(input.size() < minInput || input.size() > maxInput, () -> getRequiredString(minInput, maxInput, " item input") + ", but found " + input.size());
+        msg.add(output.size() < minOutput || output.size() > maxOutput, () -> getRequiredString(minOutput, maxOutput, "item output") + ", but found " + output.size());
     }
 
     public void validateItems(GroovyLog.Msg msg) {
@@ -111,7 +126,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         validateFluids(msg, 0, 0, 0, 0);
     }
 
-    private static String getRequiredString(int min, int max, String type) {
+    protected static String getRequiredString(int min, int max, String type) {
         if (max <= 0) {
             return "No " + type + "s allowed";
         }

@@ -1,0 +1,64 @@
+package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
+
+import blusunrize.immersiveengineering.api.crafting.IngredientStack;
+import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
+import java.util.Arrays;
+
+public class ImmersiveEngineering extends ModPropertyContainer {
+
+    public final AlloyKiln alloyKiln = new AlloyKiln();
+    public final ArcFurnace arcFurnace = new ArcFurnace();
+    public final BlastFurnace blastFurnace = new BlastFurnace();
+    public final BlueprintCrafting blueprint = new BlueprintCrafting();
+    public final BottlingMachine bottlingMachine = new BottlingMachine();
+    public final CokeOven cokeOven = new CokeOven();
+    public final Crusher crusher = new Crusher();
+    public final Fermenter fermenter = new Fermenter();
+    public final MetalPress metalPress = new MetalPress();
+    public final Mixer mixer = new Mixer();
+    public final Refinery refinery = new Refinery();
+    public final Squeezer squeezer = new Squeezer();
+
+    public ImmersiveEngineering() {
+        addRegistry(alloyKiln);
+        addRegistry(arcFurnace);
+        addRegistry(blastFurnace);
+        addRegistry(blueprint);
+        addRegistry(bottlingMachine);
+        addRegistry(cokeOven);
+        addRegistry(crusher);
+        addRegistry(fermenter);
+        addRegistry(metalPress);
+        addRegistry(mixer);
+        addRegistry(refinery);
+        addRegistry(squeezer);
+    }
+
+    public static IngredientStack toIngredientStack(IIngredient ingredient) {
+        if (IngredientHelper.isItem(ingredient)) {
+            return new IngredientStack(IngredientHelper.toItemStack(ingredient).copy());
+        }
+        if (ingredient instanceof OreDictIngredient) {
+            return new IngredientStack(((OreDictIngredient) ingredient).getOreDict());
+        }
+        if (ingredient instanceof FluidStack) {
+            return new IngredientStack(((FluidStack) ingredient).copy());
+        }
+        return new IngredientStack(Arrays.asList(ingredient.getMatchingStacks()));
+    }
+
+    public static Object toIEInput(IIngredient ingredient) {
+        if (ingredient instanceof OreDictIngredient) {
+            return ((OreDictIngredient) ingredient).getOreDict();
+        }
+        ItemStack[] matchingStacks = ingredient.getMatchingStacks();
+        return matchingStacks.length == 0 ? ItemStack.EMPTY : matchingStacks[0];
+    }
+
+}

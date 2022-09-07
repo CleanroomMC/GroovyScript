@@ -5,12 +5,12 @@ import cofh.thermalexpansion.util.managers.machine.PulverizerManager;
 import cofh.thermalexpansion.util.managers.machine.PulverizerManager.PulverizerRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
-import com.cleanroommc.groovyscript.mixin.thermalexpansion.PulverizerManagerAccessor;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.PulverizerManagerAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -52,20 +52,40 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         return recipe;
     }
 
-    public void remove(PulverizerRecipe recipe) {
+    public boolean remove(PulverizerRecipe recipe) {
         if (PulverizerManagerAccessor.getRecipeMap().values().removeIf(r -> r == recipe)) {
             addBackup(recipe);
+            return true;
         }
+        return false;
     }
 
     public void removeByInput(IIngredient input) {
         if (IngredientHelper.isEmpty(input)) {
-            GroovyLog.LOG.error("Error removing Thermal Expansion Pulverizer recipe for empty input!");
+            GroovyLog.msg("Error removing Thermal Expansion Pulverizer recipe")
+                    .add("input must not be empty")
+                    .error()
+                    .post();
             return;
         }
+        boolean found = false;
         for (ItemStack stack : input.getMatchingStacks()) {
-            addBackup(PulverizerManager.removeRecipe(stack));
+            PulverizerRecipe recipe = PulverizerManager.removeRecipe(stack);
+            if (recipe != null) {
+                found = true;
+                addBackup(recipe);
+            }
         }
+        if (!found) {
+            GroovyLog.msg("Error removing Thermal Expansion Pulverizer recipe")
+                    .add("could not find recipe for %s", input)
+                    .error()
+                    .post();
+        }
+    }
+
+    public SimpleObjectStream<PulverizerRecipe> stream() {
+        return new SimpleObjectStream<>(PulverizerManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
     public void removeAll() {
@@ -108,7 +128,7 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         }
 
         @Override
-        public @Nullable PulverizerManager.PulverizerRecipe buildAndRegister() {
+        public @Nullable PulverizerManager.PulverizerRecipe register() {
             if (!validate()) return null;
             PulverizerManager.PulverizerRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {

@@ -127,15 +127,11 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
             if (energy <= 0) energy = 5000;
             if (baseMultiplier <= 0) baseMultiplier = 1;
 
-            if (msg.hasSubMessages()) {
-                GroovyLog.LOG.log(msg);
-                return false;
-            }
-            return true;
+            return !msg.postIfNotEmpty();
         }
 
         @Override
-        public @Nullable Recipe buildAndRegister() {
+        public @Nullable Recipe register() {
             if (!validate()) return null;
             List<IRecipeInput> inputs = new ArrayList<>();
             for (int i = 0; i < itemInputs1.size(); i++) {

@@ -35,7 +35,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
                 .energy(energy)
                 .output(output)
                 .input(input)
-                .buildAndRegister();
+                .register();
     }
 
     public void add(IManyToOneRecipe recipe) {
@@ -107,7 +107,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         }
 
         @Override
-        public @Nullable IRecipe buildAndRegister() {
+        public @Nullable IRecipe register() {
             if (!validate()) return null;
             RecipeOutput recipeOutput = new RecipeOutput(output.get(0), 1, xp);
             List<IRecipeInput> inputs = new ArrayList<>();
