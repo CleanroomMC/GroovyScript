@@ -1,7 +1,8 @@
 package com.cleanroommc.groovyscript.sandbox;
 
-import com.cleanroommc.groovyscript.api.BracketHandler;
+import com.cleanroommc.groovyscript.api.IBracketHandler;
 import com.cleanroommc.groovyscript.api.IGroovyPropertyGetter;
+import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.event.GroovyEvent;
 import com.cleanroommc.groovyscript.event.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
@@ -11,9 +12,10 @@ import groovy.lang.Script;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 
 import java.util.Arrays;
-import java.util.function.Function;
 
 public class SimpleGroovyInterceptor extends GroovyInterceptor {
+
+    private static final String PRINT = "print", PRINTF = "printf", PRINTLN = "println";
 
     public static void makeSureExists() {
         if (!getApplicableInterceptors().isEmpty()) {
@@ -29,13 +31,13 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
     @Override
     public Object onMethodCall(Invoker invoker, Object receiver, String method, Object... args) throws Throwable {
         if (receiver.getClass().getSuperclass() == Script.class) {
-            if (args.length == 1 && args[0] instanceof String) {
-                Function<String, Object> bracketHandler = BracketHandler.getBracketHandler(method);
+            if (args.length >= 1 && args[0] instanceof String) {
+                IBracketHandler bracketHandler = BracketHandlerManager.getBracketHandler(method);
                 if (bracketHandler != null) {
-                    return bracketHandler.apply((String) args[0]);
+                    return bracketHandler.parse(args);
                 }
             }
-            if (method.equals("print") || method.equals("println") || method.equals("printf")) {
+            if (method.equals(PRINT) || method.equals(PRINTLN) || method.equals(PRINTF)) {
                 Object msg = args.length == 0 ? "" : args[0];
                 Object[] args2 = args.length < 2 ? new Object[0] : Arrays.copyOfRange(args, 1, args.length);
                 GroovyLog.LOG.info(msg.toString(), args2);

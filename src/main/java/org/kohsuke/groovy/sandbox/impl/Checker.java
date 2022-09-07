@@ -1,6 +1,6 @@
 package org.kohsuke.groovy.sandbox.impl;
 
-import com.cleanroommc.groovyscript.api.BracketHandler;
+import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import groovy.lang.*;
 import org.codehaus.groovy.classgen.asm.BinaryExpressionHelper;
 import org.codehaus.groovy.reflection.ParameterTypes;
@@ -363,7 +363,7 @@ public class Checker {
 
         Object result = s;
         if (s.startsWith("<") && s.endsWith(">")) {
-            result = BracketHandler.handleBracket(s.substring(1, s.length() - 1));
+            result = BracketHandlerManager.handleBracket(s.substring(1, s.length() - 1));
         }
 
         sourceVar.set(null);
