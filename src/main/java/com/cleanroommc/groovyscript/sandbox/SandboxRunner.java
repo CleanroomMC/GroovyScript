@@ -83,9 +83,9 @@ public class SandboxRunner {
     }
 
     @Nullable
-    public static Throwable run() {
+    public static Throwable run(String loader) {
         try {
-            runScript();
+            runScript(loader);
             return null;
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.LOG.error("An Exception occurred trying to run groovy!");
@@ -97,8 +97,8 @@ public class SandboxRunner {
         }
     }
 
-    public static void runScript() throws IOException, ScriptException, ResourceException, SandboxSecurityException {
-        GroovyLog.LOG.info("Running scripts");
+    public static void runScript(String loader) throws IOException, ScriptException, ResourceException, SandboxSecurityException {
+        GroovyLog.LOG.info("Running scripts in loader '%s'", loader);
         // prepare script running
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         GroovyEventManager.clearAllListeners();
@@ -118,7 +118,7 @@ public class SandboxRunner {
 
         // find and run scripts
         running = true;
-        for (File file : getStartupFiles()) {
+        for (File file : GroovyScript.getRunConfig().getSortedFiles(loader)) {
             GroovyLog.LOG.info(" - executing %s", file.toString());
             engine.run(file.toString(), binding);
         }

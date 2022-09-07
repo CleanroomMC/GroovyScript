@@ -55,7 +55,7 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
             GroovyLog.LOG.info("========== Reloading Groovy scripts ==========");
             long time = System.currentTimeMillis();
-            Throwable throwable = SandboxRunner.run();
+            Throwable throwable = SandboxRunner.run("postInit");
             time = System.currentTimeMillis() - time;
             if (throwable == null) {
                 sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
