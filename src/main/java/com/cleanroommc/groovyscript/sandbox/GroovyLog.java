@@ -7,8 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.kohsuke.groovy.sandbox.impl.Checker;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,23 +28,32 @@ public class GroovyLog {
     private static final Logger logger = LogManager.getLogger("GroovyLog");
     private final File logFile;
     private final Path logFilePath;
+    private final PrintWriter printWriter;
     private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
     private final DateFormat timeFormat = new SimpleDateFormat("[HH:mm:ss]");
 
     public boolean debug = false;
 
     private GroovyLog() {
-        logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + "/groovy.log");
+        logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy.log");
         logFilePath = logFile.toPath();
+        PrintWriter tempWriter;
         try {
             if (logFile.exists() && !logFile.isDirectory()) {
                 Files.delete(logFilePath);
             }
             Files.createFile(logFilePath);
-            writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
+            tempWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(logFile))), true);
         } catch (IOException e) {
             e.printStackTrace();
+            tempWriter = new PrintWriter(System.out);
         }
+        this.printWriter = tempWriter;
+        writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
+    }
+
+    public PrintWriter getWriter() {
+        return printWriter;
     }
 
     public Path getPath() {
@@ -212,12 +220,13 @@ public class GroovyLog {
     }
 
     private void writeLogLine(String line) {
-        try {
+        this.printWriter.println(line);
+        /*try {
             line += "\n";
             Files.write(logFilePath, line.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public static Msg msg(String msg, Object... data) {

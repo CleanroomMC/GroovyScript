@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
+import groovy.lang.Script;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
@@ -80,6 +81,7 @@ public class SandboxRunner {
 
         registerBinding("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
         registerBinding("mods", ModSupport.INSTANCE);
+        registerBinding("log", GroovyLog.LOG);
     }
 
     @Nullable
@@ -115,6 +117,7 @@ public class SandboxRunner {
         config.addCompilationCustomizers(new SandboxTransformer());
         engine.setConfig(config);
         Binding binding = new Binding(BINDINGS);
+        binding.setProperty("out", GroovyLog.LOG.getWriter());
 
         // find and run scripts
         running = true;
