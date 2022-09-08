@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.event.GsHandEvent;
+import com.cleanroommc.groovyscript.helper.NbtHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SCopy;
 import com.cleanroommc.groovyscript.network.SReloadJei;
@@ -124,6 +125,9 @@ public class GSCommand extends CommandTreeBase {
                 }
 
                 TileEntity tileEntity = pos != null ? player.world.getTileEntity(pos) : null;
+                if (tileEntity != null) {
+                    GSHandCommand.tileInformation(messages, tileEntity);
+                }
                 GsHandEvent event = new GsHandEvent(server, player, args, messages, stack, blockState, block, tileEntity);
                 MinecraftForge.EVENT_BUS.post(event);
                 for (ITextComponent msg : event.messages) {
