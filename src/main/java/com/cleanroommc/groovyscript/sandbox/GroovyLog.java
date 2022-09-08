@@ -8,10 +8,8 @@ import org.apache.logging.log4j.Logger;
 import org.kohsuke.groovy.sandbox.impl.Checker;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,10 +37,13 @@ public class GroovyLog {
         logFilePath = logFile.toPath();
         PrintWriter tempWriter;
         try {
+            // delete file if it exists
             if (logFile.exists() && !logFile.isDirectory()) {
                 Files.delete(logFilePath);
             }
+            // create file
             Files.createFile(logFilePath);
+            // create writer which automatically flushes on write
             tempWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(logFile))), true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -108,7 +109,7 @@ public class GroovyLog {
      */
     public void info(String msg, Object... args) {
         String line = String.format(msg, args);
-        writeLogLine(formatLine("INFO ", line));
+        writeLogLine(formatLine("INFO", line));
     }
 
     /**
@@ -156,7 +157,7 @@ public class GroovyLog {
      */
     public void warn(String msg, Object... args) {
         String line = String.format(msg, args);
-        writeLogLine(formatLine("WARN ", line));
+        writeLogLine(formatLine("WARN", line));
     }
 
     /**
@@ -208,7 +209,11 @@ public class GroovyLog {
     }
 
     private String formatLine(String level, String msg) {
-        return timeFormat.format(new Date()) + " [" + getSource() + "] " + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? "[CLIENT]" : "[SERVER]") + " [" + level + "] " + msg;
+        return timeFormat.format(new Date()) +
+                (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT]" : "[SERVER]") +
+                " [" + level + "]" +
+                " [" + getSource() + "] " +
+                msg;
     }
 
     private String getSource() {
@@ -221,12 +226,6 @@ public class GroovyLog {
 
     private void writeLogLine(String line) {
         this.printWriter.println(line);
-        /*try {
-            line += "\n";
-            Files.write(logFilePath, line.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public static Msg msg(String msg, Object... data) {
