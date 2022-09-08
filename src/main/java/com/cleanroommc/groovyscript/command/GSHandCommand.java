@@ -1,10 +1,13 @@
 package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.NbtHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -25,6 +28,7 @@ public class GSHandCommand {
         String itemNbt = IngredientHelper.asGroovyCode(stack, true, prettyNbt);
         String item = IngredientHelper.asGroovyCode(stack, true);
 
+        messages.add(new TextComponentString("Item:"));
         messages.add(TextCopyable.string(item, itemNbt).build());
         GuiScreen.setClipboardString(item);
     }
@@ -65,5 +69,13 @@ public class GSHandCommand {
                 messages.add(TextCopyable.string(s, " - " + oreName).build());
             }
         }
+    }
+
+    public static void tileInformation(List<ITextComponent> messages, TileEntity tile) {
+        NBTTagCompound nbt = tile.serializeNBT();
+        String copyText = NbtHelper.toGroovyCode(nbt, false, false);
+
+        messages.add(new TextComponentString("Tile NBT:"));
+        messages.add(TextCopyable.string(copyText, NbtHelper.toGroovyCode(nbt, true, true)).build());
     }
 }

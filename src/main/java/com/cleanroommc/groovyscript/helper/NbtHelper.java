@@ -95,44 +95,46 @@ public class NbtHelper {
 
     public static String toGroovyCode(NBTTagCompound nbt, int indent, boolean pretty, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        newLine(builder, indent, pretty);
         if (colored) builder.append(TextFormatting.GRAY);
         builder.append('[');
-        indent++;
-        for (String key : nbt.getKeySet()) {
+        if (!nbt.isEmpty()) {
+            indent++;
+            for (String key : nbt.getKeySet()) {
+                newLine(builder, indent, pretty);
+                if (colored) builder.append(TextFormatting.GREEN);
+                builder.append(key);
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append(": ");
+                builder.append(toGroovyCode(nbt.getTag(key), indent, pretty, colored));
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append(", ");
+            }
+            builder.delete(builder.length() - 2, builder.length());
+            indent--;
             newLine(builder, indent, pretty);
-            if (colored) builder.append(TextFormatting.GREEN);
-            builder.append(key);
             if (colored) builder.append(TextFormatting.GRAY);
-            builder.append(": ");
-            builder.append(toGroovyCode(nbt.getTag(key), indent, pretty, colored));
-            if (colored) builder.append(TextFormatting.GRAY);
-            builder.append(", ");
         }
-        builder.delete(builder.length() - 2, builder.length());
-        indent--;
-        newLine(builder, indent, pretty);
-        if (colored) builder.append(TextFormatting.GRAY);
         builder.append(']');
         return builder.toString();
     }
 
     public static String toGroovyCode(NBTTagList nbt, int indent, boolean pretty, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        newLine(builder, indent, pretty);
         if (colored) builder.append(TextFormatting.GRAY);
         builder.append('[');
-        indent++;
-        for (NBTBase nbtBase : nbt) {
+        if (!nbt.isEmpty()) {
+            indent++;
+            for (NBTBase nbtBase : nbt) {
+                newLine(builder, indent, pretty);
+                builder.append(toGroovyCode(nbtBase, indent, pretty, colored));
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append(", ");
+            }
+            builder.delete(builder.length() - 2, builder.length());
+            indent--;
             newLine(builder, indent, pretty);
-            builder.append(toGroovyCode(nbtBase, indent, pretty, colored));
             if (colored) builder.append(TextFormatting.GRAY);
-            builder.append(", ");
         }
-        builder.delete(builder.length() - 2, builder.length());
-        indent--;
-        newLine(builder, indent, pretty);
-        if (colored) builder.append(TextFormatting.GRAY);
         builder.append(']');
         return builder.toString();
     }
