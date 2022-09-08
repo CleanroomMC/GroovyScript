@@ -133,20 +133,6 @@ public class SandboxRunner {
         }
     }
 
-    private static File[] getStartupFiles() throws IOException {
-        Path path = GroovyScript.startupPath.toPath();
-        if (!Files.exists(path)) {
-            Files.createDirectory(path);
-        }
-        File[] files = GroovyScript.startupPath.listFiles();
-        if (files == null || files.length == 0) {
-            Files.createFile(new File(path + "/main.groovy").toPath());
-            return new File[0];
-        }
-        Path mainPath = new File(GroovyScript.scriptPath).toPath();
-        return Arrays.stream(files).map(file -> mainPath.relativize(file.toPath()).toFile()).toArray(File[]::new);
-    }
-
     public static void logError(String msg, String sourceName, int lineNumber) throws SandboxSecurityException {
         throw new SandboxSecurityException("SandboxSecurityException: " + msg + " in script " + relativizeSource(sourceName) + " in line " + lineNumber);
     }

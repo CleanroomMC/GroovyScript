@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -43,17 +44,34 @@ public class RunConfig {
     public RunConfig(JsonObject json) {
         this.packName = JsonHelper.getString(json, "", "packName", "name");
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
+
         JsonObject jsonLoaders = JsonHelper.getJsonObject(json, "loaders");
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";
         String replacement = getSeparator();
+        List<Pair<String, String>> pathsList = new ArrayList<>();
+
+        GroovyLog.Msg errorMsg = GroovyLog.msg("Fatal while parsing runConfig.json")
+                .add("Files should NOT be ran in multiple loaders!")
+                .logToMc()
+                .fatal();
+
         for (Map.Entry<String, JsonElement> entry : jsonLoaders.entrySet()) {
             JsonArray loader = (JsonArray) entry.getValue();
             List<String> paths = new ArrayList<>();
+
             for (JsonElement element : loader) {
-                paths.add(element.getAsString().replaceAll(regex, replacement));
+                String path = element.getAsString().replaceAll(regex, replacement);
+                while (path.endsWith("/") || path.endsWith("\\")) {
+                    path = path.substring(0, path.length() - 1);
+                }
+                if (!checkValid(errorMsg, pathsList, entry.getKey(), path)) continue;
+                paths.add(path);
             }
+
             loaderPaths.put(entry.getKey(), paths);
+            pathsList.addAll(paths.stream().map(path -> Pair.of(entry.getKey(), path)).collect(Collectors.toList()));
         }
+        errorMsg.postIfNotEmpty();
     }
 
     public String getPackName() {
@@ -95,5 +113,24 @@ public class RunConfig {
 
     private static String getSeparator() {
         return File.separatorChar == '\\' ? "\\\\" : File.separator;
+    }
+
+    private static boolean checkValid(GroovyLog.Msg errorMsg, List<Pair<String, String>> paths, String loader, String path) {
+        boolean valid = true;
+        for (Pair<String, String> path1 : paths) {
+            if (path1.getValue().startsWith(path) || path.startsWith(path1.getValue())) {
+                String longPath = path;
+                if (path1.getValue().length() > path.length()) longPath = path1.getValue();
+                String msg = String.format("files in '%s' are configured for multiple loaders: '%s' and '%s'", longPath, loader, path1.getKey());
+                if (!errorMsg.contains(msg)) {
+                    errorMsg.add(msg);
+                }
+                valid = false;
+            }
+        }
+        if (!valid) {
+            errorMsg.add("removing path '%s' from loader '%s'", path, loader);
+        }
+        return valid;
     }
 }

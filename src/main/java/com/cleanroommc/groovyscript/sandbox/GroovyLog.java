@@ -210,9 +210,9 @@ public class GroovyLog {
 
     private String formatLine(String level, String msg) {
         return timeFormat.format(new Date()) +
-                (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT]" : "[SERVER]") +
-                " [" + level + "]" +
-                " [" + getSource() + "] " +
+                (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : "[SERVER/") +
+                level + "]" +
+                " [" + getSource() + "]: " +
                 msg;
     }
 
@@ -267,6 +267,10 @@ public class GroovyLog {
             return this;
         }
 
+        public boolean contains(String msg) {
+            return this.messages.contains(msg);
+        }
+
         private Msg level(Level level) {
             this.level = level;
             return this;
@@ -286,6 +290,10 @@ public class GroovyLog {
 
         public Msg error() {
             return level(Level.ERROR);
+        }
+
+        public Msg fatal() {
+            return level(Level.FATAL);
         }
 
         public Msg logToMc() {
