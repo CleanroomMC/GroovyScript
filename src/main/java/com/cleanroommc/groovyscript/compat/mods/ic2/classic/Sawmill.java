@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ic2.RecipeInput;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.classic.recipe.ClassicRecipes;
@@ -24,6 +25,13 @@ public class Sawmill extends VirtualizedRegistry<IMachineRecipeList.RecipeEntry>
     }
 
     public IMachineRecipeList.RecipeEntry add(ItemStack output, IIngredient input) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Sawmill recipe")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         IMachineRecipeList.RecipeEntry entry = new IMachineRecipeList.RecipeEntry(new RecipeInput(input), new MachineOutput(null, output), "" + output.hashCode());
         ClassicRecipes.sawMill.addRecipe(entry.getInput(), entry.getOutput(), entry.getRecipeID());
         addScripted(entry);
@@ -31,15 +39,33 @@ public class Sawmill extends VirtualizedRegistry<IMachineRecipeList.RecipeEntry>
     }
 
     public IMachineRecipeList.RecipeEntry add(ItemStack output, IIngredient input, float xp) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Sawmill recipe")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
+        if (xp < 0) {
+            GroovyLog.msg("Error adding Industrialcraft 2 Sawmill recipe")
+                    .add("xp must not be negative, defaulting to zero")
+                    .warn()
+                    .post();
+            xp = 0F;
+        }
         IMachineRecipeList.RecipeEntry entry = new IMachineRecipeList.RecipeEntry(new RecipeInput(input), new MachineExpOutput(null, xp, output), "" + output.hashCode());
         ClassicRecipes.sawMill.addRecipe(entry.getInput(), entry.getOutput(), entry.getRecipeID());
         addScripted(entry);
         return entry;
     }
 
-    public void remove(IMachineRecipeList.RecipeEntry entry) {
-        ClassicRecipes.sawMill.removeRecipe(entry);
+    public SimpleObjectStream<IMachineRecipeList.RecipeEntry> streamRecipes() {
+        return new SimpleObjectStream<>(ClassicRecipes.sawMill.getRecipeMap()).setRemover(this::remove);
+    }
+
+    public boolean remove(IMachineRecipeList.RecipeEntry entry) {
         addScripted(entry);
+        return ClassicRecipes.sawMill.removeRecipe(entry.getInput()).size() > 0;
     }
 
     public void removeByOutput(ItemStack output) {

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.recipe.ILiquidHeatExchangerManager;
@@ -34,11 +35,27 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
     }
 
     public HeatExchangerRecipe add(FluidStack hotFluid, FluidStack coldFluid, int huPerMB) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Liquid Heat Exchanger recipe")
+                .add(IngredientHelper.isEmpty(hotFluid), () -> "hot fluid must not be empty")
+                .add(IngredientHelper.isEmpty(coldFluid), () -> "cold fluid must not be empty")
+                .add(huPerMB <= 0, () -> "heat per mb must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         addCooldown(hotFluid, coldFluid, huPerMB);
         return addHeatup(coldFluid, hotFluid, huPerMB);
     }
 
     public HeatExchangerRecipe addHeatup(FluidStack coldFluid, FluidStack hotFluid, int huPerMB) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Liquid Heat Exchanger recipe")
+                .add(IngredientHelper.isEmpty(hotFluid), () -> "hot fluid must not be empty")
+                .add(IngredientHelper.isEmpty(coldFluid), () -> "cold fluid must not be empty")
+                .add(huPerMB <= 0, () -> "heat per mb must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         Recipes.liquidHeatupManager.getHeatExchangeProperties().put(coldFluid.getFluid().getName(), new ILiquidHeatExchangerManager.HeatExchangeProperty(hotFluid.getFluid(), huPerMB));
         HeatExchangerRecipe recipe = new HeatExchangerRecipe(0, hotFluid, coldFluid, huPerMB);
         addScripted(recipe);
@@ -46,6 +63,14 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
     }
 
     public HeatExchangerRecipe addCooldown(FluidStack hotFluid, FluidStack coldFluid, int huPerMB) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Liquid Heat Exchanger recipe")
+                .add(IngredientHelper.isEmpty(hotFluid), () -> "hot fluid must not be empty")
+                .add(IngredientHelper.isEmpty(coldFluid), () -> "cold fluid must not be empty")
+                .add(huPerMB <= 0, () -> "heat per mb must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         Recipes.liquidCooldownManager.getHeatExchangeProperties().put(hotFluid.getFluid().getName(), new ILiquidHeatExchangerManager.HeatExchangeProperty(coldFluid.getFluid(), huPerMB));
         HeatExchangerRecipe recipe = new HeatExchangerRecipe(1, hotFluid, coldFluid, huPerMB);
         addScripted(recipe);
@@ -92,6 +117,14 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
         }
 
         return false;
+    }
+
+    public SimpleObjectStream<Map.Entry<String, ILiquidHeatExchangerManager.HeatExchangeProperty>> streamCooldownRecipes() {
+        return new SimpleObjectStream<>(cooldownMap.entrySet()).setRemover(r -> removeCooldown(FluidRegistry.getFluid(r.getKey())));
+    }
+
+    public SimpleObjectStream<Map.Entry<String, ILiquidHeatExchangerManager.HeatExchangeProperty>> streamHeatupRecipes() {
+        return new SimpleObjectStream<>(heatupMap.entrySet()).setRemover(r -> removeHeatup(FluidRegistry.getFluid(r.getKey())));
     }
 
     public void removeAll() {

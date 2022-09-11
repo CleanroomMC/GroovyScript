@@ -3,16 +3,21 @@ package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ic2.RecipeInput;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.recipe.ICannerEnrichRecipeManager;
+import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.MachineRecipe;
 import ic2.api.recipe.Recipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> {
 
@@ -31,15 +36,35 @@ public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrich
     }
 
     public MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> add(FluidStack input, IIngredient input1, FluidStack output) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Fluid Canner recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input 1 must not be empty")
+                .add(IngredientHelper.isEmpty(input1), () -> "input 2 must not be empty")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> recipe = create(input, input1, output, null);
         add(recipe);
         return recipe;
     }
 
     public MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> add(FluidStack input, IIngredient input1, FluidStack output, NBTTagCompound tag) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Fluid Canner recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input 1 must not be empty")
+                .add(IngredientHelper.isEmpty(input1), () -> "input 2 must not be empty")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> recipe = create(input, input1, output, tag);
         add(recipe);
         return recipe;
+    }
+
+    public SimpleObjectStream<MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> streamRecipes() {
+        return new SimpleObjectStream<>(asList()).setRemover(this::remove);
     }
 
     public boolean remove(MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> recipe) {
@@ -108,5 +133,13 @@ public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrich
 
     private static MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> create(FluidStack input, IIngredient input1, FluidStack output, NBTTagCompound tag) {
         return new MachineRecipe<>(new ICannerEnrichRecipeManager.Input(input, new RecipeInput(input1)), output, tag);
+    }
+
+    private static List<MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> asList() {
+        List<MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> list = new ArrayList<>();
+        for (MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> rec : Recipes.cannerEnrich.getRecipes()) {
+            list.add(rec);
+        }
+        return list;
     }
 }

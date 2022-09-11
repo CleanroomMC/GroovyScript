@@ -3,8 +3,11 @@ package com.cleanroommc.groovyscript.compat.mods.ic2;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ic2.classic.*;
 import com.cleanroommc.groovyscript.compat.mods.ic2.exp.*;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+
+import java.util.List;
 
 public class IC2 extends ModPropertyContainer {
 
@@ -96,6 +99,15 @@ public class IC2 extends ModPropertyContainer {
             if (container.getModId().equals("ic2")) {
                 return container.getMetadata().version.contains("ex");
             }
+        }
+
+        return false;
+    }
+
+    public static boolean isNull(List<ItemStack> list) {
+        if (list == null || list.size() <= 0) return true;
+        for (ItemStack stack : list) {
+            if (stack.isEmpty()) return true;
         }
 
         return false;

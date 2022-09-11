@@ -1,7 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
 import com.cleanroommc.groovyscript.core.mixin.ic2.ScrapboxRecipeManagerAccessor;
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.recipe.Recipes;
 import net.minecraft.item.ItemStack;
 
@@ -23,9 +25,21 @@ public class Scrapbox extends VirtualizedRegistry<Object> {
     }
 
     public void add(ItemStack stack, float chance) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Scrapbox recipe")
+                .add(IngredientHelper.isEmpty(stack), () -> "stack must not be emtpy")
+                .add(chance <= 0, () -> "chance must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
         Drop drop = new Drop(stack, chance).setId(drops.size());
         Recipes.scrapboxDrops.addDrop(stack, chance);
         addScripted(drop);
+    }
+
+    public boolean remove(Object obj) {
+        this.addBackup(obj);
+        return drops.remove(obj);
     }
 
     public void removeAll() {

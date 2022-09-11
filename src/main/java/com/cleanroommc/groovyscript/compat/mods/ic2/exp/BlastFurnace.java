@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.ic2.RecipeInput;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.recipe.IRecipeInput;
@@ -11,6 +13,7 @@ import ic2.api.recipe.Recipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -32,15 +35,33 @@ public class BlastFurnace extends VirtualizedRegistry<MachineRecipe<IRecipeInput
     }
 
     public MachineRecipe<IRecipeInput, Collection<ItemStack>> add(IIngredient input, List<ItemStack> output) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Blast Furnace recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(IC2.isNull(output), () -> "output must not be null")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(new RecipeInput(input), output);
         add(recipe);
         return recipe;
     }
 
     public MachineRecipe<IRecipeInput, Collection<ItemStack>> add(IIngredient input, List<ItemStack> output, NBTTagCompound tag) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Blast Furnace recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(IC2.isNull(output), () -> "output must not be null")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(new RecipeInput(input), output, tag);
         add(recipe);
         return recipe;
+    }
+
+    public SimpleObjectStream<MachineRecipe<IRecipeInput, Collection<ItemStack>>> streamRecipes() {
+        return new SimpleObjectStream<>(asList()).setRemover(this::remove);
     }
 
     public boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
@@ -115,5 +136,13 @@ public class BlastFurnace extends VirtualizedRegistry<MachineRecipe<IRecipeInput
     private void add(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe, boolean scripted) {
         Recipes.blastfurnace.addRecipe(recipe.getInput(), recipe.getOutput(), recipe.getMetaData(), false);
         if (scripted) addScripted(recipe);
+    }
+
+    private static List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> asList() {
+        List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> list = new ArrayList<>();
+        for (MachineRecipe<IRecipeInput, Collection<ItemStack>> rec : Recipes.blastfurnace.getRecipes()) {
+            list.add(rec);
+        }
+        return list;
     }
 }

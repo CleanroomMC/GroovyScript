@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.ic2;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.recipe.IBasicMachineRecipeManager;
@@ -11,9 +12,7 @@ import ic2.api.recipe.Recipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerRecipe> {
 
@@ -43,8 +42,20 @@ public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerReci
         return recipe;
     }
 
+    public SimpleObjectStream<MachineRecipe<IRecipeInput, Collection<ItemStack>>> streamRecipes() {
+        return new SimpleObjectStream<>(asList()).setRemover(this::remove);
+    }
+
+    public SimpleObjectStream<MachineRecipe<IRecipeInput, Collection<ItemStack>>> streamRecipes(int type) {
+        return new SimpleObjectStream<>(asList(type)).setRemover(r -> this.remove(type, r));
+    }
+
     public boolean remove(int type, MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
         return remove(type, recipe, true);
+    }
+
+    public boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
+        return remove(0, recipe) || remove(1, recipe) || remove(2, recipe);
     }
 
     public void removeByOutput(int type, ItemStack output) {
@@ -130,5 +141,23 @@ public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerReci
             this.type = type;
             this.recipe = recipe;
         }
+    }
+
+    private List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> asList(int type) {
+        List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> list = new ArrayList<>();
+        for (MachineRecipe<IRecipeInput, Collection<ItemStack>> rec : getManager(type).getRecipes()) {
+            list.add(rec);
+        }
+        return list;
+    }
+
+    private List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> asList() {
+        List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> list = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            for (MachineRecipe<IRecipeInput, Collection<ItemStack>> rec : getManager(i).getRecipes()) {
+                list.add(rec);
+            }
+        }
+        return list;
     }
 }

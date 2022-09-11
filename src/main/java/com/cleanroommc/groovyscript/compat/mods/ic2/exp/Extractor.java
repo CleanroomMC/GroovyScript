@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ic2.RecipeInput;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.recipe.IRecipeInput;
@@ -11,9 +12,7 @@ import ic2.api.recipe.Recipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 public class Extractor extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
@@ -32,15 +31,33 @@ public class Extractor extends VirtualizedRegistry<MachineRecipe<IRecipeInput, C
     }
 
     public MachineRecipe<IRecipeInput, Collection<ItemStack>> add(IIngredient input, ItemStack output) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Extractor recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(new RecipeInput(input), Collections.singleton(output));
         add(recipe);
         return recipe;
     }
 
     public MachineRecipe<IRecipeInput, Collection<ItemStack>> add(IIngredient input, ItemStack output, NBTTagCompound tag) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Extractor recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(new RecipeInput(input), Collections.singleton(output), tag);
         add(recipe);
         return recipe;
+    }
+
+    public SimpleObjectStream<MachineRecipe<IRecipeInput, Collection<ItemStack>>> streamRecipes() {
+        return new SimpleObjectStream<>(asList()).setRemover(this::remove);
     }
 
     public boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
@@ -105,5 +122,13 @@ public class Extractor extends VirtualizedRegistry<MachineRecipe<IRecipeInput, C
     private void add(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe, boolean scripted) {
         Recipes.extractor.addRecipe(recipe.getInput(), recipe.getOutput(), recipe.getMetaData(), false);
         if (scripted) addScripted(recipe);
+    }
+
+    protected List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> asList() {
+        List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> list = new ArrayList<>();
+        for (MachineRecipe<IRecipeInput, Collection<ItemStack>> rec : Recipes.extractor.getRecipes()) {
+            list.add(rec);
+        }
+        return list;
     }
 }

@@ -4,11 +4,14 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ic2.RecipeInput;
 import com.cleanroommc.groovyscript.core.mixin.ic2.ClassicCanningMachineRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.ItemsIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.classic.recipe.ClassicRecipes;
 import ic2.api.classic.recipe.machine.ICannerRegistry;
+import ic2.api.classic.recipe.machine.IFoodCanEffect;
+import ic2.api.item.ICustomDamageItem;
 import ic2.api.recipe.IRecipeInput;
 import ic2.core.util.helpers.ItemWithMeta;
 import net.minecraft.item.ItemStack;
@@ -32,6 +35,13 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
     }
     
     public CanningRecipe addCanning(ItemStack output, IIngredient input, ItemStack container) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Canner Canning recipe")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         CanningRecipe recipe = new CanningRecipe(RecipeType.CANNING_RECIPE).setOutput(output).setInput(input).setContainer(container);
         add(recipe);
         addScripted(recipe);
@@ -39,33 +49,77 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
     }
 
     public CanningRecipe registerItemEffect(int id, IIngredient input) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Canner Item Effect recipe")
+                .add(id < 0, () -> "id must not be negative")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         CanningRecipe recipe = new CanningRecipe(RecipeType.ITEM_EFFECT).setInt(id).setInput(input);
         add(recipe);
         addScripted(recipe);
         return recipe;
     }
 
-    public CanningRecipe registerFuelValue(IIngredient stack, int value) {
-        CanningRecipe recipe = new CanningRecipe(RecipeType.FUEL_VALUE).setInt(value).setInput(stack);
+    public CanningRecipe registerFuelValue(IIngredient ingredient, int value) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Canner Fuel Value")
+                .add(IngredientHelper.isEmpty(ingredient), () -> "ingredient must not be empty")
+                .add(value <= 0, () -> "value must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
+        CanningRecipe recipe = new CanningRecipe(RecipeType.FUEL_VALUE).setInt(value).setInput(ingredient);
         add(recipe);
         addScripted(recipe);
         return recipe;
     }
 
-    public CanningRecipe registerFuelValue(IIngredient stack, int value, float value1) {
-        CanningRecipe recipe = new CanningRecipe(RecipeType.FUEL_VALUE).setInt(value).setInput(stack).setFloat(value1);
+    public CanningRecipe registerFuelValue(IIngredient ingredient, int value, float value1) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Canner Fuel Value")
+                .add(IngredientHelper.isEmpty(ingredient), () -> "ingredient must not be empty")
+                .add(value <= 0, () -> "value must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
+        CanningRecipe recipe = new CanningRecipe(RecipeType.FUEL_VALUE).setInt(value).setInput(ingredient).setFloat(value1);
         add(recipe);
         addScripted(recipe);
         return recipe;
     }
 
-    public void removeFuelValue(IIngredient fuel) {
+    public SimpleObjectStream<Map.Entry<ItemStack, List<Tuple<IRecipeInput, ItemStack>>>> streamCanningRecipes() {
+        return new SimpleObjectStream<>(ClassicRecipes.canningMachine.getCanningMap().entrySet()).setRemover(r -> this.removeCanning(r.getKey()));
+    }
+
+    public SimpleObjectStream<ICannerRegistry.FuelInfo> streamFuelValues() {
+        return new SimpleObjectStream<>(ClassicRecipes.canningMachine.getAllFuelTypes()).setRemover(r -> this.removeFuelValue(IngredientHelper.toIIngredient(r.getItem())));
+    }
+
+    public SimpleObjectStream<Map.Entry<Integer, IFoodCanEffect>> streamItemEffects() {
+        return new SimpleObjectStream<>(ClassicRecipes.canningMachine.getEffectMap().entrySet()).setRemover(r -> this.removeItemEffect(r.getKey()));
+    }
+
+    public SimpleObjectStream<Map.Entry<ICustomDamageItem, List<Tuple<Integer, Tuple<IRecipeInput, Integer>>>>> streamRepairRecipes() {
+        return new SimpleObjectStream<>(ClassicRecipes.canningMachine.getRepairMap().entrySet()).setRemover(entry -> {
+            for (Tuple<Integer, Tuple<IRecipeInput, Integer>> tuple : entry.getValue()) {
+                CanningRecipe recipe = new CanningRecipe(RecipeType.REPAIR).setDamageItem(entry.getKey()).setMeta(tuple.getFirst()).setInput(new ItemsIngredient(tuple.getSecond().getFirst().getInputs())).setInt(tuple.getSecond().getSecond());
+                remove(recipe);
+                addBackup(recipe);
+            }
+            return true;
+        });
+    }
+
+    public boolean removeFuelValue(IIngredient fuel) {
         if (IngredientHelper.isEmpty(fuel)) {
             GroovyLog.msg("Error removing Industrialcraft 2 Canner recipe")
                     .add("fuel must not be empty")
                     .error()
                     .post();
-            return;
+            return false;
         }
         ICannerRegistry.FuelInfo info = ClassicRecipes.canningMachine.getFuelInfo(fuel.getMatchingStacks()[0]);
         if (info == null) {
@@ -73,11 +127,12 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
                     .add("no recipes found for %s", fuel)
                     .error()
                     .post();
-            return;
+            return false;
         }
         CanningRecipe recipe = new CanningRecipe(RecipeType.FUEL_VALUE).setInput(fuel).setInt(info.getAmount()).setFloat(info.getMultiplier());
         remove(recipe);
         addBackup(recipe);
+        return true;
     }
 
     public void removeAllFuelValue() {
@@ -88,17 +143,18 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
         }
     }
 
-    public void removeItemEffect(int id) {
+    public boolean removeItemEffect(int id) {
         if (id < 0 || id >= idToItems.size()) {
             GroovyLog.msg("Error removing Industrialcraft 2 Canner Item Effect recipe")
-                    .add("id must be between 0-%s", idToItems.size())
+                    .add("id must be between 0-%d", idToItems.size())
                     .error()
                     .post();
-            return;
+            return false;
         }
         CanningRecipe recipe = new CanningRecipe(RecipeType.ITEM_EFFECT).setInput(new ItemsIngredient(asItemStackList(idToItems.get(id)))).setInt(id);
         ClassicRecipes.canningMachine.deleteEffectID(id, true);
         addBackup(recipe);
+        return true;
     }
 
     public void removeAllItemEffect() {
@@ -107,6 +163,17 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
             remove(recipe);
             addBackup(recipe);
         }
+    }
+
+    public boolean removeAllRepair() {
+        for (Map.Entry<ICustomDamageItem, List<Tuple<Integer, Tuple<IRecipeInput, Integer>>>> entry : ClassicRecipes.canningMachine.getRepairMap().entrySet()) {
+            for (Tuple<Integer, Tuple<IRecipeInput, Integer>> tuple : entry.getValue()) {
+                CanningRecipe recipe = new CanningRecipe(RecipeType.REPAIR).setDamageItem(entry.getKey()).setMeta(tuple.getFirst()).setInput(new ItemsIngredient(tuple.getSecond().getFirst().getInputs())).setInt(tuple.getSecond().getSecond());
+                remove(recipe);
+                addBackup(recipe);
+            }
+        }
+        return true;
     }
 
     public boolean removeCanning(ItemStack container) {
@@ -195,6 +262,8 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
                     ClassicRecipes.canningMachine.registerFuelValue(stack, recipe.intValue);
                     if (recipe.floatValue > 0) ClassicRecipes.canningMachine.registerFuelMultiplier(stack, recipe.floatValue);
                 }
+            case REPAIR:
+                ClassicRecipes.canningMachine.addRepairRecipe(recipe.damageItem, recipe.meta, new RecipeInput(recipe.input), recipe.intValue);
         }
     }
 
@@ -208,6 +277,8 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.canningMachine.deleteItemFuel(stack);
                 }
+            case REPAIR:
+                ClassicRecipes.canningMachine.removeRepairItem(recipe.damageItem, recipe.meta);
         }
     }
 
@@ -229,6 +300,9 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
         public float floatValue;
 
         public ItemStack container;
+
+        public int meta;
+        public ICustomDamageItem damageItem;
 
         public CanningRecipe(RecipeType type) {
             this.type = type;
@@ -258,11 +332,22 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
             this.container = container;
             return this;
         }
+
+        public CanningRecipe setMeta(int meta) {
+            this.meta = meta;
+            return this;
+        }
+
+        public CanningRecipe setDamageItem(ICustomDamageItem item) {
+            this.damageItem = item;
+            return this;
+        }
     }
 
     private enum RecipeType {
         ITEM_EFFECT,
         FUEL_VALUE,
-        CANNING_RECIPE
+        CANNING_RECIPE,
+        REPAIR
     }
 }

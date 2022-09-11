@@ -2,16 +2,21 @@ package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
 import com.cleanroommc.groovyscript.core.mixin.ic2.ElectrolyzerRecipeManagerAccessor;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.recipe.IElectrolyzerRecipeManager;
+import ic2.api.recipe.IRecipeInput;
+import ic2.api.recipe.MachineRecipe;
 import ic2.api.recipe.Recipes;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +38,10 @@ public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzer
         return add(name, recipe, true);
     }
 
+    public SimpleObjectStream<Map.Entry<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe>> streamRecipes() {
+        return new SimpleObjectStream<>(Recipes.electrolyzer.getRecipeMap().entrySet()).setRemover(r -> remove(r.getKey(), r.getValue()));
+    }
+
     public boolean remove(String name, IElectrolyzerRecipeManager.ElectrolyzerRecipe recipe) {
         if (fluidMap.remove(name, recipe)) {
             addBackup(Pair.of(name, recipe));
@@ -42,14 +51,23 @@ public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzer
         return false;
     }
 
-    public Pair<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> add(FluidStack input, int EUaTick, int ticksNeeded, FluidStack... outputs) {
+    public Pair<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> add(FluidStack input, int euATick, int ticksNeeded, FluidStack... outputs) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Electrolyzer recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(euATick <= 0, () -> "energy per tick must be higher than zero")
+                .add(ticksNeeded <= 0, () -> "recipe time must be higher than zero")
+                .add(outputs == null || outputs.length <= 0, () -> "outputs must not be null")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         List<IElectrolyzerRecipeManager.ElectrolyzerOutput> list = new ArrayList<>();
         for (int i = 0; i < outputs.length; i++) {
             FluidStack fs = outputs[i];
             if (fs != null) list.add(new IElectrolyzerRecipeManager.ElectrolyzerOutput(fs.getFluid().getName(), fs.amount, EnumFacing.values()[i]));
         }
 
-        return add(input.getFluid().getName(), new IElectrolyzerRecipeManager.ElectrolyzerRecipe(input.amount, EUaTick, ticksNeeded, list.toArray(new IElectrolyzerRecipeManager.ElectrolyzerOutput[list.size()])));
+        return add(input.getFluid().getName(), new IElectrolyzerRecipeManager.ElectrolyzerRecipe(input.amount, euATick, ticksNeeded, list.toArray(new IElectrolyzerRecipeManager.ElectrolyzerOutput[list.size()])));
     }
 
     public void removeByOutput(FluidStack... outputs) {

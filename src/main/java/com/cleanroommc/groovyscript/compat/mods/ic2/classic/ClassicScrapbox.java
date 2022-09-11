@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 
 import com.cleanroommc.groovyscript.compat.mods.ic2.exp.Scrapbox;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.classic.recipe.ClassicRecipes;
 import ic2.api.classic.recipe.custom.IClassicScrapBoxManager;
@@ -25,8 +26,19 @@ public class ClassicScrapbox extends Scrapbox {
     }
 
     public void add(ItemStack stack, float chance) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Scrapbox recipe")
+                .add(IngredientHelper.isEmpty(stack), () -> "stack must not be emtpy")
+                .add(chance <= 0, () -> "chance must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
         ClassicRecipes.scrapboxDrops.addDrop(stack, chance);
         addScripted(new Drop(stack, chance));
+    }
+
+    public SimpleObjectStream<IClassicScrapBoxManager.IDrop> streamRecipes() {
+        return new SimpleObjectStream<>(ClassicRecipes.scrapboxDrops.getEntries()).setRemover(r -> remove(r.getDrop()));
     }
 
     public void remove(IClassicScrapBoxManager.IDrop drop) {
@@ -34,19 +46,25 @@ public class ClassicScrapbox extends Scrapbox {
         addBackup(drop);
     }
 
-    public void remove(ItemStack stack) {
+    public boolean remove(ItemStack stack) {
         if (IngredientHelper.isEmpty(stack)) {
             GroovyLog.msg("Error removing Industrialcraft 2 Scrapbox recipe")
                     .add("stack must not be empty")
                     .error()
                     .post();
-            return;
+            return false;
         }
         for (IClassicScrapBoxManager.IDrop drop : ClassicRecipes.scrapboxDrops.getEntries()) {
             if (ItemStack.areItemStacksEqual(drop.getDrop(), stack)) {
                 remove(drop);
+                return true;
             }
         }
+        GroovyLog.msg("Error removing Industrialcraft 2 Scrapbox recipe")
+                .add("no recipes found for %s", stack)
+                .error()
+                .post();
+        return false;
     }
 
     public void removeAll() {

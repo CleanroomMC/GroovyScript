@@ -12,8 +12,10 @@ import ic2.api.recipe.MachineRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class ClassicMacerator extends Macerator {
 
@@ -25,12 +27,33 @@ public class ClassicMacerator extends Macerator {
 
     @Override
     public MachineRecipe<IRecipeInput, Collection<ItemStack>> add(ItemStack output, IIngredient input) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Macerator recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(new RecipeInput(input), Collections.singleton(output));
         add(recipe);
         return recipe;
     }
 
     public MachineRecipe<IRecipeInput, Collection<ItemStack>> add(ItemStack output, IIngredient input, float xp) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Macerator recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
+        if (xp < 0) {
+            GroovyLog.msg("Error adding Industrialcraft 2 Macerator recipe")
+                    .add("xp must not be negative, defaulting to zero")
+                    .warn()
+                    .post();
+            xp = 0F;
+        }
         MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(new RecipeInput(input), Collections.singleton(output));
         ClassicRecipes.macerator.addRecipe(recipe.getInput(), output, xp, "" + recipe.hashCode());
         addScripted(recipe);
@@ -40,6 +63,11 @@ public class ClassicMacerator extends Macerator {
     @Override
     public MachineRecipe<IRecipeInput, Collection<ItemStack>> add(ItemStack output, IIngredient input, NBTTagCompound tag) {
         return add(output, input);
+    }
+
+    public boolean remove(IMachineRecipeList.RecipeEntry entry) {
+        addBackup(new MachineRecipe<>(entry.getInput(), entry.getOutput().getAllOutputs()));
+        return ClassicRecipes.macerator.removeRecipe(entry.getInput()).size() > 0;
     }
 
     @Override
@@ -99,5 +127,16 @@ public class ClassicMacerator extends Macerator {
     public boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
         addBackup(recipe);
         return ClassicRecipes.macerator.removeRecipe(recipe.getInput()).size() > 0;
+    }
+
+    @Override
+    protected List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> asList() {
+        List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> list = new ArrayList<>();
+        for (IMachineRecipeList.RecipeEntry entry : ClassicRecipes.macerator.getRecipeMap()) {
+            MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(entry.getInput(), entry.getOutput().getAllOutputs());
+            list.add(recipe);
+        }
+
+        return list;
     }
 }

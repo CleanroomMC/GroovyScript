@@ -1,13 +1,17 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.recipe.IFluidHeatManager;
 import ic2.api.recipe.Recipes;
 import ic2.core.block.heatgenerator.tileentity.TileEntityFluidHeatGenerator;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Map;
 
 public class FluidHeater extends VirtualizedRegistry<Pair<String, IFluidHeatManager.BurnProperty>> {
 
@@ -22,6 +26,13 @@ public class FluidHeater extends VirtualizedRegistry<Pair<String, IFluidHeatMana
     }
 
     public Pair<String, IFluidHeatManager.BurnProperty> add(FluidStack input, int heat) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Fluid Heat Generator recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(heat <= 0, () -> "heat must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         return add(input.getFluid().getName(), new IFluidHeatManager.BurnProperty(input.amount, heat));
     }
 
@@ -30,6 +41,10 @@ public class FluidHeater extends VirtualizedRegistry<Pair<String, IFluidHeatMana
         TileEntityFluidHeatGenerator.addFuel(name, recipe.amount, recipe.heat);
         addScripted(pair);
         return pair;
+    }
+
+    public SimpleObjectStream<Map.Entry<String, IFluidHeatManager.BurnProperty>> streamRecipes() {
+        return new SimpleObjectStream<>(Recipes.fluidHeatGenerator.getBurnProperties().entrySet()).setRemover(r -> remove(r.getKey()));
     }
 
     public boolean remove(FluidStack input) {
@@ -50,6 +65,13 @@ public class FluidHeater extends VirtualizedRegistry<Pair<String, IFluidHeatMana
     }
 
     public boolean remove(String name) {
+        if (StringUtils.isEmpty(name)) {
+            GroovyLog.msg("Error removing Industrialcraft 2 Liquid Fuel Firebox recipe")
+                    .add("input must not be empty")
+                    .error()
+                    .post();
+            return false;
+        }
         IFluidHeatManager.BurnProperty property = Recipes.fluidHeatGenerator.getBurnProperties().remove(name);
         if (property != null) {
             addBackup(Pair.of(name, property));

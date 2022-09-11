@@ -2,13 +2,12 @@ package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.classic.recipe.ClassicRecipes;
 import ic2.api.classic.recipe.machine.IElectrolyzerRecipeList;
 import net.minecraft.item.ItemStack;
-
-import java.util.Iterator;
 
 public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer.ElectrolyzerRecipe> {
 
@@ -22,25 +21,53 @@ public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer
         restoreFromBackup().forEach(this::add);
     }
 
-    public ElectrolyzerRecipe addBoth(ItemStack output, IIngredient ingredient, int energy) {
-        ElectrolyzerRecipe recipe = new ElectrolyzerRecipe(RecipeType.BOTH, ingredient, output, energy);
+    public ElectrolyzerRecipe addBoth(ItemStack output, IIngredient input, int energy) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Electrolyzer recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .add(energy <= 0, () -> "energy must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
+        ElectrolyzerRecipe recipe = new ElectrolyzerRecipe(RecipeType.BOTH, input, output, energy);
         add(recipe);
         addScripted(recipe);
         return recipe;
     }
 
-    public ElectrolyzerRecipe addCharge(ItemStack output, IIngredient ingredient, int energy) {
-        ElectrolyzerRecipe recipe = new ElectrolyzerRecipe(RecipeType.CHARGE, ingredient, output, energy);
+    public ElectrolyzerRecipe addCharge(ItemStack output, IIngredient input, int energy) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Electrolyzer recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .add(energy <= 0, () -> "energy must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
+        ElectrolyzerRecipe recipe = new ElectrolyzerRecipe(RecipeType.CHARGE, input, output, energy);
         add(recipe);
         addScripted(recipe);
         return recipe;
     }
 
-    public ElectrolyzerRecipe addDischarge(ItemStack output, IIngredient ingredient, int energy) {
-        ElectrolyzerRecipe recipe = new ElectrolyzerRecipe(RecipeType.DISCHARGE, ingredient, output, energy);
+    public ElectrolyzerRecipe addDischarge(ItemStack output, IIngredient input, int energy) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Electrolyzer recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
+                .add(energy <= 0, () -> "energy must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
+        ElectrolyzerRecipe recipe = new ElectrolyzerRecipe(RecipeType.DISCHARGE, input, output, energy);
         add(recipe);
         addScripted(recipe);
         return recipe;
+    }
+
+    public SimpleObjectStream<IElectrolyzerRecipeList.RecipeEntry> streamRecipes() {
+        return new SimpleObjectStream<>(ClassicRecipes.electrolyzer.getRecipeList()).setRemover(r -> removeByInput(r.getInput()));
     }
 
     public boolean removeByOutput(ItemStack output) {

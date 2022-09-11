@@ -1,11 +1,15 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 
+import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.classic.recipe.ClassicRecipes;
 import ic2.api.classic.recipe.custom.ILiquidFuelGeneratorRegistry;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.Map;
 
 public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator.LFGRecipe> {
 
@@ -25,22 +29,52 @@ public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator
     }
     
     public LFGRecipe add(FluidStack fluid, int burnTicks, float euPerTick) {
+        if (GroovyLog.msg("Error adding Fluid Generator recipe")
+                .add(IngredientHelper.isEmpty(fluid), () -> "fluid must not be empty")
+                .add(burnTicks <= 0, () -> "burnTicks must be higher than zero")
+                .add(euPerTick <= 0, () -> "euPerTick must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return null;
+        }
         LFGRecipe recipe = new LFGRecipe(fluid, burnTicks, euPerTick);
         add(recipe);
         return recipe;
     }
     
     public boolean remove(FluidStack fluid) {
-        ILiquidFuelGeneratorRegistry.BurnEntry entry = ClassicRecipes.fluidGenerator.getBurnEntry(fluid.getFluid());
+        if (IngredientHelper.isEmpty(fluid)) {
+            GroovyLog.msg("Error removing Liquid Fuel Generator recipe")
+                    .add("fluid must not be empty")
+                    .error()
+                    .post();
+            return false;
+        }
+        return remove(fluid.getFluid());
+    }
+
+    public boolean remove(Fluid fluid) {
+        if (fluid == null) {
+            GroovyLog.msg("Error removing Liquid Fuel Generator recipe")
+                    .add("fluid must not be empty")
+                    .error()
+                    .post();
+            return false;
+        }
+        ILiquidFuelGeneratorRegistry.BurnEntry entry = ClassicRecipes.fluidGenerator.getBurnEntry(fluid);
         if (entry == null) {
             GroovyLog.msg("Error removing Liquid Fuel Generator recipe")
-                    .add("input must not be empty")
+                    .add("no recipes found for %s", fluid)
                     .error()
                     .post();
             return false;
         }
         remove(new LFGRecipe(fluid, entry.getTicksLast(), entry.getProduction()));
         return true;
+    }
+
+    public SimpleObjectStream<Map.Entry<Fluid, ILiquidFuelGeneratorRegistry.BurnEntry>> streamRecipes() {
+        return new SimpleObjectStream<>(ClassicRecipes.fluidGenerator.getBurnMap().entrySet()).setRemover(r -> remove(r.getKey()));
     }
 
     public void remove(LFGRecipe recipe) {

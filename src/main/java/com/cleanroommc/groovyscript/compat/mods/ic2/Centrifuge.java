@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.ic2;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.recipe.IRecipeInput;
@@ -96,6 +97,10 @@ public class Centrifuge extends VirtualizedRegistry<MachineRecipe<IRecipeInput, 
         }
     }
 
+    public SimpleObjectStream<MachineRecipe<IRecipeInput, Collection<ItemStack>>> streamRecipes() {
+        return new SimpleObjectStream<>(asList()).setRemover(this::remove);
+    }
+
     private boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe, boolean backup) {
         for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.centrifuge.getRecipes().iterator(); iterator.hasNext(); ) {
             MachineRecipe<IRecipeInput, Collection<ItemStack>> rec = iterator.next();
@@ -112,5 +117,13 @@ public class Centrifuge extends VirtualizedRegistry<MachineRecipe<IRecipeInput, 
     private void add(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe, boolean scripted) {
         Recipes.centrifuge.addRecipe(recipe.getInput(), recipe.getOutput(), recipe.getMetaData(), false);
         if (scripted) addScripted(recipe);
+    }
+
+    private static List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> asList() {
+        List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> list = new ArrayList<>();
+        for (MachineRecipe<IRecipeInput, Collection<ItemStack>> rec : Recipes.centrifuge.getRecipes()) {
+            list.add(rec);
+        }
+        return list;
     }
 }

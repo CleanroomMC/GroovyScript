@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.classic.recipe.ClassicRecipes;
@@ -26,10 +27,21 @@ public class RareEarthExtractor extends VirtualizedRegistry<IRareEarthExtractorR
     }
 
     public void add(IIngredient input, float value) {
+        if (GroovyLog.msg("Error adding Industrialcraft 2 Rare Earth Extractor recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                .add(value <= 0, () -> "value must be higher than zero")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
         for (ItemStack stack : input.getMatchingStacks()) {
             IRareEarthExtractorRecipeList.EarthEntry entry = new IRareEarthExtractorRecipeList.EarthEntry(value, stack);
             add(entry);
         }
+    }
+
+    public SimpleObjectStream<IRareEarthExtractorRecipeList.EarthEntry> streamRecipes() {
+        return new SimpleObjectStream<>(ClassicRecipes.earthExtractor.getRecipeList()).setRemover(r -> this.remove(r.getItem()));
     }
 
     public boolean remove(ItemStack input) {
