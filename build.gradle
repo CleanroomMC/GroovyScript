@@ -116,6 +116,8 @@ dependencies {
         deobfCompile 'curse.maven:draconic_evolution-223565:3431261'
         deobfCompile 'curse.maven:brandons_core-231382:3408276'
         deobfCompile 'curse.maven:immersive_engineering-231951:2974106'
+        deobfCompile 'curse.maven:industrialcraft_experimental-242638:3838713'
+        deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
     } else {
         deobfProvided 'curse.maven:mekanism-268560:2835175'
 
@@ -136,6 +138,8 @@ dependencies {
         deobfProvided 'curse.maven:draconic_evolution-223565:3431261'
         deobfProvided 'curse.maven:brandons_core-231382:3408276'
         deobfProvided 'curse.maven:immersive_engineering-231951:2974106'
+        deobfProvided 'curse.maven:industrialcraft_experimental-242638:3838713'
+        deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
     }
 
     shadow 'org.codehaus.groovy:groovy-ant:3.0.11'

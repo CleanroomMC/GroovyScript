@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.core;
 
+import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.google.common.collect.ImmutableList;
 import net.minecraftforge.fml.common.Loader;
 import zone.rong.mixinbooter.ILateMixinLoader;
@@ -13,7 +14,10 @@ public class LateMixin implements ILateMixinLoader {
 
     @Override
     public List<String> getMixinConfigs() {
-        return modMixins.stream().map(mod -> "mixin.groovyscript." + mod + ".json").collect(Collectors.toList());
+        List<String> list = modMixins.stream().map(mod -> "mixin.groovyscript." + mod + ".json").collect(Collectors.toList());
+        if (IC2.isLoaded(true)) list.add("mixin.groovyscript.ic2.json");
+        else list.add("mixin.groovyscript.ic2.classic.json");
+        return list;
     }
 
     @Override
