@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe>> {
+
     private static final Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> fluidMap = ((ElectrolyzerRecipeManagerAccessor) Recipes.electrolyzer).getFluidMap();
 
     public Electrolyzer() {

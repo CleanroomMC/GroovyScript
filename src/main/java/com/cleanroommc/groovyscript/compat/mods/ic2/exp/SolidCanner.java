@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import java.util.Iterator;
 
 public class SolidCanner extends VirtualizedRegistry<MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> {
+
     public SolidCanner() {
         super("SolidCanner", "solidcanner");
     }

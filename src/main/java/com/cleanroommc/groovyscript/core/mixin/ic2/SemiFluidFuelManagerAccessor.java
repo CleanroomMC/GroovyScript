@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Mixin(SemiFluidFuelManager.class)
 public interface SemiFluidFuelManagerAccessor {
+
     @Accessor
     Map<String, ISemiFluidFuelManager.FuelProperty> getFuelProperties();
 }

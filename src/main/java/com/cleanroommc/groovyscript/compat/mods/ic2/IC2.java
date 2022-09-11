@@ -38,7 +38,7 @@ public class IC2 extends ModPropertyContainer {
     public FluidHeater liquidFueledFirebox = null;
 
     public IC2() {
-        isExp = isLoaded(true);
+        isExp = isExp();
 
         extractor = isExp ? new Extractor() : new ClassicExtractor();
         macerator = isExp ? new Macerator() : new ClassicMacerator();
@@ -91,10 +91,10 @@ public class IC2 extends ModPropertyContainer {
         }
     }
 
-    public static boolean isLoaded(boolean exp) {
+    public static boolean isExp() {
         for (ModContainer container : Loader.instance().getActiveModList()) {
             if (container.getModId().equals("ic2")) {
-                return !exp || container.getMetadata().version.contains("ex");
+                return container.getMetadata().version.contains("ex");
             }
         }
 

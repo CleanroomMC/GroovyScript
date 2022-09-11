@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RecipeInput implements IRecipeInput {
+
     private final IIngredient ingredient;
 
     public RecipeInput(IIngredient ingredient) {

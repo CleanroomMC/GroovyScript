@@ -15,7 +15,7 @@ public class LateMixin implements ILateMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
         List<String> list = modMixins.stream().map(mod -> "mixin.groovyscript." + mod + ".json").collect(Collectors.toList());
-        if (IC2.isLoaded(true)) list.add("mixin.groovyscript.ic2.json");
+        if (IC2.isExp()) list.add("mixin.groovyscript.ic2.json");
         else list.add("mixin.groovyscript.ic2.classic.json");
         return list;
     }

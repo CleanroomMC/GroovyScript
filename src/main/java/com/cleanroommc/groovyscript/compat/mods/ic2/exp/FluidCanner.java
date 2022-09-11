@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.Iterator;
 
 public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> {
+
     public FluidCanner() {
         super("FluidCanner", "fluidcanner");
     }

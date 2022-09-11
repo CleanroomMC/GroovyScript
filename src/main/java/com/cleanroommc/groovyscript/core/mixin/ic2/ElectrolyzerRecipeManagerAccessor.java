@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Mixin(ElectrolyzerRecipeManager.class)
 public interface ElectrolyzerRecipeManagerAccessor {
+
     @Accessor
     Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> getFluidMap();
 }

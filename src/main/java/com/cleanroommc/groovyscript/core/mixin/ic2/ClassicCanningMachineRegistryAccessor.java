@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Mixin(CanningMachineRegistry.class)
 public interface ClassicCanningMachineRegistryAccessor {
+
     @Accessor("IdToItems")
     Map<Integer, List<ItemWithMeta>> getIdToItems();
 }

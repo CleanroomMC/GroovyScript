@@ -8,6 +8,7 @@ import java.util.List;
 
 @Mixin(ScrapboxRecipeManager.class)
 public interface ScrapboxRecipeManagerAccessor {
+
     @Accessor
     List getDrops();
 }

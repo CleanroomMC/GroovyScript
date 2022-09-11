@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.classic.recipe.ClassicRecipes;
 import ic2.api.classic.recipe.custom.IClassicScrapBoxManager;
-import ic2.core.item.recipe.ScrapBoxManager;
 import net.minecraft.item.ItemStack;
 
 public class ClassicScrapbox extends Scrapbox {

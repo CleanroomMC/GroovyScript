@@ -9,6 +9,7 @@ import ic2.api.classic.recipe.machine.IRareEarthExtractorRecipeList;
 import net.minecraft.item.ItemStack;
 
 public class RareEarthExtractor extends VirtualizedRegistry<IRareEarthExtractorRecipeList.EarthEntry> {
+
     public RareEarthExtractor() {
         super("RareEarthExtractor", "rareearthextractor");
     }
