@@ -4,7 +4,6 @@ import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
-import com.cleanroommc.groovyscript.event.Events;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.sandbox.GroovyDeobfuscationMapper;
 import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
@@ -40,7 +39,6 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
         scriptPath = Loader.instance().getConfigDir().toPath().getParent().toString() + "/scripts";
         startupPath = new File(scriptPath + "/startup");
         SandboxRunner.init();
-        Events.init();
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
     }
