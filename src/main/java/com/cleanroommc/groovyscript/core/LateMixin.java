@@ -10,14 +10,11 @@ import java.util.stream.Collectors;
 
 public class LateMixin implements ILateMixinLoader {
 
-    public static final List<String> modMixins = ImmutableList.of("jei", "mekanism", "enderio", "thermalexpansion", "draconicevolution");
+    public static final List<String> modMixins = ImmutableList.of("jei", "mekanism", "enderio", "thermalexpansion", "draconicevolution", "ic2_classic", "ic2_exp");
 
     @Override
     public List<String> getMixinConfigs() {
-        List<String> list = modMixins.stream().map(mod -> "mixin.groovyscript." + mod + ".json").collect(Collectors.toList());
-        if (IC2.isExp()) list.add("mixin.groovyscript.ic2.json");
-        else list.add("mixin.groovyscript.ic2.classic.json");
-        return list;
+        return modMixins.stream().map(mod -> "mixin.groovyscript." + mod + ".json").collect(Collectors.toList());
     }
 
     @Override
@@ -27,6 +24,9 @@ public class LateMixin implements ILateMixinLoader {
     }
 
     public boolean shouldEnableModMixin(String mod) {
+        if (mod.startsWith("ic2")) {
+            return Loader.isModLoaded("ic2") && mod.endsWith("exp") == IC2.isExp();
+        }
         return Loader.isModLoaded(mod);
     }
 }
