@@ -40,12 +40,12 @@ public class SandboxRunner {
     private static final Pattern packagePattern = Pattern.compile("[a-zA-Z_]+[a-zA-Z0-9_$]*(.[a-zA-Z_]+[a-zA-Z0-9_$]*)*");
     private static URL[] scriptEnvironment;
 
-    private static boolean running = false;
+    private static final ThreadLocal<Boolean> running = ThreadLocal.withInitial(() -> false);
 
     private static final Map<String, Object> BINDINGS = new Object2ObjectOpenHashMap<>();
 
     public static boolean isCurrentlyRunning() {
-        return running;
+        return running.get();
     }
 
     public static void registerBinding(String name, Object obj) {
@@ -57,7 +57,7 @@ public class SandboxRunner {
     public static void init() {
         scriptEnvironment = new URL[1];
         try {
-            scriptEnvironment[0] = new File(GroovyScript.scriptPath).toURI().toURL();
+            scriptEnvironment[0] = new File(GroovyScript.getScriptPath()).toURI().toURL();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -117,12 +117,12 @@ public class SandboxRunner {
         Binding binding = new Binding(BINDINGS);
 
         // find and run scripts
-        running = true;
+        running.set(true);
         for (File file : getStartupFiles()) {
             GroovyLog.LOG.info(" - executing %s", file.toString());
             engine.run(file.toString(), binding);
         }
-        running = false;
+        running.set(false);
         ReloadableRegistryManager.afterScriptRun();
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
         if (ReloadableRegistryManager.isFirstLoad()) {
@@ -131,16 +131,16 @@ public class SandboxRunner {
     }
 
     private static File[] getStartupFiles() throws IOException {
-        Path path = GroovyScript.startupPath.toPath();
+        Path path = GroovyScript.getStartupPath().toPath();
         if (!Files.exists(path)) {
             Files.createDirectory(path);
         }
-        File[] files = GroovyScript.startupPath.listFiles();
+        File[] files = GroovyScript.getStartupPath().listFiles();
         if (files == null || files.length == 0) {
             Files.createFile(new File(path + "/main.groovy").toPath());
             return new File[0];
         }
-        Path mainPath = new File(GroovyScript.scriptPath).toPath();
+        Path mainPath = new File(GroovyScript.getScriptPath()).toPath();
         return Arrays.stream(files).map(file -> mainPath.relativize(file.toPath()).toFile()).toArray(File[]::new);
     }
 
@@ -151,7 +151,7 @@ public class SandboxRunner {
     public static String relativizeSource(String source) {
         try {
             Path path = Paths.get(new URL(source).toURI());
-            Path mainPath = new File(GroovyScript.scriptPath).toPath();
+            Path mainPath = new File(GroovyScript.getScriptPath()).toPath();
             return mainPath.relativize(path).toString();
         } catch (URISyntaxException | MalformedURLException e) {
             GroovyLog.LOG.error("Error parsing script source '%s'", source);
@@ -162,12 +162,12 @@ public class SandboxRunner {
     public static <T> T runClosure(Closure<T> closure, Object... args) {
         try {
             SimpleGroovyInterceptor.makeSureExists();
-            running = true;
+            running.set(true);
             T t = closure.call(args);
-            running = false;
+            running.set(false);
             return t;
         } catch (Exception e) {
-            running = false;
+            running.set(false);
             GroovyScript.LOGGER.error("Caught an exception trying to run a closure:");
             e.printStackTrace();
         }
