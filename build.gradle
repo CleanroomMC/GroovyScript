@@ -84,7 +84,7 @@ dependencies {
         deobfCompile 'zone.rong:mixinbooter:4.2'
     }
 
-    compile 'org.jetbrains:annotations:23.0.0'
+    compileOnly 'org.jetbrains:annotations:23.0.0'
 
     // compile 'org.codehaus.groovy:groovy-all:3.0.11'
     compile 'org.codehaus.groovy:groovy-ant:3.0.11'

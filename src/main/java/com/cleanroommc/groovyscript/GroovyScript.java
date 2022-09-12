@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -35,8 +36,8 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
-    public static String scriptPath;
-    public static File startupPath;
+    private static String scriptPath;
+    private static File startupPath;
 
     private static RunConfig runConfig;
     public static final JsonParser jsonParser = new JsonParser();
@@ -76,6 +77,22 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
                 "com.cleanroommc.groovyscript.registry",
                 "com.cleanroommc.groovyscript.sandbox"
         );
+    }
+
+    @NotNull
+    public static String getScriptPath() {
+        if (scriptPath == null) {
+            throw new IllegalStateException("GroovyScript is not yet loaded!");
+        }
+        return scriptPath;
+    }
+
+    @NotNull
+    public static File getStartupPath() {
+        if (startupPath == null) {
+            throw new IllegalStateException("GroovyScript is not yet loaded!");
+        }
+        return startupPath;
     }
 
     public static RunConfig getRunConfig() {

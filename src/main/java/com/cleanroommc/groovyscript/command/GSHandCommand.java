@@ -1,10 +1,14 @@
 package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.NbtHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -14,6 +18,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Creates and sends information to the player for the `/gs hand` command
@@ -25,6 +30,7 @@ public class GSHandCommand {
         String itemNbt = IngredientHelper.asGroovyCode(stack, true, prettyNbt);
         String item = IngredientHelper.asGroovyCode(stack, true);
 
+        messages.add(new TextComponentString("Item:"));
         messages.add(TextCopyable.string(item, itemNbt).build());
         GuiScreen.setClipboardString(item);
     }
@@ -37,11 +43,15 @@ public class GSHandCommand {
 //        sender.sendMessage(new TextComponentString(formatted));
     }
 
+    @SuppressWarnings("all")
     public static void blockStateInformation(List<ITextComponent> messages, @NotNull IBlockState state) {
-        //TODO when blockStates are implemented
-//        String s = IngredientHelper.toIIngredient(state).asGroovyCode();
-//        String formatted = BracketFormatter.formatGSCode(s, !state.getPropertyKeys().isEmpty());
-//        sender.sendMessage(new TextComponentString(formatted));
+        if (!state.getProperties().isEmpty()) {
+            messages.add(new TextComponentString("Block state properties:"));
+            for (Map.Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
+                IProperty property = entry.getKey();
+                messages.add(new TextComponentString(" - " + property.getName() + " = " + property.getName(entry.getValue())));
+            }
+        }
     }
 
     public static void fluidInformation(List<ITextComponent> messages, @NotNull FluidStack stack) {
@@ -65,5 +75,13 @@ public class GSHandCommand {
                 messages.add(TextCopyable.string(s, " - " + oreName).build());
             }
         }
+    }
+
+    public static void tileInformation(List<ITextComponent> messages, TileEntity tile) {
+        NBTTagCompound nbt = tile.serializeNBT();
+        String copyText = NbtHelper.toGroovyCode(nbt, false, false);
+
+        messages.add(new TextComponentString("Tile NBT:"));
+        messages.add(TextCopyable.string(copyText, NbtHelper.toGroovyCode(nbt, true, true)).build());
     }
 }
