@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.event.GsHandEvent;
-import com.cleanroommc.groovyscript.helper.NbtHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SCopy;
 import com.cleanroommc.groovyscript.network.SReloadJei;
@@ -33,7 +32,9 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.server.command.CommandTreeBase;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import java.util.List;
 public class GSCommand extends CommandTreeBase {
 
     public GSCommand() {
+
         addSubcommand(new SimpleCommand("log", (server, sender, args) -> {
             sender.sendMessage(new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + "Groovy Log"))
                     .setStyle(new Style()
@@ -53,7 +55,12 @@ public class GSCommand extends CommandTreeBase {
                             .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.LOG.getPath().getParent().toString() + "/logs/latest.log"))
                             .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open Minecraft log")))));
         }));
+
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
+            if (FMLCommonHandler.instance().getSide().isServer()) {
+                sender.sendMessage(new TextComponentString("Reloading in multiplayer is currently no allowed to avoid desync."));
+                return;
+            }
             GroovyLog.LOG.info("========== Reloading Groovy scripts ==========");
             long time = System.currentTimeMillis();
             Throwable throwable = SandboxRunner.run();
@@ -68,6 +75,7 @@ public class GSCommand extends CommandTreeBase {
             }
             sender.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
         }));
+
         addSubcommand(new SimpleCommand("hand", (server, sender, args) -> {
             if (sender instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) sender;
@@ -135,11 +143,12 @@ public class GSCommand extends CommandTreeBase {
                 }
             }
         }));
+
         addSubcommand(new GSMekanismCommand());
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String[] args) throws CommandException {
         if (args.length > 0) {
             if (sender instanceof EntityPlayerMP && args[0].equals("copy")) {
                 NetworkHandler.sendToPlayer(new SCopy(Arrays.copyOfRange(args, 1, args.length)), (EntityPlayerMP) sender);
