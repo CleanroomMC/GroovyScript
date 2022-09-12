@@ -1,13 +1,20 @@
 package com.cleanroommc.groovyscript.helper;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
+@GroovyBlacklist
 public class JsonHelper {
 
     public static final JsonObject EMPTY_JSON = new JsonObject();
+    public static final JsonParser jsonParser = new JsonParser();
+    public static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static float getFloat(JsonObject json, float defaultValue, String... keys) {
         for (String key : keys) {
@@ -95,5 +102,35 @@ public class JsonHelper {
             }
         }
         return defaultJson;
+    }
+
+    public static JsonElement loadJson(File file) {
+        try {
+            if (!file.isFile()) return null;
+            Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
+            JsonElement json = jsonParser.parse(new JsonReader(reader));
+            reader.close();
+            return json;
+        } catch (Exception e) {
+            GroovyScript.LOGGER.error("Failed to read file on path {}", file, e);
+        }
+        return null;
+    }
+
+    public static boolean saveJson(File file, JsonElement element) {
+        try {
+            if (!file.getParentFile().isDirectory()) {
+                if (!file.getParentFile().mkdirs()) {
+                    GroovyScript.LOGGER.error("Failed to create file dirs on path {}", file);
+                }
+            }
+            Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+            writer.write(gson.toJson(element));
+            writer.close();
+            return true;
+        } catch (Exception e) {
+            GroovyScript.LOGGER.error("Failed to save file on path {}", file, e);
+        }
+        return false;
     }
 }

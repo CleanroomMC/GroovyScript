@@ -5,12 +5,13 @@ import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.event.Events;
+import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.sandbox.GroovyDeobfuscationMapper;
+import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
-import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
-import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -20,8 +21,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,31 +37,34 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
-    private static String scriptPath;
-    private static File startupPath;
+    private static File scriptPath;
 
     private static RunConfig runConfig;
-    public static final JsonParser jsonParser = new JsonParser();
-    public static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    private static GroovyScriptSandbox sandbox;
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
         NetworkHandler.init();
         GroovyDeobfuscationMapper.init();
-        scriptPath = Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy";
-        startupPath = new File(scriptPath + "/startup");
+        scriptPath = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy");
+        try {
+            sandbox = new GroovyScriptSandbox(getScriptFile().toURI().toURL());
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("Error initializing sandbox!");
+        }
         runConfig = createRunConfig();
-        SandboxRunner.init();
+        //SandboxRunner.init();
         Events.init();
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
 
-        SandboxRunner.run("preInit");
+        getSandbox().run("preInit");
     }
 
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
-        SandboxRunner.run("postInit");
+        getSandbox().run("postInit");
     }
 
     @Mod.EventHandler
@@ -81,6 +85,11 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
 
     @NotNull
     public static String getScriptPath() {
+        return getScriptFile().getPath();
+    }
+
+    @NotNull
+    public static File getScriptFile() {
         if (scriptPath == null) {
             throw new IllegalStateException("GroovyScript is not yet loaded!");
         }
@@ -88,11 +97,11 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
     }
 
     @NotNull
-    public static File getStartupPath() {
-        if (startupPath == null) {
+    public static GroovyScriptSandbox getSandbox() {
+        if (sandbox == null) {
             throw new IllegalStateException("GroovyScript is not yet loaded!");
         }
-        return startupPath;
+        return sandbox;
     }
 
     public static RunConfig getRunConfig() {
@@ -103,45 +112,15 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
         File runConfigFile = new File(scriptPath + File.separator + "runConfig.json");
         if (!Files.exists(runConfigFile.toPath())) {
             JsonObject json = RunConfig.createDefaultJson();
-            saveJson(runConfigFile, json);
+            JsonHelper.saveJson(runConfigFile, json);
             return new RunConfig(json);
         }
-        JsonElement element = loadJson(runConfigFile);
+        JsonElement element = JsonHelper.loadJson(runConfigFile);
         if (element == null) return new RunConfig(new JsonObject());
-        if (!element.isJsonObject()){
+        if (!element.isJsonObject()) {
             LOGGER.error("runConfig.json must be a json object!");
             return new RunConfig(new JsonObject());
         }
         return new RunConfig(element.getAsJsonObject());
-    }
-
-    public static JsonElement loadJson(File file) {
-        try {
-            if (!file.isFile()) return null;
-            Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
-            JsonElement json = jsonParser.parse(new JsonReader(reader));
-            reader.close();
-            return json;
-        } catch (Exception e) {
-            LOGGER.error("Failed to read file on path {}", file, e);
-        }
-        return null;
-    }
-
-    public static boolean saveJson(File file, JsonElement element) {
-        try {
-            if (!file.getParentFile().isDirectory()) {
-                if (!file.getParentFile().mkdirs()) {
-                    LOGGER.error("Failed to create file dirs on path {}", file);
-                }
-            }
-            Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-            writer.write(gson.toJson(element));
-            writer.close();
-            return true;
-        } catch (Exception e) {
-            LOGGER.error("Failed to save file on path {}", file, e);
-        }
-        return false;
     }
 }

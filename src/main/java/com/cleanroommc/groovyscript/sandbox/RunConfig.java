@@ -90,7 +90,7 @@ public class RunConfig {
         String separator = getSeparator();
 
         for (String path : paths) {
-            File[] listedFiles = new File(GroovyScript.scriptPath + File.separator + path).listFiles();
+            File[] listedFiles = new File(GroovyScript.getScriptPath() + File.separator + path).listFiles();
             if (listedFiles == null || listedFiles.length == 0) continue;
             int pathSize = path.split(separator).length;
             for (File file : listedFiles) {
@@ -107,7 +107,7 @@ public class RunConfig {
         }
 
         GroovyScript.LOGGER.info("Files: {}", files);
-        Path mainPath = new File(GroovyScript.scriptPath).toPath();
+        Path mainPath = new File(GroovyScript.getScriptPath()).toPath();
         return files.keySet().stream().map(file -> mainPath.relativize(file.toPath()).toFile()).collect(Collectors.toList());
     }
 

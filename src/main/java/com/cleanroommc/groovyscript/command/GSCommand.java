@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.command;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SCopy;
 import com.cleanroommc.groovyscript.network.SReloadJei;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
-import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandException;
@@ -63,7 +63,7 @@ public class GSCommand extends CommandTreeBase {
             }
             GroovyLog.LOG.info("========== Reloading Groovy scripts ==========");
             long time = System.currentTimeMillis();
-            Throwable throwable = SandboxRunner.run("postInit");
+            Throwable throwable = GroovyScript.getSandbox().run("postInit");
             time = System.currentTimeMillis() - time;
             if (throwable == null) {
                 sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));

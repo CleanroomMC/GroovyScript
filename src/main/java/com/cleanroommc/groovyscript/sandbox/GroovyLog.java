@@ -221,7 +221,7 @@ public class GroovyLog {
         if (source == Checker.UNKNOWN_SOURCE) {
             return Loader.instance().activeModContainer().getModId();
         }
-        return SandboxRunner.relativizeSource(source) + ":" + Checker.getLineNumber();
+        return GroovyScriptSandbox.relativizeSource(source) + ":" + Checker.getLineNumber();
     }
 
     private void writeLogLine(String line) {

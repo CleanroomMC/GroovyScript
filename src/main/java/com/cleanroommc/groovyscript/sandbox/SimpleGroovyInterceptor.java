@@ -12,20 +12,7 @@ import groovy.lang.Script;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 
-import java.util.Arrays;
-
 public class SimpleGroovyInterceptor extends GroovyInterceptor {
-
-    public static void makeSureExists() {
-        if (!getApplicableInterceptors().isEmpty()) {
-            for (GroovyInterceptor interceptor : getApplicableInterceptors()) {
-                if (interceptor.getClass() == SimpleGroovyInterceptor.class) {
-                    return;
-                }
-            }
-        }
-        new SimpleGroovyInterceptor().register();
-    }
 
     @Override
     public Object onMethodCall(Invoker invoker, Object receiver, String method, Object... args) throws Throwable {

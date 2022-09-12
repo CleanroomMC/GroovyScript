@@ -2,6 +2,7 @@ package org.kohsuke.groovy.sandbox.impl;
 
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor.Invoker;
+import org.kohsuke.groovy.sandbox.GroovySandbox;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -10,8 +11,10 @@ import java.util.Set;
 
 /**
  * @author Kohsuke Kawaguchi
+ * changes by brachy84
  */
 abstract class InvokerChain implements Invoker {
+
     protected final Iterator<GroovyInterceptor> chain;
 
     protected InvokerChain(Object receiver) {
@@ -22,7 +25,7 @@ abstract class InvokerChain implements Invoker {
         if (receiver == null) {
             chain = EMPTY_ITERATOR;
         } else {
-            List<GroovyInterceptor> interceptors = GroovyInterceptor.getApplicableInterceptors();
+            List<GroovyInterceptor> interceptors = GroovySandbox.getInterceptors();
             if (interceptors.isEmpty()) {
                 // We are running sandbox-transformed code, but there is no interceptor on the current thread.
                 // This is dangerous (SECURITY-2020), so we reject everything.
@@ -33,6 +36,6 @@ abstract class InvokerChain implements Invoker {
         }
     }
 
-    private static final Iterator<GroovyInterceptor> EMPTY_ITERATOR = Collections.<GroovyInterceptor>emptyList().iterator();
-    private static final Set<GroovyInterceptor> REJECT_EVERYTHING = Collections.<GroovyInterceptor>singleton(new RejectEverythingInterceptor());
+    private static final Iterator<GroovyInterceptor> EMPTY_ITERATOR = Collections.emptyIterator();
+    private static final Set<GroovyInterceptor> REJECT_EVERYTHING = Collections.singleton(new RejectEverythingInterceptor());
 }
