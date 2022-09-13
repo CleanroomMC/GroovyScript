@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.api.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
@@ -31,9 +30,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
     public GroovyScriptSandbox(URL... scriptEnvironment) {
         super(scriptEnvironment);
         registerInterceptor(new SimpleGroovyInterceptor());
-        registerBinding("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
         registerBinding("mods", ModSupport.INSTANCE);
         registerBinding("log", GroovyLog.LOG);
+        registerBinding("EventManager", GroovyEventManager.INSTANCE);
+        registerBinding("eventManager", GroovyEventManager.INSTANCE);
+        registerBinding("event_manager", GroovyEventManager.INSTANCE);
     }
 
     public Throwable run(String currentLoader) {
@@ -73,11 +74,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
     protected void preRun() {
         GroovyLog.LOG.info("Running scripts in loader '%s'", this.currentLoader);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
-        GroovyEventManager.clearAllListeners();
         if (!ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
             MinecraftForge.EVENT_BUS.post(new GroovyReloadEvent());
         }
+        GroovyEventManager.INSTANCE.reset();
     }
 
     @Override
