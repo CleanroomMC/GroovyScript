@@ -1,112 +1,115 @@
 package com.cleanroommc.groovyscript.event;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import groovy.lang.Closure;
-import org.jetbrains.annotations.ApiStatus;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.eventhandler.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
-@GroovyBlacklist
-public final class GroovyEventManager extends GroovyEvent.Group {
+public enum GroovyEventManager {
 
-    public static final GroovyEventManager MAIN;
+    INSTANCE;
 
-    private static final Pattern namePattern = Pattern.compile("[a-z_]+[a-zA-Z0-9_$]*");
-    private static final List<GroovyEventManager> eventManagers;
+    private final List<EventListener> listeners = new ArrayList<>();
 
-    static {
-        eventManagers = new ArrayList<>();
-        MAIN = new GroovyEventManager();
-    }
-
-    private boolean disposed = false;
-
-    public GroovyEventManager() {
-        super("");
-        eventManagers.add(this);
-    }
-
-    /**
-     * Registers a event which can be listened to from groovy
-     *
-     * @param fullName   The name of the event f.e. onBlockBreak
-     *                   In groovy you can then call events.[namespace].onBlockBreak to add an event listener
-     * @param cancelable if the event can be canceled by returning true
-     */
-    public void registerEvent(String fullName, boolean cancelable) {
-        checkDisposed();
-        validateEventName(fullName);
-        registerEvent(fullName, fullName, cancelable);
-    }
-
-    /**
-     * Returns if such an event was registered
-     *
-     * @param event event to check for
-     * @return if the event exists
-     */
-    public boolean eventExists(String event) {
-        return !disposed && getEvent(event) != null;
-    }
-
-    /**
-     * Registers a listener. Automatically called by the groovy sandbox
-     *
-     * @param event   event name
-     * @param closure event consumer
-     */
-    public boolean registerListener(String event, Closure<Object> closure) {
-        checkDisposed();
-        return super.registerListener(event, closure);
-    }
-
-    /**
-     * Removes all current listeners for the specified event
-     *
-     * @param event event name to remove listeners for
-     */
-    public void clearListeners(String event) {
-        super.clearListeners(event);
-    }
-
-    /**
-     * Removes all event listeners for all events
-     */
-    public void clearListeners() {
-        super.clearListeners();
-    }
-
-    /**
-     * Invalidates the manager. Need to check how useful this is.
-     */
-    @ApiStatus.Experimental
-    public void dispose() {
-        checkDisposed();
-        this.disposed = true;
-        eventManagers.remove(this);
-    }
-
-    private static void validateEventName(String name) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Event name must no be empty!");
+    @GroovyBlacklist
+    public void reset() {
+        for (EventListener listener : this.listeners) {
+            listener.unregister();
         }
-        String[] parts = name.split("\\.");
-        for (String part : parts) {
-            if (!namePattern.matcher(part).matches()) {
-                throw new IllegalArgumentException("Event name parts (" + name + ") must start with underscore or a lowercase letter and must be followed by numbers, letters or underscores");
+        this.listeners.clear();
+    }
+
+    public void listen(EventPriority eventPriority, EventBusType eventBusType, Closure<?> eventListener) {
+        if (eventListener.getMaximumNumberOfParameters() > 1) {
+            GroovyLog.LOG.error("Event listeners should only have one parameter.");
+            return;
+        }
+        Class<?> eventClass = eventListener.getParameterTypes()[0];
+        if (!Event.class.isAssignableFrom(eventClass)) {
+            GroovyLog.LOG.error("Event listeners' only parameter should be the Event class you are trying to listen to.");
+            return;
+        }
+        this.listeners.add(new EventListener(eventBusType, eventPriority, eventListener));
+    }
+
+    public void listen(EventBusType eventBusType, EventPriority eventPriority, Closure<?> eventListener) {
+        listen(eventPriority, eventBusType, eventListener);
+    }
+
+    public void listen(EventBusType eventBusType, Closure<?> eventListener) {
+        listen(EventPriority.NORMAL, eventBusType, eventListener);
+    }
+
+    public void listen(EventPriority eventPriority, Closure<?> eventListener) {
+        listen(eventPriority, EventBusType.MAIN, eventListener);
+    }
+
+    public void listen(Closure<?> eventListener) {
+        listen(EventPriority.NORMAL, EventBusType.MAIN, eventListener);
+    }
+
+    private static class EventListener implements IEventListener {
+
+        private final EventBus eventBus;
+        private final Closure<?> listener;
+
+        private IEventListener wrappedListener = this;
+
+        private EventListener(EventBusType busType, EventPriority priority, Closure<?> listener) {
+            switch (busType) {
+                case ORE_GENERATION:
+                    this.eventBus = MinecraftForge.ORE_GEN_BUS;
+                    break;
+                case TERRAIN_GENERATION:
+                    this.eventBus = MinecraftForge.TERRAIN_GEN_BUS;
+                    break;
+                default:
+                    this.eventBus = MinecraftForge.EVENT_BUS;
+                    break;
+            }
+            this.listener = listener;
+            this.register(priority);
+        }
+
+        private void register(EventPriority priority) {
+            Class<?> eventClass = listener.getParameterTypes()[0];
+            if (IContextSetter.class.isAssignableFrom(eventClass)) {
+                final ModContainer owner = Loader.instance().activeModContainer();
+                this.wrappedListener = event -> {
+                    final Loader loader = Loader.instance();
+                    ModContainer old = loader.activeModContainer();
+                    loader.setActiveModContainer(owner);
+                    ((IContextSetter) event).setModContainer(owner);
+                    EventListener.this.invoke(event);
+                    loader.setActiveModContainer(old);
+                };
+            }
+            ((EventBusExtended) this.eventBus).register(eventClass, priority, this.wrappedListener);
+        }
+
+        private void unregister() {
+            this.eventBus.unregister(this.wrappedListener);
+        }
+
+        @Override
+        public void invoke(Event event) {
+            if (!event.isCancelable() || !event.isCanceled()/* || subInfo.receiveCanceled()*/) {
+                /*
+                if (filter == null || filter == ((IGenericEvent) event).getGenericType()) {
+                    handler.invoke(event);
+                }
+                 */
+                ClosureHelper.call(this.listener, event);
             }
         }
+
     }
 
-    private void checkDisposed() {
-        if (disposed) {
-            throw new IllegalStateException("Event manager has been disposed! This action can not be performed!");
-        }
-    }
-
-    public static void clearAllListeners() {
-        eventManagers.forEach(GroovyEventManager::clearListeners);
-    }
 }

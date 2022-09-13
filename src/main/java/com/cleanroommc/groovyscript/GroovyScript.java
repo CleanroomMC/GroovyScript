@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
-import com.cleanroommc.groovyscript.event.Events;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.sandbox.GroovyDeobfuscationMapper;
@@ -35,9 +34,7 @@ public class GroovyScript {
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
     private static File scriptPath;
-
     private static RunConfig runConfig;
-
     private static GroovyScriptSandbox sandbox;
 
     @Mod.EventHandler
@@ -51,8 +48,6 @@ public class GroovyScript {
             throw new IllegalStateException("Error initializing sandbox!");
         }
         runConfig = createRunConfig();
-        //SandboxRunner.init();
-        Events.init();
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
 
