@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.brackets;
 import com.cleanroommc.groovyscript.api.IBracketHandler;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;

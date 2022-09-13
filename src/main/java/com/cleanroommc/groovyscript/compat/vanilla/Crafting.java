@@ -1,8 +1,6 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.helper.recipe.ShapedCraftingRecipe;
-import com.cleanroommc.groovyscript.helper.recipe.ShapelessCraftingRecipe;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;

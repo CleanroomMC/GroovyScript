@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism.recipe;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.helper.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasStack;

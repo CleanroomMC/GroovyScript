@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.helper.recipe;
+package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import net.minecraft.inventory.InventoryCrafting;

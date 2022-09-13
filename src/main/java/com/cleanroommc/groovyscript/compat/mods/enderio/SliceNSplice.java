@@ -7,7 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuil
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.ManyToOneRecipe;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeUtils;
-import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import crazypants.enderio.base.recipe.*;

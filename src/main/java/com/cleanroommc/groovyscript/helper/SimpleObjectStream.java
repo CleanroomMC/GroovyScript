@@ -9,13 +9,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * A object that acts like a {@link java.util.stream.Stream} but is just a {@link List} wrapper.
  * Mainly used for recipes, but can be used for anything.
+ *
  * @param <T> type of the stream elements
  */
-public class SimpleObjectStream<T> {
+public class SimpleObjectStream<T> extends AbstractList<T> {
 
     private final List<T> recipes;
     private Predicate<T> remover;
@@ -100,5 +102,23 @@ public class SimpleObjectStream<T> {
 
     public boolean isEmpty() {
         return this.recipes.isEmpty();
+    }
+
+    @Override
+    public T get(int index) {
+        return recipes.get(index);
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        if (o != null && this.remover == null || this.remover.test((T) o)) {
+            return this.recipes.remove(o);
+        }
+        return false;
+    }
+
+    @Override
+    public Stream<T> stream() {
+        throw new UnsupportedOperationException("Is already a stream");
     }
 }
