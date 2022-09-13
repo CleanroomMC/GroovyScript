@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript;
 
-import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
@@ -24,12 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Collection;
 
 @Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION)
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
-public class GroovyScript implements IGroovyEnvironmentRegister {
+public class GroovyScript {
 
     public static final String ID = "groovyscript";
     public static final String NAME = "GroovyScript";
@@ -70,17 +67,6 @@ public class GroovyScript implements IGroovyEnvironmentRegister {
     @Mod.EventHandler
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new GSCommand());
-    }
-
-    @Override
-    public Collection<String> getBannedPackages() {
-        return Arrays.asList(
-                "com.cleanroommc.groovyscript.api",
-                "com.cleanroommc.groovyscript.command",
-                "com.cleanroommc.groovyscript.core.mixin",
-                "com.cleanroommc.groovyscript.registry",
-                "com.cleanroommc.groovyscript.sandbox"
-        );
     }
 
     @NotNull
