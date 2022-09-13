@@ -1,13 +1,10 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.IBracketHandler;
-import com.cleanroommc.groovyscript.api.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.api.IGroovyPropertyGetter;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
-import com.cleanroommc.groovyscript.event.GroovyEvent;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
-import groovy.lang.Closure;
 import groovy.lang.Script;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
@@ -49,18 +46,6 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
                 return null;
             }
         }
-
-
-        if (receiver instanceof IGroovyEventHandler && args.length >= 1 && args[0] instanceof Closure) {
-            ((IGroovyEventHandler) receiver).getEventManager().registerListener(method, (Closure<Object>) args[0]);
-            return null;
-        }
-
-        if (receiver instanceof GroovyEvent.Group && args.length >= 1 && args[0] instanceof Closure) {
-            ((GroovyEvent.Group) receiver).registerListener(method, (Closure<Object>) args[0]);
-            return null;
-        }
-
         Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
         String obfMethodName = method;
         if (!FMLLaunchHandler.isDeobfuscatedEnvironment()) {
@@ -94,9 +79,6 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onGetProperty(Invoker invoker, Object receiver, String property) throws Throwable {
-        if (receiver instanceof IGroovyEventHandler) {
-            receiver = ((IGroovyEventHandler) receiver).getEventManager();
-        }
         if (receiver instanceof IGroovyPropertyGetter) {
             Object r = ((IGroovyPropertyGetter) receiver).getProperty(property);
             if (r != null) return r;

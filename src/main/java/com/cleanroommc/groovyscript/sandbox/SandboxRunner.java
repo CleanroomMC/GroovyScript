@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IGroovyEnvironmentRegister;
-import com.cleanroommc.groovyscript.api.IGroovyEventHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
@@ -78,7 +77,10 @@ public class SandboxRunner {
             }
         }
 
-        registerBinding("events", (IGroovyEventHandler) () -> GroovyEventManager.MAIN);
+        registerBinding("EventManager", GroovyEventManager.INSTANCE);
+        registerBinding("eventManager", GroovyEventManager.INSTANCE);
+        registerBinding("event_manager", GroovyEventManager.INSTANCE);
+
         registerBinding("mods", ModSupport.INSTANCE);
     }
 
@@ -101,13 +103,12 @@ public class SandboxRunner {
         GroovyLog.LOG.info("Running scripts");
         // prepare script running
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
-        GroovyEventManager.clearAllListeners();
         if (!ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
             MinecraftForge.EVENT_BUS.post(new GroovyReloadEvent());
         }
         SimpleGroovyInterceptor.makeSureExists();
-
+        GroovyEventManager.INSTANCE.reset();
         GroovyScript.LOGGER.info("Script environments: {}", Arrays.toString(scriptEnvironment));
         // initialise script engine
         GroovyScriptEngine engine = new GroovyScriptEngine(scriptEnvironment);
