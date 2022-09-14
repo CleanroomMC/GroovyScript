@@ -5,12 +5,14 @@ import net.minecraftforge.fml.common.Loader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.kohsuke.groovy.sandbox.impl.Checker;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DateFormat;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +26,7 @@ public class GroovyLog {
     public static final GroovyLog LOG = new GroovyLog();
 
     private static final Logger logger = LogManager.getLogger("GroovyLog");
+    private static final String NULL = "null";
     private final File logFile;
     private final Path logFilePath;
     private final PrintWriter printWriter;
@@ -108,8 +111,7 @@ public class GroovyLog {
      * @param args arguments
      */
     public void info(String msg, Object... args) {
-        String line = String.format(msg, args);
-        writeLogLine(formatLine("INFO", line));
+        writeLogLine(formatLine("INFO", format(msg, args)));
     }
 
     /**
@@ -133,8 +135,7 @@ public class GroovyLog {
      */
     public void debug(String msg, Object... args) {
         if (debug) {
-            String line = String.format(msg, args);
-            writeLogLine(formatLine("DEBUG", line));
+            writeLogLine(formatLine("DEBUG", format(msg, args)));
         }
     }
 
@@ -156,8 +157,7 @@ public class GroovyLog {
      * @param args arguments
      */
     public void warn(String msg, Object... args) {
-        String line = String.format(msg, args);
-        writeLogLine(formatLine("WARN", line));
+        writeLogLine(formatLine("WARN", format(msg, args)));
     }
 
     /**
@@ -167,9 +167,14 @@ public class GroovyLog {
      * @param args arguments
      */
     public void error(String msg, Object... args) {
-        String line = String.format(msg, args);
+        String line = new MessageFormat(msg).format(args);
         logger.error(line);
         writeLogLine(formatLine("ERROR", line));
+    }
+
+    private static String format(String msg, Object[] args) {
+        if (args.length == 0) return msg;
+        return new ParameterizedMessage(msg, args).getFormattedMessage();
     }
 
     /**
