@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.registry.DummyRecipe;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -39,7 +40,7 @@ public class Crafting {
     }
 
     public void remove(String name) {
-        ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name);
+        ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name, new DummyRecipe());
     }
 
     public void removeByOutput(IIngredient output) {

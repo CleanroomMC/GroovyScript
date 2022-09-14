@@ -18,6 +18,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -87,12 +88,16 @@ public class ReloadableRegistryManager {
         ((IReloadableForgeRegistry<V>) registry).registerEntry(entry.setRegistryName(name));
     }
 
-    public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, String name) {
-        removeRegistryEntry(registry, new ResourceLocation(name));
+    public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, String name, @Nullable V dummy) {
+        removeRegistryEntry(registry, new ResourceLocation(name), dummy);
     }
 
     public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name) {
-        ((IReloadableForgeRegistry<V>) registry).removeEntry(name);
+        ((IReloadableForgeRegistry<V>) registry).removeEntry(name, null);
+    }
+
+    public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name, @Nullable V dummy) {
+        ((IReloadableForgeRegistry<V>) registry).removeEntry(name, dummy);
     }
 
     /**

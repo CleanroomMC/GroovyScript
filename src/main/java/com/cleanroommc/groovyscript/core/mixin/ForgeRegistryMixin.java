@@ -8,6 +8,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.commons.lang3.tuple.Triple;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,7 +44,7 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     }
 
     @Override
-    public void removeEntry(ResourceLocation name) {
+    public void removeEntry(ResourceLocation name, @Nullable V dummy) {
         V entry = this.names.remove(name);
         if (entry != null) {
             if (this.backups == null) {
@@ -52,6 +53,15 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
             Integer id = this.ids.inverse().remove(entry);
             Object ownerOverride = this.owners.inverse().remove(entry);
             this.backups.add(Triple.of(entry, id, ownerOverride));
+
+            if (dummy != null) {
+                dummy.setRegistryName(name);
+                this.names.put(name, dummy);
+                this.ids.put(id, dummy);
+                if (ownerOverride != null) {
+                    this.owners.put(ownerOverride, dummy);
+                }
+            }
         }
     }
 
