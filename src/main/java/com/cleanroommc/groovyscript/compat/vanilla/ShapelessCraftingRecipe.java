@@ -1,11 +1,12 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipe;
+import groovy.lang.Closure;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,8 +14,8 @@ import java.util.List;
 
 public class ShapelessCraftingRecipe extends CraftingRecipe {
 
-    public ShapelessCraftingRecipe(ItemStack output, List<IIngredient> input) {
-        super(output, input);
+    public ShapelessCraftingRecipe(ItemStack output, List<IIngredient> input, @Nullable Closure<ItemStack> recipeFunction) {
+        super(output, input, recipeFunction);
     }
 
     @Override

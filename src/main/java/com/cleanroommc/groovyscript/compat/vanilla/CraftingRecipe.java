@@ -1,14 +1,24 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IMarkable;
+import com.cleanroommc.groovyscript.core.mixin.InventoryCraftingAccess;
+import com.cleanroommc.groovyscript.core.mixin.SlotCraftingAccess;
+import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import groovy.lang.Closure;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,10 +31,13 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     protected final ItemStack output;
     protected final List<IIngredient> input;
     private final NonNullList<Ingredient> ingredients;
+    @Nullable
+    protected final Closure<ItemStack> recipeFunction;
 
-    public CraftingRecipe(ItemStack output, List<IIngredient> input) {
+    public CraftingRecipe(ItemStack output, List<IIngredient> input, @Nullable Closure<ItemStack> recipeFunction) {
         this.output = output;
         this.input = input;
+        this.recipeFunction = recipeFunction;
         this.ingredients = NonNullList.create();
         for (int i = 0; i < this.input.size(); i++) {
             if (this.input.get(i) == null) this.input.set(i, IIngredient.EMPTY);
@@ -36,7 +49,28 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
 
     @Override
     public @NotNull ItemStack getCraftingResult(@NotNull InventoryCrafting inv) {
-        return output.copy();
+        ItemStack result = output.copy();
+        if (recipeFunction != null) {
+            MatchList matchList = getMatchingList(inv);
+            GroovyLog.LOG.infoMC("Running recipe function. {} matches found", matchList.size());
+            Object2ObjectOpenHashMap<String, ItemStack> marks = new Object2ObjectOpenHashMap<>();
+            for (SlotMatchResult matchResult : matchList) {
+                if (matchResult.getRecipeIngredient() instanceof IMarkable) {
+                    GroovyLog.LOG.infoMC(" - found mark at slot {}", matchResult.getSlotIndex());
+                    IMarkable markable = (IMarkable) matchResult.getRecipeIngredient();
+                    if (!input.isEmpty() && markable.hasMark()) {
+                        marks.put(markable.getMark(), matchResult.getGivenInput().copy());
+                    }
+                }
+            }
+            GroovyLog.LOG.infoMC(" - found {} marks", marks.size());
+            result = ClosureHelper.call(recipeFunction, result, marks, new CraftingInfo(inv, getPlayerFromInventory(inv)));
+            GroovyLog.LOG.infoMC(" - result: {}", result);
+            if (result == null) {
+                result = ItemStack.EMPTY;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -56,9 +90,9 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     @Override
     public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull InventoryCrafting inv) {
         NonNullList<ItemStack> result = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
-        for (Triple<IIngredient, ItemStack, Integer> pair : getMatchingList(inv)) {
-            ItemStack itemStack = pair.getLeft().applyTransform(pair.getMiddle().copy());
-            result.set(pair.getRight(), itemStack == null ? ItemStack.EMPTY : itemStack);
+        for (SlotMatchResult matchResult : getMatchingList(inv)) {
+            ItemStack itemStack = matchResult.getRecipeIngredient().applyTransform(matchResult.getGivenInput().copy());
+            result.set(matchResult.getSlotIndex(), itemStack == null ? ItemStack.EMPTY : itemStack);
         }
         return result;
     }
@@ -71,28 +105,61 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     @NotNull
     public abstract MatchList getMatchingList(InventoryCrafting inv);
 
-    public static class MatchList implements Iterable<Triple<IIngredient, ItemStack, Integer>> {
+    /**
+     * Contains information about a inventory that was matched against a recipe.
+     * The triples contain:
+     * 1. The ingredient defined by the recipe
+     * 2. The given input from a inventory
+     * 3. The slot index the input was found
+     */
+    public static class MatchList extends ArrayList<SlotMatchResult> {
         public static final MatchList EMPTY = new MatchList() {
             @Override
-            public void addMatch(IIngredient ingredient, ItemStack itemStack, int itemSlotIndex) {
+            public boolean add(SlotMatchResult slotMatchResult) {
                 throw new UnsupportedOperationException();
             }
         };
 
-        private final List<Triple<IIngredient, ItemStack, Integer>> matches = new ArrayList<>();
-
         public void addMatch(IIngredient ingredient, ItemStack itemStack, int itemSlotIndex) {
-            matches.add(Triple.of(ingredient, itemStack, itemSlotIndex));
+            add(new SlotMatchResult(ingredient, itemStack, itemSlotIndex));
+        }
+    }
+
+    public static class SlotMatchResult {
+
+        private final IIngredient recipeIngredient;
+        private final ItemStack givenInput;
+        private final int slotIndex;
+
+        public SlotMatchResult(IIngredient recipeIngredient, ItemStack givenInput, int slotIndex) {
+            this.recipeIngredient = recipeIngredient;
+            this.givenInput = givenInput;
+            this.slotIndex = slotIndex;
         }
 
-        public boolean isEmpty() {
-            return matches.isEmpty();
+        public IIngredient getRecipeIngredient() {
+            return recipeIngredient;
         }
 
-        @NotNull
-        @Override
-        public Iterator<Triple<IIngredient, ItemStack, Integer>> iterator() {
-            return matches.iterator();
+        public ItemStack getGivenInput() {
+            return givenInput;
         }
+
+        public int getSlotIndex() {
+            return slotIndex;
+        }
+    }
+
+    // TODO
+    private static EntityPlayer getPlayerFromInventory(InventoryCrafting inventory) {
+        Container eventHandler = ((InventoryCraftingAccess) inventory).getEventHandler();
+        if (eventHandler != null) {
+            for (Slot slot : eventHandler.inventorySlots) {
+                if (slot instanceof SlotCraftingAccess) {
+                    return ((SlotCraftingAccess) slot).getPlayer();
+                }
+            }
+        }
+        return null;
     }
 }

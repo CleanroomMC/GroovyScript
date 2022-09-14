@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import groovy.lang.Closure;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.chars.CharOpenHashSet;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ public abstract class CraftingRecipeBuilder {
 
     protected ItemStack output;
     protected String name;
+    protected Closure<ItemStack> recipeFunction;
 
     protected final int width, height;
 
@@ -34,7 +36,12 @@ public abstract class CraftingRecipeBuilder {
     }
 
     public CraftingRecipeBuilder output(ItemStack item) {
-        this.name = name;
+        this.output = item;
+        return this;
+    }
+
+    public CraftingRecipeBuilder recipeFunction(Closure<ItemStack> recipeFunction) {
+        this.recipeFunction = recipeFunction;
         return this;
     }
 
@@ -91,7 +98,7 @@ public abstract class CraftingRecipeBuilder {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shapeless Crafting recipe").error()
                     .add((keyBasedMatrix == null || keyBasedMatrix.length == 0) && (ingredientMatrix == null || ingredientMatrix.isEmpty()), () -> "No matrix was defined")
                     .add(keyBasedMatrix != null && ingredientMatrix != null, () -> "A key based matrix AND a ingredient based matrix was defined. This is not allowed!");
-            if (!msg.postIfNotEmpty()) return null;
+            if (msg.postIfNotEmpty()) return null;
             msg.add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty");
 
             ShapedCraftingRecipe recipe = null;
@@ -136,8 +143,8 @@ public abstract class CraftingRecipeBuilder {
                         msg.add("Matrix only contains empty ingredients!");
                     }
                 }
-                if (!msg.postIfNotEmpty()) return null;
-                recipe = new ShapedCraftingRecipe(output, ingredients, rowWidth, keyBasedMatrix.length);
+                if (msg.postIfNotEmpty()) return null;
+                recipe = new ShapedCraftingRecipe(output, ingredients, rowWidth, keyBasedMatrix.length, recipeFunction);
             } else if (ingredientMatrix != null) {
                 List<IIngredient> ingredients = new ArrayList<>();
                 if (ingredientMatrix.size() > height) {
@@ -160,7 +167,7 @@ public abstract class CraftingRecipeBuilder {
                 }
                 msg.add(!hasNonEmpty, () -> "Matrix must not be empty");
                 if (msg.postIfNotEmpty()) return null;
-                recipe = new ShapedCraftingRecipe(output.copy(), ingredients, rowWidth, ingredientMatrix.size());
+                recipe = new ShapedCraftingRecipe(output.copy(), ingredients, rowWidth, ingredientMatrix.size(), recipeFunction);
             }
 
             if (recipe != null) {
@@ -212,7 +219,7 @@ public abstract class CraftingRecipeBuilder {
                     .postIfNotEmpty()) {
                 return null;
             }
-            ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), ingredients);
+            ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), ingredients, recipeFunction);
             ResourceLocation rl = new ResourceLocation(GroovyScript.ID, name != null ? name : RecipeName.generate(ID_PREFIX));
             ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, rl, recipe);
             return recipe;

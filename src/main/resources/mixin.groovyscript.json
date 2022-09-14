@@ -9,6 +9,8 @@
     "FluidStackMixin",
     "ForgeRegistryMixin",
     "FurnaceRecipeMixin",
-    "ItemStackMixin"
+    "InventoryCraftingAccess",
+    "ItemStackMixin",
+    "SlotCraftingAccess"
   ]
 }
