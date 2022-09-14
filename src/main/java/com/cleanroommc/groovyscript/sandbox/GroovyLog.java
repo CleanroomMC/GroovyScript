@@ -7,12 +7,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.kohsuke.groovy.sandbox.impl.Checker;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,23 +26,35 @@ public class GroovyLog {
     private static final Logger logger = LogManager.getLogger("GroovyLog");
     private final File logFile;
     private final Path logFilePath;
+    private final PrintWriter printWriter;
     private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
     private final DateFormat timeFormat = new SimpleDateFormat("[HH:mm:ss]");
 
     public boolean debug = false;
 
     private GroovyLog() {
-        logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + "/groovy.log");
+        logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy.log");
         logFilePath = logFile.toPath();
+        PrintWriter tempWriter;
         try {
+            // delete file if it exists
             if (logFile.exists() && !logFile.isDirectory()) {
                 Files.delete(logFilePath);
             }
+            // create file
             Files.createFile(logFilePath);
-            writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
+            // create writer which automatically flushes on write
+            tempWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(logFile))), true);
         } catch (IOException e) {
             e.printStackTrace();
+            tempWriter = new PrintWriter(System.out);
         }
+        this.printWriter = tempWriter;
+        writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
+    }
+
+    public PrintWriter getWriter() {
+        return printWriter;
     }
 
     public Path getPath() {
@@ -100,7 +109,7 @@ public class GroovyLog {
      */
     public void info(String msg, Object... args) {
         String line = String.format(msg, args);
-        writeLogLine(formatLine("INFO ", line));
+        writeLogLine(formatLine("INFO", line));
     }
 
     /**
@@ -148,7 +157,7 @@ public class GroovyLog {
      */
     public void warn(String msg, Object... args) {
         String line = String.format(msg, args);
-        writeLogLine(formatLine("WARN ", line));
+        writeLogLine(formatLine("WARN", line));
     }
 
     /**
@@ -200,7 +209,11 @@ public class GroovyLog {
     }
 
     private String formatLine(String level, String msg) {
-        return timeFormat.format(new Date()) + " [" + getSource() + "] " + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? "[CLIENT]" : "[SERVER]") + " [" + level + "] " + msg;
+        return timeFormat.format(new Date()) +
+                (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : "[SERVER/") +
+                level + "]" +
+                " [" + getSource() + "]: " +
+                msg;
     }
 
     private String getSource() {
@@ -208,16 +221,11 @@ public class GroovyLog {
         if (source == Checker.UNKNOWN_SOURCE) {
             return Loader.instance().activeModContainer().getModId();
         }
-        return SandboxRunner.relativizeSource(source) + ":" + Checker.getLineNumber();
+        return GroovyScriptSandbox.relativizeSource(source) + ":" + Checker.getLineNumber();
     }
 
     private void writeLogLine(String line) {
-        try {
-            line += "\n";
-            Files.write(logFilePath, line.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.printWriter.println(line);
     }
 
     public static Msg msg(String msg, Object... data) {
@@ -259,6 +267,10 @@ public class GroovyLog {
             return this;
         }
 
+        public boolean contains(String msg) {
+            return this.messages.contains(msg);
+        }
+
         private Msg level(Level level) {
             this.level = level;
             return this;
@@ -278,6 +290,10 @@ public class GroovyLog {
 
         public Msg error() {
             return level(Level.ERROR);
+        }
+
+        public Msg fatal() {
+            return level(Level.FATAL);
         }
 
         public Msg logToMc() {
