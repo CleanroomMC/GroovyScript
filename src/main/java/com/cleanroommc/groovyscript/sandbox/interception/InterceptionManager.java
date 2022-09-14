@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.sandbox.FieldAccess;
 import groovy.lang.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +23,7 @@ public class InterceptionManager {
 
     public static final String CONSTRUCTOR_METHOD = "<init>";
 
-    private final List<String> bannedPackages = new ObjectArrayList<>();
+    private final List<String> bannedPackages = new ArrayList<>();
     private final Set<Class<?>> bannedClasses = new ObjectOpenHashSet<>();
     private final Map<Class<?>, Set<String>> bannedMethods = new Object2ObjectOpenHashMap<>();
 
@@ -44,6 +43,7 @@ public class InterceptionManager {
         banPackage("java.security");
         banPackage("groovy");
         banPackage("org.codehaus.groovy");
+        banPackage("org.kohsuke");
         banPackage("sun."); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
         banPackage("javax.net");
         banPackage("javax.security");
@@ -53,6 +53,12 @@ public class InterceptionManager {
         banClasses(Runtime.class, ClassLoader.class);
         banMethods(System.class, "exit", "gc");
         // TODO wrap and/or ban Minecraft and MinecraftServer
+
+        // mod specific
+        banPackage("com.cleanroommc.groovyscript.command");
+        banPackage("com.cleanroommc.groovyscript.core");
+        banPackage("com.cleanroommc.groovyscript.registry");
+        banPackage("com.cleanroommc.groovyscript.sandbox");
     }
 
     public void banPackage(String packageName) {

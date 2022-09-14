@@ -9,41 +9,16 @@ import groovy.lang.Script;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 
-import java.util.Arrays;
-
 public class SimpleGroovyInterceptor extends GroovyInterceptor {
-
-    private static final String PRINT = "print", PRINTF = "printf", PRINTLN = "println";
-
-    public static void makeSureExists() {
-        if (!getApplicableInterceptors().isEmpty()) {
-            for (GroovyInterceptor interceptor : getApplicableInterceptors()) {
-                if (interceptor.getClass() == SimpleGroovyInterceptor.class) {
-                    return;
-                }
-            }
-        }
-        new SimpleGroovyInterceptor().register();
-    }
 
     @Override
     public Object onMethodCall(Invoker invoker, Object receiver, String method, Object... args) throws Throwable {
         if (receiver.getClass().getSuperclass() == Script.class) {
             if (args.length >= 1 && args[0] instanceof String) {
-                IBracketHandler bracketHandler = BracketHandlerManager.getBracketHandler(method);
+                IBracketHandler<?> bracketHandler = BracketHandlerManager.getBracketHandler(method);
                 if (bracketHandler != null) {
                     return bracketHandler.parse(args);
                 }
-            }
-            if (method.equals(PRINT) || method.equals(PRINTLN) || method.equals(PRINTF)) {
-                Object msg = args.length == 0 ? "" : args[0];
-                if (msg == null) {
-                    GroovyLog.LOG.info("null");
-                    return null;
-                }
-                Object[] args2 = args.length < 2 ? new Object[0] : Arrays.copyOfRange(args, 1, args.length);
-                GroovyLog.LOG.info(msg.toString(), args2);
-                return null;
             }
         }
         Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
