@@ -18,7 +18,7 @@ import java.util.List;
 
 public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
-    protected final net.minecraft.item.ItemStack output;
+    protected final ItemStack output;
     protected final List<IIngredient> input;
     private final NonNullList<Ingredient> ingredients;
 
@@ -30,7 +30,7 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
             if (this.input.get(i) == null) this.input.set(i, IIngredient.EMPTY);
         }
         for (IIngredient ingredient : this.input) {
-            this.ingredients.add(ingredient == null ? Ingredient.EMPTY : ingredient.toMcIngredient());
+            this.ingredients.add(ingredient.toMcIngredient());
         }
     }
 
