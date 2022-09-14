@@ -8,6 +8,7 @@
     "EventBusMixin",
     "FluidStackMixin",
     "ForgeRegistryMixin",
+    "FurnaceRecipeMixin",
     "ItemStackMixin"
   ]
 }

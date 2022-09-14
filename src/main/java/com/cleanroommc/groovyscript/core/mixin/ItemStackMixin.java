@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.Predicate;
 
-@Mixin(value = ItemStack.class, remap = false)
+@Mixin(value = ItemStack.class)
 public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
 
     @Shadow
