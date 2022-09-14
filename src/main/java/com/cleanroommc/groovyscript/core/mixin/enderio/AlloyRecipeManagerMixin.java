@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.core.mixin.enderio;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.sandbox.SandboxRunner;
 import crazypants.enderio.base.recipe.IManyToOneRecipe;
 import crazypants.enderio.base.recipe.alloysmelter.AlloyRecipeManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ public class AlloyRecipeManagerMixin {
 
     @Inject(method = "addRecipe(Lcrazypants/enderio/base/recipe/IManyToOneRecipe;)V", at = @At("RETURN"))
     private void afterAddRecipe(IManyToOneRecipe recipe, CallbackInfo ci) {
-        if (SandboxRunner.isCurrentlyRunning()) {
+        if (GroovyScript.getSandbox().isRunning()) {
             ModSupport.ENDER_IO.get().alloySmelter.addScripted(recipe);
         }
     }

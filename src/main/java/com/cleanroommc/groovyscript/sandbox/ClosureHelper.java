@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import groovy.lang.Closure;
 import org.jetbrains.annotations.Nullable;
 
@@ -7,7 +8,7 @@ public class ClosureHelper {
 
     @Nullable
     public static <T> T call(Closure<T> closure, Object... args) {
-        return SandboxRunner.runClosure(closure, args);
+        return GroovyScript.getSandbox().runClosure(closure, args);
     }
 
     @Nullable
