@@ -3,9 +3,9 @@ package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ic2.RecipeInput;
 import com.cleanroommc.groovyscript.core.mixin.ic2.ClassicCanningMachineRegistryAccessor;
-import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.helper.recipe.ItemsIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.classic.recipe.ClassicRecipes;
@@ -105,7 +105,11 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
     public SimpleObjectStream<Map.Entry<ICustomDamageItem, List<Tuple<Integer, Tuple<IRecipeInput, Integer>>>>> streamRepairRecipes() {
         return new SimpleObjectStream<>(ClassicRecipes.canningMachine.getRepairMap().entrySet()).setRemover(entry -> {
             for (Tuple<Integer, Tuple<IRecipeInput, Integer>> tuple : entry.getValue()) {
-                CanningRecipe recipe = new CanningRecipe(RecipeType.REPAIR).setDamageItem(entry.getKey()).setMeta(tuple.getFirst()).setInput(new ItemsIngredient(tuple.getSecond().getFirst().getInputs())).setInt(tuple.getSecond().getSecond());
+                CanningRecipe recipe = new CanningRecipe(RecipeType.REPAIR)
+                        .setDamageItem(entry.getKey())
+                        .setMeta(tuple.getFirst())
+                        .setInput(new ItemsIngredient(tuple.getSecond().getFirst().getInputs()))
+                        .setInt(tuple.getSecond().getSecond());
                 remove(recipe);
                 addBackup(recipe);
             }
