@@ -29,6 +29,9 @@ public class BlockStateBracketHandler implements IBracketHandler<IBlockState> {
         String main = (String) args[0];
         IBlockState blockState = parse(main);
         if (args.length > 1) {
+            if (args.length == 2 && args[1] instanceof Integer) {
+                return blockState.getBlock().getStateFromMeta((Integer) args[1]);
+            }
             for (int i = 1; i < args.length; i++) {
                 if (!(args[i] instanceof String)) {
                     throw new IllegalArgumentException("All arguments must be strings in block state bracket handler!");
@@ -55,6 +58,13 @@ public class BlockStateBracketHandler implements IBracketHandler<IBlockState> {
         IBlockState blockState = block.getDefaultState();
         if (parts.length > 2) {
             String[] states = parts[2].split(COMMA);
+            if (states.length == 1) {
+                try {
+                    int meta = Integer.parseInt(states[0]);
+                    return blockState.getBlock().getStateFromMeta(meta);
+                } catch (NumberFormatException ignored) {
+                }
+            }
             return parseBlockStates(blockState, Iterators.forArray(states));
         }
         return blockState;
