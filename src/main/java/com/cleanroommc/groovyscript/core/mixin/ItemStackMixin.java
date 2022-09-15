@@ -1,46 +1,24 @@
 package com.cleanroommc.groovyscript.core.mixin;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IMarkable;
 import com.cleanroommc.groovyscript.api.INBTResourceStack;
 import com.cleanroommc.groovyscript.api.INbtIngredient;
-import com.cleanroommc.groovyscript.helper.NbtHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.Predicate;
 
-@Mixin(value = ItemStack.class, remap = false)
-public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
-
-    @Shadow
-    public abstract Item getItem();
-
-    @Shadow
-    public abstract int getCount();
-
-    @Shadow
-    public abstract void setCount(int size);
-
-    @Shadow
-    private NBTTagCompound stackTagCompound;
-
-    @Shadow
-    public abstract ItemStack copy();
-
-    @Shadow
-    public abstract int getMetadata();
+@Mixin(value = ItemStack.class)
+public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMarkable {
 
     @Unique
     protected Closure<Object> matchCondition;
@@ -48,6 +26,8 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
     protected Closure<Object> transformer;
     @Unique
     protected Predicate<NBTTagCompound> nbtMatcher = NbtHelper.MATCH_ANY;
+    @Unique
+    protected String mark;
 
     private ItemStack groovyscript$getThis() {
         return (ItemStack) (Object) this;
@@ -55,27 +35,32 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
 
     @Override
     public int getAmount() {
-        return getCount();
+        return groovyscript$getThis().getCount();
     }
 
     @Override
     public void setAmount(int amount) {
-        setCount(amount);
+        groovyscript$getThis().setCount(amount);
     }
 
     @Override
     public @Nullable NBTTagCompound getNbt() {
-        return stackTagCompound;
+        return groovyscript$getThis().getTagCompound();
     }
 
     @Override
     public void setNbt(NBTTagCompound nbt) {
-        stackTagCompound = nbt;
+        groovyscript$getThis().setTagCompound(nbt);
     }
 
     @Override
     public IIngredient exactCopy() {
-        return (IIngredient) (Object) copy();
+        ItemStackMixin copy = (ItemStackMixin) (Object) groovyscript$getThis().copy();
+        copy.setMark(getMark());
+        copy.transform(transformer);
+        copy.when(matchCondition);
+        copy.withNbtFilter(nbtMatcher);
+        return copy;
     }
 
     @Override
@@ -85,7 +70,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        return new ItemStack[]{copy()};
+        return new ItemStack[]{groovyscript$getThis().copy()};
     }
 
     @Override
@@ -110,15 +95,18 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient {
         if (transformer != null) {
             return ClosureHelper.call(ItemStack.EMPTY, transformer, matchedInput);
         }
-        return getItem().getContainerItem(matchedInput);
+        return groovyscript$getThis().getItem().getContainerItem(matchedInput);
     }
 
-    @Inject(method = "copy", at = @At("RETURN"), cancellable = true)
-    public void injectCopy(CallbackInfoReturnable<ItemStack> cir) {
-        ItemStackMixin ingredient = (ItemStackMixin) (Object) cir.getReturnValue();
-        ingredient.when(matchCondition);
-        ingredient.transform(transformer);
-        cir.setReturnValue((ItemStack) (Object) ingredient);
+    @Nullable
+    @Override
+    public String getMark() {
+        return mark;
+    }
+
+    @Override
+    public void setMark(String mark) {
+        this.mark = mark;
     }
 
     @Override

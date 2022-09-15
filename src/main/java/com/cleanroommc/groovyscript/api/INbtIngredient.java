@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.api;
 
-import com.cleanroommc.groovyscript.helper.NbtHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.Map;

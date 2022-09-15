@@ -1,10 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.classic.recipe.ClassicRecipes;
 import ic2.api.classic.recipe.machine.IElectrolyzerRecipeList;
 import net.minecraft.item.ItemStack;
@@ -130,14 +130,17 @@ public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.addChargeRecipe(stack, recipe.output, recipe.energy, "" + recipe.hashCode());
                 }
+                break;
             case DISCHARGE:
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.addDischargeRecipe(stack, recipe.output, recipe.energy, "" + recipe.hashCode());
                 }
+                break;
             case BOTH:
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.addBothRecipe(stack, recipe.output, recipe.energy, "" + recipe.hashCode());
                 }
+                break;
         }
     }
 
@@ -148,16 +151,19 @@ public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer
                     ClassicRecipes.electrolyzer.removeRecipe(stack, true, false);
                     removeFromMap(stack);
                 }
+                break;
             case DISCHARGE:
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.removeRecipe(stack, false, false);
                     removeFromMap(stack);
                 }
+                break;
             case BOTH:
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.removeRecipe(stack, true, true);
                     removeFromMap(stack);
                 }
+                break;
         }
     }
 

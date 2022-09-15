@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.helper;
+package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 

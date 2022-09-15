@@ -1,10 +1,12 @@
-package com.cleanroommc.groovyscript.helper.recipe;
+package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import groovy.lang.Closure;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,8 +14,8 @@ import java.util.List;
 
 public class ShapelessCraftingRecipe extends CraftingRecipe {
 
-    public ShapelessCraftingRecipe(ItemStack output, List<IIngredient> input) {
-        super(output, input);
+    public ShapelessCraftingRecipe(ItemStack output, List<IIngredient> input, @Nullable Closure<ItemStack> recipeFunction, @Nullable Closure<Void> recipeAction) {
+        super(output, input, recipeFunction, recipeAction);
     }
 
     @Override
@@ -41,7 +43,7 @@ public class ShapelessCraftingRecipe extends CraftingRecipe {
             while (pairIterator.hasNext()) {
                 Pair<ItemStack, Integer> pair = pairIterator.next();
                 if (matches(ingredient, pair.getLeft())) {
-                    // expected input matches given input so both get removed so they dont get checked again
+                    // expected input matches given input so both get removed so they don't get checked again
                     matches.addMatch(ingredient, pair.getLeft(), pair.getRight());
                     ingredientIterator.remove();
                     pairIterator.remove();

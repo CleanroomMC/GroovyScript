@@ -1,22 +1,18 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
 import com.cleanroommc.groovyscript.core.mixin.ic2.ElectrolyzerRecipeManagerAccessor;
-import com.cleanroommc.groovyscript.helper.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import ic2.api.recipe.IElectrolyzerRecipeManager;
-import ic2.api.recipe.IRecipeInput;
-import ic2.api.recipe.MachineRecipe;
 import ic2.api.recipe.Recipes;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +60,8 @@ public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzer
         List<IElectrolyzerRecipeManager.ElectrolyzerOutput> list = new ArrayList<>();
         for (int i = 0; i < outputs.length; i++) {
             FluidStack fs = outputs[i];
-            if (fs != null) list.add(new IElectrolyzerRecipeManager.ElectrolyzerOutput(fs.getFluid().getName(), fs.amount, EnumFacing.values()[i]));
+            if (fs != null)
+                list.add(new IElectrolyzerRecipeManager.ElectrolyzerOutput(fs.getFluid().getName(), fs.amount, EnumFacing.values()[i]));
         }
 
         return add(input.getFluid().getName(), new IElectrolyzerRecipeManager.ElectrolyzerRecipe(input.amount, euATick, ticksNeeded, list.toArray(new IElectrolyzerRecipeManager.ElectrolyzerOutput[list.size()])));

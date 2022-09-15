@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SCopy;
 import com.cleanroommc.groovyscript.network.SReloadJei;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandException;
@@ -48,11 +48,11 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new SimpleCommand("log", (server, sender, args) -> {
             sender.sendMessage(new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + "Groovy Log"))
                     .setStyle(new Style()
-                            .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.LOG.getPath().toString()))
+                            .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.get().getLogFilerPath().toString()))
                             .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open GroovyScript log")))));
             sender.sendMessage(new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + "Minecraft Log"))
                     .setStyle(new Style()
-                            .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.LOG.getPath().getParent().toString() + "/logs/latest.log"))
+                            .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.get().getLogFilerPath().getParent().toString() + "/logs/latest.log"))
                             .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open Minecraft log")))));
         }));
 
@@ -61,7 +61,7 @@ public class GSCommand extends CommandTreeBase {
                 sender.sendMessage(new TextComponentString("Reloading in multiplayer is currently no allowed to avoid desync."));
                 return;
             }
-            GroovyLog.LOG.info("========== Reloading Groovy scripts ==========");
+            GroovyLog.get().info("========== Reloading Groovy scripts ==========");
             long time = System.currentTimeMillis();
             Throwable throwable = GroovyScript.getSandbox().run("postInit");
             time = System.currentTimeMillis() - time;
@@ -172,7 +172,7 @@ public class GSCommand extends CommandTreeBase {
 
     @Override
     @Nonnull
-    public String getUsage(ICommandSender sender) {
+    public String getUsage(@NotNull ICommandSender sender) {
         return "/gs []";
     }
 

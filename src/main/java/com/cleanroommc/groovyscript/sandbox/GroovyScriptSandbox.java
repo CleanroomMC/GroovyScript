@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
@@ -31,7 +32,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
         super(scriptEnvironment);
         registerInterceptor(new SimpleGroovyInterceptor());
         registerBinding("mods", ModSupport.INSTANCE);
-        registerBinding("log", GroovyLog.LOG);
+        registerBinding("log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
         registerBinding("eventManager", GroovyEventManager.INSTANCE);
         registerBinding("event_manager", GroovyEventManager.INSTANCE);
@@ -43,11 +44,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
             super.run();
             return null;
         } catch (IOException | ScriptException | ResourceException e) {
-            GroovyLog.LOG.error("An Exception occurred trying to run groovy!");
+            GroovyLog.get().error("An Exception occurred trying to run groovy!");
             e.printStackTrace();
             return e;
         } catch (Exception e) {
-            GroovyLog.LOG.exception(e);
+            GroovyLog.get().exception(e);
             return e;
         } finally {
             this.currentLoader = null;
@@ -62,7 +63,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void postInitBindings(Binding binding) {
-        binding.setProperty("out", GroovyLog.LOG.getWriter());
+        binding.setProperty("out", GroovyLog.get().getWriter());
     }
 
     @Override
@@ -72,7 +73,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void preRun() {
-        GroovyLog.LOG.info("Running scripts in loader '%s'", this.currentLoader);
+        GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoader);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         if (!ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
@@ -83,7 +84,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected boolean shouldRunFile(File file) {
-        GroovyLog.LOG.info(" - executing %s", file.toString());
+        GroovyLog.get().info(" - executing {}", file.toString());
         return true;
     }
 
@@ -107,7 +108,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             Path mainPath = new File(GroovyScript.getScriptPath()).toPath();
             return mainPath.relativize(path).toString();
         } catch (URISyntaxException | MalformedURLException e) {
-            GroovyLog.LOG.error("Error parsing script source '%s'", source);
+            GroovyLog.get().error("Error parsing script source '{}'", source);
             return source;
         }
     }

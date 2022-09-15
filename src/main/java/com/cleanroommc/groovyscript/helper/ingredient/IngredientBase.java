@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.helper.recipe;
+package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;

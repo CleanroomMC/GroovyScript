@@ -1,9 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.core.mixin.ic2.ScrapboxRecipeManagerAccessor;
-import com.cleanroommc.groovyscript.helper.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import ic2.api.recipe.Recipes;
 import net.minecraft.item.ItemStack;
 
@@ -18,6 +19,8 @@ public class Scrapbox extends VirtualizedRegistry<Object> {
         if (check) drops = ((ScrapboxRecipeManagerAccessor) Recipes.scrapboxDrops).getDrops();
     }
 
+    @SuppressWarnings("all")
+    @GroovyBlacklist
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> drops.remove(((Drop) recipe).id));
