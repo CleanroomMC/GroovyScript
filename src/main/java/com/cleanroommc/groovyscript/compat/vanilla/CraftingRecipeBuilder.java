@@ -91,6 +91,7 @@ public abstract class CraftingRecipeBuilder {
 
         private static final String ID_PREFIX = "shaped_";
 
+        protected boolean mirrored = false;
         private String[] keyBasedMatrix;
         private final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
 
@@ -101,6 +102,15 @@ public abstract class CraftingRecipeBuilder {
         public Shaped(int width, int height) {
             super(width, height);
             keyMap.put(' ', IIngredient.EMPTY);
+        }
+
+        public Shaped mirrored(boolean mirrored) {
+            this.mirrored = mirrored;
+            return this;
+        }
+
+        public Shaped mirrored() {
+            return mirrored(true);
         }
 
         public Shaped matrix(String... matrix) {
@@ -184,7 +194,7 @@ public abstract class CraftingRecipeBuilder {
                     }
                 }
                 if (msg.postIfNotEmpty()) return null;
-                recipe = new ShapedCraftingRecipe(output, ingredients, rowWidth, keyBasedMatrix.length, recipeFunction);
+                recipe = new ShapedCraftingRecipe(output, ingredients, rowWidth, keyBasedMatrix.length, mirrored, recipeFunction);
             } else if (ingredientMatrix != null) {
                 List<IIngredient> ingredients = new ArrayList<>();
                 if (ingredientMatrix.size() > height) {
@@ -207,7 +217,7 @@ public abstract class CraftingRecipeBuilder {
                 }
                 msg.add(!hasNonEmpty, () -> "Matrix must not be empty");
                 if (msg.postIfNotEmpty()) return null;
-                recipe = new ShapedCraftingRecipe(output.copy(), ingredients, rowWidth, ingredientMatrix.size(), recipeFunction);
+                recipe = new ShapedCraftingRecipe(output.copy(), ingredients, rowWidth, ingredientMatrix.size(), mirrored, recipeFunction);
             }
 
             if (recipe != null) {
