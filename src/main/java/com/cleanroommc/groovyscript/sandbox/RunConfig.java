@@ -20,6 +20,7 @@ public class RunConfig {
         JsonObject json = new JsonObject();
         json.addProperty("packName", "");
         json.addProperty("version", "1.0.0");
+        json.addProperty("debug", false);
         JsonObject loaders = new JsonObject();
         json.add("loaders", loaders);
         JsonArray preInit = new JsonArray();
@@ -44,6 +45,7 @@ public class RunConfig {
     public RunConfig(JsonObject json) {
         this.packName = JsonHelper.getString(json, "", "packName", "name");
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
+        GroovyLog.LOG.debug = JsonHelper.getBoolean(json, false, "debug");
 
         JsonObject jsonLoaders = JsonHelper.getJsonObject(json, "loaders");
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";

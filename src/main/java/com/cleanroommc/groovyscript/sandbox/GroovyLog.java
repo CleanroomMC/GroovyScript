@@ -26,7 +26,6 @@ public class GroovyLog {
     public static final GroovyLog LOG = new GroovyLog();
 
     private static final Logger logger = LogManager.getLogger("GroovyLog");
-    private static final String NULL = "null";
     private final File logFile;
     private final Path logFilePath;
     private final PrintWriter printWriter;
