@@ -1,6 +1,5 @@
-package com.cleanroommc.groovyscript.helper;
+package com.cleanroommc.groovyscript.helper.ingredient;
 
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;

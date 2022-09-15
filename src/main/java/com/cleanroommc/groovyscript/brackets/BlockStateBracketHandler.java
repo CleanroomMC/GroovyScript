@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.brackets;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IBracketHandler;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterators;
 import net.minecraft.block.Block;
@@ -29,6 +29,9 @@ public class BlockStateBracketHandler implements IBracketHandler<IBlockState> {
         String main = (String) args[0];
         IBlockState blockState = parse(main);
         if (args.length > 1) {
+            if (args.length == 2 && args[1] instanceof Integer) {
+                return blockState.getBlock().getStateFromMeta((Integer) args[1]);
+            }
             for (int i = 1; i < args.length; i++) {
                 if (!(args[i] instanceof String)) {
                     throw new IllegalArgumentException("All arguments must be strings in block state bracket handler!");
@@ -44,17 +47,24 @@ public class BlockStateBracketHandler implements IBracketHandler<IBlockState> {
     public IBlockState parse(String arg) {
         String[] parts = arg.split(SPLITTER);
         if (parts.length < 2) {
-            GroovyLog.LOG.error("Can't find item for '%s'", arg);
+            GroovyLog.get().error("Can't find item for '{}'", arg);
             return null;
         }
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(parts[0], parts[1]));
         if (block == null) {
-            GroovyLog.LOG.error("Can't find block for '%s'", arg);
+            GroovyLog.get().error("Can't find block for '{}'", arg);
             return null;
         }
         IBlockState blockState = block.getDefaultState();
         if (parts.length > 2) {
             String[] states = parts[2].split(COMMA);
+            if (states.length == 1) {
+                try {
+                    int meta = Integer.parseInt(states[0]);
+                    return blockState.getBlock().getStateFromMeta(meta);
+                } catch (NumberFormatException ignored) {
+                }
+            }
             return parseBlockStates(blockState, Iterators.forArray(states));
         }
         return blockState;
@@ -67,14 +77,14 @@ public class BlockStateBracketHandler implements IBracketHandler<IBlockState> {
             String[] prop = state.split(EQUALS, 2);
             IProperty property = defaultState.getBlock().getBlockState().getProperty(prop[0]);
             if (property == null) {
-                GroovyLog.LOG.error("Invalid property name '%s' for block '%s'", prop[0], defaultState.getBlock().getRegistryName());
+                GroovyLog.get().error("Invalid property name '{}' for block '{}'", prop[0], defaultState.getBlock().getRegistryName());
                 continue;
             }
             Optional<? extends Comparable> value = property.parseValue(prop[1]);
             if (value.isPresent()) {
                 defaultState = defaultState.withProperty(property, value.get());
             } else {
-                GroovyLog.LOG.error("Invalid property value '%s' for block '%s:%s'", prop[1], defaultState.getBlock().getRegistryName());
+                GroovyLog.get().error("Invalid property value '{}' for block '{}:{}'", prop[1], defaultState.getBlock().getRegistryName());
             }
         }
 

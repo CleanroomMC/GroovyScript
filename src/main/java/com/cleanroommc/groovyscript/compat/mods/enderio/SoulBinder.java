@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.IMachineRecipe;
 import crazypants.enderio.base.recipe.MachineRecipeRegistry;
@@ -44,7 +44,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
             }
         }
         if (recipes.isEmpty()) {
-            GroovyLog.LOG.error("No Soul Binder recipe found for " + output.getDisplayName());
+            GroovyLog.get().error("No Soul Binder recipe found for " + output.getDisplayName());
         } else {
             for (ISoulBinderRecipe recipe : recipes) {
                 MachineRecipeRegistry.instance.removeRecipe(recipe);

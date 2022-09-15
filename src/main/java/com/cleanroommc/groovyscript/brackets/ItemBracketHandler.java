@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.brackets;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IBracketHandler;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -25,12 +25,12 @@ public class ItemBracketHandler implements IBracketHandler<ItemStack> {
         String main = (String) args[0];
         String[] parts = main.split(SPLITTER);
         if (parts.length < 2) {
-            GroovyLog.LOG.error("Can't find item for '%s'", main);
+            GroovyLog.get().error("Can't find item for '{}'", main);
             return ItemStack.EMPTY;
         }
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
         if (item == null) {
-            GroovyLog.LOG.error("Can't find item for '%s'", main);
+            GroovyLog.get().error("Can't find item for '{}'", main);
             return ItemStack.EMPTY;
         }
         int meta = 0;
@@ -57,12 +57,12 @@ public class ItemBracketHandler implements IBracketHandler<ItemStack> {
     public ItemStack parse(String arg) {
         String[] parts = arg.split(SPLITTER);
         if (parts.length < 2) {
-            GroovyLog.LOG.error("Can't find item for '%s'", arg);
+            GroovyLog.get().error("Can't find item for '{}'", arg);
             return null;
         }
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
         if (item == null) {
-            GroovyLog.LOG.error("Can't find item for '%s'", arg);
+            GroovyLog.get().error("Can't find item for '{}'", arg);
             return null;
         }
         int meta = 0;

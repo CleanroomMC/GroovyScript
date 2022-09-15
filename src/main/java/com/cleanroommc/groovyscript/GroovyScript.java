@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyDeobfuscationMapper;
 import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
@@ -41,6 +42,7 @@ public class GroovyScript {
     public void onPreInit(FMLPreInitializationEvent event) {
         NetworkHandler.init();
         GroovyDeobfuscationMapper.init();
+        ReloadableRegistryManager.init();
         scriptPath = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy");
         try {
             sandbox = new GroovyScriptSandbox(getScriptFile().toURI().toURL());

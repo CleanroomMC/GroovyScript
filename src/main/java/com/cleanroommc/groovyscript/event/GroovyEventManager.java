@@ -2,7 +2,7 @@ package com.cleanroommc.groovyscript.event;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import groovy.lang.Closure;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
@@ -28,12 +28,12 @@ public enum GroovyEventManager {
 
     public void listen(EventPriority eventPriority, EventBusType eventBusType, Closure<?> eventListener) {
         if (eventListener.getMaximumNumberOfParameters() > 1) {
-            GroovyLog.LOG.error("Event listeners should only have one parameter.");
+            GroovyLog.get().error("Event listeners should only have one parameter.");
             return;
         }
         Class<?> eventClass = eventListener.getParameterTypes()[0];
         if (!Event.class.isAssignableFrom(eventClass)) {
-            GroovyLog.LOG.error("Event listeners' only parameter should be the Event class you are trying to listen to.");
+            GroovyLog.get().error("Event listeners' only parameter should be the Event class you are trying to listen to.");
             return;
         }
         this.listeners.add(new EventListener(eventBusType, eventPriority, eventListener));

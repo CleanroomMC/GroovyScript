@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism.recipe;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.helper.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.recipe.OreDictIngredient;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.ingredients.IMekanismIngredient;
@@ -28,7 +28,7 @@ public class MekanismIngredientHelper {
     public static boolean checkNotNull(String name, IIngredient... ingredients) {
         for (IIngredient ingredient : ingredients) {
             if (ingredient == null) {
-                GroovyLog.LOG.error(String.format("Required parameters missing for %s Recipe.", name));
+                GroovyLog.get().error("Required parameters missing for {} Recipe.", name);
                 return false;
             }
         }
@@ -54,8 +54,8 @@ public class MekanismIngredientHelper {
         if (input instanceof GasStack) {
             return matches(toMatch, (GasStack) input);
         }
-        if ((Object) input instanceof ItemStack) {
-            return toMatch != null && toMatch.test((ItemStack) (Object) input);
+        if (IngredientHelper.isItem(input)) {
+            return toMatch != null && toMatch.test(IngredientHelper.toItemStack(input));
         }
         if (input instanceof FluidStack) {
             return toMatch != null && toMatch.test((FluidStack) input);

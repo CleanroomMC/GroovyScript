@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.helper;
+package com.cleanroommc.groovyscript.helper.ingredient;
 
 import net.minecraft.nbt.*;
 import net.minecraft.util.text.TextFormatting;

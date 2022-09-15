@@ -1,22 +1,25 @@
-package com.cleanroommc.groovyscript.helper.recipe;
+package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import groovy.lang.Closure;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class ShapedCraftingRecipe extends CraftingRecipe implements IShapedRecipe {
 
     private final int width, height;
-    private boolean mirrored = false;
+    private final boolean mirrored;
 
-    public ShapedCraftingRecipe(ItemStack output, List<IIngredient> input, int width, int height) {
-        super(output, input);
+    public ShapedCraftingRecipe(ItemStack output, List<IIngredient> input, int width, int height, boolean mirrored, @Nullable Closure<ItemStack> recipeFunction, @Nullable Closure<Void> recipeAction) {
+        super(output, input, recipeFunction, recipeAction);
         this.width = width;
         this.height = height;
+        this.mirrored = mirrored;
     }
 
     @Override
