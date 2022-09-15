@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism.recipe;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.ingredients.IMekanismIngredient;
@@ -54,8 +54,8 @@ public class MekanismIngredientHelper {
         if (input instanceof GasStack) {
             return matches(toMatch, (GasStack) input);
         }
-        if ((Object) input instanceof ItemStack) {
-            return toMatch != null && toMatch.test((ItemStack) (Object) input);
+        if (IngredientHelper.isItem(input)) {
+            return toMatch != null && toMatch.test(IngredientHelper.toItemStack(input));
         }
         if (input instanceof FluidStack) {
             return toMatch != null && toMatch.test((FluidStack) input);

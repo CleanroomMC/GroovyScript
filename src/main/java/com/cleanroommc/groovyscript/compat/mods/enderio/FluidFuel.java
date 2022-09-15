@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.core.mixin.enderio.FluidFuelRegisterAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import crazypants.enderio.base.fluid.FluidFuelRegister;
 import crazypants.enderio.base.fluid.IFluidFuel;
 import net.minecraftforge.fluids.Fluid;

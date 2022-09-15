@@ -10,7 +10,6 @@ import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeUtils;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import crazypants.enderio.base.recipe.*;
 import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
 import net.minecraft.item.ItemStack;

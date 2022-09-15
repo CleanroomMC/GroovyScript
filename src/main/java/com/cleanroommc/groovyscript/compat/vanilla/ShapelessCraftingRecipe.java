@@ -43,7 +43,7 @@ public class ShapelessCraftingRecipe extends CraftingRecipe {
             while (pairIterator.hasNext()) {
                 Pair<ItemStack, Integer> pair = pairIterator.next();
                 if (matches(ingredient, pair.getLeft())) {
-                    // expected input matches given input so both get removed so they dont get checked again
+                    // expected input matches given input so both get removed so they don't get checked again
                     matches.addMatch(ingredient, pair.getLeft(), pair.getRight());
                     ingredientIterator.remove();
                     pairIterator.remove();

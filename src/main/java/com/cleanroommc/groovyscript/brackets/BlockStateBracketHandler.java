@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.brackets;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IBracketHandler;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterators;
 import net.minecraft.block.Block;
