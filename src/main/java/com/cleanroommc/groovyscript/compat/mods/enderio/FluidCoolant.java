@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.core.mixin.enderio.FluidFuelRegisterAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import crazypants.enderio.base.fluid.FluidFuelRegister;
 import crazypants.enderio.base.fluid.IFluidCoolant;
 import net.minecraftforge.fluids.Fluid;
@@ -18,7 +18,7 @@ public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
 
     public void addCoolant(FluidStack fluidStack, float degreesPerMb) {
         if (fluidStack == null) {
-            GroovyLog.LOG.error("Error adding EnderIO coolant for null fluidstack!");
+            GroovyLog.get().error("Error adding EnderIO coolant for null fluidstack!");
             return;
         }
         addCoolant(fluidStack.getFluid(), degreesPerMb);
@@ -26,7 +26,7 @@ public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
 
     public void addCoolant(Fluid fluid, float degreesPerMb) {
         if (fluid == null) {
-            GroovyLog.LOG.error("Error adding EnderIO coolant for null fluid!");
+            GroovyLog.get().error("Error adding EnderIO coolant for null fluid!");
             return;
         }
         IFluidCoolant existingCoolant = find(fluid);
@@ -39,7 +39,7 @@ public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
 
     public void remove(FluidStack fluidStack) {
         if (fluidStack == null) {
-            GroovyLog.LOG.error("Error removing EnderIO coolant for null fluidstack!");
+            GroovyLog.get().error("Error removing EnderIO coolant for null fluidstack!");
             return;
         }
         remove(fluidStack.getFluid());
@@ -47,7 +47,7 @@ public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
 
     public void remove(Fluid fluid) {
         if (fluid == null) {
-            GroovyLog.LOG.error("Error removing EnderIO coolant for null fluid!");
+            GroovyLog.get().error("Error removing EnderIO coolant for null fluid!");
             return;
         }
         IFluidCoolant existingCoolant = find(fluid);
@@ -55,7 +55,7 @@ public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
             addBackup(existingCoolant);
             ((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getCoolants().remove(fluid.getName());
         } else {
-            GroovyLog.LOG.error("No EnderIO coolant found for {} fluid!", fluid.getName());
+            GroovyLog.get().error("No EnderIO coolant found for {} fluid!", fluid.getName());
         }
     }
 

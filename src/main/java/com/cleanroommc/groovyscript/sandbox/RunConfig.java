@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -39,13 +40,14 @@ public class RunConfig {
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
     // TODO asm
     private final String asmClass = null;
+    private final boolean debug;
 
     private static final String GROOVY_SUFFIX = ".groovy";
 
     public RunConfig(JsonObject json) {
         this.packName = JsonHelper.getString(json, "", "packName", "name");
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
-        GroovyLog.LOG.debug = JsonHelper.getBoolean(json, false, "debug");
+        this.debug = JsonHelper.getBoolean(json, false, "debug");
 
         JsonObject jsonLoaders = JsonHelper.getJsonObject(json, "loaders");
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";
@@ -73,7 +75,7 @@ public class RunConfig {
             loaderPaths.put(entry.getKey(), paths);
             pathsList.addAll(paths.stream().map(path -> Pair.of(entry.getKey(), path)).collect(Collectors.toList()));
         }
-        if (errorMsg.getMessageAmount() > 2) {
+        if (errorMsg.getSubMessages().size() > 1) {
             errorMsg.post();
         }
     }
@@ -84,6 +86,10 @@ public class RunConfig {
 
     public String getVersion() {
         return version;
+    }
+
+    public boolean isDebug() {
+        return debug;
     }
 
     public Collection<File> getSortedFiles(String loader) {
@@ -126,7 +132,7 @@ public class RunConfig {
                 String longPath = path;
                 if (path1.getValue().length() > path.length()) longPath = path1.getValue();
                 String msg = String.format("files in '%s' are configured for multiple loaders: '%s' and '%s'", longPath, loader, path1.getKey());
-                if (!errorMsg.contains(msg)) {
+                if (!errorMsg.getSubMessages().contains(msg)) {
                     errorMsg.add(msg);
                 }
                 valid = false;

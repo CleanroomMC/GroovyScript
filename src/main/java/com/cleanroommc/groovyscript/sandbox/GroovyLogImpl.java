@@ -1,38 +1,40 @@
 package com.cleanroommc.groovyscript.sandbox;
 
+import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.intellij.lang.annotations.Flow;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.kohsuke.groovy.sandbox.impl.Checker;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DateFormat;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class GroovyLog {
+public class GroovyLogImpl implements GroovyLog {
 
-    public static final GroovyLog LOG = new GroovyLog();
+    public static final GroovyLogImpl LOG = new GroovyLogImpl();
 
     private static final Logger logger = LogManager.getLogger("GroovyLog");
     private final Path logFilePath;
     private final PrintWriter printWriter;
     private final DateFormat timeFormat = new SimpleDateFormat("[HH:mm:ss]");
 
-    public boolean debug = false;
-
-    private GroovyLog() {
+    private GroovyLogImpl() {
         File logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy.log");
         logFilePath = logFile.toPath();
         PrintWriter tempWriter;
@@ -54,41 +56,63 @@ public class GroovyLog {
         writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
     }
 
+    @Override
+    public boolean isDebug() {
+        return GroovyScript.getRunConfig().isDebug();
+    }
+
+    @Override
     public PrintWriter getWriter() {
         return printWriter;
     }
 
-    public Path getPath() {
+    @Override
+    public Path getLogFilerPath() {
         return logFilePath;
     }
 
-    public void log(Msg msg) {
-        if (msg.level == Level.OFF || !msg.hasMessages()) return;
-        if (msg.level == Level.DEBUG && !debug) return;
-        String level = msg.level.name();
-        String main = msg.messages.get(0);
-        if (msg.messages.size() == 1) {
+    @Override
+    public void log(GroovyLog.Msg msg) {
+        if (msg.getLevel() == Level.OFF) return;
+        if (msg.getLevel() == Level.DEBUG && !isDebug()) return;
+        String level = msg.getLevel().name();
+        String main = msg.getMainMsg();
+        List<String> messages = msg.getSubMessages();
+        if (messages.isEmpty()) {
+            // has no sub messages -> log in a single line
             writeLogLine(formatLine(level, main));
-            if (msg.logToMcLog) {
-                logger.log(msg.level, main + " in line " + Checker.getLineNumber());
+            if (msg.shouldLogToMc()) {
+                logger.log(msg.getLevel(), main + " in line " + Checker.getLineNumber());
             }
-        } else if (msg.messages.size() == 2 && main.length() + msg.messages.get(1).length() < 100) {
-            writeLogLine(formatLine(level, main + ": - " + msg.messages.get(1)));
-            if (msg.logToMcLog) {
-                logger.log(msg.level, main + ": - " + msg.messages.get(1) + "  in line " + Checker.getLineNumber());
+        } else if (messages.size() == 1 && main.length() + messages.get(0).length() < 100) {
+            // has one sub message and the main message and the sub message have less than 100 characters ->
+            // log in a single line
+            writeLogLine(formatLine(level, main + ": - " + messages.get(0)));
+            if (msg.shouldLogToMc()) {
+                logger.log(msg.getLevel(), main + ": - " + messages.get(0) + "  in line " + Checker.getLineNumber());
             }
         } else {
+            // has multiple log lines or the main message and the first sub message are to long ->
+            // log each sub message in a single line, starting with the main message
             writeLogLine(formatLine(level, main + ": "));
-            for (int i = 1; i < msg.messages.size(); i++) {
-                writeLogLine(formatLine(level, " - " + msg.messages.get(i)));
+            for (int i = 1; i < messages.size(); i++) {
+                writeLogLine(formatLine(level, " - " + messages.get(i)));
             }
-            if (msg.logToMcLog) {
-                logger.log(msg.level, main + " in line " + Checker.getLineNumber() + " : - ");
-                for (int i = 1; i < msg.messages.size(); i++) {
-                    logger.log(msg.level, " - " + msg.messages.get(i));
+            if (msg.shouldLogToMc()) {
+                logger.log(msg.getLevel(), main + " in line " + Checker.getLineNumber() + " : - ");
+                for (int i = 1; i < messages.size(); i++) {
+                    logger.log(msg.getLevel(), " - " + messages.get(i));
                 }
             }
         }
+        Throwable throwable = msg.getException();
+        if (throwable != null) {
+            exception(throwable);
+        }
+    }
+
+    public Path getPath() {
+        return logFilePath;
     }
 
     /**
@@ -109,7 +133,7 @@ public class GroovyLog {
      * @param args arguments
      */
     public void info(String msg, Object... args) {
-        writeLogLine(formatLine("INFO", format(msg, args)));
+        writeLogLine(formatLine("INFO", GroovyLog.format(msg, args)));
     }
 
     /**
@@ -119,7 +143,7 @@ public class GroovyLog {
      * @param args arguments
      */
     public void debugMC(String msg, Object... args) {
-        if (debug) {
+        if (isDebug()) {
             debug(msg, args);
             logger.info(msg, args);
         }
@@ -132,8 +156,8 @@ public class GroovyLog {
      * @param args arguments
      */
     public void debug(String msg, Object... args) {
-        if (debug) {
-            writeLogLine(formatLine("DEBUG", format(msg, args)));
+        if (isDebug()) {
+            writeLogLine(formatLine("DEBUG", GroovyLog.format(msg, args)));
         }
     }
 
@@ -148,6 +172,17 @@ public class GroovyLog {
         logger.warn(msg, args);
     }
 
+    @Override
+    public void fatal(String msg, Object... args) {
+        writeLogLine(formatLine("FATAL", GroovyLog.format(msg, args)));
+    }
+
+    @Override
+    public void fatalMC(String msg, Object... args) {
+        fatal(msg, args);
+        logger.fatal(msg, args);
+    }
+
     /**
      * Logs a warn msg to the groovy log
      *
@@ -155,7 +190,7 @@ public class GroovyLog {
      * @param args arguments
      */
     public void warn(String msg, Object... args) {
-        writeLogLine(formatLine("WARN", format(msg, args)));
+        writeLogLine(formatLine("WARN", GroovyLog.format(msg, args)));
     }
 
     /**
@@ -165,14 +200,13 @@ public class GroovyLog {
      * @param args arguments
      */
     public void error(String msg, Object... args) {
-        String line = new MessageFormat(msg).format(args);
-        logger.error(line);
-        writeLogLine(formatLine("ERROR", line));
+        writeLogLine(formatLine("ERROR", GroovyLog.format(msg, args)));
     }
 
-    private static String format(String msg, Object[] args) {
-        if (args.length == 0) return msg;
-        return new ParameterizedMessage(msg, args).getFormattedMessage();
+    @Override
+    public void errorMC(String msg, Object... args) {
+        error(msg, args);
+        logger.error(msg, args);
     }
 
     /**
@@ -231,50 +265,63 @@ public class GroovyLog {
         this.printWriter.println(line);
     }
 
-    public static Msg msg(String msg, Object... data) {
-        return new Msg(msg, data);
+    public static GroovyLog.Msg msg(String msg, Object... data) {
+        return new MsgImpl(msg, data);
     }
 
-    public static Msg msg(String msg) {
-        return new Msg(msg);
-    }
+    public static class MsgImpl implements GroovyLog.Msg {
 
-    public static class Msg {
-
+        private final String mainMsg;
         private final List<String> messages = new ArrayList<>();
         private Level level = Level.INFO;
         private boolean logToMcLog = false;
+        @Nullable
+        private Throwable throwable;
 
-        public Msg(String msg, Object... data) {
-            this.messages.add(String.format(msg, data));
+        private MsgImpl(String msg, Object... data) {
+            this.mainMsg = GroovyLog.format(msg, data);
         }
 
-        public Msg(String msg) {
-            this.messages.add(msg);
+        @Flow(source = "this.level")
+        public boolean isValid() {
+            return level != null;
         }
 
         public Msg add(String msg, Object... data) {
-            this.messages.add(String.format(msg, data));
+            this.messages.add(GroovyLog.format(msg, data));
             return this;
         }
 
-        public Msg add(String msg) {
-            this.messages.add(msg);
+        @Override
+        public Msg add(boolean condition, String msg, Object... args) {
+            if (condition) {
+                return add(msg, args);
+            }
             return this;
         }
 
         public Msg add(boolean condition, Supplier<String> msg) {
             if (condition) {
-                this.messages.add(msg.get());
+                return add(msg.get());
             }
             return this;
         }
 
-        public boolean contains(String msg) {
-            return this.messages.contains(msg);
+        @Override
+        public Msg add(boolean condition, Consumer<Msg> msgBuilder) {
+            if (condition) {
+                msgBuilder.accept(this);
+            }
+            return this;
         }
 
-        private Msg level(Level level) {
+        @Override
+        public Msg exception(Throwable throwable) {
+            this.throwable = throwable;
+            return this;
+        }
+
+        private MsgImpl level(Level level) {
             this.level = level;
             return this;
         }
@@ -291,41 +338,47 @@ public class GroovyLog {
             return level(Level.WARN);
         }
 
-        public Msg error() {
-            return level(Level.ERROR);
-        }
-
         public Msg fatal() {
             return level(Level.FATAL);
         }
 
-        public Msg logToMc() {
-            this.logToMcLog = true;
+        public Msg error() {
+            return level(Level.ERROR);
+        }
+
+        @Override
+        public Msg logToMc(boolean logToMC) {
+            this.logToMcLog = logToMC;
             return this;
+        }
+
+        @Override
+        public @NotNull String getMainMsg() {
+            return mainMsg;
+        }
+
+        @Override
+        public @NotNull List<String> getSubMessages() {
+            return messages;
+        }
+
+        @Override
+        public @Nullable Throwable getException() {
+            return throwable;
+        }
+
+        @Override
+        public Level getLevel() {
+            return level;
+        }
+
+        @Override
+        public boolean shouldLogToMc() {
+            return logToMcLog;
         }
 
         public boolean hasMessages() {
             return !this.messages.isEmpty();
-        }
-
-        public boolean hasSubMessages() {
-            return this.messages.size() > 1;
-        }
-
-        public int getMessageAmount() {
-            return this.messages.size();
-        }
-
-        public void post() {
-            LOG.log(this);
-        }
-
-        public boolean postIfNotEmpty() {
-            if (hasSubMessages()) {
-                LOG.log(this);
-                return true;
-            }
-            return false;
         }
     }
 }

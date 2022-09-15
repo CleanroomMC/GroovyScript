@@ -1,8 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio.recipe;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import crazypants.enderio.base.recipe.IRecipeInput;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,8 +23,7 @@ public class RecipeInput implements IRecipeInput {
         this.ing = IngredientHelper.isEmpty(ing) ? IIngredient.EMPTY : ing.exactCopy();
         this.slot = slot;
         if (this.ing.getMatchingStacks().length == 0) {
-            GroovyLog.LOG.warn("EnderTweaker received an empty ingredient. This may cause problems.");
-            GroovyLog.LOG.warn(this.ing.toString());
+            GroovyLog.get().warn("EnderTweaker received an empty ingredient. This may cause problems. Ingredient: ", this.ing);
         }
     }
 

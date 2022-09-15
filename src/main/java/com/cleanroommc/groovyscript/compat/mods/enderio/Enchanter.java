@@ -1,14 +1,14 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.CustomEnchanterRecipe;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
+import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import crazypants.enderio.base.recipe.IMachineRecipe;
 import crazypants.enderio.base.recipe.MachineRecipeRegistry;
 import crazypants.enderio.base.recipe.enchanter.EnchanterRecipe;
@@ -44,7 +44,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
     public void remove(Enchantment enchantment) {
         if (enchantment == null) {
-            GroovyLog.LOG.error("Can't remove EnderIO Enchanter recipe for null enchantment!");
+            GroovyLog.get().error("Can't remove EnderIO Enchanter recipe for null enchantment!");
             return;
         }
         List<EnchanterRecipe> recipes = new ArrayList<>();
@@ -54,7 +54,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
             }
         }
         if (recipes.isEmpty()) {
-            GroovyLog.LOG.error("Can't find EnderIO Enchanter recipe for " + enchantment.getName() + " enchantment!");
+            GroovyLog.get().error("Can't find EnderIO Enchanter recipe for " + enchantment.getName() + " enchantment!");
         } else {
             for (EnchanterRecipe recipe : recipes) {
                 MachineRecipeRegistry.instance.removeRecipe(recipe);
@@ -110,11 +110,11 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
         @Override
         public boolean validate() {
-            GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Enchanter recipe").error();
-            msg.add(enchantment == null, () -> "enchantment must not be null");
-            msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
-            msg.add(IngredientHelper.isEmpty(book), () -> "custom book must not be empty");
-            msg.add(IngredientHelper.isEmpty(lapis), () -> "custom lapis must not be empty");
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding EnderIO Enchanter recipe").error()
+                    .add(enchantment == null, () -> "enchantment must not be null")
+                    .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
+                    .add(IngredientHelper.isEmpty(book), () -> "custom book must not be empty")
+                    .add(IngredientHelper.isEmpty(lapis), () -> "custom lapis must not be empty");
             if (amount <= 0 && input != null) amount = input.getAmount();
 
             return !msg.postIfNotEmpty();

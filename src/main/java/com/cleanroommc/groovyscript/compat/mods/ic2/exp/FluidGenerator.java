@@ -4,7 +4,7 @@ import com.cleanroommc.groovyscript.core.mixin.ic2.SemiFluidFuelManagerAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import ic2.api.recipe.ISemiFluidFuelManager;
 import ic2.api.recipe.Recipes;
 import net.minecraftforge.fluids.FluidStack;

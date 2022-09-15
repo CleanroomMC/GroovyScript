@@ -10,7 +10,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.BrewerManagerAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -37,7 +37,7 @@ public class Brewer extends VirtualizedRegistry<BrewerManager.BrewerRecipe> {
     }
 
     public void removeByInput(IIngredient ingredient, FluidStack input) {
-        if (new GroovyLog.Msg("Error removing Thermal Expansion Brewer recipe").error()
+        if (GroovyLog.msg("Error removing Thermal Expansion Brewer recipe").error()
                 .add(IngredientHelper.isEmpty(ingredient), () -> "item input must not be empty")
                 .add(IngredientHelper.isEmpty(input), () -> "fluid input must not be empty")
                 .postIfNotEmpty()) {

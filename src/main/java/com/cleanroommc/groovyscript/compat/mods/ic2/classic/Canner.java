@@ -1,13 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ic2.RecipeInput;
 import com.cleanroommc.groovyscript.core.mixin.ic2.ClassicCanningMachineRegistryAccessor;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import ic2.api.classic.recipe.ClassicRecipes;
 import ic2.api.classic.recipe.machine.ICannerRegistry;
 import ic2.api.classic.recipe.machine.IFoodCanEffect;
@@ -17,7 +17,10 @@ import ic2.core.util.helpers.ItemWithMeta;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
 
@@ -33,7 +36,7 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
         removeScripted().forEach(this::remove);
         restoreFromBackup().forEach(this::add);
     }
-    
+
     public CanningRecipe addCanning(ItemStack output, IIngredient input, ItemStack container) {
         if (GroovyLog.msg("Error adding Industrialcraft 2 Canner Canning recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
@@ -259,15 +262,20 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
         switch (recipe.type) {
             case CANNING_RECIPE:
                 ClassicRecipes.canningMachine.registerCannerItem(recipe.container, new RecipeInput(recipe.input), recipe.output);
+                break;
             case ITEM_EFFECT:
                 ClassicRecipes.canningMachine.registerItemsForEffect(recipe.intValue, recipe.input.getMatchingStacks());
+                break;
             case FUEL_VALUE:
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.canningMachine.registerFuelValue(stack, recipe.intValue);
-                    if (recipe.floatValue > 0) ClassicRecipes.canningMachine.registerFuelMultiplier(stack, recipe.floatValue);
+                    if (recipe.floatValue > 0)
+                        ClassicRecipes.canningMachine.registerFuelMultiplier(stack, recipe.floatValue);
                 }
+                break;
             case REPAIR:
                 ClassicRecipes.canningMachine.addRepairRecipe(recipe.damageItem, recipe.meta, new RecipeInput(recipe.input), recipe.intValue);
+                break;
         }
     }
 
@@ -275,14 +283,18 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
         switch (recipe.type) {
             case CANNING_RECIPE:
                 ClassicRecipes.canningMachine.removeCanningRecipe(recipe.container, recipe.input.getMatchingStacks()[0]);
+                break;
             case ITEM_EFFECT:
                 ClassicRecipes.canningMachine.deleteEffectID(recipe.intValue, true);
+                break;
             case FUEL_VALUE:
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.canningMachine.deleteItemFuel(stack);
                 }
+                break;
             case REPAIR:
                 ClassicRecipes.canningMachine.removeRepairItem(recipe.damageItem, recipe.meta);
+                break;
         }
     }
 

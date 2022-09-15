@@ -6,7 +6,7 @@ import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipe;
 import com.cleanroommc.groovyscript.core.mixin.InventoryCraftingAccess;
 import com.cleanroommc.groovyscript.core.mixin.SlotCraftingAccess;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import groovy.lang.Closure;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
@@ -39,7 +39,7 @@ public class EventHandler {
                 if (recipe instanceof CraftingRecipe) {
                     Closure<Void> recipeAction = ((CraftingRecipe) recipe).getRecipeAction();
                     if (recipeAction != null) {
-                        GroovyLog.LOG.infoMC("Fire Recipe Action");
+                        GroovyLog.get().infoMC("Fire Recipe Action");
                         ClosureHelper.call(recipeAction, event.crafting, new CraftingInfo(inventoryCrafting, player));
                     }
                 }

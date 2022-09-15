@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.enderio;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.core.mixin.enderio.FluidFuelRegisterAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import crazypants.enderio.base.fluid.FluidFuelRegister;
 import crazypants.enderio.base.fluid.IFluidFuel;
 import net.minecraftforge.fluids.Fluid;
@@ -18,7 +18,7 @@ public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
 
     public void addFuel(FluidStack fluidStack, int rfPerCycle, int totalBurnTime) {
         if (fluidStack == null) {
-            GroovyLog.LOG.error("Error adding EnderIO fuel for null fluidstack!");
+            GroovyLog.get().error("Error adding EnderIO fuel for null fluidstack!");
             return;
         }
         addFuel(fluidStack.getFluid(), rfPerCycle, totalBurnTime);
@@ -26,7 +26,7 @@ public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
 
     public void addFuel(Fluid fluid, int rfPerCycle, int totalBurnTime) {
         if (fluid == null) {
-            GroovyLog.LOG.error("Error adding EnderIO fuel for null fluid!");
+            GroovyLog.get().error("Error adding EnderIO fuel for null fluid!");
             return;
         }
         IFluidFuel existingFuel = find(fluid);
@@ -39,7 +39,7 @@ public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
 
     public void remove(FluidStack fluidStack) {
         if (fluidStack == null) {
-            GroovyLog.LOG.error("Error removing EnderIO fuel for null fluidstack!");
+            GroovyLog.get().error("Error removing EnderIO fuel for null fluidstack!");
             return;
         }
         remove(fluidStack.getFluid());
@@ -47,7 +47,7 @@ public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
 
     public void remove(Fluid fluid) {
         if (fluid == null) {
-            GroovyLog.LOG.error("Error removing EnderIO fuel for null fluid!");
+            GroovyLog.get().error("Error removing EnderIO fuel for null fluid!");
             return;
         }
         IFluidFuel existingFuel = find(fluid);
@@ -55,7 +55,7 @@ public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
             addBackup(existingFuel);
             ((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getFuels().remove(fluid.getName());
         } else {
-            GroovyLog.LOG.error("No EnderIO fuel found for {} fluid!", fluid.getName());
+            GroovyLog.get().error("No EnderIO fuel found for {} fluid!", fluid.getName());
         }
     }
 

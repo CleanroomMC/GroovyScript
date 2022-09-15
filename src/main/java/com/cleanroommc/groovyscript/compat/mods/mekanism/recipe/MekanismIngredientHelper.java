@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism.recipe;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.ingredients.IMekanismIngredient;
@@ -28,7 +28,7 @@ public class MekanismIngredientHelper {
     public static boolean checkNotNull(String name, IIngredient... ingredients) {
         for (IIngredient ingredient : ingredients) {
             if (ingredient == null) {
-                GroovyLog.LOG.error("Required parameters missing for {} Recipe.", name);
+                GroovyLog.get().error("Required parameters missing for {} Recipe.", name);
                 return false;
             }
         }

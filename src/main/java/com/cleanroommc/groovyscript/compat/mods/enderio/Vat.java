@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
@@ -8,7 +9,6 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.*;
 import crazypants.enderio.base.recipe.vat.VatRecipe;
@@ -39,7 +39,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
 
     public void remove(FluidStack output) {
         if (IngredientHelper.isEmpty(output)) {
-            GroovyLog.LOG.error("Error removing EnderIO Vat recipe for empty output!");
+            GroovyLog.get().error("Error removing EnderIO Vat recipe for empty output!");
             return;
         }
         int oldSize = VatRecipeManager.getInstance().getRecipes().size();
@@ -48,7 +48,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
             return output.isFluidEqual(recipeOutput);
         });
         if (oldSize == VatRecipeManager.getInstance().getRecipes().size()) {
-            GroovyLog.LOG.error("Could not find EnderIO Vat recipes with fluid output {}", output.getFluid().getName());
+            GroovyLog.get().error("Could not find EnderIO Vat recipes with fluid output {}", output.getFluid().getName());
         }
     }
 
@@ -120,7 +120,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
 
         @Override
         public boolean validate() {
-            GroovyLog.Msg msg = new GroovyLog.Msg("Error adding EnderIO Vat recipe").error();
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding EnderIO Vat recipe").error();
             msg.add(IngredientHelper.isEmpty(input), () -> "fluid input must not be empty");
             msg.add(IngredientHelper.isEmpty(output), () -> "fluid output must not be empty");
 

@@ -10,7 +10,7 @@ import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeLeafNodeAccesso
 import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeNodeAccessor;
 import com.cleanroommc.groovyscript.core.mixin.enderio.TriItemLookupAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.IManyToOneRecipe;
 import crazypants.enderio.base.recipe.alloysmelter.AlloyRecipeManager;

@@ -2,7 +2,7 @@ package com.cleanroommc.groovyscript.helper;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import groovy.lang.Closure;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.jetbrains.annotations.Nullable;
@@ -92,7 +92,7 @@ public class SimpleObjectStream<T> extends AbstractList<T> {
                 return this;
             }
         }
-        GroovyLog.LOG.error("No recipe found to remove!");
+        GroovyLog.get().error("No recipe found to remove!");
         return this;
     }
 

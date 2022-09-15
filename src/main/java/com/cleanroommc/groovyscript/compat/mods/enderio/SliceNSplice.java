@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
@@ -9,7 +10,7 @@ import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeUtils;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import crazypants.enderio.base.recipe.*;
 import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
 import net.minecraft.item.ItemStack;
@@ -61,7 +62,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
             }
         }
         if (count == 0) {
-            GroovyLog.LOG.error("No EnderIO Slice'n'Splice recipe found for " + output.getDisplayName());
+            GroovyLog.get().error("No EnderIO Slice'n'Splice recipe found for " + output.getDisplayName());
         }
     }
 
@@ -71,7 +72,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
             SliceAndSpliceRecipeManager.getInstance().getRecipes().remove(recipe);
             addBackup((IManyToOneRecipe) recipe);
         } else {
-            GroovyLog.LOG.error("No EnderIO Slice'n'Splice recipe found for " + input);
+            GroovyLog.get().error("No EnderIO Slice'n'Splice recipe found for " + input);
         }
     }
 

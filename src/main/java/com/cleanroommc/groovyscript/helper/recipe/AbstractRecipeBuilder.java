@@ -4,7 +4,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.FluidStackList;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -95,7 +95,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
     @Override
     public boolean validate() {
-        GroovyLog.Msg msg = new GroovyLog.Msg(getErrorMsg()).error();
+        GroovyLog.Msg msg = GroovyLog.msg(getErrorMsg()).error();
         validate(msg);
         return !msg.postIfNotEmpty();
     }

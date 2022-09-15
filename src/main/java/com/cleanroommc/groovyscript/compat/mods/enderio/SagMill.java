@@ -1,13 +1,14 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.SagRecipe;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import crazypants.enderio.base.recipe.Recipe;
 import crazypants.enderio.base.recipe.RecipeBonusType;
 import crazypants.enderio.base.recipe.RecipeLevel;
@@ -17,8 +18,6 @@ import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.floats.FloatList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 public class SagMill extends VirtualizedRegistry<Recipe> {
 
@@ -38,7 +37,7 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
     public void removeByInput(ItemStack input) {
         Recipe recipe = (Recipe) SagMillRecipeManager.getInstance().getRecipeForInput(RecipeLevel.IGNORE, input);
         if (recipe == null) {
-            GroovyLog.LOG.error("Can't find EnderIO Sag Mill recipe for input " + input);
+            GroovyLog.get().error("Can't find EnderIO Sag Mill recipe for input " + input);
         } else {
             SagMillRecipeManager.getInstance().getRecipes().remove(recipe);
             addBackup(recipe);
