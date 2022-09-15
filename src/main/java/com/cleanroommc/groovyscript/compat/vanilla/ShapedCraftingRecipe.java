@@ -15,8 +15,8 @@ public class ShapedCraftingRecipe extends CraftingRecipe implements IShapedRecip
     private final int width, height;
     private final boolean mirrored;
 
-    public ShapedCraftingRecipe(ItemStack output, List<IIngredient> input, int width, int height, boolean mirrored, @Nullable Closure<ItemStack> recipeFunction) {
-        super(output, input, recipeFunction);
+    public ShapedCraftingRecipe(ItemStack output, List<IIngredient> input, int width, int height, boolean mirrored, @Nullable Closure<ItemStack> recipeFunction, @Nullable Closure<Void> recipeAction) {
+        super(output, input, recipeFunction, recipeAction);
         this.width = width;
         this.height = height;
         this.mirrored = mirrored;

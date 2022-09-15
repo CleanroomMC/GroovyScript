@@ -14,8 +14,8 @@ import java.util.List;
 
 public class ShapelessCraftingRecipe extends CraftingRecipe {
 
-    public ShapelessCraftingRecipe(ItemStack output, List<IIngredient> input, @Nullable Closure<ItemStack> recipeFunction) {
-        super(output, input, recipeFunction);
+    public ShapelessCraftingRecipe(ItemStack output, List<IIngredient> input, @Nullable Closure<ItemStack> recipeFunction, @Nullable Closure<Void> recipeAction) {
+        super(output, input, recipeFunction, recipeAction);
     }
 
     @Override

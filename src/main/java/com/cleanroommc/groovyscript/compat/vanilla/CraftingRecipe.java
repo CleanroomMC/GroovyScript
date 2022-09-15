@@ -30,11 +30,14 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     private final NonNullList<Ingredient> ingredients;
     @Nullable
     protected final Closure<ItemStack> recipeFunction;
+    @Nullable
+    protected final Closure<Void> recipeAction;
 
-    public CraftingRecipe(ItemStack output, List<IIngredient> input, @Nullable Closure<ItemStack> recipeFunction) {
+    public CraftingRecipe(ItemStack output, List<IIngredient> input, @Nullable Closure<ItemStack> recipeFunction, @Nullable Closure<Void> recipeAction) {
         this.output = output;
         this.input = input;
         this.recipeFunction = recipeFunction;
+        this.recipeAction = recipeAction;
         this.ingredients = NonNullList.create();
         for (int i = 0; i < this.input.size(); i++) {
             if (this.input.get(i) == null) this.input.set(i, IIngredient.EMPTY);
@@ -69,6 +72,16 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     @Override
     public @NotNull ItemStack getRecipeOutput() {
         return output;
+    }
+
+    @Nullable
+    public Closure<Void> getRecipeAction() {
+        return recipeAction;
+    }
+
+    @Nullable
+    public Closure<ItemStack> getRecipeFunction() {
+        return recipeFunction;
     }
 
     public boolean matches(@Nullable IIngredient expectedInput, ItemStack givenInput) {

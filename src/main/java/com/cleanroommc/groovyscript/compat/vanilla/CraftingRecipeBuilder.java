@@ -24,6 +24,7 @@ public abstract class CraftingRecipeBuilder {
     protected ItemStack output;
     protected String name;
     protected Closure<ItemStack> recipeFunction;
+    protected Closure<Void> recipeAction;
     protected byte replace = 0;
 
     protected final int width, height;
@@ -45,6 +46,11 @@ public abstract class CraftingRecipeBuilder {
 
     public CraftingRecipeBuilder recipeFunction(Closure<ItemStack> recipeFunction) {
         this.recipeFunction = recipeFunction;
+        return this;
+    }
+
+    public CraftingRecipeBuilder recipeAction(Closure<Void> recipeAction) {
+        this.recipeAction = recipeAction;
         return this;
     }
 
@@ -194,7 +200,7 @@ public abstract class CraftingRecipeBuilder {
                     }
                 }
                 if (msg.postIfNotEmpty()) return null;
-                recipe = new ShapedCraftingRecipe(output, ingredients, rowWidth, keyBasedMatrix.length, mirrored, recipeFunction);
+                recipe = new ShapedCraftingRecipe(output, ingredients, rowWidth, keyBasedMatrix.length, mirrored, recipeFunction, recipeAction);
             } else if (ingredientMatrix != null) {
                 List<IIngredient> ingredients = new ArrayList<>();
                 if (ingredientMatrix.size() > height) {
@@ -217,7 +223,7 @@ public abstract class CraftingRecipeBuilder {
                 }
                 msg.add(!hasNonEmpty, () -> "Matrix must not be empty");
                 if (msg.postIfNotEmpty()) return null;
-                recipe = new ShapedCraftingRecipe(output.copy(), ingredients, rowWidth, ingredientMatrix.size(), mirrored, recipeFunction);
+                recipe = new ShapedCraftingRecipe(output.copy(), ingredients, rowWidth, ingredientMatrix.size(), mirrored, recipeFunction, recipeAction);
             }
 
             if (recipe != null) {
@@ -271,7 +277,7 @@ public abstract class CraftingRecipeBuilder {
                 return null;
             }
             handleReplace();
-            ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), ingredients, recipeFunction);
+            ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), ingredients, recipeFunction, recipeAction);
             ResourceLocation rl = createName(name, ID_PREFIX);
             ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, rl, recipe);
             return recipe;
