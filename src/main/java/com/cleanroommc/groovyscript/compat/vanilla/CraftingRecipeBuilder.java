@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
@@ -12,6 +13,7 @@ import it.unimi.dsi.fastutil.chars.CharOpenHashSet;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +24,7 @@ public abstract class CraftingRecipeBuilder {
     protected ItemStack output;
     protected String name;
     protected Closure<ItemStack> recipeFunction;
+    protected byte replace = 0;
 
     protected final int width, height;
 
@@ -45,7 +48,44 @@ public abstract class CraftingRecipeBuilder {
         return this;
     }
 
+    public CraftingRecipeBuilder replace() {
+        this.replace = 1;
+        return this;
+    }
+
+    public CraftingRecipeBuilder replaceByName() {
+        this.replace = 2;
+        return this;
+    }
+
     public abstract CraftingRecipe register();
+
+    @GroovyBlacklist
+    protected void handleReplace() {
+        if (replace == 1) {
+            VanillaModule.crafting.removeByOutput(IngredientHelper.toIIngredient(output), false);
+        } else if (replace == 2) {
+            if (name == null) {
+                GroovyLog.msg("Error replacing Minecraft Crafting recipe")
+                        .add("Name must not be null when replacing by name")
+                        .error()
+                        .post();
+                return;
+            }
+            ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name);
+        }
+    }
+
+    @GroovyBlacklist
+    protected ResourceLocation createName(@Nullable String name, @Nullable String prefix) {
+        if (name == null) {
+            return new ResourceLocation(GroovyScript.ID, prefix == null ? RecipeName.generate() : RecipeName.generate(prefix));
+        }
+        if (name.contains(":")) {
+            return new ResourceLocation(name);
+        }
+        return new ResourceLocation(GroovyScript.ID, name);
+    }
 
     public static class Shaped extends CraftingRecipeBuilder {
 
@@ -171,7 +211,8 @@ public abstract class CraftingRecipeBuilder {
             }
 
             if (recipe != null) {
-                ResourceLocation rl = new ResourceLocation(GroovyScript.ID, name != null ? name : RecipeName.generate(ID_PREFIX));
+                handleReplace();
+                ResourceLocation rl = createName(name, ID_PREFIX);
                 ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, rl, recipe);
             }
 
@@ -219,8 +260,9 @@ public abstract class CraftingRecipeBuilder {
                     .postIfNotEmpty()) {
                 return null;
             }
+            handleReplace();
             ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), ingredients, recipeFunction);
-            ResourceLocation rl = new ResourceLocation(GroovyScript.ID, name != null ? name : RecipeName.generate(ID_PREFIX));
+            ResourceLocation rl = createName(name, ID_PREFIX);
             ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, rl, recipe);
             return recipe;
         }

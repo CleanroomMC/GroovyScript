@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.registry.DummyRecipe;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -39,17 +39,50 @@ public class Crafting {
                 .register();
     }
 
+    public void replaceShapeless(ItemStack output, List<IIngredient> input) {
+        replaceShapeless(null, output, input);
+    }
+
+    public void replaceShapeless(String name, ItemStack output, List<IIngredient> input) {
+        shapelessBuilder()
+                .input(input)
+                .output(output)
+                .name(name)
+                .replace()
+                .register();
+    }
+
+    public void replaceShaped(ItemStack output, List<List<IIngredient>> input) {
+        replaceShaped(null, output, input);
+    }
+
+    public void replaceShaped(String name, ItemStack output, List<List<IIngredient>> input) {
+        shapedBuilder()
+                .matrix(input)
+                .output(output)
+                .name(name)
+                .replace()
+                .register();
+    }
+
     public void remove(String name) {
-        ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name, new DummyRecipe());
+        ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name);
     }
 
     public void removeByOutput(IIngredient output) {
+        removeByOutput(output, true);
+    }
+
+    @GroovyBlacklist
+    public void removeByOutput(IIngredient output, boolean log) {
         if (IngredientHelper.isEmpty(output)) {
-            GroovyLog.msg("Error removing Minecraft Crafting recipe")
-                    .add("Output must not be empty")
-                    .error()
-                    .post();
-            return;
+            if (log) {
+                GroovyLog.msg("Error removing Minecraft Crafting recipe")
+                        .add("Output must not be empty")
+                        .error()
+                        .post();
+                return;
+            }
         }
         List<ResourceLocation> recipesToRemove = new ArrayList<>();
         for (IRecipe recipe : ForgeRegistries.RECIPES) {
@@ -58,10 +91,12 @@ public class Crafting {
             }
         }
         if (recipesToRemove.isEmpty()) {
-            GroovyLog.msg("Error removing Minecraft Crafting recipe")
-                    .add("No recipes found for %s", output)
-                    .error()
-                    .post();
+            if (log) {
+                GroovyLog.msg("Error removing Minecraft Crafting recipe")
+                        .add("No recipes found for %s", output)
+                        .error()
+                        .post();
+            }
             return;
         }
         for (ResourceLocation rl : recipesToRemove) {

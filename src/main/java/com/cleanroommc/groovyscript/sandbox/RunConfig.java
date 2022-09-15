@@ -71,7 +71,9 @@ public class RunConfig {
             loaderPaths.put(entry.getKey(), paths);
             pathsList.addAll(paths.stream().map(path -> Pair.of(entry.getKey(), path)).collect(Collectors.toList()));
         }
-        errorMsg.postIfNotEmpty();
+        if (errorMsg.getMessageAmount() > 2) {
+            errorMsg.post();
+        }
     }
 
     public String getPackName() {

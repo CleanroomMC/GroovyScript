@@ -1,12 +1,10 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.IMarkable;
 import com.cleanroommc.groovyscript.core.mixin.InventoryCraftingAccess;
 import com.cleanroommc.groovyscript.core.mixin.SlotCraftingAccess;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
-import com.cleanroommc.groovyscript.sandbox.GroovyLog;
 import groovy.lang.Closure;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
@@ -52,20 +49,16 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         ItemStack result = output.copy();
         if (recipeFunction != null) {
             MatchList matchList = getMatchingList(inv);
-            GroovyLog.LOG.infoMC("Running recipe function. {} matches found", matchList.size());
             Object2ObjectOpenHashMap<String, ItemStack> marks = new Object2ObjectOpenHashMap<>();
             for (SlotMatchResult matchResult : matchList) {
                 if (matchResult.getRecipeIngredient() instanceof IMarkable) {
-                    GroovyLog.LOG.infoMC(" - found mark at slot {}", matchResult.getSlotIndex());
                     IMarkable markable = (IMarkable) matchResult.getRecipeIngredient();
                     if (!input.isEmpty() && markable.hasMark()) {
                         marks.put(markable.getMark(), matchResult.getGivenInput().copy());
                     }
                 }
             }
-            GroovyLog.LOG.infoMC(" - found {} marks", marks.size());
             result = ClosureHelper.call(recipeFunction, result, marks, new CraftingInfo(inv, getPlayerFromInventory(inv)));
-            GroovyLog.LOG.infoMC(" - result: {}", result);
             if (result == null) {
                 result = ItemStack.EMPTY;
             }

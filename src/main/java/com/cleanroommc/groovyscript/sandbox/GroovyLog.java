@@ -74,7 +74,7 @@ public class GroovyLog {
             if (msg.logToMcLog) {
                 logger.log(msg.level, main + " in line " + Checker.getLineNumber());
             }
-        } else if (msg.messages.size() == 2) {
+        } else if (msg.messages.size() == 2 && main.length() + msg.messages.get(1).length() < 100) {
             writeLogLine(formatLine(level, main + ": - " + msg.messages.get(1)));
             if (msg.logToMcLog) {
                 logger.log(msg.level, main + ": - " + msg.messages.get(1) + "  in line " + Checker.getLineNumber());
@@ -215,7 +215,7 @@ public class GroovyLog {
 
     private String formatLine(String level, String msg) {
         return timeFormat.format(new Date()) +
-                (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : "[SERVER/") +
+                (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : " [SERVER/") +
                 level + "]" +
                 " [" + getSource() + "]: " +
                 msg;
@@ -312,6 +312,10 @@ public class GroovyLog {
 
         public boolean hasSubMessages() {
             return this.messages.size() > 1;
+        }
+
+        public int getMessageAmount() {
+            return this.messages.size();
         }
 
         public void post() {

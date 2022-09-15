@@ -18,15 +18,16 @@ import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
 @GroovyBlacklist
 public class ReloadableRegistryManager {
 
     private static final AtomicBoolean firstLoad = new AtomicBoolean(true);
+    private static final Map<Class<?>, Supplier<?>> registryDummies = new Object2ObjectOpenHashMap<>();
     private static final Map<Class<?>, List<Object>> recipeRecovery = new Object2ObjectOpenHashMap<>();
     private static final Map<Class<?>, List<Object>> scriptRecipes = new Object2ObjectOpenHashMap<>();
 
@@ -54,6 +55,11 @@ public class ReloadableRegistryManager {
     public static <T> List<T> unmarkScripted(Class<?> registryClass, @SuppressWarnings("unused") Class<T> recipeClass) {
         @SuppressWarnings("unchecked") List<T> marked = (List<T>) scriptRecipes.remove(registryClass);
         return marked == null ? Collections.emptyList() : marked;
+    }
+
+    @ApiStatus.Internal
+    public static void init() {
+        registryDummies.put(IRecipe.class, DummyRecipe::new);
     }
 
     @ApiStatus.Internal
@@ -88,16 +94,16 @@ public class ReloadableRegistryManager {
         ((IReloadableForgeRegistry<V>) registry).registerEntry(entry.setRegistryName(name));
     }
 
-    public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, String name, @Nullable V dummy) {
-        removeRegistryEntry(registry, new ResourceLocation(name), dummy);
+    public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, String name) {
+        removeRegistryEntry(registry, new ResourceLocation(name));
     }
 
     public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name) {
-        ((IReloadableForgeRegistry<V>) registry).removeEntry(name, null);
+        ((IReloadableForgeRegistry<V>) registry).removeEntry(name);
     }
 
-    public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name, @Nullable V dummy) {
-        ((IReloadableForgeRegistry<V>) registry).removeEntry(name, dummy);
+    public static <V extends IForgeRegistryEntry<V>> Supplier<V> getDummySupplier(Class<V> registryClass) {
+        return (Supplier<V>) registryDummies.getOrDefault(registryClass, () -> null);
     }
 
     /**

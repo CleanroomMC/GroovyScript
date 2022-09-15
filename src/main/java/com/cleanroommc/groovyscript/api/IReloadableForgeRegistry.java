@@ -10,7 +10,7 @@ public interface IReloadableForgeRegistry<V> {
 
     V registerEntry(V registryEntry);
 
-    void removeEntry(ResourceLocation name, @Nullable V dummy);
+    void removeEntry(ResourceLocation name);
 
     void onReload();
 }
