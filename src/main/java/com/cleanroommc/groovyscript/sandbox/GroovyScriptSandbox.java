@@ -72,7 +72,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void preRun() {
-        GroovyLog.LOG.info("Running scripts in loader '%s'", this.currentLoader);
+        GroovyLog.LOG.info("Running scripts in loader '{}'", this.currentLoader);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         if (!ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
@@ -83,7 +83,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected boolean shouldRunFile(File file) {
-        GroovyLog.LOG.info(" - executing %s", file.toString());
+        GroovyLog.LOG.info(" - executing {}", file.toString());
         return true;
     }
 
@@ -107,7 +107,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             Path mainPath = new File(GroovyScript.getScriptPath()).toPath();
             return mainPath.relativize(path).toString();
         } catch (URISyntaxException | MalformedURLException e) {
-            GroovyLog.LOG.error("Error parsing script source '%s'", source);
+            GroovyLog.LOG.error("Error parsing script source '{}'", source);
             return source;
         }
     }

@@ -80,7 +80,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
             }
         }
         if (recipes.isEmpty()) {
-            GroovyLog.LOG.error("Could not find EnderIO Tank filling recipes for fluid %s and output %s", fluid.getFluid().getName(), output);
+            GroovyLog.LOG.error("Could not find EnderIO Tank filling recipes for fluid {} and output {}", fluid.getFluid().getName(), output);
         } else {
             recipes.forEach(this::addBackup);
             recipes.forEach(MachineRecipeRegistry.instance::removeRecipe);
@@ -104,7 +104,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
             }
         }
         if (recipes.isEmpty()) {
-            GroovyLog.LOG.error("Could not find EnderIO Tank draining recipes for fluid %s and output %s", fluid.getFluid().getName(), output);
+            GroovyLog.LOG.error("Could not find EnderIO Tank draining recipes for fluid {} and output {}", fluid.getFluid().getName(), output);
         } else {
             recipes.forEach(this::addBackup);
             recipes.forEach(MachineRecipeRegistry.instance::removeRecipe);

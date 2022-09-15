@@ -26,16 +26,14 @@ public class GroovyLog {
     public static final GroovyLog LOG = new GroovyLog();
 
     private static final Logger logger = LogManager.getLogger("GroovyLog");
-    private final File logFile;
     private final Path logFilePath;
     private final PrintWriter printWriter;
-    private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
     private final DateFormat timeFormat = new SimpleDateFormat("[HH:mm:ss]");
 
     public boolean debug = false;
 
     private GroovyLog() {
-        logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy.log");
+        File logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy.log");
         logFilePath = logFile.toPath();
         PrintWriter tempWriter;
         try {
@@ -52,6 +50,7 @@ public class GroovyLog {
             tempWriter = new PrintWriter(System.out);
         }
         this.printWriter = tempWriter;
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
     }
 

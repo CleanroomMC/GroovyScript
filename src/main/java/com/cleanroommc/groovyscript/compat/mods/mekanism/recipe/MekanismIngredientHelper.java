@@ -28,7 +28,7 @@ public class MekanismIngredientHelper {
     public static boolean checkNotNull(String name, IIngredient... ingredients) {
         for (IIngredient ingredient : ingredients) {
             if (ingredient == null) {
-                GroovyLog.LOG.error(String.format("Required parameters missing for %s Recipe.", name));
+                GroovyLog.LOG.error("Required parameters missing for {} Recipe.", name);
                 return false;
             }
         }

@@ -133,7 +133,7 @@ public class RunConfig {
             }
         }
         if (!valid) {
-            errorMsg.add("removing path '%s' from loader '%s'", path, loader);
+            errorMsg.add("removing path '{}' from loader '{}'", path, loader);
         }
         return valid;
     }

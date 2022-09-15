@@ -47,12 +47,12 @@ public class BlockStateBracketHandler implements IBracketHandler<IBlockState> {
     public IBlockState parse(String arg) {
         String[] parts = arg.split(SPLITTER);
         if (parts.length < 2) {
-            GroovyLog.LOG.error("Can't find item for '%s'", arg);
+            GroovyLog.LOG.error("Can't find item for '{}'", arg);
             return null;
         }
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(parts[0], parts[1]));
         if (block == null) {
-            GroovyLog.LOG.error("Can't find block for '%s'", arg);
+            GroovyLog.LOG.error("Can't find block for '{}'", arg);
             return null;
         }
         IBlockState blockState = block.getDefaultState();
@@ -77,14 +77,14 @@ public class BlockStateBracketHandler implements IBracketHandler<IBlockState> {
             String[] prop = state.split(EQUALS, 2);
             IProperty property = defaultState.getBlock().getBlockState().getProperty(prop[0]);
             if (property == null) {
-                GroovyLog.LOG.error("Invalid property name '%s' for block '%s'", prop[0], defaultState.getBlock().getRegistryName());
+                GroovyLog.LOG.error("Invalid property name '{}' for block '{}'", prop[0], defaultState.getBlock().getRegistryName());
                 continue;
             }
             Optional<? extends Comparable> value = property.parseValue(prop[1]);
             if (value.isPresent()) {
                 defaultState = defaultState.withProperty(property, value.get());
             } else {
-                GroovyLog.LOG.error("Invalid property value '%s' for block '%s:%s'", prop[1], defaultState.getBlock().getRegistryName());
+                GroovyLog.LOG.error("Invalid property value '{}' for block '{}:{}'", prop[1], defaultState.getBlock().getRegistryName());
             }
         }
 
