@@ -65,6 +65,7 @@ public class GSCommand extends CommandTreeBase {
             long time = System.currentTimeMillis();
             Throwable throwable = GroovyScript.getSandbox().run("postInit");
             time = System.currentTimeMillis() - time;
+            sender.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
             if (throwable == null) {
                 sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
                 NetworkHandler.sendToPlayer(new SReloadJei(), (EntityPlayerMP) sender);
@@ -73,7 +74,6 @@ public class GSCommand extends CommandTreeBase {
                 sender.sendMessage(new TextComponentString(TextFormatting.RED + throwable.getMessage()));
                 server.commandManager.executeCommand(sender, "/gs log");
             }
-            sender.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
         }));
 
         addSubcommand(new SimpleCommand("hand", (server, sender, args) -> {

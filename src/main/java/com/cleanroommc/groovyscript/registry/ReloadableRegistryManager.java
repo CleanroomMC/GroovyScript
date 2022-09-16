@@ -9,8 +9,10 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.jei.JeiProxyAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mezz.jei.JustEnoughItems;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -114,7 +116,10 @@ public class ReloadableRegistryManager {
     public static void reloadJei() {
         if (ModSupport.JEI.isLoaded()) {
             JeiProxyAccessor jeiProxy = (JeiProxyAccessor) JustEnoughItems.getProxy();
+            long time = System.currentTimeMillis();
             jeiProxy.getStarter().start(jeiProxy.getPlugins(), jeiProxy.getTextures());
+            time = System.currentTimeMillis() - time;
+            Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Reloading JEI took " + time + "ms"));
         }
     }
 
