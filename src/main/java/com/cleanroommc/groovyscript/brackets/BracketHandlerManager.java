@@ -28,19 +28,6 @@ public class BracketHandlerManager {
         bracketHandlers.put(key, handler);
     }
 
-    public static Object handleBracket(String s) {
-        String[] parts = s.split(SPLITTER, 2);
-        if (parts.length == 0) return s;
-        IBracketHandler<?> bracketHandler = bracketHandlers.get(parts[0]);
-        if (bracketHandler != null) {
-            return bracketHandler.parse(parts[1]);
-        }
-        String main = parts[1];
-        if (ANY.equals(main)) return IIngredient.ANY;
-        if (EMPTY.equals(main)) return IIngredient.EMPTY;
-        return ItemBracketHandler.INSTANCE.parse(main);
-    }
-
     @Nullable
     public static IBracketHandler<?> getBracketHandler(String key) {
         return bracketHandlers.get(key);

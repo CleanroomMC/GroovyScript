@@ -357,20 +357,6 @@ public class Checker {
         }
     }
 
-    public static Object checkedString(String s, String source, int line) {
-        sourceVar.set(source);
-        lineNumberVar.set(line);
-
-        Object result = s;
-        if (s.startsWith("<") && s.endsWith(">")) {
-            result = BracketHandlerManager.handleBracket(s.substring(1, s.length() - 1));
-        }
-
-        sourceVar.set(null);
-        lineNumberVar.set(null);
-        return result;
-    }
-
     public static Object checkedGetProperty(final Object _receiver, boolean safe, boolean spread, Object _property, String source, int line) throws Throwable {
         sourceVar.set(source);
         lineNumberVar.set(line);

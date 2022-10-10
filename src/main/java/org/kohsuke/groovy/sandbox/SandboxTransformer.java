@@ -391,17 +391,6 @@ public class SandboxTransformer extends CompilationCustomizer {
         }
 
         private Expression innerTransform(Expression exp) {
-            if (exp instanceof ConstantExpression && ((ConstantExpression) exp).getValue() instanceof String) {
-                String value = (String) ((ConstantExpression) exp).getValue();
-                if (value.startsWith("<") && value.endsWith(">")) {
-                    return makeCheckedCall("checkedString",
-                            constExp(((ConstantExpression) exp).getValue()),
-                            constExp(sourceUnit.getName()),
-                            constExp(exp.getLineNumber()));
-                }
-                return exp;
-            }
-
             if (exp instanceof ClosureExpression) {
                 // ClosureExpression.transformExpression doesn't visit the code inside
                 ClosureExpression ce = (ClosureExpression) exp;
