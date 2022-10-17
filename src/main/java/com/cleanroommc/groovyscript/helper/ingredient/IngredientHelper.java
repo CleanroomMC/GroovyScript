@@ -204,22 +204,21 @@ public class IngredientHelper {
 
     public static String asGroovyCode(ItemStack itemStack, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("'<");
         if (colored) builder.append(TextFormatting.DARK_GREEN);
         builder.append("item");
         if (colored) builder.append(TextFormatting.GRAY);
-        builder.append(":");
+        builder.append("('");
         if (colored) builder.append(TextFormatting.AQUA);
         builder.append(itemStack.getItem().getRegistryName());
         if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("'");
         if (itemStack.getMetadata() != 0) {
-            builder.append(":");
+            builder.append(", ");
             if (colored) builder.append(TextFormatting.GOLD);
             builder.append(itemStack.getMetadata());
             if (colored) builder.append(TextFormatting.GRAY);
         }
-        builder.append(">'");
+        builder.append(")");
         return builder.toString();
     }
 
@@ -236,46 +235,40 @@ public class IngredientHelper {
 
     public static String asGroovyCode(FluidStack fluidStack, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("'<");
         if (colored) builder.append(TextFormatting.DARK_GREEN);
         builder.append("fluid");
         if (colored) builder.append(TextFormatting.GRAY);
-        builder.append(":");
+        builder.append("('");
         if (colored) builder.append(TextFormatting.AQUA);
         builder.append(fluidStack.getFluid().getName());
         if (colored) builder.append(TextFormatting.GRAY);
-        builder.append(">'");
+        builder.append("')");
         return builder.toString();
     }
 
     public static String asGroovyCode(Gas gasStack, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("'<");
         if (colored) builder.append(TextFormatting.DARK_GREEN);
         builder.append("gas");
         if (colored) builder.append(TextFormatting.GRAY);
-        builder.append(":");
+        builder.append("('");
         if (colored) builder.append(TextFormatting.AQUA);
         builder.append(gasStack.getName());
         if (colored) builder.append(TextFormatting.GRAY);
-        builder.append(">'");
+        builder.append("')");
         return builder.toString();
     }
 
     public static String asGroovyCode(String oreDict, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("'<");
         if (colored) builder.append(TextFormatting.DARK_GREEN);
         builder.append("ore");
         if (colored) builder.append(TextFormatting.GRAY);
-        builder.append(":");
+        builder.append("('");
         if (colored) builder.append(TextFormatting.AQUA);
         builder.append(oreDict);
         if (colored) builder.append(TextFormatting.GRAY);
-        builder.append(">'");
+        builder.append("')");
         return builder.toString();
     }
 
