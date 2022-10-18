@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -33,11 +34,12 @@ public class GroovyScript {
 
     public static final String ID = "groovyscript";
     public static final String NAME = "GroovyScript";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "0.0.1";
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
     private static File scriptPath;
+    private static File runConfigFile;
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
 
@@ -52,7 +54,8 @@ public class GroovyScript {
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Error initializing sandbox!");
         }
-        runConfig = createRunConfig();
+        runConfigFile = new File(scriptPath.getPath() + File.separator + "runConfig.json");
+        reloadRunConfig();
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
 
@@ -94,28 +97,34 @@ public class GroovyScript {
         return runConfig;
     }
 
-    private static RunConfig createRunConfig() {
-        File runConfigFile = new File(scriptPath.getPath() + File.separator + "runConfig.json");
-        if (!Files.exists(runConfigFile.toPath())) {
-            JsonObject json = RunConfig.createDefaultJson();
-            JsonHelper.saveJson(runConfigFile, json);
-            File main = new File(scriptPath.getPath() + File.separator + "postInit" + File.separator + "main.groovy");
-            if (!Files.exists(main.toPath())) {
-                try {
-                    main.getParentFile().mkdirs();
-                    Files.write(main.toPath(), "\nprintln('Hello World!')\n".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            return new RunConfig(json);
-        }
+    @ApiStatus.Internal
+    public static void reloadRunConfig() {
         JsonElement element = JsonHelper.loadJson(runConfigFile);
-        if (element == null) return new RunConfig(new JsonObject());
-        if (!element.isJsonObject()) {
-            LOGGER.error("runConfig.json must be a json object!");
-            return new RunConfig(new JsonObject());
+        if (element == null || !element.isJsonObject()) element = new JsonObject();
+        JsonObject json = element.getAsJsonObject();
+        if (runConfig == null) {
+            if (!Files.exists(runConfigFile.toPath())) {
+                json = RunConfig.createDefaultJson();
+                runConfig = createRunConfig(json);
+            } else {
+                runConfig = new RunConfig(json);
+            }
         }
-        return new RunConfig(element.getAsJsonObject());
+        runConfig.reload(json);
+    }
+
+    private static RunConfig createRunConfig(JsonObject json) {
+        JsonHelper.saveJson(runConfigFile, json);
+        File main = new File(scriptPath.getPath() + File.separator + "postInit" + File.separator + "main.groovy");
+        if (!Files.exists(main.toPath())) {
+            try {
+                main.getParentFile().mkdirs();
+                Files.write(main.toPath(), "\nprintln('Hello World!')\n".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return new RunConfig(json);
+
     }
 }

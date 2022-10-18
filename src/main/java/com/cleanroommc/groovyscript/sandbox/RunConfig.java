@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -40,14 +41,23 @@ public class RunConfig {
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
     // TODO asm
     private final String asmClass = null;
-    private final boolean debug;
+    private boolean debug;
 
     private static final String GROOVY_SUFFIX = ".groovy";
 
     public RunConfig(JsonObject json) {
         this.packName = JsonHelper.getString(json, "", "packName", "name");
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
+    }
+
+    @ApiStatus.Internal
+    public void reload(JsonObject json) {
+        if (GroovyScript.getSandbox().isRunning()) {
+            throw new RuntimeException();
+        }
         this.debug = JsonHelper.getBoolean(json, false, "debug");
+        this.loaderPaths.clear();
+        this.packmodePaths.clear();
 
         JsonObject jsonLoaders = JsonHelper.getJsonObject(json, "loaders");
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";

@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.registry;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
@@ -66,6 +67,7 @@ public class ReloadableRegistryManager {
 
     @ApiStatus.Internal
     public static void onReload() {
+        GroovyScript.reloadRunConfig();
         reloadForgeRegistries();
         VanillaModule.furnace.onReload();
         ModSupport.getAllContainers().stream()
