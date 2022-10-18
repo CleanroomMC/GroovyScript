@@ -98,16 +98,11 @@ dependencies {
 
     if (project.debug_load_all_mods.toBoolean()) {
         deobfCompile 'curse.maven:mekanism-268560:2835175'
-
-        // deobfCompile 'curse.maven:ender_io-64578:3328811'
-        // deobfCompile 'curse.maven:endercore-231868:2972849'
         deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
         deobfCompile ("com.enderio:EnderIO:1.12.2-+") {
             transitive = false
         }
-
         deobfCompile 'curse.maven:codechicken_lib_1_8-242818:2779848'
-
         deobfCompile 'curse.maven:cofh_core-69162:2920433'
         deobfCompile 'curse.maven:cofh_world-271384:2920434'
         deobfCompile 'curse.maven:redstone_flux-270789:2920436'
@@ -120,16 +115,11 @@ dependencies {
         deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
     } else {
         deobfProvided 'curse.maven:mekanism-268560:2835175'
-
-        // deobfProvided 'curse.maven:ender_io-64578:3328811'
-        // deobfProvided 'curse.maven:endercore-231868:2972849'
         deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
         deobfProvided ("com.enderio:EnderIO:1.12.2-+") {
             transitive = false
         }
-
         deobfProvided 'curse.maven:codechicken_lib_1_8-242818:2779848'
-
         deobfProvided 'curse.maven:cofh_core-69162:2920433'
         deobfProvided 'curse.maven:cofh_world-271384:2920434'
         deobfProvided 'curse.maven:redstone_flux-270789:2920436'
@@ -142,7 +132,7 @@ dependencies {
         deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
     }
 
-    shadow 'org.codehaus.groovy:groovy-ant:3.0.11'
+    shadow 'org.codehaus.groovy:groovy-ant:3.0.13'
     shadow 'org.codehaus.groovy:groovy-astbuilder:3.0.11'
     shadow 'org.codehaus.groovy:groovy-jsr223:3.0.11'
     shadow 'org.codehaus.groovy:groovy-macro:3.0.11'
