@@ -23,11 +23,11 @@ public abstract class VirtualizedRegistry<R> {
     }
 
     @GroovyBlacklist
-    @ApiStatus.Internal
+    @ApiStatus.OverrideOnly
     public abstract void onReload();
 
     @GroovyBlacklist
-    @ApiStatus.Internal
+    @ApiStatus.OverrideOnly
     public void afterScriptLoad() {
 
     }
@@ -41,13 +41,11 @@ public abstract class VirtualizedRegistry<R> {
     }
 
     @GroovyBlacklist
-    @ApiStatus.Internal
     public Collection<R> getBackupRecipes() {
         return Collections.unmodifiableCollection(backup);
     }
 
     @GroovyBlacklist
-    @ApiStatus.Internal
     public Collection<R> getScriptedRecipes() {
         return Collections.unmodifiableCollection(scripted);
     }
@@ -65,19 +63,16 @@ public abstract class VirtualizedRegistry<R> {
     }
 
     @GroovyBlacklist
-    @ApiStatus.Internal
     public void addBackup(R recipe) {
         this.backup.add(recipe);
     }
 
     @GroovyBlacklist
-    @ApiStatus.Internal
     public void addScripted(R recipe) {
         this.scripted.add(recipe);
     }
 
     @GroovyBlacklist
-    @ApiStatus.Internal
     protected Collection<R> restoreFromBackup() {
         Collection<R> backup = this.backup;
         initBackup();
@@ -85,7 +80,6 @@ public abstract class VirtualizedRegistry<R> {
     }
 
     @GroovyBlacklist
-    @ApiStatus.Internal
     protected Collection<R> removeScripted() {
         Collection<R> scripted = this.scripted;
         initScripted();

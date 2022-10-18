@@ -10,6 +10,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+// TODO does it work for sub classes?
 public class GroovyDeobfuscationMapper {
 
     private static final Map<Class<?>, Map<String, String>> OBF_FIELD_NAMES = new Object2ObjectOpenHashMap<>();
@@ -20,18 +21,18 @@ public class GroovyDeobfuscationMapper {
     public static void init() {
         GroovyScript.LOGGER.info("Generating obfuscation map...");
         try {
-            Field rawFieldMapsField = FMLDeobfuscatingRemapper.class.getDeclaredField("rawFieldMaps");
-            Field rawMethodMapsField = FMLDeobfuscatingRemapper.class.getDeclaredField("rawMethodMaps");
-            rawFieldMapsField.setAccessible(true);
-            rawMethodMapsField.setAccessible(true);
-            Map<String, Map<String, String>> rawFieldMaps = (Map<String, Map<String, String>>) rawFieldMapsField.get(FMLDeobfuscatingRemapper.INSTANCE);
-            Map<String, Map<String, String>> rawMethodMaps = (Map<String, Map<String, String>>) rawMethodMapsField.get(FMLDeobfuscatingRemapper.INSTANCE);
-
             String splitter = ";";
             String func = "func";
             String field = "field";
             String clazz = "CLASS";
             if (FMLLaunchHandler.isDeobfuscatedEnvironment()) {
+                Field rawFieldMapsField = FMLDeobfuscatingRemapper.class.getDeclaredField("rawFieldMaps");
+                Field rawMethodMapsField = FMLDeobfuscatingRemapper.class.getDeclaredField("rawMethodMaps");
+                rawFieldMapsField.setAccessible(true);
+                rawMethodMapsField.setAccessible(true);
+                Map<String, Map<String, String>> rawFieldMaps = (Map<String, Map<String, String>>) rawFieldMapsField.get(FMLDeobfuscatingRemapper.INSTANCE);
+                Map<String, Map<String, String>> rawMethodMaps = (Map<String, Map<String, String>>) rawMethodMapsField.get(FMLDeobfuscatingRemapper.INSTANCE);
+
                 if (outputSrgNames) {
                     File file = Loader.instance().getConfigDir().getParentFile().toPath().resolve("srgNames.txt").toFile();
                     file.delete();

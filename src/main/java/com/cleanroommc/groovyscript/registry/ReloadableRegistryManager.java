@@ -31,6 +31,8 @@ public class ReloadableRegistryManager {
 
     private static final AtomicBoolean firstLoad = new AtomicBoolean(true);
     private static final Map<Class<?>, Supplier<?>> registryDummies = new Object2ObjectOpenHashMap<>();
+
+    // TODO still needed?
     private static final Map<Class<?>, List<Object>> recipeRecovery = new Object2ObjectOpenHashMap<>();
     private static final Map<Class<?>, List<Object>> scriptRecipes = new Object2ObjectOpenHashMap<>();
 
@@ -59,6 +61,8 @@ public class ReloadableRegistryManager {
         @SuppressWarnings("unchecked") List<T> marked = (List<T>) scriptRecipes.remove(registryClass);
         return marked == null ? Collections.emptyList() : marked;
     }
+
+    // end
 
     @ApiStatus.Internal
     public static void init() {
