@@ -2,13 +2,13 @@
 {
   "modid": "groovyscript",
   "name": "GroovyScript",
-  "description": "Example placeholder mod.",
+  "description": "A powerful scripting mod that rules them all",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["CleanroomMC"],
-  "credits": "Authors of this project",
+  "authorList": ["CleanroomMC", "brachy84", "Rongmario"],
+  "credits": "Apache for Groovy",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
