@@ -21,8 +21,11 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 @Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION)
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
@@ -92,10 +95,19 @@ public class GroovyScript {
     }
 
     private static RunConfig createRunConfig() {
-        File runConfigFile = new File(scriptPath + File.separator + "runConfig.json");
+        File runConfigFile = new File(scriptPath.getPath() + File.separator + "runConfig.json");
         if (!Files.exists(runConfigFile.toPath())) {
             JsonObject json = RunConfig.createDefaultJson();
             JsonHelper.saveJson(runConfigFile, json);
+            File main = new File(scriptPath.getPath() + File.separator + "postInit" + File.separator + "main.groovy");
+            if (!Files.exists(main.toPath())) {
+                try {
+                    main.getParentFile().mkdirs();
+                    Files.write(main.toPath(), "\nprintln('Hello World!')\n".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             return new RunConfig(json);
         }
         JsonElement element = JsonHelper.loadJson(runConfigFile);

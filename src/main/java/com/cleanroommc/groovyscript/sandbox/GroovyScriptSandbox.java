@@ -44,8 +44,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
             super.run();
             return null;
         } catch (IOException | ScriptException | ResourceException e) {
-            GroovyLog.get().error("An Exception occurred trying to run groovy!");
-            e.printStackTrace();
+            GroovyLog.get().errorMC("An Exception occurred trying to run groovy!");
+            GroovyScript.LOGGER.throwing(e);
             return e;
         } catch (Exception e) {
             GroovyLog.get().exception(e);
