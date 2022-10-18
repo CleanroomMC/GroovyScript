@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Map;
 import java.util.Objects;
 
-@Mixin(FurnaceRecipes.class)
+@Mixin(value = FurnaceRecipes.class, remap = false)
 public abstract class FurnaceRecipeMixin implements FurnaceRecipeAccess {
 
     @Shadow
