@@ -74,6 +74,7 @@ public class ReloadableRegistryManager {
         GroovyScript.reloadRunConfig();
         reloadForgeRegistries();
         VanillaModule.furnace.onReload();
+        VanillaModule.oreDict.onReload();
         ModSupport.getAllContainers().stream()
                 .filter(Container::isLoaded)
                 .map(Container::get)
