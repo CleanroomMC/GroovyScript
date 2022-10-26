@@ -60,14 +60,34 @@ public class GroovyDeobfuscationMapper {
     }
 
     public static String getObfuscatedMethodName(Class<?> receiver, String method) {
-        Map<String, String> obfNames = OBF_METHOD_NAMES.get(receiver);
-        if (obfNames == null) return method;
-        return obfNames.getOrDefault(method, method);
+        Class<Object> objClass = Object.class;
+        Map<String, String> obfNames;
+        String obfName = null;
+
+        do {
+            obfNames = OBF_METHOD_NAMES.get(receiver);
+            if (obfNames != null) {
+                obfName = obfNames.get(method);
+            }
+            receiver = receiver.getSuperclass();
+        } while (obfName == null && receiver != null && receiver != objClass);
+
+        return obfName != null ? obfName : method;
     }
 
     public static String getObfuscatedFieldName(Class<?> receiver, String field) {
-        Map<String, String> obfNames = OBF_FIELD_NAMES.get(receiver);
-        if (obfNames == null) return field;
-        return obfNames.getOrDefault(field, field);
+        Class<Object> objClass = Object.class;
+        Map<String, String> obfNames;
+        String obfName = null;
+
+        do {
+            obfNames = OBF_FIELD_NAMES.get(receiver);
+            if (obfNames != null) {
+                obfName = obfNames.get(field);
+            }
+            receiver = receiver.getSuperclass();
+        } while (obfName == null && receiver != null && receiver != objClass);
+
+        return obfName != null ? obfName : field;
     }
 }

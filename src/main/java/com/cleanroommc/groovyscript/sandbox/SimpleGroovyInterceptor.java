@@ -61,7 +61,7 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
         Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
         String obfPropertyName = property;
         if (!FMLLaunchHandler.isDeobfuscatedEnvironment()) {
-            obfPropertyName = GroovyDeobfuscationMapper.getObfuscatedMethodName(clazz, property);
+            obfPropertyName = GroovyDeobfuscationMapper.getObfuscatedFieldName(clazz, property);
         }
         if (InterceptionManager.INSTANCE.isBlacklistedField(clazz, obfPropertyName, FieldAccess.GET)) {
             throw SandboxSecurityException.format("Prohibited property access '" + property + "' on class '" + clazz.getName() + "'!");
@@ -74,7 +74,7 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
         Class<?> clazz = receiver instanceof Class ? (Class<?>) receiver : receiver.getClass();
         String obfPropertyName = property;
         if (!FMLLaunchHandler.isDeobfuscatedEnvironment()) {
-            obfPropertyName = GroovyDeobfuscationMapper.getObfuscatedMethodName(clazz, property);
+            obfPropertyName = GroovyDeobfuscationMapper.getObfuscatedFieldName(clazz, property);
         }
         if (InterceptionManager.INSTANCE.isBlacklistedField(clazz, obfPropertyName, FieldAccess.SET)) {
             throw SandboxSecurityException.format("Prohibited property access '" + property + "' on class '" + clazz.getName() + "'!");
