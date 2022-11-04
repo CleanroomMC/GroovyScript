@@ -72,7 +72,7 @@ public class GSHandCommand {
                 String oreName = OreDictionary.getOreName(id);
                 s = IngredientHelper.asGroovyCode(oreName, true);
 
-                messages.add(TextCopyable.string(s, " - " + oreName).build());
+                messages.add(TextCopyable.string(s, " - \u00A7b" + oreName).build());
             }
         }
     }

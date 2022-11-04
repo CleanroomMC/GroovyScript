@@ -1,12 +1,9 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import mekanism.api.gas.Gas;
-import mekanism.api.gas.GasStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,10 +15,6 @@ public class IngredientHelper {
 
     public static boolean isFluid(IIngredient ingredient) {
         return ingredient instanceof FluidStack;
-    }
-
-    public static boolean isGas(IIngredient ingredient) {
-        return Loader.isModLoaded("mekanism") && ingredient instanceof GasStack;
     }
 
     @SuppressWarnings("all")
@@ -56,11 +49,6 @@ public class IngredientHelper {
 
     public static boolean isEmpty(@Nullable FluidStack itemStack) {
         return itemStack == null || itemStack.amount <= 0;
-    }
-
-
-    public static boolean isEmpty(@Nullable GasStack gasStack) {
-        return gasStack == null || gasStack.getGas() == null || gasStack.amount <= 0;
     }
 
     /**
@@ -246,19 +234,6 @@ public class IngredientHelper {
         return builder.toString();
     }
 
-    public static String asGroovyCode(Gas gasStack, boolean colored) {
-        StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.DARK_GREEN);
-        builder.append("gas");
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("('");
-        if (colored) builder.append(TextFormatting.AQUA);
-        builder.append(gasStack.getName());
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("')");
-        return builder.toString();
-    }
-
     public static String asGroovyCode(String oreDict, boolean colored) {
         StringBuilder builder = new StringBuilder();
         if (colored) builder.append(TextFormatting.DARK_GREEN);
@@ -271,5 +246,4 @@ public class IngredientHelper {
         builder.append("')");
         return builder.toString();
     }
-
 }

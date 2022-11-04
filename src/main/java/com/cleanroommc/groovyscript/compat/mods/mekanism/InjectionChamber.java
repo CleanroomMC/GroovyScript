@@ -19,7 +19,7 @@ public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecip
     public InjectionRecipe add(IIngredient ingredient, GasStack gasInput, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Injection Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(gasInput), () -> "gas input must not be empty");
+        msg.add(Mekanism.isEmpty(gasInput), () -> "gas input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
@@ -37,7 +37,7 @@ public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecip
     public boolean removeByInput(IIngredient ingredient, GasStack gasInput) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Injection Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(gasInput), () -> "gas input must not be empty");
+        msg.add(Mekanism.isEmpty(gasInput), () -> "gas input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 
         boolean found = false;

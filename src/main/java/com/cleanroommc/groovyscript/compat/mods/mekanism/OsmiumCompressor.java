@@ -37,7 +37,7 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
     public boolean removeByInput(IIngredient ingredient, GasStack gasInput) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Osmium Compressor recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(gasInput), () -> "gas input must not be empty");
+        msg.add(Mekanism.isEmpty(gasInput), () -> "gas input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 
         boolean found = false;

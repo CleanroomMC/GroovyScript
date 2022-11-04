@@ -19,7 +19,7 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
     public OxidationRecipe add(IIngredient ingredient, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Oxidizer recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
+        msg.add(Mekanism.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
         output = output.copy();
