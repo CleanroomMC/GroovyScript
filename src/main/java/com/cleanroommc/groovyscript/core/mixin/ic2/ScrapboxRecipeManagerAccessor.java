@@ -10,5 +10,5 @@ import java.util.List;
 public interface ScrapboxRecipeManagerAccessor {
 
     @Accessor
-    List getDrops();
+    List<Object> getDrops();
 }

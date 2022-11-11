@@ -46,7 +46,7 @@ public class IC2 extends ModPropertyContainer {
         extractor = isExp ? new Extractor() : new ClassicExtractor();
         macerator = isExp ? new Macerator() : new ClassicMacerator();
         compressor = isExp ? new Compressor() : new ClassicCompressor();
-        scrapbox = isExp ? new Scrapbox(true) : new ClassicScrapbox();
+        scrapbox = isExp ? new Scrapbox() : new ClassicScrapbox();
 
         addRegistry(macerator);
         addRegistry(compressor);

@@ -13,6 +13,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -44,7 +45,7 @@ public class GroovyScript {
     private static GroovyScriptSandbox sandbox;
 
     @Mod.EventHandler
-    public void onPreInit(FMLPreInitializationEvent event) {
+    public void onConstruction(FMLConstructionEvent event) {
         NetworkHandler.init();
         GroovyDeobfuscationMapper.init();
         ReloadableRegistryManager.init();
@@ -59,12 +60,16 @@ public class GroovyScript {
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
 
-        getSandbox().run("preInit");
+        getSandbox().run(GroovyScriptSandbox.LOADER_PRE_INIT);
+    }
+
+    @Mod.EventHandler
+    public void onPreInit(FMLPreInitializationEvent event) {
     }
 
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
-        getSandbox().run("postInit");
+        getSandbox().run(GroovyScriptSandbox.LOADER_POST_INIT);
     }
 
     @Mod.EventHandler

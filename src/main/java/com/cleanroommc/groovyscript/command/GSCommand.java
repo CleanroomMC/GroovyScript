@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SCopy;
 import com.cleanroommc.groovyscript.network.SReloadJei;
+import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandException;
@@ -63,7 +64,7 @@ public class GSCommand extends CommandTreeBase {
             }
             GroovyLog.get().info("========== Reloading Groovy scripts ==========");
             long time = System.currentTimeMillis();
-            Throwable throwable = GroovyScript.getSandbox().run("postInit");
+            Throwable throwable = GroovyScript.getSandbox().run(GroovyScriptSandbox.LOADER_POST_INIT);
             time = System.currentTimeMillis() - time;
             sender.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
             if (throwable == null) {

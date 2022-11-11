@@ -26,6 +26,8 @@ import java.util.Objects;
 
 public class GroovyScriptSandbox extends GroovySandbox {
 
+    public static final String LOADER_PRE_INIT = "preInit";
+    public static final String LOADER_POST_INIT = "postInit";
     private String currentLoader;
 
     public GroovyScriptSandbox(URL... scriptEnvironment) {
@@ -75,7 +77,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     protected void preRun() {
         GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoader);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
-        if (!ReloadableRegistryManager.isFirstLoad()) {
+        if (!LOADER_PRE_INIT.equals(this.currentLoader) && !ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
             MinecraftForge.EVENT_BUS.post(new GroovyReloadEvent());
         }
@@ -90,9 +92,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void postRun() {
-        ReloadableRegistryManager.afterScriptRun();
+        if (!LOADER_PRE_INIT.equals(this.currentLoader)) {
+            ReloadableRegistryManager.afterScriptRun();
+        }
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
-        if (ReloadableRegistryManager.isFirstLoad()) {
+        if (!LOADER_PRE_INIT.equals(this.currentLoader) && ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.setLoaded();
         }
     }
