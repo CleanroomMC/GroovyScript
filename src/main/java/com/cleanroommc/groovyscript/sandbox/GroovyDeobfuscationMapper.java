@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -31,7 +30,6 @@ public class GroovyDeobfuscationMapper {
         PRIMITIVE_DESC_MAP.put('S', "java.lang.Short");
         PRIMITIVE_DESC_MAP.put('C', "java.lang.Character");
         PRIMITIVE_DESC_MAP.put('Z', "java.lang.Boolean");
-        PRIMITIVE_DESC_MAP.put('[', "java.util.Arrays");
     }
 
     public static void init() {
@@ -161,10 +159,12 @@ public class GroovyDeobfuscationMapper {
                             classes.add(name);
                             i++;
                         }
+                        continue;
                     } else if (c == 'L') {
                         int last = descriptor.indexOf(';', i + 1);
                         classes.add(descriptor.substring(i + 1, last).replace('/', '.'));
                         i = last + 1;
+                        continue;
                     }
                     String className = PRIMITIVE_DESC_MAP.get(c);
                     if (className != null) {
