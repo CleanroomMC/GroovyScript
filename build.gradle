@@ -5,10 +5,10 @@ buildscript {
             url = "https://maven.minecraftforge.net/"
         }
         maven {
-            url = 'https://maven.cleanroommc.com'
+            url = 'https://maven.cleanroommc.com/'
         }
         maven {
-            url = 'https://repo.spongepowered.org/maven'
+            url = 'https://repo.spongepowered.org/maven/'
         }
     }
     dependencies {
@@ -59,23 +59,23 @@ minecraft {
 
 repositories {
     maven {
-        url = 'https://maven.cleanroommc.com'
+        url = 'https://maven.cleanroommc.com/'
     }
     maven {
-        url = 'https://repo.spongepowered.org/maven'
+        url = 'https://repo.spongepowered.org/maven/'
     }
     maven {
-        url = 'https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all'
+        url = 'https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all/'
     }
     maven {
         url 'https://dvs1.progwml6.com/files/maven/'
     }
     maven {
         name = "CurseForge"
-        url = 'https://www.cursemaven.com'
+        url = 'https://www.cursemaven.com/'
     }
     maven {
-        url "http://maven.tterrag.com"
+        url "http://maven.tterrag.com/"
     }
 }
 
@@ -106,6 +106,7 @@ dependencies {
         deobfCompile 'curse.maven:cofh_core-69162:2920433'
         deobfCompile 'curse.maven:cofh_world-271384:2920434'
         deobfCompile 'curse.maven:redstone_flux-270789:2920436'
+        deobfCompile 'curse.maven:thaumcraft-223628:2629023'
         deobfCompile 'curse.maven:thermal_expansion-69163:2926431'
         deobfCompile 'curse.maven:thermal_foundation-222880:2926428'
         deobfCompile 'curse.maven:draconic_evolution-223565:3431261'
@@ -123,6 +124,7 @@ dependencies {
         deobfProvided 'curse.maven:cofh_core-69162:2920433'
         deobfProvided 'curse.maven:cofh_world-271384:2920434'
         deobfProvided 'curse.maven:redstone_flux-270789:2920436'
+        deobfProvided 'curse.maven:thaumcraft-223628:2629023'
         deobfProvided 'curse.maven:thermal_expansion-69163:2926431'
         deobfProvided 'curse.maven:thermal_foundation-222880:2926428'
         deobfProvided 'curse.maven:draconic_evolution-223565:3431261'
