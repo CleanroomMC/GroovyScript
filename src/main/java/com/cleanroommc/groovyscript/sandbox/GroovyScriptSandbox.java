@@ -112,7 +112,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
             Path mainPath = new File(GroovyScript.getScriptPath()).toPath();
             return mainPath.relativize(path).toString();
         } catch (URISyntaxException | MalformedURLException e) {
-            GroovyLog.get().error("Error parsing script source '{}'", source);
+            GroovyScript.LOGGER.error("Error parsing script source '{}'", source);
+            // don't log to GroovyLog here since it will cause a StackOverflow
             return source;
         }
     }
