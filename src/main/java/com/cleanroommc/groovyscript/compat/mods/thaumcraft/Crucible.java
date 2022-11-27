@@ -1,12 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
-import cofh.thermalexpansion.util.managers.machine.PulverizerManager;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.Pulverizer;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.AspectList;
@@ -16,12 +13,10 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import thaumcraft.api.ThaumcraftApi;
-import thaumcraft.api.crafting.CrucibleRecipe;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 
@@ -93,7 +88,6 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
                 recipes.add((CrucibleRecipe)r);
             }
         }
-        //List<CrucibleRecipe> recipes = CrucibleRecipe.removeRecipes(output);
         if (recipes.isEmpty()) {
             GroovyLog.msg("Error removing Thaumcraft Crucible recipe")
                     .add("no recipes found for %s", output)
