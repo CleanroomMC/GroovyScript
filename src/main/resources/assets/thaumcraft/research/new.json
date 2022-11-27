@@ -1,0 +1,38 @@
+{
+    "entries" :[
+        {
+            "key": "FIRSTSTEPSHUMOR2",
+            "name": "First Steps",
+            "icons": [ "thaumcraft:textures/aspects/humor.png" ],
+            "category": "BASICS2", "location": [ 0,0 ],
+            "parents": [ "!gotthaumonomicon" ],
+            "siblings": [ "KNOWLEDGETYPESHUMOR2", "!gotdream" ],
+            "meta": [ "ROUND","SPIKY" ],        
+            "stages": [
+                {   
+                    "text": "Humor line first steps - stage 1",
+                    "required_craft":["thaumcraft:arcane_workbench"], 
+                    "recipes": ["thaumcraft:salismundusfake"]
+                },
+                {
+                    "text": "Humor line first steps - stage 2",
+                    "required_craft":["thaumcraft:thaumometer"], 
+                    "required_knowledge":["OBSERVATION;BASICS;1"], 
+                    "recipes": ["thaumcraft:thaumometer","thaumcraft:salismundusfake"]
+                },
+                {
+                    "text": "Humor line first steps - stage 3",
+                    "recipes": ["thaumcraft:thaumometer","thaumcraft:salismundusfake","thaumcraft:StoneArcane","thaumcraft:BrickArcane"]
+                }
+            ]
+        },
+        {
+            "key": "KNOWLEDGETYPESHUMOR2",
+            "name": "Humor Knowledge Types",
+            "icons": [ "thaumcraft:textures/research/knowledge_theory.png" ],
+            "category": "BASICS2", "location": [ 2,-1 ],
+            "meta": [ "ROUND" , "HIDDEN" ],
+            "stages": [{"text": "research.KNOWLEDGETYPESHUMOR2.stage.1"}]
+        }
+    ]
+}
