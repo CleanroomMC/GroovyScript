@@ -12,6 +12,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.api.ThaumcraftApiHelper;
+import thaumcraft.api.aspects.Aspect;
 
 import java.util.Map;
 
@@ -42,6 +44,10 @@ public class BracketHandlerManager {
         registerBracketHandler("enchantment", Enchantment::getEnchantmentByLocation);
         if (ModSupport.MEKANISM.isLoaded()) {
             registerBracketHandler("gas", s -> new GasStack(GasRegistry.getGas(s), 1));
+        }
+        if (ModSupport.THAUMCRAFT.isLoaded()) {
+            registerBracketHandler("aspect", s -> Aspect.getAspect(s));
+            registerBracketHandler("crystal", s -> ThaumcraftApiHelper.makeCrystal(Aspect.getAspect(s)));
         }
     }
 
