@@ -12,7 +12,7 @@ public class AspectHelper {
 
     private String entity;
     private ItemStack object;
-    private AspectList aspects;
+    private AspectList aspects = new AspectList();
 
     public AspectHelper() {
         //do nothing
@@ -28,8 +28,8 @@ public class AspectHelper {
         return this;
     }
 
-    public AspectHelper aspects(AspectList aspects) {
-        this.aspects = aspects;
+    public AspectHelper aspect(thaumcraft.api.aspects.Aspect aspectIn, int amount) {
+        this.aspects.add(aspectIn, amount);
         return this;
     }
 

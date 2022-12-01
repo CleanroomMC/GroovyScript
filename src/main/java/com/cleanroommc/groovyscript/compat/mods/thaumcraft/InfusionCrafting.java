@@ -108,27 +108,26 @@ public class InfusionCrafting extends VirtualizedRegistry<InfusionRecipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<InfusionRecipe> {
 
         private String researchKey;
-        private AspectList aspects;
+        private AspectList aspects = new AspectList();
         private int instability;
-        private Object[] components;
-        // public Ingredient sourceInput; // this will be mapped by input
+        private ArrayList<Object> components = new ArrayList<Object>();
 
-        public InfusionCrafting.RecipeBuilder researchKey(String researchKey) {
+        public RecipeBuilder researchKey(String researchKey) {
             this.researchKey = researchKey;
             return this;
         }
 
-        public InfusionCrafting.RecipeBuilder aspects(AspectList aspects) {
-            this.aspects = aspects;
+        public RecipeBuilder aspect(thaumcraft.api.aspects.Aspect aspectIn, int amount) {
+            this.aspects.add(aspectIn, amount);
             return this;
         }
 
-        public InfusionCrafting.RecipeBuilder components(Object[] components) {
-            this.components = components;
+        public RecipeBuilder component(Object comp) {
+            this.components.add(comp);
             return this;
         }
 
-        public InfusionCrafting.RecipeBuilder instability(int instability) {
+        public RecipeBuilder instability(int instability) {
             this.instability = instability;
             return this;
         }
@@ -148,7 +147,7 @@ public class InfusionCrafting extends VirtualizedRegistry<InfusionRecipe> {
             if (!validate()) return null;
             InfusionRecipe recipe = null;
             for (ItemStack itemStack : output) {
-                InfusionRecipe recipe1 = ModSupport.THAUMCRAFT.get().infusionCrafting.add(researchKey, itemStack, instability, aspects, input.get(0).getMatchingStacks()[0], components);
+                InfusionRecipe recipe1 = ModSupport.THAUMCRAFT.get().infusionCrafting.add(researchKey, itemStack, instability, aspects, input.get(0).getMatchingStacks()[0], components.toArray());
                 if (recipe == null) recipe = recipe1;
             }
             return recipe;
