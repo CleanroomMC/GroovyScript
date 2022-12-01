@@ -78,7 +78,7 @@ public class Research {
 
         private String key;
         private String researchKey;
-        private AspectList formula;
+        private AspectList formula = new AspectList();
         private ResourceLocation icon;
         private ResourceLocation background;
         private ResourceLocation background2 = null;
@@ -93,8 +93,8 @@ public class Research {
             return this;
         }
 
-        public ResearchCategoryBuilder formula(AspectList formula) {
-            this.formula = formula;
+        public ResearchCategoryBuilder formulaAspect(thaumcraft.api.aspects.Aspect aspectIn, int amount) {
+            this.formula.add(aspectIn, amount);
             return this;
         }
 
