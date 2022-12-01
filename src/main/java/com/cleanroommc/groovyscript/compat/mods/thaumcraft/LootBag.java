@@ -9,6 +9,10 @@ import java.util.*;
 
 public class LootBag {
 
+    public LootBag() {
+        //do nothing
+    }
+
     public void addItem(ItemStack item, int chance, int[] bags) {
         ThaumcraftApi.addLootBagItem(item, chance, bags);
     }

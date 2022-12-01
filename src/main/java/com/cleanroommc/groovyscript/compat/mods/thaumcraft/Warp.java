@@ -8,6 +8,10 @@ import java.util.Arrays;
 
 public class Warp {
 
+    public Warp() {
+        //do nothing
+    }
+
     public void addWarp(ItemStack item, int amount) {
         ThaumcraftApi.addWarpToItem(item, amount);
     }

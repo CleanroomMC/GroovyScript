@@ -9,15 +9,19 @@ import java.util.List;
 
 public class SmeltingBonus {
 
-    public static void add(ItemStack in, ItemStack out) {
+    public SmeltingBonus() {
+        //do nothing
+    }
+
+    public void add(ItemStack in, ItemStack out) {
         ThaumcraftApi.addSmeltingBonus(in, out);
     }
 
-    public static void add(ItemStack in, ItemStack out, float chance) {
+    public void add(ItemStack in, ItemStack out, float chance) {
         ThaumcraftApi.addSmeltingBonus(in, out, chance);
     }
 
-    public static void removeByOutput(ItemStack output) {
+    public void removeByOutput(ItemStack output) {
         List<ThaumcraftApi.SmeltBonus> remove = new ArrayList<>();
         for (ThaumcraftApi.SmeltBonus bonus : CommonInternals.smeltingBonus)
             if (output.isItemEqual(bonus.out))
@@ -25,7 +29,9 @@ public class SmeltingBonus {
         CommonInternals.smeltingBonus.removeAll(remove);
     }
 
-    public static class SmeltingBonusBuilder {
+    public SmeltingBonusBuilder recipeBuilder() { return new SmeltingBonusBuilder(); }
+
+    public class SmeltingBonusBuilder {
 
         private ItemStack in;
         private ItemStack out;
@@ -47,9 +53,7 @@ public class SmeltingBonus {
         }
 
         public void register() {
-            add(in, out, chance);
+            ThaumcraftApi.addSmeltingBonus(in, out, chance);
         }
-
     }
-
 }

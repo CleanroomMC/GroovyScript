@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.crafting.IDustTrigger;
 import thaumcraft.common.lib.crafting.DustTriggerOre;
@@ -12,6 +11,10 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 
 public class DustTrigger {
+
+    public DustTrigger() {
+        //do nothing
+    }
 
     private Field simpleTriggerResult;
     private Field oreTriggerResult;
@@ -50,7 +53,10 @@ public class DustTrigger {
             }
         }
     }
-    public static class TriggerBuilder {
+
+    public TriggerBuilder triggerBuilder() { return new TriggerBuilder(); }
+
+    public class TriggerBuilder {
 
         private String research;
         private String ore;
