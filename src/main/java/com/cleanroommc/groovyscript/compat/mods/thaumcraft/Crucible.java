@@ -104,20 +104,20 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrucibleRecipe> {
 
         private String researchKey;
-        private AspectList aspects;
+        private AspectList aspects = new AspectList();
         private Object catalyst;
 
-        public Crucible.RecipeBuilder researchKey(String researchKey) {
+        public RecipeBuilder researchKey(String researchKey) {
             this.researchKey = researchKey;
             return this;
         }
 
-        public Crucible.RecipeBuilder aspects(AspectList aspects) {
-            this.aspects = aspects;
+        public RecipeBuilder aspect(thaumcraft.api.aspects.Aspect aspectIn, int amount) {
+            this.aspects.add(aspectIn, amount);
             return this;
         }
 
-        public Crucible.RecipeBuilder catalyst(Object catalyst) {
+        public RecipeBuilder catalyst(Object catalyst) {
             this.catalyst = catalyst;
             return this;
         }

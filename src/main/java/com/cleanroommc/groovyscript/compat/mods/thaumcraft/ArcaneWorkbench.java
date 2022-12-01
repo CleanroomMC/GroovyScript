@@ -3,24 +3,23 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
-import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.GameData;
+import net.minecraftforge.registries.RegistryManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.crafting.IArcaneRecipe;
-import thaumcraft.api.crafting.ShapedArcaneRecipe;
-import thaumcraft.api.crafting.ShapelessArcaneRecipe;
+import thaumcraft.api.crafting.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 
@@ -36,18 +35,20 @@ public class ArcaneWorkbench extends VirtualizedRegistry<IArcaneRecipe> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(recipe -> ThaumcraftApi.getCraftingRecipes().values().remove(recipe));
-        restoreFromBackup().forEach(recipe -> {
-            if (!ThaumcraftApi.getCraftingRecipes().values().contains(recipe))
-                ThaumcraftApi.addArcaneCraftingRecipe(new ResourceLocation(recipe.getRecipeOutput().toString()), recipe);
-        });
+//        removeScripted().forEach(recipe -> remove(recipe));
+//        restoreFromBackup().forEach(recipe -> add(recipe));
         compileGroups();
     }
 
     public void add(IArcaneRecipe recipe) {
         if (recipe != null) {
             addScripted(recipe);
-            ThaumcraftApi.addArcaneCraftingRecipe(new ResourceLocation(recipe.getRecipeOutput().toString()), recipe);
+            try {
+                recipe.setRegistryName(new ResourceLocation(recipe.getRecipeOutput().getItem().getRegistryName().toString()));
+            } catch (IllegalStateException e) {}
+            try {
+                GameData.register_impl(recipe);
+            } catch (IllegalArgumentException e) {}
         }
     }
 
@@ -88,48 +89,86 @@ public class ArcaneWorkbench extends VirtualizedRegistry<IArcaneRecipe> {
                     .error()
                     .post();
         }
-        VanillaModule.crafting.removeByOutput(new ItemsIngredient(output));
+
+        List<ResourceLocation> removed = new ArrayList<>();
+
+        for(Map.Entry<ResourceLocation, IRecipe> entry : ForgeRegistries.RECIPES.getEntries()) {
+            if(entry.getValue() instanceof IArcaneRecipe) {
+                if(output.isItemEqual(entry.getValue().getRecipeOutput())) {
+                    removed.add(entry.getKey());
+                    this.addBackup((IArcaneRecipe)entry.getValue());
+                } else if (entry.getKey().toString().equals(output.getItem().getRegistryName().toString())) {
+                    removed.add(entry.getKey());
+                    this.addBackup((IArcaneRecipe)entry.getValue());
+                }
+            }
+        }
+
+        if (removed.isEmpty()) {
+            GroovyLog.msg("Error removing Thaumcraft Arcane Workbench recipe")
+                    .add("no recipes found for %s", output)
+                    .error()
+                    .post();
+            return;
+        }
+
+        removed.forEach(RegistryManager.ACTIVE.getRegistry(GameData.RECIPES)::remove);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<IArcaneRecipe> {
 
         private String researchKey;
-        private AspectList aspects;
+        private AspectList aspects = new AspectList();
         private int vis;
 
-        private Object[] recipe;
+        private ArrayList<Object> recipe = new ArrayList<Object>();
+        private ArrayList<String> matrix = new ArrayList<String>();
+
+        private ArrayList<String> keyChars = new ArrayList<String>();
+        private ArrayList<ItemStack> keyItems = new ArrayList<ItemStack>();
         private ArrayList<ItemStack> ingList = new ArrayList<ItemStack>();
 
         private boolean shaped = true;
 
-        public ArcaneWorkbench.RecipeBuilder researchKey(String researchKey) {
+        public RecipeBuilder researchKey(String researchKey) {
             this.researchKey = researchKey;
             return this;
         }
 
-        public ArcaneWorkbench.RecipeBuilder aspects(AspectList aspects) {
-            this.aspects = aspects;
+        public RecipeBuilder aspect(thaumcraft.api.aspects.Aspect aspectIn, int amount) {
+            this.aspects.add(aspectIn, amount);
             return this;
         }
 
-        public ArcaneWorkbench.RecipeBuilder vis(int vis) {
+        public RecipeBuilder vis(int vis) {
             this.vis = vis;
             return this;
         }
 
-        public ArcaneWorkbench.RecipeBuilder recipe(Object[] recipe) {
-            this.recipe = recipe;
+        public RecipeBuilder matrixRow(String row) {
+            this.matrix.add(row);
             return this;
         }
 
-        public ArcaneWorkbench.RecipeBuilder shapeless() {
+        public RecipeBuilder key(String c, ItemStack item) {
+            this.keyChars.add(c);
+            this.keyItems.add(item);
+            return this;
+        }
+
+        public RecipeBuilder shapeless() {
             this.shaped = false;
             return this;
         }
 
-        public ArcaneWorkbench.RecipeBuilder input(ItemStack items, int quantity) {
-            items.setCount(quantity);
-            this.ingList.add(items);
+        public RecipeBuilder input(ItemStack item) {
+            this.ingList.add(item);
+            return this;
+        }
+
+        public RecipeBuilder input(ItemStack item, int quantity) {
+            for (int i = 0; i < quantity; i++)
+                this.ingList.add(item);
             return this;
         }
 
@@ -150,7 +189,14 @@ public class ArcaneWorkbench extends VirtualizedRegistry<IArcaneRecipe> {
             IArcaneRecipe recipe1;
             for (ItemStack itemStack : output) {
                 if (this.shaped) {
-                    recipe1 = ModSupport.THAUMCRAFT.get().arcaneWorkbench.addShaped(researchKey, vis, aspects, itemStack.getItem(), this.recipe);
+                    for (String row : matrix) {
+                        this.recipe.add(row);
+                    }
+                    for (int i = 0; i < keyChars.size(); i++) {
+                        this.recipe.add(keyChars.get(i).charAt(0));
+                        this.recipe.add(keyItems.get(i));
+                    }
+                    recipe1 = ModSupport.THAUMCRAFT.get().arcaneWorkbench.addShaped(researchKey, vis, aspects, itemStack.getItem(), this.recipe.toArray());
                 } else {
                     recipe1 = ModSupport.THAUMCRAFT.get().arcaneWorkbench.addShapeless(researchKey, vis, aspects, itemStack.getItem(), this.ingList.toArray());
                 }
