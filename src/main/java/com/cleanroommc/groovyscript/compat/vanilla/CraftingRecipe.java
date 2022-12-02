@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe, ICraftingRecipe {
 
     protected final ItemStack output;
     protected final List<IIngredient> input;
@@ -75,11 +75,13 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     }
 
     @Nullable
+    @Override
     public Closure<Void> getRecipeAction() {
         return recipeAction;
     }
 
     @Nullable
+    @Override
     public Closure<ItemStack> getRecipeFunction() {
         return recipeFunction;
     }
