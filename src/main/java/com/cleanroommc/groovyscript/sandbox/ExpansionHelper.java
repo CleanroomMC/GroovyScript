@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import groovy.lang.*;
 import groovy.transform.Internal;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.codehaus.groovy.reflection.*;
 import org.codehaus.groovy.runtime.HandleMetaClass;
 import org.codehaus.groovy.runtime.metaclass.*;
@@ -14,8 +13,6 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 
 public class ExpansionHelper {
-
-    private static final Object2ObjectOpenHashMap<Class<?>, MixinInMetaClass> MIXIN_CLASSES = new Object2ObjectOpenHashMap<>();
 
     public static ExpandoMetaClass getExpandoClass(Class<?> clazz) {
         return getExpandoClass(GroovySystem.getMetaClassRegistry().getMetaClass(clazz));
@@ -39,24 +36,12 @@ public class ExpansionHelper {
         return (ExpandoMetaClass) clazz;
     }
 
-    public static MixinInMetaClass getMixinMetaClass(Class<?> clazz) {
-        MixinInMetaClass mixin = MIXIN_CLASSES.get(clazz);
-        if (mixin != null) return mixin;
-        return createMixinMetaClass(GroovySystem.getMetaClassRegistry().getMetaClass(clazz));
+    public static MixinInMetaClass getMixinMetaClass(Class<?> clazz, ExpandoMetaClass emc) {
+        return new MixinInMetaClass(emc, ReflectionCache.getCachedClass(clazz));
     }
 
-    public static MixinInMetaClass getMixinMetaClass(MetaClass metaClass) {
-        Class<?> clazz = metaClass.getTheClass();
-        MixinInMetaClass mixin = MIXIN_CLASSES.get(clazz);
-        if (mixin != null) return mixin;
-        return createMixinMetaClass(metaClass);
-    }
-
-    private static MixinInMetaClass createMixinMetaClass(MetaClass metaClass) {
-        ExpandoMetaClass expandoMetaClass = getExpandoClass(metaClass);
-        MixinInMetaClass mixin = new MixinInMetaClass(expandoMetaClass, ReflectionCache.getCachedClass(metaClass.getTheClass()));
-        MIXIN_CLASSES.put(metaClass.getTheClass(), mixin);
-        return mixin;
+    public static MixinInMetaClass getMixinMetaClass(MetaClass metaClass, ExpandoMetaClass emc) {
+        return getMixinMetaClass(metaClass.getTheClass(), emc);
     }
 
     public static void mixinProperties(ExpandoMetaClass emc, MetaClass metaClass, MixinInMetaClass mixin) {
@@ -94,15 +79,14 @@ public class ExpansionHelper {
 
     public static void mixinClasses(Class<?> self, Collection<Class<?>> mixinClasses) {
         ExpandoMetaClass emc = getExpandoClass(self);
-        MixinInMetaClass mixin = getMixinMetaClass(emc);
         for (Class<?> clazz : mixinClasses) {
-            mixinClass(emc, mixin, clazz);
+            mixinClass(emc, getMixinMetaClass(clazz, emc), clazz);
         }
     }
 
     public static void mixinClass(Class<?> self, Class<?> mixinClass) {
         ExpandoMetaClass emc = getExpandoClass(self);
-        MixinInMetaClass mixin = getMixinMetaClass(emc);
+        MixinInMetaClass mixin = getMixinMetaClass(mixinClass, emc);
         mixinClass(emc, mixin, mixinClass);
     }
 
@@ -116,13 +100,13 @@ public class ExpansionHelper {
 
     public static void mixinMethod(Class<?> self, Method method) {
         ExpandoMetaClass emc = getExpandoClass(self);
-        MixinInMetaClass mixin = Modifier.isStatic(method.getModifiers()) ? null : getMixinMetaClass(emc);
+        MixinInMetaClass mixin = Modifier.isStatic(method.getModifiers()) ? null : getMixinMetaClass(method.getDeclaringClass(), emc);
         mixinMethod(emc, CachedMethod.find(method), mixin);
     }
 
     public static void mixinMethod(Class<?> self, Class<?> other, String methodName) {
         ExpandoMetaClass emc = getExpandoClass(self);
-        MixinInMetaClass mixin = getMixinMetaClass(emc);
+        MixinInMetaClass mixin = getMixinMetaClass(other, emc);
         for (Method method : other.getDeclaredMethods()) {
             if (methodName.equals(method.getName())) {
                 mixinMethod(emc, CachedMethod.find(method), mixin);
