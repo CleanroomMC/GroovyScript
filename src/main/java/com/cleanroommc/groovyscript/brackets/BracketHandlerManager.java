@@ -46,7 +46,7 @@ public class BracketHandlerManager {
             registerBracketHandler("gas", s -> new GasStack(GasRegistry.getGas(s), 1));
         }
         if (ModSupport.THAUMCRAFT.isLoaded()) {
-            registerBracketHandler("aspect", s -> Aspect.getAspect(s));
+            registerBracketHandler("aspect", AspectBracketHandler.INSTANCE);
             registerBracketHandler("crystal", s -> ThaumcraftApiHelper.makeCrystal(Aspect.getAspect(s)));
         }
     }
