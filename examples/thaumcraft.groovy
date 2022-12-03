@@ -73,6 +73,12 @@ mods.thaumcraft.DustTrigger.triggerBuilder()
         .output(item('minecraft:enchanting_table'))
         .register()
 
+mods.thaumcraft.DustTrigger.triggerBuilder()
+        .researchKey("UNLOCKALCHEMY@3")
+        .target(ore('cropPumpkin'))
+        .output(item('minecraft:lit_pumpkin'))
+        .register()
+
 mods.thaumcraft.LootBag.removeAll(new int[]{0,1,2})
 mods.thaumcraft.LootBag.addItem(item('minecraft:diamond_block'), 100, new int[]{0,1,2})
 

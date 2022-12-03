@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.crafting.IDustTrigger;
@@ -75,6 +76,11 @@ public class DustTrigger {
 
         public TriggerBuilder target(String oreDic) {
             this.ore = oreDic;
+            return this;
+        }
+
+        public TriggerBuilder target(OreDictIngredient oreDic) {
+            this.ore = oreDic.getOreDict();
             return this;
         }
 
