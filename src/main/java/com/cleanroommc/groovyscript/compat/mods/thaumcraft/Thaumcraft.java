@@ -2,6 +2,8 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane.ArcaneWorkbench;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.Aspect;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 
