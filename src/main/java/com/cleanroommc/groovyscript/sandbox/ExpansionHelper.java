@@ -1,0 +1,209 @@
+package com.cleanroommc.groovyscript.sandbox;
+
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import groovy.lang.*;
+import groovy.transform.Internal;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import org.codehaus.groovy.reflection.*;
+import org.codehaus.groovy.runtime.HandleMetaClass;
+import org.codehaus.groovy.runtime.metaclass.*;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+
+public class ExpansionHelper {
+
+    private static final Object2ObjectOpenHashMap<Class<?>, MixinInMetaClass> MIXIN_CLASSES = new Object2ObjectOpenHashMap<>();
+
+    public static ExpandoMetaClass getExpandoClass(Class<?> clazz) {
+        return getExpandoClass(GroovySystem.getMetaClassRegistry().getMetaClass(clazz));
+    }
+
+    public static ExpandoMetaClass getExpandoClass(MetaClass clazz) {
+        if (clazz instanceof HandleMetaClass) {
+            clazz = (MetaClass) ((HandleMetaClass) clazz).replaceDelegate();
+        }
+
+        if (!(clazz instanceof ExpandoMetaClass)) {
+            if (clazz instanceof DelegatingMetaClass && ((DelegatingMetaClass) clazz).getAdaptee() instanceof ExpandoMetaClass) {
+                clazz = ((DelegatingMetaClass) clazz).getAdaptee();
+            } else {
+                ExpandoMetaClass emc = new ExpandoMetaClass(clazz.getTheClass(), true, true);
+                emc.initialize();
+                return emc;
+            }
+        }
+
+        return (ExpandoMetaClass) clazz;
+    }
+
+    public static MixinInMetaClass getMixinMetaClass(Class<?> clazz) {
+        MixinInMetaClass mixin = MIXIN_CLASSES.get(clazz);
+        if (mixin != null) return mixin;
+        return createMixinMetaClass(GroovySystem.getMetaClassRegistry().getMetaClass(clazz));
+    }
+
+    public static MixinInMetaClass getMixinMetaClass(MetaClass metaClass) {
+        Class<?> clazz = metaClass.getTheClass();
+        MixinInMetaClass mixin = MIXIN_CLASSES.get(clazz);
+        if (mixin != null) return mixin;
+        return createMixinMetaClass(metaClass);
+    }
+
+    private static MixinInMetaClass createMixinMetaClass(MetaClass metaClass) {
+        ExpandoMetaClass expandoMetaClass = getExpandoClass(metaClass);
+        MixinInMetaClass mixin = new MixinInMetaClass(expandoMetaClass, ReflectionCache.getCachedClass(metaClass.getTheClass()));
+        MIXIN_CLASSES.put(metaClass.getTheClass(), mixin);
+        return mixin;
+    }
+
+    public static void mixinProperties(ExpandoMetaClass emc, MetaClass metaClass, MixinInMetaClass mixin) {
+        final CachedClass cachedCategoryClass = ReflectionCache.getCachedClass(metaClass.getClass());
+
+        for (MetaProperty prop : metaClass.getProperties()) {
+            if (isValidProperty(prop) && emc.getMetaProperty(prop.getName()) == null) {
+                emc.registerBeanProperty(prop.getName(), new MixinInstanceMetaProperty(prop, mixin));
+            }
+        }
+
+        for (MetaProperty prop : cachedCategoryClass.getFields()) {
+            if (isValidProperty(prop) && emc.getMetaProperty(prop.getName()) == null) {
+                emc.registerBeanProperty(prop.getName(), new MixinInstanceMetaProperty(prop, mixin));
+            }
+        }
+    }
+
+    private static boolean isValidProperty(MetaProperty prop) {
+        if (prop instanceof MetaBeanProperty) {
+            MetaBeanProperty beanProperty = (MetaBeanProperty) prop;
+            if (!isValid(beanProperty.getField())) return false;
+            if (!(beanProperty.getGetter() instanceof CachedMethod) || isValid((CachedMethod) beanProperty.getGetter()))
+                return false;
+            return beanProperty.getSetter() instanceof CachedMethod && !isValid((CachedMethod) beanProperty.getSetter());
+        }
+        if (prop instanceof MethodMetaProperty && ((MethodMetaProperty) prop).getMetaMethod() instanceof CachedMethod) {
+            return isValid((CachedMethod) ((MethodMetaProperty) prop).getMetaMethod());
+        }
+        if (prop instanceof CachedField) {
+            return isValid((CachedField) prop);
+        }
+        return false;
+    }
+
+    public static void mixinClasses(Class<?> self, Collection<Class<?>> mixinClasses) {
+        ExpandoMetaClass emc = getExpandoClass(self);
+        MixinInMetaClass mixin = getMixinMetaClass(emc);
+        for (Class<?> clazz : mixinClasses) {
+            mixinClass(emc, mixin, clazz);
+        }
+    }
+
+    public static void mixinClass(Class<?> self, Class<?> mixinClass) {
+        ExpandoMetaClass emc = getExpandoClass(self);
+        MixinInMetaClass mixin = getMixinMetaClass(emc);
+        mixinClass(emc, mixin, mixinClass);
+    }
+
+    private static void mixinClass(ExpandoMetaClass emc, MixinInMetaClass mixin, Class<?> clazz) {
+        MetaClass other = GroovySystem.getMetaClassRegistry().getMetaClass(clazz);
+        mixinProperties(emc, other, mixin);
+        for (MetaMethod method : other.getMethods()) {
+            mixinMethod(emc, method, mixin);
+        }
+    }
+
+    public static void mixinMethod(Class<?> self, Method method) {
+        ExpandoMetaClass emc = getExpandoClass(self);
+        MixinInMetaClass mixin = Modifier.isStatic(method.getModifiers()) ? null : getMixinMetaClass(emc);
+        mixinMethod(emc, CachedMethod.find(method), mixin);
+    }
+
+    public static void mixinMethod(Class<?> self, Class<?> other, String methodName) {
+        ExpandoMetaClass emc = getExpandoClass(self);
+        MixinInMetaClass mixin = getMixinMetaClass(emc);
+        for (Method method : other.getDeclaredMethods()) {
+            if (methodName.equals(method.getName())) {
+                mixinMethod(emc, CachedMethod.find(method), mixin);
+            }
+        }
+    }
+
+    public static void mixinMethod(Class<?> self, String name, LambdaClosure.AnyFunction function) {
+        ExpandoMetaClass emc = getExpandoClass(self);
+        emc.registerInstanceMethod(name, new LambdaClosure(null, function));
+    }
+
+    private static void mixinMethod(ExpandoMetaClass self, MetaMethod method, MixinInMetaClass mixin) {
+        if (method instanceof CachedMethod) {
+            final int mod = method.getModifiers();
+            CachedMethod cachedMethod = (CachedMethod) method;
+            if (!isValid(cachedMethod)) {
+                return;
+            }
+            CachedClass[] paramTypes = method.getParameterTypes();
+            MetaMethod metaMethod;
+            if (Modifier.isStatic(mod)) {
+                if (paramTypes.length > 0 && paramTypes[0].isAssignableFrom(self.getTheClass())) {
+                    // instance method disguised as static method
+                    if (paramTypes[0].getTheClass() == self.getTheClass())
+                        metaMethod = new NewInstanceMetaMethod(cachedMethod);
+                    else
+                        metaMethod = new NewInstanceMetaMethod(cachedMethod) {
+                            public CachedClass getDeclaringClass() {
+                                return ReflectionCache.getCachedClass(self.getTheClass());
+                            }
+                        };
+                } else {
+                    // true static method
+                    metaMethod = new NewStaticMetaMethod(self.getTheCachedClass(), cachedMethod);
+                }
+            } else if (method.getDeclaringClass().getTheClass() != Object.class || method.getName().equals("toString")) {
+                metaMethod = new MixinInstanceMetaMethod(method, mixin);
+            } else {
+                return;
+            }
+            self.registerInstanceMethod(metaMethod);
+        }
+    }
+
+    private static boolean isValid(CachedMethod method) {
+        final int mod = method.getModifiers();
+        return Modifier.isPublic(mod) && !Modifier.isAbstract(mod) && !method.isSynthetic() &&
+                method.getAnnotation(Internal.class) == null &&
+                method.getAnnotation(GroovyBlacklist.class) == null;
+    }
+
+    private static boolean isValid(CachedField cachedField) {
+        if (cachedField == null) return true;
+        final int mod = cachedField.getModifiers();
+        Field field = cachedField.getCachedField();
+        return Modifier.isPublic(mod) && !field.isSynthetic() &&
+                !field.isAnnotationPresent(Internal.class) &&
+                !field.isAnnotationPresent(GroovyBlacklist.class);
+    }
+
+    /**
+     * Groovy's {@link org.codehaus.groovy.runtime.metaclass.NewStaticMetaMethod} does weird shit.
+     */
+    private static class NewStaticMetaMethod extends NewMetaMethod {
+
+        private final CachedClass owner;
+
+        public NewStaticMetaMethod(CachedClass owner, CachedMethod method) {
+            super(method);
+            this.owner = owner;
+        }
+
+        @Override
+        public CachedClass getDeclaringClass() {
+            return owner;
+        }
+
+        @Override
+        public CachedClass getOwnerClass() {
+            return owner;
+        }
+    }
+}
