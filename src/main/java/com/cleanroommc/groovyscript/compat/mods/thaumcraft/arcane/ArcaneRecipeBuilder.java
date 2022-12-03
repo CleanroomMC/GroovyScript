@@ -33,7 +33,7 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
     }
 
     public ArcaneRecipeBuilder aspect(AspectStack aspect) {
-        this.aspects.add(aspect.getAspect(), aspect.getQuantity());
+        this.aspects.add(aspect.getAspect(), aspect.getAmount());
         return this;
     }
 

@@ -115,7 +115,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         }
 
         public RecipeBuilder aspect(AspectStack aspectIn) {
-            this.aspects.add(aspectIn.getAspect(), aspectIn.getQuantity());
+            this.aspects.add(aspectIn.getAspect(), aspectIn.getAmount());
             return this;
         }
 

@@ -6,27 +6,6 @@ import thaumcraft.api.aspects.AspectList;
 
 public class Aspect {
 
-    private thaumcraft.api.aspects.Aspect thaumAspect;
-
-    public Aspect() {
-        //do nothing
-    }
-
-    public thaumcraft.api.aspects.Aspect getNativeAspect() {
-        return thaumAspect;
-    }
-
-    public Aspect(String tag, int color, thaumcraft.api.aspects.Aspect[] components, ResourceLocation image, int blend) {
-        try {
-            thaumAspect = new thaumcraft.api.aspects.Aspect(tag, color, components, image, blend);
-        } catch (IllegalArgumentException e) {
-            GroovyLog.msg("Error adding Thaumcraft Aspect: ")
-                    .add(e.getMessage())
-                    .error()
-                    .post();
-        }
-    }
-
     public AspectBuilder aspectBuilder() { return new AspectBuilder(); }
 
     public class AspectBuilder {
@@ -48,7 +27,7 @@ public class Aspect {
         }
 
         public AspectBuilder component(AspectStack component) {
-            this.components.add(component.getAspect(), component.getQuantity());
+            this.components.add(component.getAspect(), component.getAmount());
             return this;
         }
 

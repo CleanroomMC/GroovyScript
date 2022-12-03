@@ -95,7 +95,7 @@ public class Research {
         }
 
         public ResearchCategoryBuilder formulaAspect(AspectStack aspect) {
-            this.formula.add(aspect.getAspect(), aspect.getQuantity());
+            this.formula.add(aspect.getAspect(), aspect.getAmount());
             return this;
         }
 

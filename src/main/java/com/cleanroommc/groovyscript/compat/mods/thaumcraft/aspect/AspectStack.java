@@ -1,29 +1,34 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 
+import com.cleanroommc.groovyscript.api.IResourceStack;
 import thaumcraft.api.aspects.Aspect;
 
-public class AspectStack {
+public class AspectStack implements IResourceStack {
 
-    private int quantity;
+    private int amount;
     private Aspect aspect;
 
     public AspectStack() {
-        this.quantity = 0;
+        this.amount = 0;
         this.aspect = null;
     }
 
-    public AspectStack(String aspect) { this(aspect, 1); }
-
-    public AspectStack(Aspect aspect) { this(aspect, 1); }
-
-    public AspectStack(String aspect, int quantity) {
-        this.aspect = Aspect.getAspect(aspect);
-        this.quantity = quantity;
+    public AspectStack(String aspect) {
+        this(aspect, 1);
     }
 
-    public AspectStack(Aspect aspect, int quantity) {
+    public AspectStack(Aspect aspect) {
+        this(aspect, 1);
+    }
+
+    public AspectStack(String aspect, int amount) {
+        this.aspect = Aspect.getAspect(aspect);
+        this.amount = amount;
+    }
+
+    public AspectStack(Aspect aspect, int amount) {
         this.aspect = aspect;
-        this.quantity = quantity;
+        this.amount = amount;
     }
 
     public Aspect getAspect() {
@@ -34,12 +39,13 @@ public class AspectStack {
         this.aspect = aspect;
     }
 
-    public int getQuantity() {
-        return this.quantity;
+    @Override
+    public int getAmount() {
+        return amount;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    @Override
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
-
 }

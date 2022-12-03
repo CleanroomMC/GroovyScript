@@ -4,12 +4,9 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -119,7 +116,7 @@ public class InfusionCrafting extends VirtualizedRegistry<InfusionRecipe> {
         }
 
         public RecipeBuilder aspect(AspectStack aspect) {
-            this.aspects.add(aspect.getAspect(), aspect.getQuantity());
+            this.aspects.add(aspect.getAspect(), aspect.getAmount());
             return this;
         }
 
