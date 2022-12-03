@@ -31,7 +31,7 @@ public class SmeltingBonus {
 
     public SmeltingBonusBuilder recipeBuilder() { return new SmeltingBonusBuilder(); }
 
-    public class SmeltingBonusBuilder {
+    public static class SmeltingBonusBuilder {
 
         private ItemStack in;
         private ItemStack out;
