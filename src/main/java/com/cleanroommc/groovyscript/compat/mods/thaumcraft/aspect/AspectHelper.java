@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
+package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.item.ItemStack;
@@ -28,8 +28,8 @@ public class AspectHelper {
         return this;
     }
 
-    public AspectHelper aspect(thaumcraft.api.aspects.Aspect aspectIn, int amount) {
-        this.aspects.add(aspectIn, amount);
+    public AspectHelper aspect(AspectStack aspect) {
+        this.aspects.add(aspect.getAspect(), aspect.getQuantity());
         return this;
     }
 

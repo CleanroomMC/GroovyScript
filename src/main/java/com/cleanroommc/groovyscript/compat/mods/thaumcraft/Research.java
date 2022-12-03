@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -93,8 +94,8 @@ public class Research {
             return this;
         }
 
-        public ResearchCategoryBuilder formulaAspect(thaumcraft.api.aspects.Aspect aspectIn, int amount) {
-            this.formula.add(aspectIn, amount);
+        public ResearchCategoryBuilder formulaAspect(AspectStack aspect) {
+            this.formula.add(aspect.getAspect(), aspect.getQuantity());
             return this;
         }
 

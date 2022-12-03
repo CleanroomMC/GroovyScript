@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import net.minecraft.util.ResourceLocation;
@@ -43,7 +44,8 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
     public void add(CrucibleRecipe recipe) {
         if (recipe != null) {
             addScripted(recipe);
-            ThaumcraftApi.addCrucibleRecipe(new ResourceLocation(recipe.getRecipeOutput().toString()), recipe);
+            ThaumcraftApi.addCrucibleRecipe(new ResourceLocation(recipe.getRecipeOutput().getDisplayName()), recipe);
+            compileGroups();
         }
     }
 
@@ -112,8 +114,8 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             return this;
         }
 
-        public RecipeBuilder aspect(thaumcraft.api.aspects.Aspect aspectIn, int amount) {
-            this.aspects.add(aspectIn, amount);
+        public RecipeBuilder aspect(AspectStack aspectIn) {
+            this.aspects.add(aspectIn.getAspect(), aspectIn.getQuantity());
             return this;
         }
 

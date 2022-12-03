@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -117,8 +118,8 @@ public class InfusionCrafting extends VirtualizedRegistry<InfusionRecipe> {
             return this;
         }
 
-        public RecipeBuilder aspect(thaumcraft.api.aspects.Aspect aspectIn, int amount) {
-            this.aspects.add(aspectIn, amount);
+        public RecipeBuilder aspect(AspectStack aspect) {
+            this.aspects.add(aspect.getAspect(), aspect.getQuantity());
             return this;
         }
 

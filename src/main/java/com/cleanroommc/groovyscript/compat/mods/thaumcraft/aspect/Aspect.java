@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
+package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.util.ResourceLocation;
@@ -47,13 +47,8 @@ public class Aspect {
             return this;
         }
 
-        public AspectBuilder component(thaumcraft.api.aspects.Aspect componentIn) {
-            this.components.add(componentIn, 1);
-            return this;
-        }
-
-        public AspectBuilder component(thaumcraft.api.aspects.Aspect componentIn, int amount) {
-            this.components.add(componentIn, amount);
+        public AspectBuilder component(AspectStack component) {
+            this.components.add(component.getAspect(), component.getQuantity());
             return this;
         }
 
