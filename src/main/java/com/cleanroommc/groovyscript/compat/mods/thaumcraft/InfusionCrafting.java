@@ -142,16 +142,16 @@ public class InfusionCrafting extends VirtualizedRegistry<InfusionRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             if (researchKey == null) {
-                msg.add("Warning: null researchKey provided for Thaumcraft Infusion Crafting recipe, defaulting to \"\"")
+                GroovyLog.msg("Warning: null researchKey provided for Thaumcraft Infusion Crafting recipe, defaulting to \"\"")
                         .warn()
                         .post();
                 researchKey = "";
             }
             if (instability < 0) {
-                msg.add("Error adding Thaumcraft Infusion Crafting recipe")
-                        .add("negative instability provided: ", instability)
-                        .error()
+                GroovyLog.msg("Warning: negative instability provided for Thaumcraft Infusion Crafting recipe, defaulting to 0")
+                        .warn()
                         .post();
+                instability = 0;
             }
         }
 
