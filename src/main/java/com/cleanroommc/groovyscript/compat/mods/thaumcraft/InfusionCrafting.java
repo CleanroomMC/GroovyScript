@@ -2,14 +2,12 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -123,8 +121,14 @@ public class InfusionCrafting extends VirtualizedRegistry<InfusionRecipe> {
             return this;
         }
 
-        public RecipeBuilder component(Object comp) {
-            this.components.add(comp);
+        public RecipeBuilder component(IIngredient comp) {
+            if (comp.getMatchingStacks().length == 1)
+                this.components.add(comp.getMatchingStacks()[0]);
+            else
+                GroovyLog.msg("Error adding component to Thaumcraft Infusion Crafting recipe")
+                        .add("component() received multiple Ingredients: ", comp)
+                        .error()
+                        .post();
             return this;
         }
 
