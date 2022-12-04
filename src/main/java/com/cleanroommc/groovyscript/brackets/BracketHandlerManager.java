@@ -1,15 +1,16 @@
 package com.cleanroommc.groovyscript.brackets;
 
 import com.cleanroommc.groovyscript.api.IBracketHandler;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.ThaumcraftApiHelper;
@@ -42,6 +43,7 @@ public class BracketHandlerManager {
         registerBracketHandler("fluid", BracketHandlerManager::parseFluidStack);
         registerBracketHandler("blockstate", BlockStateBracketHandler.INSTANCE);
         registerBracketHandler("enchantment", Enchantment::getEnchantmentByLocation);
+        registerBracketHandler("entity", s -> ForgeRegistries.ENTITIES.getValue(new ResourceLocation(s)));
         if (ModSupport.MEKANISM.isLoaded()) {
             registerBracketHandler("gas", s -> new GasStack(GasRegistry.getGas(s), 1));
         }
