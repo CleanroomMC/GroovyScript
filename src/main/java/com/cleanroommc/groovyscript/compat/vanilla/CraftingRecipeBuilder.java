@@ -291,7 +291,7 @@ public abstract class CraftingRecipeBuilder {
         boolean hasNonEmpty = false;
         int rowWidth = ingredientMatrix.get(0).size();
         for (int i = 0, n = Math.min(ingredientMatrix.size(), height); i < n; i++) {
-            List<IIngredient> row = ingredientMatrix.get(0);
+            List<IIngredient> row = ingredientMatrix.get(i);
             if (!logged && row.size() != rowWidth) {
                 logged = true;
                 msg.add("All rows must have the same length!");
