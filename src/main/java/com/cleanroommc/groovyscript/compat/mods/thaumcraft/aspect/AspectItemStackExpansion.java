@@ -10,6 +10,7 @@ public class AspectItemStackExpansion {
     public static void addAspect(ItemStack itemStack, AspectStack aspect) {
         AspectList aspectList = AspectHelper.getObjectAspects(itemStack);
         aspectList.add(aspect.getAspect(), aspect.getAmount());
+        ThaumcraftApi.registerObjectTag(itemStack, aspectList);
     }
 
     public static void removeAspect(ItemStack itemStack, AspectStack aspect) {

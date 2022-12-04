@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 
 import com.cleanroommc.groovyscript.api.IResourceStack;
+import net.minecraft.item.ItemStack;
+import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 
 public class AspectStack implements IResourceStack {
@@ -47,5 +49,9 @@ public class AspectStack implements IResourceStack {
     @Override
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public ItemStack getCrystal() {
+        return ThaumcraftApiHelper.makeCrystal(this.aspect, this.amount);
     }
 }
