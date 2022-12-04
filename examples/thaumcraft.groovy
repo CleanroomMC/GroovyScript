@@ -79,8 +79,10 @@ mods.thaumcraft.DustTrigger.triggerBuilder()
         .output(item('minecraft:lit_pumpkin'))
         .register()
 
-mods.thaumcraft.LootBag.removeAll(new int[]{0,1,2})
-mods.thaumcraft.LootBag.addItem(item('minecraft:diamond_block'), 100, new int[]{0,1,2})
+mods.thaumcraft.LootBag.getRare().removeAll()
+mods.thaumcraft.LootBag.getRare().addItem(item('minecraft:diamond_block'), 100)
+mods.thaumcraft.LootBag.getCommon().removeItem(item('minecraft:ender_pearl'))
+mods.thaumcraft.LootBag.getCommon().addItem(item('minecraft:dirt'), 100)
 
 mods.thaumcraft.SmeltingBonus.recipeBuilder()
         .input(item('minecraft:cobblestone'))
