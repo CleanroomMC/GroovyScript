@@ -61,7 +61,7 @@ public class Crafting {
                 .matrix(input)
                 .output(output)
                 .name(name)
-                .replace()
+                .replaceByName()
                 .register();
     }
 
