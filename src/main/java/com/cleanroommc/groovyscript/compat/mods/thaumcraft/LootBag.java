@@ -1,42 +1,57 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.internal.WeightedRandomLoot;
 
 import java.util.*;
 
-public class LootBag {
+public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
 
-    private int type;
+    public LootBag() { super("LootBag", "lootbag", "Lootbag"); }
 
-    public LootBag() {
+    @Override
+    @GroovyBlacklist
+    @ApiStatus.Internal
+    public void onReload() {
+        removeScripted().forEach(bag -> {
+            this.remove((ItemStack) bag.get(1), (int) bag.get(0));
+        });
+        restoreFromBackup().forEach(bag -> {
+            this.add((ItemStack) bag.get(1), (int) bag.get(2), (int) bag.get(0));
+        });
     }
 
-    public LootBag(int type) {
-        this.type = type;
+    public static LootBagHelper getCommon() {
+        return new LootBagHelper(0);
     }
 
-    public static LootBag getCommon() {
-        return new LootBag(0);
+    public static LootBagHelper getUncommon() {
+        return new LootBagHelper(1);
     }
 
-    public static LootBag getUncommon() {
-        return new LootBag(1);
+    public static LootBagHelper getRare() {
+        return new LootBagHelper(2);
     }
 
-    public static LootBag getRare() {
-        return new LootBag(2);
+    public void add(ItemStack item, int chance, int rarity) {
+        ThaumcraftApi.addLootBagItem(item, chance, new int[]{rarity});
+        ArrayList<Object> bag = new ArrayList<Object>();
+        bag.add(rarity);
+        bag.add(item);
+        bag.add(chance);
+        addScripted(bag);
     }
 
-    public void addItem(ItemStack item, int chance) {
-        ThaumcraftApi.addLootBagItem(item, chance, new int[]{type});
-    }
-
-    public void removeItem(ItemStack item) {
+    public void remove(ItemStack item, int rarity) {
         ArrayList<WeightedRandomLoot> list = new ArrayList<WeightedRandomLoot>();
-        switch (type) {
+        switch (rarity) {
             case 0:
                 list = WeightedRandomLoot.lootBagCommon;
                 break;
@@ -51,15 +66,21 @@ public class LootBag {
         }
         List<WeightedRandomLoot> remove = new ArrayList<>();
         for (WeightedRandomLoot loot : list) {
-            if (item.isItemEqual(loot.item))
+            if (item.isItemEqual(loot.item)) {
                 remove.add(loot);
+                ArrayList<Object> bag = new ArrayList<Object>();
+                bag.add(rarity);
+                bag.add(loot.item);
+                bag.add(loot.itemWeight);
+                addBackup(bag);
+            }
         }
         list.removeAll(remove);
     }
 
-    public void removeAll() {
+    public void removeAll(int rarity) {
         ArrayList<WeightedRandomLoot> list = new ArrayList<WeightedRandomLoot>();
-        switch (type) {
+        switch (rarity) {
             case 0:
                 list = WeightedRandomLoot.lootBagCommon;
                 break;
@@ -73,8 +94,29 @@ public class LootBag {
                 GroovyLog.msg("Error: Thaumcraft Lootbag type not specified. Please use Lootbag.getCommon(), Lootbag.getUncommon(), or Lootbag.getRare().").error().post();
         }
         List<WeightedRandomLoot> remove = new ArrayList<>();
-        for (WeightedRandomLoot loot : list)
+        for (WeightedRandomLoot loot : list) {
             remove.add(loot);
+            ArrayList<Object> bag = new ArrayList<Object>();
+            bag.add(rarity);
+            bag.add(loot.item);
+            bag.add(loot.itemWeight);
+            addBackup(bag);
+        }
         list.removeAll(remove);
+    }
+
+    public static class LootBagHelper {
+
+        private int rarity;
+
+        public LootBagHelper (int rarity) {
+            this.rarity = rarity;
+        }
+
+        public void addItem(ItemStack item, int chance) { ModSupport.THAUMCRAFT.get().lootBag.add(item, chance, rarity); }
+
+        public void removeItem(ItemStack item) { ModSupport.THAUMCRAFT.get().lootBag.remove(item, rarity); }
+
+        public void removeAll() { ModSupport.THAUMCRAFT.get().lootBag.removeAll(rarity); }
     }
 }

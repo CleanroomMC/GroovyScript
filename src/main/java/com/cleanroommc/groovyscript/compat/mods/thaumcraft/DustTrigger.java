@@ -1,9 +1,15 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.ApiStatus;
+import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.crafting.IDustTrigger;
 import thaumcraft.common.lib.crafting.DustTriggerOre;
 import thaumcraft.common.lib.crafting.DustTriggerSimple;
@@ -11,11 +17,21 @@ import thaumcraft.common.lib.crafting.DustTriggerSimple;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 
-public class DustTrigger {
+public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
 
-    public DustTrigger() {
-        //do nothing
+    @Override
+    @GroovyBlacklist
+    @ApiStatus.Internal
+    public void onReload() {
+        removeScripted().forEach(recipe -> {
+            this.remove(recipe);
+        });
+        restoreFromBackup().forEach(recipe -> {
+            this.add(recipe);
+        });
     }
+
+    public DustTrigger() { super("DustTrigger", "dust_trigger"); }
 
     private Field simpleTriggerResult;
     private Field oreTriggerResult;
@@ -37,6 +53,29 @@ public class DustTrigger {
         }
     }
 
+    public void add(IDustTrigger trigger) {
+        IDustTrigger.registerDustTrigger(trigger);
+        addScripted(trigger);
+    }
+
+    public void remove(IDustTrigger trigger) {
+        doDirtyReflection();
+        Iterator<IDustTrigger> it = IDustTrigger.triggers.iterator();
+        while (it.hasNext()) {
+            final IDustTrigger registeredTrigger = it.next();
+            if (trigger instanceof DustTriggerSimple && registeredTrigger instanceof DustTriggerSimple
+                    && trigger.equals(registeredTrigger)) {
+                it.remove();
+                addBackup(trigger);
+            }
+            else if (trigger instanceof DustTriggerOre && registeredTrigger instanceof DustTriggerOre
+                    && trigger.equals(registeredTrigger)) {
+                it.remove();
+                addBackup(trigger);
+            }
+        }
+    }
+
     public void removeByOutput(ItemStack output) {
         doDirtyReflection();
         Iterator<IDustTrigger> it = IDustTrigger.triggers.iterator();
@@ -44,11 +83,15 @@ public class DustTrigger {
             final IDustTrigger trigger = it.next();
             try {
                 if (trigger instanceof DustTriggerSimple && simpleTriggerResult != null
-                        && output.isItemEqual((ItemStack) simpleTriggerResult.get(trigger)))
+                        && output.isItemEqual((ItemStack) simpleTriggerResult.get(trigger))) {
                     it.remove();
+                    addBackup(trigger);
+                }
                 else if (trigger instanceof DustTriggerOre && oreTriggerResult != null
-                        && output.isItemEqual((ItemStack) oreTriggerResult.get(trigger)))
+                        && output.isItemEqual((ItemStack) oreTriggerResult.get(trigger))) {
                     it.remove();
+                    addBackup(trigger);
+                }
             } catch(IllegalAccessException e) {
                 GroovyLog.msg("Error while applying Salis Mundus effect: " + e).error().post();
             }
@@ -91,9 +134,9 @@ public class DustTrigger {
 
         public void register() {
             if(target == null) {
-                IDustTrigger.registerDustTrigger(new DustTriggerOre(research, ore, output));
+                ModSupport.THAUMCRAFT.get().dustTrigger.add(new DustTriggerOre(research, ore, output));
             } else {
-                IDustTrigger.registerDustTrigger(new DustTriggerSimple(research, target, output));
+                ModSupport.THAUMCRAFT.get().dustTrigger.add(new DustTriggerSimple(research, target, output));
             }
         }
 
