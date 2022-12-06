@@ -4,8 +4,12 @@ import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane.ArcaneWorkbench;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.Aspect;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectHelper;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.api.aspects.AspectList;
+
+import java.util.Collection;
 
 public class Thaumcraft extends ModPropertyContainer {
 
@@ -42,5 +46,13 @@ public class Thaumcraft extends ModPropertyContainer {
     public @Nullable Object getProperty(String name) {
         Object o = super.getProperty(name);
         return o != null ? o : altNames.get(name);
+    }
+
+    public static AspectList makeAspectList(Collection<AspectStack> aspects) {
+        AspectList list = new AspectList();
+        for (AspectStack aspectStack : aspects) {
+            list.add(aspectStack.getAspect(), aspectStack.getAmount());
+        }
+        return list;
     }
 }

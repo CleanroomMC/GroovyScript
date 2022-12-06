@@ -181,6 +181,16 @@ public class ExpansionHelper {
         }
 
         @Override
+        public boolean isStatic() {
+            return true;
+        }
+
+        @Override
+        public int getModifiers() {
+            return Modifier.PUBLIC;
+        }
+
+        @Override
         public CachedClass getDeclaringClass() {
             return owner;
         }
