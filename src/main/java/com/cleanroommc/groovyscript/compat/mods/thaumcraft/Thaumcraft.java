@@ -35,10 +35,10 @@ public class Thaumcraft extends ModPropertyContainer {
         addRegistry(lootBag);
         addRegistry(dustTrigger);
         addRegistry(smeltingBonus);
+        addRegistry(warp);
         altNames.put("ArcaneWorkbench", arcaneWorkbench);
         altNames.put("arcane_workbench", arcaneWorkbench);
         altNames.put("Aspect", aspect);
-        altNames.put("Warp", warp);
         altNames.put("Research", research);
     }
 
