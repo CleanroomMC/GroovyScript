@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -49,8 +50,8 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         }
     }
 
-    public CrucibleRecipe add(String researchKey, ItemStack result, Object catalyst, AspectList tags) {
-        CrucibleRecipe recipe = new CrucibleRecipe(researchKey, result, catalyst, tags);
+    public CrucibleRecipe add(String researchKey, ItemStack result, IIngredient catalyst, AspectList tags) {
+        CrucibleRecipe recipe = new CrucibleRecipe(researchKey, result, catalyst.toMcIngredient(), tags);
         add(recipe);
         return recipe;
     }
@@ -107,7 +108,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
         private String researchKey;
         private AspectList aspects = new AspectList();
-        private Object catalyst;
+        private IIngredient catalyst;
 
         public RecipeBuilder researchKey(String researchKey) {
             this.researchKey = researchKey;
@@ -119,7 +120,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             return this;
         }
 
-        public RecipeBuilder catalyst(Object catalyst) {
+        public RecipeBuilder catalyst(IIngredient catalyst) {
             this.catalyst = catalyst;
             return this;
         }
@@ -132,6 +133,9 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 0, 0, 1, 1);
+            msg.add(IngredientHelper.isEmpty(catalyst), () -> "Catalyst must not be empty");
+            msg.add(aspects.size() == 0, () -> "Aspects must not be empty");
+            if(researchKey == null) researchKey = "";
         }
 
         @Override
