@@ -28,17 +28,14 @@ public class Thaumcraft extends ModPropertyContainer {
     public Thaumcraft() {
         addRegistry(crucible);
         addRegistry(infusionCrafting);
+        addRegistry(lootBag);
+        addRegistry(dustTrigger);
+        addRegistry(smeltingBonus);
         altNames.put("ArcaneWorkbench", arcaneWorkbench);
         altNames.put("arcane_workbench", arcaneWorkbench);
         altNames.put("Aspect", aspect);
-        altNames.put("LootBag", lootBag);
-        altNames.put("loot_bag", lootBag);
         altNames.put("Warp", warp);
-        altNames.put("SmeltingBonus", smeltingBonus);
-        altNames.put("smelting_bonus", smeltingBonus);
         altNames.put("Research", research);
-        altNames.put("DustTrigger", dustTrigger);
-        altNames.put("dust_trigger", dustTrigger);
     }
 
     @Override
