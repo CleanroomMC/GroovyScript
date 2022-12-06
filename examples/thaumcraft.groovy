@@ -90,6 +90,11 @@ mods.thaumcraft.SmeltingBonus.recipeBuilder()
         .chance(0.2F)
         .register()
 
+mods.thaumcraft.SmeltingBonus.recipeBuilder()
+        .input(ore('stone'))
+        .output(item('minecraft:obsidian'))
+        .register()
+
 mods.thaumcraft.SmeltingBonus.removeByOutput(item('minecraft:gold_nugget'))
 
 //mods.thaumcraft.Research.researchCategoryBuilder()
