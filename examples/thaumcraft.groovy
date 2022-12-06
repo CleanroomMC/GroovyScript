@@ -97,6 +97,10 @@ mods.thaumcraft.SmeltingBonus.recipeBuilder()
 
 mods.thaumcraft.SmeltingBonus.removeByOutput(item('minecraft:gold_nugget'))
 
+mods.thaumcraft.SmeltingBonus.stream()
+        .filter{ bonus -> bonus.in == 'oreDiamond' }
+        .removeAll()
+
 //mods.thaumcraft.Research.researchCategoryBuilder()
 //    .key("BASICS2")
 //    .researchKey("UNLOCKAUROMANCY")

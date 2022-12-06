@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -13,9 +14,10 @@ import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.internal.CommonInternals;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class SmeltingBonus extends VirtualizedRegistry<ArrayList<Object>> {
+public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus> {
 
     public SmeltingBonus() { super("SmeltingBonus", "smelting_bonus"); }
 
@@ -23,12 +25,12 @@ public class SmeltingBonus extends VirtualizedRegistry<ArrayList<Object>> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(recipe -> {
-            this.removeByOutput((ItemStack) recipe.get(1));
-        });
-        restoreFromBackup().forEach(recipe -> {
-            this.add((IIngredient) recipe.get(0), (ItemStack) recipe.get(1), (float) recipe.get(2));
-        });
+        removeScripted().forEach(bonus -> this.remove(bonus) );
+        restoreFromBackup().forEach(bonus -> this.add(bonus) );
+    }
+
+    public void add(ThaumcraftApi.SmeltBonus bonus) {
+        ThaumcraftApi.addSmeltingBonus(bonus.in, bonus.out, bonus.chance);
     }
 
     public void add(IIngredient in, ItemStack out) {
@@ -38,19 +40,25 @@ public class SmeltingBonus extends VirtualizedRegistry<ArrayList<Object>> {
     public void add(IIngredient in, ItemStack out, float chance) {
         if (in instanceof OreDictIngredient) {
             ThaumcraftApi.addSmeltingBonus(((OreDictIngredient) in).getOreDict(), out, chance);
-            ArrayList<Object> sb = new ArrayList<Object>();
-            sb.add(((OreDictIngredient) in).getOreDict());
-            sb.add(out);
-            sb.add(chance);
-            addScripted(sb);
+            addScripted(new ThaumcraftApi.SmeltBonus(((OreDictIngredient) in).getOreDict(), out, chance));
         } else if (in.getMatchingStacks().length == 1) {
             ThaumcraftApi.addSmeltingBonus(in.getMatchingStacks()[0], out, chance);
-            ArrayList<Object> sb = new ArrayList<Object>();
-            sb.add(in.getMatchingStacks()[0]);
-            sb.add(out);
-            sb.add(chance);
-            addScripted(sb);
+            addScripted(new ThaumcraftApi.SmeltBonus(in.getMatchingStacks()[0], out, chance));
         }
+    }
+
+    public boolean remove(ThaumcraftApi.SmeltBonus bonus) {
+        boolean removed = false;
+        Iterator<ThaumcraftApi.SmeltBonus> it = CommonInternals.smeltingBonus.iterator();
+        while(it.hasNext()) {
+            ThaumcraftApi.SmeltBonus registeredBonus = it.next();
+            if (registeredBonus.equals(bonus)) {
+                it.remove();
+                addBackup(registeredBonus);
+                removed = true;
+            }
+        }
+        return removed;
     }
 
     public void removeByOutput(ItemStack output) {
@@ -58,14 +66,14 @@ public class SmeltingBonus extends VirtualizedRegistry<ArrayList<Object>> {
         for (ThaumcraftApi.SmeltBonus bonus : CommonInternals.smeltingBonus) {
             if (output.isItemEqual(bonus.out)) {
                 remove.add(bonus);
-                ArrayList<Object> sb = new ArrayList<Object>();
-                sb.add(bonus.in);
-                sb.add(bonus.out);
-                sb.add(bonus.chance);
-                addBackup(sb);
+                addBackup(bonus);
             }
         }
         CommonInternals.smeltingBonus.removeAll(remove);
+    }
+
+    public SimpleObjectStream<ThaumcraftApi.SmeltBonus> stream() {
+        return new SimpleObjectStream<>(CommonInternals.smeltingBonus).setRemover(this::remove);
     }
 
     public SmeltingBonusBuilder recipeBuilder() { return new SmeltingBonusBuilder(); }
