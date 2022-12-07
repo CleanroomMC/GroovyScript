@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class RareEarthExtractor extends VirtualizedRegistry<IRareEarthExtractorRecipeList.EarthEntry> {
 
     public RareEarthExtractor() {
-        super("RareEarthExtractor", "rareearthextractor");
+        super();
     }
 
     @Override

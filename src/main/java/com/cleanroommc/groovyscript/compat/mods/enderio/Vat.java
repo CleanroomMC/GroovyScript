@@ -24,7 +24,7 @@ import java.util.List;
 public class Vat extends VirtualizedRegistry<VatRecipe> {
 
     public Vat() {
-        super("Vat", "vat");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {

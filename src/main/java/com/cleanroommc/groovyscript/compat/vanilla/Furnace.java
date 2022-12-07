@@ -15,7 +15,7 @@ import java.util.List;
 public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
     public Furnace() {
-        super("Furnace", "furnace");
+        super();
     }
 
     public void add(IIngredient input, ItemStack output) {

@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
 
     public Fermenter() {
-        super("Fermenter", "fermenter");
+        super();
     }
 
     public static RecipeBuilder recipeBuilder() {

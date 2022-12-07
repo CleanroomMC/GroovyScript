@@ -19,7 +19,7 @@ import java.util.List;
 public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
 
     public MetalPress() {
-        super("MetalPress", "metalpress");
+        super();
     }
 
     @Override

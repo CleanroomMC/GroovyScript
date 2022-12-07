@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
 
     public FluidCoolant() {
-        super("FluidCoolant", "fluidcoolant", "fluid_coolant", "CombustionCoolant", "combustion_coolant");
+        super(VirtualizedRegistry.generateAliases("CombustionCoolant"));
     }
 
     public void addCoolant(FluidStack fluidStack, float degreesPerMb) {

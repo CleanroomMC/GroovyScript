@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
 
     public Squeezer() {
-        super("Squeezer", "squeezer");
+        super();
     }
 
     public static RecipeBuilder recipeBuilder() {

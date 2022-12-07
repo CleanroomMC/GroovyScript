@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
 
     public Refinery() {
-        super("Refinery", "refinery");
+        super();
     }
 
     public static RecipeBuilder recipeBuilder() {

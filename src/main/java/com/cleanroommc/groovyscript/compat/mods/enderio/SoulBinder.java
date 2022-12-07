@@ -24,7 +24,7 @@ import java.util.List;
 public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
 
     public SoulBinder() {
-        super("SoulBinder", "soulbinder", "soul_binder");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {

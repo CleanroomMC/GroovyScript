@@ -21,7 +21,7 @@ public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzer
     private static final Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> fluidMap = ((ElectrolyzerRecipeManagerAccessor) Recipes.electrolyzer).getFluidMap();
 
     public Electrolyzer() {
-        super("Electrolyzer", "electrolyzer");
+        super();
     }
 
     @Override

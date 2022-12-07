@@ -22,7 +22,7 @@ import java.util.List;
 public class Mixer extends VirtualizedRegistry<MixerRecipe> {
 
     public Mixer() {
-        super("Mixer", "mixer");
+        super();
     }
 
     public static RecipeBuilder recipeBuilder() {

@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe> {
 
     public Crystallizer() {
-        super(RecipeHandler.Recipe.CHEMICAL_CRYSTALLIZER, "Crystallizer", "crystallizer");
+        super(RecipeHandler.Recipe.CHEMICAL_CRYSTALLIZER);
     }
 
     public CrystallizerRecipe add(GasStack input, ItemStack output) {

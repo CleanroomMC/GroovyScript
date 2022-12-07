@@ -23,7 +23,7 @@ import java.util.List;
 public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
     public Enchanter() {
-        super("Enchanter", "enchanter");
+        super();
     }
 
     public void add(EnchanterRecipe recipe) {

@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
 
     public Sawmill() {
-        super(RecipeHandler.Recipe.PRECISION_SAWMILL, "Sawmill", "sawmill");
+        super(RecipeHandler.Recipe.PRECISION_SAWMILL);
     }
 
     public SawmillRecipe add(IIngredient ingredient, ItemStack output) {

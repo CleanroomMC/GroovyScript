@@ -21,7 +21,7 @@ import java.util.List;
 public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
 
     public ArcFurnace() {
-        super("ArcFurnace", "arcfurnace", "arc_furnace");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {

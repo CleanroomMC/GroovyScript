@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> {
 
     public BottlingMachine() {
-        super("Bottling", "bottling");
+        super(VirtualizedRegistry.generateAliases("Bottling"));
     }
 
     public static RecipeBuilder recipeBuilder() {

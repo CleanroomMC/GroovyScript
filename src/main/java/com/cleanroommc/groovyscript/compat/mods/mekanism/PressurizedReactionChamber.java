@@ -21,7 +21,7 @@ import java.util.List;
 public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<PressurizedRecipe> {
 
     public PressurizedReactionChamber() {
-        super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, "PressurizedReactionChamber", "pressurize_reaction_chamber", "PRC");
+        super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, "PRC");
     }
 
     public RecipeBuilder recipeBuilder() {
