@@ -21,7 +21,6 @@ public abstract class VirtualizedRegistry<R> {
             Collections.addAll(this.aliases, VirtualizedRegistry.generateAliases(this.getClass().getSimpleName()));
         }
         Collections.addAll(this.aliases, aliases);
-        GroovyLog.get().info("Alias: {}", this.aliases);
         initBackup();
         initScripted();
     }
