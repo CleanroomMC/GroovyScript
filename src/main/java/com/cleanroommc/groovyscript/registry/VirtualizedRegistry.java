@@ -15,7 +15,7 @@ public abstract class VirtualizedRegistry<R> {
 
     public VirtualizedRegistry(String... aliases) { this(true, aliases); }
 
-    public VirtualizedRegistry(Boolean generate, String... aliases) {
+    public VirtualizedRegistry(boolean generate, String... aliases) {
         this.aliases = new ArrayList<>();
         if (generate) {
             Collections.addAll(this.aliases, VirtualizedRegistry.generateAliases(this.getClass().getSimpleName()));
