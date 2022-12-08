@@ -62,6 +62,12 @@ mods.thaumcraft.AspectHelper()
         .aspect(aspect('ignis', 20))
         .register()
 
+mods.thaumcraft.AspectHelper()
+        .entity(entity('minecraft:chicken'))
+        .stripAspects()
+        .aspect(aspect('ignis', 20))
+        .register()
+
 mods.thaumcraft.Warp.addWarp(item('minecraft:pumpkin'), 3)
 mods.thaumcraft.Warp.removeWarp(item('thaumcraft:void_hoe'))
 

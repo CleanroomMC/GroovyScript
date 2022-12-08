@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.AspectEventProxy;
 import thaumcraft.api.aspects.AspectList;
@@ -22,8 +23,9 @@ public class AspectHelper {
         //do nothing
     }
 
-    public AspectHelper entity(String entity) {
-        this.entity = entity;
+    public AspectHelper entity(EntityEntry entity) {
+        if (entity != null && entity.getName() != null)
+            this.entity = entity.getName();
         return this;
     }
 
