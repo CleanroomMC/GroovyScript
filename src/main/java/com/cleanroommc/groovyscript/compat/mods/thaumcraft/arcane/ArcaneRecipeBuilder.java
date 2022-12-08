@@ -43,7 +43,7 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
     }
 
     protected void validateArcane(GroovyLog.Msg msg) {
-
+        if (researchKey == null) researchKey = "";
     }
 
     public static class Shaped extends ArcaneRecipeBuilder {
