@@ -4,7 +4,6 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import thaumcraft.api.ThaumcraftApi;
@@ -41,7 +40,7 @@ public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
     }
 
     public void add(ItemStack item, int chance, int rarity) {
-        ThaumcraftApi.addLootBagItem(item, chance, new int[]{rarity});
+        ThaumcraftApi.addLootBagItem(item, chance, rarity);
         ArrayList<Object> bag = new ArrayList<Object>();
         bag.add(rarity);
         bag.add(item);
