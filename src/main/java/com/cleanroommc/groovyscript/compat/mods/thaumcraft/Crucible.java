@@ -141,12 +141,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         @Override
         public @Nullable CrucibleRecipe register() {
             if (!validate()) return null;
-            CrucibleRecipe recipe = null;
-            for (ItemStack itemStack : output) {
-                CrucibleRecipe recipe1 = ModSupport.THAUMCRAFT.get().crucible.add(researchKey, itemStack, catalyst, aspects);
-                if (recipe == null) recipe = recipe1;
-            }
-            return recipe;
+            return ModSupport.THAUMCRAFT.get().crucible.add(researchKey, this.output.get(0), catalyst, aspects);
         }
     }
 }
