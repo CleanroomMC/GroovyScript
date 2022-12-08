@@ -69,7 +69,7 @@ mods.thaumcraft.DustTrigger.removeByOutput(item('thaumcraft:arcane_workbench'))
 
 mods.thaumcraft.DustTrigger.triggerBuilder()
         .researchKey('UNLOCKALCHEMY@3')
-        .target(Blocks.OBSIDIAN)
+        .target(block('minecraft:obsidian'))
         .output(item('minecraft:enchanting_table'))
         .register()
 
@@ -97,9 +97,9 @@ mods.thaumcraft.SmeltingBonus.recipeBuilder()
 
 mods.thaumcraft.SmeltingBonus.removeByOutput(item('minecraft:gold_nugget'))
 
-mods.thaumcraft.SmeltingBonus.stream()
-        .filter{ bonus -> bonus.in == 'oreDiamond' }
-        .removeAll()
+//mods.thaumcraft.SmeltingBonus.stream()
+//        .filter{ bonus -> bonus.in == 'oreDiamond' }
+//        .removeAll()
 
 //mods.thaumcraft.Research.researchCategoryBuilder()
 //    .key('BASICS2')

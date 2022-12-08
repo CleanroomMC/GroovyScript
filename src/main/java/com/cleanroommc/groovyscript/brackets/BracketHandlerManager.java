@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -41,6 +42,7 @@ public class BracketHandlerManager {
         registerBracketHandler("item", ItemBracketHandler.INSTANCE);
         registerBracketHandler("liquid", BracketHandlerManager::parseFluidStack);
         registerBracketHandler("fluid", BracketHandlerManager::parseFluidStack);
+        registerBracketHandler("block", s -> Block.getBlockFromName(s));
         registerBracketHandler("blockstate", BlockStateBracketHandler.INSTANCE);
         registerBracketHandler("enchantment", Enchantment::getEnchantmentByLocation);
         registerBracketHandler("entity", s -> ForgeRegistries.ENTITIES.getValue(new ResourceLocation(s)));
