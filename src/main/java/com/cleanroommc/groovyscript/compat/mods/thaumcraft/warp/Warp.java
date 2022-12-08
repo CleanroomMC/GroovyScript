@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
+package com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;

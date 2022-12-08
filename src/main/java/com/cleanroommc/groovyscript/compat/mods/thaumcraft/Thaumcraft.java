@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane.ArcaneWorkbenc
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.Aspect;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectHelper;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.Warp;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.AspectList;
