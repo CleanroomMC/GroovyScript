@@ -1,6 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import thaumcraft.api.ThaumcraftApi;
@@ -11,7 +14,7 @@ import thaumcraft.api.aspects.AspectRegistryEvent;
 public class AspectHelper {
 
     private String entity;
-    private ItemStack object;
+    private IIngredient object;
     private AspectList aspects = new AspectList();
 
     public AspectHelper() {
@@ -23,7 +26,7 @@ public class AspectHelper {
         return this;
     }
 
-    public AspectHelper object(ItemStack object) {
+    public AspectHelper object(IIngredient object) {
         this.object = object;
         return this;
     }
@@ -37,8 +40,10 @@ public class AspectHelper {
     public AspectHelper stripAspects() {
         if (entity != null) {
             ThaumcraftApi.registerEntityTag(entity, new AspectList(), new ThaumcraftApi.EntityTagsNBT[0]);
-        } else if (object != null) {
-            ThaumcraftApi.registerObjectTag(object, new AspectList());
+        } else if (object != null && object instanceof OreDictIngredient) {
+            ThaumcraftApi.registerObjectTag(((OreDictIngredient) object).getOreDict(), new AspectList());
+        } else if (object != null && object.getMatchingStacks() != null) {
+            ThaumcraftApi.registerObjectTag(object.getMatchingStacks()[0], new AspectList());
         } else {
             GroovyLog.msg("Error removing Thaumcraft Aspects from item/entity")
                     .error()
@@ -54,8 +59,10 @@ public class AspectHelper {
     public void register() {
         if (entity != null) {
             ThaumcraftApi.registerEntityTag(entity, aspects, new ThaumcraftApi.EntityTagsNBT[0]);
-        } else if (object != null) {
-            ThaumcraftApi.registerObjectTag(object, aspects);
+        } else if (object != null && object instanceof OreDictIngredient) {
+            ThaumcraftApi.registerObjectTag(((OreDictIngredient) object).getOreDict(), aspects);
+        } else if (object != null && object.getMatchingStacks() != null) {
+            ThaumcraftApi.registerObjectTag(object.getMatchingStacks()[0], aspects);
         } else {
             GroovyLog.msg("Error adding Thaumcraft Aspects to item/entity")
                     .error()
