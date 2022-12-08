@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -21,12 +22,11 @@ import thaumcraft.api.crafting.InfusionRecipe;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 
-public class InfusionCrafting extends VirtualizedRegistry<InfusionRecipe> {
+public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
 
     public InfusionCrafting() {
         super("InfusionCrafting", "infusion_crafting");
@@ -40,26 +40,51 @@ public class InfusionCrafting extends VirtualizedRegistry<InfusionRecipe> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(recipe -> ThaumcraftApi.getCraftingRecipes().values().remove(recipe));
-        restoreFromBackup().forEach(recipe -> {
-            if (!ThaumcraftApi.getCraftingRecipes().values().contains(recipe))
-                ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation(recipe.getRecipeOutput().toString()), recipe);
-        });
+        removeScripted().forEach(recipe -> this.remove((InfusionRecipe) recipe.get(1)) );
+        restoreFromBackup().forEach(recipe -> this.add((ResourceLocation) recipe.get(0), (InfusionRecipe) recipe.get(1)) );
         compileGroups();
     }
 
-    public void add(InfusionRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation(recipe.getRecipeOutput().toString()), recipe);
+    public void add(ResourceLocation rl, InfusionRecipe recipe) {
+        if (recipe != null && recipe.recipeOutput instanceof ItemStack) {
+            recipe.setGroup(rl);
+            ArrayList<Object> tuple = new ArrayList<>();
+            tuple.add(rl);
+            tuple.add(recipe);
+            addScripted(tuple);
+            ThaumcraftApi.addInfusionCraftingRecipe(rl, recipe);
         }
     }
 
     public InfusionRecipe add(String research, ItemStack outputResult, int inst, Collection<AspectStack> aspects, IIngredient centralItem, IIngredient... input) {
         Object[] inputs = ArrayUtils.map(input, IIngredient::toMcIngredient, new Ingredient[0]);
         InfusionRecipe infusionRecipe = new InfusionRecipe(research, outputResult, inst, Thaumcraft.makeAspectList(aspects), centralItem.toMcIngredient(), inputs);
-        add(infusionRecipe);
+        ResourceLocation rl = RecipeName.generateRl(((ItemStack) infusionRecipe.recipeOutput).getItem().toString());
+        add(rl, infusionRecipe);
         return infusionRecipe;
+    }
+
+    public void remove(InfusionRecipe recipe) {
+        List<InfusionRecipe> recipes = new ArrayList<>();
+        for (IThaumcraftRecipe r : ThaumcraftApi.getCraftingRecipes().values()) {
+            if (r instanceof InfusionRecipe && r.equals(recipe))
+                recipes.add((InfusionRecipe) r);
+        }
+        recipes.forEach(rec -> {
+            if (rec.getGroup() != "") {
+                ArrayList<Object> tuple = new ArrayList<>();
+                tuple.add(new ResourceLocation(rec.getGroup()));
+                tuple.add(rec);
+                this.addBackup(tuple);
+            } else {
+                ArrayList<Object> tuple = new ArrayList<>();
+                ResourceLocation rl = new ResourceLocation( "thaumcraft:" + ((ItemStack) rec.recipeOutput).getItem().toString() );
+                tuple.add(rl);
+                tuple.add(rec.setGroup(rl));
+                this.addBackup(tuple);
+            }
+            ThaumcraftApi.getCraftingRecipes().values().remove(recipe);
+        });
     }
 
     public void removeByOutput(IIngredient output) {
@@ -87,7 +112,18 @@ public class InfusionCrafting extends VirtualizedRegistry<InfusionRecipe> {
             return;
         }
         recipes.forEach(recipe -> {
-            this.addBackup(recipe);
+            if (recipe.getGroup() != "") {
+                ArrayList<Object> tuple = new ArrayList<>();
+                tuple.add(new ResourceLocation(recipe.getGroup()));
+                tuple.add(recipe);
+                this.addBackup(tuple);
+            } else {
+                ArrayList<Object> tuple = new ArrayList<>();
+                ResourceLocation rl = new ResourceLocation( "thaumcraft:" + ((ItemStack) recipe.recipeOutput).getItem().toString() );
+                tuple.add(rl);
+                tuple.add(recipe.setGroup(rl));
+                this.addBackup(tuple);
+            }
             ThaumcraftApi.getCraftingRecipes().values().remove(recipe);
         });
     }
@@ -142,7 +178,7 @@ public class InfusionCrafting extends VirtualizedRegistry<InfusionRecipe> {
 
             Object[] inputs = this.input.stream().map(IIngredient::toMcIngredient).toArray();
             InfusionRecipe recipe = new InfusionRecipe(researchKey, output.get(0), instability, aspects, mainInput.toMcIngredient(), inputs);
-            ModSupport.THAUMCRAFT.get().infusionCrafting.add(recipe);
+            ModSupport.THAUMCRAFT.get().infusionCrafting.add(new ResourceLocation("groovyscript:"+((ItemStack) recipe.recipeOutput).getItem().toString()), recipe);
             return recipe;
         }
     }
