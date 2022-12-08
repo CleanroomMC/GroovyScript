@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import net.minecraft.item.ItemStack;
@@ -42,8 +43,8 @@ public class AspectHelper {
             ThaumcraftApi.registerEntityTag(entity, new AspectList(), new ThaumcraftApi.EntityTagsNBT[0]);
         } else if (object != null && object instanceof OreDictIngredient) {
             ThaumcraftApi.registerObjectTag(((OreDictIngredient) object).getOreDict(), new AspectList());
-        } else if (object != null && object.getMatchingStacks() != null) {
-            ThaumcraftApi.registerObjectTag(object.getMatchingStacks()[0], new AspectList());
+        } else if (object != null && IngredientHelper.isItem(object) && !IngredientHelper.isEmpty(object)) {
+            ThaumcraftApi.registerObjectTag(IngredientHelper.toItemStack(object), new AspectList());
         } else {
             GroovyLog.msg("Error removing Thaumcraft Aspects from item/entity")
                     .error()
@@ -61,8 +62,8 @@ public class AspectHelper {
             ThaumcraftApi.registerEntityTag(entity, aspects, new ThaumcraftApi.EntityTagsNBT[0]);
         } else if (object != null && object instanceof OreDictIngredient) {
             ThaumcraftApi.registerObjectTag(((OreDictIngredient) object).getOreDict(), aspects);
-        } else if (object != null && object.getMatchingStacks() != null) {
-            ThaumcraftApi.registerObjectTag(object.getMatchingStacks()[0], aspects);
+        } else if (object != null && IngredientHelper.isItem(object) && !IngredientHelper.isEmpty(object)) {
+            ThaumcraftApi.registerObjectTag(IngredientHelper.toItemStack(object), aspects);
         } else {
             GroovyLog.msg("Error adding Thaumcraft Aspects to item/entity")
                     .error()
