@@ -42,7 +42,7 @@ public class BracketHandlerManager {
         registerBracketHandler("item", ItemBracketHandler.INSTANCE);
         registerBracketHandler("liquid", BracketHandlerManager::parseFluidStack);
         registerBracketHandler("fluid", BracketHandlerManager::parseFluidStack);
-        registerBracketHandler("block", s -> Block.getBlockFromName(s));
+        registerBracketHandler("block", Block::getBlockFromName);
         registerBracketHandler("blockstate", BlockStateBracketHandler.INSTANCE);
         registerBracketHandler("enchantment", Enchantment::getEnchantmentByLocation);
         registerBracketHandler("entity", s -> ForgeRegistries.ENTITIES.getValue(new ResourceLocation(s)));

@@ -25,8 +25,8 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(bonus -> this.remove(bonus) );
-        restoreFromBackup().forEach(bonus -> this.add(bonus) );
+        removeScripted().forEach(this::remove);
+        restoreFromBackup().forEach(this::add);
     }
 
     public void add(ThaumcraftApi.SmeltBonus bonus) {

@@ -23,12 +23,8 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(recipe -> {
-            this.remove(recipe);
-        });
-        restoreFromBackup().forEach(recipe -> {
-            this.add(recipe);
-        });
+        removeScripted().forEach(this::remove);
+        restoreFromBackup().forEach(this::add);
     }
 
     public DustTrigger() { super("DustTrigger", "dust_trigger"); }
