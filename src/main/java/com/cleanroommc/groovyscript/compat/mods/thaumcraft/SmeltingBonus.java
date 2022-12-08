@@ -82,7 +82,7 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
 
         private IIngredient in = null;
         private ItemStack out = null;
-        private float chance = 0;
+        private float chance = 0.33F;
 
         public SmeltingBonusBuilder input(IIngredient input) {
             this.in = input;
@@ -107,17 +107,14 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
                 GroovyLog.msg("Error while adding Smelting Bonus: output() must not be null.").error().post();
                 return false;
             } else if (chance < 0) {
-                chance = 0;
+                chance = 0.33F;
             }
             return true;
         }
 
         public void register() {
             if (validate()) {
-                if (chance == 0)
-                    ModSupport.THAUMCRAFT.get().smeltingBonus.add(in, out);
-                else
-                    ModSupport.THAUMCRAFT.get().smeltingBonus.add(in, out, chance);
+                ModSupport.THAUMCRAFT.get().smeltingBonus.add(in, out, chance);
             }
         }
     }
