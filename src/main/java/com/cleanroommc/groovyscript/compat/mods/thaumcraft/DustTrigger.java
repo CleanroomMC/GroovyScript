@@ -25,7 +25,9 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         restoreFromBackup().forEach(this::add);
     }
 
-    public DustTrigger() { super("DustTrigger", "dust_trigger"); }
+    public DustTrigger() {
+        super("DustTrigger", "dust_trigger");
+    }
 
     private Field simpleTriggerResult;
     private Field oreTriggerResult;
@@ -92,7 +94,9 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         }
     }
 
-    public TriggerBuilder triggerBuilder() { return new TriggerBuilder(); }
+    public TriggerBuilder triggerBuilder() {
+        return new TriggerBuilder();
+    }
 
     public static class TriggerBuilder {
 

@@ -12,7 +12,9 @@ import java.util.Arrays;
 
 public class Warp extends VirtualizedRegistry<ArrayList<Object>> {
 
-    public Warp() { super("Warp", "warp"); }
+    public Warp() {
+        super("Warp", "warp");
+    }
 
     @Override
     @GroovyBlacklist

@@ -73,7 +73,9 @@ public class Research {
         ResearchCategories.researchCategories.remove(key);
     }
 
-    public ResearchCategoryBuilder researchCategoryBuilder() { return new ResearchCategoryBuilder(); }
+    public ResearchCategoryBuilder researchCategoryBuilder() {
+        return new ResearchCategoryBuilder();
+    }
 
     public class ResearchCategoryBuilder {
 

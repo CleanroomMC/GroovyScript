@@ -6,7 +6,9 @@ import thaumcraft.api.aspects.AspectList;
 
 public class Aspect {
 
-    public AspectBuilder aspectBuilder() { return new AspectBuilder(); }
+    public AspectBuilder aspectBuilder() {
+        return new AspectBuilder();
+    }
 
     public static class AspectBuilder {
 

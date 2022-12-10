@@ -25,7 +25,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
-    public AspectHelper() { super("AspectHelper", "aspect_helper"); }
+    public AspectHelper() {
+        super("AspectHelper", "aspect_helper");
+    }
 
     @Override
     @GroovyBlacklist
@@ -293,7 +295,9 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
             this.remove(target, new AspectStack(a, CommonInternals.objectTags.get(CommonInternals.generateUniqueItemstackId(target)).getAmount(a)));
     }
 
-    public AspectHelperBuilder aspectBuilder() { return new AspectHelperBuilder(); }
+    public AspectHelperBuilder aspectBuilder() {
+        return new AspectHelperBuilder();
+    }
 
     public static class AspectHelperBuilder {
         private EntityEntry entity;

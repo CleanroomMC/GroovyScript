@@ -13,7 +13,9 @@ import java.util.*;
 
 public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
 
-    public LootBag() { super("LootBag", "lootbag", "Lootbag"); }
+    public LootBag() {
+        super("LootBag", "lootbag", "Lootbag");
+    }
 
     @Override
     @GroovyBlacklist
@@ -108,10 +110,16 @@ public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
             this.rarity = rarity;
         }
 
-        public void addItem(ItemStack item, int chance) { ModSupport.THAUMCRAFT.get().lootBag.add(item, chance, rarity); }
+        public void addItem(ItemStack item, int chance) {
+            ModSupport.THAUMCRAFT.get().lootBag.add(item, chance, rarity);
+        }
 
-        public void removeItem(ItemStack item) { ModSupport.THAUMCRAFT.get().lootBag.remove(item, rarity); }
+        public void removeItem(ItemStack item) {
+            ModSupport.THAUMCRAFT.get().lootBag.remove(item, rarity);
+        }
 
-        public void removeAll() { ModSupport.THAUMCRAFT.get().lootBag.removeAll(rarity); }
+        public void removeAll() {
+            ModSupport.THAUMCRAFT.get().lootBag.removeAll(rarity);
+        }
     }
 }

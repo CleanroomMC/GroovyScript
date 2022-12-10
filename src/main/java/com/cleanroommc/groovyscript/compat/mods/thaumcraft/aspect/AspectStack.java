@@ -56,5 +56,7 @@ public class AspectStack implements IResourceStack {
         return ThaumcraftApiHelper.makeCrystal(this.aspect, this.amount);
     }
 
-    public ItemStack getPhial() { return ItemPhial.makeFilledPhial(this.aspect); }
+    public ItemStack getPhial() {
+        return ItemPhial.makeFilledPhial(this.aspect);
+    }
 }

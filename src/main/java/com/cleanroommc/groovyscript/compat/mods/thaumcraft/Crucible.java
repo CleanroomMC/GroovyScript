@@ -29,7 +29,9 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         super("Crucible", "crucible");
     }
 
-    public RecipeBuilder recipeBuilder() { return new RecipeBuilder(); }
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
+    }
 
     @Override
     @GroovyBlacklist

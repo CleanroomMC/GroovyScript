@@ -18,7 +18,9 @@ import java.util.List;
 
 public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus> {
 
-    public SmeltingBonus() { super("SmeltingBonus", "smelting_bonus"); }
+    public SmeltingBonus() {
+        super("SmeltingBonus", "smelting_bonus");
+    }
 
     @Override
     @GroovyBlacklist
@@ -75,7 +77,9 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
         return new SimpleObjectStream<>(CommonInternals.smeltingBonus).setRemover(this::remove);
     }
 
-    public SmeltingBonusBuilder recipeBuilder() { return new SmeltingBonusBuilder(); }
+    public SmeltingBonusBuilder recipeBuilder() {
+        return new SmeltingBonusBuilder();
+    }
 
     public static class SmeltingBonusBuilder {
 
