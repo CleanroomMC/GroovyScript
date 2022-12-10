@@ -19,12 +19,8 @@ public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(bag -> {
-            this.remove((ItemStack) bag.get(1), (int) bag.get(0));
-        });
-        restoreFromBackup().forEach(bag -> {
-            this.add((ItemStack) bag.get(1), (int) bag.get(2), (int) bag.get(0));
-        });
+        removeScripted().forEach(bag -> this.remove((ItemStack) bag.get(1), (int) bag.get(0)));
+        restoreFromBackup().forEach(bag -> this.add((ItemStack) bag.get(1), (int) bag.get(2), (int) bag.get(0)));
     }
 
     public static LootBagHelper getCommon() {
@@ -41,7 +37,7 @@ public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
 
     public void add(ItemStack item, int chance, int rarity) {
         ThaumcraftApi.addLootBagItem(item, chance, rarity);
-        ArrayList<Object> bag = new ArrayList<Object>();
+        ArrayList<Object> bag = new ArrayList<>();
         bag.add(rarity);
         bag.add(item);
         bag.add(chance);
@@ -49,7 +45,7 @@ public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
     }
 
     public void remove(ItemStack item, int rarity) {
-        ArrayList<WeightedRandomLoot> list = new ArrayList<WeightedRandomLoot>();
+        ArrayList<WeightedRandomLoot> list = new ArrayList<>();
         switch (rarity) {
             case 0:
                 list = WeightedRandomLoot.lootBagCommon;
@@ -67,7 +63,7 @@ public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
         for (WeightedRandomLoot loot : list) {
             if (item.isItemEqual(loot.item)) {
                 remove.add(loot);
-                ArrayList<Object> bag = new ArrayList<Object>();
+                ArrayList<Object> bag = new ArrayList<>();
                 bag.add(rarity);
                 bag.add(loot.item);
                 bag.add(loot.itemWeight);
@@ -78,7 +74,7 @@ public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
     }
 
     public void removeAll(int rarity) {
-        ArrayList<WeightedRandomLoot> list = new ArrayList<WeightedRandomLoot>();
+        ArrayList<WeightedRandomLoot> list = new ArrayList<>();
         switch (rarity) {
             case 0:
                 list = WeightedRandomLoot.lootBagCommon;
@@ -95,7 +91,7 @@ public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
         List<WeightedRandomLoot> remove = new ArrayList<>();
         for (WeightedRandomLoot loot : list) {
             remove.add(loot);
-            ArrayList<Object> bag = new ArrayList<Object>();
+            ArrayList<Object> bag = new ArrayList<>();
             bag.add(rarity);
             bag.add(loot.item);
             bag.add(loot.itemWeight);
@@ -106,7 +102,7 @@ public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
 
     public static class LootBagHelper {
 
-        private int rarity;
+        private final int rarity;
 
         public LootBagHelper (int rarity) {
             this.rarity = rarity;

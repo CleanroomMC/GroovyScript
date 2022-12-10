@@ -15,6 +15,7 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.crafting.IThaumcraftRecipe;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,7 +37,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
     public void onReload() {
         removeScripted().forEach(recipe -> ThaumcraftApi.getCraftingRecipes().values().remove(recipe));
         restoreFromBackup().forEach(recipe -> {
-            if (!ThaumcraftApi.getCraftingRecipes().values().contains(recipe))
+            if (!ThaumcraftApi.getCraftingRecipes().containsValue(recipe))
                 ThaumcraftApi.addCrucibleRecipe(new ResourceLocation(recipe.getRecipeOutput().toString()), recipe);
         });
         compileGroups();
@@ -58,7 +59,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
     public boolean remove(CrucibleRecipe recipe) {
 
-        Iterator recipeIterator = ThaumcraftApi.getCraftingRecipes().values().iterator();
+        Iterator<IThaumcraftRecipe> recipeIterator = ThaumcraftApi.getCraftingRecipes().values().iterator();
 
         Object r;
         do {
@@ -84,11 +85,10 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         }
         Object r;
         List<CrucibleRecipe> recipes = new ArrayList<>();
-        Iterator recipeIterator = ThaumcraftApi.getCraftingRecipes().values().iterator();
-        while (recipeIterator.hasNext()) {
-            r = recipeIterator.next();
-            if((r instanceof CrucibleRecipe) && ((CrucibleRecipe)r).getRecipeOutput().isItemEqual(output)) {
-                recipes.add((CrucibleRecipe)r);
+        for (IThaumcraftRecipe iThaumcraftRecipe : ThaumcraftApi.getCraftingRecipes().values()) {
+            r = iThaumcraftRecipe;
+            if ((r instanceof CrucibleRecipe) && ((CrucibleRecipe) r).getRecipeOutput().isItemEqual(output)) {
+                recipes.add((CrucibleRecipe) r);
             }
         }
         if (recipes.isEmpty()) {
@@ -107,7 +107,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrucibleRecipe> {
 
         private String researchKey;
-        private AspectList aspects = new AspectList();
+        private final AspectList aspects = new AspectList();
         private IIngredient catalyst;
 
         public RecipeBuilder researchKey(String researchKey) {

@@ -57,23 +57,10 @@ public class AspectListHelper {
         }
     }
 
-//    public boolean removeAspect(AspectStack aspect) {
-//        AtomicBoolean found = new AtomicBoolean(false);
-//        aspects.forEach(as -> {
-//            if (aspect.getAspect().equals(as.getAspect())) {
-//                as.setAmount(0);
-//                found.set(true);
-//            }
-//        });
-//        return found.get();
-//    }
-
     public AspectList getAspectList() {
         AspectList result = new AspectList();
 
-        aspects.forEach(as -> {
-            result.add(as.getAspect(), as.getAmount());
-        });
+        aspects.forEach(as -> result.add(as.getAspect(), as.getAmount()));
 
         return result;
     }

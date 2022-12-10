@@ -71,7 +71,7 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
                 recipes.add((InfusionRecipe) r);
         }
         recipes.forEach(rec -> {
-            if (rec.getGroup() != "") {
+            if (!rec.getGroup().equals("")) {
                 ArrayList<Object> tuple = new ArrayList<>();
                 tuple.add(new ResourceLocation(rec.getGroup()));
                 tuple.add(rec);
@@ -112,7 +112,7 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
             return;
         }
         recipes.forEach(recipe -> {
-            if (recipe.getGroup() != "") {
+            if (!recipe.getGroup().equals("")) {
                 ArrayList<Object> tuple = new ArrayList<>();
                 tuple.add(new ResourceLocation(recipe.getGroup()));
                 tuple.add(recipe);

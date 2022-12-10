@@ -8,11 +8,11 @@ public class Aspect {
 
     public AspectBuilder aspectBuilder() { return new AspectBuilder(); }
 
-    public class AspectBuilder {
+    public static class AspectBuilder {
 
         private String tag;
         private int chatColor;
-        private AspectList components = new AspectList();
+        private final AspectList components = new AspectList();
         private ResourceLocation image;
         private int blend = 1;
 

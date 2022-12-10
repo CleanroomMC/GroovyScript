@@ -149,7 +149,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                         ItemStack oc = ore.copy();
                         oc.setCount(1);
                         this.add(oc, aspect, doBackup);
-                    } catch (Exception e) {}
+                    } catch (Exception ignored) {}
                 }
             }
             return;
@@ -159,7 +159,6 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                 .post();
     }
 
-    @SuppressWarnings("deprecation")
     public void add(ItemStack item, AspectStack aspect, boolean doBackup) {
         if (item != null && aspect != null) {
             CommonInternals.objectTags.get(CommonInternals.generateUniqueItemstackId(item)).remove(aspect.getAspect());
@@ -214,7 +213,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                         ItemStack oc = ore.copy();
                         oc.setCount(1);
                         this.remove(oc, aspect, doBackup);
-                    } catch (Exception e) {}
+                    } catch (Exception ignored) {}
                 }
             }
             return;
@@ -268,7 +267,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                     ItemStack oc = ore.copy();
                     oc.setCount(1);
                     this.removeAll(oc);
-                } catch (Exception e) {}
+                } catch (Exception ignored) {}
             }
         }
     }

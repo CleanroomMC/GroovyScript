@@ -42,6 +42,7 @@ public class ShapedArcaneCR extends ShapedArcaneRecipe implements ICraftingRecip
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getWidth() {
         return craftingRecipe.getRecipeWidth();
     }
@@ -52,6 +53,7 @@ public class ShapedArcaneCR extends ShapedArcaneRecipe implements ICraftingRecip
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getHeight() {
         return craftingRecipe.getRecipeHeight();
     }

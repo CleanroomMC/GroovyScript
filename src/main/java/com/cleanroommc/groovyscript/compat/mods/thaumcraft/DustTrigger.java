@@ -94,7 +94,7 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
 
     public TriggerBuilder triggerBuilder() { return new TriggerBuilder(); }
 
-    public class TriggerBuilder {
+    public static class TriggerBuilder {
 
         private String research;
         private String ore;
