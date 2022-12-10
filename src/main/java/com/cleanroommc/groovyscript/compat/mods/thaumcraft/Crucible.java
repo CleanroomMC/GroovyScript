@@ -78,7 +78,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         return true;
     }
 
-    public void removeByOutput(ItemStack output) {
+    public void removeByOutput(IIngredient output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Thaumcraft Crucible recipe")
                     .add("output must not be empty")
@@ -89,7 +89,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         List<CrucibleRecipe> recipes = new ArrayList<>();
         for (IThaumcraftRecipe iThaumcraftRecipe : ThaumcraftApi.getCraftingRecipes().values()) {
             r = iThaumcraftRecipe;
-            if ((r instanceof CrucibleRecipe) && ((CrucibleRecipe) r).getRecipeOutput().isItemEqual(output)) {
+            if ((r instanceof CrucibleRecipe) && output.test(((CrucibleRecipe) r).getRecipeOutput())) {
                 recipes.add((CrucibleRecipe) r);
             }
         }
