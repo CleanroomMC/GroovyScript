@@ -4,9 +4,6 @@ import com.cleanroommc.groovyscript.api.IResourceStack;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.items.ItemGenericEssentiaContainer;
-import thaumcraft.api.items.ItemsTC;
 import thaumcraft.common.items.consumables.ItemPhial;
 
 public class AspectStack implements IResourceStack {

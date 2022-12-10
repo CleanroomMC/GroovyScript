@@ -26,9 +26,7 @@ public class Thaumcraft extends ModPropertyContainer {
     public final Research research = new Research();
     public final DustTrigger dustTrigger = new DustTrigger();
 
-    public AspectHelper AspectHelper() {
-        return new AspectHelper();
-    }
+    public final AspectHelper aspectHelper = new AspectHelper();
 
     public Thaumcraft() {
         addRegistry(crucible);
@@ -37,6 +35,7 @@ public class Thaumcraft extends ModPropertyContainer {
         addRegistry(dustTrigger);
         addRegistry(smeltingBonus);
         addRegistry(warp);
+        addRegistry(aspectHelper);
         altNames.put("ArcaneWorkbench", arcaneWorkbench);
         altNames.put("arcane_workbench", arcaneWorkbench);
         altNames.put("Aspect", aspect);
