@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStackExpansion;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
@@ -85,6 +86,7 @@ public class GroovyScript {
     private void registerExpansions() {
         if (ModSupport.THAUMCRAFT.isLoaded()) {
             ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
+            ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);
         }
     }
 
