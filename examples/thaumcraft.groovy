@@ -1,4 +1,3 @@
-import net.minecraft.init.Blocks
 import net.minecraft.util.ResourceLocation
 
 mods.thaumcraft.Crucible.removeByOutput(item('minecraft:gunpowder'))
