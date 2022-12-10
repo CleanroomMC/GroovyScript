@@ -99,13 +99,29 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         }
     }
 
-    public void add(EntityEntry entity, AspectStack aspect) { this.add(entity, aspect, true); }
-    public void add(OreDictIngredient oreDict, AspectStack aspect) { this.add(oreDict, aspect, true); }
-    public void add(ItemStack item, AspectStack aspect) { this.add(item, aspect, true); }
+    public void add(EntityEntry entity, AspectStack aspect) {
+        this.add(entity, aspect, true);
+    }
 
-    public void remove(EntityEntry entity, AspectStack aspect) { this.remove(entity, aspect, true); }
-    public void remove(OreDictIngredient oreDict, AspectStack aspect) { this.remove(oreDict, aspect, true); }
-    public void remove(ItemStack item, AspectStack aspect) { this.remove(item, aspect, true); }
+    public void add(OreDictIngredient oreDict, AspectStack aspect) {
+        this.add(oreDict, aspect, true);
+    }
+
+    public void add(ItemStack item, AspectStack aspect) {
+        this.add(item, aspect, true);
+    }
+
+    public void remove(EntityEntry entity, AspectStack aspect) {
+        this.remove(entity, aspect, true);
+    }
+
+    public void remove(OreDictIngredient oreDict, AspectStack aspect) {
+        this.remove(oreDict, aspect, true);
+    }
+
+    public void remove(ItemStack item, AspectStack aspect) {
+        this.remove(item, aspect, true);
+    }
 
     @SuppressWarnings("deprecation")
     public void add(EntityEntry entity, AspectStack aspect, boolean doBackup) {
