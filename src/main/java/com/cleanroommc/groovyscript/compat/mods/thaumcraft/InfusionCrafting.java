@@ -59,8 +59,7 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
     public InfusionRecipe add(String research, ItemStack outputResult, int inst, Collection<AspectStack> aspects, IIngredient centralItem, IIngredient... input) {
         Object[] inputs = ArrayUtils.map(input, IIngredient::toMcIngredient, new Ingredient[0]);
         InfusionRecipe infusionRecipe = new InfusionRecipe(research, outputResult, inst, Thaumcraft.makeAspectList(aspects), centralItem.toMcIngredient(), inputs);
-        ResourceLocation rl = RecipeName.generateRl(((ItemStack) infusionRecipe.recipeOutput).getItem().toString());
-        add(rl, infusionRecipe);
+        add(RecipeName.generateRl("infusion_matrix_recipe"), infusionRecipe);
         return infusionRecipe;
     }
 
@@ -178,7 +177,7 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
 
             Object[] inputs = this.input.stream().map(IIngredient::toMcIngredient).toArray();
             InfusionRecipe recipe = new InfusionRecipe(researchKey, output.get(0), instability, aspects, mainInput.toMcIngredient(), inputs);
-            ModSupport.THAUMCRAFT.get().infusionCrafting.add(new ResourceLocation("groovyscript:"+((ItemStack) recipe.recipeOutput).getItem().toString()), recipe);
+            ModSupport.THAUMCRAFT.get().infusionCrafting.add(RecipeName.generateRl("infusion_matrix_recipe"), recipe);
             return recipe;
         }
     }
