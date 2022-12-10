@@ -162,7 +162,7 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 20, 1, 1);
+            validateItems(msg, 1, 100, 1, 1);
             msg.add(IngredientHelper.isEmpty(mainInput), () -> "Main Input must not be empty");
             if (researchKey == null) {
                 researchKey = "";
