@@ -111,6 +111,8 @@ dependencies {
         deobfCompile 'curse.maven:draconic_evolution-223565:3431261'
         deobfCompile 'curse.maven:brandons_core-231382:3408276'
         deobfCompile 'curse.maven:immersive_engineering-231951:2974106'
+        deobfCompile 'curse.maven:guide-api-228832:2645992'
+        deobfCompile 'curse.maven:blood-magic-224791:2822288'
         deobfCompile 'curse.maven:industrialcraft_experimental-242638:3838713'
         deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
     } else {
@@ -128,6 +130,8 @@ dependencies {
         deobfProvided 'curse.maven:draconic_evolution-223565:3431261'
         deobfProvided 'curse.maven:brandons_core-231382:3408276'
         deobfProvided 'curse.maven:immersive_engineering-231951:2974106'
+        deobfProvided 'curse.maven:guide-api-228832:2645992'
+        deobfProvided 'curse.maven:blood-magic-224791:2822288'
         deobfProvided 'curse.maven:industrialcraft_experimental-242638:3838713'
         deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
     }
