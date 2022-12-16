@@ -11,7 +11,7 @@ import mekanism.common.recipe.machines.SolarNeutronRecipe;
 public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeutronRecipe> {
 
     public SolarNeutronActivator() {
-        super(RecipeHandler.Recipe.SOLAR_NEUTRON_ACTIVATOR, "SolarNeutronActivator", "solar_neutron_activator", "SNA");
+        super(RecipeHandler.Recipe.SOLAR_NEUTRON_ACTIVATOR, "SNA");
     }
 
     public SolarNeutronRecipe add(GasStack input, GasStack output) {

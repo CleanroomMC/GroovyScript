@@ -17,7 +17,7 @@ import java.util.*;
 public class Macerator extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
     public Macerator() {
-        super("Macerator", "macerator");
+        super();
     }
 
     @Override

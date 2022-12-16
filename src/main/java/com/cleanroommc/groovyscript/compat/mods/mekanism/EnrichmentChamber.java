@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
 import mekanism.common.recipe.machines.EnrichmentRecipe;
@@ -12,7 +13,7 @@ import net.minecraft.item.ItemStack;
 public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRecipe> {
 
     public EnrichmentChamber() {
-        super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, "EnrichmentChamber", "Enricher", "enrichment_chamber", "enricher");
+        super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, VirtualizedRegistry.generateAliases("Enricher"));
     }
 
     public EnrichmentRecipe add(IIngredient ingredient, ItemStack output) {

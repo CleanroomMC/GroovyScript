@@ -21,7 +21,7 @@ import java.util.List;
 public class BlastFurnace extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
     public BlastFurnace() {
-        super("BlastFurnace", "blastfurnace");
+        super();
     }
 
     @Override

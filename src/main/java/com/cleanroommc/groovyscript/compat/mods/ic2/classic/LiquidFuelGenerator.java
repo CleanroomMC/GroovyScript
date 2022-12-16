@@ -14,7 +14,7 @@ import java.util.Map;
 public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator.LFGRecipe> {
 
     public LiquidFuelGenerator() {
-        super("FluidGenerator", "fluidgenerator");
+        super(VirtualizedRegistry.generateAliases("FluidGenerator"));
     }
 
     @Override

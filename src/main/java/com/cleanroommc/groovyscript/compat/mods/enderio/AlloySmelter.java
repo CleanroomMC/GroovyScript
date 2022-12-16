@@ -33,7 +33,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
     private Set<IManyToOneRecipe> removalQueue;
 
     public AlloySmelter() {
-        super("AlloySmelter", "alloysmelter", "alloy_smelter", "Alloying", "alloying");
+        super(VirtualizedRegistry.generateAliases("Alloying"));
     }
 
     public RecipeBuilder recipeBuilder() {

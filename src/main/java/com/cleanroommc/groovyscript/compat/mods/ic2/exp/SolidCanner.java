@@ -19,7 +19,7 @@ import java.util.List;
 public class SolidCanner extends VirtualizedRegistry<MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> {
 
     public SolidCanner() {
-        super("SolidCanner", "solidcanner");
+        super();
     }
 
     @Override
