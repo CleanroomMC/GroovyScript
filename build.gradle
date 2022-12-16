@@ -86,59 +86,85 @@ dependencies {
 
     compileOnly 'org.jetbrains:annotations:23.0.0'
 
-    // compile 'org.codehaus.groovy:groovy-all:3.0.11'
-    compile 'org.codehaus.groovy:groovy-ant:3.0.11'
-    compile 'org.codehaus.groovy:groovy-astbuilder:3.0.11'
-    compile 'org.codehaus.groovy:groovy-jsr223:3.0.11'
-    compile 'org.codehaus.groovy:groovy-macro:3.0.11'
-    // compile 'org.codehaus.plexus:plexus-utils:3.1.0'
+    compile "org.codehaus.groovy:groovy-ant:${project.groovy_version}"
+    compile "org.codehaus.groovy:groovy-astbuilder:${project.groovy_version}"
+    compile "org.codehaus.groovy:groovy-jsr223:${project.groovy_version}"
+    compile "org.codehaus.groovy:groovy-macro:${project.groovy_version}"
 
     compile 'mezz.jei:jei_1.12.2:4.16.1.302'
-    compile 'curse.maven:crafttweaker-239197:3523955'
 
-    if (project.debug_load_all_mods.toBoolean()) {
+    if (project.debug_mekanism.toBoolean()) {
         deobfCompile 'curse.maven:mekanism-268560:2835175'
-        deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
-        deobfCompile ("com.enderio:EnderIO:1.12.2-+") {
-            transitive = false
-        }
-        deobfCompile 'curse.maven:codechicken_lib_1_8-242818:2779848'
+    } else {
+        deobfProvided 'curse.maven:mekanism-268560:2835175'
+    }
+
+    if (project.debug_thermal.toBoolean() || project.debug_de.toBoolean()) {
+        deobfCompile 'curse.maven:redstone_flux-270789:2920436'
+    } else {
+        deobfProvided 'curse.maven:redstone_flux-270789:2920436'
+    }
+
+    if (project.debug_thermal.toBoolean()) {
         deobfCompile 'curse.maven:cofh_core-69162:2920433'
         deobfCompile 'curse.maven:cofh_world-271384:2920434'
-        deobfCompile 'curse.maven:redstone_flux-270789:2920436'
-        deobfCompile 'curse.maven:thaumcraft-223628:2629023'
         deobfCompile 'curse.maven:thermal_expansion-69163:2926431'
         deobfCompile 'curse.maven:thermal_foundation-222880:2926428'
+    } else {
+        deobfProvided 'curse.maven:cofh_core-69162:2920433'
+        deobfProvided 'curse.maven:cofh_world-271384:2920434'
+        deobfProvided 'curse.maven:thermal_expansion-69163:2926431'
+        deobfProvided 'curse.maven:thermal_foundation-222880:2926428'
+    }
+
+    if (project.debug_de.toBoolean()) {
+        deobfCompile 'curse.maven:codechicken_lib_1_8-242818:2779848'
         deobfCompile 'curse.maven:draconic_evolution-223565:3431261'
         deobfCompile 'curse.maven:brandons_core-231382:3408276'
-        deobfCompile 'curse.maven:immersive_engineering-231951:2974106'
+    } else {
+        deobfProvided 'curse.maven:codechicken_lib_1_8-242818:2779848'
+        deobfProvided 'curse.maven:draconic_evolution-223565:3431261'
+        deobfProvided 'curse.maven:brandons_core-231382:3408276'
+    }
+
+    if (project.debug_enderio.toBoolean()) {
+        deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
+        deobfCompile("com.enderio:EnderIO:1.12.2-+") {
+            transitive = false
+        }
+    } else {
+        deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
+        deobfProvided("com.enderio:EnderIO:1.12.2-+") {
+            transitive = false
+        }
+    }
+
+    if (project.debug_ic2.toBoolean()) {
         deobfCompile 'curse.maven:industrialcraft_experimental-242638:3838713'
         deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
     } else {
-        deobfProvided 'curse.maven:mekanism-268560:2835175'
-        deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
-        deobfProvided ("com.enderio:EnderIO:1.12.2-+") {
-            transitive = false
-        }
-        deobfProvided 'curse.maven:codechicken_lib_1_8-242818:2779848'
-        deobfProvided 'curse.maven:cofh_core-69162:2920433'
-        deobfProvided 'curse.maven:cofh_world-271384:2920434'
-        deobfProvided 'curse.maven:redstone_flux-270789:2920436'
-        deobfProvided 'curse.maven:thaumcraft-223628:2629023'
-        deobfProvided 'curse.maven:thermal_expansion-69163:2926431'
-        deobfProvided 'curse.maven:thermal_foundation-222880:2926428'
-        deobfProvided 'curse.maven:draconic_evolution-223565:3431261'
-        deobfProvided 'curse.maven:brandons_core-231382:3408276'
-        deobfProvided 'curse.maven:immersive_engineering-231951:2974106'
         deobfProvided 'curse.maven:industrialcraft_experimental-242638:3838713'
         deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
     }
 
-    shadow 'org.codehaus.groovy:groovy-ant:3.0.13'
-    shadow 'org.codehaus.groovy:groovy-astbuilder:3.0.11'
-    shadow 'org.codehaus.groovy:groovy-jsr223:3.0.11'
-    shadow 'org.codehaus.groovy:groovy-macro:3.0.11'
-    // shadow 'org.codehaus.plexus:plexus-utils:3.1.0'
+    if (project.debug_thaum.toBoolean()) {
+        deobfCompile 'curse.maven:thaumcraft-223628:2629023'
+        runtime 'curse.maven:thaumic_jei-285492:2705304'
+        runtime 'curse.maven:baubles-227083:2518667'
+    } else {
+        deobfProvided 'curse.maven:thaumcraft-223628:2629023'
+    }
+
+    if (project.debug_ie.toBoolean()) {
+        deobfCompile 'curse.maven:immersive_engineering-231951:2974106'
+    } else {
+        deobfProvided 'curse.maven:immersive_engineering-231951:2974106'
+    }
+
+    shadow "org.codehaus.groovy:groovy-ant:${project.groovy_version}"
+    shadow "org.codehaus.groovy:groovy-astbuilder:${project.groovy_version}"
+    shadow "org.codehaus.groovy:groovy-jsr223:${project.groovy_version}"
+    shadow "org.codehaus.groovy:groovy-macro:${project.groovy_version}"
 }
 
 sourceSets {
