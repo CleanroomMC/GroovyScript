@@ -33,8 +33,13 @@ public class Aspect {
             return this;
         }
 
-        public AspectBuilder image(ResourceLocation image) {
-            this.image = image;
+        public AspectBuilder image(String image) {
+            this.image = new ResourceLocation(image);
+            return this;
+        }
+
+        public AspectBuilder image(String mod, String image) {
+            this.image = new ResourceLocation(mod, image);
             return this;
         }
 

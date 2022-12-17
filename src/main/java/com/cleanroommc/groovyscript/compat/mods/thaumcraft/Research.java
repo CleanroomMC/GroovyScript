@@ -20,12 +20,12 @@ public class Research {
         //do nothing
     }
 
-    public void addCategory(String key, String researchkey, AspectList formula, ResourceLocation icon, ResourceLocation background) {
-        ResearchCategories.registerCategory(key, researchkey, formula, icon, background);
+    public void addCategory(String key, String researchkey, AspectList formula, String icon, String background) {
+        ResearchCategories.registerCategory(key, researchkey, formula, new ResourceLocation(icon), new ResourceLocation(background));
     }
 
-    public void addCategory(String key, String researchkey, AspectList formula, ResourceLocation icon, ResourceLocation background, ResourceLocation background2) {
-        ResearchCategories.registerCategory(key, researchkey, formula, icon, background, background2);
+    public void addCategory(String key, String researchkey, AspectList formula, String icon, String background, String background2) {
+        ResearchCategories.registerCategory(key, researchkey, formula, new ResourceLocation(icon), new ResourceLocation(background), new ResourceLocation(background2));
     }
 
     public void addScannable(String researchKey, Class entityClass, boolean inheritedClasses) {
@@ -64,8 +64,13 @@ public class Research {
         ScanningManager.addScannableThing(new ScanPotion(potion));
     }
 
-    public void addResearchLocation(ResourceLocation location) {
-        ThaumcraftApi.registerResearchLocation(location);
+    public void addResearchLocation(String location) {
+        ThaumcraftApi.registerResearchLocation(new ResourceLocation(location));
+        ResearchManager.parseAllResearch();
+    }
+
+    public void addResearchLocation(String mod, String location) {
+        ThaumcraftApi.registerResearchLocation(new ResourceLocation(mod, location));
         ResearchManager.parseAllResearch();
     }
 
@@ -77,11 +82,11 @@ public class Research {
         return new ResearchCategoryBuilder();
     }
 
-    public class ResearchCategoryBuilder {
+    public static class ResearchCategoryBuilder {
 
         private String key;
         private String researchKey;
-        private AspectList formula = new AspectList();
+        private final AspectList formula = new AspectList();
         private ResourceLocation icon;
         private ResourceLocation background;
         private ResourceLocation background2 = null;
@@ -101,29 +106,42 @@ public class Research {
             return this;
         }
 
-        public ResearchCategoryBuilder icon(ResourceLocation icon) {
-            this.icon = icon;
+        public ResearchCategoryBuilder icon(String icon) {
+            this.icon = new ResourceLocation(icon);
             return this;
         }
 
-        public ResearchCategoryBuilder background(ResourceLocation background) {
-            this.background = background;
+        public ResearchCategoryBuilder icon(String mod, String icon) {
+            this.icon = new ResourceLocation(mod, icon);
             return this;
         }
 
-        public ResearchCategoryBuilder background2(ResourceLocation background2) {
-            this.background2 = background2;
+        public ResearchCategoryBuilder background(String background) {
+            this.background = new ResourceLocation(background);
+            return this;
+        }
+
+        public ResearchCategoryBuilder background(String mod, String background) {
+            this.background = new ResourceLocation(mod, background);
+            return this;
+        }
+
+        public ResearchCategoryBuilder background2(String background2) {
+            this.background2 = new ResourceLocation(background2);
+            return this;
+        }
+
+        public ResearchCategoryBuilder background2(String mod, String background2) {
+            this.background2 = new ResourceLocation(mod, background2);
             return this;
         }
 
         public void register() {
-            if (background2 == null)
+            if (background2 == null) {
                 ResearchCategories.registerCategory(key, researchKey, formula, icon, background);
-            else
+            } else {
                 ResearchCategories.registerCategory(key, researchKey, formula, icon, background, background2);
+            }
         }
     }
-
-
-
 }
