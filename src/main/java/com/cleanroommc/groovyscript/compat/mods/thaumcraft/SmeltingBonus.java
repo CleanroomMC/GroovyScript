@@ -19,7 +19,7 @@ import java.util.List;
 public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus> {
 
     public SmeltingBonus() {
-        super("SmeltingBonus", "smelting_bonus");
+        super();
     }
 
     @Override

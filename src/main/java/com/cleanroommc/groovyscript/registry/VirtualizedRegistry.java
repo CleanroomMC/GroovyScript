@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.google.common.base.CaseFormat;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -13,7 +12,9 @@ public abstract class VirtualizedRegistry<R> {
 
     protected Collection<R> backup, scripted;
 
-    public VirtualizedRegistry(String... aliases) { this(true, aliases); }
+    public VirtualizedRegistry(String... aliases) {
+        this(true, aliases);
+    }
 
     public VirtualizedRegistry(boolean generate, String... aliases) {
         this.aliases = new ArrayList<>();
@@ -36,6 +37,12 @@ public abstract class VirtualizedRegistry<R> {
         }
 
         return aliases.toArray(new String[0]);
+    }
+
+    public static <T> void putAll(String name, T object, Map<String, T> map) {
+        for (String alias : generateAliases(name)) {
+            map.put(alias, object);
+        }
     }
 
     @GroovyBlacklist

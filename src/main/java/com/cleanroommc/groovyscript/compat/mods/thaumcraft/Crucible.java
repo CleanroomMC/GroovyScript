@@ -26,7 +26,7 @@ import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
     public Crucible() {
-        super("Crucible", "crucible");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {

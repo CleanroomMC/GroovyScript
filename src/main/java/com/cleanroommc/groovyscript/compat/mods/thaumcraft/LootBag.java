@@ -14,7 +14,7 @@ import java.util.*;
 public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
 
     public LootBag() {
-        super("LootBag", "lootbag", "Lootbag");
+        super();
     }
 
     @Override

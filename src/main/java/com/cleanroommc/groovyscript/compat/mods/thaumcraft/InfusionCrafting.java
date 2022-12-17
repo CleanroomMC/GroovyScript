@@ -29,7 +29,7 @@ import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
 
     public InfusionCrafting() {
-        super("InfusionCrafting", "infusion_crafting");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {

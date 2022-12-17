@@ -26,7 +26,7 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
     }
 
     public DustTrigger() {
-        super("DustTrigger", "dust_trigger");
+        super();
     }
 
     private Field simpleTriggerResult;
