@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 public class Sawmill extends VirtualizedRegistry<IMachineRecipeList.RecipeEntry> {
 
     public Sawmill() {
-        super("Sawmill", "sawmill");
+        super();
     }
 
     @Override

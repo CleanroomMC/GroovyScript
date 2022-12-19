@@ -16,7 +16,7 @@ import java.util.List;
 public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
 
     public CokeOven() {
-        super("CokeOven", "cokeoven");
+        super();
     }
 
     public static RecipeBuilder recipeBuilder() {

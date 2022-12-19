@@ -16,7 +16,7 @@ import java.util.Map;
 public class FluidHeater extends VirtualizedRegistry<Pair<String, IFluidHeatManager.BurnProperty>> {
 
     public FluidHeater() {
-        super("FluidHeater", "Firebox", "fluidheater", "firebox");
+        super(VirtualizedRegistry.generateAliases("Firebox"));
     }
 
     @Override

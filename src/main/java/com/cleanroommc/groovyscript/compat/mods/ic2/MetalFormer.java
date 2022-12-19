@@ -17,7 +17,7 @@ import java.util.*;
 public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerRecipe> {
 
     public MetalFormer() {
-        super("MetalFormer", "metalformer");
+        super();
     }
 
     @Override

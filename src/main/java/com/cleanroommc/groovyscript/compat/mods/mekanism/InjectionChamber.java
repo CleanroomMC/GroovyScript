@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.AdvancedMachineInput;
@@ -13,7 +14,7 @@ import net.minecraft.item.ItemStack;
 public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecipe> {
 
     public InjectionChamber() {
-        super(RecipeHandler.Recipe.CHEMICAL_INJECTION_CHAMBER, "InjectionChamber", "injection_chamber", "Injector", "injector");
+        super(RecipeHandler.Recipe.CHEMICAL_INJECTION_CHAMBER, VirtualizedRegistry.generateAliases("Injector"));
     }
 
     public InjectionRecipe add(IIngredient ingredient, GasStack gasInput, ItemStack output) {

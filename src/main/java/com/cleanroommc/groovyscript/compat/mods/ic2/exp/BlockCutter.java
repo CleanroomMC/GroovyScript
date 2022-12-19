@@ -16,7 +16,7 @@ import java.util.*;
 public class BlockCutter extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
     public BlockCutter() {
-        super("BlockCutter", "blockcutter", "cutter");
+        super(VirtualizedRegistry.generateAliases("Cutter"));
     }
 
     @Override

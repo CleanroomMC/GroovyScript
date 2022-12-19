@@ -18,7 +18,7 @@ public class Fermenter extends VirtualizedRegistry<Pair<String, IFermenterRecipe
     private static final Map<String, IFermenterRecipeManager.FermentationProperty> fluidMap = ((FermenterRecipeManagerAccessor) Recipes.fermenter).getFluidMap();
 
     public Fermenter() {
-        super("Fermenter", "fermenter");
+        super();
     }
 
     @Override

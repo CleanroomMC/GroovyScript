@@ -11,7 +11,7 @@ import mekanism.common.recipe.machines.WasherRecipe;
 public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
 
     public Washer() {
-        super(RecipeHandler.Recipe.CHEMICAL_WASHER, "Washer", "washer");
+        super(RecipeHandler.Recipe.CHEMICAL_WASHER);
     }
 
     public WasherRecipe add(GasStack input, GasStack output) {

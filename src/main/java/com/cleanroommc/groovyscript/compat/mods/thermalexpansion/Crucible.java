@@ -25,7 +25,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleManager.CrucibleRecipe
     private final List<ComparableItemStackValidatedNBT> lavaSetBackup = new ArrayList<>();
 
     public Crucible() {
-        super("Crucible", "crucible");
+        super();
     }
 
     @Override

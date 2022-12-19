@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompressorRecipe> {
 
     public OsmiumCompressor() {
-        super(RecipeHandler.Recipe.OSMIUM_COMPRESSOR, "OsmiumCompressor", "osmium_compressor");
+        super(RecipeHandler.Recipe.OSMIUM_COMPRESSOR);
     }
 
     public OsmiumCompressorRecipe add(IIngredient ingredient, GasStack gasInput, ItemStack output) {

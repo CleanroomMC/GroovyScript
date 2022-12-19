@@ -11,7 +11,7 @@ import mekanism.common.recipe.machines.ChemicalInfuserRecipe;
 public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuserRecipe> {
 
     public ChemicalInfuser() {
-        super(RecipeHandler.Recipe.CHEMICAL_INFUSER, "ChemicalInfuser", "chemical_infuser");
+        super(RecipeHandler.Recipe.CHEMICAL_INFUSER);
     }
 
     public ChemicalInfuserRecipe add(GasStack leftInput, GasStack rightInput, GasStack output) {

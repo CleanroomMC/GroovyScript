@@ -12,8 +12,8 @@ public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, 
 
     protected final RecipeHandler.Recipe<?, ?, R> recipeRegistry;
 
-    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry, String name, String... aliases) {
-        super(name, aliases);
+    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry, String... aliases) {
+        super(aliases);
         this.recipeRegistry = recipeRegistry;
     }
 

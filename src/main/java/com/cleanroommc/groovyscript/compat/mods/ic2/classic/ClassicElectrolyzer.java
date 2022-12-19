@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer.ElectrolyzerRecipe> {
 
     public ClassicElectrolyzer() {
-        super("Electrolyzer", "electrolyzer");
+        super(false, VirtualizedRegistry.generateAliases("Electrolyzer"));
     }
 
     @Override

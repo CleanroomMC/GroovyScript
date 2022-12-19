@@ -20,7 +20,7 @@ import java.util.List;
 public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> {
 
     public FluidCanner() {
-        super("FluidCanner", "fluidcanner");
+        super();
     }
 
     @Override

@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 public class SagMill extends VirtualizedRegistry<Recipe> {
 
     public SagMill() {
-        super("SagMill", "sagmill", "sag_mill", "SAGMill", "Sag", "sag");
+        super("SAGMill", "Sag", "sag");
     }
 
     public RecipeBuilder recipeBuilder() {

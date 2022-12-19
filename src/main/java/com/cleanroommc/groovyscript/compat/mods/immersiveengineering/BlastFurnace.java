@@ -16,7 +16,7 @@ import java.util.List;
 public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
 
     public BlastFurnace() {
-        super("BlastFurnace", "blastfurnace", "blast_furnace");
+        super();
     }
 
     public static RecipeBuilder recipeBuilder() {

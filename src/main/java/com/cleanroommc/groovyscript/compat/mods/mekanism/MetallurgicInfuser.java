@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicInfuserRecipe> {
 
     public MetallurgicInfuser() {
-        super(RecipeHandler.Recipe.METALLURGIC_INFUSER, "MetallurgicInfuser", "metallurgic_infuser");
+        super(RecipeHandler.Recipe.METALLURGIC_INFUSER);
     }
 
     public MetallurgicInfuserRecipe add(IIngredient ingredient, String infuseType, int infuseAmount, ItemStack output) {

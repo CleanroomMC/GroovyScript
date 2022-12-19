@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
@@ -13,7 +14,7 @@ import net.minecraft.item.ItemStack;
 public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecipe> {
 
     public ChemicalOxidizer() {
-        super(RecipeHandler.Recipe.CHEMICAL_OXIDIZER, "ChemicalOxidizer", "Oxidizer", "chemical_oxidizer", "oxidizer");
+        super(RecipeHandler.Recipe.CHEMICAL_OXIDIZER, VirtualizedRegistry.generateAliases("Oxidizer"));
     }
 
     public OxidationRecipe add(IIngredient ingredient, GasStack output) {

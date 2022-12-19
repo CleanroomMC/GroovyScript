@@ -2,15 +2,20 @@ package com.cleanroommc.groovyscript;
 
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.GSCommand;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStackExpansion;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.ExpansionHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyDeobfuscationMapper;
 import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -59,6 +64,7 @@ public class GroovyScript {
         reloadRunConfig();
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
+        registerExpansions();
 
         getSandbox().run(GroovyScriptSandbox.LOADER_PRE_INIT);
     }
@@ -75,6 +81,13 @@ public class GroovyScript {
     @Mod.EventHandler
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new GSCommand());
+    }
+
+    private void registerExpansions() {
+        if (ModSupport.THAUMCRAFT.isLoaded()) {
+            ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
+            ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);
+        }
     }
 
     @NotNull

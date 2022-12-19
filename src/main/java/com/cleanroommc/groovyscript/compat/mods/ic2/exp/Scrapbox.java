@@ -13,7 +13,7 @@ import java.util.List;
 public class Scrapbox extends VirtualizedRegistry<Object> {
 
     public Scrapbox() {
-        super("Scrapbox", "scrapbox");
+        super();
     }
 
     @SuppressWarnings("all")
