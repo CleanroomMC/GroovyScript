@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class LateMixin implements ILateMixinLoader {
 
-    public static final List<String> modMixins = ImmutableList.of("jei", "mekanism", "enderio", "thermalexpansion", "draconicevolution", "ic2_classic", "ic2_exp");
+    public static final List<String> modMixins = ImmutableList.of("jei", "mekanism", "enderio", "thermalexpansion", "draconicevolution", "ic2_classic", "ic2_exp", "bloodmagic");
 
     @Override
     public List<String> getMixinConfigs() {
