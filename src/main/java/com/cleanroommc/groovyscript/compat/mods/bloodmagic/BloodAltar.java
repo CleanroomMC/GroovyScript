@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 import WayofTime.bloodmagic.altar.AltarTier;
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeBloodAltar;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -19,8 +20,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.stream.Collectors;
 
 public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
+
     public BloodAltar() {
-        super("BloodAltar", "bloodaltar", "bloodAltar", "blood_altar");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -28,6 +30,7 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
     }
 
     @Override
+    @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes()::remove);
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes()::add);

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.bloodmagic.BloodMagicValueManagerAccessor;
@@ -15,8 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Integer>> {
+
     public Sacrificial() {
-        super("Sacrificial", "sacrificial");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -24,6 +26,7 @@ public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Inte
     }
 
     @Override
+    @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getSacrificial().put(pair.getKey(), pair.getValue()));
         restoreFromBackup().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getSacrificial().remove(pair.getKey()));

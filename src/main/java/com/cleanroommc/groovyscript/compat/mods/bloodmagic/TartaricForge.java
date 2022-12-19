@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeTartaricForge;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -19,8 +20,9 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
+
     public TartaricForge() {
-        super("TartaricForge", "tartaricforge", "tartaricForge", "tartaric_forge");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -28,13 +30,25 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
     }
 
     @Override
+    @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes()::remove);
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes()::add);
     }
 
     public RecipeTartaricForge add(NonNullList<Ingredient> input, ItemStack output, double minimumSouls, double soulDrain) {
-        RecipeTartaricForge recipe = new RecipeTartaricForge(input, output, minimumSouls, soulDrain);
+        double minimum;
+        if (minimumSouls < soulDrain) {
+            GroovyLog.msg("Warning creating Blood Magic Tartaric Forge recipe")
+                    .add("minimumSouls should be greater than soulDrain, yet minimumSouls was {} and soulDrain was {}", minimumSouls, soulDrain)
+                    .add("set minimumSouls equal to soulDrain")
+                    .warn()
+                    .post();
+            minimum = soulDrain;
+        } else {
+            minimum = minimumSouls;
+        }
+        RecipeTartaricForge recipe = new RecipeTartaricForge(input, output, minimum, soulDrain);
         add(recipe);
         return recipe;
     }
@@ -112,8 +126,8 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeTartaricForge> {
-        double minimumSouls;
-        double soulDrain;
+        private double minimumSouls;
+        private double soulDrain;
 
         public RecipeBuilder minimumSouls(double minimumSouls) {
             this.minimumSouls = minimumSouls;
@@ -139,7 +153,6 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
             validateItems(msg, 1, 4, 1, 1);
             msg.add(minimumSouls < 0, "minimumSouls must be a nonnegative integer, yet it was {}", minimumSouls);
             msg.add(soulDrain < 0, "soulDrain must be a nonnegative integer, yet it was {}", soulDrain);
-            //msg.add(minimumSouls < soulDrain, "minimumSouls must be greater than soulDrain, yet minimumSouls was {} and soulDrain was {}", minimumSouls, soulDrain);
         }
 
         @Override

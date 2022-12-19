@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeAlchemyTable;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -19,8 +20,9 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
+
     public AlchemyTable() {
-        super("AlchemyTable", "alchemytable", "alchemyTable", "alchemy_table");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -28,6 +30,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
     }
 
     @Override
+    @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes()::remove);
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes()::add);
@@ -112,9 +115,9 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeAlchemyTable> {
-        int syphon;
-        int ticks;
-        int minimumTier;
+        private int syphon;
+        private int ticks;
+        private int minimumTier;
 
         public RecipeBuilder syphon(int syphon) {
             this.syphon = syphon;

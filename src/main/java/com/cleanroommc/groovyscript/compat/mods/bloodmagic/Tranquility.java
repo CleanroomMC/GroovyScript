@@ -19,8 +19,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, TranquilityStack>> {
+
     public Tranquility() {
-        super("Tranquility", "tranquility");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {

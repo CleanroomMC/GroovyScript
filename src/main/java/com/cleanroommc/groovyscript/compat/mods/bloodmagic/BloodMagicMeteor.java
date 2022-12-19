@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 import WayofTime.bloodmagic.meteor.Meteor;
 import WayofTime.bloodmagic.meteor.MeteorComponent;
 import WayofTime.bloodmagic.meteor.MeteorRegistry;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -17,8 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 public class BloodMagicMeteor extends VirtualizedRegistry<Meteor> {
+
     public BloodMagicMeteor() {
-        super("Meteor", "meteor");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -26,6 +28,7 @@ public class BloodMagicMeteor extends VirtualizedRegistry<Meteor> {
     }
 
     @Override
+    @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(r -> MeteorRegistry.meteorMap.remove(r.getCatalystStack()));
         restoreFromBackup().forEach(r -> MeteorRegistry.registerMeteor(r.getCatalystStack(), r));
@@ -74,11 +77,11 @@ public class BloodMagicMeteor extends VirtualizedRegistry<Meteor> {
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<Meteor> {
-        final List<MeteorComponent> components = new ArrayList<>();
-        ItemStack catalyst;
-        float explosionStrength;
-        int radius;
-        int cost = 1000000;
+        private final List<MeteorComponent> components = new ArrayList<>();
+        private ItemStack catalyst;
+        private float explosionStrength;
+        private int radius;
+        private int cost = 1000000;
 
 
         public RecipeBuilder catalystStack(ItemStack catalystStack) {

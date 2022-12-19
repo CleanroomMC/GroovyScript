@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeAlchemyArray;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -16,8 +17,9 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
+
     public AlchemyArray() {
-        super("AlchemyArray", "alchemyarray", "alchemyArray", "alchemy_array");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -25,6 +27,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
     }
 
     @Override
+    @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes()::remove);
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes()::add);
