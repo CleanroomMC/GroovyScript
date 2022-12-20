@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
-import WayofTime.bloodmagic.meteor.Meteor;
 import WayofTime.bloodmagic.meteor.MeteorComponent;
 import WayofTime.bloodmagic.meteor.MeteorRegistry;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -17,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class BloodMagicMeteor extends VirtualizedRegistry<Meteor> {
+public class Meteor extends VirtualizedRegistry<WayofTime.bloodmagic.meteor.Meteor> {
 
-    public BloodMagicMeteor() {
+    public Meteor() {
         super();
     }
 
@@ -34,20 +33,20 @@ public class BloodMagicMeteor extends VirtualizedRegistry<Meteor> {
         restoreFromBackup().forEach(r -> MeteorRegistry.registerMeteor(r.getCatalystStack(), r));
     }
 
-    public Meteor add(ItemStack stack, List<MeteorComponent> componentList, float explosionStrength, int radius, int cost) {
-        Meteor recipe = new Meteor(stack, componentList, explosionStrength, radius);
+    public WayofTime.bloodmagic.meteor.Meteor add(ItemStack stack, List<MeteorComponent> componentList, float explosionStrength, int radius, int cost) {
+        WayofTime.bloodmagic.meteor.Meteor recipe = new WayofTime.bloodmagic.meteor.Meteor(stack, componentList, explosionStrength, radius);
         recipe.setCost(cost);
         add(recipe);
         return recipe;
     }
 
-    public void add(Meteor recipe) {
+    public void add(WayofTime.bloodmagic.meteor.Meteor recipe) {
         if (recipe == null) return;
         addScripted(recipe);
         MeteorRegistry.registerMeteor(recipe.getCatalystStack(), recipe);
     }
 
-    public boolean remove(Meteor recipe) {
+    public boolean remove(WayofTime.bloodmagic.meteor.Meteor recipe) {
         if (recipe == null) return false;
         addBackup(recipe);
         MeteorRegistry.meteorMap.remove(recipe.getCatalystStack());
@@ -71,12 +70,12 @@ public class BloodMagicMeteor extends VirtualizedRegistry<Meteor> {
         MeteorRegistry.meteorMap.clear();
     }
 
-    public SimpleObjectStream<Map.Entry<ItemStack, Meteor>> streamRecipes() {
+    public SimpleObjectStream<Map.Entry<ItemStack, WayofTime.bloodmagic.meteor.Meteor>> streamRecipes() {
         return new SimpleObjectStream<>(MeteorRegistry.meteorMap.entrySet())
                 .setRemover(x -> this.remove(x.getKey()));
     }
 
-    public static class RecipeBuilder extends AbstractRecipeBuilder<Meteor> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<WayofTime.bloodmagic.meteor.Meteor> {
         private final List<MeteorComponent> components = new ArrayList<>();
         private ItemStack catalyst;
         private float explosionStrength;
@@ -142,9 +141,9 @@ public class BloodMagicMeteor extends VirtualizedRegistry<Meteor> {
         }
 
         @Override
-        public @Nullable Meteor register() {
+        public @Nullable WayofTime.bloodmagic.meteor.Meteor register() {
             if (!validate()) return null;
-            Meteor recipe = ModSupport.BLOOD_MAGIC.get().meteor.add(catalyst, components, explosionStrength, radius, cost);
+            WayofTime.bloodmagic.meteor.Meteor recipe = ModSupport.BLOOD_MAGIC.get().meteor.add(catalyst, components, explosionStrength, radius, cost);
             return recipe;
         }
     }
