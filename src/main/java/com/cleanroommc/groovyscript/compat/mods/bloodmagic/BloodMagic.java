@@ -10,7 +10,7 @@ public class BloodMagic extends ModPropertyContainer {
     public final AlchemyTable alchemyTable = new AlchemyTable();
     public final Tranquility tranquility = new Tranquility();
     public final Sacrificial sacrificial = new Sacrificial();
-    public final BloodMagicMeteor meteor = new BloodMagicMeteor();
+    public final Meteor meteor = new Meteor();
 
     public BloodMagic() {
         addRegistry(bloodAltar);
