@@ -8,6 +8,7 @@ import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -45,6 +46,7 @@ public class BracketHandlerManager {
         registerBracketHandler("block", Block::getBlockFromName);
         registerBracketHandler("blockstate", BlockStateBracketHandler.INSTANCE);
         registerBracketHandler("enchantment", Enchantment::getEnchantmentByLocation);
+        registerBracketHandler("potion", Potion::getPotionFromResourceLocation);
         registerBracketHandler("entity", s -> ForgeRegistries.ENTITIES.getValue(new ResourceLocation(s)));
         if (ModSupport.MEKANISM.isLoaded()) {
             registerBracketHandler("gas", s -> new GasStack(GasRegistry.getGas(s), 1));
@@ -52,6 +54,9 @@ public class BracketHandlerManager {
         if (ModSupport.THAUMCRAFT.isLoaded()) {
             registerBracketHandler("aspect", AspectBracketHandler.INSTANCE);
             registerBracketHandler("crystal", s -> ThaumcraftApiHelper.makeCrystal(Aspect.getAspect(s)));
+        }
+        if (ModSupport.ASTRAL_SORCERY.isLoaded()) {
+            registerBracketHandler("constellation", ConstellationBracketHandler.INSTANCE);
         }
     }
 
