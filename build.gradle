@@ -105,6 +105,14 @@ dependencies {
         deobfProvided 'curse.maven:redstone_flux-270789:2920436'
     }
 
+    if (project.debug_blood_magic.toBoolean()) {
+        deobfCompile 'curse.maven:guide-api-228832:2645992'
+        deobfCompile 'curse.maven:blood-magic-224791:2822288'
+    } else {
+        deobfProvided 'curse.maven:guide-api-228832:2645992'
+        deobfProvided 'curse.maven:blood-magic-224791:2822288'
+    }
+
     if (project.debug_thermal.toBoolean()) {
         deobfCompile 'curse.maven:cofh_core-69162:2920433'
         deobfCompile 'curse.maven:cofh_world-271384:2920434'
