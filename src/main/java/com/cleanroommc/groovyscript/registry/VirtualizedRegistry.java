@@ -108,7 +108,7 @@ public abstract class VirtualizedRegistry<R> {
     }
 
     @GroovyBlacklist
-    protected Predicate<R> recipeComparator(R recipe) {
-        return r -> r == recipe;
+    protected boolean compareRecipe(R recipe, R recipe2) {
+        return recipe == recipe2;
     }
 }
