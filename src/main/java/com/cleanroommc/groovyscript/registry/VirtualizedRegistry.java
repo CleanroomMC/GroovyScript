@@ -84,7 +84,7 @@ public abstract class VirtualizedRegistry<R> {
 
     @GroovyBlacklist
     public void addBackup(R recipe) {
-        if (this.scripted.stream().anyMatch(this.recipeComparator(recipe))) return;
+        if (this.scripted.stream().anyMatch(r -> compareRecipe(r, recipe))) return;
         this.backup.add(recipe);
     }
 
