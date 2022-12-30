@@ -5,6 +5,7 @@ import com.google.common.base.CaseFormat;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public abstract class VirtualizedRegistry<R> {
 
@@ -83,7 +84,7 @@ public abstract class VirtualizedRegistry<R> {
 
     @GroovyBlacklist
     public void addBackup(R recipe) {
-        if (this.scripted.stream().anyMatch(r -> r == recipe)) return;
+        if (this.scripted.stream().anyMatch(this.recipeComparator(recipe))) return;
         this.backup.add(recipe);
     }
 
@@ -104,5 +105,10 @@ public abstract class VirtualizedRegistry<R> {
         Collection<R> scripted = this.scripted;
         initScripted();
         return scripted;
+    }
+
+    @GroovyBlacklist
+    protected Predicate<R> recipeComparator(R recipe) {
+        return r -> r == recipe;
     }
 }
