@@ -10,6 +10,7 @@ import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -17,10 +18,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutations.Transmutation> {
-
-    public LightTransmutation() {
-        super("LightTransmutation", "light_transmutation");
-    }
 
     @Override
     @GroovyBlacklist
@@ -89,11 +86,11 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightOreTransmutations.Transmutation> {
 
         private Block inBlock = null;
-        private IBlockState input;
-        private IBlockState output;
+        private IBlockState input = null;
+        private IBlockState output = null;
         private double cost = 0;
-        private ItemStack outStack = ItemStack.EMPTY;
-        private ItemStack inStack = ItemStack.EMPTY;
+        private ItemStack outStack = null;
+        private ItemStack inStack = null;
 
         public RecipeBuilder inputDisplayStack(ItemStack item) {
             this.inStack = item;
@@ -137,18 +134,20 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-//            validateItems(msg, 0, 0, 1, 1);
-//            msg.add(this.input == null, () -> "Input cannot be null");
-//            msg.add(this.chance < 0, () -> "Chance cannot be negative");
-//            msg.add(this.doubleChance < 0 || this.doubleChance > 1, () -> "Chance to double output must be between [0,1]");
+            msg.add(this.input == null && this.inBlock == null, () -> "Input cannot be null");
+            msg.add(this.output == null, () -> "Output cannot be null");
+            msg.add(this.cost < 0, () -> "Cost cannot be negative");
+            if (this.inStack != null && this.inBlock != null) this.inStack = new ItemStack(this.inBlock);
+            if (this.inStack != null && this.input != null) this.inStack = new ItemStack(this.input.getBlock());
+            if (this.outStack != null && this.output != null) this.outStack = new ItemStack(this.output.getBlock());
         }
 
         public LightOreTransmutations.Transmutation register() {
+            if(!validate()) return null;
             if (inBlock == null) {
                 return ModSupport.ASTRAL_SORCERY.get().lightTransmutation.add(input, output, inStack, outStack, cost);
-            } else {
-                return ModSupport.ASTRAL_SORCERY.get().lightTransmutation.add(inBlock, output, inStack, outStack, cost);
             }
+            return ModSupport.ASTRAL_SORCERY.get().lightTransmutation.add(inBlock, output, inStack, outStack, cost);
         }
     }
 }

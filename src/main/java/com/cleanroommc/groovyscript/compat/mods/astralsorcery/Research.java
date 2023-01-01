@@ -32,10 +32,6 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
     HashMap<ResearchNode, ArrayList<ResearchNode>> removedConnections = new HashMap<>();
     HashMap<ResearchNode, Point> movedNodes = new HashMap<>();
 
-    public Research() {
-        super("Research", "research");
-    }
-
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal

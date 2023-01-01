@@ -23,10 +23,6 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
     private final HashMap<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsAdded = new HashMap<>();
     private final HashMap<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsRemoved = new HashMap<>();
 
-    public Constellation() {
-        super("Constellation", "constellation");
-    }
-
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal

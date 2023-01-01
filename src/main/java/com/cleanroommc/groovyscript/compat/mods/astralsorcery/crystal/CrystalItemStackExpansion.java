@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal;
 
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalHelper;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.item.ItemStack;
 
 public class CrystalItemStackExpansion {
@@ -23,6 +24,14 @@ public class CrystalItemStackExpansion {
 
     public static ItemStack setSizeOverride(ItemStack crystal, int size) {
         return CrystalHelper.setSizeOverride(crystal, size);
+    }
+
+    public static ItemStack tuneTo(ItemStack crystal, IConstellation constellation) {
+        return CrystalHelper.tuneTo(crystal, constellation);
+    }
+
+    public static ItemStack setTrait(ItemStack crystal, IConstellation constellation) {
+        return CrystalHelper.setTrait(crystal, constellation);
     }
 
 }

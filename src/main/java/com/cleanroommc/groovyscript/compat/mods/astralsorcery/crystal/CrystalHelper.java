@@ -1,6 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import net.minecraft.item.ItemStack;
 
 public class CrystalHelper {
@@ -57,6 +62,22 @@ public class CrystalHelper {
             CrystalProperties newProps = new CrystalProperties(oldProps.getSize(), oldProps.getPurity(), oldProps.getCollectiveCapability(), oldProps.getFracturation(), size);
             CrystalProperties.applyCrystalProperties(crystal, newProps);
         }
+        return crystal;
+    }
+
+    public static ItemStack tuneTo(ItemStack crystal, IConstellation constellation) {
+        if (constellation instanceof IWeakConstellation)
+            ItemTunedCrystalBase.applyMainConstellation(crystal, (IWeakConstellation) constellation);
+        else
+            GroovyLog.msg("Main constellation must be Major or Weak (Bright or Dim)").error().post();
+        return crystal;
+    }
+
+    public static ItemStack setTrait(ItemStack crystal, IConstellation constellation) {
+        if (constellation instanceof IMinorConstellation)
+            ItemTunedCrystalBase.applyTrait(crystal, (IMinorConstellation) constellation);
+        else
+            GroovyLog.msg("Trait constellation must be Minor (Faint)").error().post();
         return crystal;
     }
 

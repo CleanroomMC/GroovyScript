@@ -29,7 +29,7 @@ public class ModSupport implements IGroovyPropertyGetter {
 
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
 
-    public static final Container<AstralSorcery> ASTRAL_SORCERY = new Container<>("astralsorcery", "Astral Sorcery", AstralSorcery::new, "astral", "astral_sorcery");
+    public static final Container<AstralSorcery> ASTRAL_SORCERY = new Container<>("astralsorcery", "Astral Sorcery", AstralSorcery::new, "astral", "astral_sorcery", "as");
     public static final Container<EnderIO> ENDER_IO = new Container<>("enderio", "Ender IO", EnderIO::new, "eio");
     public static final Container<JustEnoughItems> JEI = new Container<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
     public static final Container<Thaumcraft> THAUMCRAFT = new Container<>("thaumcraft", "Thaumcraft", Thaumcraft::new, "tc", "thaum");

@@ -4,8 +4,6 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.Utils;
-import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationRegistryAccessor;
-import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
@@ -183,12 +181,20 @@ public class AltarRecipeBuilder extends AbstractRecipeBuilder<AbstractAltarRecip
 
         switch(this.altarLevel) {
             case DISCOVERY:
+                if (this.starlightRequired > 1000)
+                    GroovyLog.msg("Warning: Discovery Altar recipe cannot exceed 1000 starlight, clamping starlight to max table value.").warn().post();
                 this.starlightRequired = Math.min(starlightRequired, 1000);
             case ATTUNEMENT:
+                if (this.starlightRequired > 2000)
+                    GroovyLog.msg("Warning: Attunement Altar recipe cannot exceed 2000 starlight, clamping starlight to max table value.").warn().post();
                 this.starlightRequired = Math.min(starlightRequired, 2000);
             case CONSTELLATION_CRAFT:
+                if (this.starlightRequired > 4000)
+                    GroovyLog.msg("Warning: Constellation Altar recipe cannot exceed 4000 starlight, clamping starlight to max table value.").warn().post();
                 this.starlightRequired = Math.min(starlightRequired, 4000);
             case TRAIT_CRAFT:
+                if (this.starlightRequired > 8000)
+                    GroovyLog.msg("Warning: Trait Altar recipe cannot exceed 8000 starlight, clamping starlight to max table value.").warn().post();
                 this.starlightRequired = Math.min(starlightRequired, 8000);
         }
 

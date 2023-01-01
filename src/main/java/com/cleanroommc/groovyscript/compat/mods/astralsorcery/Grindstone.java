@@ -16,10 +16,6 @@ import java.util.ArrayList;
 
 public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
 
-    public Grindstone() {
-        super("Grindstone", "grindstone");
-    }
-
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal
@@ -105,7 +101,7 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
             validateItems(msg, 0, 0, 1, 1);
             msg.add(this.input == null, () -> "Input cannot be null");
             msg.add(this.chance < 0, () -> "Chance cannot be negative");
-            msg.add(this.doubleChance < 0 || this.doubleChance > 1, () -> "Chance to double output must be between [0,1]");
+            msg.add(this.doubleChance < 0 || this.doubleChance > 1, () -> "Chance to double output must be between [0,1]. Instead found " + this.doubleChance + ".");
         }
 
         public GrindstoneRecipe register() {

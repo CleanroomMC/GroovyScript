@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
@@ -14,10 +15,6 @@ import java.awt.*;
 import java.util.List;
 
 public class Lightwell extends VirtualizedRegistry<WellLiquefaction.LiquefactionEntry> {
-
-    public Lightwell() {
-        super("Lightwell", "lightwell");
-    }
 
     @Override
     @GroovyBlacklist
@@ -58,10 +55,10 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
 
     public static class RecipeBuilder {
 
-        private ItemStack catalyst;
-        private Fluid output;
-        private float productionMultiplier;
-        private float shatterMultiplier;
+        private ItemStack catalyst = null;
+        private Fluid output = null;
+        private float productionMultiplier = 0.0F;
+        private float shatterMultiplier = 0.0F;
         private Color color = null;
 
         public RecipeBuilder catalyst(ItemStack catalyst) {
@@ -89,7 +86,28 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
             return this;
         }
 
+        private boolean validate() {
+            if (this.output == null) {
+                GroovyLog.msg("Output not specified for Astral Sorcery Lightwell recipe.").error().post();
+                return false;
+            }
+            if (this.catalyst == null) {
+                GroovyLog.msg("Catalyst not specified for Astral Sorcery Lightwell recipe.").error().post();
+                return false;
+            }
+            if (this.productionMultiplier < 0.0F) {
+                GroovyLog.msg("Production multiplier for Astral Sorcery Lightwell recipe may not be negative.").error().post();
+                this.productionMultiplier = 0.0F;
+            }
+            if (this.shatterMultiplier < 0.0F) {
+                GroovyLog.msg("Production multiplier for Astral Sorcery Lightwell recipe may not be negative.").error().post();
+                this.shatterMultiplier = 0.0F;
+            }
+            return true;
+        }
+
         public void register() {
+            if (!validate()) return;
             ModSupport.ASTRAL_SORCERY.get().lightwell.add(catalyst, output, productionMultiplier, shatterMultiplier, color);
         }
     }

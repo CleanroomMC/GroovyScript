@@ -8,8 +8,12 @@
     "ConstellationBaseAccessor",
     "ConstellationMapEffectRegistryAccessor",
     "ConstellationRegistryAccessor",
+    "FluidRarityRegistryAccessor",
     "LightOreTransmutationsAccessor",
     "LiquidInteractionAccessor",
+    "OreTypesAccessor",
+    "PerkLevelManagerAccessor",
+    "PerkLevelManagerMixin",
     "PerkTreeAccessor",
     "ResearchNodeAccessor",
     "TraitRecipeAccessor"

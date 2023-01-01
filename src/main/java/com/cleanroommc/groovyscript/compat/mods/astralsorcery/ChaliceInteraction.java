@@ -11,13 +11,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class LiquidInteraction extends VirtualizedRegistry<hellfirepvp.astralsorcery.common.base.LiquidInteraction> {
-
-    public LiquidInteraction() {
-        super("LiquidInteraction", "liquid_interaction");
-    }
+public class ChaliceInteraction extends VirtualizedRegistry<hellfirepvp.astralsorcery.common.base.LiquidInteraction> {
 
     @Override
     @GroovyBlacklist
@@ -86,14 +83,10 @@ public class LiquidInteraction extends VirtualizedRegistry<hellfirepvp.astralsor
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<hellfirepvp.astralsorcery.common.base.LiquidInteraction> {
 
-        private float c1;
-        private float c2;
+        private final ArrayList<Float> chances = new ArrayList<>();
         private ItemStack result;
-        private FluidStack component1 = null;
-        private FluidStack component2 = null;
+        private final ArrayList<FluidStack> components = new ArrayList<>();
         private int probability = 1;
-        private boolean chanceCalled = false;
-        private boolean componentCalled = false;
 
         public RecipeBuilder result(ItemStack item) {
             this.result = item;
@@ -101,18 +94,13 @@ public class LiquidInteraction extends VirtualizedRegistry<hellfirepvp.astralsor
         }
 
         public RecipeBuilder component(FluidStack fluid) {
-            if (!this.componentCalled) {
-                this.component1 = fluid;
-                componentCalled = true;
-            } else {
-                this.component2 = fluid;
-            }
+            this.components.add(fluid);
             return this;
         }
 
         public RecipeBuilder component(FluidStack fluid1, FluidStack fluid2) {
-            this.component1 = fluid1;
-            this.component2 = fluid2;
+            this.components.add(fluid1);
+            this.components.add(fluid2);
             return this;
         }
 
@@ -122,18 +110,13 @@ public class LiquidInteraction extends VirtualizedRegistry<hellfirepvp.astralsor
         }
 
         public RecipeBuilder chance(float consumptionChance) {
-            if (!this.chanceCalled) {
-                this.c1 = consumptionChance;
-                chanceCalled = true;
-            } else {
-                this.c2 = consumptionChance;
-            }
+            this.chances.add(consumptionChance);
             return this;
         }
 
         public RecipeBuilder chance(float consumptionChance1, float consumptionChance2) {
-            this.c1 = consumptionChance1;
-            this.c2 = consumptionChance2;
+            this.chances.add(consumptionChance1);
+            this.chances.add(consumptionChance2);
             return this;
         }
 
@@ -144,15 +127,17 @@ public class LiquidInteraction extends VirtualizedRegistry<hellfirepvp.astralsor
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-//            validateItems(msg, 0, 0, 1, 1);
-//            msg.add(this.input == null, () -> "Input cannot be null");
-//            msg.add(this.chance < 0, () -> "Chance cannot be negative");
-//            msg.add(this.doubleChance < 0 || this.doubleChance > 1, () -> "Chance to double output must be between [0,1]");
+            msg.add(this.probability > 0, () -> "Weight must be a positive integer. Instead found: " + this.probability);
+            msg.add(this.chances.size() != 2, () -> "Exactly two consumption chances must be provided. Number provided: " + this.chances.size());
+            msg.add(this.chances.get(0) < 0 || this.chances.get(1) < 0, () -> "Consumption chance cannot be negative");
+            msg.add(this.components.size() != 2, () -> "Exactly two fluids must be provided. Number provided: " + this.components.size());
+            msg.add(this.components.get(0) == null || this.components.get(1) == null, () -> "Neither fluid can be null");
+            msg.add(this.result == null, () -> "No output provided.");
         }
 
         public hellfirepvp.astralsorcery.common.base.LiquidInteraction register() {
 //            if (!validate()) return null;
-            return ModSupport.ASTRAL_SORCERY.get().liquidInteraction.add(this.probability, this.component1, this.component2, hellfirepvp.astralsorcery.common.base.LiquidInteraction.createItemDropAction(this.c1, this.c2, this.result));
+            return ModSupport.ASTRAL_SORCERY.get().chaliceInteraction.add(this.probability, this.components.get(0), this.components.get(1), hellfirepvp.astralsorcery.common.base.LiquidInteraction.createItemDropAction(this.chances.get(0), this.chances.get(1), this.result));
         }
     }
 }
