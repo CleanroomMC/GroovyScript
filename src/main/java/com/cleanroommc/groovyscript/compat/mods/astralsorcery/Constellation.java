@@ -11,7 +11,6 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.Tuple;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.awt.*;
@@ -91,7 +90,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         private String name;
         private Color color = null;
         private ConstellationBuilder.Type type;
-        private final ArrayList<Tuple<Point,Point>> connections = new ArrayList<>();
+        private final ArrayList<Point2PointConnection> connections = new ArrayList<>();
         private final ArrayList<MoonPhase> phases = new ArrayList<>();
 
         private enum Type {
@@ -105,8 +104,8 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             return this;
         }
 
-        public ConstellationBuilder color(String color) {
-            this.color = Color.decode(color);
+        public ConstellationBuilder color(int color) {
+            this.color = new Color(color);
             return this;
         }
 
@@ -126,12 +125,9 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         }
 
         public ConstellationBuilder connection(int x1, int y1, int x2, int y2) {
-            Point s1 = new Point(x1,y1);
-            Point s2 = new Point(x2,y2);
-            Tuple<Point, Point> line = new Tuple<>(s1,s2);
-            Tuple<Point, Point> lineReverse = new Tuple<>(s2,s1);
-            if (!connections.contains(line) && !connections.contains(lineReverse)) {
-                connections.add(line);
+            Point2PointConnection connection = new Point2PointConnection(x1, y1, x2, y2);
+            if (!connections.contains(connection)) {
+                connections.add(connection);
             }
             return this;
         }
@@ -152,27 +148,22 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         }
 
         private boolean validate() {
-            if (this.name == null || this.name.equals("")) {
-                GroovyLog.msg("Error adding Astral Sorcery Constellation: ")
-                        .add("name must be provided")
-                        .error()
-                        .post();
+            ArrayList<String> errors = new ArrayList<>();
+
+            if (this.name == null || this.name.equals(""))
+                errors.add("name must be provided");
+            if (this.connections.equals(new ArrayList<>()))
+                errors.add("connections must not be empty");
+            if (this.type.equals(Type.MINOR) && this.phases.size() == 0)
+                errors.add("minor constellations require at least one moon phase");
+
+            if (!errors.isEmpty()) {
+                GroovyLog.Msg errorOut = GroovyLog.msg("Error adding Astral Sorcery Constellation: ");
+                errors.forEach(errorOut::add);
+                errorOut.error().post();
                 return false;
             }
-            if (this.connections.equals(new ArrayList<>())) {
-                GroovyLog.msg("Error adding Astral Sorcery Constellation: ")
-                        .add("connections must not be empty")
-                        .error()
-                        .post();
-                return false;
-            }
-            if (this.type.equals(Type.MINOR) && this.phases.size() == 0) {
-                GroovyLog.msg("Error adding Astral Sorcery Constellation: ")
-                        .add("minor constellations require at least one moon phase")
-                        .error()
-                        .post();
-                return false;
-            }
+
             if (this.color == null) {
                 switch (this.type) {
                     case MAJOR:
@@ -183,6 +174,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
                         this.color = new Color(93, 25, 127);
                 }
             }
+
             return true;
         }
 
@@ -196,15 +188,15 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             HashMap<Point, StarLocation> addedStars = new HashMap<>();
             this.connections.forEach(connection -> {
                 StarLocation s1, s2;
-                if (addedStars.containsKey(connection.getFirst())) s1 = addedStars.get(connection.getFirst());
+                if (addedStars.containsKey(connection.p1)) s1 = addedStars.get(connection.p1);
                 else {
-                    s1 = constellation.addStar(connection.getFirst().x, connection.getFirst().y);
-                    addedStars.put(connection.getFirst(), s1);
+                    s1 = constellation.addStar(connection.p1.x, connection.p1.y);
+                    addedStars.put(connection.p1, s1);
                 }
-                if (addedStars.containsKey(connection.getSecond())) s2 = addedStars.get(connection.getSecond());
+                if (addedStars.containsKey(connection.p2)) s2 = addedStars.get(connection.p2);
                 else {
-                    s2 = constellation.addStar(connection.getSecond().x, connection.getSecond().y);
-                    addedStars.put(connection.getSecond(), s2);
+                    s2 = constellation.addStar(connection.p2.x, connection.p2.y);
+                    addedStars.put(connection.p2, s2);
                 }
                 constellation.addConnection(s1, s2);
             });
@@ -235,13 +227,46 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         }
 
         private boolean validate() {
-            if (constellation == null) return false;
+            ArrayList<String> errors = new ArrayList<>();
+            if (constellation == null) errors.add("No constellation provided.");
+            if (enchantmentEffect.isEmpty() && potionEffect.isEmpty()) errors.add("Either enchantmentEffect or potionEffect must be provided, neither were found.");
+            if (!errors.isEmpty()) {
+                GroovyLog.Msg errorOut = GroovyLog.msg("Error adding Astral Sorcery Constellation Map Effect: ");
+                errors.forEach(errorOut::add);
+                errorOut.error().post();
+                return false;
+            }
             return true;
         }
 
         public void register() {
             if (!validate()) return;
             ModSupport.ASTRAL_SORCERY.get().constellation.addConstellationMapEffect(constellation, enchantmentEffect, potionEffect);
+        }
+
+    }
+
+    public static class Point2PointConnection {
+
+        public Point p1;
+        public Point p2;
+
+        public Point2PointConnection(Point p1, Point p2) {
+            this.p1 = p1;
+            this.p2 = p2;
+        }
+
+        public Point2PointConnection(int x1, int y1, int x2, int y2) {
+            this.p1 = new Point(x1, y1);
+            this.p2 = new Point(x2, y2);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof Point2PointConnection)) return false;
+            if (o == this) return true;
+            Point2PointConnection other = (Point2PointConnection) o;
+            return ((p1.equals(other.p1) && p2.equals(other.p2)) || (p2.equals(other.p1) && p1.equals(other.p2)));
         }
 
     }

@@ -16,9 +16,6 @@ import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.
 
 public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
 
-    public GroovyPerkTree() {
-    }
-
     public static AttributeModifierPerkBuilder attributePerkBuilder() {
         return new AttributeModifierPerkBuilder();
     }
@@ -27,9 +24,9 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
         return new AttributeModifierPerkBuilder.PerkModifierBuilder();
     }
 
-    HashMap<AbstractPerk, ArrayList<ResourceLocation>> scriptedConnections = new HashMap<>();
-    HashMap<AbstractPerk, ArrayList<ResourceLocation>> removedConnections = new HashMap<>();
-    HashMap<AbstractPerk, Point> movedPerks = new HashMap<>();
+    private final HashMap<AbstractPerk, ArrayList<ResourceLocation>> scriptedConnections = new HashMap<>();
+    private final HashMap<AbstractPerk, ArrayList<ResourceLocation>> removedConnections = new HashMap<>();
+    private final HashMap<AbstractPerk, Point> movedPerks = new HashMap<>();
 
     @Override
     @GroovyBlacklist

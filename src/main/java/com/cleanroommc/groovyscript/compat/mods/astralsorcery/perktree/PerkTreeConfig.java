@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.core.mixin.astralsorcery.PerkLevelManagerAcc
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import groovy.lang.Closure;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
-import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.ApiStatus;
 
 public class PerkTreeConfig extends VirtualizedRegistry<Closure<Long>> {
@@ -15,26 +14,28 @@ public class PerkTreeConfig extends VirtualizedRegistry<Closure<Long>> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        // TODO: add reloading support, pending sandbox.
+        this.setXpFunction(null);
+        this.setLevelCap(30);
     }
 
-    public Closure<Long> xpFunction = new Closure<Long>(null) {
-        @Override
-        public Long call(Object... args) {
-            return ( (long) args[1] ) + 150L + MathHelper.lfloor(Math.pow(2.0, (double)(((int)args[0]) / 2 + 3)));
-        }
-    };
+    public Closure<Long> xpFunction = null;
 
     public void setXpFunction(Closure<Long> func) {
         if (func != null) {
-            this.xpFunction = func;
-            ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).getLevelMap().clear();
+            if (func.getParameterTypes().length != 2 || func.getParameterTypes()[0] != int.class || func.getParameterTypes()[1] != long.class) {
+                GroovyLog.msg("Astral Perk xp function requires a closure with exactly two parameters: int levelNumber, long previousLevelXp in that order.").error().post();
+                return;
+            }
         }
+        this.xpFunction = func;
+        ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).getLevelMap().clear();
+        ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).generateLevelMap();
     }
 
     public void setLevelCap(int cap) {
         PerkLevelManagerAccessor.setLevelCap(cap);
         ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).getLevelMap().clear();
+        ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).generateLevelMap();
     }
 
 }

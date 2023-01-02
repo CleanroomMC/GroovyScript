@@ -12,6 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Lightwell extends VirtualizedRegistry<WellLiquefaction.LiquefactionEntry> {
@@ -87,22 +88,29 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         }
 
         private boolean validate() {
-            if (this.output == null) {
-                GroovyLog.msg("Output not specified for Astral Sorcery Lightwell recipe.").error().post();
-                return false;
-            }
-            if (this.catalyst == null) {
-                GroovyLog.msg("Catalyst not specified for Astral Sorcery Lightwell recipe.").error().post();
-                return false;
-            }
+            ArrayList<String> errors = new ArrayList<>();
+            ArrayList<String> warnings = new ArrayList<>();
+
+            if (this.output == null) errors.add("No output specified.");
+            if (this.catalyst == null) errors.add("No catalyst specified.");
             if (this.productionMultiplier < 0.0F) {
-                GroovyLog.msg("Production multiplier for Astral Sorcery Lightwell recipe may not be negative.").error().post();
+                warnings.add("Production multiplier may not be negative, defaulting to 0.");
                 this.productionMultiplier = 0.0F;
             }
             if (this.shatterMultiplier < 0.0F) {
-                GroovyLog.msg("Production multiplier for Astral Sorcery Lightwell recipe may not be negative.").error().post();
+                warnings.add("Shatter multiplier may not be negative, defaulting to 0.");
                 this.shatterMultiplier = 0.0F;
             }
+
+            if (!errors.isEmpty() || !warnings.isEmpty()) {
+                GroovyLog.Msg errorOut = GroovyLog.msg("Error adding recipe to Astral Sorcery Lightwell");
+                errors.forEach(errorOut::add);
+                warnings.forEach(errorOut::add);
+                if ((errors.isEmpty())) errorOut.warn().post();
+                else errorOut.error().post();
+                return errors.isEmpty();
+            }
+
             return true;
         }
 

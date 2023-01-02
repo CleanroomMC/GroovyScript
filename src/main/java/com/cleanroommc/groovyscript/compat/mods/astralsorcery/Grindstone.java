@@ -62,24 +62,8 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<GrindstoneRecipe> {
 
-        private ItemHandle input = null;
         private int chance = 0;
         private float doubleChance = 0.0F;
-
-        public RecipeBuilder input(ItemStack item) {
-            this.input = new ItemHandle(item);
-            return this;
-        }
-
-        public RecipeBuilder input(String ore) {
-            this.input = new ItemHandle(ore);
-            return this;
-        }
-
-        public RecipeBuilder input(OreDictIngredient ore) {
-            this.input = new ItemHandle(ore.getOreDict());
-            return this;
-        }
 
         public RecipeBuilder chance(int chance) {
             this.chance = chance;
@@ -98,14 +82,13 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 0, 0, 1, 1);
-            msg.add(this.input == null, () -> "Input cannot be null");
+            validateItems(msg, 1, 1, 1, 1);
             msg.add(this.chance < 0, () -> "Chance cannot be negative");
             msg.add(this.doubleChance < 0 || this.doubleChance > 1, () -> "Chance to double output must be between [0,1]. Instead found " + this.doubleChance + ".");
         }
 
         public GrindstoneRecipe register() {
-            return ModSupport.ASTRAL_SORCERY.get().grindstone.add(input, output.get(0), chance, doubleChance);
+            return ModSupport.ASTRAL_SORCERY.get().grindstone.add(Utils.convertToItemHandle(input.get(0)), output.get(0), chance, doubleChance);
         }
     }
 }

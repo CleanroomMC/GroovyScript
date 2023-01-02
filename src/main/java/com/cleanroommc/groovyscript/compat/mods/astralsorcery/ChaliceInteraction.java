@@ -6,6 +6,9 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.LiquidInteractionAccessor;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -83,40 +86,28 @@ public class ChaliceInteraction extends VirtualizedRegistry<hellfirepvp.astralso
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<hellfirepvp.astralsorcery.common.base.LiquidInteraction> {
 
-        private final ArrayList<Float> chances = new ArrayList<>();
-        private ItemStack result;
+        private final FloatArrayList chances = new FloatArrayList();
+        private final ArrayList<ItemStack> results = new ArrayList<>();
         private final ArrayList<FluidStack> components = new ArrayList<>();
-        private int probability = 1;
+        private final IntArrayList probabilities = new IntArrayList();
 
         public RecipeBuilder result(ItemStack item) {
-            this.result = item;
+            return this.result(item, 1);
+        }
+
+        public RecipeBuilder result(ItemStack item, int weight) {
+            this.results.add(item);
+            this.probabilities.add(weight);
             return this;
         }
 
         public RecipeBuilder component(FluidStack fluid) {
+            return this.component(fluid, 1.0F);
+        }
+
+        public RecipeBuilder component(FluidStack fluid, float chance) {
             this.components.add(fluid);
-            return this;
-        }
-
-        public RecipeBuilder component(FluidStack fluid1, FluidStack fluid2) {
-            this.components.add(fluid1);
-            this.components.add(fluid2);
-            return this;
-        }
-
-        public RecipeBuilder weight(int weight) {
-            this.probability = weight;
-            return this;
-        }
-
-        public RecipeBuilder chance(float consumptionChance) {
-            this.chances.add(consumptionChance);
-            return this;
-        }
-
-        public RecipeBuilder chance(float consumptionChance1, float consumptionChance2) {
-            this.chances.add(consumptionChance1);
-            this.chances.add(consumptionChance2);
+            this.chances.add(chance);
             return this;
         }
 
@@ -127,17 +118,23 @@ public class ChaliceInteraction extends VirtualizedRegistry<hellfirepvp.astralso
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            msg.add(this.probability > 0, () -> "Weight must be a positive integer. Instead found: " + this.probability);
-            msg.add(this.chances.size() != 2, () -> "Exactly two consumption chances must be provided. Number provided: " + this.chances.size());
-            msg.add(this.chances.get(0) < 0 || this.chances.get(1) < 0, () -> "Consumption chance cannot be negative");
+            msg.add(this.results.isEmpty(), () -> "No output(s) provided.");
+            for (Integer probability : this.probabilities) {
+                if (probability <= 0) msg.add("Weight must be a positive integer. Instead found: " + probability);
+            }
             msg.add(this.components.size() != 2, () -> "Exactly two fluids must be provided. Number provided: " + this.components.size());
+            if (this.components.size() < 2) return;
             msg.add(this.components.get(0) == null || this.components.get(1) == null, () -> "Neither fluid can be null");
-            msg.add(this.result == null, () -> "No output provided.");
+            msg.add(this.chances.getFloat(0) < 0 || this.chances.getFloat(1) < 0, () -> "Consumption chance cannot be negative");
         }
 
-        public hellfirepvp.astralsorcery.common.base.LiquidInteraction register() {
-//            if (!validate()) return null;
-            return ModSupport.ASTRAL_SORCERY.get().chaliceInteraction.add(this.probability, this.components.get(0), this.components.get(1), hellfirepvp.astralsorcery.common.base.LiquidInteraction.createItemDropAction(this.chances.get(0), this.chances.get(1), this.result));
+        @Override
+        public LiquidInteraction register() {
+            if (!validate()) return null;
+            for (int i = 0; i < this.results.size(); i++) {
+                ModSupport.ASTRAL_SORCERY.get().chaliceInteraction.add(this.probabilities.getInt(i), this.components.get(0), this.components.get(1), hellfirepvp.astralsorcery.common.base.LiquidInteraction.createItemDropAction(this.chances.getFloat(0), this.chances.getFloat(1), this.results.get(i)));
+            }
+            return null;
         }
     }
 }

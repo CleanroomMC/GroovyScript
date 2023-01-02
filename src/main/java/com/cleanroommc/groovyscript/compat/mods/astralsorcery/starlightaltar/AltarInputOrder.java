@@ -3,6 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 
+import java.util.Arrays;
+
 public class AltarInputOrder {
 
     public static final int[][] DISCOVERY = new int[][]{
@@ -48,18 +50,19 @@ public class AltarInputOrder {
     }
 
     public static ItemHandle[] initInputList(TileAltar.AltarLevel level) {
+        ItemHandle[] rVal = null;
         switch (level) {
             case DISCOVERY:
-                return new ItemHandle[]{null,null,null,null,null,null,null,null,null};
+                rVal = new ItemHandle[9];
             case ATTUNEMENT:
-                return new ItemHandle[]{null,null,null,null,null,null,null,null,null,null,null,null,null};
+                rVal = new ItemHandle[13];
             case CONSTELLATION_CRAFT:
-                return new ItemHandle[]{null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null};
+                rVal = new ItemHandle[21];
             case TRAIT_CRAFT:
-                return new ItemHandle[]{null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null};
-            default:
-                return null;
+                rVal = new ItemHandle[25];
         }
+        if (rVal != null) Arrays.fill(rVal, null);
+        return rVal;
     }
 
 }

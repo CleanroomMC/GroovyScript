@@ -19,7 +19,7 @@ public class Utils {
 
     private static ItemHandle convertToItemHandle(Object in) {
         if (in == null) {
-            return null;
+            return ItemHandle.EMPTY;
         }
         if (in instanceof ItemStack) {
             return new ItemHandle((ItemStack) in);
@@ -30,7 +30,7 @@ public class Utils {
         } else if (in instanceof FluidStack) {
             return new ItemHandle((FluidStack) in);
         }
-        return null;
+        return ItemHandle.EMPTY;
     }
 
     public static boolean isEqual(ItemHandle item1, ItemHandle item2) {
@@ -61,7 +61,7 @@ public class Utils {
             constructor.setAccessible(true);
             return constructor.newInstance(fluid, rarity, guaranteedAmt, addRand);
         } catch(Exception e) {
-            GroovyLog.msg(e.toString()).error().post();
+            GroovyLog.get().exception(e);
         }
 
         return null;

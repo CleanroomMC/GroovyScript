@@ -1,3 +1,5 @@
+import net.minecraft.util.math.MathHelper
+
 mods.astralsorcery.StarlightAltar.recipeBuilder()
         .output(item('minecraft:water_bucket'))
         .row('   ')
@@ -100,20 +102,18 @@ mods.astralsorcery.LightTransmutation.recipeBuilder()
         .cost(400.0)
         .register()
 
-mods.astralsorcery.LiquidInteraction.removeByOutput(item('minecraft:ice'))
+mods.astralsorcery.ChaliceInteraction.removeByOutput(item('minecraft:ice'))
 
-mods.astralsorcery.LiquidInteraction.recipeBuilder()
+mods.astralsorcery.ChaliceInteraction.recipeBuilder()
         .result(item('astralsorcery:blockmarble'))
         .component(fluid('water') * 10)
         .component(fluid('astralsorcery.liquidstarlight') * 30)
-        .chance(1.0F)
-        .chance(1.0F)
         .register()
 
 mods.astralsorcery.Constellation.constellationBuilder()
         .major()
         .name('square')
-        .color('0xE01903')
+        .color(0xE01903)
         .connection(12, 2, 2, 2)
         .connection(12, 12, 12, 2)
         .connection(2, 12, 12, 12)
@@ -211,3 +211,24 @@ mods.astralsorcery.Research.moveNode('SOOTYMARBLE', 5, 6)
 mods.astralsorcery.Research.removeNode('CPAPER')
 
 mods.astralsorcery.Research.disconnectNodes('MY_TEST_RESEARCH', 'ALTAR1')
+
+mods.astralsorcery.Fountain.remove(fluid('lava'))
+
+mods.astralsorcery.Fountain.chanceHelper()
+        .fluid(fluid('astralsorcery.liquidstarlight'))
+        .rarity(10000000)
+        .minimumAmount(4000000)
+        .variance(1000000)
+        .register()
+
+mods.astralsorcery.aevitasPerkOreChance.remove(ore('oreCoal'))
+mods.astralsorcery.aevitasPerkOreChance.remove(ore('oreIron'))
+mods.astralsorcery.aevitasPerkOreChance.remove(ore('oreLapis'))
+mods.astralsorcery.aevitasPerkOreChance.remove(ore('oreRedstone'))
+mods.astralsorcery.aevitasPerkOreChance.remove(ore('oreGold'))
+mods.astralsorcery.aevitasPerkOreChance.remove(ore('oreEmerald'))
+
+mods.astralsorcery.aevitasPerkOreChance.add(ore('oreQuartz'), 1000)
+
+mods.astralsorcery.PerkTreeConfig.setLevelCap(50)
+mods.astralsorcery.PerkTreeConfig.setXpFunction{ int i, long prev -> prev + 1000L + MathHelper.lfloor(Math.pow(2.0, i / 2.0F + 3)) }

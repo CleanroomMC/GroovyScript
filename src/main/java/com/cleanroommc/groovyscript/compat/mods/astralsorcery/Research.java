@@ -1,11 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
-import cofh.thermalexpansion.util.managers.machine.PulverizerManager;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ResearchNodeAccessor;
-import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.PulverizerManagerAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.client.gui.journal.page.*;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -26,11 +23,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Research extends VirtualizedRegistry<ResearchNode> {
 
-    HashMap<ResearchNode, ResearchProgression> scriptedCategories = new HashMap<>();
-    HashMap<ResearchNode, ResearchProgression> removedCategories = new HashMap<>();
-    HashMap<ResearchNode, ArrayList<ResearchNode>> scriptedConnections = new HashMap<>();
-    HashMap<ResearchNode, ArrayList<ResearchNode>> removedConnections = new HashMap<>();
-    HashMap<ResearchNode, Point> movedNodes = new HashMap<>();
+    private final HashMap<ResearchNode, ResearchProgression> scriptedCategories = new HashMap<>();
+    private final HashMap<ResearchNode, ResearchProgression> removedCategories = new HashMap<>();
+    private final HashMap<ResearchNode, ArrayList<ResearchNode>> scriptedConnections = new HashMap<>();
+    private final HashMap<ResearchNode, ArrayList<ResearchNode>> removedConnections = new HashMap<>();
+    private final HashMap<ResearchNode, Point> movedNodes = new HashMap<>();
 
     @Override
     @GroovyBlacklist
@@ -56,9 +53,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
             }
         });
 
-        movedNodes.forEach(((node, point) -> {
-            this.moveNode(node, point.x, point.y, false);
-        }));
+        movedNodes.forEach(((node, point) -> this.moveNode(node, point.x, point.y, false)));
 
         movedNodes.clear();
         scriptedConnections.clear();
@@ -162,10 +157,10 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
 
         private ResearchProgression category;
         private ItemStack node;
-        private ArrayList<IJournalPage> pages = new ArrayList<>();
+        private final ArrayList<IJournalPage> pages = new ArrayList<>();
         private String name;
         private Point location;
-        private ArrayList<ResearchNode> connections = new ArrayList<>();
+        private final ArrayList<ResearchNode> connections = new ArrayList<>();
 
 
         public ResearchNodeBuilder discovery() {

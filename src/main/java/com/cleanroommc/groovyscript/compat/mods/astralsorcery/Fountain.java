@@ -10,6 +10,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.ArrayList;
+
 public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarityEntry> {
 
     @Override
@@ -43,10 +45,13 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
     }
 
     public void remove(Fluid entry) {
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().forEach(fluidRarityEntry -> {
-            if (fluidRarityEntry.fluid.equals(entry)) this.addBackup(fluidRarityEntry);
+        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().removeIf(fluidRarityEntry -> {
+            if (fluidRarityEntry.fluid.equals(entry)) {
+                this.addBackup(fluidRarityEntry);
+                return true;
+            }
+            return false;
         });
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().removeIf(fluidRarityEntry -> fluidRarityEntry.fluid.equals(entry));
     }
 
     public FountainChanceHelper chanceHelper() {
@@ -85,22 +90,32 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
         }
 
         private boolean validate() {
+            ArrayList<String> errors = new ArrayList<>();
+            ArrayList<String> warnings = new ArrayList<>();
+
+            if (this.fluid == null) errors.add("No fluid specified.");
             if (this.rarity < 0) {
+                warnings.add("Rarity cannot be negative, defaulting to 0.");
                 this.rarity = 0;
-                GroovyLog.msg("Error adding fluid to Astral Sorcery Founain. rarity cannot be negative.");
             }
             if (this.minimumAmount < 0) {
+                warnings.add("Minimum amount cannot be negative, defaulting to 0.");
                 this.minimumAmount = 0;
-                GroovyLog.msg("Error adding fluid to Astral Sorcery Founain. minimumAmount cannot be negative.");
             }
             if (this.variance < 0) {
+                warnings.add("Variance cannot be negative, defaulting to 0.");
                 this.variance = 0;
-                GroovyLog.msg("Error adding fluid to Astral Sorcery Founain. variance cannot be negative.");
             }
-            if (this.fluid == null) {
-                GroovyLog.msg("Error adding fluid to Astral Sorcery Founain. No Fluid provided.");
-                return false;
+
+            if (!errors.isEmpty() || !warnings.isEmpty()) {
+                GroovyLog.Msg errorOut = GroovyLog.msg("Error adding fluid to Astral Sorcery Fountain");
+                errors.forEach(errorOut::add);
+                warnings.forEach(errorOut::add);
+                if ((errors.isEmpty())) errorOut.warn().post();
+                else errorOut.error().post();
+                return errors.isEmpty();
             }
+
             return true;
         }
 
