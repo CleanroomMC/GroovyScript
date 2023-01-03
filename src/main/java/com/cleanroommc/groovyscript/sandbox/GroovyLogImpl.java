@@ -54,6 +54,7 @@ public class GroovyLogImpl implements GroovyLog {
         this.printWriter = tempWriter;
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
+        writeLogLine("GroovyScript version: " + GroovyScript.VERSION);
     }
 
     @Override
