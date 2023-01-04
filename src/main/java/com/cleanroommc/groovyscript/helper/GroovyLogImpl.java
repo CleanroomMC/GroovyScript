@@ -1,7 +1,8 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.helper;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.logging.log4j.Level;
