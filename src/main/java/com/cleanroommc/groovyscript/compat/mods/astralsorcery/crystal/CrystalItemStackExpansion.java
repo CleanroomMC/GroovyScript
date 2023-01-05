@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal;
 
-import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalHelper;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.item.ItemStack;
 

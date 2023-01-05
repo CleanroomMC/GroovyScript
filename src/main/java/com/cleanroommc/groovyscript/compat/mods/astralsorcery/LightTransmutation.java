@@ -7,11 +7,8 @@ import com.cleanroommc.groovyscript.core.mixin.astralsorcery.LightOreTransmutati
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 

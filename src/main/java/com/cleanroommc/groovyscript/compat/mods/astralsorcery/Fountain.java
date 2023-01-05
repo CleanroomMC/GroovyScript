@@ -11,8 +11,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.ArrayList;
-
 public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarityEntry> {
 
     @Override

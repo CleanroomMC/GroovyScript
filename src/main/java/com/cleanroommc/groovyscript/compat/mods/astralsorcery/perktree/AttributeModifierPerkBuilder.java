@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;

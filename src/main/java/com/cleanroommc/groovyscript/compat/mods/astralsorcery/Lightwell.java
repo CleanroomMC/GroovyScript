@@ -13,7 +13,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Lightwell extends VirtualizedRegistry<WellLiquefaction.LiquefactionEntry> {

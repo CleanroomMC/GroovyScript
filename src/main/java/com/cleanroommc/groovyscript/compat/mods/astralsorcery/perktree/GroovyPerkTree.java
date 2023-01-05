@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.PerkTreeAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import groovy.lang.Closure;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import net.minecraft.util.ResourceLocation;
