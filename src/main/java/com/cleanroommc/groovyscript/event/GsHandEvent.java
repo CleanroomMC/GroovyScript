@@ -35,7 +35,7 @@ public class GsHandEvent extends Event {
     public final String[] commandArgs;
 
     /**
-     * A list of messages that will be send to the player after this event.
+     * A list of messages that will be sent to the player after this event.
      * Add or remove your messages here.
      */
     @NotNull

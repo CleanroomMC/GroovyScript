@@ -16,17 +16,25 @@ import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.client.settings.KeyModifier;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +49,7 @@ public class GroovyScript {
 
     public static final String ID = "groovyscript";
     public static final String NAME = "GroovyScript";
-    public static final String VERSION = "0.0.2";
+    public static final String VERSION = "0.1.0";
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
@@ -49,6 +57,9 @@ public class GroovyScript {
     private static File runConfigFile;
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
+
+    private static final KeyBinding reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
+    private static long timeSinceLastUse = 0;
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
@@ -71,10 +82,6 @@ public class GroovyScript {
     }
 
     @Mod.EventHandler
-    public void onPreInit(FMLPreInitializationEvent event) {
-    }
-
-    @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
         getSandbox().run(GroovyScriptSandbox.LOADER_POST_INIT);
     }
@@ -82,6 +89,18 @@ public class GroovyScript {
     @Mod.EventHandler
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new GSCommand());
+        if (event.getServer() instanceof IntegratedServer) {
+            ClientRegistry.registerKeyBinding(reloadKey);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onInput(InputEvent.KeyInputEvent event) {
+        long time = Minecraft.getSystemTime();
+        if (reloadKey.isPressed() && time - timeSinceLastUse >= 1000 && Minecraft.getMinecraft().player.getPermissionLevel() >= 4) {
+            GSCommand.runReload(Minecraft.getMinecraft().player, null);
+            timeSinceLastUse = time;
+        }
     }
 
     private void registerExpansions() {

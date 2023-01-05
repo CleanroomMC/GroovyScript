@@ -1,7 +1,8 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.helper;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.logging.log4j.Level;
@@ -54,6 +55,7 @@ public class GroovyLogImpl implements GroovyLog {
         this.printWriter = tempWriter;
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
+        writeLogLine("GroovyScript version: " + GroovyScript.VERSION);
     }
 
     @Override
