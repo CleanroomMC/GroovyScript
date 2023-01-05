@@ -1,1 +1,4 @@
 groovyscript.command.copy.hover=§rClick to copy §6%s§r to clipboard
+
+key.categories.groovyscript=GroovyScript
+key.groovyscript.reload=Reload Scripts
