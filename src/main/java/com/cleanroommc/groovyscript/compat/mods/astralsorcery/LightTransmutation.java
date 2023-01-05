@@ -63,7 +63,6 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         ArrayList<LightOreTransmutations.Transmutation> rts = (ArrayList<LightOreTransmutations.Transmutation>) LightOreTransmutationsAccessor.getRegisteredTransmutations();
 
         if (rts == null) return;
-//        ModIntegrationJEI.removeRecipe(recipe);
         rts.removeIf(rec -> rec.equals(recipe));
     }
 
@@ -74,7 +73,6 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         rts.forEach(rec -> {
             if (rec.matchesOutput(block)) {
                 addBackup(rec);
-//                ModIntegrationJEI.removeRecipe(rec);
             }
         });
         rts.removeIf(rec -> rec.matchesOutput(block));
