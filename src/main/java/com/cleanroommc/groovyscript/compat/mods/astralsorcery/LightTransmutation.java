@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -62,6 +63,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         ArrayList<LightOreTransmutations.Transmutation> rts = (ArrayList<LightOreTransmutations.Transmutation>) LightOreTransmutationsAccessor.getRegisteredTransmutations();
 
         if (rts == null) return;
+//        ModIntegrationJEI.removeRecipe(recipe);
         rts.removeIf(rec -> rec.equals(recipe));
     }
 
@@ -70,7 +72,10 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
 
         if (rts == null) return;
         rts.forEach(rec -> {
-            if (rec.getOutput().equals(block)) addBackup(rec);
+            if (rec.matchesOutput(block)) {
+                addBackup(rec);
+//                ModIntegrationJEI.removeRecipe(rec);
+            }
         });
         rts.removeIf(rec -> rec.matchesOutput(block));
     }
@@ -137,9 +142,9 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
             msg.add(this.input == null && this.inBlock == null, () -> "Input cannot be null");
             msg.add(this.output == null, () -> "Output cannot be null");
             msg.add(this.cost < 0, () -> "Cost cannot be negative");
-            if (this.inStack != null && this.inBlock != null) this.inStack = new ItemStack(this.inBlock);
-            if (this.inStack != null && this.input != null) this.inStack = new ItemStack(this.input.getBlock());
-            if (this.outStack != null && this.output != null) this.outStack = new ItemStack(this.output.getBlock());
+            if (this.inStack == null && this.inBlock != null) this.inStack = new ItemStack(this.inBlock);
+            if (this.inStack == null && this.input != null) this.inStack = new ItemStack(this.input.getBlock());
+            if (this.outStack == null && this.output != null) this.outStack = new ItemStack(this.output.getBlock());
         }
 
         public LightOreTransmutations.Transmutation register() {
