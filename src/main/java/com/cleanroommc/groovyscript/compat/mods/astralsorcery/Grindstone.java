@@ -28,8 +28,8 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
         GrindstoneRecipeRegistry.registerGrindstoneRecipe(recipe);
     }
 
-    public GrindstoneRecipe add(ItemHandle input, ItemStack output, int chance, float doubleChance) {
-        GrindstoneRecipe recipe = new GrindstoneRecipe(input, output, chance, doubleChance);
+    public GrindstoneRecipe add(ItemHandle input, ItemStack output, int weight, float secondaryChance) {
+        GrindstoneRecipe recipe = new GrindstoneRecipe(input, output, weight, secondaryChance);
         addScripted(recipe);
         return GrindstoneRecipeRegistry.registerGrindstoneRecipe(recipe);
     }
@@ -62,16 +62,16 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<GrindstoneRecipe> {
 
-        private int chance = 0;
-        private float doubleChance = 0.0F;
+        private int weight = 0;
+        private float secondaryChance = 0.0F;
 
-        public RecipeBuilder chance(int chance) {
-            this.chance = chance;
+        public RecipeBuilder weight(int weight) {
+            this.weight = weight;
             return this;
         }
 
-        public RecipeBuilder doubleChance(float chance) {
-            this.doubleChance = chance;
+        public RecipeBuilder secondaryChance(float chance) {
+            this.secondaryChance = chance;
             return this;
         }
 
@@ -83,12 +83,12 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
-            msg.add(this.chance < 0, () -> "Chance cannot be negative");
-            msg.add(this.doubleChance < 0 || this.doubleChance > 1, () -> "Chance to double output must be between [0,1]. Instead found " + this.doubleChance + ".");
+            msg.add(this.weight < 0, () -> "Weight cannot be negative");
+            msg.add(this.secondaryChance < 0 || this.secondaryChance > 1, () -> "Secondary chance must be between [0,1]. Instead found " + this.secondaryChance + ".");
         }
 
         public GrindstoneRecipe register() {
-            return ModSupport.ASTRAL_SORCERY.get().grindstone.add(Utils.convertToItemHandle(input.get(0)), output.get(0), chance, doubleChance);
+            return ModSupport.ASTRAL_SORCERY.get().grindstone.add(Utils.convertToItemHandle(input.get(0)), output.get(0), weight, secondaryChance);
         }
     }
 }
