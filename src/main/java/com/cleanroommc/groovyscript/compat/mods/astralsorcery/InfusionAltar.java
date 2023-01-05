@@ -71,7 +71,7 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
+            validateItems(msg, 1, 64, 1, 64);
             msg.add(this.consumption <= 0.0F, () -> "Consumption must be a positive value.");
         }
 

@@ -1,17 +1,16 @@
 import net.minecraft.util.math.MathHelper
 
-mods.astralsorcery.StarlightAltar.recipeBuilder()
+mods.astralsorcery.StarlightAltar.discoveryRecipeBuilder()
         .output(item('minecraft:water_bucket'))
         .row('   ')
         .row(' B ')
         .row('   ')
         .key('B', item('minecraft:bucket'))
-        .altarLevel(0)
         .starlight(1)
         .craftTime(1)
         .register()
 
-mods.astralsorcery.StarlightAltar.recipeBuilder()
+mods.astralsorcery.StarlightAltar.constellationRecipeBuilder()
         .output(item('minecraft:pumpkin'))
         .matrix('ss ss',
                 's   s',
@@ -20,12 +19,11 @@ mods.astralsorcery.StarlightAltar.recipeBuilder()
                 'ss ss')
         .key('s', item('minecraft:pumpkin_seeds'))
         .key('d', ore('dirt'))
-        .setConstellationCraft()
         .starlight(0)
         .craftTime(0)
         .register()
 
-mods.astralsorcery.StarlightAltar.recipeBuilder()
+mods.astralsorcery.StarlightAltar.traitRecipeBuilder()
         .output(item('astralsorcery:itemrockcrystalsimple').setSize(300).setPurity(50).setCutting(50))
         .matrix('sssss',
                 'sgggs',
@@ -40,7 +38,6 @@ mods.astralsorcery.StarlightAltar.recipeBuilder()
         .outerInput(fluid('astralsorcery.liquidstarlight') * 1000)
         .outerInput(ore('treeSapling'))
         .constellation(constellation('discidia'))
-        .setTraitCraft()
         .starlight(0)
         .craftTime(0)
         .register()
@@ -130,45 +127,12 @@ mods.astralsorcery.Constellation.constellationMapEffectBuilder()
 
 mods.astralsorcery.Constellation.removeConstellationMapEffect(constellation('discidia'))
 
-mods.astralsorcery.StarlightAltar.recipeBuilder()
-        .output(item('astralsorcery:itemcape').withNbt([astralsorcery: [constellationName: constellation('square').getUnlocalizedName()]]))
-        .matrix('  s  ',
-                '  d  ',
-                'sdmds',
-                '  d  ',
-                '  s  ')
-        .key('s', ore('dustAstralStarmetal'))
-        .key('d', ore('gemDiamond'))
-        .key('m', item('astralsorcery:itemcape'))
-        .outerInput(ore('gemDiamond'))
-        .outerInput(item('minecraft:water_bucket'))
-        .outerInput(item('minecraft:rabbit_foot'))
-        .outerInput(item('minecraft:fish'))
+mods.astralsorcery.Constellation.signatureItems()
         .constellation(constellation('square'))
-        .setTraitCraft()
-        .starlight(0)
-        .craftTime(0)
-        .register()
-
-mods.astralsorcery.StarlightAltar.recipeBuilder()
-        .output(item('astralsorcery:itemconstellationpaper').withNbt([astralsorcery: [constellationName: constellation('square').getUnlocalizedName()]]))
-        .matrix('  d  ',
-                '  f  ',
-                'dspsd',
-                '  b  ',
-                '  d  ')
-        .key('p', item('astralsorcery:itemcraftingcomponent', 5))
-        .key('d', ore('gemDiamond'))
-        .key('f', item('minecraft:feather'))
-        .key('s', ore('dustAstralStarmetal'))
-        .key('b', ore('dyeBlack'))
-        .outerInput(ore('gemDiamond'))
-        .outerInput(item('minecraft:water_bucket'))
-        .outerInput(item('minecraft:rabbit_foot'))
-        .outerInput(item('minecraft:fish'))
-        .setTraitCraft()
-        .starlight(0)
-        .craftTime(0)
+        .addItem(ore('gemDiamond'))
+        .addItem(item('minecraft:water_bucket'))
+        .addItem(item('minecraft:rabbit_foot'))
+        .addItem(item('minecraft:fish'))
         .register()
 
 mods.astralsorcery.PerkTree.attributePerkBuilder()

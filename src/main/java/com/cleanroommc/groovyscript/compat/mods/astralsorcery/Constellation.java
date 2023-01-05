@@ -2,14 +2,31 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationBaseAccessor;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationMapEffectRegistryAccessor;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationRegistryAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.Iterables;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CapeAttunementRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationPaperRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.lib.RecipesAS;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.potion.Potion;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -21,6 +38,8 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
 
     private final HashMap<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsAdded = new HashMap<>();
     private final HashMap<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsRemoved = new HashMap<>();
+    private final HashMap<IConstellation, List<ItemHandle>> signatureItemsAdded = new HashMap<>();
+    private final HashMap<IConstellation, List<ItemHandle>> signatureItemsRemoved = new HashMap<>();
 
     @Override
     @GroovyBlacklist
@@ -31,8 +50,13 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
 
         this.constellationMapEffectsRemoved.forEach((constellation, effect) -> ConstellationMapEffectRegistry.registerMapEffect(constellation, effect.enchantmentEffects, effect.potionEffects));
         this.constellationMapEffectsAdded.forEach((constellation, effect) -> this.removeConstellationMapEffect(constellation, false));
+        this.signatureItemsAdded.keySet().forEach(this::removeSignatureItems);
+        this.signatureItemsRemoved.forEach( (constellation, items) -> items.forEach(item -> this.addSignatureItem(constellation, item)) );
+
         this.constellationMapEffectsAdded.clear();
         this.constellationMapEffectsRemoved.clear();
+        this.signatureItemsAdded.clear();
+        this.signatureItemsRemoved.clear();
     }
 
     private void add(IConstellation constellation) {
@@ -77,12 +101,78 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         }
     }
 
+    private void addSignatureItem(IConstellation constellation, ItemHandle item) {
+        constellation.addSignatureItem(item);
+    }
+
+    public void addSignatureItem(IConstellation constellation, IIngredient ing) {
+        if (!this.signatureItemsAdded.containsKey(constellation)) {
+            this.signatureItemsAdded.put(constellation, new ArrayList<>());
+        }
+        this.signatureItemsAdded.get(constellation).add(Utils.convertToItemHandle(ing));
+        constellation.addSignatureItem(Utils.convertToItemHandle(ing));
+        if (!(constellation instanceof IMinorConstellation)) this.updateDefaultCapeRecipe(constellation);
+        this.updateDefaultPaperRecipe(constellation);
+
+    }
+    public void addSignatureItem(IConstellation constellation, IIngredient... ings) {
+        for (IIngredient ing : ings) {
+            this.addSignatureItem(constellation, ing);
+        }
+    }
+    public void addSignatureItem(IConstellation constellation, Collection<IIngredient> ings) {
+        ings.forEach(ing -> this.addSignatureItem(constellation, ing));
+    }
+
+    public void removeSignatureItems(IConstellation constellation) {
+        this.removeSignatureItems(constellation, true);
+    }
+
+    public void removeSignatureItems(IConstellation constellation, boolean doBackup) {
+        if (doBackup) this.signatureItemsRemoved.put(constellation, ((ConstellationBaseAccessor) constellation).getSignatureItems());
+        ((ConstellationBaseAccessor) constellation).getSignatureItems().clear();
+        if (!(constellation instanceof IMinorConstellation)) this.updateDefaultCapeRecipe(constellation);
+        this.updateDefaultPaperRecipe(constellation);
+    }
+
+    private void updateDefaultPaperRecipe(IConstellation constellation) {
+        AccessibleRecipeAdapater shapedPaper = ShapedRecipe.Builder.newShapedRecipe("internal/altar/constellationpaper/" + constellation.getSimpleName().toLowerCase(), ItemsAS.constellationPaper).addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(), ShapedRecipeSlot.CENTER).addPart(Items.FEATHER, ShapedRecipeSlot.UPPER_CENTER).addPart(OreDictAlias.getDyeOreDict(EnumDyeColor.BLACK), ShapedRecipeSlot.LOWER_CENTER).addPart(OreDictAlias.ITEM_STARMETAL_DUST, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT).unregisteredAccessibleShapedRecipe();
+        ConstellationPaperRecipe recipe = new ConstellationPaperRecipe(shapedPaper, constellation);
+        ItemHandle first = (ItemHandle)Iterables.getFirst(constellation.getConstellationSignatureItems(), (Object)null);
+        recipe.setInnerTraitItem(first, TraitRecipe.TraitRecipeSlot.values());
+
+        for (ItemHandle s : constellation.getConstellationSignatureItems()) {
+            recipe.addOuterTraitItem(s);
+        }
+
+        AltarRecipeRegistry.registerAltarRecipe(recipe);
+        RecipesAS.paperCraftingRecipes.put(constellation, recipe);
+    }
+
+    private void updateDefaultCapeRecipe(IConstellation constellation) {
+        ItemHandle first = (ItemHandle) Iterables.getFirst(constellation.getConstellationSignatureItems(), (Object)null);
+        AccessibleRecipeAdapater ar = ShapedRecipe.Builder.newShapedRecipe("internal/cape/att/" + constellation.getSimpleName().toLowerCase(), ItemsAS.armorImbuedCape).addPart(ItemsAS.armorImbuedCape, ShapedRecipeSlot.CENTER).addPart(first, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT, ShapedRecipeSlot.LOWER_CENTER).unregisteredAccessibleShapedRecipe();
+        CapeAttunementRecipe recipe = new CapeAttunementRecipe(constellation, ar);
+
+        for (ItemHandle s : constellation.getConstellationSignatureItems()) {
+            recipe.addOuterTraitItem(s);
+        }
+
+        recipe.setInnerTraitItem(OreDictAlias.ITEM_STARMETAL_DUST, TraitRecipe.TraitRecipeSlot.values());
+        AltarRecipeRegistry.registerAltarRecipe(recipe);
+        RecipesAS.capeCraftingRecipes.put(constellation, recipe);
+    }
+
     public ConstellationBuilder constellationBuilder() {
         return new ConstellationBuilder();
     }
 
     public ConstellationMapEffectBuilder constellationMapEffectBuilder() {
         return new ConstellationMapEffectBuilder();
+    }
+
+    public SignatureItemsHelper signatureItems() {
+        return new SignatureItemsHelper();
     }
 
     public static class ConstellationBuilder {
@@ -227,21 +317,50 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         }
 
         private boolean validate() {
-            ArrayList<String> errors = new ArrayList<>();
-            if (constellation == null) errors.add("No constellation provided.");
-            if (enchantmentEffect.isEmpty() && potionEffect.isEmpty()) errors.add("Either enchantmentEffect or potionEffect must be provided, neither were found.");
-            if (!errors.isEmpty()) {
-                GroovyLog.Msg errorOut = GroovyLog.msg("Error adding Astral Sorcery Constellation Map Effect: ");
-                errors.forEach(errorOut::add);
-                errorOut.error().post();
-                return false;
-            }
-            return true;
+            GroovyLog.Msg out = GroovyLog.msg("Error adding Astral Sorcery Constellation Map Effect").error();
+
+            out.add(this.constellation == null, "No constellation provided.");
+            out.add(enchantmentEffect.isEmpty() && potionEffect.isEmpty(), "Either enchantmentEffect or potionEffect must be provided, neither were found.");
+
+            return !out.postIfNotEmpty();
         }
 
         public void register() {
             if (!validate()) return;
             ModSupport.ASTRAL_SORCERY.get().constellation.addConstellationMapEffect(constellation, enchantmentEffect, potionEffect);
+        }
+
+    }
+
+    public static class SignatureItemsHelper {
+
+        private IConstellation constellation = null;
+        private boolean doStrip = false;
+        private final ArrayList<IIngredient> items = new ArrayList<>();
+
+        public SignatureItemsHelper constellation(IConstellation constellation) {
+            this.constellation = constellation;
+            return this;
+        }
+
+        public SignatureItemsHelper stripItems() {
+            this.doStrip = true;
+            return this;
+        }
+
+        public SignatureItemsHelper addItem(IIngredient ing) {
+            this.items.add(ing);
+            return this;
+        }
+
+        public void register() {
+            if (this.constellation != null) {
+                if (this.doStrip)
+                    ModSupport.ASTRAL_SORCERY.get().constellation.removeSignatureItems(this.constellation);
+                ModSupport.ASTRAL_SORCERY.get().constellation.addSignatureItem(this.constellation, this.items);
+            } else {
+                GroovyLog.msg("Error modifying Astral Sorcery constellation signature items").add("No constellation specified.").error().post();
+            }
         }
 
     }

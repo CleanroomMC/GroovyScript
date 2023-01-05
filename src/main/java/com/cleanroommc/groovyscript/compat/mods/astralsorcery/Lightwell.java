@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,30 +89,21 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         }
 
         private boolean validate() {
-            ArrayList<String> errors = new ArrayList<>();
-            ArrayList<String> warnings = new ArrayList<>();
+            GroovyLog.Msg out = GroovyLog.msg("Error adding recipe to Astral Sorcery Lightwell");
 
-            if (this.output == null) errors.add("No output specified.");
-            if (this.catalyst == null) errors.add("No catalyst specified.");
             if (this.productionMultiplier < 0.0F) {
-                warnings.add("Production multiplier may not be negative, defaulting to 0.");
+                out.add("Production multiplier may not be negative, defaulting to 0.").warn();
                 this.productionMultiplier = 0.0F;
             }
             if (this.shatterMultiplier < 0.0F) {
-                warnings.add("Shatter multiplier may not be negative, defaulting to 0.");
+                out.add("Shatter multiplier may not be negative, defaulting to 0.").warn();
                 this.shatterMultiplier = 0.0F;
             }
+            out.add(this.output == null, "No output specified.").error();
+            out.add(this.catalyst == null, "No catalyst specified.").error();
 
-            if (!errors.isEmpty() || !warnings.isEmpty()) {
-                GroovyLog.Msg errorOut = GroovyLog.msg("Error adding recipe to Astral Sorcery Lightwell");
-                errors.forEach(errorOut::add);
-                warnings.forEach(errorOut::add);
-                if ((errors.isEmpty())) errorOut.warn().post();
-                else errorOut.error().post();
-                return errors.isEmpty();
-            }
-
-            return true;
+            out.postIfNotEmpty();
+            return out.getLevel() != Level.ERROR;
         }
 
         public void register() {

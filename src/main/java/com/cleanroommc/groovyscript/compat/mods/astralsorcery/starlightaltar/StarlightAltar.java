@@ -222,7 +222,19 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
         AltarRecipeRegistry.compileRecipes();
     }
 
-    public static AltarRecipeBuilder recipeBuilder() {
-        return new AltarRecipeBuilder();
+    public static AltarRecipeBuilder discoveryRecipeBuilder() {
+        return new AltarRecipeBuilder(3, 3, TileAltar.AltarLevel.DISCOVERY);
+    }
+
+    public static AltarRecipeBuilder attunementRecipeBuilder() {
+        return new AltarRecipeBuilder(5, 5, TileAltar.AltarLevel.ATTUNEMENT);
+    }
+
+    public static AltarRecipeBuilder constellationRecipeBuilder() {
+        return new AltarRecipeBuilder(5, 5, TileAltar.AltarLevel.CONSTELLATION_CRAFT);
+    }
+
+    public static AltarRecipeBuilder traitRecipeBuilder() {
+        return new AltarRecipeBuilder(5, 5, TileAltar.AltarLevel.TRAIT_CRAFT);
     }
 }

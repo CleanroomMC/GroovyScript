@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ResearchNodeAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -13,6 +14,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -224,7 +226,22 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         }
 
         private boolean validate() {
-            return true;
+            GroovyLog.Msg out = GroovyLog.msg("Error adding Research Node to Astral Sorcery Journal").error();
+
+            if (this.name == null || this.name.equals("")) {
+                out.add("Name not provided.");
+            }
+            if (this.node == null || this.node.isItemEqual(ItemStack.EMPTY)) {
+                out.add("No display item provided.");
+            }
+            if (this.location == null) {
+                out.add("No location specified.");
+            }
+            if (this.category == null) {
+                out.add("No research tab specified.");
+            }
+
+            return !out.postIfNotEmpty();
         }
 
         public void register() {
