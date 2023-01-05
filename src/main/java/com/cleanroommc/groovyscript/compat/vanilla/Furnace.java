@@ -1,16 +1,17 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
@@ -52,11 +53,10 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
     @GroovyBlacklist
     private ItemStack findTrueInput(ItemStack input) {
-        FurnaceRecipeAccess recipes = (FurnaceRecipeAccess) FurnaceRecipes.instance();
-        ItemStack trueInput = recipes.getInputList().get(input);
+        ItemStack trueInput = FurnaceRecipeManager.inputMap.get(input);
         if (trueInput == null && input.getMetadata() != Short.MAX_VALUE) {
             input = new ItemStack(input.getItem(), input.getCount(), Short.MAX_VALUE);
-            trueInput = recipes.getInputList().get(input);
+            trueInput = FurnaceRecipeManager.inputMap.get(input);
         }
         return trueInput;
     }
@@ -76,7 +76,6 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
             }
             return false;
         }
-        FurnaceRecipeAccess recipes = (FurnaceRecipeAccess) FurnaceRecipes.instance();
 
         ItemStack trueInput = findTrueInput(input);
         if (trueInput == null) {
@@ -88,18 +87,16 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
             }
             return false;
         }
-        ItemStack output = recipes.getSmeltingList().remove(trueInput);
-        Float exp = recipes.getExperienceList().remove(output);
-
-        if (output != null && exp != null) {
+        ItemStack output = FurnaceRecipes.instance().getSmeltingList().remove(trueInput);
+        if (output != null) {
+            float exp = FurnaceRecipes.instance().getSmeltingExperience(output);
             Recipe recipe = new Recipe(trueInput, output, exp);
             if (isScripted) addBackup(recipe);
             return true;
         } else {
             if (isScripted) {
                 GroovyLog.msg("Error removing Minecraft Furnace recipe")
-                        .add(output == null, () -> "Found input, but no output for " + input)
-                        .add(exp == null, () -> "Found input, but no exp value for " + input)
+                        .add("Found input, but no output for " + input)
                         .error()
                         .post();
             }
@@ -109,14 +106,10 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
     }
 
     public SimpleObjectStream<Recipe> streamRecipes() {
-        FurnaceRecipeAccess furnaceRecipes = (FurnaceRecipeAccess) FurnaceRecipes.instance();
         List<Recipe> recipes = new ArrayList<>();
-        for (ItemStack input : furnaceRecipes.getInputList().values()) {
-            ItemStack output = furnaceRecipes.getSmeltingList().get(input);
-            Float exp = furnaceRecipes.getExperienceList().get(output);
-            if (output != null && exp != null) {
-                recipes.add(new Recipe(input.copy(), output.copy(), exp));
-            }
+        for (Map.Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet()) {
+            float exp = FurnaceRecipes.instance().getSmeltingExperience(entry.getValue());
+            recipes.add(new Recipe(entry.getKey(), entry.getValue(), exp));
         }
         return new SimpleObjectStream<>(recipes, false).setRemover(recipe -> remove(recipe, true));
     }

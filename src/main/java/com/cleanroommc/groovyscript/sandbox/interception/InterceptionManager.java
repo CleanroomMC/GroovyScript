@@ -130,9 +130,10 @@ public class InterceptionManager {
 
     public boolean isBlacklistedMethod(Class<?> receiver, String method, Object... args) {
         if (receiver.getSuperclass() == Script.class) return false;
+        if (receiver.isAnnotationPresent(GroovyBlacklist.class)) return true;
         AnnotatedElement method1 = findMethod(receiver, method, args);
         if (method1 == null) {
-            GroovyScript.LOGGER.error("Could not find method {} in {}", method, receiver.getName());
+            GroovyScript.LOGGER.debug("Could not find method {} in {}", method, receiver.getName());
         }
         return method1 != null && method1.isAnnotationPresent(GroovyBlacklist.class);
     }
@@ -141,16 +142,17 @@ public class InterceptionManager {
         if (receiver.getSuperclass() == Script.class) return false;
         Constructor<?> constructor = findConstructor(receiver, args);
         if (constructor == null) {
-            GroovyScript.LOGGER.error("Could not find constructor in {}", receiver.getName());
+            GroovyScript.LOGGER.debug("Could not find constructor in {}", receiver.getName());
         }
         return constructor != null && constructor.isAnnotationPresent(GroovyBlacklist.class);
     }
 
     public boolean isBlacklistedField(Class<?> receiver, String field, FieldAccess access) {
         if (receiver.getSuperclass() == Script.class) return false;
+        if (receiver.isAnnotationPresent(GroovyBlacklist.class)) return true;
         AnnotatedElement field1 = findField(receiver, field, access);
         if (field1 == null) {
-            GroovyScript.LOGGER.error("Could not find field {} in {}", field, receiver.getName());
+            GroovyScript.LOGGER.debug("Could not find field {} in {}", field, receiver.getName());
         }
         return field1 != null && field1.isAnnotationPresent(GroovyBlacklist.class);
     }
@@ -167,7 +169,7 @@ public class InterceptionManager {
 
         Method method1 = findMethod(method);
         if (method1 == null) {
-            GroovyScript.LOGGER.info("No method found for {}", methodName);
+            GroovyScript.LOGGER.debug("No method found for {}", methodName);
         }
         return method1;
     }
