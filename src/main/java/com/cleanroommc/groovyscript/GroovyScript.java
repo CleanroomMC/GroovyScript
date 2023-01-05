@@ -18,10 +18,10 @@ import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -82,21 +82,21 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
-        if (FMLCommonHandler.instance().getSide().isClient()) {
-            ClientRegistry.registerKeyBinding(reloadKey);
-        }
         getSandbox().run(GroovyScriptSandbox.LOADER_POST_INIT);
     }
 
     @Mod.EventHandler
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new GSCommand());
+        if (event.getServer() instanceof IntegratedServer) {
+            ClientRegistry.registerKeyBinding(reloadKey);
+        }
     }
 
     @SubscribeEvent
     public static void onInput(InputEvent.KeyInputEvent event) {
         long time = Minecraft.getSystemTime();
-        if (reloadKey.isPressed() && time - timeSinceLastUse >= 1000 && Minecraft.getMinecraft().player.isCreative()) {
+        if (reloadKey.isPressed() && time - timeSinceLastUse >= 1000 && Minecraft.getMinecraft().player.getPermissionLevel() >= 4) {
             GSCommand.runReload(Minecraft.getMinecraft().player, null);
             timeSinceLastUse = time;
         }
