@@ -35,8 +35,6 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
 
     private final List<String> errors = new ArrayList<>();
 
-    private static final String ID_PREFIX = "starlight_altar_";
-
     public AltarRecipeBuilder(int width, int height, TileAltar.AltarLevel level) {
         super(width, height);
         this.altarLevel = level;
@@ -153,7 +151,7 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
         if (this.starlightRequired < 0) {
             out.add("Starlight amount cannot be negative, setting starlight amount to 0.");
             this.starlightRequired = 0;
-        };
+        }
         if (this.craftingTickTime < 0) {
             out.add("Crafting time cannot be negative, setting crafting time to 0.");
             this.craftingTickTime = 0;
