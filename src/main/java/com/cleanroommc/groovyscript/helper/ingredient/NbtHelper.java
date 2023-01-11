@@ -51,7 +51,7 @@ public class NbtHelper {
         if (o instanceof List) {
             NBTTagList list = new NBTTagList();
             byte type = 0;
-            for (Object lo : list) {
+            for (Object lo : (List<?>) o) {
                 NBTBase lNbt = toNbt(lo);
                 if (type == 0) {
                     type = lNbt.getId();
