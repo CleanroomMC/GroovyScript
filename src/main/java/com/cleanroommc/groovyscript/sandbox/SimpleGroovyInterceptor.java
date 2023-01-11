@@ -5,7 +5,7 @@ import com.cleanroommc.groovyscript.api.IGroovyPropertyGetter;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
-import groovy.lang.Script;
+import groovy.lang.GroovyObject;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 
@@ -13,7 +13,8 @@ public class SimpleGroovyInterceptor extends GroovyInterceptor {
 
     @Override
     public Object onMethodCall(Invoker invoker, Object receiver, String method, Object... args) throws Throwable {
-        if (receiver.getClass().getSuperclass() == Script.class) {
+        // TODO: Do this at compile time
+        if (receiver instanceof GroovyObject) {
             if (args.length >= 1 && args[0] instanceof String) {
                 IBracketHandler<?> bracketHandler = BracketHandlerManager.getBracketHandler(method);
                 if (bracketHandler != null) {

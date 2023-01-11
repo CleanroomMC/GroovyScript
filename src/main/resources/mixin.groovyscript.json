@@ -12,5 +12,8 @@
     "InventoryCraftingAccess",
     "ItemStackMixin",
     "SlotCraftingAccess"
+  ],
+  "client": [
+    "GuiScreenMixin"
   ]
 }

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript;
 
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
+import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStackExpansion;
@@ -16,9 +17,14 @@ import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -83,6 +89,13 @@ public class GroovyScript {
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
         getSandbox().run(GroovyScriptSandbox.LOADER_POST_INIT);
+
+        CustomClickAction.registerAction("copy", value -> {
+            GuiScreen.setClipboardString(value);
+            Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.command.copy.copied_start")
+                    .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
+                    .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
+        });
     }
 
     @Mod.EventHandler

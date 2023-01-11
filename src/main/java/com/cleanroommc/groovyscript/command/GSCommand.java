@@ -167,17 +167,6 @@ public class GSCommand extends CommandTreeBase {
     }
 
     @Override
-    public void execute(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String[] args) throws CommandException {
-        if (args.length > 0) {
-            if (sender instanceof EntityPlayerMP && args[0].equals("copy")) {
-                NetworkHandler.sendToPlayer(new SCopy(Arrays.copyOfRange(args, 1, args.length)), (EntityPlayerMP) sender);
-                return;
-            }
-        }
-        super.execute(server, sender, args);
-    }
-
-    @Override
     @Nonnull
     public String getName() {
         return "groovyscript";
