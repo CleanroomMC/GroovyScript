@@ -47,7 +47,7 @@ public class BlockStateBracketHandler implements IBracketHandler<IBlockState> {
     public IBlockState parse(String arg) {
         String[] parts = arg.split(SPLITTER);
         if (parts.length < 2) {
-            GroovyLog.get().error("Can't find item for '{}'", arg);
+            GroovyLog.get().error("Can't find block for '{}'", arg);
             return null;
         }
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(parts[0], parts[1]));

@@ -36,6 +36,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.server.command.CommandTreeBase;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +45,8 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GSCommand extends CommandTreeBase {
 
@@ -131,8 +134,10 @@ public class GSCommand extends CommandTreeBase {
                 if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
                     IFluidHandler handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
                     if (handler != null) {
-                        FluidStack fluidStack = handler.drain(Integer.MAX_VALUE, false);
-                        if (fluidStack != null) GSHandCommand.fluidInformation(messages, fluidStack);
+                        GSHandCommand.fluidInformation(messages, Arrays.stream(handler.getTankProperties())
+                                .map(IFluidTankProperties::getContents)
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList()));
                     }
                 }
 
@@ -143,8 +148,6 @@ public class GSCommand extends CommandTreeBase {
                         GSHandCommand.fluidInformation(messages, new FluidStack(fluid, 1000));
                     }
 
-                    // add the block's info
-                    GSHandCommand.blockInformation(messages, block);
                     GSHandCommand.blockStateInformation(messages, blockState);
                 }
 

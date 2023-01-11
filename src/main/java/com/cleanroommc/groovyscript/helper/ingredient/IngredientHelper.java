@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
@@ -10,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 public class IngredientHelper {
 
@@ -244,6 +247,36 @@ public class IngredientHelper {
         builder.append(oreDict);
         if (colored) builder.append(TextFormatting.GRAY);
         builder.append("')");
+        return builder.toString();
+    }
+
+    @SuppressWarnings("all")
+    public static String asGroovyCode(IBlockState state, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.DARK_GREEN);
+        builder.append("blockstate");
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("('");
+        if (colored) builder.append(TextFormatting.AQUA);
+        builder.append(state.getBlock().getRegistryName());
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("'");
+        if (!state.getProperties().isEmpty()) {
+            for (Map.Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
+                IProperty property = entry.getKey();
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append(", ").append("'");
+                if (colored) builder.append(TextFormatting.YELLOW);
+                builder.append(property.getName());
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append("=");
+                if (colored) builder.append(TextFormatting.YELLOW);
+                builder.append(property.getName(entry.getValue()));
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append("'");
+            }
+        }
+        builder.append(")");
         return builder.toString();
     }
 }
