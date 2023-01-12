@@ -26,7 +26,7 @@ public class GSHandCommand {
 
     public static void itemInformation(List<ITextComponent> messages, @NotNull ItemStack stack, boolean prettyNbt) {
         String itemPretty = IngredientHelper.asGroovyCode(stack, true, prettyNbt);
-        String item = IngredientHelper.asGroovyCode(stack, false, false);
+        String item = IngredientHelper.asGroovyCode(stack, false, prettyNbt);
 
         messages.add(new TextComponentString("Item:"));
         messages.add(TextCopyable.string(item, itemPretty).build());
