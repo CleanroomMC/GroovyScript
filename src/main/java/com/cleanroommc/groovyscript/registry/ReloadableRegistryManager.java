@@ -117,7 +117,7 @@ public class ReloadableRegistryManager {
     }
 
     /**
-     * Reloads JEI completely. Is called after groovy scripts are re ran.
+     * Reloads JEI completely. Is called after groovy scripts are ran.
      */
     @ApiStatus.Internal
     @SideOnly(Side.CLIENT)
