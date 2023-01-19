@@ -3,11 +3,13 @@ package com.cleanroommc.groovyscript;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
+import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
@@ -26,6 +28,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -83,6 +86,9 @@ public class GroovyScript {
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
         registerExpansions();
+
+        Loot.TABLE_MANAGER = new LootTableManager(null);
+        Loot.TABLES.values().forEach(table -> ((LootTableAccessor) table).setIsFrozen(false));
 
         getSandbox().run(GroovyScriptSandbox.LOADER_PRE_INIT);
     }

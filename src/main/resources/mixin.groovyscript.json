@@ -11,9 +11,12 @@
     "FurnaceRecipeMixin",
     "InventoryCraftingAccess",
     "ItemStackMixin",
-    "SlotCraftingAccess"
+    "SlotCraftingAccess",
+    "loot.LootPoolAccessor",
+    "loot.LootTableAccessor"
   ],
   "client": [
-    "GuiScreenMixin"
+    "GuiScreenMixin",
+    "MinecraftServerAccessor"
   ]
 }
