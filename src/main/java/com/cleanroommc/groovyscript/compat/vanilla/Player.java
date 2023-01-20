@@ -1,15 +1,15 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.minecraft.item.ItemStack;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Player {
 
     public static final String GIVEN_ITEMS = "GroovyScript:GivenItems";
-    public static final Map<ItemStack, Integer> ITEM_MAP = new HashMap<>();
+    public static final Map<ItemStack, Integer> ITEM_MAP = new Object2IntArrayMap<>();
 
     public void addStartingItem(ItemStack item) {
         this.addStartingItem(item, -1);
