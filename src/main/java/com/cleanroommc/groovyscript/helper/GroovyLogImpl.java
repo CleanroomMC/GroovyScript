@@ -97,12 +97,12 @@ public class GroovyLogImpl implements GroovyLog {
             // has multiple log lines or the main message and the first sub message are to long ->
             // log each sub message in a single line, starting with the main message
             writeLogLine(formatLine(level, main + ": "));
-            for (int i = 1; i < messages.size(); i++) {
+            for (int i = 0; i < messages.size(); i++) {
                 writeLogLine(formatLine(level, " - " + messages.get(i)));
             }
             if (msg.shouldLogToMc()) {
                 logger.log(msg.getLevel(), main + " in line " + Checker.getLineNumber() + " : - ");
-                for (int i = 1; i < messages.size(); i++) {
+                for (int i = 0; i < messages.size(); i++) {
                     logger.log(msg.getLevel(), " - " + messages.get(i));
                 }
             }
