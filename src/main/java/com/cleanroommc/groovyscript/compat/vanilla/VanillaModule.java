@@ -8,6 +8,7 @@ public class VanillaModule {
     public static final Crafting crafting = new Crafting();
     public static final Furnace furnace = new Furnace();
     public static final Loot loot = new Loot();
+    public static final Player player = new Player();
 
     public static void initializeBinding() {
         GroovyScript.getSandbox().registerBinding("crafting", crafting);
@@ -16,6 +17,8 @@ public class VanillaModule {
         GroovyScript.getSandbox().registerBinding("Furnace", furnace);
         GroovyScript.getSandbox().registerBinding("loot", loot);
         GroovyScript.getSandbox().registerBinding("Loot", loot);
+        GroovyScript.getSandbox().registerBinding("player", player);
+        GroovyScript.getSandbox().registerBinding("Player", player);
     }
 
 }
