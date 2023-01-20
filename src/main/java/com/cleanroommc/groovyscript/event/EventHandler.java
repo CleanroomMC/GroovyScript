@@ -11,13 +11,11 @@ import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class EventHandler {
@@ -25,26 +23,13 @@ public class EventHandler {
     @SubscribeEvent
     public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         NBTTagCompound tag = event.player.getEntityData();
-        NBTTagCompound data;
-        if (!tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
-            data = new NBTTagCompound();
-        } else {
+        NBTTagCompound data = new NBTTagCompound();
+        if (tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
             data = tag.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         }
-        if (!data.getBoolean(Player.givenItems)) {
-            Player.itemMap.forEach((stack, slot) -> {
-                if (slot <= -1) {
-                    ItemHandlerHelper.giveItemToPlayer(event.player, stack.copy());
-                } else {
-                    if (event.player.inventory.getStackInSlot(slot) != ItemStack.EMPTY) {
-                        ItemHandlerHelper.giveItemToPlayer(event.player, stack.copy());
-                    } else {
-                        event.player.inventory.setInventorySlotContents(slot, stack.copy());
-                    }
-                }
-
-            });
-            data.setBoolean(Player.givenItems, true);
+        if (!data.getBoolean(Player.GIVEN_ITEMS)) {
+            Player.ITEM_MAP.forEach((stack, slot) -> event.player.inventory.add(slot, stack.copy()));
+            data.setBoolean(Player.GIVEN_ITEMS, true);
             tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
         }
     }
