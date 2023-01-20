@@ -16,8 +16,4 @@ public interface LootTableAccessor {
     @Accessor("isFrozen")
     void setIsFrozen(boolean val);
 
-//    default void unfreeze() {
-//        this.setIsFrozen(false);
-//    }
-
 }

@@ -16,7 +16,6 @@
     "loot.LootTableAccessor"
   ],
   "client": [
-    "GuiScreenMixin",
-    "MinecraftServerAccessor"
+    "GuiScreenMixin"
   ]
 }

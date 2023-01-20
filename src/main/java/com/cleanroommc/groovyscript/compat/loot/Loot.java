@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.compat.loot;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.core.mixin.MinecraftServerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
 import groovy.lang.Closure;
@@ -21,7 +20,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Loot {
 
@@ -36,7 +34,7 @@ public class Loot {
     @ApiStatus.Internal
     public void afterScriptRun() {
         if (Minecraft.getMinecraft().isIntegratedServerRunning() && Minecraft.getMinecraft().getIntegratedServer() != null) {
-            for (WorldServer world : ((MinecraftServerAccessor) Minecraft.getMinecraft().getIntegratedServer()).getWorlds()) {
+            for (WorldServer world : Minecraft.getMinecraft().getIntegratedServer().worlds) {
                 world.getLootTableManager().reloadLootTables();
             }
         }
@@ -46,22 +44,13 @@ public class Loot {
     public static LootTableManager TABLE_MANAGER;
 
     public LootTable getTable(String name) {
-        AtomicReference<LootTable> val = new AtomicReference<>(null);
-        TABLES.forEach( (rl, lt) -> {
-            if (rl.toString().equals(name)) {
-                val.set(lt);
-            }
-        } );
-        if (val.get() == null) GroovyLog.msg("GroovyScript found 0 LootTable(s) named " + name).post();
-        return val.get();
+        LootTable lootTable = TABLES.get(new ResourceLocation(name));
+        if (lootTable == null) GroovyLog.msg("GroovyScript found 0 LootTable(s) named " + name).post();
+        return lootTable;
     }
 
     public void removeTable(String name) {
-        TABLES.forEach( (rl, lt) -> {
-            if (rl.toString().equals(name)) {
-                lt = LootTable.EMPTY_LOOT_TABLE;
-            }
-        } );
+        TABLES.put(new ResourceLocation(name), LootTable.EMPTY_LOOT_TABLE);
     }
 
     public LootPoolBuilder poolBuilder() {
@@ -188,7 +177,7 @@ public class Loot {
         return null;
     }
 
-    public static class conditions {
+    public static class Conditions {
 
         public static LootCondition custom(Closure<Boolean> customCondition) {
             if (Arrays.equals(customCondition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {

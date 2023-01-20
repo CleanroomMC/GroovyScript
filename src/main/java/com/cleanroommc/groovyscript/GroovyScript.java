@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalIte
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
@@ -88,7 +89,10 @@ public class GroovyScript {
         registerExpansions();
 
         Loot.TABLE_MANAGER = new LootTableManager(null);
-        Loot.TABLES.values().forEach(table -> ((LootTableAccessor) table).setIsFrozen(false));
+        Loot.TABLES.values().forEach(table -> {
+            ((LootTableAccessor) table).setIsFrozen(false);
+            ((LootTableAccessor) table).getPools().forEach(pool -> ((LootPoolAccessor) pool).setIsFrozen(false));
+        });
 
         getSandbox().run(GroovyScriptSandbox.LOADER_PRE_INIT);
     }

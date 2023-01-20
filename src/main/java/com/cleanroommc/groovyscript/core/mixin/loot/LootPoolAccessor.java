@@ -13,4 +13,7 @@ public interface LootPoolAccessor {
     @Accessor
     public List<LootEntry> getLootEntries();
 
+    @Accessor
+    void setIsFrozen(boolean val);
+
 }
