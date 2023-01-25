@@ -64,7 +64,7 @@ public class GroovyScript {
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
 
-    private static final KeyBinding reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
+    private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
 
     @Mod.EventHandler
@@ -103,6 +103,7 @@ public class GroovyScript {
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new GSCommand());
         if (event.getServer() instanceof IntegratedServer) {
+            reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
             ClientRegistry.registerKeyBinding(reloadKey);
         }
     }
