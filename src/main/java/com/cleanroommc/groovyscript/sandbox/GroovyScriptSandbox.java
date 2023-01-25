@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
@@ -13,7 +14,6 @@ import net.minecraftforge.common.MinecraftForge;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.jetbrains.annotations.ApiStatus;
 import org.kohsuke.groovy.sandbox.GroovySandbox;
-import org.kohsuke.groovy.sandbox.SandboxTransformer;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,7 +70,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
-        config.addCompilationCustomizers(new SandboxTransformer());
+        config.addCompilationCustomizers(new GroovyScriptCompiler());
     }
 
     @Override

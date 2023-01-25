@@ -1,6 +1,7 @@
 package org.kohsuke.groovy.sandbox;
 
-import java.util.HashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+
 import java.util.Set;
 
 /**
@@ -14,14 +15,14 @@ import java.util.Set;
  *
  * @author Kohsuke Kawaguchi
  */
-final class StackVariableSet implements AutoCloseable {
+public final class StackVariableSet implements AutoCloseable {
 
     final ScopeTrackingClassCodeExpressionTransformer owner;
     final StackVariableSet parent;
 
-    private final Set<String> names = new HashSet<>();
+    private final Set<String> names = new ObjectOpenHashSet<>();
 
-    StackVariableSet(ScopeTrackingClassCodeExpressionTransformer owner) {
+    public StackVariableSet(ScopeTrackingClassCodeExpressionTransformer owner) {
         this.owner = owner;
         this.parent = owner.varScope;
         owner.varScope = this;

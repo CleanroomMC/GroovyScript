@@ -9,7 +9,7 @@ import org.codehaus.groovy.ast.stmt.*;
  *
  * @author Kohsuke Kawaguchi
  */
-abstract class ScopeTrackingClassCodeExpressionTransformer extends ClassCodeExpressionTransformer {
+public abstract class ScopeTrackingClassCodeExpressionTransformer extends ClassCodeExpressionTransformer {
     /**
      * As we visit expressions, track variable scopes.
      * This is used to distinguish local variables from property access. See issue #11.
@@ -167,7 +167,7 @@ abstract class ScopeTrackingClassCodeExpressionTransformer extends ClassCodeExpr
         }
     }
 
-    void declareVariable(Variable exp) {
+    protected void declareVariable(Variable exp) {
         varScope.declare(exp.getName());
     }
 }
