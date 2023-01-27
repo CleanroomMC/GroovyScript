@@ -1,6 +1,9 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
-import org.codehaus.groovy.ast.*;
+import org.codehaus.groovy.ast.ClassNode;
+import org.codehaus.groovy.ast.FieldNode;
+import org.codehaus.groovy.ast.MethodNode;
+import org.codehaus.groovy.ast.Parameter;
 import org.codehaus.groovy.ast.stmt.Statement;
 import org.codehaus.groovy.classgen.GeneratorContext;
 import org.codehaus.groovy.control.CompilationFailedException;
@@ -10,14 +13,17 @@ import org.codehaus.groovy.control.customizers.CompilationCustomizer;
 
 public class GroovyScriptCompiler extends CompilationCustomizer {
 
-    public GroovyScriptCompiler() {
-        super(CompilePhase.CANONICALIZATION);
+    public static GroovyScriptCompiler transformer() {
+        return new GroovyScriptCompiler(CompilePhase.CANONICALIZATION);
+    }
+
+    private GroovyScriptCompiler(CompilePhase phase) {
+        super(phase);
     }
 
     @Override
     public void call(SourceUnit source, GeneratorContext context, ClassNode classNode) throws CompilationFailedException {
         GroovyScriptTransformer visitor = new GroovyScriptTransformer(source, classNode);
-
         for (MethodNode m : classNode.getMethods()) {
             forbidIfFinalizer(m);
             visitor.visitMethod(m);

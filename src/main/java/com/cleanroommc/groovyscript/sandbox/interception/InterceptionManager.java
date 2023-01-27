@@ -101,6 +101,15 @@ public class InterceptionManager {
                 !isBlacklistedConstructor(clazz, args);
     }
 
+    public boolean isValid(MetaMethod method) {
+        Class<?> clazz = method.getDeclaringClass().getTheClass();
+        if (!isValid(clazz)) {
+            return false;
+        }
+        AnnotatedElement ae = findMethod(method);
+        return ae == null || !ae.isAnnotationPresent(GroovyBlacklist.class);
+    }
+
     public boolean isValid(Class<?> clazz) {
         return isValidClass(clazz) && isValidPackage(clazz);
     }
@@ -222,5 +231,9 @@ public class InterceptionManager {
             types[i] = args[i].getClass();
         }
         return types;
+    }
+
+    public static boolean isValidHook(MetaMethod mm) {
+        return INSTANCE.isValid(mm);
     }
 }

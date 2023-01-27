@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.brackets;
 import com.cleanroommc.groovyscript.api.IBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
+import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
@@ -62,5 +63,19 @@ public class BracketHandlerManager {
 
     public static FluidStack parseFluidStack(String s) {
         return FluidRegistry.getFluidStack(s, 1);
+    }
+
+    private static void throwSecurityError(String msg) throws SandboxSecurityException {
+        throw SandboxSecurityException.format(msg);
+    }
+
+    private static Object handleBracket(String name, Object... args) {
+        if (args.length >= 1 && args[0] instanceof String) {
+            IBracketHandler<?> bracketHandler = BracketHandlerManager.getBracketHandler(name);
+            if (bracketHandler != null) {
+                return bracketHandler.parse(args);
+            }
+        }
+        return null;
     }
 }

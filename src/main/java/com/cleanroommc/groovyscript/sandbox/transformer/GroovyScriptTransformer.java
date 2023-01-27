@@ -3,12 +3,8 @@ package com.cleanroommc.groovyscript.sandbox.transformer;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IBracketHandler;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
-import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
-import groovy.lang.GroovySystem;
-import groovy.lang.MetaClass;
 import groovy.lang.MetaMethod;
 import org.codehaus.groovy.GroovyBugError;
 import org.codehaus.groovy.ast.*;
@@ -19,14 +15,13 @@ import org.codehaus.groovy.runtime.metaclass.ReflectionMetaMethod;
 import org.kohsuke.groovy.sandbox.ScopeTrackingClassCodeExpressionTransformer;
 import org.kohsuke.groovy.sandbox.StackVariableSet;
 
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTransformer {
 
-    private static final ClassNode thisClass = new ClassNode(GroovyScriptTransformer.class);
+    private static final ClassNode bracketHandlerClass = ClassHelper.makeCached(BracketHandlerManager.class);
     private final SourceUnit source;
     private final ClassNode classNode;
 
@@ -46,21 +41,7 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
     }
 
     private static Expression makeSecurityError(String msg) {
-        return makeCheckedCall(thisClass, "throwSecurityError", new ConstantExpression(msg));
-    }
-
-    private static void throwSecurityError(String msg) throws SandboxSecurityException {
-        throw SandboxSecurityException.format(msg);
-    }
-
-    private static Object handleBracket(String name, Object... args) {
-        if (args.length >= 1 && args[0] instanceof String) {
-            IBracketHandler<?> bracketHandler = BracketHandlerManager.getBracketHandler(name);
-            if (bracketHandler != null) {
-                return bracketHandler.parse(args);
-            }
-        }
-        return null;
+        return makeCheckedCall(bracketHandlerClass, "throwSecurityError", new ConstantExpression(msg));
     }
 
     @Override
@@ -92,9 +73,6 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
         }
         if (expr instanceof StaticMethodCallExpression) {
             return checkValid((StaticMethodCallExpression) expr);
-        }
-        if (expr instanceof VariableExpression) {
-
         }
         return expr;
     }
@@ -143,11 +121,16 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
                     args = new ArrayList<>();
                 }
                 args.add(0, new ConstantExpression(name));
-                return makeCheckedCall(thisClass, "handleBracket", args.toArray(new Expression[0]));
+                return makeCheckedCall(bracketHandlerClass, "handleBracket", args.toArray(new Expression[0]));
             }
         }
         if (method == null) {
-            return expression;
+            Class<?> type = expression.getObjectExpression().getType().getTypeClass();
+            method = findMethod(type, expression.getMethodAsString(), argCount);
+            if (method == null) {
+                return expression;
+            }
+            expression.setMethodTarget(method);
         }
         for (AnnotationNode annotation : method.getAnnotations()) {
             Class<?> clazz = annotation.getClassNode().getTypeClass();
@@ -164,32 +147,25 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
         if (expression.getMetaMethod() == null) {
             return expression;
         }
-        AnnotatedElement method = findMethod(expression.getMetaMethod());
+       /* AnnotatedElement method = findMethod(expression.getMetaMethod());
         if (method == null) {
             GroovyScript.LOGGER.info("  - no method found for {}", expression.getMetaMethod().getClass());
             return expression;
         }
         if (method.isAnnotationPresent(GroovyBlacklist.class)) {
             return makeSecurityError("Prohibited method call '" + expression.getMethod() + "' on class '" + expression.getOwnerType().getTypeClass().getName() + "'!");
-        }
+        }*/
         return expression;
     }
 
-    private AnnotatedElement findMethod(Class<?> receiver, String methodName, Object[] args) {
-        MetaClass metaClass = GroovySystem.getMetaClassRegistry().getMetaClass(receiver);
-        MetaMethod method = metaClass.getMetaMethod(methodName, args);
-        if (method == null) {
-            method = metaClass.getStaticMetaMethod(methodName, args);
-            if (method == null) {
-                return null;
-            }
+    private MethodNode findMethod(Class<?> receiver, String methodName, int argCount) {
+        ClassNode classNode1 = ClassHelper.makeCached(receiver);
+        List<MethodNode> methods = classNode1.getMethods(methodName);
+        methods.removeIf(methodNode -> methodNode.getParameters().length != argCount);
+        if (methods.size() == 1) {
+            return methods.get(0);
         }
-
-        Method method1 = findMethod(method);
-        if (method1 == null) {
-            GroovyScript.LOGGER.debug("No method found for {}", methodName);
-        }
-        return method1;
+        return null;
     }
 
     private Method findMethod(MetaMethod method) {

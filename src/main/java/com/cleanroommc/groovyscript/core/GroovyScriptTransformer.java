@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.core;
 
 import com.cleanroommc.groovyscript.core.visitors.InvokerHelperVisitor;
+import com.cleanroommc.groovyscript.core.visitors.MetaClassVisitor;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -15,6 +16,10 @@ public class GroovyScriptTransformer implements IClassTransformer {
                 new ClassReader(classBytes).accept(new InvokerHelperVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
+            case MetaClassVisitor.CLASS_NAME:
+                ClassWriter classWriter = new ClassWriter(0);
+                new ClassReader(classBytes).accept(new MetaClassVisitor(classWriter), 0);
+                return classWriter.toByteArray();
         }
         return classBytes;
     }

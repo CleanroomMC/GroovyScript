@@ -70,7 +70,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
-        config.addCompilationCustomizers(new GroovyScriptCompiler());
+        config.addCompilationCustomizers(GroovyScriptCompiler.transformer());
     }
 
     @Override
