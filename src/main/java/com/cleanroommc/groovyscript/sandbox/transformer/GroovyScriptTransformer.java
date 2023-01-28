@@ -1,21 +1,14 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
-import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
-import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
-import groovy.lang.MetaMethod;
-import org.codehaus.groovy.GroovyBugError;
-import org.codehaus.groovy.ast.*;
+import org.codehaus.groovy.ast.ClassHelper;
+import org.codehaus.groovy.ast.ClassNode;
+import org.codehaus.groovy.ast.Parameter;
 import org.codehaus.groovy.ast.expr.*;
 import org.codehaus.groovy.control.SourceUnit;
-import org.codehaus.groovy.reflection.CachedMethod;
-import org.codehaus.groovy.runtime.metaclass.ReflectionMetaMethod;
 import org.kohsuke.groovy.sandbox.ScopeTrackingClassCodeExpressionTransformer;
 import org.kohsuke.groovy.sandbox.StackVariableSet;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +33,6 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
                 new ArgumentListExpression(arguments));
     }
 
-    private static Expression makeSecurityError(String msg) {
-        return makeCheckedCall(bracketHandlerClass, "throwSecurityError", new ConstantExpression(msg));
-    }
-
     @Override
     public Expression transform(Expression expr) {
         if (expr == null) return null;
@@ -56,16 +45,11 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
     }
 
     private Expression transformInternal(Expression expr) {
-        GroovyScript.LOGGER.info("Transfroming:  {}", expr);
-
         if (expr instanceof ClosureExpression) {
             return transformClosure((ClosureExpression) expr);
         }
         if (expr instanceof MethodCallExpression) {
             return checkValid((MethodCallExpression) expr);
-        }
-        if (expr instanceof StaticMethodCallExpression) {
-            return checkValid((StaticMethodCallExpression) expr);
         }
         return expr;
     }
@@ -114,10 +98,6 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
                 return makeCheckedCall(bracketHandlerClass, "handleBracket", args.toArray(new Expression[0]));
             }
         }
-        return expression;
-    }
-
-    private Expression checkValid(StaticMethodCallExpression expression) {
         return expression;
     }
 }

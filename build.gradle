@@ -86,7 +86,8 @@ dependencies {
 
     compileOnly 'org.jetbrains:annotations:23.0.0'
 
-    implementation 'org.apache.groovy:groovy:4.0.8'
+    implementation "org.apache.groovy:groovy:${project.groovy_version}"
+    shadow "org.apache.groovy:groovy:${project.groovy_version}"
 
     compile 'mezz.jei:jei_1.12.2:4.16.1.302'
 
@@ -174,8 +175,6 @@ dependencies {
     } else {
         deobfProvided 'curse.maven:immersive_engineering-231951:2974106'
     }
-
-    //shadow 'org.apache.groovy:groovy:4.0.8'
 }
 
 sourceSets {

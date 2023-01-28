@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.core.visitors;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -10,11 +9,9 @@ public class MetaClassVisitor extends ClassVisitor implements Opcodes {
 
     public static final String CLASS_NAME = "groovy.lang.MetaClassImpl";
 
-    public static final String METHOD = "chooseMethodInternal";
-    public static final String METHOD_2 = "invokeStaticMissingProperty";
-
-    private static final String PARAM_TYPES_CLASS = "org/codehaus/groovy/reflection/ParameterTypes";
-    private static final String INTERCEPTOR_CLASS = "com/cleanroommc/groovyscript/sandbox/interception/InterceptionManager";
+    public static final String INVOKE_METHOD = "invokeMethod";
+    public static final String INVOKE_METHOD_DESC = "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Object;ZZ)Ljava/lang/Object;";
+    public static final String INVOKE_STATIC_MISSING_PROPERTY = "invokeStaticMissingProperty";
 
     public MetaClassVisitor(ClassVisitor cv) {
         super(ASM5, cv);
@@ -23,47 +20,70 @@ public class MetaClassVisitor extends ClassVisitor implements Opcodes {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
-        if (METHOD.equals(name)) {
-            return new Method(visitor);
+        if (INVOKE_METHOD.equals(name) && desc.equals(INVOKE_METHOD_DESC)) {
+            return new InvokeMethod(visitor);
         }
-        if (METHOD_2.equals(name)) {
+        if (INVOKE_STATIC_MISSING_PROPERTY.equals(name)) {
             return new StaticMissingProperty(visitor);
         }
         return visitor;
     }
 
     /**
-     * Adds an extra validation to method finding
+     * Overwrites the invoke method so that when no method is found, it won't search in java itself
      */
-    private static class Method extends MethodVisitor {
+    private static class InvokeMethod extends MethodVisitor {
 
-        private int[] vars = {2, 6, 11};
-        private int i = 0;
-        private boolean flag = false;
+        private final MethodVisitor mv;
 
-        public Method(MethodVisitor mv) {
-            super(ASM5, mv);
+        public InvokeMethod(MethodVisitor mv) {
+            super(ASM5, null);
+            this.mv = mv;
         }
 
         @Override
-        public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-            super.visitMethodInsn(opcode, owner, name, desc, itf);
-            if (opcode == INVOKEVIRTUAL && PARAM_TYPES_CLASS.equals(owner) && "isValidMethod".equals(name)) {
-                flag = true;
-            }
-        }
-
-        @Override
-        public void visitJumpInsn(int opcode, Label label) {
-            super.visitJumpInsn(opcode, label);
-            if (opcode == IFEQ && flag) {
-                mv.visitFieldInsn(GETSTATIC, INTERCEPTOR_CLASS, "INSTANCE", "L" + INTERCEPTOR_CLASS + ";");
-                mv.visitVarInsn(ALOAD, vars[i++]);
-                mv.visitMethodInsn(INVOKEVIRTUAL, INTERCEPTOR_CLASS, "isValid", "(Ljava/lang/Object;)Z", false);
-                mv.visitJumpInsn(IFEQ, label);
-                flag = false;
-                GroovyScript.LOGGER.info("Applied method validation core mod");
-            }
+        public void visitCode() {
+            super.visitCode();
+            Label label0 = new Label();
+            Label label1 = new Label();
+            Label label2 = new Label();
+            mv.visitTryCatchBlock(label0, label1, label2, "groovy/lang/MissingMethodException");
+            mv.visitLabel(label0);
+            mv.visitLineNumber(15, label0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 1);
+            mv.visitVarInsn(ALOAD, 2);
+            mv.visitVarInsn(ALOAD, 3);
+            mv.visitVarInsn(ALOAD, 4);
+            mv.visitVarInsn(ILOAD, 5);
+            mv.visitVarInsn(ILOAD, 6);
+            mv.visitMethodInsn(INVOKESPECIAL, "groovy/lang/MetaClassImpl", "doInvokeMethod", "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Object;ZZ)Ljava/lang/Object;", false);
+            mv.visitLabel(label1);
+            mv.visitInsn(ARETURN);
+            mv.visitLabel(label2);
+            mv.visitLineNumber(16, label2);
+            mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{"groovy/lang/MissingMethodException"});
+            mv.visitVarInsn(ASTORE, 7);
+            Label label3 = new Label();
+            mv.visitLabel(label3);
+            mv.visitLineNumber(17, label3);
+            mv.visitTypeInsn(NEW, "groovy/lang/GroovyRuntimeException");
+            mv.visitInsn(DUP);
+            mv.visitVarInsn(ALOAD, 7);
+            mv.visitMethodInsn(INVOKESPECIAL, "groovy/lang/GroovyRuntimeException", "<init>", "(Ljava/lang/Throwable;)V", false);
+            mv.visitInsn(ATHROW);
+            Label label4 = new Label();
+            mv.visitLabel(label4);
+            mv.visitLocalVariable("mme", "Lgroovy/lang/MissingMethodException;", null, label3, label4, 7);
+            mv.visitLocalVariable("this", "Lgroovy/lang/MetaClassImpl;", null, label0, label4, 0);
+            mv.visitLocalVariable("sender", "Ljava/lang/Class;", null, label0, label4, 1);
+            mv.visitLocalVariable("object", "Ljava/lang/Object;", null, label0, label4, 2);
+            mv.visitLocalVariable("methodName", "Ljava/lang/String;", null, label0, label4, 3);
+            mv.visitLocalVariable("arguments", "[Ljava/lang/Object;", null, label0, label4, 4);
+            mv.visitLocalVariable("isCallToSuper", "Z", null, label0, label4, 5);
+            mv.visitLocalVariable("fromInsideClass", "Z", null, label0, label4, 6);
+            mv.visitMaxs(7, 8);
+            mv.visitEnd();
         }
     }
 
