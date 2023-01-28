@@ -65,7 +65,7 @@ repositories {
         url = 'https://repo.spongepowered.org/maven/'
     }
     maven {
-        url = 'https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all/'
+        url = "https://mvnrepository.com/artifact/org.apache.groovy/groovy"
     }
     maven {
         url 'https://dvs1.progwml6.com/files/maven/'
@@ -86,10 +86,7 @@ dependencies {
 
     compileOnly 'org.jetbrains:annotations:23.0.0'
 
-    compile "org.codehaus.groovy:groovy-ant:${project.groovy_version}"
-    compile "org.codehaus.groovy:groovy-astbuilder:${project.groovy_version}"
-    compile "org.codehaus.groovy:groovy-jsr223:${project.groovy_version}"
-    compile "org.codehaus.groovy:groovy-macro:${project.groovy_version}"
+    implementation 'org.apache.groovy:groovy:4.0.8'
 
     compile 'mezz.jei:jei_1.12.2:4.16.1.302'
 
@@ -178,10 +175,7 @@ dependencies {
         deobfProvided 'curse.maven:immersive_engineering-231951:2974106'
     }
 
-    shadow "org.codehaus.groovy:groovy-ant:${project.groovy_version}"
-    shadow "org.codehaus.groovy:groovy-astbuilder:${project.groovy_version}"
-    shadow "org.codehaus.groovy:groovy-jsr223:${project.groovy_version}"
-    shadow "org.codehaus.groovy:groovy-macro:${project.groovy_version}"
+    //shadow 'org.apache.groovy:groovy:4.0.8'
 }
 
 sourceSets {

@@ -23,6 +23,9 @@ public class StaticVerifierVisitor extends ClassVisitor implements Opcodes {
         return mv;
     }
 
+    /**
+     * Overwrites visit variable method to check if there is a binding for the variables name before erroring
+     */
     private static class VisitVariableVisitor extends MethodVisitor {
 
         private final MethodVisitor mv;

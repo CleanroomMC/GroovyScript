@@ -32,6 +32,9 @@ public class MetaClassVisitor extends ClassVisitor implements Opcodes {
         return visitor;
     }
 
+    /**
+     * Adds an extra validation to method finding
+     */
     private static class Method extends MethodVisitor {
 
         private int[] vars = {2, 6, 11};
@@ -64,6 +67,9 @@ public class MetaClassVisitor extends ClassVisitor implements Opcodes {
         }
     }
 
+    /**
+     * Overwrites the missing static property method to check if there is a binding with that name
+     */
     private static class StaticMissingProperty extends MethodVisitor {
 
         private final MethodVisitor mv;
@@ -243,138 +249,6 @@ public class MetaClassVisitor extends ClassVisitor implements Opcodes {
             mv.visitLocalVariable("bindings", "Ljava/util/Map;", "Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;", label1, label20, 5);
             mv.visitLocalVariable("mc", "Lgroovy/lang/MetaClass;", null, label9, label20, 6);
             mv.visitMaxs(6, 8);
-            mv.visitEnd();
-        }
-
-        public void asm() {
-            //mv = classWriter.visitMethod(ACC_PROTECTED, "invokeStaticMissingProperty", "(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Object;Z)Ljava/lang/Object;", null, null);
-            mv.visitCode();
-            Label label0 = new Label();
-            mv.visitLabel(label0);
-            mv.visitLineNumber(51, label0);
-            mv.visitVarInsn(ALOAD, 1);
-            mv.visitTypeInsn(INSTANCEOF, "java/lang/Class");
-            Label label1 = new Label();
-            mv.visitJumpInsn(IFEQ, label1);
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, "com/cleanroommc/groovyscript/core/visitors/Test", "registry", "Lgroovy/lang/MetaClassRegistry;");
-            mv.visitVarInsn(ALOAD, 1);
-            mv.visitTypeInsn(CHECKCAST, "java/lang/Class");
-            mv.visitMethodInsn(INVOKEINTERFACE, "groovy/lang/MetaClassRegistry", "getMetaClass", "(Ljava/lang/Class;)Lgroovy/lang/MetaClass;", true);
-            Label label2 = new Label();
-            mv.visitJumpInsn(GOTO, label2);
-            mv.visitLabel(label1);
-            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitLabel(label2);
-            mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{"groovy/lang/MetaClass"});
-            mv.visitVarInsn(ASTORE, 5);
-            Label label3 = new Label();
-            mv.visitLabel(label3);
-            mv.visitLineNumber(52, label3);
-            mv.visitVarInsn(ILOAD, 4);
-            Label label4 = new Label();
-            mv.visitJumpInsn(IFEQ, label4);
-            Label label5 = new Label();
-            mv.visitLabel(label5);
-            mv.visitLineNumber(53, label5);
-            mv.visitVarInsn(ALOAD, 5);
-            mv.visitLdcInsn("$static_propertyMissing");
-            mv.visitFieldInsn(GETSTATIC, "com/cleanroommc/groovyscript/core/visitors/Test", "GETTER_MISSING_ARGS", "[Ljava/lang/Class;");
-            mv.visitMethodInsn(INVOKEINTERFACE, "groovy/lang/MetaClass", "getMetaMethod", "(Ljava/lang/String;[Ljava/lang/Object;)Lgroovy/lang/MetaMethod;", true);
-            mv.visitVarInsn(ASTORE, 6);
-            Label label6 = new Label();
-            mv.visitLabel(label6);
-            mv.visitLineNumber(54, label6);
-            mv.visitVarInsn(ALOAD, 6);
-            Label label7 = new Label();
-            mv.visitJumpInsn(IFNULL, label7);
-            Label label8 = new Label();
-            mv.visitLabel(label8);
-            mv.visitLineNumber(55, label8);
-            mv.visitVarInsn(ALOAD, 6);
-            mv.visitVarInsn(ALOAD, 1);
-            mv.visitInsn(ICONST_1);
-            mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
-            mv.visitInsn(DUP);
-            mv.visitInsn(ICONST_0);
-            mv.visitVarInsn(ALOAD, 2);
-            mv.visitInsn(AASTORE);
-            mv.visitMethodInsn(INVOKEVIRTUAL, "groovy/lang/MetaMethod", "invoke", "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;", false);
-            mv.visitInsn(ARETURN);
-            mv.visitLabel(label7);
-            mv.visitLineNumber(57, label7);
-            mv.visitFrame(Opcodes.F_APPEND, 1, new Object[]{"groovy/lang/MetaClass"}, 0, null);
-            Label label9 = new Label();
-            mv.visitJumpInsn(GOTO, label9);
-            mv.visitLabel(label4);
-            mv.visitLineNumber(58, label4);
-            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-            mv.visitVarInsn(ALOAD, 5);
-            mv.visitLdcInsn("$static_propertyMissing");
-            mv.visitFieldInsn(GETSTATIC, "com/cleanroommc/groovyscript/core/visitors/Test", "SETTER_MISSING_ARGS", "[Ljava/lang/Class;");
-            mv.visitMethodInsn(INVOKEINTERFACE, "groovy/lang/MetaClass", "getMetaMethod", "(Ljava/lang/String;[Ljava/lang/Object;)Lgroovy/lang/MetaMethod;", true);
-            mv.visitVarInsn(ASTORE, 6);
-            Label label10 = new Label();
-            mv.visitLabel(label10);
-            mv.visitLineNumber(59, label10);
-            mv.visitVarInsn(ALOAD, 6);
-            mv.visitJumpInsn(IFNULL, label9);
-            Label label11 = new Label();
-            mv.visitLabel(label11);
-            mv.visitLineNumber(60, label11);
-            mv.visitVarInsn(ALOAD, 6);
-            mv.visitVarInsn(ALOAD, 1);
-            mv.visitInsn(ICONST_2);
-            mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
-            mv.visitInsn(DUP);
-            mv.visitInsn(ICONST_0);
-            mv.visitVarInsn(ALOAD, 2);
-            mv.visitInsn(AASTORE);
-            mv.visitInsn(DUP);
-            mv.visitInsn(ICONST_1);
-            mv.visitVarInsn(ALOAD, 3);
-            mv.visitInsn(AASTORE);
-            mv.visitMethodInsn(INVOKEVIRTUAL, "groovy/lang/MetaMethod", "invoke", "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;", false);
-            mv.visitInsn(ARETURN);
-            mv.visitLabel(label9);
-            mv.visitLineNumber(64, label9);
-            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-            mv.visitVarInsn(ALOAD, 1);
-            mv.visitTypeInsn(INSTANCEOF, "java/lang/Class");
-            Label label12 = new Label();
-            mv.visitJumpInsn(IFEQ, label12);
-            Label label13 = new Label();
-            mv.visitLabel(label13);
-            mv.visitLineNumber(65, label13);
-            mv.visitTypeInsn(NEW, "groovy/lang/MissingPropertyException");
-            mv.visitInsn(DUP);
-            mv.visitVarInsn(ALOAD, 2);
-            mv.visitVarInsn(ALOAD, 1);
-            mv.visitTypeInsn(CHECKCAST, "java/lang/Class");
-            mv.visitMethodInsn(INVOKESPECIAL, "groovy/lang/MissingPropertyException", "<init>", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
-            mv.visitInsn(ATHROW);
-            mv.visitLabel(label12);
-            mv.visitLineNumber(67, label12);
-            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-            mv.visitTypeInsn(NEW, "groovy/lang/MissingPropertyException");
-            mv.visitInsn(DUP);
-            mv.visitVarInsn(ALOAD, 2);
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, "com/cleanroommc/groovyscript/core/visitors/Test", "theClass", "Ljava/lang/Class;");
-            mv.visitMethodInsn(INVOKESPECIAL, "groovy/lang/MissingPropertyException", "<init>", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
-            mv.visitInsn(ATHROW);
-            Label label14 = new Label();
-            mv.visitLabel(label14);
-            mv.visitLocalVariable("propertyMissing", "Lgroovy/lang/MetaMethod;", null, label6, label7, 6);
-            mv.visitLocalVariable("propertyMissing", "Lgroovy/lang/MetaMethod;", null, label10, label9, 6);
-            mv.visitLocalVariable("this", "Lcom/cleanroommc/groovyscript/core/visitors/Test;", null, label0, label14, 0);
-            mv.visitLocalVariable("instance", "Ljava/lang/Object;", null, label0, label14, 1);
-            mv.visitLocalVariable("propertyName", "Ljava/lang/String;", null, label0, label14, 2);
-            mv.visitLocalVariable("optionalValue", "Ljava/lang/Object;", null, label0, label14, 3);
-            mv.visitLocalVariable("isGetter", "Z", null, label0, label14, 4);
-            mv.visitLocalVariable("mc", "Lgroovy/lang/MetaClass;", null, label3, label14, 5);
-            mv.visitMaxs(6, 7);
             mv.visitEnd();
         }
     }
