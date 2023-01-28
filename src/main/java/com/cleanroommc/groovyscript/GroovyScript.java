@@ -12,9 +12,9 @@ import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.ExpansionHelper;
-import com.cleanroommc.groovyscript.sandbox.GroovyDeobfuscationMapper;
 import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
+import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
@@ -70,7 +70,7 @@ public class GroovyScript {
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
         NetworkHandler.init();
-        GroovyDeobfuscationMapper.init();
+        GroovyDeobfMapper.init();
         ReloadableRegistryManager.init();
         scriptPath = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy");
         try {
