@@ -1,4 +1,4 @@
-package org.kohsuke.groovy.sandbox;
+package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
@@ -28,6 +28,9 @@ import java.util.Objects;
 public abstract class GroovySandbox {
 
     private static final ThreadLocal<GroovySandbox> currentSandbox = new ThreadLocal<>();
+    // TODO
+    private String currentScript = "null";
+    private int currentLine = -1;
 
     @Nullable
     public static GroovySandbox getCurrentSandbox() {
@@ -143,6 +146,14 @@ public abstract class GroovySandbox {
 
     public Map<String, Object> getBindings() {
         return bindings;
+    }
+
+    public String getCurrentScript() {
+        return currentScript;
+    }
+
+    public int getCurrentLine() {
+        return currentLine;
     }
 
     @Nullable

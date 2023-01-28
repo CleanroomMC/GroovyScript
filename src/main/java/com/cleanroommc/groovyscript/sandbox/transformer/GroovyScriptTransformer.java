@@ -1,18 +1,17 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
+import org.codehaus.groovy.ast.ClassCodeExpressionTransformer;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.Parameter;
 import org.codehaus.groovy.ast.expr.*;
 import org.codehaus.groovy.control.SourceUnit;
-import org.kohsuke.groovy.sandbox.ScopeTrackingClassCodeExpressionTransformer;
-import org.kohsuke.groovy.sandbox.StackVariableSet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTransformer {
+public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
 
     private static final ClassNode bracketHandlerClass = ClassHelper.makeCached(BracketHandlerManager.class);
     private final SourceUnit source;
@@ -56,27 +55,19 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
 
     private Expression transformClosure(ClosureExpression closure) {
         // ClosureExpression.transformExpression doesn't visit the code inside
-        try (StackVariableSet scope = new StackVariableSet(this)) {
-            Parameter[] parameters = closure.getParameters();
-            if (parameters != null) {
-                // Explicitly defined parameters, i.e., ".findAll { i -> i == 'bar' }"
-                if (parameters.length > 0) {
-                    for (Parameter p : parameters) {
-                        if (p.hasInitialExpression()) {
-                            Expression init = p.getInitialExpression();
-                            p.setInitialExpression(transform(init));
-                        }
+        Parameter[] parameters = closure.getParameters();
+        if (parameters != null) {
+            // Explicitly defined parameters, i.e., ".findAll { i -> i == 'bar' }"
+            if (parameters.length > 0) {
+                for (Parameter p : parameters) {
+                    if (p.hasInitialExpression()) {
+                        Expression init = p.getInitialExpression();
+                        p.setInitialExpression(transform(init));
                     }
-                    for (Parameter p : parameters) {
-                        declareVariable(p);
-                    }
-                } else {
-                    // Implicit parameter - i.e., ".findAll { it == 'bar' }"
-                    declareVariable(new Parameter(ClassHelper.DYNAMIC_TYPE, "it"));
                 }
             }
-            closure.getCode().visit(this);
         }
+        closure.getCode().visit(this);
         return closure;
     }
 

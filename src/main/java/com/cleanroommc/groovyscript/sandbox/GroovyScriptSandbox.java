@@ -15,7 +15,6 @@ import groovy.util.ScriptException;
 import net.minecraftforge.common.MinecraftForge;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.jetbrains.annotations.ApiStatus;
-import org.kohsuke.groovy.sandbox.GroovySandbox;
 
 import java.io.File;
 import java.io.IOException;
