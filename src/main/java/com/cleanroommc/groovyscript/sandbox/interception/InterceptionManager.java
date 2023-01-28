@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.codehaus.groovy.reflection.CachedConstructor;
 import org.codehaus.groovy.reflection.CachedField;
 import org.codehaus.groovy.reflection.CachedMethod;
 import org.codehaus.groovy.runtime.metaclass.ReflectionMetaMethod;
@@ -101,12 +102,25 @@ public class InterceptionManager {
                 !isBlacklistedConstructor(clazz, args);
     }
 
-    public boolean isValid(MetaMethod method) {
-        Class<?> clazz = method.getDeclaringClass().getTheClass();
+    /**
+     * Called by asm
+     */
+    public boolean isValid(Object method) {
+        if (method instanceof CachedConstructor) {
+            CachedConstructor cc = (CachedConstructor) method;
+            Class<?> clazz = cc.getCachedClass().getTheClass();
+            if (!isValid(clazz)) {
+                return false;
+            }
+            Constructor<?> c = cc.getCachedConstructor();
+            return !c.isAnnotationPresent(GroovyBlacklist.class);
+        }
+        MetaMethod mm = (MetaMethod) method;
+        Class<?> clazz = mm.getDeclaringClass().getTheClass();
         if (!isValid(clazz)) {
             return false;
         }
-        AnnotatedElement ae = findMethod(method);
+        AnnotatedElement ae = findMethod(mm);
         return ae == null || !ae.isAnnotationPresent(GroovyBlacklist.class);
     }
 
@@ -231,9 +245,5 @@ public class InterceptionManager {
             types[i] = args[i].getClass();
         }
         return types;
-    }
-
-    public static boolean isValidHook(MetaMethod mm) {
-        return INSTANCE.isValid(mm);
     }
 }

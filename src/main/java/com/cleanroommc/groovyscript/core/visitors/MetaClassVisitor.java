@@ -52,8 +52,7 @@ public class MetaClassVisitor extends ClassVisitor implements Opcodes {
             if (opcode == IFEQ && flag) {
                 mv.visitFieldInsn(GETSTATIC, INTERCEPTOR_CLASS, "INSTANCE", "L" + INTERCEPTOR_CLASS + ";");
                 mv.visitVarInsn(ALOAD, vars[i++]);
-                mv.visitTypeInsn(CHECKCAST, "groovy/lang/MetaMethod");
-                mv.visitMethodInsn(INVOKEVIRTUAL, INTERCEPTOR_CLASS, "isValid", "(Lgroovy/lang/MetaMethod;)Z", false);
+                mv.visitMethodInsn(INVOKEVIRTUAL, INTERCEPTOR_CLASS, "isValid", "(Ljava/lang/Object;)Z", false);
                 mv.visitJumpInsn(IFEQ, label);
                 flag = false;
                 GroovyScript.LOGGER.info("Applied method validation core mod");
