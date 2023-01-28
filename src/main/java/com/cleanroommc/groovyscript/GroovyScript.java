@@ -11,7 +11,7 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
-import com.cleanroommc.groovyscript.sandbox.ExpansionHelper;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;

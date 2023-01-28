@@ -57,13 +57,6 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
 
     private Expression transformInternal(Expression expr) {
         GroovyScript.LOGGER.info("Transfroming:  {}", expr);
-        try {
-            if (expr.getType() != null && !InterceptionManager.INSTANCE.isValid(expr.getType().getTypeClass())) {
-                return makeSecurityError("Prohibited class access on " + expr.getType().getName());
-            }
-        } catch (GroovyBugError e) {
-            GroovyLog.get().errorMC(e.getBugText());
-        }
 
         if (expr instanceof ClosureExpression) {
             return transformClosure((ClosureExpression) expr);
@@ -104,14 +97,11 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
     }
 
     private Expression checkValid(MethodCallExpression expression) {
-        MethodNode method = expression.getMethodTarget();
-        GroovyScript.LOGGER.info("  - method call: {}", expression.getMethodAsString());
         int argCount = 0;
         if (expression.getArguments() instanceof TupleExpression) {
             argCount = ((TupleExpression) expression.getArguments()).getExpressions().size();
         }
         if (expression.isImplicitThis() && argCount > 0) {
-            GroovyScript.LOGGER.info("  - maybe bracket handler");
             String name = expression.getMethodAsString();
             if (BracketHandlerManager.getBracketHandler(name) != null) {
                 List<Expression> args;
@@ -124,57 +114,10 @@ public class GroovyScriptTransformer extends ScopeTrackingClassCodeExpressionTra
                 return makeCheckedCall(bracketHandlerClass, "handleBracket", args.toArray(new Expression[0]));
             }
         }
-        if (method == null) {
-            Class<?> type = expression.getObjectExpression().getType().getTypeClass();
-            method = findMethod(type, expression.getMethodAsString(), argCount);
-            if (method == null) {
-                return expression;
-            }
-            expression.setMethodTarget(method);
-        }
-        for (AnnotationNode annotation : method.getAnnotations()) {
-            Class<?> clazz = annotation.getClassNode().getTypeClass();
-            if (clazz == GroovyBlacklist.class) {
-                GroovyScript.LOGGER.info("  - blacklisted");
-                return makeSecurityError("Prohibited method call '" + method.getName() + "' on class '" + clazz.getName() + "'!");
-            }
-        }
         return expression;
     }
 
     private Expression checkValid(StaticMethodCallExpression expression) {
-        GroovyScript.LOGGER.info("  - static method call: {}", expression.getMethod());
-        if (expression.getMetaMethod() == null) {
-            return expression;
-        }
-       /* AnnotatedElement method = findMethod(expression.getMetaMethod());
-        if (method == null) {
-            GroovyScript.LOGGER.info("  - no method found for {}", expression.getMetaMethod().getClass());
-            return expression;
-        }
-        if (method.isAnnotationPresent(GroovyBlacklist.class)) {
-            return makeSecurityError("Prohibited method call '" + expression.getMethod() + "' on class '" + expression.getOwnerType().getTypeClass().getName() + "'!");
-        }*/
         return expression;
-    }
-
-    private MethodNode findMethod(Class<?> receiver, String methodName, int argCount) {
-        ClassNode classNode1 = ClassHelper.makeCached(receiver);
-        List<MethodNode> methods = classNode1.getMethods(methodName);
-        methods.removeIf(methodNode -> methodNode.getParameters().length != argCount);
-        if (methods.size() == 1) {
-            return methods.get(0);
-        }
-        return null;
-    }
-
-    private Method findMethod(MetaMethod method) {
-        while (method instanceof ReflectionMetaMethod) {
-            method = ((ReflectionMetaMethod) method).getCachedMethod();
-        }
-        if (method instanceof CachedMethod) {
-            return ((CachedMethod) method).getCachedMethod();
-        }
-        return null;
     }
 }

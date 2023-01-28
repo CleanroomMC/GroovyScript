@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.sandbox.expand;
 
 import groovy.lang.Closure;
 

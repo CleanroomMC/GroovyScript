@@ -10,7 +10,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.runtime.InvokerHelper;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -19,7 +18,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author brachy84
@@ -33,13 +34,6 @@ public abstract class GroovySandbox {
         return currentSandbox.get();
     }
 
-    @NotNull
-    public static List<GroovyInterceptor> getInterceptors() {
-        GroovySandbox sandbox = getCurrentSandbox();
-        return sandbox != null ? sandbox.interceptors : Collections.emptyList();
-    }
-
-    private final List<GroovyInterceptor> interceptors = new ArrayList<>();
     private final URL[] scriptEnvironment;
     private final ThreadLocal<Boolean> running = ThreadLocal.withInitial(() -> false);
     private final Map<String, Object> bindings = new Object2ObjectOpenHashMap<>();
@@ -59,11 +53,6 @@ public abstract class GroovySandbox {
         Objects.requireNonNull(name);
         Objects.requireNonNull(obj);
         bindings.put(name, obj);
-    }
-
-    public void registerInterceptor(GroovyInterceptor interceptor) {
-        Objects.requireNonNull(interceptor);
-        interceptors.add(interceptor);
     }
 
     public void run() throws Exception {

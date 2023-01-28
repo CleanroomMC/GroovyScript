@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox.mapper;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.sandbox.GroovyDeobfuscationMapper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +22,7 @@ public class GroovyDeobfMapper {
             String method = "MD:";
             String field = "FD:";
 
-            InputStream stream = GroovyDeobfuscationMapper.class.getResourceAsStream("/assets/groovyscript/mappings.srg");
+            InputStream stream = GroovyDeobfMapper.class.getResourceAsStream("/assets/groovyscript/mappings.srg");
             try (BufferedReader br = new BufferedReader(new InputStreamReader(stream))) {
                 String line;
                 while ((line = br.readLine()) != null) {

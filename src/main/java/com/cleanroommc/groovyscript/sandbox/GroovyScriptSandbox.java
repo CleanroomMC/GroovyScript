@@ -4,6 +4,8 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
+import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
+import com.cleanroommc.groovyscript.event.ScriptRunEvent;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import groovy.lang.Binding;
@@ -32,7 +34,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     public GroovyScriptSandbox(URL... scriptEnvironment) {
         super(scriptEnvironment);
-        registerInterceptor(new SimpleGroovyInterceptor());
         registerBinding("mods", ModSupport.INSTANCE);
         registerBinding("log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);

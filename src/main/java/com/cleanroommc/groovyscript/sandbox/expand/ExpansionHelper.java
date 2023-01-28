@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.sandbox.expand;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import groovy.lang.*;
