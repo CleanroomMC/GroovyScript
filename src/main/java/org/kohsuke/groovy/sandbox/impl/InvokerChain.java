@@ -25,7 +25,7 @@ abstract class InvokerChain implements Invoker {
         if (receiver == null) {
             chain = EMPTY_ITERATOR;
         } else {
-            List<GroovyInterceptor> interceptors = GroovySandbox.getInterceptors();
+            List<GroovyInterceptor> interceptors = Collections.emptyList();
             if (interceptors.isEmpty()) {
                 // We are running sandbox-transformed code, but there is no interceptor on the current thread.
                 // This is dangerous (SECURITY-2020), so we reject everything.

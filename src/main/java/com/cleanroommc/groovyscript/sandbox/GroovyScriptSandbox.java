@@ -67,6 +67,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     protected void postInitBindings(Binding binding) {
         binding.setProperty("out", GroovyLog.get().getWriter());
+        binding.setVariable("globals", binding);
     }
 
     @Override

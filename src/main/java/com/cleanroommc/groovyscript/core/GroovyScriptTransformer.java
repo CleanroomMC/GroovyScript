@@ -1,9 +1,6 @@
 package com.cleanroommc.groovyscript.core;
 
-import com.cleanroommc.groovyscript.core.visitors.CachedClassFieldsVisitor;
-import com.cleanroommc.groovyscript.core.visitors.CachedClassMethodsVisitor;
-import com.cleanroommc.groovyscript.core.visitors.InvokerHelperVisitor;
-import com.cleanroommc.groovyscript.core.visitors.MetaClassVisitor;
+import com.cleanroommc.groovyscript.core.visitors.*;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -31,6 +28,11 @@ public class GroovyScriptTransformer implements IClassTransformer {
             case CachedClassFieldsVisitor.CLASS_NAME: {
                 ClassWriter classWriter = new ClassWriter(0);
                 new ClassReader(classBytes).accept(new CachedClassFieldsVisitor(classWriter), 0);
+                return classWriter.toByteArray();
+            }
+            case StaticVerifierVisitor.CLASS_NAME: {
+                ClassWriter classWriter = new ClassWriter(0);
+                new ClassReader(classBytes).accept(new StaticVerifierVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
         }

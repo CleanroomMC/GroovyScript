@@ -141,6 +141,10 @@ public abstract class GroovySandbox {
         return this.running.get();
     }
 
+    public Map<String, Object> getBindings() {
+        return bindings;
+    }
+
     @Nullable
     private Class<?> tryLoadDynamicFile(GroovyScriptEngine engine, File file) throws ResourceException {
         Path path = null;
