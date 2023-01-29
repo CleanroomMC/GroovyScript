@@ -58,6 +58,16 @@ public abstract class GroovySandbox {
         bindings.put(name, obj);
     }
 
+    protected void startRunning() {
+        currentSandbox.set(this);
+        this.running.set(true);
+    }
+
+    protected void stopRunning() {
+        this.running.set(false);
+        currentSandbox.set(null);
+    }
+
     public void run() throws Exception {
         currentSandbox.set(this);
         preRun();
@@ -102,8 +112,7 @@ public abstract class GroovySandbox {
     }
 
     public <T> T runClosure(Closure<T> closure, Object... args) {
-        currentSandbox.set(this);
-        running.set(true);
+        startRunning();
         T result = null;
         try {
             result = closure.call(args);
@@ -111,8 +120,7 @@ public abstract class GroovySandbox {
             GroovyScript.LOGGER.error("Caught an exception trying to run a closure:");
             e.printStackTrace();
         } finally {
-            running.set(false);
-            currentSandbox.set(null);
+            stopRunning();
         }
         return result;
     }

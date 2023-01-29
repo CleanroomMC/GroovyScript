@@ -56,12 +56,7 @@ public class GroovyCodeFactory {
                 return Arrays.stream(cachedClass.getTheClass().getDeclaredMethods())
                         .filter(m -> m.getName().indexOf('+') < 0) // no synthetic JDK 5+ methods
                         .filter(m -> ReflectionUtils.checkCanSetAccessible(m, CachedClass.class))
-                        .filter(m -> {
-                            boolean b = InterceptionManager.INSTANCE.isValid(m);
-                            if (!b)
-                                GroovyLog.get().infoMC("Method {} in {} is invalid", m.getName(), m.getDeclaringClass());
-                            return b;
-                        })
+                        .filter(InterceptionManager.INSTANCE::isValid)
                         .map(!FMLLaunchHandler.isDeobfuscatedEnvironment() && cachedClass.getName().startsWith(MC_CLASS) ?
                                 m -> makeMethod(cachedClass, m) :
                                 m -> new CachedMethod(cachedClass, m))

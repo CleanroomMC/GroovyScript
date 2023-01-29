@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.event.ScriptRunEvent;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import groovy.lang.Binding;
+import groovy.lang.Closure;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
@@ -61,6 +62,21 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     public void run() throws Exception {
         throw new UnsupportedOperationException("Use run(String loader) instead!");
+    }
+
+    @Override
+    public <T> T runClosure(Closure<T> closure, Object... args) {
+        startRunning();
+        T result = null;
+        try {
+            result = closure.call(args);
+        } catch (Exception e) {
+            GroovyLog.get().error("An exception occurred while running a closure!");
+            GroovyLog.get().exception(e);
+        } finally {
+            stopRunning();
+        }
+        return result;
     }
 
     @Override
