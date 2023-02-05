@@ -11,6 +11,7 @@
     "FurnaceRecipeMixin",
     "InventoryCraftingAccess",
     "ItemStackMixin",
+    "MetaClassImplMixin",
     "SlotCraftingAccess"
   ],
   "client": [
