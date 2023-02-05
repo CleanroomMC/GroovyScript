@@ -13,6 +13,7 @@ import java.util.function.Function;
 public class JsonHelper {
 
     public static final JsonObject EMPTY_JSON = new JsonObject();
+    public static final JsonArray EMPTY_JSON_ARRAY = new JsonArray();
     public static final JsonParser jsonParser = new JsonParser();
     public static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -98,6 +99,22 @@ public class JsonHelper {
                 JsonElement element = json.get(key);
                 if (element.isJsonObject()) {
                     return element.getAsJsonObject();
+                }
+            }
+        }
+        return defaultJson;
+    }
+
+    public static JsonArray getJsonArray(JsonObject json, String... keys) {
+        return getJsonArray(json, EMPTY_JSON_ARRAY, keys);
+    }
+
+    public static JsonArray getJsonArray(JsonObject json, JsonArray defaultJson, String... keys) {
+        for (String key : keys) {
+            if (json.has(key)) {
+                JsonElement element = json.get(key);
+                if (element.isJsonArray()) {
+                    return element.getAsJsonArray();
                 }
             }
         }

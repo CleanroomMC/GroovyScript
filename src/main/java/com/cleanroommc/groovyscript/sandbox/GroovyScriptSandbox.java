@@ -24,6 +24,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Objects;
 
 public class GroovyScriptSandbox extends GroovySandbox {
@@ -119,8 +120,13 @@ public class GroovyScriptSandbox extends GroovySandbox {
     }
 
     @Override
-    public Iterable<File> getScriptFiles() {
-        return GroovyScript.getRunConfig().getSortedFiles(currentLoader);
+    public Collection<File> getClassFiles() {
+        return GroovyScript.getRunConfig().getClassFiles();
+    }
+
+    @Override
+    public Collection<File> getScriptFiles() {
+        return GroovyScript.getRunConfig().getSortedFiles(this.currentLoader);
     }
 
     public static String relativizeSource(String source) {
