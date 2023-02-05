@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -71,7 +72,7 @@ public abstract class GroovySandbox {
         currentSandbox.set(this);
         preRun();
 
-        GroovyScriptEngine engine = new GroovyScriptEngine(scriptEnvironment);
+        GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment);
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
         engine.setConfig(config);
         initEngine(engine, config);
@@ -81,27 +82,32 @@ public abstract class GroovySandbox {
 
         running.set(true);
         try {
+            // load and run any configured class files
             for (File classFile : getClassFiles()) {
-                Class<?> clazz = loadScriptClass(engine, classFile);
+                Class<?> clazz = loadScriptClass(engine, classFile, false);
                 if (clazz == null) {
-                    GroovyLog.get().errorMC("Error loading class for {}", classFile.getPath());
+                    // loading script fails if the file is a script that depends on a class file that isn't loaded yet
+                    // we cant determine if the file is a script or a class
                     continue;
                 }
+                // the superclass of class files is Object
                 if (clazz.getSuperclass() == Object.class && shouldRunFile(classFile)) {
                     executedClasses.add(classFile);
                     InvokerHelper.createScript(clazz, binding).run();
                 }
             }
-
+            // now run all script files
             for (File scriptFile : getScriptFiles()) {
                 if (!executedClasses.contains(scriptFile)) {
-                    Class<?> clazz = loadScriptClass(engine, scriptFile);
+                    Class<?> clazz = loadScriptClass(engine, scriptFile, true);
                     if (clazz == null) {
                         GroovyLog.get().errorMC("Error loading script for {}", scriptFile.getPath());
+                        GroovyLog.get().errorMC("Did you forget to register your class file in your run config?");
                         continue;
                     }
                     if (clazz.getSuperclass() == Object.class) {
-                        GroovyLog.get().errorMC("Class file '{}' should be defined in the runConfig in the classes property!");
+                        GroovyLog.get().errorMC("Class file '{}' should be defined in the runConfig in the classes property!", scriptFile);
+                        continue;
                     }
                     if (clazz.getSuperclass() == Script.class && shouldRunFile(scriptFile)) {
                         InvokerHelper.createScript(clazz, binding).run();
@@ -170,7 +176,7 @@ public abstract class GroovySandbox {
         return currentLine;
     }
 
-    private Class<?> loadScriptClass(GroovyScriptEngine engine, File file) {
+    private Class<?> loadScriptClass(GroovyScriptEngine engine, File file, boolean printError) {
         Class<?> scriptClass = null;
         try {
             try {
@@ -188,7 +194,9 @@ public abstract class GroovySandbox {
 
             // if the file is still not found something went wrong
         } catch (Exception e) {
-            e.printStackTrace();
+            if (printError) {
+                e.printStackTrace();
+            }
         }
         return scriptClass;
     }
@@ -196,7 +204,7 @@ public abstract class GroovySandbox {
     @Nullable
     private Class<?> tryLoadDynamicFile(GroovyScriptEngine engine, File file) throws ResourceException {
         Path path = null;
-        /*for (URL root : this.scriptEnvironment) {
+        for (URL root : this.scriptEnvironment) {
             try {
                 File rootFile = new File(root.toURI());
                 // try to combine the root with the file ending
@@ -208,9 +216,9 @@ public abstract class GroovySandbox {
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-        }*/
-        path = file.toPath();
-        if (!Files.exists(path)) return null;
+        }
+
+        if (path == null) return null;
 
         GroovyLog.get().debugMC("Found path '{}' for dynamic file {}", path, file.toString());
 

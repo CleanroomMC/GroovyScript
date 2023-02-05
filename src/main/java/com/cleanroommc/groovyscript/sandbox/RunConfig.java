@@ -49,7 +49,16 @@ public class RunConfig {
     private final String asmClass = null;
     private boolean debug;
 
-    public static final String GROOVY_SUFFIX = ".groovy";
+    public static final String[] GROOVY_SUFFIXES = {".groovy", ".gvy", ".gy", ".gsh"};
+
+    public static boolean isGroovyFile(String path) {
+        for (String suffix : GROOVY_SUFFIXES) {
+            if (path.endsWith(suffix)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public RunConfig(JsonObject json) {
         this.packName = JsonHelper.getString(json, "", "packName", "name");
@@ -137,7 +146,7 @@ public class RunConfig {
             }
             int pathSize = path.split(separator).length;
             try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
-                stream.filter(path1 -> path1.toString().endsWith(GROOVY_SUFFIX))
+                stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile).forEach(file -> {
                             if (files.containsKey(file)) {
                                 if (pathSize > files.getInt(file)) {
