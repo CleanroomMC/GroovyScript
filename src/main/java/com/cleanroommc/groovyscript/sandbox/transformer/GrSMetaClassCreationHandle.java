@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
-import groovy.lang.Binding;
 import groovy.lang.MetaClass;
 import groovy.lang.MetaClassRegistry;
 
@@ -17,7 +16,7 @@ public class GrSMetaClassCreationHandle extends MetaClassRegistry.MetaClassCreat
 
     @Override
     protected MetaClass createNormalMetaClass(Class theClass, MetaClassRegistry registry) {
-        if (!InterceptionManager.INSTANCE.isValid(theClass) && theClass != Binding.class) {
+        if (!InterceptionManager.INSTANCE.isValid(theClass)) {
             return new BlackListedMetaClass(theClass);
         }
         return super.createNormalMetaClass(theClass, registry);

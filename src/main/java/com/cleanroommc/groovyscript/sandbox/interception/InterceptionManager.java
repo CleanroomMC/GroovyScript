@@ -1,8 +1,11 @@
 package com.cleanroommc.groovyscript.sandbox.interception;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import groovy.lang.Binding;
+import groovy.lang.Script;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import org.codehaus.groovy.runtime.NullObject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,12 +18,16 @@ public class InterceptionManager {
     private final List<String> bannedPackages = new ArrayList<>();
     private final Set<Class<?>> bannedClasses = new ObjectOpenHashSet<>();
     private final Map<Class<?>, Set<String>> bannedMethods = new Object2ObjectOpenHashMap<>();
+    private final Set<Class<?>> whiteListedClasses = new ObjectOpenHashSet<>();
 
     private InterceptionManager() {
         initDefaults();
     }
 
     public void initDefaults() {
+        this.whiteListedClasses.add(NullObject.class);
+        this.whiteListedClasses.add(Binding.class);
+
         banPackage("java.lang.reflect");
         banPackage("java.lang.invoke");
         banPackage("java.net");
@@ -77,7 +84,9 @@ public class InterceptionManager {
     }
 
     public boolean isValid(Class<?> clazz) {
-        return isValidClass(clazz) && isValidPackage(clazz);
+        return Script.class.isAssignableFrom(clazz) ||
+                this.whiteListedClasses.contains(clazz) ||
+                (isValidClass(clazz) && isValidPackage(clazz));
     }
 
     public boolean isValidPackage(Class<?> clazz) {
