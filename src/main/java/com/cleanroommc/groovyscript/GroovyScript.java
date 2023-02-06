@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
@@ -11,6 +12,7 @@ import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -45,6 +47,7 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
         GroovyDeobfuscationMapper.init();
         ReloadableRegistryManager.init();

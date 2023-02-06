@@ -2,62 +2,65 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.core.mixin.OreDictionaryMixin;
+import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OreDict extends VirtualizedRegistry<OreDictEntry> {
 
     public OreDict() {
-        super("OreDict", "OreDictionary", "oredictionary", "oredict");
+        super();
     }
 
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(entry -> getItems(entry.name)
-                .removeIf(s -> s.isItemEqual(entry.stack)));
+        removeScripted().forEach(entry -> remove(entry.name, entry.stack, false));
         restoreFromBackup().forEach(entry -> OreDictionary.registerOre(entry.name, entry.stack));
     }
 
     public void add(String name, Item item) {
-        if (name != null && item != null && item != Items.AIR) {
-            add(new OreDictEntry(name, new ItemStack(item)));
-        }
+        add(name, new ItemStack(item));
     }
 
     public void add(String name, Block block) {
-        if (name != null && block != null && block != Blocks.AIR) {
-            add(new OreDictEntry(name, new ItemStack(block)));
-        }
+        add(name, new ItemStack(block));
     }
 
     public void add(String name, ItemStack stack) {
-        if (name != null && stack != null) {
-            add(new OreDictEntry(name, stack));
+        if (GroovyLog.msg("Error adding ore dictionary entry")
+                .add(StringUtils.isEmpty(name), () -> "Name must not be empty")
+                .add(IngredientHelper.isEmpty(stack), () -> "Item must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
         }
+        add(new OreDictEntry(name, stack));
     }
 
+    @GroovyBlacklist
     public void add(OreDictEntry entry) {
-        if (entry != null) {
-            addScripted(entry);
-            OreDictionary.registerOre(entry.name, entry.stack);
-        }
+        addScripted(entry);
+        OreDictionary.registerOre(entry.name, entry.stack);
     }
 
     public List<ItemStack> getItems(String name) {
-        return OreDictionary.getOres(name, false);
+        return new ArrayList<>(OreDictionary.getOres(name, false));
+    }
+
+    // groovy [] operator
+    public List<ItemStack> getAt(String name) {
+        return getItems(name);
     }
 
     public boolean exists(String name) {
@@ -69,32 +72,46 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
     }
 
     public boolean remove(String name, ItemStack stack) {
-        List<ItemStack> list = getItems(name);
-        if (GroovyLog.msg("Error removing from OreDictionary entry")
-                .add(list.isEmpty(), "OreDictionary Entry '%s' was empty", name)
-                .error()
-                .postIfNotEmpty()) {
-            return false;
-        }
-        Integer id = OreDictionaryMixin.getNameToId().get(name);
-        if (list.removeIf(s -> s.isItemEqual(stack))) {
-            if (id != null) {
-                int i = id;
-                OreDictionaryMixin.getNameToId().remove(name);
-                OreDictionaryMixin.getIdToName().remove(i);
-                OreDictionaryMixin.getIdToName().add(i, "");
-                OreDictionaryMixin.getIdToStack().remove(i);
-                OreDictionaryMixin.getIdToStack().add(i, NonNullList.create());
-                OreDictionaryMixin.getIdToStackUn().remove(i);
-                OreDictionaryMixin.getIdToStackUn().add(i, NonNullList.create());
-                OreDictionaryMixin.getStackToId().remove(i | stack.getMetadata());
-                OreDictionaryMixin.getStackToId().put(i | stack.getMetadata(), Collections.emptyList());
+        return remove(name, stack, true);
+    }
+
+    @GroovyBlacklist
+    private boolean remove(String oreDict, ItemStack ore, boolean scripted) {
+        Integer id = OreDictionaryAccessor.getNameToId().get(oreDict);
+        if (id != null) {
+            GroovyLog.get().infoMC("Removing {} from {}", ore, oreDict);
+            int i = id;
+
+            List<ItemStack> items = OreDictionaryAccessor.getIdToStack().get(i);
+            items.removeIf(itemStack -> itemStack.isItemEqual(ore));
+            //int hash = getItemHash(itemStack);
+            int hash = Item.REGISTRY.getIDForObject(ore.getItem().delegate.get());
+            List<Integer> oreDicts = OreDictionaryAccessor.getStackToId().get(hash);
+            if (oreDicts != null) {
+                oreDicts.remove(id);
+            }
+            if (ore.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
+                hash |= ((ore.getItemDamage() + 1) << 16); // +1 so 0 is significant
+            }
+            oreDicts = OreDictionaryAccessor.getStackToId().get(hash);
+            if (oreDicts != null) {
+                oreDicts.remove(id);
             }
 
-            addBackup(new OreDictEntry(name, stack));
-            return true;
+
+            if (scripted) {
+                addBackup(new OreDictEntry(oreDict, ore));
+            }
         }
-        return false;
+        return true;
+    }
+
+    private static int getItemHash(ItemStack itemStack) {
+        int hash = Item.REGISTRY.getIDForObject(itemStack.getItem().delegate.get());
+        if (itemStack.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
+            hash |= ((itemStack.getItemDamage() + 1) << 16); // +1 so 0 is significant
+        }
+        return hash;
     }
 
     public boolean clear(OreDictEntry entry) {
@@ -104,9 +121,9 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
     public boolean clear(String name) {
         List<ItemStack> list = getItems(name);
         if (GroovyLog.msg("Error removing from OreDictionary entry")
-                    .add(list.isEmpty(), "OreDictionary Entry was empty")
-                    .error()
-                    .postIfNotEmpty()) {
+                .add(list.isEmpty(), "OreDictionary Entry was empty")
+                .error()
+                .postIfNotEmpty()) {
             return false;
         }
         list.forEach(stack -> addBackup(new OreDictEntry(name, stack)));

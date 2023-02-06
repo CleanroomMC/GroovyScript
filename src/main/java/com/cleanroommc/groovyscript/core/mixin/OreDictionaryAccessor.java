@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Mixin(OreDictionary.class)
-public interface OreDictionaryMixin {
+public interface OreDictionaryAccessor {
 
     @Accessor
     static List<String> getIdToName() {

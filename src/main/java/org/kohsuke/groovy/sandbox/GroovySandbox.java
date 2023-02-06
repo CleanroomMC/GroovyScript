@@ -2,6 +2,7 @@ package org.kohsuke.groovy.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
 import groovy.util.GroovyScriptEngine;
@@ -58,7 +59,9 @@ public abstract class GroovySandbox {
     public void registerBinding(String name, Object obj) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(obj);
-        bindings.put(name, obj);
+        for (String alias : VirtualizedRegistry.generateAliases(name)) {
+            bindings.put(alias, obj);
+        }
     }
 
     public void registerInterceptor(GroovyInterceptor interceptor) {
