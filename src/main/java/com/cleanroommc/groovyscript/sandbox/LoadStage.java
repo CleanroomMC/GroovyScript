@@ -20,4 +20,9 @@ public class LoadStage {
     public boolean isReloadable() {
         return reloadable;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
