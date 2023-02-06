@@ -79,12 +79,9 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
     private boolean remove(String oreDict, ItemStack ore, boolean scripted) {
         Integer id = OreDictionaryAccessor.getNameToId().get(oreDict);
         if (id != null) {
-            GroovyLog.get().infoMC("Removing {} from {}", ore, oreDict);
             int i = id;
-
             List<ItemStack> items = OreDictionaryAccessor.getIdToStack().get(i);
             items.removeIf(itemStack -> itemStack.isItemEqual(ore));
-            //int hash = getItemHash(itemStack);
             int hash = Item.REGISTRY.getIDForObject(ore.getItem().delegate.get());
             List<Integer> oreDicts = OreDictionaryAccessor.getStackToId().get(hash);
             if (oreDicts != null) {
@@ -97,21 +94,11 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
             if (oreDicts != null) {
                 oreDicts.remove(id);
             }
-
-
             if (scripted) {
                 addBackup(new OreDictEntry(oreDict, ore));
             }
         }
         return true;
-    }
-
-    private static int getItemHash(ItemStack itemStack) {
-        int hash = Item.REGISTRY.getIDForObject(itemStack.getItem().delegate.get());
-        if (itemStack.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
-            hash |= ((itemStack.getItemDamage() + 1) << 16); // +1 so 0 is significant
-        }
-        return hash;
     }
 
     public boolean clear(OreDictEntry entry) {
