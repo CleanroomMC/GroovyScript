@@ -60,6 +60,9 @@ public class GroovyScript {
     public static final String NAME = "GroovyScript";
     public static final String VERSION = "0.3.0-exp2";
 
+    public static final String MC_VERSION = "1.12.2";
+    public static final String GROOVY_VERSION = "4.0.8";
+
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
     private static File scriptPath;

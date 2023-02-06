@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
 import com.cleanroommc.groovyscript.event.ScriptRunEvent;
+import com.cleanroommc.groovyscript.helper.GroovyHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import groovy.lang.Binding;
@@ -89,6 +90,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
         config.addCompilationCustomizers(GroovyScriptCompiler.transformer());
+        ImportCustomizer importCustomizer = new ImportCustomizer();
+        importCustomizer.addStaticStars(GroovyHelper.class.getName());
+        config.addCompilationCustomizers(importCustomizer);
     }
 
     @Override
