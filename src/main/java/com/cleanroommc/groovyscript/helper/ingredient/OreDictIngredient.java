@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
@@ -66,5 +67,41 @@ public class OreDictIngredient implements IIngredient {
     @Override
     public String toString() {
         return "OreDictIngredient{ " + oreDict + " } * " + count;
+    }
+
+    public void add(ItemStack itemStack) {
+        VanillaModule.oreDict.add(this.oreDict, itemStack);
+    }
+
+    public void add(ItemStack... itemStacks) {
+        for (ItemStack itemStack : itemStacks) {
+            add(itemStack);
+        }
+    }
+
+    public void add(Iterable<ItemStack> itemStacks) {
+        for (ItemStack itemStack : itemStacks) {
+            add(itemStack);
+        }
+    }
+
+    public void add(OreDictIngredient ingredient) {
+        add(OreDictionary.getOres(ingredient.oreDict));
+    }
+
+    public void remove(ItemStack itemStack) {
+        VanillaModule.oreDict.remove(this.oreDict, itemStack);
+    }
+
+    public void remove(ItemStack... itemStacks) {
+        for (ItemStack itemStack : itemStacks) {
+            remove(itemStack);
+        }
+    }
+
+    public void remove(Iterable<ItemStack> itemStacks) {
+        for (ItemStack itemStack : itemStacks) {
+            remove(itemStack);
+        }
     }
 }

@@ -12,6 +12,7 @@
     "InventoryCraftingAccess",
     "ItemStackMixin",
     "MetaClassImplMixin",
+    "OreDictionaryAccessor",
     "SlotCraftingAccess"
   ],
   "client": [

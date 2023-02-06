@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalIte
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
@@ -20,6 +21,7 @@ import com.cleanroommc.groovyscript.sandbox.transformer.GrSMetaClassCreationHand
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovySystem;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
@@ -75,6 +77,7 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
+        MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
         GroovySystem.getMetaClassRegistry().setMetaClassCreationHandle(GrSMetaClassCreationHandle.INSTANCE);
         GroovyDeobfMapper.init();
