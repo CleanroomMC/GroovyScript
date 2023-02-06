@@ -29,7 +29,7 @@ public class Brewer extends VirtualizedRegistry<BrewerManager.BrewerRecipe> {
     private final List<String> validationFluidsBackup = new ArrayList<>();
 
     public Brewer() {
-        super("Brewer", "brewer", "Imbuer");
+        super(VirtualizedRegistry.generateAliases("Imbuer"));
     }
 
     public RecipeBuilder recipeBuilder() {

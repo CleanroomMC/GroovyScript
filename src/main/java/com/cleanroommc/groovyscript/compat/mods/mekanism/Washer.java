@@ -11,13 +11,13 @@ import mekanism.common.recipe.machines.WasherRecipe;
 public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
 
     public Washer() {
-        super(RecipeHandler.Recipe.CHEMICAL_WASHER, "Washer", "washer");
+        super(RecipeHandler.Recipe.CHEMICAL_WASHER);
     }
 
     public WasherRecipe add(GasStack input, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Washer recipe").error();
-        msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
+        msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
+        msg.add(Mekanism.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
         WasherRecipe recipe = new WasherRecipe(input.copy(), output.copy());
@@ -28,7 +28,7 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
 
     public boolean removeByInput(GasStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Washer recipe").error();
-        msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
+        msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 
         WasherRecipe recipe = recipeRegistry.get().remove(new GasInput(input));

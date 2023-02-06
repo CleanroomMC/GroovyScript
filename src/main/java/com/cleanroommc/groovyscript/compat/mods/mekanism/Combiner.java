@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
 
     public Combiner() {
-        super(RecipeHandler.Recipe.COMBINER, "Combiner", "combiner");
+        super(RecipeHandler.Recipe.COMBINER);
     }
 
     public CombinerRecipe add(IIngredient ingredient, ItemStack extra, ItemStack output) {

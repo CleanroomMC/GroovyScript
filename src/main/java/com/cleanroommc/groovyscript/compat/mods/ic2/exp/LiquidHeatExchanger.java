@@ -19,7 +19,7 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
     private static final Map<String, ILiquidHeatExchangerManager.HeatExchangeProperty> cooldownMap = Recipes.liquidCooldownManager.getHeatExchangeProperties();
 
     public LiquidHeatExchanger() {
-        super("LiquidHeatExchanger", "liquidheatexchanger", "HeatExchanger", "heatexchanger");
+        super(VirtualizedRegistry.generateAliases("HeatExchanger"));
     }
 
     @Override

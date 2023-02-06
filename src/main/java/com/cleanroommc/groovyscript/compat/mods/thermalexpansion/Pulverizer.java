@@ -21,7 +21,7 @@ import java.util.Map;
 public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
 
     public Pulverizer() {
-        super("Pulverizer", "pulverizer");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {

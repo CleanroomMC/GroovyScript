@@ -21,7 +21,7 @@ import java.util.List;
 public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingRecipe> {
 
     public BlueprintCrafting() {
-        super("Blueprint", "blueprint");
+        super(VirtualizedRegistry.generateAliases("Blueprint"));
     }
 
     public static RecipeBuilder recipeBuilder() {

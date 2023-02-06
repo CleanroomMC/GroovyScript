@@ -21,7 +21,7 @@ import java.util.List;
 public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<PressurizedRecipe> {
 
     public PressurizedReactionChamber() {
-        super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, "PressurizedReactionChamber", "pressurize_reaction_chamber", "PRC");
+        super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, "PRC");
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -43,7 +43,7 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
         if (GroovyLog.msg("Error removing Mekanism Pressurized Reaction Chamber recipe").error()
                 .add(IngredientHelper.isEmpty(inputSolid), () -> "item input must not be empty")
                 .add(IngredientHelper.isEmpty(inputFluid), () -> "fluid input must not be empty")
-                .add(IngredientHelper.isEmpty(inputGas), () -> "input gas must not be empty")
+                .add(Mekanism.isEmpty(inputGas), () -> "input gas must not be empty")
                 .error()
                 .postIfNotEmpty()) {
             return false;
@@ -134,8 +134,8 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);
-            this.gasInput.removeIf(IngredientHelper::isEmpty);
-            this.gasOutput.removeIf(IngredientHelper::isEmpty);
+            this.gasInput.removeIf(Mekanism::isEmpty);
+            this.gasOutput.removeIf(Mekanism::isEmpty);
             msg.add(this.gasInput.size() != 1, () -> getRequiredString(1, 1, " gas input") + ", but found " + this.gasInput.size());
             msg.add(this.gasOutput.size() != 1, () -> getRequiredString(1, 1, " gas output") + ", but found " + this.gasOutput.size());
             if (duration <= 0) duration = 100;

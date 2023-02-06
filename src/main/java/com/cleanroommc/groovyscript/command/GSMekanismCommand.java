@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.infuse.InfuseRegistry;
@@ -23,7 +23,7 @@ public class GSMekanismCommand extends CommandTreeBase {
         addSubcommand(new SimpleCommand("gas", (server, sender, args) -> {
             sender.sendMessage(new TextComponentString("Mekanism gases:"));
             for (Gas gas : GasRegistry.getRegisteredGasses()) {
-                String copyText = IngredientHelper.asGroovyCode(gas, true);
+                String copyText = Mekanism.asGroovyCode(gas, true);
                 sender.sendMessage(TextCopyable.string(copyText, " - " + gas.getName()).build());
             }
         }, "gases"));

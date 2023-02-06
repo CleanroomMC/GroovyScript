@@ -6,8 +6,11 @@ import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SCopy;
 import com.cleanroommc.groovyscript.network.SReloadJei;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,12 +29,14 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.server.command.CommandTreeBase;
 import org.jetbrains.annotations.NotNull;
@@ -40,8 +45,34 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GSCommand extends CommandTreeBase {
+
+    public static void runReload(ICommandSender player, MinecraftServer server) {
+        GroovyLog.get().info("========== Reloading Groovy scripts ==========");
+        long time = System.currentTimeMillis();
+        Throwable throwable = GroovyScript.getSandbox().run(GroovyScriptSandbox.LOADER_POST_INIT);
+        time = System.currentTimeMillis() - time;
+        player.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
+        if (throwable == null) {
+            player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
+            if (player instanceof EntityPlayerSP) {
+                ReloadableRegistryManager.reloadJei();
+            } else {
+                NetworkHandler.sendToPlayer(new SReloadJei(), (EntityPlayerMP) player);
+            }
+        } else {
+            player.sendMessage(new TextComponentString(TextFormatting.RED + "Error executing scripts:"));
+            player.sendMessage(new TextComponentString(TextFormatting.RED + throwable.getMessage()));
+            if (server != null) {
+                server.commandManager.executeCommand(player, "/gs log");
+            } else if (player instanceof EntityPlayerSP) {
+                ClientCommandHandler.instance.executeCommand(player, "/gs log");
+            }
+        }
+    }
 
     public GSCommand() {
 
@@ -61,19 +92,7 @@ public class GSCommand extends CommandTreeBase {
                 sender.sendMessage(new TextComponentString("Reloading in multiplayer is currently no allowed to avoid desync."));
                 return;
             }
-            GroovyLog.get().info("========== Reloading Groovy scripts ==========");
-            long time = System.currentTimeMillis();
-            Throwable throwable = GroovyScript.getSandbox().run("postInit");
-            time = System.currentTimeMillis() - time;
-            sender.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
-            if (throwable == null) {
-                sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
-                NetworkHandler.sendToPlayer(new SReloadJei(), (EntityPlayerMP) sender);
-            } else {
-                sender.sendMessage(new TextComponentString(TextFormatting.RED + "Error executing scripts:"));
-                sender.sendMessage(new TextComponentString(TextFormatting.RED + throwable.getMessage()));
-                server.commandManager.executeCommand(sender, "/gs log");
-            }
+            runReload(sender, server);
         }));
 
         addSubcommand(new SimpleCommand("hand", (server, sender, args) -> {
@@ -115,8 +134,10 @@ public class GSCommand extends CommandTreeBase {
                 if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
                     IFluidHandler handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
                     if (handler != null) {
-                        FluidStack fluidStack = handler.drain(Integer.MAX_VALUE, false);
-                        if (fluidStack != null) GSHandCommand.fluidInformation(messages, fluidStack);
+                        GSHandCommand.fluidInformation(messages, Arrays.stream(handler.getTankProperties())
+                                .map(IFluidTankProperties::getContents)
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList()));
                     }
                 }
 
@@ -127,8 +148,6 @@ public class GSCommand extends CommandTreeBase {
                         GSHandCommand.fluidInformation(messages, new FluidStack(fluid, 1000));
                     }
 
-                    // add the block's info
-                    GSHandCommand.blockInformation(messages, block);
                     GSHandCommand.blockStateInformation(messages, blockState);
                 }
 
@@ -145,17 +164,6 @@ public class GSCommand extends CommandTreeBase {
         }));
 
         addSubcommand(new GSMekanismCommand());
-    }
-
-    @Override
-    public void execute(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String[] args) throws CommandException {
-        if (args.length > 0) {
-            if (sender instanceof EntityPlayerMP && args[0].equals("copy")) {
-                NetworkHandler.sendToPlayer(new SCopy(Arrays.copyOfRange(args, 1, args.length)), (EntityPlayerMP) sender);
-                return;
-            }
-        }
-        super.execute(server, sender, args);
     }
 
     @Override

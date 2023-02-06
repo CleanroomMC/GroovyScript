@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.api;
 
-import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
+import com.cleanroommc.groovyscript.helper.GroovyLogImpl;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.jetbrains.annotations.Contract;

@@ -21,7 +21,7 @@ import java.util.List;
 public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
 
     public Tank() {
-        super("Tank", "tank");
+        super();
     }
 
     public void addFill(IIngredient input, FluidStack inputFluid, ItemStack output) {

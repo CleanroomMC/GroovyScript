@@ -11,14 +11,14 @@ import mekanism.common.recipe.machines.ChemicalInfuserRecipe;
 public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuserRecipe> {
 
     public ChemicalInfuser() {
-        super(RecipeHandler.Recipe.CHEMICAL_INFUSER, "ChemicalInfuser", "chemical_infuser");
+        super(RecipeHandler.Recipe.CHEMICAL_INFUSER);
     }
 
     public ChemicalInfuserRecipe add(GasStack leftInput, GasStack rightInput, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Chemical Infuser recipe").error();
-        msg.add(IngredientHelper.isEmpty(leftInput), () -> "left gas input must not be empty");
-        msg.add(IngredientHelper.isEmpty(rightInput), () -> "right gas input must not be empty");
-        msg.add(IngredientHelper.isEmpty(output), () -> "gas output must not be empty");
+        msg.add(Mekanism.isEmpty(leftInput), () -> "left gas input must not be empty");
+        msg.add(Mekanism.isEmpty(rightInput), () -> "right gas input must not be empty");
+        msg.add(Mekanism.isEmpty(output), () -> "gas output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
         ChemicalInfuserRecipe recipe = new ChemicalInfuserRecipe(leftInput.copy(), rightInput.copy(), output.copy());
@@ -28,8 +28,8 @@ public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuser
 
     public boolean removeByInput(GasStack leftInput, GasStack rightInput) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Chemical Infuser recipe").error();
-        msg.add(IngredientHelper.isEmpty(leftInput), () -> "left gas input must not be empty");
-        msg.add(IngredientHelper.isEmpty(rightInput), () -> "right gas input must not be empty");
+        msg.add(Mekanism.isEmpty(leftInput), () -> "left gas input must not be empty");
+        msg.add(Mekanism.isEmpty(rightInput), () -> "right gas input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 
         ChemicalInfuserRecipe recipe = recipeRegistry.get().remove(new ChemicalPairInput(leftInput, rightInput));

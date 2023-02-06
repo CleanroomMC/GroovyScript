@@ -16,7 +16,7 @@ import java.util.List;
 public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
 
     public Crusher() {
-        super("Crusher", "crusher");
+        super();
     }
 
     public static RecipeBuilder recipeBuilder() {

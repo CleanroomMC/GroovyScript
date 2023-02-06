@@ -1,10 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.core.mixin.ic2.ScrapboxRecipeManagerAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import ic2.api.recipe.Recipes;
 import net.minecraft.item.ItemStack;
 
@@ -12,19 +12,16 @@ import java.util.List;
 
 public class Scrapbox extends VirtualizedRegistry<Object> {
 
-    private List drops;
-
-    public Scrapbox(boolean check) {
-        super("Scrapbox", "scrapbox");
-        if (check) drops = ((ScrapboxRecipeManagerAccessor) Recipes.scrapboxDrops).getDrops();
+    public Scrapbox() {
+        super();
     }
 
     @SuppressWarnings("all")
     @GroovyBlacklist
     @Override
     public void onReload() {
-        removeScripted().forEach(recipe -> drops.remove(((Drop) recipe).id));
-        drops.addAll(restoreFromBackup());
+        removeScripted().forEach(recipe -> getDrops().remove(((Drop) recipe).id));
+        getDrops().addAll(restoreFromBackup());
     }
 
     public void add(ItemStack stack, float chance) {
@@ -35,19 +32,24 @@ public class Scrapbox extends VirtualizedRegistry<Object> {
                 .postIfNotEmpty()) {
             return;
         }
-        Drop drop = new Drop(stack, chance).setId(drops.size());
+        Drop drop = new Drop(stack, chance).setId(getDrops().size());
         Recipes.scrapboxDrops.addDrop(stack, chance);
         addScripted(drop);
     }
 
     public boolean remove(Object obj) {
         this.addBackup(obj);
-        return drops.remove(obj);
+        return getDrops().remove(obj);
     }
 
     public void removeAll() {
-        drops.forEach(this::addBackup);
-        drops.clear();
+        getDrops().forEach(this::addBackup);
+        getDrops().clear();
+    }
+
+    @GroovyBlacklist
+    public List<Object> getDrops() {
+        return ((ScrapboxRecipeManagerAccessor) Recipes.scrapboxDrops).getDrops();
     }
 
     public static class Drop {

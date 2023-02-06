@@ -11,13 +11,13 @@ import mekanism.common.recipe.machines.SolarNeutronRecipe;
 public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeutronRecipe> {
 
     public SolarNeutronActivator() {
-        super(RecipeHandler.Recipe.SOLAR_NEUTRON_ACTIVATOR, "SolarNeutronActivator", "solar_neutron_activator", "SNA");
+        super(RecipeHandler.Recipe.SOLAR_NEUTRON_ACTIVATOR, "SNA");
     }
 
     public SolarNeutronRecipe add(GasStack input, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Solar Neutron Activator recipe").error();
-        msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
+        msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
+        msg.add(Mekanism.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
         SolarNeutronRecipe recipe = new SolarNeutronRecipe(input.copy(), output.copy());
@@ -28,7 +28,7 @@ public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeut
 
     public boolean removeByInput(GasStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Solar Neutron Activator recipe").error();
-        msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
+        msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 
         SolarNeutronRecipe recipe = recipeRegistry.get().remove(new GasInput(input));

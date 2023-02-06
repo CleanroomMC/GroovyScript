@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 public class ClassicScrapbox extends Scrapbox {
 
     public ClassicScrapbox() {
-        super(false);
+        super();
     }
 
     @Override

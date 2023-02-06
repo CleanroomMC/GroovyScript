@@ -27,7 +27,7 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
     private static Map<Integer, List<ItemWithMeta>> idToItems;
 
     public Canner() {
-        super("Canner", "canner");
+        super();
         idToItems = ((ClassicCanningMachineRegistryAccessor) ClassicRecipes.canningMachine).getIdToItems();
     }
 

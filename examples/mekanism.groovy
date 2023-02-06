@@ -1,6 +1,6 @@
 // crusher
-mods.mekanism.Crusher.add('<item:minecraft:clay_ball>', '<minecraft:gold_ingot>')
-mods.mekanism.Crusher.removeByInput('<ore:ingotSilver>')
+mods.mekanism.Crusher.add(item('minecraft:clay_ball'), item('minecraft:gold_ingot'))
+mods.mekanism.Crusher.removeByInput(ore('ingotSilver'))
 
 // chemical infuser
 mods.mekanism.ChemicalInfuser.add(gas('copper'), gas('iron'), gas('gold'))

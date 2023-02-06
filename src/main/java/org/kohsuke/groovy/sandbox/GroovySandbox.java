@@ -89,7 +89,9 @@ public abstract class GroovySandbox {
                         // this will only work for files that existed when the game launches
                         scriptClass = engine.loadScriptByName(file.toString());
                         // extra safety
-                        if (scriptClass == null) tryLoadDynamicFile(engine, file);
+                        if (scriptClass == null) {
+                            scriptClass = tryLoadDynamicFile(engine, file);
+                        }
                     } catch (ResourceException e) {
                         // file was added later, causing a ResourceException
                         // try to manually load the file

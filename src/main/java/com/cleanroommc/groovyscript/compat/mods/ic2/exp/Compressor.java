@@ -17,7 +17,7 @@ import java.util.*;
 public class Compressor extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
     public Compressor() {
-        super("Compressor", "compressor");
+        super();
     }
 
     @Override

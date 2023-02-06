@@ -7,12 +7,13 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
 import mekanism.common.recipe.machines.SawmillRecipe;
+import mekanism.common.recipe.outputs.ChanceOutput;
 import net.minecraft.item.ItemStack;
 
 public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
 
     public Sawmill() {
-        super(RecipeHandler.Recipe.PRECISION_SAWMILL, "Sawmill", "sawmill");
+        super(RecipeHandler.Recipe.PRECISION_SAWMILL);
     }
 
     public SawmillRecipe add(IIngredient ingredient, ItemStack output) {
@@ -39,10 +40,8 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         SawmillRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
             SawmillRecipe recipe;
-            if (withSecondary)
-                recipe = new SawmillRecipe(itemStack.copy(), output);
-            else
-                recipe = new SawmillRecipe(itemStack.copy(), output, secondary, chance);
+            ChanceOutput chanceOutput = withSecondary ? new ChanceOutput(output, secondary, chance) : new ChanceOutput(output);
+            recipe = new SawmillRecipe(new ItemStackInput(itemStack.copy()), chanceOutput);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);

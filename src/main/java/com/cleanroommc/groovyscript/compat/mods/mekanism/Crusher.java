@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
 
     public Crusher() {
-        super(RecipeHandler.Recipe.CRUSHER, "Crusher", "crusher");
+        super(RecipeHandler.Recipe.CRUSHER);
     }
 
     public CrusherRecipe add(IIngredient ingredient, ItemStack output) {

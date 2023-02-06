@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.AdvancedMachineInput;
@@ -14,7 +15,7 @@ import net.minecraft.item.ItemStack;
 public class PurificationChamber extends VirtualizedMekanismRegistry<PurificationRecipe> {
 
     public PurificationChamber() {
-        super(RecipeHandler.Recipe.PURIFICATION_CHAMBER, "PurificationChamber", "purification_chamber", "Purifier", "purifier");
+        super(RecipeHandler.Recipe.PURIFICATION_CHAMBER, VirtualizedRegistry.generateAliases("Purifier"));
     }
 
     public PurificationRecipe add(IIngredient ingredient, GasStack gasInput, ItemStack output) {
@@ -37,7 +38,7 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
     public boolean removeByInput(IIngredient ingredient, GasStack gasInput) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Purification Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(gasInput), () -> "gas input must not be empty");
+        msg.add(Mekanism.isEmpty(gasInput), () -> "gas input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 
         boolean found = false;

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
 
     public FluidFuel() {
-        super("FluidFuel", "fluidfuel", "fluid_fuel", "CombustionFuel", "combustion_fuel");
+        super(VirtualizedRegistry.generateAliases("CombustionFuel"));
     }
 
     public void addFuel(FluidStack fluidStack, int rfPerCycle, int totalBurnTime) {

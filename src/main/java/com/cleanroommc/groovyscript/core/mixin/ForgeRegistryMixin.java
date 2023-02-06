@@ -43,9 +43,7 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
         if (registryEntry != null) {
             ResourceLocation rl = registryEntry.getRegistryName();
             if (rl != null) {
-                if (dummies.contains(rl)) {
-                    groovyscript$removeDummy(rl);
-                }
+                groovyscript$removeDummy(rl);
             }
         }
         V newEntry = getValue(add(-1, registryEntry, null));
@@ -110,9 +108,11 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
 
     public void groovyscript$removeDummy(ResourceLocation rl) {
         V dummy = this.names.remove(rl);
-        int id = this.ids.inverse().remove(dummy);
-        this.owners.inverse().remove(dummy);
-        this.availabilityMap.clear(id);
+        if (dummy != null) {
+            int id = this.ids.inverse().remove(dummy);
+            this.owners.inverse().remove(dummy);
+            this.availabilityMap.clear(id);
+        }
         this.dummies.remove(rl);
     }
 

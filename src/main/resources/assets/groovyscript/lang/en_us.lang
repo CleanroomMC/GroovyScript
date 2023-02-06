@@ -1,1 +1,6 @@
-groovyscript.command.copy.hover=§6Click to copy §r%s§6 to clipboard
+groovyscript.command.copy.hover=Click to copy
+groovyscript.command.copy.copied_start=Copied [
+groovyscript.command.copy.copied_end=] to the clipboard
+
+key.categories.groovyscript=GroovyScript
+key.groovyscript.reload=Reload Scripts

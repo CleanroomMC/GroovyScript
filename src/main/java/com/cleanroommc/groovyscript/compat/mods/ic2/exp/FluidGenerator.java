@@ -17,7 +17,7 @@ public class FluidGenerator extends VirtualizedRegistry<Pair<String, ISemiFluidF
     private static final Map<String, ISemiFluidFuelManager.FuelProperty> fluidMap = ((SemiFluidFuelManagerAccessor) Recipes.semiFluidGenerator).getFuelProperties();
 
     public FluidGenerator() {
-        super("SemiFluidGenerator", "FluidGenerator", "semifluidgenerator", "fluidgenerator");
+        super(VirtualizedRegistry.generateAliases("SemiFluidGenerator"));
     }
 
     @Override

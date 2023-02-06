@@ -1,12 +1,11 @@
 package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.google.common.base.CaseFormat;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.Predicate;
 
 public abstract class VirtualizedRegistry<R> {
 
@@ -14,12 +13,37 @@ public abstract class VirtualizedRegistry<R> {
 
     protected Collection<R> backup, scripted;
 
-    public VirtualizedRegistry(String name, String... aliases) {
+    public VirtualizedRegistry(String... aliases) {
+        this(true, aliases);
+    }
+
+    public VirtualizedRegistry(boolean generate, String... aliases) {
         this.aliases = new ArrayList<>();
-        this.aliases.add(name);
-        addAlias(aliases);
+        if (generate) {
+            Collections.addAll(this.aliases, VirtualizedRegistry.generateAliases(this.getClass().getSimpleName()));
+        }
+        Collections.addAll(this.aliases, aliases);
         initBackup();
         initScripted();
+    }
+
+    public static String[] generateAliases(String name) {
+        ArrayList<String> aliases = new ArrayList<>();
+        aliases.add(name);
+        aliases.add(name.toLowerCase(Locale.ROOT));
+
+        if (name.split("[A-Z]").length > 2) {
+            aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, name));
+            aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name));
+        }
+
+        return aliases.toArray(new String[0]);
+    }
+
+    public static <T> void putAll(String name, T object, Map<String, T> map) {
+        for (String alias : generateAliases(name)) {
+            map.put(alias, object);
+        }
     }
 
     @GroovyBlacklist
@@ -30,10 +54,6 @@ public abstract class VirtualizedRegistry<R> {
     @ApiStatus.OverrideOnly
     public void afterScriptLoad() {
 
-    }
-
-    public void addAlias(String... aliases) {
-        Collections.addAll(this.aliases, aliases);
     }
 
     public List<String> getAliases() {
@@ -64,6 +84,7 @@ public abstract class VirtualizedRegistry<R> {
 
     @GroovyBlacklist
     public void addBackup(R recipe) {
+        if (this.scripted.stream().anyMatch(r -> compareRecipe(r, recipe))) return;
         this.backup.add(recipe);
     }
 
@@ -86,4 +107,8 @@ public abstract class VirtualizedRegistry<R> {
         return scripted;
     }
 
+    @GroovyBlacklist
+    protected boolean compareRecipe(R recipe, R recipe2) {
+        return recipe == recipe2;
+    }
 }

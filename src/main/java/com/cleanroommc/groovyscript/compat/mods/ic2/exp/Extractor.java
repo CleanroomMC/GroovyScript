@@ -17,7 +17,7 @@ import java.util.*;
 public class Extractor extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
     public Extractor() {
-        super("Extractor", "extractor");
+        super();
     }
 
     @Override

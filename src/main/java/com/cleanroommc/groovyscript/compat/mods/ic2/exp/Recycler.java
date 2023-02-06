@@ -18,7 +18,7 @@ public class Recycler extends VirtualizedRegistry<IRecipeInput> {
     private static final Object dummy = new Object();
 
     public Recycler() {
-        super("Recycler", "recycler");
+        super();
     }
 
     @Override

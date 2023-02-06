@@ -12,12 +12,12 @@ import net.minecraft.item.ItemStack;
 public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe> {
 
     public Crystallizer() {
-        super(RecipeHandler.Recipe.CHEMICAL_CRYSTALLIZER, "Crystallizer", "crystallizer");
+        super(RecipeHandler.Recipe.CHEMICAL_CRYSTALLIZER);
     }
 
     public CrystallizerRecipe add(GasStack input, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crystallizer recipe").error();
-        msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
+        msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
@@ -29,7 +29,7 @@ public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe
 
     public boolean removeByInput(GasStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Crystallizer recipe").error();
-        msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
+        msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
         if (msg.postIfNotEmpty()) return false;
 
         CrystallizerRecipe recipe = recipeRegistry.get().remove(new GasInput(input));
