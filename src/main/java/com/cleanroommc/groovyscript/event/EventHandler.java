@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.event;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingInfo;
 import com.cleanroommc.groovyscript.compat.vanilla.ICraftingRecipe;
@@ -13,11 +12,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
-@Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class EventHandler {
 
     @SubscribeEvent
