@@ -4,7 +4,9 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.IMarkable;
 import com.cleanroommc.groovyscript.api.INBTResourceStack;
 import com.cleanroommc.groovyscript.api.INbtIngredient;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import net.minecraft.item.ItemStack;
@@ -127,5 +129,13 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     public INbtIngredient withNbtFilter(Predicate<NBTTagCompound> nbtFilter) {
         this.nbtMatcher = nbtFilter == null ? nbt -> true : nbtFilter;
         return this;
+    }
+
+    public void addOreDict(OreDictIngredient ingredient) {
+        VanillaModule.oreDict.add(ingredient.getOreDict(), groovyscript$getThis());
+    }
+
+    public void removeOreDict(OreDictIngredient ingredient) {
+        VanillaModule.oreDict.remove(ingredient.getOreDict(), groovyscript$getThis());
     }
 }

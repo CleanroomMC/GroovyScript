@@ -67,11 +67,14 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
         return OreDictionary.doesOreNameExist(name);
     }
 
-    public boolean remove(OreDictEntry entry, ItemStack stack) {
-        return entry != null && remove(entry.name, stack);
-    }
-
     public boolean remove(String name, ItemStack stack) {
+        if (GroovyLog.msg("Error removing ore dictionary entry")
+                .add(StringUtils.isEmpty(name), () -> "Name must not be empty")
+                .add(IngredientHelper.isEmpty(stack), () -> "Item must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return false;
+        }
         return remove(name, stack, true);
     }
 
@@ -97,12 +100,9 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
             if (scripted) {
                 addBackup(new OreDictEntry(oreDict, ore));
             }
+            return true;
         }
-        return true;
-    }
-
-    public boolean clear(OreDictEntry entry) {
-        return entry != null && clear(entry.name);
+        return false;
     }
 
     public boolean clear(String name) {
@@ -113,14 +113,7 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
                 .postIfNotEmpty()) {
             return false;
         }
-        list.forEach(stack -> addBackup(new OreDictEntry(name, stack)));
-        list.clear();
+        list.forEach(stack -> remove(name, stack));
         return true;
-    }
-
-    public void removeAll() {
-        for (String name : OreDictionary.getOreNames()) {
-            clear(name);
-        }
     }
 }

@@ -11,6 +11,7 @@ public class OreDictEntry {
     @GroovyBlacklist
     public OreDictEntry(String name, ItemStack stack) {
         this.name = name;
-        this.stack = stack;
+        this.stack = stack.copy();
+        this.stack.setTagCompound(null);
     }
 }
