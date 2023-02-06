@@ -11,9 +11,10 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
-import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.transformer.GrSMetaClassCreationHandle;
 import com.google.gson.JsonElement;
@@ -87,12 +88,12 @@ public class GroovyScript {
         VanillaModule.initializeBinding();
         registerExpansions();
 
-        getSandbox().run(GroovyScriptSandbox.LOADER_PRE_INIT);
+        getSandbox().run(LoadStage.PRE_INIT);
     }
 
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
-        getSandbox().run(GroovyScriptSandbox.LOADER_POST_INIT);
+        getSandbox().run(LoadStage.POST_INIT);
 
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);

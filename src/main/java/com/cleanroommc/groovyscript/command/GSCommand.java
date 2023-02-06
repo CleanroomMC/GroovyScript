@@ -4,14 +4,12 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
-import com.cleanroommc.groovyscript.network.SCopy;
 import com.cleanroommc.groovyscript.network.SReloadJei;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
-import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -53,7 +51,7 @@ public class GSCommand extends CommandTreeBase {
     public static void runReload(ICommandSender player, MinecraftServer server) {
         GroovyLog.get().info("========== Reloading Groovy scripts ==========");
         long time = System.currentTimeMillis();
-        Throwable throwable = GroovyScript.getSandbox().run(GroovyScriptSandbox.LOADER_POST_INIT);
+        Throwable throwable = GroovyScript.getSandbox().run(LoadStage.POST_INIT);
         time = System.currentTimeMillis() - time;
         player.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
         if (throwable == null) {
