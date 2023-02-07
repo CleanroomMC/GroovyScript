@@ -138,4 +138,14 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     public void removeOreDict(OreDictIngredient ingredient) {
         VanillaModule.oreDict.remove(ingredient.getOreDict(), groovyscript$getThis());
     }
+
+    public boolean isCase(OreDictIngredient ingredient) {
+        ItemStack itemStack = groovyscript$getThis();
+        for (ItemStack stack : OreDictionary.getOres(ingredient.getOreDict())) {
+            if (OreDictionary.itemMatches(itemStack, stack, false)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

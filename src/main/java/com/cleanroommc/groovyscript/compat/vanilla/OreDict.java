@@ -67,6 +67,11 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
         return OreDictionary.doesOreNameExist(name);
     }
 
+    // groovy in operator
+    public boolean isCase(String name) {
+        return OreDictionary.doesOreNameExist(name);
+    }
+
     public boolean remove(String name, ItemStack stack) {
         if (GroovyLog.msg("Error removing ore dictionary entry")
                 .add(StringUtils.isEmpty(name), () -> "Name must not be empty")
