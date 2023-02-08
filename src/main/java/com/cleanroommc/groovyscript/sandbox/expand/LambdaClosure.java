@@ -11,6 +11,10 @@ public class LambdaClosure extends Closure<Object> {
         this.function = function;
     }
 
+    public LambdaClosure(AnyFunction function) {
+        this(function.getClass(), function);
+    }
+
     public Object doCall(Object[] args) {
         return function.run(args);
     }

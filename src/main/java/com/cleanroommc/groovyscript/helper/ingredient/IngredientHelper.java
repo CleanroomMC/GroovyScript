@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class IngredientHelper {
 
-    public static final Closure<Object> REUSE = new LambdaClosure(null, args -> args[0]);
+    public static final Closure<Object> REUSE = new LambdaClosure(args -> args[0]);
 
     public static boolean isFluid(IIngredient ingredient) {
         return ingredient instanceof FluidStack;

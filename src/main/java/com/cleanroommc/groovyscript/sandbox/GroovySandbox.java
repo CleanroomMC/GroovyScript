@@ -198,7 +198,7 @@ public abstract class GroovySandbox {
             // if the file is still not found something went wrong
         } catch (Exception e) {
             if (printError) {
-                e.printStackTrace();
+                GroovyLog.get().exception(e);
             }
         }
         return scriptClass;
