@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 
 import java.io.File;
@@ -56,5 +57,13 @@ public class GroovyHelper {
 
     public static File getConfigDir() {
         return Loader.instance().getConfigDir();
+    }
+
+    public static boolean isClient() {
+        return FMLCommonHandler.instance().getSide().isClient();
+    }
+
+    public static boolean isServer() {
+        return FMLCommonHandler.instance().getSide().isServer();
     }
 }
