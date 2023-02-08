@@ -10,7 +10,9 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExp
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
+import com.cleanroommc.groovyscript.network.NetworkUtils;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.ExpansionHelper;
 import com.cleanroommc.groovyscript.sandbox.GroovyDeobfuscationMapper;
@@ -18,18 +20,17 @@ import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -88,6 +89,11 @@ public class GroovyScript {
         registerExpansions();
 
         getSandbox().run(GroovyScriptSandbox.LOADER_PRE_INIT);
+
+        if (NetworkUtils.isDedicatedClient()) {
+            reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
+            ClientRegistry.registerKeyBinding(reloadKey);
+        }
     }
 
     @Mod.EventHandler
@@ -105,17 +111,13 @@ public class GroovyScript {
     @Mod.EventHandler
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new GSCommand());
-        if (event.getServer() instanceof IntegratedServer) {
-            reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
-            ClientRegistry.registerKeyBinding(reloadKey);
-        }
     }
 
     @SubscribeEvent
     public static void onInput(InputEvent.KeyInputEvent event) {
         long time = Minecraft.getSystemTime();
         if (reloadKey.isPressed() && time - timeSinceLastUse >= 1000 && Minecraft.getMinecraft().player.getPermissionLevel() >= 4) {
-            GSCommand.runReload(Minecraft.getMinecraft().player, null);
+            NetworkHandler.sendToServer(new CReload());
             timeSinceLastUse = time;
         }
     }
