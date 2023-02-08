@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
+import groovy.lang.Closure;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,8 @@ import java.util.Collections;
 import java.util.Map;
 
 public class IngredientHelper {
+
+    public static final Closure<Object> REUSE = new LambdaClosure(null, args -> args[0]);
 
     public static boolean isFluid(IIngredient ingredient) {
         return ingredient instanceof FluidStack;

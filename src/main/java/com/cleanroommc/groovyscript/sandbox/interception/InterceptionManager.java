@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.sandbox.interception;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
+import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.Binding;
 import groovy.lang.Script;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -27,6 +29,8 @@ public class InterceptionManager {
     public void initDefaults() {
         this.whiteListedClasses.add(NullObject.class);
         this.whiteListedClasses.add(Binding.class);
+        this.whiteListedClasses.add(GroovyLogImpl.class);
+        this.whiteListedClasses.add(LambdaClosure.class);
 
         banPackage("java.lang.reflect");
         banPackage("java.lang.invoke");
