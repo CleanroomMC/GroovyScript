@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.sandbox.mapper;
 import com.cleanroommc.groovyscript.GroovyScript;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -15,8 +16,11 @@ public class GroovyDeobfMapper {
     private static final Map<String, Map<String, String>> METHODS = new Object2ObjectOpenHashMap<>();
     private static final Map<String, Map<String, String>> FIELDS = new Object2ObjectOpenHashMap<>();
 
+    @ApiStatus.Internal
     public static void init() {
         GroovyScript.LOGGER.info("Generating obfuscation map...");
+        METHODS.clear();
+        FIELDS.clear();
         try {
             String splitter = " ";
             String method = "MD:";
