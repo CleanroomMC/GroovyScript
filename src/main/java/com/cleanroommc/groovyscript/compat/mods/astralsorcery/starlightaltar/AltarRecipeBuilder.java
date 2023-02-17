@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
+
     protected String name;
     protected ItemHandle[] inputs = null;
     protected ItemHandle[] outerInputs = null;

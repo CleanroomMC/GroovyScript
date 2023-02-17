@@ -126,6 +126,7 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
      * 3. The slot index the input was found
      */
     public static class MatchList extends ArrayList<SlotMatchResult> {
+
         public static final MatchList EMPTY = new MatchList() {
             @Override
             public boolean add(SlotMatchResult slotMatchResult) {

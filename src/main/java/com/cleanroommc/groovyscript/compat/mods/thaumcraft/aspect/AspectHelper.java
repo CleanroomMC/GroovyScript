@@ -56,11 +56,11 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         AtomicBoolean found = new AtomicBoolean(false);
         scripted.forEach(scriptedAspect -> {
             if (target instanceof EntityEntry && scriptedAspect.entity != null
-                    && ((EntityEntry) target).getName().equals(scriptedAspect.entity.getName())) {
+                && ((EntityEntry) target).getName().equals(scriptedAspect.entity.getName())) {
                 found.set(true);
                 scriptedAspect.addAspect(aspect);
             } else if (target instanceof ItemStack && scriptedAspect.item != null
-                    && ((ItemStack) target).isItemEqual(scriptedAspect.item)) {
+                       && ((ItemStack) target).isItemEqual(scriptedAspect.item)) {
                 found.set(true);
                 scriptedAspect.addAspect(aspect);
             }
@@ -81,11 +81,11 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         AtomicBoolean found = new AtomicBoolean(false);
         backup.forEach(backupAspect -> {
             if (target instanceof EntityEntry && backupAspect.entity != null
-                    && ((EntityEntry) target).getName().equals(backupAspect.entity.getName())) {
+                && ((EntityEntry) target).getName().equals(backupAspect.entity.getName())) {
                 found.set(true);
                 backupAspect.addAspect(aspect);
             } else if (target instanceof ItemStack && backupAspect.item != null
-                    && ((ItemStack) target).isItemEqual(backupAspect.item)) {
+                       && ((ItemStack) target).isItemEqual(backupAspect.item)) {
                 found.set(true);
                 backupAspect.addAspect(aspect);
             }
@@ -302,6 +302,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     }
 
     public static class AspectHelperBuilder {
+
         private EntityEntry entity;
         private IIngredient object;
         private final ArrayList<AspectStack> aspects = new ArrayList<>();

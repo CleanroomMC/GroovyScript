@@ -20,6 +20,7 @@ public class LambdaClosure extends Closure<Object> {
     }
 
     public interface AnyFunction {
+
         Object run(Object[] args);
     }
 }

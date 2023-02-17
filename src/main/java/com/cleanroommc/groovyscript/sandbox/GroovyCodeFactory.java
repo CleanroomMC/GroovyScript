@@ -28,16 +28,16 @@ public class GroovyCodeFactory {
                 .filter(f -> ReflectionUtils.checkCanSetAccessible(f, CachedClass.class))
                 .filter(InterceptionManager.INSTANCE::isValid)
                 .map(!FMLLaunchHandler.isDeobfuscatedEnvironment() && cachedClass.getName().startsWith(MC_CLASS) ?
-                        f -> makeField(cachedClass, f) :
-                        CachedField::new)
+                     f -> makeField(cachedClass, f) :
+                     CachedField::new)
                 .toArray(CachedField[]::new);
     }
 
     private static CachedField makeField(CachedClass cachedClass, Field field) {
         String deobfName = GroovyDeobfMapper.getDeobfField(cachedClass.getTheClass(), field.getName());
         return deobfName == null ?
-                new CachedField(field) :
-                new RemappedCachedField(field, deobfName);
+               new CachedField(field) :
+               new RemappedCachedField(field, deobfName);
     }
 
     public static PrivilegedAction<CachedConstructor[]> makeConstructorsHook(CachedClass cachedClass) {
@@ -57,8 +57,8 @@ public class GroovyCodeFactory {
                         .filter(m -> ReflectionUtils.checkCanSetAccessible(m, CachedClass.class))
                         .filter(InterceptionManager.INSTANCE::isValid)
                         .map(!FMLLaunchHandler.isDeobfuscatedEnvironment() && cachedClass.getName().startsWith(MC_CLASS) ?
-                                m -> makeMethod(cachedClass, m) :
-                                m -> new CachedMethod(cachedClass, m))
+                             m -> makeMethod(cachedClass, m) :
+                             m -> new CachedMethod(cachedClass, m))
                         .toArray(CachedMethod[]::new);
             } catch (LinkageError e) {
                 return CachedMethod.EMPTY_ARRAY;
@@ -69,7 +69,7 @@ public class GroovyCodeFactory {
     private static CachedMethod makeMethod(CachedClass cachedClass, Method method) {
         String deobfName = GroovyDeobfMapper.getDeobfMethod(cachedClass.getTheClass(), method.getName());
         return deobfName == null ?
-                new CachedMethod(cachedClass, method) :
-                new RemappedCachedMethod(cachedClass, method, deobfName);
+               new CachedMethod(cachedClass, method) :
+               new RemappedCachedMethod(cachedClass, method, deobfName);
     }
 }

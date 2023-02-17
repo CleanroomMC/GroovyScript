@@ -73,6 +73,7 @@ public class AttributeModifierPerkBuilder {
     }
 
     public static class PerkModifierBuilder {
+
         float modifier;
         PerkAttributeModifier.Mode mode;
         String type;

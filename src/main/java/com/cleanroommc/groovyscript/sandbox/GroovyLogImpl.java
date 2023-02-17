@@ -244,10 +244,10 @@ public class GroovyLogImpl implements GroovyLog {
 
     private String formatLine(String level, String msg) {
         return timeFormat.format(new Date()) +
-                (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : " [SERVER/") +
-                level + "]" +
-                " [" + getSource() + "]: " +
-                msg;
+               (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : " [SERVER/") +
+               level + "]" +
+               " [" + getSource() + "]: " +
+               msg;
     }
 
     private String getSource() {

@@ -90,6 +90,7 @@ public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator
     }
 
     public static class LFGRecipe {
+
         public Fluid fluid;
         public int time;
         public float power;

@@ -79,8 +79,8 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     @Override
     public boolean test(ItemStack stack) {
         return (matchCondition == null || ClosureHelper.call(true, matchCondition, stack)) &&
-                OreDictionary.itemMatches(groovyscript$getThis(), stack, false) &&
-                this.nbtMatcher.test(stack.getTagCompound());
+               OreDictionary.itemMatches(groovyscript$getThis(), stack, false) &&
+               this.nbtMatcher.test(stack.getTagCompound());
     }
 
     public ItemStack when(Closure<Object> matchCondition) {

@@ -110,8 +110,8 @@ public class GroovyScript {
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);
             Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.command.copy.copied_start")
-                    .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
-                    .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
+                                                                .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
+                                                                .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
         });
     }
 

@@ -317,6 +317,7 @@ public abstract class CraftingRecipeBuilder {
     }
 
     public interface IRecipeCreator<T> {
+
         T createRecipe(int width, int height, List<IIngredient> ingredients);
     }
 }

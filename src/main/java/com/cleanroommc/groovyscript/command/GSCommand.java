@@ -75,13 +75,13 @@ public class GSCommand extends CommandTreeBase {
 
         addSubcommand(new SimpleCommand("log", (server, sender, args) -> {
             sender.sendMessage(new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + "Groovy Log"))
-                    .setStyle(new Style()
-                            .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.get().getLogFilerPath().toString()))
-                            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open GroovyScript log")))));
+                                       .setStyle(new Style()
+                                                         .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.get().getLogFilerPath().toString()))
+                                                         .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open GroovyScript log")))));
             sender.sendMessage(new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + "Minecraft Log"))
-                    .setStyle(new Style()
-                            .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.get().getLogFilerPath().getParent().toString() + "/logs/latest.log"))
-                            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open Minecraft log")))));
+                                       .setStyle(new Style()
+                                                         .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.get().getLogFilerPath().getParent().toString() + "/logs/latest.log"))
+                                                         .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open Minecraft log")))));
         }));
 
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {

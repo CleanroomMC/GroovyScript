@@ -155,8 +155,8 @@ public class ExpansionHelper {
     private static boolean isValid(CachedMethod method) {
         final int mod = method.getModifiers();
         return Modifier.isPublic(mod) && !Modifier.isAbstract(mod) && !method.isSynthetic() &&
-                method.getAnnotation(Internal.class) == null &&
-                method.getAnnotation(GroovyBlacklist.class) == null;
+               method.getAnnotation(Internal.class) == null &&
+               method.getAnnotation(GroovyBlacklist.class) == null;
     }
 
     private static boolean isValid(CachedField cachedField) {
@@ -164,8 +164,8 @@ public class ExpansionHelper {
         final int mod = cachedField.getModifiers();
         Field field = cachedField.getCachedField();
         return Modifier.isPublic(mod) && !field.isSynthetic() &&
-                !field.isAnnotationPresent(Internal.class) &&
-                !field.isAnnotationPresent(GroovyBlacklist.class);
+               !field.isAnnotationPresent(Internal.class) &&
+               !field.isAnnotationPresent(GroovyBlacklist.class);
     }
 
     /**

@@ -137,6 +137,7 @@ public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerReci
     }
 
     public static class MetalFormerRecipe {
+
         public int type;
         public MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe;
 

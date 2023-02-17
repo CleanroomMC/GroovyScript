@@ -77,6 +77,7 @@ public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Inte
 
 
     public static class RecipeBuilder {
+
         private ResourceLocation entity;
         private int value;
 

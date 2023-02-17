@@ -63,11 +63,11 @@ public class ChaliceInteraction extends VirtualizedRegistry<hellfirepvp.astralso
         if (rts == null) return;
         rts.forEach(rec -> {
             if ((rec.getComponent1().getFluid().equals(fluid1) && rec.getComponent2().getFluid().equals(fluid2))
-                    || (rec.getComponent1().getFluid().equals(fluid2) && rec.getComponent2().getFluid().equals(fluid1)))
+                || (rec.getComponent1().getFluid().equals(fluid2) && rec.getComponent2().getFluid().equals(fluid1)))
                 addBackup(rec);
         });
         rts.removeIf(rec -> ((rec.getComponent1().getFluid().equals(fluid1) && rec.getComponent2().getFluid().equals(fluid2))
-                || (rec.getComponent1().getFluid().equals(fluid2) && rec.getComponent2().getFluid().equals(fluid1))));
+                             || (rec.getComponent1().getFluid().equals(fluid2) && rec.getComponent2().getFluid().equals(fluid1))));
     }
 
     public void removeByOutput(ItemStack output) {

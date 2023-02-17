@@ -117,6 +117,7 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
 
 
     public static class RecipeBuilder {
+
         private IBlockState blockstate;
         private Block block;
         private EnumTranquilityType tranquility;

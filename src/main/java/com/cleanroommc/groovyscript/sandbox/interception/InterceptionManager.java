@@ -80,7 +80,7 @@ public class InterceptionManager {
 
     public boolean isValid(Method method) {
         return isValidMethod(method.getDeclaringClass(), method.getName()) &&
-                !method.isAnnotationPresent(GroovyBlacklist.class);
+               !method.isAnnotationPresent(GroovyBlacklist.class);
     }
 
     public boolean isValid(Field field) {
@@ -89,8 +89,8 @@ public class InterceptionManager {
 
     public boolean isValid(Class<?> clazz) {
         return Script.class.isAssignableFrom(clazz) ||
-                this.whiteListedClasses.contains(clazz) ||
-                (isValidClass(clazz) && isValidPackage(clazz));
+               this.whiteListedClasses.contains(clazz) ||
+               (isValidClass(clazz) && isValidPackage(clazz));
     }
 
     public boolean isValidPackage(Class<?> clazz) {

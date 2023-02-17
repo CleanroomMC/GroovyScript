@@ -35,11 +35,11 @@ public class Utils {
 
     public static boolean isEqual(ItemHandle item1, ItemHandle item2) {
         if (item1.getOreDictName() != null && item2.getOreDictName() != null
-                && !item1.getOreDictName().equals("") && !item2.getOreDictName().equals("")
-                && item1.getOreDictName().equals(item2.getOreDictName())) {
+            && !item1.getOreDictName().equals("") && !item2.getOreDictName().equals("")
+            && item1.getOreDictName().equals(item2.getOreDictName())) {
             return true;
         } else if (item1.getApplicableItems() != null && item2.getApplicableItems() != null
-                && item1.getApplicableItems().size() == item2.getApplicableItems().size()) {
+                   && item1.getApplicableItems().size() == item2.getApplicableItems().size()) {
             boolean rVal = true;
             for (int i = 0; i < item1.getApplicableItems().size(); i++) {
                 if (!item1.getApplicableItems().get(i).isItemEqual(item2.getApplicableItems().get(i)))

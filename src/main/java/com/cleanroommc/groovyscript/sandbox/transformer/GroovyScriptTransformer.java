@@ -29,7 +29,7 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
 
     private static Expression makeCheckedCall(ClassNode classNode, String name, Expression... arguments) {
         return new StaticMethodCallExpression(classNode, name,
-                new ArgumentListExpression(arguments));
+                                              new ArgumentListExpression(arguments));
     }
 
     @Override
