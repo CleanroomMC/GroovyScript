@@ -23,7 +23,6 @@ import com.cleanroommc.groovyscript.sandbox.transformer.GrSMetaClassCreationHand
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovySystem;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;

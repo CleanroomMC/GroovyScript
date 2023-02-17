@@ -8,13 +8,13 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.List;
 import java.util.Map;
 
-@Mixin( value = TraitRecipe.class, remap = false )
+@Mixin(value = TraitRecipe.class, remap = false)
 public interface TraitRecipeAccessor {
 
     @Accessor("additionallyRequiredStacks")
-    public List<ItemHandle> getOuterTraitItems();
+    List<ItemHandle> getOuterTraitItems();
 
     @Accessor("matchTraitStacks")
-    public Map<TraitRecipe.TraitRecipeSlot, ItemHandle> getTraitStackMap();
+    Map<TraitRecipe.TraitRecipeSlot, ItemHandle> getTraitStackMap();
 
 }

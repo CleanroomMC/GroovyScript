@@ -10,19 +10,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-@Mixin( value = PerkTree.class, remap = false )
+@Mixin(value = PerkTree.class, remap = false)
 public interface PerkTreeAccessor {
 
     @Accessor
-    public abstract boolean getFrozen();
+    boolean getFrozen();
 
     @Accessor
-    public void setFrozen(boolean x);
+    void setFrozen(boolean x);
 
     @Accessor
-    public Map<AbstractPerk, Collection<AbstractPerk>> getDoubleConnections();
+    Map<AbstractPerk, Collection<AbstractPerk>> getDoubleConnections();
 
     @Accessor
-    public List<Tuple<AbstractPerk, AbstractPerk>> getConnections();
+    List<Tuple<AbstractPerk, AbstractPerk>> getConnections();
 
 }

@@ -1,10 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
-import com.cleanroommc.groovyscript.core.mixin.ic2.FermenterRecipeManagerAccessor;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.core.mixin.ic2.FermenterRecipeManagerAccessor;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import ic2.api.recipe.IFermenterRecipeManager;
 import ic2.api.recipe.Recipes;
 import net.minecraftforge.fluids.FluidStack;

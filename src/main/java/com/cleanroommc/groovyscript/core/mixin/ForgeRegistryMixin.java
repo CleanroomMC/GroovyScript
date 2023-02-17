@@ -22,21 +22,43 @@ import java.util.function.Supplier;
 @Mixin(value = ForgeRegistry.class, remap = false)
 public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> implements IForgeRegistry<V>, IReloadableForgeRegistry<V> {
 
-    @Shadow public abstract void register(V value);
-    @Shadow public abstract void unfreeze();
-    @Shadow public abstract V getValue(int id);
-    @Shadow abstract int add(int id, V value, String owner);
+    @Shadow
+    public abstract void register(V value);
 
-    @Shadow @Final private BiMap<ResourceLocation, V> names;
-    @Shadow @Final private BiMap<Integer, V> ids;
-    @Shadow @Final private BiMap<Object, V> owners;
-    @Shadow @Final private DummyFactory<V> dummyFactory;
-    @Shadow @Final private BitSet availabilityMap;
+    @Shadow
+    public abstract void unfreeze();
 
-    @Unique private Set<Triple<V, Integer, Object>> backups;
-    @Unique private Set<V> scripted;
-    @Unique private Supplier<V> dummySupplier;
-    @Unique @Final private Set<ResourceLocation> dummies = new ObjectOpenHashSet<>();
+    @Shadow
+    public abstract V getValue(int id);
+
+    @Shadow
+    abstract int add(int id, V value, String owner);
+
+    @Shadow
+    @Final
+    private BiMap<ResourceLocation, V> names;
+    @Shadow
+    @Final
+    private BiMap<Integer, V> ids;
+    @Shadow
+    @Final
+    private BiMap<Object, V> owners;
+    @Shadow
+    @Final
+    private DummyFactory<V> dummyFactory;
+    @Shadow
+    @Final
+    private BitSet availabilityMap;
+
+    @Unique
+    private Set<Triple<V, Integer, Object>> backups;
+    @Unique
+    private Set<V> scripted;
+    @Unique
+    private Supplier<V> dummySupplier;
+    @Unique
+    @Final
+    private final Set<ResourceLocation> dummies = new ObjectOpenHashSet<>();
 
     @Override
     public V registerEntry(V registryEntry) {

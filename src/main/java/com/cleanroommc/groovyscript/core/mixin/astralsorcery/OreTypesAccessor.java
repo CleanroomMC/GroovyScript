@@ -8,19 +8,19 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.List;
 
-@Mixin( value = OreTypes.class , remap = false )
+@Mixin(value = OreTypes.class, remap = false)
 public interface OreTypesAccessor {
 
     @Accessor("oreDictWeights")
-    public List<OreEntry> getEntries();
+    List<OreEntry> getEntries();
 
     @Accessor
-    public double getTotalWeight();
+    double getTotalWeight();
 
     @Accessor
-    public void setTotalWeight(double weight);
+    void setTotalWeight(double weight);
 
     @Invoker("appendOreEntry")
-    public void add(OreEntry entry);
+    void add(OreEntry entry);
 
 }

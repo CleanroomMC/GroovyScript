@@ -45,7 +45,8 @@ public class ModSupport implements IDynamicGroovyProperty {
         return new ObjectOpenHashSet<>(containers.values());
     }
 
-    private ModSupport() { }
+    private ModSupport() {
+    }
 
     @Override
     @Nullable

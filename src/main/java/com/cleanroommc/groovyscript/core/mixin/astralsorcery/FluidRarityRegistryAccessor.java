@@ -6,10 +6,10 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin( value = FluidRarityRegistry.class, remap = false )
+@Mixin(value = FluidRarityRegistry.class, remap = false)
 public interface FluidRarityRegistryAccessor {
 
     @Accessor
-    public List<FluidRarityRegistry.FluidRarityEntry> getRarityList();
+    List<FluidRarityRegistry.FluidRarityEntry> getRarityList();
 
 }

@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
 
 public class Utils {
 
@@ -60,7 +60,7 @@ public class Utils {
             Constructor<FluidRarityRegistry.FluidRarityEntry> constructor = FluidRarityRegistry.FluidRarityEntry.class.getDeclaredConstructor(args);
             constructor.setAccessible(true);
             return constructor.newInstance(fluid, rarity, guaranteedAmt, addRand);
-        } catch(Exception e) {
+        } catch (Exception e) {
             GroovyLog.get().exception(e);
         }
 

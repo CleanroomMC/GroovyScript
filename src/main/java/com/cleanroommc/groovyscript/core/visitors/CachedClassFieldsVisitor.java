@@ -1,6 +1,9 @@
 package com.cleanroommc.groovyscript.core.visitors;
 
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 public class CachedClassFieldsVisitor extends ClassVisitor implements Opcodes {
 

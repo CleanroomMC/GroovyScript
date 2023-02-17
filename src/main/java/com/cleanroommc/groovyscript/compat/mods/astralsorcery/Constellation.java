@@ -31,8 +31,8 @@ import net.minecraft.potion.Potion;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class Constellation extends VirtualizedRegistry<IConstellation> {
 
@@ -51,7 +51,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         this.constellationMapEffectsRemoved.forEach((constellation, effect) -> ConstellationMapEffectRegistry.registerMapEffect(constellation, effect.enchantmentEffects, effect.potionEffects));
         this.constellationMapEffectsAdded.forEach((constellation, effect) -> this.removeConstellationMapEffect(constellation, false));
         this.signatureItemsAdded.keySet().forEach(this::removeSignatureItems);
-        this.signatureItemsRemoved.forEach( (constellation, items) -> items.forEach(item -> this.addSignatureItem(constellation, item)) );
+        this.signatureItemsRemoved.forEach((constellation, items) -> items.forEach(item -> this.addSignatureItem(constellation, item)));
 
         this.constellationMapEffectsAdded.clear();
         this.constellationMapEffectsRemoved.clear();
@@ -96,7 +96,8 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
     private void removeConstellationMapEffect(IConstellation constellation, boolean doBackup) {
         if (ConstellationMapEffectRegistryAccessor.getEffectRegistry() == null) return;
         if (ConstellationMapEffectRegistryAccessor.getEffectRegistry().containsKey(constellation)) {
-            if (doBackup) this.constellationMapEffectsRemoved.put(constellation, ConstellationMapEffectRegistryAccessor.getEffectRegistry().get(constellation));
+            if (doBackup)
+                this.constellationMapEffectsRemoved.put(constellation, ConstellationMapEffectRegistryAccessor.getEffectRegistry().get(constellation));
             ConstellationMapEffectRegistryAccessor.getEffectRegistry().remove(constellation);
         }
     }
@@ -115,11 +116,13 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         this.updateDefaultPaperRecipe(constellation);
 
     }
+
     public void addSignatureItem(IConstellation constellation, IIngredient... ings) {
         for (IIngredient ing : ings) {
             this.addSignatureItem(constellation, ing);
         }
     }
+
     public void addSignatureItem(IConstellation constellation, Collection<IIngredient> ings) {
         ings.forEach(ing -> this.addSignatureItem(constellation, ing));
     }
@@ -129,7 +132,8 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
     }
 
     public void removeSignatureItems(IConstellation constellation, boolean doBackup) {
-        if (doBackup) this.signatureItemsRemoved.put(constellation, ((ConstellationBaseAccessor) constellation).getSignatureItems());
+        if (doBackup)
+            this.signatureItemsRemoved.put(constellation, ((ConstellationBaseAccessor) constellation).getSignatureItems());
         ((ConstellationBaseAccessor) constellation).getSignatureItems().clear();
         if (!(constellation instanceof IMinorConstellation)) this.updateDefaultCapeRecipe(constellation);
         this.updateDefaultPaperRecipe(constellation);
@@ -138,7 +142,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
     private void updateDefaultPaperRecipe(IConstellation constellation) {
         AccessibleRecipeAdapater shapedPaper = ShapedRecipe.Builder.newShapedRecipe("internal/altar/constellationpaper/" + constellation.getSimpleName().toLowerCase(), ItemsAS.constellationPaper).addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(), ShapedRecipeSlot.CENTER).addPart(Items.FEATHER, ShapedRecipeSlot.UPPER_CENTER).addPart(OreDictAlias.getDyeOreDict(EnumDyeColor.BLACK), ShapedRecipeSlot.LOWER_CENTER).addPart(OreDictAlias.ITEM_STARMETAL_DUST, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT).unregisteredAccessibleShapedRecipe();
         ConstellationPaperRecipe recipe = new ConstellationPaperRecipe(shapedPaper, constellation);
-        ItemHandle first = (ItemHandle)Iterables.getFirst(constellation.getConstellationSignatureItems(), (Object)null);
+        ItemHandle first = (ItemHandle) Iterables.getFirst(constellation.getConstellationSignatureItems(), (Object) null);
         recipe.setInnerTraitItem(first, TraitRecipe.TraitRecipeSlot.values());
 
         for (ItemHandle s : constellation.getConstellationSignatureItems()) {
@@ -150,7 +154,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
     }
 
     private void updateDefaultCapeRecipe(IConstellation constellation) {
-        ItemHandle first = (ItemHandle) Iterables.getFirst(constellation.getConstellationSignatureItems(), (Object)null);
+        ItemHandle first = (ItemHandle) Iterables.getFirst(constellation.getConstellationSignatureItems(), (Object) null);
         AccessibleRecipeAdapater ar = ShapedRecipe.Builder.newShapedRecipe("internal/cape/att/" + constellation.getSimpleName().toLowerCase(), ItemsAS.armorImbuedCape).addPart(ItemsAS.armorImbuedCape, ShapedRecipeSlot.CENTER).addPart(first, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT, ShapedRecipeSlot.LOWER_CENTER).unregisteredAccessibleShapedRecipe();
         CapeAttunementRecipe recipe = new CapeAttunementRecipe(constellation, ar);
 
@@ -272,7 +276,8 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             if (!this.validate()) return;
             IConstellation constellation;
             if (type.equals(Type.MAJOR)) constellation = new ConstellationBase.Major(name, color);
-            else if (type.equals(Type.MINOR)) constellation = new ConstellationBase.Minor(name, color, phases.toArray(new MoonPhase[0]));
+            else if (type.equals(Type.MINOR))
+                constellation = new ConstellationBase.Minor(name, color, phases.toArray(new MoonPhase[0]));
             else if (type.equals(Type.WEAK)) constellation = new ConstellationBase.Weak(name, color);
             else return;
             HashMap<Point, StarLocation> addedStars = new HashMap<>();

@@ -143,7 +143,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         }
 
         public LightOreTransmutations.Transmutation register() {
-            if(!validate()) return null;
+            if (!validate()) return null;
             if (inBlock == null) {
                 return ModSupport.ASTRAL_SORCERY.get().lightTransmutation.add(input, output, inStack, outStack, cost);
             }

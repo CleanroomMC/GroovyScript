@@ -140,12 +140,11 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
             if (!found.get()) {
                 ThaumcraftApi.registerEntityTag(
                         entity.getName(),
-                        new AspectList().add(aspect.getAspect(), aspect.getAmount()),
-                        new ThaumcraftApi.EntityTagsNBT[0]
+                        new AspectList().add(aspect.getAspect(), aspect.getAmount())
                 );
             }
 
-            if (doBackup) addScripted(entity,aspect);
+            if (doBackup) addScripted(entity, aspect);
 
             AspectRegistryEvent are = new AspectRegistryEvent();
             are.register = new AspectEventProxy();
@@ -167,7 +166,8 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                         ItemStack oc = ore.copy();
                         oc.setCount(1);
                         this.add(oc, aspect, doBackup);
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                 }
             }
             return;
@@ -231,7 +231,8 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                         ItemStack oc = ore.copy();
                         oc.setCount(1);
                         this.remove(oc, aspect, doBackup);
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                 }
             }
             return;
@@ -285,7 +286,8 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                     ItemStack oc = ore.copy();
                     oc.setCount(1);
                     this.removeAll(oc);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
     }

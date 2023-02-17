@@ -1,10 +1,10 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.FluidStackList;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 

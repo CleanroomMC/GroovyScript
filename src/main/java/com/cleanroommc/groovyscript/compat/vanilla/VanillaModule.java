@@ -8,7 +8,7 @@ public class VanillaModule {
     public static final Furnace furnace = new Furnace();
     public static final OreDict oreDict = new OreDict();
     public static final Player player = new Player();
-    
+
     public static void initializeBinding() {
         GroovyScript.getSandbox().registerBinding("Crafting", crafting);
         GroovyScript.getSandbox().registerBinding("Furnace", furnace);

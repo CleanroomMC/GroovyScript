@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import ic2.api.recipe.ILiquidHeatExchangerManager;
 import ic2.api.recipe.Recipes;
 import ic2.core.block.machine.tileentity.TileEntityLiquidHeatExchanger;
@@ -29,8 +29,10 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
             else cooldownMap.remove(recipe.hot.getName());
         });
         restoreFromBackup().forEach(recipe -> {
-            if (recipe.type == 0) TileEntityLiquidHeatExchanger.addHeatupRecipe(recipe.hot.getName(), recipe.cold.getName(), recipe.huPerMB);
-            else TileEntityLiquidHeatExchanger.addCooldownRecipe(recipe.hot.getName(), recipe.cold.getName(), recipe.huPerMB);
+            if (recipe.type == 0)
+                TileEntityLiquidHeatExchanger.addHeatupRecipe(recipe.hot.getName(), recipe.cold.getName(), recipe.huPerMB);
+            else
+                TileEntityLiquidHeatExchanger.addCooldownRecipe(recipe.hot.getName(), recipe.cold.getName(), recipe.huPerMB);
         });
     }
 

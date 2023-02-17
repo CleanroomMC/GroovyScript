@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedField;

@@ -16,8 +16,10 @@ public class Player {
     }
 
     public void addStartingItem(ItemStack item, int slot) {
-        if (ITEM_MAP.size() > 36) GroovyLog.msg("Warning: adding more than 36 items to a player's inventory may cause some items to not be received by the player.").warn().post();
-        if (slot > 36) GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 36 may cause some items to not be received by the player.").warn().post();
+        if (ITEM_MAP.size() > 36)
+            GroovyLog.msg("Warning: adding more than 36 items to a player's inventory may cause some items to not be received by the player.").warn().post();
+        if (slot > 36)
+            GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 36 may cause some items to not be received by the player.").warn().post();
         ITEM_MAP.put(item, slot);
     }
 

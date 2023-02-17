@@ -9,7 +9,8 @@ public class AspectBracketHandler implements IBracketHandler<AspectStack> {
 
     public static final AspectBracketHandler INSTANCE = new AspectBracketHandler();
 
-    private AspectBracketHandler() {}
+    private AspectBracketHandler() {
+    }
 
     @Override
     public AspectStack parse(Object[] args) {

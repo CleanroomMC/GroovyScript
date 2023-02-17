@@ -107,7 +107,7 @@ public class IngredientHelper {
      * @return true if the array or the elements are empty
      */
     public static boolean isEmpty(@Nullable ItemStack[] itemStacks) {
-        if (itemStacks == null || itemStacks.length == 0)
+        if (itemStacks == null)
             return true;
         for (ItemStack item : itemStacks)
             if (!isEmpty(item)) return false;
@@ -115,7 +115,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(@Nullable FluidStack[] fluidStacks) {
-        if (fluidStacks == null || fluidStacks.length == 0)
+        if (fluidStacks == null)
             return true;
         for (FluidStack fluid : fluidStacks)
             if (!isEmpty(fluid)) return false;
@@ -123,7 +123,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(@Nullable IIngredient[] ingredients) {
-        if (ingredients == null || ingredients.length == 0)
+        if (ingredients == null)
             return true;
         for (IIngredient item : ingredients)
             if (!isEmpty(item)) return false;

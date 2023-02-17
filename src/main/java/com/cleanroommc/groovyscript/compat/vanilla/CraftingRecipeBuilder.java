@@ -310,7 +310,7 @@ public abstract class CraftingRecipeBuilder {
     }
 
     private static IIngredient getIngredient(Char2ObjectMap<IIngredient> keyMap, char c) {
-        if(keyMap.containsKey(c)) {
+        if (keyMap.containsKey(c)) {
             return keyMap.get(c);
         }
         return Crafting.getFallback(c);

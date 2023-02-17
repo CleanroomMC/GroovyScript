@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
-@Mixin( value = PerkLevelManager.class , remap = false )
+@Mixin(value = PerkLevelManager.class, remap = false)
 public abstract class PerkLevelManagerMixin {
 
     @Shadow
@@ -21,10 +21,10 @@ public abstract class PerkLevelManagerMixin {
     @Shadow
     private Map<Integer, Long> totalExpLevelRequired;
 
-    @Inject( method = "ensureLevels()V" , at = @At("HEAD") , cancellable = true )
+    @Inject(method = "ensureLevels()V", at = @At("HEAD"), cancellable = true)
     public void ensureLevels(CallbackInfo ci) {
         if (this.totalExpLevelRequired.isEmpty()) {
-            for(int i = 1; i <= LEVEL_CAP; ++i) {
+            for (int i = 1; i <= LEVEL_CAP; ++i) {
                 long prev = this.totalExpLevelRequired.getOrDefault(i - 1, 0L);
                 if (ModSupport.ASTRAL_SORCERY.get().perkTreeConfig.xpFunction != null)
                     this.totalExpLevelRequired.put(i, ClosureHelper.call(ModSupport.ASTRAL_SORCERY.get().perkTreeConfig.xpFunction, i, prev));
