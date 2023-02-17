@@ -1,8 +1,7 @@
-package com.cleanroommc.groovyscript.helper;
+package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.logging.log4j.Level;
@@ -11,17 +10,13 @@ import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.kohsuke.groovy.sandbox.impl.Checker;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -84,14 +79,14 @@ public class GroovyLogImpl implements GroovyLog {
             // has no sub messages -> log in a single line
             writeLogLine(formatLine(level, main));
             if (msg.shouldLogToMc()) {
-                logger.log(msg.getLevel(), main + " in line " + Checker.getLineNumber());
+                logger.log(msg.getLevel(), main + " in line " + GroovyScript.getSandbox().getCurrentLine());
             }
         } else if (messages.size() == 1 && main.length() + messages.get(0).length() < 100) {
             // has one sub message and the main message and the sub message have less than 100 characters ->
             // log in a single line
             writeLogLine(formatLine(level, main + ": - " + messages.get(0)));
             if (msg.shouldLogToMc()) {
-                logger.log(msg.getLevel(), main + ": - " + messages.get(0) + "  in line " + Checker.getLineNumber());
+                logger.log(msg.getLevel(), main + ": - " + messages.get(0) + "  in line " + GroovyScript.getSandbox().getCurrentLine());
             }
         } else {
             // has multiple log lines or the main message and the first sub message are to long ->
@@ -101,7 +96,7 @@ public class GroovyLogImpl implements GroovyLog {
                 writeLogLine(formatLine(level, " - " + messages.get(i)));
             }
             if (msg.shouldLogToMc()) {
-                logger.log(msg.getLevel(), main + " in line " + Checker.getLineNumber() + " : - ");
+                logger.log(msg.getLevel(), main + " in line " + GroovyScript.getSandbox().getCurrentLine() + " : - ");
                 for (int i = 0; i < messages.size(); i++) {
                     logger.log(msg.getLevel(), " - " + messages.get(i));
                 }
@@ -256,11 +251,11 @@ public class GroovyLogImpl implements GroovyLog {
     }
 
     private String getSource() {
-        String source = Checker.getSource();
-        if (source == Checker.UNKNOWN_SOURCE) {
+        String source = GroovyScript.getSandbox().getCurrentScript();
+        if (Objects.equals(source, "null")) {
             return Loader.instance().activeModContainer().getModId();
         }
-        return GroovyScriptSandbox.relativizeSource(source) + ":" + Checker.getLineNumber();
+        return GroovyScriptSandbox.relativizeSource(source) + ":" + GroovyScript.getSandbox().getCurrentLine();
     }
 
     private void writeLogLine(String line) {

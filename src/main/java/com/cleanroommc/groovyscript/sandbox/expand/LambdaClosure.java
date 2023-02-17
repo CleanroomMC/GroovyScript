@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.sandbox.expand;
 
 import groovy.lang.Closure;
 
@@ -9,6 +9,10 @@ public class LambdaClosure extends Closure<Object> {
     public LambdaClosure(Object owner, AnyFunction function) {
         super(owner);
         this.function = function;
+    }
+
+    public LambdaClosure(AnyFunction function) {
+        this(function.getClass(), function);
     }
 
     public Object doCall(Object[] args) {

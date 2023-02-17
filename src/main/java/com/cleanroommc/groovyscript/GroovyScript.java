@@ -14,12 +14,16 @@ import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.NetworkUtils;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
-import com.cleanroommc.groovyscript.sandbox.ExpansionHelper;
-import com.cleanroommc.groovyscript.sandbox.GroovyDeobfuscationMapper;
 import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
+import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
+import com.cleanroommc.groovyscript.sandbox.transformer.GrSMetaClassCreationHandle;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import groovy.lang.GroovySystem;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
@@ -58,7 +62,10 @@ public class GroovyScript {
 
     public static final String ID = "groovyscript";
     public static final String NAME = "GroovyScript";
-    public static final String VERSION = "0.1.0";
+    public static final String VERSION = "0.3.0-exp2";
+
+    public static final String MC_VERSION = "1.12.2";
+    public static final String GROOVY_VERSION = "4.0.8";
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
@@ -74,7 +81,8 @@ public class GroovyScript {
     public void onConstruction(FMLConstructionEvent event) {
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
-        GroovyDeobfuscationMapper.init();
+        GroovySystem.getMetaClassRegistry().setMetaClassCreationHandle(GrSMetaClassCreationHandle.INSTANCE);
+        GroovyDeobfMapper.init();
         ReloadableRegistryManager.init();
         scriptPath = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy");
         try {
@@ -88,7 +96,7 @@ public class GroovyScript {
         VanillaModule.initializeBinding();
         registerExpansions();
 
-        getSandbox().run(GroovyScriptSandbox.LOADER_PRE_INIT);
+        getSandbox().run(LoadStage.PRE_INIT);
 
         if (NetworkUtils.isDedicatedClient()) {
             reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
@@ -98,7 +106,7 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
-        getSandbox().run(GroovyScriptSandbox.LOADER_POST_INIT);
+        getSandbox().run(LoadStage.POST_INIT);
 
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);

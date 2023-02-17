@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IMarkable;
 import com.cleanroommc.groovyscript.api.INBTResourceStack;
 import com.cleanroommc.groovyscript.api.INbtIngredient;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
@@ -92,10 +93,14 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         return groovyscript$getThis();
     }
 
+    public ItemStack reuse() {
+        return transform(IngredientHelper.REUSE);
+    }
+
     @Override
     public ItemStack applyTransform(ItemStack matchedInput) {
         if (transformer != null) {
-            return ClosureHelper.call(ItemStack.EMPTY, transformer, matchedInput);
+            return ClosureHelper.call(ItemStack.EMPTY, transformer, matchedInput).copy();
         }
         return groovyscript$getThis().getItem().getContainerItem(matchedInput);
     }
@@ -137,5 +142,15 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
 
     public void removeOreDict(OreDictIngredient ingredient) {
         VanillaModule.oreDict.remove(ingredient.getOreDict(), groovyscript$getThis());
+    }
+
+    public boolean isCase(OreDictIngredient ingredient) {
+        ItemStack itemStack = groovyscript$getThis();
+        for (ItemStack stack : OreDictionary.getOres(ingredient.getOreDict())) {
+            if (OreDictionary.itemMatches(itemStack, stack, false)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

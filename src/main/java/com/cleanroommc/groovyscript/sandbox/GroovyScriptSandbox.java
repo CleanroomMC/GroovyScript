@@ -4,16 +4,21 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
+import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
+import com.cleanroommc.groovyscript.event.ScriptRunEvent;
+import com.cleanroommc.groovyscript.helper.GroovyHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import groovy.lang.Binding;
+import groovy.lang.Closure;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
 import net.minecraftforge.common.MinecraftForge;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.jetbrains.annotations.ApiStatus;
-import org.kohsuke.groovy.sandbox.GroovySandbox;
-import org.kohsuke.groovy.sandbox.SandboxTransformer;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,17 +27,15 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Objects;
 
 public class GroovyScriptSandbox extends GroovySandbox {
 
-    public static final String LOADER_PRE_INIT = "preInit";
-    public static final String LOADER_POST_INIT = "postInit";
-    private String currentLoader;
+    private LoadStage currentLoadStage;
 
     public GroovyScriptSandbox(URL... scriptEnvironment) {
         super(scriptEnvironment);
-        registerInterceptor(new SimpleGroovyInterceptor());
         registerBinding("mods", ModSupport.INSTANCE);
         registerBinding("log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
@@ -40,8 +43,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("event_manager", GroovyEventManager.INSTANCE);
     }
 
-    public Throwable run(String currentLoader) {
-        this.currentLoader = Objects.requireNonNull(currentLoader);
+    public Throwable run(LoadStage currentLoadStage) {
+        this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
             super.run();
             return null;
@@ -53,31 +56,50 @@ public class GroovyScriptSandbox extends GroovySandbox {
             GroovyLog.get().exception(e);
             return e;
         } finally {
-            this.currentLoader = null;
+            this.currentLoadStage = null;
         }
     }
 
     @ApiStatus.Internal
     @Override
     public void run() throws Exception {
-        throw new UnsupportedOperationException("Use run(String loader) instead!");
+        throw new UnsupportedOperationException("Use run(Loader loader) instead!");
+    }
+
+    @Override
+    public <T> T runClosure(Closure<T> closure, Object... args) {
+        startRunning();
+        T result = null;
+        try {
+            result = closure.call(args);
+        } catch (Exception e) {
+            GroovyLog.get().error("An exception occurred while running a closure!");
+            GroovyLog.get().exception(e);
+        } finally {
+            stopRunning();
+        }
+        return result;
     }
 
     @Override
     protected void postInitBindings(Binding binding) {
         binding.setProperty("out", GroovyLog.get().getWriter());
+        binding.setVariable("globals", getBindings());
     }
 
     @Override
     protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
-        config.addCompilationCustomizers(new SandboxTransformer());
+        config.addCompilationCustomizers(GroovyScriptCompiler.transformer());
+        ImportCustomizer importCustomizer = new ImportCustomizer();
+        importCustomizer.addStaticStars(GroovyHelper.class.getName());
+        config.addCompilationCustomizers(importCustomizer);
     }
 
     @Override
     protected void preRun() {
-        GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoader);
+        GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoadStage);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
-        if (!LOADER_PRE_INIT.equals(this.currentLoader) && !ReloadableRegistryManager.isFirstLoad()) {
+        if (this.currentLoadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
             MinecraftForge.EVENT_BUS.post(new GroovyReloadEvent());
         }
@@ -92,18 +114,28 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void postRun() {
-        if (!LOADER_PRE_INIT.equals(this.currentLoader)) {
+        if (this.currentLoadStage == LoadStage.POST_INIT) {
             ReloadableRegistryManager.afterScriptRun();
         }
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
-        if (!LOADER_PRE_INIT.equals(this.currentLoader) && ReloadableRegistryManager.isFirstLoad()) {
+        if (this.currentLoadStage == LoadStage.POST_INIT && ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.setLoaded();
         }
     }
 
     @Override
-    public Iterable<File> getScriptFiles() {
-        return GroovyScript.getRunConfig().getSortedFiles(currentLoader);
+    public Collection<File> getClassFiles() {
+        return GroovyScript.getRunConfig().getClassFiles();
+    }
+
+    @Override
+    public Collection<File> getScriptFiles() {
+        return GroovyScript.getRunConfig().getSortedFiles(this.currentLoadStage.getName());
+    }
+
+    @Nullable
+    public LoadStage getCurrentLoader() {
+        return currentLoadStage;
     }
 
     public static String relativizeSource(String source) {
