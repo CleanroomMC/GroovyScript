@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -27,7 +28,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -35,7 +35,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.server.command.CommandTreeBase;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +47,11 @@ import java.util.stream.Collectors;
 
 public class GSCommand extends CommandTreeBase {
 
-    public static void runReload(ICommandSender player, MinecraftServer server) {
+    public static void runReload(EntityPlayer player, MinecraftServer server) {
+        if (!(server instanceof IntegratedServer)) {
+            player.sendMessage(new TextComponentString("Reloading in multiplayer is currently no allowed to avoid desync."));
+            return;
+        }
         GroovyLog.get().info("========== Reloading Groovy scripts ==========");
         long time = System.currentTimeMillis();
         Throwable throwable = GroovyScript.getSandbox().run(LoadStage.POST_INIT);
@@ -64,11 +67,7 @@ public class GSCommand extends CommandTreeBase {
         } else {
             player.sendMessage(new TextComponentString(TextFormatting.RED + "Error executing scripts:"));
             player.sendMessage(new TextComponentString(TextFormatting.RED + throwable.getMessage()));
-            if (server != null) {
-                server.commandManager.executeCommand(player, "/gs log");
-            } else if (player instanceof EntityPlayerSP) {
-                ClientCommandHandler.instance.executeCommand(player, "/gs log");
-            }
+            server.commandManager.executeCommand(player, "/gs log");
         }
     }
 
@@ -86,11 +85,9 @@ public class GSCommand extends CommandTreeBase {
         }));
 
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
-            if (FMLCommonHandler.instance().getSide().isServer()) {
-                sender.sendMessage(new TextComponentString("Reloading in multiplayer is currently no allowed to avoid desync."));
-                return;
+            if (sender instanceof EntityPlayer) {
+                runReload((EntityPlayer) sender, server);
             }
-            runReload(sender, server);
         }));
 
         addSubcommand(new SimpleCommand("hand", (server, sender, args) -> {
