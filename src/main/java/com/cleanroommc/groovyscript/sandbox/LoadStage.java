@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.sandbox;
 public class LoadStage {
 
     public static final LoadStage PRE_INIT = new LoadStage("preInit", false);
-    public static final LoadStage POST_INIT = new LoadStage("postInit", false);
+    public static final LoadStage POST_INIT = new LoadStage("postInit", true);
 
     private final String name;
     private final boolean reloadable;
