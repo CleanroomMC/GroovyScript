@@ -2,6 +2,8 @@ package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SReloadJei;
@@ -39,6 +41,7 @@ import net.minecraftforge.server.command.CommandTreeBase;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,14 +77,8 @@ public class GSCommand extends CommandTreeBase {
     public GSCommand() {
 
         addSubcommand(new SimpleCommand("log", (server, sender, args) -> {
-            sender.sendMessage(new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + "Groovy Log"))
-                                       .setStyle(new Style()
-                                                         .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.get().getLogFilerPath().toString()))
-                                                         .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open GroovyScript log")))));
-            sender.sendMessage(new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + "Minecraft Log"))
-                                       .setStyle(new Style()
-                                                         .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, GroovyLog.get().getLogFilerPath().getParent().toString() + "/logs/latest.log"))
-                                                         .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open Minecraft log")))));
+            sender.sendMessage(getTextForFile("Groovy Log", GroovyLog.get().getLogFilerPath(), new TextComponentString("Click to open GroovyScript log")));
+            sender.sendMessage(getTextForFile("Minecraft Log", GroovyLog.get().getLogFilerPath().getParent(), new TextComponentString("Click to open Minecraft log")));
         }));
 
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
@@ -158,7 +155,12 @@ public class GSCommand extends CommandTreeBase {
             }
         }));
 
-        addSubcommand(new GSMekanismCommand());
+        if (ModSupport.MEKANISM.isLoaded()) {
+            addSubcommand(new GSMekanismCommand());
+        }
+        if (ModSupport.JEI.isLoaded()) {
+            addSubcommand(JeiPlugin.getJeiCategoriesCommand());
+        }
     }
 
     @Override
@@ -177,6 +179,13 @@ public class GSCommand extends CommandTreeBase {
     @Nonnull
     public String getUsage(@NotNull ICommandSender sender) {
         return "/gs []";
+    }
+
+    public static ITextComponent getTextForFile(String name, Path path, ITextComponent hoverText) {
+        return new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + name))
+                .setStyle(new Style()
+                                  .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path.toString()))
+                                  .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText)));
     }
 
     private static BlockPos getBlockLookingAt(EntityPlayer player) {
