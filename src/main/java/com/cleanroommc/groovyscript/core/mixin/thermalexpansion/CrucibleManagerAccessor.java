@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.Map;
 import java.util.Set;
 
-@Mixin(CrucibleManager.class)
+@Mixin(value = CrucibleManager.class, remap = false)
 public interface CrucibleManagerAccessor {
 
     @Accessor

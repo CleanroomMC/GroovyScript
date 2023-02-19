@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.List;
 import java.util.Map;
 
-@Mixin(CanningMachineRegistry.class)
+@Mixin(value = CanningMachineRegistry.class, remap = false)
 public interface ClassicCanningMachineRegistryAccessor {
 
     @Accessor("IdToItems")
