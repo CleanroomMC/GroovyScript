@@ -24,7 +24,7 @@ public class ShapelessCraftingRecipe extends CraftingRecipe {
 
         List<Pair<ItemStack, Integer>> givenInputs = new ArrayList<>();
         // collect all items from the crafting matrix
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
+        for (int i = 0; i < inv.getSizeInventory(); i++) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (!itemstack.isEmpty()) {
                 givenInputs.add(Pair.of(itemstack, i));

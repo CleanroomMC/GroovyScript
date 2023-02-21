@@ -147,7 +147,9 @@ public class RunConfig {
             int pathSize = path.split(separator).length;
             try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
-                        .map(Path::toFile).forEach(file -> {
+                        .map(Path::toFile)
+                        .sorted(Comparator.comparing(File::getPath))
+                        .forEach(file -> {
                             if (files.containsKey(file)) {
                                 if (pathSize > files.getInt(file)) {
                                     files.put(file, pathSize);
