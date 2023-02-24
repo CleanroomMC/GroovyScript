@@ -49,7 +49,7 @@ public class ShapedCraftingRecipe extends CraftingRecipe implements IShapedRecip
                 if (!matches.isEmpty()) return matches;
                 if (mirrored) {
                     matches = checkMatch(inv, x, y, true);
-                    if (matches.isEmpty()) return matches;
+                    if (!matches.isEmpty()) return matches;
                 }
             }
         }
