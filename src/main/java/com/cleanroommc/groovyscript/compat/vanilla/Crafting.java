@@ -109,7 +109,7 @@ public class Crafting {
         if (recipesToRemove.isEmpty()) {
             if (log) {
                 GroovyLog.msg("Error removing Minecraft Crafting recipe")
-                        .add("No recipes found for %s", output)
+                        .add("No recipes found for {}", output)
                         .error()
                         .post();
             }
