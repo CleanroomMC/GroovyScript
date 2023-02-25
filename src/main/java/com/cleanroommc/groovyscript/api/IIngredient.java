@@ -26,6 +26,10 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
         return false;
     }
 
+    default IResourceStack copyWithAmount(int amount) {
+        return exactCopy().withAmount(amount);
+    }
+
     /**
      * An empty ingredient with stack size 0, that matches empty item stacks
      */

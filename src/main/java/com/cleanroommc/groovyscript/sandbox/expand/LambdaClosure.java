@@ -2,25 +2,25 @@ package com.cleanroommc.groovyscript.sandbox.expand;
 
 import groovy.lang.Closure;
 
-public class LambdaClosure extends Closure<Object> {
+public class LambdaClosure<T> extends Closure<T> {
 
-    private final AnyFunction function;
+    private final AnyFunction<T> function;
 
-    public LambdaClosure(Object owner, AnyFunction function) {
+    public LambdaClosure(Object owner, AnyFunction<T> function) {
         super(owner);
         this.function = function;
     }
 
-    public LambdaClosure(AnyFunction function) {
+    public LambdaClosure(AnyFunction<T> function) {
         this(function.getClass(), function);
     }
 
-    public Object doCall(Object[] args) {
+    public T doCall(Object[] args) {
         return function.run(args);
     }
 
-    public interface AnyFunction {
+    public interface AnyFunction<T> {
 
-        Object run(Object[] args);
+        T run(Object[] args);
     }
 }

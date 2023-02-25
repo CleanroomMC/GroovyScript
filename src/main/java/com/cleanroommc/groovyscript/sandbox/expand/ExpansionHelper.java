@@ -114,9 +114,9 @@ public class ExpansionHelper {
         }
     }
 
-    public static void mixinMethod(Class<?> self, String name, LambdaClosure.AnyFunction function) {
+    public static void mixinMethod(Class<?> self, String name, LambdaClosure.AnyFunction<?> function) {
         ExpandoMetaClass emc = getExpandoClass(self);
-        emc.registerInstanceMethod(name, new LambdaClosure(null, function));
+        emc.registerInstanceMethod(name, new LambdaClosure<>(function));
     }
 
     private static void mixinMethod(ExpandoMetaClass self, MetaMethod method, MixinInMetaClass mixin) {
