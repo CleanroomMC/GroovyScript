@@ -14,6 +14,7 @@ import groovy.lang.Closure;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
@@ -31,6 +32,32 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class GroovyScriptSandbox extends GroovySandbox {
+
+    private static final String[] DEFAULT_IMPORTS = {
+            "net.minecraft.world.World",
+            "net.minecraft.block.state.IBlockState",
+            "net.minecraft.block.Block",
+            "net.minecraft.enchantment.Enchantment",
+            "net.minecraft.entity.Entity",
+            "net.minecraft.entity.player.EntityPlayer",
+            "net.minecraft.init.Biomes",
+            "net.minecraft.init.Blocks",
+            "net.minecraft.init.Enchantments",
+            "net.minecraft.init.Items",
+            "net.minecraft.init.MobEffects",
+            "net.minecraft.init.PoisonTypes",
+            "net.minecraft.init.SoundEvents",
+            "net.minecraft.item.Item",
+            "net.minecraft.item.ItemStack",
+            "net.minecraft.nbt.NBTTagCompound",
+            "net.minecraft.nbt.NBTTagList",
+            "net.minecraft.tileentity.TileEntity",
+            "net.minecraft.util.math.BlockPos",
+            "net.minecraft.util.EnumHand",
+            "net.minecraft.util.EnumHandSide",
+            "net.minecraft.util.EnumFacing",
+            "net.minecraft.util.DamageSource"
+    };
 
     private LoadStage currentLoadStage;
 
@@ -91,7 +118,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
     protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
         config.addCompilationCustomizers(GroovyScriptCompiler.transformer());
         ImportCustomizer importCustomizer = new ImportCustomizer();
-        importCustomizer.addStaticStars(GroovyHelper.class.getName());
+        importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
+        importCustomizer.addImports(DEFAULT_IMPORTS);
         config.addCompilationCustomizers(importCustomizer);
     }
 
