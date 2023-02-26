@@ -45,7 +45,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             "net.minecraft.init.Enchantments",
             "net.minecraft.init.Items",
             "net.minecraft.init.MobEffects",
-            "net.minecraft.init.PoisonTypes",
+            "net.minecraft.init.PotionTypes",
             "net.minecraft.init.SoundEvents",
             "net.minecraft.item.Item",
             "net.minecraft.item.ItemStack",
