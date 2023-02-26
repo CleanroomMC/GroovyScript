@@ -3,11 +3,13 @@ package com.cleanroommc.groovyscript;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
+import com.cleanroommc.groovyscript.compat.content.GroovyResourcePack;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.CReload;
@@ -20,6 +22,7 @@ import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.transformer.GrSMetaClassCreationHandle;
+import com.google.common.base.Joiner;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovySystem;
@@ -70,11 +73,14 @@ public class GroovyScript {
 
     private static File scriptPath;
     private static File runConfigFile;
+    private static File resourcesFile;
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
 
     private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
+
+    private static final Joiner fileJoiner = Joiner.on(File.separator);
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
@@ -89,7 +95,8 @@ public class GroovyScript {
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Error initializing sandbox!");
         }
-        runConfigFile = new File(scriptPath.getPath() + File.separator + "runConfig.json");
+        runConfigFile = new File(scriptPath, "runConfig.json");
+        resourcesFile = new File(scriptPath, "assets");
         reloadRunConfig();
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
@@ -98,6 +105,7 @@ public class GroovyScript {
         getSandbox().run(LoadStage.PRE_INIT);
 
         if (NetworkUtils.isDedicatedClient()) {
+            ((DefaultResourcePackAccessor) Minecraft.getMinecraft()).get().add(new GroovyResourcePack());
             reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
             ClientRegistry.registerKeyBinding(reloadKey);
         }
@@ -153,6 +161,14 @@ public class GroovyScript {
     }
 
     @NotNull
+    public static File getResourcesFile() {
+        if (resourcesFile == null) {
+            throw new IllegalStateException("GroovyScript is not yet loaded!");
+        }
+        return resourcesFile;
+    }
+
+    @NotNull
     public static GroovyScriptSandbox getSandbox() {
         if (sandbox == null) {
             throw new IllegalStateException("GroovyScript is not yet loaded!");
@@ -192,6 +208,13 @@ public class GroovyScript {
             }
         }
         return new RunConfig(json);
+    }
 
+    public static File makeFile(String... pieces) {
+        return new File(fileJoiner.join(pieces));
+    }
+
+    public static File makeFile(File parent, String... pieces) {
+        return new File(parent, fileJoiner.join(pieces));
     }
 }

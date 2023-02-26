@@ -16,6 +16,7 @@
     "SlotCraftingAccess"
   ],
   "client": [
+    "DefaultResourcePackAccessor",
     "GuiScreenMixin"
   ]
 }

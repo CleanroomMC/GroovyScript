@@ -23,7 +23,8 @@ public class RunConfig {
 
     public static JsonObject createDefaultJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("packName", "");
+        json.addProperty("packName", "PlaceHolder name");
+        json.addProperty("packId", "placeholdername");
         json.addProperty("version", "1.0.0");
         json.addProperty("debug", false);
         JsonArray classes = new JsonArray();
@@ -40,6 +41,7 @@ public class RunConfig {
     }
 
     private final String packName;
+    private final String packId;
     private final String version;
     private final List<String> classes = new ArrayList<>();
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
@@ -61,7 +63,19 @@ public class RunConfig {
     }
 
     public RunConfig(JsonObject json) {
-        this.packName = JsonHelper.getString(json, "", "packName", "name");
+        String name = JsonHelper.getString(json, "", "packName", "name");
+        String id = JsonHelper.getString(json, "", "packId", "id");
+        if (id.isEmpty()) {
+            if (name.isEmpty()) {
+                GroovyLog.get().exception(new IllegalStateException("Pack name and id must not both be empty"));
+            } else {
+                id = name.toLowerCase().replaceAll("[_ ]", "");
+            }
+        } else if (name.isEmpty()) {
+            name = id;
+        }
+        this.packName = name;
+        this.packId = id;
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
     }
 
@@ -115,6 +129,10 @@ public class RunConfig {
 
     public String getPackName() {
         return packName;
+    }
+
+    public String getPackId() {
+        return packId;
     }
 
     public String getVersion() {
