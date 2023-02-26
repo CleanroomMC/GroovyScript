@@ -13,8 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.IRarity;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +30,7 @@ public class GroovyItem extends Item {
 
     @GroovyBlacklist
     public static void registerItem(Item item) {
-        if (initialised && GroovyScript.getSandbox().isRunning()) {
+        if (initialised) {
             GroovyLog.get().errorMC("Items must registered in preInit. Tried to register {} too late!", item.getRegistryName());
             return;
         }
@@ -67,43 +65,47 @@ public class GroovyItem extends Item {
         initialised = true;
     }
 
+    private boolean effect = false;
+    private int enchantability = 0;
+    private IRarity rarity = null;
+
     public GroovyItem(String loc) {
         setRegistryName(GroovyScript.getRunConfig().getPackId(), loc);
 
+    }
+
+    public GroovyItem setEnchantedEffect() {
+        this.effect = true;
+        return this;
+    }
+
+    public GroovyItem setEnchantability(int enchantability) {
+        this.enchantability = enchantability;
+        return this;
+    }
+
+    public GroovyItem setRarity(IRarity rarity) {
+        this.rarity = rarity;
+        return this;
     }
 
     public void register() {
         registerItem(this);
     }
 
-    @SideOnly(Side.CLIENT)
-    public ResourceLocation createItemModelPath(String postfix) {
-        return new ResourceLocation(getRegistryName().getNamespace(), getRegistryName().getPath() + postfix);
-    }
-
     @Override
     public int getItemEnchantability() {
-        return super.getItemEnchantability();
-    }
-
-    @Override
-    public int getMaxItemUseDuration(@NotNull ItemStack stack) {
-        return super.getMaxItemUseDuration(stack);
+        return this.enchantability;
     }
 
     @Override
     public boolean hasEffect(@NotNull ItemStack stack) {
-        return super.hasEffect(stack);
+        return this.effect || super.hasEffect(stack);
     }
 
     @Override
     public @NotNull IRarity getForgeRarity(@NotNull ItemStack stack) {
-        return super.getForgeRarity(stack);
-    }
-
-    @Override
-    public void setHarvestLevel(@NotNull String toolClass, int level) {
-        super.setHarvestLevel(toolClass, level);
+        return this.rarity == null ? super.getForgeRarity(stack) : this.rarity;
     }
 
     private static void checkModelFile(ResourceLocation loc) {
