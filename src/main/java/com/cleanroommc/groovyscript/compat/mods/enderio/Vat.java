@@ -64,10 +64,10 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         private FluidStack output;
         private FluidStack input;
         private float baseMultiplier = 1;
-        private IngredientList<IIngredient> itemInputs1 = new IngredientList<>();
-        private IngredientList<IIngredient> itemInputs2 = new IngredientList<>();
-        private FloatList multipliers1 = new FloatArrayList();
-        private FloatList multipliers2 = new FloatArrayList();
+        private final IngredientList<IIngredient> itemInputs1 = new IngredientList<>();
+        private final IngredientList<IIngredient> itemInputs2 = new IngredientList<>();
+        private final FloatList multipliers1 = new FloatArrayList();
+        private final FloatList multipliers2 = new FloatArrayList();
         private int energy = 0;
         protected RecipeLevel level = RecipeLevel.IGNORE;
 

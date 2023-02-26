@@ -7,11 +7,11 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin( value = ConstellationMapEffectRegistry.class, remap = false )
+@Mixin(value = ConstellationMapEffectRegistry.class, remap = false)
 public interface ConstellationMapEffectRegistryAccessor {
 
     @Accessor
-    public static Map<IConstellation, ConstellationMapEffectRegistry.MapEffect> getEffectRegistry() {
+    static Map<IConstellation, ConstellationMapEffectRegistry.MapEffect> getEffectRegistry() {
         return null;
     }
 

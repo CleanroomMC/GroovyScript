@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.event;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingInfo;
@@ -20,7 +19,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
-@Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class EventHandler {
 
     @SubscribeEvent

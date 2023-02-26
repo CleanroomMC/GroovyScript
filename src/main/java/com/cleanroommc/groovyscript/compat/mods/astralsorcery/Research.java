@@ -260,7 +260,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         public IJournalPage discoveryRecipePage(ItemStack output) {
             AtomicReference<DiscoveryRecipe> recipe = new AtomicReference<>(null);
             AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.DISCOVERY).forEach(registeredRecipe -> {
-                if(registeredRecipe.getOutputForMatching().isItemEqual(output)) {
+                if (registeredRecipe.getOutputForMatching().isItemEqual(output)) {
                     recipe.set((DiscoveryRecipe) registeredRecipe);
                 }
             });
@@ -270,7 +270,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         public IJournalPage constellationRecipePage(ItemStack output) {
             AtomicReference<ConstellationRecipe> recipe = new AtomicReference<>(null);
             AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.CONSTELLATION_CRAFT).forEach(registeredRecipe -> {
-                if(registeredRecipe.getOutputForMatching().isItemEqual(output)) {
+                if (registeredRecipe.getOutputForMatching().isItemEqual(output)) {
                     recipe.set((ConstellationRecipe) registeredRecipe);
                 }
             });
@@ -280,7 +280,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         public IJournalPage attunementRecipePage(ItemStack output) {
             AtomicReference<AttunementRecipe> recipe = new AtomicReference<>(null);
             AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.ATTUNEMENT).forEach(registeredRecipe -> {
-                if(registeredRecipe.getOutputForMatching().isItemEqual(output)) {
+                if (registeredRecipe.getOutputForMatching().isItemEqual(output)) {
                     recipe.set((AttunementRecipe) registeredRecipe);
                 }
             });
@@ -290,7 +290,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         public IJournalPage traitRecipePage(ItemStack output) {
             AtomicReference<TraitRecipe> recipe = new AtomicReference<>(null);
             AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.TRAIT_CRAFT).forEach(registeredRecipe -> {
-                if(registeredRecipe.getOutputForMatching().isItemEqual(output)) {
+                if (registeredRecipe.getOutputForMatching().isItemEqual(output)) {
                     recipe.set((TraitRecipe) registeredRecipe);
                 }
             });

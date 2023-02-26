@@ -40,8 +40,8 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(recipe -> this.remove((InfusionRecipe) recipe.get(1)) );
-        restoreFromBackup().forEach(recipe -> this.add((ResourceLocation) recipe.get(0), (InfusionRecipe) recipe.get(1)) );
+        removeScripted().forEach(recipe -> this.remove((InfusionRecipe) recipe.get(1)));
+        restoreFromBackup().forEach(recipe -> this.add((ResourceLocation) recipe.get(0), (InfusionRecipe) recipe.get(1)));
         compileGroups();
     }
 
@@ -77,7 +77,7 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
                 this.addBackup(tuple);
             } else {
                 ArrayList<Object> tuple = new ArrayList<>();
-                ResourceLocation rl = new ResourceLocation( "thaumcraft:" + ((ItemStack) rec.recipeOutput).getItem().toString() );
+                ResourceLocation rl = new ResourceLocation("thaumcraft:" + ((ItemStack) rec.recipeOutput).getItem());
                 tuple.add(rl);
                 tuple.add(rec.setGroup(rl));
                 this.addBackup(tuple);
@@ -118,7 +118,7 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
                 this.addBackup(tuple);
             } else {
                 ArrayList<Object> tuple = new ArrayList<>();
-                ResourceLocation rl = new ResourceLocation( "thaumcraft:" + ((ItemStack) recipe.recipeOutput).getItem().toString() );
+                ResourceLocation rl = new ResourceLocation("thaumcraft:" + ((ItemStack) recipe.recipeOutput).getItem());
                 tuple.add(rl);
                 tuple.add(recipe.setGroup(rl));
                 this.addBackup(tuple);

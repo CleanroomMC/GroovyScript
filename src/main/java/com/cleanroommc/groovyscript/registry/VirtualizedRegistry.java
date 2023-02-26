@@ -5,7 +5,6 @@ import com.google.common.base.CaseFormat;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 public abstract class VirtualizedRegistry<R> {
 

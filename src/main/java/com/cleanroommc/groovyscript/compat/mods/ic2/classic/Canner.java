@@ -307,6 +307,7 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
     }
 
     public static class CanningRecipe {
+
         public RecipeType type;
 
         public IIngredient input;

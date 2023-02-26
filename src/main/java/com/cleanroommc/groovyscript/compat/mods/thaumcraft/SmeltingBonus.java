@@ -51,7 +51,7 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
     public boolean remove(ThaumcraftApi.SmeltBonus bonus) {
         boolean removed = false;
         Iterator<ThaumcraftApi.SmeltBonus> it = CommonInternals.smeltingBonus.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             ThaumcraftApi.SmeltBonus registeredBonus = it.next();
             if (registeredBonus.equals(bonus)) {
                 it.remove();

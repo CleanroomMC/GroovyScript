@@ -11,20 +11,25 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExp
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
+import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
+import com.cleanroommc.groovyscript.network.NetworkUtils;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
-import com.cleanroommc.groovyscript.sandbox.ExpansionHelper;
-import com.cleanroommc.groovyscript.sandbox.GroovyDeobfuscationMapper;
 import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
+import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
+import com.cleanroommc.groovyscript.sandbox.transformer.GrSMetaClassCreationHandle;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import groovy.lang.GroovySystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -32,6 +37,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -59,7 +65,10 @@ public class GroovyScript {
 
     public static final String ID = "groovyscript";
     public static final String NAME = "GroovyScript";
-    public static final String VERSION = "0.1.0";
+    public static final String VERSION = "0.3.1";
+
+    public static final String MC_VERSION = "1.12.2";
+    public static final String GROOVY_VERSION = "4.0.8";
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
@@ -68,13 +77,15 @@ public class GroovyScript {
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
 
-    private static final KeyBinding reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
+    private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
+        MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
-        GroovyDeobfuscationMapper.init();
+        GroovySystem.getMetaClassRegistry().setMetaClassCreationHandle(GrSMetaClassCreationHandle.INSTANCE);
+        GroovyDeobfMapper.init();
         ReloadableRegistryManager.init();
         scriptPath = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy");
         try {
@@ -94,34 +105,36 @@ public class GroovyScript {
             ((LootTableAccessor) table).getPools().forEach(pool -> ((LootPoolAccessor) pool).setIsFrozen(false));
         });
 
-        getSandbox().run(GroovyScriptSandbox.LOADER_PRE_INIT);
+        getSandbox().run(LoadStage.PRE_INIT);
+
+        if (NetworkUtils.isDedicatedClient()) {
+            reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
+            ClientRegistry.registerKeyBinding(reloadKey);
+        }
     }
 
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
-        getSandbox().run(GroovyScriptSandbox.LOADER_POST_INIT);
+        getSandbox().run(LoadStage.POST_INIT);
 
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);
             Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.command.copy.copied_start")
-                    .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
-                    .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
+                                                                .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
+                                                                .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
         });
     }
 
     @Mod.EventHandler
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new GSCommand());
-        if (event.getServer() instanceof IntegratedServer) {
-            ClientRegistry.registerKeyBinding(reloadKey);
-        }
     }
 
     @SubscribeEvent
     public static void onInput(InputEvent.KeyInputEvent event) {
         long time = Minecraft.getSystemTime();
         if (reloadKey.isPressed() && time - timeSinceLastUse >= 1000 && Minecraft.getMinecraft().player.getPermissionLevel() >= 4) {
-            GSCommand.runReload(Minecraft.getMinecraft().player, null);
+            NetworkHandler.sendToServer(new CReload());
             timeSinceLastUse = time;
         }
     }

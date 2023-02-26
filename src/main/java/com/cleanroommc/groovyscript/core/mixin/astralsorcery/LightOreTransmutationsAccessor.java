@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Collection;
 
-@Mixin( value = LightOreTransmutations.class, remap = false )
+@Mixin(value = LightOreTransmutations.class, remap = false)
 public interface LightOreTransmutationsAccessor {
 
     @Accessor

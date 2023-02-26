@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.api;
 
-import com.cleanroommc.groovyscript.helper.GroovyLogImpl;
+import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.jetbrains.annotations.Contract;
@@ -83,6 +83,15 @@ public interface GroovyLog {
      * @param msg message to log
      */
     void log(Msg msg);
+
+    /**
+     * Formats and logs a single object to this log on INFO level
+     *
+     * @param obj object to log
+     */
+    default void info(Object obj) {
+        info(obj == null ? "null" : obj.toString(), 0);
+    }
 
     /**
      * Formats and logs to this log on INFO level

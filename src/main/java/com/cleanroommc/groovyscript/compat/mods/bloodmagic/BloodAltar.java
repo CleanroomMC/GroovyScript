@@ -102,6 +102,7 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeBloodAltar> {
+
         private int minimumTier;
         private int syphon;
         private int consumeRate;

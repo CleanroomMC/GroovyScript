@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
+import groovy.lang.Closure;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,11 @@ import java.util.Collections;
 import java.util.Map;
 
 public class IngredientHelper {
+
+    public static final Closure<Object> MATCH_ANY = new LambdaClosure<>(args -> true);
+    public static final Closure<Object> REUSE = new LambdaClosure<>(args -> args[0]);
+    public static final Closure<Object> NO_RETURN = new LambdaClosure<>(args -> ItemStack.EMPTY);
+    public static final Closure<Object> MATCH_NBT = new LambdaClosure<>(args -> ItemStack.EMPTY);
 
     public static boolean isFluid(IIngredient ingredient) {
         return ingredient instanceof FluidStack;
@@ -103,7 +110,7 @@ public class IngredientHelper {
      * @return true if the array or the elements are empty
      */
     public static boolean isEmpty(@Nullable ItemStack[] itemStacks) {
-        if (itemStacks == null || itemStacks.length == 0)
+        if (itemStacks == null)
             return true;
         for (ItemStack item : itemStacks)
             if (!isEmpty(item)) return false;
@@ -111,7 +118,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(@Nullable FluidStack[] fluidStacks) {
-        if (fluidStacks == null || fluidStacks.length == 0)
+        if (fluidStacks == null)
             return true;
         for (FluidStack fluid : fluidStacks)
             if (!isEmpty(fluid)) return false;
@@ -119,7 +126,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(@Nullable IIngredient[] ingredients) {
-        if (ingredients == null || ingredients.length == 0)
+        if (ingredients == null)
             return true;
         for (IIngredient item : ingredients)
             if (!isEmpty(item)) return false;

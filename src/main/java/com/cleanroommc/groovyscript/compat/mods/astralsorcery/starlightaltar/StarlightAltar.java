@@ -45,9 +45,13 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
         switch (altarLevel) {
             case DISCOVERY:
                 DiscoveryRecipe dRec = new DiscoveryRecipe(this.registerNative(name, output, inputs)) {
-                    public int getPassiveStarlightRequired() { return starlightConsumed; }
+                    public int getPassiveStarlightRequired() {
+                        return starlightConsumed;
+                    }
 
-                    public int craftingTickTime() { return craftingTickTime; }
+                    public int craftingTickTime() {
+                        return craftingTickTime;
+                    }
 
                     public boolean mayDecrement(TileAltar ta, ShapedRecipeSlot slot) {
                         return !fluidStacks.contains(slot.getSlotID());
@@ -76,7 +80,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
                 };
 
                 for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) aRec.setAttItem(inputs[al.getSlotId()], al);
+                    if (inputs[al.getSlotId()] != null) aRec.setAttItem(inputs[al.getSlotId()], al);
                 }
 
                 addScripted(aRec);
@@ -105,10 +109,10 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
                 };
 
                 for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) cRec.setAttItem(inputs[al.getSlotId()], al);
+                    if (inputs[al.getSlotId()] != null) cRec.setAttItem(inputs[al.getSlotId()], al);
                 }
                 for (ConstellationRecipe.ConstellationAtlarSlot al : ConstellationRecipe.ConstellationAtlarSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) cRec.setCstItem(inputs[al.getSlotId()], al);
+                    if (inputs[al.getSlotId()] != null) cRec.setCstItem(inputs[al.getSlotId()], al);
                 }
 
                 addScripted(cRec);
@@ -141,16 +145,16 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
                 };
 
                 for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) rRec.setAttItem(inputs[al.getSlotId()], al);
+                    if (inputs[al.getSlotId()] != null) rRec.setAttItem(inputs[al.getSlotId()], al);
                 }
                 for (ConstellationRecipe.ConstellationAtlarSlot al : ConstellationRecipe.ConstellationAtlarSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) rRec.setCstItem(inputs[al.getSlotId()], al);
+                    if (inputs[al.getSlotId()] != null) rRec.setCstItem(inputs[al.getSlotId()], al);
                 }
                 for (TraitRecipe.TraitRecipeSlot al : TraitRecipe.TraitRecipeSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) rRec.setInnerTraitItem(inputs[al.getSlotId()], al);
+                    if (inputs[al.getSlotId()] != null) rRec.setInnerTraitItem(inputs[al.getSlotId()], al);
                 }
                 for (int i = 25; i < inputs.length; i++) {
-                    if(inputs[i] != null) {
+                    if (inputs[i] != null) {
                         rRec.addOuterTraitItem(inputs[i]);
                     }
                 }
@@ -170,7 +174,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
     private AccessibleRecipeAdapater registerNative(String name, ItemStack output, ItemHandle[] inputs) {
         ShapedRecipe.Builder builder = ShapedRecipe.Builder.newShapedRecipe(name, output);
 
-        for(int i = 0; i < 9; ++i) {
+        for (int i = 0; i < 9; ++i) {
             ItemHandle itemHandle = inputs[i];
             if (itemHandle != null) {
                 ShapedRecipeSlot srs = ShapedRecipeSlot.values()[i];
@@ -190,7 +194,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
     private List<Integer> computeFluidConsumptionSlots(ItemHandle[] inputs) {
         List<Integer> fluidInputs = Lists.newLinkedList();
 
-        for(int i = 0; i < inputs.length; ++i) {
+        for (int i = 0; i < inputs.length; ++i) {
             ItemHandle handle = inputs[i];
             if (handle != null && handle.handleType == ItemHandle.Type.FLUID) {
                 fluidInputs.add(i);

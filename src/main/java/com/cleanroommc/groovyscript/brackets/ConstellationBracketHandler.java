@@ -5,13 +5,12 @@ import com.cleanroommc.groovyscript.api.IBracketHandler;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationRegistryAccessor;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 public class ConstellationBracketHandler implements IBracketHandler<IConstellation> {
 
     public static final ConstellationBracketHandler INSTANCE = new ConstellationBracketHandler();
 
-    private ConstellationBracketHandler() {}
+    private ConstellationBracketHandler() {
+    }
 
     @Override
     public IConstellation parse(String arg) {

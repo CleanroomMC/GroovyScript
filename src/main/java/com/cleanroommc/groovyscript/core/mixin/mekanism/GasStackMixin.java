@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.core.mixin.mekanism;
 
-import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IResourceStack;
 import mekanism.api.gas.GasStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;

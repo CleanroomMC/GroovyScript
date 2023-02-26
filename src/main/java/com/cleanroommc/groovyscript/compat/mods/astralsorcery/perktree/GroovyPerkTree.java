@@ -9,7 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.PERK_TREE;
 

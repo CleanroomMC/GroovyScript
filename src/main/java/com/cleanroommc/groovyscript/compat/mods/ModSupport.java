@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
-import com.cleanroommc.groovyscript.api.IGroovyPropertyGetter;
+import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolution;
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
-public class ModSupport implements IGroovyPropertyGetter {
+public class ModSupport implements IDynamicGroovyProperty {
 
     private static final Map<String, Container<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
 
@@ -45,7 +45,8 @@ public class ModSupport implements IGroovyPropertyGetter {
         return new ObjectOpenHashSet<>(containers.values());
     }
 
-    private ModSupport() { }
+    private ModSupport() {
+    }
 
     @Override
     @Nullable

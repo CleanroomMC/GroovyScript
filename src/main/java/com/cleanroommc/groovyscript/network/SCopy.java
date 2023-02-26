@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.network;
 
-import com.google.common.base.Joiner;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;

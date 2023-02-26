@@ -46,4 +46,8 @@ public interface INBTResourceStack extends IResourceStack {
     default INBTResourceStack withNbt(Map<String, Object> map) {
         return withNbt(NbtHelper.ofMap(map));
     }
+
+    default INBTResourceStack withEmptyNbt() {
+        return withNbt(new NBTTagCompound());
+    }
 }

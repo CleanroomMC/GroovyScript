@@ -115,6 +115,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeAlchemyTable> {
+
         private int syphon;
         private int ticks;
         private int minimumTier;

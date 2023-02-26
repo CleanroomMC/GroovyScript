@@ -53,6 +53,7 @@ public class Scrapbox extends VirtualizedRegistry<Object> {
     }
 
     public static class Drop {
+
         int id;
         public ItemStack stack;
         public float chance;

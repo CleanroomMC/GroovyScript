@@ -11,6 +11,8 @@
     "FurnaceRecipeMixin",
     "InventoryCraftingAccess",
     "ItemStackMixin",
+    "MetaClassImplMixin",
+    "OreDictionaryAccessor",
     "SlotCraftingAccess",
     "loot.LootPoolAccessor",
     "loot.LootTableAccessor"

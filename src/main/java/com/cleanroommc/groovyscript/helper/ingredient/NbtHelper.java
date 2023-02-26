@@ -1,5 +1,7 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
+import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
+import groovy.lang.Closure;
 import net.minecraft.nbt.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants;
@@ -10,7 +12,9 @@ import java.util.function.Predicate;
 
 public class NbtHelper {
 
-    public static final Predicate<NBTTagCompound> MATCH_ANY = nbt -> true;
+    public static Closure<Object> makeNbtPredicate(Predicate<NBTTagCompound> predicate) {
+        return new LambdaClosure<>(args -> predicate.test(((NBTTagCompound) args[0])));
+    }
 
     public static boolean containsNbt(NBTTagCompound nbtContainer, NBTTagCompound nbtMatcher) {
         if (nbtMatcher == null || nbtMatcher.isEmpty()) return true;

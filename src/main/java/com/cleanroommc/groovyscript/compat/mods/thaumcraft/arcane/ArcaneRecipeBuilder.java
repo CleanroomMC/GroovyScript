@@ -148,7 +148,7 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
         }
 
         public ArcaneRecipeBuilder.Shapeless input(IIngredient... ingredients) {
-            if (ingredients != null && ingredients.length > 0)
+            if (ingredients != null)
                 for (IIngredient ingredient : ingredients)
                     input(ingredient);
             return this;

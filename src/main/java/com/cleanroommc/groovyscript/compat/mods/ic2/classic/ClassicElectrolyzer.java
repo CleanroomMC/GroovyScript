@@ -172,6 +172,7 @@ public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer
     }
 
     public static class ElectrolyzerRecipe {
+
         public RecipeType type;
         public IIngredient input;
         public ItemStack output;

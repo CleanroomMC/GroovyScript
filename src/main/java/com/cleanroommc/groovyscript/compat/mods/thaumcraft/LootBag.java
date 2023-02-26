@@ -9,7 +9,8 @@ import org.jetbrains.annotations.ApiStatus;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.internal.WeightedRandomLoot;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
 
@@ -106,7 +107,7 @@ public class LootBag extends VirtualizedRegistry<ArrayList<Object>> {
 
         private final int rarity;
 
-        public LootBagHelper (int rarity) {
+        public LootBagHelper(int rarity) {
             this.rarity = rarity;
         }
 

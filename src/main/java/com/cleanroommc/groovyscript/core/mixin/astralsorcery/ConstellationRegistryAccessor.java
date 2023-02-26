@@ -6,26 +6,26 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin( value = ConstellationRegistry.class, remap = false )
+@Mixin(value = ConstellationRegistry.class, remap = false)
 public interface ConstellationRegistryAccessor {
 
     @Accessor("generalConstellationList")
-    public static List<IConstellation> getConstellationList() {
+    static List<IConstellation> getConstellationList() {
         return null;
     }
 
     @Accessor
-    public static List<IMajorConstellation> getMajorConstellations() {
+    static List<IMajorConstellation> getMajorConstellations() {
         return null;
     }
 
     @Accessor
-    public static List<IWeakConstellation> getWeakConstellations() {
+    static List<IWeakConstellation> getWeakConstellations() {
         return null;
     }
 
     @Accessor
-    public static List<IMinorConstellation> getMinorConstellations() {
+    static List<IMinorConstellation> getMinorConstellations() {
         return null;
     }
 

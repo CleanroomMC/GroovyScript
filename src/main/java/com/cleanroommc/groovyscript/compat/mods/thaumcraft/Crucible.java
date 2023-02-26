@@ -1,20 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
-import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.crafting.CrucibleRecipe;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.IThaumcraftRecipe;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             }
 
             r = recipeIterator.next();
-        } while(!(r instanceof CrucibleRecipe) || !((CrucibleRecipe)r).getRecipeOutput().isItemEqual(recipe.getRecipeOutput()));
+        } while (!(r instanceof CrucibleRecipe) || !((CrucibleRecipe) r).getRecipeOutput().isItemEqual(recipe.getRecipeOutput()));
 
         recipeIterator.remove();
 
@@ -137,7 +137,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             validateItems(msg, 0, 0, 1, 1);
             msg.add(IngredientHelper.isEmpty(catalyst), () -> "Catalyst must not be empty");
             msg.add(aspects.size() == 0, () -> "Aspects must not be empty");
-            if(researchKey == null) researchKey = "";
+            if (researchKey == null) researchKey = "";
         }
 
         @Override

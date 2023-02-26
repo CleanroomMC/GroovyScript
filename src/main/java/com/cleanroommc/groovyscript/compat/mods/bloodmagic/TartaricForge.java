@@ -126,6 +126,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeTartaricForge> {
+
         private double minimumSouls;
         private double soulDrain;
 

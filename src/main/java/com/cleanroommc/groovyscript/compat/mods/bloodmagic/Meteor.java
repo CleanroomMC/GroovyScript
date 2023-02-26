@@ -76,6 +76,7 @@ public class Meteor extends VirtualizedRegistry<WayofTime.bloodmagic.meteor.Mete
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<WayofTime.bloodmagic.meteor.Meteor> {
+
         private final List<MeteorComponent> components = new ArrayList<>();
         private ItemStack catalyst;
         private float explosionStrength;

@@ -32,7 +32,8 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         rts.add(recipe);
     }
 
-    public LightOreTransmutations.Transmutation add(Block input, IBlockState output, @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
+    public LightOreTransmutations.Transmutation add(Block input, IBlockState output,
+                                                    @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
 
@@ -44,7 +45,8 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         return recipe;
     }
 
-    public LightOreTransmutations.Transmutation add(IBlockState input, IBlockState output, @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
+    public LightOreTransmutations.Transmutation add(IBlockState input, IBlockState output,
+                                                    @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
 
@@ -143,7 +145,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         }
 
         public LightOreTransmutations.Transmutation register() {
-            if(!validate()) return null;
+            if (!validate()) return null;
             if (inBlock == null) {
                 return ModSupport.ASTRAL_SORCERY.get().lightTransmutation.add(input, output, inStack, outStack, cost);
             }

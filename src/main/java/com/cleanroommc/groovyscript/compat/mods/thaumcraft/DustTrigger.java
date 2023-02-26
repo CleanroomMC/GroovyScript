@@ -43,7 +43,7 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
                 oreTriggerResult.setAccessible(true);
 
                 didReflection = true;
-            } catch(NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {
                 e.printStackTrace();
             }
         }
@@ -60,12 +60,11 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         while (it.hasNext()) {
             final IDustTrigger registeredTrigger = it.next();
             if (trigger instanceof DustTriggerSimple && registeredTrigger instanceof DustTriggerSimple
-                    && trigger.equals(registeredTrigger)) {
+                && trigger.equals(registeredTrigger)) {
                 it.remove();
                 addBackup(trigger);
-            }
-            else if (trigger instanceof DustTriggerOre && registeredTrigger instanceof DustTriggerOre
-                    && trigger.equals(registeredTrigger)) {
+            } else if (trigger instanceof DustTriggerOre && registeredTrigger instanceof DustTriggerOre
+                       && trigger.equals(registeredTrigger)) {
                 it.remove();
                 addBackup(trigger);
             }
@@ -79,16 +78,15 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
             final IDustTrigger trigger = it.next();
             try {
                 if (trigger instanceof DustTriggerSimple && simpleTriggerResult != null
-                        && output.isItemEqual((ItemStack) simpleTriggerResult.get(trigger))) {
+                    && output.isItemEqual((ItemStack) simpleTriggerResult.get(trigger))) {
+                    it.remove();
+                    addBackup(trigger);
+                } else if (trigger instanceof DustTriggerOre && oreTriggerResult != null
+                           && output.isItemEqual((ItemStack) oreTriggerResult.get(trigger))) {
                     it.remove();
                     addBackup(trigger);
                 }
-                else if (trigger instanceof DustTriggerOre && oreTriggerResult != null
-                        && output.isItemEqual((ItemStack) oreTriggerResult.get(trigger))) {
-                    it.remove();
-                    addBackup(trigger);
-                }
-            } catch(IllegalAccessException e) {
+            } catch (IllegalAccessException e) {
                 GroovyLog.msg("Error while applying Salis Mundus effect: " + e).error().post();
             }
         }
@@ -105,7 +103,7 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         private Block target;
         private ItemStack output;
 
-        public TriggerBuilder researchKey(String research){
+        public TriggerBuilder researchKey(String research) {
             this.research = research;
             return this;
         }
@@ -131,7 +129,7 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         }
 
         public void register() {
-            if(target == null) {
+            if (target == null) {
                 ModSupport.THAUMCRAFT.get().dustTrigger.add(new DustTriggerOre(research, ore, output));
             } else {
                 ModSupport.THAUMCRAFT.get().dustTrigger.add(new DustTriggerSimple(research, target, output));

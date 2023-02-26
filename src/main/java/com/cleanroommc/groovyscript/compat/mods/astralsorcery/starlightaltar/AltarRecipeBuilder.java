@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
+
     protected String name;
     protected ItemHandle[] inputs = null;
     protected ItemHandle[] outerInputs = null;
@@ -157,7 +158,7 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
             this.craftingTickTime = 0;
         }
 
-        switch(this.altarLevel) {
+        switch (this.altarLevel) {
             case DISCOVERY:
                 if (this.starlightRequired > 1000)
                     out.add("Discovery Altar recipe cannot exceed 1000 starlight, clamping starlight to max table value.");

@@ -99,8 +99,13 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull InventoryCrafting inv) {
         NonNullList<ItemStack> result = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
         for (SlotMatchResult matchResult : getMatchingList(inv)) {
-            ItemStack itemStack = matchResult.getRecipeIngredient().applyTransform(matchResult.getGivenInput().copy());
-            result.set(matchResult.getSlotIndex(), itemStack == null ? ItemStack.EMPTY : itemStack);
+            ItemStack input = matchResult.getGivenInput();
+            ItemStack remainder = matchResult.getRecipeIngredient().applyTransform(input.copy());
+            if (remainder == null) remainder = ItemStack.EMPTY;
+            else if (input.getCount() > 1 && !remainder.isEmpty() && ItemStack.areItemsEqual(input, remainder) && ItemStack.areItemStackTagsEqual(input, remainder)) {
+                remainder.setCount(1);
+            }
+            result.set(matchResult.getSlotIndex(), remainder);
         }
         return result;
     }
@@ -121,6 +126,7 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
      * 3. The slot index the input was found
      */
     public static class MatchList extends ArrayList<SlotMatchResult> {
+
         public static final MatchList EMPTY = new MatchList() {
             @Override
             public boolean add(SlotMatchResult slotMatchResult) {

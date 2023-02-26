@@ -7,18 +7,17 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.Map;
 
-@Mixin( value = PerkLevelManager.class , remap = false )
+@Mixin(value = PerkLevelManager.class, remap = false)
 public interface PerkLevelManagerAccessor {
 
     @Accessor("LEVEL_CAP")
-    public static void setLevelCap(int cap) {
-        return;
+    static void setLevelCap(int cap) {
     }
 
     @Accessor("totalExpLevelRequired")
-    public Map<Integer, Long> getLevelMap();
+    Map<Integer, Long> getLevelMap();
 
     @Invoker("ensureLevels")
-    public void generateLevelMap();
+    void generateLevelMap();
 
 }

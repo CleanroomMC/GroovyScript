@@ -56,11 +56,11 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         AtomicBoolean found = new AtomicBoolean(false);
         scripted.forEach(scriptedAspect -> {
             if (target instanceof EntityEntry && scriptedAspect.entity != null
-                    && ((EntityEntry) target).getName().equals(scriptedAspect.entity.getName())) {
+                && ((EntityEntry) target).getName().equals(scriptedAspect.entity.getName())) {
                 found.set(true);
                 scriptedAspect.addAspect(aspect);
             } else if (target instanceof ItemStack && scriptedAspect.item != null
-                    && ((ItemStack) target).isItemEqual(scriptedAspect.item)) {
+                       && ((ItemStack) target).isItemEqual(scriptedAspect.item)) {
                 found.set(true);
                 scriptedAspect.addAspect(aspect);
             }
@@ -81,11 +81,11 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         AtomicBoolean found = new AtomicBoolean(false);
         backup.forEach(backupAspect -> {
             if (target instanceof EntityEntry && backupAspect.entity != null
-                    && ((EntityEntry) target).getName().equals(backupAspect.entity.getName())) {
+                && ((EntityEntry) target).getName().equals(backupAspect.entity.getName())) {
                 found.set(true);
                 backupAspect.addAspect(aspect);
             } else if (target instanceof ItemStack && backupAspect.item != null
-                    && ((ItemStack) target).isItemEqual(backupAspect.item)) {
+                       && ((ItemStack) target).isItemEqual(backupAspect.item)) {
                 found.set(true);
                 backupAspect.addAspect(aspect);
             }
@@ -140,12 +140,11 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
             if (!found.get()) {
                 ThaumcraftApi.registerEntityTag(
                         entity.getName(),
-                        new AspectList().add(aspect.getAspect(), aspect.getAmount()),
-                        new ThaumcraftApi.EntityTagsNBT[0]
+                        new AspectList().add(aspect.getAspect(), aspect.getAmount())
                 );
             }
 
-            if (doBackup) addScripted(entity,aspect);
+            if (doBackup) addScripted(entity, aspect);
 
             AspectRegistryEvent are = new AspectRegistryEvent();
             are.register = new AspectEventProxy();
@@ -167,7 +166,8 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                         ItemStack oc = ore.copy();
                         oc.setCount(1);
                         this.add(oc, aspect, doBackup);
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                 }
             }
             return;
@@ -231,7 +231,8 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                         ItemStack oc = ore.copy();
                         oc.setCount(1);
                         this.remove(oc, aspect, doBackup);
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                 }
             }
             return;
@@ -285,7 +286,8 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                     ItemStack oc = ore.copy();
                     oc.setCount(1);
                     this.removeAll(oc);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
     }
@@ -300,6 +302,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     }
 
     public static class AspectHelperBuilder {
+
         private EntityEntry entity;
         private IIngredient object;
         private final ArrayList<AspectStack> aspects = new ArrayList<>();

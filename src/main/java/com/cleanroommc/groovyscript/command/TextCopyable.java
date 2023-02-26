@@ -14,6 +14,7 @@ public class TextCopyable {
     }
 
     public static class Builder {
+
         private final java.lang.String copyText;
         private final java.lang.String msg;
         private Object[] args;

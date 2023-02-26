@@ -46,7 +46,7 @@ public class GSHandCommand {
     public static void fluidInformation(List<ITextComponent> messages, @NotNull List<FluidStack> fluidStacks) {
         if (fluidStacks.isEmpty()) return;
         messages.add(new TextComponentString("Fluids:")
-                .setStyle(new Style().setColor(TextFormatting.GREEN)));
+                             .setStyle(new Style().setColor(TextFormatting.GREEN)));
 
         for (FluidStack stack : fluidStacks) {
             String s = IngredientHelper.asGroovyCode(stack, true);
@@ -59,7 +59,7 @@ public class GSHandCommand {
         int[] ids = OreDictionary.getOreIDs(stack);
         if (ids.length > 0) {
             messages.add(new TextComponentString("Ore Dictionaries:")
-                    .setStyle(new Style().setColor(TextFormatting.GREEN)));
+                                 .setStyle(new Style().setColor(TextFormatting.GREEN)));
             for (int id : ids) {
                 String oreName = OreDictionary.getOreName(id);
                 s = IngredientHelper.asGroovyCode(oreName, true);

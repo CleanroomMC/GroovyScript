@@ -45,7 +45,7 @@ public class RecipeUtils {
     public static String getDisplayString(IIngredient... ings) {
         StringBuilder sb = new StringBuilder("[");
         for (IIngredient i : ings)
-            sb.append(i == null ? i : i.toString() + ",");
+            sb.append(i == null ? i : i + ",");
         sb.replace(sb.length() - 1, sb.length(), "");
         return sb.append("]").toString();
     }

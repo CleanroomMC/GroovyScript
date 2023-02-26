@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import groovy.lang.Closure;
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.chars.CharOpenHashSet;
 import net.minecraft.item.ItemStack;
@@ -201,7 +202,7 @@ public abstract class CraftingRecipeBuilder {
         }
 
         public Shapeless input(IIngredient... ingredients) {
-            if (ingredients != null && ingredients.length > 0)
+            if (ingredients != null)
                 for (IIngredient ingredient : ingredients)
                     input(ingredient);
             return this;
@@ -255,7 +256,8 @@ public abstract class CraftingRecipeBuilder {
             rowWidth = Math.max(rowWidth, row.length());
             for (int j = 0; j < row.length(); j++) {
                 char c = row.charAt(j);
-                if (!keyMap.containsKey(c)) {
+                IIngredient ingredient = getIngredient(keyMap, c);
+                if (ingredient == null) {
                     if (!checkedChars.contains(c)) {
                         msg.add("Key '" + c + "' is not defined!");
                         checkedChars.add(c);
@@ -263,7 +265,7 @@ public abstract class CraftingRecipeBuilder {
                     continue;
                 }
                 checkedChars.add(c);
-                ingredients.add(keyMap.get(c));
+                ingredients.add(ingredient);
             }
         }
         int finalRowWidth = rowWidth;
@@ -307,7 +309,15 @@ public abstract class CraftingRecipeBuilder {
         return recipeCreator.createRecipe(rowWidth, ingredientMatrix.size(), ingredients);
     }
 
+    private static IIngredient getIngredient(Char2ObjectMap<IIngredient> keyMap, char c) {
+        if (keyMap.containsKey(c)) {
+            return keyMap.get(c);
+        }
+        return Crafting.getFallback(c);
+    }
+
     public interface IRecipeCreator<T> {
+
         T createRecipe(int width, int height, List<IIngredient> ingredients);
     }
 }
