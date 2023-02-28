@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
@@ -153,6 +154,23 @@ public class GSCommand extends CommandTreeBase {
                     player.sendMessage(msg);
                 }
             }
+        }));
+
+        addSubcommand(new SimpleCommand("wiki", (server, sender, args) -> {
+            sender.sendMessage(new TextComponentString("GroovyScript wiki")
+                                       .setStyle(new Style()
+                                                         .setColor(TextFormatting.GOLD)
+                                                         .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open wiki in browser")))
+                                                         .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://groovyscript-docs.readthedocs.io/en/latest/"))));
+        }, "doc", "docs", "documentation"));
+
+        addSubcommand(new SimpleCommand("creativeTabs", (server, sender, args) -> {
+            GroovyLog.get().info("All creative tabs:");
+            for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
+                GroovyLog.get().getWriter().println(" - " + tab.getTabLabel());
+            }
+            sender.sendMessage(new TextComponentString("Creative tabs has been logged to the ")
+                                       .appendSibling(GSCommand.getTextForFile("Groovy Log", GroovyLog.get().getLogFilerPath(), new TextComponentString("Click to open GroovyScript log"))));
         }));
 
         if (ModSupport.MEKANISM.isLoaded()) {
