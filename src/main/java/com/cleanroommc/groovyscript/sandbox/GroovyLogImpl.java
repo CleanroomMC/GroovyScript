@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -253,7 +254,8 @@ public class GroovyLogImpl implements GroovyLog {
     private String getSource() {
         String source = GroovyScript.getSandbox().getCurrentScript();
         if (Objects.equals(source, "null")) {
-            return Loader.instance().activeModContainer().getModId();
+            ModContainer mod = Loader.instance().activeModContainer();
+            return mod != null ? mod.getModId() : "null";
         }
         return GroovyScriptSandbox.relativizeSource(source) + ":" + GroovyScript.getSandbox().getCurrentLine();
     }

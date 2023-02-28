@@ -55,10 +55,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
             "net.minecraft.nbt.NBTTagList",
             "net.minecraft.tileentity.TileEntity",
             "net.minecraft.util.math.BlockPos",
+            "net.minecraft.util.DamageSource",
             "net.minecraft.util.EnumHand",
             "net.minecraft.util.EnumHandSide",
             "net.minecraft.util.EnumFacing",
-            "net.minecraft.util.DamageSource"
+            "net.minecraft.util.ResourceLocation"
     };
 
     private LoadStage currentLoadStage;
@@ -73,6 +74,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     }
 
     public Throwable run(LoadStage currentLoadStage) {
+        setCurrentScript(GroovyScript.ID);
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
             super.run();
@@ -151,6 +153,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
         if (this.currentLoadStage == LoadStage.POST_INIT && ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.setLoaded();
         }
+        setCurrentScript(null);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
@@ -17,6 +18,7 @@ import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fml.common.Loader;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +28,7 @@ import java.util.Map;
 public class ModSupport implements IDynamicGroovyProperty {
 
     private static final Map<String, Container<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
+    private static boolean frozen = false;
 
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
 
@@ -58,6 +61,18 @@ public class ModSupport implements IDynamicGroovyProperty {
         return null;
     }
 
+    @GroovyBlacklist
+    @ApiStatus.Internal
+    public static void init() {
+        frozen = true;
+        for (Container<?> container : containers.values()) {
+            if (container.isLoaded()) {
+                container.get().initialize();
+            }
+        }
+    }
+
+    @SuppressWarnings("all")
     public static class Container<T extends ModPropertyContainer> {
 
         private final String modId, modName;
@@ -69,6 +84,9 @@ public class ModSupport implements IDynamicGroovyProperty {
         }
 
         public Container(String modId, String modName, @NotNull Supplier<T> modProperty, String... aliases) {
+            if (frozen) {
+                throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + modName + "' too late.");
+            }
             this.modId = modId;
             this.modName = modName;
             this.modProperty = Suppliers.memoize(modProperty);

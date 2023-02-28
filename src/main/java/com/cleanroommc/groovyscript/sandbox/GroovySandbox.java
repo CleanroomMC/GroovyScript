@@ -30,8 +30,8 @@ public abstract class GroovySandbox {
 
     private static final ThreadLocal<GroovySandbox> currentSandbox = new ThreadLocal<>();
     // TODO
-    private final String currentScript = "null";
-    private final int currentLine = -1;
+    private String currentScript = "null";
+    private int currentLine = -1;
 
     @Nullable
     public static GroovySandbox getCurrentSandbox() {
@@ -177,6 +177,14 @@ public abstract class GroovySandbox {
 
     public int getCurrentLine() {
         return currentLine;
+    }
+
+    protected void setCurrentScript(String currentScript) {
+        this.currentScript = currentScript;
+    }
+
+    protected void setCurrentLine(int currentLine) {
+        this.currentLine = currentLine;
     }
 
     private Class<?> loadScriptClass(GroovyScriptEngine engine, File file, boolean printError) {

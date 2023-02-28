@@ -42,6 +42,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -98,9 +99,13 @@ public class GroovyScript {
         runConfigFile = new File(scriptPath, "runConfig.json");
         resourcesFile = new File(scriptPath, "assets");
         reloadRunConfig();
+    }
+
+    @ApiStatus.Internal
+    public static void initializeGroovyPreInit() {
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
-        registerExpansions();
+        ModSupport.init();
 
         getSandbox().run(LoadStage.PRE_INIT);
 
@@ -109,6 +114,11 @@ public class GroovyScript {
             reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
             ClientRegistry.registerKeyBinding(reloadKey);
         }
+    }
+
+    @Mod.EventHandler
+    public void onPreInit(FMLPreInitializationEvent event) {
+        LOGGER.info("Hello");
     }
 
     @Mod.EventHandler
@@ -134,16 +144,6 @@ public class GroovyScript {
         if (reloadKey.isPressed() && time - timeSinceLastUse >= 1000 && Minecraft.getMinecraft().player.getPermissionLevel() >= 4) {
             NetworkHandler.sendToServer(new CReload());
             timeSinceLastUse = time;
-        }
-    }
-
-    private void registerExpansions() {
-        if (ModSupport.THAUMCRAFT.isLoaded()) {
-            ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
-            ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);
-        }
-        if (ModSupport.ASTRAL_SORCERY.isLoaded()) {
-            ExpansionHelper.mixinClass(ItemStack.class, CrystalItemStackExpansion.class);
         }
     }
 

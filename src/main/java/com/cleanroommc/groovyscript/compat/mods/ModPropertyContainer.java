@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -31,4 +33,11 @@ public class ModPropertyContainer implements IDynamicGroovyProperty {
         return registries.get(name);
     }
 
+    /**
+     * Register bracket handlers, bindings, expansions etc. here
+     */
+    @GroovyBlacklist
+    @ApiStatus.OverrideOnly
+    public void initialize() {
+    }
 }
