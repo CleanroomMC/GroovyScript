@@ -25,16 +25,16 @@ public class BlockStateBracketHandler implements IBracketHandler<IBlockState> {
     }
 
     @Override
-    public IBlockState parse(Object[] args) {
-        String main = (String) args[0];
-        IBlockState blockState = parse(main);
-        if (args.length > 1) {
-            if (args.length == 2 && args[1] instanceof Integer) {
-                return blockState.getBlock().getStateFromMeta((Integer) args[1]);
+    public IBlockState parse(String mainArg, Object[] args) {
+        IBlockState blockState = parse(mainArg);
+        if (args.length > 0) {
+            if (args.length == 1 && args[0] instanceof Integer) {
+                return blockState.getBlock().getStateFromMeta((Integer) args[0]);
             }
-            for (int i = 1; i < args.length; i++) {
-                if (!(args[i] instanceof String)) {
-                    throw new IllegalArgumentException("All arguments must be strings in block state bracket handler!");
+            for (Object arg : args) {
+                if (!(arg instanceof String)) {
+                    GroovyLog.get().error("All arguments must be strings in block state bracket handler!");
+                    return blockState;
                 }
             }
             String[] stringArgs = (String[]) Arrays.copyOfRange(args, 1, args.length);

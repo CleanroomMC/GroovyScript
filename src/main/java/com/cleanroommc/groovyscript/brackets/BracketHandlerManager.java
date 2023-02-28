@@ -1,13 +1,18 @@
 package com.cleanroommc.groovyscript.brackets;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
@@ -19,23 +24,28 @@ import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class BracketHandlerManager {
 
-    private static final Map<String, IBracketHandler<?>> bracketHandlers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, BracketHandler<?>> bracketHandlers = new Object2ObjectOpenHashMap<>();
     public static final String ANY = "any", EMPTY = "empty", WILDCARD = "*", SPLITTER = ":";
 
-    public static void registerBracketHandler(String key, IBracketHandler<?> handler) {
+    public static <T> void registerBracketHandler(@Nullable String mod, String key, IBracketHandler<T> handler) {
         if (StringUtils.isEmpty(key) || handler == null) throw new NullPointerException();
         if (bracketHandlers.containsKey(key)) {
             throw new IllegalArgumentException("Bracket handler already exists for key " + key);
         }
-        bracketHandlers.put(key, handler);
+        bracketHandlers.put(key, new BracketHandler<>(key, mod, handler));
+    }
+
+    public static <T> void registerBracketHandler(String key, IBracketHandler<T> handler) {
+        registerBracketHandler(null, key, handler);
     }
 
     @Nullable
-    public static IBracketHandler<?> getBracketHandler(String key) {
+    public static BracketHandler<?> getBracketHandler(String key) {
         return bracketHandlers.get(key);
     }
 
@@ -49,15 +59,36 @@ public class BracketHandlerManager {
         registerBracketHandler("enchantment", Enchantment::getEnchantmentByLocation);
         registerBracketHandler("potion", Potion::getPotionFromResourceLocation);
         registerBracketHandler("entity", s -> ForgeRegistries.ENTITIES.getValue(new ResourceLocation(s)));
+        registerBracketHandler("creativeTab", s -> {
+            for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
+                if (s.equals(tab.getTabLabel())) {
+                    return tab;
+                }
+            }
+            return null;
+        });
         if (ModSupport.MEKANISM.isLoaded()) {
-            registerBracketHandler("gas", s -> new GasStack(GasRegistry.getGas(s), 1));
+            registerBracketHandler("gas", s -> {
+                Gas gas = GasRegistry.getGas(s);
+                return gas == null ? null : new GasStack(gas, 1);
+            });
         }
         if (ModSupport.THAUMCRAFT.isLoaded()) {
             registerBracketHandler("aspect", AspectBracketHandler.INSTANCE);
-            registerBracketHandler("crystal", s -> ThaumcraftApiHelper.makeCrystal(Aspect.getAspect(s)));
+            registerBracketHandler("crystal", s -> {
+                Aspect aspect = Aspect.getAspect(s);
+                return aspect == null ? null : ThaumcraftApiHelper.makeCrystal(aspect);
+            });
         }
         if (ModSupport.ASTRAL_SORCERY.isLoaded()) {
-            registerBracketHandler("constellation", ConstellationBracketHandler.INSTANCE);
+            registerBracketHandler("constellation", s -> {
+                for (IConstellation constellation : ConstellationRegistryAccessor.getConstellationList()) {
+                    if (constellation.getSimpleName().equalsIgnoreCase(s)) {
+                        return constellation;
+                    }
+                }
+                return null;
+            });
         }
     }
 
@@ -69,13 +100,43 @@ public class BracketHandlerManager {
         throw SandboxSecurityException.format(msg);
     }
 
-    private static Object handleBracket(String name, Object... args) {
-        if (args.length >= 1 && args[0] instanceof String) {
-            IBracketHandler<?> bracketHandler = BracketHandlerManager.getBracketHandler(name);
-            if (bracketHandler != null) {
-                return bracketHandler.parse(args);
-            }
+    public static Object handleBracket(Object... args) {
+        String name = (String) args[0], mainArg = (String) args[1];
+        args = Arrays.copyOfRange(args, 2, args.length);
+        //if (args.length >= 1 && args[0] instanceof String) {
+        BracketHandler<?> bracketHandler = BracketHandlerManager.getBracketHandler(name);
+        if (bracketHandler != null) {
+            return bracketHandler.invoke(mainArg, args);
         }
+        //}
         return null;
+    }
+
+    private static class BracketHandler<T> {
+
+        private final String name;
+        private final String mod;
+        private final IBracketHandler<T> handler;
+
+        private BracketHandler(String name, String mod, IBracketHandler<T> handler) {
+            this.name = name;
+            this.mod = mod;
+            this.handler = handler;
+        }
+
+        private T invoke(String s, Object... args) {
+            /*if (args.length > 1) {
+                args = Arrays.copyOfRange(args, 1, args.length);
+            }*/
+            T t = handler.parse(s, args);
+            if (t == null) {
+                if (this.mod == null) {
+                    GroovyLog.get().error("Can't find {} for name {}!", name, s);
+                } else {
+                    GroovyLog.get().error("Can't find {} {} for name {}!", mod, name, s);
+                }
+            }
+            return t;
+        }
     }
 }
