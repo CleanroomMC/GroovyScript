@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.content;
 
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.client.resources.FolderResourcePack;
 import net.minecraft.client.resources.data.IMetadataSection;
 import net.minecraft.client.resources.data.MetadataSerializer;
@@ -11,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Set;
 
 public class GroovyResourcePack extends FolderResourcePack {
 
@@ -42,6 +44,26 @@ public class GroovyResourcePack extends FolderResourcePack {
         makePath(root, "textures", "items");
         makePath(root, "textures", "blocks");
         makePath(root, "blockstates");
+    }
+
+
+    @Override
+    protected boolean hasResourceName(String name) {
+        boolean b = super.hasResourceName(name);
+        if (!b) {
+            GroovyLog.get().infoMC("Can't find resource {}", name);
+        }
+        return b;
+    }
+
+    @Override
+    public Set<String> getResourceDomains() {
+        Set<String> set = super.getResourceDomains();
+        GroovyLog.get().info("Domains in resourcepack");
+        for (String s : set) {
+            GroovyLog.get().infoMC(" - {}", s);
+        }
+        return set;
     }
 
     @Override

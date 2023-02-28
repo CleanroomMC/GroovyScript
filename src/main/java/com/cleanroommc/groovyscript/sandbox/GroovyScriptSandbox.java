@@ -74,7 +74,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
     }
 
     public Throwable run(LoadStage currentLoadStage) {
-        setCurrentScript(GroovyScript.ID);
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
             super.run();
@@ -153,7 +152,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
         if (this.currentLoadStage == LoadStage.POST_INIT && ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.setLoaded();
         }
-        setCurrentScript(null);
     }
 
     @Override

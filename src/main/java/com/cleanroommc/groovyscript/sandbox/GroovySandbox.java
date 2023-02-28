@@ -30,7 +30,7 @@ public abstract class GroovySandbox {
 
     private static final ThreadLocal<GroovySandbox> currentSandbox = new ThreadLocal<>();
     // TODO
-    private String currentScript = "null";
+    private String currentScript = null;
     private int currentLine = -1;
 
     @Nullable
