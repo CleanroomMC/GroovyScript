@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.event;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import groovy.lang.Closure;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
@@ -16,6 +18,7 @@ public enum GroovyEventManager {
 
     INSTANCE;
 
+    // only contains reloadable listeners
     private final List<EventListener> listeners = new ArrayList<>();
 
     @GroovyBlacklist
@@ -36,7 +39,11 @@ public enum GroovyEventManager {
             GroovyLog.get().error("Event listeners' only parameter should be the Event class you are trying to listen to.");
             return;
         }
-        this.listeners.add(new EventListener(eventBusType, eventPriority, eventListener));
+        EventListener listener = new EventListener(eventBusType, eventPriority, eventListener);
+        LoadStage loadStage = GroovyScript.getSandbox().getCurrentLoader();
+        if (loadStage != null && loadStage.isReloadable()) {
+            this.listeners.add(listener);
+        }
     }
 
     public void listen(EventBusType eventBusType, EventPriority eventPriority, Closure<?> eventListener) {
