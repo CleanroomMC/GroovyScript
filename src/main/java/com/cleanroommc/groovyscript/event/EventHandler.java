@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.event;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.content.GroovyBlock;
 import com.cleanroommc.groovyscript.compat.content.GroovyItem;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingInfo;
 import com.cleanroommc.groovyscript.compat.vanilla.ICraftingRecipe;
@@ -9,6 +10,7 @@ import com.cleanroommc.groovyscript.core.mixin.InventoryCraftingAccess;
 import com.cleanroommc.groovyscript.core.mixin.SlotCraftingAccess;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
@@ -26,12 +28,19 @@ public class EventHandler {
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
         GroovyItem.initItems(event.getRegistry());
+        GroovyBlock.initItems(event.getRegistry());
+    }
+
+    @SubscribeEvent
+    public static void registerBlocks(RegistryEvent.Register<Block> event) {
+        GroovyBlock.initBlocks(event.getRegistry());
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void registerModels(ModelRegistryEvent event) {
         GroovyItem.registerModels();
+        GroovyBlock.registerModels();
     }
 
     @SubscribeEvent

@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -141,6 +142,10 @@ public class RunConfig {
 
     public boolean isDebug() {
         return debug;
+    }
+
+    public ResourceLocation makeLoc(String name) {
+        return new ResourceLocation(getPackId(), name);
     }
 
     public Collection<File> getClassFiles() {

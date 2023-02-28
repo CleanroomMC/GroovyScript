@@ -37,6 +37,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             "net.minecraft.world.World",
             "net.minecraft.block.state.IBlockState",
             "net.minecraft.block.Block",
+            "net.minecraft.block.SoundType",
             "net.minecraft.enchantment.Enchantment",
             "net.minecraft.entity.Entity",
             "net.minecraft.entity.player.EntityPlayer",
