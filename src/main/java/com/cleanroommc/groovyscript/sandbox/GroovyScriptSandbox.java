@@ -23,11 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -164,17 +160,5 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Nullable
     public LoadStage getCurrentLoader() {
         return currentLoadStage;
-    }
-
-    public static String relativizeSource(String source) {
-        try {
-            Path path = Paths.get(new URL(source).toURI());
-            Path mainPath = new File(GroovyScript.getScriptPath()).toPath();
-            return mainPath.relativize(path).toString();
-        } catch (URISyntaxException | MalformedURLException e) {
-            GroovyScript.LOGGER.error("Error parsing script source '{}'", source);
-            // don't log to GroovyLog here since it will cause a StackOverflow
-            return source;
-        }
     }
 }
