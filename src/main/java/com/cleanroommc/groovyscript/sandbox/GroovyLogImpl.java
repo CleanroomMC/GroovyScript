@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -17,7 +18,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -30,6 +34,7 @@ public class GroovyLogImpl implements GroovyLog {
     private final Path logFilePath;
     private final PrintWriter printWriter;
     private final DateFormat timeFormat = new SimpleDateFormat("[HH:mm:ss]");
+    private List<String> errors = new ArrayList<>();
 
     private GroovyLogImpl() {
         File logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy.log");
@@ -54,6 +59,13 @@ public class GroovyLogImpl implements GroovyLog {
         writeLogLine("GroovyScript version: " + GroovyScript.VERSION);
     }
 
+    @GroovyBlacklist
+    public List<String> collectErrors() {
+        List<String> errors = this.errors;
+        this.errors = new ArrayList<>();
+        return errors;
+    }
+
     @Override
     public boolean isDebug() {
         return GroovyScript.getRunConfig().isDebug();
@@ -76,6 +88,9 @@ public class GroovyLogImpl implements GroovyLog {
         String level = msg.getLevel().name();
         String main = msg.getMainMsg();
         List<String> messages = msg.getSubMessages();
+        if (msg.getLevel() == Level.ERROR || msg.getLevel() == Level.FATAL) {
+            this.errors.add(main);
+        }
         if (messages.isEmpty()) {
             // has no sub messages -> log in a single line
             writeLogLine(formatLine(level, main));
@@ -172,7 +187,9 @@ public class GroovyLogImpl implements GroovyLog {
 
     @Override
     public void fatal(String msg, Object... args) {
-        writeLogLine(formatLine("FATAL", GroovyLog.format(msg, args)));
+        msg = GroovyLog.format(msg, args);
+        this.errors.add(msg);
+        writeLogLine(formatLine("FATAL", msg));
     }
 
     @Override
@@ -198,7 +215,9 @@ public class GroovyLogImpl implements GroovyLog {
      * @param args arguments
      */
     public void error(String msg, Object... args) {
-        writeLogLine(formatLine("ERROR", GroovyLog.format(msg, args)));
+        msg = GroovyLog.format(msg, args);
+        this.errors.add(msg);
+        writeLogLine(formatLine("ERROR", msg));
     }
 
     @Override
@@ -215,8 +234,10 @@ public class GroovyLogImpl implements GroovyLog {
      * @param throwable exception
      */
     public void exception(Throwable throwable) {
+        String msg = throwable.toString();
+        this.errors.add(msg);
         writeLogLine(formatLine("ERROR", "An exception occurred while running scripts. Look at latest.log for a full stacktrace:"));
-        writeLogLine("\t" + throwable.toString());
+        writeLogLine("\t" + msg);
         throwable.printStackTrace();
         for (String line : prepareStackTrace(throwable.getStackTrace())) {
             writeLogLine("\t\tat " + line);

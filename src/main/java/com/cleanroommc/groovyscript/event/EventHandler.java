@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.event;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.content.GroovyBlock;
 import com.cleanroommc.groovyscript.compat.content.GroovyItem;
@@ -12,6 +13,7 @@ import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
@@ -45,6 +47,9 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.player instanceof EntityPlayerMP) {
+            GroovyScript.postScriptRunResult((EntityPlayerMP) event.player, true);
+        }
         NBTTagCompound tag = event.player.getEntityData();
         NBTTagCompound data = new NBTTagCompound();
         if (tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {

@@ -7,11 +7,9 @@ import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SReloadJei;
-import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,28 +49,19 @@ import java.util.stream.Collectors;
 
 public class GSCommand extends CommandTreeBase {
 
-    public static void runReload(EntityPlayer player, MinecraftServer server) {
+    public static void runReload(EntityPlayerMP player, MinecraftServer server) {
         if (!(server instanceof IntegratedServer)) {
             player.sendMessage(new TextComponentString("Reloading in multiplayer is currently no allowed to avoid desync."));
             return;
         }
         GroovyLog.get().info("========== Reloading Groovy scripts ==========");
         long time = System.currentTimeMillis();
-        Throwable throwable = GroovyScript.getSandbox().run(LoadStage.POST_INIT);
+        GroovyScript.getSandbox().run(LoadStage.POST_INIT);
         time = System.currentTimeMillis() - time;
         player.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
-        if (throwable == null) {
-            player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
-            if (player instanceof EntityPlayerSP) {
-                ReloadableRegistryManager.reloadJei();
-            } else {
-                NetworkHandler.sendToPlayer(new SReloadJei(), (EntityPlayerMP) player);
-            }
-        } else {
-            player.sendMessage(new TextComponentString(TextFormatting.RED + "Error executing scripts:"));
-            player.sendMessage(new TextComponentString(TextFormatting.RED + throwable.getMessage()));
-            server.commandManager.executeCommand(player, "/gs log");
-        }
+        GroovyScript.postScriptRunResult(player, false);
+
+        NetworkHandler.sendToPlayer(new SReloadJei(), player);
     }
 
     public GSCommand() {
@@ -83,8 +72,8 @@ public class GSCommand extends CommandTreeBase {
         }));
 
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
-            if (sender instanceof EntityPlayer) {
-                runReload((EntityPlayer) sender, server);
+            if (sender instanceof EntityPlayerMP) {
+                runReload((EntityPlayerMP) sender, server);
             }
         }));
 

@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
@@ -13,6 +14,7 @@ import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.NetworkUtils;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
@@ -25,6 +27,7 @@ import groovy.lang.GroovySystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -52,7 +55,9 @@ import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 
+@GroovyBlacklist
 @Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION)
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
@@ -207,5 +212,23 @@ public class GroovyScript {
 
     public static File makeFile(File parent, String... pieces) {
         return new File(parent, fileJoiner.join(pieces));
+    }
+
+    public static void postScriptRunResult(EntityPlayerMP player, boolean startup) {
+        List<String> errors = GroovyLogImpl.LOG.collectErrors();
+        if (errors.isEmpty()) {
+            if (!startup) {
+                player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
+            }
+        } else {
+            player.sendMessage(new TextComponentString(TextFormatting.RED + "Found " + errors.size() + " errors while executing scripts"));
+            if (errors.size() > 10) {
+                player.sendMessage(new TextComponentString("Displaying the first 7 errors:"));
+            }
+            for (int i = 0, n = Math.min(errors.size(), 7); i < n; i++) {
+                player.sendMessage(new TextComponentString(TextFormatting.RED + errors.get(i)));
+            }
+            player.server.commandManager.executeCommand(player, "/gs log");
+        }
     }
 }

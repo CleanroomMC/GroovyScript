@@ -75,18 +75,15 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("event_manager", GroovyEventManager.INSTANCE);
     }
 
-    public Throwable run(LoadStage currentLoadStage) {
+    public void run(LoadStage currentLoadStage) {
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
             super.run();
-            return null;
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.get().errorMC("An Exception occurred trying to run groovy!");
             GroovyScript.LOGGER.throwing(e);
-            return e;
         } catch (Exception e) {
             GroovyLog.get().exception(e);
-            return e;
         } finally {
             this.currentLoadStage = null;
         }
