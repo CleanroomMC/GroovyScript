@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.List;
 import java.util.Map;
 
-@Mixin(OreDictionary.class)
+@Mixin(value = OreDictionary.class, remap = false)
 public interface OreDictionaryAccessor {
 
     @Accessor
