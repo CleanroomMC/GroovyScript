@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.google.common.base.CaseFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,6 +54,9 @@ public class RunConfig {
     private final String asmClass = null;
     private boolean debug;
 
+    private final boolean invalidPackId;
+    private boolean warnedAboutInvalidPackId = false;
+
     public static final String[] GROOVY_SUFFIXES = {".groovy", ".gvy", ".gy", ".gsh"};
 
     public static boolean isGroovyFile(String path) {
@@ -66,14 +71,10 @@ public class RunConfig {
     public RunConfig(JsonObject json) {
         String name = JsonHelper.getString(json, "", "packName", "name");
         String id = JsonHelper.getString(json, "", "packId", "id");
-        if (id.isEmpty()) {
-            if (name.isEmpty()) {
-                GroovyLog.get().exception(new IllegalStateException("Pack name and id must not both be empty"));
-            } else {
-                id = name.toLowerCase().replaceAll("[_ ]", "");
-            }
-        } else if (name.isEmpty()) {
-            name = id;
+        Pattern idPattern = Pattern.compile("[a-z_]+");
+        this.invalidPackId = id.isEmpty() || !idPattern.matcher(id).matches();
+        if (name.isEmpty() && !this.invalidPackId) {
+            name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_UNDERSCORE, id).replace('_', ' ');
         }
         this.packName = name;
         this.packId = id;
@@ -133,7 +134,20 @@ public class RunConfig {
     }
 
     public String getPackId() {
+        if (this.invalidPackId && !this.warnedAboutInvalidPackId) {
+            GroovyLog.msg("Fatal error while trying to use the pack id")
+                    .add("specified pack id is invalid or empty ('{}')", this.packId)
+                    .add("pack id must only contain lower case letters and underscores")
+                    .add("see https://groovyscript-docs.readthedocs.io/en/latest/getting_started/#run-config for more info")
+                    .fatal()
+                    .post();
+            this.warnedAboutInvalidPackId = true;
+        }
         return packId;
+    }
+
+    public boolean isValidPackId() {
+        return !invalidPackId;
     }
 
     public String getVersion() {

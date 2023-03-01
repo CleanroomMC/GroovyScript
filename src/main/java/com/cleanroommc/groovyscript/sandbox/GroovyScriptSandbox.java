@@ -59,7 +59,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
             "net.minecraft.util.EnumHand",
             "net.minecraft.util.EnumHandSide",
             "net.minecraft.util.EnumFacing",
-            "net.minecraft.util.ResourceLocation"
+            "net.minecraft.util.ResourceLocation",
+            "net.minecraftforge.fml.common.eventhandler.EventPriority",
+            "com.cleanroommc.groovyscript.event.EventBusType"
     };
 
     private LoadStage currentLoadStage;

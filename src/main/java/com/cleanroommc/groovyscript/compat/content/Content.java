@@ -26,6 +26,10 @@ public class Content {
         GroovyBlock.register(block, item);
     }
 
+    public void registerBlock(String name, Block block) {
+        registerBlock(name, block, new ItemBlock(block));
+    }
+
     public GroovyItem createItem(String name) {
         return new GroovyItem(name);
     }
