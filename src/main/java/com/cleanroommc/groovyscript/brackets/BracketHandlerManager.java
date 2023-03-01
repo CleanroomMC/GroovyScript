@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.brackets;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IBracketHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
-import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -78,10 +77,6 @@ public class BracketHandlerManager {
         return FluidRegistry.getFluidStack(s, 1);
     }
 
-    private static void throwSecurityError(String msg) throws SandboxSecurityException {
-        throw SandboxSecurityException.format(msg);
-    }
-
     public static Object handleBracket(String name, String mainArg, Object... args) {
         BracketHandler<?> bracketHandler = BracketHandlerManager.getBracketHandler(name);
         if (bracketHandler != null) {
@@ -90,7 +85,7 @@ public class BracketHandlerManager {
         return null;
     }
 
-    private static Object handleBracket(String name, Object...args) {
+    private static Object handleBracket(String name, Object... args) {
         GroovyLog.get().error("First argument of a bracket handler must be a string!");
         return null;
     }

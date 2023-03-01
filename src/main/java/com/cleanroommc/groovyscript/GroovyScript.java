@@ -19,7 +19,7 @@ import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
-import com.cleanroommc.groovyscript.sandbox.transformer.GrSMetaClassCreationHandle;
+import com.cleanroommc.groovyscript.sandbox.security.GrSMetaClassCreationHandle;
 import com.google.common.base.Joiner;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -222,10 +222,12 @@ public class GroovyScript {
             }
         } else {
             player.sendMessage(new TextComponentString(TextFormatting.RED + "Found " + errors.size() + " errors while executing scripts"));
-            if (errors.size() > 10) {
+            int n = errors.size();
+            if (errors.size() >= 10) {
                 player.sendMessage(new TextComponentString("Displaying the first 7 errors:"));
+                n = 7;
             }
-            for (int i = 0, n = Math.min(errors.size(), 7); i < n; i++) {
+            for (int i = 0; i < n; i++) {
                 player.sendMessage(new TextComponentString(TextFormatting.RED + errors.get(i)));
             }
             player.server.commandManager.executeCommand(player, "/gs log");

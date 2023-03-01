@@ -1,7 +1,7 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.sandbox.transformer;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.sandbox.interception.InterceptionManager;
+import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedField;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedMethod;
@@ -26,7 +26,7 @@ public class GroovyCodeFactory {
     public static PrivilegedAction<CachedField[]> makeFieldsHook(CachedClass cachedClass) {
         return () -> Arrays.stream(cachedClass.getTheClass().getDeclaredFields())
                 .filter(f -> ReflectionUtils.checkCanSetAccessible(f, CachedClass.class))
-                .filter(InterceptionManager.INSTANCE::isValid)
+                .filter(GroovySecurityManager.INSTANCE::isValid)
                 .map(!FMLLaunchHandler.isDeobfuscatedEnvironment() && cachedClass.getName().startsWith(MC_CLASS) ?
                      f -> makeField(cachedClass, f) :
                      CachedField::new)
@@ -55,7 +55,7 @@ public class GroovyCodeFactory {
                 return Arrays.stream(cachedClass.getTheClass().getDeclaredMethods())
                         .filter(m -> m.getName().indexOf('+') < 0) // no synthetic JDK 5+ methods
                         .filter(m -> ReflectionUtils.checkCanSetAccessible(m, CachedClass.class))
-                        .filter(InterceptionManager.INSTANCE::isValid)
+                        .filter(GroovySecurityManager.INSTANCE::isValid)
                         .map(!FMLLaunchHandler.isDeobfuscatedEnvironment() && cachedClass.getName().startsWith(MC_CLASS) ?
                              m -> makeMethod(cachedClass, m) :
                              m -> new CachedMethod(cachedClass, m))

@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.sandbox.interception;
+package com.cleanroommc.groovyscript.sandbox.security;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
@@ -13,16 +13,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class InterceptionManager {
+public class GroovySecurityManager {
 
-    public static final InterceptionManager INSTANCE = new InterceptionManager();
+    public static final GroovySecurityManager INSTANCE = new GroovySecurityManager();
 
     private final List<String> bannedPackages = new ArrayList<>();
     private final Set<Class<?>> bannedClasses = new ObjectOpenHashSet<>();
     private final Map<Class<?>, Set<String>> bannedMethods = new Object2ObjectOpenHashMap<>();
     private final Set<Class<?>> whiteListedClasses = new ObjectOpenHashSet<>();
 
-    private InterceptionManager() {
+    private GroovySecurityManager() {
         initDefaults();
     }
 

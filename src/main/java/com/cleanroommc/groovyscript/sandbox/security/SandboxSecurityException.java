@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.sandbox.interception;
+package com.cleanroommc.groovyscript.sandbox.security;
 
 public class SandboxSecurityException extends RuntimeException {
 
