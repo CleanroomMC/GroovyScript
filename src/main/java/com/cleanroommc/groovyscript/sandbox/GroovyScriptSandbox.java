@@ -23,11 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -37,6 +33,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             "net.minecraft.world.World",
             "net.minecraft.block.state.IBlockState",
             "net.minecraft.block.Block",
+            "net.minecraft.block.SoundType",
             "net.minecraft.enchantment.Enchantment",
             "net.minecraft.entity.Entity",
             "net.minecraft.entity.player.EntityPlayer",
@@ -45,18 +42,22 @@ public class GroovyScriptSandbox extends GroovySandbox {
             "net.minecraft.init.Enchantments",
             "net.minecraft.init.Items",
             "net.minecraft.init.MobEffects",
-            "net.minecraft.init.PoisonTypes",
+            "net.minecraft.init.PotionTypes",
             "net.minecraft.init.SoundEvents",
+            "net.minecraft.item.EnumRarity",
             "net.minecraft.item.Item",
             "net.minecraft.item.ItemStack",
             "net.minecraft.nbt.NBTTagCompound",
             "net.minecraft.nbt.NBTTagList",
             "net.minecraft.tileentity.TileEntity",
             "net.minecraft.util.math.BlockPos",
+            "net.minecraft.util.DamageSource",
             "net.minecraft.util.EnumHand",
             "net.minecraft.util.EnumHandSide",
             "net.minecraft.util.EnumFacing",
-            "net.minecraft.util.DamageSource"
+            "net.minecraft.util.ResourceLocation",
+            "net.minecraftforge.fml.common.eventhandler.EventPriority",
+            "com.cleanroommc.groovyscript.event.EventBusType"
     };
 
     private LoadStage currentLoadStage;
@@ -70,18 +71,15 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("event_manager", GroovyEventManager.INSTANCE);
     }
 
-    public Throwable run(LoadStage currentLoadStage) {
+    public void run(LoadStage currentLoadStage) {
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
             super.run();
-            return null;
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.get().errorMC("An Exception occurred trying to run groovy!");
             GroovyScript.LOGGER.throwing(e);
-            return e;
         } catch (Exception e) {
             GroovyLog.get().exception(e);
-            return e;
         } finally {
             this.currentLoadStage = null;
         }
@@ -164,17 +162,5 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Nullable
     public LoadStage getCurrentLoader() {
         return currentLoadStage;
-    }
-
-    public static String relativizeSource(String source) {
-        try {
-            Path path = Paths.get(new URL(source).toURI());
-            Path mainPath = new File(GroovyScript.getScriptPath()).toPath();
-            return mainPath.relativize(path).toString();
-        } catch (URISyntaxException | MalformedURLException e) {
-            GroovyScript.LOGGER.error("Error parsing script source '{}'", source);
-            // don't log to GroovyLog here since it will cause a StackOverflow
-            return source;
-        }
     }
 }

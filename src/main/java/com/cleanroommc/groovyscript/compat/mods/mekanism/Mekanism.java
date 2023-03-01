@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import mekanism.api.gas.Gas;
+import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
@@ -47,6 +49,14 @@ public class Mekanism extends ModPropertyContainer {
         addRegistry(solarNeutronActivator);
         addRegistry(thermalEvaporation);
         addRegistry(washer);
+    }
+
+    @Override
+    public void initialize() {
+        BracketHandlerManager.registerBracketHandler("gas", s -> {
+            Gas gas = GasRegistry.getGas(s);
+            return gas == null ? null : new GasStack(gas, 1);
+        });
     }
 
     @Optional.Method(modid = "mekanism")

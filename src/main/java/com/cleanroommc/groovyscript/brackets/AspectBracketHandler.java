@@ -13,31 +13,28 @@ public class AspectBracketHandler implements IBracketHandler<AspectStack> {
     }
 
     @Override
-    public AspectStack parse(Object[] args) {
-        if (args.length > 2 || (args.length == 2 && !(args[1] instanceof Integer))) {
+    public AspectStack parse(String mainArg, Object[] args) {
+        if (args.length > 1 || (args.length == 1 && !(args[0] instanceof Integer))) {
             throw new IllegalArgumentException("Arguments not valid for bracket handler. Use 'aspect(String)' or 'aspect(String, int quantity)'");
         }
-        String main = (String) args[0];
-        if (Aspect.getAspect(main) == null) {
-            GroovyLog.get().error("Can't find aspect for '{}'", main);
+        if (Aspect.getAspect(mainArg) == null) {
             return null;
         }
-        if (args.length == 2) {
-            int quantity = (int) args[1];
+        if (args.length == 1) {
+            int quantity = (int) args[0];
             if (quantity < 0) {
                 throw new IllegalArgumentException("Arguments not valid for bracket handler. 'aspect('{}', int quantity)' quantity must be greater than 0");
             } else {
-                return new AspectStack(main, quantity);
+                return new AspectStack(mainArg, quantity);
             }
         } else {
-            return new AspectStack(main);
+            return new AspectStack(mainArg);
         }
     }
 
     @Override
     public AspectStack parse(String arg) {
         if (Aspect.getAspect(arg) == null) {
-            GroovyLog.get().error("Can't find aspect for '{}'", arg);
             return null;
         } else {
             return new AspectStack(arg);

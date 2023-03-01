@@ -1,14 +1,21 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
+import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
+import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane.ArcaneWorkbench;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.Aspect;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectHelper;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.Warp;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.AspectList;
 
 import java.util.Collection;
@@ -43,6 +50,17 @@ public class Thaumcraft extends ModPropertyContainer {
     }
 
     @Override
+    public void initialize() {
+        BracketHandlerManager.registerBracketHandler("aspect", AspectBracketHandler.INSTANCE);
+        BracketHandlerManager.registerBracketHandler("crystal", s -> {
+            thaumcraft.api.aspects.Aspect aspect = thaumcraft.api.aspects.Aspect.getAspect(s);
+            return aspect == null ? null : ThaumcraftApiHelper.makeCrystal(aspect);
+        });
+        ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
+        ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);
+    }
+
+    @Override
     public @Nullable Object getProperty(String name) {
         Object o = super.getProperty(name);
         return o != null ? o : altNames.get(name);
@@ -55,4 +73,5 @@ public class Thaumcraft extends ModPropertyContainer {
         }
         return list;
     }
+
 }

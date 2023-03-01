@@ -1,35 +1,36 @@
 package com.cleanroommc.groovyscript;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.loot.Loot;
+import com.cleanroommc.groovyscript.compat.content.GroovyResourcePack;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalItemStackExpansion;
-import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStackExpansion;
-import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
+import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.NetworkUtils;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
-import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
-import com.cleanroommc.groovyscript.sandbox.transformer.GrSMetaClassCreationHandle;
+import com.cleanroommc.groovyscript.sandbox.security.GrSMetaClassCreationHandle;
+import com.google.common.base.Joiner;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovySystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -58,7 +59,9 @@ import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 
+@GroovyBlacklist
 @Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION)
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
@@ -74,11 +77,14 @@ public class GroovyScript {
 
     private static File scriptPath;
     private static File runConfigFile;
+    private static File resourcesFile;
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
 
     private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
+
+    private static final Joiner fileJoiner = Joiner.on(File.separator);
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
@@ -93,12 +99,25 @@ public class GroovyScript {
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Error initializing sandbox!");
         }
-        runConfigFile = new File(scriptPath.getPath() + File.separator + "runConfig.json");
+        runConfigFile = new File(scriptPath, "runConfig.json");
+        resourcesFile = new File(scriptPath, "assets");
         reloadRunConfig();
+
+        if (NetworkUtils.isDedicatedClient()) {
+            // this resource pack must be added in construction
+            ((DefaultResourcePackAccessor) Minecraft.getMinecraft()).get().add(new GroovyResourcePack());
+            reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
+            ClientRegistry.registerKeyBinding(reloadKey);
+        }
+    }
+
+    @ApiStatus.Internal
+    public static void initializeGroovyPreInit() {
+        // called via mixin in between construction and fml pre init
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
-        registerExpansions();
-
+        ModSupport.init();
+        
         Loot.TABLE_MANAGER = new LootTableManager(null);
         Loot.TABLES.values().forEach(table -> {
             ((LootTableAccessor) table).setIsFrozen(false);
@@ -106,11 +125,6 @@ public class GroovyScript {
         });
 
         getSandbox().run(LoadStage.PRE_INIT);
-
-        if (NetworkUtils.isDedicatedClient()) {
-            reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
-            ClientRegistry.registerKeyBinding(reloadKey);
-        }
     }
 
     @Mod.EventHandler
@@ -139,16 +153,6 @@ public class GroovyScript {
         }
     }
 
-    private void registerExpansions() {
-        if (ModSupport.THAUMCRAFT.isLoaded()) {
-            ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
-            ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);
-        }
-        if (ModSupport.ASTRAL_SORCERY.isLoaded()) {
-            ExpansionHelper.mixinClass(ItemStack.class, CrystalItemStackExpansion.class);
-        }
-    }
-
     @NotNull
     public static String getScriptPath() {
         return getScriptFile().getPath();
@@ -160,6 +164,14 @@ public class GroovyScript {
             throw new IllegalStateException("GroovyScript is not yet loaded!");
         }
         return scriptPath;
+    }
+
+    @NotNull
+    public static File getResourcesFile() {
+        if (resourcesFile == null) {
+            throw new IllegalStateException("GroovyScript is not yet loaded!");
+        }
+        return resourcesFile;
     }
 
     @NotNull
@@ -202,6 +214,33 @@ public class GroovyScript {
             }
         }
         return new RunConfig(json);
+    }
 
+    public static File makeFile(String... pieces) {
+        return new File(fileJoiner.join(pieces));
+    }
+
+    public static File makeFile(File parent, String... pieces) {
+        return new File(parent, fileJoiner.join(pieces));
+    }
+
+    public static void postScriptRunResult(EntityPlayerMP player, boolean startup) {
+        List<String> errors = GroovyLogImpl.LOG.collectErrors();
+        if (errors.isEmpty()) {
+            if (!startup) {
+                player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
+            }
+        } else {
+            player.sendMessage(new TextComponentString(TextFormatting.RED + "Found " + errors.size() + " errors while executing scripts"));
+            int n = errors.size();
+            if (errors.size() >= 10) {
+                player.sendMessage(new TextComponentString("Displaying the first 7 errors:"));
+                n = 7;
+            }
+            for (int i = 0; i < n; i++) {
+                player.sendMessage(new TextComponentString(TextFormatting.RED + errors.get(i)));
+            }
+            player.server.commandManager.executeCommand(player, "/gs log");
+        }
     }
 }

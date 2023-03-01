@@ -18,20 +18,17 @@ public class ItemBracketHandler implements IBracketHandler<ItemStack> {
     }
 
     @Override
-    public ItemStack parse(Object[] args) {
-        if (args.length > 2 || (args.length == 2 && !(args[1] instanceof Integer))) {
+    public ItemStack parse(String mainArg, Object[] args) {
+        if (args.length > 1 || (args.length == 1 && !(args[0] instanceof Integer))) {
             throw new IllegalArgumentException("Arguments not valid for bracket handler. Use 'item(String)' or 'item(String, int meta)'");
         }
-        String main = (String) args[0];
-        String[] parts = main.split(SPLITTER);
+        String[] parts = mainArg.split(SPLITTER);
         if (parts.length < 2) {
-            GroovyLog.get().error("Can't find item for '{}'", main);
-            return ItemStack.EMPTY;
+            return null;
         }
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
         if (item == null) {
-            GroovyLog.get().error("Can't find item for '{}'", main);
-            return ItemStack.EMPTY;
+            return null;
         }
         int meta = 0;
         if (parts.length > 2) {
@@ -44,11 +41,12 @@ public class ItemBracketHandler implements IBracketHandler<ItemStack> {
                 }
             }
         }
-        if (args.length == 2) {
+        if (args.length == 1) {
             if (meta != 0) {
-                throw new IllegalArgumentException("Defined meta value twice for item bracket handler");
+                GroovyLog.get().error("Defined meta value twice for item bracket handler");
+                return new ItemStack(item, 1, meta);
             }
-            meta = (int) args[1];
+            meta = (int) args[0];
         }
         return new ItemStack(item, 1, meta);
     }
@@ -57,12 +55,10 @@ public class ItemBracketHandler implements IBracketHandler<ItemStack> {
     public ItemStack parse(String arg) {
         String[] parts = arg.split(SPLITTER);
         if (parts.length < 2) {
-            GroovyLog.get().error("Can't find item for '{}'", arg);
             return null;
         }
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
         if (item == null) {
-            GroovyLog.get().error("Can't find item for '{}'", arg);
             return null;
         }
         int meta = 0;

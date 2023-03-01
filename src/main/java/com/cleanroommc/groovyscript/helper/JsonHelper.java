@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonReader;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.function.Function;
 
 @GroovyBlacklist
@@ -141,7 +142,7 @@ public class JsonHelper {
                     GroovyScript.LOGGER.error("Failed to create file dirs on path {}", file);
                 }
             }
-            Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+            Writer writer = new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8);
             writer.write(gson.toJson(element));
             writer.close();
             return true;

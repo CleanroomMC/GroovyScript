@@ -1,6 +1,5 @@
-package com.cleanroommc.groovyscript.sandbox.transformer;
+package com.cleanroommc.groovyscript.sandbox.security;
 
-import com.cleanroommc.groovyscript.sandbox.interception.SandboxSecurityException;
 import groovy.lang.*;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.control.CompilationUnit;
