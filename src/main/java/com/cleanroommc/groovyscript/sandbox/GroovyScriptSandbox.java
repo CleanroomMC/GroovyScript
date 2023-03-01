@@ -33,6 +33,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             "net.minecraft.world.World",
             "net.minecraft.block.state.IBlockState",
             "net.minecraft.block.Block",
+            "net.minecraft.block.SoundType",
             "net.minecraft.enchantment.Enchantment",
             "net.minecraft.entity.Entity",
             "net.minecraft.entity.player.EntityPlayer",
@@ -43,16 +44,20 @@ public class GroovyScriptSandbox extends GroovySandbox {
             "net.minecraft.init.MobEffects",
             "net.minecraft.init.PotionTypes",
             "net.minecraft.init.SoundEvents",
+            "net.minecraft.item.EnumRarity",
             "net.minecraft.item.Item",
             "net.minecraft.item.ItemStack",
             "net.minecraft.nbt.NBTTagCompound",
             "net.minecraft.nbt.NBTTagList",
             "net.minecraft.tileentity.TileEntity",
             "net.minecraft.util.math.BlockPos",
+            "net.minecraft.util.DamageSource",
             "net.minecraft.util.EnumHand",
             "net.minecraft.util.EnumHandSide",
             "net.minecraft.util.EnumFacing",
-            "net.minecraft.util.DamageSource"
+            "net.minecraft.util.ResourceLocation",
+            "net.minecraftforge.fml.common.eventhandler.EventPriority",
+            "com.cleanroommc.groovyscript.event.EventBusType"
     };
 
     private LoadStage currentLoadStage;
@@ -66,18 +71,15 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("event_manager", GroovyEventManager.INSTANCE);
     }
 
-    public Throwable run(LoadStage currentLoadStage) {
+    public void run(LoadStage currentLoadStage) {
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
             super.run();
-            return null;
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.get().errorMC("An Exception occurred trying to run groovy!");
             GroovyScript.LOGGER.throwing(e);
-            return e;
         } catch (Exception e) {
             GroovyLog.get().exception(e);
-            return e;
         } finally {
             this.currentLoadStage = null;
         }

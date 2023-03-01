@@ -11,22 +11,22 @@ public interface ConstellationRegistryAccessor {
 
     @Accessor("generalConstellationList")
     static List<IConstellation> getConstellationList() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Accessor
     static List<IMajorConstellation> getMajorConstellations() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Accessor
     static List<IWeakConstellation> getWeakConstellations() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Accessor
     static List<IMinorConstellation> getMinorConstellations() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
 }

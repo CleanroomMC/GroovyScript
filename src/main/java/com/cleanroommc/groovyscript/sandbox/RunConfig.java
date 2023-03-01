@@ -3,11 +3,13 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.google.common.base.CaseFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,7 +26,8 @@ public class RunConfig {
 
     public static JsonObject createDefaultJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("packName", "");
+        json.addProperty("packName", "PlaceHolder name");
+        json.addProperty("packId", "placeholdername");
         json.addProperty("version", "1.0.0");
         json.addProperty("debug", false);
         JsonArray classes = new JsonArray();
@@ -40,6 +44,7 @@ public class RunConfig {
     }
 
     private final String packName;
+    private final String packId;
     private final String version;
     private final List<String> classes = new ArrayList<>();
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
@@ -48,6 +53,9 @@ public class RunConfig {
     // TODO asm
     private final String asmClass = null;
     private boolean debug;
+
+    private final boolean invalidPackId;
+    private boolean warnedAboutInvalidPackId = false;
 
     public static final String[] GROOVY_SUFFIXES = {".groovy", ".gvy", ".gy", ".gsh"};
 
@@ -61,7 +69,15 @@ public class RunConfig {
     }
 
     public RunConfig(JsonObject json) {
-        this.packName = JsonHelper.getString(json, "", "packName", "name");
+        String name = JsonHelper.getString(json, "", "packName", "name");
+        String id = JsonHelper.getString(json, "", "packId", "id");
+        Pattern idPattern = Pattern.compile("[a-z_]+");
+        this.invalidPackId = id.isEmpty() || !idPattern.matcher(id).matches();
+        if (name.isEmpty() && !this.invalidPackId) {
+            name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_UNDERSCORE, id).replace('_', ' ');
+        }
+        this.packName = name;
+        this.packId = id;
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
     }
 
@@ -117,12 +133,33 @@ public class RunConfig {
         return packName;
     }
 
+    public String getPackId() {
+        if (this.invalidPackId && !this.warnedAboutInvalidPackId) {
+            GroovyLog.msg("Fatal error while trying to use the pack id")
+                    .add("specified pack id is invalid or empty ('{}')", this.packId)
+                    .add("pack id must only contain lower case letters and underscores")
+                    .add("see https://groovyscript-docs.readthedocs.io/en/latest/getting_started/#run-config for more info")
+                    .fatal()
+                    .post();
+            this.warnedAboutInvalidPackId = true;
+        }
+        return packId;
+    }
+
+    public boolean isValidPackId() {
+        return !invalidPackId;
+    }
+
     public String getVersion() {
         return version;
     }
 
     public boolean isDebug() {
         return debug;
+    }
+
+    public ResourceLocation makeLoc(String name) {
+        return new ResourceLocation(getPackId(), name);
     }
 
     public Collection<File> getClassFiles() {

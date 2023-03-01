@@ -1,9 +1,15 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
+import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.GroovyPerkTree;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.PerkTreeConfig;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar.StarlightAltar;
+import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationRegistryAccessor;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import net.minecraft.item.ItemStack;
 
 public class AstralSorcery extends ModPropertyContainer {
 
@@ -24,7 +30,6 @@ public class AstralSorcery extends ModPropertyContainer {
     public final PerkTreeConfig perkTreeConfig = new PerkTreeConfig();
 
     public AstralSorcery() {
-
         addRegistry(altar);
         addRegistry(lightwell);
         addRegistry(infusionAltar);
@@ -40,6 +45,18 @@ public class AstralSorcery extends ModPropertyContainer {
         addRegistry(trashPerkOreChance);
         addRegistry(treasureShrineOreChance);
         addRegistry(perkTreeConfig);
+    }
 
+    @Override
+    public void initialize() {
+        BracketHandlerManager.registerBracketHandler("constellation", s -> {
+            for (IConstellation constellation : ConstellationRegistryAccessor.getConstellationList()) {
+                if (constellation.getSimpleName().equalsIgnoreCase(s)) {
+                    return constellation;
+                }
+            }
+            return null;
+        });
+        ExpansionHelper.mixinClass(ItemStack.class, CrystalItemStackExpansion.class);
     }
 }

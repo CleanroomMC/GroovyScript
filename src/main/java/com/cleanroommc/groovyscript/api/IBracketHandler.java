@@ -2,10 +2,9 @@ package com.cleanroommc.groovyscript.api;
 
 /**
  * A bracket handler returns a object based on its input arguments.
- * There are two ways a bracket handler can be called from groovy:
+ * A bracket handler can be called from groovy lik this:
  * <p>
- * 1.   {@code "<bracket_handler_name:args>"}
- * 2.   {@code bracket_handler_name(args)}
+ *    {@code bracket_handler_name(args)}
  * </p>
  * In the first way there is always only one argument which is a String.
  * In the second method the argument size is at least, but not limited to one.
@@ -19,9 +18,8 @@ public interface IBracketHandler<T> {
      * @param args arguments. length >= 1 && args[0] instanceof String
      * @return a parsed Object
      */
-    default T parse(Object[] args) {
-        if (args.length != 1) throw new IllegalArgumentException("Bracket handler only accepts a String");
-        return parse((String) args[0]);
+    default T parse(String mainArg, Object[] args) {
+        return parse(mainArg);
     }
 
     /**

@@ -11,11 +11,13 @@
     "FurnaceRecipeMixin",
     "InventoryCraftingAccess",
     "ItemStackMixin",
+    "LoaderControllerMixin",
     "MetaClassImplMixin",
     "OreDictionaryAccessor",
     "SlotCraftingAccess"
   ],
   "client": [
+    "DefaultResourcePackAccessor",
     "GuiScreenMixin"
   ]
 }
