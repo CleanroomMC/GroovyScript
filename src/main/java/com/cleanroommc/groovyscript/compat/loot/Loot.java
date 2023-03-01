@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
 import groovy.lang.Closure;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +18,6 @@ import net.minecraft.world.storage.loot.conditions.RandomChanceWithLooting;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -40,7 +40,7 @@ public class Loot {
         }
     }
 
-    public static final Map<ResourceLocation, LootTable> TABLES = new HashMap<>();
+    public static final Map<ResourceLocation, LootTable> TABLES = new Object2ObjectOpenHashMap<>();
     public static LootTableManager TABLE_MANAGER;
 
     public LootTable getTable(String name) {
@@ -179,7 +179,7 @@ public class Loot {
 
     public static class Conditions {
 
-        public static LootCondition custom(Closure<Boolean> customCondition) {
+        public static LootCondition custom(Closure<Object> customCondition) {
             if (Arrays.equals(customCondition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {
                 return new GroovyLootCondition(customCondition);
             }

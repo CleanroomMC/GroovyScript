@@ -29,11 +29,11 @@ public class LootEntryBuilder {
     private Item item;
     private int weight = 1;
     private int quality = 0;
-    private final ArrayList<LootFunction> functions = new ArrayList<>();
-    private final ArrayList<LootCondition> conditions = new ArrayList<>();
+    private final List<LootFunction> functions = new ArrayList<>();
+    private final List<LootCondition> conditions = new ArrayList<>();
     private final GroovyLog.Msg out = GroovyLog.msg("Error creating GroovyScript LootPool").warn();
 
-    public LootEntryBuilder(){
+    public LootEntryBuilder() {
         this.name = "";
     }
 
@@ -73,7 +73,7 @@ public class LootEntryBuilder {
         return this;
     }
 
-    public LootEntryBuilder function(Closure<ItemStack> function) {
+    public LootEntryBuilder function(Closure<Object> function) {
         if (Arrays.equals(function.getParameterTypes(), new Class[]{ItemStack.class, Random.class, LootContext.class})) {
             this.functions.add(new GroovyLootFunction(function));
         } else {
@@ -83,11 +83,11 @@ public class LootEntryBuilder {
         return this;
     }
 
-    public LootEntryBuilder function(Closure<ItemStack> function, LootCondition condition) {
+    public LootEntryBuilder function(Closure<Object> function, LootCondition condition) {
         return this.function(function, new LootCondition[]{condition});
     }
 
-    public LootEntryBuilder function(Closure<ItemStack> function, LootCondition... conditions) {
+    public LootEntryBuilder function(Closure<Object> function, LootCondition... conditions) {
         if (Arrays.equals(function.getParameterTypes(), new Class[]{ItemStack.class, Random.class, LootContext.class})) {
             this.functions.add(new GroovyLootFunction(conditions, function));
         } else {
@@ -135,7 +135,7 @@ public class LootEntryBuilder {
     }
 
     public LootEntryBuilder enchantRandomly(LootCondition[] conditions, Enchantment... enchantments) {
-        List<Enchantment> list = (enchantments != null)? Lists.newArrayList(enchantments) : null;
+        List<Enchantment> list = (enchantments != null) ? Lists.newArrayList(enchantments) : null;
         if (conditions == null) conditions = new LootCondition[0];
         this.functions.add(new EnchantRandomly(conditions, list));
         return this;
@@ -296,7 +296,7 @@ public class LootEntryBuilder {
         return this;
     }
 
-    public LootEntryBuilder condition(Closure<Boolean> customCondition) {
+    public LootEntryBuilder condition(Closure<Object> customCondition) {
         if (Arrays.equals(customCondition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {
             this.conditions.add(new GroovyLootCondition(customCondition));
         } else {

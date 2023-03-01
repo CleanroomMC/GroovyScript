@@ -13,13 +13,14 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class GroovyLootFunction extends LootFunction {
-    private Closure<ItemStack> function;
 
-    public GroovyLootFunction(Closure<ItemStack> function) {
+    private final Closure<Object> function;
+
+    public GroovyLootFunction(Closure<Object> function) {
         this(new LootCondition[0], function);
     }
 
-    public GroovyLootFunction(LootCondition[] conditions, Closure<ItemStack> function) {
+    public GroovyLootFunction(LootCondition[] conditions, Closure<Object> function) {
         super(conditions);
         if (Arrays.equals(function.getParameterTypes(), new Class[]{ItemStack.class, Random.class, LootContext.class})) {
             this.function = function;
@@ -32,8 +33,7 @@ public class GroovyLootFunction extends LootFunction {
     @Override
     public @NotNull ItemStack apply(@NotNull ItemStack stack, @NotNull Random rand, @NotNull LootContext context) {
         if (function == null) return ItemStack.EMPTY;
-        ItemStack val = ClosureHelper.call(function, stack, rand, context);
-        return (val == null)? ItemStack.EMPTY : val;
+        return ClosureHelper.call(ItemStack.EMPTY, function, stack, rand, context);
     }
 
 }

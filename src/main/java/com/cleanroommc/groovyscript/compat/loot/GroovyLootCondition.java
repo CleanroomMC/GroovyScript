@@ -12,9 +12,9 @@ import java.util.Random;
 
 public class GroovyLootCondition implements LootCondition {
 
-    public final Closure<Boolean> condition;
+    public final Closure<Object> condition;
 
-    public GroovyLootCondition(Closure<Boolean> condition) {
+    public GroovyLootCondition(Closure<Object> condition) {
         if (Arrays.equals(condition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {
             this.condition = condition;
         } else {
@@ -26,7 +26,7 @@ public class GroovyLootCondition implements LootCondition {
     @Override
     public boolean testCondition(@NotNull Random rand, @NotNull LootContext context) {
         if (this.condition == null) return false;
-        return Boolean.TRUE.equals(ClosureHelper.call(condition, rand, context));
+        return ClosureHelper.call(true, condition, rand, context);
     }
 
 }

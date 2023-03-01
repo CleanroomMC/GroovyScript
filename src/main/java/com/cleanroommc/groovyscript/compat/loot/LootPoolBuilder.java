@@ -15,16 +15,17 @@ import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class LootPoolBuilder {
 
     private String name;
-    private final ArrayList<LootEntry> lootEntries = new ArrayList<>();
-    private final ArrayList<LootCondition> poolConditions = new ArrayList<>();
+    private final List<LootEntry> lootEntries = new ArrayList<>();
+    private final List<LootCondition> poolConditions = new ArrayList<>();
     private RandomValueRange rolls;
     private RandomValueRange bonusRolls;
-    private GroovyLog.Msg out = GroovyLog.msg("Error creating GroovyScript LootPool").warn();
+    private final GroovyLog.Msg out = GroovyLog.msg("Error creating GroovyScript LootPool").warn();
 
     public LootPoolBuilder() {
     }
@@ -76,7 +77,7 @@ public class LootPoolBuilder {
         return this;
     }
 
-    public LootPoolBuilder condition(Closure<Boolean> customCondition) {
+    public LootPoolBuilder condition(Closure<Object> customCondition) {
         if (Arrays.equals(customCondition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {
             this.poolConditions.add(new GroovyLootCondition(customCondition));
         } else {
