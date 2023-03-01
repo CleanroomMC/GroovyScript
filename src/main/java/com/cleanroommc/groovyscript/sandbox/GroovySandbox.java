@@ -17,10 +17,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -96,7 +98,9 @@ public abstract class GroovySandbox {
                 // the superclass of class files is Object
                 if (clazz.getSuperclass() == Object.class && shouldRunFile(classFile)) {
                     executedClasses.add(classFile);
+                    setCurrentScript(classFile.toString());
                     InvokerHelper.createScript(clazz, binding).run();
+                    setCurrentScript(null);
                 }
             }
             // now run all script files
@@ -113,7 +117,9 @@ public abstract class GroovySandbox {
                         continue;
                     }
                     if (clazz.getSuperclass() == Script.class && shouldRunFile(scriptFile)) {
+                        setCurrentScript(scriptFile.toString());
                         InvokerHelper.createScript(clazz, binding).run();
+                        setCurrentScript(null);
                     }
                 }
             }
@@ -121,6 +127,7 @@ public abstract class GroovySandbox {
             running.set(false);
             postRun();
             currentSandbox.set(null);
+            setCurrentScript(null);
         }
     }
 
@@ -181,10 +188,19 @@ public abstract class GroovySandbox {
 
     protected void setCurrentScript(String currentScript) {
         this.currentScript = currentScript;
+        this.currentLine = -1;
     }
 
-    protected void setCurrentLine(int currentLine) {
-        this.currentLine = currentLine;
+    public static String getRelativePath(String source) {
+        try {
+            Path path = Paths.get(new URL(source).toURI());
+            Path mainPath = new File(GroovyScript.getScriptPath()).toPath();
+            return mainPath.relativize(path).toString();
+        } catch (URISyntaxException | MalformedURLException e) {
+            GroovyScript.LOGGER.error("Error parsing script source '{}'", source);
+            // don't log to GroovyLog here since it will cause a StackOverflow
+            return source;
+        }
     }
 
     private Class<?> loadScriptClass(GroovyScriptEngine engine, File file, boolean printError) {
