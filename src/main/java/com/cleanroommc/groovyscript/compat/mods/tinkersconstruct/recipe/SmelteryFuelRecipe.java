@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
+package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe;
 
 import net.minecraftforge.fluids.FluidStack;
 
