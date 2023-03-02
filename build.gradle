@@ -175,6 +175,16 @@ dependencies {
     } else {
         deobfProvided 'curse.maven:immersive_engineering-231951:2974106'
     }
+
+    if (project.debug_tinkers.toBoolean()) {
+        deobfCompile 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
+        deobfCompile 'slimeknights:TConstruct:1.12.2-2.13.0.190'
+        deobfCompile 'curse.maven:constructs-armory-287683:3174535'
+    } else {
+        deobfProvided 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
+        deobfProvided 'slimeknights:TConstruct:1.12.2-2.13.0.190'
+        deobfProvided 'curse.maven:constructs-armory-287683:3174535'
+    }
 }
 
 sourceSets {
