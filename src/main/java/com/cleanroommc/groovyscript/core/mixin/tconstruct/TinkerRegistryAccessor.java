@@ -6,9 +6,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import slimeknights.tconstruct.library.DryingRecipe;
 import slimeknights.tconstruct.library.TinkerRegistry;
+import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.smeltery.AlloyRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
+import slimeknights.tconstruct.library.traits.ITrait;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +49,16 @@ public interface TinkerRegistryAccessor {
 
     @Accessor
     static Map<ResourceLocation, FluidStack> getEntityMeltingRegistry() {
+        throw new AssertionError();
+    }
+
+    @Accessor
+    static Map<String, Material> getMaterials() {
+        throw new AssertionError();
+    }
+
+    @Accessor
+    static Map<String, ITrait> getTraits() {
         throw new AssertionError();
     }
 }

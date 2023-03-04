@@ -16,6 +16,7 @@ import groovy.util.ResourceException;
 import groovy.util.ScriptException;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.jetbrains.annotations.ApiStatus;
@@ -124,6 +125,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     protected void preRun() {
         GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoadStage);
+        if (Loader.instance().activeModContainer() == null) Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get("groovyscript"));
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         if (this.currentLoadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
