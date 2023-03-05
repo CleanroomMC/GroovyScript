@@ -4,11 +4,10 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.EntityMeltingRecipe;
-import com.cleanroommc.groovyscript.core.mixin.tconstruct.MeltingRecipeAccessor;
+import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
+import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeRegistry;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
-import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.entity.Entity;
@@ -16,13 +15,12 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
-import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Melting extends VirtualizedRegistry<MeltingRecipe> {
+public class Melting extends MeltingRecipeRegistry {
     public final EntityMelting entityMelting = new EntityMelting();
 
     public Melting() {
@@ -30,7 +28,7 @@ public class Melting extends VirtualizedRegistry<MeltingRecipe> {
     }
 
     public RecipeBuilder recipeBuilder() {
-        return new RecipeBuilder();
+        return new RecipeBuilder(this);
     }
 
     @Override
@@ -41,8 +39,7 @@ public class Melting extends VirtualizedRegistry<MeltingRecipe> {
     }
 
     public MeltingRecipe add(IIngredient input, FluidStack output, int temp) {
-        RecipeMatch match = (input instanceof OreDictIngredient) ? RecipeMatch.of(((OreDictIngredient) input).getOreDict()) : RecipeMatch.of(input.getMatchingStacks()[0]);
-        MeltingRecipe recipe = new MeltingRecipe(match, output, temp);
+        MeltingRecipe recipe = new MeltingRecipe(MeltingRecipeBuilder.recipeMatchFromIngredient(input, output.amount), output, temp);
         add(recipe);
         return recipe;
     }
@@ -111,41 +108,9 @@ public class Melting extends VirtualizedRegistry<MeltingRecipe> {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getMeltingRegistry()).setRemover(this::remove);
     }
 
-    public class RecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
-        private int temp = 300;
-
-        public RecipeBuilder temperature(int temp) {
-            this.temp = temp + 300;
-            return this;
-        }
-
-        public RecipeBuilder time(int time) {
-            int t = fluidOutput.get(0) != null ? fluidOutput.get(0).getFluid().getTemperature() : 300;
-            this.temp = MeltingRecipeAccessor.invokeCalcTemperature(t, time);
-            return this;
-        }
-
-        @Override
-        public String getErrorMsg() {
-            return "Error adding Tinkers Construct Melting recipe";
-        }
-
-        @Override
-        public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 1, 0, 0);
-            validateFluids(msg, 0, 0, 1, 1);
-            msg.add(temp < 1, "Recipe temperature must be at least 1, got " + temp);
-        }
-
-        @Override
-        public @Nullable MeltingRecipe register() {
-            if (!validate()) return null;
-            int amount = fluidOutput.get(0).amount;
-            IIngredient input = this.input.get(0);
-            RecipeMatch match = (input instanceof OreDictIngredient) ? RecipeMatch.of(((OreDictIngredient) input).getOreDict(), amount) : RecipeMatch.of(input.getMatchingStacks()[0], amount);
-            MeltingRecipe recipe = new MeltingRecipe(match, fluidOutput.get(0), temp);
-            add(recipe);
-            return recipe;
+    public static class RecipeBuilder extends MeltingRecipeBuilder {
+        public RecipeBuilder(Melting melting) {
+            super(melting, "Tinkers Construct Melting recipe");
         }
     }
 

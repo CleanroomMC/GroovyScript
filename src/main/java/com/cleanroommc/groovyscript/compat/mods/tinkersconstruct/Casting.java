@@ -3,16 +3,15 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
-import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 
@@ -139,8 +138,7 @@ public class Casting {
             @Override
             public @Nullable ICastingRecipe register() {
                 if (!validate()) return null;
-                RecipeMatch match = (cast instanceof OreDictIngredient) ? RecipeMatch.of(((OreDictIngredient) cast).getOreDict()) : RecipeMatch.of(cast.getMatchingStacks()[0]);
-                CastingRecipe recipe = new CastingRecipe(output.get(0), match, fluidInput.get(0), time, consumesCast, false);
+                CastingRecipe recipe = new CastingRecipe(output.get(0), MeltingRecipeBuilder.recipeMatchFromIngredient(cast), fluidInput.get(0), time, consumesCast, false);
                 add(recipe);
                 return recipe;
             }
@@ -266,8 +264,7 @@ public class Casting {
             @Override
             public @Nullable ICastingRecipe register() {
                 if (!validate()) return null;
-                RecipeMatch match = (cast instanceof OreDictIngredient) ? RecipeMatch.of(((OreDictIngredient) cast).getOreDict()) : RecipeMatch.of(cast.getMatchingStacks()[0]);
-                CastingRecipe recipe = new CastingRecipe(output.get(0), match, fluidInput.get(0), time, consumesCast, false);
+                CastingRecipe recipe = new CastingRecipe(output.get(0), MeltingRecipeBuilder.recipeMatchFromIngredient(cast), fluidInput.get(0), time, consumesCast, false);
                 add(recipe);
                 return recipe;
             }

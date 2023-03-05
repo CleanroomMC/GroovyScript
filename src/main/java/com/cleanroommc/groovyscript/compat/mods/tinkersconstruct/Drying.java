@@ -3,15 +3,13 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.Nullable;
-import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.DryingRecipe;
 
 public class Drying extends VirtualizedRegistry<DryingRecipe> {
@@ -31,8 +29,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
     }
 
     public DryingRecipe add(IIngredient input, ItemStack output, int time) {
-        RecipeMatch match = (input instanceof OreDictIngredient) ? RecipeMatch.of(((OreDictIngredient) input).getOreDict()) : RecipeMatch.of(input.getMatchingStacks()[0]);
-        DryingRecipe recipe = new DryingRecipe(match, output, time);
+        DryingRecipe recipe = new DryingRecipe(MeltingRecipeBuilder.recipeMatchFromIngredient(input), output, time);
         add(recipe);
         return recipe;
     }
@@ -123,9 +120,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         @Override
         public @Nullable DryingRecipe register() {
             if (!validate()) return null;
-            IIngredient input = this.input.get(0);
-            RecipeMatch match = (input instanceof OreDictIngredient) ? RecipeMatch.of(((OreDictIngredient) input).getOreDict()) : RecipeMatch.of(input.getMatchingStacks()[0]);
-            DryingRecipe recipe = new DryingRecipe(match, output.get(0), time);
+            DryingRecipe recipe = new DryingRecipe(MeltingRecipeBuilder.recipeMatchFromIngredient(input.get(0)), output.get(0), time);
             add(recipe);
             return recipe;
         }
