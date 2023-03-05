@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.EntityMe
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.MeltingRecipeAccessor;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -39,14 +40,9 @@ public class Melting extends VirtualizedRegistry<MeltingRecipe> {
         restoreFromBackup().forEach(TinkerRegistryAccessor.getMeltingRegistry()::add);
     }
 
-    public MeltingRecipe add(String oreDict, FluidStack output, int temp) {
-        MeltingRecipe recipe = new MeltingRecipe(RecipeMatch.of(oreDict), output, temp);
-        add(recipe);
-        return recipe;
-    }
-
     public MeltingRecipe add(IIngredient input, FluidStack output, int temp) {
-        MeltingRecipe recipe = new MeltingRecipe(RecipeMatch.of(input.getMatchingStacks()[0]), output, temp);
+        RecipeMatch match = (input instanceof OreDictIngredient) ? RecipeMatch.of(((OreDictIngredient) input).getOreDict()) : RecipeMatch.of(input.getMatchingStacks()[0]);
+        MeltingRecipe recipe = new MeltingRecipe(match, output, temp);
         add(recipe);
         return recipe;
     }
@@ -117,7 +113,6 @@ public class Melting extends VirtualizedRegistry<MeltingRecipe> {
 
     public class RecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
         private int temp = 300;
-        private String oreDict;
 
         public RecipeBuilder temperature(int temp) {
             this.temp = temp + 300;
@@ -127,11 +122,6 @@ public class Melting extends VirtualizedRegistry<MeltingRecipe> {
         public RecipeBuilder time(int time) {
             int t = fluidOutput.get(0) != null ? fluidOutput.get(0).getFluid().getTemperature() : 300;
             this.temp = MeltingRecipeAccessor.invokeCalcTemperature(t, time);
-            return this;
-        }
-
-        public RecipeBuilder input(String oreDict) {
-            this.oreDict = oreDict;
             return this;
         }
 
@@ -151,7 +141,8 @@ public class Melting extends VirtualizedRegistry<MeltingRecipe> {
         public @Nullable MeltingRecipe register() {
             if (!validate()) return null;
             int amount = fluidOutput.get(0).amount;
-            RecipeMatch match = oreDict != null && !oreDict.isEmpty() ? RecipeMatch.of(oreDict, amount) : RecipeMatch.of(input.get(0).getMatchingStacks()[0], amount);
+            IIngredient input = this.input.get(0);
+            RecipeMatch match = (input instanceof OreDictIngredient) ? RecipeMatch.of(((OreDictIngredient) input).getOreDict(), amount) : RecipeMatch.of(input.getMatchingStacks()[0], amount);
             MeltingRecipe recipe = new MeltingRecipe(match, fluidOutput.get(0), temp);
             add(recipe);
             return recipe;

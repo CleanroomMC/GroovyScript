@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -30,13 +31,8 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
     }
 
     public DryingRecipe add(IIngredient input, ItemStack output, int time) {
-        DryingRecipe recipe = new DryingRecipe(RecipeMatch.of(input.getMatchingStacks()[0]), output, time);
-        add(recipe);
-        return recipe;
-    }
-
-    public DryingRecipe add(String oreDict, ItemStack output, int time) {
-        DryingRecipe recipe = new DryingRecipe(RecipeMatch.of(oreDict), output, time);
+        RecipeMatch match = (input instanceof OreDictIngredient) ? RecipeMatch.of(((OreDictIngredient) input).getOreDict()) : RecipeMatch.of(input.getMatchingStacks()[0]);
+        DryingRecipe recipe = new DryingRecipe(match, output, time);
         add(recipe);
         return recipe;
     }
@@ -107,15 +103,9 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
 
     public class RecipeBuilder extends AbstractRecipeBuilder<DryingRecipe> {
         private int time = 20;
-        private String oreDict;
 
         public RecipeBuilder time(int time) {
             this.time = time;
-            return this;
-        }
-
-        public RecipeBuilder input(String oreDict) {
-            this.oreDict = oreDict;
             return this;
         }
 
@@ -133,7 +123,8 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         @Override
         public @Nullable DryingRecipe register() {
             if (!validate()) return null;
-            RecipeMatch match = oreDict != null && !oreDict.isEmpty() ? RecipeMatch.of(oreDict) : RecipeMatch.of(input.get(0).getMatchingStacks()[0]);
+            IIngredient input = this.input.get(0);
+            RecipeMatch match = (input instanceof OreDictIngredient) ? RecipeMatch.of(((OreDictIngredient) input).getOreDict()) : RecipeMatch.of(input.getMatchingStacks()[0]);
             DryingRecipe recipe = new DryingRecipe(match, output.get(0), time);
             add(recipe);
             return recipe;
