@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
+import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.GroovyMaterial;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.ToolMaterialBuilder;
+import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 
 public class TinkersConstruct extends ModPropertyContainer {
@@ -24,6 +26,13 @@ public class TinkersConstruct extends ModPropertyContainer {
         addRegistry(casting.table);
         addRegistry(casting.basin);
         addRegistry(materials);
+    }
+
+    @Override
+    public void initialize() {
+        if (BracketHandlerManager.getBracketHandler("toolMaterial") == null) BracketHandlerManager.registerBracketHandler("toolMaterial", TinkerRegistryAccessor.getMaterials()::get);
+        if (BracketHandlerManager.getBracketHandler("trait") == null) BracketHandlerManager.registerBracketHandler("trait", TinkerRegistryAccessor.getTraits()::get);
+        if (BracketHandlerManager.getBracketHandler("armorTrait") == null) BracketHandlerManager.registerBracketHandler("armorTrait", s -> TinkerRegistryAccessor.getTraits().get(s + "_armor"));
     }
 
     public static void init() {

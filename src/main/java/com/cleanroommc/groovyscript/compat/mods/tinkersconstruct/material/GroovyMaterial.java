@@ -85,8 +85,8 @@ public class GroovyMaterial extends Material {
 
     public void registerTraits() {
         for (Map.Entry<String, String> pair : traits.entrySet()) {
-            ITrait trait = TinkerRegistry.getTrait(pair.getKey());
-            if (trait != null) addTrait(trait, pair.getValue());
+            ITrait trait = TinkerRegistry.getTrait(pair.getValue());
+            if (trait != null) addTrait(trait, !pair.getKey().equals(pair.getValue()) ? pair.getKey() : null);
         }
     }
 }

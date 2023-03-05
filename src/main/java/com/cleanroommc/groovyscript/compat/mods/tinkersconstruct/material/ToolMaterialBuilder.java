@@ -10,6 +10,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.materials.*;
+import slimeknights.tconstruct.library.traits.ITrait;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -41,8 +42,32 @@ public class ToolMaterialBuilder {
     }
 
     public ToolMaterialBuilder addTrait(String trait, @Nullable String dependency) {
-        this.traits.put(trait, dependency);
+        this.traits.put(dependency != null ? dependency : trait, trait);
         return this;
+    }
+
+    public ToolMaterialBuilder addTrait(String trait) {
+        return addTrait(trait, null);
+    }
+
+    public ToolMaterialBuilder addTrait(ITrait trait, @Nullable String dependency) {
+        return addTrait(trait.getIdentifier(), dependency);
+    }
+
+    public ToolMaterialBuilder addTrait(ITrait trait) {
+        return addTrait(trait, null);
+    }
+
+    public ToolMaterialBuilder addArmorTrait(String trait) {
+        String name = trait.endsWith("_armor") ? trait : trait + "_armor";
+        addTrait(name, "core");
+        addTrait(name, "plates");
+        addTrait(name, "trim");
+        return this;
+    }
+
+    public ToolMaterialBuilder addArmorTrait(ITrait trait) {
+        return addArmorTrait(trait.getIdentifier());
     }
 
     public ToolMaterialBuilder setShardItem(IIngredient shard) {
