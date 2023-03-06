@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.GroovyMaterial;
+import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.GroovyMaterialIntegration;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.ToolMaterialBuilder;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.armory.GroovyArmorTrait;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.traits.GroovyTrait;
@@ -33,6 +34,12 @@ public class Materials extends VirtualizedRegistry<GroovyMaterial> {
     public void addArmorTrait(GroovyArmorTrait trait) {
         if (trait == null) return;
         TinkerRegistry.addTrait(trait);
+    }
+
+    public void addMaterial(GroovyMaterial material) {
+        if (material == null) return;
+        TinkerRegistry.addMaterial(material);
+        TinkerRegistry.integrate(new GroovyMaterialIntegration(material));
     }
 
     public boolean removeMaterial(String material) {

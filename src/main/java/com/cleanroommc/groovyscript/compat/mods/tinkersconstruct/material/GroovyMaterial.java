@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -34,6 +35,12 @@ public class GroovyMaterial extends Material {
             MaterialRenderInfo a = setRenderInfo(color);
             GroovyScript.LOGGER.info(a.useVertexColoring());
         }
+    }
+
+    public GroovyMaterial addItem(IIngredient item, int amountNeeded, int amountMatched) {
+        if (item instanceof OreDictIngredient) addItem(((OreDictIngredient) item).getOreDict(), amountNeeded, amountMatched);
+        else addItem(item.getMatchingStacks()[0], amountNeeded, amountMatched);
+        return this;
     }
 
     @Override
