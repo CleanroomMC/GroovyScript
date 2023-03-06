@@ -4,36 +4,35 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.GroovyMaterial;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.ToolMaterialBuilder;
-import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.armory.Armory;
-import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.traits.TraitBuilder;
+import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.armory.GroovyArmorTrait;
+import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.traits.GroovyTrait;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.MaterialAccessor;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import net.minecraftforge.fml.common.Loader;
+import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.traits.ITrait;
 
 public class Materials extends VirtualizedRegistry<GroovyMaterial> {
 
-    public Armory Armory;
-
-    public Materials() {
-        super();
-        if (Loader.isModLoaded("conarm")) this.Armory = new Armory();
-    }
-
     public ToolMaterialBuilder materialBuilder(String name) {
         return new ToolMaterialBuilder(name);
-    }
-
-    public TraitBuilder traitBuilder(String name) {
-        return new TraitBuilder(name);
     }
 
     @Override
     @GroovyBlacklist
     public void onReload() {
+    }
+
+    public void addTrait(GroovyTrait trait) {
+        if (trait == null) return;
+        TinkerRegistry.addTrait(trait);
+    }
+
+    public void addArmorTrait(GroovyArmorTrait trait) {
+        if (trait == null) return;
+        TinkerRegistry.addTrait(trait);
     }
 
     public boolean removeMaterial(String material) {
@@ -76,6 +75,6 @@ public class Materials extends VirtualizedRegistry<GroovyMaterial> {
     }
 
     public SimpleObjectStream<ITrait> streamTraits() {
-        return new SimpleObjectStream<>(TinkerRegistryAccessor.getTraits().values());
+        return new SimpleObjectStream<>(TinkerRegistryAccessor.getTraits().values()).setRemover(this::removeTrait);
     }
 }
