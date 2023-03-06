@@ -114,7 +114,16 @@ public class GroovyScript {
         VanillaModule.initializeBinding();
         ModSupport.init();
 
+        boolean wasNull = Loader.instance().activeModContainer() == null;
+        if (wasNull) {
+            Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get(ID));
+        }
+
         getSandbox().run(LoadStage.PRE_INIT);
+
+        if (wasNull) {
+            Loader.instance().setActiveModContainer(null);
+        }
     }
 
     @Mod.EventHandler

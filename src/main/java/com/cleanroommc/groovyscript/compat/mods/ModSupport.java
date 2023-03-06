@@ -65,7 +65,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     @ApiStatus.Internal
     public static void init() {
         frozen = true;
-        for (Container<?> container : containers.values()) {
+        for (Container<?> container : getAllContainers()) {
             if (container.isLoaded()) {
                 container.get().initialize();
             }
