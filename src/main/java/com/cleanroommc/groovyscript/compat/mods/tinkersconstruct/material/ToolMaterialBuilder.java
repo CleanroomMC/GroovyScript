@@ -4,6 +4,7 @@ import c4.conarm.lib.materials.ArmorMaterialType;
 import c4.conarm.lib.materials.CoreMaterialStats;
 import c4.conarm.lib.materials.PlatesMaterialStats;
 import c4.conarm.lib.materials.TrimMaterialStats;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import net.minecraftforge.fluids.FluidStack;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public class ToolMaterialBuilder {
+
     public static final List<GroovyMaterial> addedMaterials = new ArrayList<>();
 
     public final String name;
@@ -199,7 +201,26 @@ public class ToolMaterialBuilder {
         return this;
     }
 
+    public String getErrorMsg() {
+        return "Error adding Tinkers' Construct Material";
+    }
+
+    public boolean validate() {
+        GroovyLog.Msg msg = GroovyLog.msg(this.getErrorMsg()).error();
+        this.validate(msg);
+        return !msg.postIfNotEmpty();
+    }
+
+    public void validate(GroovyLog.Msg msg) {
+        msg.add(stats.isEmpty(), "Tool material must have at least one stat type, but found none!");
+        msg.add(!castable && !craftable, "Tool material must either be craftable, castable, or both, but got neither!");
+        msg.add(representativeItem == null, "Tool material must have a representative item, but found none!");
+        msg.add(displayName == null || displayName.isEmpty(), "Expected a localized material name, got " + displayName);
+    }
+
+    @Nullable
     public Material register() {
+        if (!validate()) return null;
         GroovyMaterial material = new GroovyMaterial(name, color, traits);
         addedMaterials.add(material);
 
