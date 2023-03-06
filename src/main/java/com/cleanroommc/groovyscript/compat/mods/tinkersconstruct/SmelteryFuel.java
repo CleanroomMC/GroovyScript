@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
-    public SmelteryFuel() {
-        super();
-    }
 
     @Override
     @GroovyBlacklist

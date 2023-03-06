@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GroovyArmorTrait extends ArmorModifierTrait implements IArmorTrait {
+
     public boolean hidden;
     public String displayName;
     public String description;

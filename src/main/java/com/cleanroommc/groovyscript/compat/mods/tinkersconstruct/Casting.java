@@ -20,9 +20,6 @@ public class Casting {
     public final Basin basin = new Basin();
 
     public static class Table extends VirtualizedRegistry<ICastingRecipe> {
-        public Table() {
-            super();
-        }
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
@@ -100,6 +97,7 @@ public class Casting {
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<ICastingRecipe> {
+
             private IIngredient cast;
             private int time = 200;
             private boolean consumesCast = false;
@@ -146,9 +144,6 @@ public class Casting {
     }
 
     public static class Basin extends VirtualizedRegistry<ICastingRecipe> {
-        public Basin() {
-            super();
-        }
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
@@ -226,6 +221,7 @@ public class Casting {
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<ICastingRecipe> {
+
             private IIngredient cast;
             private int time = 200;
             private boolean consumesCast = false;

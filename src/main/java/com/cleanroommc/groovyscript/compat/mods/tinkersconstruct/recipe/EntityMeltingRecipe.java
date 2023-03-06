@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import java.util.Map;
 
 public class EntityMeltingRecipe {
+
     public final FluidStack result;
     public final ResourceLocation name;
 

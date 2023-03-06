@@ -10,6 +10,7 @@ import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
 public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
+
     private int temp = 300;
     private final MeltingRecipeRegistry registry;
     private final String recipeName;

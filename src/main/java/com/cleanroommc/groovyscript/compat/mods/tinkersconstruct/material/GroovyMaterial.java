@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public class GroovyMaterial extends Material {
+
     public boolean hidden = false;
     public IIngredient representativeItem;
     public IIngredient shard;

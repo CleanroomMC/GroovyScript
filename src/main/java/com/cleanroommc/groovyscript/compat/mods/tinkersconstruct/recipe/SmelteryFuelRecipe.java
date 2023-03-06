@@ -5,6 +5,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.Map;
 
 public class SmelteryFuelRecipe {
+
     public final FluidStack fluid;
     public final int duration;
 

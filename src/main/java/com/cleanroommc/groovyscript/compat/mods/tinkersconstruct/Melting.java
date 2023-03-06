@@ -21,11 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Melting extends MeltingRecipeRegistry {
-    public final EntityMelting entityMelting = new EntityMelting();
 
-    public Melting() {
-        super();
-    }
+    public final EntityMelting entityMelting = new EntityMelting();
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder(this);
@@ -197,6 +194,7 @@ public class Melting extends MeltingRecipeRegistry {
         }
 
         public class RecipeBuilder implements IRecipeBuilder<EntityMeltingRecipe> {
+
             private FluidStack output;
             private ResourceLocation input;
 

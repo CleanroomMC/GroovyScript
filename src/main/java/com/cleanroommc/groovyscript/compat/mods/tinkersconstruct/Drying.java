@@ -13,9 +13,6 @@ import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.DryingRecipe;
 
 public class Drying extends VirtualizedRegistry<DryingRecipe> {
-    public Drying() {
-        super();
-    }
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -99,6 +96,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
     }
 
     public class RecipeBuilder extends AbstractRecipeBuilder<DryingRecipe> {
+
         private int time = 20;
 
         public RecipeBuilder time(int time) {

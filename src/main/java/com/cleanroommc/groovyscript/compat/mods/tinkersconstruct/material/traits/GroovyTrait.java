@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GroovyTrait extends ModifierTrait implements ITrait {
+
     public TraitFunctions.OnUpdate onUpdate;
     public TraitFunctions.MiningSpeed miningSpeed;
     public TraitFunctions.BeforeBlockBreak beforeBlockBreak;

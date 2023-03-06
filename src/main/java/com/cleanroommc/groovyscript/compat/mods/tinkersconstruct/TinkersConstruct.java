@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 
 public class TinkersConstruct extends ModPropertyContainer {
+
     public static final LoadStage MATERIALS = new LoadStage("tinkersMaterials", false);
 
     public final Drying drying = new Drying();

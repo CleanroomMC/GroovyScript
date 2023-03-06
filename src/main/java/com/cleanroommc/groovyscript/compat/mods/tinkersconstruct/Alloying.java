@@ -13,9 +13,6 @@ import slimeknights.tconstruct.library.smeltery.AlloyRecipe;
 import java.util.Arrays;
 
 public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
-    public Alloying() {
-        super();
-    }
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -99,6 +96,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
     }
 
     public class RecipeBuilder extends AbstractRecipeBuilder<AlloyRecipe> {
+
         @Override
         public String getErrorMsg() {
             return "Error adding Tinkers Construct Alloying recipe";

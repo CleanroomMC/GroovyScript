@@ -22,13 +22,10 @@ import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 import java.util.Map;
 
 public class HighOven extends MeltingRecipeRegistry {
+
     public final Fuel fuel = new Fuel();
     public final Heating heating = new Heating();
     public final Mixing mixing = new Mixing();
-
-    public HighOven() {
-        super();
-    }
 
     public MeltingRecipeBuilder recipeBuilder() {
         return new MeltingRecipeBuilder(this, "Tinkers Complement High Oven override");
@@ -118,9 +115,6 @@ public class HighOven extends MeltingRecipeRegistry {
     }
 
     public static class Mixing extends VirtualizedRegistry<IMixRecipe> {
-        public Mixing() {
-            super();
-        }
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
@@ -192,15 +186,15 @@ public class HighOven extends MeltingRecipeRegistry {
         public boolean removeByAdditives(Map<MixAdditive, IIngredient> additives) {
             if (TCompRegistryAccessor.getMixRegistry().removeIf(recipe -> {
                 MixRecipe recipe1 = (recipe instanceof MixRecipe) ? (MixRecipe) recipe : null;
-                boolean found = recipe1 != null;
-                if (found) for (Map.Entry<MixAdditive, IIngredient> entry : additives.entrySet()) {
-                    if (!recipe1.getAdditives(entry.getKey()).contains(entry.getValue().getMatchingStacks()[0])) {
-                        found = false;
-                        break;
+                if (recipe1 != null) {
+                    for (Map.Entry<MixAdditive, IIngredient> entry : additives.entrySet()) {
+                        if (recipe1.getAdditives(entry.getKey()).contains(entry.getValue().getMatchingStacks()[0])) {
+                            addBackup(recipe);
+                            return true;
+                        }
                     }
                 }
-                if (found) addBackup(recipe);
-                return found;
+                return false;
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Complement High Oven Mixing recipe")
@@ -224,6 +218,7 @@ public class HighOven extends MeltingRecipeRegistry {
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<MixRecipe> {
+
             private int temp = 300;
             private RecipeMatch oxidizer;
             private RecipeMatch reducer;
@@ -293,9 +288,6 @@ public class HighOven extends MeltingRecipeRegistry {
     }
 
     public static class Heating extends VirtualizedRegistry<IHeatRecipe> {
-        public Heating() {
-            super();
-        }
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
@@ -378,6 +370,7 @@ public class HighOven extends MeltingRecipeRegistry {
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<IHeatRecipe> {
+
             private int temp = 300;
 
             public RecipeBuilder temperature(int temp) {
@@ -412,9 +405,6 @@ public class HighOven extends MeltingRecipeRegistry {
     }
 
     public static class Fuel extends VirtualizedRegistry<HighOvenFuel> {
-        public Fuel() {
-            super();
-        }
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
@@ -470,6 +460,7 @@ public class HighOven extends MeltingRecipeRegistry {
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<HighOvenFuel> {
+
             private int time = 1;
             private int rate = 1;
 

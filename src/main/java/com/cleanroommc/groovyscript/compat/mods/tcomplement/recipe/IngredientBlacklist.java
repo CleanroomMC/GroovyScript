@@ -5,6 +5,7 @@ import knightminer.tcomplement.library.IBlacklist;
 import net.minecraft.item.ItemStack;
 
 public class IngredientBlacklist implements IBlacklist {
+
     protected final IIngredient ingredient;
 
     public IngredientBlacklist(IIngredient ingredient) {

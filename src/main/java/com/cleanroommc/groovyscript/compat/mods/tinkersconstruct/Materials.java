@@ -14,6 +14,7 @@ import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.traits.ITrait;
 
 public class Materials extends VirtualizedRegistry<GroovyMaterial> {
+
     public Armory Armory;
 
     public Materials() {
@@ -32,7 +33,6 @@ public class Materials extends VirtualizedRegistry<GroovyMaterial> {
     @Override
     @GroovyBlacklist
     public void onReload() {
-
     }
 
     public boolean removeMaterial(String material) {
