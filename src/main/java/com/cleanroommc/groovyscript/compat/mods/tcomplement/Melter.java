@@ -20,7 +20,9 @@ import java.util.Collection;
 public class Melter extends MeltingRecipeRegistry {
 
     @GroovyBlacklist
-    protected Collection<IBlacklist> backupBlacklist, scriptedBlacklist = new ArrayList<>();
+    protected Collection<IBlacklist> backupBlacklist = new ArrayList<>();
+    @GroovyBlacklist
+    protected Collection<IBlacklist> scriptedBlacklist = new ArrayList<>();
 
     public MeltingRecipeBuilder recipeBuilder() {
         return new MeltingRecipeBuilder(this, "Tinkers Complement Melter override");
