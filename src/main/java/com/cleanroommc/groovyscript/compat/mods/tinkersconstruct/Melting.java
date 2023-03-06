@@ -10,10 +10,10 @@ import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
@@ -134,7 +134,7 @@ public class Melting extends MeltingRecipeRegistry {
             return TinkerRegistryAccessor.getEntityMeltingRegistry().entrySet().stream().map(EntityMeltingRecipe::fromMapEntry).collect(Collectors.toList());
         }
 
-        public <T extends Entity> EntityMeltingRecipe add(Class<T> entity, FluidStack output) {
+        public EntityMeltingRecipe add(EntityEntry entity, FluidStack output) {
             EntityMeltingRecipe recipe = new EntityMeltingRecipe(entity, output);
             add(recipe);
             return recipe;
@@ -153,8 +153,8 @@ public class Melting extends MeltingRecipeRegistry {
             return true;
         }
 
-        public boolean removeByInput(Class<? extends Entity> entity) {
-            ResourceLocation name = EntityList.getKey(entity);
+        public boolean removeByInput(EntityEntry entity) {
+            ResourceLocation name = entity.getRegistryName();
             if (TinkerRegistryAccessor.getEntityMeltingRegistry().entrySet().removeIf(entry -> {
                 boolean found = name != null && entry.getKey().equals(name);
                 if (found) addBackup(new EntityMeltingRecipe(entry.getKey(), entry.getValue()));
@@ -218,8 +218,8 @@ public class Melting extends MeltingRecipeRegistry {
                 return input(new ResourceLocation(modid, name));
             }
 
-            public RecipeBuilder input(Class<? extends Entity> entity) {
-                return input(EntityList.getKey(entity));
+            public RecipeBuilder input(EntityEntry entity) {
+                return input(entity.getRegistryName());
             }
 
             private String getErrorMsg() {

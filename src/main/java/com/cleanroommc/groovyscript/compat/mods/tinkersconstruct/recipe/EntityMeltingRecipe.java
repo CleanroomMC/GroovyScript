@@ -1,9 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 
 import java.util.Map;
 
@@ -11,8 +10,8 @@ public class EntityMeltingRecipe {
     public final FluidStack result;
     public final ResourceLocation name;
 
-    public EntityMeltingRecipe(Class<? extends Entity> entity, FluidStack result) {
-        this.name = EntityList.getKey(entity);
+    public EntityMeltingRecipe(EntityEntry entity, FluidStack result) {
+        this.name = entity.getRegistryName();
         this.result = result;
     }
 
