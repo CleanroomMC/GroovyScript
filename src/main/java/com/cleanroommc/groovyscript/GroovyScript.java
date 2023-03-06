@@ -113,7 +113,7 @@ public class GroovyScript {
 
     @Mod.EventHandler()
     public void preInit(FMLPreInitializationEvent event) {
-        if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) GroovyScript.getSandbox().run(TinkersConstruct.MATERIALS);
+        if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) TinkersConstruct.preInit();
     }
 
     @ApiStatus.Internal

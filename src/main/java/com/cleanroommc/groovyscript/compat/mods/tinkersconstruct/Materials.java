@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.Groovy
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.ToolMaterialBuilder;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.armory.Armory;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.traits.TraitBuilder;
+import com.cleanroommc.groovyscript.core.mixin.tconstruct.MaterialAccessor;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -44,9 +45,29 @@ public class Materials extends VirtualizedRegistry<GroovyMaterial> {
         return false;
     }
 
+    public boolean removeTrait(String trait) {
+        if (TinkerRegistryAccessor.getTraits().entrySet().removeIf(entry -> {
+            boolean found = entry.getKey().equals(trait);
+            if (found) TinkerRegistryAccessor.getMaterials().values().forEach(material -> ((MaterialAccessor) material).getTraits().values().forEach(l -> l.removeIf(t -> t.getIdentifier().equals(trait))));
+            return found;
+        })) return true;
+        GroovyLog.msg("Error removing Tinkers Construct material trait")
+                .add("could not find trait with name %s", trait)
+                .error()
+                .post();
+        return false;
+    }
+
     public boolean removeMaterial(Material material) {
         if (material == null) return false;
         TinkerRegistryAccessor.getMaterials().remove(material.getIdentifier(), material);
+        return true;
+    }
+
+    public boolean removeTrait(ITrait trait) {
+        if (trait == null) return false;
+        TinkerRegistryAccessor.getTraits().remove(trait.getIdentifier(), trait);
+        TinkerRegistryAccessor.getMaterials().values().forEach(material -> ((MaterialAccessor) material).getTraits().values().forEach(l -> l.removeIf(t -> t.getIdentifier().equals(trait.getIdentifier()))));
         return true;
     }
 
