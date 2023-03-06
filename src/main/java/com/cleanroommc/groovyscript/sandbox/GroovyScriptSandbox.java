@@ -125,7 +125,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     protected void preRun() {
         GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoadStage);
-        if (Loader.instance().activeModContainer() == null) Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get("groovyscript"));
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         if (this.currentLoadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
