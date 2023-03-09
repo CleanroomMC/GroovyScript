@@ -33,6 +33,7 @@ public class Melting extends MeltingRecipeRegistry {
     public void onReload() {
         removeScripted().forEach(TinkerRegistryAccessor.getMeltingRegistry()::remove);
         restoreFromBackup().forEach(TinkerRegistryAccessor.getMeltingRegistry()::add);
+        entityMelting.onReload();
     }
 
     public MeltingRecipe add(IIngredient input, FluidStack output, int temp) {

@@ -36,6 +36,9 @@ public class HighOven extends MeltingRecipeRegistry {
     public void onReload() {
         removeScripted().forEach(TCompRegistryAccessor.getHighOvenOverrides()::remove);
         restoreFromBackup().forEach(TCompRegistryAccessor.getHighOvenOverrides()::add);
+        fuel.onReload();
+        heating.onReload();
+        mixing.onReload();
     }
 
     public MeltingRecipe add(IIngredient input, FluidStack output, int temp) {

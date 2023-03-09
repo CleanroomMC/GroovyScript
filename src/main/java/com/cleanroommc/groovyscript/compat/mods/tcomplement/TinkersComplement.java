@@ -10,8 +10,5 @@ public class TinkersComplement extends ModPropertyContainer {
     public TinkersComplement() {
         addRegistry(melter);
         addRegistry(highOven);
-        addRegistry(highOven.fuel);
-        addRegistry(highOven.heating);
-        addRegistry(highOven.mixing);
     }
 }
