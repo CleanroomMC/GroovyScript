@@ -20,6 +20,14 @@ public abstract class IngredientBase implements IIngredient {
         return this;
     }
 
+    public IngredientBase reuse() {
+        return transform(IngredientHelper.REUSE);
+    }
+
+    public IngredientBase noreturn() {
+        return transform(IngredientHelper.NO_RETURN);
+    }
+
     @Override
     public boolean test(ItemStack itemStack) {
         return (matchCondition == null || ClosureHelper.call(true, matchCondition, itemStack)) && matches(itemStack);

@@ -5,7 +5,7 @@ import net.minecraft.inventory.SlotCrafting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(value = SlotCrafting.class, remap = false)
+@Mixin(value = SlotCrafting.class)
 public interface SlotCraftingAccess {
 
     @Accessor
