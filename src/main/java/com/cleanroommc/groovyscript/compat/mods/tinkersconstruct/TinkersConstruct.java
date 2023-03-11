@@ -30,9 +30,9 @@ public class TinkersConstruct extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        if (BracketHandlerManager.getBracketHandler("toolMaterial") == null) BracketHandlerManager.registerBracketHandler("toolMaterial", TinkerRegistryAccessor.getMaterials()::get);
-        if (BracketHandlerManager.getBracketHandler("toolTrait") == null) BracketHandlerManager.registerBracketHandler("toolTrait", TinkerRegistryAccessor.getTraits()::get);
-        if (BracketHandlerManager.getBracketHandler("armorTrait") == null) BracketHandlerManager.registerBracketHandler("armorTrait", s -> TinkerRegistryAccessor.getTraits().get(s + "_armor"));
+        BracketHandlerManager.registerBracketHandler("toolMaterial", TinkerRegistryAccessor.getMaterials()::get);
+        BracketHandlerManager.registerBracketHandler("toolTrait", TinkerRegistryAccessor.getTraits()::get);
+        BracketHandlerManager.registerBracketHandler("armorTrait", s -> TinkerRegistryAccessor.getTraits().get(s + "_armor"));
     }
 
     public static void init() {
