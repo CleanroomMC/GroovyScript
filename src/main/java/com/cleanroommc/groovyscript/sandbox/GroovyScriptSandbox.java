@@ -16,7 +16,6 @@ import groovy.util.ResourceException;
 import groovy.util.ScriptException;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.jetbrains.annotations.ApiStatus;
