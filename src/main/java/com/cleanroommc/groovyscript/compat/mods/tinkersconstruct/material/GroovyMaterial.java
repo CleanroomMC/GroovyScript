@@ -38,8 +38,8 @@ public class GroovyMaterial extends Material {
     }
 
     public GroovyMaterial addItem(IIngredient item, int amountNeeded, int amountMatched) {
-        if (item instanceof OreDictIngredient) addItem(((OreDictIngredient) item).getOreDict(), amountNeeded, amountMatched);
-        else addItem(item.getMatchingStacks()[0], amountNeeded, amountMatched);
+        if (item instanceof OreDictIngredient) addItem(((OreDictIngredient) item).getOreDict(), amountNeeded, amountMatched * 144);
+        else addItem(item.getMatchingStacks()[0], amountNeeded, amountMatched * 144);
         return this;
     }
 

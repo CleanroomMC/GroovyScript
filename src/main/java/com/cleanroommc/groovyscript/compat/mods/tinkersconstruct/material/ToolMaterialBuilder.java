@@ -236,8 +236,8 @@ public class ToolMaterialBuilder {
             if (stat != null) material.addStats(stat);
         });
         repairIngredients.forEach(repair -> {
-            if (repair.ingredient instanceof OreDictIngredient) material.addItem(((OreDictIngredient) repair.ingredient).getOreDict(), repair.amountNeeded, repair.amountMatched);
-            else material.addItem(repair.ingredient.getMatchingStacks()[0], repair.amountNeeded, repair.amountMatched);
+            if (repair.ingredient instanceof OreDictIngredient) material.addItem(((OreDictIngredient) repair.ingredient).getOreDict(), repair.amountNeeded, repair.amountMatched * 144);
+            else material.addItem(repair.ingredient.getMatchingStacks()[0], repair.amountNeeded, repair.amountMatched * 144);
         });
 
         if (representativeItem != null) {
