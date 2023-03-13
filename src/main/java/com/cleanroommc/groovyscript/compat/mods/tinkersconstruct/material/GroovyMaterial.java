@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -11,7 +10,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 import slimeknights.tconstruct.library.TinkerRegistry;
-import slimeknights.tconstruct.library.client.MaterialRenderInfo;
 import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.traits.ITrait;
 
@@ -31,10 +29,7 @@ public class GroovyMaterial extends Material {
     public GroovyMaterial(String identifier, int color, Map<String, String> traits) {
         super(identifier, color);
         this.traits = traits;
-        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-            MaterialRenderInfo a = setRenderInfo(color);
-            GroovyScript.LOGGER.info(a.useVertexColoring());
-        }
+        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) setRenderInfo(color);
     }
 
     public GroovyMaterial addItem(IIngredient item, int amountNeeded, int amountMatched) {

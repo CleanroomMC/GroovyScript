@@ -16,8 +16,8 @@ public class GroovyArmorTrait extends ArmorModifierTrait implements IArmorTrait 
     }
 
     public GroovyArmorTrait addItem(IIngredient ingredient, int amountNeeded, int amountMatched) {
-        if (ingredient instanceof OreDictIngredient) addItem(((OreDictIngredient) ingredient).getOreDict(), amountNeeded, amountMatched);
-        else addItem(ingredient.getMatchingStacks()[0], amountNeeded, amountMatched);
+        if (ingredient instanceof OreDictIngredient) addItem(((OreDictIngredient) ingredient).getOreDict(), amountNeeded, amountMatched * 144);
+        else addItem(ingredient.getMatchingStacks()[0], amountNeeded, amountMatched * 144);
         return this;
     }
 }
