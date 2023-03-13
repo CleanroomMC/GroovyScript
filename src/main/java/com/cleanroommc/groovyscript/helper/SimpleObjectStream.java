@@ -77,6 +77,15 @@ public class SimpleObjectStream<T> extends AbstractList<T> {
         return new ObjectOpenHashSet<>(this.recipes);
     }
 
+    @Override
+    public boolean removeIf(Predicate<? super T> filter) {
+        Objects.requireNonNull(this.remover);
+        return this.recipes.removeIf(t -> {
+            if (filter.test(t)) return this.remover.test(t);
+            return false;
+        });
+    }
+
     public SimpleObjectStream<T> removeAll() {
         Objects.requireNonNull(this.remover);
         this.recipes.removeIf(this.remover);
