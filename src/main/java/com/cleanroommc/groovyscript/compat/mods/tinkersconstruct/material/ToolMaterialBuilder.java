@@ -215,7 +215,6 @@ public class ToolMaterialBuilder {
 
     public void validate(GroovyLog.Msg msg) {
         msg.add(stats.isEmpty(), "Tool material must have at least one stat type, but found none!");
-        msg.add(!castable && !craftable, "Tool material must either be craftable, castable, or both, but got neither!");
         msg.add(representativeItem == null, "Tool material must have a representative item, but found none!");
         msg.add(displayName == null || displayName.isEmpty(), "Expected a localized material name, got " + displayName);
     }
