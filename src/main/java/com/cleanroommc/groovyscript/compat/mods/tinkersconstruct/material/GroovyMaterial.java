@@ -13,6 +13,7 @@ import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.traits.ITrait;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
@@ -24,9 +25,9 @@ public class GroovyMaterial extends Material {
     public FluidStack fluidStack;
     public String displayName;
     public BiFunction<Material, String, String> localizer;
-    protected final Map<String, String> traits;
+    protected final Map<String, List<String>> traits;
 
-    public GroovyMaterial(String identifier, int color, Map<String, String> traits) {
+    public GroovyMaterial(String identifier, int color, Map<String, List<String>> traits) {
         super(identifier, color);
         this.traits = traits;
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) setRenderInfo(color);
@@ -87,9 +88,11 @@ public class GroovyMaterial extends Material {
     }
 
     public void registerTraits() {
-        for (Map.Entry<String, String> pair : traits.entrySet()) {
-            ITrait trait = TinkerRegistry.getTrait(pair.getValue());
-            if (trait != null) addTrait(trait, !pair.getKey().equals(pair.getValue()) ? pair.getKey() : null);
+        for (Map.Entry<String, List<String>> pair : traits.entrySet()) {
+            for (String traitName : pair.getValue()) {
+                ITrait trait = TinkerRegistry.getTrait(traitName);
+                if (trait != null) addTrait(trait, pair.getKey().equals("all") ? null : pair.getKey());
+            }
         }
     }
 }

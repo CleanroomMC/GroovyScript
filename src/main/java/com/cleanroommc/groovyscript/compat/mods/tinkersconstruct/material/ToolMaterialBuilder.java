@@ -35,7 +35,7 @@ public class ToolMaterialBuilder {
     public IIngredient representativeItem;
     public IIngredient shard;
     public BiFunction<Material, String, String> localizer;
-    protected Map<String, String> traits = new HashMap<>();
+    protected Map<String, List<String>> traits = new HashMap<>();
     protected List<MaterialRepairIngredient> repairIngredients = new ArrayList<>();
     protected final Map<String, IMaterialStats> stats = new HashMap<>(8);
 
@@ -44,7 +44,9 @@ public class ToolMaterialBuilder {
     }
 
     public ToolMaterialBuilder addTrait(String trait, @Nullable String dependency) {
-        this.traits.put(dependency != null ? dependency : trait, trait);
+        String key = dependency != null ? dependency : "all";
+        this.traits.computeIfAbsent(key, k -> new ArrayList<>());
+        this.traits.get(key).add(trait);
         return this;
     }
 
