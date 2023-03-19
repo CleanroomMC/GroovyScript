@@ -34,6 +34,8 @@ public class JeiPlugin implements IModPlugin {
 
     public static final List<ItemStack> HIDDEN = new ArrayList<>();
     public static final List<FluidStack> HIDDEN_FLUIDS = new ArrayList<>();
+    public static final List<ItemStack> ADDED = new ArrayList<>();
+    public static final List<FluidStack> ADDED_FLUIDS = new ArrayList<>();
     public static final List<String> HIDDEN_CATEGORY = new ArrayList<>();
 
     public static boolean isLoaded() {
@@ -42,11 +44,18 @@ public class JeiPlugin implements IModPlugin {
 
     public static void reload() {
         HIDDEN.clear();
+        HIDDEN_FLUIDS.clear();
         HIDDEN_CATEGORY.clear();
+        ADDED.clear();
+        ADDED_FLUIDS.clear();
     }
 
     public static void hideItem(ItemStack... stack) {
         Collections.addAll(HIDDEN, stack);
+    }
+
+    public static void addItem(ItemStack... stack) {
+        Collections.addAll(ADDED, stack);
     }
 
     @Override
@@ -71,6 +80,12 @@ public class JeiPlugin implements IModPlugin {
         }
         if (!HIDDEN_FLUIDS.isEmpty()) {
             itemRegistry.removeIngredientsAtRuntime(VanillaTypes.FLUID, HIDDEN_FLUIDS);
+        }
+        if (!ADDED.isEmpty()) {
+            itemRegistry.addIngredientsAtRuntime(VanillaTypes.ITEM, ingredientHelper.expandSubtypes(ADDED));
+        }
+        if (!ADDED_FLUIDS.isEmpty()) {
+            itemRegistry.addIngredientsAtRuntime(VanillaTypes.FLUID, ADDED_FLUIDS);
         }
         for (String category : HIDDEN_CATEGORY) {
             recipeRegistry.hideRecipeCategory(category);
