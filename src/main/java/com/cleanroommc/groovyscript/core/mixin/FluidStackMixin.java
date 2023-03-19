@@ -12,13 +12,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = FluidStack.class, remap = false)
 public abstract class FluidStackMixin implements IIngredient, INBTResourceStack {
@@ -29,6 +27,7 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
     @Shadow
     public NBTTagCompound tag;
 
+    @NotNull
     @Shadow
     public abstract FluidStack copy();
 
@@ -44,8 +43,11 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
     protected Closure<Object> transformer;
 
     @Override
-    public IIngredient exactCopy() {
-        return (IIngredient) copy();
+    public IIngredient copyExact() {
+        FluidStackMixin fluidStackMixin = (FluidStackMixin) (Object) copy();
+        fluidStackMixin.matchCondition = matchCondition;
+        fluidStackMixin.transformer = transformer;
+        return fluidStackMixin;
     }
 
     @Override
@@ -110,13 +112,5 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
     @Override
     public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    @Inject(method = "copy", at = @At("RETURN"), cancellable = true)
-    public void injectCopy(CallbackInfoReturnable<FluidStack> cir) {
-        FluidStackMixin fluid = (FluidStackMixin) (Object) cir.getReturnValue();
-        fluid.when(matchCondition);
-        fluid.transform(transformer);
-        cir.setReturnValue((FluidStack) (Object) fluid);
     }
 }

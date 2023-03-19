@@ -28,7 +28,7 @@ public abstract class GasStackMixin implements IIngredient, IResourceStack {
     }
 
     @Override
-    public IIngredient exactCopy() {
+    public IIngredient copyExact() {
         return (IIngredient) copy();
     }
 

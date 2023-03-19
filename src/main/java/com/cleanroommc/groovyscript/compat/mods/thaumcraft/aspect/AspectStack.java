@@ -52,6 +52,11 @@ public class AspectStack implements IResourceStack {
         this.amount = amount;
     }
 
+    @Override
+    public AspectStack copyExact() {
+        return new AspectStack(this.aspect, this.amount);
+    }
+
     public ItemStack getCrystal() {
         return ThaumcraftApiHelper.makeCrystal(this.aspect, this.amount);
     }

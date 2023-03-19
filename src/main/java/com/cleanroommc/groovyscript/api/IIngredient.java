@@ -12,7 +12,8 @@ import java.util.function.Predicate;
  */
 public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
 
-    IIngredient exactCopy();
+    @Override
+    IIngredient copyExact();
 
     Ingredient toMcIngredient();
 
@@ -24,10 +25,6 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
 
     default boolean test(FluidStack fluidStack) {
         return false;
-    }
-
-    default IResourceStack copyWithAmount(int amount) {
-        return exactCopy().withAmount(amount);
     }
 
     /**
@@ -44,7 +41,7 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
         }
 
         @Override
-        public IIngredient exactCopy() {
+        public IIngredient copyExact() {
             return this;
         }
 
@@ -70,7 +67,7 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
     IIngredient ANY = new IIngredient() {
 
         @Override
-        public IIngredient exactCopy() {
+        public IIngredient copyExact() {
             return this;
         }
 

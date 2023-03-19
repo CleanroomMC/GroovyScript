@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.google.common.collect.Iterators;
 import net.minecraft.item.ItemStack;
@@ -37,6 +36,15 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
     }
 
     @Override
+    public OreDictIngredient copyExact() {
+        OreDictIngredient oreDictIngredient = new OreDictIngredient(this.oreDict);
+        oreDictIngredient.setAmount(this.count);
+        oreDictIngredient.transform(this.transformer);
+        oreDictIngredient.when(this.matchCondition);
+        return oreDictIngredient;
+    }
+
+    @Override
     public boolean matches(ItemStack stack) {
         // TODO this sucks
         if (IngredientHelper.isEmpty(stack)) return false;
@@ -47,11 +55,6 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
             }
         }
         return false;
-    }
-
-    @Override
-    public IIngredient exactCopy() {
-        return (IIngredient) new OreDictIngredient(oreDict).withAmount(count);
     }
 
     @Override
