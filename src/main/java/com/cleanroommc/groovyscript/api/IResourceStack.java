@@ -10,10 +10,10 @@ public interface IResourceStack {
 
     void setAmount(int amount);
 
-    IResourceStack copyExact();
+    IResourceStack exactCopy();
 
     default IResourceStack withAmount(int amount) {
-        IResourceStack resourceStack = copyExact();
+        IResourceStack resourceStack = exactCopy();
         resourceStack.setAmount(amount);
         return resourceStack;
     }

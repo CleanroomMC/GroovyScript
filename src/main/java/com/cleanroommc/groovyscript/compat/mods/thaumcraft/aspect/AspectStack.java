@@ -53,7 +53,7 @@ public class AspectStack implements IResourceStack {
     }
 
     @Override
-    public AspectStack copyExact() {
+    public AspectStack exactCopy() {
         return new AspectStack(this.aspect, this.amount);
     }
 

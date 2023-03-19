@@ -26,7 +26,7 @@ public class ItemsIngredient extends IngredientBase {
     }
 
     @Override
-    public IIngredient copyExact() {
+    public IIngredient exactCopy() {
         ItemsIngredient ingredient = new ItemsIngredient(this.itemStacks);
         ingredient.amount = this.amount;
         return ingredient;

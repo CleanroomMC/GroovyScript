@@ -39,7 +39,7 @@ public interface INBTResourceStack extends IResourceStack {
     void setNbt(NBTTagCompound nbt);
 
     default INBTResourceStack withNbt(NBTTagCompound nbt) {
-        INBTResourceStack resourceStack = (INBTResourceStack) copyExact();
+        INBTResourceStack resourceStack = (INBTResourceStack) exactCopy();
         resourceStack.setNbt(nbt);
         return resourceStack;
     }

@@ -43,7 +43,7 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
     protected Closure<Object> transformer;
 
     @Override
-    public IIngredient copyExact() {
+    public IIngredient exactCopy() {
         FluidStackMixin fluidStackMixin = (FluidStackMixin) (Object) copy();
         fluidStackMixin.matchCondition = matchCondition;
         fluidStackMixin.transformer = transformer;

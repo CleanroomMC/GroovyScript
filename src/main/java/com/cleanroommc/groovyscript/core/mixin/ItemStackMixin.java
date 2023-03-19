@@ -56,7 +56,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     }
 
     @Override
-    public IIngredient copyExact() {
+    public IIngredient exactCopy() {
         ItemStackMixin copy = (ItemStackMixin) (Object) groovyscript$getThis().copy();
         copy.setMark(getMark());
         copy.transform(transformer);

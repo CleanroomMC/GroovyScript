@@ -36,7 +36,7 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
     }
 
     @Override
-    public OreDictIngredient copyExact() {
+    public OreDictIngredient exactCopy() {
         OreDictIngredient oreDictIngredient = new OreDictIngredient(this.oreDict);
         oreDictIngredient.setAmount(this.count);
         oreDictIngredient.transform(this.transformer);
