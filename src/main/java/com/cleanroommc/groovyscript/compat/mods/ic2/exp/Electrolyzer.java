@@ -18,14 +18,13 @@ import java.util.Map;
 
 public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe>> {
 
-    private static final Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> fluidMap = ((ElectrolyzerRecipeManagerAccessor) Recipes.electrolyzer).getFluidMap();
-
     public Electrolyzer() {
         super();
     }
 
     @Override
     public void onReload() {
+        Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> fluidMap = ((ElectrolyzerRecipeManagerAccessor) Recipes.electrolyzer).getFluidMap();
         removeScripted().forEach(pair -> fluidMap.remove(pair.getKey()));
         restoreFromBackup().forEach(pair -> add(pair.getKey(), pair.getValue(), false));
     }
@@ -39,6 +38,7 @@ public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzer
     }
 
     public boolean remove(String name, IElectrolyzerRecipeManager.ElectrolyzerRecipe recipe) {
+        Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> fluidMap = ((ElectrolyzerRecipeManagerAccessor) Recipes.electrolyzer).getFluidMap();
         if (fluidMap.remove(name, recipe)) {
             addBackup(Pair.of(name, recipe));
             return true;
@@ -75,6 +75,7 @@ public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzer
                     .post();
             return;
         }
+        Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> fluidMap = ((ElectrolyzerRecipeManagerAccessor) Recipes.electrolyzer).getFluidMap();
         for (Map.Entry<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> recipe : fluidMap.entrySet()) {
             int i;
             for (i = 0; i < recipe.getValue().outputs.length; i++) {
@@ -96,12 +97,14 @@ public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzer
                     .post();
             return;
         }
+        Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> fluidMap = ((ElectrolyzerRecipeManagerAccessor) Recipes.electrolyzer).getFluidMap();
         Fluid in = input.getFluid();
         addBackup(Pair.of(in.getName(), fluidMap.get(in.getName())));
         fluidMap.remove(in.getName());
     }
 
     public void removeAll() {
+        Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> fluidMap = ((ElectrolyzerRecipeManagerAccessor) Recipes.electrolyzer).getFluidMap();
         for (Map.Entry<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> recipe : fluidMap.entrySet()) {
             remove(recipe.getKey(), recipe.getValue());
         }

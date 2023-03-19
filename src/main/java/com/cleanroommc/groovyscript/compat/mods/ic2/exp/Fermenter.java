@@ -15,14 +15,13 @@ import java.util.Map;
 
 public class Fermenter extends VirtualizedRegistry<Pair<String, IFermenterRecipeManager.FermentationProperty>> {
 
-    private static final Map<String, IFermenterRecipeManager.FermentationProperty> fluidMap = ((FermenterRecipeManagerAccessor) Recipes.fermenter).getFluidMap();
-
     public Fermenter() {
         super();
     }
 
     @Override
     public void onReload() {
+        Map<String, IFermenterRecipeManager.FermentationProperty> fluidMap = ((FermenterRecipeManagerAccessor) Recipes.fermenter).getFluidMap();
         removeScripted().forEach(pair -> fluidMap.remove(pair.getKey()));
         restoreFromBackup().forEach(pair -> fluidMap.put(pair.getKey(), pair.getValue()));
     }
@@ -43,6 +42,7 @@ public class Fermenter extends VirtualizedRegistry<Pair<String, IFermenterRecipe
     }
 
     public void add(String input, IFermenterRecipeManager.FermentationProperty recipe) {
+        Map<String, IFermenterRecipeManager.FermentationProperty> fluidMap = ((FermenterRecipeManagerAccessor) Recipes.fermenter).getFluidMap();
         fluidMap.put(input, recipe);
         addScripted(Pair.of(input, recipe));
     }
@@ -71,6 +71,7 @@ public class Fermenter extends VirtualizedRegistry<Pair<String, IFermenterRecipe
                     .post();
             return;
         }
+        Map<String, IFermenterRecipeManager.FermentationProperty> fluidMap = ((FermenterRecipeManagerAccessor) Recipes.fermenter).getFluidMap();
         for (Map.Entry<String, IFermenterRecipeManager.FermentationProperty> entry : fluidMap.entrySet()) {
             FluidStack out = entry.getValue().getOutput();
             if (out.isFluidEqual(output) && out.amount == output.amount) {
@@ -80,6 +81,7 @@ public class Fermenter extends VirtualizedRegistry<Pair<String, IFermenterRecipe
     }
 
     public void removeAll() {
+        Map<String, IFermenterRecipeManager.FermentationProperty> fluidMap = ((FermenterRecipeManagerAccessor) Recipes.fermenter).getFluidMap();
         for (String name : fluidMap.keySet()) {
             remove(name);
         }
@@ -93,6 +95,7 @@ public class Fermenter extends VirtualizedRegistry<Pair<String, IFermenterRecipe
                     .post();
             return false;
         }
+        Map<String, IFermenterRecipeManager.FermentationProperty> fluidMap = ((FermenterRecipeManagerAccessor) Recipes.fermenter).getFluidMap();
         IFermenterRecipeManager.FermentationProperty property = fluidMap.remove(input);
         if (property != null) {
             addBackup(Pair.of(input, property));
