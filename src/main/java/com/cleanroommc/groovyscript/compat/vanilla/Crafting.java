@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
@@ -89,7 +90,6 @@ public class Crafting {
         removeByOutput(output, true);
     }
 
-    @GroovyBlacklist
     public void removeByOutput(IIngredient output, boolean log) {
         if (IngredientHelper.isEmpty(output)) {
             if (log) {
@@ -97,8 +97,8 @@ public class Crafting {
                         .add("Output must not be empty")
                         .error()
                         .post();
-                return;
             }
+            return;
         }
         List<ResourceLocation> recipesToRemove = new ArrayList<>();
         for (IRecipe recipe : ForgeRegistries.RECIPES) {
@@ -118,6 +118,48 @@ public class Crafting {
         for (ResourceLocation rl : recipesToRemove) {
             ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, rl);
         }
+    }
+
+    public void removeByInput(IIngredient input) {
+        removeByInput(input, true);
+    }
+
+    public void removeByInput(IIngredient input, boolean log) {
+        if (IngredientHelper.isEmpty(input)) {
+            if (log) {
+                GroovyLog.msg("Error removing Minecraft Crafting recipe")
+                        .add("Input must not be empty")
+                        .error()
+                        .post();
+            }
+            return;
+        }
+        List<ResourceLocation> recipesToRemove = new ArrayList<>();
+        for (IRecipe recipe : ForgeRegistries.RECIPES) {
+            if (recipe.getRegistryName() != null && !recipe.getIngredients().isEmpty() && recipe.getIngredients().stream().anyMatch(i -> i.getMatchingStacks().length > 0 && input.test(i.getMatchingStacks()[0]))){
+                recipesToRemove.add(recipe.getRegistryName());
+            }
+        }
+        if (recipesToRemove.isEmpty()) {
+            if (log) {
+                GroovyLog.msg("Error removing Minecraft Crafting recipe")
+                        .add("No recipes found for {}", input)
+                        .error()
+                        .post();
+            }
+            return;
+        }
+        for (ResourceLocation location : recipesToRemove) {
+            ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, location);
+        }
+    }
+
+    public SimpleObjectStream<IRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(ForgeRegistries.RECIPES.getValuesCollection()).setRemover(recipe -> {
+            ResourceLocation key = ForgeRegistries.RECIPES.getKey(recipe);
+            if (key != null) ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, key);
+            return key != null;
+        });
     }
 
     public CraftingRecipeBuilder.Shaped shapedBuilder() {
