@@ -80,10 +80,7 @@ public class SimpleObjectStream<T> extends AbstractList<T> {
     @Override
     public boolean removeIf(Predicate<? super T> filter) {
         Objects.requireNonNull(this.remover);
-        return this.recipes.removeIf(t -> {
-            if (filter.test(t)) return this.remover.test(t);
-            return false;
-        });
+        return this.recipes.removeIf(t -> filter.test(t) && this.remover.test(t));
     }
 
     public SimpleObjectStream<T> removeAll() {
