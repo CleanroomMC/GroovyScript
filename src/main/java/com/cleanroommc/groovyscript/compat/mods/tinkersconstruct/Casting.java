@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
+import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 
@@ -130,13 +131,12 @@ public class Casting {
             public void validate(GroovyLog.Msg msg) {
                 validateFluids(msg, 1, 1, 0, 0);
                 validateItems(msg, 0, 0, 1, 1);
-                msg.add(cast == null, "Casting recipe must have a cast item! got " + cast);
             }
 
             @Override
             public @Nullable ICastingRecipe register() {
                 if (!validate()) return null;
-                CastingRecipe recipe = new CastingRecipe(output.get(0), MeltingRecipeBuilder.recipeMatchFromIngredient(cast), fluidInput.get(0), time, consumesCast, false);
+                CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast) : null, fluidInput.get(0), time, consumesCast, false);
                 add(recipe);
                 return recipe;
             }
@@ -254,13 +254,12 @@ public class Casting {
             public void validate(GroovyLog.Msg msg) {
                 validateFluids(msg, 1, 1, 0, 0);
                 validateItems(msg, 0, 0, 1, 1);
-                msg.add(cast == null, "Casting recipe must have a cast item! got " + cast);
             }
 
             @Override
             public @Nullable ICastingRecipe register() {
                 if (!validate()) return null;
-                CastingRecipe recipe = new CastingRecipe(output.get(0), MeltingRecipeBuilder.recipeMatchFromIngredient(cast), fluidInput.get(0), time, consumesCast, false);
+                CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast) : null, fluidInput.get(0), time, consumesCast, false);
                 add(recipe);
                 return recipe;
             }
