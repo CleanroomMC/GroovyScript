@@ -96,7 +96,7 @@ public abstract class GroovySandbox {
                     continue;
                 }
                 // the superclass of class files is Object
-                if (clazz.getSuperclass() == Object.class && shouldRunFile(classFile)) {
+                if (clazz.getSuperclass() != Script.class && shouldRunFile(classFile)) {
                     executedClasses.add(classFile);
                     setCurrentScript(classFile.toString());
                     InvokerHelper.createScript(clazz, binding).run();
@@ -112,11 +112,11 @@ public abstract class GroovySandbox {
                         GroovyLog.get().errorMC("Did you forget to register your class file in your run config?");
                         continue;
                     }
-                    if (clazz.getSuperclass() == Object.class) {
+                    if (clazz.getSuperclass() != Script.class) {
                         GroovyLog.get().errorMC("Class file '{}' should be defined in the runConfig in the classes property!", scriptFile);
                         continue;
                     }
-                    if (clazz.getSuperclass() == Script.class && shouldRunFile(scriptFile)) {
+                    if (shouldRunFile(scriptFile)) {
                         setCurrentScript(scriptFile.toString());
                         InvokerHelper.createScript(clazz, binding).run();
                         setCurrentScript(null);
