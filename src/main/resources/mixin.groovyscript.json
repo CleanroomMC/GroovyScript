@@ -11,6 +11,7 @@
     "FurnaceRecipeMixin",
     "InventoryCraftingAccess",
     "ItemStackMixin",
+    "Java8Mixin",
     "LoaderControllerMixin",
     "MetaClassImplMixin",
     "OreDictionaryAccessor",
