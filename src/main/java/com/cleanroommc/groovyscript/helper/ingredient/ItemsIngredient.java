@@ -27,7 +27,9 @@ public class ItemsIngredient extends IngredientBase {
 
     @Override
     public IIngredient exactCopy() {
-        return new ItemsIngredient(this.itemStacks);
+        ItemsIngredient ingredient = new ItemsIngredient(this.itemStacks);
+        ingredient.amount = this.amount;
+        return ingredient;
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedField;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedMethod;
+import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.codehaus.groovy.reflection.*;
 

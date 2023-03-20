@@ -94,7 +94,9 @@ public class ExpansionHelper {
         MetaClass other = GroovySystem.getMetaClassRegistry().getMetaClass(clazz);
         mixinProperties(emc, other, mixin);
         for (MetaMethod method : other.getMethods()) {
-            mixinMethod(emc, method, mixin);
+            if (method instanceof CachedMethod && clazz == ((CachedMethod) method).getCachedMethod().getDeclaringClass()) {
+                mixinMethod(emc, (CachedMethod) method, mixin);
+            }
         }
     }
 
@@ -119,37 +121,34 @@ public class ExpansionHelper {
         emc.registerInstanceMethod(name, new LambdaClosure<>(function));
     }
 
-    private static void mixinMethod(ExpandoMetaClass self, MetaMethod method, MixinInMetaClass mixin) {
-        if (method instanceof CachedMethod) {
-            final int mod = method.getModifiers();
-            CachedMethod cachedMethod = (CachedMethod) method;
-            if (!isValid(cachedMethod)) {
-                return;
-            }
-            CachedClass[] paramTypes = method.getParameterTypes();
-            MetaMethod metaMethod;
-            if (Modifier.isStatic(mod)) {
-                if (paramTypes.length > 0 && paramTypes[0].isAssignableFrom(self.getTheClass())) {
-                    // instance method disguised as static method
-                    if (paramTypes[0].getTheClass() == self.getTheClass())
-                        metaMethod = new NewInstanceMetaMethod(cachedMethod);
-                    else
-                        metaMethod = new NewInstanceMetaMethod(cachedMethod) {
-                            public CachedClass getDeclaringClass() {
-                                return ReflectionCache.getCachedClass(self.getTheClass());
-                            }
-                        };
-                } else {
-                    // true static method
-                    metaMethod = new NewStaticMetaMethod(self.getTheCachedClass(), cachedMethod);
-                }
-            } else if (method.getDeclaringClass().getTheClass() != Object.class || method.getName().equals("toString")) {
-                metaMethod = new MixinInstanceMetaMethod(method, mixin);
-            } else {
-                return;
-            }
-            self.registerInstanceMethod(metaMethod);
+    private static void mixinMethod(ExpandoMetaClass self, CachedMethod method, MixinInMetaClass mixin) {
+        final int mod = method.getModifiers();
+        if (!isValid(method)) {
+            return;
         }
+        CachedClass[] paramTypes = method.getParameterTypes();
+        MetaMethod metaMethod;
+        if (Modifier.isStatic(mod)) {
+            if (paramTypes.length > 0 && paramTypes[0].isAssignableFrom(self.getTheClass())) {
+                // instance method disguised as static method
+                if (paramTypes[0].getTheClass() == self.getTheClass())
+                    metaMethod = new NewInstanceMetaMethod(method);
+                else
+                    metaMethod = new NewInstanceMetaMethod(method) {
+                        public CachedClass getDeclaringClass() {
+                            return ReflectionCache.getCachedClass(self.getTheClass());
+                        }
+                    };
+            } else {
+                // true static method
+                metaMethod = new NewStaticMetaMethod(self.getTheCachedClass(), method);
+            }
+        } else if (method.getDeclaringClass().getTheClass() != Object.class || method.getName().equals("toString")) {
+            metaMethod = new MixinInstanceMetaMethod(method, mixin);
+        } else {
+            return;
+        }
+        self.registerInstanceMethod(metaMethod);
     }
 
     private static boolean isValid(CachedMethod method) {

@@ -69,4 +69,12 @@ public class GroovyDeobfMapper {
     public static String getDeobfField(Class<?> clazz, String obfField) {
         return FIELDS.getOrDefault(clazz.getName(), Object2ObjectMaps.emptyMap()).get(obfField);
     }
+
+    public static Map<String, String> getDeobfMethods(Class<?> clazz) {
+        return METHODS.get(clazz.getName());
+    }
+
+    public static Map<String, String> getDeobfFields(Class<?> clazz) {
+        return FIELDS.get(clazz.getName());
+    }
 }

@@ -61,6 +61,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         copy.setMark(getMark());
         copy.transform(transformer);
         copy.when(matchCondition);
+        copy.nbtMatcher = nbtMatcher;
         return copy;
     }
 
@@ -126,16 +127,16 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
 
     @Override
     public INBTResourceStack withNbt(NBTTagCompound nbt) {
-        setNbt(nbt);
-        this.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> NbtHelper.containsNbt(nbt1, nbt));
-        return this;
+        ItemStackMixin itemStackMixin = (ItemStackMixin) INbtIngredient.super.withNbt(nbt);
+        itemStackMixin.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> NbtHelper.containsNbt(nbt1, nbt));
+        return itemStackMixin;
     }
 
     @Override
     public INbtIngredient withNbtExact(NBTTagCompound nbt) {
-        setNbt(nbt);
-        this.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> nbt1.equals(nbt));
-        return this;
+        ItemStackMixin itemStackMixin = (ItemStackMixin) INbtIngredient.super.withNbt(nbt);
+        itemStackMixin.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> nbt1.equals(nbt));
+        return itemStackMixin;
     }
 
     public INbtIngredient withNbtFilter(Closure<Object> nbtFilter) {
@@ -161,17 +162,18 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         return this;
     }
 
-    public IIngredient copyWithMeta(int meta) {
+    public IIngredient withMeta(int meta) {
         ItemStack t = groovyscript$getThis();
         ItemStackMixin itemStack = (ItemStackMixin) (Object) new ItemStack(t.getItem(), t.getCount(), meta);
         itemStack.setMark(getMark());
         itemStack.transform(transformer);
         itemStack.when(matchCondition);
+        itemStack.nbtMatcher = nbtMatcher;
         return itemStack;
     }
 
-    public IIngredient copyWithDamage(int meta) {
-        return copyWithMeta(meta);
+    public IIngredient withDamage(int meta) {
+        return withMeta(meta);
     }
 
     public void addOreDict(OreDictIngredient ingredient) {
