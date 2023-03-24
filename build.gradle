@@ -22,6 +22,7 @@ buildscript {
 plugins {
     id 'com.github.johnrengelman.shadow' version '4.0.4'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
+    //id 'io.github.CDAGaming.cursegradle' version '1.6.0'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -279,21 +280,23 @@ tasks.register("readVersion") { task ->
         def ver = readVersion(task)
         println "Current version in JAVA project: $ver"
         println "Current version in gradle.properties: ${project.mod_version}"
+        return project.mod_version
     }
 }
 
 tasks.register('bumpVersion') { task ->
     group = project.archives_base_name
-    def doPushVersion = true
+    def doPushVersion = false
     // read version from gradle and update java file
     doFirst {
+        println("Bumping version")
         def currentVer = readVersion(task)
         if (currentVer == project.mod_version) {
-            project.property('doPushVersion', true)
-            doPushVersion = false
+            println("Nothing to bump")
             return
             //throw new TaskExecutionException(task, new IllegalStateException("Bump version in gradle.properties before releasing a new file!"))
         }
+        doPushVersion = true
         ant.replaceregexp(file: refFilePath, match: versionFieldRegex, replace: "\\\$1\"${project.mod_version}\"")
     }
     // commit gradle.properties & java ref file
@@ -341,54 +344,4 @@ tasks.register('bumpVersion') { task ->
     }
 }
 
-tasks.register("releaseVersion") { task ->
-    group = project.archives_base_name
-    //dependsOn bumpVersion, build
-
-    /*if (!project.hasProperty('doPushVersion') || !project.doPushVersion) {
-        println("Failed to bump version")
-        return ""
-    }*/
-    curseforge {
-        apiKey = cf_api_token
-        project {
-            id = project.cf_id
-            changelogType = "markdown"
-            changelog = ""
-            releaseType = project.release_type
-
-            addGameVersion "1.12.2"
-
-            def main_artifact = "${archivesBaseName}-${project.mod_version}.jar"
-            mainArtifact file("build/libs/${main_artifact}")
-            file('build/libs/').eachFile { file ->
-                if (file.name.endsWith('.jar') && file.name != main_artifact) {
-                    addArtifact file
-                }
-            }
-        }
-        options {
-            debug = true
-            javaVersionAutoDetect = true
-            detectNewerJava = false
-            javaIntegration = false
-            forgeGradleIntegration = false
-        }
-    }
-}
-
-String generateLog() {
-    def lastTag = exec {
-        executable 'git'
-        args 'describe', '--tags', '--abbrev=0'
-    }
-    def secondLastTag = exec {
-        executable 'git'
-        args 'describe', '--tags', '--abbrev=0', '--skip=1'
-    }
-    def log = exec {
-        executable 'git'
-        args 'log', "$lastTag..$secondLastTag"
-    }
-    return log
-}
+tasks.build.mustRunAfter bumpVersion
