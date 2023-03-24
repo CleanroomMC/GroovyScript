@@ -38,11 +38,15 @@ jobs:
 
       - name: Generate Changelog
         run: |
-          latest_tag=$(git describe --tags --abbrev=0)
-          previous_tag=$(git describe --tags --abbrev=0 ${latest_tag}^)
-          changelog=$(git log --pretty=format:'* %s ([%h](https://github.com/$GITHUB_REPOSITORY/commit/%H))' ${previous_tag}..${latest_tag})
           echo "## Changelog v${{ steps.tag_version.outputs.version }}-${{ steps.tag_version.outputs.release_type }}" > CHANGELOG.md
-          echo "${changelog}" >> CHANGELOG.md
+          if git describe --tags --abbrev=0 > /dev/null 2>&1; then
+            latest_tag=$(git describe --tags --abbrev=0)
+            previous_tag=$(git describe --tags --abbrev=0 ${latest_tag}^)
+            changelog=$(git log --pretty=format:'- %s' --oneline --decorate --decorate-refs=0 ${previous_tag}..${latest_tag})
+            echo "${changelog}" >> CHANGELOG.md
+          else
+            echo "No tags found" >> CHANGELOG.md
+          fi
 
       - name: Set up JDK 8
         uses: actions/setup-java@v2
