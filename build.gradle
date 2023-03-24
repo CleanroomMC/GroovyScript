@@ -21,6 +21,7 @@ buildscript {
 
 plugins {
     id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -236,4 +237,146 @@ jar.finalizedBy('reobfShadowJar')
 
 artifacts {
     archives shadowJar
+}
+
+static String getVersionFieldRegex() {
+    def regex = /(VERSION\s*=\s*)"((\d+\.)*\d+)(-\w+)?"/
+    return regex
+}
+
+String getRefFilePath() {
+    return "src/main/java/${project.ref_class.replace(".", "/")}.java"
+}
+
+String readVersion(Task task) {
+    def version = file(refFilePath).readLines().findResult { line ->
+        def matcher = line =~ versionFieldRegex
+        if (matcher) return matcher[0][2]
+        return null
+    }
+    if (!version) {
+        def except = new IllegalStateException("Could not find VERSION string at '$path'")
+        throw task ? new TaskExecutionException(task, except) : except
+    }
+    return version
+}
+
+tasks.register("readVersion") { task ->
+    group = project.archives_base_name
+    doFirst {
+        def ver = readVersion(task)
+        println "Current version in JAVA project: $ver"
+        println "Current version in gradle.properties: ${project.mod_version}"
+    }
+}
+
+tasks.register('bumpVersion') { task ->
+    group = project.archives_base_name
+    def doPushVersion = true
+    // read version from gradle and update java file
+    doFirst {
+        def currentVer = readVersion(task)
+        if (currentVer == project.mod_version) {
+            project.property('doPushVersion', true)
+            doPushVersion = false
+            return
+            //throw new TaskExecutionException(task, new IllegalStateException("Bump version in gradle.properties before releasing a new file!"))
+        }
+        ant.replaceregexp(file: refFilePath, match: versionFieldRegex, replace: "\\\$1\"${project.mod_version}\"")
+    }
+    // commit gradle.properties & java ref file
+    if (!doPushVersion) return ""
+    doLast {
+        // stage gradle properties and java ref file
+        exec {
+            executable 'git'
+            args 'add', 'gradle.properties'
+        }
+        exec {
+            executable 'git'
+            args 'add', refFilePath
+        }
+
+        // check for changes to commit
+        def dif = exec {
+            executable 'git'
+            args 'diff', '--cached', '--exit-code'
+            ignoreExitValue true
+        }.exitValue
+        if (dif == 0) {
+            println "Nothing to commit."
+            return
+        }
+        println "Pushing commit for version ${project.mod_version}"
+
+        // commit changes
+        def msg = "Bump version to ${project.mod_version}"
+        exec {
+            executable 'git'
+            args 'commit', '-m', msg
+        }
+        // create tag
+        exec {
+            executable 'git'
+            args 'tag', "v${project.mod_version}", '-a', '-m', project.release_type
+        }
+        // push changes
+        def url = "https://$githubPublishToken@github.com/${project.github_repo}.git"
+        exec {
+            executable 'git'
+            args 'push', url, 'master', '--tags'
+        }
+    }
+}
+
+tasks.register("releaseVersion") { task ->
+    group = project.archives_base_name
+    //dependsOn bumpVersion, build
+
+    /*if (!project.hasProperty('doPushVersion') || !project.doPushVersion) {
+        println("Failed to bump version")
+        return ""
+    }*/
+    curseforge {
+        apiKey = cf_api_token
+        project {
+            id = project.cf_id
+            changelogType = "markdown"
+            changelog = ""
+            releaseType = project.release_type
+
+            addGameVersion "1.12.2"
+
+            def main_artifact = "${archivesBaseName}-${project.mod_version}.jar"
+            mainArtifact file("build/libs/${main_artifact}")
+            file('build/libs/').eachFile { file ->
+                if (file.name.endsWith('.jar') && file.name != main_artifact) {
+                    addArtifact file
+                }
+            }
+        }
+        options {
+            debug = true
+            javaVersionAutoDetect = true
+            detectNewerJava = false
+            javaIntegration = false
+            forgeGradleIntegration = false
+        }
+    }
+}
+
+String generateLog() {
+    def lastTag = exec {
+        executable 'git'
+        args 'describe', '--tags', '--abbrev=0'
+    }
+    def secondLastTag = exec {
+        executable 'git'
+        args 'describe', '--tags', '--abbrev=0', '--skip=1'
+    }
+    def log = exec {
+        executable 'git'
+        args 'log', "$lastTag..$secondLastTag"
+    }
+    return log
 }
