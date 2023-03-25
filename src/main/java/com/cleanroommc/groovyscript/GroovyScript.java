@@ -64,12 +64,12 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
 
-    public static final String ID = "groovyscript";
+    public static final String ID = "@MODID@";
     public static final String NAME = "GroovyScript";
-    public static final String VERSION = "0.4.3";
+    public static final String VERSION = "@VERSION@";
 
     public static final String MC_VERSION = "1.12.2";
-    public static final String GROOVY_VERSION = "4.0.8";
+    public static final String GROOVY_VERSION = "@GROOVY_VERSION@";
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
@@ -86,6 +86,11 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
+
+        LOGGER.info("ID: {}", ID);
+        LOGGER.info("VERSION: {}", VERSION);
+        LOGGER.info("GROOVY_VERSION: {}", GROOVY_VERSION);
+
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
