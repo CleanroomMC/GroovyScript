@@ -6,7 +6,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -28,7 +28,7 @@ public class GroovyBlock extends Block {
     private static boolean initialised = false;
     private static final String nullTranslationKey = "tile.null";
 
-    private static final Map<String, Pair<Block, ItemBlock>> BLOCKS = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, Pair<Block, ItemBlock>> BLOCKS = new Object2ObjectLinkedOpenHashMap<>();
 
     @GroovyBlacklist
     public static void register(Block block, ItemBlock itemBlock) {
