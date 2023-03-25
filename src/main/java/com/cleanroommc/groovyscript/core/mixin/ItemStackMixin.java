@@ -72,7 +72,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        return new ItemStack[]{groovyscript$getThis().copy()};
+        return new ItemStack[]{IngredientHelper.toItemStack(exactCopy())};
     }
 
     @Override
@@ -82,7 +82,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
             return false;
         }
         if (nbtMatcher != null) {
-            NBTTagCompound nbt = getNbt();
+            NBTTagCompound nbt = stack.getTagCompound();
             return nbt == null || nbt.isEmpty() || ClosureHelper.call(true, nbtMatcher, nbt);
         }
         return true;
