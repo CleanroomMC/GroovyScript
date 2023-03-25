@@ -27,7 +27,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     @Unique
     protected Closure<Object> transformer;
     @Unique
-    protected Closure<Object> nbtMatcher = IngredientHelper.MATCH_ANY;
+    protected Closure<Object> nbtMatcher = null;
     @Unique
     protected String mark;
 
@@ -83,7 +83,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         }
         if (nbtMatcher != null) {
             NBTTagCompound nbt = stack.getTagCompound();
-            return nbt == null || nbt.isEmpty() || ClosureHelper.call(true, nbtMatcher, nbt);
+            return nbt != null && ClosureHelper.call(true, nbtMatcher, nbt);
         }
         return true;
     }
@@ -125,17 +125,22 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         this.mark = mark;
     }
 
+
     @Override
     public INBTResourceStack withNbt(NBTTagCompound nbt) {
         ItemStackMixin itemStackMixin = (ItemStackMixin) INbtIngredient.super.withNbt(nbt);
-        itemStackMixin.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> NbtHelper.containsNbt(nbt1, nbt));
+        itemStackMixin.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> nbt.isEmpty() || NbtHelper.containsNbt(nbt1, nbt));
         return itemStackMixin;
     }
 
     @Override
     public INbtIngredient withNbtExact(NBTTagCompound nbt) {
         ItemStackMixin itemStackMixin = (ItemStackMixin) INbtIngredient.super.withNbt(nbt);
-        itemStackMixin.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> nbt1.equals(nbt));
+        if (nbt == null) {
+            itemStackMixin.nbtMatcher = null;
+        } else {
+            itemStackMixin.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> nbt.isEmpty() || nbt1.equals(nbt));
+        }
         return itemStackMixin;
     }
 

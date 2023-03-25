@@ -6,6 +6,7 @@ import groovy.lang.Closure;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class IngredientHelper {
 
     public static final Closure<Object> MATCH_ANY = new LambdaClosure<>(args -> true);
+    public static final Closure<Object> MATCH_NONE = new LambdaClosure<>(args -> false);
     public static final Closure<Object> REUSE = new LambdaClosure<>(args -> args[0]);
     public static final Closure<Object> NO_RETURN = new LambdaClosure<>(args -> ItemStack.EMPTY);
     public static final Closure<Object> MATCH_NBT = new LambdaClosure<>(args -> ItemStack.EMPTY);
@@ -59,6 +61,10 @@ public class IngredientHelper {
 
     public static boolean isEmpty(@Nullable FluidStack itemStack) {
         return itemStack == null || itemStack.amount <= 0;
+    }
+
+    public static boolean isEmpty(@Nullable NBTTagCompound nbt) {
+        return nbt == null || nbt.isEmpty();
     }
 
     /**
