@@ -35,7 +35,7 @@ jobs:
           fi
 
       - name: Set version
-        run: sed -i "s/mod_version=.*/mod_version=${{ github.event.inputs.version }}/g" gradle.properties
+        run: sed -i "s/mod_version.*=.*/mod_version = ${{ github.event.inputs.version }}/g" gradle.properties
 
       - name: Commit and push gradle.properties
         uses: stefanzweifel/git-auto-commit-action@v4
