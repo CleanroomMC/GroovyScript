@@ -33,7 +33,6 @@ jobs:
             echo "Version ${{ github.event.inputs.version }} already exists, aborting workflow."
             exit 1
           fi
-        env:
 
       - name: Set version
         run: sed -i "s/mod_version=.*/mod_version=${{ github.event.inputs.version }}/g" gradle.properties
