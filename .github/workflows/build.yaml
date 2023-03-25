@@ -8,7 +8,7 @@ name: Publish mod version
 on:
   workflow_dispatch:
     inputs:
-      tag_version:
+      version:
         description: 'Mod version'
         required: true
       release_type:
@@ -45,18 +45,6 @@ jobs:
           file_pattern: gradle.properties
           tagging_message: "v${{ github.event.inputs.version }}"
 
-      - name: Generate Changelog
-        run: |
-          echo "### Changelog ${{ github.event.inputs.version }}-${{ github.event.inputs.release-type }}" > CHANGELOG.md
-          if git describe --tags --abbrev=0 > /dev/null 2>&1; then
-            latest_tag=$(git describe --tags --abbrev=0)
-            previous_tag=$(git describe --tags --abbrev=0 ${latest_tag}^)
-            changelog=$(git log --pretty=format:'- %s' --oneline --decorate --decorate-refs=0 ${previous_tag}..${latest_tag})
-            echo "${changelog}" >> CHANGELOG.md
-          else
-            echo "- No tags found" >> CHANGELOG.md
-          fi
-
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -82,10 +70,9 @@ jobs:
 
           files-primary: build/libs/!(*-@(dev|sources|javadoc)).jar
           files-secondary: build/libs/*-@(dev|sources|javadoc).jar
-          name: GroovyScript-${{ github.event.inputs.tag_version }}
-          version: ${{ github.event.inputs.tag_version }}
+          name: GroovyScript-${{ github.event.inputs.version }}
+          version: ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release_type }}
-          changelog-file: CHANGELOG.md
           loaders: |
             forge
           game-versions: |
