@@ -19,13 +19,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # added or changed files to the repository.
-      contents: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT }}
 
       - name: Check if tag already exists
         run: |
@@ -66,7 +64,7 @@ jobs:
           github-generate-changelog: true
           github-draft: false
           github-prerelease: false
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PAT }}
 
           files-primary: build/libs/!(*-@(dev|sources|javadoc)).jar
           files-secondary: build/libs/*-@(dev|sources|javadoc).jar
