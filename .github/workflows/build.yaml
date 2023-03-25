@@ -60,7 +60,7 @@ jobs:
           curseforge-id: 687577
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
-          github-tag: "v${{ steps.tag_version.outputs.version }}"
+          github-tag: "v${{ github.event.inputs.version }}"
           github-generate-changelog: true
           github-draft: false
           github-prerelease: false
