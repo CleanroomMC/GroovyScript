@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.ModMetadata;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -41,6 +42,14 @@ public class RunConfig {
         loaders.add("postInit", postInit);
         postInit.add("postInit/");
         return json;
+    }
+
+    public static final ModMetadata modMetadata = new ModMetadata();
+
+    static {
+        modMetadata.modId = "placeholder";
+        modMetadata.name = "Placeholder";
+        modMetadata.version = "0.0.0";
     }
 
     private final String packName;
@@ -79,6 +88,10 @@ public class RunConfig {
         this.packName = name;
         this.packId = id;
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
+        modMetadata.modId = this.packId;
+        modMetadata.name = this.packName;
+        modMetadata.version = this.version;
+        modMetadata.parent = GroovyScript.ID;
     }
 
     @ApiStatus.Internal

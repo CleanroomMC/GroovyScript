@@ -41,7 +41,10 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -86,26 +89,12 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
-
-        LOGGER.info("ID: {}", ID);
-        LOGGER.info("VERSION: {}", VERSION);
-        LOGGER.info("GROOVY_VERSION: {}", GROOVY_VERSION);
-
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
         GroovySystem.getMetaClassRegistry().setMetaClassCreationHandle(GrSMetaClassCreationHandle.INSTANCE);
         GroovyDeobfMapper.init();
         ReloadableRegistryManager.init();
-        scriptPath = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy");
-        try {
-            sandbox = new GroovyScriptSandbox(getScriptFile().toURI().toURL());
-        } catch (MalformedURLException e) {
-            throw new IllegalStateException("Error initializing sandbox!");
-        }
-        runConfigFile = new File(scriptPath, "runConfig.json");
-        resourcesFile = new File(scriptPath, "assets");
-        reloadRunConfig();
 
         if (NetworkUtils.isDedicatedClient()) {
             // this resource pack must be added in construction
@@ -123,6 +112,19 @@ public class GroovyScript {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onRegisterItem(RegistryEvent.Register<Item> event) {
         if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) TinkersConstruct.preInit();
+    }
+
+    @ApiStatus.Internal
+    public static void initializeRunConfig(File minecraftHome) {
+        scriptPath = new File(minecraftHome, "groovy");
+        try {
+            sandbox = new GroovyScriptSandbox(scriptPath.toURI().toURL());
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("Error initializing sandbox!");
+        }
+        runConfigFile = new File(scriptPath, "runConfig.json");
+        resourcesFile = new File(scriptPath, "assets");
+        reloadRunConfig();
     }
 
     @ApiStatus.Internal
