@@ -59,7 +59,7 @@ public class GSCommand extends CommandTreeBase {
         GroovyScript.getSandbox().run(LoadStage.POST_INIT);
         time = System.currentTimeMillis() - time;
         player.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
-        GroovyScript.postScriptRunResult(player, false);
+        GroovyScript.postScriptRunResult(player, false, true);
 
         NetworkHandler.sendToPlayer(new SReloadJei(), player);
     }
@@ -74,6 +74,17 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
             if (sender instanceof EntityPlayerMP) {
                 runReload((EntityPlayerMP) sender, server);
+            }
+        }));
+
+        addSubcommand(new SimpleCommand("check", (server, sender, args) -> {
+            if (sender instanceof EntityPlayerMP) {
+                sender.sendMessage(new TextComponentString("Checking groovy syntax..."));
+                long time = System.currentTimeMillis();
+                GroovyScript.getSandbox().checkSyntax();
+                time = System.currentTimeMillis() - time;
+                sender.sendMessage(new TextComponentString("Checking syntax took " + time + "ms"));
+                GroovyScript.postScriptRunResult((EntityPlayerMP) sender, false, false);
             }
         }));
 

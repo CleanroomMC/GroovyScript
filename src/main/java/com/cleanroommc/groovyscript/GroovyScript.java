@@ -243,14 +243,19 @@ public class GroovyScript {
         return new File(parent, fileJoiner.join(pieces));
     }
 
-    public static void postScriptRunResult(EntityPlayerMP player, boolean startup) {
+    public static void postScriptRunResult(EntityPlayerMP player, boolean startup, boolean running) {
         List<String> errors = GroovyLogImpl.LOG.collectErrors();
         if (errors.isEmpty()) {
             if (!startup) {
-                player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
+                if (running) {
+                    player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
+                } else {
+                    player.sendMessage(new TextComponentString(TextFormatting.GREEN + "No syntax errors found :)"));
+                }
             }
         } else {
-            player.sendMessage(new TextComponentString(TextFormatting.RED + "Found " + errors.size() + " errors while executing scripts"));
+            String executing = running ? "running" : "checking";
+            player.sendMessage(new TextComponentString(TextFormatting.RED + "Found " + errors.size() + " errors while " + executing + " scripts"));
             int n = errors.size();
             if (errors.size() >= 10) {
                 player.sendMessage(new TextComponentString("Displaying the first 7 errors:"));
