@@ -7,6 +7,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class ItemsIngredient extends IngredientBase {
 
@@ -34,7 +35,7 @@ public class ItemsIngredient extends IngredientBase {
 
     @Override
     public Ingredient toMcIngredient() {
-        return Ingredient.fromStacks(itemStacks.toArray(new ItemStack[0]));
+        return Ingredient.fromStacks(getMatchingStacks());
     }
 
     @Override
@@ -66,5 +67,9 @@ public class ItemsIngredient extends IngredientBase {
             }
         }
         return false;
+    }
+
+    public List<ItemStack> getItemStacks() {
+        return Collections.unmodifiableList(this.itemStacks);
     }
 }

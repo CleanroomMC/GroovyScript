@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.brackets;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IBracketHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -54,7 +55,7 @@ public class BracketHandlerManager {
     }
 
     public static void init() {
-        registerBracketHandler("ore", OreDictIngredient::new);
+        registerBracketHandler("ore", s -> s.contains("*") ? OreDictWildcardIngredient.of(s) : new OreDictIngredient(s));
         registerBracketHandler("item", ItemBracketHandler.INSTANCE, () -> ItemStack.EMPTY);
         registerBracketHandler("liquid", BracketHandlerManager::parseFluidStack);
         registerBracketHandler("fluid", BracketHandlerManager::parseFluidStack);
