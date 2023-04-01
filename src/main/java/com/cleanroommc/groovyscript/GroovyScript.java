@@ -166,7 +166,7 @@ public class GroovyScript {
     @SubscribeEvent
     public static void onInput(InputEvent.KeyInputEvent event) {
         long time = Minecraft.getSystemTime();
-        if (reloadKey.isPressed() && time - timeSinceLastUse >= 1000 && Minecraft.getMinecraft().player.getPermissionLevel() >= 4) {
+        if (Minecraft.getMinecraft().isIntegratedServerRunning() && reloadKey.isPressed() && time - timeSinceLastUse >= 1000 && Minecraft.getMinecraft().player.getPermissionLevel() >= 4) {
             NetworkHandler.sendToServer(new CReload());
             timeSinceLastUse = time;
         }

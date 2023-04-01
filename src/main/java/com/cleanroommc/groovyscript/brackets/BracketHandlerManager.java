@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IBracketHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
+import com.cleanroommc.groovyscript.network.NetworkUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -65,6 +66,10 @@ public class BracketHandlerManager {
         registerBracketHandler("potion", Potion::getPotionFromResourceLocation);
         registerBracketHandler("entity", s -> ForgeRegistries.ENTITIES.getValue(new ResourceLocation(s)));
         registerBracketHandler("creativeTab", s -> {
+            if (!NetworkUtils.isDedicatedClient()) {
+                GroovyLog.get().error("Creative tabs can't be obtained from server side!");
+                return CreativeTabs.SEARCH;
+            }
             for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
                 if (s.equals(tab.getTabLabel())) {
                     return tab;

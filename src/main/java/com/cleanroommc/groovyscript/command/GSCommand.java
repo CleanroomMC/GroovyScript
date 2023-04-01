@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -50,8 +49,8 @@ import java.util.stream.Collectors;
 public class GSCommand extends CommandTreeBase {
 
     public static void runReload(EntityPlayerMP player, MinecraftServer server) {
-        if (!(server instanceof IntegratedServer)) {
-            player.sendMessage(new TextComponentString("Reloading in multiplayer is currently no allowed to avoid desync."));
+        if (server.isDedicatedServer()) {
+            player.sendMessage(new TextComponentString("Reloading in multiplayer is currently not allowed to avoid desync."));
             return;
         }
         GroovyLog.get().info("========== Reloading Groovy scripts ==========");
