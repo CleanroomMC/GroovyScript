@@ -138,9 +138,6 @@ public class GroovyScript {
         if (wasNull) {
             Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get(ID));
         }
-        if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) {
-            LOGGER.info("tconstruct loaded");
-        }
 
         getSandbox().run(LoadStage.PRE_INIT);
 
