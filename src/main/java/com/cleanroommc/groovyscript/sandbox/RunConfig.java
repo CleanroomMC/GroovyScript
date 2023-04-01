@@ -96,7 +96,7 @@ public class RunConfig {
 
     @ApiStatus.Internal
     public void reload(JsonObject json) {
-        if (GroovyScript.getSandbox().isRunning()) {
+        if (GroovyScript.isSandboxLoaded() && GroovyScript.getSandbox().isRunning()) {
             throw new RuntimeException();
         }
         this.debug = JsonHelper.getBoolean(json, false, "debug");

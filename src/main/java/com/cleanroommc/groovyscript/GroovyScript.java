@@ -95,6 +95,11 @@ public class GroovyScript {
         GroovySystem.getMetaClassRegistry().setMetaClassCreationHandle(GrSMetaClassCreationHandle.INSTANCE);
         GroovyDeobfMapper.init();
         ReloadableRegistryManager.init();
+        try {
+            sandbox = new GroovyScriptSandbox(scriptPath.toURI().toURL());
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("Error initializing sandbox!");
+        }
 
         if (NetworkUtils.isDedicatedClient()) {
             // this resource pack must be added in construction
@@ -117,11 +122,6 @@ public class GroovyScript {
     @ApiStatus.Internal
     public static void initializeRunConfig(File minecraftHome) {
         scriptPath = new File(minecraftHome, "groovy");
-        try {
-            sandbox = new GroovyScriptSandbox(scriptPath.toURI().toURL());
-        } catch (MalformedURLException e) {
-            throw new IllegalStateException("Error initializing sandbox!");
-        }
         runConfigFile = new File(scriptPath, "runConfig.json");
         resourcesFile = new File(scriptPath, "assets");
         reloadRunConfig();
@@ -137,6 +137,9 @@ public class GroovyScript {
         boolean wasNull = Loader.instance().activeModContainer() == null;
         if (wasNull) {
             Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get(ID));
+        }
+        if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) {
+            LOGGER.info("tconstruct loaded");
         }
 
         getSandbox().run(LoadStage.PRE_INIT);
@@ -199,6 +202,10 @@ public class GroovyScript {
             throw new IllegalStateException("GroovyScript is not yet loaded!");
         }
         return sandbox;
+    }
+
+    public static boolean isSandboxLoaded() {
+        return sandbox != null;
     }
 
     public static RunConfig getRunConfig() {
