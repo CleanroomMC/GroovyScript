@@ -35,6 +35,13 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
         return orIngredient;
     }
 
+    @Override
+    default IIngredient withAmount(int amount) {
+        IIngredient iIngredientStack = exactCopy();
+        iIngredientStack.setAmount(amount);
+        return iIngredientStack;
+    }
+
     /**
      * An empty ingredient with stack size 0, that matches empty item stacks
      */

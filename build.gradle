@@ -116,6 +116,14 @@ dependencies {
         deobfProvided 'curse.maven:blood-magic-224791:2822288'
     }
 
+    if (project.debug_extended_crafting.toBoolean()) {
+        deobfCompile 'curse.maven:cucumber-272335:2645867'
+        deobfCompile 'curse.maven:extended-crafting-nomifactory-edition-398267:3613140'
+    } else {
+        deobfProvided 'curse.maven:cucumber-272335:2645867'
+        deobfProvided 'curse.maven:extended-crafting-nomifactory-edition-398267:3613140'
+    }
+
     if (project.debug_thermal.toBoolean()) {
         deobfCompile 'curse.maven:cofh_core-69162:2920433'
         deobfCompile 'curse.maven:cofh_world-271384:2920434'

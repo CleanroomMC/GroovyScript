@@ -30,7 +30,7 @@ public abstract class CraftingRecipeBuilder {
     protected Closure<Void> recipeAction;
     protected byte replace = 0;
 
-    protected final int width, height;
+    protected int width, height;
 
     public CraftingRecipeBuilder(int width, int height) {
         this.width = width;
