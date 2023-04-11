@@ -6,13 +6,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class OreDictWildcardIngredient extends ItemsIngredient {
 
     private final String oreDict;
     private final List<String> matchingOreDictionaries = new ArrayList<>();
+    public final List<String> ores = Collections.unmodifiableList(this.matchingOreDictionaries);;
 
     public static OreDictWildcardIngredient of(String oreDict) {
         List<String> matchingOreDictionaries = new ArrayList<>();
@@ -41,11 +44,19 @@ public class OreDictWildcardIngredient extends ItemsIngredient {
     }
 
     public List<String> getMatchingOreDictionaries() {
-        return matchingOreDictionaries;
+        return ores;
+    }
+
+    public List<OreDictIngredient> getOres() {
+        return this.ores.stream().map(OreDictIngredient::new).collect(Collectors.toList());
     }
 
     @Override
     public IIngredient exactCopy() {
-        return new OreDictWildcardIngredient(this.oreDict, this.matchingOreDictionaries, getItemStacks());
+        OreDictWildcardIngredient odwi = new OreDictWildcardIngredient(this.oreDict, this.matchingOreDictionaries, getItemStacks());
+        odwi.setAmount(getAmount());
+        odwi.transform(transformer);
+        odwi.when(matchCondition);
+        return odwi;
     }
 }

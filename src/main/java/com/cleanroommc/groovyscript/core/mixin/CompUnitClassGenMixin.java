@@ -14,7 +14,11 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(targets = "org/codehaus/groovy/control/CompilationUnit$3", remap = false)
 public class CompUnitClassGenMixin {
 
-    @Inject(method = "call", at = @At(value = "INVOKE", target = "Lorg/codehaus/groovy/ast/GroovyClassVisitor;visitClass(Lorg/codehaus/groovy/ast/ClassNode;)V", ordinal = 4), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    @Inject(method = "call",
+            at = @At(value = "INVOKE",
+                     target = "Lorg/codehaus/groovy/ast/GroovyClassVisitor;visitClass(Lorg/codehaus/groovy/ast/ClassNode;)V",
+                     ordinal = 4),
+            locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void call(SourceUnit source, GeneratorContext context, ClassNode classNode, CallbackInfo ci, GroovyClassVisitor visitor) {
         GroovyCodeFactory.remapOverrides(classNode);
     }
