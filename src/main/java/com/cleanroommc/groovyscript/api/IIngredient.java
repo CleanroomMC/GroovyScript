@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.api;
 import com.cleanroommc.groovyscript.helper.ingredient.OrIngredient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +22,7 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
     ItemStack[] getMatchingStacks();
 
     default ItemStack applyTransform(ItemStack matchedInput) {
-        return matchedInput.getItem().hasContainerItem(matchedInput) ? matchedInput.getItem().getContainerItem(matchedInput) : ItemStack.EMPTY;
+        return ForgeHooks.getContainerItem(matchedInput);
     }
 
     default boolean test(FluidStack fluidStack) {

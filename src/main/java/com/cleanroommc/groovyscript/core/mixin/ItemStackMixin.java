@@ -14,6 +14,7 @@ import groovy.lang.Closure;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -111,7 +112,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         if (transformer != null) {
             return ClosureHelper.call(ItemStack.EMPTY, transformer, matchedInput).copy();
         }
-        return groovyscript$getThis().getItem().getContainerItem(matchedInput);
+        return ForgeHooks.getContainerItem(matchedInput);
     }
 
     @Nullable
@@ -124,7 +125,6 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     public void setMark(String mark) {
         this.mark = mark;
     }
-
 
     @Override
     public INBTResourceStack withNbt(NBTTagCompound nbt) {
