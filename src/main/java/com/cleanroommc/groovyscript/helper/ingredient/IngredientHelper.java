@@ -6,7 +6,9 @@ import groovy.lang.Closure;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
@@ -49,6 +51,26 @@ public class IngredientHelper {
 
     public static IIngredient toIIngredient(FluidStack fluidStack) {
         return (IIngredient) fluidStack;
+    }
+
+    @NotNull
+    public static NonNullList<IIngredient> toNonNullList(IngredientList<IIngredient> list) {
+        NonNullList<IIngredient> ingredients = NonNullList.create();
+        for (IIngredient i : list) {
+            if (i == null) ingredients.add(IIngredient.EMPTY);
+            else ingredients.add(i);
+        }
+        return ingredients;
+    }
+
+    @NotNull
+    public static NonNullList<Ingredient> toIngredientNonNullList(Collection<IIngredient> list) {
+        NonNullList<Ingredient> ingredients = NonNullList.create();
+        for (IIngredient i : list) {
+            if (i == null) ingredients.add(Ingredient.EMPTY);
+            else ingredients.add(i.toMcIngredient());
+        }
+        return ingredients;
     }
 
     public static boolean isEmpty(@Nullable IIngredient ingredient) {
