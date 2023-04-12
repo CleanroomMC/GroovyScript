@@ -17,7 +17,6 @@ import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
 
@@ -163,9 +162,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         @Override
         public @Nullable RecipeAlchemyTable register() {
             if (!validate()) return null;
-            NonNullList<Ingredient> inputs = NonNullList.create();
-            inputs.addAll(input.stream().map(IIngredient::toMcIngredient).collect(Collectors.toList()));
-            RecipeAlchemyTable recipe = ModSupport.BLOOD_MAGIC.get().alchemyTable.add(inputs, output.get(0), syphon, ticks, minimumTier);
+            RecipeAlchemyTable recipe = ModSupport.BLOOD_MAGIC.get().alchemyTable.add(IngredientHelper.toIngredientNonNullList(input), output.get(0), syphon, ticks, minimumTier);
             return recipe;
         }
     }
