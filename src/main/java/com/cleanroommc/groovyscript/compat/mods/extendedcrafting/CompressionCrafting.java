@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
+
     public CompressionCrafting() {
         super(VirtualizedRegistry.generateAliases("Compression"));
     }
@@ -93,6 +94,7 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompressorRecipe> {
+
         private IIngredient input;
         private int inputCount;
         private IIngredient catalyst = IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack());

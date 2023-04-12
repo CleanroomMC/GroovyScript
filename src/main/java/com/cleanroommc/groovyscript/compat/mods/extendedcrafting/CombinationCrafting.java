@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> {
+
     public CombinationCrafting() {
         super(VirtualizedRegistry.generateAliases("Combination"));
     }
@@ -91,6 +92,7 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<CombinationRecipe> {
+
         private final NonNullList<IIngredient> pedestals = NonNullList.create();
         private long cost;
         private int perTick = ModConfig.confCraftingCoreRFRate;

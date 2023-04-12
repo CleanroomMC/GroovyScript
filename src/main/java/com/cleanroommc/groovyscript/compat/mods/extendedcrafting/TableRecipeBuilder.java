@@ -112,7 +112,7 @@ public abstract class TableRecipeBuilder extends CraftingRecipeBuilder {
 
         @Override
         public IRecipe register() {
-            GroovyLog.Msg msg = GroovyLog.msg("Error creating Extended Crafting Table recipe").error()
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding shaped Extended Crafting Table recipe").error()
                     .add((keyBasedMatrix == null || keyBasedMatrix.length == 0) && (ingredientMatrix == null || ingredientMatrix.isEmpty()), () -> "No matrix was defined")
                     .add(keyBasedMatrix != null && ingredientMatrix != null, () -> "A key based matrix AND a ingredient based matrix was defined. This is not allowed!");
             if (msg.postIfNotEmpty()) return null;
@@ -159,7 +159,7 @@ public abstract class TableRecipeBuilder extends CraftingRecipeBuilder {
         }
 
         public boolean validate() {
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Extended Crafting Table recipe").error();
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding shapeless Extended Crafting Table recipe").error();
             msg.add(tier < 0 || tier > 4, () -> "tier must be between 0 and 4, was instead " + tier);
             msg.add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty");
             msg.add(ingredients.isEmpty(), () -> "inputs must not be empty");

@@ -1,12 +1,17 @@
 package com.cleanroommc.groovyscript.compat.mods.extendedcrafting;
 
+import com.blakebr0.extendedcrafting.config.ModConfig;
 import com.blakebr0.extendedcrafting.crafting.endercrafter.EnderCrafterRecipeManager;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
+import java.util.List;
+
 public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
+
     public EnderCrafting() {
         super();
     }
@@ -23,6 +28,30 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
     public void onReload() {
         removeScripted().forEach(recipe -> EnderCrafterRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe));
         EnderCrafterRecipeManager.getInstance().getRecipes().addAll(restoreFromBackup());
+    }
+
+    public IRecipe addShaped(ItemStack output, List<List<IIngredient>> input) {
+        return addShaped(ModConfig.confEnderTimeRequired, output, input);
+    }
+
+    public IRecipe addShaped(int time, ItemStack output, List<List<IIngredient>> input) {
+        return shapedBuilder()
+                .matrix(input)
+                .time(time)
+                .output(output)
+                .register();
+    }
+
+    public IRecipe addShapeless(ItemStack output, List<List<IIngredient>> input) {
+        return addShaped(ModConfig.confEnderTimeRequired, output, input);
+    }
+
+    public IRecipe addShapeless(int time, ItemStack output, List<IIngredient> input) {
+        return shapelessBuilder()
+                .input(input)
+                .time(time)
+                .output(output)
+                .register();
     }
 
     public IRecipe add(IRecipe recipe) {

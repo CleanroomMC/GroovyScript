@@ -29,24 +29,22 @@ public abstract class ItemRecipeMakerMixin {
     @Inject(method = "setClipboard", at = @At("HEAD"), cancellable = true)
     public void setClipboard(IExtendedTable table, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         if (Desktop.isDesktopSupported()) {
-            StringBuilder string = (new StringBuilder("mods.extendedcrafting.")).append(table instanceof TileEnderCrafter ? "EnderCrafting" : "TableCrafting");
+            boolean ender = table instanceof TileEnderCrafter;
+            StringBuilder string = (new StringBuilder("mods.extendedcrafting.")).append(ender ? "EnderCrafting" : "TableCrafting");
+            String inputs;
             if (isShapeless(stack)) {
-                String s = groovyscript$makeItemArrayShapeless(table);
-                if (s == null) {
-                    cir.setReturnValue(false);
-                    return;
-                }
-                string.append(".addShapeless(0, OUTPUT, [").append(s);
+                inputs = groovyscript$makeItemArrayShapeless(table);
+                string.append(".addShapeless(");
             } else {
-                String s = groovyscript$makeItemArrayShaped(table);
-                if (s == null) {
-                    cir.setReturnValue(false);
-                    return;
-                }
-                string.append(".addShaped(0, OUTPUT, [").append('\n').append(s);
+                inputs = groovyscript$makeItemArrayShaped(table, !ender);
+                string.append(".addShaped(");
             }
-
-            string.append("])");
+            if (inputs == null) {
+                cir.setReturnValue(false);
+                return;
+            }
+            if (!ender) string.append("0, ");
+            string.append("OUTPUT, [").append(inputs).append("])");
             StringSelection stringSelection = new StringSelection(string.toString());
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);
@@ -70,18 +68,19 @@ public abstract class ItemRecipeMakerMixin {
         return builder.delete(builder.length() - 2, builder.length()).toString();
     }
 
-    public String groovyscript$makeItemArrayShaped(IExtendedTable table) {
+    public String groovyscript$makeItemArrayShaped(IExtendedTable table, boolean removeEmpties) {
         List<List<String>> matrix = new ArrayList<>();
         int row = 0;
         int column = 0;
-        boolean rowEmpty = true;
+        boolean rowEmpty = true, allEmpty = true;
         matrix.add(new ArrayList<>());
         for (ItemStack stack : table.getMatrix()) {
             String s = stack.isEmpty() ? null : groovyscript$makeItem(stack);
             rowEmpty &= s == null;
+            allEmpty &= rowEmpty;
             matrix.get(row).add(s);
             if (++column == table.getLineSize()) {
-                if (rowEmpty) {
+                if (rowEmpty && removeEmpties) {
                     matrix.remove(row);
                     row--;
                 }
@@ -92,24 +91,26 @@ public abstract class ItemRecipeMakerMixin {
             }
         }
         matrix.remove(row);
-        if (matrix.isEmpty()) return null;
-        // remove empty columns
-        for (int col = 0; col < matrix.get(0).size(); col++) {
-            boolean isEmpty = true;
-            for (row = 0; row < matrix.size(); row++) {
-                if (matrix.get(row).get(col) != null) {
-                    isEmpty = false;
-                    break;
-                }
-            }
-            if (isEmpty) {
+        if (allEmpty || matrix.isEmpty()) return null;
+        if (removeEmpties) {
+            // remove empty columns
+            for (int col = 0; col < matrix.get(0).size(); col++) {
+                boolean isEmpty = true;
                 for (row = 0; row < matrix.size(); row++) {
-                    matrix.get(row).remove(col);
+                    if (matrix.get(row).get(col) != null) {
+                        isEmpty = false;
+                        break;
+                    }
                 }
-                col--;
+                if (isEmpty) {
+                    for (row = 0; row < matrix.size(); row++) {
+                        matrix.get(row).remove(col);
+                    }
+                    col--;
+                }
             }
         }
-        return Joiner.on(", \n").join(matrix);
+        return '\n' + Joiner.on(", \n").join(matrix) + '\n';
     }
 
     private static String groovyscript$makeItem(ItemStack stack) {
