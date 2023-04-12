@@ -121,7 +121,7 @@ public class IngredientHelper {
      * Determines whether the list or all elements in the list are considered empty
      *
      * @param ingredients collection of ingredients
-     * @return true if the collection or the elements are empty
+     * @return true if the collection or all elements are empty
      */
     public static boolean isEmpty(@Nullable Collection<IIngredient> ingredients) {
         if (ingredients == null || ingredients.isEmpty())
@@ -129,6 +129,20 @@ public class IngredientHelper {
         for (IIngredient item : ingredients)
             if (!isEmpty(item)) return false;
         return true;
+    }
+
+    /**
+     * Determines whether the list or all elements in the list are considered empty
+     *
+     * @param ingredients collection of ingredients
+     * @return true if the collection or one element is empty
+     */
+    public static boolean isAnyEmpty(@Nullable Collection<IIngredient> ingredients) {
+        if (ingredients == null || ingredients.isEmpty())
+            return true;
+        for (IIngredient item : ingredients)
+            if (isEmpty(item)) return true;
+        return false;
     }
 
     /**
