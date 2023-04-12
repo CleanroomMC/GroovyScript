@@ -111,7 +111,7 @@ public class ShapedArcaneCR extends ShapedArcaneRecipe implements ICraftingRecip
             dummy.setInventorySlotContents(a, inv.getStackInSlot(a));
         }
 
-        if (getCrystals() != null && inv.getSizeInventory() >= 15) {
+        if (getCrystals() != null) {
             Aspect[] var12 = getCrystals().getAspects();
             int var5 = var12.length;
 
@@ -132,6 +132,6 @@ public class ShapedArcaneCR extends ShapedArcaneRecipe implements ICraftingRecip
                 }
             }
         }
-        return craftingRecipe.matches(inv, worldIn);
+        return craftingRecipe.matches(dummy, worldIn);
     }
 }
