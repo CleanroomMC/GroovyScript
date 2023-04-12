@@ -2,14 +2,14 @@ package com.cleanroommc.groovyscript.compat.mods.extendedcrafting;
 
 import com.blakebr0.extendedcrafting.crafting.table.ITieredRecipe;
 import com.blakebr0.extendedcrafting.crafting.table.TableRecipeManager;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 
+import java.util.List;
+
 public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
-    public TableCrafting() {
-        super();
-    }
 
     public TableRecipeBuilder.Shaped shapedBuilder() {
         return new TableRecipeBuilder.Shaped();
@@ -23,6 +23,30 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
     public void onReload() {
         removeScripted().forEach(recipe -> TableRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe));
         TableRecipeManager.getInstance().getRecipes().addAll(restoreFromBackup());
+    }
+
+    public ITieredRecipe addShaped(ItemStack output, List<List<IIngredient>> input) {
+        return addShaped(0, output, input);
+    }
+
+    public ITieredRecipe addShaped(int tier, ItemStack output, List<List<IIngredient>> input) {
+        return (ITieredRecipe) shapedBuilder()
+                .matrix(input)
+                .tier(tier)
+                .output(output)
+                .register();
+    }
+
+    public ITieredRecipe addShapeless(ItemStack output, List<List<IIngredient>> input) {
+        return addShaped(0, output, input);
+    }
+
+    public ITieredRecipe addShapeless(int tier, ItemStack output, List<IIngredient> input) {
+        return (ITieredRecipe) shapelessBuilder()
+                .input(input)
+                .tier(tier)
+                .output(output)
+                .register();
     }
 
     public ITieredRecipe add(ITieredRecipe recipe) {
