@@ -44,6 +44,30 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
         return add(new CombinationRecipe(output, cost, perTick, input, pedestals));
     }
 
+    public boolean removeByOutput(ItemStack output) {
+        return CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> {
+            if (r.getOutput().equals(output)) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public boolean removeByInput(ItemStack input) {
+        return CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> {
+            if (r.getInput().equals(input)) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public boolean removeByInput(IIngredient input) {
+        return removeByInput(IngredientHelper.toItemStack(input));
+    }
+
     public boolean remove(CombinationRecipe recipe) {
         if (CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe)) {
             addBackup(recipe);
@@ -54,6 +78,11 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
 
     public SimpleObjectStream<CombinationRecipe> streamRecipes() {
         return new SimpleObjectStream<>(CombinationRecipeManager.getInstance().getRecipes()).setRemover(this::remove);
+    }
+
+    public void removeAll() {
+        CombinationRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
+        CombinationRecipeManager.getInstance().getRecipes().clear();
     }
 
 

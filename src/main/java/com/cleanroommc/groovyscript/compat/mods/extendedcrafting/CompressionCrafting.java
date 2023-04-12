@@ -41,6 +41,36 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         return add(new CompressorRecipe(output, input.toMcIngredient(), inputCount, catalyst.toMcIngredient(), consumeCatalyst, powerCost, powerRate));
     }
 
+    public boolean removeByOutput(ItemStack output) {
+        return CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> {
+            if (r.getOutput().equals(output)) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public boolean removeByCatalyst(IIngredient catalyst) {
+        return CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> {
+            if (r.getCatalyst().equals(catalyst.toMcIngredient())) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public boolean removeByInput(IIngredient input) {
+        return CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> {
+            if (r.getInput().equals(input.toMcIngredient())) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
+    }
+
     public boolean remove(CompressorRecipe recipe) {
         if (CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe)) {
             addBackup(recipe);
