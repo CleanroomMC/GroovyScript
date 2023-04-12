@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
 import mekanism.common.recipe.machines.CrusherRecipe;
@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
 
     public Crusher() {
-        super(RecipeHandler.Recipe.CRUSHER, "Crusher", "crusher");
+        super(RecipeHandler.Recipe.CRUSHER);
     }
 
     public CrusherRecipe add(IIngredient ingredient, ItemStack output) {

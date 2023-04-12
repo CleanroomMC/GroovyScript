@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.helper;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.jetbrains.annotations.Nullable;
@@ -75,6 +75,12 @@ public class SimpleObjectStream<T> extends AbstractList<T> {
 
     public Set<T> getSet() {
         return new ObjectOpenHashSet<>(this.recipes);
+    }
+
+    @Override
+    public boolean removeIf(Predicate<? super T> filter) {
+        Objects.requireNonNull(this.remover);
+        return this.recipes.removeIf(t -> filter.test(t) && this.remover.test(t));
     }
 
     public SimpleObjectStream<T> removeAll() {

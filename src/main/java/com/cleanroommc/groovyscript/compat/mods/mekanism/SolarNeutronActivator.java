@@ -1,8 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
-import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.GasInput;
@@ -11,7 +10,7 @@ import mekanism.common.recipe.machines.SolarNeutronRecipe;
 public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeutronRecipe> {
 
     public SolarNeutronActivator() {
-        super(RecipeHandler.Recipe.SOLAR_NEUTRON_ACTIVATOR, "SolarNeutronActivator", "solar_neutron_activator", "SNA");
+        super(RecipeHandler.Recipe.SOLAR_NEUTRON_ACTIVATOR, "SNA");
     }
 
     public SolarNeutronRecipe add(GasStack input, GasStack output) {

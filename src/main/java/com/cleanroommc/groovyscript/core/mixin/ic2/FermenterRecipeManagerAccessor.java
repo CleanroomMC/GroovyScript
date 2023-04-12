@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin(FermenterRecipeManager.class)
+@Mixin(value = FermenterRecipeManager.class, remap = false)
 public interface FermenterRecipeManagerAccessor {
 
     @Accessor

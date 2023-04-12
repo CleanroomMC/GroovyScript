@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
 import mekanism.common.recipe.machines.SawmillRecipe;
@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
 
     public Sawmill() {
-        super(RecipeHandler.Recipe.PRECISION_SAWMILL, "Sawmill", "sawmill");
+        super(RecipeHandler.Recipe.PRECISION_SAWMILL);
     }
 
     public SawmillRecipe add(IIngredient ingredient, ItemStack output) {

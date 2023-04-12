@@ -3,13 +3,13 @@ package com.cleanroommc.groovyscript.compat.mods.thermalexpansion;
 import cofh.core.inventory.ComparableItemStackValidatedNBT;
 import cofh.thermalexpansion.util.managers.machine.CrucibleManager;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CrucibleManagerAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import org.jetbrains.annotations.ApiStatus;
@@ -25,7 +25,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleManager.CrucibleRecipe
     private final List<ComparableItemStackValidatedNBT> lavaSetBackup = new ArrayList<>();
 
     public Crucible() {
-        super("Crucible", "crucible");
+        super();
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport.Container;
+import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.jei.JeiProxyAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -74,12 +75,14 @@ public class ReloadableRegistryManager {
         GroovyScript.reloadRunConfig();
         reloadForgeRegistries();
         VanillaModule.furnace.onReload();
+        VanillaModule.oreDict.onReload();
         ModSupport.getAllContainers().stream()
                 .filter(Container::isLoaded)
                 .map(Container::get)
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
                 .forEach(VirtualizedRegistry::onReload);
+        JeiPlugin.reload();
     }
 
     @ApiStatus.Internal

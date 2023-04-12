@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
 
     public Fusion() {
-        super("Fusion", "fusion");
+        super();
     }
 
     @Override

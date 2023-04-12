@@ -44,6 +44,7 @@ public class SimpleCommand extends CommandBase {
     }
 
     public interface ICommand {
+
         void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException;
     }
 

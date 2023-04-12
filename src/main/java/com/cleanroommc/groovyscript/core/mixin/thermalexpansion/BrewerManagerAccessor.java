@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Mixin(BrewerManager.class)
+@Mixin(value = BrewerManager.class, remap = false)
 public interface BrewerManagerAccessor {
 
     @Accessor

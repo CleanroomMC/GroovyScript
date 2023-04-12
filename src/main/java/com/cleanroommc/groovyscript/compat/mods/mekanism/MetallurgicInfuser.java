@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.api.infuse.InfuseRegistry;
 import mekanism.api.infuse.InfuseType;
 import mekanism.common.recipe.RecipeHandler;
@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicInfuserRecipe> {
 
     public MetallurgicInfuser() {
-        super(RecipeHandler.Recipe.METALLURGIC_INFUSER, "MetallurgicInfuser", "metallurgic_infuser");
+        super(RecipeHandler.Recipe.METALLURGIC_INFUSER);
     }
 
     public MetallurgicInfuserRecipe add(IIngredient ingredient, String infuseType, int infuseAmount, ItemStack output) {

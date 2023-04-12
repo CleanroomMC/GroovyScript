@@ -85,6 +85,15 @@ public interface GroovyLog {
     void log(Msg msg);
 
     /**
+     * Formats and logs a single object to this log on INFO level
+     *
+     * @param obj object to log
+     */
+    default void info(Object obj) {
+        info(obj == null ? "null" : obj.toString(), 0);
+    }
+
+    /**
      * Formats and logs to this log on INFO level
      *
      * @param msg  message to log

@@ -5,12 +5,21 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "CompUnitClassGenMixin",
     "EventBusMixin",
     "FluidStackMixin",
     "ForgeRegistryMixin",
     "FurnaceRecipeMixin",
     "InventoryCraftingAccess",
     "ItemStackMixin",
+    "Java8Mixin",
+    "LoaderControllerMixin",
+    "MetaClassImplMixin",
+    "OreDictionaryAccessor",
     "SlotCraftingAccess"
+  ],
+  "client": [
+    "DefaultResourcePackAccessor",
+    "GuiScreenMixin"
   ]
 }

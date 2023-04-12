@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin(ScrapboxRecipeManager.class)
+@Mixin(value = ScrapboxRecipeManager.class, remap = false)
 public interface ScrapboxRecipeManagerAccessor {
 
     @Accessor

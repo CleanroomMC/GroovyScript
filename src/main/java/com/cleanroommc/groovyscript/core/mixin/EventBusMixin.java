@@ -16,9 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mixin(value = EventBus.class, remap = false)
 public class EventBusMixin implements EventBusExtended {
 
-    @Shadow @Final private int busID;
+    @Shadow
+    @Final
+    private int busID;
 
-    @Shadow private ConcurrentHashMap<Object, ArrayList<IEventListener>> listeners;
+    @Shadow
+    private ConcurrentHashMap<Object, ArrayList<IEventListener>> listeners;
 
     @Override
     public void register(Class<?> eventClass, EventPriority priority, IEventListener listener) {

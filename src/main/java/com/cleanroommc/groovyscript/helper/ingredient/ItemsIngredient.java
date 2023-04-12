@@ -1,14 +1,18 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.google.common.collect.Iterators;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
-public class ItemsIngredient extends IngredientBase {
+public class ItemsIngredient extends IngredientBase implements Iterable<ItemStack> {
 
     private final ItemStackList itemStacks = new ItemStackList();
     private int amount = 1;
@@ -27,12 +31,16 @@ public class ItemsIngredient extends IngredientBase {
 
     @Override
     public IIngredient exactCopy() {
-        return new ItemsIngredient(this.itemStacks);
+        ItemsIngredient ingredient = new ItemsIngredient(this.itemStacks);
+        ingredient.amount = this.amount;
+        ingredient.transform(transformer);
+        ingredient.when(matchCondition);
+        return ingredient;
     }
 
     @Override
     public Ingredient toMcIngredient() {
-        return Ingredient.fromStacks(itemStacks.toArray(new ItemStack[0]));
+        return Ingredient.fromStacks(getMatchingStacks());
     }
 
     @Override
@@ -64,5 +72,15 @@ public class ItemsIngredient extends IngredientBase {
             }
         }
         return false;
+    }
+
+    public List<ItemStack> getItemStacks() {
+        return Collections.unmodifiableList(this.itemStacks);
+    }
+
+    @NotNull
+    @Override
+    public Iterator<ItemStack> iterator() {
+        return Iterators.unmodifiableIterator(this.itemStacks.iterator());
     }
 }

@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import ic2.api.recipe.ILiquidHeatExchangerManager;
 import ic2.api.recipe.Recipes;
 import ic2.core.block.machine.tileentity.TileEntityLiquidHeatExchanger;
@@ -15,22 +15,23 @@ import java.util.Map;
 
 public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger.HeatExchangerRecipe> {
 
-    private static final Map<String, ILiquidHeatExchangerManager.HeatExchangeProperty> heatupMap = Recipes.liquidHeatupManager.getHeatExchangeProperties();
-    private static final Map<String, ILiquidHeatExchangerManager.HeatExchangeProperty> cooldownMap = Recipes.liquidCooldownManager.getHeatExchangeProperties();
-
     public LiquidHeatExchanger() {
-        super("LiquidHeatExchanger", "liquidheatexchanger", "HeatExchanger", "heatexchanger");
+        super(VirtualizedRegistry.generateAliases("HeatExchanger"));
     }
 
     @Override
     public void onReload() {
+        Map<String, ILiquidHeatExchangerManager.HeatExchangeProperty> heatupMap = Recipes.liquidHeatupManager.getHeatExchangeProperties();
+        Map<String, ILiquidHeatExchangerManager.HeatExchangeProperty> cooldownMap = Recipes.liquidCooldownManager.getHeatExchangeProperties();
         removeScripted().forEach(recipe -> {
             if (recipe.type == 0) heatupMap.remove(recipe.cold.getName());
             else cooldownMap.remove(recipe.hot.getName());
         });
         restoreFromBackup().forEach(recipe -> {
-            if (recipe.type == 0) TileEntityLiquidHeatExchanger.addHeatupRecipe(recipe.hot.getName(), recipe.cold.getName(), recipe.huPerMB);
-            else TileEntityLiquidHeatExchanger.addCooldownRecipe(recipe.hot.getName(), recipe.cold.getName(), recipe.huPerMB);
+            if (recipe.type == 0)
+                TileEntityLiquidHeatExchanger.addHeatupRecipe(recipe.hot.getName(), recipe.cold.getName(), recipe.huPerMB);
+            else
+                TileEntityLiquidHeatExchanger.addCooldownRecipe(recipe.hot.getName(), recipe.cold.getName(), recipe.huPerMB);
         });
     }
 
@@ -100,7 +101,7 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
     }
 
     public boolean removeHeatup(Fluid coldFluid) {
-        ILiquidHeatExchangerManager.HeatExchangeProperty property = heatupMap.remove(coldFluid.getName());
+        ILiquidHeatExchangerManager.HeatExchangeProperty property = Recipes.liquidHeatupManager.getHeatExchangeProperties().remove(coldFluid.getName());
         if (property != null) {
             addBackup(new HeatExchangerRecipe(0, property.outputFluid, coldFluid, property.huPerMB));
             return true;
@@ -110,7 +111,7 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
     }
 
     public boolean removeCooldown(Fluid hotFluid) {
-        ILiquidHeatExchangerManager.HeatExchangeProperty property = cooldownMap.remove(hotFluid.getName());
+        ILiquidHeatExchangerManager.HeatExchangeProperty property = Recipes.liquidCooldownManager.getHeatExchangeProperties().remove(hotFluid.getName());
         if (property != null) {
             addBackup(new HeatExchangerRecipe(1, hotFluid, property.outputFluid, property.huPerMB));
             return true;
@@ -120,24 +121,26 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
     }
 
     public SimpleObjectStream<Map.Entry<String, ILiquidHeatExchangerManager.HeatExchangeProperty>> streamCooldownRecipes() {
+        Map<String, ILiquidHeatExchangerManager.HeatExchangeProperty> cooldownMap = Recipes.liquidCooldownManager.getHeatExchangeProperties();
         return new SimpleObjectStream<>(cooldownMap.entrySet()).setRemover(r -> removeCooldown(FluidRegistry.getFluid(r.getKey())));
     }
 
     public SimpleObjectStream<Map.Entry<String, ILiquidHeatExchangerManager.HeatExchangeProperty>> streamHeatupRecipes() {
+        Map<String, ILiquidHeatExchangerManager.HeatExchangeProperty> heatupMap = Recipes.liquidHeatupManager.getHeatExchangeProperties();
         return new SimpleObjectStream<>(heatupMap.entrySet()).setRemover(r -> removeHeatup(FluidRegistry.getFluid(r.getKey())));
     }
 
     public void removeAll() {
-        for (String fluid : heatupMap.keySet()) {
+        for (String fluid : Recipes.liquidHeatupManager.getHeatExchangeProperties().keySet()) {
             removeHeatup(FluidRegistry.getFluid(fluid));
         }
-
-        for (String fluid : cooldownMap.keySet()) {
+        for (String fluid : Recipes.liquidCooldownManager.getHeatExchangeProperties().keySet()) {
             removeCooldown(FluidRegistry.getFluid(fluid));
         }
     }
 
     public static class HeatExchangerRecipe {
+
         public int type; // 0 = heatup | 1 = cooldown
         public Fluid hot, cold;
         public int huPerMB;

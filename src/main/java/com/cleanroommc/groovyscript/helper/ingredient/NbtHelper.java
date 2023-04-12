@@ -1,5 +1,7 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
+import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
+import groovy.lang.Closure;
 import net.minecraft.nbt.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants;
@@ -10,7 +12,9 @@ import java.util.function.Predicate;
 
 public class NbtHelper {
 
-    public static final Predicate<NBTTagCompound> MATCH_ANY = nbt -> true;
+    public static Closure<Object> makeNbtPredicate(Predicate<NBTTagCompound> predicate) {
+        return new LambdaClosure<>(args -> predicate.test(((NBTTagCompound) args[0])));
+    }
 
     public static boolean containsNbt(NBTTagCompound nbtContainer, NBTTagCompound nbtMatcher) {
         if (nbtMatcher == null || nbtMatcher.isEmpty()) return true;
@@ -51,7 +55,7 @@ public class NbtHelper {
         if (o instanceof List) {
             NBTTagList list = new NBTTagList();
             byte type = 0;
-            for (Object lo : list) {
+            for (Object lo : (List<?>) o) {
                 NBTBase lNbt = toNbt(lo);
                 if (type == 0) {
                     type = lNbt.getId();
@@ -102,7 +106,7 @@ public class NbtHelper {
             for (String key : nbt.getKeySet()) {
                 newLine(builder, indent, pretty);
                 if (colored) builder.append(TextFormatting.GREEN);
-                builder.append(key);
+                builder.append('"').append(key).append('"');
                 if (colored) builder.append(TextFormatting.GRAY);
                 builder.append(": ");
                 builder.append(toGroovyCode(nbt.getTag(key), indent, pretty, colored));

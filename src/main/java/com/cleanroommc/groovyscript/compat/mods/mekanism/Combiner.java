@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.DoubleMachineInput;
 import mekanism.common.recipe.machines.CombinerRecipe;
@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
 
     public Combiner() {
-        super(RecipeHandler.Recipe.COMBINER, "Combiner", "combiner");
+        super(RecipeHandler.Recipe.COMBINER);
     }
 
     public CombinerRecipe add(IIngredient ingredient, ItemStack extra, ItemStack output) {

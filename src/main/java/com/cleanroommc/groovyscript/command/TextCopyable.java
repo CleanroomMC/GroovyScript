@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.command;
 
 import net.minecraft.util.text.*;
-import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
 public class TextCopyable {
@@ -15,6 +14,7 @@ public class TextCopyable {
     }
 
     public static class Builder {
+
         private final java.lang.String copyText;
         private final java.lang.String msg;
         private Object[] args;
@@ -33,10 +33,11 @@ public class TextCopyable {
         public ITextComponent build() {
             Style style = new Style();
             if (hoverMsg == null) {
-                hoverMsg = new TextComponentTranslation("groovyscript.command.copy.hover", copyText);
+                hoverMsg = new TextComponentTranslation("groovyscript.command.copy.hover")
+                        .appendSibling(new TextComponentString(" " + copyText).setStyle(new Style().setColor(TextFormatting.GOLD)));
             }
             style.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverMsg));
-            style.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gs copy " + copyText));
+            style.setClickEvent(CustomClickAction.makeCopyEvent(copyText));
             ITextComponent textComponent;
             if (args == null)
                 textComponent = new TextComponentString(msg);

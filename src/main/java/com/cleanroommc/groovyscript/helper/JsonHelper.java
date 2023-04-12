@@ -7,12 +7,14 @@ import com.google.gson.stream.JsonReader;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.function.Function;
 
 @GroovyBlacklist
 public class JsonHelper {
 
     public static final JsonObject EMPTY_JSON = new JsonObject();
+    public static final JsonArray EMPTY_JSON_ARRAY = new JsonArray();
     public static final JsonParser jsonParser = new JsonParser();
     public static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -104,6 +106,22 @@ public class JsonHelper {
         return defaultJson;
     }
 
+    public static JsonArray getJsonArray(JsonObject json, String... keys) {
+        return getJsonArray(json, EMPTY_JSON_ARRAY, keys);
+    }
+
+    public static JsonArray getJsonArray(JsonObject json, JsonArray defaultJson, String... keys) {
+        for (String key : keys) {
+            if (json.has(key)) {
+                JsonElement element = json.get(key);
+                if (element.isJsonArray()) {
+                    return element.getAsJsonArray();
+                }
+            }
+        }
+        return defaultJson;
+    }
+
     public static JsonElement loadJson(File file) {
         try {
             if (!file.isFile()) return null;
@@ -124,7 +142,7 @@ public class JsonHelper {
                     GroovyScript.LOGGER.error("Failed to create file dirs on path {}", file);
                 }
             }
-            Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+            Writer writer = new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8);
             writer.write(gson.toJson(element));
             writer.close();
             return true;

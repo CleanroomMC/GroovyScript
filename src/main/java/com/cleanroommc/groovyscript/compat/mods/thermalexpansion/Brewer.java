@@ -4,13 +4,13 @@ import cofh.core.inventory.ComparableItemStackValidatedNBT;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.thermalexpansion.util.managers.machine.BrewerManager;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.BrewerManagerAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -29,7 +29,7 @@ public class Brewer extends VirtualizedRegistry<BrewerManager.BrewerRecipe> {
     private final List<String> validationFluidsBackup = new ArrayList<>();
 
     public Brewer() {
-        super("Brewer", "brewer", "Imbuer");
+        super(VirtualizedRegistry.generateAliases("Imbuer"));
     }
 
     public RecipeBuilder recipeBuilder() {

@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import ic2.api.classic.recipe.ClassicRecipes;
 import ic2.api.classic.recipe.custom.ILiquidFuelGeneratorRegistry;
 import net.minecraftforge.fluids.Fluid;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator.LFGRecipe> {
 
     public LiquidFuelGenerator() {
-        super("FluidGenerator", "fluidgenerator");
+        super(VirtualizedRegistry.generateAliases("FluidGenerator"));
     }
 
     @Override
@@ -22,12 +22,12 @@ public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator
         removeScripted().forEach(recipe -> ClassicRecipes.fluidGenerator.getBurnMap().remove(recipe.fluid));
         restoreFromBackup().forEach(recipe -> ClassicRecipes.fluidGenerator.addEntry(recipe.fluid, recipe.time, recipe.power));
     }
-    
+
     public void add(LFGRecipe recipe) {
         ClassicRecipes.fluidGenerator.addEntry(recipe.fluid, recipe.time, recipe.power);
         addScripted(recipe);
     }
-    
+
     public LFGRecipe add(FluidStack fluid, int burnTicks, float euPerTick) {
         if (GroovyLog.msg("Error adding Fluid Generator recipe")
                 .add(IngredientHelper.isEmpty(fluid), () -> "fluid must not be empty")
@@ -41,7 +41,7 @@ public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator
         add(recipe);
         return recipe;
     }
-    
+
     public boolean remove(FluidStack fluid) {
         if (IngredientHelper.isEmpty(fluid)) {
             GroovyLog.msg("Error removing Liquid Fuel Generator recipe")
@@ -90,10 +90,11 @@ public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator
     }
 
     public static class LFGRecipe {
+
         public Fluid fluid;
         public int time;
         public float power;
-        
+
         public LFGRecipe(FluidStack fluid, int time, float power) {
             this.fluid = fluid.getFluid();
             this.time = time;

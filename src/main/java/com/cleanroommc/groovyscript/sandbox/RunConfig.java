@@ -3,26 +3,36 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.google.common.base.CaseFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.ModMetadata;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RunConfig {
 
     public static JsonObject createDefaultJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("packName", "");
+        json.addProperty("packName", "PlaceHolder name");
+        json.addProperty("packId", "placeholdername");
         json.addProperty("version", "1.0.0");
         json.addProperty("debug", false);
+        JsonArray classes = new JsonArray();
+        json.add("classes", classes);
         JsonObject loaders = new JsonObject();
         json.add("loaders", loaders);
         JsonArray preInit = new JsonArray();
@@ -34,8 +44,18 @@ public class RunConfig {
         return json;
     }
 
+    public static final ModMetadata modMetadata = new ModMetadata();
+
+    static {
+        modMetadata.modId = "placeholder";
+        modMetadata.name = "Placeholder";
+        modMetadata.version = "0.0.0";
+    }
+
     private final String packName;
+    private final String packId;
     private final String version;
+    private final List<String> classes = new ArrayList<>();
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
     // TODO pack modes
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
@@ -43,31 +63,63 @@ public class RunConfig {
     private final String asmClass = null;
     private boolean debug;
 
-    private static final String GROOVY_SUFFIX = ".groovy";
+    private final boolean invalidPackId;
+    private boolean warnedAboutInvalidPackId = false;
+
+    public static final String[] GROOVY_SUFFIXES = {".groovy", ".gvy", ".gy", ".gsh"};
+
+    public static boolean isGroovyFile(String path) {
+        for (String suffix : GROOVY_SUFFIXES) {
+            if (path.endsWith(suffix)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public RunConfig(JsonObject json) {
-        this.packName = JsonHelper.getString(json, "", "packName", "name");
+        String name = JsonHelper.getString(json, "", "packName", "name");
+        String id = JsonHelper.getString(json, "", "packId", "id");
+        Pattern idPattern = Pattern.compile("[a-z_]+");
+        this.invalidPackId = id.isEmpty() || !idPattern.matcher(id).matches();
+        if (name.isEmpty() && !this.invalidPackId) {
+            name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_UNDERSCORE, id).replace('_', ' ');
+        }
+        this.packName = name;
+        this.packId = id;
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
+        modMetadata.modId = this.packId;
+        modMetadata.name = this.packName;
+        modMetadata.version = this.version;
+        modMetadata.parent = GroovyScript.ID;
     }
 
     @ApiStatus.Internal
     public void reload(JsonObject json) {
-        if (GroovyScript.getSandbox().isRunning()) {
+        if (GroovyScript.isSandboxLoaded() && GroovyScript.getSandbox().isRunning()) {
             throw new RuntimeException();
         }
         this.debug = JsonHelper.getBoolean(json, false, "debug");
+        this.classes.clear();
         this.loaderPaths.clear();
         this.packmodePaths.clear();
 
-        JsonObject jsonLoaders = JsonHelper.getJsonObject(json, "loaders");
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";
         String replacement = getSeparator();
+        JsonArray jsonClasses = JsonHelper.getJsonArray(json, "classes");
+
+        for (JsonElement element : jsonClasses) {
+            String path = element.getAsString().replaceAll(regex, replacement);
+            while (path.endsWith("/") || path.endsWith("\\")) {
+                path = path.substring(0, path.length() - 1);
+            }
+            classes.add(path);
+        }
+
+        JsonObject jsonLoaders = JsonHelper.getJsonObject(json, "loaders");
         List<Pair<String, String>> pathsList = new ArrayList<>();
 
-        GroovyLog.Msg errorMsg = GroovyLog.msg("Fatal while parsing runConfig.json")
-                .add("Files should NOT be ran in multiple loaders!")
-                .logToMc()
-                .fatal();
+        GroovyLog.Msg errorMsg = GroovyLog.msg("Fatal while parsing runConfig.json").add("Files should NOT be ran in multiple loaders!").logToMc().fatal();
 
         for (Map.Entry<String, JsonElement> entry : jsonLoaders.entrySet()) {
             JsonArray loader = (JsonArray) entry.getValue();
@@ -94,6 +146,23 @@ public class RunConfig {
         return packName;
     }
 
+    public String getPackId() {
+        if (this.invalidPackId && !this.warnedAboutInvalidPackId) {
+            GroovyLog.msg("Fatal error while trying to use the pack id")
+                    .add("specified pack id is invalid or empty ('{}')", this.packId)
+                    .add("pack id must only contain lower case letters and underscores")
+                    .add("see https://groovyscript-docs.readthedocs.io/en/latest/getting_started/#run-config for more info")
+                    .fatal()
+                    .post();
+            this.warnedAboutInvalidPackId = true;
+        }
+        return packId;
+    }
+
+    public boolean isValidPackId() {
+        return !invalidPackId;
+    }
+
     public String getVersion() {
         return version;
     }
@@ -102,32 +171,48 @@ public class RunConfig {
         return debug;
     }
 
+    public ResourceLocation makeLoc(String name) {
+        return new ResourceLocation(getPackId(), name);
+    }
+
+    public Collection<File> getClassFiles() {
+        return getSortedFilesOf(this.classes);
+    }
+
     public Collection<File> getSortedFiles(String loader) {
         List<String> paths = loaderPaths.get(loader);
         if (paths == null || paths.isEmpty()) return Collections.emptyList();
+        return getSortedFilesOf(paths);
+    }
 
+    private Collection<File> getSortedFilesOf(Collection<String> paths) {
         Object2IntLinkedOpenHashMap<File> files = new Object2IntLinkedOpenHashMap<>();
         String separator = getSeparator();
 
         for (String path : paths) {
-            File[] listedFiles = new File(GroovyScript.getScriptPath() + File.separator + path).listFiles();
-            if (listedFiles == null || listedFiles.length == 0) continue;
+            File rootFile = new File(GroovyScript.getScriptPath() + File.separator + path);
+            if (!rootFile.exists()) {
+                continue;
+            }
             int pathSize = path.split(separator).length;
-            for (File file : listedFiles) {
-                if (!file.getPath().endsWith(GROOVY_SUFFIX))
-                    continue;
-                if (files.containsKey(file)) {
-                    if (pathSize > files.getInt(file)) {
-                        files.put(file, pathSize);
-                    }
-                } else {
-                    files.put(file, pathSize);
-                }
+            try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
+                stream.filter(path1 -> isGroovyFile(path1.toString()))
+                        .map(Path::toFile)
+                        .sorted(Comparator.comparing(File::getPath))
+                        .forEach(file -> {
+                            if (files.containsKey(file)) {
+                                if (pathSize > files.getInt(file)) {
+                                    files.put(file, pathSize);
+                                }
+                            } else {
+                                files.put(file, pathSize);
+                            }
+                        });
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
-
-        GroovyScript.LOGGER.info("Files: {}", files);
-        Path mainPath = new File(GroovyScript.getScriptPath()).toPath();
+        Path mainPath = GroovyScript.getScriptFile().toPath();
         return files.keySet().stream().map(file -> mainPath.relativize(file.toPath()).toFile()).collect(Collectors.toList());
     }
 

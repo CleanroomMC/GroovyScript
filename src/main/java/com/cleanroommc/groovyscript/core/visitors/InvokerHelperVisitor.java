@@ -28,6 +28,9 @@ public class InvokerHelperVisitor extends ClassVisitor implements Opcodes {
         return visitor;
     }
 
+    /**
+     * Replaces the default groovy map with a fastutil map
+     */
     public static class CreateMapVisitor extends MethodVisitor {
 
         public CreateMapVisitor(MethodVisitor mv) {

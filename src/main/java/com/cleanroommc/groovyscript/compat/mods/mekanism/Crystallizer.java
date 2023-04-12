@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.GasInput;
@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe> {
 
     public Crystallizer() {
-        super(RecipeHandler.Recipe.CHEMICAL_CRYSTALLIZER, "Crystallizer", "crystallizer");
+        super(RecipeHandler.Recipe.CHEMICAL_CRYSTALLIZER);
     }
 
     public CrystallizerRecipe add(GasStack input, ItemStack output) {

@@ -4,18 +4,21 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.IMarkable;
 import com.cleanroommc.groovyscript.api.INBTResourceStack;
 import com.cleanroommc.groovyscript.api.INbtIngredient;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.Closure;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-
-import java.util.function.Predicate;
 
 @Mixin(value = ItemStack.class)
 public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMarkable {
@@ -25,7 +28,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     @Unique
     protected Closure<Object> transformer;
     @Unique
-    protected Predicate<NBTTagCompound> nbtMatcher = NbtHelper.MATCH_ANY;
+    protected Closure<Object> nbtMatcher = null;
     @Unique
     protected String mark;
 
@@ -59,7 +62,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         copy.setMark(getMark());
         copy.transform(transformer);
         copy.when(matchCondition);
-        copy.withNbtFilter(nbtMatcher);
+        copy.nbtMatcher = nbtMatcher;
         return copy;
     }
 
@@ -70,14 +73,20 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        return new ItemStack[]{groovyscript$getThis().copy()};
+        return new ItemStack[]{IngredientHelper.toItemStack(exactCopy())};
     }
 
     @Override
     public boolean test(ItemStack stack) {
-        return (matchCondition == null || ClosureHelper.call(true, matchCondition, stack)) &&
-                OreDictionary.itemMatches(groovyscript$getThis(), stack, false) &&
-                this.nbtMatcher.test(stack.getTagCompound());
+        if (!OreDictionary.itemMatches(groovyscript$getThis(), stack, false) ||
+            (matchCondition != null && !ClosureHelper.call(true, matchCondition, stack))) {
+            return false;
+        }
+        if (nbtMatcher != null) {
+            NBTTagCompound nbt = stack.getTagCompound();
+            return nbt != null && ClosureHelper.call(true, nbtMatcher, nbt);
+        }
+        return true;
     }
 
     public ItemStack when(Closure<Object> matchCondition) {
@@ -90,12 +99,20 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         return groovyscript$getThis();
     }
 
+    public ItemStack reuse() {
+        return transform(IngredientHelper.REUSE);
+    }
+
+    public ItemStack noreturn() {
+        return transform(IngredientHelper.NO_RETURN);
+    }
+
     @Override
     public ItemStack applyTransform(ItemStack matchedInput) {
         if (transformer != null) {
-            return ClosureHelper.call(ItemStack.EMPTY, transformer, matchedInput);
+            return ClosureHelper.call(ItemStack.EMPTY, transformer, matchedInput).copy();
         }
-        return groovyscript$getThis().getItem().getContainerItem(matchedInput);
+        return ForgeHooks.getContainerItem(matchedInput);
     }
 
     @Nullable
@@ -111,21 +128,74 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
 
     @Override
     public INBTResourceStack withNbt(NBTTagCompound nbt) {
-        setNbt(nbt);
-        this.nbtMatcher = nbt1 -> NbtHelper.containsNbt(nbt1, nbt);
-        return this;
+        ItemStackMixin itemStackMixin = (ItemStackMixin) INbtIngredient.super.withNbt(nbt);
+        itemStackMixin.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> nbt.isEmpty() || NbtHelper.containsNbt(nbt1, nbt));
+        return itemStackMixin;
     }
 
     @Override
     public INbtIngredient withNbtExact(NBTTagCompound nbt) {
-        setNbt(nbt);
-        this.nbtMatcher = nbt1 -> nbt1.equals(nbt);
+        ItemStackMixin itemStackMixin = (ItemStackMixin) INbtIngredient.super.withNbt(nbt);
+        if (nbt == null) {
+            itemStackMixin.nbtMatcher = null;
+        } else {
+            itemStackMixin.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> nbt.isEmpty() || nbt1.equals(nbt));
+        }
+        return itemStackMixin;
+    }
+
+    public INbtIngredient withNbtFilter(Closure<Object> nbtFilter) {
+        this.nbtMatcher = nbtFilter == null ? IngredientHelper.MATCH_ANY : nbtFilter;
         return this;
     }
 
-    @Override
-    public INbtIngredient withNbtFilter(Predicate<NBTTagCompound> nbtFilter) {
-        this.nbtMatcher = nbtFilter == null ? nbt -> true : nbtFilter;
+    public INbtIngredient whenNoNbt() {
+        setNbt(null);
+        this.matchCondition = new LambdaClosure<>(args -> {
+            NBTTagCompound nbt = ((ItemStack) args[0]).getTagCompound();
+            return nbt == null || nbt.isEmpty();
+        });
         return this;
+    }
+
+    public INbtIngredient whenAnyNbt() {
+        setNbt(new NBTTagCompound());
+        this.matchCondition = new LambdaClosure<>(args -> {
+            NBTTagCompound nbt = ((ItemStack) args[0]).getTagCompound();
+            return nbt != null && !nbt.isEmpty();
+        });
+        return this;
+    }
+
+    public IIngredient withMeta(int meta) {
+        ItemStack t = groovyscript$getThis();
+        ItemStackMixin itemStack = (ItemStackMixin) (Object) new ItemStack(t.getItem(), t.getCount(), meta);
+        itemStack.setMark(getMark());
+        itemStack.transform(transformer);
+        itemStack.when(matchCondition);
+        itemStack.nbtMatcher = nbtMatcher;
+        return itemStack;
+    }
+
+    public IIngredient withDamage(int meta) {
+        return withMeta(meta);
+    }
+
+    public void addOreDict(OreDictIngredient ingredient) {
+        VanillaModule.oreDict.add(ingredient.getOreDict(), groovyscript$getThis());
+    }
+
+    public void removeOreDict(OreDictIngredient ingredient) {
+        VanillaModule.oreDict.remove(ingredient.getOreDict(), groovyscript$getThis());
+    }
+
+    public boolean isCase(OreDictIngredient ingredient) {
+        ItemStack itemStack = groovyscript$getThis();
+        for (ItemStack stack : OreDictionary.getOres(ingredient.getOreDict())) {
+            if (OreDictionary.itemMatches(itemStack, stack, false)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

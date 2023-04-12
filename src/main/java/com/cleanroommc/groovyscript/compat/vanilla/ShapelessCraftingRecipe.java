@@ -24,7 +24,7 @@ public class ShapelessCraftingRecipe extends CraftingRecipe {
 
         List<Pair<ItemStack, Integer>> givenInputs = new ArrayList<>();
         // collect all items from the crafting matrix
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
+        for (int i = 0; i < inv.getSizeInventory(); i++) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (!itemstack.isEmpty()) {
                 givenInputs.add(Pair.of(itemstack, i));
@@ -33,7 +33,7 @@ public class ShapelessCraftingRecipe extends CraftingRecipe {
         // check if expected and given inputs have the same count
         if (givenInputs.isEmpty() || givenInputs.size() != input.size()) return MatchList.EMPTY;
         List<IIngredient> input = new ArrayList<>(this.input);
-        // go through each expected input and try to match it to an given input
+        // go through each expected input and try to match it to a given input
         Iterator<IIngredient> ingredientIterator = input.iterator();
         main:
         while (ingredientIterator.hasNext()) {
@@ -43,7 +43,7 @@ public class ShapelessCraftingRecipe extends CraftingRecipe {
             while (pairIterator.hasNext()) {
                 Pair<ItemStack, Integer> pair = pairIterator.next();
                 if (matches(ingredient, pair.getLeft())) {
-                    // expected input matches given input so both get removed so they don't get checked again
+                    // expected input matches given input so both get removed, so they don't get checked again
                     matches.addMatch(ingredient, pair.getLeft(), pair.getRight());
                     ingredientIterator.remove();
                     pairIterator.remove();

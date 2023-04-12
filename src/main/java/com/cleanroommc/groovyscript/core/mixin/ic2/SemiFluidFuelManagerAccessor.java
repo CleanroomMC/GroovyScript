@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin(SemiFluidFuelManager.class)
+@Mixin(value = SemiFluidFuelManager.class, remap = false)
 public interface SemiFluidFuelManagerAccessor {
 
     @Accessor

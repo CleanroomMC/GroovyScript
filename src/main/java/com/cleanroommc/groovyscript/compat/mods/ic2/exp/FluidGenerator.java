@@ -1,10 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
-import com.cleanroommc.groovyscript.core.mixin.ic2.SemiFluidFuelManagerAccessor;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.core.mixin.ic2.SemiFluidFuelManagerAccessor;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import ic2.api.recipe.ISemiFluidFuelManager;
 import ic2.api.recipe.Recipes;
 import net.minecraftforge.fluids.FluidStack;
@@ -14,14 +14,13 @@ import java.util.Map;
 
 public class FluidGenerator extends VirtualizedRegistry<Pair<String, ISemiFluidFuelManager.FuelProperty>> {
 
-    private static final Map<String, ISemiFluidFuelManager.FuelProperty> fluidMap = ((SemiFluidFuelManagerAccessor) Recipes.semiFluidGenerator).getFuelProperties();
-
     public FluidGenerator() {
-        super("SemiFluidGenerator", "FluidGenerator", "semifluidgenerator", "fluidgenerator");
+        super(VirtualizedRegistry.generateAliases("SemiFluidGenerator"));
     }
 
     @Override
     public void onReload() {
+        Map<String, ISemiFluidFuelManager.FuelProperty> fluidMap = ((SemiFluidFuelManagerAccessor) Recipes.semiFluidGenerator).getFuelProperties();
         removeScripted().forEach(pair -> fluidMap.remove(pair.getKey()));
         restoreFromBackup().forEach(pair -> fluidMap.put(pair.getKey(), pair.getValue()));
     }
@@ -42,6 +41,7 @@ public class FluidGenerator extends VirtualizedRegistry<Pair<String, ISemiFluidF
     }
 
     public Pair<String, ISemiFluidFuelManager.FuelProperty> add(String name, ISemiFluidFuelManager.FuelProperty recipe) {
+        Map<String, ISemiFluidFuelManager.FuelProperty> fluidMap = ((SemiFluidFuelManagerAccessor) Recipes.semiFluidGenerator).getFuelProperties();
         Pair<String, ISemiFluidFuelManager.FuelProperty> pair = Pair.of(name, recipe);
         fluidMap.put(name, recipe);
         addScripted(pair);
@@ -64,6 +64,7 @@ public class FluidGenerator extends VirtualizedRegistry<Pair<String, ISemiFluidF
     }
 
     public void removeAll() {
+        Map<String, ISemiFluidFuelManager.FuelProperty> fluidMap = ((SemiFluidFuelManagerAccessor) Recipes.semiFluidGenerator).getFuelProperties();
         for (String fluid : fluidMap.keySet()) {
             addBackup(Pair.of(fluid, fluidMap.get(fluid)));
             fluidMap.remove(fluid);
@@ -71,6 +72,7 @@ public class FluidGenerator extends VirtualizedRegistry<Pair<String, ISemiFluidF
     }
 
     public boolean remove(String name) {
+        Map<String, ISemiFluidFuelManager.FuelProperty> fluidMap = ((SemiFluidFuelManagerAccessor) Recipes.semiFluidGenerator).getFuelProperties();
         ISemiFluidFuelManager.FuelProperty property = fluidMap.remove(name);
         if (property != null) {
             addBackup(Pair.of(name, property));

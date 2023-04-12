@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism.recipe;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.machines.MachineRecipe;
 import org.jetbrains.annotations.ApiStatus;
@@ -12,8 +12,8 @@ public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, 
 
     protected final RecipeHandler.Recipe<?, ?, R> recipeRegistry;
 
-    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry, String name, String... aliases) {
-        super(name, aliases);
+    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry, String... aliases) {
+        super(aliases);
         this.recipeRegistry = recipeRegistry;
     }
 
@@ -26,7 +26,7 @@ public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, 
     }
 
     public boolean remove(R recipe) {
-        if(recipeRegistry.get().remove(recipe) != null) {
+        if (recipeRegistry.get().remove(recipe) != null) {
             addBackup(recipe);
             return true;
         }

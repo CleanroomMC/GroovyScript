@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import ic2.api.recipe.IFluidHeatManager;
 import ic2.api.recipe.Recipes;
 import ic2.core.block.heatgenerator.tileentity.TileEntityFluidHeatGenerator;
@@ -16,7 +16,7 @@ import java.util.Map;
 public class FluidHeater extends VirtualizedRegistry<Pair<String, IFluidHeatManager.BurnProperty>> {
 
     public FluidHeater() {
-        super("FluidHeater", "Firebox", "fluidheater", "firebox");
+        super(VirtualizedRegistry.generateAliases("Firebox"));
     }
 
     @Override

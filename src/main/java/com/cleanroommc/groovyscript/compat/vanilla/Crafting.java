@@ -1,10 +1,12 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
-import com.cleanroommc.groovyscript.api.GroovyLog;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -14,6 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Crafting {
+
+    private static final Char2ObjectOpenHashMap<IIngredient> fallbackChars = new Char2ObjectOpenHashMap<>();
+
+    @GroovyBlacklist
+    public static IIngredient getFallback(char c) {
+        return fallbackChars.get(c);
+    }
+
+    public void setFallback(String key, IIngredient ingredient) {
+        if (key == null || key.length() != 1) {
+            GroovyLog.get().error("Fallback key must be a single character");
+            return;
+        }
+        fallbackChars.put(key.charAt(0), ingredient);
+    }
 
     public void addShaped(ItemStack output, List<List<IIngredient>> input) {
         addShaped(null, output, input);
@@ -73,7 +90,6 @@ public class Crafting {
         removeByOutput(output, true);
     }
 
-    @GroovyBlacklist
     public void removeByOutput(IIngredient output, boolean log) {
         if (IngredientHelper.isEmpty(output)) {
             if (log) {
@@ -81,8 +97,8 @@ public class Crafting {
                         .add("Output must not be empty")
                         .error()
                         .post();
-                return;
             }
+            return;
         }
         List<ResourceLocation> recipesToRemove = new ArrayList<>();
         for (IRecipe recipe : ForgeRegistries.RECIPES) {
@@ -93,7 +109,7 @@ public class Crafting {
         if (recipesToRemove.isEmpty()) {
             if (log) {
                 GroovyLog.msg("Error removing Minecraft Crafting recipe")
-                        .add("No recipes found for %s", output)
+                        .add("No recipes found for {}", output)
                         .error()
                         .post();
             }
@@ -102,6 +118,48 @@ public class Crafting {
         for (ResourceLocation rl : recipesToRemove) {
             ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, rl);
         }
+    }
+
+    public void removeByInput(IIngredient input) {
+        removeByInput(input, true);
+    }
+
+    public void removeByInput(IIngredient input, boolean log) {
+        if (IngredientHelper.isEmpty(input)) {
+            if (log) {
+                GroovyLog.msg("Error removing Minecraft Crafting recipe")
+                        .add("Input must not be empty")
+                        .error()
+                        .post();
+            }
+            return;
+        }
+        List<ResourceLocation> recipesToRemove = new ArrayList<>();
+        for (IRecipe recipe : ForgeRegistries.RECIPES) {
+            if (recipe.getRegistryName() != null && !recipe.getIngredients().isEmpty() && recipe.getIngredients().stream().anyMatch(i -> i.getMatchingStacks().length > 0 && input.test(i.getMatchingStacks()[0]))){
+                recipesToRemove.add(recipe.getRegistryName());
+            }
+        }
+        if (recipesToRemove.isEmpty()) {
+            if (log) {
+                GroovyLog.msg("Error removing Minecraft Crafting recipe")
+                        .add("No recipes found for {}", input)
+                        .error()
+                        .post();
+            }
+            return;
+        }
+        for (ResourceLocation location : recipesToRemove) {
+            ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, location);
+        }
+    }
+
+    public SimpleObjectStream<IRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(ForgeRegistries.RECIPES.getValuesCollection()).setRemover(recipe -> {
+            ResourceLocation key = ForgeRegistries.RECIPES.getKey(recipe);
+            if (key != null) ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, key);
+            return key != null;
+        });
     }
 
     public CraftingRecipeBuilder.Shaped shapedBuilder() {

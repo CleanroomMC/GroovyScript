@@ -2,12 +2,12 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.crafting.AlloyRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +17,7 @@ import java.util.List;
 public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
 
     public AlloyKiln() {
-        super("AlloyKiln", "alloykiln");
+        super();
     }
 
     public RecipeBuilder recipeBuilder() {

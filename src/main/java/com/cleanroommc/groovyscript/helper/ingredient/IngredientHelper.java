@@ -1,7 +1,12 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
+import groovy.lang.Closure;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
@@ -10,8 +15,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 public class IngredientHelper {
+
+    public static final Closure<Object> MATCH_ANY = new LambdaClosure<>(args -> true);
+    public static final Closure<Object> MATCH_NONE = new LambdaClosure<>(args -> false);
+    public static final Closure<Object> REUSE = new LambdaClosure<>(args -> args[0]);
+    public static final Closure<Object> NO_RETURN = new LambdaClosure<>(args -> ItemStack.EMPTY);
+    public static final Closure<Object> MATCH_NBT = new LambdaClosure<>(args -> ItemStack.EMPTY);
 
     public static boolean isFluid(IIngredient ingredient) {
         return ingredient instanceof FluidStack;
@@ -49,6 +61,10 @@ public class IngredientHelper {
 
     public static boolean isEmpty(@Nullable FluidStack itemStack) {
         return itemStack == null || itemStack.amount <= 0;
+    }
+
+    public static boolean isEmpty(@Nullable NBTTagCompound nbt) {
+        return nbt == null || nbt.isEmpty();
     }
 
     /**
@@ -100,7 +116,7 @@ public class IngredientHelper {
      * @return true if the array or the elements are empty
      */
     public static boolean isEmpty(@Nullable ItemStack[] itemStacks) {
-        if (itemStacks == null || itemStacks.length == 0)
+        if (itemStacks == null)
             return true;
         for (ItemStack item : itemStacks)
             if (!isEmpty(item)) return false;
@@ -108,7 +124,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(@Nullable FluidStack[] fluidStacks) {
-        if (fluidStacks == null || fluidStacks.length == 0)
+        if (fluidStacks == null)
             return true;
         for (FluidStack fluid : fluidStacks)
             if (!isEmpty(fluid)) return false;
@@ -116,7 +132,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(@Nullable IIngredient[] ingredients) {
-        if (ingredients == null || ingredients.length == 0)
+        if (ingredients == null)
             return true;
         for (IIngredient item : ingredients)
             if (!isEmpty(item)) return false;
@@ -244,6 +260,36 @@ public class IngredientHelper {
         builder.append(oreDict);
         if (colored) builder.append(TextFormatting.GRAY);
         builder.append("')");
+        return builder.toString();
+    }
+
+    @SuppressWarnings("all")
+    public static String asGroovyCode(IBlockState state, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.DARK_GREEN);
+        builder.append("blockstate");
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("('");
+        if (colored) builder.append(TextFormatting.AQUA);
+        builder.append(state.getBlock().getRegistryName());
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("'");
+        if (!state.getProperties().isEmpty()) {
+            for (Map.Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
+                IProperty property = entry.getKey();
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append(", ").append("'");
+                if (colored) builder.append(TextFormatting.YELLOW);
+                builder.append(property.getName());
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append("=");
+                if (colored) builder.append(TextFormatting.YELLOW);
+                builder.append(property.getName(entry.getValue()));
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append("'");
+            }
+        }
+        builder.append(")");
         return builder.toString();
     }
 }

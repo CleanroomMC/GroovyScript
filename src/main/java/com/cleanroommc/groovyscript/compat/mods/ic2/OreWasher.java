@@ -19,7 +19,7 @@ import java.util.List;
 public class OreWasher extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
     public OreWasher() {
-        super("OreWasher", "orewasher", "OreWashingPlant", "orewashingplant");
+        super(VirtualizedRegistry.generateAliases("OreWashingPlant"));
     }
 
     @Override

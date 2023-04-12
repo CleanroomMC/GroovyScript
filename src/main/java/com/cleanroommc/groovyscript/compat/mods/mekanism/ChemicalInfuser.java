@@ -1,8 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
-import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ChemicalPairInput;
@@ -11,7 +10,7 @@ import mekanism.common.recipe.machines.ChemicalInfuserRecipe;
 public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuserRecipe> {
 
     public ChemicalInfuser() {
-        super(RecipeHandler.Recipe.CHEMICAL_INFUSER, "ChemicalInfuser", "chemical_infuser");
+        super(RecipeHandler.Recipe.CHEMICAL_INFUSER);
     }
 
     public ChemicalInfuserRecipe add(GasStack leftInput, GasStack rightInput, GasStack output) {

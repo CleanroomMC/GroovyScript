@@ -23,7 +23,7 @@ import java.util.List;
 public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
 
     public SliceNSplice() {
-        super("SliceNSplice", "slice_n_splice", "SliceAndSplice", "slice_and_splice");
+        super(VirtualizedRegistry.generateAliases("SliceAndSplice"));
     }
 
     public RecipeBuilder recipeBuilder() {

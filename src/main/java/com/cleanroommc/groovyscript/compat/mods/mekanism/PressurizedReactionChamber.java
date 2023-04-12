@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.PressurizedInput;
@@ -21,7 +21,7 @@ import java.util.List;
 public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<PressurizedRecipe> {
 
     public PressurizedReactionChamber() {
-        super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, "PressurizedReactionChamber", "pressurize_reaction_chamber", "PRC");
+        super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, "PRC");
     }
 
     public RecipeBuilder recipeBuilder() {

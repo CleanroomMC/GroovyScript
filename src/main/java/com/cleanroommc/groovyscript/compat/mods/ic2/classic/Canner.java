@@ -24,13 +24,6 @@ import java.util.Map;
 
 public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
 
-    private static Map<Integer, List<ItemWithMeta>> idToItems;
-
-    public Canner() {
-        super("Canner", "canner");
-        idToItems = ((ClassicCanningMachineRegistryAccessor) ClassicRecipes.canningMachine).getIdToItems();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(this::remove);
@@ -151,6 +144,7 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
     }
 
     public boolean removeItemEffect(int id) {
+        Map<Integer, List<ItemWithMeta>> idToItems = ((ClassicCanningMachineRegistryAccessor) ClassicRecipes.canningMachine).getIdToItems();
         if (id < 0 || id >= idToItems.size()) {
             GroovyLog.msg("Error removing Industrialcraft 2 Canner Item Effect recipe")
                     .add("id must be between 0-%d", idToItems.size())
@@ -165,6 +159,7 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
     }
 
     public void removeAllItemEffect() {
+        Map<Integer, List<ItemWithMeta>> idToItems = ((ClassicCanningMachineRegistryAccessor) ClassicRecipes.canningMachine).getIdToItems();
         for (int i = 0; i < ClassicRecipes.canningMachine.getEffectMap().size(); i++) {
             CanningRecipe recipe = new CanningRecipe(RecipeType.ITEM_EFFECT).setInput(new ItemsIngredient(asItemStackList(idToItems.get(i)))).setInt(i);
             remove(recipe);
@@ -307,6 +302,7 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
     }
 
     public static class CanningRecipe {
+
         public RecipeType type;
 
         public IIngredient input;

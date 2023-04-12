@@ -17,7 +17,7 @@ import java.util.*;
 public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerRecipe> {
 
     public MetalFormer() {
-        super("MetalFormer", "metalformer");
+        super();
     }
 
     @Override
@@ -127,13 +127,17 @@ public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerReci
 
     public IBasicMachineRecipeManager getManager(int type) {
         switch (type) {
-            default: return Recipes.metalformerCutting;
-            case 1: return Recipes.metalformerExtruding;
-            case 2: return Recipes.metalformerRolling;
+            default:
+                return Recipes.metalformerCutting;
+            case 1:
+                return Recipes.metalformerExtruding;
+            case 2:
+                return Recipes.metalformerRolling;
         }
     }
 
     public static class MetalFormerRecipe {
+
         public int type;
         public MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe;
 

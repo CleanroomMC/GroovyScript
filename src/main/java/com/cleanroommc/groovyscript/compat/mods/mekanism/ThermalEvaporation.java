@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.FluidInput;
 import mekanism.common.recipe.machines.ThermalEvaporationRecipe;
@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class ThermalEvaporation extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
 
     public ThermalEvaporation() {
-        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, "ThermalEvaporationPlant", "thermal_evaporation_plant", "TEP");
+        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, "TEP");
     }
 
     public ThermalEvaporationRecipe add(FluidStack input, FluidStack output) {

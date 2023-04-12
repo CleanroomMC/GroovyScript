@@ -1,16 +1,17 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.kohsuke.groovy.sandbox.impl.Checker;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -33,6 +34,7 @@ public class GroovyLogImpl implements GroovyLog {
     private final Path logFilePath;
     private final PrintWriter printWriter;
     private final DateFormat timeFormat = new SimpleDateFormat("[HH:mm:ss]");
+    private List<String> errors = new ArrayList<>();
 
     private GroovyLogImpl() {
         File logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy.log");
@@ -54,6 +56,14 @@ public class GroovyLogImpl implements GroovyLog {
         this.printWriter = tempWriter;
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
+        writeLogLine("GroovyScript version: " + GroovyScript.VERSION);
+    }
+
+    @GroovyBlacklist
+    public List<String> collectErrors() {
+        List<String> errors = this.errors;
+        this.errors = new ArrayList<>();
+        return errors;
     }
 
     @Override
@@ -78,29 +88,32 @@ public class GroovyLogImpl implements GroovyLog {
         String level = msg.getLevel().name();
         String main = msg.getMainMsg();
         List<String> messages = msg.getSubMessages();
+        if (msg.getLevel() == Level.ERROR || msg.getLevel() == Level.FATAL) {
+            this.errors.add(main);
+        }
         if (messages.isEmpty()) {
             // has no sub messages -> log in a single line
             writeLogLine(formatLine(level, main));
             if (msg.shouldLogToMc()) {
-                logger.log(msg.getLevel(), main + " in line " + Checker.getLineNumber());
+                logger.log(msg.getLevel(), main + " in line " + GroovyScript.getSandbox().getCurrentLine());
             }
         } else if (messages.size() == 1 && main.length() + messages.get(0).length() < 100) {
             // has one sub message and the main message and the sub message have less than 100 characters ->
             // log in a single line
             writeLogLine(formatLine(level, main + ": - " + messages.get(0)));
             if (msg.shouldLogToMc()) {
-                logger.log(msg.getLevel(), main + ": - " + messages.get(0) + "  in line " + Checker.getLineNumber());
+                logger.log(msg.getLevel(), main + ": - " + messages.get(0) + "  in line " + GroovyScript.getSandbox().getCurrentLine());
             }
         } else {
             // has multiple log lines or the main message and the first sub message are to long ->
             // log each sub message in a single line, starting with the main message
             writeLogLine(formatLine(level, main + ": "));
-            for (int i = 1; i < messages.size(); i++) {
+            for (int i = 0; i < messages.size(); i++) {
                 writeLogLine(formatLine(level, " - " + messages.get(i)));
             }
             if (msg.shouldLogToMc()) {
-                logger.log(msg.getLevel(), main + " in line " + Checker.getLineNumber() + " : - ");
-                for (int i = 1; i < messages.size(); i++) {
+                logger.log(msg.getLevel(), main + " in line " + GroovyScript.getSandbox().getCurrentLine() + " : - ");
+                for (int i = 0; i < messages.size(); i++) {
                     logger.log(msg.getLevel(), " - " + messages.get(i));
                 }
             }
@@ -174,7 +187,9 @@ public class GroovyLogImpl implements GroovyLog {
 
     @Override
     public void fatal(String msg, Object... args) {
-        writeLogLine(formatLine("FATAL", GroovyLog.format(msg, args)));
+        msg = GroovyLog.format(msg, args);
+        this.errors.add(msg);
+        writeLogLine(formatLine("FATAL", msg));
     }
 
     @Override
@@ -200,7 +215,9 @@ public class GroovyLogImpl implements GroovyLog {
      * @param args arguments
      */
     public void error(String msg, Object... args) {
-        writeLogLine(formatLine("ERROR", GroovyLog.format(msg, args)));
+        msg = GroovyLog.format(msg, args);
+        this.errors.add(msg);
+        writeLogLine(formatLine("ERROR", msg));
     }
 
     @Override
@@ -217,8 +234,10 @@ public class GroovyLogImpl implements GroovyLog {
      * @param throwable exception
      */
     public void exception(Throwable throwable) {
+        String msg = throwable.toString();
+        this.errors.add(msg);
         writeLogLine(formatLine("ERROR", "An exception occurred while running scripts. Look at latest.log for a full stacktrace:"));
-        writeLogLine("\t" + throwable.toString());
+        writeLogLine("\t" + msg);
         throwable.printStackTrace();
         for (String line : prepareStackTrace(throwable.getStackTrace())) {
             writeLogLine("\t\tat " + line);
@@ -247,18 +266,19 @@ public class GroovyLogImpl implements GroovyLog {
 
     private String formatLine(String level, String msg) {
         return timeFormat.format(new Date()) +
-                (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : " [SERVER/") +
-                level + "]" +
-                " [" + getSource() + "]: " +
-                msg;
+               (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : " [SERVER/") +
+               level + "]" +
+               " [" + getSource() + "]: " +
+               msg;
     }
 
     private String getSource() {
-        String source = Checker.getSource();
-        if (source == Checker.UNKNOWN_SOURCE) {
-            return Loader.instance().activeModContainer().getModId();
+        String source = GroovyScript.getSandbox().getCurrentScript();
+        if (source == null) {
+            ModContainer mod = Loader.instance().activeModContainer();
+            return mod != null ? mod.getModId() : GroovyScript.ID;
         }
-        return GroovyScriptSandbox.relativizeSource(source) + ":" + Checker.getLineNumber();
+        return source;
     }
 
     private void writeLogLine(String line) {
