@@ -116,6 +116,18 @@ dependencies {
         deobfProvided 'curse.maven:blood-magic-224791:2822288'
     }
 
+    if (project.debug_roots.toBoolean()) {
+        deobfCompile 'curse.maven:patchouli-306770:3162874'
+        deobfCompile 'curse.maven:mystical_lib-277064:3483816'
+        deobfCompile 'curse.maven:mystical_world-282940:3460961'
+        deobfCompile 'curse.maven:roots-246183:3905074'
+    } else {
+        deobfProvided 'curse.maven:patchouli-306770:3162874'
+        deobfProvided 'curse.maven:mystical_lib-277064:3483816'
+        deobfProvided 'curse.maven:mystical_world-282940:3460961'
+        deobfProvided 'curse.maven:roots-246183:3905074'
+    }
+
     if (project.debug_thermal.toBoolean()) {
         deobfCompile 'curse.maven:cofh_core-69162:2920433'
         deobfCompile 'curse.maven:cofh_world-271384:2920434'
