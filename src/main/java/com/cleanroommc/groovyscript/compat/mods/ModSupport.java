@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
 import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
+import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
 import com.cleanroommc.groovyscript.compat.mods.tcomplement.TinkersComplement;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
@@ -42,6 +43,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<TinkersConstruct> TINKERS_CONSTRUCT = new Container<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new, "ticon", "tinkersconstruct");
     public static final Container<TinkersComplement> TINKERS_COMPLEMENT = new Container<>("tcomplement", "Tinkers Complement", TinkersComplement::new, "tcomp", "tinkerscomplement");
     public static final Container<DraconicEvolution> DRACONIC_EVO = new Container<>("draconicevolution", "Draconic Evolution", DraconicEvolution::new, "de");
+    public static final Container<Roots> ROOTS = new Container<>("roots", "Roots 3", Roots::new);
     public static final Container<BloodMagic> BLOOD_MAGIC = new Container<>("bloodmagic", "Blood Magic: Alchemical Wizardry", BloodMagic::new, "bm");
     public static final Container<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new Container<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
     public static final Container<IC2> INDUSTRIALCRAFT = new Container<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
