@@ -1,13 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.ChrysopoeiaRecipe;
 import epicsquid.roots.util.IngredientWithStack;
@@ -34,8 +32,8 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
         restoreFromBackup().forEach(pair -> ModRecipesAccessor.getChrysopoeiaRecipes().put(pair.getKey(), pair.getValue()));
     }
 
-    public void add(String name, ChrysopoeiaRecipe recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name), recipe);
+    public void add(ChrysopoeiaRecipe recipe) {
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, ChrysopoeiaRecipe recipe) {
@@ -99,11 +97,10 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<ChrysopoeiaRecipe> {
 
-        // overload, byproductChance, and byproduct are all unused
+//        overload, byproductChance, and byproduct are all unused
 //        private float overload = 0.0F;
 //        private float byproductChance = 0.0F;
 //        private ItemStack byproduct = ItemStack.EMPTY;
-        private ResourceLocation name;
 
 //        public RecipeBuilder overload(float overload) {
 //            this.overload = overload;
@@ -120,30 +117,22 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
 //            return this;
 //        }
 
-        public RecipeBuilder name(String name) {
-            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
-            return this;
-        }
-
-        public RecipeBuilder name(ResourceLocation name) {
-            this.name = name;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Roots Chrysopoeia conversion recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_chrysopoeia_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
 //            msg.add(overload < 0, "overload must be a nonnegative float, yet it was {}", overload);
 //            msg.add(byproductChance < 0, "byproductChance must be a nonnegative float, yet it was {}", byproductChance);
-            if (name == null) {
-                name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_chrysopoeia_"));
-            }
         }
 
         @Override

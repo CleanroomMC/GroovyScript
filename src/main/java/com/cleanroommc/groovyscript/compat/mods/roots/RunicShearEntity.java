@@ -1,11 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.RunicShearConditionalEntityRecipe;
 import epicsquid.roots.recipe.RunicShearEntityRecipe;
@@ -39,8 +37,8 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         restoreFromBackup().forEach(pair -> getRunicShearEntityRecipes().put(pair.getKey(), pair.getValue()));
     }
 
-    public void add(String name, RunicShearEntityRecipe recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name), recipe);
+    public void add(RunicShearEntityRecipe recipe) {
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, RunicShearEntityRecipe recipe) {
@@ -103,7 +101,6 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         private Class<? extends EntityLivingBase> entity;
         private int cooldown;
         private Function<EntityLivingBase, ItemStack> functionMap;
-        private ResourceLocation name;
 
         public RecipeBuilder entity(EntityEntry entity) {
             this.entity = (Class<? extends EntityLivingBase>) entity.getEntityClass();
@@ -120,30 +117,22 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
             return this;
         }
 
-        public RecipeBuilder name(String name) {
-            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
-            return this;
-        }
-
-        public RecipeBuilder name(ResourceLocation name) {
-            this.name = name;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Roots Runic Shear Entity recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_runic_shear_entity_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             msg.add(!input.isEmpty(), () -> "No item inputs allowed, but found " + input.size());
             validateFluids(msg);
             msg.add(output.size() > 1 && functionMap == null, "if output is greater than 1, functionMap must be defined");
             msg.add(entity == null , "entity must be defined and extended EntityLivingBase, instead it was {}", entity);
-            if (name == null) {
-                name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_runic_shear_entity_"));
-            }
         }
 
         @Override

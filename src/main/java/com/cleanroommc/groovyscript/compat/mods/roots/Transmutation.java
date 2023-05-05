@@ -1,12 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.TransmutationRecipe;
 import epicsquid.roots.recipe.transmutation.BlockStatePredicate;
@@ -41,8 +39,8 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         restoreFromBackup().forEach(pair -> ModRecipesAccessor.getTransmutationRecipes().put(pair.getKey(), pair.getValue()));
     }
 
-    public void add(String name, TransmutationRecipe recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name), recipe);
+    public void add(TransmutationRecipe recipe) {
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, TransmutationRecipe recipe) {
@@ -120,7 +118,6 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         private BlockStatePredicate start;
         private IBlockState state;
         private WorldBlockStatePredicate condition = WorldBlockStatePredicate.TRUE;
-        private ResourceLocation name;
 
         public RecipeBuilder start(BlockStatePredicate start) {
             this.start = start;
@@ -147,30 +144,22 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
             return this;
         }
 
-        public RecipeBuilder name(String name) {
-            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
-            return this;
-        }
-
-        public RecipeBuilder name(ResourceLocation name) {
-            this.name = name;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Roots Transmutation recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_transmutation_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 0, 0, 0, 1);
             validateFluids(msg);
             msg.add(start == null, "start must be defined");
             msg.add(state == null && (output.size() != 1 || output.get(0).isEmpty()), "either state must be defined or recipe must have an output");
-            if (name == null) {
-                name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_transmutation_"));
-            }
         }
 
         @Override

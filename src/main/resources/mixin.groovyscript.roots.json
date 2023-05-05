@@ -9,6 +9,7 @@
     "ModifierRegistryAccessor",
     "ModRecipesAccessor",
     "MossConfigAccessor",
+    "PacifistEntryAccessor",
     "RitualBaseAccessor"
   ]
 }

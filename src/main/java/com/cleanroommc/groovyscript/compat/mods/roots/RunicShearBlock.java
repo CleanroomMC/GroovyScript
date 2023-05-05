@@ -1,11 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.RunicShearRecipe;
 import epicsquid.roots.recipe.transmutation.BlockStatePredicate;
@@ -36,8 +34,8 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
         restoreFromBackup().forEach(pair -> getRunicShearRecipes().put(pair.getKey(), pair.getValue()));
     }
 
-    public void add(String name, RunicShearRecipe recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name), recipe);
+    public void add(RunicShearRecipe recipe) {
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, RunicShearRecipe recipe) {
@@ -97,7 +95,6 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
         private ItemStack displayItem;
         private BlockStatePredicate state;
         private IBlockState replacementState;
-        private ResourceLocation name;
 
         public RecipeBuilder displayItem(ItemStack displayItem) {
             this.displayItem = displayItem;
@@ -119,32 +116,24 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
             return this;
         }
 
-        public RecipeBuilder name(String name) {
-            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
-            return this;
-        }
-
-        public RecipeBuilder name(ResourceLocation name) {
-            this.name = name;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Roots Runic Shear Block recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_runic_shear_block_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 0, 0, 1, 1);
             validateFluids(msg);
             msg.add(state == null, "state must be defined");
             msg.add(replacementState == null, "replacementState must be defined");
             if (displayItem == null) {
                 displayItem = state.matchingItems().get(0);
-            }
-            if (name == null) {
-                name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_runic_shear_block_"));
             }
         }
 

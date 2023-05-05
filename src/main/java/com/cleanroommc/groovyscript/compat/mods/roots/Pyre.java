@@ -1,11 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.PyreCraftingRecipe;
 import net.minecraft.item.ItemStack;
@@ -33,8 +31,8 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
         restoreFromBackup().forEach(pair -> addPyreCraftingRecipe(pair.getKey(), pair.getValue()));
     }
 
-    public void add(String name, PyreCraftingRecipe recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name), recipe);
+    public void add(PyreCraftingRecipe recipe) {
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, PyreCraftingRecipe recipe) {
@@ -89,7 +87,6 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
 
         private int xp = 0;
         private int burnTime = 200;
-        private ResourceLocation name;
 
         public RecipeBuilder xp(int xp) {
             this.xp = xp;
@@ -110,29 +107,21 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
             return this.burnTime(time);
         }
 
-        public RecipeBuilder name(String name) {
-            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
-            return this;
-        }
-
-        public RecipeBuilder name(ResourceLocation name) {
-            this.name = name;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Roots Pyre recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_pyre_recipe_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 5, 5, 1, 1);
             validateFluids(msg);
             msg.add(xp < 0, "xp must be a nonnegative integer, yet it was {}", xp);
-            if (name == null) {
-                name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_pyre_recipe_"));
-            }
         }
 
         @Override

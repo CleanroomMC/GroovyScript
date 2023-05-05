@@ -1,11 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.AnimalHarvestFishRecipe;
 import net.minecraft.item.ItemStack;
@@ -35,8 +33,8 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
         restoreFromBackup().forEach(pair -> getAnimalHarvestFishRecipes().put(pair.getKey(), pair.getValue()));
     }
 
-    public void add(String name, AnimalHarvestFishRecipe recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name), recipe);
+    public void add(AnimalHarvestFishRecipe recipe) {
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, AnimalHarvestFishRecipe recipe) {
@@ -87,7 +85,6 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
     public static class RecipeBuilder extends AbstractRecipeBuilder<AnimalHarvestFishRecipe> {
 
         private int weight;
-        private ResourceLocation name;
 
         public RecipeBuilder weight(int weight) {
             this.weight = weight;
@@ -99,29 +96,21 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
             return this;
         }
 
-        public RecipeBuilder name(String name) {
-            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
-            return this;
-        }
-
-        public RecipeBuilder name(ResourceLocation name) {
-            this.name = name;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Roots Animal Harvest Fish recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_animal_harvest_fish_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 0, 0, 1, 1);
             validateFluids(msg);
             msg.add(weight <= 0, "weight must be a nonnegative integer greater than 0, instead it was {}", weight);
-            if (name == null) {
-                name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_animal_harvest_fish_"));
-            }
         }
 
         @Override

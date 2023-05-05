@@ -1,11 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.FlowerRecipe;
 import net.minecraft.block.Block;
@@ -40,8 +38,8 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         restoreFromBackup().forEach(pair -> getFlowerRecipes().put(pair.getKey(), pair.getValue()));
     }
 
-    public void add(String name, FlowerRecipe recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name), recipe);
+    public void add(FlowerRecipe recipe) {
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, FlowerRecipe recipe) {
@@ -105,7 +103,6 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
 
         private IBlockState flower;
         private final List<Ingredient> allowedSoils = new ArrayList<>();
-        private ResourceLocation name;
 
         public RecipeBuilder flower(IBlockState flower) {
             this.flower = flower;
@@ -138,29 +135,21 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         }
         */
 
-        public RecipeBuilder name(String name) {
-            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
-            return this;
-        }
-
-        public RecipeBuilder name(ResourceLocation name) {
-            this.name = name;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Roots Flower Generation recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_flower_generation_recipe_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg);
             validateFluids(msg);
             msg.add(flower == null, "flower must be defined");
-            if (name == null) {
-                name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_flower_generation_recipe_"));
-            }
         }
 
         @Override

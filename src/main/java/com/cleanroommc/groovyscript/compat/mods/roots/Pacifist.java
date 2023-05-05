@@ -1,11 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.core.mixin.roots.PacifistEntryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.PacifistEntry;
 import net.minecraft.entity.Entity;
@@ -34,8 +33,8 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
         restoreFromBackup().forEach(pair -> getPacifistEntities().put(pair.getKey(), pair.getValue()));
     }
 
-    public void add(String name, PacifistEntry recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name), recipe);
+    public void add(PacifistEntry recipe) {
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, PacifistEntry recipe) {
@@ -85,15 +84,9 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
     public static class RecipeBuilder extends AbstractRecipeBuilder<PacifistEntry> {
 
         private Class<? extends Entity> entity;
-        private String name;
 
         public RecipeBuilder entity(EntityEntry entity) {
             this.entity = entity.getEntityClass();
-            return this;
-        }
-
-        public RecipeBuilder name(String name) {
-            this.name = name;
             return this;
         }
 
@@ -102,20 +95,23 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
             return "Error adding Roots Runic Shear Entity recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_pacifist_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg);
             validateFluids(msg);
             msg.add(entity == null, "entity must be defined");
-            if (name == null) {
-                name = RecipeName.generate("groovyscript_pacifist_");
-            }
         }
 
         @Override
         public @Nullable PacifistEntry register() {
             if (!validate()) return null;
-            PacifistEntry recipe = new PacifistEntry(entity, name);
+            PacifistEntry recipe = new PacifistEntry(entity, name.toString());
+            ((PacifistEntryAccessor) recipe).setName(name);
             ModSupport.ROOTS.get().pacifist.add(recipe.getRegistryName(), recipe);
             return recipe;
         }

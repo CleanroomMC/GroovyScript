@@ -1,13 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.SummonCreatureRecipe;
 import net.minecraft.entity.EntityLivingBase;
@@ -39,8 +37,8 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
         restoreFromBackup().forEach(pair -> addSummonCreatureEntry(pair.getValue()));
     }
 
-    public void add(String name, SummonCreatureRecipe recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name), recipe);
+    public void add(SummonCreatureRecipe recipe) {
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, SummonCreatureRecipe recipe) {
@@ -92,20 +90,9 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
     public static class RecipeBuilder extends AbstractRecipeBuilder<SummonCreatureRecipe> {
 
         private Class<? extends EntityLivingBase> entity;
-        private ResourceLocation name;
 
         public RecipeBuilder entity(EntityEntry entity) {
             this.entity = (Class<? extends EntityLivingBase>) entity.getEntityClass();
-            return this;
-        }
-
-        public RecipeBuilder name(String name) {
-            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
-            return this;
-        }
-
-        public RecipeBuilder name(ResourceLocation name) {
-            this.name = name;
             return this;
         }
 
@@ -114,14 +101,16 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
             return "Error adding Roots Summon Creature recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_summon_creature_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 10, 0, 0);
             validateFluids(msg);
             msg.add(entity == null, "entity must be defined");
-            if (name == null) {
-                name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_summon_creature_"));
-            }
         }
 
         @Override

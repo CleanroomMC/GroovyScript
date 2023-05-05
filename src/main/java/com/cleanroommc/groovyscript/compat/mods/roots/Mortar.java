@@ -1,13 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.MortarRecipe;
 import net.minecraft.item.ItemStack;
@@ -38,8 +36,8 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
         restoreFromBackup().forEach(pair -> addMortarRecipe(pair.getValue()));
     }
 
-    public void add(String name, MortarRecipe recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name), recipe);
+    public void add(MortarRecipe recipe) {
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, MortarRecipe recipe) {
@@ -102,7 +100,6 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
         private float green2 = 1.0F;
         private float blue2 = 1.0F;
         private boolean generate = true;
-        private ResourceLocation name;
 
         public RecipeBuilder red1(float red1) {
             this.red1 = red1;
@@ -200,23 +197,18 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
             return this;
         }
 
-        public RecipeBuilder name(String name) {
-            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
-            return this;
-        }
-
-        public RecipeBuilder name(ResourceLocation name) {
-            this.name = name;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Roots Pyre recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_mortar_recipe_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 5, 1, 1);
             validateFluids(msg);
             msg.add(red1 < 0 || red1 > 1, "red1 must be a float between 0 and 1, yet it was {}", red1);
@@ -225,9 +217,6 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
             msg.add(red2 < 0 || red2 > 1, "red2 must be a float between 0 and 1, yet it was {}", red2);
             msg.add(green2 < 0 || green2 > 1, "green2 must be a float between 0 and 1, yet it was {}", green2);
             msg.add(blue2 < 0 || blue2 > 1, "blue2 must be a float between 0 and 1, yet it was {}", blue2);
-            if (name == null) {
-                name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_mortar_recipe_"));
-            }
         }
 
         @Override

@@ -1,11 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.AnimalHarvestRecipe;
 import net.minecraft.entity.EntityLivingBase;
@@ -36,7 +34,7 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
     }
 
     public void add(AnimalHarvestRecipe recipe) {
-        add(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_animal_harvest_")), recipe);
+        add(recipe.getRegistryName(), recipe);
     }
 
     public void add(ResourceLocation name, AnimalHarvestRecipe recipe) {
@@ -83,20 +81,9 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
     public static class RecipeBuilder extends AbstractRecipeBuilder<AnimalHarvestRecipe> {
 
         private Class<? extends EntityLivingBase> entity;
-        private ResourceLocation name;
 
         public RecipeBuilder entity(EntityEntry entity) {
             this.entity = (Class<? extends EntityLivingBase>) entity.getEntityClass();
-            return this;
-        }
-
-        public RecipeBuilder name(String name) {
-            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
-            return this;
-        }
-
-        public RecipeBuilder name(ResourceLocation name) {
-            this.name = name;
             return this;
         }
 
@@ -105,14 +92,16 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
             return "Error adding Roots Animal Harvest recipe";
         }
 
+        public String getRecipeNamePrefix() {
+            return "groovyscript_animal_harvest_";
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg);
             validateFluids(msg);
             msg.add(entity == null, "entity must be defined and extended EntityLivingBase, instead it was {}", entity);
-            if (name == null) {
-                name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate("groovyscript_animal_harvest_"));
-            }
         }
 
         @Override
