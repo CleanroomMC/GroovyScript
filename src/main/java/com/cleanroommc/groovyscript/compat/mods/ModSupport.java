@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolution;
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
+import com.cleanroommc.groovyscript.compat.mods.evilcraft.EvilCraft;
 import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCrafting;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
@@ -44,6 +45,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<TinkersComplement> TINKERS_COMPLEMENT = new Container<>("tcomplement", "Tinkers Complement", TinkersComplement::new, "tcomp", "tinkerscomplement");
     public static final Container<DraconicEvolution> DRACONIC_EVO = new Container<>("draconicevolution", "Draconic Evolution", DraconicEvolution::new, "de");
     public static final Container<BloodMagic> BLOOD_MAGIC = new Container<>("bloodmagic", "Blood Magic: Alchemical Wizardry", BloodMagic::new, "bm");
+    public static final Container<EvilCraft> EVILCRAFT = new Container<>("evilcraft", "EvilCraft", EvilCraft::new);
     public static final Container<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new Container<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
     public static final Container<IC2> INDUSTRIALCRAFT = new Container<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
     public static final Container<ExtendedCrafting> EXTENDED_CRAFTING = new Container<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);

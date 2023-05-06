@@ -102,6 +102,12 @@ dependencies {
         deobfProvided 'curse.maven:mekanism-268560:2835175'
     }
 
+    if (project.debug_evilcraft.toBoolean()) {
+        deobfCompile 'curse.maven:cyclops-core-232758:3159497'
+    } else {
+        deobfProvided 'curse.maven:cyclops-core-232758:3159497'
+    }
+
     if (project.debug_thermal.toBoolean() || project.debug_de.toBoolean()) {
         deobfCompile 'curse.maven:redstone_flux-270789:2920436'
     } else {
@@ -114,6 +120,12 @@ dependencies {
     } else {
         deobfProvided 'curse.maven:guide-api-228832:2645992'
         deobfProvided 'curse.maven:blood-magic-224791:2822288'
+    }
+
+    if (project.debug_evilcraft.toBoolean()) {
+        deobfCompile 'curse.maven:evilcraft-74610:2811267'
+    } else {
+        deobfProvided 'curse.maven:evilcraft-74610:2811267'
     }
 
     if (project.debug_extended_crafting.toBoolean()) {
