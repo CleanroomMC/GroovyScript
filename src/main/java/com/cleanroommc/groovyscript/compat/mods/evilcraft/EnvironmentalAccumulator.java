@@ -131,7 +131,7 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
 
         @Override
         public String getErrorMsg() {
-            return "Error adding EvilCraft Blood Infuser Recipe";
+            return "Error adding EvilCraft Environmental Accumulator Recipe";
         }
 
         @Override
