@@ -67,12 +67,12 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
 
-    public static final String ID = "@MODID@";
+    public static final String ID = Tags.ID;
     public static final String NAME = "GroovyScript";
-    public static final String VERSION = "@VERSION@";
+    public static final String VERSION = Tags.VERSION;
 
     public static final String MC_VERSION = "1.12.2";
-    public static final String GROOVY_VERSION = "@GROOVY_VERSION@";
+    public static final String GROOVY_VERSION = Tags.GROOVY_VERSION;
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
