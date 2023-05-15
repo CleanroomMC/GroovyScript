@@ -210,6 +210,14 @@ public class Lexicon {
             return false;
         }
 
+        public void setKnowledgeType(String entry, KnowledgeType type) {
+            Objects.requireNonNull(Botania.getEntry(entry)).setKnowledgeType(type);
+        }
+
+        public void setKnowledgeType(String entry, String type) {
+            setKnowledgeType(entry, BotaniaAPI.knowledgeTypes.get(type));
+        }
+
         public SimpleObjectStream<LexiconEntry> streamEntries() {
             return new SimpleObjectStream<>(BotaniaAPI.getAllEntries()).setRemover(this::remove);
         }
