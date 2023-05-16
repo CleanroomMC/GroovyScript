@@ -12,19 +12,10 @@ public class Flowers {
         BotaniaAPI.addSubTileToCreativeMenu(name);
     }
 
-    public void registerFlowerWithMini(String name, Class<? extends SubTileEntity> clazz) {
+    public <T extends SubTileEntity> void registerFlowerWithMini(String name, Class<T> clazz, Class<? extends T> miniClazz) {
         registerFlower(name, clazz);
-        Class<?>[] subClasses = clazz.getDeclaredClasses();
-        int l = subClasses.length;
-
-        for (int i = 0; i < l; i++) {
-            Class<?> subClass = subClasses[i];
-            if (subClass.getSimpleName().equals("Mini") && SubTileEntity.class.isAssignableFrom(subClass)) {
-                BotaniaAPI.registerMiniSubTile(name + "Chibi", (Class<? extends SubTileEntity>) subClass, name);
-                BotaniaAPI.registerSubTileSignature((Class<? extends SubTileEntity>) subClass, new BasicSignature(name + "Chibi"));
-                BotaniaAPI.addSubTileToCreativeMenu(name);
-                break;
-            }
-        }
+        BotaniaAPI.registerMiniSubTile(name + "Chibi", miniClazz, name);
+        BotaniaAPI.registerSubTileSignature(miniClazz, new BasicSignature(name + "Chibi"));
+        BotaniaAPI.addSubTileToCreativeMenu(name);
     }
 }
