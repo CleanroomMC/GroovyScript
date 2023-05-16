@@ -46,7 +46,7 @@ public class OrechidIgnem extends Orechid {
     @Override
     public boolean removeByOutput(String output) {
         if (BotaniaAPI.oreWeightsNether.containsKey(output)) {
-            addBackup(new OrechidRecipe(output, BotaniaAPI.getOreWeight(output)));
+            addBackup(new OrechidRecipe(output, BotaniaAPI.getOreWeightNether(output)));
             BotaniaAPI.oreWeightsNether.remove(output);
             return true;
         }
