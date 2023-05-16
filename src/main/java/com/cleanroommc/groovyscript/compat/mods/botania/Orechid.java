@@ -16,46 +16,46 @@ public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
     @Override
     @GroovyBlacklist
     public void onReload() {
-        removeScripted().forEach(recipe -> BotaniaAPI.oreWeights.remove(recipe.output.getOreDict()));
-        restoreFromBackup().forEach(recipe -> BotaniaAPI.oreWeights.put(recipe.output.getOreDict(), recipe.weight));
+        removeScripted().forEach(recipe -> BotaniaAPI.oreWeights.remove(recipe.output));
+        restoreFromBackup().forEach(recipe -> BotaniaAPI.oreWeights.put(recipe.output, recipe.weight));
     }
 
     protected List<OrechidRecipe> getAllRecipes() {
         List<OrechidRecipe> recipes = new ArrayList<>(BotaniaAPI.oreWeights.size());
-        BotaniaAPI.oreWeights.forEach((ore, weight) -> recipes.add(new OrechidRecipe(new OreDictIngredient(ore), weight)));
+        BotaniaAPI.oreWeights.forEach((ore, weight) -> recipes.add(new OrechidRecipe(ore, weight)));
         return recipes;
     }
 
-    public OrechidRecipe add(OreDictIngredient output, int weight) {
+    public OrechidRecipe add(String output, int weight) {
         OrechidRecipe recipe = new OrechidRecipe(output, weight);
         add(recipe);
         return recipe;
     }
 
-    public OrechidRecipe add(String output, int weight) {
-        return add(new OreDictIngredient(output), weight);
+    public OrechidRecipe add(OreDictIngredient output, int weight) {
+        return add(output.getOreDict(), weight);
     }
 
     public void add(OrechidRecipe recipe) {
         if (recipe == null) return;
         addScripted(recipe);
-        BotaniaAPI.oreWeights.put(recipe.output.getOreDict(), recipe.weight);
+        BotaniaAPI.oreWeights.put(recipe.output, recipe.weight);
     }
 
     public boolean remove(OrechidRecipe recipe) {
         if (recipe == null) return false;
-        if (BotaniaAPI.oreWeights.containsKey(recipe.output.getOreDict())) {
+        if (BotaniaAPI.oreWeights.containsKey(recipe.output)) {
             addBackup(recipe);
-            BotaniaAPI.oreWeights.remove(recipe.output.getOreDict());
+            BotaniaAPI.oreWeights.remove(recipe.output);
             return true;
         }
         return false;
     }
 
-    public boolean removeByOutput(OreDictIngredient output) {
-        if (BotaniaAPI.oreWeights.containsKey(output.getOreDict())) {
-            addBackup(new OrechidRecipe(output, BotaniaAPI.getOreWeight(output.getOreDict())));
-            BotaniaAPI.oreWeights.remove(output.getOreDict());
+    public boolean removeByOutput(String output) {
+        if (BotaniaAPI.oreWeights.containsKey(output)) {
+            addBackup(new OrechidRecipe(output, BotaniaAPI.getOreWeight(output)));
+            BotaniaAPI.oreWeights.remove(output);
             return true;
         }
 
@@ -66,8 +66,8 @@ public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
         return false;
     }
 
-    public boolean removeByOutput(String output) {
-        return removeByOutput(new OreDictIngredient(output));
+    public boolean removeByOutput(OreDictIngredient output) {
+        return removeByOutput(output.getOreDict());
     }
 
     public void removeAll() {
