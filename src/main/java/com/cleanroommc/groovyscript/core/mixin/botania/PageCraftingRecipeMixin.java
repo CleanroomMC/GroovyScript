@@ -7,7 +7,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraftforge.common.crafting.IShapedRecipe;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -48,12 +48,12 @@ public abstract class PageCraftingRecipeMixin extends PageRecipe {
                     this.shapelessRecipe = true;
                     this.oreDictRecipe = recipe instanceof ShapelessOreRecipe;
 
-                    label56:
+                    drawGrid:
                     for(y = 0; y < 3; ++y) {
                         for(x = 0; x < 3; ++x) {
                             index = y * 3 + x;
                             if (index >= recipe.getIngredients().size()) {
-                                break label56;
+                                break drawGrid;
                             }
 
                             Ingredient input = recipe.getIngredients().get(index);
@@ -66,12 +66,16 @@ public abstract class PageCraftingRecipeMixin extends PageRecipe {
                 }
             } else {
                 this.oreDictRecipe = recipe instanceof ShapedOreRecipe;
-                y = ((IShapedRecipe) recipe).getRecipeHeight();
-                x = ((IShapedRecipe) recipe).getRecipeWidth();
+                int width = oreDictRecipe
+                            ? ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, (ShapedOreRecipe) recipe, "width")
+                            : recipe instanceof ShapedCraftingRecipe ? ((ShapedCraftingRecipe) recipe).getRecipeWidth() : ((ShapedRecipes) recipe).getWidth();
+                int height = oreDictRecipe
+                             ? ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, (ShapedOreRecipe) recipe, "height")
+                             : recipe instanceof ShapedCraftingRecipe ? ((ShapedCraftingRecipe) recipe).getRecipeHeight() : ((ShapedRecipes) recipe).getHeight();
 
-                for(index = 0; index < x; ++index) {
-                    for(x = 0; x < y; ++x) {
-                        Ingredient input = recipe.getIngredients().get(index * y + x);
+                for(index = 0; index < height; ++index) {
+                    for(x = 0; x < width; ++x) {
+                        Ingredient input = recipe.getIngredients().get(index * width + x);
                         ItemStack[] stacks = input.getMatchingStacks();
                         if (stacks.length > 0) {
                             this.renderItemAtGridPos(gui, 1 + x, 1 + index, stacks[this.ticksElapsed / 40 % stacks.length], true);
