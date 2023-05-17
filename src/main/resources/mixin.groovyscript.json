@@ -11,6 +11,7 @@
     "ForgeRegistryMixin",
     "FurnaceRecipeMixin",
     "InventoryCraftingAccess",
+    "ItemMixin",
     "ItemStackMixin",
     "Java8Mixin",
     "LoaderControllerMixin",
