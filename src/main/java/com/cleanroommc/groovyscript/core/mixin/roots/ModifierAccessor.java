@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin(Modifier.class)
+@Mixin(value = Modifier.class, remap = false)
 public interface ModifierAccessor {
 
     @Accessor

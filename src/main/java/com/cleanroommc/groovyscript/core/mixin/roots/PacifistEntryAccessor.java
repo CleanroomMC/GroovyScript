@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(PacifistEntry.class)
+@Mixin(value = PacifistEntry.class, remap = false)
 public interface PacifistEntryAccessor {
 
     @Accessor

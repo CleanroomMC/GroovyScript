@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Set;
 
-@Mixin(ModifierRegistry.class)
+@Mixin(value = ModifierRegistry.class, remap = false)
 public interface ModifierRegistryAccessor {
 
     @Accessor
