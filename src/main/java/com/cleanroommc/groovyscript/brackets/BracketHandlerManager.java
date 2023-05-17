@@ -12,6 +12,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -76,6 +77,15 @@ public class BracketHandlerManager {
                 }
             }
             return null;
+        });
+        registerBracketHandler("textformat", s -> {
+            TextFormatting textformat = TextFormatting.getValueByName(s);
+            if (textformat == null) {
+                try {
+                    textformat = TextFormatting.fromColorIndex(Integer.parseInt(s));
+                } catch (NumberFormatException ignored) { }
+            }
+            return textformat;
         });
     }
 
