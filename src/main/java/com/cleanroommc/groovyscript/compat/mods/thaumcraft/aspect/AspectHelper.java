@@ -14,9 +14,7 @@ import org.jetbrains.annotations.ApiStatus;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectEventProxy;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.aspects.AspectRegistryEvent;
 import thaumcraft.api.internal.CommonInternals;
 
 import java.util.ArrayList;
@@ -146,9 +144,6 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
             if (doBackup) addScripted(entity, aspect);
 
-            AspectRegistryEvent are = new AspectRegistryEvent();
-            are.register = new AspectEventProxy();
-            MinecraftForge.EVENT_BUS.post(are);
             return;
         }
         GroovyLog.msg("Error adding Thaumcraft Aspects from item/entity")
@@ -186,9 +181,6 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
             if (doBackup) addScripted(item, aspect);
 
-            AspectRegistryEvent are = new AspectRegistryEvent();
-            are.register = new AspectEventProxy();
-            MinecraftForge.EVENT_BUS.post(are);
             return;
         }
         GroovyLog.msg("Error adding Thaumcraft Aspects from item/entity")
@@ -211,9 +203,6 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
             if (doBackup) addBackup(entity, aspect);
 
-            AspectRegistryEvent are = new AspectRegistryEvent();
-            are.register = new AspectEventProxy();
-            MinecraftForge.EVENT_BUS.post(are);
             return;
         }
         GroovyLog.msg("Error removing Thaumcraft Aspects from item/entity")
@@ -251,9 +240,6 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
             CommonInternals.objectTags.get(CommonInternals.generateUniqueItemstackId(item)).remove(aspect.getAspect());
 
-            AspectRegistryEvent are = new AspectRegistryEvent();
-            are.register = new AspectEventProxy();
-            MinecraftForge.EVENT_BUS.post(are);
             return;
         }
         GroovyLog.msg("Error adding Thaumcraft Aspects from item/entity")
@@ -334,9 +320,6 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                         .error()
                         .post();
             }
-            AspectRegistryEvent are = new AspectRegistryEvent();
-            are.register = new AspectEventProxy();
-            MinecraftForge.EVENT_BUS.post(are);
             return this;
         }
 
