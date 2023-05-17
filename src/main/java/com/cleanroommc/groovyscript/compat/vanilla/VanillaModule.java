@@ -10,6 +10,7 @@ public class VanillaModule {
     public static final OreDict oreDict = new OreDict();
     public static final Player player = new Player();
     public static final Content content = new Content();
+    public static final Rarity rarity = new Rarity();
 
     public static void initializeBinding() {
         GroovyScript.getSandbox().registerBinding("Crafting", crafting);
@@ -18,5 +19,6 @@ public class VanillaModule {
         GroovyScript.getSandbox().registerBinding("OreDictionary", oreDict);
         GroovyScript.getSandbox().registerBinding("Player", player);
         GroovyScript.getSandbox().registerBinding("Content", content);
+        GroovyScript.getSandbox().registerBinding("Rarity", rarity);
     }
 }

@@ -178,7 +178,7 @@ dependencies {
         deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
     }
 
-    if (project.debug_astral.toBoolean() || project.debug_thaum.toBoolean()) {
+    if (project.debug_astral.toBoolean() || project.debug_thaum.toBoolean() || project.debug_botania.toBoolean()) {
         runtime 'curse.maven:baubles-227083:2518667'
     }
 
@@ -211,6 +211,12 @@ dependencies {
         deobfProvided 'slimeknights:TConstruct:1.12.2-2.13.0.190'
         deobfProvided 'curse.maven:constructs-armory-287683:3174535'
         deobfProvided 'curse.maven:tinkers-complement-272671:2843439'
+    }
+
+    if (project.debug_botania.toBoolean()) {
+        deobfCompile 'curse.maven:botania-225643:3330934'
+    } else {
+        deobfProvided 'curse.maven:botania-225643:3330934'
     }
 }
 
