@@ -154,9 +154,17 @@ dependencies {
     }
 
     compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
+    if (project.debug_astral.toBoolean() || project.debug_thaum.toBoolean() || project.debug_botania.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:baubles-227083:2518667')
+    }
+
+    compileOnly rfg.deobf('curse.maven:botania-225643:3330934')
+    if (project.debug_botania.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:botania-225643:3330934')
+    }
+
     compileOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
     if (project.debug_thaum.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:baubles-227083:2518667')
         runtimeOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
         runtimeOnly 'curse.maven:thaumic_jei-285492:2705304'
     }
@@ -169,6 +177,17 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
     if (project.debug_ie.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
+    }
+
+    compileOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
+    compileOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
+    compileOnly rfg.deobf('curse.maven:mystical_world-282940:3460961')
+    compileOnly rfg.deobf('curse.maven:roots-246183:3905074')
+    if (project.debug_roots.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
+        runtimeOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
+        runtimeOnly rfg.deobf('curse.maven:mystical_world-282940:3460961')
+        runtimeOnly rfg.deobf('curse.maven:roots-246183:3905074')
     }
 
     compileOnly 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
