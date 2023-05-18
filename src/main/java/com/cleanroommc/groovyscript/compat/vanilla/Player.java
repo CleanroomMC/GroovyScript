@@ -25,10 +25,10 @@ public class Player implements IScriptReloadable {
         for (int i = 0; i < givenItemsSlots.length; i++) {
             ItemStack stack = givenItemsSlots[i];
             if (stack != null && !stack.isEmpty()) {
-                playerInv.add(i, stack);
+                playerInv.add(i, stack.copy());
             }
         }
-        givenItemsAnySlot.forEach(playerInv::addItemStackToInventory);
+        givenItemsAnySlot.stream().map(ItemStack::copy).forEach(playerInv::addItemStackToInventory);
     }
 
     public void addStartingItem(ItemStack item) {
