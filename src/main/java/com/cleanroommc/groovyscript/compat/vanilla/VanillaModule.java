@@ -30,6 +30,7 @@ public class VanillaModule implements IScriptReloadable {
         furnace.onReload();
         oreDict.onReload();
         rarity.onReload();
+        player.onReload();
     }
 
     @Override
