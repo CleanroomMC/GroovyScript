@@ -57,6 +57,7 @@ public class BracketHandlerManager {
     }
 
     public static void init() {
+        registerBracketHandler("resource", ResourceLocationBracketHandler.INSTANCE);
         registerBracketHandler("ore", s -> s.contains("*") ? OreDictWildcardIngredient.of(s) : new OreDictIngredient(s));
         registerBracketHandler("item", ItemBracketHandler.INSTANCE, () -> ItemStack.EMPTY);
         registerBracketHandler("liquid", BracketHandlerManager::parseFluidStack);
