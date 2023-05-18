@@ -1,9 +1,11 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.compat.content.Content;
 
-public class VanillaModule {
+public class VanillaModule implements IScriptReloadable {
 
     public static final Crafting crafting = new Crafting();
     public static final Furnace furnace = new Furnace();
@@ -21,4 +23,19 @@ public class VanillaModule {
         GroovyScript.getSandbox().registerBinding("Content", content);
         GroovyScript.getSandbox().registerBinding("Rarity", rarity);
     }
+
+    @Override
+    @GroovyBlacklist
+    public void onReload() {
+        furnace.onReload();
+        oreDict.onReload();
+        rarity.onReload();
+    }
+
+    @Override
+    @GroovyBlacklist
+    public void afterScriptLoad() {
+        furnace.afterScriptLoad();
+    }
+
 }

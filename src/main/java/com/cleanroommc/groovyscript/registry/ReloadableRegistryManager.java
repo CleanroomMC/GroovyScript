@@ -74,8 +74,7 @@ public class ReloadableRegistryManager {
     public static void onReload() {
         GroovyScript.reloadRunConfig();
         reloadForgeRegistries();
-        VanillaModule.furnace.onReload();
-        VanillaModule.oreDict.onReload();
+        new VanillaModule().onReload();
         ModSupport.getAllContainers().stream()
                 .filter(Container::isLoaded)
                 .map(Container::get)
@@ -93,7 +92,7 @@ public class ReloadableRegistryManager {
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
                 .forEach(VirtualizedRegistry::afterScriptLoad);
-        VanillaModule.furnace.afterScriptLoad();
+        new VanillaModule().afterScriptLoad();
         unfreezeForgeRegistries();
     }
 

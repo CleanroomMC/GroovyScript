@@ -1,12 +1,13 @@
 package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.google.common.base.CaseFormat;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;
 
-public abstract class VirtualizedRegistry<R> {
+public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
 
     protected final List<String> aliases;
 
