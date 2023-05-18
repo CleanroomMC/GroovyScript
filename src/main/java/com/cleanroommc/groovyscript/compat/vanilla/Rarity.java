@@ -2,7 +2,9 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
+import groovy.lang.Closure;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -16,15 +18,15 @@ import java.util.function.Predicate;
 
 public class Rarity {
 
-    private final List<Pair<ItemStack, IRarity>> rarities = new ArrayList<>();
+    private final List<Pair<Closure<Boolean>, IRarity>> rarities = new ArrayList<>();
 
     public Rarity() {
         super();
     }
 
     public IRarity check(ItemStack testStack) {
-        for (Pair<ItemStack, IRarity> pair : this.rarities) {
-            if (((Predicate<ItemStack>) (Object) pair.getKey()).test(testStack)) {
+        for (Pair<Closure<Boolean>, IRarity> pair : this.rarities) {
+            if (ClosureHelper.call(false, pair.getKey(), testStack)) {
                 return pair.getValue();
             }
         }
@@ -40,14 +42,26 @@ public class Rarity {
     }
 
     public void set(IRarity rarity, ItemStack stack) {
+        set(rarity, new LambdaClosure<>(this, arr -> ((Predicate<ItemStack>) (Object) stack).test((ItemStack) arr[0])));
+    }
+
+    public void set(TextFormatting color, Closure<Boolean> predicate) {
+        set(color, getAppropriateRarityName(color), predicate);
+    }
+
+    public void set(TextFormatting color, String rarityName, Closure<Boolean> predicate) {
+        set(new RarityImpl(color, rarityName), predicate);
+    }
+
+    public void set(IRarity rarity, Closure<Boolean> predicate) {
         if (GroovyLog.msg("Error setting Item Rarity")
                 .add(rarity == null, () -> "Rarity must not be null")
-                .add(IngredientHelper.isEmpty(stack), () -> "Stack must not be null")
+                .add(predicate == null, () -> "Predicate must not be null")
                 .error()
                 .postIfNotEmpty()) {
             return;
         }
-        rarities.add(Pair.of(stack, rarity));
+        rarities.add(Pair.of(predicate, rarity));
     }
 
     @GroovyBlacklist
