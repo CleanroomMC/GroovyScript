@@ -5,6 +5,13 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "SqueezerRecipeManagerAccessor"
+    "SqueezerRecipeManagerAccessor",
+    "CarpenterRecipeManagerAccessor",
+    "CentrifugeRecipeManagerAccessor",
+    "StillRecipeManagerAccessor",
+    "MoistenerRecipeManagerAccessor",
+    "FermenterRecipeManagerAccessor",
+    "FabricatorRecipeManagerAccessor",
+    "CharcoalManagerAccessor"
   ]
 }

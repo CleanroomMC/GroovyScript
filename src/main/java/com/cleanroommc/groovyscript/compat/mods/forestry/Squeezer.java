@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.core.mixin.forestry.SqueezerRecipeManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.factory.recipes.SqueezerRecipe;
 import net.minecraft.item.ItemStack;
@@ -18,7 +17,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Squeezer extends VirtualizedRegistry<ISqueezerRecipe> {
+public class Squeezer extends ForestryRegistry<ISqueezerRecipe> {
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -27,6 +26,7 @@ public class Squeezer extends VirtualizedRegistry<ISqueezerRecipe> {
     @Override
     @GroovyBlacklist
     public void onReload() {
+        if (!isEnabled()) return;
         removeScripted().forEach(SqueezerRecipeManagerAccessor.getRecipes()::remove);
         restoreFromBackup().forEach(SqueezerRecipeManagerAccessor.getRecipes()::add);
     }
