@@ -7,6 +7,11 @@ import forestry.modules.ForestryModuleUids;
 import org.jetbrains.annotations.ApiStatus;
 
 public abstract class ForestryRegistry<T> extends VirtualizedRegistry<T> {
+
+    public ForestryRegistry(String... aliases) {
+        super(aliases);
+    }
+
     @GroovyBlacklist
     @ApiStatus.Internal
     public boolean isEnabled() {

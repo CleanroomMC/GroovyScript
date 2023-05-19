@@ -1,7 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.forestry;
 
+import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
+import com.cleanroommc.groovyscript.brackets.SpeciesBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public class Forestry extends ModPropertyContainer {
@@ -13,6 +14,8 @@ public class Forestry extends ModPropertyContainer {
     public final Fermenter fermenter = new Fermenter();
     public final Moistener moistener = new Moistener();
     public final MoistenerFuel moistenerFuel = new MoistenerFuel();
+    public final BeeProduce beeProduce = new BeeProduce();
+    public final BeeMutations beeMutations = new BeeMutations();
 
     public Forestry() {
         addRegistry(charcoalPile);
@@ -22,11 +25,18 @@ public class Forestry extends ModPropertyContainer {
         addRegistry(fermenter);
         addRegistry(moistener);
         addRegistry(moistenerFuel);
+        addRegistry(beeProduce);
+        addRegistry(beeMutations);
+    }
+
+    @Override
+    public void initialize() {
+        BracketHandlerManager.registerBracketHandler("species", SpeciesBracketHandler.INSTANCE);
     }
 
     @Override
     public @Nullable Object getProperty(String name) {
-        VirtualizedRegistry<?> registry = (VirtualizedRegistry<?>) super.getProperty(name);
+        Object registry = super.getProperty(name);
         if (registry instanceof ForestryRegistry<?> && !((ForestryRegistry<?>) registry).isEnabled()) return null;
         return registry;
     }

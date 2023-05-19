@@ -12,6 +12,8 @@
     "MoistenerRecipeManagerAccessor",
     "FermenterRecipeManagerAccessor",
     "FabricatorRecipeManagerAccessor",
-    "CharcoalManagerAccessor"
+    "CharcoalManagerAccessor",
+    "AlleleRegistryAccessor",
+    "BeeRootAccessor"
   ]
 }
