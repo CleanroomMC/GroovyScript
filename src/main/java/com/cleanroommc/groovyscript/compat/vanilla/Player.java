@@ -55,12 +55,14 @@ public class Player implements IScriptReloadable {
     }
 
     @Override
+    @GroovyBlacklist
     public void onReload() {
         this.givenItemsAnySlot.clear();
         this.givenItemsSlots = new ItemStack[36];
     }
 
     @Override
+    @GroovyBlacklist
     public void afterScriptLoad() {
 
     }
