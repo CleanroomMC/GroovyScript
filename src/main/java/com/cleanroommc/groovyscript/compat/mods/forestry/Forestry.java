@@ -29,6 +29,7 @@ public class Forestry extends ModPropertyContainer {
         addRegistry(moistenerFuel);
         addRegistry(carpenter);
         addRegistry(thermionicFabricator);
+        addRegistry(thermionicFabricator.smelting);
         addRegistry(beeProduce);
         addRegistry(beeMutations);
     }
