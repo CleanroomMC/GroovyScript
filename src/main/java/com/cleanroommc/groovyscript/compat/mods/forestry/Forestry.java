@@ -14,6 +14,8 @@ public class Forestry extends ModPropertyContainer {
     public final Fermenter fermenter = new Fermenter();
     public final Moistener moistener = new Moistener();
     public final MoistenerFuel moistenerFuel = new MoistenerFuel();
+    public final Carpenter carpenter = new Carpenter();
+    public final ThermionicFabricator thermionicFabricator = new ThermionicFabricator();
     public final BeeProduce beeProduce = new BeeProduce();
     public final BeeMutations beeMutations = new BeeMutations();
 
@@ -25,6 +27,8 @@ public class Forestry extends ModPropertyContainer {
         addRegistry(fermenter);
         addRegistry(moistener);
         addRegistry(moistenerFuel);
+        addRegistry(carpenter);
+        addRegistry(thermionicFabricator);
         addRegistry(beeProduce);
         addRegistry(beeMutations);
     }
