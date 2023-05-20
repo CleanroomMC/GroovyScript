@@ -166,10 +166,6 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
         protected IIngredient box = IIngredient.EMPTY;
         protected Char2ObjectOpenHashMap<IIngredient> keys = new Char2ObjectOpenHashMap<>();
 
-        public RecipeBuilder() {
-            keys.put(' ', IIngredient.EMPTY);
-        }
-
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;

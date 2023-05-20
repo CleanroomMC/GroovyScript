@@ -10,7 +10,5 @@ import java.util.List;
 @Mixin(value = CharcoalManager.class, remap = false)
 public interface CharcoalManagerAccessor {
     @Accessor
-    static List<ICharcoalPileWall> getWalls() {
-        throw new AssertionError();
-    }
+    List<ICharcoalPileWall> getWalls();
 }

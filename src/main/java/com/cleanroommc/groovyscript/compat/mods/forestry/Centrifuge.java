@@ -113,7 +113,7 @@ public class Centrifuge extends ForestryRegistry<ICentrifugeRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateFluids(msg, 0, 0, 0, 0);
-            validateItems(msg, 1, 1, 1, 6);
+            validateItems(msg, 1, 1, 0, 6);
         }
 
         @Override
