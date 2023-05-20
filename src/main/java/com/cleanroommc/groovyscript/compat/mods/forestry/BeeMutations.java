@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.core.mixin.forestry.BeeRootAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeeMutationBuilder;
@@ -21,7 +22,7 @@ import java.util.function.Function;
 public class BeeMutations extends ForestryRegistry<IBeeMutation> {
 
     public BeeMutations() {
-        super("Mutations");
+        super(VirtualizedRegistry.generateAliases("Mutations"));
     }
 
     @Override
