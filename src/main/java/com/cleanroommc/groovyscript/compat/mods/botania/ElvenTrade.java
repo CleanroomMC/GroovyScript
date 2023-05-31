@@ -62,7 +62,7 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
         })) return true;
 
         GroovyLog.msg("Error removing Botania Elven Trade recipe")
-                .add("could not find recipe with outputs {}", (Object[]) outputs)
+                .add("could not find recipe with outputs {}", Arrays.toString(outputs))
                 .error()
                 .post();
         return false;
