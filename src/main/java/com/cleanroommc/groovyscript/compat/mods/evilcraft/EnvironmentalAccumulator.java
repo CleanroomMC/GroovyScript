@@ -13,6 +13,8 @@ import org.cyclops.evilcraft.core.recipe.custom.EnvironmentalAccumulatorRecipePr
 import org.cyclops.evilcraft.core.weather.WeatherType;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> {
 
     public EnvironmentalAccumulator() {
@@ -110,7 +112,7 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
         }
 
         public RecipeBuilder inputWeather(String inputWeather) {
-            this.inputWeather = WeatherType.valueOf(inputWeather);
+            this.inputWeather = WeatherType.valueOf(inputWeather.toUpperCase(Locale.ROOT));
             return this;
         }
 
@@ -120,7 +122,7 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
         }
 
         public RecipeBuilder outputWeather(String outputWeather) {
-            this.outputWeather = WeatherType.valueOf(outputWeather);
+            this.outputWeather = WeatherType.valueOf(outputWeather.toUpperCase(Locale.ROOT));
             return this;
         }
 
