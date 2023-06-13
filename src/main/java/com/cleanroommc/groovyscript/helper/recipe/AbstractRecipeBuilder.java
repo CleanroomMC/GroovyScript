@@ -1,21 +1,38 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.FluidStackList;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Collection;
 
 public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
+    protected ResourceLocation name;
     protected final IngredientList<IIngredient> input = new IngredientList<>();
     protected final ItemStackList output = new ItemStackList();
     protected final FluidStackList fluidInput = new FluidStackList();
     protected final FluidStackList fluidOutput = new FluidStackList();
+
+    public String getRecipeNamePrefix() {
+        return "groovyscript_";
+    }
+
+    public AbstractRecipeBuilder<T> name(String name) {
+        this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
+        return this;
+    }
+
+    public AbstractRecipeBuilder<T> name(ResourceLocation name) {
+        this.name = name;
+        return this;
+    }
 
     public AbstractRecipeBuilder<T> input(IIngredient ingredient) {
         this.input.add(ingredient);
@@ -103,6 +120,12 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     public abstract String getErrorMsg();
 
     public abstract void validate(GroovyLog.Msg msg);
+
+    public void validateName() {
+        if (name == null) {
+            name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate(getRecipeNamePrefix()));
+        }
+    }
 
     public void validateFluids(GroovyLog.Msg msg, int minFluidInput, int maxFluidInput, int minFluidOutput, int maxFluidOutput) {
         fluidInput.trim();
