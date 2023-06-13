@@ -102,7 +102,9 @@ public class Still extends ForestryRegistry<IStillRecipe> {
         @Override
         public @Nullable IStillRecipe register() {
             if (!validate()) return null;
-            return add(fluidOutput.get(0), time, fluidInput.get(0));
+            IStillRecipe recipe = new StillRecipe(time, fluidInput.get(0), fluidOutput.get(0));
+            add(recipe);
+            return recipe;
         }
     }
 }
