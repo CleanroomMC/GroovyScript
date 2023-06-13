@@ -103,12 +103,12 @@ public class Fermenter extends ForestryRegistry<IFermenterRecipe> {
         protected float modifier = 1.0F;
 
         public RecipeBuilder value(int value) {
-            this.value = value;
+            this.value = Math.max(value, 1);
             return this;
         }
 
         public RecipeBuilder modifier(float modifier) {
-            this.modifier = modifier;
+            this.modifier = Math.max(modifier, 0.01F);
             return this;
         }
 

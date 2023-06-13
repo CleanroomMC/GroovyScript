@@ -167,7 +167,7 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
         protected Char2ObjectOpenHashMap<IIngredient> keys = new Char2ObjectOpenHashMap<>();
 
         public RecipeBuilder time(int time) {
-            this.time = time;
+            this.time = Math.max(time, 1);
             return this;
         }
 

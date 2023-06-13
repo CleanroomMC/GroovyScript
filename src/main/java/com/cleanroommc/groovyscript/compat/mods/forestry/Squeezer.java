@@ -97,12 +97,12 @@ public class Squeezer extends ForestryRegistry<ISqueezerRecipe> {
         protected float chance = 1.0F;
 
         public RecipeBuilder time(int time) {
-            this.time = time;
+            this.time = Math.max(time, 1);
             return this;
         }
 
         public RecipeBuilder chance(float chance) {
-            this.chance = chance;
+            this.chance = Math.max(chance, 0.01F);
             return this;
         }
 

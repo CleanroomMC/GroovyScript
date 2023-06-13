@@ -84,7 +84,7 @@ public class Still extends ForestryRegistry<IStillRecipe> {
         protected int time = 100;
 
         public RecipeBuilder time(int time) {
-            this.time = time;
+            this.time = Math.max(time, 1);
             return this;
         }
 

@@ -91,17 +91,17 @@ public class Centrifuge extends ForestryRegistry<ICentrifugeRecipe> {
         protected Map<ItemStack, Float> outputs = new Object2FloatOpenHashMap<>();
 
         public RecipeBuilder time(int time) {
-            this.time = time;
+            this.time = Math.max(time, 1);
             return this;
         }
 
         public RecipeBuilder output(ItemStack output, float chance) {
-            this.outputs.put(output, chance);
+            if (!output.isEmpty()) this.outputs.put(output, Math.max(chance, 0.01F));
             return this;
         }
 
         @Override
-        public AbstractRecipeBuilder<ICentrifugeRecipe> output(ItemStack output) {
+        public RecipeBuilder output(ItemStack output) {
             return this.output(output, 1.0F);
         }
 
@@ -113,7 +113,8 @@ public class Centrifuge extends ForestryRegistry<ICentrifugeRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateFluids(msg, 0, 0, 0, 0);
-            validateItems(msg, 1, 1, 0, 6);
+            validateItems(msg, 1, 1, 0, 0);
+            msg.add(outputs.isEmpty(), "Expected at least 1 output! got 0.");
         }
 
         @Override
