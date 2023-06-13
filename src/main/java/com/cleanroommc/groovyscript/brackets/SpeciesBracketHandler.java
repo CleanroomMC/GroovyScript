@@ -26,18 +26,18 @@ public class SpeciesBracketHandler implements IBracketHandler<AlleleBeeSpecies> 
             GroovyLog.msg("Can't find bee species for '{}'", arg).error().post();
             return null;
         } else {
-            String name = parts[1];
-            if (parts[0].equals("forestry")) name = convertForestryName(name);
-            IAlleleBeeSpecies species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(parts[0] + "." + name);
+            IAlleleBeeSpecies species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(parts[0] + "." + parts[1]);
             if (species instanceof AlleleBeeSpecies) return (AlleleBeeSpecies) species;
             else {
+                species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(parts[0] + "." + getNormalName(parts[1]));
+                if (species instanceof AlleleBeeSpecies) return (AlleleBeeSpecies) species;
                 GroovyLog.msg("Can't find bee species for '{}'", arg);
                 return null;
             }
         }
     }
 
-    protected String convertForestryName(String name) {
+    protected String getNormalName(String name) {
         String capital = name.substring(0, 1).toUpperCase() + name.substring(1);
         return "species" + capital;
     }
