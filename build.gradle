@@ -121,6 +121,11 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:blood-magic-224791:2822288')
     }
 
+    compileOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
+    if (project.debug_actually_additions.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
+    }
+
     compileOnly rfg.deobf('curse.maven:cucumber-272335:2645867')
     compileOnly rfg.deobf('curse.maven:extended-crafting-nomifactory-edition-398267:3613140')
     if (project.debug_extended_crafting.toBoolean()) {
