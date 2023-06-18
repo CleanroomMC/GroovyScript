@@ -308,6 +308,10 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
             return this;
         }
 
+        public AspectHelperBuilder aspect(String tag, int amount) {
+            return this.aspect(new AspectStack(tag, amount));
+        }
+
         public AspectHelperBuilder stripAspects() {
             if (entity != null) {
                 ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(entity);

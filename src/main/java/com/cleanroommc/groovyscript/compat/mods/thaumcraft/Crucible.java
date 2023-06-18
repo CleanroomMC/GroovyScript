@@ -122,6 +122,10 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             return this;
         }
 
+        public RecipeBuilder aspect(String tag, int amount) {
+            return this.aspect(new AspectStack(tag, amount));
+        }
+
         public RecipeBuilder catalyst(IIngredient catalyst) {
             this.catalyst = catalyst;
             return this;

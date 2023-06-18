@@ -33,6 +33,10 @@ public class Aspect {
             return this;
         }
 
+        public AspectBuilder component(String tag, int amount) {
+            return this.component(new AspectStack(tag, amount));
+        }
+
         public AspectBuilder image(String image) {
             this.image = new ResourceLocation(image);
             return this;

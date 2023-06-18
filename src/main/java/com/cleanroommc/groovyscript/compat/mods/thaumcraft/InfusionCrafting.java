@@ -149,6 +149,10 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
             return this;
         }
 
+        public RecipeBuilder aspect(String tag, int amount) {
+            return this.aspect(new AspectStack(tag, amount));
+        }
+
         public RecipeBuilder instability(int instability) {
             this.instability = instability;
             return this;
