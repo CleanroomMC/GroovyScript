@@ -25,16 +25,15 @@ public class SpeciesBracketHandler implements IBracketHandler<AlleleBeeSpecies> 
         if (parts.length < 2) {
             GroovyLog.msg("Can't find bee species for '{}'", arg).error().post();
             return null;
-        } else {
-            IAlleleBeeSpecies species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(parts[0] + "." + parts[1]);
-            if (species instanceof AlleleBeeSpecies) return (AlleleBeeSpecies) species;
-            else {
-                species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(parts[0] + "." + getNormalName(parts[1]));
-                if (species instanceof AlleleBeeSpecies) return (AlleleBeeSpecies) species;
-                GroovyLog.msg("Can't find bee species for '{}'", arg);
-                return null;
-            }
         }
+        IAlleleBeeSpecies species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(parts[0] + "." + parts[1]);
+        if (species instanceof AlleleBeeSpecies) return (AlleleBeeSpecies) species;
+
+        species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(parts[0] + "." + getNormalName(parts[1]));
+        if (species instanceof AlleleBeeSpecies) return (AlleleBeeSpecies) species;
+
+        GroovyLog.msg("Can't find bee species for '{}'", arg);
+        return null;
     }
 
     protected String getNormalName(String name) {

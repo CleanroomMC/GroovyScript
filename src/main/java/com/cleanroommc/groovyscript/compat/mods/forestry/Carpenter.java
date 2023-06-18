@@ -23,6 +23,7 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
+
     @Override
     @GroovyBlacklist
     public void onReload() {

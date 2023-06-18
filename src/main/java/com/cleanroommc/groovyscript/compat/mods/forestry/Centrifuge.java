@@ -114,7 +114,7 @@ public class Centrifuge extends ForestryRegistry<ICentrifugeRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateFluids(msg, 0, 0, 0, 0);
             validateItems(msg, 1, 1, 0, 0);
-            msg.add(outputs.isEmpty(), "Expected at least 1 output! got 0.");
+            msg.add(outputs.isEmpty() || outputs.size() > 9, "Must have 1 - 9 outputs. got {}.", outputs.size());
         }
 
         @Override
