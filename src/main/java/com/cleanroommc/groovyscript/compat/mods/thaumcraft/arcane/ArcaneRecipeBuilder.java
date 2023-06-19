@@ -11,6 +11,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.commons.lang3.ArrayUtils;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
 import java.util.ArrayList;
@@ -34,6 +35,11 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
 
     public ArcaneRecipeBuilder aspect(AspectStack aspect) {
         this.aspects.add(aspect.getAspect(), aspect.getAmount());
+        return this;
+    }
+
+    public ArcaneRecipeBuilder aspect(String tag, int amount) {
+        this.aspects.add(Aspect.getAspect(tag), amount);
         return this;
     }
 
