@@ -231,6 +231,11 @@ dependencies {
         }
     }
 
+    compileOnly 'curse.maven:exnihilocreatio-274456:2817545'
+    if (project.debug_exnihilocreatio.toBoolean()) {
+        runtimeOnly 'curse.maven:exnihilocreatio-274456:2817545'
+    }
+
 }
 
 processResources {
