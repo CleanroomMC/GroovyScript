@@ -32,9 +32,6 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
 
     @Override
     public void onReload() {
-
-        team.chisel.common.carving.Carving.chisel.removeGroup("s");
-
         removeScripted().forEach(pair -> CarvingUtils.getChiselRegistry().removeVariation(pair.getValue(), pair.getKey()));
         restoreFromBackup().forEach(pair -> CarvingUtils.getChiselRegistry().addVariation(pair.getKey(), CarvingUtils.variationFor(pair.getValue(), 0)));
 
