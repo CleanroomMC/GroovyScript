@@ -6,9 +6,12 @@ import net.minecraft.util.ResourceLocation;
 public class RecipeName {
 
     private static int nextId = -1;
-    private static final String prefix = "groovyscript_";
+    private static String prefix = "";
 
     public static String generate() {
+        if (prefix.isEmpty())
+            prefix = GroovyScript.getRunConfig().getPackId() + "_";
+
         return generate(prefix);
     }
 
@@ -17,6 +20,6 @@ public class RecipeName {
     }
 
     public static ResourceLocation generateRl(String prefix) {
-        return new ResourceLocation(GroovyScript.ID, prefix + Integer.toHexString(nextId--));
+        return new ResourceLocation(GroovyScript.getRunConfig().getPackId(), prefix + Integer.toHexString(nextId--));
     }
 }

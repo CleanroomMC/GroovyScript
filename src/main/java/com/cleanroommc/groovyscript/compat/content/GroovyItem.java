@@ -3,9 +3,10 @@ package com.cleanroommc.groovyscript.compat.content;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -26,7 +27,7 @@ public class GroovyItem extends Item {
     private static final String nullTranslationKey = "item.null";
 
     @GroovyBlacklist
-    private static final Map<String, Item> ITEMS = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, Item> ITEMS = new Object2ObjectLinkedOpenHashMap<>();
 
     @GroovyBlacklist
     public static void registerItem(Item item) {
@@ -71,7 +72,9 @@ public class GroovyItem extends Item {
 
     public GroovyItem(String loc) {
         setRegistryName(GroovyScript.getRunConfig().getPackId(), loc);
-
+        if (VanillaModule.content.getDefaultTab() != null) {
+            setCreativeTab(VanillaModule.content.getDefaultTab());
+        }
     }
 
     public GroovyItem setEnchantedEffect() {
@@ -89,8 +92,9 @@ public class GroovyItem extends Item {
         return this;
     }
 
-    public void register() {
+    public GroovyItem register() {
         registerItem(this);
+        return this;
     }
 
     @Override

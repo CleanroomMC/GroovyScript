@@ -30,7 +30,7 @@ public abstract class CraftingRecipeBuilder {
     protected Closure<Void> recipeAction;
     protected byte replace = 0;
 
-    protected final int width, height;
+    protected int width, height;
 
     public CraftingRecipeBuilder(int width, int height) {
         this.width = width;
@@ -88,12 +88,12 @@ public abstract class CraftingRecipeBuilder {
     @GroovyBlacklist
     protected ResourceLocation createName(@Nullable String name, @Nullable String prefix) {
         if (name == null) {
-            return new ResourceLocation(GroovyScript.ID, prefix == null ? RecipeName.generate() : RecipeName.generate(prefix));
+            return new ResourceLocation(GroovyScript.getRunConfig().getPackId(), prefix == null ? RecipeName.generate() : RecipeName.generate(prefix));
         }
         if (name.contains(":")) {
             return new ResourceLocation(name);
         }
-        return new ResourceLocation(GroovyScript.ID, name);
+        return new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
     }
 
     public static class Shaped extends CraftingRecipeBuilder {

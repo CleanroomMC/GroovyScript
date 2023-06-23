@@ -4,11 +4,16 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Content {
+
+    public CreativeTabs defaultTab;
 
     public void registerItem(@Nullable String name, Item item) {
         if (name != null) {
@@ -40,5 +45,22 @@ public class Content {
 
     public GroovyBlock createBlock(String name) {
         return new GroovyBlock(name, Material.ROCK);
+    }
+
+    public CreativeTabs createCreativeTab(String name, ItemStack icon) {
+        return new CreativeTabs(name) {
+            @Override
+            public @NotNull ItemStack createIcon() {
+                return icon.copy();
+            }
+        };
+    }
+
+    public CreativeTabs getDefaultTab() {
+        return defaultTab;
+    }
+
+    public void setDefaultCreativeTab(CreativeTabs tab) {
+        this.defaultTab = tab;
     }
 }

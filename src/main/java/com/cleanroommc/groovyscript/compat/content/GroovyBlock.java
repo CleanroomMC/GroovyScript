@@ -3,15 +3,15 @@ package com.cleanroommc.groovyscript.compat.content;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +28,7 @@ public class GroovyBlock extends Block {
     private static boolean initialised = false;
     private static final String nullTranslationKey = "tile.null";
 
-    private static final Map<String, Pair<Block, ItemBlock>> BLOCKS = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, Pair<Block, ItemBlock>> BLOCKS = new Object2ObjectLinkedOpenHashMap<>();
 
     @GroovyBlacklist
     public static void register(Block block, ItemBlock itemBlock) {
@@ -94,10 +94,14 @@ public class GroovyBlock extends Block {
         setHardness(2.0F);
         setResistance(10.0F);
         setSoundType(SoundType.STONE);
+        if (VanillaModule.content.getDefaultTab() != null) {
+            setCreativeTab(VanillaModule.content.getDefaultTab());
+        }
     }
 
-    public void register() {
+    public GroovyBlock register() {
         register(this, this.itemBlock);
+        return this;
     }
 
     private static void checkBlockModel(ResourceLocation loc) {

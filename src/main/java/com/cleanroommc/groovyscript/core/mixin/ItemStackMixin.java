@@ -14,6 +14,7 @@ import groovy.lang.Closure;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,7 +28,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     @Unique
     protected Closure<Object> transformer;
     @Unique
-    protected Closure<Object> nbtMatcher = IngredientHelper.MATCH_ANY;
+    protected Closure<Object> nbtMatcher = null;
     @Unique
     protected String mark;
 
@@ -61,6 +62,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         copy.setMark(getMark());
         copy.transform(transformer);
         copy.when(matchCondition);
+        copy.nbtMatcher = nbtMatcher;
         return copy;
     }
 
@@ -71,7 +73,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        return new ItemStack[]{groovyscript$getThis().copy()};
+        return new ItemStack[]{IngredientHelper.toItemStack(exactCopy())};
     }
 
     @Override
@@ -81,8 +83,8 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
             return false;
         }
         if (nbtMatcher != null) {
-            NBTTagCompound nbt = getNbt();
-            return nbt == null || nbt.isEmpty() || ClosureHelper.call(true, nbtMatcher, nbt);
+            NBTTagCompound nbt = stack.getTagCompound();
+            return nbt != null && ClosureHelper.call(true, nbtMatcher, nbt);
         }
         return true;
     }
@@ -110,7 +112,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         if (transformer != null) {
             return ClosureHelper.call(ItemStack.EMPTY, transformer, matchedInput).copy();
         }
-        return groovyscript$getThis().getItem().getContainerItem(matchedInput);
+        return ForgeHooks.getContainerItem(matchedInput);
     }
 
     @Nullable
@@ -126,16 +128,20 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
 
     @Override
     public INBTResourceStack withNbt(NBTTagCompound nbt) {
-        setNbt(nbt);
-        this.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> NbtHelper.containsNbt(nbt1, nbt));
-        return this;
+        ItemStackMixin itemStackMixin = (ItemStackMixin) INbtIngredient.super.withNbt(nbt);
+        itemStackMixin.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> nbt.isEmpty() || NbtHelper.containsNbt(nbt1, nbt));
+        return itemStackMixin;
     }
 
     @Override
     public INbtIngredient withNbtExact(NBTTagCompound nbt) {
-        setNbt(nbt);
-        this.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> nbt1.equals(nbt));
-        return this;
+        ItemStackMixin itemStackMixin = (ItemStackMixin) INbtIngredient.super.withNbt(nbt);
+        if (nbt == null) {
+            itemStackMixin.nbtMatcher = null;
+        } else {
+            itemStackMixin.nbtMatcher = NbtHelper.makeNbtPredicate(nbt1 -> nbt.isEmpty() || nbt1.equals(nbt));
+        }
+        return itemStackMixin;
     }
 
     public INbtIngredient withNbtFilter(Closure<Object> nbtFilter) {
@@ -161,17 +167,18 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         return this;
     }
 
-    public IIngredient copyWithMeta(int meta) {
+    public IIngredient withMeta(int meta) {
         ItemStack t = groovyscript$getThis();
         ItemStackMixin itemStack = (ItemStackMixin) (Object) new ItemStack(t.getItem(), t.getCount(), meta);
         itemStack.setMark(getMark());
         itemStack.transform(transformer);
         itemStack.when(matchCondition);
+        itemStack.nbtMatcher = nbtMatcher;
         return itemStack;
     }
 
-    public IIngredient copyWithDamage(int meta) {
-        return copyWithMeta(meta);
+    public IIngredient withDamage(int meta) {
+        return withMeta(meta);
     }
 
     public void addOreDict(OreDictIngredient ingredient) {

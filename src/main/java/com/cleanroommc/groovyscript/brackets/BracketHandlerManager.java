@@ -3,6 +3,8 @@ package com.cleanroommc.groovyscript.brackets;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IBracketHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
+import com.cleanroommc.groovyscript.network.NetworkUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -10,6 +12,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -54,7 +57,8 @@ public class BracketHandlerManager {
     }
 
     public static void init() {
-        registerBracketHandler("ore", OreDictIngredient::new);
+        registerBracketHandler("resource", ResourceLocationBracketHandler.INSTANCE);
+        registerBracketHandler("ore", s -> s.contains("*") ? OreDictWildcardIngredient.of(s) : new OreDictIngredient(s));
         registerBracketHandler("item", ItemBracketHandler.INSTANCE, () -> ItemStack.EMPTY);
         registerBracketHandler("liquid", BracketHandlerManager::parseFluidStack);
         registerBracketHandler("fluid", BracketHandlerManager::parseFluidStack);
@@ -64,12 +68,25 @@ public class BracketHandlerManager {
         registerBracketHandler("potion", Potion::getPotionFromResourceLocation);
         registerBracketHandler("entity", s -> ForgeRegistries.ENTITIES.getValue(new ResourceLocation(s)));
         registerBracketHandler("creativeTab", s -> {
+            if (!NetworkUtils.isDedicatedClient()) {
+                GroovyLog.get().error("Creative tabs can't be obtained from server side!");
+                return CreativeTabs.SEARCH;
+            }
             for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
                 if (s.equals(tab.getTabLabel())) {
                     return tab;
                 }
             }
             return null;
+        });
+        registerBracketHandler("textformat", s -> {
+            TextFormatting textformat = TextFormatting.getValueByName(s);
+            if (textformat == null) {
+                try {
+                    textformat = TextFormatting.fromColorIndex(Integer.parseInt(s));
+                } catch (NumberFormatException ignored) { }
+            }
+            return textformat;
         });
     }
 

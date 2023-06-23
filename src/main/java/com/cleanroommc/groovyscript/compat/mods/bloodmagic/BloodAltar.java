@@ -14,10 +14,7 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.stream.Collectors;
 
 public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
 
@@ -150,8 +147,6 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
         @Override
         public @Nullable RecipeBloodAltar register() {
             if (!validate()) return null;
-            NonNullList<Ingredient> inputs = NonNullList.create();
-            inputs.addAll(input.stream().map(IIngredient::toMcIngredient).collect(Collectors.toList()));
             RecipeBloodAltar recipe = ModSupport.BLOOD_MAGIC.get().bloodAltar.add(input.get(0).toMcIngredient(), output.get(0), minimumTier, syphon, consumeRate, drainRate);
             return recipe;
         }

@@ -85,15 +85,6 @@ public interface GroovyLog {
     void log(Msg msg);
 
     /**
-     * Formats and logs a single object to this log on INFO level
-     *
-     * @param obj object to log
-     */
-    default void info(Object obj) {
-        info(obj == null ? "null" : obj.toString(), 0);
-    }
-
-    /**
      * Formats and logs to this log on INFO level
      *
      * @param msg  message to log
@@ -103,6 +94,15 @@ public interface GroovyLog {
     void info(String msg, Object... args);
 
     /**
+     * Formats and logs a single object to this log on INFO level
+     *
+     * @param obj object to log
+     */
+    default void info(Object obj) {
+        info(String.valueOf(obj), 0);
+    }
+
+    /**
      * Formats and logs to this log AND Minecraft's log on INFO level
      *
      * @param msg  message to log
@@ -110,6 +110,10 @@ public interface GroovyLog {
      * @see GroovyLog formatting
      */
     void infoMC(String msg, Object... args);
+
+    default void infoMC(Object o) {
+        infoMC(String.valueOf(o), 0);
+    }
 
     /**
      * Formats and logs to this log on DEBUG level. <br>
@@ -121,6 +125,10 @@ public interface GroovyLog {
      */
     void debug(String msg, Object... args);
 
+    default void debug(Object o) {
+        debug(String.valueOf(o), 0);
+    }
+
     /**
      * Formats and logs to this log AND Minecraft's log on DEBUG level. <br>
      * <b>Note!</b> {@link #isDebug()} must be true for this actually log something.
@@ -131,6 +139,10 @@ public interface GroovyLog {
      */
     void debugMC(String msg, Object... args);
 
+    default void debugMC(Object o) {
+        debugMC(String.valueOf(o), 0);
+    }
+
     /**
      * Formats and logs to this log on WARN level
      *
@@ -139,6 +151,10 @@ public interface GroovyLog {
      * @see GroovyLog formatting
      */
     void warn(String msg, Object... args);
+
+    default void warn(Object o) {
+        warn(String.valueOf(o), 0);
+    }
 
     /**
      * Formats and logs to this log AND Minecraft's log on WARN level
@@ -149,6 +165,10 @@ public interface GroovyLog {
      */
     void warnMC(String msg, Object... args);
 
+    default void warnMC(Object o) {
+        warnMC(String.valueOf(o), 0);
+    }
+
     /**
      * Formats and logs to this log on FATAL level
      *
@@ -157,6 +177,10 @@ public interface GroovyLog {
      * @see GroovyLog formatting
      */
     void fatal(String msg, Object... args);
+
+    default void fatal(Object o) {
+        fatal(String.valueOf(o), 0);
+    }
 
     /**
      * Formats and logs to this log AND Minecraft's log on FATAL level
@@ -167,6 +191,10 @@ public interface GroovyLog {
      */
     void fatalMC(String msg, Object... args);
 
+    default void fatalMC(Object o) {
+        fatalMC(String.valueOf(o), 0);
+    }
+
     /**
      * Formats and logs to this log on ERROR level
      *
@@ -176,6 +204,10 @@ public interface GroovyLog {
      */
     void error(String msg, Object... args);
 
+    default void error(Object o) {
+        error(String.valueOf(o), 0);
+    }
+
     /**
      * Formats and logs to this log AND Minecraft's log on ERROR level
      *
@@ -184,6 +216,10 @@ public interface GroovyLog {
      * @see GroovyLog formatting
      */
     void errorMC(String msg, Object... args);
+
+    default void errorMC(Object o) {
+        errorMC(String.valueOf(o), 0);
+    }
 
     /**
      * Formats and logs an exception to this log AND Minecraft's log.<br>

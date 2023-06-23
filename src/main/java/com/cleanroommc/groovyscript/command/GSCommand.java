@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -50,8 +49,8 @@ import java.util.stream.Collectors;
 public class GSCommand extends CommandTreeBase {
 
     public static void runReload(EntityPlayerMP player, MinecraftServer server) {
-        if (!(server instanceof IntegratedServer)) {
-            player.sendMessage(new TextComponentString("Reloading in multiplayer is currently no allowed to avoid desync."));
+        if (server.isDedicatedServer()) {
+            player.sendMessage(new TextComponentString("Reloading in multiplayer is currently not allowed to avoid desync."));
             return;
         }
         GroovyLog.get().info("========== Reloading Groovy scripts ==========");
@@ -59,7 +58,7 @@ public class GSCommand extends CommandTreeBase {
         GroovyScript.getSandbox().run(LoadStage.POST_INIT);
         time = System.currentTimeMillis() - time;
         player.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
-        GroovyScript.postScriptRunResult(player, false);
+        GroovyScript.postScriptRunResult(player, false, true);
 
         NetworkHandler.sendToPlayer(new SReloadJei(), player);
     }
@@ -74,6 +73,17 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
             if (sender instanceof EntityPlayerMP) {
                 runReload((EntityPlayerMP) sender, server);
+            }
+        }));
+
+        addSubcommand(new SimpleCommand("check", (server, sender, args) -> {
+            if (sender instanceof EntityPlayerMP) {
+                sender.sendMessage(new TextComponentString("Checking groovy syntax..."));
+                long time = System.currentTimeMillis();
+                GroovyScript.getSandbox().checkSyntax();
+                time = System.currentTimeMillis() - time;
+                sender.sendMessage(new TextComponentString("Checking syntax took " + time + "ms"));
+                GroovyScript.postScriptRunResult((EntityPlayerMP) sender, false, false);
             }
         }));
 

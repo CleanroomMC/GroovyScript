@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin(value = Minecraft.class, remap = false)
+@Mixin(value = Minecraft.class)
 public interface DefaultResourcePackAccessor {
 
     @Accessor("defaultResourcePacks")

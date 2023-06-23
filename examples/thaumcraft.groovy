@@ -1,5 +1,3 @@
-import net.minecraft.util.ResourceLocation
-
 mods.thaumcraft.Crucible.removeByOutput(item('minecraft:gunpowder'))
 
 mods.thaumcraft.Crucible.recipeBuilder()
@@ -52,7 +50,7 @@ mods.thaumcraft.ArcaneWorkbench.shapedBuilder()
 //        .chatColor(14013676)
 //        .component(aspect('cognito'))
 //        .component(aspect('perditio'))
-//        .image(new ResourceLocation('thaumcraft', 'textures/aspects/humor.png'))
+//        .image(resource('thaumcraft:textures/aspects/humor.png'))
 //        .register()
 
 mods.thaumcraft.AspectHelper.aspectBuilder()
@@ -122,12 +120,12 @@ mods.thaumcraft.SmeltingBonus.removeByOutput(item('minecraft:gold_nugget'))
 //    .formulaAspect(aspect('ignis') * 5)
 //    .formulaAspect(aspect('terra') * 5)
 //    .formulaAspect(aspect('aqua') * 5)
-//    .icon(new ResourceLocation('thaumcraft', 'textures/aspects/humor.png'))
-//    .background(new ResourceLocation('thaumcraft', 'textures/gui/gui_research_back_1.jpg'))
-//    .background2(new ResourceLocation('thaumcraft', 'textures/gui/gui_research_back_over.png'))
+//    .icon(resource('thaumcraft:textures/aspects/humor.png'))
+//    .background(resource('thaumcraft:textures/gui/gui_research_back_1.jpg'))
+//    .background2(resource('thaumcraft:textures/gui/gui_research_back_over.png'))
 //    .register()
 //
-//mods.thaumcraft.Research.addResearchLocation(new ResourceLocation('thaumcraft', 'research/new.json'))
+//mods.thaumcraft.Research.addResearchLocation(resource('thaumcraft:research/new.json'))
 
 mods.thaumcraft.Research.addScannable('KNOWLEDGETYPEHUMOR', item('minecraft:pumpkin'))
 

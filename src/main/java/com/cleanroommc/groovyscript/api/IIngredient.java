@@ -1,7 +1,9 @@
 package com.cleanroommc.groovyscript.api;
 
+import com.cleanroommc.groovyscript.helper.ingredient.OrIngredient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +14,7 @@ import java.util.function.Predicate;
  */
 public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
 
+    @Override
     IIngredient exactCopy();
 
     Ingredient toMcIngredient();
@@ -19,15 +22,25 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
     ItemStack[] getMatchingStacks();
 
     default ItemStack applyTransform(ItemStack matchedInput) {
-        return matchedInput.getItem().hasContainerItem(matchedInput) ? matchedInput.getItem().getContainerItem(matchedInput) : ItemStack.EMPTY;
+        return ForgeHooks.getContainerItem(matchedInput);
     }
 
     default boolean test(FluidStack fluidStack) {
         return false;
     }
 
-    default IResourceStack copyWithAmount(int amount) {
-        return exactCopy().withAmount(amount);
+    default IIngredient or(IIngredient ingredient) {
+        OrIngredient orIngredient = new OrIngredient();
+        orIngredient.addIngredient(this);
+        orIngredient.addIngredient(ingredient);
+        return orIngredient;
+    }
+
+    @Override
+    default IIngredient withAmount(int amount) {
+        IIngredient iIngredientStack = exactCopy();
+        iIngredientStack.setAmount(amount);
+        return iIngredientStack;
     }
 
     /**

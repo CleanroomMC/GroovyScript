@@ -24,7 +24,9 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 public class GroovyScriptSandbox extends GroovySandbox {
@@ -61,6 +63,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     };
 
     private LoadStage currentLoadStage;
+    private boolean checkSyntaxMode = false;
 
     public GroovyScriptSandbox(URL... scriptEnvironment) {
         super(scriptEnvironment);
@@ -71,10 +74,28 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("event_manager", GroovyEventManager.INSTANCE);
     }
 
+    public void checkSyntax() {
+        load(LoadStage.PRE_INIT, false, true);
+        for (LoadStage loadStage : LoadStage.getLoadStages()) {
+            if (loadStage != LoadStage.PRE_INIT) {
+                load(loadStage, false, false);
+            }
+        }
+    }
+
+    public void checkSyntax(LoadStage loadStage) {
+        load(loadStage, false, true);
+    }
+
     public void run(LoadStage currentLoadStage) {
+        load(currentLoadStage, true, true);
+    }
+
+    public void load(LoadStage currentLoadStage, boolean run, boolean loadClasses) {
+        this.checkSyntaxMode = !run;
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
-            super.run();
+            super.load(run, loadClasses);
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.get().errorMC("An Exception occurred trying to run groovy!");
             GroovyScript.LOGGER.throwing(e);
@@ -82,12 +103,13 @@ public class GroovyScriptSandbox extends GroovySandbox {
             GroovyLog.get().exception(e);
         } finally {
             this.currentLoadStage = null;
+            this.checkSyntaxMode = false;
         }
     }
 
     @ApiStatus.Internal
     @Override
-    public void run() throws Exception {
+    public void load(boolean run, boolean loadClasses) throws Exception {
         throw new UnsupportedOperationException("Use run(Loader loader) instead!");
     }
 
@@ -123,7 +145,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void preRun() {
-        GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoadStage);
+        if (this.checkSyntaxMode) {
+            GroovyLog.get().info("Checking syntax in loader '{}'", this.currentLoadStage);
+        } else {
+            GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoadStage);
+        }
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         if (this.currentLoadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
@@ -134,7 +160,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected boolean shouldRunFile(File file) {
-        GroovyLog.get().info(" - executing {}", file.toString());
+        if (!this.checkSyntaxMode) {
+            GroovyLog.get().info(" - executing {}", file.toString());
+        }
         return true;
     }
 

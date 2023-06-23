@@ -20,7 +20,7 @@ public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
     public String getModContainerClass() {
-        return null;
+        return "com.cleanroommc.groovyscript.sandbox.ScriptModContainer";
     }
 
     @Nullable

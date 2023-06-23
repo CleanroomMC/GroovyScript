@@ -1,17 +1,20 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedField;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedMethod;
+import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import org.codehaus.groovy.ast.ClassNode;
+import org.codehaus.groovy.ast.MethodNode;
 import org.codehaus.groovy.reflection.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.PrivilegedAction;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * A helper class that filters blacklisted fields and methods and remaps their names if needed
@@ -71,5 +74,43 @@ public class GroovyCodeFactory {
         return deobfName == null ?
                new CachedMethod(cachedClass, method) :
                new RemappedCachedMethod(cachedClass, method, deobfName);
+    }
+
+    /**
+     * This bad boy is responsible for remapping overriden methods.
+     * Called via Mixin
+     */
+    public static void remapOverrides(ClassNode classNode) {
+        if (FMLLaunchHandler.isDeobfuscatedEnvironment()) return;
+        ClassNode superClass = classNode.getSuperClass();
+        if (superClass == null || !superClass.getName().startsWith(MC_CLASS)) return;
+        List<MethodNode> methodNodes = classNode.getMethods();
+        for (int i = 0, methodNodesSize = methodNodes.size(); i < methodNodesSize; i++) {
+            MethodNode methodNode = methodNodes.get(i);
+            String obf = GroovyDeobfMapper.getObfuscatedMethodName(superClass, methodNode.getName(), methodNode.getParameters());
+            if (obf != null) {
+                classNode.addMethod(copyRemappedMethodNode(obf, methodNode));
+            }
+        }
+    }
+
+    /**
+     * Copies a method node with a new name
+     */
+    private static MethodNode copyRemappedMethodNode(String name, MethodNode original) {
+        MethodNode copy = new MethodNode(name, original.getModifiers(), original.getReturnType(), original.getParameters(), original.getExceptions(), original.getCode());
+        copy.setAnnotationDefault(original.hasDefaultValue());
+        copy.setColumnNumber(original.getColumnNumber());
+        copy.setDeclaringClass(original.getDeclaringClass());
+        copy.setGenericsTypes(original.getGenericsTypes());
+        copy.setHasNoRealSourcePosition(original.hasNoRealSourcePosition());
+        copy.setLastColumnNumber(original.getLastColumnNumber());
+        copy.setLastLineNumber(original.getLastLineNumber());
+        copy.setLineNumber(original.getLineNumber());
+        copy.setMetaDataMap(original.getMetaDataMap());
+        copy.setSynthetic(original.isSynthetic());
+        copy.setSyntheticPublic(original.isSyntheticPublic());
+        copy.setVariableScope(original.getVariableScope());
+        return copy;
     }
 }

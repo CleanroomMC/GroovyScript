@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.core.mixin;
 
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import groovy.lang.MetaClassImpl;
+import groovy.lang.Script;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,7 +27,7 @@ public class MetaClassImplMixin {
 
     @Inject(method = "invokeStaticMissingMethod", at = @At("HEAD"), cancellable = true)
     public void invokeStaticMissingMethod(Class<?> sender, String methodName, Object[] arguments, CallbackInfoReturnable<Object> cir) {
-        if (sender.getSuperclass() == Object.class && "main".equals(methodName)) {
+        if (sender.getSuperclass() != Script.class && "main".equals(methodName)) {
             cir.setReturnValue(null);
         }
     }

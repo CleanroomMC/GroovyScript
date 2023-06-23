@@ -5,7 +5,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(InventoryCrafting.class)
+@Mixin(value = InventoryCrafting.class)
 public interface InventoryCraftingAccess {
 
     @Accessor

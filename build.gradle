@@ -1,186 +1,236 @@
-buildscript {
-    repositories {
-        maven {
-            name = "forge"
-            url = "https://maven.minecraftforge.net/"
-        }
-        maven {
-            url = 'https://maven.cleanroommc.com/'
-        }
-        maven {
-            url = 'https://repo.spongepowered.org/maven/'
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        if (project.use_mixins.toBoolean()) {
-            classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-        }
-    }
-}
+import com.gtnewhorizons.retrofuturagradle.mcp.ReobfuscatedJar
+import org.jetbrains.gradle.ext.Gradle
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '4.0.4'
-}
-
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'com.github.johnrengelman.shadow'
-
-if (project.use_mixins.toBoolean()) {
-    apply plugin: 'org.spongepowered.mixin'
+    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.7'
+    id 'eclipse'
+    id 'com.gtnewhorizons.retrofuturagradle' version '1.3.16'
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
 version = project.mod_version
 group = project.maven_group
 archivesBaseName = project.archives_base_name
 
-sourceCompatibility = targetCompatibility = '1.8'
+// Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+        // Azul covers the most platforms for Java 8 toolchains, crucially including MacOS arm64
+        vendor.set(org.gradle.jvm.toolchain.JvmVendorSpec.AZUL)
+    }
+    // Generate sources and javadocs jars when building and publishing
+    withSourcesJar()
+    // withJavadocJar()
+}
 
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+configurations {
+    embed
+    implementation.extendsFrom(embed)
 }
 
 minecraft {
-    version = '1.12.2-14.23.5.2847'
-    runDir = 'run'
-    mappings = 'stable_39'
-    def args = []
-    if (project.use_coremod.toBoolean()) {
-        args << '-Dfml.coreMods.load=' + coremod_plugin_class_name
-    }
-    if (project.use_mixins.toBoolean()) {
-        args << '-Dmixin.hotSwap=true'
-        args << '-Dmixin.checks.interfaces=true'
-        args << '-Dmixin.debug.export=true'
-    }
-    clientJvmArgs.addAll(args)
-    serverJvmArgs.addAll(args)
+    mcVersion = '1.12.2'
+    def args = ["-ea:${project.group}"]
+    args << '-Dfml.coreMods.load=' + coremod_plugin_class_name
+    args << '-Dmixin.hotSwap=true'
+    args << '-Dmixin.checks.interfaces=true'
+    args << '-Dmixin.debug.export=true'
+    extraRunJvmArguments.addAll(args)
+
+    useDependencyAccessTransformers = true
+
+    injectedTags.put("ID", project.archives_base_name)
+    injectedTags.put("VERSION", project.version)
+    injectedTags.put("GROOVY_VERSION", project.groovy_version)
+}
+
+// Generate a my.project.Tags class with the version number as a field
+tasks.injectTags.configure {
+    outputClassName.set("${project.group}.${project.archives_base_name}.Tags")
 }
 
 repositories {
     maven {
-        url = 'https://maven.cleanroommc.com/'
+        url = 'https://maven.cleanroommc.com'
     }
     maven {
-        url = 'https://repo.spongepowered.org/maven/'
+        url = 'https://repo.spongepowered.org/maven'
     }
     maven {
-        url = "https://mvnrepository.com/artifact/org.apache.groovy/groovy"
+        url 'https://cursemaven.com'
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        url = 'https://mvnrepository.com/artifact/org.apache.groovy/groovy'
     }
     maven {
         url 'https://dvs1.progwml6.com/files/maven/'
     }
     maven {
-        name = "CurseForge"
-        url = 'https://www.cursemaven.com/'
+        url 'http://maven.tterrag.com/'
+        allowInsecureProtocol = true
     }
-    maven {
-        url "http://maven.tterrag.com/"
-    }
+    mavenLocal() // Must be last for caching to work
 }
 
 dependencies {
-    if (project.use_mixins.toBoolean()) {
-        deobfCompile 'zone.rong:mixinbooter:4.2'
+    implementation 'zone.rong:mixinbooter:7.1'
+
+    String mixin = modUtils.enableMixins('org.spongepowered:mixin:0.8.3')
+
+    api (mixin) {
+        transitive = false
+    }
+    annotationProcessor 'org.ow2.asm:asm-debug-all:5.2'
+    annotationProcessor 'com.google.guava:guava:24.1.1-jre'
+    annotationProcessor 'com.google.code.gson:gson:2.8.6'
+    annotationProcessor (mixin) {
+        transitive = false
     }
 
     compileOnly 'org.jetbrains:annotations:23.0.0'
 
-    implementation "org.apache.groovy:groovy:${project.groovy_version}"
-    shadow "org.apache.groovy:groovy:${project.groovy_version}"
+    embed "org.apache.groovy:groovy:${project.groovy_version}"
 
-    compile 'mezz.jei:jei_1.12.2:4.16.1.302'
+    implementation 'mezz.jei:jei_1.12.2:4.16.1.302'
 
+    compileOnly rfg.deobf('curse.maven:mekanism-268560:2835175')
     if (project.debug_mekanism.toBoolean()) {
-        deobfCompile 'curse.maven:mekanism-268560:2835175'
-    } else {
-        deobfProvided 'curse.maven:mekanism-268560:2835175'
+        runtimeOnly rfg.deobf('curse.maven:mekanism-268560:2835175')
     }
 
+    compileOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
     if (project.debug_thermal.toBoolean() || project.debug_de.toBoolean()) {
-        deobfCompile 'curse.maven:redstone_flux-270789:2920436'
-    } else {
-        deobfProvided 'curse.maven:redstone_flux-270789:2920436'
+        runtimeOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
     }
 
+    compileOnly rfg.deobf('curse.maven:guide-api-228832:2645992')
+    compileOnly rfg.deobf('curse.maven:blood-magic-224791:2822288')
     if (project.debug_blood_magic.toBoolean()) {
-        deobfCompile 'curse.maven:guide-api-228832:2645992'
-        deobfCompile 'curse.maven:blood-magic-224791:2822288'
-    } else {
-        deobfProvided 'curse.maven:guide-api-228832:2645992'
-        deobfProvided 'curse.maven:blood-magic-224791:2822288'
+        runtimeOnly rfg.deobf('curse.maven:guide-api-228832:2645992')
+        runtimeOnly rfg.deobf('curse.maven:blood-magic-224791:2822288')
     }
 
+    compileOnly rfg.deobf('curse.maven:cucumber-272335:2645867')
+    compileOnly rfg.deobf('curse.maven:extended-crafting-nomifactory-edition-398267:3613140')
+    if (project.debug_extended_crafting.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:cucumber-272335:2645867')
+        runtimeOnly rfg.deobf('curse.maven:extended-crafting-nomifactory-edition-398267:3613140')
+    }
+
+    compileOnly rfg.deobf('curse.maven:cofh_core-69162:2920433')
+    compileOnly rfg.deobf('curse.maven:cofh_world-271384:2920434')
+    compileOnly rfg.deobf('curse.maven:thermal_expansion-69163:2926431')
+    compileOnly rfg.deobf('curse.maven:thermal_foundation-222880:2926428')
     if (project.debug_thermal.toBoolean()) {
-        deobfCompile 'curse.maven:cofh_core-69162:2920433'
-        deobfCompile 'curse.maven:cofh_world-271384:2920434'
-        deobfCompile 'curse.maven:thermal_expansion-69163:2926431'
-        deobfCompile 'curse.maven:thermal_foundation-222880:2926428'
-    } else {
-        deobfProvided 'curse.maven:cofh_core-69162:2920433'
-        deobfProvided 'curse.maven:cofh_world-271384:2920434'
-        deobfProvided 'curse.maven:thermal_expansion-69163:2926431'
-        deobfProvided 'curse.maven:thermal_foundation-222880:2926428'
+        runtimeOnly rfg.deobf('curse.maven:cofh_core-69162:2920433')
+        runtimeOnly rfg.deobf('curse.maven:cofh_world-271384:2920434')
+        runtimeOnly rfg.deobf('curse.maven:thermal_expansion-69163:2926431')
+        runtimeOnly rfg.deobf('curse.maven:thermal_foundation-222880:2926428')
     }
 
+    compileOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
+    compileOnly rfg.deobf('curse.maven:draconic_evolution-223565:3431261')
+    compileOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
     if (project.debug_de.toBoolean()) {
-        deobfCompile 'curse.maven:codechicken_lib_1_8-242818:2779848'
-        deobfCompile 'curse.maven:draconic_evolution-223565:3431261'
-        deobfCompile 'curse.maven:brandons_core-231382:3408276'
-    } else {
-        deobfProvided 'curse.maven:codechicken_lib_1_8-242818:2779848'
-        deobfProvided 'curse.maven:draconic_evolution-223565:3431261'
-        deobfProvided 'curse.maven:brandons_core-231382:3408276'
+        runtimeOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
+        runtimeOnly rfg.deobf('curse.maven:draconic_evolution-223565:3431261')
+        runtimeOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
     }
 
-    if (project.debug_enderio.toBoolean()) {
-        deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
-        deobfCompile("com.enderio:EnderIO:1.12.2-+") {
-            transitive = false
-        }
-    } else {
-        deobfProvided "com.enderio.core:EnderCore:1.12.2-+"
-        deobfProvided("com.enderio:EnderIO:1.12.2-+") {
-            transitive = false
-        }
-    }
-
+    compileOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
+    compileOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
     if (project.debug_ic2.toBoolean()) {
-        deobfCompile 'curse.maven:industrialcraft_experimental-242638:3838713'
-        deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
-    } else {
-        deobfProvided 'curse.maven:industrialcraft_experimental-242638:3838713'
-        deobfProvided 'curse.maven:industrialcraft_classic-242942:3093607'
+        runtimeOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
+        runtimeOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
     }
 
-    if (project.debug_astral.toBoolean() || project.debug_thaum.toBoolean()) {
-        runtime 'curse.maven:baubles-227083:2518667'
+    compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
+    if (project.debug_astral.toBoolean() || project.debug_thaum.toBoolean() || project.debug_botania.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:baubles-227083:2518667')
     }
 
-    if (project.debug_astral.toBoolean()) {
-        deobfCompile 'curse.maven:astralsorcery-sorcery-241721:3044416'
-    } else {
-        deobfProvided 'curse.maven:astralsorcery-sorcery-241721:3044416'
+    compileOnly rfg.deobf('curse.maven:botania-225643:3330934')
+    if (project.debug_botania.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:botania-225643:3330934')
     }
 
+    compileOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
     if (project.debug_thaum.toBoolean()) {
-        deobfCompile 'curse.maven:thaumcraft-223628:2629023'
-        runtime 'curse.maven:thaumic_jei-285492:2705304'
-    } else {
-        deobfProvided 'curse.maven:thaumcraft-223628:2629023'
+        runtimeOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
+        runtimeOnly 'curse.maven:thaumic_jei-285492:2705304'
     }
 
+    compileOnly rfg.deobf('curse.maven:astralsorcery-sorcery-241721:3044416')
+    if (project.debug_astral.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:astralsorcery-sorcery-241721:3044416')
+    }
+
+    compileOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
     if (project.debug_ie.toBoolean()) {
-        deobfCompile 'curse.maven:immersive_engineering-231951:2974106'
-    } else {
-        deobfProvided 'curse.maven:immersive_engineering-231951:2974106'
+        runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
     }
-}
 
-sourceSets {
-    main {
-        ext.refMap = 'mixins.' + archives_base_name + '.refmap.json'
+    compileOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
+    compileOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
+    compileOnly rfg.deobf('curse.maven:mystical_world-282940:3460961')
+    compileOnly rfg.deobf('curse.maven:roots-246183:3905074')
+    if (project.debug_roots.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
+        runtimeOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
+        runtimeOnly rfg.deobf('curse.maven:mystical_world-282940:3460961')
+        runtimeOnly rfg.deobf('curse.maven:roots-246183:3905074')
     }
+
+    compileOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
+    if (project.debug_thaum.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:baubles-227083:2518667')
+        runtimeOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
+        runtimeOnly 'curse.maven:thaumic_jei-285492:2705304'
+    }
+
+    compileOnly rfg.deobf('curse.maven:astralsorcery-sorcery-241721:3044416')
+    if (project.debug_astral.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:astralsorcery-sorcery-241721:3044416')
+    }
+
+    compileOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
+    if (project.debug_ie.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
+    }
+
+    compileOnly 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
+    compileOnly 'slimeknights:TConstruct:1.12.2-2.13.0.190'
+    compileOnly rfg.deobf('curse.maven:constructs-armory-287683:3174535')
+    compileOnly rfg.deobf('curse.maven:tinkers-complement-272671:2843439')
+    if (project.debug_tinkers.toBoolean()) {
+        runtimeOnly 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
+        runtimeOnly 'slimeknights:TConstruct:1.12.2-2.13.0.190'
+        runtimeOnly rfg.deobf('curse.maven:constructs-armory-287683:3174535')
+        runtimeOnly rfg.deobf('curse.maven:tinkers-complement-272671:2843439')
+    }
+
+    compileOnly 'com.enderio.core:EnderCore:1.12.2-+'
+    compileOnly ('com.enderio:EnderIO:1.12.2-+') {
+        transitive = false
+    }
+    if (project.debug_enderio.toBoolean()) {
+        runtimeOnly 'com.enderio.core:EnderCore:1.12.2-+'
+        runtimeOnly ('com.enderio:EnderIO:1.12.2-+') {
+            transitive = false
+        }
+    }
+
 }
 
 processResources {
@@ -188,52 +238,55 @@ processResources {
     inputs.property 'version', project.version
     inputs.property 'mcversion', project.minecraft.version
     // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+    filesMatching(['mcmod.info', 'pack.mcmeta']) { fcd ->
         // replace version and mcversion
-        expand 'version': project.version, 'mcversion': project.minecraft.version
+        fcd.expand (
+                'version': project.version,
+                'mcversion': project.minecraft.version
+        )
     }
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-    rename '(.+_at.cfg)', 'META-INF/$1' // Access Transformers
 }
 
 jar {
     manifest {
         def attribute_map = [:]
-        if (project.use_coremod.toBoolean()) {
-            attribute_map['FMLCorePlugin'] = project.coremod_plugin_class_name
-            if (project.include_mod.toBoolean()) {
-                attribute_map['FMLCorePluginContainsFMLMod'] = true
-            }
-        }
-        if (project.use_mixins.toBoolean()) {
-            attribute_map['TweakClass'] = 'org.spongepowered.asm.launch.MixinTweaker'
-            // false for dev and true for non dev
-            attribute_map['ForceLoadAsMod'] = project.gradle.startParameter.taskNames[0] == "build"
-        }
+        attribute_map['FMLCorePlugin'] = project.coremod_plugin_class_name
+        attribute_map['FMLCorePluginContainsFMLMod'] = true
+        attribute_map['ForceLoadAsMod'] = project.gradle.startParameter.taskNames[0] == "build"
         attributes(attribute_map)
     }
+    // Add all embedded dependencies into the jar
+    from(provider{ configurations.embed.collect {it.isDirectory() ? it : zipTree(it)} })
 }
 
-shadowJar {
-    classifier = ''
-    baseName = archivesBaseName
-    version = version
-    configurations = [project.configurations.shadow]
-    relocate 'lib.group', "${project.group}.shadow.lib.group" // ensure repackaged packages have unique names
+idea {
+    module { inheritOutputDirs = true }
+    project { settings {
+        runConfigurations {
+            "1. Run Client"(Gradle) {
+                taskNames = ['runClient']
+            }
+            "2. Run Server"(Gradle) {
+                taskNames = ['runServer']
+            }
+            "3. Run Obfuscated Client"(Gradle) {
+                taskNames = ['runObfClient']
+            }
+            "4. Run Obfuscated Server"(Gradle) {
+                taskNames = ['runObfServer']
+            }
+        }
+        compiler.javac {
+            afterEvaluate {
+                javacAdditionalOptions = '-encoding utf8'
+                moduleJavacAdditionalOptions = [
+                        (project.name + ".main"): tasks.compileJava.options.compilerArgs.collect { '"' + it + '"' }.join(' ')
+                ]
+            }
+        }
+    }}
 }
 
-reobf {
-    shadowJar {}
-}
-
-// this replaces jar.finalizedBy('reobfJar') in the standard forge mod buildscript
-tasks.build.dependsOn reobfShadowJar
-jar.finalizedBy('reobfShadowJar')
-
-artifacts {
-    archives shadowJar
+tasks.named("processIdeaSettings").configure {
+    dependsOn("injectTags")
 }

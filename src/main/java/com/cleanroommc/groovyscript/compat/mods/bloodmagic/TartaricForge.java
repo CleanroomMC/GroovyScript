@@ -17,7 +17,6 @@ import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
 
@@ -159,9 +158,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         @Override
         public @Nullable RecipeTartaricForge register() {
             if (!validate()) return null;
-            NonNullList<Ingredient> inputs = NonNullList.create();
-            inputs.addAll(input.stream().map(IIngredient::toMcIngredient).collect(Collectors.toList()));
-            RecipeTartaricForge recipe = ModSupport.BLOOD_MAGIC.get().tartaricForge.add(inputs, output.get(0), minimumSouls, soulDrain);
+            RecipeTartaricForge recipe = ModSupport.BLOOD_MAGIC.get().tartaricForge.add(IngredientHelper.toIngredientNonNullList(input), output.get(0), minimumSouls, soulDrain);
             return recipe;
         }
     }

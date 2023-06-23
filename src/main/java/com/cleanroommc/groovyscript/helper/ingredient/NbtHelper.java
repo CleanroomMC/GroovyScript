@@ -106,7 +106,7 @@ public class NbtHelper {
             for (String key : nbt.getKeySet()) {
                 newLine(builder, indent, pretty);
                 if (colored) builder.append(TextFormatting.GREEN);
-                builder.append(key);
+                builder.append('"').append(key).append('"');
                 if (colored) builder.append(TextFormatting.GRAY);
                 builder.append(": ");
                 builder.append(toGroovyCode(nbt.getTag(key), indent, pretty, colored));

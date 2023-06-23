@@ -39,8 +39,9 @@ public interface INBTResourceStack extends IResourceStack {
     void setNbt(NBTTagCompound nbt);
 
     default INBTResourceStack withNbt(NBTTagCompound nbt) {
-        setNbt(nbt);
-        return this;
+        INBTResourceStack resourceStack = (INBTResourceStack) exactCopy();
+        resourceStack.setNbt(nbt);
+        return resourceStack;
     }
 
     default INBTResourceStack withNbt(Map<String, Object> map) {

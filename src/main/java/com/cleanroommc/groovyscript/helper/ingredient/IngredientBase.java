@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeHooks;
 
 public abstract class IngredientBase implements IIngredient {
 
@@ -20,6 +21,14 @@ public abstract class IngredientBase implements IIngredient {
         return this;
     }
 
+    public IngredientBase reuse() {
+        return transform(IngredientHelper.REUSE);
+    }
+
+    public IngredientBase noreturn() {
+        return transform(IngredientHelper.NO_RETURN);
+    }
+
     @Override
     public boolean test(ItemStack itemStack) {
         return (matchCondition == null || ClosureHelper.call(true, matchCondition, itemStack)) && matches(itemStack);
@@ -32,6 +41,6 @@ public abstract class IngredientBase implements IIngredient {
         if (transformer != null) {
             return ClosureHelper.call(ItemStack.EMPTY, transformer, matchedInput);
         }
-        return ItemStack.EMPTY;
+        return ForgeHooks.getContainerItem(matchedInput);
     }
 }

@@ -73,7 +73,7 @@ public abstract class GroovySandbox {
         currentSandbox.set(null);
     }
 
-    public void run() throws Exception {
+    public void load(boolean run, boolean loadClasses) throws Exception {
         currentSandbox.set(this);
         preRun();
 
@@ -85,49 +85,65 @@ public abstract class GroovySandbox {
         postInitBindings(binding);
         Set<File> executedClasses = new ObjectOpenHashSet<>();
 
-        running.set(true);
+        running.set(run);
         try {
-            // load and run any configured class files
-            for (File classFile : getClassFiles()) {
-                Class<?> clazz = loadScriptClass(engine, classFile, false);
-                if (clazz == null) {
-                    // loading script fails if the file is a script that depends on a class file that isn't loaded yet
-                    // we cant determine if the file is a script or a class
-                    continue;
-                }
-                // the superclass of class files is Object
-                if (clazz.getSuperclass() == Object.class && shouldRunFile(classFile)) {
-                    executedClasses.add(classFile);
-                    setCurrentScript(classFile.toString());
-                    InvokerHelper.createScript(clazz, binding).run();
-                    setCurrentScript(null);
-                }
+            if (loadClasses) {
+                // load and run any configured class files
+                loadClassScripts(engine, binding, executedClasses, run);
             }
             // now run all script files
-            for (File scriptFile : getScriptFiles()) {
-                if (!executedClasses.contains(scriptFile)) {
-                    Class<?> clazz = loadScriptClass(engine, scriptFile, true);
-                    if (clazz == null) {
-                        GroovyLog.get().errorMC("Error loading script for {}", scriptFile.getPath());
-                        GroovyLog.get().errorMC("Did you forget to register your class file in your run config?");
-                        continue;
-                    }
-                    if (clazz.getSuperclass() == Object.class) {
-                        GroovyLog.get().errorMC("Class file '{}' should be defined in the runConfig in the classes property!", scriptFile);
-                        continue;
-                    }
-                    if (clazz.getSuperclass() == Script.class && shouldRunFile(scriptFile)) {
-                        setCurrentScript(scriptFile.toString());
-                        InvokerHelper.createScript(clazz, binding).run();
-                        setCurrentScript(null);
-                    }
-                }
-            }
+            loadScripts(engine, binding, executedClasses, run);
         } finally {
             running.set(false);
             postRun();
             currentSandbox.set(null);
             setCurrentScript(null);
+        }
+    }
+
+    protected void loadScripts(GroovyScriptEngine engine, Binding binding, Set<File> executedClasses, boolean run) {
+        for (File scriptFile : getScriptFiles()) {
+            if (!executedClasses.contains(scriptFile)) {
+                Class<?> clazz = loadScriptClass(engine, scriptFile, true);
+                if (clazz == null) {
+                    GroovyLog.get().errorMC("Error loading script for {}", scriptFile.getPath());
+                    GroovyLog.get().errorMC("Did you forget to register your class file in your run config?");
+                    continue;
+                }
+                if (clazz.getSuperclass() != Script.class) {
+                    GroovyLog.get().errorMC("Class file '{}' should be defined in the runConfig in the classes property!", scriptFile);
+                    continue;
+                }
+                if (shouldRunFile(scriptFile)) {
+                    Script script = InvokerHelper.createScript(clazz, binding);
+                    if (run) {
+                        setCurrentScript(scriptFile.toString());
+                        script.run();
+                        setCurrentScript(null);
+                    }
+                }
+            }
+        }
+    }
+
+    protected void loadClassScripts(GroovyScriptEngine engine, Binding binding, Set<File> executedClasses, boolean run) {
+        for (File classFile : getClassFiles()) {
+            Class<?> clazz = loadScriptClass(engine, classFile, false);
+            if (clazz == null) {
+                // loading script fails if the file is a script that depends on a class file that isn't loaded yet
+                // we cant determine if the file is a script or a class
+                continue;
+            }
+            // the superclass of class files is Object
+            if (clazz.getSuperclass() != Script.class && shouldRunFile(classFile)) {
+                executedClasses.add(classFile);
+                Script script = InvokerHelper.createScript(clazz, binding);
+                if (run) {
+                    setCurrentScript(script.toString());
+                    script.run();
+                    setCurrentScript(null);
+                }
+            }
         }
     }
 

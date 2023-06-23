@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin(FusionRecipeRegistry.class)
+@Mixin(value = FusionRecipeRegistry.class, remap = false)
 public interface FusionRegistryAccessor {
 
     @Accessor

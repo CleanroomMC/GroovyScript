@@ -33,7 +33,7 @@ public class CachedClassMethodsVisitor extends ClassVisitor implements Opcodes {
         @Override
         public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
             mv.visitFieldInsn(GETFIELD, CLASS_NAME_2 + "$3", "this$0", "L" + CLASS_NAME_2 + ";");
-            mv.visitMethodInsn(INVOKESTATIC, "com/cleanroommc/groovyscript/sandbox/GroovyCodeFactory", "makeMethodsHook", "(L" + CLASS_NAME_2 + ";)Ljava/security/PrivilegedAction;", false);
+            mv.visitMethodInsn(INVOKESTATIC, "com/cleanroommc/groovyscript/sandbox/transformer/GroovyCodeFactory", "makeMethodsHook", "(L" + CLASS_NAME_2 + ";)Ljava/security/PrivilegedAction;", false);
         }
     }
 }

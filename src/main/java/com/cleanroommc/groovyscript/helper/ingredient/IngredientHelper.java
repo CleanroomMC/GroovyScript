@@ -6,6 +6,9 @@ import groovy.lang.Closure;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
@@ -19,6 +22,7 @@ import java.util.Map;
 public class IngredientHelper {
 
     public static final Closure<Object> MATCH_ANY = new LambdaClosure<>(args -> true);
+    public static final Closure<Object> MATCH_NONE = new LambdaClosure<>(args -> false);
     public static final Closure<Object> REUSE = new LambdaClosure<>(args -> args[0]);
     public static final Closure<Object> NO_RETURN = new LambdaClosure<>(args -> ItemStack.EMPTY);
     public static final Closure<Object> MATCH_NBT = new LambdaClosure<>(args -> ItemStack.EMPTY);
@@ -49,6 +53,26 @@ public class IngredientHelper {
         return (IIngredient) fluidStack;
     }
 
+    @NotNull
+    public static NonNullList<IIngredient> toNonNullList(IngredientList<IIngredient> list) {
+        NonNullList<IIngredient> ingredients = NonNullList.create();
+        for (IIngredient i : list) {
+            if (i == null) ingredients.add(IIngredient.EMPTY);
+            else ingredients.add(i);
+        }
+        return ingredients;
+    }
+
+    @NotNull
+    public static NonNullList<Ingredient> toIngredientNonNullList(Collection<IIngredient> list) {
+        NonNullList<Ingredient> ingredients = NonNullList.create();
+        for (IIngredient i : list) {
+            if (i == null) ingredients.add(Ingredient.EMPTY);
+            else ingredients.add(i.toMcIngredient());
+        }
+        return ingredients;
+    }
+
     public static boolean isEmpty(@Nullable IIngredient ingredient) {
         return ingredient == null || ingredient.getMatchingStacks().length == 0 || ingredient.getAmount() <= 0;
     }
@@ -59,6 +83,10 @@ public class IngredientHelper {
 
     public static boolean isEmpty(@Nullable FluidStack itemStack) {
         return itemStack == null || itemStack.amount <= 0;
+    }
+
+    public static boolean isEmpty(@Nullable NBTTagCompound nbt) {
+        return nbt == null || nbt.isEmpty();
     }
 
     /**
@@ -93,7 +121,7 @@ public class IngredientHelper {
      * Determines whether the list or all elements in the list are considered empty
      *
      * @param ingredients collection of ingredients
-     * @return true if the collection or the elements are empty
+     * @return true if the collection or all elements are empty
      */
     public static boolean isEmpty(@Nullable Collection<IIngredient> ingredients) {
         if (ingredients == null || ingredients.isEmpty())
@@ -101,6 +129,20 @@ public class IngredientHelper {
         for (IIngredient item : ingredients)
             if (!isEmpty(item)) return false;
         return true;
+    }
+
+    /**
+     * Determines whether the list or all elements in the list are considered empty
+     *
+     * @param ingredients collection of ingredients
+     * @return true if the collection or one element is empty
+     */
+    public static boolean isAnyEmpty(@Nullable Collection<IIngredient> ingredients) {
+        if (ingredients == null || ingredients.isEmpty())
+            return true;
+        for (IIngredient item : ingredients)
+            if (isEmpty(item)) return true;
+        return false;
     }
 
     /**
