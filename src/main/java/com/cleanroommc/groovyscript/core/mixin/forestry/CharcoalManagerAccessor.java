@@ -9,6 +9,7 @@ import java.util.List;
 
 @Mixin(value = CharcoalManager.class, remap = false)
 public interface CharcoalManagerAccessor {
+
     @Accessor
     List<ICharcoalPileWall> getWalls();
 }

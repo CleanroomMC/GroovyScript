@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Mixin(value = CarpenterRecipeManager.class, remap = false)
 public interface CarpenterRecipeManagerAccessor {
+
     @Accessor
     static Set<ICarpenterRecipe> getRecipes() {
         throw new AssertionError();

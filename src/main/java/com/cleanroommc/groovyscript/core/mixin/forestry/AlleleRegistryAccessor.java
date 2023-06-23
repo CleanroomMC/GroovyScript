@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 
 @Mixin(value = AlleleRegistry.class, remap = false)
 public interface AlleleRegistryAccessor {
+
     @Accessor
     LinkedHashMap<String, IAllele> getAlleleMap();
 }

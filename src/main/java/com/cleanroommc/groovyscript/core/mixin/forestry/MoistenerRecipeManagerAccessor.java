@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Mixin(value = MoistenerRecipeManager.class, remap = false)
 public interface MoistenerRecipeManagerAccessor {
+
     @Accessor
     static Set<IMoistenerRecipe> getRecipes() {
         throw new AssertionError();

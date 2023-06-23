@@ -9,6 +9,7 @@ import java.util.List;
 
 @Mixin(value = BeeRoot.class, remap = false)
 public interface BeeRootAccessor {
+
     @Accessor
     static List<IBeeMutation> getBeeMutations() {
         throw new AssertionError();

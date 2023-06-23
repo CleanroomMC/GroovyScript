@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Mixin(value = CentrifugeRecipeManager.class, remap = false)
 public interface CentrifugeRecipeManagerAccessor {
+
     @Accessor
     static Set<ICentrifugeRecipe> getRecipes() {
         throw new AssertionError();

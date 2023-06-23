@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Mixin(value = StillRecipeManager.class, remap = false)
 public interface StillRecipeManagerAccessor {
+
     @Accessor
     static Set<IStillRecipe> getRecipes() {
         throw new AssertionError();

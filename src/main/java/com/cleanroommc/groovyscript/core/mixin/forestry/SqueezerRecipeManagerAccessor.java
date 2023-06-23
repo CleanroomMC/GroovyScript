@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Mixin(value = SqueezerRecipeManager.class, remap = false)
 public interface SqueezerRecipeManagerAccessor {
+
     @Accessor
     static Set<ISqueezerRecipe> getRecipes() {
         throw new AssertionError();
