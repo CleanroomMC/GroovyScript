@@ -21,6 +21,10 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
 
     ItemStack[] getMatchingStacks();
 
+    default boolean isEmpty() {
+        return getAmount() <= 0 || getMatchingStacks().length == 0;
+    }
+
     default ItemStack applyTransform(ItemStack matchedInput) {
         return ForgeHooks.getContainerItem(matchedInput);
     }
@@ -54,6 +58,11 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
 
         @Override
         public void setAmount(int amount) {
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return true;
         }
 
         @Override
@@ -100,6 +109,11 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
         @Override
         public ItemStack[] getMatchingStacks() {
             return new ItemStack[0];
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return false;
         }
 
         @Override

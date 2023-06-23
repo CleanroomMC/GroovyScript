@@ -61,6 +61,11 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
     }
 
     @Override
+    public boolean isEmpty() {
+        return getAmount() <= 0;
+    }
+
+    @Override
     public boolean test(ItemStack stack) {
         if (matchCondition == null || ClosureHelper.call(true, matchCondition, stack)) {
             IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
