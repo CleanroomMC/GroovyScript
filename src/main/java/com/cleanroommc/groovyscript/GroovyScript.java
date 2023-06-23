@@ -41,10 +41,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -63,7 +60,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 @GroovyBlacklist
-@Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION)
+@Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION, dependencies = "before:jei;")
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
 
@@ -147,9 +144,12 @@ public class GroovyScript {
     }
 
     @Mod.EventHandler
-    public void onPostInit(FMLPostInitializationEvent event) {
+    public void onLoadComplete(FMLLoadCompleteEvent event) {
         getSandbox().run(LoadStage.POST_INIT);
+    }
 
+    @Mod.EventHandler
+    public void onPostInit(FMLPostInitializationEvent event) {
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);
             Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.command.copy.copied_start")
