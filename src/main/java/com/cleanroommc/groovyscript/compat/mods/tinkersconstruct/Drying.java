@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.DryingRecipe;
 
@@ -45,14 +46,15 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
     }
 
     public boolean removeByInput(IIngredient input) {
+        NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
         if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
-            boolean found = input.test(recipe.input.getInputs().get(0));
+            boolean found = recipe.input.matches(matching).isPresent();
             if (found) addBackup(recipe);
             return found;
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Construct Drying recipe")
-                .add("could not find recipe with input %s", input)
+                .add("could not find recipe with input {}", input)
                 .error()
                 .post();
         return false;
@@ -60,27 +62,28 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
 
     public boolean removeByOutput(ItemStack output) {
         if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
-            boolean found = recipe.output.isItemEqual(output);
+            boolean found = ItemStack.areItemStacksEqual(recipe.output, output);
             if (found) addBackup(recipe);
             return found;
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Construct Drying recipe")
-                .add("could not find recipe with output %s", output)
+                .add("could not find recipe with output {}", output)
                 .error()
                 .post();
         return false;
     }
 
     public boolean removeByInputAndOutput(IIngredient input, ItemStack output) {
+        NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
         if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
-            boolean found = input.test(recipe.input.getInputs().get(0)) && recipe.output.isItemEqual(output);
+            boolean found = recipe.input.matches(matching).isPresent() && ItemStack.areItemStacksEqual(recipe.output, output);
             if (found) addBackup(recipe);
             return found;
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Construct Drying recipe")
-                .add("could not find recipe with input %s and output %s", input, output)
+                .add("could not find recipe with input {} and output {}", input, output)
                 .error()
                 .post();
         return false;

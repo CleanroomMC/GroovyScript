@@ -74,6 +74,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(@Nullable IIngredient ingredient) {
+        if (ingredient instanceof FluidStack) return isEmpty(toFluidStack(ingredient));
         return ingredient == null || ingredient.getMatchingStacks().length == 0 || ingredient.getAmount() <= 0;
     }
 

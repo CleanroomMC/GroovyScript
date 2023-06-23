@@ -37,7 +37,7 @@ public class BlockStateBracketHandler implements IBracketHandler<IBlockState> {
                     return blockState;
                 }
             }
-            String[] stringArgs = (String[]) Arrays.copyOfRange(args, 1, args.length);
+            String[] stringArgs = Arrays.stream(args).map(Object::toString).toArray(String[]::new);
             return parseBlockStates(blockState, Iterators.forArray(stringArgs));
         }
         return blockState;
