@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
@@ -150,7 +151,7 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
         }
 
         public RecipeBuilder aspect(String tag, int amount) {
-            return this.aspect(new AspectStack(tag, amount));
+            return this.aspect(new AspectStack(AspectBracketHandler.validateAspect(tag), amount));
         }
 
         public RecipeBuilder instability(int instability) {
