@@ -60,7 +60,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 @GroovyBlacklist
-@Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION, dependencies = "before:jei;")
+@Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION)
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
 
@@ -145,8 +145,9 @@ public class GroovyScript {
         }
     }
 
-    @Mod.EventHandler
-    public void onLoadComplete(FMLLoadCompleteEvent event) {
+    @ApiStatus.Internal
+    public static void initializeGroovyPostInit() {
+        // called via mixin between fml post init and load complete
         long time = System.currentTimeMillis();
         getSandbox().run(LoadStage.POST_INIT);
         LOGGER.info("Running Groovy scripts took " + (System.currentTimeMillis() - time) + " ms");
