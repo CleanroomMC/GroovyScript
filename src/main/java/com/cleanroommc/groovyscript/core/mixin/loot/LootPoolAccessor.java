@@ -7,13 +7,13 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin( value = LootPool.class, remap = false )
+@Mixin(value = LootPool.class)
 public interface LootPoolAccessor {
 
     @Accessor
-    public List<LootEntry> getLootEntries();
+    List<LootEntry> getLootEntries();
 
-    @Accessor
+    @Accessor(remap = false)
     void setIsFrozen(boolean val);
 
 }
