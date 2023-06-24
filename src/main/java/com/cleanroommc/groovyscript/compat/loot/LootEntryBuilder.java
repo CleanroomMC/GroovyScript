@@ -25,6 +25,8 @@ import java.util.Random;
 
 public class LootEntryBuilder {
 
+    private static final LootCondition[] EMPTY_CONDITIONS = {};
+
     private String name;
     private Item item;
     private int weight = 1;
@@ -53,6 +55,12 @@ public class LootEntryBuilder {
 
     public LootEntryBuilder item(ItemStack stack) {
         this.item = stack.getItem();
+        if (stack.getMetadata() != 0) {
+            setMetadata(stack.getMetadata(), stack.getMetadata());
+        }
+        if (stack.hasTagCompound()) {
+            setNBT(stack.getTagCompound());
+        }
         return this;
     }
 
@@ -115,15 +123,15 @@ public class LootEntryBuilder {
     }
 
     public LootEntryBuilder enchantRandomly() {
-        return this.enchantRandomly(new LootCondition[0]);
+        return this.enchantRandomly(EMPTY_CONDITIONS);
     }
 
     public LootEntryBuilder enchantRandomly(Enchantment enchantment) {
-        return this.enchantRandomly(new LootCondition[0], enchantment);
+        return this.enchantRandomly(EMPTY_CONDITIONS, enchantment);
     }
 
     public LootEntryBuilder enchantRandomly(Enchantment... enchantments) {
-        return this.enchantRandomly(new LootCondition[0], enchantments);
+        return this.enchantRandomly(EMPTY_CONDITIONS, enchantments);
     }
 
     public LootEntryBuilder enchantRandomly(LootCondition condition, Enchantment enchantment) {
@@ -136,17 +144,17 @@ public class LootEntryBuilder {
 
     public LootEntryBuilder enchantRandomly(LootCondition[] conditions, Enchantment... enchantments) {
         List<Enchantment> list = (enchantments != null) ? Lists.newArrayList(enchantments) : null;
-        if (conditions == null) conditions = new LootCondition[0];
+        if (conditions == null) conditions = EMPTY_CONDITIONS;
         this.functions.add(new EnchantRandomly(conditions, list));
         return this;
     }
 
     public LootEntryBuilder lootingEnchantBonus(float min, float max) {
-        return this.lootingEnchantBonus(min, max, (int) max, new LootCondition[0]);
+        return this.lootingEnchantBonus(min, max, (int) max, EMPTY_CONDITIONS);
     }
 
     public LootEntryBuilder lootingEnchantBonus(float min, float max, int limit) {
-        return this.lootingEnchantBonus(min, max, limit, new LootCondition[0]);
+        return this.lootingEnchantBonus(min, max, limit, EMPTY_CONDITIONS);
     }
 
     public LootEntryBuilder lootingEnchantBonus(float min, float max, LootCondition conditions) {
@@ -165,61 +173,85 @@ public class LootEntryBuilder {
         out.add(min < 0.0f, () -> "lootingEnchantBonus minimum cannot be less than 0.");
         out.add(max < 0.0f, () -> "lootingEnchantBonus maximum cannot be less than 0.");
         out.add(limit < 0, () -> "lootingEnchantBonus limit cannot be less than 0.");
-        if (conditions == null) conditions = new LootCondition[0];
+        if (conditions == null) conditions = EMPTY_CONDITIONS;
         this.functions.add(new LootingEnchantBonus(conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f)), Math.max(limit, 0)));
         return this;
     }
 
-    public LootEntryBuilder setDamage(float min, float max) {
-        return this.setDamage(min, max, new LootCondition[0]);
+    public LootEntryBuilder setDamage(int dmg) {
+        return this.setDamage(dmg, dmg, EMPTY_CONDITIONS);
     }
 
-    public LootEntryBuilder setDamage(float min, float max, LootCondition conditions) {
+    public LootEntryBuilder setDamage(int dmg, LootCondition... conditions) {
+        return this.setDamage(dmg, dmg, conditions);
+    }
+
+    public LootEntryBuilder setDamage(int min, int max) {
+        return this.setDamage(min, max, EMPTY_CONDITIONS);
+    }
+
+    public LootEntryBuilder setDamage(int min, int max, LootCondition conditions) {
         return this.setDamage(min, max, new LootCondition[]{conditions});
     }
 
-    public LootEntryBuilder setDamage(float min, float max, LootCondition... conditions) {
-        out.add(min < 0.0f, () -> "setDamage minimum cannot be less than 0.");
-        out.add(max < 0.0f, () -> "setDamage maximum cannot be less than 0.");
-        if (conditions == null) conditions = new LootCondition[0];
+    public LootEntryBuilder setDamage(int min, int max, LootCondition... conditions) {
+        out.add(min < 0 || min >= 32767, () -> "setDamage minimum cannot be less than 0 or more than 32766.");
+        out.add(max < 0 || min >= 32767, () -> "setDamage maximum cannot be less than 0 or more than 32766.");
+        if (conditions == null) conditions = EMPTY_CONDITIONS;
         this.functions.add(new SetDamage(conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f))));
         return this;
     }
 
-    public LootEntryBuilder setCount(float min, float max) {
-        return this.setCount(min, max, new LootCondition[0]);
+    public LootEntryBuilder setCount(int count) {
+        return this.setCount(count, count, EMPTY_CONDITIONS);
     }
 
-    public LootEntryBuilder setCount(float min, float max, LootCondition conditions) {
+    public LootEntryBuilder setCount(int count, LootCondition... conditions) {
+        return this.setCount(count, count, conditions);
+    }
+
+    public LootEntryBuilder setCount(int min, int max) {
+        return this.setCount(min, max, EMPTY_CONDITIONS);
+    }
+
+    public LootEntryBuilder setCount(int min, int max, LootCondition conditions) {
         return this.setCount(min, max, new LootCondition[]{conditions});
     }
 
-    public LootEntryBuilder setCount(float min, float max, LootCondition... conditions) {
-        out.add(min < 0.0f, () -> "setCount minimum cannot be less than 0.");
-        out.add(max < 0.0f, () -> "setCount maximum cannot be less than 0.");
-        if (conditions == null) conditions = new LootCondition[0];
+    public LootEntryBuilder setCount(int min, int max, LootCondition... conditions) {
+        out.add(min < 0, () -> "setCount minimum cannot be less than 0.");
+        out.add(max < 0, () -> "setCount maximum cannot be less than 0.");
+        if (conditions == null) conditions = EMPTY_CONDITIONS;
         this.functions.add(new SetCount(conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f))));
         return this;
     }
 
-    public LootEntryBuilder setMetadata(float min, float max) {
-        return this.setMetadata(min, max, new LootCondition[0]);
+    public LootEntryBuilder setMetadata(int meta) {
+        return this.setMetadata(meta, meta, EMPTY_CONDITIONS);
     }
 
-    public LootEntryBuilder setMetadata(float min, float max, LootCondition conditions) {
+    public LootEntryBuilder setMetadata(int meta, LootCondition... conditions) {
+        return this.setMetadata(meta, meta, conditions);
+    }
+
+    public LootEntryBuilder setMetadata(int min, int max) {
+        return this.setMetadata(min, max, EMPTY_CONDITIONS);
+    }
+
+    public LootEntryBuilder setMetadata(int min, int max, LootCondition conditions) {
         return this.setMetadata(min, max, new LootCondition[]{conditions});
     }
 
-    public LootEntryBuilder setMetadata(float min, float max, LootCondition... conditions) {
-        out.add(min < 0.0f, () -> "setMetadata minimum cannot be less than 0.");
-        out.add(max < 0.0f, () -> "setMetadata maximum cannot be less than 0.");
-        if (conditions == null) conditions = new LootCondition[0];
+    public LootEntryBuilder setMetadata(int min, int max, LootCondition... conditions) {
+        out.add(min < 0 || min >= 32767, () -> "setMetadata minimum cannot be less than 0 or more than 32766.");
+        out.add(max < 0 || min >= 32767, () -> "setMetadata maximum cannot be less than 0 or more than 32766.");
+        if (conditions == null) conditions = EMPTY_CONDITIONS;
         this.functions.add(new SetMetadata(conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f))));
         return this;
     }
 
     public LootEntryBuilder setNBT(NBTTagCompound tag) {
-        return this.setNBT(tag, new LootCondition[0]);
+        return this.setNBT(tag, EMPTY_CONDITIONS);
     }
 
     public LootEntryBuilder setNBT(NBTTagCompound tag, LootCondition conditions) {
@@ -227,17 +259,17 @@ public class LootEntryBuilder {
     }
 
     public LootEntryBuilder setNBT(NBTTagCompound tag, LootCondition... conditions) {
-        if (conditions == null) conditions = new LootCondition[0];
+        if (conditions == null) conditions = EMPTY_CONDITIONS;
         this.functions.add(new SetNBT(conditions, tag));
         return this;
     }
 
     public LootEntryBuilder setAttributes(SetAttributesFunction.Modifier modifiers) {
-        return this.setAttributes(new SetAttributesFunction.Modifier[]{modifiers}, new LootCondition[0]);
+        return this.setAttributes(new SetAttributesFunction.Modifier[]{modifiers}, EMPTY_CONDITIONS);
     }
 
     public LootEntryBuilder setAttributes(SetAttributesFunction.Modifier[] modifiers) {
-        return this.setAttributes(modifiers, new LootCondition[0]);
+        return this.setAttributes(modifiers, EMPTY_CONDITIONS);
     }
 
     public LootEntryBuilder setAttributes(SetAttributesFunction.Modifier modifiers, LootCondition conditions) {
@@ -254,7 +286,7 @@ public class LootEntryBuilder {
     }
 
     public LootEntryBuilder smelt() {
-        return this.smelt(new LootCondition[0]);
+        return this.smelt(EMPTY_CONDITIONS);
     }
 
     public LootEntryBuilder smelt(LootCondition conditions) {
@@ -310,7 +342,7 @@ public class LootEntryBuilder {
 
     private boolean validate() {
         if (item == null) out.add("No item provided.").error();
-        if (name == null || name.equals("")) out.add("No name provided").error();
+        if (name == null || name.isEmpty()) out.add("No name provided").error();
         if (weight <= 0) out.add("weight <= 0 may make the loot entry unable to be rolled");
         if (quality < 0) out.add("quality < 0 may make the loot entry unable to be rolled");
         out.postIfNotEmpty();

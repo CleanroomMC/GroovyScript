@@ -45,7 +45,9 @@ public class LootPoolBuilder {
     }
 
     public LootPoolBuilder entry(ItemStack stack, int weight) {
-
+        this.lootEntries.add(new LootEntryBuilder(stack.getItem().getRegistryName().getNamespace() + ":" + stack.getMetadata())
+                                     .item(stack)
+                                     .weight(weight).build());
         return this;
     }
 
@@ -102,7 +104,7 @@ public class LootPoolBuilder {
     }
 
     private boolean validate() {
-
+        if (name == null || name.isEmpty()) out.add("No name provided").error();
         out.postIfNotEmpty();
         return out.getLevel() != Level.ERROR;
     }
