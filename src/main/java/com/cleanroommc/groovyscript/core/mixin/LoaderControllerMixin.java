@@ -16,11 +16,7 @@ public class LoaderControllerMixin {
         if (state == LoaderState.PREINITIALIZATION) {
             GroovyScript.initializeGroovyPreInit();
         }
-    }
-
-    @Inject(method = "distributeStateMessage(Lnet/minecraftforge/fml/common/LoaderState;[Ljava/lang/Object;)V", at = @At("RETURN"))
-    public void postInit(LoaderState state, Object[] eventData, CallbackInfo ci) {
-        if (state == LoaderState.POSTINITIALIZATION) {
+        if (state == LoaderState.AVAILABLE) {
             GroovyScript.initializeGroovyPostInit();
         }
     }
