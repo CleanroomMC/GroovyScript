@@ -19,7 +19,14 @@ mods.evilcraft.bloodinfuser.recipeBuilder()
 mods.evilcraft.bloodinfuser.recipeBuilder()
     .input(item('minecraft:gold_ingot'))
     .output(item('minecraft:clay'))
-    .fluidInput(100000) // Just an integer will automatically consider it as `evilcraftblood`
+    .fluidInput(100000) // Calling `fluidInput` with just an integer will automatically consider the fluid as "evilcraftblood".
+    .register()
+
+mods.evilcraft.bloodinfuser.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .output(item('minecraft:clay') * 4)
+    .fluidInput(5000) // `blood` can also be used as an alias for `fluidInput` when only an integer is used.
+    .tier(1)
     .register()
 
 mods.evilcraft.bloodinfuser.removeByInput(item('evilcraft:dark_gem'))

@@ -6,7 +6,9 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import org.cyclops.cyclopscore.recipe.custom.api.IRecipe;
 import org.cyclops.cyclopscore.recipe.custom.component.IngredientRecipeComponent;
 import org.cyclops.evilcraft.core.recipe.custom.DurationXpRecipeProperties;
@@ -78,6 +80,8 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> {
 
+        private static final Fluid bloodFluid = FluidRegistry.getFluid("evilcraftblood");
+
         private int tier = 0;
         private int duration = 0;
         private float xp = 0;
@@ -97,8 +101,13 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
             return this;
         }
 
+        public RecipeBuilder blood(int amount) {
+            this.fluidInput.add(new FluidStack(bloodFluid, amount));
+            return this;
+        }
+
         public RecipeBuilder fluidInput(int amount) {
-            this.fluidInput.add(FluidRegistry.getFluidStack("evilcraftblood", amount));
+            this.fluidInput.add(new FluidStack(bloodFluid, amount));
             return this;
         }
 
