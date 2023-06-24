@@ -16,5 +16,8 @@ public class LoaderControllerMixin {
         if (state == LoaderState.PREINITIALIZATION) {
             GroovyScript.initializeGroovyPreInit();
         }
+        if (state == LoaderState.AVAILABLE) {
+            GroovyScript.initializeGroovyPostInit();
+        }
     }
 }

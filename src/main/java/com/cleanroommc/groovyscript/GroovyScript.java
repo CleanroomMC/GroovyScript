@@ -41,10 +41,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -139,17 +136,25 @@ public class GroovyScript {
             Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get(ID));
         }
 
+        long time = System.currentTimeMillis();
         getSandbox().run(LoadStage.PRE_INIT);
+        LOGGER.info("Running early Groovy scripts took " + (System.currentTimeMillis() - time) + " ms");
 
         if (wasNull) {
             Loader.instance().setActiveModContainer(null);
         }
     }
 
+    @ApiStatus.Internal
+    public static void initializeGroovyPostInit() {
+        // called via mixin between fml post init and load complete
+        long time = System.currentTimeMillis();
+        getSandbox().run(LoadStage.POST_INIT);
+        LOGGER.info("Running Groovy scripts took " + (System.currentTimeMillis() - time) + " ms");
+    }
+
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
-        getSandbox().run(LoadStage.POST_INIT);
-
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);
             Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.command.copy.copied_start")
