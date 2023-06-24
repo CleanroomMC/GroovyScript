@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import net.minecraft.util.ResourceLocation;
 import thaumcraft.api.aspects.AspectList;
 
@@ -30,6 +31,12 @@ public class Aspect {
 
         public AspectBuilder component(AspectStack component) {
             this.components.add(component.getAspect(), component.getAmount());
+            return this;
+        }
+
+        public AspectBuilder component(String tag, int amount) {
+            thaumcraft.api.aspects.Aspect a = AspectBracketHandler.validateAspect(tag);
+            if (a != null) this.components.add(a, amount);
             return this;
         }
 
