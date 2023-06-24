@@ -80,6 +80,10 @@ repositories {
         url 'http://maven.tterrag.com/'
         allowInsecureProtocol = true
     }
+    maven {
+        url = 'http://maven.ic2.player.to/'
+        allowInsecureProtocol = true
+    }
     mavenLocal() // Must be last for caching to work
 }
 
@@ -229,6 +233,12 @@ dependencies {
         runtimeOnly ('com.enderio:EnderIO:1.12.2-+') {
             transitive = false
         }
+    }
+
+    compileOnly rfg.deobf('net.sengir.forestry:forestry_1.12.2:5.8.2.422')
+    if (project.debug_forestry.toBoolean()) {
+        runtimeOnly rfg.deobf('net.sengir.forestry:forestry_1.12.2:5.8.2.422')
+        runtimeOnly rfg.deobf('curse.maven:jei-bees-248370:2490058')
     }
 
 }
