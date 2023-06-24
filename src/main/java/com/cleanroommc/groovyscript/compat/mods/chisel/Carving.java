@@ -13,14 +13,20 @@ import team.chisel.api.carving.ICarvingRegistry;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
 
-    private static final ICarvingRegistry registry = CarvingUtils.getChiselRegistry();
+    private static ICarvingRegistry getRegistry() {
+        if (CarvingUtils.getChiselRegistry() == null) {
+            throw new IllegalStateException("Chisel carving getRegistry() is not yet initialized!");
+        }
+        return CarvingUtils.getChiselRegistry();
+    }
 
-    private ArrayList<Pair<String, SoundEvent>> sounds;
-    private ArrayList<String> groupBackup;
-    private ArrayList<String> groupScripted;
+    private List<Pair<String, SoundEvent>> sounds;
+    private List<String> groupBackup;
+    private List<String> groupScripted;
 
     public Carving() {
         super();
@@ -35,12 +41,12 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> registry.removeVariation(pair.getValue(), pair.getKey()));
-        restoreFromBackup().forEach(pair -> registry.addVariation(pair.getKey(), CarvingUtils.variationFor(pair.getValue(), 0)));
+        removeScripted().forEach(pair -> getRegistry().removeVariation(pair.getValue(), pair.getKey()));
+        restoreFromBackup().forEach(pair -> getRegistry().addVariation(pair.getKey(), CarvingUtils.variationFor(pair.getValue(), 0)));
 
-        this.sounds.forEach(pair -> registry.setVariationSound(pair.getKey(), pair.getValue()));
-        this.groupBackup.forEach(group -> registry.addGroup(CarvingUtils.getDefaultGroupFor(group)));
-        this.groupScripted.forEach(registry::removeGroup);
+        this.sounds.forEach(pair -> getRegistry().setVariationSound(pair.getKey(), pair.getValue()));
+        this.groupBackup.forEach(group -> getRegistry().addGroup(CarvingUtils.getDefaultGroupFor(group)));
+        this.groupScripted.forEach(getRegistry()::removeGroup);
 
         this.sounds = new ArrayList<>();
         this.groupBackup = new ArrayList<>();
@@ -49,7 +55,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
 
     public void addVariation(String groupName, ItemStack item) {
         try {
-            registry.addVariation(groupName, CarvingUtils.variationFor(item, 0));
+            getRegistry().addVariation(groupName, CarvingUtils.variationFor(item, 0));
             addScripted(Pair.of(groupName, item));
         } catch (UnsupportedOperationException e) {
             GroovyLog.msg("Error adding a Chisel Carving variation")
@@ -62,7 +68,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
 
     public void removeVariation(String groupName, ItemStack item) {
         try {
-            registry.removeVariation(item, groupName);
+            getRegistry().removeVariation(item, groupName);
             addBackup(Pair.of(groupName, item));
         } catch (UnsupportedOperationException e) {
             GroovyLog.msg("Error removing a Chisel Carving variation")
@@ -74,7 +80,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
     }
 
     public void setSound(String group, SoundEvent sound) {
-        ICarvingGroup carvingGroup = registry.getGroup(group);
+        ICarvingGroup carvingGroup = getRegistry().getGroup(group);
         if (carvingGroup == null) {
             GroovyLog.msg("Error setting the sound for a Chisel Carving group")
                     .add("could not find a Carving Group with the name {}", group)
@@ -86,37 +92,37 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
     }
 
     public void setSound(ICarvingGroup group, SoundEvent sound) {
-        registry.setVariationSound(group.getName(), sound);
+        getRegistry().setVariationSound(group.getName(), sound);
         this.sounds.add(Pair.of(group.getName(), group.getSound()));
     }
 
     public void addGroup(String groupName) {
-        if (registry.getSortedGroupNames().contains(groupName)) {
+        if (getRegistry().getSortedGroupNames().contains(groupName)) {
             GroovyLog.msg("Error adding Chisel Carving group")
                     .add("found a duplicate Chisel Carving group with name {}", groupName)
                     .error()
                     .post();
             return;
         }
-        registry.addGroup(CarvingUtils.getDefaultGroupFor(groupName));
+        getRegistry().addGroup(CarvingUtils.getDefaultGroupFor(groupName));
         this.groupScripted.add(groupName);
     }
 
     public void removeGroup(String groupName) {
-        if (!registry.getSortedGroupNames().contains(groupName)) {
+        if (!getRegistry().getSortedGroupNames().contains(groupName)) {
             GroovyLog.msg("Error removing Chisel Carving group")
                     .add("could not find Chisel Carving group with name {}", groupName)
                     .error()
                     .post();
             return;
         }
-        registry.removeGroup(groupName);
+        getRegistry().removeGroup(groupName);
         this.groupBackup.add(groupName);
     }
 
     public void removeAll() {
-        registry.getSortedGroupNames().forEach(name -> {
-            registry.removeGroup(name);
+        getRegistry().getSortedGroupNames().forEach(name -> {
+            getRegistry().removeGroup(name);
             this.groupBackup.add(name);
         });
     }
@@ -124,18 +130,11 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
 
     public static class CarvingGroup {
 
-        ICarvingGroup group;
+        private final ICarvingGroup group;
 
         public CarvingGroup(String group) {
-            if (registry == null) {
-                GroovyLog.msg("Error finding or creating Chisel Carving group")
-                        .add("Chisel Registry not yet initialized {}")
-                        .error()
-                        .post();
-                return;
-            }
-            if (!registry.getSortedGroupNames().contains(group)) ModSupport.CHISEL.get().carving.addGroup(group);
-            this.group = registry.getGroup(group);
+            if (!getRegistry().getSortedGroupNames().contains(group)) ModSupport.CHISEL.get().carving.addGroup(group);
+            this.group = getRegistry().getGroup(group);
         }
 
         public CarvingGroup sound(SoundEvent sound) {

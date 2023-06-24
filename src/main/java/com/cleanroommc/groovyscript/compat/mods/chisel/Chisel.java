@@ -4,7 +4,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 
 public class Chisel extends ModPropertyContainer {
 
-    Carving carving = new Carving();
+    public final Carving carving = new Carving();
 
     public Chisel() {
         addRegistry(carving);
