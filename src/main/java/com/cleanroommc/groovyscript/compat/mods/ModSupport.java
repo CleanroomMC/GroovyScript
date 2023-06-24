@@ -52,7 +52,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new Container<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
     public static final Container<IC2> INDUSTRIALCRAFT = new Container<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
     public static final Container<ExtendedCrafting> EXTENDED_CRAFTING = new Container<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
-    public static final Container<ExNihilo> EX_NIHILO = new Container<>("exnihilocreatio", "Ex Nihilo Creatio", ExNihilo::new);
+    public static final Container<ExNihilo> EX_NIHILO = new Container<>("exnihilocreatio", "Ex Nihilo Creatio", ExNihilo::new, "exnihilo");
 
     public static Collection<Container<? extends ModPropertyContainer>> getAllContainers() {
         return new ObjectOpenHashSet<>(containers.values());

@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.exnihilo;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.mods.exnihilo.recipe.SieveRecipe;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -11,41 +10,20 @@ import exnihilocreatio.registries.manager.ExNihiloRegistryManager;
 import exnihilocreatio.registries.types.Siftable;
 import exnihilocreatio.util.ItemInfo;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.item.crafting.Ingredient;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
-public class Sieve extends VirtualizedRegistry<SieveRecipe> {
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+public class Sieve extends VirtualizedRegistry<Pair<Ingredient, Siftable>> {
 
     @Override
     @GroovyBlacklist
     public void onReload() {
-        removeScripted().forEach(recipe -> {
-                NonNullList<Siftable > backup = NonNullList.create();
-                backup.addAll(ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().get(recipe.input));
-                if (backup.size() > 1) {
-                    backup.removeIf(siftable -> siftable.getDrop().getItemStack().isItemEqualIgnoreDurability(recipe.output)
-                                                && siftable.getChance() == recipe.chance
-                                                && siftable.getMeshLevel() == recipe.meshlevel);
-                    ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().remove(recipe.input);
-                    ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().put(recipe.input, backup);
-                    return;
-                }
-                ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().remove(recipe.input);
-        });
-        restoreFromBackup().forEach(recipe -> {
-            if (ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().get(recipe.input) != null) {
-                NonNullList<Siftable> backup = NonNullList.create();
-                backup.addAll(ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().get(recipe.input));
-                backup.add(new Siftable(new ItemInfo(recipe.output), recipe.chance, recipe.meshlevel));
-                ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().remove(recipe.input);
-                ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().put(recipe.input, backup);
-                return;
-            }
-            NonNullList<Siftable> siftable = NonNullList.create();
-            siftable.add(new Siftable(new ItemInfo(recipe.output), recipe.chance, recipe.meshlevel));
-        ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().put(recipe.input, siftable);
-        });
+        removeScripted().forEach(recipe -> ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().get(recipe.getKey()).removeIf(siftable -> recipe.getValue() == siftable));
+        restoreFromBackup().forEach(recipe -> ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().computeIfAbsent(recipe.getKey(), key -> new ArrayList<>()).add(recipe.getValue()));
     }
 
     public void removeByInput(IIngredient input) {
@@ -56,67 +34,77 @@ public class Sieve extends VirtualizedRegistry<SieveRecipe> {
                     .post();
             return;
         }
-        if (ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().get(input.toMcIngredient()) == null) {
+        ItemStack[] matchingInput = input.getMatchingStacks();
+        boolean successful = ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().entrySet().removeIf(entry -> {
+            for (ItemStack stack : matchingInput) {
+                if (entry.getKey().test(stack)) {
+                    for (Siftable siftable : entry.getValue()) {
+                        addBackup(Pair.of(entry.getKey(), siftable));
+                    }
+                    return true;
+                }
+            }
+            return false;
+        });
+        if (!successful) {
             GroovyLog.msg("Error removing Ex Nihilo sieve recipe")
                     .add(String.format("can't find recipe for %s", IngredientHelper.toItemStack(input).getDisplayName()))
                     .error()
                     .post();
-            return;
         }
-        NonNullList<Siftable> backup = NonNullList.create();
-        backup.addAll(ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().get(input.toMcIngredient()));
-        backup.forEach(siftable -> addBackup(new SieveRecipe(input.toMcIngredient(), siftable.getDrop().getItemStack(), siftable.getChance(), siftable.getMeshLevel())));
-        ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().remove(input.toMcIngredient());
     }
 
-    public void removeByInputAndOutput(IIngredient input, ItemStack output) {
-        if (IngredientHelper.isEmpty(input)) {
-            GroovyLog.msg("Error removing Ex Nihilo sieve recipe")
-                    .add("input must not be empty")
-                    .error()
-                    .post();
+    public void removeByInputAndOutput(IIngredient input, IIngredient output) {
+        if (GroovyLog.msg("Error removing Ex Nihilo sieve recipe")
+                .add(IngredientHelper.isEmpty(input), "input must not be empty")
+                .add(IngredientHelper.isEmpty(output), "output must not be empty")
+                .error()
+                .postIfNotEmpty()) {
             return;
         }
-        if (IngredientHelper.isEmpty(output)) {
-            GroovyLog.msg("Error removing Ex Nihilo sieve recipe")
-                    .add("output must not be empty")
-                    .error()
-                    .post();
-            return;
-        }
-        NonNullList<Siftable> backup = NonNullList.create();
-        backup.addAll(ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().get(input.toMcIngredient()));
-        if (backup.size() == 0) {
-            GroovyLog.msg("Error removing Ex Nihilo sieve recipe")
-                    .add(String.format("couldn't find a recipe for input %s and output %s", IngredientHelper.toItemStack(input).getDisplayName(), output.getDisplayName()))
-                    .error()
-                    .post();
-            return;
-        }
-        backup.forEach(siftable -> {
-            if (siftable.getDrop().getItemStack().isItemEqualIgnoreDurability(output)) {
-                addBackup(new SieveRecipe(input.toMcIngredient(), output, siftable.getChance(), siftable.getMeshLevel()));
-                backup.remove(siftable);
+
+        ItemStack[] matchingInput = input.getMatchingStacks();
+        ItemStack[] matchingOutput = output.getMatchingStacks();
+        AtomicBoolean successful = new AtomicBoolean();
+        ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().entrySet().removeIf(entry -> {
+            for (ItemStack stack : matchingInput) {
+                if (entry.getKey().test(stack)) {
+                    entry.getValue().removeIf(siftable -> {
+                        for (ItemStack out : matchingOutput) {
+                            if (siftable.getDrop().equals(out)) {
+                                addBackup(Pair.of(entry.getKey(), siftable));
+                                successful.set(true);
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+                }
             }
+            return entry.getValue().isEmpty();
         });
-        ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().remove(input.toMcIngredient());
-        ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().put(input.toMcIngredient(), backup);
+        if (!successful.get()) {
+            GroovyLog.msg("Error removing Ex Nihilo sieve recipe")
+                    .add("couldn't find a recipe for input {} and output {}", input, output)
+                    .error()
+                    .post();
+        }
     }
 
     public void removeAll() {
-        ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().keySet().forEach(ingredient -> {
-           NonNullList<Siftable> siftableList = NonNullList.create();
-           siftableList.addAll(ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().get(ingredient));
-            siftableList.forEach(siftable -> addBackup(new SieveRecipe(ingredient, siftable.getDrop().getItemStack(), siftable.getChance(), siftable.getMeshLevel())));
+        ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().entrySet().removeIf(entry -> {
+            for (Siftable siftable : entry.getValue()) {
+                addBackup(Pair.of(entry.getKey(), siftable));
+            }
+            return true;
         });
-        ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().clear();
     }
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    public class RecipeBuilder extends AbstractRecipeBuilder<SieveRecipe> {
+    public class RecipeBuilder extends AbstractRecipeBuilder<Pair<Ingredient, Siftable>> {
 
         private IIngredient input;
         private ItemStack output;
@@ -138,7 +126,7 @@ public class Sieve extends VirtualizedRegistry<SieveRecipe> {
             return this;
         }
 
-        public RecipeBuilder meshlevel(int meshlevel) {
+        public RecipeBuilder meshLevel(int meshlevel) {
             this.meshlevel = meshlevel;
             return this;
         }
@@ -153,24 +141,15 @@ public class Sieve extends VirtualizedRegistry<SieveRecipe> {
             msg.add(IngredientHelper.isEmpty(input), "Input must not be empty");
             msg.add(IngredientHelper.isEmpty(output), "Output must not be empty");
             msg.add(meshlevel > 4 || meshlevel < 1, "Meshlevel must be a Number between 1 (String) and 4 (Diamond)");
+            this.chance = (float) Math.max(0.000001, this.chance);
         }
 
         @Nullable
         @Override
-        public SieveRecipe register() {
+        public Pair<Ingredient, Siftable> register() {
             if (!validate()) return null;
-            SieveRecipe recipe = new SieveRecipe(input.toMcIngredient(), this.output, this.chance, this.meshlevel);
-            if (ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().containsKey(recipe.input)) {
-                NonNullList<Siftable> backup = NonNullList.create();
-                backup.addAll(ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().get(recipe.input));
-                backup.add(new Siftable(new ItemInfo(recipe.output), recipe.chance, recipe.meshlevel));
-                ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().remove(recipe.input);
-                ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().put(recipe.input, backup);
-            } else {
-                NonNullList<Siftable> siftableList = NonNullList.create();
-                siftableList.add(new Siftable(new ItemInfo(recipe.output), recipe.chance, recipe.meshlevel));
-                ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().put(recipe.input, siftableList);
-            }
+            Pair<Ingredient, Siftable> recipe = Pair.of(this.input.toMcIngredient(), new Siftable(new ItemInfo(this.output), this.chance, this.meshlevel));
+            ExNihiloRegistryManager.SIEVE_REGISTRY.getRegistry().computeIfAbsent(recipe.getKey(), key -> new ArrayList<>()).add(recipe.getValue());
             addScripted(recipe);
             return recipe;
         }
