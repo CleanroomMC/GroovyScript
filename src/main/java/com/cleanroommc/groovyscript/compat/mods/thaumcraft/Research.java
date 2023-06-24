@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.research.*;
 import thaumcraft.common.lib.research.ResearchManager;
@@ -108,7 +109,8 @@ public class Research {
         }
 
         public ResearchCategoryBuilder formulaAspect(String tag, int amount) {
-            this.formula.add(AspectBracketHandler.validateAspect(tag), amount);
+            Aspect a = AspectBracketHandler.validateAspect(tag);
+            if (a != null) this.formula.add(a, amount);
             return this;
         }
 

@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.IThaumcraftRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
@@ -151,7 +152,9 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
         }
 
         public RecipeBuilder aspect(String tag, int amount) {
-            return this.aspect(new AspectStack(AspectBracketHandler.validateAspect(tag), amount));
+            Aspect a = AspectBracketHandler.validateAspect(tag);
+            if (a != null) this.aspects.add(a, amount);
+            return this;
         }
 
         public RecipeBuilder instability(int instability) {

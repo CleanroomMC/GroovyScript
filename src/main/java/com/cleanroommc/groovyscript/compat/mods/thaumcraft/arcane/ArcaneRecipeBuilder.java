@@ -40,7 +40,8 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
     }
 
     public ArcaneRecipeBuilder aspect(String tag, int amount) {
-        this.aspects.add(AspectBracketHandler.validateAspect(tag), amount);
+        Aspect a = AspectBracketHandler.validateAspect(tag);
+        if (a != null) this.aspects.add(a, amount);
         return this;
     }
 

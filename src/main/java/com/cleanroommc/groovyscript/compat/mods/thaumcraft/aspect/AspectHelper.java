@@ -309,7 +309,9 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         }
 
         public AspectHelperBuilder aspect(String tag, int amount) {
-            return this.aspect(new AspectStack(AspectBracketHandler.validateAspect(tag), amount));
+            Aspect a = AspectBracketHandler.validateAspect(tag);
+            if (a != null) this.aspects.add(new AspectStack(a, amount));
+            return this;
         }
 
         public AspectHelperBuilder stripAspects() {

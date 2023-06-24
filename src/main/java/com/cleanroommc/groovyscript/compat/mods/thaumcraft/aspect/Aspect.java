@@ -35,7 +35,9 @@ public class Aspect {
         }
 
         public AspectBuilder component(String tag, int amount) {
-            return this.component(new AspectStack(AspectBracketHandler.validateAspect(tag), amount));
+            thaumcraft.api.aspects.Aspect a = AspectBracketHandler.validateAspect(tag);
+            if (a != null) this.components.add(a, amount);
+            return this;
         }
 
         public AspectBuilder image(String image) {
