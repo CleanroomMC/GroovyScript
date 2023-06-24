@@ -38,7 +38,7 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Construct Smeltery Fuel")
-                .add("could not find smeltery fuel entry for %s", fluid)
+                .add("could not find smeltery fuel entry for {}", fluid)
                 .error()
                 .post();
         return false;

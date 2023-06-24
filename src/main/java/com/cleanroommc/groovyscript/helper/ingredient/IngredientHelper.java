@@ -74,7 +74,7 @@ public class IngredientHelper {
     }
 
     public static boolean isEmpty(@Nullable IIngredient ingredient) {
-        return ingredient == null || ingredient.getMatchingStacks().length == 0 || ingredient.getAmount() <= 0;
+        return ingredient == null || ingredient.isEmpty();
     }
 
     public static boolean isEmpty(@Nullable ItemStack itemStack) {
