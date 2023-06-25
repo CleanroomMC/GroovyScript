@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
+import com.cleanroommc.groovyscript.compat.mods.actuallyadditions.ActuallyAdditions;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
@@ -38,8 +39,9 @@ public class ModSupport implements IDynamicGroovyProperty {
 
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
 
-    public static final Container<Chisel> CHISEL = new Container<>("chisel", "Chisel", Chisel::new);
+    public static final Container<ActuallyAdditions> ACTUALLY_ADDITIONS = new Container<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
     public static final Container<AstralSorcery> ASTRAL_SORCERY = new Container<>("astralsorcery", "Astral Sorcery", AstralSorcery::new, "astral", "astral_sorcery", "as");
+    public static final Container<Chisel> CHISEL = new Container<>("chisel", "Chisel", Chisel::new);
     public static final Container<EnderIO> ENDER_IO = new Container<>("enderio", "Ender IO", EnderIO::new, "eio");
     public static final Container<JustEnoughItems> JEI = new Container<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
     public static final Container<Thaumcraft> THAUMCRAFT = new Container<>("thaumcraft", "Thaumcraft", Thaumcraft::new, "tc", "thaum");
