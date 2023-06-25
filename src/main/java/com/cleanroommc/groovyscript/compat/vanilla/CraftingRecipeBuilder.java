@@ -67,7 +67,7 @@ public abstract class CraftingRecipeBuilder {
         return this;
     }
 
-    public abstract IRecipe register();
+    public abstract Object register();
 
     @GroovyBlacklist
     protected void handleReplace() {

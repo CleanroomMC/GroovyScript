@@ -108,6 +108,12 @@ dependencies {
 
     implementation 'mezz.jei:jei_1.12.2:4.16.1.302'
 
+    compileOnly rfg.deobf('curse.maven:avaritia_1_10-261348:3143349')
+    if (project.debug_avaritia.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
+        runtimeOnly rfg.deobf('curse.maven:avaritia_1_10-261348:3143349')
+    }
+
     compileOnly rfg.deobf("curse.maven:ctm-267602:2915363")
     compileOnly rfg.deobf("curse.maven:chisel-235279:2915375")
     if (project.debug_chisel.toBoolean()) {
