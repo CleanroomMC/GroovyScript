@@ -125,7 +125,7 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
 
         @Override
         public String getErrorMsg() {
-            return "Error adding Roots Pyre recipe";
+            return "Error adding Roots Bark Carving recipe";
         }
 
         public String getRecipeNamePrefix() {
