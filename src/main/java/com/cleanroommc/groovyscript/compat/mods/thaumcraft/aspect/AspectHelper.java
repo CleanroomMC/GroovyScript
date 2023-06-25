@@ -3,12 +3,12 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import org.jetbrains.annotations.ApiStatus;
 import thaumcraft.api.ThaumcraftApi;
@@ -305,6 +305,12 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
         public AspectHelperBuilder aspect(AspectStack aspect) {
             this.aspects.add(aspect);
+            return this;
+        }
+
+        public AspectHelperBuilder aspect(String tag, int amount) {
+            Aspect a = AspectBracketHandler.validateAspect(tag);
+            if (a != null) this.aspects.add(new AspectStack(a, amount));
             return this;
         }
 

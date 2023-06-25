@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
+import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -8,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.research.*;
 import thaumcraft.common.lib.research.ResearchManager;
@@ -103,6 +105,12 @@ public class Research {
 
         public ResearchCategoryBuilder formulaAspect(AspectStack aspect) {
             this.formula.add(aspect.getAspect(), aspect.getAmount());
+            return this;
+        }
+
+        public ResearchCategoryBuilder formulaAspect(String tag, int amount) {
+            Aspect a = AspectBracketHandler.validateAspect(tag);
+            if (a != null) this.formula.add(a, amount);
             return this;
         }
 

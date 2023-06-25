@@ -17,7 +17,9 @@
     "LoaderControllerMixin",
     "MetaClassImplMixin",
     "OreDictionaryAccessor",
-    "SlotCraftingAccess"
+    "SlotCraftingAccess",
+    "loot.LootPoolAccessor",
+    "loot.LootTableAccessor"
   ],
   "client": [
     "DefaultResourcePackAccessor",

@@ -171,13 +171,13 @@ public class Casting {
 
         public boolean removeByOutput(ItemStack output){
             if (TinkerRegistryAccessor.getBasinCastRegistry().removeIf(recipe -> {
-                boolean found = recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER).isItemEqual(output);
+                boolean found = ItemStack.areItemStacksEqual(recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER), output);
                 if (found) addBackup(recipe);
                 return found;
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Casting Basin recipe")
-                    .add("could not find recipe with output %s", output)
+                    .add("could not find recipe with output {}", output)
                     .error()
                     .post();
             return false;
@@ -191,21 +191,22 @@ public class Casting {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Casting Basin recipe")
-                    .add("could not find recipe with input %s", input)
+                    .add("could not find recipe with input {}", input)
                     .error()
                     .post();
             return false;
         }
 
         public boolean removeByCast(IIngredient cast) {
+            ItemStack castStack = cast.getMatchingStacks()[0];
             if (TinkerRegistryAccessor.getBasinCastRegistry().removeIf(recipe -> {
-                boolean found = recipe.matches(cast.getMatchingStacks()[0], recipe.getFluid(cast.getMatchingStacks()[0], FluidRegistry.WATER).getFluid());
+                boolean found = recipe.matches(castStack, recipe.getFluid(castStack, FluidRegistry.WATER).getFluid());
                 if (found) addBackup(recipe);
                 return found;
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Casting Basin recipe")
-                    .add("could not find recipe with cast %s", cast)
+                    .add("could not find recipe with cast {}", cast)
                     .error()
                     .post();
             return false;

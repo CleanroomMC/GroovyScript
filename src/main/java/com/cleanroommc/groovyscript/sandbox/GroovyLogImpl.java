@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class GroovyLogImpl implements GroovyLog {
@@ -37,7 +39,7 @@ public class GroovyLogImpl implements GroovyLog {
     private List<String> errors = new ArrayList<>();
 
     private GroovyLogImpl() {
-        File logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + "groovy.log");
+        File logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + getLogFileName());
         logFilePath = logFile.toPath();
         PrintWriter tempWriter;
         try {
@@ -48,7 +50,7 @@ public class GroovyLogImpl implements GroovyLog {
             // create file
             Files.createFile(logFilePath);
             // create writer which automatically flushes on write
-            tempWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(logFile))), true);
+            tempWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(logFile.toPath()))), true);
         } catch (IOException e) {
             e.printStackTrace();
             tempWriter = new PrintWriter(System.out);
@@ -57,6 +59,10 @@ public class GroovyLogImpl implements GroovyLog {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
         writeLogLine("GroovyScript version: " + GroovyScript.VERSION);
+    }
+
+    private static String getLogFileName() {
+        return FMLCommonHandler.instance().getSide().isServer() ? "groovy_server.log" : "groovy.log";
     }
 
     @GroovyBlacklist
@@ -238,16 +244,21 @@ public class GroovyLogImpl implements GroovyLog {
         this.errors.add(msg);
         writeLogLine(formatLine("ERROR", "An exception occurred while running scripts. Look at latest.log for a full stacktrace:"));
         writeLogLine("\t" + msg);
-        throwable.printStackTrace();
+        Pattern pattern = Pattern.compile("(\\w*).run\\(\\1.groovy:(\\d*)\\)");
         for (String line : prepareStackTrace(throwable.getStackTrace())) {
-            writeLogLine("\t\tat " + line);
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.matches()) {
+                writeLogLine("\t\tin " + matcher.group(1) + ".groovy in line " + matcher.group(2));
+            } else {
+                writeLogLine("\t\tat " + line);
+            }
         }
+        throwable.printStackTrace();
     }
 
     private List<String> prepareStackTrace(StackTraceElement[] stackTrace) {
-        // TODO figure out what can be stripped out since those stacktrace get pretty large
         List<String> lines = Arrays.stream(stackTrace).map(StackTraceElement::toString).collect(Collectors.toList());
-        String engineCause = "groovy.util.GroovyScriptEngine.run";
+        String engineCause = "com.cleanroommc.groovyscript.sandbox.GroovySandbox.loadScripts";
         int i = 0;
         for (String line : lines) {
             i++;
@@ -258,9 +269,7 @@ public class GroovyLogImpl implements GroovyLog {
         if (i > 0 && i <= lines.size()) {
             lines = lines.subList(0, i);
         }
-        String groovyInternal = "org.codehaus.groovy.runtime";
-        String groovySandbox = "org.kohsuke";
-        lines.removeIf(s -> s.startsWith(groovyInternal) || s.startsWith(groovySandbox));
+        lines.removeIf(s -> s.startsWith("org.codehaus.groovy.vmplugin") || s.startsWith("org.codehaus.groovy.runtime"));
         return lines;
     }
 

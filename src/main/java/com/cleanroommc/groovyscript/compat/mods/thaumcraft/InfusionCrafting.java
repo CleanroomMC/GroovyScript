@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
@@ -16,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.IThaumcraftRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
@@ -146,6 +148,12 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
 
         public RecipeBuilder aspect(AspectStack aspect) {
             this.aspects.add(aspect.getAspect(), aspect.getAmount());
+            return this;
+        }
+
+        public RecipeBuilder aspect(String tag, int amount) {
+            Aspect a = AspectBracketHandler.validateAspect(tag);
+            if (a != null) this.aspects.add(a, amount);
             return this;
         }
 
