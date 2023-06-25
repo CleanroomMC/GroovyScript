@@ -131,7 +131,17 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:guide-api-228832:2645992')
         runtimeOnly rfg.deobf('curse.maven:blood-magic-224791:2822288')
     }
+    
+    compileOnly rfg.deobf('curse.maven:cyclops-core-232758:3159497')
+    if (project.debug_evilcraft.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:cyclops-core-232758:3159497')
+    }
 
+    compileOnly rfg.deobf('curse.maven:evilcraft-74610:2811267')
+    if (project.debug_evilcraft.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:evilcraft-74610:2811267')
+    }
+    
     compileOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
     if (project.debug_actually_additions.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')

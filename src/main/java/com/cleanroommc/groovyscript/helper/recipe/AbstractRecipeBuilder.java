@@ -137,7 +137,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     public void validateItems(GroovyLog.Msg msg, int minInput, int maxInput, int minOutput, int maxOutput) {
         input.trim();
         output.trim();
-        msg.add(input.size() < minInput || input.size() > maxInput, () -> getRequiredString(minInput, maxInput, " item input") + ", but found " + input.size());
+        msg.add(input.size() < minInput || input.size() > maxInput, () -> getRequiredString(minInput, maxInput, "item input") + ", but found " + input.size());
         msg.add(output.size() < minOutput || output.size() > maxOutput, () -> getRequiredString(minOutput, maxOutput, "item output") + ", but found " + output.size());
     }
 
