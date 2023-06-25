@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -13,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.IThaumcraftRecipe;
@@ -119,6 +121,12 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
         public RecipeBuilder aspect(AspectStack aspectIn) {
             this.aspects.add(aspectIn.getAspect(), aspectIn.getAmount());
+            return this;
+        }
+
+        public RecipeBuilder aspect(String tag, int amount) {
+            Aspect a = AspectBracketHandler.validateAspect(tag);
+            if (a != null) this.aspects.add(a, amount);
             return this;
         }
 

@@ -68,7 +68,7 @@ public class HighOven extends MeltingRecipeRegistry {
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Complement High Oven override")
-                .add("could not find override with output %s", output)
+                .add("could not find override with output {}", output)
                 .error()
                 .post();
         return false;
@@ -85,7 +85,7 @@ public class HighOven extends MeltingRecipeRegistry {
 
         list.clear();
         GroovyLog.msg("Error removing Tinkers Complement High Oven override")
-                .add("could not find override with input %s", input)
+                .add("could not find override with input {}", input)
                 .error()
                 .post();
         return false;
@@ -102,7 +102,7 @@ public class HighOven extends MeltingRecipeRegistry {
 
         list.clear();
         GroovyLog.msg("Error removing Tinkers Complement High Oven override")
-                .add("could not find override with input %s and output %s", input, output)
+                .add("could not find override with input {} and output {]", input, output)
                 .error()
                 .post();
         return false;
@@ -150,7 +150,7 @@ public class HighOven extends MeltingRecipeRegistry {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Complement High Oven Mixing recipe")
-                    .add("could not find recipe with output %s", output)
+                    .add("could not find recipe with output {}", output)
                     .error()
                     .post();
             return false;
@@ -165,7 +165,7 @@ public class HighOven extends MeltingRecipeRegistry {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Complement High Oven Mixing recipe")
-                    .add("could not find recipe with input %s", input)
+                    .add("could not find recipe with input {}", input)
                     .error()
                     .post();
             return false;
@@ -180,7 +180,7 @@ public class HighOven extends MeltingRecipeRegistry {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Complement High Oven Mixing recipe")
-                    .add("could not find recipe with input %s and output %s", input, output)
+                    .add("could not find recipe with input {} and output {}", input, output)
                     .error()
                     .post();
             return false;
@@ -201,7 +201,7 @@ public class HighOven extends MeltingRecipeRegistry {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Complement High Oven Mixing recipe")
-                    .add("could not find override with additives %s", additives.values())
+                    .add("could not find override with additives {}", additives.values())
                     .error()
                     .post();
             return false;

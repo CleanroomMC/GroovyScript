@@ -113,7 +113,7 @@ public class Melter extends MeltingRecipeRegistry {
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Complement Melter blacklist")
-                .add("could not find a blacklist for item %s", item)
+                .add("could not find a blacklist for item {}", item)
                 .error()
                 .post();
         return false;
@@ -130,7 +130,7 @@ public class Melter extends MeltingRecipeRegistry {
 
         list.clear();
         GroovyLog.msg("Error removing Tinkers Complement Melter override")
-                .add("could not find a override for input %s", input)
+                .add("could not find a override for input {}", input)
                 .error()
                 .post();
         return false;
@@ -144,7 +144,7 @@ public class Melter extends MeltingRecipeRegistry {
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Complement Melter override")
-                .add("could not find a override for output %s", stack)
+                .add("could not find a override for output {}", stack)
                 .error()
                 .post();
         return false;
@@ -161,7 +161,7 @@ public class Melter extends MeltingRecipeRegistry {
 
         list.clear();
         GroovyLog.msg("Error removing Tinkers Complement Melter override")
-                .add("could not find a override for input %s and output %s", input, output)
+                .add("could not find a override for input {} and output {}", input, output)
                 .error()
                 .post();
         return false;

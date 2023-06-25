@@ -6,9 +6,11 @@ import com.cleanroommc.groovyscript.compat.mods.actuallyadditions.ActuallyAdditi
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
+import com.cleanroommc.groovyscript.compat.mods.chisel.Chisel;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolution;
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
 import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCrafting;
+import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
 import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
@@ -39,6 +41,7 @@ public class ModSupport implements IDynamicGroovyProperty {
 
     public static final Container<ActuallyAdditions> ACTUALLY_ADDITIONS = new Container<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
     public static final Container<AstralSorcery> ASTRAL_SORCERY = new Container<>("astralsorcery", "Astral Sorcery", AstralSorcery::new, "astral", "astral_sorcery", "as");
+    public static final Container<Chisel> CHISEL = new Container<>("chisel", "Chisel", Chisel::new);
     public static final Container<EnderIO> ENDER_IO = new Container<>("enderio", "Ender IO", EnderIO::new, "eio");
     public static final Container<JustEnoughItems> JEI = new Container<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
     public static final Container<Thaumcraft> THAUMCRAFT = new Container<>("thaumcraft", "Thaumcraft", Thaumcraft::new, "tc", "thaum");
@@ -53,6 +56,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new Container<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
     public static final Container<IC2> INDUSTRIALCRAFT = new Container<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
     public static final Container<ExtendedCrafting> EXTENDED_CRAFTING = new Container<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
+    public static final Container<Forestry> FORESTRY = new Container<>("forestry", "Forestry", Forestry::new);
 
     public static Collection<Container<? extends ModPropertyContainer>> getAllContainers() {
         return new ObjectOpenHashSet<>(containers.values());

@@ -12,6 +12,12 @@ public class AspectBracketHandler implements IBracketHandler<AspectStack> {
     private AspectBracketHandler() {
     }
 
+    public static Aspect validateAspect(String tag) {
+        Aspect aspect = Aspect.getAspect(tag);
+        if (aspect == null) GroovyLog.msg("Can't find aspect for name {}!", tag).error().post();
+        return aspect;
+    }
+
     @Override
     public AspectStack parse(String mainArg, Object[] args) {
         if (args.length > 1 || (args.length == 1 && !(args[0] instanceof Integer))) {
