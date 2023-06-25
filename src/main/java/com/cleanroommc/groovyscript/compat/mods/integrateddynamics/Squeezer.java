@@ -23,7 +23,7 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
     }
 
     public RecipeBuilder recipeBuilder() {
-        return new RecipeBuilder(true, false);
+        return new RecipeBuilder().basic();
     }
 
     @Override
@@ -75,16 +75,6 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
         private int duration = 10;
         private boolean basic;
         private boolean mechanical;
-
-        public RecipeBuilder(boolean basic, boolean mechanical) {
-            this.basic = basic;
-            this.mechanical = mechanical;
-        }
-
-        public RecipeBuilder() {
-            this.basic = true;
-            this.mechanical = true;
-        }
 
         public RecipeBuilder basic(boolean is) {
             this.basic = is;

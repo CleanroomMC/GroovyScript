@@ -14,7 +14,7 @@ public class MechanicalDryingBasin extends VirtualizedRegistry<IRecipe<Ingredien
     }
 
     public DryingBasin.RecipeBuilder recipeBuilder() {
-        return new DryingBasin.RecipeBuilder(false, true);
+        return new DryingBasin.RecipeBuilder().mechanical();
     }
 
     @Override

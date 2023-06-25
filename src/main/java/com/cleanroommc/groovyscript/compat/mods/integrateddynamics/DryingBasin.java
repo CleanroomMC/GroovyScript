@@ -19,7 +19,7 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
     }
 
     public RecipeBuilder recipeBuilder() {
-        return new RecipeBuilder(true, false);
+        return new RecipeBuilder().basic();
     }
 
     @Override
@@ -80,16 +80,6 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
         private boolean basic;
         private boolean mechanical;
         private int duration = 10;
-
-        public RecipeBuilder(boolean basic, boolean mechanical) {
-            this.basic = basic;
-            this.mechanical = mechanical;
-        }
-
-        public RecipeBuilder() {
-            this.basic = true;
-            this.mechanical = true;
-        }
 
         public RecipeBuilder basic(boolean is) {
             this.basic = is;

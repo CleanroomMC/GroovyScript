@@ -1,7 +1,7 @@
 
 // Drying Basin and Mechanical Drying Basin:
 // Takes either an item or fluid input and gives either an item or fluid output after a duration.
-mods.integrateddynamics.dryingbasin.recipeBuilder()
+mods.integrateddynamics.dryingbasin.recipeBuilder() // Defaults to basic-only, and mechanical must be enabled via `mechanical()`
     .input(item('minecraft:gold_ingot')) // Either an item input or fluid input must be defined, or both
     .output(item('minecraft:clay')) // Either an item output or fluid output must be defined, or both
     .fluidInput(fluid('water') * 500) // Either an item input or fluid input must be defined, or both
@@ -24,7 +24,7 @@ mods.integrateddynamics.mechanicaldryingbasin.recipeBuilder() // Defaults to mec
 
 // Squeezer and Mechanical Squeezer:
 // Takes an item and can give up to 3 chanced item outputs and a fluid. 
-mods.integrateddynamics.squeezer.recipeBuilder()
+mods.integrateddynamics.squeezer.recipeBuilder() // Defaults to basic-only, and mechanical must be enabled via `mechanical()`
     .input(item('minecraft:clay'))
     .output(item('minecraft:clay_ball'), 1F) // Between 0 and 3 item outputs with chances can be added.
     .output(item('minecraft:clay_ball') * 2, 0.7F)

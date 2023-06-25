@@ -15,7 +15,7 @@ public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRe
     }
 
     public Squeezer.RecipeBuilder recipeBuilder() {
-        return new Squeezer.RecipeBuilder(false, true);
+        return new Squeezer.RecipeBuilder().mechanical();
     }
 
     @Override
