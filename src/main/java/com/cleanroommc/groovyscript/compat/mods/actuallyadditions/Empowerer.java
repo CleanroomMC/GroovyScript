@@ -14,6 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
+
 public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
 
     public Empowerer() {
@@ -124,6 +126,18 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
             return this.particleColor(color);
         }
 
+        public RecipeBuilder particleColor(int hex) {
+            Color color = new Color(hex);
+            this.red = color.getRed() / 255f;
+            this.green = color.getGreen() / 255f;
+            this.blue = color.getBlue() / 255f;
+            return this;
+        }
+
+        public RecipeBuilder color(int hex) {
+            return this.particleColor(hex);
+        }
+
         public RecipeBuilder red(float red) {
             this.red = red;
             return this;
@@ -154,6 +168,9 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
             msg.add(mainInput == null, "mainInput must be defined");
             msg.add(energyPerStand < 0, "energyPerStand must be a non negative integer, yet it was {}", energyPerStand);
             msg.add(time <= 0, "time must be an integer greater than 0, yet it was {}", time);
+            msg.add(red < 0 || red > 1, "red must be a float between 0 and 1, yet it was {}", red);
+            msg.add(green < 0 || green > 1, "green must be a float between 0 and 1, yet it was {}", green);
+            msg.add(blue < 0 || blue > 1, "blue must be a float between 0 and 1, yet it was {}", blue);
         }
 
         @Override

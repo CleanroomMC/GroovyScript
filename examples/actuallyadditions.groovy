@@ -78,6 +78,14 @@ mods.actuallyadditions.empowerer.recipeBuilder()
     .register()
 
 mods.actuallyadditions.empowerer.recipeBuilder()
+    .mainInput(item('minecraft:diamond'))
+    .input(item('minecraft:diamond'),item('minecraft:gold_ingot'),item('minecraft:diamond'),item('minecraft:gold_ingot'))
+    .output(item('minecraft:dirt') * 8)
+    .time(50)
+    .particleColor(0x00FF88) // Optional, int. Hexadecimal color. "particleColor" and "color" are aliases
+    .register()
+
+mods.actuallyadditions.empowerer.recipeBuilder()
     .input(item('minecraft:gold_ingot'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay'))
     .output(item('minecraft:diamond'))
     .time(50)
