@@ -64,7 +64,17 @@ mods.actuallyadditions.empowerer.recipeBuilder()
     .output(item('minecraft:diamond'))
     .time(50)
     .energy(1000) // Optional, int
-    .color(0.5, 0.3, 0.2) // Optional, float... (default [0, 0, 0])
+    .red(0.5) // Optional, float (default 0)
+    .green(0.3) // Optional, float (default 0)
+    .blue(0.2) // Optional, float (default 0)
+    .register()
+
+mods.actuallyadditions.empowerer.recipeBuilder()
+    .mainInput(item('minecraft:clay'))
+    .input(item('minecraft:diamond'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay'))
+    .output(item('minecraft:diamond') * 2)
+    .time(50)
+    .color(0.5, 0.3, 0.2) // Optional, float... shorthand for (red, green, blue). Must contain exactly 3 entries. "particleColor" and "color" are aliases
     .register()
 
 mods.actuallyadditions.empowerer.recipeBuilder()

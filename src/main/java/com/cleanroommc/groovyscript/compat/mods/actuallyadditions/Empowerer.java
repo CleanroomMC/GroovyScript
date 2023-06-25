@@ -85,7 +85,9 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         private IIngredient mainInput;
         private int energyPerStand;
         private int time;
-        private float[] particleColor = new float[]{0, 0, 0};
+        private float red = 0;
+        private float green = 0;
+        private float blue = 0;
 
         public RecipeBuilder mainInput(IIngredient mainInput) {
             this.mainInput = mainInput;
@@ -107,13 +109,33 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
             return this;
         }
 
-        public RecipeBuilder particleColor(float... particleColor) {
-            this.particleColor = particleColor;
+        public RecipeBuilder particleColor(float... color) {
+            if (color.length != 3) {
+                GroovyLog.get().warn("Error setting color in Actually Additions Empowerer recipe. color must contain 3 floats, yet it contained {}", color.length);
+                return this;
+            }
+            this.red = color[0];
+            this.green = color[1];
+            this.blue = color[2];
             return this;
         }
 
         public RecipeBuilder color(float... color) {
-            this.particleColor = color;
+            return this.particleColor(color);
+        }
+
+        public RecipeBuilder red(float red) {
+            this.red = red;
+            return this;
+        }
+
+        public RecipeBuilder green(float green) {
+            this.green = green;
+            return this;
+        }
+
+        public RecipeBuilder blue(float blue) {
+            this.blue = blue;
             return this;
         }
 
@@ -137,7 +159,17 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         @Override
         public @Nullable EmpowererRecipe register() {
             if (!validate()) return null;
-            EmpowererRecipe recipe = new EmpowererRecipe(mainInput.toMcIngredient(), output.get(0), input.get(0).toMcIngredient(), input.get(1).toMcIngredient(), input.get(2).toMcIngredient(), input.get(3).toMcIngredient(), energyPerStand, time, particleColor);
+            EmpowererRecipe recipe = new EmpowererRecipe(
+                    mainInput.toMcIngredient(),
+                    output.get(0),
+                    input.get(0).toMcIngredient(),
+                    input.get(1).toMcIngredient(),
+                    input.get(2).toMcIngredient(),
+                    input.get(3).toMcIngredient(),
+                    energyPerStand,
+                    time,
+                    new float[]{red, green, blue}
+            );
             ModSupport.ACTUALLY_ADDITIONS.get().empowerer.add(recipe);
             return recipe;
         }
