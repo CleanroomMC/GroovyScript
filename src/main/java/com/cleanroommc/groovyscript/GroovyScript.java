@@ -112,6 +112,12 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
+        Loot.TABLE_MANAGER = new LootTableManager(null);
+        Loot.TABLES.values().forEach(table -> {
+            ((LootTableAccessor) table).setIsFrozen(false);
+            ((LootTableAccessor) table).getPools().forEach(pool -> ((LootPoolAccessor) pool).setIsFrozen(false));
+        });
+
         if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) TinkersConstruct.init();
     }
 
@@ -134,12 +140,6 @@ public class GroovyScript {
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
         ModSupport.init();
-        
-        Loot.TABLE_MANAGER = new LootTableManager(null);
-        Loot.TABLES.values().forEach(table -> {
-            ((LootTableAccessor) table).setIsFrozen(false);
-            ((LootTableAccessor) table).getPools().forEach(pool -> ((LootPoolAccessor) pool).setIsFrozen(false));
-        });
 
         boolean wasNull = Loader.instance().activeModContainer() == null;
         if (wasNull) {
