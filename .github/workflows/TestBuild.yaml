@@ -29,12 +29,13 @@ jobs:
         file: gradle.properties
         all: true
 
-    - name: Change mod version
+    - name: Retrieve SHA short
       id: vars
       shell: bash
-      run: |
-        echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-        sed -i "s/mod_version.*=.*/mod_version = ${{ steps.gradle_properties.outputs.mod_version }}-${{ steps.vars.outputs.SHA_SHORT }}/g" gradle.properties
+      run: echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      
+    - name: Change mod version
+      run: sed -i "s/mod_version.*=.*/mod_version = ${{ steps.gradle_properties.outputs.mod_version }}-${{ steps.vars.outputs.SHA_SHORT }}/g" gradle.properties
 
     - name: Set up Temurin JDK 8
       uses: actions/setup-java@v3
