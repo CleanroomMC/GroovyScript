@@ -3,7 +3,8 @@ package com.cleanroommc.groovyscript.sandbox.security;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
-import groovy.lang.Script;
+import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyShell;
 import groovy.ui.GroovyMain;
 import groovy.ui.GroovySocketServer;
 import groovy.util.Eval;
@@ -41,13 +42,10 @@ public class GroovySecurityManager {
         banPackage("java.net");
         banPackage("java.rmi");
         banPackage("java.security");
-        banPackage("org.codehaus.groovy");
-        banPackage("org.apache.groovy");
         banPackage("groovy.grape");
         banPackage("groovy.beans");
         banPackage("groovy.cli");
         banPackage("groovyjarjar");
-        banPackage("org.kohsuke");
         banPackage("sun."); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
         banPackage("javax.net");
         banPackage("javax.security");
@@ -55,7 +53,7 @@ public class GroovySecurityManager {
         banPackage("org.spongepowered");
         banPackage("zone.rong.mixinbooter");
         banClasses(Runtime.class, ClassLoader.class);
-        banClasses(GroovyScriptEngine.class, Eval.class, GroovyMain.class, GroovySocketServer.class);
+        banClasses(GroovyScriptEngine.class, Eval.class, GroovyMain.class, GroovySocketServer.class, GroovyShell.class, GroovyClassLoader.class);
         banMethods(System.class, "exit", "gc");
 
         // mod specific
@@ -107,8 +105,7 @@ public class GroovySecurityManager {
     }
 
     public boolean isValid(Class<?> clazz) {
-        return Script.class.isAssignableFrom(clazz) ||
-               this.whiteListedClasses.contains(clazz) ||
+        return this.whiteListedClasses.contains(clazz) ||
                (isValidClass(clazz) && isValidPackage(clazz));
     }
 
