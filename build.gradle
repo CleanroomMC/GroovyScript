@@ -120,6 +120,11 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:mekanism-268560:2835175')
     }
 
+    compileOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
+    if (project.debug_applied_energistics_2.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
+    }
+
     compileOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
     if (project.debug_thermal.toBoolean() || project.debug_de.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
