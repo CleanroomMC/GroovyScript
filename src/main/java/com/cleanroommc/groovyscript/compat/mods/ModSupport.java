@@ -14,6 +14,7 @@ import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCraftin
 import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
+import com.cleanroommc.groovyscript.compat.mods.inspirations.Inspirations;
 import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
@@ -59,6 +60,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<IC2> INDUSTRIALCRAFT = new Container<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
     public static final Container<ExtendedCrafting> EXTENDED_CRAFTING = new Container<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
     public static final Container<Forestry> FORESTRY = new Container<>("forestry", "Forestry", Forestry::new);
+    public static final Container<Inspirations> INSPIRATIONS = new Container<>("inspirations", "Inspirations", Inspirations::new);
 
     public static Collection<Container<? extends ModPropertyContainer>> getAllContainers() {
         return new ObjectOpenHashSet<>(containers.values());
