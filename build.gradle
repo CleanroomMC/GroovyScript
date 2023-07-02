@@ -141,6 +141,11 @@ dependencies {
     if (project.debug_evilcraft.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:evilcraft-74610:2811267')
     }
+
+    compileOnly rfg.deobf('curse.maven:compact-machines-224218:2707509')
+    if (project.debug_compact_machines.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:compact-machines-224218:2707509')
+    }
     
     compileOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
     if (project.debug_actually_additions.toBoolean()) {
