@@ -2,13 +2,12 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipePureDaisy;
@@ -76,6 +75,10 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         return false;
     }
 
+    public boolean removeByInput(OreDictIngredient input) {
+        return removeByInput(input.getOreDict());
+    }
+
     public boolean removeByInput(IBlockState input) {
         if (BotaniaAPI.pureDaisyRecipes.removeIf(recipe -> {
             boolean found = (recipe.getInput() instanceof IBlockState && recipe.getInput().equals(input)) || (recipe.getInput() instanceof Block && recipe.getInput() == input.getBlock());
@@ -133,6 +136,10 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
             return this;
         }
 
+        public RecipeBuilder input(OreDictIngredient input) {
+            return input(input.getOreDict());
+        }
+
         @Override
         public String getErrorMsg() {
             return "Error adding Botania Pure Daisy recipe";
@@ -143,8 +150,8 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
             validateItems(msg, 0, 0, 0, 0);
             validateFluids(msg, 0, 0, 0, 0);
             msg.add(time < 0, "time must be at least 1, got " + time);
-            msg.add(output != null, "expected IBlockState output, got " + output);
-            msg.add(input != null, "expected IBlockState or String input, got " + input);
+            msg.add(output == null, "output must be defined");
+            msg.add(input == null || !(input instanceof String || input instanceof IBlockState), "expected IBlockState or String input, got {}", input);
         }
 
         @Override
