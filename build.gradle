@@ -119,7 +119,7 @@ dependencies {
     }
 
     compileOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
-    if (project.debug_thermal.toBoolean() || project.debug_de.toBoolean()) {
+    if (project.debug_thermal.toBoolean() || project.debug_draconic_evolution.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
     }
 
@@ -166,7 +166,7 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
     compileOnly rfg.deobf('curse.maven:draconic_evolution-223565:3431261')
     compileOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
-    if (project.debug_de.toBoolean()) {
+    if (project.debug_draconic_evolution.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
         runtimeOnly rfg.deobf('curse.maven:draconic_evolution-223565:3431261')
         runtimeOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
