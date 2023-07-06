@@ -6,33 +6,33 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
-import mekanism.common.recipe.machines.EnrichmentRecipe;
+import mekanism.common.recipe.machines.SmeltingRecipe;
+import mekanism.common.recipe.outputs.ItemStackOutput;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRecipe> {
+public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
 
-    public EnrichmentChamber() {
-        super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, VirtualizedRegistry.generateAliases("Enricher"));
+    public Smelting() {
+        super(RecipeHandler.Recipe.ENERGIZED_SMELTER, VirtualizedMekanismRegistry.generateAliases("Smelter"));
     }
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    public EnrichmentRecipe add(IIngredient ingredient, ItemStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Enrichment Chamber recipe").error();
+    public SmeltingRecipe add(IIngredient ingredient, ItemStack output) {
+        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Smelter recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
         output = output.copy();
-        EnrichmentRecipe recipe1 = null;
+        SmeltingRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            EnrichmentRecipe recipe = new EnrichmentRecipe(itemStack.copy(), output);
+            SmeltingRecipe recipe = new SmeltingRecipe(new ItemStackInput(itemStack.copy()), new ItemStackOutput(output));
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -47,7 +47,7 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
         }
         boolean found = false;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            EnrichmentRecipe recipe = recipeRegistry.get().remove(new ItemStackInput(itemStack));
+            SmeltingRecipe recipe = recipeRegistry.get().remove(new ItemStackInput(itemStack));
             if (recipe != null) {
                 addBackup(recipe);
                 found = true;
@@ -59,11 +59,11 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
         return found;
     }
 
-    public static class RecipeBuilder extends AbstractRecipeBuilder<EnrichmentRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<SmeltingRecipe> {
 
         @Override
         public String getErrorMsg() {
-            return "Error adding Mekanism Enrichment Chamber recipe";
+            return "Error adding Mekanism Smelting recipe";
         }
 
         @Override
@@ -73,13 +73,13 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
         }
 
         @Override
-        public @Nullable EnrichmentRecipe register() {
+        public @Nullable SmeltingRecipe register() {
             if (!validate()) return null;
-            EnrichmentRecipe recipe = null;
+            SmeltingRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                EnrichmentRecipe r = new EnrichmentRecipe(itemStack.copy(), output.get(0));
+                SmeltingRecipe r = new SmeltingRecipe(itemStack.copy(), output.get(0));
                 if (recipe == null) recipe = r;
-                ModSupport.MEKANISM.get().enrichmentChamber.add(r);
+                ModSupport.MEKANISM.get().smelting.add(r);
             }
             return recipe;
         }

@@ -1,17 +1,27 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.FluidInput;
 import mekanism.common.recipe.machines.ThermalEvaporationRecipe;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
-public class ThermalEvaporation extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
+import java.util.Arrays;
 
-    public ThermalEvaporation() {
-        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, "TEP");
+public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
+
+    public ThermalEvaporationPlant() {
+        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, "TEP", "tep");
+        aliases.addAll(Arrays.asList(VirtualizedMekanismRegistry.generateAliases("ThermalEvaporation")));
+    }
+
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
     }
 
     public ThermalEvaporationRecipe add(FluidStack input, FluidStack output) {
@@ -38,5 +48,27 @@ public class ThermalEvaporation extends VirtualizedMekanismRegistry<ThermalEvapo
         }
         removeError("could not find recipe for %", input);
         return false;
+    }
+
+    public static class RecipeBuilder extends AbstractRecipeBuilder<ThermalEvaporationRecipe> {
+
+        @Override
+        public String getErrorMsg() {
+            return "Error adding Mekanism Thermal Evaporation Plant recipe";
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
+            validateItems(msg);
+            validateFluids(msg, 1, 1, 1, 1);
+        }
+
+        @Override
+        public @Nullable ThermalEvaporationRecipe register() {
+            if (!validate()) return null;
+            ThermalEvaporationRecipe recipe = new ThermalEvaporationRecipe(fluidInput.get(0), fluidOutput.get(0));
+            ModSupport.MEKANISM.get().thermalEvaporationPlant.add(recipe);
+            return recipe;
+        }
     }
 }
