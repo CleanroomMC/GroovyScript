@@ -66,7 +66,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
             return false;
         })) {
             GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
-                    .add("no recipes found for %s", fluidOutput)
+                    .add("no recipes found for {}", fluidOutput)
                     .error()
                     .post();
         }
@@ -85,7 +85,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
             addBackup(recipe);
         } else {
             GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
-                    .add("no recipes found for %s", input)
+                    .add("no recipes found for {}", input)
                     .error()
                     .post();
         }
@@ -116,7 +116,9 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         @Override
         public @Nullable FermenterRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().fermenter.add(fluidOutput.get(0), output.getOrEmpty(0), input.get(0), energy);
+            FermenterRecipe recipe = new FermenterRecipe(fluidOutput.get(0), output.getOrEmpty(0), input.get(0), energy);
+            ModSupport.IMMERSIVE_ENGINEERING.get().fermenter.add(recipe);
+            return recipe;
         }
     }
 }

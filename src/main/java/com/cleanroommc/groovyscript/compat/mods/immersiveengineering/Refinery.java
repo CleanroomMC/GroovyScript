@@ -10,6 +10,9 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
 
     public Refinery() {
@@ -34,8 +37,8 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
     }
 
     public RefineryRecipe add(FluidStack output, FluidStack input0, FluidStack input1, int energy) {
-        RefineryRecipe recipe = RefineryRecipe.addRecipe(output, input0, input1, energy);
-        addScripted(recipe);
+        RefineryRecipe recipe = new RefineryRecipe(output, input0, input1, energy);
+        add(recipe);
         return recipe;
     }
 
@@ -63,7 +66,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
             return false;
         })) {
             GroovyLog.msg("Error removing Immersive Engineering Refinery recipe")
-                    .add("no recipes found for %s", fluidOutput)
+                    .add("no recipes found for {}", fluidOutput)
                     .error()
                     .post();
         }
@@ -77,10 +80,13 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        RefineryRecipe recipe = RefineryRecipe.findRecipe(input0, input1);
-        if (recipe == null || !remove(recipe)) {
+        List<RefineryRecipe> recipes = RefineryRecipe.recipeList.stream().filter(r -> (r.input0.isFluidEqual(input0) && r.input1.isFluidEqual(input1)) || (r.input0.isFluidEqual(input1) && r.input1.isFluidEqual(input0))).collect(Collectors.toList());
+        for (RefineryRecipe recipe : recipes) {
+            remove(recipe);
+        }
+        if (recipes.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Refinery recipe")
-                    .add("no recipes found for %s and %s", input0, input1)
+                    .add("no recipes found for {} and {}", input0, input1)
                     .error()
                     .post();
         }
@@ -110,7 +116,10 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
 
         @Override
         public @Nullable RefineryRecipe register() {
-            return ModSupport.IMMERSIVE_ENGINEERING.get().refinery.add(fluidOutput.get(0), fluidInput.get(0), fluidInput.get(1), energy);
+            if (!validate()) return null;
+            RefineryRecipe recipe = new RefineryRecipe(fluidOutput.get(0), fluidInput.get(0), fluidInput.get(1), energy);
+            ModSupport.IMMERSIVE_ENGINEERING.get().refinery.add(recipe);
+            return recipe;
         }
     }
 }

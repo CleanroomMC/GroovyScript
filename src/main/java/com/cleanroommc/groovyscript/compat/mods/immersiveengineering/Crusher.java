@@ -60,7 +60,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         List<CrusherRecipe> list = CrusherRecipe.removeRecipesForOutput(output);
         if (list.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
-                    .add("no recipes found for %s", output)
+                    .add("no recipes found for {}", output)
                     .error()
                     .post();
             return;
@@ -78,7 +78,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         List<CrusherRecipe> list = CrusherRecipe.removeRecipesForInput(input);
         if (list.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
-                    .add("no recipes found for %s", input)
+                    .add("no recipes found for {}", input)
                     .error()
                     .post();
             return;
@@ -112,7 +112,9 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         @Override
         public @Nullable CrusherRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().crusher.add(output.get(0), input.get(0), energy);
+            CrusherRecipe recipe = new CrusherRecipe(output.get(0), input.get(0), energy);
+            ModSupport.IMMERSIVE_ENGINEERING.get().crusher.add(recipe);
+            return recipe;
         }
     }
 }

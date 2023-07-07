@@ -201,7 +201,7 @@ dependencies {
     }
 
     compileOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
-    if (project.debug_ie.toBoolean()) {
+    if (project.debug_immersive_engineering.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
     }
 
@@ -229,7 +229,7 @@ dependencies {
     }
 
     compileOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
-    if (project.debug_ie.toBoolean()) {
+    if (project.debug_immersive_engineering.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
     }
 
