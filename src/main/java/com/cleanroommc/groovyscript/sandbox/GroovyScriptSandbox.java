@@ -41,8 +41,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
         registerBinding("eventManager", GroovyEventManager.INSTANCE);
         registerBinding("event_manager", GroovyEventManager.INSTANCE);
-        importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
-        importCustomizer.addImports("net.minecraft.world.World",
+        this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
+        this.importCustomizer.addImports("net.minecraft.world.World",
                                     "net.minecraft.block.state.IBlockState",
                                     "net.minecraft.block.Block",
                                     "net.minecraft.block.SoundType",
@@ -174,7 +174,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     public Collection<File> getClassFiles() {
-        return GroovyScript.getRunConfig().getClassFiles();
+        return GroovyScript.getRunConfig().getClassFiles(this.currentLoadStage.getName());
     }
 
     @Override
