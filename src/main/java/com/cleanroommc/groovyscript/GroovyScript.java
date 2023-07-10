@@ -146,9 +146,7 @@ public class GroovyScript {
             Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get(ID));
         }
 
-        long time = System.currentTimeMillis();
-        getSandbox().run(LoadStage.PRE_INIT);
-        LOGGER.info("Running early Groovy scripts took " + (System.currentTimeMillis() - time) + " ms");
+        runGroovyScriptsInLoader(LoadStage.PRE_INIT);
 
         if (wasNull) {
             Loader.instance().setActiveModContainer(null);
@@ -156,11 +154,11 @@ public class GroovyScript {
     }
 
     @ApiStatus.Internal
-    public static void initializeGroovyPostInit() {
+    public static void runGroovyScriptsInLoader(LoadStage loadStage) {
         // called via mixin between fml post init and load complete
         long time = System.currentTimeMillis();
-        getSandbox().run(LoadStage.POST_INIT);
-        LOGGER.info("Running Groovy scripts took " + (System.currentTimeMillis() - time) + " ms");
+        getSandbox().run(loadStage);
+        LOGGER.info("Running Groovy scripts during {} took {} ms", loadStage.getName(), System.currentTimeMillis() - time);
     }
 
     @Mod.EventHandler
