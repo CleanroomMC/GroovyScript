@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.core.mixin;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraftforge.fml.common.LoadController;
 import net.minecraftforge.fml.common.LoaderState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,6 +16,12 @@ public class LoaderControllerMixin {
     public void preInit(LoaderState state, Object[] eventData, CallbackInfo ci) {
         if (state == LoaderState.PREINITIALIZATION) {
             GroovyScript.initializeGroovyPreInit();
+        }
+        if (state == LoaderState.POSTINITIALIZATION) {
+            GroovyScript.runGroovyScriptsInLoader(LoadStage.INIT);
+        }
+        if (state == LoaderState.AVAILABLE) {
+            GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
         }
     }
 }

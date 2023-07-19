@@ -80,14 +80,18 @@ repositories {
         url 'http://maven.tterrag.com/'
         allowInsecureProtocol = true
     }
+    maven {
+        url = 'http://maven.ic2.player.to/'
+        allowInsecureProtocol = true
+    }
     mavenLocal() // Must be last for caching to work
 }
 
 dependencies {
-    implementation 'zone.rong:mixinbooter:7.1'
+    compileOnly 'org.jetbrains:annotations:24.0.1'
+    implementation 'zone.rong:mixinbooter:8.3'
 
     String mixin = modUtils.enableMixins('org.spongepowered:mixin:0.8.3')
-
     api (mixin) {
         transitive = false
     }
@@ -98,11 +102,16 @@ dependencies {
         transitive = false
     }
 
-    compileOnly 'org.jetbrains:annotations:23.0.0'
-
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 
     implementation 'mezz.jei:jei_1.12.2:4.16.1.302'
+
+    compileOnly rfg.deobf("curse.maven:ctm-267602:2915363")
+    compileOnly rfg.deobf("curse.maven:chisel-235279:2915375")
+    if (project.debug_chisel.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:ctm-267602:2915363')
+        runtimeOnly rfg.deobf('curse.maven:chisel-235279:2915375')
+    }
 
     compileOnly rfg.deobf('curse.maven:mekanism-268560:2835175')
     if (project.debug_mekanism.toBoolean()) {
@@ -119,6 +128,21 @@ dependencies {
     if (project.debug_blood_magic.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:guide-api-228832:2645992')
         runtimeOnly rfg.deobf('curse.maven:blood-magic-224791:2822288')
+    }
+    
+    compileOnly rfg.deobf('curse.maven:cyclops-core-232758:3159497')
+    if (project.debug_evilcraft.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:cyclops-core-232758:3159497')
+    }
+
+    compileOnly rfg.deobf('curse.maven:evilcraft-74610:2811267')
+    if (project.debug_evilcraft.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:evilcraft-74610:2811267')
+    }
+    
+    compileOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
+    if (project.debug_actually_additions.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
     }
 
     compileOnly rfg.deobf('curse.maven:cucumber-272335:2645867')
@@ -236,6 +260,11 @@ dependencies {
         runtimeOnly 'curse.maven:exnihilocreatio-274456:2817545'
     }
 
+    compileOnly rfg.deobf('net.sengir.forestry:forestry_1.12.2:5.8.2.422')
+    if (project.debug_forestry.toBoolean()) {
+        runtimeOnly rfg.deobf('net.sengir.forestry:forestry_1.12.2:5.8.2.422')
+        runtimeOnly rfg.deobf('curse.maven:jei-bees-248370:2490058')
+    }
 }
 
 processResources {

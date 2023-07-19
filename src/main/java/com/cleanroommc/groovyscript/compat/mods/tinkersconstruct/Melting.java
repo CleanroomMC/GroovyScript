@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -11,6 +12,8 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.entity.EntityList;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -56,14 +59,15 @@ public class Melting extends MeltingRecipeRegistry {
     }
 
     public boolean removeByInput(IIngredient input) {
+        NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
         if (TinkerRegistryAccessor.getMeltingRegistry().removeIf(recipe -> {
-            boolean found = input.test(recipe.input.getInputs().get(0));
+            boolean found = recipe.input.matches(matching).isPresent();
             if (found) addBackup(recipe);
             return found;
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Construct Melting recipe")
-                .add("could not find recipe with input %s", input)
+                .add("could not find recipe with input {}", input)
                 .error()
                 .post();
         return false;
@@ -77,21 +81,22 @@ public class Melting extends MeltingRecipeRegistry {
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Construct Melting recipe")
-                .add("could not find recipe with output %s", output)
+                .add("could not find recipe with output {}", output)
                 .error()
                 .post();
         return false;
     }
 
     public boolean removeByInputAndOutput(IIngredient input, FluidStack output) {
+        NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
         if (TinkerRegistryAccessor.getMeltingRegistry().removeIf(recipe -> {
-            boolean found = input.test(recipe.input.getInputs().get(0)) && recipe.getResult().isFluidEqual(output);
+            boolean found = recipe.input.matches(matching).isPresent() && recipe.getResult().isFluidEqual(output);
             if (found) addBackup(recipe);
             return found;
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Construct Melting recipe")
-                .add("could not find recipe with input %s and output %s", input, output)
+                .add("could not find recipe with input {} and output {}", input, output)
                 .error()
                 .post();
         return false;

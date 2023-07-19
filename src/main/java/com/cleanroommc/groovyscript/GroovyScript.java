@@ -4,10 +4,13 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
+import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.content.GroovyResourcePack;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
+import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
 import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
@@ -34,6 +37,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,10 +45,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -111,6 +112,12 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
+        Loot.TABLE_MANAGER = new LootTableManager(null);
+        Loot.TABLES.values().forEach(table -> {
+            ((LootTableAccessor) table).setIsFrozen(false);
+            ((LootTableAccessor) table).getPools().forEach(pool -> ((LootPoolAccessor) pool).setIsFrozen(false));
+        });
+
         if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) TinkersConstruct.init();
     }
 
@@ -139,17 +146,23 @@ public class GroovyScript {
             Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get(ID));
         }
 
-        getSandbox().run(LoadStage.PRE_INIT);
+        runGroovyScriptsInLoader(LoadStage.PRE_INIT);
 
         if (wasNull) {
             Loader.instance().setActiveModContainer(null);
         }
     }
 
+    @ApiStatus.Internal
+    public static void runGroovyScriptsInLoader(LoadStage loadStage) {
+        // called via mixin between fml post init and load complete
+        long time = System.currentTimeMillis();
+        getSandbox().run(loadStage);
+        LOGGER.info("Running Groovy scripts during {} took {} ms", loadStage.getName(), System.currentTimeMillis() - time);
+    }
+
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
-        getSandbox().run(LoadStage.POST_INIT);
-
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);
             Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.command.copy.copied_start")

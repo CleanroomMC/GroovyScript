@@ -199,7 +199,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
 
         @Override
         public String getErrorMsg() {
-            return "Error adding Roots Pyre recipe";
+            return "Error adding Roots Mortar recipe";
         }
 
         public String getRecipeNamePrefix() {

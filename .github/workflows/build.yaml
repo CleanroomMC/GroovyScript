@@ -89,6 +89,14 @@ jobs:
             tinkers-construct | recommends | *
             tinkers-complement | recommends | *
             constructs-armory | recommends | *
+            had-enough-items | recommends | *
+            actually-additions | recommends | *
+            botania | recommends | *
+            chisel | recommends | *
+            evilcraft | recommends | *
+            extended-crafting | recommends | *
+            forestry | recommends | *
+            roots | recommends | *
           java: |
             8
           retry-attempts: 2
