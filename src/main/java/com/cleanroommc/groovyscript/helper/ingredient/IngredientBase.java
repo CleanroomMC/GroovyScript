@@ -12,20 +12,22 @@ public abstract class IngredientBase implements IIngredient {
     protected Closure<Object> transformer;
 
     public IngredientBase when(Closure<Object> matchCondition) {
-        this.matchCondition = matchCondition;
-        return this;
+        IngredientBase fresh = (IngredientBase) this.exactCopy();
+        fresh.matchCondition = matchCondition;
+        return fresh;
     }
 
     public IngredientBase transform(Closure<Object> transformer) {
-        this.transformer = transformer;
-        return this;
+        IngredientBase fresh = (IngredientBase) this.exactCopy();
+        fresh.transformer = transformer;
+        return fresh;
     }
 
     public IngredientBase reuse() {
         return transform(IngredientHelper.REUSE);
     }
 
-    public IngredientBase noreturn() {
+    public IngredientBase noReturn() {
         return transform(IngredientHelper.NO_RETURN);
     }
 
