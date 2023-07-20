@@ -83,6 +83,11 @@ public class EnderRecipeBuilder extends CraftingRecipeBuilder {
             return this;
         }
 
+        public EnderRecipeBuilder.Shaped key(char c, IIngredient ingredient) {
+            this.keyMap.put(c, ingredient);
+            return this;
+        }
+
         public EnderRecipeBuilder.Shaped key(String c, IIngredient ingredient) {
             if (c == null || c.length() != 1) {
                 errors.add("key must be a single char, but found '" + c + "'");

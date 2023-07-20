@@ -91,6 +91,11 @@ public abstract class TableRecipeBuilder extends CraftingRecipeBuilder {
             return this;
         }
 
+        public TableRecipeBuilder.Shaped key(char c, IIngredient ingredient) {
+            this.keyMap.put(c, ingredient);
+            return this;
+        }
+
         public TableRecipeBuilder.Shaped key(String c, IIngredient ingredient) {
             if (c == null || c.length() != 1) {
                 errors.add("key must be a single char, but found '" + c + "'");

@@ -9,7 +9,6 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.commons.lang3.ArrayUtils;
 import thaumcraft.api.aspects.Aspect;
@@ -56,8 +55,6 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
 
     public static class Shaped extends ArcaneRecipeBuilder {
 
-        private static final String ID_PREFIX = "shaped_arcane_";
-
         protected boolean mirrored = false;
         private String[] keyBasedMatrix;
         private final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
@@ -98,6 +95,11 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
             return this;
         }
 
+        public ArcaneRecipeBuilder.Shaped key(char c, IIngredient ingredient) {
+            this.keyMap.put(c, ingredient);
+            return this;
+        }
+
         // groovy doesn't have char literals
         public ArcaneRecipeBuilder.Shaped key(String c, IIngredient ingredient) {
             if (c == null || c.length() != 1) {
@@ -119,6 +121,11 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_shaped_arcane_";
+        }
+
+        @Override
         public IRecipe register() {
             GroovyLog.Msg msg = GroovyLog.msg("Error creating Thaumcraft Arcane Workbench recipe").error()
                     .add((keyBasedMatrix == null || keyBasedMatrix.length == 0) && (ingredientMatrix == null || ingredientMatrix.isEmpty()), () -> "No matrix was defined")
@@ -136,8 +143,8 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
 
             if (recipe != null) {
                 handleReplace();
-                ResourceLocation rl = createName(name, ID_PREFIX);
-                ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, rl, recipe);
+                validateName();
+                ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             }
 
             return recipe;
@@ -145,8 +152,6 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
     }
 
     public static class Shapeless extends ArcaneRecipeBuilder {
-
-        private static final String ID_PREFIX = "shapeless_arcane_";
 
         private final List<IIngredient> ingredients = new ArrayList<>();
 
@@ -170,6 +175,11 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_shapeless_arcane_";
+        }
+
+        @Override
         public IRecipe register() {
             IngredientHelper.trim(ingredients);
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shapeless Crafting recipe")
@@ -183,8 +193,8 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
             }
             handleReplace();
             ShapelessArcaneCR recipe = new ShapelessArcaneCR(output.copy(), ingredients, recipeFunction, recipeAction, researchKey, vis, aspects);
-            ResourceLocation rl = createName(name, ID_PREFIX);
-            ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, rl, recipe);
+            validateName();
+            ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             return recipe;
         }
     }

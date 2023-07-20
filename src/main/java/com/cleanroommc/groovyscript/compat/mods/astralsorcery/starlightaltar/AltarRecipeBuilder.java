@@ -80,15 +80,6 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
         return this;
     }
 
-    public AltarRecipeBuilder key(String c, IIngredient item) {
-        if (c == null || c.length() != 1) {
-            errors.add("key must be a single char but found '" + c + "'");
-            return this;
-        }
-        this.keyMap.put(c.charAt(0), item);
-        return this;
-    }
-
     public AltarRecipeBuilder starlight(int starlight) {
         this.starlightRequired = starlight;
         return this;
