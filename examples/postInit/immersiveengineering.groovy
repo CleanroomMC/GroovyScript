@@ -1,4 +1,9 @@
 
+if (!isLoaded('immersiveengineering')) {
+    println 'Cancelled running script immersiveengineering'
+    return
+}
+
 // Alloy Kiln:
 // Converts two input itemstacks into an output itemstack, consuming fuel (based on burn time).
 mods.immersiveengineering.alloykiln.recipeBuilder()

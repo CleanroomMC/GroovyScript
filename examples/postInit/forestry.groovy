@@ -1,3 +1,9 @@
+
+if (!isLoaded('forestry')) {
+    println 'Cancelled running script forestry'
+    return
+}
+
 // Species Bracket Handler
 // While forestry:speciesCommon is the actual name, for convenience, both will work.
 species("forestry:common")

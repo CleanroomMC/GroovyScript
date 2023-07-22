@@ -1,4 +1,9 @@
 
+if (!isLoaded('extendedcrafting')) {
+    println 'Cancelled running script extendedcrafting'
+    return
+}
+
 // Combination crafting
 
 // there are no combination recipes by default, and so none can be removed

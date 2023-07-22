@@ -1,4 +1,9 @@
 
+if (!isLoaded('enderio')) {
+    println 'Cancelled running script enderio'
+    return
+}
+
 // Alloy Smelter (Alloying):
 // Convert up to 3 itemstack inputs into an itemstack output, using energy and giving XP. Can be restricted to require a given tier of machine.
 // Can be set to require at least SIMPLE, NORMAL, or ENHANCED tiers, or to IGNORE the tier. SIMPLE and IGNORE are effectively the same.

@@ -1,3 +1,9 @@
+
+if (!isLoaded('chisel')) {
+    println 'Cancelled running script chisel'
+    return
+}
+
 // Carving
 mods.chisel.carving.addGroup('demo')
 mods.chisel.carving.removeGroup('blockDiamond')

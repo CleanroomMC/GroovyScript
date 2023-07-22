@@ -1,4 +1,9 @@
 
+if (!isLoaded('draconicevolution')) {
+    println 'Cancelled running script draconicevolution'
+    return
+}
+
 // Fusion:
 // Consumes items and power from up to 54 pedestals of at least a given tier pointing towards a Fusion Crafting Core containing a catalyst to produce an output item.
 mods.draconicevolution.fusion.recipeBuilder()

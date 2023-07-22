@@ -1,3 +1,9 @@
+
+if (!isLoaded('thaumcraft')) {
+    println 'Cancelled running script thaumcraft'
+    return
+}
+
 mods.thaumcraft.Crucible.removeByOutput(item('minecraft:gunpowder'))
 
 mods.thaumcraft.Crucible.recipeBuilder()

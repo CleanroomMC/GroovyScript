@@ -1,5 +1,10 @@
 import net.minecraft.util.math.MathHelper
 
+if (!isLoaded('astralsorcery')) {
+    println 'Cancelled running script astralsorcery'
+    return
+}
+
 mods.astralsorcery.StarlightAltar.discoveryRecipeBuilder()
         .output(item('minecraft:water_bucket'))
         .row('   ')

@@ -1,4 +1,9 @@
 
+if (!isLoaded('mekanism')) {
+    println 'Cancelled running script mekanism'
+    return
+}
+
 // Bracket Handlers
 // Gas
 gas('gold')

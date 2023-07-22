@@ -1,4 +1,10 @@
 
+if (!isLoaded('actuallyadditions')) {
+    println 'Cancelled running script actuallyadditions'
+    return
+}
+
+
 // Atomic Reconstructor
 // The Atomic Reconstructor is a block which uses energy to convert a block or item in front of it into other items.
 mods.actuallyadditions.atomicreconstructor.recipeBuilder()

@@ -1,6 +1,11 @@
 import net.minecraft.potion.PotionEffect
 import net.minecraft.util.text.TextFormatting
 
+if (!isLoaded('botania')) {
+    println 'Cancelled running script botania'
+    return
+}
+
 
 // Bracket Handlers
 // Brew:

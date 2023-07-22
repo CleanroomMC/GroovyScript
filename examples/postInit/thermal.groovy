@@ -1,4 +1,9 @@
 
+if (!isLoaded('thermalexpansion')) {
+    println 'Cancelled running script thermalexpansion'
+    return
+}
+
 mods.te.Pulverizer.recipeBuilder()
     .input(item('minecraft:bookshelf'))
     .output(item('minecraft:diamond'))

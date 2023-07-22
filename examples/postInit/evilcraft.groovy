@@ -1,4 +1,9 @@
 
+if (!isLoaded('evilcraft')) {
+    println 'Cancelled running script evilcraft'
+    return
+}
+
 // Weather Bracket Handler
 weather('clear')
 weather('rain')

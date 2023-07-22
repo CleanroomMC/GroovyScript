@@ -1,4 +1,9 @@
 
+if (!isLoaded('roots')) {
+    println 'Cancelled running script roots'
+    return
+}
+
 // Bracket Handlers
 
 // Cost Bracket Handler
