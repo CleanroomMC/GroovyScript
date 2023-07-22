@@ -54,7 +54,7 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s", ingredient);
+            removeError("could not find recipe for {}", ingredient);
         }
         return found;
     }

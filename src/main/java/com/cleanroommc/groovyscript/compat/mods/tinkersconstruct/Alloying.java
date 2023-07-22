@@ -80,7 +80,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Construct Alloying recipe")
-                .add("could not find recipe with inputs %s and output {}", Arrays.asList(inputs), output)
+                .add("could not find recipe with inputs {} and output {}", Arrays.asList(inputs), output)
                 .error()
                 .post();
         return false;

@@ -87,7 +87,7 @@ public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer
             }
         }
         GroovyLog.msg("Error removing Industrialcraft 2 Electrolyzer recipe")
-                .add("no recipes found for %s", output)
+                .add("no recipes found for {}", output)
                 .error()
                 .post();
         return false;
@@ -110,7 +110,7 @@ public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer
             }
         }
         GroovyLog.msg("Error removing Industrialcraft 2 Electrolyzer recipe")
-                .add("no recipes found for %s", input)
+                .add("no recipes found for {}", input)
                 .error()
                 .post();
         return false;
@@ -128,17 +128,17 @@ public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer
         switch (recipe.type) {
             case CHARGE:
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
-                    ClassicRecipes.electrolyzer.addChargeRecipe(stack, recipe.output, recipe.energy, "" + recipe.hashCode());
+                    ClassicRecipes.electrolyzer.addChargeRecipe(stack, recipe.output, recipe.energy, String.valueOf(recipe.hashCode()));
                 }
                 break;
             case DISCHARGE:
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
-                    ClassicRecipes.electrolyzer.addDischargeRecipe(stack, recipe.output, recipe.energy, "" + recipe.hashCode());
+                    ClassicRecipes.electrolyzer.addDischargeRecipe(stack, recipe.output, recipe.energy, String.valueOf(recipe.hashCode()));
                 }
                 break;
             case BOTH:
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
-                    ClassicRecipes.electrolyzer.addBothRecipe(stack, recipe.output, recipe.energy, "" + recipe.hashCode());
+                    ClassicRecipes.electrolyzer.addBothRecipe(stack, recipe.output, recipe.energy, String.valueOf(recipe.hashCode()));
                 }
                 break;
         }

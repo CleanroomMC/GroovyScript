@@ -107,7 +107,7 @@ public class InfusionCrafting extends VirtualizedRegistry<ArrayList<Object>> {
         }
         if (recipes.isEmpty()) {
             GroovyLog.msg("Error removing Thaumcraft Infusion Crafting recipe")
-                    .add("no recipes found for %s", output.toString())
+                    .add("no recipes found for {}", output.toString())
                     .error()
                     .post();
             return;

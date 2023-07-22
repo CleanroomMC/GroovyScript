@@ -53,7 +53,7 @@ public class Brewer extends VirtualizedRegistry<BrewerManager.BrewerRecipe> {
             }
             if (!found) {
                 GroovyLog.msg("Error removing Thermal Expansion Brewer recipe")
-                        .add("could not find recipe for %s and %s", ingredient, input)
+                        .add("could not find recipe for {} and {}", ingredient, input)
                         .error()
                         .post();
             }

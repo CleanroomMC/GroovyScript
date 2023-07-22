@@ -62,7 +62,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s", ingredient);
+            removeError("could not find recipe for {}", ingredient);
         }
         return found;
     }

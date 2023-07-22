@@ -46,7 +46,7 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
             addBackup(recipe);
             return true;
         }
-        removeError("could not find recipe for %s", input);
+        removeError("could not find recipe for {}", input);
         return false;
     }
 

@@ -102,7 +102,7 @@ public class Fermenter extends VirtualizedRegistry<Pair<String, IFermenterRecipe
             return true;
         }
         GroovyLog.msg("Error removing Industrialcraft 2 Fermenter recipe")
-                .add("no recipes found for %s", input)
+                .add("no recipes found for {}", input)
                 .error()
                 .post();
         return false;

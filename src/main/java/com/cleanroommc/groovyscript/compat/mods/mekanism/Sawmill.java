@@ -70,7 +70,7 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s", ingredient);
+            removeError("could not find recipe for {}", ingredient);
         }
         return found;
     }

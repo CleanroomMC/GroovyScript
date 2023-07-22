@@ -55,7 +55,7 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s", ingredient);
+            removeError("could not find recipe for {}", ingredient);
         }
         return found;
     }

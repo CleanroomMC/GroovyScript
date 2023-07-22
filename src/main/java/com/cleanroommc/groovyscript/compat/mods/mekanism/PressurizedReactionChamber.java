@@ -54,7 +54,7 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s, %s and %s", inputSolid, inputFluid, inputGas);
+            removeError("could not find recipe for {}, {}, and {}", inputSolid, inputFluid, inputGas);
         }
         return found;
     }

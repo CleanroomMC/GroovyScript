@@ -78,7 +78,7 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         }
         if (!found) {
             GroovyLog.msg("Error removing Thermal Expansion Pulverizer recipe")
-                    .add("could not find recipe for %s", input)
+                    .add("could not find recipe for {}", input)
                     .error()
                     .post();
         }

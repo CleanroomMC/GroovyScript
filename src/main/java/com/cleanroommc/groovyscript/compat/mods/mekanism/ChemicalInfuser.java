@@ -44,7 +44,7 @@ public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuser
             addBackup(recipe);
             return true;
         }
-        removeError("could not find recipe for %s and %s", leftInput, rightInput);
+        removeError("could not find recipe for {} and {}", leftInput, rightInput);
         return false;
     }
 

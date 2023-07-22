@@ -74,7 +74,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         }
 
         GroovyLog.msg("Error removing Blood Magic Alchemy Array recipe")
-                .add("could not find recipe with input %s", input)
+                .add("could not find recipe with input {}", input)
                 .error()
                 .post();
         return false;
@@ -92,7 +92,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         }
 
         GroovyLog.msg("Error removing Blood Magic Alchemy Array recipe")
-                .add("could not find recipe with catalyst %s", catalyst)
+                .add("could not find recipe with catalyst {}", catalyst)
                 .error()
                 .post();
         return false;
@@ -110,7 +110,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         }
 
         GroovyLog.msg("Error removing Blood Magic Alchemy Array recipe")
-                .add("could not find recipe with input %s and catalyst %s", input, catalyst)
+                .add("could not find recipe with input {} and catalyst {}", input, catalyst)
                 .error()
                 .post();
         return false;
@@ -128,7 +128,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         }
 
         GroovyLog.msg("Error removing Blood Magic Alchemy Array recipe")
-                .add("could not find recipe with output %s", output)
+                .add("could not find recipe with output {}", output)
                 .error()
                 .post();
         return false;

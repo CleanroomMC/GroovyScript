@@ -91,7 +91,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         }
 
         GroovyLog.msg("Error removing Blood Magic Tartaric Forge recipe")
-                .add("could not find recipe with inputs including all of %s", input)
+                .add("could not find recipe with inputs including all of {}", input)
                 .error()
                 .post();
         return false;
@@ -108,7 +108,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
             return true;
         }
         GroovyLog.msg("Error removing Blood Magic Tartaric Forge recipe")
-                .add("could not find recipe with output %s", output)
+                .add("could not find recipe with output {}", output)
                 .error()
                 .post();
         return false;

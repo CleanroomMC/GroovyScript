@@ -64,7 +64,7 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
         }
 
         GroovyLog.msg("Error removing Blood Magic Blood Altar recipe")
-                .add("could not find recipe with input %s", input)
+                .add("could not find recipe with input {}", input)
                 .error()
                 .post();
         return false;
@@ -82,7 +82,7 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
         }
 
         GroovyLog.msg("Error removing Blood Magic Blood Altar recipe")
-                .add("could not find recipe with output %s", output)
+                .add("could not find recipe with output {}", output)
                 .error()
                 .post();
         return false;

@@ -56,7 +56,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s and %s", ingredient, extra);
+            removeError("could not find recipe for {} and {}", ingredient, extra);
         }
         return found;
     }

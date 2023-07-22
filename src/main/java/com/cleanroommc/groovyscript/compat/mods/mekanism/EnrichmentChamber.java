@@ -54,7 +54,7 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s", ingredient);
+            removeError("could not find recipe for {}", ingredient);
         }
         return found;
     }

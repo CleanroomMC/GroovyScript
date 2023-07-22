@@ -57,7 +57,7 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s and %s", ingredient, gasInput);
+            removeError("could not find recipe for {} and {}", ingredient, gasInput);
         }
         return found;
     }

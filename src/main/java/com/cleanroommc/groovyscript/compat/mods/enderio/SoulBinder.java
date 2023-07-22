@@ -157,7 +157,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
             validateFluids(msg);
             if (!entityErrors.isEmpty()) {
                 for (String error : entityErrors) {
-                    msg.add("could not find entity with name %s", error);
+                    msg.add("could not find entity with name {}", error);
                 }
             }
             if (energy <= 0) energy = 5000;

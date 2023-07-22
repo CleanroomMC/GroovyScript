@@ -64,7 +64,7 @@ public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator
         ILiquidFuelGeneratorRegistry.BurnEntry entry = ClassicRecipes.fluidGenerator.getBurnEntry(fluid);
         if (entry == null) {
             GroovyLog.msg("Error removing Liquid Fuel Generator recipe")
-                    .add("no recipes found for %s", fluid)
+                    .add("no recipes found for {}", fluid)
                     .error()
                     .post();
             return false;
