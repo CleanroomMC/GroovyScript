@@ -172,11 +172,12 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
     }
 
-    compileOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
     compileOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
-    if (project.debug_ic2.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
+    compileOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
+    if (project.debug_industrial_craft_2_classic.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
+    } else if (project.debug_industrial_craft_2_experimental.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
     }
 
     compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
