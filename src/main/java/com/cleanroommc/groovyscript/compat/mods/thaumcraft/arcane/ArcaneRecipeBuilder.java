@@ -17,6 +17,7 @@ import thaumcraft.api.aspects.AspectList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
 
@@ -36,6 +37,10 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
     public ArcaneRecipeBuilder aspect(AspectStack aspect) {
         this.aspects.add(aspect.getAspect(), aspect.getAmount());
         return this;
+    }
+
+    public ArcaneRecipeBuilder aspect(String tag) {
+        return aspect(tag, 1);
     }
 
     public ArcaneRecipeBuilder aspect(String tag, int amount) {
@@ -107,6 +112,13 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
                 return this;
             }
             this.keyMap.put(c.charAt(0), ingredient);
+            return this;
+        }
+
+        public ArcaneRecipeBuilder.Shaped key(Map<String, IIngredient> map) {
+            for (Map.Entry<String, IIngredient> x : map.entrySet()) {
+                key(x.getKey(), x.getValue());
+            }
             return this;
         }
 

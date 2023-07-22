@@ -102,7 +102,9 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        List<SqueezerRecipe> recipes = SqueezerRecipe.recipeList.stream().filter(r -> r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
+        // "Condition 'r.itemOutput != null' is always 'true'" is a lie. It can be null, and if it is it *will* throw an NPE if we don't check against it.
+        @SuppressWarnings("ConstantValue")
+        List<SqueezerRecipe> recipes = SqueezerRecipe.recipeList.stream().filter(r -> r != null && r.itemOutput != null && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
         for (SqueezerRecipe recipe : recipes) {
             remove(recipe);
         }

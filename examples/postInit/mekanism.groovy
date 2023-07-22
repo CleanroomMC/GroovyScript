@@ -32,9 +32,9 @@ mods.mekanism.infusion.infusion(infusion('carbon'))
 
 // NOTE:
 // To register the texture used, you have to add the following event listen to a PreInit file.
-// event_manager.listen { TextureStitchEvent.Pre event -> event.getMap().registerSprite(resource('groovytest:blocks/example')) }
-// Where 'assets/groovytest/textures/blocks/example.png' is the location of the desired texture.
-mods.mekanism.infusion.infusion('groovy_example', resource('groovytest:blocks/example'))
+// event_manager.listen { TextureStitchEvent.Pre event -> event.getMap().registerSprite(resource('placeholdername:blocks/example')) }
+// Where 'assets/placeholdername/textures/blocks/example.png' is the location of the desired texture.
+mods.mekanism.infusion.infusion('groovy_example', resource('placeholdername:blocks/example'))
     .add(10, item('minecraft:ice'))
     .add(20, item('minecraft:packed_ice'))
 
@@ -75,7 +75,7 @@ mods.mekanism.combiner.recipeBuilder()
     .register()
 //mods.mekanism.combiner.add(ore('gemQuartz') * 8, item('minecraft:netherrack'), item('minecraft:quartz_ore'))
 
-mods.mekanism.combiner.removeByInput(ore('gemQuartz') * 8, item('minecraft:cobblestone'))
+mods.mekanism.combiner.removeByInput(item('minecraft:flint'), item('minecraft:cobblestone'))
 //mods.mekanism.combiner.removeAll()
 
 

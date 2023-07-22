@@ -28,6 +28,7 @@ mods.thermalexpansion.Crucible.recipeBuilder()
 
 //mods.thermalexpansion.Crucible.removeByInput(item('thermalfoundation:material:1027'))
 
+/*
 mods.thermalexpansion.Centrifuge.recipeBuilder()
     .input(item('minecraft:diamond'))
     .output(item('minecraft:wool:5'), 0.3)
@@ -39,6 +40,7 @@ mods.thermalexpansion.Centrifuge.recipeBuilder()
     .register()
 
 mods.thermalexpansion.Centrifuge.removeByInput(item('minecraft:concrete_powder:6'))
+
 
 mods.thermalexpansion.Charger.recipeBuilder()
     .input(item('minecraft:iron_ingot'))
@@ -60,3 +62,4 @@ mods.thermalexpansion.Compactor.Coin.recipeBuilder()
     .register()
 
 mods.thermalexpansion.Compactor.Gear.removeByInput(ore('ingotEnderium'))
+ */

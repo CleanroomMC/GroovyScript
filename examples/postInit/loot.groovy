@@ -1,13 +1,21 @@
 
-def pyramidLootTable = loot.getTable("minecraft:chests/stronghold_library")
+if (isReloading()) {
+    println 'Cancelled running script loot'
+    return
+}
 
-pyramidLootTable.removePool("main")
+// TODO: `loot` (all lowercase` is a default package in groovy. figure out how to not have this implode (rename to LootTable?)
+
+
+def pyramidLootTable = Loot.getTable(resource('minecraft:chests/stronghold_library'))
+
+pyramidLootTable.removePool('main')
 
 pyramidLootTable.addPool(
-        loot.poolBuilder("main")
+        Loot.poolBuilder('main')
                 .entry(
-                        loot.entryBuilder("minecraft:diamond_block")
-                                .item(item("minecraft:diamond_block"))
+                        Loot.entryBuilder('minecraft:diamond_block')
+                                .item(item('minecraft:diamond_block'))
                                 .weight(1)
                                 .quality(1)
                                 .build())
@@ -20,15 +28,15 @@ pyramidLootTable.addPool(
 
 
 
-def pyramidLootTable2 = loot.getTable("minecraft:chests/stronghold_corridor")
+def pyramidLootTable2 = Loot.getTable('minecraft:chests/stronghold_corridor')
 
-pyramidLootTable2.removePool("main")
+pyramidLootTable2.removePool('main')
 
 pyramidLootTable2.addPool(
-        loot.poolBuilder("main")
+        Loot.poolBuilder('main')
                 .entry(
-                        loot.entryBuilder("minecraft:diamond_block")
-                                .item(item("minecraft:diamond_block"))
+                        Loot.entryBuilder('minecraft:diamond_block')
+                                .item(item('minecraft:diamond_block'))
                                 .weight(1)
                                 .quality(1)
                                 .build())
@@ -38,14 +46,14 @@ pyramidLootTable2.addPool(
                 .build()
 )
 
-def chickenLootTable = loot.getTable("minecraft:entities/chicken")
+def chickenLootTable = Loot.getTable('minecraft:entities/chicken')
 
-chickenLootTable.removePool("main")
+chickenLootTable.removePool('main')
 
 chickenLootTable.addPool(
-        loot.poolBuilder("main").entry(
-                loot.entryBuilder("minecraft:pumpkin")
-                        .item(item("minecraft:pumpkin"))
+        Loot.poolBuilder('main').entry(
+                Loot.entryBuilder('minecraft:pumpkin')
+                        .item(item('minecraft:pumpkin'))
                         .weight(1)
                         .quality(1)
                         .build()
@@ -56,14 +64,14 @@ chickenLootTable.addPool(
                 .build()
 )
 
-def zombieLootTable = loot.getTable("minecraft:entities/zombie")
+def zombieLootTable = Loot.getTable('minecraft:entities/zombie')
 
-zombieLootTable.removePool("main")
+zombieLootTable.removePool('main')
 
 zombieLootTable.addPool(
-        loot.poolBuilder("main").entry(
-                loot.entryBuilder("minecraft:potato")
-                        .item(item("minecraft:potato"))
+        Loot.poolBuilder('main').entry(
+                Loot.entryBuilder('minecraft:potato')
+                        .item(item('minecraft:potato'))
                         .weight(1)
                         .quality(1)
                         .smelt()
@@ -76,4 +84,4 @@ zombieLootTable.addPool(
                 .build()
 )
 
-loot.printEntries()
+//Loot.printEntries()

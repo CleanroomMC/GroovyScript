@@ -30,8 +30,8 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().put(pair.getKey(), pair.getValue()));
-        restoreFromBackup().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().remove(pair.getKey()));
+        removeScripted().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().remove(pair.getKey(), pair.getValue()));
+        restoreFromBackup().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().put(pair.getKey(), pair.getValue()));
     }
 
     public void add(Block block, String tranquility, double value) {

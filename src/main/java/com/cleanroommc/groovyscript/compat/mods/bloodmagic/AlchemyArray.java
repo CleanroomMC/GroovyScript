@@ -118,7 +118,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
 
     public boolean removeByOutput(ItemStack output) {
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().removeIf(recipe -> {
-            boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
+            boolean matches = recipe.getOutput().isItemEqual(output);
             if (matches) {
                 addBackup(recipe);
             }

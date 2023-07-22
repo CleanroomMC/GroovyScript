@@ -110,12 +110,12 @@ public abstract class CraftingRecipeBuilder {
     public static class Shaped extends CraftingRecipeBuilder {
 
         protected boolean mirrored = false;
-        private String[] keyBasedMatrix;
-        private final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
+        protected String[] keyBasedMatrix;
+        protected final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
 
-        private List<List<IIngredient>> ingredientMatrix;
+        protected List<List<IIngredient>> ingredientMatrix;
 
-        private final List<String> errors = new ArrayList<>();
+        protected final List<String> errors = new ArrayList<>();
 
         public Shaped(int width, int height) {
             super(width, height);

@@ -8,7 +8,6 @@ import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipeBuilder;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import org.apache.commons.lang3.ArrayUtils;
@@ -27,14 +26,8 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
     protected int starlightRequired = 0;
     protected int craftingTickTime = 0;
     private final TileAltar.AltarLevel altarLevel;
-    private String[] keyBasedMatrix = null;
     private IConstellation requiredConstellation = null;
     private final ArrayList<IIngredient> outerIngredients = new ArrayList<>();
-    private final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
-
-    private List<List<IIngredient>> ingredientMatrix = null;
-
-    private final List<String> errors = new ArrayList<>();
 
     public AltarRecipeBuilder(int width, int height, TileAltar.AltarLevel level) {
         super(width, height);

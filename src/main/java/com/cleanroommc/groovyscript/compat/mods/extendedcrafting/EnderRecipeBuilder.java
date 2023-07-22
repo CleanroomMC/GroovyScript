@@ -14,6 +14,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class EnderRecipeBuilder extends CraftingRecipeBuilder {
 
@@ -94,6 +95,13 @@ public class EnderRecipeBuilder extends CraftingRecipeBuilder {
                 return this;
             }
             this.keyMap.put(c.charAt(0), ingredient);
+            return this;
+        }
+
+        public EnderRecipeBuilder.Shaped key(Map<String, IIngredient> map) {
+            for (Map.Entry<String, IIngredient> x : map.entrySet()) {
+                key(x.getKey(), x.getValue());
+            }
             return this;
         }
 

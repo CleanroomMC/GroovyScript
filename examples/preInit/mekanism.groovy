@@ -7,5 +7,5 @@ if (!isLoaded('mekanism')) {
 }
 
 eventManager.listen { TextureStitchEvent.Pre event ->
-    event.getMap().registerSprite(resource('groovytest:blocks/example'))
+    event.getMap().registerSprite(resource('placeholdername:blocks/example'))
 }

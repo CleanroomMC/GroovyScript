@@ -84,7 +84,7 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         }
     }
 
-    public SimpleObjectStream<PulverizerRecipe> stream() {
+    public SimpleObjectStream<PulverizerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(PulverizerManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
