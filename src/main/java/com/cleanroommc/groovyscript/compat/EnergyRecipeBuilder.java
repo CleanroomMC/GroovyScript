@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat;
 
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 
+@Deprecated
 public abstract class EnergyRecipeBuilder<T> extends AbstractRecipeBuilder<T> {
 
     protected int energy;

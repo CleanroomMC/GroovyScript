@@ -3,10 +3,10 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 import blusunrize.immersiveengineering.api.crafting.SqueezerRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -142,7 +142,14 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         SqueezerRecipe.recipeList.clear();
     }
 
-    private static class RecipeBuilder extends EnergyRecipeBuilder<SqueezerRecipe> {
+    private static class RecipeBuilder extends AbstractRecipeBuilder<SqueezerRecipe> {
+
+        private int energy;
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
+            return this;
+        }
 
         @Override
         public String getErrorMsg() {

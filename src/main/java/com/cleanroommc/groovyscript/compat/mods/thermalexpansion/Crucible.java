@@ -5,10 +5,10 @@ import cofh.thermalexpansion.util.managers.machine.CrucibleManager;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CrucibleManagerAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -74,7 +74,14 @@ public class Crucible extends VirtualizedRegistry<CrucibleManager.CrucibleRecipe
 
     }
 
-    public static class RecipeBuilder extends EnergyRecipeBuilder<CrucibleManager.CrucibleRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<CrucibleManager.CrucibleRecipe> {
+
+        private int energy;
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
+            return this;
+        }
 
         @Override
         public String getErrorMsg() {

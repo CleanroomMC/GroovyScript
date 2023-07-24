@@ -5,10 +5,10 @@ import blusunrize.immersiveengineering.api.ComparableItemStack;
 import blusunrize.immersiveengineering.api.crafting.MetalPressRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -173,9 +173,15 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         return new SimpleObjectStream<>(recipes).setRemover(this::remove);
     }
 
-    public static class RecipeBuilder extends EnergyRecipeBuilder<MetalPressRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<MetalPressRecipe> {
 
+        private int energy;
         private ItemStack mold = ItemStack.EMPTY;
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
+            return this;
+        }
 
         public RecipeBuilder mold(ItemStack mold) {
             this.mold = mold;
