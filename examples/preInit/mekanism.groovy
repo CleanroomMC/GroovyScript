@@ -7,5 +7,5 @@ if (!isLoaded('mekanism')) {
 }
 
 eventManager.listen { TextureStitchEvent.Pre event ->
-    event.getMap().registerSprite(resource('placeholdername:blocks/example'))
+    event.getMap().registerSprite(resource('placeholdername:blocks/mekanism_infusion_texture'))
 }
