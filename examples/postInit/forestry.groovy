@@ -1,8 +1,6 @@
 
-if (!isLoaded('forestry')) {
-    println 'Cancelled running script forestry'
-    return
-}
+if (!isLoaded('forestry')) return
+println 'mod \'forestry\' detected, running script'
 
 // Species Bracket Handler
 // While forestry:speciesCommon is the actual name, for convenience, both will work.

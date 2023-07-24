@@ -1,8 +1,6 @@
 
-if (!isLoaded('mekanism')) {
-    println 'Cancelled running script mekanism'
-    return
-}
+if (!isLoaded('mekanism')) return
+println 'mod \'mekanism\' detected, running script'
 
 // Bracket Handlers
 // Gas

@@ -1,8 +1,6 @@
 
-if (!isLoaded('draconicevolution')) {
-    println 'Cancelled running script draconicevolution'
-    return
-}
+if (!isLoaded('draconicevolution')) return
+println 'mod \'draconicevolution\' detected, running script'
 
 // Fusion:
 // Consumes items and power from up to 54 pedestals of at least a given tier pointing towards a Fusion Crafting Core containing a catalyst to produce an output item.

@@ -1,8 +1,6 @@
 
-if (!isLoaded('thermalexpansion')) {
-    println 'Cancelled running script thermalexpansion'
-    return
-}
+if (!isLoaded('thermalexpansion')) return
+println 'mod \'thermalexpansion\' detected, running script'
 
 mods.te.Pulverizer.recipeBuilder()
     .input(item('minecraft:bookshelf'))

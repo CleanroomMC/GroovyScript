@@ -1,8 +1,6 @@
 
-if (!isLoaded('chisel')) {
-    println 'Cancelled running script chisel'
-    return
-}
+if (!isLoaded('chisel')) return
+println 'mod \'chisel\' detected, running script'
 
 // Carving
 mods.chisel.carving.addGroup('demo')

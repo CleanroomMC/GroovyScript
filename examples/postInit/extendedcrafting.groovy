@@ -1,8 +1,6 @@
 
-if (!isLoaded('extendedcrafting')) {
-    println 'Cancelled running script extendedcrafting'
-    return
-}
+if (!isLoaded('extendedcrafting')) return
+println 'mod \'extendedcrafting\' detected, running script'
 
 // Combination crafting
 

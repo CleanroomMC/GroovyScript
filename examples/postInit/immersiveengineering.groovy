@@ -1,8 +1,6 @@
 
-if (!isLoaded('immersiveengineering')) {
-    println 'Cancelled running script immersiveengineering'
-    return
-}
+if (!isLoaded('immersiveengineering')) return
+println 'mod \'immersiveengineering\' detected, running script'
 
 // Alloy Kiln:
 // Converts two input itemstacks into an output itemstack, consuming fuel (based on burn time).

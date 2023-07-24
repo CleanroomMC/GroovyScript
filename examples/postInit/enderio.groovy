@@ -1,8 +1,6 @@
 
-if (!isLoaded('enderio')) {
-    println 'Cancelled running script enderio'
-    return
-}
+if (!isLoaded('enderio')) return
+println 'mod \'enderio\' detected, running script'
 
 // Alloy Smelter (Alloying):
 // Convert up to 3 itemstack inputs into an itemstack output, using energy and giving XP. Can be restricted to require a given tier of machine.

@@ -1,10 +1,8 @@
 import net.minecraft.potion.PotionEffect
 import net.minecraft.util.text.TextFormatting
 
-if (!isLoaded('botania')) {
-    println 'Cancelled running script botania'
-    return
-}
+if (!isLoaded('botania')) return
+println 'mod \'botania\' detected, running script'
 
 
 // Bracket Handlers

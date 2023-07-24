@@ -1,8 +1,6 @@
 
-if (!isLoaded('actuallyadditions')) {
-    println 'Cancelled running script actuallyadditions'
-    return
-}
+if (!isLoaded('actuallyadditions')) return
+println 'mod \'actuallyadditions\' detected, running script'
 
 
 // Atomic Reconstructor

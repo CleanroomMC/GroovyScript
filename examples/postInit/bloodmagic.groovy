@@ -1,8 +1,6 @@
 
-if (!isLoaded('bloodmagic')) {
-    println 'Cancelled running script bloodmagic'
-    return
-}
+if (!isLoaded('bloodmagic')) return
+println 'mod \'bloodmagic\' detected, running script'
 
 mods.bloodmagic.bloodaltar.removeByInput(item("minecraft:ender_pearl"))
 mods.bloodmagic.bloodaltar.removeByOutput(item("bloodmagic:slate:4"))

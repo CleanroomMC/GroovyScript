@@ -1,8 +1,6 @@
 
-if (!isLoaded('roots')) {
-    println 'Cancelled running script roots'
-    return
-}
+if (!isLoaded('roots')) return
+println 'mod \'roots\' detected, running script'
 
 // Bracket Handlers
 

@@ -1,8 +1,6 @@
 
-if (!isLoaded('evilcraft')) {
-    println 'Cancelled running script evilcraft'
-    return
-}
+if (!isLoaded('evilcraft')) return
+println 'mod \'evilcraft\' detected, running script'
 
 // Weather Bracket Handler
 weather('clear')

@@ -1,9 +1,7 @@
 import net.minecraft.util.math.MathHelper
 
-if (!isLoaded('astralsorcery')) {
-    println 'Cancelled running script astralsorcery'
-    return
-}
+if (!isLoaded('astralsorcery')) return
+println 'mod \'astralsorcery\' detected, running script'
 
 mods.astralsorcery.StarlightAltar.discoveryRecipeBuilder()
         .output(item('minecraft:water_bucket'))
