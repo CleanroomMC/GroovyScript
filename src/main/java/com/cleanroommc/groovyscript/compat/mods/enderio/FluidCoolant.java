@@ -78,7 +78,7 @@ public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
 
     @Nullable
     public IFluidCoolant find(Fluid fluid) {
-        return ((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getCoolants().get(fluid.getName());    //FluidFuelRegister.instance.getCoolant(fluid);
+        return ((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getCoolants().get(fluid.getName());
     }
 
     @GroovyBlacklist

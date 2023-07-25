@@ -177,12 +177,6 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
             addBackup(recipe);
             return true;
         });
-        /*for (Map.Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet()) {
-            float exp = FurnaceRecipes.instance().getSmeltingExperience(entry.getValue());
-            Recipe recipe = new Recipe(entry.getKey(), entry.getValue(), exp);
-            addBackup(recipe);
-            FurnaceRecipes.instance().getSmeltingList().remove(recipe.input);
-        }*/
     }
 
     @GroovyBlacklist
