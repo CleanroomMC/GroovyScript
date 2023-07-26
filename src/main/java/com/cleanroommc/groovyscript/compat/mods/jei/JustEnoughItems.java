@@ -53,20 +53,14 @@ public class JustEnoughItems extends ModPropertyContainer {
             }
             JeiPlugin.hideItem(ingredient.getMatchingStacks());
         }
-        List<ResourceLocation> recipesToRemove = new ArrayList<>();
         for (IRecipe recipe : ForgeRegistries.RECIPES) {
             if (recipe.getRegistryName() != null) {
                 for (IIngredient ingredient : ingredients) {
                     if (ingredient.test(recipe.getRecipeOutput())) {
-                        recipesToRemove.add(recipe.getRegistryName());
+                        ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, recipe.getRegistryName());
                         break;
                     }
                 }
-            }
-        }
-        if (!recipesToRemove.isEmpty()) {
-            for (ResourceLocation loc : recipesToRemove) {
-                ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, loc);
             }
         }
     }
