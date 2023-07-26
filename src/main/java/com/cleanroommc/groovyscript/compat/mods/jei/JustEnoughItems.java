@@ -7,12 +7,7 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class JustEnoughItems extends ModPropertyContainer {
 
@@ -28,6 +23,18 @@ public class JustEnoughItems extends ModPropertyContainer {
             JeiPlugin.HIDDEN_FLUIDS.add(IngredientHelper.toFluidStack(ingredient));
         } else {
             JeiPlugin.hideItem(ingredient.getMatchingStacks());
+        }
+    }
+
+    public void hide(IIngredient... ingredients) {
+        for (IIngredient ingredient : ingredients) {
+            hide(ingredient);
+        }
+    }
+
+    public void hide(Iterable<IIngredient> ingredients) {
+        for (IIngredient ingredient : ingredients) {
+            hide(ingredient);
         }
     }
 
@@ -66,7 +73,7 @@ public class JustEnoughItems extends ModPropertyContainer {
         }
     }
 
-    public void removeAndHide(Collection<IIngredient> ingredients) {
+    public void removeAndHide(Iterable<IIngredient> ingredients) {
         for (IIngredient ingredient : ingredients) {
             if (IngredientHelper.isEmpty(ingredient)) {
                 GroovyLog.msg("Error remove and hide items {}", ingredient)
@@ -97,7 +104,7 @@ public class JustEnoughItems extends ModPropertyContainer {
         removeAndHide(ingredients);
     }
 
-    public void yeet(Collection<IIngredient> ingredients) {
+    public void yeet(Iterable<IIngredient> ingredients) {
         removeAndHide(ingredients);
     }
 
