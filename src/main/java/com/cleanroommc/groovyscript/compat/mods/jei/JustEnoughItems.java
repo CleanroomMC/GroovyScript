@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class JustEnoughItems extends ModPropertyContainer {
@@ -65,11 +66,38 @@ public class JustEnoughItems extends ModPropertyContainer {
         }
     }
 
+    public void removeAndHide(Collection<IIngredient> ingredients) {
+        for (IIngredient ingredient : ingredients) {
+            if (IngredientHelper.isEmpty(ingredient)) {
+                GroovyLog.msg("Error remove and hide items {}", ingredient)
+                        .add("Items must not be empty")
+                        .error()
+                        .post();
+                return;
+            }
+            JeiPlugin.hideItem(ingredient.getMatchingStacks());
+        }
+        for (IRecipe recipe : ForgeRegistries.RECIPES) {
+            if (recipe.getRegistryName() != null) {
+                for (IIngredient ingredient : ingredients) {
+                    if (ingredient.test(recipe.getRecipeOutput())) {
+                        ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, recipe.getRegistryName());
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public void yeet(IIngredient ingredient) {
         removeAndHide(ingredient);
     }
 
     public void yeet(IIngredient... ingredients) {
+        removeAndHide(ingredients);
+    }
+
+    public void yeet(Collection<IIngredient> ingredients) {
         removeAndHide(ingredients);
     }
 
