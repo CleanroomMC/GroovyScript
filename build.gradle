@@ -260,6 +260,12 @@ dependencies {
         runtimeOnly rfg.deobf('net.sengir.forestry:forestry_1.12.2:5.8.2.422')
         runtimeOnly rfg.deobf('curse.maven:jei-bees-248370:2490058')
     }
+
+    compileOnly rfg.deobf('curse.maven:advancedmortars-283777:2780626')
+    if (project.debug_adv_mortars.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:advancedmortars-283777:2780626')
+    }
+
 }
 
 processResources {
