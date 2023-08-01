@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.core.mixin;
+package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyCodeFactory;
 import org.codehaus.groovy.ast.ClassNode;

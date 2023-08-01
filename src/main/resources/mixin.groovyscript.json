@@ -5,7 +5,6 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "CompUnitClassGenMixin",
     "EventBusMixin",
     "FluidStackMixin",
     "ForgeRegistryMixin",
@@ -14,9 +13,11 @@
     "ItemMixin",
     "ItemStackMixin",
     "LoaderControllerMixin",
-    "MetaClassImplMixin",
     "OreDictionaryAccessor",
     "SlotCraftingAccess",
+    "groovy.AsmDecompilerMixin",
+    "groovy.CompUnitClassGenMixin",
+    "groovy.MetaClassImplMixin",
     "loot.LootPoolAccessor",
     "loot.LootTableAccessor"
   ],
