@@ -13,7 +13,6 @@
     "InventoryCraftingAccess",
     "ItemMixin",
     "ItemStackMixin",
-    "Java8Mixin",
     "LoaderControllerMixin",
     "MetaClassImplMixin",
     "OreDictionaryAccessor",
