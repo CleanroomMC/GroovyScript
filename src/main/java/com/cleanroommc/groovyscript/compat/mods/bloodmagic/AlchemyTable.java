@@ -156,7 +156,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
             validateItems(msg, 1, 6, 1, 1);
             msg.add(syphon < 0, "syphon must be a nonnegative integer, yet it was {}", syphon);
             msg.add(ticks <= 0, "ticks must be a positive integer greater than 0, yet it was {}", ticks);
-            msg.add(minimumTier <= 0, "minimumTier must be a positive integer greater than 0, yet it was {}", minimumTier);
+            msg.add(minimumTier < 0, "minimumTier must be a nonnegative integer, yet it was {}", minimumTier);
         }
 
         @Override
