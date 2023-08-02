@@ -25,6 +25,16 @@ mods.avaritia.ExtremeCrafting.shapedBuilder()
         .key('G', item('minecraft:gold_ingot'))
         .register()
 
+mods.avaritia.ExtremeCrafting.shapelessBuilder()
+        .output(item('minecraft:stone') * 64)
+        .input(item('minecraft:stone'),
+                item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),
+                item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),
+                item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),
+                item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),
+                item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'))
+        .register()
+
 mods.avaritia.Compressor.removeByOutput(item('avaritia:singularity', 0))
 mods.avaritia.Compressor.add(item('minecraft:nether_star'), item('minecraft:clay_ball'), 100) // the last number is the required input amount
 mods.avaritia.Compressor.recipeBuilder()
