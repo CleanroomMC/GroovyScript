@@ -1,15 +1,16 @@
 package com.cleanroommc.groovyscript.compat.mods.avaritia;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import morph.avaritia.recipe.AvaritiaRecipeManager;
 import morph.avaritia.recipe.compressor.CompressorRecipe;
 import morph.avaritia.recipe.compressor.ICompressorRecipe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 
@@ -21,11 +22,13 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         restoreFromBackup().forEach(recipe -> AvaritiaRecipeManager.COMPRESSOR_RECIPES.put(recipe.getRegistryName(), recipe));
     }
 
-    public void remove(ICompressorRecipe recipe) {
+    public boolean remove(ICompressorRecipe recipe) {
         recipe = AvaritiaRecipeManager.COMPRESSOR_RECIPES.remove(recipe.getRegistryName());
         if (recipe != null) {
             addBackup(recipe);
+            return true;
         }
+        return false;
     }
 
     public boolean removeByOutput(ItemStack output) {
@@ -45,22 +48,68 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         });
     }
 
+    public void removeAll() {
+        AvaritiaRecipeManager.COMPRESSOR_RECIPES.values().forEach(this::addBackup);
+        AvaritiaRecipeManager.COMPRESSOR_RECIPES.values().clear();
+    }
+
+    public SimpleObjectStream<ICompressorRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(AvaritiaRecipeManager.COMPRESSOR_RECIPES.values()).setRemover(this::remove);
+    }
+
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
+    }
+
     public void add(ICompressorRecipe recipe) {
         AvaritiaRecipeManager.COMPRESSOR_RECIPES.put(recipe.getRegistryName(), recipe);
         addScripted(recipe);
     }
 
     public void add(ItemStack output, IIngredient input, int cost) {
-        if (GroovyLog.msg("Error adding avaritia compressor recipe")
-                .add(IngredientHelper.isEmpty(output), () -> "output must not be empty")
-                .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
-                .error()
-                .postIfNotEmpty()) {
-            return;
+        recipeBuilder()
+                .cost(cost)
+                .input(input)
+                .output(output)
+                .register();
+    }
+
+    public class RecipeBuilder extends AbstractRecipeBuilder<ICompressorRecipe> {
+
+        private int cost = 300;
+
+        public RecipeBuilder cost(int cost) {
+            this.cost = cost;
+            return this;
         }
-        if (cost <= 0) cost = 1;
-        CompressorRecipe recipe = new CompressorRecipe(output, cost, true, Collections.singletonList(input.toMcIngredient()));
-        recipe.setRegistryName(new ResourceLocation(GroovyScript.getRunConfig().getPackId()));
-        add(recipe);
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "avaritia_compressor_";
+        }
+
+        @Override
+        public String getErrorMsg() {
+            return "Error adding Avaritia compressor recipe";
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
+            validateItems(msg, 1, 1, 1, 1);
+            validateFluids(msg);
+            validateName();
+            if (this.cost <= 0) {
+                this.cost = 1;
+            }
+        }
+
+        @Override
+        public @Nullable ICompressorRecipe register() {
+            if (!validate()) return null;
+            CompressorRecipe recipe = new CompressorRecipe(this.output.get(0), this.cost, true, Collections.singletonList(this.input.get(0).toMcIngredient()));
+            recipe.setRegistryName(this.name);
+            add(recipe);
+            return recipe;
+        }
     }
 }
