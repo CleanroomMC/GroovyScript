@@ -47,20 +47,19 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
                     .add("maximum number of 8 input ingredients exceeded: " + inputs.size())
                     .error()
                     .post();
-        } else {
-            for (String type : types) {
-                EnumMortarType enumMortarType = EnumMortarType.fromName(type);
-                if (enumMortarType == null) {
-                    GroovyLog.msg("Error adding Advanced Mortars recipe")
-                            .add("invalid mortar type: " + type)
-                            .add("valid types are: " + Arrays.toString(EnumMortarType.NAMES))
-                            .error()
-                            .post();
-                    return;
-                } else {
-                    add(enumMortarType, new RecipeMortar(output, duration, secondaryOutput, secondaryOutputChance, IngredientHelper.toIngredientNonNullList(inputs)));
-                }
+            return;
+        }
+        for (String type : types) {
+            EnumMortarType enumMortarType = EnumMortarType.fromName(type);
+            if (enumMortarType == null) {
+                GroovyLog.msg("Error adding Advanced Mortars recipe")
+                        .add("invalid mortar type: " + type)
+                        .add("valid types are: " + Arrays.toString(EnumMortarType.NAMES))
+                        .error()
+                        .post();
+                return;
             }
+            add(enumMortarType, new RecipeMortar(output, duration, secondaryOutput, secondaryOutputChance, IngredientHelper.toIngredientNonNullList(inputs)));
         }
     }
 
@@ -89,11 +88,16 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
 
         private final List<String> types = new ArrayList<>();
         private int duration;
-        private ItemStack secondaryOutput;
-        private float secondaryOutputChance;
+        private ItemStack secondaryOutput = ItemStack.EMPTY;
+        private float secondaryOutputChance = 1.0f;
 
-        public RecipeBuilder type(String type) {
-            this.types.add(type);
+        public RecipeBuilder type(String... type) {
+            this.types.addAll(Arrays.asList(type));
+            return this;
+        }
+
+        public RecipeBuilder type(List<String> type) {
+            this.types.addAll(type);
             return this;
         }
 
@@ -113,6 +117,11 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
             return this;
         }
 
+        public RecipeBuilder secondaryOutputChance(float chance) {
+            this.secondaryOutputChance = chance;
+            return this;
+        }
+
         @Override
         public String getErrorMsg() {
             return "Error adding Advanced Mortars recipe";
@@ -126,12 +135,6 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
                 if (enumMortarType == null) {
                     msg.add("invalid mortar type: " + type).add("valid types are: " + Arrays.toString(EnumMortarType.NAMES));
                 }
-            }
-            if (secondaryOutput == null) secondaryOutput = ItemStack.EMPTY;
-            if (secondaryOutput.isEmpty()) {
-                secondaryOutputChance = 0.0f;
-            } else if (secondaryOutputChance <= 0.0f) {
-                secondaryOutputChance = 1.0f;
             }
         }
 
