@@ -2,55 +2,54 @@
 if (!isLoaded('extendedcrafting')) return
 println 'mod \'extendedcrafting\' detected, running script'
 
-// Combination crafting
-
-// there are no combination recipes by default, and so none can be removed
-//mods.extendedcrafting.combination.removeAll()
-//mods.extendedcrafting.combination.removeByInput(item('minecraft:pumpkin'))
-//mods.extendedcrafting.combination.removeByOutput(item('minecraft:gold_ingot'))
-
+// Combination Crafting (Combination):
+// Converts one main item and any number of additional items into an output itemstack, with a configurable rf cost and consumption per tick amount.
 mods.extendedcrafting.combination.recipeBuilder()
-    .cost(100)
-    .perTick(100)
-    .output(item('minecraft:diamond') * 2)
     .input(item('minecraft:pumpkin'))
     .pedestals(item('minecraft:pumpkin') * 8)
+    .output(item('minecraft:diamond') * 2)
+    .cost(100)
+    .perTick(100) // Optional int, maximum amount of RF consumed per tick until the cost is paid. (Default ModConfig.confCraftingCoreRFRate, 500)
     .register()
 
 mods.extendedcrafting.combinationcrafting.recipeBuilder()
-    .cost(10000)
-    .output(item('minecraft:gold_ingot') * 2)
     .input(item('minecraft:pumpkin'))
     .pedestals(item('minecraft:pumpkin'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:pumpkin'))
+    .output(item('minecraft:gold_ingot') * 2)
+    .cost(10000)
     .register()
 
-// Compression crafting
-
+// there are no combination recipes by default, and so none can be removed
+//mods.extendedcrafting.combination.removeByInput(item('minecraft:pumpkin'))
+//mods.extendedcrafting.combination.removeByOutput(item('minecraft:gold_ingot'))
 //mods.extendedcrafting.combination.removeAll()
-//mods.extendedcrafting.combination.removeByInput(item('minecraft:gold_ingot'))
-//mods.extendedcrafting.combination.removeByCatalyst(item('extendedcrafting:material:11'))
-//mods.extendedcrafting.combination.removeByOutput(item('extendedcrafting:singularity:6'))
 
-mods.extendedcrafting.compression.recipeBuilder()
-    .input(item('minecraft:clay') * 10)
-    .output(item('minecraft:diamond') * 2)
-    .powerCost(1000)
-    .register()
 
+// Compression Crafting (Compression):
+// Converts any number of a single item into an output itemstack, with a configurable rf cost, consumption per tick amount, catalyst, and if the catalyst is consumed.
 mods.extendedcrafting.compressioncrafting.recipeBuilder()
     .input(item('minecraft:clay'))
     .inputCount(100)
     .output(item('minecraft:gold_ingot') * 7)
-    .catalyst(item('minecraft:diamond'))
-    .consumeCatalyst(true)
+    .catalyst(item('minecraft:diamond')) // Optional IIngredient, the item in the catalyst slot. (Default ModConfig.confSingularityCatalyst, ItemMaterial.itemUltimateCatalyst)
+    .consumeCatalyst(true) // Optional boolean, if the catalyst stack is consumed when the recipe completes. (Default false)
     .powerCost(10000)
-    .powerRate(1000)
+    .powerRate(1000) // Optional int, maximum amount of RF consumed per tick until the cost is paid. (Default ModConfig.confCompressorRFRate, 5000)
     .register()
 
-// Ender crafting
+mods.extendedcrafting.compression.recipeBuilder()
+    .input(item('minecraft:clay') * 10) // Input count can also be defined like this.
+    .output(item('minecraft:diamond') * 2)
+    .powerCost(1000)
+    .register()
 
-//mods.extendedcrafting.endercrafting.removeByOutput(item('extendedcrafting:material:40'))
+mods.extendedcrafting.compression.removeByInput(item('minecraft:gold_ingot'))
+mods.extendedcrafting.compression.removeByCatalyst(item('extendedcrafting:material:11'))
+mods.extendedcrafting.compression.removeByOutput(item('extendedcrafting:singularity:6'))
+//mods.extendedcrafting.compression.removeAll()
 
+// Ender Crafting:
+// A normal crafting recipe, with the recipe being slowly crafted based on nearby Ender Alternators.
 mods.extendedcrafting.endercrafting.shapelessBuilder()
         .output(item('minecraft:clay') * 8)
         .input(item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'))
@@ -80,10 +79,11 @@ mods.extendedcrafting.endercrafting.shapedBuilder()
         .time(1)
         .register()
 
-// Table crafting
+mods.extendedcrafting.endercrafting.removeByOutput(item('extendedcrafting:material:40'))
+//mods.extendedcrafting.endercrafting.removeAll()
 
-//mods.extendedcrafting.tablecrafting.removeByOutput(item('extendedcrafting:singularity_ultimate'))
-
+// Table Crafting
+// A normal crafting recipe, but requiring either a specific tier, or at least a given tier, from 3x3 to 9x9.
 mods.extendedcrafting.tablecrafting.shapedBuilder()
         .output(item('minecraft:stone') * 64)
         .matrix(
@@ -145,4 +145,7 @@ mods.extendedcrafting.tablecrafting.shapelessBuilder()
                 item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),
                 item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'))
         .register()
+
+mods.extendedcrafting.tablecrafting.removeByOutput(item('extendedcrafting:singularity_ultimate'))
+//mods.extendedcrafting.tablecrafting.removeAll()
 
