@@ -136,6 +136,9 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
                     msg.add("invalid mortar type: " + type).add("valid types are: " + Arrays.toString(EnumMortarType.NAMES));
                 }
             }
+            if (secondaryOutputChance > 1.0f) {
+                secondaryOutputChance = 1.0f;
+            }
         }
 
         @Override
