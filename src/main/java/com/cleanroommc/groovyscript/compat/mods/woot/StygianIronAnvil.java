@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.woot.AnvilManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import ipsis.Woot;
@@ -113,7 +114,7 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
             // validateItems(msg, 1, 6, 1, 1);
             validateItems(msg, 1, Integer.MAX_VALUE, 1, 1);
             validateFluids(msg);
-            msg.add(base.isEmpty(), "base must be defined");
+            msg.add(IngredientHelper.isEmpty(base), "base must be defined");
         }
 
         @Override

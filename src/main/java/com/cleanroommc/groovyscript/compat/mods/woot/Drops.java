@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Drops extends VirtualizedRegistry<Object> {
@@ -39,12 +40,15 @@ public class Drops extends VirtualizedRegistry<Object> {
     public void add(WootMobName wootMobName, ItemStack itemStack, List<Integer> chances, List<Integer> sizes) {
         Woot.customDropsRepository.addDrop(wootMobName, itemStack, chances, sizes);
         // get the drop we just added, but painfully
-        addScripted(
-                ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops()
-                        .stream()
-                        .filter(drop -> areCustomDropsEqual((CustomDropAccessor) drop, wootMobName, itemStack, chances, sizes))
-                        .collect(Collectors.toList()).get(0)
-        );
+        Optional<Object> recipe = ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops()
+                .stream()
+                .filter(drop -> areCustomDropsEqual((CustomDropAccessor) drop, wootMobName, itemStack, chances, sizes))
+                .findFirst();
+        if (!recipe.isPresent()) {
+            GroovyLog.msg("Error adding entry to Woot Custom Drops Repository with name {}", wootMobName).error().post();
+            return;
+        }
+        addScripted(recipe.get());
     }
 
     public boolean remove(Object drop) {

@@ -193,6 +193,4 @@ public class Policy extends VirtualizedRegistry<Pair<Policy.PolicyType, Object>>
         GENERATE_ONLY_LIST//getExternalGenerateOnlyList
     }
 
-
-
 }
