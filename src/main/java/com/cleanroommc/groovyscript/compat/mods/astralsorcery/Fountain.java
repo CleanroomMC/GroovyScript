@@ -3,7 +3,10 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.core.mixin.astralsorcery.FluidRarityEntryAccessor;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.FluidRarityRegistryAccessor;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import net.minecraftforge.fluids.Fluid;
@@ -13,15 +16,30 @@ import org.jetbrains.annotations.ApiStatus;
 
 public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarityEntry> {
 
+    public FountainChanceHelper chanceHelper() {
+        return new FountainChanceHelper();
+    }
+
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(this::remove);
-        restoreFromBackup().forEach(this::add);
+        removeScripted().forEach(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList()::remove);
+        restoreFromBackup().forEach(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList()::add);
+    }
+
+    public void afterScriptLoad() {
+        // If the rarity list is empty, generating new chunks will cause a NPE. To prevent this, we add a "water" entry that will always have 0mb inside,
+        // which causes it to be marked as empty, and thus not be interactable.
+        if (((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().isEmpty()) {
+            FluidRarityRegistry.FluidRarityEntry errorBlocker = FluidRarityEntryAccessor.createFluidRarityEntry("water", 1, 0, 0);
+            ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().add(errorBlocker);
+            addScripted(errorBlocker);
+        }
     }
 
     public void add(FluidRarityRegistry.FluidRarityEntry entry) {
+        addScripted(entry);
         ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().add(entry);
     }
 
@@ -30,13 +48,12 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
     }
 
     public void add(Fluid fluid, int rarity, int guaranteedAmt, int addRand) {
-        FluidRarityRegistry.FluidRarityEntry newFRE = Utils.createNewFRE(fluid, rarity, guaranteedAmt, addRand);
-        this.addScripted(newFRE);
-        this.add(newFRE);
+        this.add(FluidRarityEntryAccessor.createFluidRarityEntry(fluid, rarity, guaranteedAmt, addRand));
     }
 
-    public void remove(FluidRarityRegistry.FluidRarityEntry entry) {
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().removeIf(fluidRarityEntry -> fluidRarityEntry.fluid.equals(entry.fluid));
+    public boolean remove(FluidRarityRegistry.FluidRarityEntry entry) {
+        addBackup(entry);
+        return ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().removeIf(fluidRarityEntry -> fluidRarityEntry == entry);
     }
 
     public void remove(FluidStack entry) {
@@ -45,19 +62,25 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
 
     public void remove(Fluid entry) {
         ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().removeIf(fluidRarityEntry -> {
-            if (fluidRarityEntry.fluid.equals(entry)) {
-                this.addBackup(fluidRarityEntry);
+            if (fluidRarityEntry.fluid != null && fluidRarityEntry.fluid.equals(entry)) {
+                addBackup(fluidRarityEntry);
                 return true;
             }
             return false;
         });
     }
 
-    public FountainChanceHelper chanceHelper() {
-        return new FountainChanceHelper();
+    public SimpleObjectStream<FluidRarityRegistry.FluidRarityEntry> streamRecipes() {
+        return new SimpleObjectStream<>(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList())
+                .setRemover(this::remove);
     }
 
-    public static class FountainChanceHelper {
+    public void removeAll() {
+        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().forEach(this::addBackup);
+        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().clear();
+    }
+
+    public static class FountainChanceHelper implements IRecipeBuilder<FluidRarityRegistry.FluidRarityEntry> {
 
         private Fluid fluid = null;
         private int rarity = 0;
@@ -88,7 +111,7 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
             return this;
         }
 
-        private boolean validate() {
+        public boolean validate() {
             GroovyLog.Msg out = GroovyLog.msg("Error adding fluid to Astral Sorcery Fountain").warn();
 
             if (this.fluid == null) {
@@ -111,10 +134,11 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
             return out.getLevel() != Level.ERROR;
         }
 
-        public void register() {
-            if (validate()) {
-                ModSupport.ASTRAL_SORCERY.get().fountain.add(this.fluid, this.rarity, this.minimumAmount, this.variance);
-            }
+        public FluidRarityRegistry.FluidRarityEntry register() {
+            if (!validate()) return null;
+            FluidRarityRegistry.FluidRarityEntry recipe = FluidRarityEntryAccessor.createFluidRarityEntry(fluid, rarity, minimumAmount, variance);
+            ModSupport.ASTRAL_SORCERY.get().fountain.add(recipe);
+            return recipe;
         }
 
     }
