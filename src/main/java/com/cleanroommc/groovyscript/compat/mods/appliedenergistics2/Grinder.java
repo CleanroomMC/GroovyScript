@@ -5,6 +5,7 @@ import appeng.api.features.IGrinderRecipe;
 import appeng.api.features.IGrinderRecipeBuilder;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -62,7 +63,6 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         }
     }
 
-
     public static class RecipeBuilder extends AbstractRecipeBuilder<IGrinderRecipe> {
 
         private int turns;
@@ -112,8 +112,8 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
                     .withInput(input.get(0).toMcIngredient().getMatchingStacks()[0])
                     .withOutput(output.get(0))
                     .withTurns(turns);
-            if (output.size() > 1 && !output.get(1).isEmpty()) builder.withFirstOptional(output.get(1), chance1);
-            if (output.size() > 2 && !output.get(2).isEmpty()) builder.withSecondOptional(output.get(2), chance2);
+            if (output.size() > 1 && !IngredientHelper.isEmpty(output.get(1))) builder.withFirstOptional(output.get(1), chance1);
+            if (output.size() > 2 && !IngredientHelper.isEmpty(output.get(2))) builder.withSecondOptional(output.get(2), chance2);
             IGrinderRecipe recipe = builder.build();
             ModSupport.APPLIED_ENERGISTICS_2.get().grinder.add(recipe);
             return recipe;

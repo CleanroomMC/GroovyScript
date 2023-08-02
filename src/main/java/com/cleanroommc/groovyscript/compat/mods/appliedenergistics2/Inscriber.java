@@ -6,6 +6,7 @@ import appeng.api.features.IInscriberRecipeBuilder;
 import appeng.api.features.InscriberProcessType;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -105,7 +106,7 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
             msg.add(type == null, "type must be defined");
-            msg.add(top.isEmpty()  && bottom.isEmpty(), "either top or bottom must be defined, yet neither were");
+            msg.add(IngredientHelper.isEmpty(top) && IngredientHelper.isEmpty(bottom), "either top or bottom must be defined, yet neither were");
         }
 
         @Override
@@ -115,8 +116,8 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
                     .withInputs(input.stream().flatMap(x -> Arrays.stream(x.toMcIngredient().getMatchingStacks())).collect(Collectors.toList()))
                     .withOutput(output.get(0))
                     .withProcessType(type);
-            if (!top.isEmpty()) builder.withTopOptional(top);
-            if (!bottom.isEmpty()) builder.withBottomOptional(bottom);
+            if (!IngredientHelper.isEmpty(top)) builder.withTopOptional(top);
+            if (!IngredientHelper.isEmpty(bottom)) builder.withBottomOptional(bottom);
             IInscriberRecipe recipe = builder.build();
             ModSupport.APPLIED_ENERGISTICS_2.get().inscriber.add(recipe);
             return recipe;
