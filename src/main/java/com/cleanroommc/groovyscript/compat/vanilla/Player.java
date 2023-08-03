@@ -46,7 +46,7 @@ public class Player implements IScriptReloadable {
     }
 
     public void addStartingItem(ItemStack item, int slot) {
-        if (slot >= 41) {
+        if (slot > 41) {
             GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 41 may cause some items to not be received by the player.")
                     .warn().post();
         }
@@ -63,7 +63,7 @@ public class Player implements IScriptReloadable {
     }
 
     public void setStartingItems(boolean isSlotSpecific, ItemStack... items) {
-        if (items.length >= 41) {
+        if (items.length > 41) {
             GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 41 may cause some items to not be received by the player.")
                     .warn().post();
         }
@@ -79,7 +79,7 @@ public class Player implements IScriptReloadable {
     }
 
     public void setStartingItems(boolean isSlotSpecific, List<ItemStack> items) {
-        if (items.size() >= 41) {
+        if (items.size() > 41) {
             GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 41 may cause some items to not be received by the player.")
                     .warn().post();
         }
