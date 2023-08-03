@@ -81,7 +81,9 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         @Override
         public AbstractRecipeBuilder<ICompressorRecipe> input(IIngredient ingredient) {
             if (ingredient == null) return this;
-            this.inputCount = ingredient.getAmount();
+            if (ingredient.getAmount() > 1) {
+                this.inputCount = ingredient.getAmount();
+            }
             return super.input(ingredient.withAmount(1));
         }
 

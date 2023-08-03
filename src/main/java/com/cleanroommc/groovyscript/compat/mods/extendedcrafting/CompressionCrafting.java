@@ -95,7 +95,6 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompressorRecipe> {
 
-        private IIngredient input;
         private int inputCount;
         private IIngredient catalyst = IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack());
         private boolean consumeCatalyst = false;
@@ -103,8 +102,11 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         private int powerRate = ModConfig.confCompressorRFRate;
 
         public RecipeBuilder input(IIngredient input) {
-            this.input = input.withAmount(1);
-            this.inputCount = input.getAmount();
+            if (input == null) return this;
+            if (input.getAmount() > 1) {
+                this.inputCount = input.getAmount();
+            }
+            this.input.add(input.withAmount(1));
             return this;
         }
 
@@ -140,10 +142,9 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
 
-            msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
-            msg.add(output.size() != 1, () -> getRequiredString(1, 1, "item output") + ", but found " + output.size());
             msg.add(IngredientHelper.isEmpty(catalyst), "catalyst must not be empty");
             msg.add(powerCost < 0, "power cost must not be negative");
             msg.add(powerRate < 0, "power rate must not be negative");
@@ -153,7 +154,7 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         @Override
         public CompressorRecipe register() {
             if (!validate()) return null;
-            CompressorRecipe recipe = new CompressorRecipe(output.get(0), input.toMcIngredient(), inputCount, catalyst.toMcIngredient(), consumeCatalyst, powerCost, powerRate);
+            CompressorRecipe recipe = new CompressorRecipe(output.get(0), input.get(0).toMcIngredient(), inputCount, catalyst.toMcIngredient(), consumeCatalyst, powerCost, powerRate);
             ModSupport.EXTENDED_CRAFTING.get().compressionCrafting.add(recipe);
             return recipe;
         }
