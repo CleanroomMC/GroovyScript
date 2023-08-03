@@ -40,5 +40,5 @@ mods.avaritia.Compressor.add(item('minecraft:nether_star'), item('minecraft:clay
 mods.avaritia.Compressor.recipeBuilder()
         .input(item('minecraft:clay_ball'))
         .output(item('minecraft:nether_star'))
-        .cost(100) // required input amount
+        .inputCount(100) // required input amount
         .register()

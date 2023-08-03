@@ -68,7 +68,7 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
 
     public void add(ItemStack output, IIngredient input, int cost) {
         recipeBuilder()
-                .cost(cost)
+                .inputCount(cost)
                 .input(input)
                 .output(output)
                 .register();
@@ -76,10 +76,17 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
 
     public class RecipeBuilder extends AbstractRecipeBuilder<ICompressorRecipe> {
 
-        private int cost = 300;
+        private int inputCount = 300;
 
-        public RecipeBuilder cost(int cost) {
-            this.cost = cost;
+        @Override
+        public AbstractRecipeBuilder<ICompressorRecipe> input(IIngredient ingredient) {
+            if (ingredient == null) return this;
+            this.inputCount = ingredient.getAmount();
+            return super.input(ingredient.withAmount(1));
+        }
+
+        public RecipeBuilder inputCount(int inputCount) {
+            this.inputCount = inputCount;
             return this;
         }
 
@@ -98,15 +105,15 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
             validateName();
-            if (this.cost <= 0) {
-                this.cost = 1;
+            if (this.inputCount <= 0) {
+                this.inputCount = 1;
             }
         }
 
         @Override
         public @Nullable ICompressorRecipe register() {
             if (!validate()) return null;
-            CompressorRecipe recipe = new CompressorRecipe(this.output.get(0), this.cost, true, Collections.singletonList(this.input.get(0).toMcIngredient()));
+            CompressorRecipe recipe = new CompressorRecipe(this.output.get(0), this.inputCount, true, Collections.singletonList(this.input.get(0).toMcIngredient()));
             recipe.setRegistryName(this.name);
             add(recipe);
             return recipe;
