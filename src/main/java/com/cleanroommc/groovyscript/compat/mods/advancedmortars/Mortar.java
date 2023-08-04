@@ -32,7 +32,7 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
     @Override
     @GroovyBlacklist
     public void onReload() {
-        removeScripted().forEach(this::remove);
+        removeScripted().forEach(recipe -> ((RegistryRecipeMortarAccessor) MortarAPI.RECIPE_REGISTRY).getRecipeMap().values().forEach(list -> list.removeIf(r -> r == recipe)));
         restoreFromBackup().forEach(recipe -> getTypes(recipe).forEach(type -> add(type, recipe)));
     }
 
@@ -69,11 +69,6 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
         addScripted(recipe);
     }
 
-    public void remove(RecipeMortar recipe) {
-        ((RegistryRecipeMortarAccessor) MortarAPI.RECIPE_REGISTRY).getRecipeMap().values().forEach(list -> list.removeIf(r -> r == recipe));
-        addBackup(recipe);
-    }
-
     public static List<EnumMortarType> getTypes(RecipeMortar recipe) {
         return ((RegistryRecipeMortarAccessor) MortarAPI.RECIPE_REGISTRY)
                 .getRecipeMap()
@@ -98,6 +93,41 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
 
         public RecipeBuilder type(List<String> type) {
             this.types.addAll(type);
+            return this;
+        }
+
+        public RecipeBuilder wood() {
+            this.types.add("wood");
+            return this;
+        }
+
+        public RecipeBuilder stone() {
+            this.types.add("stone");
+            return this;
+        }
+
+        public RecipeBuilder iron() {
+            this.types.add("iron");
+            return this;
+        }
+
+        public RecipeBuilder diamond() {
+            this.types.add("diamond");
+            return this;
+        }
+
+        public RecipeBuilder gold() {
+            this.types.add("gold");
+            return this;
+        }
+
+        public RecipeBuilder obsidian() {
+            this.types.add("obsidian");
+            return this;
+        }
+
+        public RecipeBuilder emerald() {
+            this.types.add("emerald");
             return this;
         }
 
