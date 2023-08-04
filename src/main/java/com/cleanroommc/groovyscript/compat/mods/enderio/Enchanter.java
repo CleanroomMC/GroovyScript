@@ -5,6 +5,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.CustomEnchanterRecipe;
+import com.cleanroommc.groovyscript.core.mixin.enderio.SimpleRecipeGroupHolderAccessor;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
@@ -18,12 +20,23 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
     public Enchanter() {
         super();
+    }
+
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
+    }
+
+    @GroovyBlacklist
+    public void onReload() {
+        removeScripted().forEach(MachineRecipeRegistry.instance::removeRecipe);
+        restoreFromBackup().forEach(MachineRecipeRegistry.instance::registerRecipe);
     }
 
     public void add(EnchanterRecipe recipe) {
@@ -38,8 +51,11 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
                 .register();
     }
 
-    public RecipeBuilder recipeBuilder() {
-        return new RecipeBuilder();
+    public boolean remove(EnchanterRecipe recipe) {
+        if (recipe == null) return false;
+        MachineRecipeRegistry.instance.removeRecipe(recipe);
+        addBackup(recipe);
+        return true;
     }
 
     public void remove(Enchantment enchantment) {
@@ -63,10 +79,14 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         }
     }
 
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(MachineRecipeRegistry.instance::removeRecipe);
-        restoreFromBackup().forEach(MachineRecipeRegistry.instance::registerRecipe);
+    public SimpleObjectStream<EnchanterRecipe> streamRecipes() {
+        return new SimpleObjectStream<>((Collection<EnchanterRecipe>) MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ENCHANTER).values())
+                .setRemover(this::remove);
+    }
+
+    public void removeAll() {
+        MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ENCHANTER).forEach((r, l) -> addBackup((EnchanterRecipe) l));
+        ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.ENCHANTER)).getRecipes().clear();
     }
 
     public static class RecipeBuilder implements IRecipeBuilder<EnchanterRecipe> {

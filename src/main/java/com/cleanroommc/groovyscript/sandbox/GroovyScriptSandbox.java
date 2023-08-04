@@ -36,11 +36,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     public GroovyScriptSandbox(URL... scriptEnvironment) {
         super(scriptEnvironment);
-        registerBinding("mods", ModSupport.INSTANCE);
-        registerBinding("log", GroovyLog.get());
+        registerBinding("Mods", ModSupport.INSTANCE);
+        registerBinding("Log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
-        registerBinding("eventManager", GroovyEventManager.INSTANCE);
-        registerBinding("event_manager", GroovyEventManager.INSTANCE);
         this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
         this.importCustomizer.addImports("net.minecraft.world.World",
                                     "net.minecraft.block.state.IBlockState",

@@ -30,8 +30,8 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().put(pair.getKey(), pair.getValue()));
-        restoreFromBackup().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().remove(pair.getKey()));
+        removeScripted().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().remove(pair.getKey(), pair.getValue()));
+        restoreFromBackup().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().put(pair.getKey(), pair.getValue()));
     }
 
     public void add(Block block, String tranquility, double value) {
@@ -54,7 +54,7 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
             }
         }
         GroovyLog.msg("Error adding or adjusting Blood Magic Tranquility")
-                .add("could not find tranquility type with string %s", tranquility)
+                .add("could not find tranquility type with string {}", tranquility)
                 .error()
                 .post();
     }
@@ -84,7 +84,7 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
             }
         }
         GroovyLog.msg("Error removing Blood Magic Tranquility")
-                .add("could not find tranquility type with string %s", tranquility)
+                .add("could not find tranquility type with string {}", tranquility)
                 .error()
                 .post();
     }
@@ -99,7 +99,7 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
             }
         }
         GroovyLog.msg("Error removing Blood Magic Tranquility")
-                .add("could not find tranquility entry with blockstate %s and enum %s", blockstate, tranquility.name())
+                .add("could not find tranquility entry with blockstate {} and enum {}", blockstate, tranquility.name())
                 .error()
                 .post();
         return false;
@@ -159,7 +159,7 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
                     return this;
                 }
             }
-            GroovyLog.msg("Tranquility string not found. The options are: %s, yet found %s", names.deleteCharAt(names.length() - 1).toString(), tranquility)
+            GroovyLog.msg("Tranquility string not found. The options are: {}, yet found {}", names.deleteCharAt(names.length() - 1).toString(), tranquility)
                     .warn()
                     .post();
             return this;

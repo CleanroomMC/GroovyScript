@@ -2,18 +2,25 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
 import mekanism.common.recipe.machines.EnrichmentRecipe;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRecipe> {
 
     public EnrichmentChamber() {
         super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, VirtualizedRegistry.generateAliases("Enricher"));
+    }
+
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
     }
 
     public EnrichmentRecipe add(IIngredient ingredient, ItemStack output) {
@@ -47,8 +54,34 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s", ingredient);
+            removeError("could not find recipe for {}", ingredient);
         }
         return found;
+    }
+
+    public static class RecipeBuilder extends AbstractRecipeBuilder<EnrichmentRecipe> {
+
+        @Override
+        public String getErrorMsg() {
+            return "Error adding Mekanism Enrichment Chamber recipe";
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
+            validateItems(msg, 1, 1, 1, 1);
+            validateFluids(msg);
+        }
+
+        @Override
+        public @Nullable EnrichmentRecipe register() {
+            if (!validate()) return null;
+            EnrichmentRecipe recipe = null;
+            for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
+                EnrichmentRecipe r = new EnrichmentRecipe(itemStack.copy(), output.get(0));
+                if (recipe == null) recipe = r;
+                ModSupport.MEKANISM.get().enrichmentChamber.add(r);
+            }
+            return recipe;
+        }
     }
 }

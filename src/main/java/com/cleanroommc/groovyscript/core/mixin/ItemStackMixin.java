@@ -60,8 +60,8 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     public IIngredient exactCopy() {
         ItemStackMixin copy = (ItemStackMixin) (Object) groovyscript$getThis().copy();
         copy.setMark(getMark());
-        copy.transform(transformer);
-        copy.when(matchCondition);
+        copy.transformer = transformer;
+        copy.matchCondition = matchCondition;
         copy.nbtMatcher = nbtMatcher;
         return copy;
     }
@@ -90,13 +90,15 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     }
 
     public ItemStack when(Closure<Object> matchCondition) {
-        this.matchCondition = matchCondition;
-        return groovyscript$getThis();
+        ItemStackMixin fresh = (ItemStackMixin) exactCopy();
+        fresh.matchCondition = matchCondition;
+        return (ItemStack) (Object) fresh;
     }
 
     public ItemStack transform(Closure<Object> transformer) {
-        this.transformer = transformer;
-        return groovyscript$getThis();
+        ItemStackMixin fresh = (ItemStackMixin) exactCopy();
+        fresh.transformer = transformer;
+        return (ItemStack) (Object) fresh;
     }
 
     public ItemStack reuse() {
@@ -171,8 +173,8 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         ItemStack t = groovyscript$getThis();
         ItemStackMixin itemStack = (ItemStackMixin) (Object) new ItemStack(t.getItem(), t.getCount(), meta);
         itemStack.setMark(getMark());
-        itemStack.transform(transformer);
-        itemStack.when(matchCondition);
+        itemStack.transformer = transformer;
+        itemStack.matchCondition = matchCondition;
         itemStack.nbtMatcher = nbtMatcher;
         return itemStack;
     }

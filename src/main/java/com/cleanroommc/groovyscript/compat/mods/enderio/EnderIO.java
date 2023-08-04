@@ -9,6 +9,7 @@ public class EnderIO extends ModPropertyContainer {
     public final FluidCoolant fluidCoolant = new FluidCoolant();
     public final Enchanter enchanter = new Enchanter();
     public final SagMill sagMill = new SagMill();
+    public final SagMillGrinding sagMillGrinding = new SagMillGrinding();
     public final SliceNSplice sliceNSplice = new SliceNSplice();
     public final SoulBinder soulBinder = new SoulBinder();
     public final Tank tank = new Tank();
@@ -20,6 +21,7 @@ public class EnderIO extends ModPropertyContainer {
         addRegistry(fluidCoolant);
         addRegistry(enchanter);
         addRegistry(sagMill);
+        addRegistry(sagMillGrinding);
         addRegistry(sliceNSplice);
         addRegistry(soulBinder);
         addRegistry(tank);

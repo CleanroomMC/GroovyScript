@@ -15,10 +15,12 @@ public class ImmersiveEngineering extends ModPropertyContainer {
     public final AlloyKiln alloyKiln = new AlloyKiln();
     public final ArcFurnace arcFurnace = new ArcFurnace();
     public final BlastFurnace blastFurnace = new BlastFurnace();
+    public final BlastFurnaceFuel blastFurnaceFuel = new BlastFurnaceFuel();
     public final BlueprintCrafting blueprint = new BlueprintCrafting();
     public final BottlingMachine bottlingMachine = new BottlingMachine();
     public final CokeOven cokeOven = new CokeOven();
     public final Crusher crusher = new Crusher();
+    public final Excavator excavator = new Excavator();
     public final Fermenter fermenter = new Fermenter();
     public final MetalPress metalPress = new MetalPress();
     public final Mixer mixer = new Mixer();
@@ -29,10 +31,12 @@ public class ImmersiveEngineering extends ModPropertyContainer {
         addRegistry(alloyKiln);
         addRegistry(arcFurnace);
         addRegistry(blastFurnace);
+        addRegistry(blastFurnaceFuel);
         addRegistry(blueprint);
         addRegistry(bottlingMachine);
         addRegistry(cokeOven);
         addRegistry(crusher);
+        addRegistry(excavator);
         addRegistry(fermenter);
         addRegistry(metalPress);
         addRegistry(mixer);
@@ -51,6 +55,14 @@ public class ImmersiveEngineering extends ModPropertyContainer {
             return new IngredientStack(((FluidStack) ingredient).copy());
         }
         return new IngredientStack(Arrays.asList(ingredient.getMatchingStacks()));
+    }
+
+    public static boolean areIngredientsEquals(IngredientStack target, IIngredient other) {
+        return other instanceof OreDictIngredient ? target.matches(((OreDictIngredient) other).getOreDict()) : target.matches(other.getMatchingStacks());
+    }
+
+    public static boolean areIngredientsEquals(IIngredient target, IngredientStack other) {
+        return areIngredientsEquals(other, target);
     }
 
     public static Object toIEInput(IIngredient ingredient) {
