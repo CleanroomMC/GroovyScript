@@ -61,6 +61,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -132,9 +133,12 @@ public class GroovyScript {
 
     @ApiStatus.Internal
     public static void initializeRunConfig(File minecraftHome) {
-        // If we are launching a dev environment, use the examples folder for easy and consistent testing.
-        if (Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) scriptPath = new File(minecraftHome.getParentFile(), "examples");
-        else scriptPath = new File(minecraftHome, "groovy");
+        // If we are launching with the environment variable set to use the examples folder, use the examples folder for easy and consistent testing.
+        if (ManagementFactory.getRuntimeMXBean().getInputArguments().contains("-Dgroovyscript.use_examples_folder=true")) {
+            scriptPath = new File(minecraftHome.getParentFile(), "examples");
+        } else {
+            scriptPath = new File(minecraftHome, "groovy");
+        }
         runConfigFile = new File(scriptPath, "runConfig.json");
         resourcesFile = new File(scriptPath, "assets");
         reloadRunConfig();

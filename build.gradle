@@ -43,6 +43,7 @@ minecraft {
     args << '-Dmixin.hotSwap=true'
     args << '-Dmixin.checks.interfaces=true'
     args << '-Dmixin.debug.export=true'
+    if (project.debug_use_examples_folder.toBoolean()) args << '-Dgroovyscript.use_examples_folder=true'
     extraRunJvmArguments.addAll(args)
 
     useDependencyAccessTransformers = true
