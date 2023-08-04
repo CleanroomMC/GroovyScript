@@ -1,23 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 
-import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import blusunrize.immersiveengineering.api.crafting.MixerRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Mixer extends VirtualizedRegistry<MixerRecipe> {
 
@@ -43,7 +40,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
     }
 
     public MixerRecipe add(FluidStack fluidOutput, FluidStack fluidInput, int energy, List<IIngredient> itemInput) {
-        IngredientStack[] inputs = ArrayUtils.mapToArray(itemInput, ImmersiveEngineering::toIngredientStack);
+        Object[] inputs = ArrayUtils.mapToArray(itemInput, ImmersiveEngineering::toIngredientStack);
         MixerRecipe recipe = new MixerRecipe(fluidOutput, fluidInput, inputs, energy);
         add(recipe);
         return recipe;
@@ -72,41 +69,34 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
             return false;
         })) {
             GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
-                    .add("no recipes found for %s", fluidOutput)
+                    .add("no recipes found for {}", fluidOutput)
                     .error()
                     .post();
         }
     }
 
-    public void removeByInput(ItemStack... itemInputs) {
+    public void removeByInput(IIngredient... itemInputs) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
                 .add(itemInputs == null || itemInputs.length == 0, () -> "item input must not be empty")
                 .error()
                 .postIfNotEmpty()) {
             return;
         }
-        if (!MixerRecipe.recipeList.removeIf(recipe -> {
-            if (recipe.itemInputs.length != itemInputs.length) return false;
-
-            int i;
-            for (i = 0; i < itemInputs.length; i++) {
-                if (!recipe.itemInputs[i].matches(itemInputs[i])) break;
-            }
-
-            if (i == itemInputs.length) {
-                addBackup(recipe);
-                return true;
-            }
-            return false;
-        })) {
+        List<MixerRecipe> recipes = MixerRecipe.recipeList.stream().filter(r -> r.itemInputs.length == itemInputs.length &&
+                                                                                Arrays.stream(itemInputs).anyMatch(check -> Arrays.stream(r.itemInputs).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check))))
+                .collect(Collectors.toList());
+        for (MixerRecipe recipe : recipes) {
+            remove(recipe);
+        }
+        if (recipes.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
-                    .add("no recipes found for %s and %s", Arrays.toString(itemInputs))
+                    .add("no recipes found for {}", Arrays.toString(itemInputs))
                     .error()
                     .post();
         }
     }
 
-    public void removeByInput(FluidStack fluidInput, ItemStack... itemInput) {
+    public void removeByInput(FluidStack fluidInput, IIngredient... itemInput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
                 .add(IngredientHelper.isEmpty(fluidInput), () -> "fluid input must not be empty")
                 .add(itemInput == null || itemInput.length == 0, () -> "item input must not be empty")
@@ -114,13 +104,16 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        NonNullList<ItemStack> inputs = NonNullList.create();
-        Collections.addAll(inputs, itemInput);
-
-        MixerRecipe recipe = MixerRecipe.findRecipe(fluidInput, inputs);
-        if (recipe == null || !remove(recipe)) {
+        List<MixerRecipe> recipes = MixerRecipe.recipeList.stream().filter(r -> fluidInput.isFluidEqual(r.fluidInput) &&
+                                                                                r.itemInputs.length == itemInput.length &&
+                                                                                Arrays.stream(itemInput).anyMatch(check -> Arrays.stream(r.itemInputs).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check))))
+                .collect(Collectors.toList());
+        for (MixerRecipe recipe : recipes) {
+            remove(recipe);
+        }
+        if (recipes.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
-                    .add("no recipes found for %s and %s", fluidInput, Arrays.toString(itemInput))
+                    .add("no recipes found for {} and {}", fluidInput, Arrays.toString(itemInput))
                     .error()
                     .post();
         }
@@ -135,7 +128,14 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         MixerRecipe.recipeList.clear();
     }
 
-    public static class RecipeBuilder extends EnergyRecipeBuilder<MixerRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<MixerRecipe> {
+
+        private int energy;
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
+            return this;
+        }
 
         @Override
         public String getErrorMsg() {
@@ -144,14 +144,17 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 8, 0, 0);
+            validateItems(msg, 1, Integer.MAX_VALUE, 0, 0);
             validateFluids(msg, 1, 1, 1, 1);
         }
 
         @Override
         public @Nullable MixerRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().mixer.add(fluidOutput.get(0), fluidInput.get(0), energy, input);
+            Object[] inputs = ArrayUtils.mapToArray(input, ImmersiveEngineering::toIngredientStack);
+            MixerRecipe recipe = new MixerRecipe(fluidOutput.get(0), fluidInput.get(0), inputs, energy);
+            ModSupport.IMMERSIVE_ENGINEERING.get().mixer.add(recipe);
+            return recipe;
         }
     }
 }

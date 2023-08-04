@@ -25,7 +25,11 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     }
 
     public AbstractRecipeBuilder<T> name(String name) {
-        this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
+        if (name.contains(":")) {
+            this.name = new ResourceLocation(name);
+        } else {
+            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
+        }
         return this;
     }
 

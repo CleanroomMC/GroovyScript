@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -165,7 +164,7 @@ public class Melting extends MeltingRecipeRegistry {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Entity Melting recipe")
-                    .add("could not find recipe with input %s", name)
+                    .add("could not find recipe with input {}", name)
                     .error()
                     .post();
             return false;
@@ -179,7 +178,7 @@ public class Melting extends MeltingRecipeRegistry {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Entity Melting recipe")
-                    .add("could not find recipe with output %s", output)
+                    .add("could not find recipe with output {}", output)
                     .error()
                     .post();
             return false;

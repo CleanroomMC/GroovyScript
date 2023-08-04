@@ -12,6 +12,8 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.stream.Collectors;
+
 public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
 
     public Fusion() {
@@ -28,32 +30,29 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
         return new RecipeBuilder();
     }
 
+    public void add(IFusionRecipe recipe) {
+        addScripted(recipe);
+        RecipeManager.FUSION_REGISTRY.add(recipe);
+    }
+
     public boolean remove(IFusionRecipe recipe) {
-        int oldSize = ((FusionRegistryAccessor) RecipeManager.FUSION_REGISTRY).getREGISTRY().size();
-        RecipeManager.FUSION_REGISTRY.remove(recipe);
-        if (oldSize != ((FusionRegistryAccessor) RecipeManager.FUSION_REGISTRY).getREGISTRY().size()) {
+        if (RecipeManager.FUSION_REGISTRY.getRecipes().contains(recipe)) {
             addBackup(recipe);
+            RecipeManager.FUSION_REGISTRY.remove(recipe);
             return true;
         }
         return false;
     }
 
-
     public void removeByCatalyst(ItemStack item) {
-        if (IngredientHelper.isEmpty(item)) {
-            GroovyLog.msg("Error removing Draconic Evo. Fusion recipe")
-                    .add("catalyst must not be empty")
-                    .error()
-                    .post();
+        for (IFusionRecipe recipe : RecipeManager.FUSION_REGISTRY.getRecipes().stream().filter(x -> x.getRecipeCatalyst().isItemEqual(item)).collect(Collectors.toList())) {
+            remove(recipe);
         }
-        IFusionRecipe recipe = RecipeManager.FUSION_REGISTRY.findRecipeForCatalyst(item);
-        if (recipe == null) {
-            GroovyLog.msg("Error removing Draconic Evo. Fusion recipe")
-                    .add("can't find recipe for %s", item)
-                    .error()
-                    .post();
-        }
-        remove(recipe);
+    }
+
+    public void removeAll() {
+        ((FusionRegistryAccessor) RecipeManager.FUSION_REGISTRY).getREGISTRY().forEach(this::addBackup);
+        ((FusionRegistryAccessor) RecipeManager.FUSION_REGISTRY).getREGISTRY().clear();
     }
 
     public SimpleObjectStream<IFusionRecipe> streamRecipes() {
@@ -64,7 +63,7 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<IFusionRecipe> {
 
         private ItemStack catalyst;
-        private long energy;
+        private long energy = 1000000;
         private int tier;
 
         public RecipeBuilder energy(long energy) {
@@ -83,6 +82,10 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
         }
 
         public RecipeBuilder tierNormal() {
+            return tier(0);
+        }
+
+        public RecipeBuilder tierBasic() {
             return tier(0);
         }
 
@@ -105,19 +108,18 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 20, 1, 1);
+            validateItems(msg, 1, 54, 1, 1);
             validateFluids(msg);
-            msg.add(IngredientHelper.isEmpty(catalyst), () -> "catalyst must not be empty");
-            msg.add(tier < 0 || tier > 3, () -> "tier must be between 0 (normal) and 3 (chaotic)");
-            if (energy <= 0) energy = 1000000;
+            msg.add(IngredientHelper.isEmpty(catalyst), "catalyst must not be empty");
+            msg.add(tier < 0 || tier > 3, "tier must be between 0 (basic) and 3 (chaotic), yet it was {}", tier);
+            msg.add(energy <= 0 , "energy must be greater than 0, yet it was {}", energy);
         }
 
         @Override
         public @Nullable IFusionRecipe register() {
             if (!validate()) return null;
             GroovyFusionRecipe recipe = new GroovyFusionRecipe(output.get(0), catalyst, input, energy, tier);
-            ModSupport.DRACONIC_EVO.get().fusion.addScripted(recipe);
-            RecipeManager.FUSION_REGISTRY.add(recipe);
+            ModSupport.DRACONIC_EVOLUTION.get().fusion.add(recipe);
             return recipe;
         }
     }

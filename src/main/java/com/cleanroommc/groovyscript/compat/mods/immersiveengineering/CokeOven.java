@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -61,7 +62,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         List<CokeOvenRecipe> list = CokeOvenRecipe.removeRecipes(output);
         if (list.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
-                    .add("no recipes found for %s", output)
+                    .add("no recipes found for {}", output)
                     .error()
                     .post();
             return;
@@ -85,7 +86,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
             return false;
         })) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
-                    .add("no recipes found for %s", input)
+                    .add("no recipes found for {}", input)
                     .error()
                     .post();
         }
@@ -100,9 +101,15 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         CokeOvenRecipe.recipeList.clear();
     }
 
-    public static class RecipeBuilder extends TimeRecipeBuilder<CokeOvenRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<CokeOvenRecipe> {
 
-        protected int creosote;
+        private int time;
+        private int creosote;
+
+        public RecipeBuilder time(int time) {
+            this.time = time;
+            return this;
+        }
 
         public RecipeBuilder creosote(int creosote) {
             this.creosote = creosote;
@@ -125,7 +132,9 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         @Override
         public @Nullable CokeOvenRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().cokeOven.add(output.get(0), input.get(0), time, creosote);
+            CokeOvenRecipe recipe = new CokeOvenRecipe(output.get(0), ImmersiveEngineering.toIEInput(input.get(0)), time, creosote);
+            ModSupport.IMMERSIVE_ENGINEERING.get().cokeOven.add(recipe);
+            return recipe;
         }
     }
 }

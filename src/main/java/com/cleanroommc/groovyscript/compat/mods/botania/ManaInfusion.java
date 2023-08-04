@@ -72,6 +72,21 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         return false;
     }
 
+    public boolean removeByCatalyst(IBlockState catalyst) {
+        if (BotaniaAPI.manaInfusionRecipes.removeIf(recipe -> {
+            if (recipe.getCatalyst() == null) return false;
+            boolean found = recipe.getCatalyst().equals(catalyst);
+            if (found) addBackup(recipe);
+            return found;
+        })) return true;
+
+        GroovyLog.msg("Error removing Botania Mana Infusion recipe")
+                .add("could not find recipe with catalyst {}", catalyst)
+                .error()
+                .post();
+        return false;
+    }
+
     public void removeAll() {
         BotaniaAPI.manaInfusionRecipes.forEach(this::addBackup);
         BotaniaAPI.manaInfusionRecipes.clear();

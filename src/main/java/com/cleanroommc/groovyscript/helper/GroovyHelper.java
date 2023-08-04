@@ -47,6 +47,10 @@ public class GroovyHelper {
         return GroovyScript.getRunConfig().getPackName();
     }
 
+    public static String getPackId() {
+        return GroovyScript.getRunConfig().getPackId();
+    }
+
     public static String getPackVersion() {
         return GroovyScript.getRunConfig().getVersion();
     }

@@ -3,10 +3,10 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 import blusunrize.immersiveengineering.api.crafting.FermenterRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -66,7 +66,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
             return false;
         })) {
             GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
-                    .add("no recipes found for %s", fluidOutput)
+                    .add("no recipes found for {}", fluidOutput)
                     .error()
                     .post();
         }
@@ -85,7 +85,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
             addBackup(recipe);
         } else {
             GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
-                    .add("no recipes found for %s", input)
+                    .add("no recipes found for {}", input)
                     .error()
                     .post();
         }
@@ -100,7 +100,14 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         FermenterRecipe.recipeList.clear();
     }
 
-    public static class RecipeBuilder extends EnergyRecipeBuilder<FermenterRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<FermenterRecipe> {
+
+        private int energy;
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
+            return this;
+        }
 
         @Override
         public String getErrorMsg() {
@@ -116,7 +123,9 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         @Override
         public @Nullable FermenterRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().fermenter.add(fluidOutput.get(0), output.getOrEmpty(0), input.get(0), energy);
+            FermenterRecipe recipe = new FermenterRecipe(fluidOutput.get(0), output.getOrEmpty(0), input.get(0), energy);
+            ModSupport.IMMERSIVE_ENGINEERING.get().fermenter.add(recipe);
+            return recipe;
         }
     }
 }
