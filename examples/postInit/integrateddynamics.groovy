@@ -1,4 +1,7 @@
 
+if (!isLoaded('integrateddynamics')) return
+println 'mod \'integrateddynamics\' detected, running script'
+
 // Drying Basin and Mechanical Drying Basin:
 // Takes either an item or fluid input and gives either an item or fluid output after a duration.
 mods.integrateddynamics.dryingbasin.recipeBuilder() // Defaults to basic-only, and mechanical must be enabled via `mechanical()`
