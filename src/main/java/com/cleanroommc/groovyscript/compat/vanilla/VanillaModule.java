@@ -5,6 +5,8 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.compat.content.Content;
 import com.cleanroommc.groovyscript.compat.loot.Loot;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
+import net.minecraft.item.ItemStack;
 
 public class VanillaModule implements IScriptReloadable {
 
@@ -25,6 +27,8 @@ public class VanillaModule implements IScriptReloadable {
         GroovyScript.getSandbox().registerBinding("Player", player);
         GroovyScript.getSandbox().registerBinding("Content", content);
         GroovyScript.getSandbox().registerBinding("Rarity", rarity);
+
+        ExpansionHelper.mixinClass(ItemStack.class, RarityItemStackExpansion.class);
     }
 
     @Override

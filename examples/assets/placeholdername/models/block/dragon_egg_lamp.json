@@ -1,0 +1,6 @@
+{
+  "parent": "block/dragon_egg",
+  "textures": {
+    "all": "placeholdername:blocks/dragon_egg_lamp"
+  }
+}

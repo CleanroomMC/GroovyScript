@@ -24,6 +24,10 @@ public class Crafting {
         return fallbackChars.get(c);
     }
 
+    public void setFallback(char key, IIngredient ingredient) {
+        fallbackChars.put(key, ingredient);
+    }
+
     public void setFallback(String key, IIngredient ingredient) {
         if (key == null || key.length() != 1) {
             GroovyLog.get().error("Fallback key must be a single character");
@@ -33,7 +37,10 @@ public class Crafting {
     }
 
     public void addShaped(ItemStack output, List<List<IIngredient>> input) {
-        addShaped(null, output, input);
+        shapedBuilder()
+                .matrix(input)
+                .output(output)
+                .register();
     }
 
     public void addShaped(String name, ItemStack output, List<List<IIngredient>> input) {
@@ -44,8 +51,19 @@ public class Crafting {
                 .register();
     }
 
+    public void addShaped(ResourceLocation name, ItemStack output, List<List<IIngredient>> input) {
+        shapedBuilder()
+                .matrix(input)
+                .output(output)
+                .name(name)
+                .register();
+    }
+
     public void addShapeless(ItemStack output, List<IIngredient> input) {
-        addShapeless(null, output, input);
+        shapelessBuilder()
+                .input(input)
+                .output(output)
+                .register();
     }
 
     public void addShapeless(String name, ItemStack output, List<IIngredient> input) {
@@ -56,8 +74,20 @@ public class Crafting {
                 .register();
     }
 
+    public void addShapeless(ResourceLocation name, ItemStack output, List<IIngredient> input) {
+        shapelessBuilder()
+                .input(input)
+                .output(output)
+                .name(name)
+                .register();
+    }
+
     public void replaceShapeless(ItemStack output, List<IIngredient> input) {
-        replaceShapeless(null, output, input);
+        shapelessBuilder()
+                .input(input)
+                .output(output)
+                .replace()
+                .register();
     }
 
     public void replaceShapeless(String name, ItemStack output, List<IIngredient> input) {
@@ -65,12 +95,25 @@ public class Crafting {
                 .input(input)
                 .output(output)
                 .name(name)
-                .replace()
+                .replaceByName()
+                .register();
+    }
+
+    public void replaceShapeless(ResourceLocation name, ItemStack output, List<IIngredient> input) {
+        shapelessBuilder()
+                .input(input)
+                .output(output)
+                .name(name)
+                .replaceByName()
                 .register();
     }
 
     public void replaceShaped(ItemStack output, List<List<IIngredient>> input) {
-        replaceShaped(null, output, input);
+        shapedBuilder()
+                .matrix(input)
+                .output(output)
+                .replace()
+                .register();
     }
 
     public void replaceShaped(String name, ItemStack output, List<List<IIngredient>> input) {
@@ -82,7 +125,20 @@ public class Crafting {
                 .register();
     }
 
+    public void replaceShaped(ResourceLocation name, ItemStack output, List<List<IIngredient>> input) {
+        shapedBuilder()
+                .matrix(input)
+                .output(output)
+                .name(name)
+                .replaceByName()
+                .register();
+    }
+
     public void remove(String name) {
+        ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name);
+    }
+
+    public void remove(ResourceLocation name) {
         ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name);
     }
 
@@ -136,7 +192,7 @@ public class Crafting {
         }
         List<ResourceLocation> recipesToRemove = new ArrayList<>();
         for (IRecipe recipe : ForgeRegistries.RECIPES) {
-            if (recipe.getRegistryName() != null && !recipe.getIngredients().isEmpty() && recipe.getIngredients().stream().anyMatch(i -> i.getMatchingStacks().length > 0 && input.test(i.getMatchingStacks()[0]))){
+            if (recipe.getRegistryName() != null && !recipe.getIngredients().isEmpty() && recipe.getIngredients().stream().anyMatch(i -> i.getMatchingStacks().length > 0 && input.test(i.getMatchingStacks()[0]))) {
                 recipesToRemove.add(recipe.getRegistryName());
             }
         }
@@ -160,6 +216,12 @@ public class Crafting {
             if (key != null) ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, key);
             return key != null;
         });
+    }
+
+    public void removeAll() {
+        for (IRecipe recipe : ForgeRegistries.RECIPES) {
+            ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, recipe.getRegistryName());
+        }
     }
 
     public CraftingRecipeBuilder.Shaped shapedBuilder() {

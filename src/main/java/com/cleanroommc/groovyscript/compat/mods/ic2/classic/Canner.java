@@ -124,7 +124,7 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
         ICannerRegistry.FuelInfo info = ClassicRecipes.canningMachine.getFuelInfo(fuel.getMatchingStacks()[0]);
         if (info == null) {
             GroovyLog.msg("Error removing Industrialcraft 2 Canner recipe")
-                    .add("no recipes found for %s", fuel)
+                    .add("no recipes found for {}", fuel)
                     .error()
                     .post();
             return false;
@@ -197,7 +197,7 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
             }
         }
         GroovyLog.msg("Error removing Industrialcraft 2 Canning Machine recipe")
-                .add("no recipes found for %s", container)
+                .add("no recipes found for {}", container)
                 .error()
                 .post();
         return false;

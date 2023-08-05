@@ -4,14 +4,14 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
-import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.content.GroovyResourcePack;
+import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
-import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.CReload;
@@ -33,6 +33,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -45,7 +46,10 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -57,6 +61,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -128,7 +133,12 @@ public class GroovyScript {
 
     @ApiStatus.Internal
     public static void initializeRunConfig(File minecraftHome) {
-        scriptPath = new File(minecraftHome, "groovy");
+        // If we are launching with the environment variable set to use the examples folder, use the examples folder for easy and consistent testing.
+        if (ManagementFactory.getRuntimeMXBean().getInputArguments().contains("-Dgroovyscript.use_examples_folder=true")) {
+            scriptPath = new File(minecraftHome.getParentFile(), "examples");
+        } else {
+            scriptPath = new File(minecraftHome, "groovy");
+        }
         runConfigFile = new File(scriptPath, "runConfig.json");
         resourcesFile = new File(scriptPath, "assets");
         reloadRunConfig();
@@ -146,9 +156,7 @@ public class GroovyScript {
             Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get(ID));
         }
 
-        long time = System.currentTimeMillis();
-        getSandbox().run(LoadStage.PRE_INIT);
-        LOGGER.info("Running early Groovy scripts took " + (System.currentTimeMillis() - time) + " ms");
+        runGroovyScriptsInLoader(LoadStage.PRE_INIT);
 
         if (wasNull) {
             Loader.instance().setActiveModContainer(null);
@@ -156,11 +164,11 @@ public class GroovyScript {
     }
 
     @ApiStatus.Internal
-    public static void initializeGroovyPostInit() {
+    public static void runGroovyScriptsInLoader(LoadStage loadStage) {
         // called via mixin between fml post init and load complete
         long time = System.currentTimeMillis();
-        getSandbox().run(LoadStage.POST_INIT);
-        LOGGER.info("Running Groovy scripts took " + (System.currentTimeMillis() - time) + " ms");
+        getSandbox().run(loadStage);
+        LOGGER.info("Running Groovy scripts during {} took {} ms", loadStage.getName(), System.currentTimeMillis() - time);
     }
 
     @Mod.EventHandler
@@ -168,8 +176,8 @@ public class GroovyScript {
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);
             Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.command.copy.copied_start")
-                                                                .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
-                                                                .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
+                    .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
+                    .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
         });
     }
 

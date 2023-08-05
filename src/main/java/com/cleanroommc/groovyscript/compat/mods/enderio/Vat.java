@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Vat extends VirtualizedRegistry<VatRecipe> {
 
@@ -37,6 +39,13 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         addScripted((VatRecipe) instance.getRecipes().get(instance.getRecipes().size() - 1));
     }
 
+    public boolean remove(VatRecipe recipe) {
+        if (recipe == null) return false;
+        VatRecipeManager.getInstance().getRecipes().remove(recipe);
+        addBackup(recipe);
+        return true;
+    }
+
     public void remove(FluidStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.get().error("Error removing EnderIO Vat recipe for empty output!");
@@ -45,6 +54,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         int oldSize = VatRecipeManager.getInstance().getRecipes().size();
         VatRecipeManager.getInstance().getRecipes().removeIf(recipe -> {
             FluidStack recipeOutput = recipe.getOutputs()[0].getFluidOutput();
+            if (output.isFluidEqual(recipeOutput)) addBackup((VatRecipe) recipe);
             return output.isFluidEqual(recipeOutput);
         });
         if (oldSize == VatRecipeManager.getInstance().getRecipes().size()) {
@@ -57,6 +67,16 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         NNList<IRecipe> recipes = VatRecipeManager.getInstance().getRecipes();
         removeScripted().forEach(recipes::remove);
         recipes.addAll(restoreFromBackup());
+    }
+
+    public SimpleObjectStream<VatRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(VatRecipeManager.getInstance().getRecipes().stream().map(r -> (VatRecipe) r).collect(Collectors.toList()))
+                .setRemover(this::remove);
+    }
+
+    public void removeAll() {
+        VatRecipeManager.getInstance().getRecipes().forEach(r -> addBackup((VatRecipe) r));
+        VatRecipeManager.getInstance().getRecipes().clear();
     }
 
     public static class RecipeBuilder implements IRecipeBuilder<Recipe> {

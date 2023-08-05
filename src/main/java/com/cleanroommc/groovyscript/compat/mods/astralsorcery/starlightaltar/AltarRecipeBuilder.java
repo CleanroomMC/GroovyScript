@@ -3,12 +3,11 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.astralsorcery.Utils;
+import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipeBuilder;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import org.apache.commons.lang3.ArrayUtils;
@@ -21,20 +20,14 @@ import java.util.List;
 
 public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
 
+    private final TileAltar.AltarLevel altarLevel;
+    private final ArrayList<IIngredient> outerIngredients = new ArrayList<>();
     protected String name;
     protected ItemHandle[] inputs = null;
     protected ItemHandle[] outerInputs = null;
     protected int starlightRequired = 0;
-    protected int craftingTickTime = 0;
-    private final TileAltar.AltarLevel altarLevel;
-    private String[] keyBasedMatrix = null;
+    protected int craftingTickTime = 1;
     private IConstellation requiredConstellation = null;
-    private final ArrayList<IIngredient> outerIngredients = new ArrayList<>();
-    private final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
-
-    private List<List<IIngredient>> ingredientMatrix = null;
-
-    private final List<String> errors = new ArrayList<>();
 
     public AltarRecipeBuilder(int width, int height, TileAltar.AltarLevel level) {
         super(width, height);
@@ -80,15 +73,6 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
         return this;
     }
 
-    public AltarRecipeBuilder key(String c, IIngredient item) {
-        if (c == null || c.length() != 1) {
-            errors.add("key must be a single char but found '" + c + "'");
-            return this;
-        }
-        this.keyMap.put(c.charAt(0), item);
-        return this;
-    }
-
     public AltarRecipeBuilder starlight(int starlight) {
         this.starlightRequired = starlight;
         return this;
@@ -128,7 +112,7 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
             String row = this.keyBasedMatrix[i];
             for (int j = 0; j < row.length(); j++) {
                 if (map[i][j] >= 0 && row.charAt(j) != ' ') {
-                    in[map[i][j]] = Utils.convertToItemHandle(keyMap.get(row.charAt(j)));
+                    in[map[i][j]] = AstralSorcery.toItemHandle(keyMap.get(row.charAt(j)));
                 }
             }
         }
@@ -137,14 +121,14 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
 
         ItemHandle[] outerIn = new ItemHandle[this.outerIngredients.size()];
         for (int j = 0; j < this.outerIngredients.size(); j++)
-            outerIn[j] = Utils.convertToItemHandle(this.outerIngredients.get(j));
+            outerIn[j] = AstralSorcery.toItemHandle(this.outerIngredients.get(j));
         this.outerInputs = outerIn;
 
         return true;
     }
 
     public boolean validate() {
-        GroovyLog.Msg out = GroovyLog.msg("Error adding Astral Sorcery Starlight Alter recipe").warn();
+        GroovyLog.Msg out = GroovyLog.msg("Error adding Astral Sorcery Starlight Altar recipe").warn();
 
         if (this.output == null || this.output.isItemEqual(ItemStack.EMPTY)) {
             out.add("Recipe output cannot be empty.").error();
@@ -153,9 +137,9 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
             out.add("Starlight amount cannot be negative, setting starlight amount to 0.");
             this.starlightRequired = 0;
         }
-        if (this.craftingTickTime < 0) {
-            out.add("Crafting time cannot be negative, setting crafting time to 0.");
-            this.craftingTickTime = 0;
+        if (this.craftingTickTime <= 0) {
+            out.add("Crafting time cannot be negative or 0, setting crafting time to 1.");
+            this.craftingTickTime = 1;
         }
 
         switch (this.altarLevel) {

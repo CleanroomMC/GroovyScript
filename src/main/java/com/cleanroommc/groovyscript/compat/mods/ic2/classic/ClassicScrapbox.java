@@ -61,7 +61,7 @@ public class ClassicScrapbox extends Scrapbox {
             }
         }
         GroovyLog.msg("Error removing Industrialcraft 2 Scrapbox recipe")
-                .add("no recipes found for %s", stack)
+                .add("no recipes found for {}", stack)
                 .error()
                 .post();
         return false;

@@ -59,7 +59,7 @@ public class RareEarthExtractor extends VirtualizedRegistry<IRareEarthExtractorR
             }
         }
         GroovyLog.msg("Error removing Rare Earth Extractor recipe")
-                .add("no recipes found for %s", input)
+                .add("no recipes found for {}", input)
                 .error()
                 .post();
         return false;

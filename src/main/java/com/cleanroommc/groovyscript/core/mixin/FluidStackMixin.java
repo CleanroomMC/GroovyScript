@@ -90,13 +90,15 @@ public abstract class FluidStackMixin implements IIngredient, INBTResourceStack 
     }
 
     public FluidStack when(Closure<Object> matchCondition) {
-        this.matchCondition = matchCondition;
-        return (FluidStack) (Object) this;
+        FluidStackMixin fresh = (FluidStackMixin) exactCopy();
+        fresh.matchCondition = matchCondition;
+        return (FluidStack) (Object) fresh;
     }
 
     public FluidStack transform(Closure<Object> transformer) {
-        this.transformer = transformer;
-        return (FluidStack) (Object) this;
+        FluidStackMixin fresh = (FluidStackMixin) exactCopy();
+        fresh.transformer = transformer;
+        return (FluidStack) (Object) fresh;
     }
 
     @Override
