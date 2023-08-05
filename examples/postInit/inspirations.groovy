@@ -1,4 +1,7 @@
 
+if (!isLoaded('inspirations')) return
+println 'mod \'inspirations\' detected, running script'
+
 // Cauldron:
 // Converts up to 1 itemstack and up to 1 fluid into up to 1 itemstack or up to 1 fluid, with a boiling boolean and variable amount of fluid consumed or produced.
 // Cauldrons have a cap of either 3 or 4 levels, depending on the config.
