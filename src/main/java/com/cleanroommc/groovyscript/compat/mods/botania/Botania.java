@@ -16,6 +16,7 @@ public class Botania extends ModPropertyContainer {
     public final OrechidIgnem orechidIgnem = new OrechidIgnem();
     public final RuneAltar runeAltar = new RuneAltar();
     public final Brew brew = new Brew();
+    public final BrewRecipe brewRecipe = new BrewRecipe();
     public final Lexicon lexicon = new Lexicon();
     public final Knowledge knowledge = new Knowledge();
     public final Magnet magnet = new Magnet();
@@ -30,6 +31,7 @@ public class Botania extends ModPropertyContainer {
         addRegistry(orechidIgnem);
         addRegistry(runeAltar);
         addRegistry(brew);
+        addRegistry(brewRecipe);
         addRegistry(lexicon.category);
         addRegistry(lexicon.entry);
         addRegistry(lexicon.page);

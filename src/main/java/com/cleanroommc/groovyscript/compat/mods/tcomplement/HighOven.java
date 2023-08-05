@@ -329,7 +329,7 @@ public class HighOven extends MeltingRecipeRegistry {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Complement High Oven Heating recipe")
-                    .add("could not find recipe with input %s", input)
+                    .add("could not find recipe with input {}", input)
                     .error()
                     .post();
             return false;
@@ -343,7 +343,7 @@ public class HighOven extends MeltingRecipeRegistry {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Complement High Oven Heating recipe")
-                    .add("could not find recipe with output %s", output)
+                    .add("could not find recipe with output {}", output)
                     .error()
                     .post();
             return false;
@@ -357,7 +357,7 @@ public class HighOven extends MeltingRecipeRegistry {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Complement High Oven Heating recipe")
-                    .add("could not find recipe with input %s and output %s", input, output)
+                    .add("could not find recipe with input {} and output {}", input, output)
                     .error()
                     .post();
             return false;
@@ -447,7 +447,7 @@ public class HighOven extends MeltingRecipeRegistry {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Complement High Oven fuel")
-                    .add("could not find override with item %s", item)
+                    .add("could not find override with item {}", item)
                     .error()
                     .post();
             return false;

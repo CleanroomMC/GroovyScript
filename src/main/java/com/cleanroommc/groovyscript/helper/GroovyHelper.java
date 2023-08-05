@@ -47,6 +47,10 @@ public class GroovyHelper {
         return GroovyScript.getRunConfig().getPackName();
     }
 
+    public static String getPackId() {
+        return GroovyScript.getRunConfig().getPackId();
+    }
+
     public static String getPackVersion() {
         return GroovyScript.getRunConfig().getVersion();
     }
@@ -60,10 +64,14 @@ public class GroovyHelper {
     }
 
     public static boolean isClient() {
-        return FMLCommonHandler.instance().getSide().isClient();
+        return FMLCommonHandler.instance().getEffectiveSide().isClient();
     }
 
     public static boolean isServer() {
+        return FMLCommonHandler.instance().getEffectiveSide().isServer();
+    }
+
+    public static boolean isDedicatedServer() {
         return FMLCommonHandler.instance().getSide().isServer();
     }
 }

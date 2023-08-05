@@ -25,6 +25,11 @@ public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, 
         restoreFromBackup().forEach(recipeRegistry::put);
     }
 
+    public void add(R recipe) {
+        recipeRegistry.put(recipe);
+        addScripted(recipe);
+    }
+
     public boolean remove(R recipe) {
         if (recipeRegistry.get().remove(recipe) != null) {
             addBackup(recipe);
@@ -36,6 +41,11 @@ public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, 
     public SimpleObjectStream<R> streamRecipes() {
         return new SimpleObjectStream<>(recipeRegistry.get().values())
                 .setRemover(this::remove);
+    }
+
+    public void removeAll() {
+        recipeRegistry.get().values().forEach(this::addBackup);
+        recipeRegistry.get().clear();
     }
 
     @GroovyBlacklist

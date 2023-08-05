@@ -13,6 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> {
 
     public BottlingMachine() {
@@ -66,7 +69,7 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
             return false;
         })) {
             GroovyLog.msg("Error removing Immersive Engineering Bottling Machine recipe")
-                    .add("no recipes found for %s", output)
+                    .add("no recipes found for {}", output)
                     .error()
                     .post();
         }
@@ -80,13 +83,13 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
                 .postIfNotEmpty()) {
             return;
         }
-        BottlingMachineRecipe recipe = BottlingMachineRecipe.findRecipe(input, inputFluid);
-        if (recipe != null) {
-            addBackup(recipe);
-            BottlingMachineRecipe.recipeList.remove(recipe);
-        } else {
+        List<BottlingMachineRecipe> recipes = BottlingMachineRecipe.recipeList.stream().filter(r -> ApiUtils.stackMatchesObject(input, r.input) && inputFluid.isFluidEqual(r.fluidInput)).collect(Collectors.toList());
+        for (BottlingMachineRecipe recipe : recipes) {
+            remove(recipe);
+        }
+        if (recipes.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Bottling Machine recipe")
-                    .add("no recipes found for %s and %s", input, inputFluid)
+                    .add("no recipes found for {} and {}", input, inputFluid)
                     .error()
                     .post();
         }
@@ -117,7 +120,9 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         @Override
         public @Nullable BottlingMachineRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().bottlingMachine.add(output.get(0), input.get(0), fluidInput.get(0));
+            BottlingMachineRecipe recipe = new BottlingMachineRecipe(output.get(0), ImmersiveEngineering.toIngredientStack(input.get(0)), fluidInput.get(0));
+            ModSupport.IMMERSIVE_ENGINEERING.get().bottlingMachine.add(recipe);
+            return recipe;
         }
     }
 }

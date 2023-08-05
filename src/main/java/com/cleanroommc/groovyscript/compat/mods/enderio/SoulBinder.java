@@ -3,17 +3,21 @@ package com.cleanroommc.groovyscript.compat.mods.enderio;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
+import com.cleanroommc.groovyscript.core.mixin.enderio.SimpleRecipeGroupHolderAccessor;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.IMachineRecipe;
 import crazypants.enderio.base.recipe.MachineRecipeRegistry;
+import crazypants.enderio.base.recipe.RecipeLevel;
 import crazypants.enderio.base.recipe.soul.BasicSoulBinderRecipe;
 import crazypants.enderio.base.recipe.soul.ISoulBinderRecipe;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +38,13 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
     public void add(ISoulBinderRecipe recipe) {
         MachineRecipeRegistry.instance.registerRecipe(recipe);
         addScripted(recipe);
+    }
+
+    public boolean remove(ISoulBinderRecipe recipe) {
+        if (recipe == null) return false;
+        MachineRecipeRegistry.instance.removeRecipe(recipe);
+        addBackup(recipe);
+        return true;
     }
 
     public void remove(ItemStack output) {
@@ -59,10 +70,21 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
         restoreFromBackup().forEach(MachineRecipeRegistry.instance::registerRecipe);
     }
 
-    public static class RecipeBuilder extends EnderIORecipeBuilder<BasicSoulBinderRecipe> {
+    public SimpleObjectStream<ISoulBinderRecipe> streamRecipes() {
+        return new SimpleObjectStream<>((Collection<ISoulBinderRecipe>) MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.SOULBINDER).values())
+                .setRemover(this::remove);
+    }
+
+    public void removeAll() {
+        MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.SOULBINDER).forEach((r, l) -> addBackup((ISoulBinderRecipe) l));
+        ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.SOULBINDER)).getRecipes().clear();
+    }
+
+    public static class RecipeBuilder extends AbstractRecipeBuilder<BasicSoulBinderRecipe> {
 
         private String name;
         private int xp;
+        private int energy;
         private final NNList<ResourceLocation> entities = new NNList<>();
         private final List<String> entityErrors = new ArrayList<>();
 
@@ -95,8 +117,32 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
             return this;
         }
 
+        public RecipeBuilder entity(EntityEntry entity) {
+            entities.add(entity.getRegistryName());
+            return this;
+        }
+
+        public RecipeBuilder entity(EntityEntry... entities) {
+            for (EntityEntry entity : entities) {
+                entity(entity);
+            }
+            return this;
+        }
+
+        public RecipeBuilder entity(Collection<EntityEntry> entities) {
+            for (EntityEntry entity : entities) {
+                entity(entity);
+            }
+            return this;
+        }
+
         public RecipeBuilder xp(int xp) {
             this.xp = xp;
+            return this;
+        }
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
             return this;
         }
 
@@ -111,7 +157,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
             validateFluids(msg);
             if (!entityErrors.isEmpty()) {
                 for (String error : entityErrors) {
-                    msg.add("could not find entity with name %s", error);
+                    msg.add("could not find entity with name {}", error);
                 }
             }
             if (energy <= 0) energy = 5000;
@@ -128,7 +174,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
                     energy,
                     xp,
                     name,
-                    level,
+                    RecipeLevel.IGNORE,
                     entities,
                     new BasicSoulBinderRecipe.OutputFilter() {
                     });

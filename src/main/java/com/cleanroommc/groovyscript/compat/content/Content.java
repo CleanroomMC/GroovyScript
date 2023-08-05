@@ -56,6 +56,10 @@ public class Content {
         };
     }
 
+    public CreativeTabs createCreativeTab(String name, Item icon) {
+        return createCreativeTab(name, new ItemStack(icon));
+    }
+
     public CreativeTabs getDefaultTab() {
         return defaultTab;
     }

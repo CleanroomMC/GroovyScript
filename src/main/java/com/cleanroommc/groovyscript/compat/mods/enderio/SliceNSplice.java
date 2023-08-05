@@ -4,13 +4,15 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.ManyToOneRecipe;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeUtils;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import crazypants.enderio.base.recipe.*;
+import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
 import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -49,6 +51,13 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         addScripted(r);
     }
 
+    public boolean remove(IManyToOneRecipe recipe) {
+        if (recipe == null) return false;
+        SagMillRecipeManager.getInstance().getRecipes().remove((Recipe) recipe);
+        addBackup(recipe);
+        return true;
+    }
+
     public void remove(ItemStack output) {
         int count = 0;
         Iterator<IManyToOneRecipe> iter = SliceAndSpliceRecipeManager.getInstance().getRecipes().iterator();
@@ -81,12 +90,28 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         restoreFromBackup().forEach(SliceAndSpliceRecipeManager.getInstance().getRecipes()::add);
     }
 
-    public static class RecipeBuilder extends EnderIORecipeBuilder<IRecipe> {
+    public SimpleObjectStream<IManyToOneRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(SliceAndSpliceRecipeManager.getInstance().getRecipes())
+                .setRemover(this::remove);
+    }
+
+    public void removeAll() {
+        SliceAndSpliceRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
+        SliceAndSpliceRecipeManager.getInstance().getRecipes().clear();
+    }
+
+    public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
 
         private float xp;
+        private int energy;
 
         public RecipeBuilder xp(float xp) {
             this.xp = xp;
+            return this;
+        }
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
             return this;
         }
 

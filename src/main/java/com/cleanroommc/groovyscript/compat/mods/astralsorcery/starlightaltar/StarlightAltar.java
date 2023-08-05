@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.collect.Lists;
@@ -22,19 +23,24 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
 
     public StarlightAltar() {
-        super("StarlightAltar", "starlight_altar");
+        super();
     }
 
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(this::remove);
-        restoreFromBackup().forEach(this::applyRecipe);
+        removeScripted().forEach(r -> AltarRecipeRegistry.recipes.get(r.getNeededLevel()).removeIf(rec -> rec.equals(r)));
+        restoreFromBackup().forEach(r -> AltarRecipeRegistry.recipes.get(r.getNeededLevel()).add(r));
+    }
+
+    public void afterScriptLoad() {
+        AltarRecipeRegistry.compileRecipes();
     }
 
     public @Nullable AbstractAltarRecipe add(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, TileAltar.AltarLevel altarLevel, IConstellation requiredConstellation, ItemHandle[] outerInputs) {
@@ -58,8 +64,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
                     }
                 };
 
-                addScripted(dRec);
-                return applyRecipe(dRec);
+                return add(dRec);
             case ATTUNEMENT:
                 AttunementRecipe aRec = new AttunementRecipe(this.registerNative(name, output, inputs)) {
                     public int getPassiveStarlightRequired() {
@@ -83,8 +88,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
                     if (inputs[al.getSlotId()] != null) aRec.setAttItem(inputs[al.getSlotId()], al);
                 }
 
-                addScripted(aRec);
-                return applyRecipe(aRec);
+                return add(aRec);
             case CONSTELLATION_CRAFT:
                 ConstellationRecipe cRec = new ConstellationRecipe(this.registerNative(name, output, inputs)) {
                     public int getPassiveStarlightRequired() {
@@ -115,8 +119,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
                     if (inputs[al.getSlotId()] != null) cRec.setCstItem(inputs[al.getSlotId()], al);
                 }
 
-                addScripted(cRec);
-                return applyRecipe(cRec);
+                return add(cRec);
             case TRAIT_CRAFT:
                 TraitRecipe rRec = new TraitRecipe(this.registerNative(name, output, inputs)) {
                     public int getPassiveStarlightRequired() {
@@ -164,8 +167,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
                 for (ItemHandle item : outerInputs)
                     rRec.addOuterTraitItem(item);
 
-                addScripted(rRec);
-                return applyRecipe(rRec);
+                return add(rRec);
             default:
                 return null;
         }
@@ -185,9 +187,9 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
         return builder.unregisteredAccessibleShapedRecipe();
     }
 
-    private AbstractAltarRecipe applyRecipe(AbstractAltarRecipe recipe) {
+    private AbstractAltarRecipe add(AbstractAltarRecipe recipe) {
+        addScripted(recipe);
         AltarRecipeRegistry.recipes.get(recipe.getNeededLevel()).add(recipe);
-        AltarRecipeRegistry.compileRecipes();
         return recipe;
     }
 
@@ -212,18 +214,29 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
     }
 
     public void removeByOutput(ItemStack output, TileAltar.AltarLevel altarLevel) {
-        AltarRecipeRegistry.recipes.get(altarLevel).forEach(recipe -> {
+        AltarRecipeRegistry.recipes.get(altarLevel).removeIf(recipe -> {
             if (recipe.getOutputForMatching().isItemEqual(output)) {
                 addBackup(recipe);
+                return true;
             }
+            return false;
         });
-        AltarRecipeRegistry.recipes.get(altarLevel).removeIf(recipe -> recipe.getOutputForMatching().isItemEqual(output));
-        AltarRecipeRegistry.compileRecipes();
     }
 
-    private void remove(AbstractAltarRecipe recipe) {
-        AltarRecipeRegistry.recipes.get(recipe.getNeededLevel()).removeIf(rec -> rec.equals(recipe));
-        AltarRecipeRegistry.compileRecipes();
+    private boolean remove(AbstractAltarRecipe recipe) {
+        return AltarRecipeRegistry.recipes.get(recipe.getNeededLevel()).removeIf(rec -> rec.equals(recipe));
+    }
+
+    public SimpleObjectStream<AbstractAltarRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(AltarRecipeRegistry.recipes.entrySet().stream().flatMap(r -> r.getValue().stream()).collect(Collectors.toList()))
+                .setRemover(this::remove);
+    }
+
+    public void removeAll() {
+        AltarRecipeRegistry.recipes.forEach((level, recipes) -> {
+            recipes.forEach(this::addBackup);
+            recipes.clear();
+        });
     }
 
     public static AltarRecipeBuilder discoveryRecipeBuilder() {

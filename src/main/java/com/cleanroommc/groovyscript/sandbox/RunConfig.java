@@ -31,11 +31,13 @@ public class RunConfig {
         json.addProperty("packId", "placeholdername");
         json.addProperty("version", "1.0.0");
         json.addProperty("debug", false);
-        JsonArray classes = new JsonArray();
+        JsonObject classes = new JsonObject();
+        JsonArray preInit = new JsonArray();
+        classes.add("preInit", preInit);
         json.add("classes", classes);
         JsonObject loaders = new JsonObject();
         json.add("loaders", loaders);
-        JsonArray preInit = new JsonArray();
+        preInit = new JsonArray();
         loaders.add("preInit", preInit);
         preInit.add("preInit/");
         JsonArray postInit = new JsonArray();
@@ -55,7 +57,7 @@ public class RunConfig {
     private final String packName;
     private final String packId;
     private final String version;
-    private final List<String> classes = new ArrayList<>();
+    private final Map<String, List<String>> classes = new Object2ObjectOpenHashMap<>();
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
     // TODO pack modes
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
@@ -106,15 +108,31 @@ public class RunConfig {
 
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";
         String replacement = getSeparator();
-        JsonArray jsonClasses = JsonHelper.getJsonArray(json, "classes");
+        if (json.has("classes")) {
+            JsonElement jsonClasses = json.get("classes");
 
-        for (JsonElement element : jsonClasses) {
-            String path = element.getAsString().replaceAll(regex, replacement);
-            while (path.endsWith("/") || path.endsWith("\\")) {
-                path = path.substring(0, path.length() - 1);
+            if (jsonClasses.isJsonArray()) {
+                List<String> classes = this.classes.computeIfAbsent("all", key -> new ArrayList<>());
+                for (JsonElement element : jsonClasses.getAsJsonArray()) {
+                    classes.add(sanitizePath(element.getAsString().replaceAll(regex, replacement)));
+                }
+            } else if (jsonClasses.isJsonObject()) {
+                for (Map.Entry<String, JsonElement> entry : jsonClasses.getAsJsonObject().entrySet()) {
+                    List<String> classes = this.classes.computeIfAbsent(entry.getKey(), key -> new ArrayList<>());
+                    if (entry.getValue().isJsonPrimitive()) {
+                        classes.add(sanitizePath(entry.getValue().getAsString().replaceAll(regex, replacement)));
+                    } else if (entry.getValue().isJsonArray()) {
+                        for (JsonElement element : entry.getValue().getAsJsonArray()) {
+                            classes.add(sanitizePath(element.getAsString().replaceAll(regex, replacement)));
+                        }
+                    }
+                    if (classes.isEmpty()) {
+                        this.classes.remove(entry.getKey());
+                    }
+                }
             }
-            classes.add(path);
         }
+
 
         JsonObject jsonLoaders = JsonHelper.getJsonObject(json, "loaders");
         List<Pair<String, String>> pathsList = new ArrayList<>();
@@ -175,8 +193,13 @@ public class RunConfig {
         return new ResourceLocation(getPackId(), name);
     }
 
-    public Collection<File> getClassFiles() {
-        return getSortedFilesOf(this.classes);
+    public Collection<File> getClassFiles(String loader) {
+        List<String> paths = this.classes.get("all");
+        paths = paths == null ? new ArrayList<>() : new ArrayList<>(paths);
+        if (this.classes.containsKey(loader)) {
+            paths.addAll(this.classes.get(loader));
+        }
+        return getSortedFilesOf(paths);
     }
 
     public Collection<File> getSortedFiles(String loader) {
@@ -214,6 +237,13 @@ public class RunConfig {
         }
         Path mainPath = GroovyScript.getScriptFile().toPath();
         return files.keySet().stream().map(file -> mainPath.relativize(file.toPath()).toFile()).collect(Collectors.toList());
+    }
+
+    private static String sanitizePath(String path) {
+        while (path.endsWith("/") || path.endsWith("\\")) {
+            path = path.substring(0, path.length() - 1);
+        }
+        return path;
     }
 
     private static String getSeparator() {

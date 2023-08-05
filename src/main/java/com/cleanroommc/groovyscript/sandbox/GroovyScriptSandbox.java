@@ -24,54 +24,50 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 public class GroovyScriptSandbox extends GroovySandbox {
 
-    private static final String[] DEFAULT_IMPORTS = {
-            "net.minecraft.world.World",
-            "net.minecraft.block.state.IBlockState",
-            "net.minecraft.block.Block",
-            "net.minecraft.block.SoundType",
-            "net.minecraft.enchantment.Enchantment",
-            "net.minecraft.entity.Entity",
-            "net.minecraft.entity.player.EntityPlayer",
-            "net.minecraft.init.Biomes",
-            "net.minecraft.init.Blocks",
-            "net.minecraft.init.Enchantments",
-            "net.minecraft.init.Items",
-            "net.minecraft.init.MobEffects",
-            "net.minecraft.init.PotionTypes",
-            "net.minecraft.init.SoundEvents",
-            "net.minecraft.item.EnumRarity",
-            "net.minecraft.item.Item",
-            "net.minecraft.item.ItemStack",
-            "net.minecraft.nbt.NBTTagCompound",
-            "net.minecraft.nbt.NBTTagList",
-            "net.minecraft.tileentity.TileEntity",
-            "net.minecraft.util.math.BlockPos",
-            "net.minecraft.util.DamageSource",
-            "net.minecraft.util.EnumHand",
-            "net.minecraft.util.EnumHandSide",
-            "net.minecraft.util.EnumFacing",
-            "net.minecraft.util.ResourceLocation",
-            "net.minecraftforge.fml.common.eventhandler.EventPriority",
-            "com.cleanroommc.groovyscript.event.EventBusType"
-    };
+    private final ImportCustomizer importCustomizer = new ImportCustomizer();
 
     private LoadStage currentLoadStage;
     private boolean checkSyntaxMode = false;
 
     public GroovyScriptSandbox(URL... scriptEnvironment) {
         super(scriptEnvironment);
-        registerBinding("mods", ModSupport.INSTANCE);
-        registerBinding("log", GroovyLog.get());
+        registerBinding("Mods", ModSupport.INSTANCE);
+        registerBinding("Log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
-        registerBinding("eventManager", GroovyEventManager.INSTANCE);
-        registerBinding("event_manager", GroovyEventManager.INSTANCE);
+        this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
+        this.importCustomizer.addImports("net.minecraft.world.World",
+                                    "net.minecraft.block.state.IBlockState",
+                                    "net.minecraft.block.Block",
+                                    "net.minecraft.block.SoundType",
+                                    "net.minecraft.enchantment.Enchantment",
+                                    "net.minecraft.entity.Entity",
+                                    "net.minecraft.entity.player.EntityPlayer",
+                                    "net.minecraft.init.Biomes",
+                                    "net.minecraft.init.Blocks",
+                                    "net.minecraft.init.Enchantments",
+                                    "net.minecraft.init.Items",
+                                    "net.minecraft.init.MobEffects",
+                                    "net.minecraft.init.PotionTypes",
+                                    "net.minecraft.init.SoundEvents",
+                                    "net.minecraft.item.EnumRarity",
+                                    "net.minecraft.item.Item",
+                                    "net.minecraft.item.ItemStack",
+                                    "net.minecraft.nbt.NBTTagCompound",
+                                    "net.minecraft.nbt.NBTTagList",
+                                    "net.minecraft.tileentity.TileEntity",
+                                    "net.minecraft.util.math.BlockPos",
+                                    "net.minecraft.util.DamageSource",
+                                    "net.minecraft.util.EnumHand",
+                                    "net.minecraft.util.EnumHandSide",
+                                    "net.minecraft.util.EnumFacing",
+                                    "net.minecraft.util.ResourceLocation",
+                                    "net.minecraftforge.fml.common.eventhandler.EventPriority",
+                                    "com.cleanroommc.groovyscript.event.EventBusType");
     }
 
     public void checkSyntax() {
@@ -137,10 +133,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
         config.addCompilationCustomizers(GroovyScriptCompiler.transformer());
-        ImportCustomizer importCustomizer = new ImportCustomizer();
-        importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
-        importCustomizer.addImports(DEFAULT_IMPORTS);
-        config.addCompilationCustomizers(importCustomizer);
+        config.addCompilationCustomizers(this.importCustomizer);
     }
 
     @Override
@@ -179,7 +172,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     public Collection<File> getClassFiles() {
-        return GroovyScript.getRunConfig().getClassFiles();
+        return GroovyScript.getRunConfig().getClassFiles(this.currentLoadStage.getName());
     }
 
     @Override
@@ -190,5 +183,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Nullable
     public LoadStage getCurrentLoader() {
         return currentLoadStage;
+    }
+
+    public ImportCustomizer getImportCustomizer() {
+        return importCustomizer;
     }
 }

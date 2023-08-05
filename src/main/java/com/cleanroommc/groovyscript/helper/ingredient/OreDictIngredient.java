@@ -39,8 +39,8 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
     public OreDictIngredient exactCopy() {
         OreDictIngredient oreDictIngredient = new OreDictIngredient(this.oreDict);
         oreDictIngredient.setAmount(this.count);
-        oreDictIngredient.transform(this.transformer);
-        oreDictIngredient.when(this.matchCondition);
+        oreDictIngredient.transformer = transformer;
+        oreDictIngredient.matchCondition = matchCondition;
         return oreDictIngredient;
     }
 

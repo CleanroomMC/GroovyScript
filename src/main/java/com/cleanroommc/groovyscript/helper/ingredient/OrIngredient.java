@@ -28,8 +28,8 @@ public class OrIngredient extends IngredientBase {
         OrIngredient orIngredient = new OrIngredient();
         orIngredient.ingredients.addAll(this.ingredients);
         orIngredient.setAmount(getAmount());
-        orIngredient.when(this.matchCondition);
-        orIngredient.transform(orIngredient.transformer);
+        orIngredient.transformer = transformer;
+        orIngredient.matchCondition = matchCondition;
         return orIngredient;
     }
 

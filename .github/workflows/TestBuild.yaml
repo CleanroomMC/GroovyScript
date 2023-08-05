@@ -1,0 +1,59 @@
+# This workflow will build and upload test artifact
+# Simple workflow with ignoring condition to prevent unneccessary build
+# To download artifact check on job task
+
+name: Build Test Artifact
+
+on:
+  push:
+    paths-ignore:
+      - '.github/workflows/build.yml' # Release GHA file, please change this when you change the file name
+      - 'LICENSE' 
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and Upload Artifact
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@v2
+    
+    # https://github.com/madhead/read-java-properties#error-java_home-is-set-to-an-invalid-directory
+    - name: Gather Gradle properties
+      uses: madhead/read-java-properties@latest
+      id: gradle_properties
+      with:
+        file: gradle.properties
+        all: true
+
+    - name: Retrieve SHA short
+      id: vars
+      shell: bash
+      run: echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      
+    - name: Change mod version
+      run: sed -i "s/mod_version.*=.*/mod_version = ${{ steps.gradle_properties.outputs.mod_version }}-${{ steps.vars.outputs.SHA_SHORT }}/g" gradle.properties
+
+    - name: Set up Temurin JDK 8
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '8'
+        cache: gradle # Only cache stuff since test build action happen mostly
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: build
+
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v2.2.3
+      with:
+        name: GroovyScript-${{ steps.gradle_properties.outputs.mod_version }}
+        path: build/libs

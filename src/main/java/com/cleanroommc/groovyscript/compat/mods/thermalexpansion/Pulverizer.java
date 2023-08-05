@@ -6,11 +6,11 @@ import cofh.thermalexpansion.util.managers.machine.PulverizerManager.PulverizerR
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.PulverizerManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -78,13 +78,13 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         }
         if (!found) {
             GroovyLog.msg("Error removing Thermal Expansion Pulverizer recipe")
-                    .add("could not find recipe for %s", input)
+                    .add("could not find recipe for {}", input)
                     .error()
                     .post();
         }
     }
 
-    public SimpleObjectStream<PulverizerRecipe> stream() {
+    public SimpleObjectStream<PulverizerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(PulverizerManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
@@ -94,10 +94,16 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         }
     }
 
-    public static class RecipeBuilder extends EnergyRecipeBuilder<PulverizerManager.PulverizerRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<PulverizerRecipe> {
 
+        private int energy;
         private ItemStack secOutput;
         private int chance;
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
+            return this;
+        }
 
         public RecipeBuilder secondaryOutput(ItemStack itemStack, int chance) {
             this.secOutput = itemStack;

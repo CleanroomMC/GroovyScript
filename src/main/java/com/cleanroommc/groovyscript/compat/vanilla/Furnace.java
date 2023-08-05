@@ -5,9 +5,11 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,10 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
     public Furnace() {
         super();
+    }
+
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
     }
 
     public void add(IIngredient input, ItemStack output) {
@@ -164,11 +170,67 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         return new SimpleObjectStream<>(recipes, false).setRemover(recipe -> remove(recipe, true));
     }
 
+    public void removeAll() {
+        FurnaceRecipes.instance().getSmeltingList().entrySet().removeIf(entry -> {
+            float exp = FurnaceRecipes.instance().getSmeltingExperience(entry.getValue());
+            Recipe recipe = new Recipe(entry.getKey(), entry.getValue(), exp);
+            addBackup(recipe);
+            return true;
+        });
+    }
+
     @GroovyBlacklist
     @Override
     public void onReload() {
         getScriptedRecipes().forEach(recipe -> remove(recipe, false));
         getBackupRecipes().forEach(recipe -> FurnaceRecipes.instance().addSmeltingRecipe(recipe.input, recipe.output, recipe.exp));
+    }
+
+    public static class RecipeBuilder extends AbstractRecipeBuilder<Recipe> {
+
+        private IIngredient input;
+        private ItemStack output;
+        private float exp = 0.1f;
+
+        public RecipeBuilder input(IIngredient input) {
+            this.input = input;
+            return this;
+        }
+
+        public RecipeBuilder output(ItemStack output) {
+            this.output = output;
+            return this;
+        }
+
+        public RecipeBuilder exp(float exp) {
+            this.exp = exp;
+            return this;
+        }
+
+        @Override
+        public String getErrorMsg() {
+            return "Error adding Minecraft Furnace recipe";
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
+            msg.add(IngredientHelper.isEmpty(input), () -> "Input must not be empty");
+            msg.add(IngredientHelper.isEmpty(output), () -> "Output must not be empty");
+            if (exp < 0) {
+                exp = 0.1f;
+            }
+        }
+
+        @Override
+        public @Nullable Recipe register() {
+            if (!validate()) return null;
+            Recipe recipe = null;
+            for (ItemStack itemStack : input.getMatchingStacks()) {
+                recipe = new Recipe(itemStack, output, exp);
+                VanillaModule.furnace.add(recipe);
+            }
+            return recipe;
+        }
     }
 
     public static class Recipe {

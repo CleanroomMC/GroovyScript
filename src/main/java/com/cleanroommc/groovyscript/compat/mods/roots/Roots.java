@@ -13,25 +13,25 @@ import java.util.Locale;
 
 public class Roots extends ModPropertyContainer {
 
-    AnimalHarvest animalHarvest = new AnimalHarvest();
-    AnimalHarvestFish animalHarvestFish = new AnimalHarvestFish();
-    BarkCarving barkCarving = new BarkCarving();
-    Chrysopoeia chrysopoeia = new Chrysopoeia();
-    FeyCrafter feyCrafter = new FeyCrafter();
-    FlowerGeneration flowerGeneration = new FlowerGeneration();
-    LifeEssence lifeEssence = new LifeEssence();
-    Modifiers modifiers = new Modifiers();
-    Moss moss = new Moss();
-    Mortar mortar = new Mortar();
-    Pacifist pacifist = new Pacifist();
-    Predicates predicates = new Predicates();
-    Pyre pyre = new Pyre();
-    Rituals rituals = new Rituals();
-    RunicShearBlock runicShearBlock = new RunicShearBlock();
-    RunicShearEntity runicShearEntity = new RunicShearEntity();
-    Spells spells = new Spells();
-    SummonCreature summonCreature = new SummonCreature();
-    Transmutation transmutation = new Transmutation();
+    public final AnimalHarvest animalHarvest = new AnimalHarvest();
+    public final AnimalHarvestFish animalHarvestFish = new AnimalHarvestFish();
+    public final BarkCarving barkCarving = new BarkCarving();
+    public final Chrysopoeia chrysopoeia = new Chrysopoeia();
+    public final FeyCrafter feyCrafter = new FeyCrafter();
+    public final FlowerGeneration flowerGeneration = new FlowerGeneration();
+    public final LifeEssence lifeEssence = new LifeEssence();
+    public final Modifiers modifiers = new Modifiers();
+    public final Moss moss = new Moss();
+    public final Mortar mortar = new Mortar();
+    public final Pacifist pacifist = new Pacifist();
+    public final Predicates predicates = new Predicates();
+    public final Pyre pyre = new Pyre();
+    public final Rituals rituals = new Rituals();
+    public final RunicShearBlock runicShearBlock = new RunicShearBlock();
+    public final RunicShearEntity runicShearEntity = new RunicShearEntity();
+    public final Spells spells = new Spells();
+    public final SummonCreature summonCreature = new SummonCreature();
+    public final Transmutation transmutation = new Transmutation();
 
 
     public Roots() {

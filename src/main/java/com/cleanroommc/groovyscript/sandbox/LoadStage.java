@@ -14,6 +14,7 @@ public class LoadStage {
     }
 
     public static final LoadStage PRE_INIT = new LoadStage("preInit", false, -1000000);
+    public static final LoadStage INIT = new LoadStage("init", false, -1000);
     public static final LoadStage POST_INIT = new LoadStage("postInit", true, 0);
 
     private final String name;

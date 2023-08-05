@@ -10,9 +10,11 @@ import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeLeafNodeAccesso
 import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeNodeAccessor;
 import com.cleanroommc.groovyscript.core.mixin.enderio.TriItemLookupAccessor;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.IManyToOneRecipe;
+import crazypants.enderio.base.recipe.MachineRecipeRegistry;
 import crazypants.enderio.base.recipe.alloysmelter.AlloyRecipeManager;
 import crazypants.enderio.base.recipe.lookup.ItemRecipeLeafNode;
 import crazypants.enderio.base.recipe.lookup.ItemRecipeNode;
@@ -26,6 +28,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
 
@@ -38,29 +41,6 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
-    }
-
-    public void remove(ItemStack output) {
-        List<IManyToOneRecipe> recipes = find(output);
-        if (!recipes.isEmpty()) {
-            if (this.removalQueue == null) {
-                this.removalQueue = new ObjectOpenHashSet<>(recipes.size());
-            }
-            for (IManyToOneRecipe r : recipes) {
-                addBackup(r);
-                this.removalQueue.add(r);
-            }
-        }
-    }
-
-    public List<IManyToOneRecipe> find(ItemStack output) {
-        List<IManyToOneRecipe> recipes = new ArrayList<>();
-        for (IManyToOneRecipe recipe : ((AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance()).getLookup()) {
-            if (OreDictionary.itemMatches(output, recipe.getOutput(), false)) {
-                recipes.add(recipe);
-            }
-        }
-        return recipes;
     }
 
     @GroovyBlacklist
@@ -89,6 +69,36 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
             removeInternal(this.removalQueue);
             this.removalQueue = null;
         }
+    }
+
+    public void remove(ItemStack output) {
+        List<IManyToOneRecipe> recipes = find(output);
+        if (!recipes.isEmpty()) {
+            if (this.removalQueue == null) {
+                this.removalQueue = new ObjectOpenHashSet<>(recipes.size());
+            }
+            for (IManyToOneRecipe r : recipes) {
+                addBackup(r);
+                this.removalQueue.add(r);
+            }
+        }
+    }
+
+    public boolean remove(IManyToOneRecipe recipe) {
+        if (recipe == null) return false;
+        addBackup(recipe);
+        this.removalQueue.add(recipe);
+        return true;
+    }
+
+    public List<IManyToOneRecipe> find(ItemStack output) {
+        List<IManyToOneRecipe> recipes = new ArrayList<>();
+        for (IManyToOneRecipe recipe : ((AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance()).getLookup()) {
+            if (OreDictionary.itemMatches(output, recipe.getOutput(), false)) {
+                recipes.add(recipe);
+            }
+        }
+        return recipes;
     }
 
     @GroovyBlacklist
@@ -125,11 +135,35 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
         }
     }
 
+    public SimpleObjectStream<IManyToOneRecipe> streamRecipes() {
+        List<IManyToOneRecipe> list = MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ALLOYSMELTER).values().stream()
+                .filter(r -> r instanceof IManyToOneRecipe)
+                .map(r -> (IManyToOneRecipe) r).collect(Collectors.toList());
+        return new SimpleObjectStream<>(list)
+                .setRemover(this::remove);
+    }
+
+    public void removeAll() {
+        AlloyRecipeManagerAccessor accessor = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
+        @SuppressWarnings("unchecked")
+        Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>> map =
+                ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>)
+                        ((TriItemLookupAccessor<IManyToOneRecipe>) accessor.getLookup()).getRoot()).getMap();
+        for (NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>> pair : map.values()) {
+            Iterator<IManyToOneRecipe> listIter = pair.left.iterator();
+            while (listIter.hasNext()) {
+                addBackup(listIter.next());
+                listIter.remove();
+            }
+        }
+    }
+
+
     public static class RecipeBuilder extends EnderIORecipeBuilder<Void> {
 
         private float xp;
 
-        public RecipeBuilder xpChance(float xp) {
+        public RecipeBuilder xp(float xp) {
             this.xp = xp;
             return this;
         }
