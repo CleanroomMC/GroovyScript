@@ -1,4 +1,7 @@
 
+if (!isLoaded('compactmachines3')) return
+println 'mod \'compactmachines3\' detected, running script'
+
 // Miniaturization:
 // Consumes a 3d structure in-world based on keys when an item is thrown into the field.
 mods.compactmachines.miniaturization.recipeBuilder()
@@ -42,7 +45,7 @@ mods.compactmachines.miniaturization.recipeBuilder()
     .layer("   a   ", "  ccc  ", " cdddc ", "acdddca", " cdddc ", "  ccc  ", "   a   ")
     .register()
 
-mods.compactmachines.multiblockrecipe.removeByInput(item('minecraft:ender_pearl'))
-mods.compactmachines.multiblockrecipe.removeByCatalyst(item('minecraft:redstone'))
-mods.compactmachines.multiblockrecipe.removeByOutput(item('compactmachines3:machine:3'))
-//mods.compactmachines.multiblockrecipe.removeAll()
+mods.compactmachines.miniaturization.removeByInput(item('minecraft:ender_pearl'))
+mods.compactmachines.miniaturization.removeByCatalyst(item('minecraft:redstone'))
+mods.compactmachines.miniaturization.removeByOutput(item('compactmachines3:machine:3'))
+//mods.compactmachines.miniaturization.removeAll()
