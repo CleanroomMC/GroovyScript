@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -63,7 +64,7 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         List<AlloyRecipe> recipes = AlloyRecipe.removeRecipes(output);
         if (recipes.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Alloy Kiln recipe")
-                    .add("no recipes found for %s", output)
+                    .add("no recipes found for {}", output)
                     .error()
                     .post();
             return;
@@ -84,7 +85,7 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
             remove(recipe);
         } else {
             GroovyLog.msg("Error removing Immersive Engineering Alloy Kiln recipe")
-                    .add("no recipes found for %s and %s", input, input1)
+                    .add("no recipes found for {} and {}", input, input1)
                     .error()
                     .post();
         }
@@ -99,7 +100,14 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         AlloyRecipe.recipeList.clear();
     }
 
-    public static class RecipeBuilder extends TimeRecipeBuilder<AlloyRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<AlloyRecipe> {
+
+        private int time;
+
+        public RecipeBuilder time(int time) {
+            this.time = time;
+            return this;
+        }
 
         @Override
         public String getErrorMsg() {
@@ -116,7 +124,9 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         @Override
         public @Nullable AlloyRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().alloyKiln.add(output.get(0), input.get(0), input.get(1), time);
+            AlloyRecipe recipe = new AlloyRecipe(output.get(0), ImmersiveEngineering.toIngredientStack(input.get(0)), ImmersiveEngineering.toIngredientStack(input.get(1)), time);
+            ModSupport.IMMERSIVE_ENGINEERING.get().alloyKiln.add(recipe);
+            return recipe;
         }
     }
 

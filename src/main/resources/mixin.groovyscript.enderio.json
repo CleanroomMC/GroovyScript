@@ -10,6 +10,7 @@
     "FluidFuelRegisterAccessor",
     "ItemRecipeLeafNodeAccessor",
     "ItemRecipeNodeAccessor",
+    "SimpleRecipeGroupHolderAccessor",
     "TriItemLookupAccessor"
   ]
 }

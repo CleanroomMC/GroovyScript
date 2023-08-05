@@ -1,6 +1,11 @@
 {
-  "packName": "",
-  "version": "0.0.1",
+  "packName": "PlaceHolder name",
+  "packId": "placeholdername",
+  "version": "1.0.0",
+  "debug": true,
+  "classes": [
+    "classes/"
+  ],
   "loaders": {
     "preInit": [
       "preInit/"
@@ -8,16 +13,7 @@
     "init": [
     ],
     "postInit": [
-      "startup/"
+      "postInit/"
     ]
-  },
-  "packmodes": {
-    "normal": [
-      "normal/"
-    ],
-    "expert": [
-      "expert"
-    ]
-  },
-  "asm": null
+  }
 }

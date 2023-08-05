@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.SagRecipe;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import crazypants.enderio.base.recipe.Recipe;
@@ -33,6 +34,13 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         addScripted(recipe);
     }
 
+    public boolean remove(Recipe recipe) {
+        if (recipe == null) return false;
+        SagMillRecipeManager.getInstance().getRecipes().remove(recipe);
+        addBackup(recipe);
+        return true;
+    }
+
     public void removeByInput(ItemStack input) {
         Recipe recipe = (Recipe) SagMillRecipeManager.getInstance().getRecipeForInput(RecipeLevel.IGNORE, input);
         if (recipe == null) {
@@ -47,6 +55,16 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
     public void onReload() {
         removeScripted().forEach(SagMillRecipeManager.getInstance().getRecipes()::remove);
         restoreFromBackup().forEach(SagMillRecipeManager.getInstance().getRecipes()::add);
+    }
+
+    public SimpleObjectStream<Recipe> streamRecipes() {
+        return new SimpleObjectStream<>(SagMillRecipeManager.getInstance().getRecipes())
+                .setRemover(this::remove);
+    }
+
+    public void removeAll() {
+        SagMillRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
+        SagMillRecipeManager.getInstance().getRecipes().clear();
     }
 
     public static class RecipeBuilder extends EnderIORecipeBuilder<Recipe> {

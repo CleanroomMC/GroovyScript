@@ -111,6 +111,10 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
     }
 
     public boolean clear(String name) {
+        return removeAll(name);
+    }
+
+    public boolean removeAll(String name) {
         List<ItemStack> list = getItems(name);
         if (GroovyLog.msg("Error removing from OreDictionary entry")
                 .add(list.isEmpty(), "OreDictionary Entry was empty")
@@ -120,5 +124,13 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
         }
         list.forEach(stack -> remove(name, stack));
         return true;
+    }
+
+    public void removeAll() {
+        for (String name : OreDictionary.getOreNames()) {
+            for (ItemStack stack : getItems(name)) {
+                remove(name, stack);
+            }
+        }
     }
 }
