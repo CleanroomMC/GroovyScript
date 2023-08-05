@@ -3,6 +3,8 @@
 
 import ipsis.woot.util.WootMobName
 
+if (!isLoaded('woot')) return
+println 'mod \'woot\' detected, running script'
 
 // Note:
 // Drops, Spawning, Policy, and Mob Config can also be controlled via .json config file
