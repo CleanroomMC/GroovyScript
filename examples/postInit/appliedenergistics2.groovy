@@ -1,4 +1,7 @@
 
+if (!isLoaded('appliedenergistics2')) return
+println 'mod \'appliedenergistics2\' detected, running script'
+
 // Can be access via either `appliedenergistics2` or `ae2`
 
 // Bracket Handlers
