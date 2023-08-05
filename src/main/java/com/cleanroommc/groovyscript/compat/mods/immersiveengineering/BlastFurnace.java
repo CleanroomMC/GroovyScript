@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -61,7 +62,7 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         List<BlastFurnaceRecipe> list = BlastFurnaceRecipe.removeRecipes(output);
         if (list.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
-                    .add("no recipes found for %s", output)
+                    .add("no recipes found for {}", output)
                     .error()
                     .post();
             return;
@@ -82,7 +83,7 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
             remove(recipe);
         } else {
             GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
-                    .add("no recipes found for %s", input)
+                    .add("no recipes found for {}", input)
                     .error()
                     .post();
         }
@@ -97,9 +98,15 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         BlastFurnaceRecipe.recipeList.clear();
     }
 
-    public static class RecipeBuilder extends TimeRecipeBuilder<BlastFurnaceRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<BlastFurnaceRecipe> {
 
-        protected ItemStack slag;
+        private int time;
+        private ItemStack slag;
+
+        public RecipeBuilder time(int time) {
+            this.time = time;
+            return this;
+        }
 
         public RecipeBuilder slag(ItemStack slag) {
             this.slag = slag;

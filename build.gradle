@@ -43,6 +43,7 @@ minecraft {
     args << '-Dmixin.hotSwap=true'
     args << '-Dmixin.checks.interfaces=true'
     args << '-Dmixin.debug.export=true'
+    if (project.debug_use_examples_folder.toBoolean()) args << '-Dgroovyscript.use_examples_folder=true'
     extraRunJvmArguments.addAll(args)
 
     useDependencyAccessTransformers = true
@@ -88,10 +89,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'zone.rong:mixinbooter:7.1'
+    compileOnly 'org.jetbrains:annotations:24.0.1'
+    implementation 'zone.rong:mixinbooter:8.3'
 
     String mixin = modUtils.enableMixins('org.spongepowered:mixin:0.8.3')
-
     api (mixin) {
         transitive = false
     }
@@ -101,8 +102,6 @@ dependencies {
     annotationProcessor (mixin) {
         transitive = false
     }
-
-    compileOnly 'org.jetbrains:annotations:23.0.0'
 
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 
@@ -125,8 +124,15 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
     }
 
+    compileOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
+    if (project.debug_applied_energistics_2.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
+    }
+
+    compileOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
     compileOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
-    if (project.debug_thermal.toBoolean() || project.debug_de.toBoolean()) {
+    if (project.debug_thermal.toBoolean() || project.debug_draconic_evolution.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
         runtimeOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
     }
 
@@ -170,19 +176,19 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:thermal_foundation-222880:2926428')
     }
 
-    compileOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
     compileOnly rfg.deobf('curse.maven:draconic_evolution-223565:3431261')
     compileOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
-    if (project.debug_de.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
+    if (project.debug_draconic_evolution.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:draconic_evolution-223565:3431261')
         runtimeOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
     }
 
+    // WARNING: experimental must be placed before classic, otherwise you will crash when debugging either.
     compileOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
     compileOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
-    if (project.debug_ic2.toBoolean()) {
+    if (project.debug_industrial_craft_2_experimental.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
+    } else if (project.debug_industrial_craft_2_classic.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
     }
 
@@ -208,7 +214,7 @@ dependencies {
     }
 
     compileOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
-    if (project.debug_ie.toBoolean()) {
+    if (project.debug_immersive_engineering.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
     }
 
@@ -236,7 +242,7 @@ dependencies {
     }
 
     compileOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
-    if (project.debug_ie.toBoolean()) {
+    if (project.debug_immersive_engineering.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
     }
 
@@ -267,7 +273,6 @@ dependencies {
         runtimeOnly rfg.deobf('net.sengir.forestry:forestry_1.12.2:5.8.2.422')
         runtimeOnly rfg.deobf('curse.maven:jei-bees-248370:2490058')
     }
-
 }
 
 processResources {

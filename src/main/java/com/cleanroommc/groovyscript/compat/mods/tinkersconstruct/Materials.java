@@ -45,7 +45,7 @@ public class Materials extends VirtualizedRegistry<GroovyMaterial> {
     public boolean removeMaterial(String material) {
         if (TinkerRegistryAccessor.getMaterials().entrySet().removeIf(entry -> entry.getKey().equals(material))) return true;
         GroovyLog.msg("Error removing Tinkers Construct material")
-                .add("could not find material with name %s", material)
+                .add("could not find material with name {}", material)
                 .error()
                 .post();
         return false;
@@ -58,7 +58,7 @@ public class Materials extends VirtualizedRegistry<GroovyMaterial> {
             return found;
         })) return true;
         GroovyLog.msg("Error removing Tinkers Construct material trait")
-                .add("could not find trait with name %s", trait)
+                .add("could not find trait with name {}", trait)
                 .error()
                 .post();
         return false;

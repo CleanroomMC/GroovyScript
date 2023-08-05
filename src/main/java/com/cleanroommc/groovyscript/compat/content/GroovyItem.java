@@ -35,9 +35,13 @@ public class GroovyItem extends Item {
             GroovyLog.get().errorMC("Items must registered in preInit. Tried to register {} too late!", item.getRegistryName());
             return;
         }
+        if (item.getCreativeTab() == null && VanillaModule.content.getDefaultTab() != null) {
+            item.setCreativeTab(VanillaModule.content.getDefaultTab());
+        }
         ResourceLocation key = item.getRegistryName();
         if (key == null || ITEMS.containsKey(key.getPath())) {
-            throw new IllegalArgumentException();
+            GroovyLog.get().exception(new IllegalArgumentException("The registry name of the item must be non-null and not match an already registered item!"));
+            return;
         }
         ITEMS.put(key.getPath(), item);
     }
