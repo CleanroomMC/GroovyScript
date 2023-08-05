@@ -9,7 +9,6 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.commons.lang3.ArrayUtils;
 import thaumcraft.api.aspects.Aspect;
@@ -18,6 +17,7 @@ import thaumcraft.api.aspects.AspectList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
 
@@ -39,6 +39,10 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
         return this;
     }
 
+    public ArcaneRecipeBuilder aspect(String tag) {
+        return aspect(tag, 1);
+    }
+
     public ArcaneRecipeBuilder aspect(String tag, int amount) {
         Aspect a = AspectBracketHandler.validateAspect(tag);
         if (a != null) this.aspects.add(a, amount);
@@ -55,8 +59,6 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
     }
 
     public static class Shaped extends ArcaneRecipeBuilder {
-
-        private static final String ID_PREFIX = "shaped_arcane_";
 
         protected boolean mirrored = false;
         private String[] keyBasedMatrix;
@@ -98,6 +100,11 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
             return this;
         }
 
+        public ArcaneRecipeBuilder.Shaped key(char c, IIngredient ingredient) {
+            this.keyMap.put(c, ingredient);
+            return this;
+        }
+
         // groovy doesn't have char literals
         public ArcaneRecipeBuilder.Shaped key(String c, IIngredient ingredient) {
             if (c == null || c.length() != 1) {
@@ -105,6 +112,13 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
                 return this;
             }
             this.keyMap.put(c.charAt(0), ingredient);
+            return this;
+        }
+
+        public ArcaneRecipeBuilder.Shaped key(Map<String, IIngredient> map) {
+            for (Map.Entry<String, IIngredient> x : map.entrySet()) {
+                key(x.getKey(), x.getValue());
+            }
             return this;
         }
 
@@ -116,6 +130,11 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
         public ArcaneRecipeBuilder.Shaped shape(List<List<IIngredient>> matrix) {
             this.ingredientMatrix = matrix;
             return this;
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_shaped_arcane_";
         }
 
         @Override
@@ -136,8 +155,8 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
 
             if (recipe != null) {
                 handleReplace();
-                ResourceLocation rl = createName(name, ID_PREFIX);
-                ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, rl, recipe);
+                validateName();
+                ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             }
 
             return recipe;
@@ -145,8 +164,6 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
     }
 
     public static class Shapeless extends ArcaneRecipeBuilder {
-
-        private static final String ID_PREFIX = "shapeless_arcane_";
 
         private final List<IIngredient> ingredients = new ArrayList<>();
 
@@ -170,6 +187,11 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_shapeless_arcane_";
+        }
+
+        @Override
         public IRecipe register() {
             IngredientHelper.trim(ingredients);
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shapeless Crafting recipe")
@@ -183,8 +205,8 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
             }
             handleReplace();
             ShapelessArcaneCR recipe = new ShapelessArcaneCR(output.copy(), ingredients, recipeFunction, recipeAction, researchKey, vis, aspects);
-            ResourceLocation rl = createName(name, ID_PREFIX);
-            ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, rl, recipe);
+            validateName();
+            ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             return recipe;
         }
     }

@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
-import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 
@@ -54,7 +53,7 @@ public class Casting {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Casting Table recipe")
-                    .add("could not find recipe with output %s", output)
+                    .add("could not find recipe with output {}", output)
                     .error()
                     .post();
             return false;
@@ -68,7 +67,7 @@ public class Casting {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Casting Table recipe")
-                    .add("could not find recipe with input %s", input)
+                    .add("could not find recipe with input {}", input)
                     .error()
                     .post();
             return false;
@@ -82,7 +81,7 @@ public class Casting {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Casting Table recipe")
-                    .add("could not find recipe with cast %s", cast)
+                    .add("could not find recipe with cast {}", cast)
                     .error()
                     .post();
             return false;

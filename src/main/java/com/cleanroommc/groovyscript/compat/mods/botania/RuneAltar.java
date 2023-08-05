@@ -7,10 +7,12 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipeRuneAltar;
+import vazkii.botania.common.block.ModBlocks;
 
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +66,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
     public boolean removeByInput(IIngredient... inputs) {
         List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict() : i.getMatchingStacks()[0]).collect(Collectors.toList());
         if (BotaniaAPI.runeAltarRecipes.removeIf(recipe -> {
-            boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> (i instanceof String || o instanceof String)? i.equals(o) : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));;
+            boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> (i instanceof String || o instanceof String) ? i.equals(o) : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));
             if (found) addBackup(recipe);
             return found;
         })) return true;
@@ -107,6 +109,8 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         public void validate(GroovyLog.Msg msg) {
             validateFluids(msg, 0, 0, 0, 0);
             validateItems(msg, 1, 20, 1, 1);
+            msg.add(input.stream().anyMatch(x -> x.test(new ItemStack(Item.getItemFromBlock(ModBlocks.livingrock), 1, 0))),
+                    "input cannot contain a livingrock item");
             msg.add(mana < 1, "mana must be at least 1, got " + mana);
         }
 

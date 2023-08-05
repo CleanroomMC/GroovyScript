@@ -6,18 +6,24 @@ import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
+import mekanism.api.infuse.InfuseRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class Mekanism extends ModPropertyContainer {
+
+    public final Infusion infusion = new Infusion();
 
     public final ChemicalInfuser chemicalInfuser = new ChemicalInfuser();
     public final Combiner combiner = new Combiner();
     public final Crusher crusher = new Crusher();
     public final Crystallizer crystallizer = new Crystallizer();
     public final DissolutionChamber dissolutionChamber = new DissolutionChamber();
+    public final ElectrolyticSeparator electrolyticSeparator = new ElectrolyticSeparator();
     public final EnrichmentChamber enrichmentChamber = new EnrichmentChamber();
     public final InjectionChamber injectionChamber = new InjectionChamber();
     public final MetallurgicInfuser metallurgicInfuser = new MetallurgicInfuser();
@@ -26,17 +32,20 @@ public class Mekanism extends ModPropertyContainer {
     public final PressurizedReactionChamber pressurizedReactionChamber = new PressurizedReactionChamber();
     public final PurificationChamber purificationChamber = new PurificationChamber();
     public final Sawmill sawmill = new Sawmill();
-    public final Separator separator = new Separator();
+    public final Smelting smelting = new Smelting();
     public final SolarNeutronActivator solarNeutronActivator = new SolarNeutronActivator();
-    public final ThermalEvaporation thermalEvaporation = new ThermalEvaporation();
+    public final ThermalEvaporationPlant thermalEvaporationPlant = new ThermalEvaporationPlant();
     public final Washer washer = new Washer();
 
     public Mekanism() {
+        addRegistry(infusion);
+
         addRegistry(chemicalInfuser);
         addRegistry(combiner);
         addRegistry(crusher);
         addRegistry(crystallizer);
         addRegistry(dissolutionChamber);
+        addRegistry(electrolyticSeparator);
         addRegistry(enrichmentChamber);
         addRegistry(injectionChamber);
         addRegistry(metallurgicInfuser);
@@ -45,9 +54,9 @@ public class Mekanism extends ModPropertyContainer {
         addRegistry(pressurizedReactionChamber);
         addRegistry(purificationChamber);
         addRegistry(sawmill);
-        addRegistry(separator);
+        addRegistry(smelting);
         addRegistry(solarNeutronActivator);
-        addRegistry(thermalEvaporation);
+        addRegistry(thermalEvaporationPlant);
         addRegistry(washer);
     }
 
@@ -57,6 +66,7 @@ public class Mekanism extends ModPropertyContainer {
             Gas gas = GasRegistry.getGas(s);
             return gas == null ? null : new GasStack(gas, 1);
         });
+        BracketHandlerManager.registerBracketHandler("infusion", s -> InfuseRegistry.get(s.toUpperCase(Locale.ROOT)));
     }
 
     @Optional.Method(modid = "mekanism")
