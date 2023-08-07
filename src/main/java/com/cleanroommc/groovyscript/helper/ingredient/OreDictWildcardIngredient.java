@@ -15,7 +15,7 @@ public class OreDictWildcardIngredient extends ItemsIngredient {
 
     private final String oreDict;
     private final List<String> matchingOreDictionaries = new ArrayList<>();
-    public final List<String> ores = Collections.unmodifiableList(this.matchingOreDictionaries);;
+    public final List<String> ores = Collections.unmodifiableList(this.matchingOreDictionaries);
 
     public static OreDictWildcardIngredient of(String oreDict) {
         List<String> matchingOreDictionaries = new ArrayList<>();
@@ -55,8 +55,8 @@ public class OreDictWildcardIngredient extends ItemsIngredient {
     public IIngredient exactCopy() {
         OreDictWildcardIngredient odwi = new OreDictWildcardIngredient(this.oreDict, this.matchingOreDictionaries, getItemStacks());
         odwi.setAmount(getAmount());
-        odwi.transform(transformer);
-        odwi.when(matchCondition);
+        odwi.transformer = transformer;
+        odwi.matchCondition = matchCondition;
         return odwi;
     }
 }

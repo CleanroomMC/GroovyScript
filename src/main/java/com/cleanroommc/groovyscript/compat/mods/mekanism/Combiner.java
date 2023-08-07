@@ -2,17 +2,24 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.DoubleMachineInput;
 import mekanism.common.recipe.machines.CombinerRecipe;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
 
     public Combiner() {
         super(RecipeHandler.Recipe.COMBINER);
+    }
+
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
     }
 
     public CombinerRecipe add(IIngredient ingredient, ItemStack extra, ItemStack output) {
@@ -49,8 +56,42 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s and %s", ingredient, extra);
+            removeError("could not find recipe for {} and {}", ingredient, extra);
         }
         return found;
     }
+
+    public static class RecipeBuilder extends AbstractRecipeBuilder<CombinerRecipe> {
+
+        private ItemStack extra;
+
+        public RecipeBuilder extra(ItemStack extra) {
+            this.extra = extra;
+            return this;
+        }
+
+        @Override
+        public String getErrorMsg() {
+            return "Error adding Mekanism Combiner recipe";
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
+            validateItems(msg, 1, 1, 1, 1);
+            validateFluids(msg);
+        }
+
+        @Override
+        public @Nullable CombinerRecipe register() {
+            if (!validate()) return null;
+            CombinerRecipe recipe = null;
+            for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
+                CombinerRecipe r = new CombinerRecipe(itemStack.copy(), extra, output.get(0));
+                if (recipe == null) recipe = r;
+                ModSupport.MEKANISM.get().combiner.add(r);
+            }
+            return recipe;
+        }
+    }
+
 }

@@ -3,16 +3,18 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 import blusunrize.immersiveengineering.api.crafting.SqueezerRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
 
@@ -39,7 +41,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
 
     public SqueezerRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, IIngredient input, int energy) {
         SqueezerRecipe recipe = new SqueezerRecipe(fluidOutput, itemOutput, ImmersiveEngineering.toIngredientStack(input), energy);
-        addScripted(recipe);
+        add(recipe);
         return recipe;
     }
 
@@ -67,7 +69,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
             return false;
         })) {
             GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
-                    .add("no recipes found for %s", fluidOutput)
+                    .add("no recipes found for {}", fluidOutput)
                     .error()
                     .post();
         }
@@ -81,15 +83,34 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        if (!SqueezerRecipe.recipeList.removeIf(recipe -> {
-            if (fluidOutput.isFluidEqual(recipe.fluidOutput) && recipe.input.matches(itemOutput)) {
-                addBackup(recipe);
-                return true;
-            }
-            return false;
-        })) {
+        List<SqueezerRecipe> recipes = SqueezerRecipe.recipeList.stream().filter(r -> fluidOutput.isFluidEqual(r.fluidOutput) && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
+        for (SqueezerRecipe recipe : recipes) {
+            remove(recipe);
+        }
+        if (recipes.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
-                    .add("no recipes found for %s and %s", fluidOutput, itemOutput)
+                    .add("no recipes found for {} and {}", fluidOutput, itemOutput)
+                    .error()
+                    .post();
+        }
+    }
+
+    public void removeByOutput(ItemStack itemOutput) {
+        if (GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
+                .add(IngredientHelper.isEmpty(itemOutput), () -> "item input must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
+        // "Condition 'r.itemOutput != null' is always 'true'" is a lie. It can be null, and if it is it *will* throw an NPE if we don't check against it.
+        @SuppressWarnings("ConstantValue")
+        List<SqueezerRecipe> recipes = SqueezerRecipe.recipeList.stream().filter(r -> r != null && r.itemOutput != null && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
+        for (SqueezerRecipe recipe : recipes) {
+            remove(recipe);
+        }
+        if (recipes.isEmpty()) {
+            GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
+                    .add("no recipes found for {}", itemOutput)
                     .error()
                     .post();
         }
@@ -106,7 +127,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         SqueezerRecipe recipe = SqueezerRecipe.findRecipe(input);
         if (recipe == null || !remove(recipe)) {
             GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
-                    .add("no recipes found for %s", input)
+                    .add("no recipes found for {}", input)
                     .error()
                     .post();
         }
@@ -121,7 +142,14 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         SqueezerRecipe.recipeList.clear();
     }
 
-    private static class RecipeBuilder extends EnergyRecipeBuilder<SqueezerRecipe> {
+    private static class RecipeBuilder extends AbstractRecipeBuilder<SqueezerRecipe> {
+
+        private int energy;
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
+            return this;
+        }
 
         @Override
         public String getErrorMsg() {
@@ -132,11 +160,15 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 1);
             validateFluids(msg, 0, 0, 0, 1);
+            msg.add(fluidOutput.size() == 0 && output.size() == 0, "Either a fluid output or an item output must be defined");
         }
 
         @Override
         public @Nullable SqueezerRecipe register() {
-            return ModSupport.IMMERSIVE_ENGINEERING.get().squeezer.add(fluidOutput.getOrEmpty(0), output.getOrEmpty(0), input.get(0), energy);
+            if (!validate()) return null;
+            SqueezerRecipe recipe = new SqueezerRecipe(fluidOutput.getOrEmpty(0), output.getOrEmpty(0), ImmersiveEngineering.toIngredientStack(input.get(0)), energy);
+            ModSupport.IMMERSIVE_ENGINEERING.get().squeezer.add(recipe);
+            return recipe;
         }
     }
 }

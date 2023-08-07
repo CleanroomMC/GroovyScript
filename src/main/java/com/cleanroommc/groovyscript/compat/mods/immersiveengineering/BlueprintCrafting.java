@@ -50,7 +50,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
     }
 
     public BlueprintCraftingRecipe add(String blueprintCategory, ItemStack output, List<IIngredient> inputs) {
-        IngredientStack[] inputs1 = ArrayUtils.mapToArray(inputs, ImmersiveEngineering::toIngredientStack);
+        Object[] inputs1 = ArrayUtils.mapToArray(inputs, ImmersiveEngineering::toIngredientStack);
         BlueprintCraftingRecipe recipe = new BlueprintCraftingRecipe(blueprintCategory, output.copy(), inputs1);
         add(recipe);
         return recipe;
@@ -67,7 +67,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
     public void removeByCategory(String blueprintCategory) {
         if (!BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory)) {
             GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
-                    .add("category %s does not exist", blueprintCategory)
+                    .add("category {} does not exist", blueprintCategory)
                     .error()
                     .post();
             return;
@@ -94,7 +94,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
             return false;
         })) {
             GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
-                    .add("no recipes found for %s", output)
+                    .add("no recipes found for {}", output)
                     .error()
                     .post();
         }
@@ -126,7 +126,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
             return false;
         })) {
             GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
-                    .add("no recipes found for %s", Arrays.toString(inputs))
+                    .add("no recipes found for {}", Arrays.toString(inputs))
                     .error()
                     .post();
         }
@@ -154,7 +154,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlueprintCraftingRecipe> {
 
-        protected String category;
+        private String category;
 
         public RecipeBuilder category(String category) {
             this.category = category;
@@ -168,7 +168,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 6, 1, 1);
+            validateItems(msg, 1, Integer.MAX_VALUE, 1, 1);
             validateFluids(msg);
             if (this.category == null) this.category = BlueprintCraftingRecipe.blueprintCategories.get(0);
         }
@@ -176,7 +176,10 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         @Override
         public @Nullable BlueprintCraftingRecipe register() {
             if (!validate()) return null;
-            return ModSupport.IMMERSIVE_ENGINEERING.get().blueprint.add(category, output.get(0), input);
+            Object[] inputs = ArrayUtils.mapToArray(input, ImmersiveEngineering::toIngredientStack);
+            BlueprintCraftingRecipe recipe = new BlueprintCraftingRecipe(category, output.get(0), inputs);
+            ModSupport.IMMERSIVE_ENGINEERING.get().blueprint.add(recipe);
+            return recipe;
         }
     }
 }

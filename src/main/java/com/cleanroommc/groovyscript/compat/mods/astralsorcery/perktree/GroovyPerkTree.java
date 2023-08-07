@@ -16,6 +16,10 @@ import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.
 
 public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
 
+    public GroovyPerkTree() {
+        super(false, VirtualizedRegistry.generateAliases("PerkTree"));
+    }
+
     public static AttributeModifierPerkBuilder attributePerkBuilder() {
         return new AttributeModifierPerkBuilder();
     }
