@@ -152,7 +152,7 @@ dependencies {
     }
     
     compileOnly rfg.deobf('curse.maven:cyclops-core-232758:3159497')
-    if (project.debug_evilcraft.toBoolean()) {
+    if (project.debug_evilcraft.toBoolean() || project.debug_integrated_dynamics.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:cyclops-core-232758:3159497')
     }
 
@@ -161,6 +161,13 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:evilcraft-74610:2811267')
     }
 
+    compileOnly rfg.deobf('curse.maven:common-capabilities-247007:3053017')
+    compileOnly rfg.deobf('curse.maven:integrated-dynamics-236307:3159505')
+    if (project.debug_integrated_dynamics.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:common-capabilities-247007:3053017')
+        runtimeOnly rfg.deobf('curse.maven:integrated-dynamics-236307:3159505')
+    }
+    
     compileOnly rfg.deobf('curse.maven:compact-machines-224218:2707509')
     if (project.debug_compact_machines.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:compact-machines-224218:2707509')
