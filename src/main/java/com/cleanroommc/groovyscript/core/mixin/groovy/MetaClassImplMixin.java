@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.core.mixin;
+package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import groovy.lang.MetaClassImpl;

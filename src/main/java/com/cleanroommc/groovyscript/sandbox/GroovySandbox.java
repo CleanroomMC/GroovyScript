@@ -104,7 +104,7 @@ public abstract class GroovySandbox {
     protected void loadScripts(GroovyScriptEngine engine, Binding binding, Set<File> executedClasses, boolean run) {
         for (File scriptFile : getScriptFiles()) {
             if (!executedClasses.contains(scriptFile)) {
-                Class<?> clazz = loadScriptClass(engine, scriptFile, true);
+                Class<?> clazz = loadScriptClass(engine, scriptFile);
                 if (clazz == null) {
                     GroovyLog.get().errorMC("Error loading script for {}", scriptFile.getPath());
                     GroovyLog.get().errorMC("Did you forget to register your class file in your run config?");
@@ -128,7 +128,7 @@ public abstract class GroovySandbox {
 
     protected void loadClassScripts(GroovyScriptEngine engine, Binding binding, Set<File> executedClasses, boolean run) {
         for (File classFile : getClassFiles()) {
-            Class<?> clazz = loadScriptClass(engine, classFile, false);
+            Class<?> clazz = loadScriptClass(engine, classFile);
             if (clazz == null) {
                 // loading script fails if the file is a script that depends on a class file that isn't loaded yet
                 // we cant determine if the file is a script or a class
@@ -219,7 +219,7 @@ public abstract class GroovySandbox {
         }
     }
 
-    private Class<?> loadScriptClass(GroovyScriptEngine engine, File file, boolean printError) {
+    private Class<?> loadScriptClass(GroovyScriptEngine engine, File file) {
         Class<?> scriptClass = null;
         try {
             try {
@@ -237,9 +237,8 @@ public abstract class GroovySandbox {
 
             // if the file is still not found something went wrong
         } catch (Exception e) {
-            if (printError) {
-                GroovyLog.get().exception(e);
-            }
+            GroovyLog.get().fatalMC("An error occurred while trying to load script class {}", file.toString());
+            GroovyLog.get().exception(e);
         }
         return scriptClass;
     }
