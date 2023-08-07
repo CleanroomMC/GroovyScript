@@ -21,12 +21,15 @@ public class LateMixin implements ILateMixinLoader {
             "forestry",
             "ic2_classic",
             "ic2_exp",
+            "inspirations",
             "jei",
             "mekanism",
             "roots",
             "tcomplement",
             "tconstruct",
             "thermalexpansion"
+            "thermalexpansion",
+            "woot"
     );
 
     @Override
