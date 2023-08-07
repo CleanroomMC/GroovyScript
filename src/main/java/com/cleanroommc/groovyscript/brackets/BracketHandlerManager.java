@@ -66,6 +66,7 @@ public class BracketHandlerManager {
         registerBracketHandler("blockstate", BlockStateBracketHandler.INSTANCE);
         registerBracketHandler("enchantment", Enchantment::getEnchantmentByLocation);
         registerBracketHandler("potion", Potion::getPotionFromResourceLocation);
+        registerBracketHandler("potionType", s -> ForgeRegistries.POTION_TYPES.getValue(new ResourceLocation(s)));
         registerBracketHandler("sound", s -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(s)));
         registerBracketHandler("entity", s -> ForgeRegistries.ENTITIES.getValue(new ResourceLocation(s)));
         registerBracketHandler("creativeTab", s -> {

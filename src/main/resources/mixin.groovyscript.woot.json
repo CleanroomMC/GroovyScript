@@ -1,0 +1,15 @@
+{
+  "package": "com.cleanroommc.groovyscript.core.mixin.woot",
+  "refmap": "mixins.groovyscript.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "AnvilManagerAccessor",
+    "CustomDropAccessor",
+    "CustomDropsRepositoryAccessor",
+    "PolicyRepositoryAccessor",
+    "SpawnRecipeRepositoryAccessor",
+    "WootConfigurationManagerAccessor"
+  ]
+}
