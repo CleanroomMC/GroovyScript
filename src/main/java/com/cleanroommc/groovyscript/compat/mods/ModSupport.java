@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
 import com.cleanroommc.groovyscript.compat.mods.chisel.Chisel;
+import com.cleanroommc.groovyscript.compat.mods.compactmachines.CompactMachines;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolution;
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
 import com.cleanroommc.groovyscript.compat.mods.evilcraft.EvilCraft;
@@ -14,6 +15,7 @@ import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCraftin
 import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
+import com.cleanroommc.groovyscript.compat.mods.inspirations.Inspirations;
 import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
@@ -61,6 +63,8 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<ExtendedCrafting> EXTENDED_CRAFTING = new Container<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
     public static final Container<Forestry> FORESTRY = new Container<>("forestry", "Forestry", Forestry::new);
     public static final Container<Woot> WOOT = new Container<>("woot", "Woot", Woot::new);
+    public static final Container<Inspirations> INSPIRATIONS = new Container<>("inspirations", "Inspirations", Inspirations::new);
+    public static final Container<CompactMachines> COMPACT_MACHINES = new Container<>("compactmachines3", "Compact Machines 3", CompactMachines::new, "compactmachines");
 
     public static Collection<Container<? extends ModPropertyContainer>> getAllContainers() {
         return new ObjectOpenHashSet<>(containers.values());
