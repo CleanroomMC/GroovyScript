@@ -12,9 +12,13 @@ on:
         description: 'Mod version'
         required: true
       release_type:
-        description: 'Release type (release, beta, alpha)'
+        description: 'Release type'
+        type: choice
         default: 'beta'
-        required: true
+        options:
+          - 'release'
+          - 'beta'
+          - 'alpha'
 
 jobs:
   build:
