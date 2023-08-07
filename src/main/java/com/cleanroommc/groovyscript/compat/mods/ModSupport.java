@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.compat.mods.actuallyadditions.ActuallyAdditions;
+import com.cleanroommc.groovyscript.compat.mods.advancedmortars.AdvancedMortars;
 import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnergistics2;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
@@ -66,6 +67,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<IC2> INDUSTRIALCRAFT = new Container<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
     public static final Container<ExtendedCrafting> EXTENDED_CRAFTING = new Container<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
     public static final Container<Forestry> FORESTRY = new Container<>("forestry", "Forestry", Forestry::new);
+    public static final Container<AdvancedMortars> ADVANCED_MORTARS = new Container<>("advancedmortars", "Advanced Mortars", AdvancedMortars::new);
     public static final Container<Woot> WOOT = new Container<>("woot", "Woot", Woot::new);
     public static final Container<Inspirations> INSPIRATIONS = new Container<>("inspirations", "Inspirations", Inspirations::new);
     public static final Container<CompactMachines> COMPACT_MACHINES = new Container<>("compactmachines3", "Compact Machines 3", CompactMachines::new, "compactmachines");
