@@ -107,6 +107,16 @@ dependencies {
 
     implementation 'mezz.jei:jei_1.12.2:4.16.1.302'
 
+    compileOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
+    if (project.debug_avaritia.toBoolean() || project.debug_draconic_evolution.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
+    }
+
+    compileOnly rfg.deobf('curse.maven:avaritia_1_10-261348:3143349')
+    if (project.debug_avaritia.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:avaritia_1_10-261348:3143349')
+    }
+
     compileOnly rfg.deobf("curse.maven:ctm-267602:2915363")
     compileOnly rfg.deobf("curse.maven:chisel-235279:2915375")
     if (project.debug_chisel.toBoolean()) {
@@ -150,7 +160,7 @@ dependencies {
     if (project.debug_blood_magic.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:blood-magic-224791:2822288')
     }
-    
+
     compileOnly rfg.deobf('curse.maven:cyclops-core-232758:3159497')
     if (project.debug_evilcraft.toBoolean() || project.debug_integrated_dynamics.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:cyclops-core-232758:3159497')
@@ -203,6 +213,7 @@ dependencies {
 
     compileOnly rfg.deobf('curse.maven:draconic_evolution-223565:3431261')
     compileOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
+
     if (project.debug_draconic_evolution.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:draconic_evolution-223565:3431261')
         runtimeOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
