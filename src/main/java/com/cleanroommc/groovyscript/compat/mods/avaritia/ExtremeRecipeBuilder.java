@@ -93,10 +93,16 @@ public abstract class ExtremeRecipeBuilder extends CraftingRecipeBuilder {
             }
             if (msg.postIfNotEmpty()) return null;
             if (recipe != null) {
-                recipe.setRegistryName(createName(this.name, "extreme_shaped_"));
+                validateName();
+                recipe.setRegistryName(this.name);
                 ModSupport.AVARITIA.get().extremeCrafting.add(recipe);
             }
             return recipe;
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "grs_extreme_shaped_";
         }
     }
 
@@ -138,10 +144,16 @@ public abstract class ExtremeRecipeBuilder extends CraftingRecipeBuilder {
         @Override
         public IExtremeRecipe register() {
             if (!validate()) return null;
+            validateName();
             IExtremeRecipe recipe = ExtremeShapelessRecipe.make(output.copy(), ingredients, recipeFunction, recipeAction);
-            recipe.setRegistryName(createName(this.name, "extreme_shapeless_"));
+            recipe.setRegistryName(this.name);
             ModSupport.AVARITIA.get().extremeCrafting.add(recipe);
             return recipe;
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "grs_extreme_shapeless_";
         }
     }
 }
