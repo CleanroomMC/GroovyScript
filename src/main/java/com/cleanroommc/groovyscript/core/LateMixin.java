@@ -28,7 +28,6 @@ public class LateMixin implements ILateMixinLoader {
             "roots",
             "tcomplement",
             "tconstruct",
-            "thermalexpansion"
             "thermalexpansion",
             "woot"
     );
