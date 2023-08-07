@@ -1,4 +1,9 @@
 
+if (!isLoaded('advancedmortars')) return
+println 'mod \'advancedmortars\' detected, running script'
+
+// Mortar
+
 // add(List<String> types, ItemStack output, int duration, List<IIngredient> inputs)
 mods.advancedmortars.Mortar.add(
         ['stone'],

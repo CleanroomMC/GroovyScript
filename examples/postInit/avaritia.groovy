@@ -1,5 +1,13 @@
 
+if (!isLoaded('avaritia')) return
+println 'mod \'avaritia\' detected, running script'
+
+// extreme crafting
+
+// remove by output
 mods.avaritia.ExtremeCrafting.removeByOutput(item('avaritia:resource', 6))
+
+// add shaped recipe with nested ingredient list
 mods.avaritia.ExtremeCrafting.shapedBuilder()
         .matrix([[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],
                  [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],
@@ -11,6 +19,7 @@ mods.avaritia.ExtremeCrafting.shapedBuilder()
         .output(item('minecraft:gold_block'))
         .register()
 
+// add shaped recipe with key based input
 mods.avaritia.ExtremeCrafting.shapedBuilder()
         .output(item('minecraft:stone') * 64)
         .matrix(
@@ -25,6 +34,7 @@ mods.avaritia.ExtremeCrafting.shapedBuilder()
         .key('G', item('minecraft:gold_ingot'))
         .register()
 
+// add shapeless recipe with ingredient list
 mods.avaritia.ExtremeCrafting.shapelessBuilder()
         .output(item('minecraft:stone') * 64)
         .input(item('minecraft:stone'),
@@ -35,10 +45,15 @@ mods.avaritia.ExtremeCrafting.shapelessBuilder()
                 item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'))
         .register()
 
+// Compressor
+
+// remove by output
 mods.avaritia.Compressor.removeByOutput(item('avaritia:singularity', 0))
+
+// add
 mods.avaritia.Compressor.add(item('minecraft:nether_star'), item('minecraft:clay_ball'), 100) // the last number is the required input amount
 mods.avaritia.Compressor.recipeBuilder()
-        .input(item('minecraft:clay_ball'))
+        .input(item('minecraft:clay_ball') * 100) // this also specifies the input amount (you should only specify 1)
         .output(item('minecraft:nether_star'))
         .inputCount(100) // required input amount
         .register()
