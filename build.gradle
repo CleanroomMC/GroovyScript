@@ -114,9 +114,24 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:chisel-235279:2915375')
     }
 
+    compileOnly 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
+    if (project.debug_inspirations.toBoolean() || project.debug_tinkers.toBoolean()) {
+        runtimeOnly 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
+    }
+
     compileOnly rfg.deobf('curse.maven:mekanism-268560:2835175')
     if (project.debug_mekanism.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:mekanism-268560:2835175')
+    }
+
+    compileOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
+    if (project.debug_applied_energistics_2.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
+    }
+
+    compileOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
+    if (project.debug_applied_energistics_2.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
     }
 
     compileOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
@@ -127,9 +142,12 @@ dependencies {
     }
 
     compileOnly rfg.deobf('curse.maven:guide-api-228832:2645992')
+    if (project.debug_blood_magic.toBoolean() || project.debug_woot.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:guide-api-228832:2645992')
+    }
+
     compileOnly rfg.deobf('curse.maven:blood-magic-224791:2822288')
     if (project.debug_blood_magic.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:guide-api-228832:2645992')
         runtimeOnly rfg.deobf('curse.maven:blood-magic-224791:2822288')
     }
     
@@ -150,9 +168,19 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:integrated-dynamics-236307:3159505')
     }
     
+    compileOnly rfg.deobf('curse.maven:compact-machines-224218:2707509')
+    if (project.debug_compact_machines.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:compact-machines-224218:2707509')
+    }
+    
     compileOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
     if (project.debug_actually_additions.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
+    }
+
+    compileOnly rfg.deobf('curse.maven:inspirations-284007:2843007')
+    if (project.debug_inspirations.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:inspirations-284007:2843007')
     }
 
     compileOnly rfg.deobf('curse.maven:cucumber-272335:2645867')
@@ -243,12 +271,16 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
     }
 
+    compileOnly rfg.deobf("curse.maven:woot-244049:2712670")
+    if (project.debug_woot.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:woot-244049:2712670')
+    }
+
     compileOnly 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
     compileOnly 'slimeknights:TConstruct:1.12.2-2.13.0.190'
     compileOnly rfg.deobf('curse.maven:constructs-armory-287683:3174535')
     compileOnly rfg.deobf('curse.maven:tinkers-complement-272671:2843439')
     if (project.debug_tinkers.toBoolean()) {
-        runtimeOnly 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
         runtimeOnly 'slimeknights:TConstruct:1.12.2-2.13.0.190'
         runtimeOnly rfg.deobf('curse.maven:constructs-armory-287683:3174535')
         runtimeOnly rfg.deobf('curse.maven:tinkers-complement-272671:2843439')
