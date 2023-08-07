@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
 import com.cleanroommc.groovyscript.compat.mods.chisel.Chisel;
+import com.cleanroommc.groovyscript.compat.mods.compactmachines.CompactMachines;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolution;
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
 import com.cleanroommc.groovyscript.compat.mods.evilcraft.EvilCraft;
@@ -59,6 +60,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<IC2> INDUSTRIALCRAFT = new Container<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
     public static final Container<ExtendedCrafting> EXTENDED_CRAFTING = new Container<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
     public static final Container<Forestry> FORESTRY = new Container<>("forestry", "Forestry", Forestry::new);
+    public static final Container<CompactMachines> COMPACT_MACHINES = new Container<>("compactmachines3", "Compact Machines 3", CompactMachines::new, "compactmachines");
 
     public static Collection<Container<? extends ModPropertyContainer>> getAllContainers() {
         return new ObjectOpenHashSet<>(containers.values());
