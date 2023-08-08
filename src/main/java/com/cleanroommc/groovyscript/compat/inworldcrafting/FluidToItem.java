@@ -4,18 +4,19 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import net.minecraft.entity.EntityList;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
-
-    public static final FluidToItem INSTANCE = new FluidToItem();
 
     @Override
     public void onReload() {
@@ -34,6 +35,46 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
             return true;
         }
         return false;
+    }
+
+    public boolean removeByInput(FluidStack fluid) {
+        if (IngredientHelper.isEmpty(fluid)) {
+            GroovyLog.msg("Error removing in world fluid to item recipe")
+                    .add("input fluid must not be empty")
+                    .error()
+                    .post();
+            return false;
+        }
+        if (!FluidRecipe.removeIf(fluid.getFluid(), fluidRecipe -> fluidRecipe.getClass() == Recipe.class, fluidRecipe -> addBackup((Recipe) fluidRecipe))) {
+            GroovyLog.msg("Error removing in world fluid to item recipe")
+                    .add("no recipes found for {}", fluid.getFluid().getName())
+                    .error()
+                    .post();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean removeByInput(FluidStack fluid, ItemStack... input) {
+        if (GroovyLog.msg("Error removing in world fluid to item recipe")
+                .add(IngredientHelper.isEmpty(fluid), () -> "input fluid must not be empty")
+                .add(IngredientHelper.isEmpty(input), () -> "input ingredients must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return false;
+        }
+        if (!FluidRecipe.removeIf(fluid.getFluid(), fluidRecipe -> fluidRecipe.getClass() == Recipe.class && fluidRecipe.matches(input), fluidRecipe -> addBackup((Recipe) fluidRecipe))) {
+            GroovyLog.msg("Error removing in world fluid to item recipe")
+                    .add("no recipes found for {}", fluid.getFluid().getName())
+                    .error()
+                    .post();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean removeAll() {
+        return FluidRecipe.removeIf(fluidRecipe -> fluidRecipe.getClass() == Recipe.class, fluidRecipe -> addBackup((Recipe) fluidRecipe));
     }
 
     public RecipeBuilder recipeBuilder() {

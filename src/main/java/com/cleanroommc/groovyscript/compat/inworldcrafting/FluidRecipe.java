@@ -29,6 +29,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public abstract class FluidRecipe {
 
@@ -56,16 +59,50 @@ public abstract class FluidRecipe {
         return recipes;
     }
 
+    public static boolean removeIf(Fluid fluid, Predicate<FluidRecipe> fluidRecipePredicate, Consumer<FluidRecipe> removedConsumer) {
+        List<FluidRecipe> recipes = fluidRecipes.get(fluid);
+        return recipes != null && recipes.removeIf(fluidRecipe -> {
+            if (fluidRecipePredicate.test(fluidRecipe)) {
+                removedConsumer.accept(fluidRecipe);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public static boolean removeIf(Predicate<FluidRecipe> fluidRecipePredicate, Consumer<FluidRecipe> removedConsumer) {
+        AtomicBoolean successful = new AtomicBoolean(false);
+        fluidRecipes.forEach((fluid, fluidRecipes1) -> {
+            if (fluidRecipes1.removeIf(fluidRecipe -> {
+                if (fluidRecipePredicate.test(fluidRecipe)) {
+                    removedConsumer.accept(fluidRecipe);
+                    return true;
+                }
+                return false;
+            })) {
+                successful.set(true);
+            }
+        });
+        return successful.get();
+    }
+
+    /**
+     * Tries to find a fluid conversion recipe for a fluid at a position in the world
+     *
+     * @return fluid recipe or null if non is found
+     */
     @Nullable
     public static FluidRecipe find(Fluid fluid, World world, BlockPos pos) {
         List<FluidRecipe> candidates = fluidRecipes.get(fluid);
         if (candidates == null || candidates.isEmpty()) return null;
         AxisAlignedBB aabb = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
+        // get all items in the fluid block space
         List<EntityItem> entitiesInFluid = world.getEntitiesWithinAABB(EntityItem.class, aabb, Entity::isEntityAlive);
         List<ItemContainer> itemsInFluid = new ArrayList<>();
         for (EntityItem item : entitiesInFluid) {
             itemsInFluid.add(new ItemContainer(item));
         }
+        // search for a recipe using those items
         for (FluidRecipe recipe : candidates) {
             if (recipe.tryRecipe(itemsInFluid)) {
                 return recipe;
@@ -84,6 +121,33 @@ public abstract class FluidRecipe {
         this.itemConsumeChance = itemConsumeChance;
     }
 
+    public IIngredient[] getItemInputs() {
+        return itemInputs;
+    }
+
+    public boolean matches(ItemStack[] input) {
+        if (input.length != this.itemInputs.length) return false;
+        IntSet used = new IntOpenHashSet();
+        main:
+        for (int i = 0; i < input.length; i++) {
+            for (int j = 0; j < input.length; j++) {
+                if (used.contains(j)) continue;
+                if (this.itemInputs[i].test(input[j])) {
+                    used.add(j);
+                    continue main;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Tries a recipe and also kills the input items if this recipe matches
+     *
+     * @param itemsInFluid all items that are in the fluid block space
+     * @return if this recipe matched the input
+     */
     private boolean tryRecipe(List<ItemContainer> itemsInFluid) {
         IntSet matchedItems = new IntOpenHashSet();
         main:
@@ -91,9 +155,10 @@ public abstract class FluidRecipe {
             IIngredient input = this.itemInputs[j];
             int remaining = input.getAmount();
             for (int i = 0; i < itemsInFluid.size(); i++) {
-                if (matchedItems.contains(i)) continue;
+                if (matchedItems.contains(i)) continue; // this item already is used
                 ItemContainer itemInFluid = itemsInFluid.get(i);
-                if (input.test(itemInFluid.item)) {
+                if (input.test(itemInFluid.item)) { // found matching item
+                    // calculate how many items should be killed and what's left of the ingredient
                     int count = itemInFluid.item.getCount() - itemInFluid.amountToKill;
                     int amountToKill;
                     if (count < input.getAmount()) {
@@ -104,6 +169,7 @@ public abstract class FluidRecipe {
                         remaining = 0;
                         matchedItems.add(i);
                     }
+                    // applies the amount to kill
                     float chance = this.itemConsumeChance[j];
                     if (chance > 0 && (chance >= 1 || GroovyScript.RND.nextFloat() < chance)) {
                         itemInFluid.amountToKill += amountToKill;
@@ -113,10 +179,17 @@ public abstract class FluidRecipe {
             }
             return false;
         }
+        // kill all items with the before calculated amount
         itemsInFluid.forEach(ItemContainer::killItems);
         return true;
     }
 
+    /**
+     * Called after a valid recipe has been found and the input items are killed.
+     *
+     * @param world world
+     * @param pos   pos of fluid
+     */
     public abstract void handleRecipeResult(World world, BlockPos pos);
 
     @Nullable
