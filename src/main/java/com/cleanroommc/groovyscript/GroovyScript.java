@@ -67,6 +67,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.Random;
 
 @GroovyBlacklist
 @Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION)
@@ -92,6 +93,8 @@ public class GroovyScript {
     private static long timeSinceLastUse = 0;
 
     private static final Joiner fileJoiner = Joiner.on(File.separator);
+
+    public static final Random RND = new Random();
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
