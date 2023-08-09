@@ -21,7 +21,7 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
     @Override
     public void onReload() {
         getScriptedRecipes().forEach(FluidRecipe::remove);
-        getBackupRecipes().forEach(FluidRecipe::remove);
+        getBackupRecipes().forEach(FluidRecipe::add);
     }
 
     public void add(Recipe recipe) {

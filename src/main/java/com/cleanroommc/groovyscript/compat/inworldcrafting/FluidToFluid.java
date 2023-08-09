@@ -19,7 +19,7 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
     @Override
     public void onReload() {
         getScriptedRecipes().forEach(FluidRecipe::remove);
-        getBackupRecipes().forEach(FluidRecipe::remove);
+        getBackupRecipes().forEach(FluidRecipe::add);
     }
 
     public void add(Recipe recipe) {

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.inworldcrafting;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -93,6 +94,7 @@ public abstract class FluidRecipe {
      *
      * @return fluid recipe or null if non is found
      */
+    @GroovyBlacklist
     public static boolean findAndRunRecipe(Fluid fluid, World world, BlockPos pos, IBlockState blockState) {
         List<FluidRecipe> candidates = fluidRecipes.get(fluid);
         if (candidates == null || candidates.isEmpty()) return false;
@@ -155,6 +157,7 @@ public abstract class FluidRecipe {
      * @param itemsInFluid all items that are in the fluid block space
      * @return if this recipe matched the input
      */
+    @GroovyBlacklist
     private boolean tryRecipe(World world, BlockPos pos, List<ItemContainer> itemsInFluid) {
         IntSet matchedItems = new IntOpenHashSet();
         main:
