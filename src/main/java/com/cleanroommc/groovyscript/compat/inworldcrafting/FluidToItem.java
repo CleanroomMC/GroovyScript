@@ -6,8 +6,7 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
+import groovy.lang.Closure;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -89,8 +88,8 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
 
         private final ItemStack output;
 
-        public Recipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, ItemStack output) {
-            super(input, itemInputs, itemConsumeChance);
+        public Recipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> beforeRecipe, Closure<?> afterRecipe, ItemStack output) {
+            super(input, itemInputs, itemConsumeChance, beforeRecipe, afterRecipe);
             this.output = output;
         }
 
@@ -121,7 +120,8 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
 
         @Override
         public @Nullable FluidToItem.Recipe register() {
-            Recipe recipe = new Recipe(this.fluidInput.get(0).getFluid(), this.input.toArray(new IIngredient[0]), this.chances.toFloatArray(), this.output.get(0));
+            Recipe recipe = new Recipe(this.fluidInput.get(0).getFluid(), this.input.toArray(new IIngredient[0]), this.chances.toFloatArray(),
+                                       this.beforeRecipe, this.afterRecipe, this.output.get(0));
             VanillaModule.inWorldCrafting.fluidToItem.add(recipe);
             return recipe;
         }

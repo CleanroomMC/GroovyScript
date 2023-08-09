@@ -20,14 +20,11 @@ public abstract class EntityItemMixin {
             BlockPos pos = new BlockPos(thisEntity);
             IBlockState blockState = thisEntity.world.getBlockState(pos);
             Fluid fluid = FluidRecipe.getFluid(blockState);
-            if (fluid != null && FluidRecipe.isSourceBlock(blockState)) {
-                FluidRecipe recipe = FluidRecipe.find(fluid, thisEntity.world, pos);
-                if (recipe != null) {
-                    recipe.handleRecipeResult(thisEntity.world, pos);
-                    if (thisEntity.isDead) {
-                        ci.cancel();
-                    }
-                }
+            if (fluid != null &&
+                FluidRecipe.isSourceBlock(blockState) &&
+                FluidRecipe.findAndRunRecipe(fluid, thisEntity.world, pos, blockState) &&
+                thisEntity.isDead) {
+                ci.cancel();
             }
         }
     }

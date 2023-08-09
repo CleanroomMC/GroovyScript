@@ -4,6 +4,8 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import groovy.lang.Closure;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.floats.FloatList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -91,10 +93,9 @@ public abstract class FluidRecipe {
      *
      * @return fluid recipe or null if non is found
      */
-    @Nullable
-    public static FluidRecipe find(Fluid fluid, World world, BlockPos pos) {
+    public static boolean findAndRunRecipe(Fluid fluid, World world, BlockPos pos, IBlockState blockState) {
         List<FluidRecipe> candidates = fluidRecipes.get(fluid);
-        if (candidates == null || candidates.isEmpty()) return null;
+        if (candidates == null || candidates.isEmpty()) return false;
         AxisAlignedBB aabb = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
         // get all items in the fluid block space
         List<EntityItem> entitiesInFluid = world.getEntitiesWithinAABB(EntityItem.class, aabb, Entity::isEntityAlive);
@@ -104,21 +105,25 @@ public abstract class FluidRecipe {
         }
         // search for a recipe using those items
         for (FluidRecipe recipe : candidates) {
-            if (recipe.tryRecipe(itemsInFluid)) {
-                return recipe;
+            if (recipe.tryRecipe(world, pos, itemsInFluid)) {
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     private final Fluid input;
     private final IIngredient[] itemInputs;
     private final float[] itemConsumeChance;
+    private final Closure<Boolean> beforeRecipe;
+    private final Closure<?> afterRecipe;
 
-    public FluidRecipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance) {
+    public FluidRecipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> beforeRecipe, Closure<?> afterRecipe) {
         this.input = input;
         this.itemInputs = itemInputs;
         this.itemConsumeChance = itemConsumeChance;
+        this.beforeRecipe = beforeRecipe;
+        this.afterRecipe = afterRecipe;
     }
 
     public IIngredient[] getItemInputs() {
@@ -145,10 +150,12 @@ public abstract class FluidRecipe {
     /**
      * Tries a recipe and also kills the input items if this recipe matches
      *
+     * @param world
+     * @param pos
      * @param itemsInFluid all items that are in the fluid block space
      * @return if this recipe matched the input
      */
-    private boolean tryRecipe(List<ItemContainer> itemsInFluid) {
+    private boolean tryRecipe(World world, BlockPos pos, List<ItemContainer> itemsInFluid) {
         IntSet matchedItems = new IntOpenHashSet();
         main:
         for (int j = 0; j < this.itemInputs.length; j++) {
@@ -179,8 +186,16 @@ public abstract class FluidRecipe {
             }
             return false;
         }
+        if (this.beforeRecipe != null && !ClosureHelper.call(true, this.beforeRecipe, world, pos)) {
+            return false;
+        }
         // kill all items with the before calculated amount
         itemsInFluid.forEach(ItemContainer::killItems);
+        // handle the output of the recipe
+        handleRecipeResult(world, pos);
+        if (this.afterRecipe != null) {
+            ClosureHelper.call(this.afterRecipe, world, pos);
+        }
         return true;
     }
 
@@ -240,6 +255,8 @@ public abstract class FluidRecipe {
     public abstract static class RecipeBuilder<T extends FluidRecipe> extends AbstractRecipeBuilder<T> {
 
         protected final FloatList chances = new FloatArrayList();
+        protected Closure<Boolean> beforeRecipe;
+        protected Closure<?> afterRecipe;
 
         public RecipeBuilder<T> input(IIngredient ingredient, float consumeChance) {
             this.input.add(ingredient);
@@ -250,6 +267,16 @@ public abstract class FluidRecipe {
         @Override
         public AbstractRecipeBuilder<T> input(IIngredient ingredient) {
             return input(ingredient, 1f);
+        }
+
+        public RecipeBuilder<T> beforeRecipe(Closure<Boolean> beforeRecipe) {
+            this.beforeRecipe = beforeRecipe;
+            return this;
+        }
+
+        public RecipeBuilder<T> afterRecipe(Closure<Boolean> afterRecipe) {
+            this.afterRecipe = afterRecipe;
+            return this;
         }
 
         protected void validateChances(GroovyLog.Msg msg) {

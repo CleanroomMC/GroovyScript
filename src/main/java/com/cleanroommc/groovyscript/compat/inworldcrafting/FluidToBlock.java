@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import groovy.lang.Closure;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -88,8 +89,8 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
 
         private final IBlockState output;
 
-        public Recipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, IBlockState output) {
-            super(input, itemInputs, itemConsumeChance);
+        public Recipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> beforeRecipe, Closure<?> afterRecipe, IBlockState output) {
+            super(input, itemInputs, itemConsumeChance, beforeRecipe, afterRecipe);
             this.output = output;
         }
 
@@ -131,7 +132,8 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
 
         @Override
         public @Nullable FluidToBlock.Recipe register() {
-            Recipe recipe = new Recipe(this.fluidInput.get(0).getFluid(), this.input.toArray(new IIngredient[0]), this.chances.toFloatArray(), this.outputBlock);
+            Recipe recipe = new Recipe(this.fluidInput.get(0).getFluid(), this.input.toArray(new IIngredient[0]), this.chances.toFloatArray(),
+                                       this.beforeRecipe, this.afterRecipe, this.outputBlock);
             VanillaModule.inWorldCrafting.fluidToBlock.add(recipe);
             return recipe;
         }
