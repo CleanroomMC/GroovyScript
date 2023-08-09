@@ -1,3 +1,9 @@
+/*
+NO_RUN
+NO_RELOAD
+MODS_LOADED: appliedenergistics2
+SIDE: client
+*/
 
 if (!isLoaded('appliedenergistics2')) return
 println 'mod \'appliedenergistics2\' detected, running script'

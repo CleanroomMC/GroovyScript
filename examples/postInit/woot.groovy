@@ -1,3 +1,5 @@
+// MODS_LOADED: woot
+
 //import ipsis.woot.configuration.EnumConfigKey
 //import ipsis.woot.util.WootMobName
 

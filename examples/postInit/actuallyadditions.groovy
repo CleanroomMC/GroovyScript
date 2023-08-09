@@ -1,4 +1,6 @@
 
+// MODS_LOADED: actuallyadditions
+
 if (!isLoaded('actuallyadditions')) return
 println 'mod \'actuallyadditions\' detected, running script'
 
