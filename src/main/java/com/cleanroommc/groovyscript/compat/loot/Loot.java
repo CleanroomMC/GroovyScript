@@ -47,11 +47,6 @@ public class Loot {
     @GroovyBlacklist
     public static void init() {
         TABLE_MANAGER = new LootTableManager(null);
-        //((LootTableManagerAccessor) TABLE_MANAGER).getRegisteredLootTables().
-        /*TABLES.values().forEach(table -> {
-            ((LootTableAccessor) table).setIsFrozen(false);
-            ((LootTableAccessor) table).getPools().forEach(pool -> ((LootPoolAccessor) pool).setIsFrozen(false));
-        });*/
     }
 
     public LootTable getTable(ResourceLocation name) {

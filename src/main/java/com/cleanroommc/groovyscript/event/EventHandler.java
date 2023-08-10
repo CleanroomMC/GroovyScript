@@ -101,7 +101,6 @@ public class EventHandler {
         if (!Loot.TABLES.containsKey(event.getName())) {
             Loot.TABLES.put(event.getName(), event.getTable());
         } else {
-            //Loot.TABLES.get(event.getName()).freeze();
             event.setTable(Loot.TABLES.get(event.getName()));
         }
     }
