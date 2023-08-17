@@ -13,7 +13,6 @@
     "ItemMixin",
     "ItemStackMixin",
     "LoaderControllerMixin",
-    "LootTableManagerAccessor",
     "OreDictionaryAccessor",
     "SlotCraftingAccess",
     "groovy.AsmDecompilerMixin",
