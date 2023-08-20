@@ -5,6 +5,13 @@ inWorldCrafting.fluidToFluid.recipeBuilder()
         .fluidOutput(fluid('lava'))
         .register()
 
+inWorldCrafting.fluidToItem.recipeBuilder()
+        .fluidInput(fluid('water'))
+        .input(item('minecraft:netherrack'))
+        .input(item('minecraft:gold_ingot'), 0.1f)
+        .output(item('minecraft:nether_star'))
+        .register()
+
 inWorldCrafting.fluidToBlock.recipeBuilder()
         .fluidInput(fluid('water'))
         .input(item('minecraft:clay_ball'))

@@ -4,14 +4,20 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.command.SimpleCommand;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.FluidRecipe;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.FluidRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapedCraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapelessCraftingRecipe;
+import mezz.jei.Internal;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientRegistry;
+import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategory;
+import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import mezz.jei.ingredients.IngredientRegistry;
 import mezz.jei.plugins.vanilla.crafting.ShapelessRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;
@@ -32,6 +38,8 @@ public class JeiPlugin implements IModPlugin {
     public static IModRegistry modRegistry;
     public static IJeiRuntime jeiRuntime;
 
+    public static IIngredientRenderer<FluidStack> fluidRenderer;
+
     public static final List<ItemStack> HIDDEN = new ArrayList<>();
     public static final List<FluidStack> HIDDEN_FLUIDS = new ArrayList<>();
     public static final List<String> HIDDEN_CATEGORY = new ArrayList<>();
@@ -50,6 +58,14 @@ public class JeiPlugin implements IModPlugin {
     }
 
     @Override
+    public void registerCategories(IRecipeCategoryRegistration registry) {
+        IngredientRegistry ingredientRegistry = Internal.getIngredientRegistry();
+        fluidRenderer = ingredientRegistry.getIngredientRenderer(VanillaTypes.FLUID);
+
+        registry.addRecipeCategories(new FluidRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+    }
+
+    @Override
     public void register(IModRegistry registry) {
         jeiHelpers = registry.getJeiHelpers();
         itemRegistry = registry.getIngredientRegistry();
@@ -59,6 +75,13 @@ public class JeiPlugin implements IModPlugin {
         // jei can't handle custom recipe classes on its own
         registry.handleRecipes(ShapedCraftingRecipe.class, recipe -> new ShapedRecipeWrapper(jeiHelpers, recipe), VanillaRecipeCategoryUid.CRAFTING);
         registry.handleRecipes(ShapelessCraftingRecipe.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe), VanillaRecipeCategoryUid.CRAFTING);
+
+        // register in world crafting recipes
+        List<FluidRecipeCategory.RecipeWrapper> recipeWrappers = new ArrayList<>();
+        FluidRecipe.forEach(fluidRecipe -> {
+            recipeWrappers.add(new FluidRecipeCategory.RecipeWrapper(fluidRecipe));
+        });
+        registry.addRecipes(recipeWrappers, FluidRecipeCategory.UID);
     }
 
     @Override

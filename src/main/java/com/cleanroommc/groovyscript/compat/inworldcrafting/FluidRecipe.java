@@ -12,6 +12,7 @@ import it.unimi.dsi.fastutil.floats.FloatList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -27,6 +28,7 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public abstract class FluidRecipe {
+
+    public static final int MAX_ITEM_INPUT = 9;
 
     private static final Map<Fluid, List<FluidRecipe>> fluidRecipes = new Object2ObjectOpenHashMap<>();
 
@@ -89,6 +93,10 @@ public abstract class FluidRecipe {
         return successful.get();
     }
 
+    public static void forEach(Consumer<FluidRecipe> consumer) {
+        fluidRecipes.values().forEach(list -> list.forEach(consumer));
+    }
+
     /**
      * Tries to find a fluid conversion recipe for a fluid at a position in the world
      *
@@ -128,9 +136,20 @@ public abstract class FluidRecipe {
         this.afterRecipe = afterRecipe;
     }
 
+    public Fluid getFluidInput() {
+        return input;
+    }
+
     public IIngredient[] getItemInputs() {
         return itemInputs;
     }
+
+    public float[] getItemConsumeChance() {
+        return itemConsumeChance;
+    }
+
+    @Optional.Method(modid = "jei")
+    public abstract void setJeiOutput(IIngredients ingredients);
 
     public boolean matches(ItemStack[] input) {
         if (input.length != this.itemInputs.length) return false;
@@ -152,8 +171,6 @@ public abstract class FluidRecipe {
     /**
      * Tries a recipe and also kills the input items if this recipe matches
      *
-     * @param world
-     * @param pos
      * @param itemsInFluid all items that are in the fluid block space
      * @return if this recipe matched the input
      */

@@ -7,6 +7,8 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import groovy.lang.Closure;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -99,6 +101,11 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         }
 
         @Override
+        public void setJeiOutput(IIngredients ingredients) {
+            ingredients.setOutput(VanillaTypes.ITEM, new ItemStack(getOutput().getBlock(), 1, getOutput().getBlock().getMetaFromState(getOutput())));
+        }
+
+        @Override
         public void handleRecipeResult(World world, BlockPos pos) {
             world.setBlockState(pos, this.output);
         }
@@ -124,7 +131,7 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 9, 0, 0);
+            validateItems(msg, 1, Recipe.MAX_ITEM_INPUT, 0, 0);
             validateFluids(msg, 1, 1, 0, 0);
             msg.add(this.outputBlock == null, () -> "output block must not be empty");
             validateChances(msg);
