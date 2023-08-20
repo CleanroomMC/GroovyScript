@@ -5,9 +5,11 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.command.SimpleCommand;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.FluidRecipe;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.ExplosionRecipeCategory;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.FluidRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapedCraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapelessCraftingRecipe;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import mezz.jei.Internal;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IIngredientHelper;
@@ -62,7 +64,9 @@ public class JeiPlugin implements IModPlugin {
         IngredientRegistry ingredientRegistry = Internal.getIngredientRegistry();
         fluidRenderer = ingredientRegistry.getIngredientRenderer(VanillaTypes.FLUID);
 
-        registry.addRecipeCategories(new FluidRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+        IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
+        registry.addRecipeCategories(new FluidRecipeCategory(guiHelper));
+        registry.addRecipeCategories(new ExplosionRecipeCategory(guiHelper));
     }
 
     @Override
@@ -82,6 +86,7 @@ public class JeiPlugin implements IModPlugin {
             recipeWrappers.add(new FluidRecipeCategory.RecipeWrapper(fluidRecipe));
         });
         registry.addRecipes(recipeWrappers, FluidRecipeCategory.UID);
+        registry.addRecipes(VanillaModule.inWorldCrafting.explosion.getRecipeWrappers(), ExplosionRecipeCategory.UID);
     }
 
     @Override

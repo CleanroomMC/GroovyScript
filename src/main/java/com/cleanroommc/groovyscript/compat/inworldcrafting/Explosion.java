@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.ExplosionRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -12,14 +13,22 @@ import groovy.lang.Closure;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
 
     private final List<Recipe> recipes = new ArrayList<>();
+
+    @Optional.Method(modid = "jei")
+    @GroovyBlacklist
+    public List<ExplosionRecipeCategory.RecipeWrapper> getRecipeWrappers() {
+        return this.recipes.stream().map(ExplosionRecipeCategory.RecipeWrapper::new).collect(Collectors.toList());
+    }
 
     @Override
     public void onReload() {
@@ -60,6 +69,18 @@ public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
             // const value based on e^(-x^2)
             this.statisticalModifier = (float) (Math.pow(1_000_000, (chance - 0.5f) * (0.5f - chance)) * 0.3f);
             this.beforeRecipe = beforeRecipe;
+        }
+
+        public IIngredient getInput() {
+            return input;
+        }
+
+        public ItemStack getOutput() {
+            return output;
+        }
+
+        public float getChance() {
+            return chance;
         }
 
         private boolean tryRecipe(EntityItem entityItem, ItemStack itemStack) {

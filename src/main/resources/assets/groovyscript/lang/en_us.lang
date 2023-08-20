@@ -5,7 +5,10 @@ groovyscript.command.copy.copied_end=] to the clipboard
 key.categories.groovyscript=GroovyScript
 key.groovyscript.reload=Reload Scripts
 
-groovyscript.jei.category.fluid_recipe.name=In world fluid recipes
+groovyscript.jei.category.groovyscript:fluid_recipe.name=In world fluid recipes
+groovyscript.jei.category.groovyscript:explosion.name=Explosion recipes
 
 groovyscript.recipe.fluid_recipe=Drop items into fluid to transform fluid
-groovyscript.recipe.chance=§2%s§7 chance to get consumed
+groovyscript.recipe.explosion=Explode item with an explosion to transform item
+groovyscript.recipe.chance_produce=§2%s§7 chance to produce output
+groovyscript.recipe.chance_consume=§2%s§7 chance to get consumed

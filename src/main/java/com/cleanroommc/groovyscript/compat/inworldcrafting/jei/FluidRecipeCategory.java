@@ -28,29 +28,22 @@ import java.util.List;
 
 public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.RecipeWrapper> {
 
-    public static final String UID = "fluid_recipe";
-    private static final NumberFormat numberFormat = NumberFormat.getPercentInstance();
+    public static final String UID = GroovyScript.ID + ":fluid_recipe";
+    public static final NumberFormat numberFormat = NumberFormat.getPercentInstance();
 
     private static final int inputY = 23;
     public static final int outputY = 52;
-    public static final int outputX = 107;
+    public static final int outputX = 105;
 
-    public final IDrawable rightArrow;
     public final IDrawable downRightArrow;
-    public final IDrawable slot;
     public final IDrawable icon;
 
     public FluidRecipeCategory(IGuiHelper guiHelper) {
         super(guiHelper, UID, 176, 73);
-        rightArrow = guiHelper.drawableBuilder(new ResourceLocation(GroovyScript.ID, "textures/jei/arrow_right.png"), 0, 0, 24, 15)
-                .setTextureSize(24, 15)
-                .build();
+
         downRightArrow = guiHelper.drawableBuilder(new ResourceLocation(GroovyScript.ID, "textures/jei/arrow_down_right.png"), 0, 0, 24, 18)
                 .setTextureSize(24, 18)
                 .build();
-        slot = guiHelper.getSlotDrawable();/*guiHelper.drawableBuilder(new ResourceLocation(GroovyScript.ID, "textures/jei/slot.png"), 0, 0, 18, 18)
-                .setTextureSize(18, 18)
-                .build();*/
         icon = guiHelper.createDrawableIngredient(new ItemStack(Items.WATER_BUCKET));
     }
 
@@ -59,7 +52,7 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
         for (int i = 0; i < 9; i++) {
             addItemSlot(recipeLayout, i, true, 7 + 18 * i, inputY);
         }
-        addFluidSlot(recipeLayout, 10, true, 55, outputY);
+        addFluidSlot(recipeLayout, 10, true, 53, outputY);
         if (recipeWrapper.recipe.getClass() == FluidToFluid.Recipe.class) {
             addFluidSlot(recipeLayout, 11, false, outputX, outputY);
         } else {
@@ -68,8 +61,8 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
         recipeLayout.getItemStacks().set(ingredients);
         recipeLayout.getFluidStacks().set(ingredients);
 
-        setBackgrounds(recipeLayout.getItemStacks(), this.slot);
-        setBackgrounds(recipeLayout.getFluidStacks(), this.slot);
+        setBackgrounds(recipeLayout.getItemStacks(), slot);
+        setBackgrounds(recipeLayout.getFluidStacks(), slot);
 
         recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (slotIndex < 9) {
@@ -98,8 +91,8 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
     public void drawExtras(@NotNull Minecraft minecraft) {
         drawLine(minecraft, "groovyscript.recipe.fluid_recipe", 4, 4, 0x404040);
         GlStateManager.color(1f, 1f, 1f, 1f);
-        this.downRightArrow.draw(minecraft, 25, outputY - 3);
-        this.rightArrow.draw(minecraft, 78, outputY + 1);
+        this.downRightArrow.draw(minecraft, 23, outputY - 3);
+        rightArrow.draw(minecraft, 76, outputY + 1);
     }
 
     @Nullable

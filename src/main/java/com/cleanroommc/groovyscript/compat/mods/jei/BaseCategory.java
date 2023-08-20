@@ -6,22 +6,30 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.api.gui.IGuiIngredientGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.gui.ingredients.GuiIngredient;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseCategory<T extends IRecipeWrapper> implements IRecipeCategory<T> {
 
     private final String uid;
     private final IDrawable background;
-    protected IRecipeLayout recipeLayout;
+
+    public static IDrawable rightArrow;
+    public static IDrawable slot;
 
     public BaseCategory(IGuiHelper guiHelper, String uid, int width, int height) {
         this.uid = uid;
         this.background = guiHelper.createBlankDrawable(width, height);
+        if (slot == null) {
+            rightArrow = guiHelper.drawableBuilder(new ResourceLocation(GroovyScript.ID, "textures/jei/arrow_right.png"), 0, 0, 24, 15)
+                    .setTextureSize(24, 15)
+                    .build();
+            slot = guiHelper.getSlotDrawable();
+        }
     }
 
     @Override
@@ -42,11 +50,6 @@ public abstract class BaseCategory<T extends IRecipeWrapper> implements IRecipeC
     @Override
     public @NotNull IDrawable getBackground() {
         return this.background;
-    }
-
-    @Override
-    public void setRecipe(@NotNull IRecipeLayout recipeLayout, @NotNull T recipeWrapper, @NotNull IIngredients ingredients) {
-        this.recipeLayout = recipeLayout;
     }
 
     public static void addItemSlot(IRecipeLayout recipeLayout, int index, boolean input, int x, int y) {
