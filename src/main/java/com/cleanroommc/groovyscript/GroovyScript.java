@@ -10,8 +10,6 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
-import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
-import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.CReload;
@@ -33,12 +31,10 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
-import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
@@ -120,12 +116,6 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
-        Loot.TABLE_MANAGER = new LootTableManager(null);
-        Loot.TABLES.values().forEach(table -> {
-            ((LootTableAccessor) table).setIsFrozen(false);
-            ((LootTableAccessor) table).getPools().forEach(pool -> ((LootPoolAccessor) pool).setIsFrozen(false));
-        });
-
         if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) TinkersConstruct.init();
     }
 
@@ -168,6 +158,9 @@ public class GroovyScript {
 
     @ApiStatus.Internal
     public static void runGroovyScriptsInLoader(LoadStage loadStage) {
+        if (loadStage == LoadStage.POST_INIT) {
+            Loot.init();
+        }
         // called via mixin between fml post init and load complete
         long time = System.currentTimeMillis();
         getSandbox().run(loadStage);
@@ -179,8 +172,8 @@ public class GroovyScript {
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);
             Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.command.copy.copied_start")
-                    .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
-                    .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
+                                                                .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
+                                                                .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
         });
     }
 

@@ -21,7 +21,8 @@
     "groovy.CompUnitClassGenMixin",
     "groovy.MetaClassImplMixin",
     "loot.LootPoolAccessor",
-    "loot.LootTableAccessor"
+    "loot.LootTableAccessor",
+    "loot.LootTableMixin"
   ],
   "client": [
     "DefaultResourcePackAccessor",

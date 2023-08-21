@@ -13,7 +13,4 @@ public interface LootTableAccessor {
     @Accessor
     List<LootPool> getPools();
 
-    @Accessor(remap = false)
-    void setIsFrozen(boolean val);
-
 }
