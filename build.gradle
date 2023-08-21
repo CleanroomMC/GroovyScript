@@ -60,6 +60,9 @@ tasks.injectTags.configure {
 
 repositories {
     maven {
+        url "https://repo.hellparadise.jp.net/snapshots"
+    }
+    maven {
         url = 'https://maven.cleanroommc.com'
     }
     maven {
@@ -73,9 +76,6 @@ repositories {
     }
     maven {
         url = 'https://mvnrepository.com/artifact/org.apache.groovy/groovy'
-    }
-    maven {
-        url 'https://dvs1.progwml6.com/files/maven/'
     }
     maven {
         url 'http://maven.tterrag.com/'
