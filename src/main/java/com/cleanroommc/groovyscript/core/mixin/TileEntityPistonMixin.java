@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.google.common.collect.Lists;
 import net.minecraft.block.BlockPistonMoving;
 import net.minecraft.block.material.EnumPushReaction;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
@@ -86,7 +87,8 @@ public abstract class TileEntityPistonMixin {
                                        this.extending &&
                                        this.shouldHeadBeRendered &&
                                        progress >= 1f &&
-                                       !((pushingAgainst = thisTile.getWorld().getBlockState(thisTile.getPos().offset(enumfacing))).getBlock() instanceof BlockPistonMoving);
+                                       !((pushingAgainst = thisTile.getWorld().getBlockState(thisTile.getPos().offset(enumfacing))).getBlock() instanceof BlockPistonMoving) &&
+                                       pushingAgainst.getMaterial() != Material.AIR;
                 // groovyscript end
 
                 for (int i = 0; i < list1.size(); i++) {

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.PistonPushRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -12,21 +13,23 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
 
     private final List<Recipe> recipes = new ArrayList<>();
 
-    /*@Optional.Method(modid = "jei")
+    @Optional.Method(modid = "jei")
     @GroovyBlacklist
-    public List<ExplosionRecipeCategory.RecipeWrapper> getRecipeWrappers() {
-        return this.recipes.stream().map(ExplosionRecipeCategory.RecipeWrapper::new).collect(Collectors.toList());
-    }*/
+    public List<PistonPushRecipeCategory.RecipeWrapper> getRecipeWrappers() {
+        return this.recipes.stream().map(PistonPushRecipeCategory.RecipeWrapper::new).collect(Collectors.toList());
+    }
 
     @Override
     public void onReload() {
@@ -77,6 +80,10 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
 
         public int getMaxConversionsPerPush() {
             return maxConversionsPerPush;
+        }
+
+        public int getMinHarvestLevel() {
+            return minHarvestLevel;
         }
 
         private boolean tryRecipe(Consumer<EntityItem> entitySpawner, EntityItem entityItem, ItemStack itemStack, IBlockState pushingAgainst) {

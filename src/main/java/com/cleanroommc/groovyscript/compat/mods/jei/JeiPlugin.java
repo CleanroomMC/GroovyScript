@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.compat.inworldcrafting.FluidRecipe;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.BurningRecipeCategory;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.ExplosionRecipeCategory;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.FluidRecipeCategory;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.PistonPushRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapedCraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapelessCraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
@@ -69,6 +70,7 @@ public class JeiPlugin implements IModPlugin {
         registry.addRecipeCategories(new FluidRecipeCategory(guiHelper));
         registry.addRecipeCategories(new ExplosionRecipeCategory(guiHelper));
         registry.addRecipeCategories(new BurningRecipeCategory(guiHelper));
+        registry.addRecipeCategories(new PistonPushRecipeCategory(guiHelper));
     }
 
     @Override
@@ -90,6 +92,7 @@ public class JeiPlugin implements IModPlugin {
         registry.addRecipes(recipeWrappers, FluidRecipeCategory.UID);
         registry.addRecipes(VanillaModule.inWorldCrafting.explosion.getRecipeWrappers(), ExplosionRecipeCategory.UID);
         registry.addRecipes(VanillaModule.inWorldCrafting.burning.getRecipeWrappers(), BurningRecipeCategory.UID);
+        registry.addRecipes(VanillaModule.inWorldCrafting.pistonPush.getRecipeWrappers(), PistonPushRecipeCategory.UID);
     }
 
     @Override
