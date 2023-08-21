@@ -65,7 +65,7 @@ public abstract class TileEntityPistonMixin {
      * @reason easier recipe implementation
      */
     @Overwrite
-    public void moveCollidedEntities(float progress) {
+    private void moveCollidedEntities(float progress) {
         TileEntityPiston thisTile = (TileEntityPiston) (Object) this;
 
         EnumFacing enumfacing = this.extending ? this.pistonFacing : this.pistonFacing.getOpposite();
