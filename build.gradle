@@ -60,13 +60,14 @@ tasks.injectTags.configure {
 
 repositories {
     maven {
-        url "https://repo.hellparadise.jp.net/snapshots"
-    }
-    maven {
         url = 'https://maven.cleanroommc.com'
     }
     maven {
         url = 'https://repo.spongepowered.org/maven'
+    }
+    maven {
+        url 'http://maven.tterrag.com/'
+        allowInsecureProtocol = true
     }
     maven {
         url 'https://cursemaven.com'
@@ -76,10 +77,6 @@ repositories {
     }
     maven {
         url = 'https://mvnrepository.com/artifact/org.apache.groovy/groovy'
-    }
-    maven {
-        url 'http://maven.tterrag.com/'
-        allowInsecureProtocol = true
     }
     maven {
         url = 'http://maven.ic2.player.to/'
@@ -124,9 +121,9 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:chisel-235279:2915375')
     }
 
-    compileOnly 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
+    compileOnly rfg.deobf('curse.maven:mantle-74924:2713386')
     if (project.debug_inspirations.toBoolean() || project.debug_tinkers.toBoolean()) {
-        runtimeOnly 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
+        runtimeOnly rfg.deobf('curse.maven:mantle-74924:2713386')
     }
 
     compileOnly rfg.deobf('curse.maven:mekanism-268560:2835175')
@@ -287,12 +284,11 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:woot-244049:2712670')
     }
 
-    compileOnly 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
-    compileOnly 'slimeknights:TConstruct:1.12.2-2.13.0.190'
+    compileOnly rfg.deobf('curse.maven:tinkers_construct-74072:2902483')
     compileOnly rfg.deobf('curse.maven:constructs-armory-287683:3174535')
     compileOnly rfg.deobf('curse.maven:tinkers-complement-272671:2843439')
     if (project.debug_tinkers.toBoolean()) {
-        runtimeOnly 'slimeknights:TConstruct:1.12.2-2.13.0.190'
+        runtimeOnly rfg.deobf('curse.maven:tinkers_construct-74072:2902483')
         runtimeOnly rfg.deobf('curse.maven:constructs-armory-287683:3174535')
         runtimeOnly rfg.deobf('curse.maven:tinkers-complement-272671:2843439')
     }
