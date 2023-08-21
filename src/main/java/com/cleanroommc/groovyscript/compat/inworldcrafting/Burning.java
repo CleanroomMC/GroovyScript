@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.BurningRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -11,18 +12,26 @@ import groovy.lang.Closure;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Burning extends VirtualizedRegistry<Burning.Recipe> {
 
     private static final Map<EntityItem, Recipe> runningRecipes = new Object2ObjectOpenHashMap<>();
 
     private final List<Recipe> recipes = new ArrayList<>();
+
+    @Optional.Method(modid = "jei")
+    @GroovyBlacklist
+    public List<BurningRecipeCategory.RecipeWrapper> getRecipeWrappers() {
+        return this.recipes.stream().map(BurningRecipeCategory.RecipeWrapper::new).collect(Collectors.toList());
+    }
 
     @Override
     public void onReload() {
@@ -67,12 +76,20 @@ public class Burning extends VirtualizedRegistry<Burning.Recipe> {
             this.beforeRecipe = beforeRecipe;
         }
 
-        public boolean isValidInput(EntityItem entityItem, ItemStack itemStack) {
-            return this.input.test(itemStack) && (this.beforeRecipe == null || ClosureHelper.call(true, this.beforeRecipe, entityItem));
+        public IIngredient getInput() {
+            return input;
+        }
+
+        public ItemStack getOutput() {
+            return output;
         }
 
         public int getTicks() {
             return ticks;
+        }
+
+        public boolean isValidInput(EntityItem entityItem, ItemStack itemStack) {
+            return this.input.test(itemStack) && (this.beforeRecipe == null || ClosureHelper.call(true, this.beforeRecipe, entityItem));
         }
     }
 
