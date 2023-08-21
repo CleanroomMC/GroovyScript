@@ -10,6 +10,7 @@ public class InWorldCrafting implements IScriptReloadable {
     public final FluidToBlock fluidToBlock = new FluidToBlock();
     public final Explosion explosion = new Explosion();
     public final Burning burning = new Burning();
+    public final PistonPush pistonPush = new PistonPush();
 
     @GroovyBlacklist
     @Override
@@ -19,6 +20,7 @@ public class InWorldCrafting implements IScriptReloadable {
         this.fluidToBlock.onReload();
         this.explosion.onReload();
         this.burning.onReload();
+        this.pistonPush.onReload();
     }
 
     @GroovyBlacklist
@@ -29,5 +31,6 @@ public class InWorldCrafting implements IScriptReloadable {
         this.fluidToBlock.afterScriptLoad();
         this.explosion.afterScriptLoad();
         this.burning.afterScriptLoad();
+        this.pistonPush.afterScriptLoad();
     }
 }

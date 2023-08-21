@@ -16,6 +16,7 @@
     "LoaderControllerMixin",
     "OreDictionaryAccessor",
     "SlotCraftingAccess",
+    "TileEntityPistonMixin",
     "groovy.AsmDecompilerMixin",
     "groovy.CompUnitClassGenMixin",
     "groovy.MetaClassImplMixin",
