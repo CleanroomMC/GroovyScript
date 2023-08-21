@@ -75,9 +75,6 @@ repositories {
         url = 'https://mvnrepository.com/artifact/org.apache.groovy/groovy'
     }
     maven {
-        url 'https://dvs1.progwml6.com/files/maven/'
-    }
-    maven {
         url 'http://maven.tterrag.com/'
         allowInsecureProtocol = true
     }
@@ -105,7 +102,7 @@ dependencies {
 
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 
-    implementation 'mezz.jei:jei_1.12.2:4.16.1.302'
+    implementation 'curse.maven:jei-238222:3040523'
 
     compileOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
     if (project.debug_avaritia.toBoolean() || project.debug_draconic_evolution.toBoolean()) {
