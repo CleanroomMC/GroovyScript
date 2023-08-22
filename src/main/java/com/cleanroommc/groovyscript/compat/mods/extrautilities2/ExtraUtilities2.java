@@ -14,5 +14,21 @@ public class ExtraUtilities2 extends ModPropertyContainer {
         addRegistry(crusher);
         addRegistry(enchanter);
         addRegistry(furnace);
+//        addRegistry(Generator.furnace);
+//        addRegistry(Generator.survivalist);
+//        addRegistry(Generator.culinary);
+//        addRegistry(Generator.potion);
+//        addRegistry(Generator.tnt);
+//        addRegistry(Generator.lava);
+//        addRegistry(Generator.pink);
+//        addRegistry(Generator.netherstar);
+//        addRegistry(Generator.ender);
+//        addRegistry(Generator.redstone);
+//        addRegistry(Generator.overclock);
+//        addRegistry(Generator.dragon);
+//        addRegistry(Generator.ice);
+//        addRegistry(Generator.death);
+//        addRegistry(Generator.enchant);
+//        addRegistry(Generator.slime);
     }
 }
