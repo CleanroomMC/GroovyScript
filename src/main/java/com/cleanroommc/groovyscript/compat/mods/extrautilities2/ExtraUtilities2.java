@@ -8,12 +8,14 @@ public class ExtraUtilities2 extends ModPropertyContainer {
     public final Crusher crusher = new Crusher();
     public final Enchanter enchanter = new Enchanter();
     public final Furnace furnace = new Furnace();
+    public final GridPowerPassiveGenerator gridPowerPassiveGenerator = new GridPowerPassiveGenerator();
 
     public ExtraUtilities2() {
         addRegistry(resonator);
         addRegistry(crusher);
         addRegistry(enchanter);
         addRegistry(furnace);
+        addRegistry(gridPowerPassiveGenerator);
 //        addRegistry(Generator.furnace);
 //        addRegistry(Generator.survivalist);
 //        addRegistry(Generator.culinary);
