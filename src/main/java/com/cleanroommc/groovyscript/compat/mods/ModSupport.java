@@ -15,6 +15,7 @@ import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolut
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
 import com.cleanroommc.groovyscript.compat.mods.evilcraft.EvilCraft;
 import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCrafting;
+import com.cleanroommc.groovyscript.compat.mods.extrautilities2.ExtraUtilities2;
 import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
@@ -60,6 +61,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<EnderIO> ENDER_IO = new Container<>("enderio", "Ender IO", EnderIO::new, "eio");
     public static final Container<EvilCraft> EVILCRAFT = new Container<>("evilcraft", "EvilCraft", EvilCraft::new);
     public static final Container<ExtendedCrafting> EXTENDED_CRAFTING = new Container<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
+    public static final Container<ExtraUtilities2> EXTRA_UTILITIES_2 = new Container<>("extrautils2", "Extra Utilities 2", ExtraUtilities2::new, "extrautilities2");
     public static final Container<Forestry> FORESTRY = new Container<>("forestry", "Forestry", Forestry::new);
     public static final Container<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new Container<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
     public static final Container<IC2> INDUSTRIALCRAFT = new Container<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
