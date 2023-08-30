@@ -63,21 +63,21 @@ public class BurningRecipeCategory extends BaseCategory<BurningRecipeCategory.Re
 
     public static class RecipeWrapper implements IRecipeWrapper {
 
-        private final Burning.Recipe recipe;
+        private final Burning.BurningRecipe burningRecipe;
 
-        public RecipeWrapper(Burning.Recipe recipe) {
-            this.recipe = recipe;
+        public RecipeWrapper(Burning.BurningRecipe burningRecipe) {
+            this.burningRecipe = burningRecipe;
         }
 
         @Override
         public void getIngredients(IIngredients ingredients) {
-            ingredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(this.recipe.getInput().getMatchingStacks())));
-            ingredients.setOutput(VanillaTypes.ITEM, this.recipe.getOutput());
+            ingredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(this.burningRecipe.getInput().getMatchingStacks())));
+            ingredients.setOutput(VanillaTypes.ITEM, this.burningRecipe.getOutput());
         }
 
         @Override
         public void drawInfo(@NotNull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-            int ticks = this.recipe.getTicks();
+            int ticks = this.burningRecipe.getTicks();
             String ticksS = ticks + " ticks";
             int w = minecraft.fontRenderer.getStringWidth(ticksS);
             int x = 88 - w / 2, y = 44;

@@ -23,8 +23,11 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.ingredients.IngredientRegistry;
 import mezz.jei.plugins.vanilla.crafting.ShapelessRecipeWrapper;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -85,6 +88,14 @@ public class JeiPlugin implements IModPlugin {
         registry.handleRecipes(ShapelessCraftingRecipe.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe), VanillaRecipeCategoryUid.CRAFTING);
 
         // register in world crafting recipes
+        registry.addRecipeCatalyst(new ItemStack(Items.WATER_BUCKET), FluidRecipeCategory.UID);
+        registry.addRecipeCatalyst(new ItemStack(Items.LAVA_BUCKET), FluidRecipeCategory.UID);
+        registry.addRecipeCatalyst(new ItemStack(Blocks.TNT), ExplosionRecipeCategory.UID);
+        //registry.addRecipeCatalyst(new ItemStack(Blocks.FIRE), BurningRecipeCategory.UID);
+        registry.addRecipeCatalyst(new ItemStack(Items.FLINT_AND_STEEL), BurningRecipeCategory.UID);
+        registry.addRecipeCatalyst(new ItemStack(Blocks.PISTON), PistonPushRecipeCategory.UID);
+        registry.addRecipeCatalyst(new ItemStack(Blocks.STICKY_PISTON), PistonPushRecipeCategory.UID);
+
         List<FluidRecipeCategory.RecipeWrapper> recipeWrappers = new ArrayList<>();
         FluidRecipe.forEach(fluidRecipe -> {
             recipeWrappers.add(new FluidRecipeCategory.RecipeWrapper(fluidRecipe));

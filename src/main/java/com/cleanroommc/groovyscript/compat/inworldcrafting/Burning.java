@@ -21,38 +21,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Burning extends VirtualizedRegistry<Burning.Recipe> {
+public class Burning extends VirtualizedRegistry<Burning.BurningRecipe> {
 
-    private static final Map<EntityItem, Recipe> runningRecipes = new Object2ObjectOpenHashMap<>();
+    private static final Map<EntityItem, BurningRecipe> runningRecipes = new Object2ObjectOpenHashMap<>();
 
-    private final List<Recipe> recipes = new ArrayList<>();
+    private final List<BurningRecipe> burningRecipes = new ArrayList<>();
 
     @Optional.Method(modid = "jei")
     @GroovyBlacklist
     public List<BurningRecipeCategory.RecipeWrapper> getRecipeWrappers() {
-        return this.recipes.stream().map(BurningRecipeCategory.RecipeWrapper::new).collect(Collectors.toList());
+        return this.burningRecipes.stream().map(BurningRecipeCategory.RecipeWrapper::new).collect(Collectors.toList());
     }
 
     @Override
     public void onReload() {
-        this.recipes.addAll(getBackupRecipes());
-        getScriptedRecipes().forEach(this.recipes::remove);
+        this.burningRecipes.addAll(getBackupRecipes());
+        getScriptedRecipes().forEach(this.burningRecipes::remove);
     }
 
     @Override
     public void afterScriptLoad() {
         super.afterScriptLoad();
-        this.recipes.sort(Comparator.comparingInt(Recipe::getTicks));
+        this.burningRecipes.sort(Comparator.comparingInt(BurningRecipe::getTicks));
     }
 
-    public void add(Recipe recipe) {
-        this.recipes.add(recipe);
-        addScripted(recipe);
+    public void add(BurningRecipe burningRecipe) {
+        this.burningRecipes.add(burningRecipe);
+        addScripted(burningRecipe);
     }
 
-    public boolean remove(Recipe recipe) {
-        if (this.recipes.remove(recipe)) {
-            addBackup(recipe);
+    public boolean remove(BurningRecipe burningRecipe) {
+        if (this.burningRecipes.remove(burningRecipe)) {
+            addBackup(burningRecipe);
             return true;
         }
         return false;
@@ -62,14 +62,14 @@ public class Burning extends VirtualizedRegistry<Burning.Recipe> {
         return new RecipeBuilder();
     }
 
-    public static class Recipe {
+    public static class BurningRecipe {
 
         private final IIngredient input;
         private final ItemStack output;
         private final int ticks;
         private final Closure<Boolean> startCondition;
 
-        public Recipe(IIngredient input, ItemStack output, int ticks, Closure<Boolean> startCondition) {
+        public BurningRecipe(IIngredient input, ItemStack output, int ticks, Closure<Boolean> startCondition) {
             this.input = input;
             this.output = output;
             this.ticks = ticks;
@@ -93,7 +93,7 @@ public class Burning extends VirtualizedRegistry<Burning.Recipe> {
         }
     }
 
-    public static class RecipeBuilder extends AbstractRecipeBuilder<Recipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<BurningRecipe> {
 
         private int ticks = 40;
         private Closure<Boolean> startCondition;
@@ -110,7 +110,7 @@ public class Burning extends VirtualizedRegistry<Burning.Recipe> {
 
         @Override
         public String getErrorMsg() {
-            return "Error adding in world explosion recipe";
+            return "Error adding in world burning recipe";
         }
 
         @Override
@@ -124,23 +124,23 @@ public class Burning extends VirtualizedRegistry<Burning.Recipe> {
         }
 
         @Override
-        public @Nullable Recipe register() {
+        public @Nullable Burning.BurningRecipe register() {
             if (!validate()) return null;
-            Recipe recipe = new Recipe(this.input.get(0), this.output.get(0), this.ticks, this.startCondition);
-            VanillaModule.inWorldCrafting.burning.add(recipe);
-            return recipe;
+            BurningRecipe burningRecipe = new BurningRecipe(this.input.get(0), this.output.get(0), this.ticks, this.startCondition);
+            VanillaModule.inWorldCrafting.burning.add(burningRecipe);
+            return burningRecipe;
         }
     }
 
     @GroovyBlacklist
-    public Recipe findRecipe(EntityItem entityItem) {
-        Recipe recipe = runningRecipes.get(entityItem);
-        if (recipe != null) return recipe;
+    public BurningRecipe findRecipe(EntityItem entityItem) {
+        BurningRecipe burningRecipe = runningRecipes.get(entityItem);
+        if (burningRecipe != null) return burningRecipe;
         ItemStack itemStack = entityItem.getItem();
-        for (Recipe recipe1 : this.recipes) {
-            if (recipe1.isValidInput(entityItem, itemStack)) {
-                runningRecipes.put(entityItem, recipe1);
-                return recipe1;
+        for (BurningRecipe burningRecipe1 : this.burningRecipes) {
+            if (burningRecipe1.isValidInput(entityItem, itemStack)) {
+                runningRecipes.put(entityItem, burningRecipe1);
+                return burningRecipe1;
             }
         }
         return null;
@@ -148,13 +148,13 @@ public class Burning extends VirtualizedRegistry<Burning.Recipe> {
 
     @GroovyBlacklist
     public void updateRecipeProgress(EntityItem entityItem) {
-        Recipe recipe = findRecipe(entityItem);
-        if (recipe == null) return;
+        BurningRecipe burningRecipe = findRecipe(entityItem);
+        if (burningRecipe == null) return;
         int prog = entityItem.getEntityData().getInteger("burn_time") + 1;
         entityItem.getEntityData().setInteger("burn_time", prog);
         entityItem.setEntityInvulnerable(true);
-        if (prog >= recipe.ticks) {
-            ItemStack newStack = recipe.output.copy();
+        if (prog >= burningRecipe.ticks) {
+            ItemStack newStack = burningRecipe.output.copy();
             newStack.setCount(entityItem.getItem().getCount());
             entityItem.setItem(newStack);
             removeBurningItem(entityItem);

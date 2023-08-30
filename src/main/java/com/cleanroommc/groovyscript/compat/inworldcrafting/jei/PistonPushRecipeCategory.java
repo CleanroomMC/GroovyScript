@@ -63,27 +63,27 @@ public class PistonPushRecipeCategory extends BaseCategory<PistonPushRecipeCateg
 
     public static class RecipeWrapper implements IRecipeWrapper {
 
-        private final PistonPush.Recipe recipe;
+        private final PistonPush.PistonPushRecipe pistonPushRecipe;
 
-        public RecipeWrapper(PistonPush.Recipe recipe) {
-            this.recipe = recipe;
+        public RecipeWrapper(PistonPush.PistonPushRecipe pistonPushRecipe) {
+            this.pistonPushRecipe = pistonPushRecipe;
         }
 
         @Override
         public void getIngredients(IIngredients ingredients) {
-            ingredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(this.recipe.getInput().getMatchingStacks())));
-            ingredients.setOutput(VanillaTypes.ITEM, this.recipe.getOutput());
+            ingredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(this.pistonPushRecipe.getInput().getMatchingStacks())));
+            ingredients.setOutput(VanillaTypes.ITEM, this.pistonPushRecipe.getOutput());
         }
 
         @Override
         public void drawInfo(@NotNull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
             int y = 46;
-            if (this.recipe.getMaxConversionsPerPush() < 64) {
-                minecraft.fontRenderer.drawString(I18n.format("groovyscript.recipe.piston_push.max_items", this.recipe.getMaxConversionsPerPush()), 7, y, 0x404040);
+            if (this.pistonPushRecipe.getMaxConversionsPerPush() < 64) {
+                minecraft.fontRenderer.drawString(I18n.format("groovyscript.recipe.piston_push.max_items", this.pistonPushRecipe.getMaxConversionsPerPush()), 7, y, 0x404040);
             }
             y += 11;
-            if (this.recipe.getMinHarvestLevel() >= 0) {
-                minecraft.fontRenderer.drawString(I18n.format("groovyscript.recipe.piston_push.min_level", this.recipe.getMinHarvestLevel()), 7, y, 0x404040);
+            if (this.pistonPushRecipe.getMinHarvestLevel() >= 0) {
+                minecraft.fontRenderer.drawString(I18n.format("groovyscript.recipe.piston_push.min_level", this.pistonPushRecipe.getMinHarvestLevel()), 7, y, 0x404040);
             }
         }
     }

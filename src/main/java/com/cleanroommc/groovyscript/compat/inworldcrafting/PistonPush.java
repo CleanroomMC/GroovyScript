@@ -21,30 +21,30 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
+public class PistonPush extends VirtualizedRegistry<PistonPush.PistonPushRecipe> {
 
-    private final List<Recipe> recipes = new ArrayList<>();
+    private final List<PistonPushRecipe> pistonPushRecipes = new ArrayList<>();
 
     @Optional.Method(modid = "jei")
     @GroovyBlacklist
     public List<PistonPushRecipeCategory.RecipeWrapper> getRecipeWrappers() {
-        return this.recipes.stream().map(PistonPushRecipeCategory.RecipeWrapper::new).collect(Collectors.toList());
+        return this.pistonPushRecipes.stream().map(PistonPushRecipeCategory.RecipeWrapper::new).collect(Collectors.toList());
     }
 
     @Override
     public void onReload() {
-        this.recipes.addAll(getBackupRecipes());
-        getScriptedRecipes().forEach(this.recipes::remove);
+        this.pistonPushRecipes.addAll(getBackupRecipes());
+        getScriptedRecipes().forEach(this.pistonPushRecipes::remove);
     }
 
-    public void add(Recipe recipe) {
-        this.recipes.add(recipe);
-        addScripted(recipe);
+    public void add(PistonPushRecipe pistonPushRecipe) {
+        this.pistonPushRecipes.add(pistonPushRecipe);
+        addScripted(pistonPushRecipe);
     }
 
-    public boolean remove(Recipe recipe) {
-        if (this.recipes.remove(recipe)) {
-            addBackup(recipe);
+    public boolean remove(PistonPushRecipe pistonPushRecipe) {
+        if (this.pistonPushRecipes.remove(pistonPushRecipe)) {
+            addBackup(pistonPushRecipe);
             return true;
         }
         return false;
@@ -54,7 +54,7 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
         return new RecipeBuilder();
     }
 
-    public static class Recipe {
+    public static class PistonPushRecipe {
 
         private final IIngredient input;
         private final ItemStack output;
@@ -62,7 +62,7 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
         private final int minHarvestLevel;
         private final Closure<Boolean> startCondition;
 
-        public Recipe(IIngredient input, ItemStack output, int maxConversionsPerPush, int minHarvestLevel, Closure<Boolean> startCondition) {
+        public PistonPushRecipe(IIngredient input, ItemStack output, int maxConversionsPerPush, int minHarvestLevel, Closure<Boolean> startCondition) {
             this.input = input;
             this.output = output;
             this.maxConversionsPerPush = maxConversionsPerPush;
@@ -104,7 +104,7 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
         }
     }
 
-    public static class RecipeBuilder extends AbstractRecipeBuilder<Recipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<PistonPushRecipe> {
 
         private int maxConversionsPerPush = 64;
         private int minHarvestLevel = -1;
@@ -127,7 +127,7 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
 
         @Override
         public String getErrorMsg() {
-            return "Error adding in world explosion recipe";
+            return "Error adding in world piston push recipe";
         }
 
         @Override
@@ -141,10 +141,10 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
         }
 
         @Override
-        public @Nullable Recipe register() {
+        public @Nullable PistonPush.PistonPushRecipe register() {
             if (!validate()) return null;
-            Recipe recipe = new Recipe(this.input.get(0), this.output.get(0), this.maxConversionsPerPush, this.minHarvestLevel, this.startCondition);
-            VanillaModule.inWorldCrafting.pistonPush.add(recipe);
+            PistonPushRecipe pistonPushRecipe = new PistonPushRecipe(this.input.get(0), this.output.get(0), this.maxConversionsPerPush, this.minHarvestLevel, this.startCondition);
+            VanillaModule.inWorldCrafting.pistonPush.add(pistonPushRecipe);
             return null;
         }
     }
@@ -152,8 +152,8 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
     @GroovyBlacklist
     public void findAndRunRecipe(Consumer<EntityItem> entitySpawner, EntityItem entityItem, IBlockState pushingAgainst) {
         ItemStack itemStack = entityItem.getItem();
-        for (Recipe recipe : this.recipes) {
-            if (recipe.tryRecipe(entitySpawner, entityItem, itemStack, pushingAgainst)) {
+        for (PistonPushRecipe pistonPushRecipe : this.pistonPushRecipes) {
+            if (pistonPushRecipe.tryRecipe(entitySpawner, entityItem, itemStack, pushingAgainst)) {
                 return;
             }
         }

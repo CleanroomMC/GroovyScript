@@ -64,21 +64,21 @@ public class ExplosionRecipeCategory extends BaseCategory<ExplosionRecipeCategor
 
     public static class RecipeWrapper implements IRecipeWrapper {
 
-        private final Explosion.Recipe recipe;
+        private final Explosion.ExplosionRecipe explosionRecipe;
 
-        public RecipeWrapper(Explosion.Recipe recipe) {
-            this.recipe = recipe;
+        public RecipeWrapper(Explosion.ExplosionRecipe explosionRecipe) {
+            this.explosionRecipe = explosionRecipe;
         }
 
         @Override
         public void getIngredients(IIngredients ingredients) {
-            ingredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(this.recipe.getInput().getMatchingStacks())));
-            ingredients.setOutput(VanillaTypes.ITEM, this.recipe.getOutput());
+            ingredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(this.explosionRecipe.getInput().getMatchingStacks())));
+            ingredients.setOutput(VanillaTypes.ITEM, this.explosionRecipe.getOutput());
         }
 
         @Override
         public void drawInfo(@NotNull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-            float chance = this.recipe.getChance();
+            float chance = this.explosionRecipe.getChance();
             if (chance < 1) {
                 String chanceS = FluidRecipeCategory.numberFormat.format(chance);
                 int w = minecraft.fontRenderer.getStringWidth(chanceS);
@@ -89,8 +89,8 @@ public class ExplosionRecipeCategory extends BaseCategory<ExplosionRecipeCategor
 
         @Override
         public @NotNull List<String> getTooltipStrings(int mouseX, int mouseY) {
-            if (this.recipe.getChance() < 1 && mouseX >= 74 && mouseX <= 72 + 28 && mouseY >= 25 && mouseY <= 54) {
-                return Collections.singletonList(I18n.format("groovyscript.recipe.chance_produce", FluidRecipeCategory.numberFormat.format(this.recipe.getChance())));
+            if (this.explosionRecipe.getChance() < 1 && mouseX >= 74 && mouseX <= 72 + 28 && mouseY >= 25 && mouseY <= 54) {
+                return Collections.singletonList(I18n.format("groovyscript.recipe.chance_produce", FluidRecipeCategory.numberFormat.format(this.explosionRecipe.getChance())));
             }
             return Collections.emptyList();
         }

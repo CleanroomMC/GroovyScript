@@ -20,30 +20,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
+public class Explosion extends VirtualizedRegistry<Explosion.ExplosionRecipe> {
 
-    private final List<Recipe> recipes = new ArrayList<>();
+    private final List<ExplosionRecipe> explosionRecipes = new ArrayList<>();
 
     @Optional.Method(modid = "jei")
     @GroovyBlacklist
     public List<ExplosionRecipeCategory.RecipeWrapper> getRecipeWrappers() {
-        return this.recipes.stream().map(ExplosionRecipeCategory.RecipeWrapper::new).collect(Collectors.toList());
+        return this.explosionRecipes.stream().map(ExplosionRecipeCategory.RecipeWrapper::new).collect(Collectors.toList());
     }
 
     @Override
     public void onReload() {
-        this.recipes.addAll(getBackupRecipes());
-        getScriptedRecipes().forEach(this.recipes::remove);
+        this.explosionRecipes.addAll(getBackupRecipes());
+        getScriptedRecipes().forEach(this.explosionRecipes::remove);
     }
 
-    public void add(Recipe recipe) {
-        this.recipes.add(recipe);
-        addScripted(recipe);
+    public void add(ExplosionRecipe explosionRecipe) {
+        this.explosionRecipes.add(explosionRecipe);
+        addScripted(explosionRecipe);
     }
 
-    public boolean remove(Recipe recipe) {
-        if (this.recipes.remove(recipe)) {
-            addBackup(recipe);
+    public boolean remove(ExplosionRecipe explosionRecipe) {
+        if (this.explosionRecipes.remove(explosionRecipe)) {
+            addBackup(explosionRecipe);
             return true;
         }
         return false;
@@ -53,7 +53,7 @@ public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
         return new RecipeBuilder();
     }
 
-    public static class Recipe {
+    public static class ExplosionRecipe {
 
         private final IIngredient input;
         private final ItemStack output;
@@ -62,7 +62,7 @@ public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
         private final float statisticalModifier;
         private final Closure<Boolean> startCondition;
 
-        public Recipe(IIngredient input, ItemStack output, float chance, Closure<Boolean> startCondition) {
+        public ExplosionRecipe(IIngredient input, ItemStack output, float chance, Closure<Boolean> startCondition) {
             this.input = input;
             this.output = output;
             this.chance = chance;
@@ -112,7 +112,7 @@ public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
         }
     }
 
-    public static class RecipeBuilder extends AbstractRecipeBuilder<Recipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<ExplosionRecipe> {
 
         private float chance = 1f;
         private Closure<Boolean> startCondition;
@@ -143,19 +143,19 @@ public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
         }
 
         @Override
-        public @Nullable Recipe register() {
+        public @Nullable Explosion.ExplosionRecipe register() {
             if (!validate()) return null;
-            Recipe recipe = new Recipe(this.input.get(0), this.output.get(0), this.chance, this.startCondition);
-            VanillaModule.inWorldCrafting.explosion.add(recipe);
-            return recipe;
+            ExplosionRecipe explosionRecipe = new ExplosionRecipe(this.input.get(0), this.output.get(0), this.chance, this.startCondition);
+            VanillaModule.inWorldCrafting.explosion.add(explosionRecipe);
+            return explosionRecipe;
         }
     }
 
     @GroovyBlacklist
     public void findAndRunRecipe(EntityItem entityItem) {
         ItemStack itemStack = entityItem.getItem();
-        for (Recipe recipe : this.recipes) {
-            if (recipe.tryRecipe(entityItem, itemStack)) {
+        for (ExplosionRecipe explosionRecipe : this.explosionRecipes) {
+            if (explosionRecipe.tryRecipe(entityItem, itemStack)) {
                 return;
             }
         }
