@@ -107,7 +107,7 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
         @Override
         public void handleRecipeResult(World world, BlockPos pos) {
             world.setBlockToAir(pos);
-            world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), getOutput().copy()));
+            InWorldCrafting.spawnItem(world, pos, getOutput().copy());
         }
     }
 

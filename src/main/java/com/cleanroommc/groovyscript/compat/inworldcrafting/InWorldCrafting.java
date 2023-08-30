@@ -2,6 +2,10 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class InWorldCrafting implements IScriptReloadable {
 
@@ -32,5 +36,11 @@ public class InWorldCrafting implements IScriptReloadable {
         this.explosion.afterScriptLoad();
         this.burning.afterScriptLoad();
         this.pistonPush.afterScriptLoad();
+    }
+
+    public static EntityItem spawnItem(World world, BlockPos pos, ItemStack item) {
+        EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, item);
+        world.spawnEntity(entityItem);
+        return entityItem;
     }
 }
