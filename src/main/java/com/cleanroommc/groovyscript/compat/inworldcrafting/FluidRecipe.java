@@ -42,14 +42,14 @@ public abstract class FluidRecipe {
 
     public static final int MAX_ITEM_INPUT = 9;
 
-    private static final Map<Fluid, List<FluidRecipe>> fluidRecipes = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, List<FluidRecipe>> fluidRecipes = new Object2ObjectOpenHashMap<>();
 
     public static void add(FluidRecipe fluidRecipe) {
-        fluidRecipes.computeIfAbsent(fluidRecipe.input, key -> new ArrayList<>()).add(fluidRecipe);
+        fluidRecipes.computeIfAbsent(fluidRecipe.input.getName(), key -> new ArrayList<>()).add(fluidRecipe);
     }
 
     public static boolean remove(FluidRecipe fluidRecipe) {
-        List<FluidRecipe> fluidRecipes1 = fluidRecipes.get(fluidRecipe.input);
+        List<FluidRecipe> fluidRecipes1 = fluidRecipes.get(fluidRecipe.input.getName());
         if (fluidRecipes1 != null) {
             return fluidRecipes1.remove(fluidRecipe);
         }
