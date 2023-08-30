@@ -67,13 +67,13 @@ public class Burning extends VirtualizedRegistry<Burning.Recipe> {
         private final IIngredient input;
         private final ItemStack output;
         private final int ticks;
-        private final Closure<Boolean> beforeRecipe;
+        private final Closure<Boolean> startCondition;
 
-        public Recipe(IIngredient input, ItemStack output, int ticks, Closure<Boolean> beforeRecipe) {
+        public Recipe(IIngredient input, ItemStack output, int ticks, Closure<Boolean> startCondition) {
             this.input = input;
             this.output = output;
             this.ticks = ticks;
-            this.beforeRecipe = beforeRecipe;
+            this.startCondition = startCondition;
         }
 
         public IIngredient getInput() {
@@ -89,22 +89,22 @@ public class Burning extends VirtualizedRegistry<Burning.Recipe> {
         }
 
         public boolean isValidInput(EntityItem entityItem, ItemStack itemStack) {
-            return this.input.test(itemStack) && (this.beforeRecipe == null || ClosureHelper.call(true, this.beforeRecipe, entityItem));
+            return this.input.test(itemStack) && (this.startCondition == null || ClosureHelper.call(true, this.startCondition, entityItem));
         }
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<Recipe> {
 
         private int ticks = 40;
-        private Closure<Boolean> beforeRecipe;
+        private Closure<Boolean> startCondition;
 
         public RecipeBuilder ticks(int ticks) {
             this.ticks = ticks;
             return this;
         }
 
-        public RecipeBuilder beforeRecipe(Closure<Boolean> beforeRecipe) {
-            this.beforeRecipe = beforeRecipe;
+        public RecipeBuilder startCondition(Closure<Boolean> startCondition) {
+            this.startCondition = startCondition;
             return this;
         }
 
@@ -126,7 +126,7 @@ public class Burning extends VirtualizedRegistry<Burning.Recipe> {
         @Override
         public @Nullable Recipe register() {
             if (!validate()) return null;
-            Recipe recipe = new Recipe(this.input.get(0), this.output.get(0), this.ticks, this.beforeRecipe);
+            Recipe recipe = new Recipe(this.input.get(0), this.output.get(0), this.ticks, this.startCondition);
             VanillaModule.inWorldCrafting.burning.add(recipe);
             return recipe;
         }

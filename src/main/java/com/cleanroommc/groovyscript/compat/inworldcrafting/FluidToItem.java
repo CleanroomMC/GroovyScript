@@ -90,8 +90,8 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
 
         private final ItemStack output;
 
-        public Recipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> beforeRecipe, Closure<?> afterRecipe, ItemStack output) {
-            super(input, itemInputs, itemConsumeChance, beforeRecipe, afterRecipe);
+        public Recipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> startCondition, Closure<?> afterRecipe, ItemStack output) {
+            super(input, itemInputs, itemConsumeChance, startCondition, afterRecipe);
             this.output = output;
         }
 
@@ -128,7 +128,7 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
         @Override
         public @Nullable FluidToItem.Recipe register() {
             Recipe recipe = new Recipe(this.fluidInput.get(0).getFluid(), this.input.toArray(new IIngredient[0]), this.chances.toFloatArray(),
-                                       this.beforeRecipe, this.afterRecipe, this.output.get(0));
+                                       this.startCondition, this.afterRecipe, this.output.get(0));
             VanillaModule.inWorldCrafting.fluidToItem.add(recipe);
             return recipe;
         }

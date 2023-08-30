@@ -91,8 +91,8 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
 
         private final IBlockState output;
 
-        public Recipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> beforeRecipe, Closure<?> afterRecipe, IBlockState output) {
-            super(input, itemInputs, itemConsumeChance, beforeRecipe, afterRecipe);
+        public Recipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> startCondition, Closure<?> afterRecipe, IBlockState output) {
+            super(input, itemInputs, itemConsumeChance, startCondition, afterRecipe);
             this.output = output;
         }
 
@@ -140,7 +140,7 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         @Override
         public @Nullable FluidToBlock.Recipe register() {
             Recipe recipe = new Recipe(this.fluidInput.get(0).getFluid(), this.input.toArray(new IIngredient[0]), this.chances.toFloatArray(),
-                                       this.beforeRecipe, this.afterRecipe, this.outputBlock);
+                                       this.startCondition, this.afterRecipe, this.outputBlock);
             VanillaModule.inWorldCrafting.fluidToBlock.add(recipe);
             return recipe;
         }

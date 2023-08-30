@@ -60,15 +60,15 @@ public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
         private final float chance;
         // modifier to approximate normal distribution
         private final float statisticalModifier;
-        private final Closure<Boolean> beforeRecipe;
+        private final Closure<Boolean> startCondition;
 
-        public Recipe(IIngredient input, ItemStack output, float chance, Closure<Boolean> beforeRecipe) {
+        public Recipe(IIngredient input, ItemStack output, float chance, Closure<Boolean> startCondition) {
             this.input = input;
             this.output = output;
             this.chance = chance;
             // const value based on e^(-x^2)
             this.statisticalModifier = (float) (Math.pow(1_000_000, (chance - 0.5f) * (0.5f - chance)) * 0.3f);
-            this.beforeRecipe = beforeRecipe;
+            this.startCondition = startCondition;
         }
 
         public IIngredient getInput() {
@@ -85,7 +85,7 @@ public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
 
         private boolean tryRecipe(EntityItem entityItem, ItemStack itemStack) {
             if (!this.input.test(itemStack)) return false;
-            if (this.beforeRecipe != null && !ClosureHelper.call(true, this.beforeRecipe, entityItem, itemStack)) return false;
+            if (this.startCondition != null && !ClosureHelper.call(true, this.startCondition, entityItem, itemStack)) return false;
             int count = itemStack.getCount();
             int amountToReplace;
             if (this.chance >= 1f) {
@@ -115,15 +115,15 @@ public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<Recipe> {
 
         private float chance = 1f;
-        private Closure<Boolean> beforeRecipe;
+        private Closure<Boolean> startCondition;
 
         public RecipeBuilder chance(float chance) {
             this.chance = chance;
             return this;
         }
 
-        public RecipeBuilder beforeRecipe(Closure<Boolean> beforeRecipe) {
-            this.beforeRecipe = beforeRecipe;
+        public RecipeBuilder startCondition(Closure<Boolean> startCondition) {
+            this.startCondition = startCondition;
             return this;
         }
 
@@ -145,7 +145,7 @@ public class Explosion extends VirtualizedRegistry<Explosion.Recipe> {
         @Override
         public @Nullable Recipe register() {
             if (!validate()) return null;
-            Recipe recipe = new Recipe(this.input.get(0), this.output.get(0), this.chance, this.beforeRecipe);
+            Recipe recipe = new Recipe(this.input.get(0), this.output.get(0), this.chance, this.startCondition);
             VanillaModule.inWorldCrafting.explosion.add(recipe);
             return recipe;
         }

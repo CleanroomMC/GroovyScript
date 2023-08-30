@@ -60,14 +60,14 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
         private final ItemStack output;
         private final int maxConversionsPerPush;
         private final int minHarvestLevel;
-        private final Closure<Boolean> beforeRecipe;
+        private final Closure<Boolean> startCondition;
 
-        public Recipe(IIngredient input, ItemStack output, int maxConversionsPerPush, int minHarvestLevel, Closure<Boolean> beforeRecipe) {
+        public Recipe(IIngredient input, ItemStack output, int maxConversionsPerPush, int minHarvestLevel, Closure<Boolean> startCondition) {
             this.input = input;
             this.output = output;
             this.maxConversionsPerPush = maxConversionsPerPush;
             this.minHarvestLevel = minHarvestLevel;
-            this.beforeRecipe = beforeRecipe;
+            this.startCondition = startCondition;
         }
 
         public IIngredient getInput() {
@@ -88,7 +88,7 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
 
         private boolean tryRecipe(Consumer<EntityItem> entitySpawner, EntityItem entityItem, ItemStack itemStack, IBlockState pushingAgainst) {
             if (!this.input.test(itemStack)) return false;
-            if (this.beforeRecipe != null && !ClosureHelper.call(true, this.beforeRecipe, entityItem, itemStack, pushingAgainst)) return false;
+            if (this.startCondition != null && !ClosureHelper.call(true, this.startCondition, entityItem, itemStack, pushingAgainst)) return false;
             if (this.minHarvestLevel >= 0 && this.minHarvestLevel > pushingAgainst.getBlock().getHarvestLevel(pushingAgainst)) return false;
             ItemStack newStack = this.output.copy();
             if (this.maxConversionsPerPush < itemStack.getCount()) {
@@ -108,7 +108,7 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
 
         private int maxConversionsPerPush = 64;
         private int minHarvestLevel = -1;
-        private Closure<Boolean> beforeRecipe;
+        private Closure<Boolean> startCondition;
 
         public RecipeBuilder maxConversionsPerPush(int maxConversionsPerPush) {
             this.maxConversionsPerPush = maxConversionsPerPush;
@@ -120,8 +120,8 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
             return this;
         }
 
-        public RecipeBuilder beforeRecipe(Closure<Boolean> beforeRecipe) {
-            this.beforeRecipe = beforeRecipe;
+        public RecipeBuilder startCondition(Closure<Boolean> beforeRecipe) {
+            this.startCondition = beforeRecipe;
             return this;
         }
 
@@ -143,7 +143,7 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.Recipe> {
         @Override
         public @Nullable Recipe register() {
             if (!validate()) return null;
-            Recipe recipe = new Recipe(this.input.get(0), this.output.get(0), this.maxConversionsPerPush, this.minHarvestLevel, this.beforeRecipe);
+            Recipe recipe = new Recipe(this.input.get(0), this.output.get(0), this.maxConversionsPerPush, this.minHarvestLevel, this.startCondition);
             VanillaModule.inWorldCrafting.pistonPush.add(recipe);
             return null;
         }

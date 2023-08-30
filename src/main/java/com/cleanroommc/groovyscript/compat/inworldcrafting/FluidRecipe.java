@@ -125,14 +125,14 @@ public abstract class FluidRecipe {
     private final Fluid input;
     private final IIngredient[] itemInputs;
     private final float[] itemConsumeChance;
-    private final Closure<Boolean> beforeRecipe;
+    private final Closure<Boolean> startCondition;
     private final Closure<?> afterRecipe;
 
-    public FluidRecipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> beforeRecipe, Closure<?> afterRecipe) {
+    public FluidRecipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> startCondition, Closure<?> afterRecipe) {
         this.input = input;
         this.itemInputs = itemInputs;
         this.itemConsumeChance = itemConsumeChance;
-        this.beforeRecipe = beforeRecipe;
+        this.startCondition = startCondition;
         this.afterRecipe = afterRecipe;
     }
 
@@ -206,7 +206,7 @@ public abstract class FluidRecipe {
             }
             return false;
         }
-        if (this.beforeRecipe != null && !ClosureHelper.call(true, this.beforeRecipe, world, pos)) {
+        if (this.startCondition != null && !ClosureHelper.call(true, this.startCondition, world, pos)) {
             return false;
         }
         // kill all items with the before calculated amount
@@ -275,7 +275,7 @@ public abstract class FluidRecipe {
     public abstract static class RecipeBuilder<T extends FluidRecipe> extends AbstractRecipeBuilder<T> {
 
         protected final FloatList chances = new FloatArrayList();
-        protected Closure<Boolean> beforeRecipe;
+        protected Closure<Boolean> startCondition;
         protected Closure<?> afterRecipe;
 
         public RecipeBuilder<T> input(IIngredient ingredient, float consumeChance) {
@@ -289,8 +289,8 @@ public abstract class FluidRecipe {
             return input(ingredient, 1f);
         }
 
-        public RecipeBuilder<T> beforeRecipe(Closure<Boolean> beforeRecipe) {
-            this.beforeRecipe = beforeRecipe;
+        public RecipeBuilder<T> startCondition(Closure<Boolean> startCondition) {
+            this.startCondition = startCondition;
             return this;
         }
 
