@@ -17,4 +17,4 @@ groovyscript.recipe.piston_push=Push item against a block to transform item
 groovyscript.recipe.piston_push.max_items=Max items per push: %d
 groovyscript.recipe.piston_push.min_level=Min harvest level: %d
 groovyscript.recipe.chance_produce=§2%s§7 chance to produce output
-groovyscript.recipe.chance_consume=§2%s§7 chance to get consumedgroovyscript.recipe.piston_push.max_items=d
+groovyscript.recipe.chance_consume=§2%s§7 chance to get consumed

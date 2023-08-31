@@ -68,7 +68,7 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
             if (slotIndex < 9) {
                 float chance = recipeWrapper.recipe.getItemConsumeChance()[slotIndex];
                 if (chance < 1) {
-                    tooltip.add(1, I18n.format("groovyscript.recipe.chance", numberFormat.format(chance)));
+                    tooltip.add(1, I18n.format("groovyscript.recipe.chance_produce", numberFormat.format(chance)));
                 }
             }
         });
