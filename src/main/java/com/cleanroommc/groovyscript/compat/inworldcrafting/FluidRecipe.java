@@ -67,7 +67,7 @@ public abstract class FluidRecipe {
     }
 
     public static boolean removeIf(Fluid fluid, Predicate<FluidRecipe> fluidRecipePredicate, Consumer<FluidRecipe> removedConsumer) {
-        List<FluidRecipe> recipes = fluidRecipes.get(fluid);
+        List<FluidRecipe> recipes = fluidRecipes.get(fluid.getName());
         return recipes != null && recipes.removeIf(fluidRecipe -> {
             if (fluidRecipePredicate.test(fluidRecipe)) {
                 removedConsumer.accept(fluidRecipe);
@@ -104,7 +104,7 @@ public abstract class FluidRecipe {
      */
     @GroovyBlacklist
     public static boolean findAndRunRecipe(Fluid fluid, World world, BlockPos pos, IBlockState blockState) {
-        List<FluidRecipe> candidates = fluidRecipes.get(fluid);
+        List<FluidRecipe> candidates = fluidRecipes.get(fluid.getName());
         if (candidates == null || candidates.isEmpty()) return false;
         AxisAlignedBB aabb = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
         // get all items in the fluid block space
