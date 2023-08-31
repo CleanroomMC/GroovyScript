@@ -18,11 +18,6 @@ public interface MossConfigAccessor {
         throw new UnsupportedOperationException();
     }
 
-    @Accessor("mossyCobblestones")
-    static void setMossyCobblestones(Map<ItemStack, ItemStack> map) {
-        throw new UnsupportedOperationException();
-    }
-
     @Accessor
     static BiMap<Block, Block> getMossyBlocks() {
         throw new UnsupportedOperationException();
