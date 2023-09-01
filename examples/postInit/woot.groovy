@@ -1,11 +1,8 @@
 // MODS_LOADED: woot
 
-//import ipsis.woot.configuration.EnumConfigKey
-//import ipsis.woot.util.WootMobName
-
+import ipsis.woot.configuration.EnumConfigKey
 import ipsis.woot.util.WootMobName
 
-if (!isLoaded('woot')) return
 println 'mod \'woot\' detected, running script'
 
 // Note:

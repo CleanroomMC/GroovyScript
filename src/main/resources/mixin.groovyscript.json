@@ -5,6 +5,7 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "EntityItemMixin",
     "EventBusMixin",
     "FluidStackMixin",
     "ForgeRegistryMixin",
@@ -15,11 +16,13 @@
     "LoaderControllerMixin",
     "OreDictionaryAccessor",
     "SlotCraftingAccess",
+    "TileEntityPistonMixin",
     "groovy.AsmDecompilerMixin",
     "groovy.CompUnitClassGenMixin",
     "groovy.MetaClassImplMixin",
     "loot.LootPoolAccessor",
-    "loot.LootTableAccessor"
+    "loot.LootTableAccessor",
+    "loot.LootTableMixin"
   ],
   "client": [
     "DefaultResourcePackAccessor",

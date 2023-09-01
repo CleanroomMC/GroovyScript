@@ -4,3 +4,17 @@ groovyscript.command.copy.copied_end=] to the clipboard
 
 key.categories.groovyscript=GroovyScript
 key.groovyscript.reload=Reload Scripts
+
+groovyscript.jei.category.groovyscript:fluid_recipe.name=In world fluid recipes
+groovyscript.jei.category.groovyscript:explosion.name=Explosion recipes
+groovyscript.jei.category.groovyscript:burning.name=Burning recipes
+groovyscript.jei.category.groovyscript:piston_push.name=Piston push recipes
+
+groovyscript.recipe.fluid_recipe=Drop items into fluid to transform fluid
+groovyscript.recipe.explosion=Explode item with an explosion to transform item
+groovyscript.recipe.burning=Burn item with fire to transform item
+groovyscript.recipe.piston_push=Push item against a block to transform item
+groovyscript.recipe.piston_push.max_items=Max items per push: %d
+groovyscript.recipe.piston_push.min_level=Min harvest level: %d
+groovyscript.recipe.chance_produce=§2%s§7 chance to produce output
+groovyscript.recipe.chance_consume=§2%s§7 chance to get consumed

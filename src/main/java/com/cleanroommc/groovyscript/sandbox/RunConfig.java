@@ -177,6 +177,14 @@ public class RunConfig {
         return packId;
     }
 
+    public String getPackOrModId() {
+        return this.invalidPackId ? GroovyScript.ID : this.packId;
+    }
+
+    public String getPackOrModName() {
+        return this.packName.isEmpty() ? GroovyScript.NAME : this.packName;
+    }
+
     public boolean isValidPackId() {
         return !invalidPackId;
     }
