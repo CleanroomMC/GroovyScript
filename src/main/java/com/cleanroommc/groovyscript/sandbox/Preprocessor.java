@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -48,6 +49,9 @@ public class Preprocessor {
     private static boolean processPreprocessor(String line) {
         if (line.startsWith("NO_RUN")) {
             return false;
+        }
+        if (line.startsWith("DEBUG_ONLY")) {
+            return GroovyScript.getRunConfig().isDebug();
         }
         if (line.startsWith("NO_RELOAD")) {
             return !ReloadableRegistryManager.isFirstLoad();
