@@ -1,5 +1,5 @@
 
-if (!isLoaded('integrateddynamics')) return
+// MODS_LOADED: integrateddynamics
 println 'mod \'integrateddynamics\' detected, running script'
 
 // Drying Basin and Mechanical Drying Basin:

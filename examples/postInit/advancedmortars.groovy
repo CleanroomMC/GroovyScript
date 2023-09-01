@@ -1,5 +1,5 @@
 
-if (!isLoaded('advancedmortars')) return
+// MODS_LOADED: advancedmortars
 println 'mod \'advancedmortars\' detected, running script'
 
 // Mortar

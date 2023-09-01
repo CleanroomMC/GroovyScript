@@ -1,5 +1,5 @@
 
-if (!isLoaded('thaumcraft')) return
+// MODS_LOADED: thaumcraft
 println 'mod \'thaumcraft\' detected, running script'
 
 mods.thaumcraft.Crucible.removeByOutput(item('minecraft:gunpowder'))
