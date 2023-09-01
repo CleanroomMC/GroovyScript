@@ -1,10 +1,10 @@
-//import ipsis.woot.configuration.EnumConfigKey
-//import ipsis.woot.util.WootMobName
-
-//import ipsis.woot.util.WootMobName
 
 if (!isLoaded('woot')) return
 println 'mod \'woot\' detected, running script'
+
+//import ipsis.woot.configuration.EnumConfigKey
+
+//import ipsis.woot.util.WootMobName
 
 // Note:
 // Drops, Spawning, Policy, and Mob Config can also be controlled via .json config file

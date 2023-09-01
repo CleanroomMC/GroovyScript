@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.compat.content.Content;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.InWorldCrafting;
 import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ public class VanillaModule implements IScriptReloadable {
     public static final Player player = new Player();
     public static final Content content = new Content();
     public static final Rarity rarity = new Rarity();
+    public static final InWorldCrafting inWorldCrafting = new InWorldCrafting();
 
     public static void initializeBinding() {
         GroovyScript.getSandbox().registerBinding("Crafting", crafting);
@@ -27,6 +29,7 @@ public class VanillaModule implements IScriptReloadable {
         GroovyScript.getSandbox().registerBinding("Player", player);
         GroovyScript.getSandbox().registerBinding("Content", content);
         GroovyScript.getSandbox().registerBinding("Rarity", rarity);
+        GroovyScript.getSandbox().registerBinding("InWorldCrafting", inWorldCrafting);
 
         ExpansionHelper.mixinClass(ItemStack.class, RarityItemStackExpansion.class);
     }
@@ -38,12 +41,14 @@ public class VanillaModule implements IScriptReloadable {
         oreDict.onReload();
         rarity.onReload();
         player.onReload();
+        inWorldCrafting.onReload();
     }
 
     @Override
     @GroovyBlacklist
     public void afterScriptLoad() {
         furnace.afterScriptLoad();
+        inWorldCrafting.afterScriptLoad();
     }
 
 }

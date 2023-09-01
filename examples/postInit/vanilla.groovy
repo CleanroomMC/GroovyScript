@@ -218,10 +218,10 @@ item('minecraft:golden_apple').setRarity(textformat('-1'))
 
 
 // Use eventManager.listen and listen to the desired event.
-eventManager.listen({ BlockEvent.BreakEvent event -> {
+/*eventManager.listen({ BlockEvent.BreakEvent event -> {
     event.setCanceled(true) // Many events can be canceled.
     event.player.sendMessage(new TextComponentString("${event.getState().getBlock().getLocalizedName()} Block was prevent from being broken"))
-}})
+}})*/
 
 // The outer parentheses and inner curly braces are optional.
 eventManager.listen { EnderTeleportEvent event ->
