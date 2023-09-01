@@ -1,5 +1,5 @@
 
-if (!isLoaded('chisel')) return
+// MODS_LOADED: chisel
 println 'mod \'chisel\' detected, running script'
 
 // Carving

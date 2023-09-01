@@ -1,5 +1,5 @@
 
-if (!isLoaded('thermalexpansion')) return
+// MODS_LOADED: thermalexpansion
 println 'mod \'thermalexpansion\' detected, running script'
 
 mods.te.Pulverizer.recipeBuilder()

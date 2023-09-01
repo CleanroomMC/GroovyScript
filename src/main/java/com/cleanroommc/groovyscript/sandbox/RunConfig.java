@@ -229,6 +229,7 @@ public class RunConfig {
             try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile)
+                        .filter(Preprocessor::validatePreprocessors)
                         .sorted(Comparator.comparing(File::getPath))
                         .forEach(file -> {
                             if (files.containsKey(file)) {

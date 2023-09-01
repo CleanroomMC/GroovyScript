@@ -1,5 +1,5 @@
 
-if (!isLoaded('forestry')) return
+// MODS_LOADED: forestry
 println 'mod \'forestry\' detected, running script'
 
 // Species Bracket Handler

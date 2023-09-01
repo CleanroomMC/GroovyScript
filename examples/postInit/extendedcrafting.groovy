@@ -1,5 +1,5 @@
 
-if (!isLoaded('extendedcrafting')) return
+// MODS_LOADED: extendedcrafting
 println 'mod \'extendedcrafting\' detected, running script'
 
 // Combination Crafting (Combination):

@@ -1,5 +1,5 @@
 
-if (!isLoaded('avaritia')) return
+// MODS_LOADED: avaritia
 println 'mod \'avaritia\' detected, running script'
 
 // extreme crafting

@@ -1,5 +1,5 @@
 
-if (!isLoaded('compactmachines3')) return
+// MODS_LOADED: compactmachines3
 println 'mod \'compactmachines3\' detected, running script'
 
 // Miniaturization:
