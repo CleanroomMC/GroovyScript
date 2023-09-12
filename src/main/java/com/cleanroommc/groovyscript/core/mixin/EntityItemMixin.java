@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.core.mixin;
 
-import com.cleanroommc.groovyscript.api.IEntityAccess;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.Burning;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.FluidRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
@@ -37,7 +36,7 @@ public abstract class EntityItemMixin extends Entity {
                 return;
             }
 
-            if (((IEntityAccess) thisEntity).getFire() > 0) {
+            if (((EntityAccessor) thisEntity).getFire() > 0) {
                 VanillaModule.inWorldCrafting.burning.updateRecipeProgress(thisEntity);
                 ci.cancel();
             } else if (Burning.removeBurningItem(thisEntity)) {
