@@ -69,6 +69,8 @@ public class BracketHandlerManager {
         registerBracketHandler("potionType", s -> ForgeRegistries.POTION_TYPES.getValue(new ResourceLocation(s)));
         registerBracketHandler("sound", s -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(s)));
         registerBracketHandler("entity", s -> ForgeRegistries.ENTITIES.getValue(new ResourceLocation(s)));
+        registerBracketHandler("biome", s -> ForgeRegistries.BIOMES.getValue(new ResourceLocation(s)));
+        registerBracketHandler("profession", s -> ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new ResourceLocation(s)));
         registerBracketHandler("creativeTab", s -> {
             if (!NetworkUtils.isDedicatedClient()) {
                 GroovyLog.get().error("Creative tabs can't be obtained from server side!");
