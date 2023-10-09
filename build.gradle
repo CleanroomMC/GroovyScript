@@ -78,10 +78,6 @@ repositories {
     maven {
         url = 'https://mvnrepository.com/artifact/org.apache.groovy/groovy'
     }
-    maven {
-        url = 'http://maven.ic2.player.to/'
-        allowInsecureProtocol = true
-    }
     mavenLocal() // Must be last for caching to work
 }
 
