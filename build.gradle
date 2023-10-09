@@ -304,9 +304,9 @@ dependencies {
         }
     }
 
-    compileOnly rfg.deobf('net.sengir.forestry:forestry_1.12.2:5.8.2.422')
+    compileOnly rfg.deobf('curse.maven:forestry-59751:2918418')
     if (project.debug_forestry.toBoolean()) {
-        runtimeOnly rfg.deobf('net.sengir.forestry:forestry_1.12.2:5.8.2.422')
+        runtimeOnly rfg.deobf('curse.maven:forestry-59751:2918418')
         runtimeOnly rfg.deobf('curse.maven:jei-bees-248370:2490058')
     }
 
