@@ -334,9 +334,12 @@ processResources {
 jar {
     manifest {
         def attribute_map = [:]
-        attribute_map['FMLCorePlugin'] = project.coremod_plugin_class_name
+        attribute_map['FMLCorePlugin'] = coremod_plugin_class_name
         attribute_map['FMLCorePluginContainsFMLMod'] = true
-        attribute_map['ForceLoadAsMod'] = project.gradle.startParameter.taskNames[0] == "build"
+        def currentTasks = gradle.startParameter.taskNames
+        if (currentTasks[0] == 'build' || currentTasks[0] == 'prepareObfModsFolder' || currentTasks[0] == 'runObfClient') {
+            attribute_map['ForceLoadAsMod'] = true
+        }
         attributes(attribute_map)
     }
     // Add all embedded dependencies into the jar

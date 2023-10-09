@@ -66,7 +66,10 @@ import java.util.List;
 import java.util.Random;
 
 @GroovyBlacklist
-@Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION)
+@Mod(modid = GroovyScript.ID,
+     name = GroovyScript.NAME,
+     version = GroovyScript.VERSION,
+     dependencies = "after:universaltweaks@[1.8.0,);")
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
 
