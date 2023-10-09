@@ -73,32 +73,44 @@ public abstract class GroovySandbox {
         currentSandbox.set(null);
     }
 
-    public void load(boolean run, boolean loadClasses) throws Exception {
-        currentSandbox.set(this);
-        preRun();
-
+    protected GroovyScriptEngine createScriptEngine() {
         GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment);
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
         engine.setConfig(config);
         initEngine(engine, config);
-        Binding binding = new Binding(bindings);
+        return engine;
+    }
+
+    protected Binding createBindings() {
+        Binding binding = new Binding(this.bindings);
         postInitBindings(binding);
+        return binding;
+    }
+
+    public void load() throws Exception {
+        currentSandbox.set(this);
+        preRun();
+
+        GroovyScriptEngine engine = createScriptEngine();
+        Binding binding = createBindings();
         Set<File> executedClasses = new ObjectOpenHashSet<>();
 
-        running.set(run);
+        running.set(true);
         try {
-            if (loadClasses) {
-                // load and run any configured class files
-                loadClassScripts(engine, binding, executedClasses, run);
-            }
-            // now run all script files
-            loadScripts(engine, binding, executedClasses, run);
+            load(engine, binding, executedClasses, true);
         } finally {
             running.set(false);
             postRun();
             currentSandbox.set(null);
             setCurrentScript(null);
         }
+    }
+
+    protected void load(GroovyScriptEngine engine, Binding binding, Set<File> executedClasses, boolean run) {
+        // load and run any configured class files
+        loadClassScripts(engine, binding, executedClasses, run);
+        // now run all script files
+        loadScripts(engine, binding, executedClasses, run);
     }
 
     protected void loadScripts(GroovyScriptEngine engine, Binding binding, Set<File> executedClasses, boolean run) {
@@ -128,6 +140,7 @@ public abstract class GroovySandbox {
 
     protected void loadClassScripts(GroovyScriptEngine engine, Binding binding, Set<File> executedClasses, boolean run) {
         for (File classFile : getClassFiles()) {
+            if (executedClasses.contains(classFile)) continue;
             Class<?> clazz = loadScriptClass(engine, classFile);
             if (clazz == null) {
                 // loading script fails if the file is a script that depends on a class file that isn't loaded yet
