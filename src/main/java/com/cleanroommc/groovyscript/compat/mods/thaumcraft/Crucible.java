@@ -97,7 +97,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         }
         if (recipes.isEmpty()) {
             GroovyLog.msg("Error removing Thaumcraft Crucible recipe")
-                    .add("no recipes found for %s", output)
+                    .add("no recipes found for {}", output)
                     .error()
                     .post();
             return;

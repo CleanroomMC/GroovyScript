@@ -2,23 +2,39 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
-import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 
-public class Casting {
+import java.util.Map;
+
+public class Casting implements IDynamicGroovyProperty {
+
+    private final Map<String, Object> properties = new Object2ObjectOpenHashMap<>();
+
     public final Table table = new Table();
     public final Basin basin = new Basin();
+
+    public Casting() {
+        for (String s : VirtualizedRegistry.generateAliases("Table")) this.properties.put(s, this.table);
+        for (String s : VirtualizedRegistry.generateAliases("Basin")) this.properties.put(s, this.basin);
+    }
+
+    @Override
+    public @Nullable Object getProperty(String name) {
+        return properties.get(name);
+    }
 
     public static class Table extends VirtualizedRegistry<ICastingRecipe> {
 
@@ -54,7 +70,7 @@ public class Casting {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Casting Table recipe")
-                    .add("could not find recipe with output %s", output)
+                    .add("could not find recipe with output {}", output)
                     .error()
                     .post();
             return false;
@@ -68,7 +84,7 @@ public class Casting {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Casting Table recipe")
-                    .add("could not find recipe with input %s", input)
+                    .add("could not find recipe with input {}", input)
                     .error()
                     .post();
             return false;
@@ -82,7 +98,7 @@ public class Casting {
             })) return true;
 
             GroovyLog.msg("Error removing Tinkers Construct Casting Table recipe")
-                    .add("could not find recipe with cast %s", cast)
+                    .add("could not find recipe with cast {}", cast)
                     .error()
                     .post();
             return false;

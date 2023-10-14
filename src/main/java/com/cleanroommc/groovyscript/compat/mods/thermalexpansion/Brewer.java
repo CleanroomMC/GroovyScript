@@ -6,10 +6,10 @@ import cofh.thermalexpansion.util.managers.machine.BrewerManager;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.EnergyRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.BrewerManagerAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -53,7 +53,7 @@ public class Brewer extends VirtualizedRegistry<BrewerManager.BrewerRecipe> {
             }
             if (!found) {
                 GroovyLog.msg("Error removing Thermal Expansion Brewer recipe")
-                        .add("could not find recipe for %s and %s", ingredient, input)
+                        .add("could not find recipe for {} and {}", ingredient, input)
                         .error()
                         .post();
             }
@@ -77,7 +77,14 @@ public class Brewer extends VirtualizedRegistry<BrewerManager.BrewerRecipe> {
         validationFluidsBackup.clear();
     }
 
-    public static class RecipeBuilder extends EnergyRecipeBuilder<BrewerManager.BrewerRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<BrewerManager.BrewerRecipe> {
+
+        private int energy;
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
+            return this;
+        }
 
         @Override
         public String getErrorMsg() {

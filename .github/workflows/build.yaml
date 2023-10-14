@@ -12,9 +12,13 @@ on:
         description: 'Mod version'
         required: true
       release_type:
-        description: 'Release type (release, beta, alpha)'
+        description: 'Release type'
+        type: choice
         default: 'beta'
-        required: true
+        options:
+          - 'release'
+          - 'beta'
+          - 'alpha'
 
 jobs:
   build:
@@ -76,27 +80,35 @@ jobs:
           game-versions: |
             1.12.2
           dependencies: |
-            mekanism | recommends | *
-            blood-magic | recommends | *
-            thermal-expansion | recommends | *
-            draconic-evolution | recommends | *
-            ender-io | recommends | *
-            industrial-craft | recommends | *
-            ic2-classic | recommends | *
-            astral-sorcery | recommends | *
-            thaumcraft | recommends | *
-            immersive-engineering | recommends | *
-            tinkers-construct | recommends | *
-            tinkers-complement | recommends | *
-            constructs-armory | recommends | *
-            had-enough-items | recommends | *
+            mixin-booter | depends | 8.3
             actually-additions | recommends | *
+            advanced-mortars | recommends | *
+            applied-energistics-2 | recommends | *
+            astral-sorcery | recommends | *
+            avaritia-1-10 | recommends | *
+            blood-magic | recommends | *
             botania | recommends | *
             chisel | recommends | *
+            compact-machines | recommends | *
+            constructs-armory | recommends | *
+            draconic-evolution | recommends | *
+            ender-io | recommends | *
             evilcraft | recommends | *
             extended-crafting | recommends | *
             forestry | recommends | *
+            had-enough-items | recommends | *
+            ic2-classic | recommends | *
+            immersive-engineering | recommends | *
+            industrial-craft | recommends | *
+            inspirations | recommends | *
+            integrated-dynamics | recommends | *
+            mekanism | recommends | *
             roots | recommends | *
+            thaumcraft | recommends | *
+            thermal-expansion | recommends | *
+            tinkers-construct | recommends | *
+            tinkers-complement | recommends | *
+            woot | recommends | *
           java: |
             8
           retry-attempts: 2

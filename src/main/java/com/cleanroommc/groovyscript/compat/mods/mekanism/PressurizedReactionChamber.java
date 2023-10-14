@@ -3,25 +3,22 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.PressurizedInput;
 import mekanism.common.recipe.machines.PressurizedRecipe;
+import mekanism.common.recipe.outputs.PressurizedOutput;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<PressurizedRecipe> {
 
     public PressurizedReactionChamber() {
-        super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, "PRC");
+        super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, "PRC", "prc");
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -57,63 +54,15 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
             }
         }
         if (!found) {
-            removeError("could not find recipe for %s, %s and %s", inputSolid, inputFluid, inputGas);
+            removeError("could not find recipe for {}, {}, and {}", inputSolid, inputFluid, inputGas);
         }
         return found;
     }
 
-    public static class RecipeBuilder extends AbstractRecipeBuilder<PressurizedRecipe> {
+    public static class RecipeBuilder extends GasRecipeBuilder<PressurizedRecipe> {
 
-        private final List<GasStack> gasInput = new ArrayList<>();
-        private final List<GasStack> gasOutput = new ArrayList<>();
         private int duration;
         private double energy;
-
-        public RecipeBuilder gasInput(GasStack gas) {
-            this.gasInput.add(gas);
-            return this;
-        }
-
-        public RecipeBuilder gasInput(Collection<GasStack> gases) {
-            if (gases != null && !gases.isEmpty()) {
-                for (GasStack gas : gasInput) {
-                    gasInput(gas);
-                }
-            }
-            return this;
-        }
-
-        public RecipeBuilder gasInput(GasStack... gases) {
-            if (gases != null && gases.length > 0) {
-                for (GasStack gas : gasInput) {
-                    gasInput(gas);
-                }
-            }
-            return this;
-        }
-
-        public RecipeBuilder gasOutput(GasStack gas) {
-            this.gasOutput.add(gas);
-            return this;
-        }
-
-        public RecipeBuilder gasOutput(Collection<GasStack> gases) {
-            if (gases != null && !gases.isEmpty()) {
-                for (GasStack gas : gasOutput) {
-                    gasOutput(gas);
-                }
-            }
-            return this;
-        }
-
-        public RecipeBuilder gasOutput(GasStack... gases) {
-            if (gases != null && gases.length > 0) {
-                for (GasStack gas : gasOutput) {
-                    gasOutput(gas);
-                }
-            }
-            return this;
-        }
 
         public RecipeBuilder duration(int duration) {
             this.duration = duration;
@@ -132,12 +81,9 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 1, 1, 1);
+            validateItems(msg, 0, 1, 0, 1);
             validateFluids(msg, 1, 1, 0, 0);
-            this.gasInput.removeIf(Mekanism::isEmpty);
-            this.gasOutput.removeIf(Mekanism::isEmpty);
-            msg.add(this.gasInput.size() != 1, () -> getRequiredString(1, 1, " gas input") + ", but found " + this.gasInput.size());
-            msg.add(this.gasOutput.size() != 1, () -> getRequiredString(1, 1, " gas output") + ", but found " + this.gasOutput.size());
+            validateGases(msg, 1, 1, 1, 1);
             if (duration <= 0) duration = 100;
             if (energy <= 0) energy = 8000;
         }
@@ -145,7 +91,19 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
         @Override
         public @Nullable PressurizedRecipe register() {
             if (!validate()) return null;
-            return ModSupport.MEKANISM.get().pressurizedReactionChamber.add(input.get(0), fluidInput.get(0), gasInput.get(0), output.get(0), gasOutput.get(0), energy, duration);
+            PressurizedOutput pressurizedOutput = new PressurizedOutput(output.getOrEmpty(0), gasOutput.get(0));
+            PressurizedRecipe recipe = null;
+            if (input.isEmpty()) {
+                recipe = new PressurizedRecipe(new PressurizedInput(ItemStack.EMPTY, fluidInput.get(0), gasInput.get(0)), pressurizedOutput, energy, duration);
+                ModSupport.MEKANISM.get().pressurizedReactionChamber.add(recipe);
+            } else {
+                for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
+                    PressurizedRecipe r = new PressurizedRecipe(new PressurizedInput(itemStack.copy(), fluidInput.get(0), gasInput.get(0)), pressurizedOutput, energy, duration);
+                    if (recipe == null) recipe = r;
+                    ModSupport.MEKANISM.get().pressurizedReactionChamber.add(r);
+                }
+            }
+            return recipe;
         }
     }
 }

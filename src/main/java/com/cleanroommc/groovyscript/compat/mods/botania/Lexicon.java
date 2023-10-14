@@ -19,10 +19,7 @@ import vazkii.botania.api.lexicon.LexiconPage;
 import vazkii.botania.api.recipe.*;
 import vazkii.botania.common.lexicon.page.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Lexicon {
@@ -64,15 +61,30 @@ public class Lexicon {
             return true;
         }
 
-        public boolean removeCategory(String name) {
+        public boolean remove(String name) {
             LexiconCategory category = Botania.getCategory(name);
             if (category != null) return remove(category);
+
+            GroovyLog.msg("Error removing Botania Lexica Botania Category")
+                    .add("could not find category with name {}", name)
+                    .error()
+                    .post();
             return false;
+        }
+
+        public boolean removeCategory(String name) {
+            return remove(name);
         }
 
         public SimpleObjectStream<LexiconCategory> streamCategories() {
             return new SimpleObjectStream<>(BotaniaAPI.getAllCategories()).setRemover(this::remove);
         }
+
+        public void removeAll() {
+            BotaniaAPI.getAllCategories().forEach(this::addBackup);
+            BotaniaAPI.getAllCategories().clear();
+        }
+
     }
 
     public static class Page extends VirtualizedRegistry<PageChange> {
@@ -109,10 +121,28 @@ public class Lexicon {
             return remove(entry, page);
         }
 
-        public void removeAll(LexiconEntry entry) {
-            for (int i = 0; i < entry.pages.size(); i++)
-                addBackup(new PageChange(entry.pages.get(i), entry, i));
+        public void removeByEntry(LexiconEntry entry) {
+            entry.pages.forEach(x -> addBackup(new PageChange(x, entry, entry.pages.indexOf(x))));
             entry.pages.clear();
+        }
+
+        public void removeByEntry(String name) {
+            LexiconEntry entry = Botania.getEntry(name);
+            if (entry == null) {
+                GroovyLog.msg("Error removing Botania Lexica Botania Pages by Entry")
+                        .add("could not find entry with name {}", name)
+                        .error()
+                        .post();
+                return;
+            }
+            removeByEntry(entry);
+        }
+
+        public void removeAll() {
+            for (LexiconEntry entry : BotaniaAPI.getAllEntries()) {
+                entry.pages.forEach(x -> addBackup(new PageChange(x, entry, entry.pages.indexOf(x))));
+                entry.pages.clear();
+            }
         }
 
         public SimpleObjectStream<LexiconPage> streamPages(LexiconEntry entry) {
@@ -204,10 +234,19 @@ public class Lexicon {
             return true;
         }
 
-        public boolean removeEntry(String name) {
+        public boolean remove(String name) {
             LexiconEntry entry = Botania.getEntry(name);
             if (entry != null) return remove(entry);
+
+            GroovyLog.msg("Error removing Botania Lexica Botania Entry")
+                    .add("could not find entry with name {}", name)
+                    .error()
+                    .post();
             return false;
+        }
+
+        public boolean removeEntry(String name) {
+            return remove(name);
         }
 
         public void setKnowledgeType(String entry, KnowledgeType type) {
@@ -216,6 +255,28 @@ public class Lexicon {
 
         public void setKnowledgeType(String entry, String type) {
             setKnowledgeType(entry, BotaniaAPI.knowledgeTypes.get(type));
+        }
+
+        public void removeByCategory(LexiconCategory category) {
+            category.entries.forEach(this::addBackup);
+            category.entries.clear();
+        }
+
+        public void removeByCategory(String name) {
+            LexiconCategory category = Botania.getCategory(name);
+            if (category == null) {
+                GroovyLog.msg("Error removing Botania Lexica Botania Entries by Category")
+                        .add("could not find category with name {}", name)
+                        .error()
+                        .post();
+                return;
+            }
+            removeByCategory(category);
+        }
+
+        public void removeAll() {
+            BotaniaAPI.getAllEntries().forEach(this::addBackup);
+            BotaniaAPI.getAllEntries().clear();
         }
 
         public SimpleObjectStream<LexiconEntry> streamEntries() {
@@ -263,6 +324,20 @@ public class Lexicon {
 
             public EntryBuilder page(LexiconPage page) {
                 this.pages.add(page);
+                return this;
+            }
+
+            public EntryBuilder page(LexiconPage... pages) {
+                for (LexiconPage page : pages) {
+                    page(page);
+                }
+                return this;
+            }
+
+            public EntryBuilder page(Collection<LexiconPage> pages) {
+                for (LexiconPage page : pages) {
+                    page(page);
+                }
                 return this;
             }
 

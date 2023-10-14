@@ -21,11 +21,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public abstract class CraftingRecipeBuilder {
 
     protected ItemStack output;
-    protected String name;
+    protected ResourceLocation name;
     protected Closure<ItemStack> recipeFunction;
     protected Closure<Void> recipeAction;
     protected byte replace = 0;
@@ -38,6 +39,15 @@ public abstract class CraftingRecipeBuilder {
     }
 
     public CraftingRecipeBuilder name(String name) {
+        if (name.contains(":")) {
+            this.name = new ResourceLocation(name);
+        } else {
+            this.name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
+        }
+        return this;
+    }
+
+    public CraftingRecipeBuilder name(ResourceLocation name) {
         this.name = name;
         return this;
     }
@@ -67,7 +77,7 @@ public abstract class CraftingRecipeBuilder {
         return this;
     }
 
-    public abstract IRecipe register();
+    public abstract Object register();
 
     @GroovyBlacklist
     protected void handleReplace() {
@@ -86,27 +96,26 @@ public abstract class CraftingRecipeBuilder {
     }
 
     @GroovyBlacklist
-    protected ResourceLocation createName(@Nullable String name, @Nullable String prefix) {
+    public String getRecipeNamePrefix() {
+        return "groovyscript_";
+    }
+
+    @GroovyBlacklist
+    public void validateName() {
         if (name == null) {
-            return new ResourceLocation(GroovyScript.getRunConfig().getPackId(), prefix == null ? RecipeName.generate() : RecipeName.generate(prefix));
+            name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate(getRecipeNamePrefix()));
         }
-        if (name.contains(":")) {
-            return new ResourceLocation(name);
-        }
-        return new ResourceLocation(GroovyScript.getRunConfig().getPackId(), name);
     }
 
     public static class Shaped extends CraftingRecipeBuilder {
 
-        private static final String ID_PREFIX = "shaped_";
-
         protected boolean mirrored = false;
-        private String[] keyBasedMatrix;
-        private final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
+        protected String[] keyBasedMatrix;
+        protected final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
 
-        private List<List<IIngredient>> ingredientMatrix;
+        protected List<List<IIngredient>> ingredientMatrix;
 
-        private final List<String> errors = new ArrayList<>();
+        protected final List<String> errors = new ArrayList<>();
 
         public Shaped(int width, int height) {
             super(width, height);
@@ -141,6 +150,11 @@ public abstract class CraftingRecipeBuilder {
             return this;
         }
 
+        public Shaped key(char c, IIngredient ingredient) {
+            this.keyMap.put(c, ingredient);
+            return this;
+        }
+
         // groovy doesn't have char literals
         public Shaped key(String c, IIngredient ingredient) {
             if (c == null || c.length() != 1) {
@@ -148,6 +162,13 @@ public abstract class CraftingRecipeBuilder {
                 return this;
             }
             this.keyMap.put(c.charAt(0), ingredient);
+            return this;
+        }
+
+        public Shaped key(Map<String, IIngredient> map) {
+            for (Map.Entry<String, IIngredient> x : map.entrySet()) {
+                key(x.getKey(), x.getValue());
+            }
             return this;
         }
 
@@ -162,8 +183,13 @@ public abstract class CraftingRecipeBuilder {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_shaped_";
+        }
+
+        @Override
         public IRecipe register() {
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shapeless Crafting recipe").error()
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shaped Crafting recipe").error()
                     .add((keyBasedMatrix == null || keyBasedMatrix.length == 0) && (ingredientMatrix == null || ingredientMatrix.isEmpty()), () -> "No matrix was defined")
                     .add(keyBasedMatrix != null && ingredientMatrix != null, () -> "A key based matrix AND a ingredient based matrix was defined. This is not allowed!");
             if (msg.postIfNotEmpty()) return null;
@@ -178,8 +204,8 @@ public abstract class CraftingRecipeBuilder {
 
             if (recipe != null) {
                 handleReplace();
-                ResourceLocation rl = createName(name, ID_PREFIX);
-                ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, rl, recipe);
+                validateName();
+                ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             }
 
             return recipe;
@@ -187,8 +213,6 @@ public abstract class CraftingRecipeBuilder {
     }
 
     public static class Shapeless extends CraftingRecipeBuilder {
-
-        private static final String ID_PREFIX = "shapeless_";
 
         private final List<IIngredient> ingredients = new ArrayList<>();
 
@@ -216,6 +240,11 @@ public abstract class CraftingRecipeBuilder {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_shapeless_";
+        }
+
+        @Override
         public IRecipe register() {
             IngredientHelper.trim(ingredients);
             if (GroovyLog.msg("Error adding Minecraft Shapeless Crafting recipe")
@@ -228,8 +257,8 @@ public abstract class CraftingRecipeBuilder {
             }
             handleReplace();
             ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), ingredients, recipeFunction, recipeAction);
-            ResourceLocation rl = createName(name, ID_PREFIX);
-            ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, rl, recipe);
+            validateName();
+            ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             return recipe;
         }
     }

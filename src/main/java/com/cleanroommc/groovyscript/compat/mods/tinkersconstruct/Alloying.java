@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.smeltery.AlloyRecipe;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
 
@@ -59,8 +60,9 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
     }
 
     public boolean removeByInputs(FluidStack... inputs) {
+        List<FluidStack> list = Arrays.asList(inputs);
         if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
-            boolean found = recipe.matches(Arrays.asList(inputs)) > 0;
+            boolean found = recipe.matches(list) > 0;
             if (found) addBackup(recipe);
             return found;
         })) return true;
@@ -73,14 +75,15 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
     }
 
     public boolean removeByInputsAndOutput(FluidStack output, FluidStack... inputs) {
+        List<FluidStack> list = Arrays.asList(inputs);
         if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
-            boolean found = recipe.getResult().isFluidEqual(output) && recipe.matches(Arrays.asList(inputs)) > 0;
+            boolean found = recipe.getResult().isFluidEqual(output) && recipe.matches(list) > 0;
             if (found) addBackup(recipe);
             return found;
         })) return true;
 
         GroovyLog.msg("Error removing Tinkers Construct Alloying recipe")
-                .add("could not find recipe with inputs %s and output {}", Arrays.asList(inputs), output)
+                .add("could not find recipe with inputs {} and output {}", Arrays.asList(inputs), output)
                 .error()
                 .post();
         return false;

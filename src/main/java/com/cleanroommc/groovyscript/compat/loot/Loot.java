@@ -43,10 +43,24 @@ public class Loot {
     public static final Map<ResourceLocation, LootTable> TABLES = new Object2ObjectOpenHashMap<>();
     public static LootTableManager TABLE_MANAGER;
 
-    public LootTable getTable(String name) {
-        LootTable lootTable = TABLES.get(new ResourceLocation(name));
+    @ApiStatus.Internal
+    @GroovyBlacklist
+    public static void init() {
+        TABLE_MANAGER = new LootTableManager(null);
+    }
+
+    public LootTable getTable(ResourceLocation name) {
+        LootTable lootTable = TABLES.get(name);
         if (lootTable == null) GroovyLog.msg("GroovyScript found 0 LootTable(s) named " + name).post();
         return lootTable;
+    }
+
+    public LootTable getTable(String name) {
+        return getTable(new ResourceLocation(name));
+    }
+
+    public void removeTable(ResourceLocation name) {
+        TABLES.put(name, LootTable.EMPTY_LOOT_TABLE);
     }
 
     public void removeTable(String name) {
