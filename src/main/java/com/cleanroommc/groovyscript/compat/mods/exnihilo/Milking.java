@@ -110,7 +110,7 @@ public class Milking extends VirtualizedRegistry<Milkable> {
         @Override
         public @Nullable Milkable register() {
             if (!validate()) return null;
-            Milkable milkable = new Milkable(entity.toString(), fluid.getFluid().toString(), fluid.amount, cooldown);
+            Milkable milkable = new Milkable(entity.toString(), fluid.getFluid().getName(), fluid.amount, cooldown);
             addScripted(milkable);
             ExNihiloRegistryManager.MILK_ENTITY_REGISTRY.getRegistry().add(milkable);
             return milkable;
