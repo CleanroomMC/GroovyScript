@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.content.GroovyResourcePack;
@@ -143,7 +143,7 @@ public class GroovyScript {
     @ApiStatus.Internal
     public static void initializeGroovyPreInit() {
         // called via mixin in between construction and fml pre init
-        BracketHandlerManager.init();
+        GameObjectHandlerManager.init();
         VanillaModule.initializeBinding();
         ModSupport.init();
 

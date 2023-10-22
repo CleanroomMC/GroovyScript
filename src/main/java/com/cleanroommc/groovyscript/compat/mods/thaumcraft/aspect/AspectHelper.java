@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -309,7 +309,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         }
 
         public AspectHelperBuilder aspect(String tag, int amount) {
-            Aspect a = AspectBracketHandler.validateAspect(tag);
+            Aspect a = Thaumcraft.validateAspect(tag);
             if (a != null) this.aspects.add(new AspectStack(a, amount));
             return this;
         }
