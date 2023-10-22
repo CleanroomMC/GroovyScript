@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.WarningScreen;
 import com.cleanroommc.groovyscript.compat.content.GroovyBlock;
+import com.cleanroommc.groovyscript.compat.content.GroovyFluid;
 import com.cleanroommc.groovyscript.compat.content.GroovyItem;
 import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingInfo;
@@ -26,6 +27,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
@@ -51,6 +53,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         GroovyBlock.initBlocks(event.getRegistry());
+        GroovyFluid.initBlocks(event.getRegistry());
     }
 
     @SubscribeEvent
@@ -58,6 +61,13 @@ public class EventHandler {
     public static void registerModels(ModelRegistryEvent event) {
         GroovyItem.registerModels();
         GroovyBlock.registerModels();
+        GroovyFluid.registerModels();
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void registerTextures(TextureStitchEvent.Post event) {
+        GroovyFluid.initTextures(event.getMap());
     }
 
     @SubscribeEvent
