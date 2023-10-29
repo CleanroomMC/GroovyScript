@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
+import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SReloadJei;
@@ -162,6 +163,18 @@ public class GSCommand extends CommandTreeBase {
                                                          .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open wiki in browser")))
                                                          .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://groovyscript-docs.readthedocs.io/en/latest/"))));
         }, "doc", "docs", "documentation"));
+
+        addSubcommand(new SimpleCommand("generateWiki", (server, sender, args) -> {
+            Documentation.generateWiki();
+            sender.sendMessage(new TextComponentString("Generated a local version of the Groovyscript wiki has been generated to the ")
+                                       .appendSibling(getTextForFile("Wiki Folder", Documentation.WIKI.toPath(), new TextComponentString("Click to open the generated GroovyScript wiki folder"))));
+        }, "generateDoc", "generateDocs", "generateDocumentation"));
+
+        addSubcommand(new SimpleCommand("generateExamples", (server, sender, args) -> {
+            Documentation.generateExamples();
+            sender.sendMessage(new TextComponentString("Generated examples for the enabled Groovyscript compat to the ")
+                                       .appendSibling(getTextForFile("Examples Folder", Documentation.EXAMPLES.toPath(), new TextComponentString("Click to open the Groovyscript examples folder"))));
+        }));
 
         addSubcommand(new SimpleCommand("creativeTabs", (server, sender, args) -> {
             GroovyLog.get().info("All creative tabs:");
