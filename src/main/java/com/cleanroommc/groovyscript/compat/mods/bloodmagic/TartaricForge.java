@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.bloodmagic.BloodMagicRecipeRegistrarAccessor;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -18,12 +19,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 
+@RegistryDescription
 public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
 
     public TartaricForge() {
         super();
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).output(item('minecraft:gold_ingot')).soulDrain(5).minimumSouls(10)"),
+            @Example(".input(item('minecraft:gold_ingot'), item('minecraft:clay')).output(item('minecraft:diamond')).drain(200).minimumSouls(500)")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -35,6 +41,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes()::add);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tartaricforge.add", signature = "NonNullList<Ingredient>, ItemStack, double, double", type = MethodDescription.Type.ADDITION)
     public RecipeTartaricForge add(NonNullList<Ingredient> input, ItemStack output, double minimumSouls, double soulDrain) {
         double minimum;
         if (minimumSouls < soulDrain) {
@@ -65,12 +72,17 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", signature = "IIngredient...", example = {
+            @Example("item('minecraft:cauldron'), item('minecraft:stone'), item('minecraft:dye:4'), item('minecraft:diamond')"),
+            @Example("item('minecraft:gunpowder'), item('minecraft:redstone')")
+    })
     public boolean removeByInput(IIngredient... input) {
         NonNullList<IIngredient> inputs = NonNullList.create();
         Collections.addAll(inputs, input);
         return removeByInput(inputs);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", signature = "NonNullList<IIngredient>")
     public boolean removeByInput(NonNullList<IIngredient> input) {
         // Filters down to only recipes which have inputs that match all the input IIngredients (NOTE: a recipe with ABCD would match an input of AB)
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().removeIf(recipe -> {
@@ -97,6 +109,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('bloodmagic:demon_crystal')"))
     public boolean removeByOutput(ItemStack output) {
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
@@ -114,31 +127,41 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().forEach(this::addBackup);
         ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipeTartaricForge> streamRecipes() {
         return new SimpleObjectStream<>(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes())
                 .setRemover(this::remove);
     }
 
+
+    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "4")})
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeTartaricForge> {
 
+        @Property(required = false, valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private double minimumSouls;
+        @Property(required = false, valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private double soulDrain;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder minimumSouls(double minimumSouls) {
             this.minimumSouls = minimumSouls;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder soulDrain(double soulDrain) {
             this.soulDrain = soulDrain;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "soulDrain")
         public RecipeBuilder drain(int drain) {
             return soulDrain(drain);
         }
@@ -156,6 +179,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable RecipeTartaricForge register() {
             if (!validate()) return null;
             RecipeTartaricForge recipe = ModSupport.BLOOD_MAGIC.get().tartaricForge.add(IngredientHelper.toIngredientNonNullList(input), output.get(0), minimumSouls, soulDrain);
