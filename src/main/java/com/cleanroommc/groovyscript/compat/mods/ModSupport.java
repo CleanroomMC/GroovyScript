@@ -30,7 +30,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class ModSupport implements IDynamicGroovyProperty {
@@ -91,6 +93,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     @SuppressWarnings("all")
     public static class Container<T extends ModPropertyContainer> {
 
+        protected final List<String> aliases;
         private final String modId, modName;
         private final Supplier<T> modProperty;
         private final boolean loaded;
@@ -103,12 +106,15 @@ public class ModSupport implements IDynamicGroovyProperty {
             if (frozen) {
                 throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + modName + "' too late.");
             }
+            this.aliases = new ArrayList<>();
             this.modId = modId;
             this.modName = modName;
             this.modProperty = Suppliers.memoize(modProperty);
             this.loaded = Loader.isModLoaded(modId);
             containers.put(modId, this);
+            this.aliases.add(modId);
             for (String alias : aliases) {
+                this.aliases.add(alias);
                 Container<?> container = containers.put(alias, this);
                 if (container != null) {
                     throw new IllegalArgumentException("Alias already exists for: " + container.modId + " mod.");
@@ -122,6 +128,10 @@ public class ModSupport implements IDynamicGroovyProperty {
 
         public String getId() {
             return modId;
+        }
+
+        public List<String> getAliases() {
+            return aliases;
         }
 
         public T get() {

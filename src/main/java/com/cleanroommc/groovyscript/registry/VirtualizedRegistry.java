@@ -9,6 +9,7 @@ import java.util.*;
 
 public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
 
+    protected final String name;
     protected final List<String> aliases;
 
     protected Collection<R> backup, scripted;
@@ -23,6 +24,7 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
             Collections.addAll(this.aliases, VirtualizedRegistry.generateAliases(this.getClass().getSimpleName()));
         }
         Collections.addAll(this.aliases, aliases);
+        this.name = this.aliases.get(0).toLowerCase(Locale.ROOT);
         initBackup();
         initScripted();
     }
@@ -54,6 +56,10 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
     @ApiStatus.OverrideOnly
     public void afterScriptLoad() {
 
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<String> getAliases() {

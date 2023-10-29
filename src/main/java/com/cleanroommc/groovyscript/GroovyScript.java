@@ -12,6 +12,8 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
+import com.cleanroommc.groovyscript.documentation.Documentation;
+import com.cleanroommc.groovyscript.documentation.LinkGenerator;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.CReload;
@@ -33,7 +35,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
-import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -46,10 +47,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -61,7 +59,6 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -100,6 +97,7 @@ public class GroovyScript {
         NetworkHandler.init();
         GroovySystem.getMetaClassRegistry().setMetaClassCreationHandle(GrSMetaClassCreationHandle.INSTANCE);
         GroovyDeobfMapper.init();
+        LinkGenerator.init();
         ReloadableRegistryManager.init();
         try {
             sandbox = new GroovyScriptSandbox(scriptPath.toURI().toURL());
@@ -134,7 +132,7 @@ public class GroovyScript {
     @ApiStatus.Internal
     public static void initializeRunConfig(File minecraftHome) {
         // If we are launching with the environment variable set to use the examples folder, use the examples folder for easy and consistent testing.
-        if (ManagementFactory.getRuntimeMXBean().getInputArguments().contains("-Dgroovyscript.use_examples_folder=true")) {
+        if (Boolean.parseBoolean(System.getProperty("groovyscript.use_examples_folder"))) {
             scriptPath = new File(minecraftHome.getParentFile(), "examples");
         } else {
             scriptPath = new File(minecraftHome, "groovy");
@@ -146,6 +144,7 @@ public class GroovyScript {
 
     @ApiStatus.Internal
     public static void initializeGroovyPreInit() {
+        Documentation.generate();
         // called via mixin in between construction and fml pre init
         BracketHandlerManager.init();
         VanillaModule.initializeBinding();
