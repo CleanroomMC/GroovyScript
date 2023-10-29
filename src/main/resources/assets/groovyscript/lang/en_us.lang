@@ -4,3 +4,269 @@ groovyscript.command.copy.copied_end=] to the clipboard
 
 key.categories.groovyscript=GroovyScript
 key.groovyscript.reload=Reload Scripts
+
+# Wiki
+groovyscript.wiki.categories=Categories
+groovyscript.wiki.subcategories_count=Has %s subcategories.
+groovyscript.wiki.description=Description
+groovyscript.wiki.package=Package
+groovyscript.wiki.defaultPackage=This package will be used as the default for examples on this page
+groovyscript.wiki.import_instructions=Import or refer to this via any of the following:
+groovyscript.wiki.adding_recipes=Adding Recipes
+groovyscript.wiki.adding_entries=Adding Entries
+groovyscript.wiki.removing_recipes=Removing Recipes
+groovyscript.wiki.removing_entries=Removing Entries
+groovyscript.wiki.query_recipes=Getting all recipes
+groovyscript.wiki.query_entries=Getting all entries
+groovyscript.wiki.recipe_builder=Recipe Builder
+groovyscript.wiki.uses_recipe_builder=Just like other recipe types, the %s also uses a recipe builder.
+groovyscript.wiki.recipe_builder_note=Don't know what a builder is? Check [the builder info page](/groovy/builder) out.
+groovyscript.wiki.required_mods.title=Required Mods
+groovyscript.wiki.required_mods.desc=This compat requires the following mods to be loaded
+
+groovyscript.wiki.requires=Requires %s.
+groovyscript.wiki.default=(Default `%s`).
+
+# General
+groovyscript.wiki.name.value=Sets the Resource Location of the recipe
+groovyscript.wiki.input.value=Sets the item inputs of the recipe
+groovyscript.wiki.output.value=Sets the item outputs of the recipe
+groovyscript.wiki.fluidInput.value=Sets the fluid inputs of the recipe
+groovyscript.wiki.fluidOutput.value=Sets the fluid outputs of the recipe
+groovyscript.wiki.register=First validates the recipe, returning `null` and outputting errors to the log file if the validation failed, then registers the recipe and returns the registered object. (returns `null` or `%s`).
+
+groovyscript.wiki.removeByInput=Removes all recipes that match the given input
+groovyscript.wiki.removeByOutput=Removes all recipes that match the given output
+groovyscript.wiki.removeByOre=Removes all recipes that match the given ore
+groovyscript.wiki.removeByCatalyst=Removes all recipes that match the given catalyst
+groovyscript.wiki.removeByInputAndCatalyst=This removes all recipes that match the given input and Catalyst
+groovyscript.wiki.streamRecipes=Iterates through every entry in the registry, with the ability to call remove on any element to remove it
+groovyscript.wiki.removeAll=Removes all registered recipes
+
+groovyscript.wiki.less_than=less than %s
+groovyscript.wiki.less_than_or_equal_to=less than or equal to %s
+groovyscript.wiki.equal_to=exactly %s
+groovyscript.wiki.greater_than_or_equal_to=greater than or equal to %s
+groovyscript.wiki.greater_than=greater than %s
+groovyscript.wiki.not=not %s
+groovyscript.wiki.and=and
+groovyscript.wiki.or=or
+
+# Actually Additions
+groovyscript.wiki.actuallyadditions.atomicreconstructor.title=Atomic Reconstructor
+groovyscript.wiki.actuallyadditions.atomicreconstructor.description=The Atomic Reconstructor is a block which uses energy to convert a block or item in front of it into other items.
+groovyscript.wiki.actuallyadditions.atomicreconstructor.energyUse.value=Sets the amount of power consumed by the recipe
+
+groovyscript.wiki.actuallyadditions.balloffur.title=Ball of Fur
+groovyscript.wiki.actuallyadditions.balloffur.description=A weighted itemstack output for using a Ball of Fur, dropped by a cat.
+groovyscript.wiki.actuallyadditions.balloffur.weight.value=Sets how likely this entry is to be rolled
+
+groovyscript.wiki.actuallyadditions.compost.title=Compost
+groovyscript.wiki.actuallyadditions.compost.description=Converts an input item into an output item after 150 seconds. Requires an input and output display blockstate.
+groovyscript.wiki.actuallyadditions.compost.inputDisplay.value=Sets the texture rendering inside the Compost Bin in-world while the given recipe is being processed
+groovyscript.wiki.actuallyadditions.compost.outputDisplay.value=Sets the texture rendering inside the Compost Bin in-world while the given recipe has been completed but has not yet been extracted
+
+groovyscript.wiki.actuallyadditions.crusher.title=Crusher
+groovyscript.wiki.actuallyadditions.crusher.description=Converts an input itemstack into an output itemstack with a chance of a second itemstack.
+groovyscript.wiki.actuallyadditions.crusher.chance.value=Sets the chance for the second output entry to be output
+
+groovyscript.wiki.actuallyadditions.empowerer.title=Empowerer
+groovyscript.wiki.actuallyadditions.empowerer.description=Turns 5 input items into an output item at the cost of power and time. Has a configurable color.
+groovyscript.wiki.actuallyadditions.empowerer.mainInput.value=Sets the center IIngredient if the input only has 4 entries
+groovyscript.wiki.actuallyadditions.empowerer.energyPerStand.value=Sets the amount of energy each stand must consume to process the recipe
+groovyscript.wiki.actuallyadditions.empowerer.time.value=Sets the amount of time the recipe takes to complete
+groovyscript.wiki.actuallyadditions.empowerer.red.value=Sets the red color
+groovyscript.wiki.actuallyadditions.empowerer.blue.value=Sets the blue color
+groovyscript.wiki.actuallyadditions.empowerer.green.value=Sets the green color
+groovyscript.wiki.actuallyadditions.empowerer.mainInput.required=either defined in mainInput or in input
+
+groovyscript.wiki.actuallyadditions.nethermininglens.title=Nether Mining Lens
+groovyscript.wiki.actuallyadditions.nethermininglens.description=A weighted oredict for the block obtained via firing a Mining Lens at a block of Netherrack. The oredict must have a block, or the world will hang.
+groovyscript.wiki.actuallyadditions.nethermininglens.ore.value=Sets the ore given by the recipe
+groovyscript.wiki.actuallyadditions.nethermininglens.weight.value=Sets how likely this ore is to be rolled
+
+groovyscript.wiki.actuallyadditions.oilgen.title=Oil Gen
+groovyscript.wiki.actuallyadditions.oilgen.description=Turns a fluid into power at a rate.
+groovyscript.wiki.actuallyadditions.oilgen.amount.value=Sets how much power is generated per tick while fluid is being consumed
+groovyscript.wiki.actuallyadditions.oilgen.time.value=Sets how long the fluid burns for
+
+groovyscript.wiki.actuallyadditions.stonemininglens.title=Stone Mining Lens
+groovyscript.wiki.actuallyadditions.stonemininglens.description=A weighted oredict for the block obtained via firing a Mining Lens at a block of Stone. The oredict must have a block, or the world will hang.
+groovyscript.wiki.actuallyadditions.stonemininglens.ore.value=Sets the ore given by the recipe
+groovyscript.wiki.actuallyadditions.stonemininglens.weight.value=Sets how likely this ore is to be rolled
+
+groovyscript.wiki.actuallyadditions.treasurechest.title=Treasure Chest
+groovyscript.wiki.actuallyadditions.treasurechest.description=A weighted item, with a weight to obtain and a minimum and maximum amount. Obtained via right-clicking a Treasure Chest spawning randomly on the sea floor.
+groovyscript.wiki.actuallyadditions.treasurechest.weight.value=Sets how likely this loot is to be rolled
+groovyscript.wiki.actuallyadditions.treasurechest.min.value=Sets the minimum stack size given when rolled
+groovyscript.wiki.actuallyadditions.treasurechest.max.value=Sets the maximum stack size given when rolled
+
+
+
+# Blood Magic
+groovyscript.wiki.bloodmagic.alchemyarray.title=Alchemy Array
+groovyscript.wiki.bloodmagic.alchemyarray.description=Converts two items into an output itemstack by using Arcane Ashes in-world. Has a configurable texture for the animation.
+groovyscript.wiki.bloodmagic.alchemyarray.add0=Adds recipes in the format `input`, `catalyst`, `output`, `circleTexture`
+groovyscript.wiki.bloodmagic.alchemyarray.add1=Adds recipes in the format `input`, `catalyst`, `output`, optional `circleTexture`
+groovyscript.wiki.bloodmagic.alchemyarray.catalyst.value=Sets the catalyst
+groovyscript.wiki.bloodmagic.alchemyarray.texture.value=Sets the animation texture
+
+groovyscript.wiki.bloodmagic.alchemytable.title=Alchemy Table
+groovyscript.wiki.bloodmagic.alchemytable.description=Converts up to 6 input items into an output itemstack, with configurable time, minimum tier of Blood Orb required, and Life Essence drained from the Orb network.
+groovyscript.wiki.bloodmagic.alchemytable.note0=Tier 6 must be enabled in the config to use an Orb of that tier in the Alchemy Table.
+groovyscript.wiki.bloodmagic.alchemytable.add=Adds recipes in the format `input`, `output`, `syphon`, `ticks`, `minimumTier`
+groovyscript.wiki.bloodmagic.alchemytable.syphon.value=Sets how much Life Essence is drained from the Blood Network
+groovyscript.wiki.bloodmagic.alchemytable.ticks.value=Sets how long in ticks the recipe should take
+groovyscript.wiki.bloodmagic.alchemytable.minimumTier.value=Sets the minimum tier the Blood Orb inside the table must be
+
+groovyscript.wiki.bloodmagic.bloodaltar.title=Blood Altar
+groovyscript.wiki.bloodmagic.bloodaltar.description=Converts an input item into an output itemstack, draining life essence from the altar at a base rate and requiring at least a specific tier.
+groovyscript.wiki.bloodmagic.bloodaltar.note0=The Blood Altar consumes Life Essence from its internal tank to convert the input item into the output item. Each tier requires a larger multiblock, which may contain Runes that modify the Blood Altar's functionality.
+groovyscript.wiki.bloodmagic.bloodaltar.note1=Tier 6 must be enabled in the config to use a Blood Altar of that tier.
+groovyscript.wiki.bloodmagic.bloodaltar.add=Adds recipes in the format `input`, `output`, `minimumTier`, `syphon`, `consumeRate`, `drainRate`
+groovyscript.wiki.bloodmagic.bloodaltar.minimumTier.value=Sets the minimum tier required from the altar
+groovyscript.wiki.bloodmagic.bloodaltar.syphon.value=Sets how much Life Essence in total is required
+groovyscript.wiki.bloodmagic.bloodaltar.consumeRate.value=Sets how much Life Essence the Blood Altar can consume per tick for this recipe
+groovyscript.wiki.bloodmagic.bloodaltar.drainRate.value=Sets how much Life Essence the recipe looses per tick when the recipe cannot consume Life Essence
+
+groovyscript.wiki.bloodmagic.meteor.title=Meteor
+groovyscript.wiki.bloodmagic.meteor.description=Throwing an input catalyst atop an activated Mark of the Falling Tower Ritual will spawn a meteor made of the given components, size, explosion strength, and Life Essence cost.
+groovyscript.wiki.bloodmagic.meteor.add=Adds recipes in the format `catalyst`, `componentList`, `explosionStrength`, `radius`, `cost`
+groovyscript.wiki.bloodmagic.meteor.components.value=Sets the blocks that make up the meteor, and what weight each block has to generate
+groovyscript.wiki.bloodmagic.meteor.catalyst.value=Sets the catalyst that must be thrown atop the Master Ritual Stone to spawn the meteor
+groovyscript.wiki.bloodmagic.meteor.explosionStrength.value=Sets the strength of the explosion caused when the meteor is spawned
+groovyscript.wiki.bloodmagic.meteor.radius.value=Sets the radius of the meteor
+groovyscript.wiki.bloodmagic.meteor.cost.value=Sets the amount of Life Essence drained from the Blood Network to spawn the meteor
+groovyscript.wiki.bloodmagic.meteor.components.required=components with corresponding weight that make up the meteor
+
+groovyscript.wiki.bloodmagic.sacrificial.title=Sacrificial
+groovyscript.wiki.bloodmagic.sacrificial.description=How much Life Essence is gained when using the Sacrificial Dagger on a mob.
+groovyscript.wiki.bloodmagic.sacrificial.add=Adds recipes in the format `entity`, `value`
+groovyscript.wiki.bloodmagic.sacrificial.remove0=Removes any Sacrificial values entry with the given ResourceLocation
+groovyscript.wiki.bloodmagic.sacrificial.remove1=Removes any Sacrificial values entry with the given String as a ResourceLocation
+groovyscript.wiki.bloodmagic.sacrificial.remove2=Removes any Sacrificial values entry with the given Entity as a ResourceLocation
+groovyscript.wiki.bloodmagic.sacrificial.remove3=Removes any Sacrificial values entry with the given EntityEntry as a ResourceLocation
+groovyscript.wiki.bloodmagic.sacrificial.entity.value=Sets the target entity
+groovyscript.wiki.bloodmagic.sacrificial.value.value=Sets how much Life Essence the entity gives
+
+groovyscript.wiki.bloodmagic.tartaricforge.title=Tartaric Forge
+groovyscript.wiki.bloodmagic.tartaricforge.description=Converts up to 4 input items into an output itemstack, requiring a Tartaric gem with a minimum amount of souls, and consuming some.
+groovyscript.wiki.bloodmagic.tartaricforge.add=Adds recipes in the format `input`, `output`, `minimumSouls`, `soulDrain`
+groovyscript.wiki.bloodmagic.tartaricforge.minimumSouls.value=Sets how much Demonic Will is required in the Tartaric Gem to start the craft
+groovyscript.wiki.bloodmagic.tartaricforge.soulDrain.value=Sets how much Demonic Will is drained from the Tartaric Gem when the craft is completed
+
+groovyscript.wiki.bloodmagic.tranquility.title=Tranquility
+groovyscript.wiki.bloodmagic.tranquility.description=Blocks in the area around the Tranquility Altar provide tranquility up to the Altar's cap, with reduced effect the more of a particular type of Tranquility is provided.
+groovyscript.wiki.bloodmagic.tranquility.add0=Adds recipes in the format `block`, `tranquility`, `value`
+groovyscript.wiki.bloodmagic.tranquility.add1=Adds recipes in the format `block`, `tranquility`
+groovyscript.wiki.bloodmagic.tranquility.add2=Adds recipes in the format `blockstate`, `tranquility`, `value`
+groovyscript.wiki.bloodmagic.tranquility.add3=Adds recipes in the format `blockstate`, `tranquility`
+groovyscript.wiki.bloodmagic.tranquility.remove0=Removes any Tranquility entry that matches the given Block and Tranquility type as String
+groovyscript.wiki.bloodmagic.tranquility.remove1=Removes any Tranquility entry that matches the given Block and EnumTranquilityType
+groovyscript.wiki.bloodmagic.tranquility.remove2=Removes any Tranquility entry that matches the given IBlockState and Tranquility as String
+groovyscript.wiki.bloodmagic.tranquility.remove3=Removes any Tranquility entry that matches the given IBlockState and EnumTranquilityType
+groovyscript.wiki.bloodmagic.tranquility.blockstate.value=Sets the target blockstate
+groovyscript.wiki.bloodmagic.tranquility.block.value=Sets the target block
+groovyscript.wiki.bloodmagic.tranquility.tranquility.value=Sets the type of Tranquility being modified
+groovyscript.wiki.bloodmagic.tranquility.value.value=Sets the amount of Tranquility provided
+groovyscript.wiki.bloodmagic.tranquility.block.required=either block or blockstate must be defined
+groovyscript.wiki.bloodmagic.tranquility.blockstate.required=either block or blockstate must be defined
+
+# Mekanism
+groovyscript.wiki.mekanism.gasInput.value=Sets the gas inputs of the recipe
+groovyscript.wiki.mekanism.gasOutput.value=Sets the gas outputs of the recipe
+
+groovyscript.wiki.mekanism.chemicalinfuser.title=Chemical Infuser
+groovyscript.wiki.mekanism.chemicalinfuser.description=Combines two input gas stacks into a output gas stack.
+groovyscript.wiki.mekanism.chemicalinfuser.add=Adds recipes in the format `leftInput`, `rightInput`, `output`
+
+groovyscript.wiki.mekanism.chemicaloxidizer.title=Chemical Oxidizer (Oxidizer)
+groovyscript.wiki.mekanism.chemicaloxidizer.description=Converts an input itemstack into an output gasstack.
+groovyscript.wiki.mekanism.chemicaloxidizer.add=Adds recipes in the format `ingredient`, `output`
+
+groovyscript.wiki.mekanism.combiner.title=Combiner
+groovyscript.wiki.mekanism.combiner.description=Combines an input itemstack with an extra itemstack to create an output itemstack.
+groovyscript.wiki.mekanism.combiner.add=Adds recipes in the format `ingredient`, `extra`, `output`
+groovyscript.wiki.mekanism.combiner.extra.value=Sets the extra input item, defaults to Cobblestone
+
+groovyscript.wiki.mekanism.crusher.title=Crusher
+groovyscript.wiki.mekanism.crusher.description=Converts an input itemstack into an output itemstack.
+groovyscript.wiki.mekanism.crusher.add=Adds recipes in the format `ingredient`, `output`
+
+groovyscript.wiki.mekanism.crystallizer.title=Crystallizer
+groovyscript.wiki.mekanism.crystallizer.description=Converts an input gasstack into an output itemstack.
+groovyscript.wiki.mekanism.crystallizer.add=Adds recipes in the format `input`, `output`
+
+groovyscript.wiki.mekanism.dissolutionchamber.title=Dissolution Chamber (Dissolver)
+groovyscript.wiki.mekanism.dissolutionchamber.description=Converts an input itemstack into an output gasstack at the cost of 100mb of Sulfuric Acid.
+groovyscript.wiki.mekanism.dissolutionchamber.add=Adds recipes in the format `ingredient`, `output`
+
+groovyscript.wiki.mekanism.electrolyticseparator.title=Electrolytic Separator (Separator)
+groovyscript.wiki.mekanism.electrolyticseparator.description=Converts an input fluid into two output gasstacks at the cost of power.
+groovyscript.wiki.mekanism.electrolyticseparator.add=Adds recipes in the format `ingredient`, `output`
+
+groovyscript.wiki.mekanism.enrichmentchamber.title=Enrichment Chamber (Enricher)
+groovyscript.wiki.mekanism.enrichmentchamber.description=Converts an input itemstack into an output itemstack.
+groovyscript.wiki.mekanism.enrichmentchamber.add=Adds recipes in the format `input`, `leftOutput`, `rightOutput`, `energy`
+
+groovyscript.wiki.mekanism.infusion.title=Infusion
+groovyscript.wiki.mekanism.infusion.description=Add new infusion types and itemstacks to those types.
+groovyscript.wiki.mekanism.infusion.note0=To register a texture to be used by an Infusion Type, you have to add the following event listener to a PreInit file. `event_manager.listen { TextureStitchEvent.Pre event -> event.getMap().registerSprite(resource('placeholdername:blocks/example')) }`, where 'assets/placeholdername/textures/blocks/example.png' is the location of the desired texture.
+groovyscript.wiki.mekanism.infusion.addType=Creates an Infusion Type with the given name and texture
+groovyscript.wiki.mekanism.infusion.removeType=Removes an Infusion Type and all corresponding items
+groovyscript.wiki.mekanism.infusion.add=Adds IIngredients to the provided Infusion Type
+groovyscript.wiki.mekanism.infusion.remove=Removes IIngredients from any Infusion Type
+groovyscript.wiki.mekanism.infusion.removeByType=Removes any Infusion Type that matches the given type
+groovyscript.wiki.mekanism.infusion.removeAll=Removes all Infusion Types
+
+groovyscript.wiki.mekanism.injectionchamber.title=Injection Chamber (Injector)
+groovyscript.wiki.mekanism.injectionchamber.description=Converts an input itemstack and 200 of a gasstack into an output itemstack.
+groovyscript.wiki.mekanism.injectionchamber.annotation=Always uses 200 gas
+groovyscript.wiki.mekanism.injectionchamber.add=Adds recipes in the format `ingredient`, `gasInput`, `output`
+
+groovyscript.wiki.mekanism.metallurgicinfuser.title=Metallurgic Infuser
+groovyscript.wiki.mekanism.metallurgicinfuser.description=Converts and input itemstack and a varible amount of an infusion type into an output itemstack.
+groovyscript.wiki.mekanism.metallurgicinfuser.add0=Adds recipes in the format `ingredient`, `infuseType`, `infuseAmount`, `output`
+groovyscript.wiki.mekanism.metallurgicinfuser.add1=Adds recipes in the format `ingredient`, `infuseType`, `infuseAmount`, `output`
+groovyscript.wiki.mekanism.metallurgicinfuser.infuse.value=Sets the Infusion type the recipe uses
+groovyscript.wiki.mekanism.metallurgicinfuser.amount.value=Sets the amount of the provided Infusion type consumed
+
+groovyscript.wiki.mekanism.osmiumcompressor.title=Osmium Compressor
+groovyscript.wiki.mekanism.osmiumcompressor.description=Converts an input itemstack and 200 of a gasstack into an output itemstack. By default, will use Liquid Osmium as the gasstack.
+groovyscript.wiki.mekanism.osmiumcompressor.annotation=Always uses 200 gas
+groovyscript.wiki.mekanism.osmiumcompressor.add=Adds recipes in the format `ingredient`, `gasInput`, `output`
+
+groovyscript.wiki.mekanism.pressurizedreactionchamber.title=Pressurized Reaction Chamber (PRC)
+groovyscript.wiki.mekanism.pressurizedreactionchamber.description=Converts an input fluidstack, gasstack, and optional itemstack into an output gasstack and optional itemstack.
+groovyscript.wiki.mekanism.pressurizedreactionchamber.add=Adds recipes in the format `ingredient`, `gasInput`, `output`
+
+groovyscript.wiki.mekanism.purificationchamber.title=Purification Chamber (Purifier)
+groovyscript.wiki.mekanism.purificationchamber.description=Converts an input itemstack and gasstack into an output itemstack.
+groovyscript.wiki.mekanism.purificationchamber.add=Adds recipes in the format `ingredient`, `output`, `secondary`, `chance`
+
+groovyscript.wiki.mekanism.sawmill.title=Sawmill
+groovyscript.wiki.mekanism.sawmill.description=Converts an input itemstack into an output itemstack, with an optional additional output.
+groovyscript.wiki.mekanism.sawmill.add0=Adds recipes in the format `ingredient`, `output`
+groovyscript.wiki.mekanism.sawmill.add1=Adds recipes in the format `ingredient`, `output`, `secondary`
+groovyscript.wiki.mekanism.sawmill.add2=Adds recipes in the format `ingredient`, `output`, `secondary`, `chance`
+groovyscript.wiki.mekanism.sawmill.extra.value=Sets the extra itemstack produced by the recipe
+groovyscript.wiki.mekanism.sawmill.chance.value=Sets the chance the extra itemstack has to be produced
+
+groovyscript.wiki.mekanism.smelting.title=Smelting (Smelter)
+groovyscript.wiki.mekanism.smelting.description=Converts an input itemstack into an output itemstack in a recipe exclusive to the Smelter. Overrides the default furnace recipe, if applicable.
+groovyscript.wiki.mekanism.smelting.note0=Recipes exclusive to the Mekanism Smelter may not be displayed in JEI
+
+groovyscript.wiki.mekanism.solarneutronactivator.title=Solar Neutron Activator (SNA)
+groovyscript.wiki.mekanism.solarneutronactivator.description=Converts an input gasstack into an output gasstack while exposed to the sun.
+groovyscript.wiki.mekanism.solarneutronactivator.add=Adds recipes in the format `input`, `output`
+
+groovyscript.wiki.mekanism.thermalevaporationplant.title=Thermal Evaporation Plant (Thermal Evaporation, TEP)
+groovyscript.wiki.mekanism.thermalevaporationplant.description=Converts an input fluidstack into an output fluidstack over time based on multiblock temperature.
+groovyscript.wiki.mekanism.thermalevaporationplant.add=Adds recipes in the format `input`, `output`
+
+groovyscript.wiki.mekanism.washer.title=Washer
+groovyscript.wiki.mekanism.washer.description=Converts an input gasstack into an output gasstack at the cost of 5mb of water.
+groovyscript.wiki.mekanism.washer.add=Adds recipes in the format `input`, `output`
+
+
+
