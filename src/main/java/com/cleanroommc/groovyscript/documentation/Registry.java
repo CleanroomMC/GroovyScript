@@ -200,8 +200,13 @@ public class Registry {
 
         for (Method method : recipeBuilderMethods) {
             Builder builder = new Builder(method, reference, baseTranslationKey);
-            out.append(builder.documentMethods());
-            out.append(builder.builderAdmonition());
+            out.append(new AdmonitionBuilder()
+                               .type(Admonition.Type.ABSTRACT)
+                               .hasTitle(true)
+                               .title(methodExample(method))
+                               .note(builder.documentMethods().split("\n"))
+                               .note(builder.builderAdmonition().split("\n"))
+                               .generate());
         }
         return out.toString();
     }

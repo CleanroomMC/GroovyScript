@@ -58,16 +58,16 @@ public class AdmonitionBuilder {
 
     public String generate() {
         StringBuilder out = new StringBuilder();
-        String indent = StringUtils.repeat("    ", (1 + indentation));
+        String indent = StringUtils.repeat("    ", indentation);
 
-        out.append(format);
+        out.append(indent).append(format);
         out.append(" ").append(type);
         if (hasTitle) out.append(" \"").append(title).append("\"");
         out.append("\n");
 
         for (int i = 0; i < note.size(); i++) {
             String line = note.get(i);
-            if (!line.trim().isEmpty()) out.append(indent).append(line);
+            if (!line.trim().isEmpty()) out.append(indent).append("    ").append(line);
             if (i < note.size() - 1) out.append("\n");
         }
 
