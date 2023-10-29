@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import mekanism.common.recipe.RecipeHandler;
@@ -13,16 +14,23 @@ import mekanism.common.recipe.outputs.ItemStackOutput;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription(
+        admonition = @Admonition(value = "groovyscript.wiki.mekanism.smelting.note0",
+                                 type = Admonition.Type.DANGER,
+                                 format = Admonition.Format.STANDARD,
+                                 hasTitle = true))
 public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
 
     public Smelting() {
         super(RecipeHandler.Recipe.ENERGIZED_SMELTER, VirtualizedMekanismRegistry.generateAliases("Smelter"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay_ball')).output(item('minecraft:clay'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.mekanism.smelting.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond_block'), item('minecraft:clay')", commented = true))
     public SmeltingRecipe add(IIngredient ingredient, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Smelter recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -40,6 +48,7 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
         return recipe1;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example(value = "item('minecraft:clay')", commented = true))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");
@@ -59,6 +68,8 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
         return found;
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SmeltingRecipe> {
 
         @Override
@@ -73,6 +84,7 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable SmeltingRecipe register() {
             if (!validate()) return null;
             SmeltingRecipe recipe = null;

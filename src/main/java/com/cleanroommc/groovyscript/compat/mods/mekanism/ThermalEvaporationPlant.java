@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import mekanism.common.recipe.RecipeHandler;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
+@RegistryDescription
 public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
 
     public ThermalEvaporationPlant() {
@@ -20,10 +22,12 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         aliases.addAll(Arrays.asList(VirtualizedMekanismRegistry.generateAliases("ThermalEvaporation")));
     }
 
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).fluidOutput(fluid('steam'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.mekanism.thermalevaporationplant.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "fluid('water'), fluid('steam')", commented = true))
     public ThermalEvaporationRecipe add(FluidStack input, FluidStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Solar Neutron Activator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
@@ -36,6 +40,7 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         return recipe;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('water')"))
     public boolean removeByInput(FluidStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Solar Neutron Activator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
@@ -50,6 +55,8 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         return false;
     }
 
+    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "fluidOutput", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ThermalEvaporationRecipe> {
 
         @Override
@@ -64,6 +71,7 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable ThermalEvaporationRecipe register() {
             if (!validate()) return null;
             ThermalEvaporationRecipe recipe = new ThermalEvaporationRecipe(fluidInput.get(0), fluidOutput.get(0));

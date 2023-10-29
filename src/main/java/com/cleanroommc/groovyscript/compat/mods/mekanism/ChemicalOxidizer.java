@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.gas.GasStack;
@@ -14,16 +15,19 @@ import mekanism.common.recipe.machines.OxidationRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecipe> {
 
     public ChemicalOxidizer() {
         super(RecipeHandler.Recipe.CHEMICAL_OXIDIZER, VirtualizedRegistry.generateAliases("Oxidizer"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(ore('dustGold')).gasOutput(gas('gold'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.mekanism.chemicaloxidizer.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "ore('dustGold'), gas('gold')", commented = true))
     public OxidationRecipe add(IIngredient ingredient, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Oxidizer recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -41,6 +45,7 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
         return recipe1;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('dustSulfur')"))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");
@@ -60,6 +65,8 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
         return found;
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "gasOutput", valid = @Comp("1"))
     public static class RecipeBuilder extends GasRecipeBuilder<OxidationRecipe> {
 
         @Override
@@ -75,6 +82,7 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable OxidationRecipe register() {
             if (!validate()) return null;
             OxidationRecipe recipe = null;

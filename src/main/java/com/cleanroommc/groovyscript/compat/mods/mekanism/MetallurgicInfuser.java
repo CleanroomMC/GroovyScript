@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import mekanism.api.infuse.InfuseRegistry;
@@ -14,16 +15,19 @@ import mekanism.common.recipe.machines.MetallurgicInfuserRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicInfuserRecipe> {
 
     public MetallurgicInfuser() {
         super(RecipeHandler.Recipe.METALLURGIC_INFUSER);
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:nether_star')).infuse(infusion('groovy_example')).amount(50).output(item('minecraft:clay'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.mekanism.metallurgicinfuser.add0", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:nether_star'), infusion('groovy_example'), 50, item('minecraft:clay')", commented = true))
     public MetallurgicInfuserRecipe add(IIngredient ingredient, InfuseType infuseType, int infuseAmount, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Metallurgic Infuser recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -42,10 +46,13 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         }
         return recipe1;
     }
+
+    @MethodDescription(description = "groovyscript.wiki.mekanism.metallurgicinfuser.add1")
     public MetallurgicInfuserRecipe add(IIngredient ingredient, String infuseType, int infuseAmount, ItemStack output) {
         return add(ingredient, InfuseRegistry.get(infuseType), infuseAmount, output);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('dustObsidian'), 'DIAMOND'"))
     public boolean removeByInput(IIngredient ingredient, InfuseType infuseType) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Metallurgic Infuser recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -71,9 +78,14 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         return removeByInput(ingredient, InfuseRegistry.get(infuseType));
     }
 
+
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MetallurgicInfuserRecipe> {
 
+        @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private InfuseType infuse;
+        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int amount;
 
         public RecipeBuilder infuse(InfuseType infuse) {
@@ -104,6 +116,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable MetallurgicInfuserRecipe register() {
             if (!validate()) return null;
             MetallurgicInfuserRecipe recipe = null;
