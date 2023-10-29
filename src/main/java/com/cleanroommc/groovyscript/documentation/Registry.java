@@ -177,7 +177,7 @@ public class Registry {
 
     private String generatePackage() {
         StringBuilder out = new StringBuilder();
-        out.append("## ").append(I18n.format("groovyscript.wiki.package")).append("\n\n").append(I18n.format("groovyscript.wiki.import_instructions")).append("\n\n");
+        out.append("## ").append(I18n.format("groovyscript.wiki.identifier")).append("\n\n").append(I18n.format("groovyscript.wiki.import_instructions")).append("\n\n");
 
         List<String> packages = mod.getAliases().stream().flatMap(modID -> registry.getAliases().stream().map(alias -> {
             String ref = String.format("mods.%s.%s", modID, alias);
