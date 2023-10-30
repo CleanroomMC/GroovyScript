@@ -205,8 +205,10 @@ public class Registry {
                                .hasTitle(true)
                                .title(methodExample(method))
                                .note(builder.documentMethods().split("\n"))
+                               .note("\n")
                                .note(builder.builderAdmonition().split("\n"))
-                               .generate());
+                               .generate())
+                    .append("\n\n");
         }
         return out.toString();
     }
@@ -225,7 +227,7 @@ public class Registry {
                 out.append(documentMethods(additionMethods)).append("\n");
             }
             if (!recipeBuilderMethods.isEmpty()) {
-                out.append(recipeBuilder()).append("\n");
+                out.append(recipeBuilder()).append("\n\n");
             }
         }
         if (!removalMethods.isEmpty()) {
@@ -254,14 +256,15 @@ public class Registry {
             Arrays.stream(method.getAnnotation(MethodDescription.class).example()).map(Example::annotations).flatMap(Arrays::stream).forEach(annotations::add);
         }
 
-        if (!exampleLines.isEmpty())
+        if (!exampleLines.isEmpty()) {
             out.append(new AdmonitionBuilder()
+                               .type(Admonition.Type.EXAMPLE)
                                .note(new CodeBlockBuilder()
                                              .line(exampleLines)
                                              .annotation(annotations)
                                              .generate())
-                               .type(Admonition.Type.EXAMPLE)
                                .generate());
+        }
 
         return out.toString();
     }

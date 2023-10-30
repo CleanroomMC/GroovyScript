@@ -241,8 +241,8 @@ public class Builder {
         for (Method registerMethod : registrationMethods) {
             out.append("- ").append(I18n.format("groovyscript.wiki.register", registerMethod.getAnnotatedReturnType().getType().getTypeName())).append("\n\n");
             out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.getName())).indentation(1).toString());
-
         }
+
         return out.toString();
     }
 
