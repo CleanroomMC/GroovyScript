@@ -179,14 +179,18 @@ public class Registry {
         StringBuilder out = new StringBuilder();
         out.append("## ").append(I18n.format("groovyscript.wiki.identifier")).append("\n\n").append(I18n.format("groovyscript.wiki.import_instructions")).append("\n\n");
 
-        List<String> packages = mod.getAliases().stream().flatMap(modID -> registry.getAliases().stream().map(alias -> {
-            String ref = String.format("mods.%s.%s", modID, alias);
-            return ref.equals(reference) ? ref + "/*()!*/" : ref;
-        })).collect(Collectors.toList());
+        List<String> packages = mod.getAliases().stream()
+                .flatMap(modID -> registry.getAliases().stream().map(alias -> String.format("mods.%s.%s", modID, alias)))
+                .collect(Collectors.toList());
+
+        int target = packages.indexOf(reference);
+        packages.set(target, reference + "/*()!*/");
 
         out.append(new CodeBlockBuilder()
                            .line(packages)
                            .annotation(I18n.format("groovyscript.wiki.defaultPackage"))
+                           // Highlighting is based on the line count, and is 1-indexed
+                           .highlight(String.valueOf(1 + target))
                            .toString());
         return out.toString();
     }

@@ -12,6 +12,7 @@ public class CodeBlockBuilder {
 
     private final List<String> lines = new ArrayList<>();
     private final List<String> annotations = new ArrayList<>();
+    private final List<String> highlight = new ArrayList<>();
     private String lang = "groovy";
     private int indentation;
 
@@ -50,6 +51,11 @@ public class CodeBlockBuilder {
         return this;
     }
 
+    public CodeBlockBuilder highlight(String highlight) {
+        this.highlight.add(highlight);
+        return this;
+    }
+
     public CodeBlockBuilder indentation(int indentation) {
         this.indentation = indentation;
         return this;
@@ -59,7 +65,9 @@ public class CodeBlockBuilder {
         List<String> out = new ArrayList<>();
         String indent = StringUtils.repeat("    ", indentation);
 
-        out.add(indent + "```" + lang);
+        String hl_lines = highlight.isEmpty() ? "" : (" hl_lines=\"" + String.join(" ", highlight) + "\"");
+
+        out.add(indent + "```" + lang + hl_lines);
         for (String line : lines) out.add(indent + line);
         out.add(indent + "```");
 
