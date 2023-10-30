@@ -175,7 +175,7 @@ public class Registry {
         return out.toString();
     }
 
-    private String generatePackage() {
+    private String generateIdentifier() {
         StringBuilder out = new StringBuilder();
         out.append("## ").append(I18n.format("groovyscript.wiki.identifier")).append("\n\n").append(I18n.format("groovyscript.wiki.import_instructions")).append("\n\n");
 
@@ -219,7 +219,7 @@ public class Registry {
         out.append(generateHeader());
         out.append(generateTitle());
         out.append(generateDescription());
-        out.append(generatePackage());
+        out.append(generateIdentifier());
 
         if (!additionMethods.isEmpty() || !recipeBuilderMethods.isEmpty()) {
             out.append("## ").append(I18n.format(description.category().adding())).append("\n\n");
