@@ -3,13 +3,13 @@ package com.cleanroommc.groovyscript.documentation;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.google.common.collect.ComparisonChain;
-import io.netty.util.internal.ConcurrentSet;
 import net.minecraft.client.resources.I18n;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -102,7 +102,7 @@ public class Builder {
     }
 
     private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
-        Set<Object> seen = new ConcurrentSet<>();
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
     }
 
