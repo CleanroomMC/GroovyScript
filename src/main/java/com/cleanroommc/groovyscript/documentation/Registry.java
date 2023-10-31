@@ -10,10 +10,7 @@ import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -26,9 +23,7 @@ public class Registry {
     private final Class<?> registryClass;
     private final RegistryDescription description;
     private final List<Method> recipeBuilderMethods;
-    private final List<Method> additionMethods;
-    private final List<Method> removalMethods;
-    private final List<Method> queryMethods;
+    private final EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
     private final List<String> imports;
 
     public Registry(ModSupport.Container<? extends ModPropertyContainer> mod, VirtualizedRegistry<?> registry) {
@@ -40,9 +35,8 @@ public class Registry {
         this.description = registryClass.getAnnotation(RegistryDescription.class);
 
         List<Method> recipeBuilderMethods = new ArrayList<>();
-        List<Method> additionMethods = new ArrayList<>();
-        List<Method> removalMethods = new ArrayList<>();
-        List<Method> queryMethods = new ArrayList<>();
+        EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
+        for (MethodDescription.Type value : MethodDescription.Type.values()) methods.put(value, new ArrayList<>());
         List<String> imports = new ArrayList<>();
 
         for (Method method : registryClass.getMethods()) {
@@ -54,27 +48,16 @@ public class Registry {
                 }
             }
             if (method.isAnnotationPresent(MethodDescription.class)) {
-                MethodDescription type = method.getAnnotation(MethodDescription.class);
-                switch (type.type()) {
-                    case ADDITION:
-                        additionMethods.add(method);
-                        break;
-                    case REMOVAL:
-                        removalMethods.add(method);
-                        break;
-                    case QUERY:
-                        queryMethods.add(method);
-                        break;
-                }
-                for (Example example : type.example()) {
+                MethodDescription description = method.getAnnotation(MethodDescription.class);
+                methods.get(description.type()).add(method);
+                for (Example example : description.example()) {
                     Collections.addAll(imports, example.imports());
                 }
             }
         }
+
         this.recipeBuilderMethods = sortGrSRecipeBuilderDescriptionMethods(recipeBuilderMethods);
-        this.additionMethods = sortGrSMethodDescriptionMethods(additionMethods);
-        this.removalMethods = sortGrSMethodDescriptionMethods(removalMethods);
-        this.queryMethods = sortGrSMethodDescriptionMethods(queryMethods);
+        methods.forEach((k, v) -> this.methods.put(k, sortGrSMethodDescriptionMethods(v)));
         this.imports = imports;
     }
 
@@ -133,12 +116,12 @@ public class Registry {
         StringBuilder out = new StringBuilder();
         out.append("// ").append(getTitle()).append(":").append("\n");
         out.append("// ").append(WordUtils.wrap(getDescription(), Documentation.MAX_LINE_LENGTH, "\n// ", false)).append("\n\n");
-        for (Method method : removalMethods) out.append(examples(method));
-        if (!removalMethods.isEmpty()) out.append("\n");
+        for (Method method : methods.get(MethodDescription.Type.REMOVAL)) out.append(examples(method));
+        if (!methods.get(MethodDescription.Type.REMOVAL).isEmpty()) out.append("\n");
         for (Method method : recipeBuilderMethods) out.append(new Builder(method, reference, baseTranslationKey).builderExampleFile()).append("\n");
         if (!recipeBuilderMethods.isEmpty()) out.append("\n");
-        for (Method method : additionMethods) out.append(examples(method));
-        if (!additionMethods.isEmpty()) out.append("\n");
+        for (Method method : methods.get(MethodDescription.Type.ADDITION)) out.append(examples(method));
+        if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) out.append("\n");
         return out.toString();
     }
 
@@ -225,20 +208,20 @@ public class Registry {
         out.append(generateDescription());
         out.append(generateIdentifier());
 
-        if (!additionMethods.isEmpty() || !recipeBuilderMethods.isEmpty()) {
+        if (!methods.get(MethodDescription.Type.ADDITION).isEmpty() || !recipeBuilderMethods.isEmpty()) {
             out.append("## ").append(I18n.format(description.category().adding())).append("\n\n");
-            if (!additionMethods.isEmpty()) {
-                out.append(documentMethods(additionMethods)).append("\n");
+            if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) {
+                out.append(documentMethods(methods.get(MethodDescription.Type.ADDITION))).append("\n");
             }
             if (!recipeBuilderMethods.isEmpty()) {
                 out.append(recipeBuilder()).append("\n\n");
             }
         }
-        if (!removalMethods.isEmpty()) {
-            out.append("## ").append(I18n.format(description.category().removing())).append("\n\n").append(documentMethods(removalMethods)).append("\n");
+        if (!methods.get(MethodDescription.Type.REMOVAL).isEmpty()) {
+            out.append("## ").append(I18n.format(description.category().removing())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.REMOVAL))).append("\n");
         }
-        if (!queryMethods.isEmpty()) {
-            out.append("## ").append(I18n.format(description.category().query())).append("\n\n").append(documentMethods(queryMethods)).append("\n");
+        if (!methods.get(MethodDescription.Type.QUERY).isEmpty()) {
+            out.append("## ").append(I18n.format(description.category().query())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.QUERY))).append("\n");
         }
         out.append("\n");
 
