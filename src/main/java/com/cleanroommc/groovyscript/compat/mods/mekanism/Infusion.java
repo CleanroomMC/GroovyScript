@@ -91,7 +91,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
 
     @MethodDescription(example = {
             @Example("infusion('diamond'), 100, item('minecraft:clay')"),
-            @Example("infusion('carbon'), 100, item('minecraft:gold')")
+            @Example("infusion('carbon'), 100, item('minecraft:gold_ingot')")
     }, type = MethodDescription.Type.ADDITION)
     public void add(InfuseType type, int amount, ItemStack item) {
         InfuseObject object = new InfuseObject(type, amount);
