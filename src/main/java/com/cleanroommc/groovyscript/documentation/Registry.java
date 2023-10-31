@@ -116,6 +116,8 @@ public class Registry {
         StringBuilder out = new StringBuilder();
         out.append("// ").append(getTitle()).append(":").append("\n");
         out.append("// ").append(WordUtils.wrap(getDescription(), Documentation.MAX_LINE_LENGTH, "\n// ", false)).append("\n\n");
+        for (Method method : methods.get(MethodDescription.Type.VALUE)) out.append(examples(method));
+        if (!methods.get(MethodDescription.Type.VALUE).isEmpty()) out.append("\n");
         for (Method method : methods.get(MethodDescription.Type.REMOVAL)) out.append(examples(method));
         if (!methods.get(MethodDescription.Type.REMOVAL).isEmpty()) out.append("\n");
         for (Method method : recipeBuilderMethods) out.append(new Builder(method, reference, baseTranslationKey).builderExampleFile()).append("\n");
@@ -208,6 +210,9 @@ public class Registry {
         out.append(generateDescription());
         out.append(generateIdentifier());
 
+        if (!methods.get(MethodDescription.Type.VALUE).isEmpty()) {
+            out.append("## ").append(I18n.format("groovyscript.wiki.editing_values")).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.VALUE))).append("\n");
+        }
         if (!methods.get(MethodDescription.Type.ADDITION).isEmpty() || !recipeBuilderMethods.isEmpty()) {
             out.append("## ").append(I18n.format(description.category().adding())).append("\n\n");
             if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) {
