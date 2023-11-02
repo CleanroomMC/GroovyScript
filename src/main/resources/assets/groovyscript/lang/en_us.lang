@@ -258,6 +258,21 @@ groovyscript.wiki.enderio.vat.multipliers2.value=Sets the multiplier applied to 
 groovyscript.wiki.enderio.vat.baseMultiplier.value=Sets the base amount of fluid output
 groovyscript.wiki.enderio.vat.energy.value=Sets the energy cost of the recipe
 
+# EvilCraft
+groovyscript.wiki.evilcraft.bloodinfuser.title=Blood Infuser
+groovyscript.wiki.evilcraft.bloodinfuser.description=Consumes an item, some fluid, and requires a given tier of Promise of Tenacity to produce the output and some experience after a duration.
+groovyscript.wiki.evilcraft.bloodinfuser.tier.value=Sets the tier of the recipe, determined by the Promise of Tenacity contained within the upgrade slots of the machine
+groovyscript.wiki.evilcraft.bloodinfuser.duration.value=Sets the base time in ticks the recipe takes to process
+groovyscript.wiki.evilcraft.bloodinfuser.xp.value=Sets the experience gained by taking the output item out of the Blood Infuser
+
+groovyscript.wiki.evilcraft.environmentalaccumulator.title=Environmental Accumulator
+groovyscript.wiki.evilcraft.environmentalaccumulator.description=Consumes an item to give an output, possibly changing the weather. Has a cooldown time or a blood cost.
+groovyscript.wiki.evilcraft.environmentalaccumulator.processingspeed.value=Sets how fast the item visually rotates while crafting
+groovyscript.wiki.evilcraft.environmentalaccumulator.cooldowntime.value=Sets the time in ticks required before another recipe can be run in this Environmental Accumulator. Also controls the amount of `fluid('evilcraftblood')` consumed by the Sanguinary Environmental Accumulator
+groovyscript.wiki.evilcraft.environmentalaccumulator.duration.value=Sets the base time in ticks the recipe takes to process
+groovyscript.wiki.evilcraft.environmentalaccumulator.inputWeather.value=Sets the weather type required to start the recipe
+groovyscript.wiki.evilcraft.environmentalaccumulator.outputWeather.value=Sets the weather type the world is changed to when the recipe is completed
+
 # Mekanism
 groovyscript.wiki.mekanism.gasInput.value=Sets the gas inputs of the recipe
 groovyscript.wiki.mekanism.gasOutput.value=Sets the gas outputs of the recipe
