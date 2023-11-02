@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.SagRecipe;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -19,12 +20,19 @@ import it.unimi.dsi.fastutil.floats.FloatList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class SagMill extends VirtualizedRegistry<Recipe> {
 
     public SagMill() {
         super("SAGMill", "Sag", "sag");
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:diamond') * 4).output(item('minecraft:clay_ball') * 2, 0.7).output(item('minecraft:gold_ingot'), 0.1).output(item('minecraft:gold_ingot'), 0.1).bonusTypeMultiply().energy(1000).tierEnhanced()"),
+            @Example(".input(item('minecraft:clay_ball')).output(item('minecraft:diamond') * 4).output(item('minecraft:gold_ingot'), 0.1).bonusTypeChance().tierNormal()"),
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot'), 0.1).bonusTypeNone().tierSimple()"),
+            @Example(".input(item('minecraft:nether_star')).output(item('minecraft:clay_ball') * 2, 0.7).output(item('minecraft:gold_ingot'), 0.1).tierAny()")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -41,6 +49,7 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat')"))
     public void removeByInput(ItemStack input) {
         Recipe recipe = (Recipe) SagMillRecipeManager.getInstance().getRecipeForInput(RecipeLevel.IGNORE, input);
         if (recipe == null) {
@@ -57,21 +66,30 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         restoreFromBackup().forEach(SagMillRecipeManager.getInstance().getRecipes()::add);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Recipe> streamRecipes() {
         return new SimpleObjectStream<>(SagMillRecipeManager.getInstance().getRecipes())
                 .setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         SagMillRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         SagMillRecipeManager.getInstance().getRecipes().clear();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "4")})
+    @Property(property = "energy", valid = @Comp(type = Comp.Type.GT, value = "0"))
+    @Property(property = "level")
     public static class RecipeBuilder extends EnderIORecipeBuilder<Recipe> {
 
+        @Property
         private final FloatList chances = new FloatArrayList();
+        @Property(defaultValue = "RecipeBonusType.NONE")
         private RecipeBonusType bonusType = RecipeBonusType.NONE;
 
+        @RecipeBuilderMethodDescription(field = {"output", "chances"})
         public RecipeBuilder output(ItemStack itemStack, float chance) {
             this.output.add(itemStack);
             this.chances.add(Math.max(0, chance));
@@ -79,20 +97,24 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         }
 
         @Override
+        @RecipeBuilderMethodDescription(field = {"output", "chances"})
         public AbstractRecipeBuilder<Recipe> output(ItemStack output) {
             return output(output, 1f);
         }
 
+        @RecipeBuilderMethodDescription(field = "bonusType")
         public RecipeBuilder bonusTypeNone() {
             this.bonusType = RecipeBonusType.NONE;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "bonusType")
         public RecipeBuilder bonusTypeMultiply() {
             this.bonusType = RecipeBonusType.MULTIPLY_OUTPUT;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "bonusType")
         public RecipeBuilder bonusTypeChance() {
             this.bonusType = RecipeBonusType.CHANCE_ONLY;
             return this;
@@ -111,6 +133,7 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable Recipe register() {
             if (!validate()) return null;
             RecipeOutput[] outputs = new RecipeOutput[output.size()];

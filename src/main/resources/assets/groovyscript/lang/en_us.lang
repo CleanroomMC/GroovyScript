@@ -180,6 +180,84 @@ groovyscript.wiki.draconicevolution.fusion.catalyst.value=Sets the item used in 
 groovyscript.wiki.draconicevolution.fusion.energy.value=Sets the power required per item input
 groovyscript.wiki.draconicevolution.fusion.tier.value=Sets the minimum tier of Fusion Crafting Injector
 
+# EnderIO
+groovyscript.wiki.enderio.level.value=Sets the minimum required machine tier of the recipe
+groovyscript.wiki.enderio.energy.value=Sets the energy cost of the recipe
+
+groovyscript.wiki.enderio.alloysmelter.title=Alloy Smelter
+groovyscript.wiki.enderio.alloysmelter.description=Convert up to 3 itemstack inputs into an itemstack output, using energy and giving XP. Can be restricted to require a given tier of machine. Can be set to require at least SIMPLE, NORMAL, or ENHANCED tiers, or to IGNORE the tier. SIMPLE and IGNORE are effectively the same.
+groovyscript.wiki.enderio.alloysmelter.xp.value=Sets the experience gained by taking the output item out of the Alloy Smelter
+
+groovyscript.wiki.enderio.enchanter.title=Enchanter
+groovyscript.wiki.enderio.enchanter.description=Convert an input itemstack, player xp, and either a written book and lapis or a custom alternative into an enchanted book.
+groovyscript.wiki.enderio.enchanter.add=Adds recipes in the format `enchantment`, `input`
+groovyscript.wiki.enderio.enchanter.input.value=Sets the key item to create the enchantment
+groovyscript.wiki.enderio.enchanter.amount.value=Sets the amount of the input item used to create a single level of enchantment
+groovyscript.wiki.enderio.enchanter.costMultiplier.value=Sets the experience cost multiplier per enchantment level created
+groovyscript.wiki.enderio.enchanter.enchantment.value=Sets the enchantment applied to the output book
+groovyscript.wiki.enderio.enchanter.book.value=Sets the item used in the book slot
+groovyscript.wiki.enderio.enchanter.lapis.value=Sets the item used in the lapis slot
+groovyscript.wiki.enderio.enchanter.remove=Removes entries by enchantment
+
+groovyscript.wiki.enderio.fluidcoolant.title=Fluid Coolant
+groovyscript.wiki.enderio.fluidcoolant.description=Create a Coolant with a given coolant rate that produces power with a Fuel while in a Combustion Generator.
+groovyscript.wiki.enderio.fluidcoolant.addCoolant=Adds recipes in the format `fluid`, `degreesPerMb`
+groovyscript.wiki.enderio.fluidcoolant.remove=Removes recipes matching the target fluid
+
+groovyscript.wiki.enderio.fluidfuel.title=Fluid Fuel
+groovyscript.wiki.enderio.fluidfuel.description=Create a Fuel with a given power per tick and total burn time that produces power with a Coolant while in a Combustion Generator.
+groovyscript.wiki.enderio.fluidfuel.addFuel=Adds recipes in the format `fluid`, `rfPerCycle`, `totalBurnTime`
+groovyscript.wiki.enderio.fluidfuel.remove=Removes recipes matching the target fluid
+
+groovyscript.wiki.enderio.sagmill.title=Sag Mill
+groovyscript.wiki.enderio.sagmill.description=Convert an input itemstack into up to 4 output itemstacks with chances, using energy. Output can be boosted by Grinding Balls based on set bonusType. Can be set to require at least SIMPLE, NORMAL, or ENHANCED tiers, or to IGNORE the tier. SIMPLE and IGNORE are effectively the same.
+groovyscript.wiki.enderio.sagmill.chances.value=Sets the chance the given output of each output slot
+groovyscript.wiki.enderio.sagmill.bonusType.value=Sets the type of bonus a Grinding Ball can apply
+
+groovyscript.wiki.enderio.sagmillgrinding.title=Sag Mill Grinding
+groovyscript.wiki.enderio.sagmillgrinding.description=Add a new Griding Ball for use in a Sag Mill with the given output multiplier, power multiplier, chance multiplier, and duration (in base power used).
+groovyscript.wiki.enderio.sagmillgrinding.duration.value=Sets the amount of power used in recipes before the grinding ball is consumed
+groovyscript.wiki.enderio.sagmillgrinding.chance.value=Sets the chance to double all outputs in recipes with an applicable bonusType
+groovyscript.wiki.enderio.sagmillgrinding.grinding.value=Sets the chance to increase outputs up to 100% with an applicable bonusType
+groovyscript.wiki.enderio.sagmillgrinding.power.value=Sets the power multiplier to recipes processed with the grinding ball
+groovyscript.wiki.enderio.sagmillgrinding.remove=Removes the Grinding Ball item
+
+groovyscript.wiki.enderio.slicensplice.title=Slice N Splice
+groovyscript.wiki.enderio.slicensplice.description=Convert up to 6 input itemstacks into an output itemstack, using energy and giving XP.
+groovyscript.wiki.enderio.slicensplice.add=Adds recipes in the format `output`, `input`, `energy`
+groovyscript.wiki.enderio.slicensplice.xp.value=Sets the experience gained by taking the output item out of the Slice N Splice
+groovyscript.wiki.enderio.slicensplice.energy.value=Sets the energy cost of the recipe
+
+groovyscript.wiki.enderio.soulbinder.title=Soulbinder
+groovyscript.wiki.enderio.soulbinder.description=Converts an input itemstack into an output itemstack, requiring one of several entities in soul vials, using energy and giving XP. Must have a unique name. To function properly, the input entities must be allowed in Soul Vials.
+groovyscript.wiki.enderio.soulbinder.entities.value=Sets the valid entities. Entities must be allowed in Soul Vials
+groovyscript.wiki.enderio.soulbinder.name.value=Sets the unique identifier of the recipe
+groovyscript.wiki.enderio.soulbinder.energy.value=Sets the energy cost of the recipe
+groovyscript.wiki.enderio.soulbinder.xp.value=Sets the experience levels required to start the recipe
+
+groovyscript.wiki.enderio.tank.title=Tank
+groovyscript.wiki.enderio.tank.description=Converts an input itemstack into an output fluidstack with an optional output itemstack in drain mode, or converts an input itemstack and fluidstack into an output itemstack in fill mode.
+groovyscript.wiki.enderio.tank.addFill0=Adds fill recipes in the format `input`, `inputFluid`, `output`, and autogenerates a recipe name
+groovyscript.wiki.enderio.tank.addFill1=Adds fill recipes in the format `recipeName`, `input`, `inputFluid`, `output`
+groovyscript.wiki.enderio.tank.addDrain0=Adds drain recipes in the format `input`, `outputFluid`, `output`, and autogenerates a recipe name
+groovyscript.wiki.enderio.tank.addDrain1=Adds drain recipes in the format `recipeName`, `input`, `outputFluid`, `output`
+groovyscript.wiki.enderio.tank.isFilling.value=Sets if the recipe is filling or emptying
+groovyscript.wiki.enderio.tank.removeFill0=Removes fill recipe by `input`, `fluid`
+groovyscript.wiki.enderio.tank.removeFill1=Removes fill recipe by `fluid`, `output`
+groovyscript.wiki.enderio.tank.removeDrain0=Removes drain recipe by `input`, `fluid`
+groovyscript.wiki.enderio.tank.removeDrain1=Removes drain recipe by `fluid`, `output`
+
+groovyscript.wiki.enderio.vat.title=Vat
+groovyscript.wiki.enderio.vat.description=Converts an input fluidstack into an output itemstack at a rate based on up 2 itemstack inputs, and using power. Can be set to require at least NORMAL or ENHANCED tiers, or to IGNORE the tier. NORMAL and IGNORE are effectively the same.
+groovyscript.wiki.enderio.vat.multipliers1.value=Sets the multiplier applied to the respective input item on the left side
+groovyscript.wiki.enderio.vat.output.value=Sets the output fluid
+groovyscript.wiki.enderio.vat.input.value=Sets the input fluid
+groovyscript.wiki.enderio.vat.itemInputs1.value=Sets the valid input items for the left side
+groovyscript.wiki.enderio.vat.itemInputs2.value=Sets the valid input items for the right side
+groovyscript.wiki.enderio.vat.multipliers2.value=Sets the multiplier applied to the respective input item on the right side
+groovyscript.wiki.enderio.vat.baseMultiplier.value=Sets the base amount of fluid output
+groovyscript.wiki.enderio.vat.energy.value=Sets the energy cost of the recipe
+
 # Mekanism
 groovyscript.wiki.mekanism.gasInput.value=Sets the gas inputs of the recipe
 groovyscript.wiki.mekanism.gasOutput.value=Sets the gas outputs of the recipe
