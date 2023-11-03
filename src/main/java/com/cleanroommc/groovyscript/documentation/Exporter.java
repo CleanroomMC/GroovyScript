@@ -72,15 +72,20 @@ public class Exporter {
         // TODO add bracket handlers
         //  maybe also add commands?
 
-        StringBuilder index = new StringBuilder();
-        StringBuilder navigation = new StringBuilder().append(String.format("* [%s](./%s)\n", mod, INDEX_FILE_NAME));
-
-        index.append("---").append("\n")
+        StringBuilder index = new StringBuilder()
+                .append("---").append("\n")
                 .append("hide: toc").append("\n") // Removes the table of contents from the sidebar of indexes.
                 .append("---").append("\n\n\n")
                 .append("# ").append(mod).append("\n\n")
                 .append("## ").append(I18n.format("groovyscript.wiki.categories")).append("\n\n")
                 .append(I18n.format("groovyscript.wiki.subcategories_count", registries.size())).append("\n\n");
+
+        StringBuilder navigation = new StringBuilder()
+                .append("---").append("\n")
+                .append("search:").append("\n")
+                .append("  exclude: true").append("\n") // Removes navigation files from the search index
+                .append("---").append("\n\n\n")
+                .append(String.format("* [%s](./%s)\n", mod, INDEX_FILE_NAME));
 
         fileLinks.stream().sorted().forEach(line -> {
             index.append(line).append("\n\n");
