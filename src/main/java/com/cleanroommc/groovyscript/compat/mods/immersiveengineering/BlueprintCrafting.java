@@ -6,6 +6,7 @@ import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -18,12 +19,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+@RegistryDescription
 public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingRecipe> {
 
     public BlueprintCrafting() {
         super(VirtualizedRegistry.generateAliases("Blueprint"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), ore('ingotGold')).output(item('minecraft:clay')).category('groovy')"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -49,6 +52,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
     }
 
+    @MethodDescription(signature = "String, ItemStack, List<IIngredient>", type = MethodDescription.Type.ADDITION)
     public BlueprintCraftingRecipe add(String blueprintCategory, ItemStack output, List<IIngredient> inputs) {
         Object[] inputs1 = ArrayUtils.mapToArray(inputs, ImmersiveEngineering::toIngredientStack);
         BlueprintCraftingRecipe recipe = new BlueprintCraftingRecipe(blueprintCategory, output.copy(), inputs1);
@@ -64,6 +68,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         return false;
     }
 
+    @MethodDescription(example = @Example("'electrode'"))
     public void removeByCategory(String blueprintCategory) {
         if (!BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory)) {
             GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
@@ -78,6 +83,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("'components', item('immersiveengineering:material:8')"))
     public void removeByOutput(String blueprintCategory, ItemStack output) {
         if (GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
                 .add(!BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory), () -> "category " + blueprintCategory + " does not exist")
@@ -100,6 +106,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
     }
 
+    @MethodDescription(signature = "String, ItemStack...", description = "groovyscript.wiki.removeByInput", example = @Example("'components', item('immersiveengineering:metal:38'), item('immersiveengineering:metal:38'), item('immersiveengineering:metal')"))
     public void removeByInput(String blueprintCategory, ItemStack... inputs) {
         if (GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
                 .add(!BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory), () -> "category " + blueprintCategory + " does not exist")
@@ -132,6 +139,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY, example = @Example("'molds'"))
     public SimpleObjectStream<BlueprintCraftingRecipe> streamRecipesByCategory(String blueprintCategory) {
         Collection<BlueprintCraftingRecipe> recipes = BlueprintCraftingRecipe.recipeList.get(blueprintCategory);
         return new SimpleObjectStream<>(recipes).setRemover(recipe -> {
@@ -143,19 +151,25 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BlueprintCraftingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BlueprintCraftingRecipe.recipeList.values()).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BlueprintCraftingRecipe.recipeList.values().forEach(this::addBackup);
         BlueprintCraftingRecipe.recipeList.clear();
     }
 
+    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlueprintCraftingRecipe> {
 
+        @Property
         private String category;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder category(String category) {
             this.category = category;
             return this;
@@ -174,6 +188,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable BlueprintCraftingRecipe register() {
             if (!validate()) return null;
             Object[] inputs = ArrayUtils.mapToArray(input, ImmersiveEngineering::toIngredientStack);

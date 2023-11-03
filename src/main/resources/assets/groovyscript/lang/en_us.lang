@@ -273,6 +273,97 @@ groovyscript.wiki.evilcraft.environmentalaccumulator.duration.value=Sets the bas
 groovyscript.wiki.evilcraft.environmentalaccumulator.inputWeather.value=Sets the weather type required to start the recipe
 groovyscript.wiki.evilcraft.environmentalaccumulator.outputWeather.value=Sets the weather type the world is changed to when the recipe is completed
 
+# Immersive Engineering
+groovyscript.wiki.immersiveengineering.alloykiln.title=Alloy Kiln
+groovyscript.wiki.immersiveengineering.alloykiln.description=Converts two input itemstacks into an output itemstack, consuming fuel (based on burn time).
+groovyscript.wiki.immersiveengineering.alloykiln.add=Adds recipes in the format `output`, `input0`, `input1`, `time`
+groovyscript.wiki.immersiveengineering.alloykiln.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersiveengineering.arcfurnace.title=Arc Furnace
+groovyscript.wiki.immersiveengineering.arcfurnace.description=Converts 1 input itemstack with up to 4 additional inputs into an output itemstack and an optional 'slag' itemstack, taking time and using rf power.
+groovyscript.wiki.immersiveengineering.arcfurnace.add=Adds recipes in the format `output`, `input`, `additives`, `slag`, `time`, `energyPerTick`
+groovyscript.wiki.immersiveengineering.arcfurnace.energyPerTick.value=Sets the amount of power consumed per tick
+groovyscript.wiki.immersiveengineering.arcfurnace.mainInput.value=Sets the item input
+groovyscript.wiki.immersiveengineering.arcfurnace.slag.value=Sets the item output as slag
+groovyscript.wiki.immersiveengineering.arcfurnace.specialRecipeType.value=Sets the special recipe type. Default options are `Alloying`, `Ores`, and `Recycling`
+groovyscript.wiki.immersiveengineering.arcfurnace.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersiveengineering.blastfurnace.title=Blast Furnace
+groovyscript.wiki.immersiveengineering.blastfurnace.description=Converts an input itemstack into an output itemstack and an optional 'slag' itemstack, taking time and consuming fuel (based on Blast Furnace Fuels).
+groovyscript.wiki.immersiveengineering.blastfurnace.add=Adds recipes in the format `output`, `input`, `time`, `slag`
+groovyscript.wiki.immersiveengineering.blastfurnace.slag.value=Sets the item output as slag
+groovyscript.wiki.immersiveengineering.blastfurnace.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersiveengineering.blastfurnacefuel.title=Blast Furnace Fuel
+groovyscript.wiki.immersiveengineering.blastfurnacefuel.description=Allows an item to be used in the Blast Furnace as a fuel for the given number of ticks.
+groovyscript.wiki.immersiveengineering.blastfurnacefuel.add=Adds recipes in the format `input`, `time`
+groovyscript.wiki.immersiveengineering.blastfurnacefuel.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersiveengineering.blueprintcrafting.title=Blueprint Crafting (Blueprint)
+groovyscript.wiki.immersiveengineering.blueprintcrafting.description=Converts any number of input itemstacks into an output itemstack, using a blueprint with the category nbt tag as a catalyst.
+groovyscript.wiki.immersiveengineering.blueprintcrafting.add=Adds recipes in the format `output`, `input`, `fluidInput`
+groovyscript.wiki.immersiveengineering.blueprintcrafting.category.value=Sets the required blueprint. Default blueprint options are `components`, `molds`, `bullet`, `specialBullet`, and `electrode`
+groovyscript.wiki.immersiveengineering.blueprintcrafting.removeByCategory=Default blueprint categories are `components`, `molds`, `bullet`, `specialBullet`, and `electrode`
+groovyscript.wiki.immersiveengineering.blueprintcrafting.streamRecipesByCategory=Default blueprint categories are `components`, `molds`, `bullet`, `specialBullet`, and `electrode`
+
+groovyscript.wiki.immersiveengineering.bottlingmachine.title=Bottling Machine (Bottling)
+groovyscript.wiki.immersiveengineering.bottlingmachine.description=Converts an input itemstack and fluidstack into an output itemstack.
+groovyscript.wiki.immersiveengineering.bottlingmachine.add=Adds recipes in the format `output`, `input`, `fluidInput`
+
+groovyscript.wiki.immersiveengineering.cokeoven.title=Coke Oven
+groovyscript.wiki.immersiveengineering.cokeoven.description=Converts an input itemstack into an output itemstack over time, producing a given amount of creosote oil.
+groovyscript.wiki.immersiveengineering.cokeoven.add=Adds recipes in the format `output`, `input`, `time`, `creosoteOutput`
+groovyscript.wiki.immersiveengineering.cokeoven.creosote.value=Sets the amount of Creosote Oil output
+groovyscript.wiki.immersiveengineering.cokeoven.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersiveengineering.crusher.title=Crusher
+groovyscript.wiki.immersiveengineering.crusher.description=Converts an input itemstack into an output itemstack, consuming energy.
+groovyscript.wiki.immersiveengineering.crusher.add=Adds recipes in the format `output`, `input`, `energy`
+groovyscript.wiki.immersiveengineering.crusher.energy.value=Sets the amount of power consumed to complete the recipe
+
+groovyscript.wiki.immersiveengineering.excavator.title=Excavator
+groovyscript.wiki.immersiveengineering.excavator.description=Adds a Mineral Mix with the given name, weight, fail chance, ores, and allowed dimensions. A Mineral Mix can be mined by an Excavator Multiblock and scanned via a Core Sample Drill.
+groovyscript.wiki.immersiveengineering.excavator.note0=Reloading will not change chunks already 'discovered'
+groovyscript.wiki.immersiveengineering.excavator.add=Adds entries in the format `name`, `mineralWeight`, `failChance`, `ores`, `chances`
+groovyscript.wiki.immersiveengineering.excavator.blacklist.value=Sets if the `dimensions` property indicates allowed dimensions (false) or blocked dimensions (true)
+groovyscript.wiki.immersiveengineering.excavator.chances.value=Sets the chance a given block output will contain the corresponding entry in ores
+groovyscript.wiki.immersiveengineering.excavator.dimensions.value=Sets the list of dimension ids the vein can generate in (if `blacklist` is false) or are prevented from generating in (if `blacklist` is true)
+groovyscript.wiki.immersiveengineering.excavator.fail.value=Sets the chance that a given mining attempt with output nothing instead of an ore
+groovyscript.wiki.immersiveengineering.excavator.name.value=Sets the unique name of the vein
+groovyscript.wiki.immersiveengineering.excavator.ores.value=Sets the valid oredicts output
+groovyscript.wiki.immersiveengineering.excavator.weight.value=Sets the weight the Mineral Mix has to spawn in its allowed dimensions
+groovyscript.wiki.immersiveengineering.excavator.removeByMineral=Removes the Mineral Mix entry with the given name
+groovyscript.wiki.immersiveengineering.excavator.removeByOres=Removes all Mineral Mix entries containing any of the given ores
+
+groovyscript.wiki.immersiveengineering.fermenter.title=Fermenter
+groovyscript.wiki.immersiveengineering.fermenter.description=Converts an input itemstack into an output fluidstack with an optional output itemstack, consuming power.
+groovyscript.wiki.immersiveengineering.fermenter.add=Adds recipes in the format `fluidOutput`, `itemOutput`, `input`, `energy`
+groovyscript.wiki.immersiveengineering.fermenter.energy.value=Sets the amount of power consumed to complete the recipe
+
+groovyscript.wiki.immersiveengineering.metalpress.title=Metal Press
+groovyscript.wiki.immersiveengineering.metalpress.description=Converts an input itemstack into an output itemstack, with a mold catalyst, consuming power.
+groovyscript.wiki.immersiveengineering.metalpress.add=Adds recipes in the format `output`, `input`, `mold`, `energy`
+groovyscript.wiki.immersiveengineering.metalpress.energy.value=Sets the amount of power consumed to complete the recipe
+groovyscript.wiki.immersiveengineering.metalpress.mold.value=Sets the mold item placed on the top face of the Metal Press as a catalyst
+groovyscript.wiki.immersiveengineering.metalpress.removeByInput=Removes recipes with the given mold and input item, in the format `mold`, `input`
+groovyscript.wiki.immersiveengineering.metalpress.removeByMold=Removes all recipes with the given mold
+groovyscript.wiki.immersiveengineering.metalpress.removeByOutput=Removes recipes with the given mold and output item, in the format `mold`, `output`
+
+groovyscript.wiki.immersiveengineering.mixer.title=Mixer
+groovyscript.wiki.immersiveengineering.mixer.description=Converts any number of input itemstacks and a fluidstack into an output fluidstack, consuming power.
+groovyscript.wiki.immersiveengineering.mixer.add=Adds recipes in the format `fluidOutput`, `fluidInput`, `energy`, `itemInput`
+groovyscript.wiki.immersiveengineering.mixer.energy.value=Sets the amount of power consumed to complete the recipe
+
+groovyscript.wiki.immersiveengineering.refinery.title=Refinery
+groovyscript.wiki.immersiveengineering.refinery.description=Converts 2 input fluidstacks into an output fluidstack, consuming power.
+groovyscript.wiki.immersiveengineering.refinery.add=Adds recipes in the format `output`, `input0`, `input1`, `energy`
+groovyscript.wiki.immersiveengineering.refinery.energy.value=Sets the amount of power consumed to complete the recipe
+
+groovyscript.wiki.immersiveengineering.squeezer.title=Squeezer
+groovyscript.wiki.immersiveengineering.squeezer.description=Converts an input itemstack into either an output itemstack, fluidstack, or both, using energy.
+groovyscript.wiki.immersiveengineering.squeezer.add=Adds recipes in the format `fluidOutput`, `itemOutput`, `input`, `energy`
+groovyscript.wiki.immersiveengineering.squeezer.energy.value=Sets the amount of power consumed to complete the recipe
+
 # Mekanism
 groovyscript.wiki.mekanism.gasInput.value=Sets the gas inputs of the recipe
 groovyscript.wiki.mekanism.gasOutput.value=Sets the gas outputs of the recipe
