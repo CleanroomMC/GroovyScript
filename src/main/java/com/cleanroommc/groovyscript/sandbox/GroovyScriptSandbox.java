@@ -115,7 +115,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             this.storedExceptions.computeIfAbsent(Arrays.asList(t.getStackTrace()), k -> {
                 GroovyLog.get().error("An exception occurred while running a closure!");
                 GroovyLog.get().exception(t);
-                return new AtomicInteger(1);
+                return new AtomicInteger();
             }).addAndGet(1);
         } finally {
             stopRunning();
