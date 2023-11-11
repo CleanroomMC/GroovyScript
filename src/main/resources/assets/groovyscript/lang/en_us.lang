@@ -460,5 +460,150 @@ groovyscript.wiki.mekanism.washer.title=Washer
 groovyscript.wiki.mekanism.washer.description=Converts an input gasstack into an output gasstack at the cost of 5mb of water.
 groovyscript.wiki.mekanism.washer.add=Adds recipes in the format `input`, `output`
 
+# Roots
+groovyscript.wiki.roots.animalharvest.title=Animal Harvest
+groovyscript.wiki.roots.animalharvest.description=Animal Harvest is a ritual that drops items from nearby mob's based on that mobs loottable without harming the mob. Only applies to allowed mobs.
+groovyscript.wiki.roots.animalharvest.entity.value=Sets the target entity
+groovyscript.wiki.roots.animalharvest.removeByEntity=Removes any Animal Harvest recipe with the given entity
+groovyscript.wiki.roots.animalharvest.removeByName=Removes the Animal Harvest recipe with the given name
 
+groovyscript.wiki.roots.animalharvestfish.title=Animal Harvest Fish
+groovyscript.wiki.roots.animalharvestfish.description=Animal Harvest Fish is another effect of the Animal Harvest ritual that applies if there are water source blocks within the ritual range.
+groovyscript.wiki.roots.animalharvestfish.weight.value=Sets the weight of the recipe to generate
+groovyscript.wiki.roots.animalharvestfish.removeByFish=Removes any Animal Harvest Fish recipe with the given fish output
+groovyscript.wiki.roots.animalharvestfish.removeByName=Removes the Animal Harvest Fish recipe with the given name
+groovyscript.wiki.roots.animalharvestfish.removeByOutput=Removes any Animal Harvest Fish recipe with the given output
+
+groovyscript.wiki.roots.barkcarving.title=Bark Carving
+groovyscript.wiki.roots.barkcarving.description=Bark Carving is a special set of alternate drops for blocks when broken with an item containing the tool type 'knife'. Amount dropped is up to 2 + fortune/looting level higher than the set amount.
+groovyscript.wiki.roots.barkcarving.removeByBlock=Removes the Bark Carving recipe with the given input itemstack
+groovyscript.wiki.roots.barkcarving.removeByInput=Removes the Bark Carving recipe with the given input itemstack
+groovyscript.wiki.roots.barkcarving.removeByName=Removes the Bark Carving recipe with the given name
+groovyscript.wiki.roots.barkcarving.removeByOutput=Removes the Bark Carving recipe with the given output itemstack
+
+groovyscript.wiki.roots.chrysopoeia.title=Chrysopoeia
+groovyscript.wiki.roots.chrysopoeia.description=Chrysopoeia is a spell that transmutes items held in the main hand.
+groovyscript.wiki.roots.chrysopoeia.removeByInput=Removes the Chrysopoeia recipe with the given input itemstack
+groovyscript.wiki.roots.chrysopoeia.removeByName=Removes the Chrysopoeia recipe with the given name
+groovyscript.wiki.roots.chrysopoeia.removeByOutput=Removes the Chrysopoeia recipe with the given output itemstack
+
+groovyscript.wiki.roots.feycrafter.title=Fey Crafter
+groovyscript.wiki.roots.feycrafter.description=The Fey Crafter is a crafting mechanism that requires an activated Grove Stone nearby to take 5 item inputs and return an item output.
+groovyscript.wiki.roots.feycrafter.note= When reloading recipes with the Fey Crafter, you may encounter a `ConcurrentModificationException`!
+groovyscript.wiki.roots.feycrafter.xp.value=Sets the amount of experience output when completing the recipe
+groovyscript.wiki.roots.feycrafter.removeByName=Removes the Fey Crafter recipe with the given name
+groovyscript.wiki.roots.feycrafter.removeByOutput=Removes the Fey Crafter recipe with the given output itemstack
+
+groovyscript.wiki.roots.flowergeneration.title=Flower Generation
+groovyscript.wiki.roots.flowergeneration.description=When running the Flower Growth Ritual, allowed flowers will generate in the area. Additionally, using the spell Growth Infusion's Floral Reproduction modifier will duplicate the flower.
+groovyscript.wiki.roots.flowergeneration.flower.value=Sets the flower blockstate
+groovyscript.wiki.roots.flowergeneration.removeByFlower0=Removes the Flower Generation entry with the given IBlockState
+groovyscript.wiki.roots.flowergeneration.removeByFlower1=Removes the Flower Generation entry with the given Block and int metadata
+groovyscript.wiki.roots.flowergeneration.removeByFlower2=Removes all Flower Generation entries with the given Block
+groovyscript.wiki.roots.flowergeneration.removeByFlower3=Removes the Flower Generation entry with the given ItemStack converted into an IBlockState
+groovyscript.wiki.roots.flowergeneration.removeByName=Removes the Flower Generation entry with the given name
+
+groovyscript.wiki.roots.lifeessence.title=Life Essence
+groovyscript.wiki.roots.lifeessence.description=When shift right clicking a mob in the Life Essence Pool with Runic Shears, it will drop a Life-Essence, which allows that mob to be spawned via the Creature Summoning ritual.
+groovyscript.wiki.roots.lifeessence.add=Adds entries in the format `entity`
+groovyscript.wiki.roots.lifeessence.remove=Removes the Life Essence entry for the given Entity
+
+groovyscript.wiki.roots.modifiers.title=Modifiers
+groovyscript.wiki.roots.modifiers.description=Controls what spell modifiers are enabled and can be used.
+groovyscript.wiki.roots.modifiers.enable0=Enable any disabled modifiers with the given string as a resource location, defaulting to a namespace of `roots` if not provided
+groovyscript.wiki.roots.modifiers.enable1=Enable any disabled modifiers with the given resource location
+groovyscript.wiki.roots.modifiers.enable2=Enable the disabled modifier
+groovyscript.wiki.roots.modifiers.enable3=Enable all disabled modifiers for the given spell
+groovyscript.wiki.roots.modifiers.enableAll=Enable all disabled modifiers
+groovyscript.wiki.roots.modifiers.disable0=Disable any enabled modifiers with the given string as a resource location, defaulting to a namespace of `roots` if not provided
+groovyscript.wiki.roots.modifiers.disable1=Disable any enabled modifiers with the given resource location
+groovyscript.wiki.roots.modifiers.disable2=Disable the enabled modifier
+groovyscript.wiki.roots.modifiers.disable3=Disable all enabled modifiers for the given spell
+groovyscript.wiki.roots.modifiers.disableAll=Disable all enabled modifiers
+
+groovyscript.wiki.roots.mortar.title=Mortar And Pestle
+groovyscript.wiki.roots.mortar.description=When right clicking a mortar containing the input items with a pestle, it will display a few colored sparkles, consume the inputs, and drop the item output.
+groovyscript.wiki.roots.mortar.blue1.value=Sets the blue color value of the first version of the particle spawned
+groovyscript.wiki.roots.mortar.red2.value=Sets the red color value of the second version of the particle spawned
+groovyscript.wiki.roots.mortar.red1.value=Sets the red color value of the first version of the particle spawned
+groovyscript.wiki.roots.mortar.green2.value=Sets the green color value of the second version of the particle spawned
+groovyscript.wiki.roots.mortar.green1.value=Sets the green color value of the first version of the particle spawned
+groovyscript.wiki.roots.mortar.generate.value=Sets if, when input has a single IIngredient, a recipe will be generated for each input amount
+groovyscript.wiki.roots.mortar.blue2.value=Sets the blue color value of the second version of the particle spawned
+groovyscript.wiki.roots.mortar.removeByName=Removes the Mortar recipe with the given name
+groovyscript.wiki.roots.mortar.removeByOutput=Removes the Mortar recipe with the given output itemstack
+
+groovyscript.wiki.roots.moss.title=Moss
+groovyscript.wiki.roots.moss.description=Moss indicates a pair of items that can right click the input with a knife to turn it into the output and give a Terra Moss and right click the output with moss spores to turn it into the input.
+groovyscript.wiki.roots.moss.add=Adds a new Moss conversion recipe in the format `in`, `out`
+groovyscript.wiki.roots.moss.remove0=Removes the Moss conversion recipe for the given input and output itemstacks, in the format `in`, `out`
+groovyscript.wiki.roots.moss.remove1=Removes the Moss conversion recipe for the given input itemstack
+
+groovyscript.wiki.roots.pacifist.title=Pacifist
+groovyscript.wiki.roots.pacifist.description=Pacifist is a list of entities which killing will give the player the advancement 'Untrue Pacifist'.
+groovyscript.wiki.roots.pacifist.entity.value=Sets the target entity
+groovyscript.wiki.roots.pacifist.removeByClass=Removes the Pacifist entry with the given Entity class
+groovyscript.wiki.roots.pacifist.removeByEntity=Removes the Pacifist entry for the given Entity
+groovyscript.wiki.roots.pacifist.removeByName=Removes the Pacifist entry with the given name
+
+groovyscript.wiki.roots.predicates.title=Predicates
+groovyscript.wiki.roots.predicates.description=Predicates are used in Transmution and RunicShearBlock. They either match all blockstates of a block, or all blockstates that have the given properties that match the input blockstate.
+groovyscript.wiki.roots.predicates.below.value=Sets if the predicate checks the block below for validation
+groovyscript.wiki.roots.predicates.above.value=Sets if the predicate checks the block above for validation
+groovyscript.wiki.roots.predicates.blockstate.value=Sets the IBlockState compared against
+groovyscript.wiki.roots.predicates.properties.value=Sets what properties of the blockstate are checked, where any properties not checked are
+groovyscript.wiki.roots.predicates.above_or_below.required=Only at most one of either `above` or `below` may be true
+groovyscript.wiki.roots.predicates.properties.required=Each property must be a valid property of the provided `blockstate`
+
+groovyscript.wiki.roots.pyre.title=Pyre
+groovyscript.wiki.roots.pyre.description=Converts 5 input items into the ouput after a period of time when the Pyre is lit on fire.
+groovyscript.wiki.roots.pyre.burnTime.value=Sets the time in ticks for the recipe to process
+groovyscript.wiki.roots.pyre.xp.value=Sets the XP given when the recipe finishes in levels
+groovyscript.wiki.roots.pyre.removeByName=Removes the Pyre recipe with the given name
+groovyscript.wiki.roots.pyre.removeByOutput=Removes the Pyre recipe with the given output itemstack
+
+groovyscript.wiki.roots.rituals.title=Rituals
+groovyscript.wiki.roots.rituals.description=Set the Pyre Ritual recipe and control all stats. Dump the modifiable stats into `roots.log` by running `/roots rituals`.
+groovyscript.wiki.roots.rituals.ritual.value=Sets the ritual being modified
+# TODO missing modifying rituals
+
+groovyscript.wiki.roots.runicshearblock.title=Runic Shear Block
+groovyscript.wiki.roots.runicshearblock.description=Right clicking a Runic Shear on a block to convert it into a replacement block and drop items.
+groovyscript.wiki.roots.runicshearblock.state.value=Sets the target input blockstate
+groovyscript.wiki.roots.runicshearblock.displayItem.value=Sets the item representing the target input blockstate
+groovyscript.wiki.roots.runicshearblock.replacementState.value=Sets the blockstate replacing the input block
+groovyscript.wiki.roots.runicshearblock.removeByName=Removes the Runic Shear Block recipe with the given name
+groovyscript.wiki.roots.runicshearblock.removeByOutput=Removes the Runic Shear Block recipe with the given output itemstack
+groovyscript.wiki.roots.runicshearblock.removeByState=Removes the Runic Shear Block recipe with the given output IBlockState
+
+groovyscript.wiki.roots.runicshearentity.title=Runic Shear Entity
+groovyscript.wiki.roots.runicshearentity.description=Right clicking a Runic Shear on an entity. The entity will have a cooldown, preventing spamming.
+groovyscript.wiki.roots.runicshearentity.cooldown.value=Sets the time in ticks before the entity can be sheared again
+groovyscript.wiki.roots.runicshearentity.entity.value=Sets the target entity
+groovyscript.wiki.roots.runicshearentity.functionMap.value=Sets a function that takes an EntityLivingBase and returns an itemstack drop based on the entities properties
+groovyscript.wiki.roots.runicshearentity.removeByEntity=Removes the Runic Shear Entity recipe for the given Entity
+groovyscript.wiki.roots.runicshearentity.removeByName=Removes the Runic Shear Entity recipe with the given name
+groovyscript.wiki.roots.runicshearentity.removeByOutput=Removes the Runic Shear Entity recipe for the given output itemstack
+
+groovyscript.wiki.roots.spells.title=Spells
+groovyscript.wiki.roots.spells.description=Controls the recipe for the given spell, the sound, all properties, the base cost, and each modifier's cost.
+groovyscript.wiki.roots.spells.list.value=Sets a list of all cost types used to construct a complex Cost object
+groovyscript.wiki.roots.spells.spell.value=Sets the spell being modified
+# TODO missing modifying spells
+
+groovyscript.wiki.roots.summoncreature.title=Summon Creature
+groovyscript.wiki.roots.summoncreature.description=When running a Summon Creature Ritual, the input items placed on Catalyst Plate will summon the target entity.
+groovyscript.wiki.roots.summoncreature.entity.value=Sets the target entity
+groovyscript.wiki.roots.summoncreature.removeByEntity=Removes the Summon Creature recipe for the given Entity
+groovyscript.wiki.roots.summoncreature.removeByName=Removes the Summon Creature recipe with the given name
+
+groovyscript.wiki.roots.transmutation.title=Transmutation
+groovyscript.wiki.roots.transmutation.description=When running the Transmutation, convert nearby blocks that match a set of conditions into either a block or items.
+groovyscript.wiki.roots.transmutation.condition.value=Sets a condition for the input to be converted, typically indicating a specific block above or below
+groovyscript.wiki.roots.transmutation.start.value=Sets the starting blockstate
+groovyscript.wiki.roots.transmutation.state.value=Sets the output iblockstate
+groovyscript.wiki.roots.transmutation.removeByInput=Removes the Transmutation recipe for the given input IBlockState
+groovyscript.wiki.roots.transmutation.removeByName=Removes the Transmutation recipe with the given name
+groovyscript.wiki.roots.transmutation.removeByOutput0=Removes the Transmutation recipe for the given output itemstack
+groovyscript.wiki.roots.transmutation.removeByOutput1=Removes the Transmutation recipe for the given output IBlockState
 

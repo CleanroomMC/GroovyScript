@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -15,12 +16,16 @@ import java.util.Map;
 
 import static epicsquid.roots.init.ModRecipes.*;
 
+@RegistryDescription(
+        admonition = @Admonition(value = "groovyscript.wiki.roots.feycrafter.note", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD)
+)
 public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCraftingRecipe>> {
 
     public FeyCrafter() {
         super();
     }
 
+    @RecipeBuilderDescription(example = @Example(".name('clay_craft').input(item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone')) // Must be exactly 5.output(item('minecraft:clay')).xp(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -54,6 +59,7 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
         return null;
     }
 
+    @MethodDescription(example = @Example("resource('roots:unending_bowl')"))
     public boolean removeByName(ResourceLocation name) {
         FeyCraftingRecipe recipe = getFeyCraftingRecipe(name);
         if (recipe == null) return false;
@@ -62,6 +68,7 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
         return true;
     }
 
+    @MethodDescription(example = @Example("item('minecraft:gravel')"))
     public boolean removeByOutput(ItemStack output) {
         for (Map.Entry<ResourceLocation, FeyCraftingRecipe> x : getFeyCraftingRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getResult(), output)) {
@@ -73,20 +80,27 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getFeyCraftingRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getFeyCraftingRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, FeyCraftingRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(getFeyCraftingRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
+    @Property(property = "name")
+    @Property(property = "input", valid = @Comp("5"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<FeyCraftingRecipe> {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int xp = 0;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder xp(int xp) {
             this.xp = xp;
             return this;
@@ -110,6 +124,7 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable FeyCraftingRecipe register() {
             if (!validate()) return null;
             FeyCraftingRecipe recipe = new FeyCraftingRecipe(output.get(0), xp);
