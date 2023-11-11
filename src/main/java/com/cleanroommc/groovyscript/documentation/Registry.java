@@ -226,7 +226,7 @@ public class Registry {
             out.append("## ").append(I18n.format(description.category().removing())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.REMOVAL))).append("\n");
         }
         if (!methods.get(MethodDescription.Type.QUERY).isEmpty()) {
-            out.append("## ").append(I18n.format(description.category().query())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.QUERY))).append("\n");
+            out.append("## ").append(I18n.format(description.category().query())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.QUERY), true)).append("\n");
         }
         out.append("\n");
 
@@ -234,6 +234,10 @@ public class Registry {
     }
 
     private String documentMethods(List<Method> methods) {
+        return documentMethods(methods, false);
+    }
+
+    private String documentMethods(List<Method> methods, boolean preventExamples) {
         StringBuilder out = new StringBuilder();
         List<String> exampleLines = new ArrayList<>();
         List<String> annotations = new ArrayList<>();
@@ -248,7 +252,7 @@ public class Registry {
             Arrays.stream(method.getAnnotation(MethodDescription.class).example()).map(Example::annotations).flatMap(Arrays::stream).forEach(annotations::add);
         }
 
-        if (!exampleLines.isEmpty()) {
+        if (!exampleLines.isEmpty() && !preventExamples) {
             out.append(new AdmonitionBuilder()
                                .type(Admonition.Type.EXAMPLE)
                                .note(new CodeBlockBuilder()
