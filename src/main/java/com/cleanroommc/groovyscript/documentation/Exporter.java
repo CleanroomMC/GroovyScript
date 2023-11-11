@@ -46,6 +46,10 @@ public class Exporter {
         List<VirtualizedRegistry<?>> registries = mod.get().getRegistries().stream()
                 .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
                 .distinct()
+                .sorted((left, right) -> ComparisonChain.start()
+                        .compare(left.getClass().getAnnotation(RegistryDescription.class).priority(), right.getClass().getAnnotation(RegistryDescription.class).priority())
+                        .compare(left.getName(), right.getName())
+                        .result())
                 .collect(Collectors.toList());
 
         if (registries.isEmpty()) return;
@@ -81,7 +85,7 @@ public class Exporter {
                 .append("---").append("\n\n\n")
                 .append(String.format("* [%s](./%s)\n", mod, INDEX_FILE_NAME));
 
-        fileLinks.stream().sorted().forEach(line -> {
+        fileLinks.forEach(line -> {
             index.append(line).append("\n\n");
             navigation.append(line).append("\n");
         });
