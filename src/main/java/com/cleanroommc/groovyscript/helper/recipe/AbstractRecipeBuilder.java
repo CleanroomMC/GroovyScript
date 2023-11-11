@@ -53,7 +53,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "IIngredient...")
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> input(IIngredient... ingredients) {
         for (IIngredient ingredient : ingredients) {
             input(ingredient);
@@ -61,7 +61,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "Collection<IIngredient>")
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> input(Collection<IIngredient> ingredients) {
         for (IIngredient ingredient : ingredients) {
             input(ingredient);
@@ -75,7 +75,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "ItemStack...")
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> output(ItemStack... outputs) {
         for (ItemStack output : outputs) {
             output(output);
@@ -83,7 +83,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "Collection<ItemStack>")
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> output(Collection<ItemStack> outputs) {
         for (ItemStack output : outputs) {
             output(output);
@@ -97,7 +97,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "FluidStack...")
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> fluidInput(FluidStack... ingredients) {
         for (FluidStack ingredient : ingredients) {
             fluidInput(ingredient);
@@ -105,7 +105,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "Collection<FluidStack>")
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> fluidInput(Collection<FluidStack> ingredients) {
         for (FluidStack ingredient : ingredients) {
             fluidInput(ingredient);
@@ -119,7 +119,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "FluidStack...")
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> fluidOutput(FluidStack... outputs) {
         for (FluidStack output : outputs) {
             fluidOutput(output);
@@ -127,7 +127,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "Collection<FluidStack>")
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> fluidOutput(Collection<FluidStack> outputs) {
         for (FluidStack output : outputs) {
             fluidOutput(output);

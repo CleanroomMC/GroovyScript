@@ -68,7 +68,7 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
         return removeByClass(entity.getEntityClass());
     }
 
-    @MethodDescription(signature = "Class<? extends Entity>")
+    @MethodDescription
     public boolean removeByClass(Class<? extends Entity> clazz) {
         return getPacifistEntities().entrySet().removeIf(x -> {
             if (x.getValue().getEntityClass().equals(clazz)) {

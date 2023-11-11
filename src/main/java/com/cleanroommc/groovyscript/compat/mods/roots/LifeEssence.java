@@ -41,7 +41,7 @@ public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivin
         add((Class<? extends EntityLivingBase>) entity.getEntityClass());
     }
 
-    @MethodDescription(signature = "Class<? extends EntityLivingBase>", example = @Example("entity('minecraft:sheep')"))
+    @MethodDescription(example = @Example("entity('minecraft:sheep')"))
     public boolean remove(Class<? extends EntityLivingBase> clazz) {
         if (!getLifeEssenceList().remove(clazz)) return false;
         addBackup(clazz);

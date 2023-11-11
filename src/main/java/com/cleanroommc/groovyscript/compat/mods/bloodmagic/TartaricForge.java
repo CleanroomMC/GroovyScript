@@ -41,7 +41,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes()::add);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tartaricforge.add", signature = "NonNullList<Ingredient>, ItemStack, double, double", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tartaricforge.add", type = MethodDescription.Type.ADDITION)
     public RecipeTartaricForge add(NonNullList<Ingredient> input, ItemStack output, double minimumSouls, double soulDrain) {
         double minimum;
         if (minimumSouls < soulDrain) {
@@ -72,7 +72,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", signature = "IIngredient...", example = {
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = {
             @Example("item('minecraft:cauldron'), item('minecraft:stone'), item('minecraft:dye:4'), item('minecraft:diamond')"),
             @Example("item('minecraft:gunpowder'), item('minecraft:redstone')")
     })
@@ -82,7 +82,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         return removeByInput(inputs);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", signature = "NonNullList<IIngredient>")
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInput(NonNullList<IIngredient> input) {
         // Filters down to only recipes which have inputs that match all the input IIngredients (NOTE: a recipe with ABCD would match an input of AB)
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().removeIf(recipe -> {

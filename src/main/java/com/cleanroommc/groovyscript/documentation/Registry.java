@@ -66,7 +66,7 @@ public class Registry {
                 .compareFalseFirst(left.isAnnotationPresent(RecipeBuilderDescription.class), right.isAnnotationPresent(RecipeBuilderDescription.class))
                 .compare(left.getAnnotation(RecipeBuilderDescription.class).priority(), right.getAnnotation(RecipeBuilderDescription.class).priority())
                 .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                .compare(Exporter.simpleName(left), Exporter.simpleName(right), String::compareToIgnoreCase)
+                .compare(Exporter.simpleSignature(left), Exporter.simpleSignature(right), String::compareToIgnoreCase)
                 .result());
         return methods;
     }
@@ -272,7 +272,7 @@ public class Registry {
         return String.format("- %s:\n\n%s",
                              I18n.format(lang),
                              new CodeBlockBuilder()
-                                     .line(methodExample(method, Exporter.simpleName(method)))
+                                     .line(methodExample(method, Exporter.simpleSignature(method)))
                                      .indentation(1)
                                      .toString());
     }

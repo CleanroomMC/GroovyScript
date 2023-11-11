@@ -117,7 +117,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = "entities", signature = "String...")
+        @RecipeBuilderMethodDescription(field = "entities")
         public RecipeBuilder entitySoul(String... entities) {
             for (String entity : entities) {
                 entitySoul(entity);
@@ -125,7 +125,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = "entities", signature = "Collection<String>")
+        @RecipeBuilderMethodDescription(field = "entities")
         public RecipeBuilder entitySoul(Collection<String> entities) {
             for (String entity : entities) {
                 entitySoul(entity);
@@ -139,7 +139,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = "entities", signature = "EntityEntry...")
+        @RecipeBuilderMethodDescription(field = "entities")
         public RecipeBuilder entity(EntityEntry... entities) {
             for (EntityEntry entity : entities) {
                 entity(entity);
@@ -147,7 +147,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = "entities", signature = "Collection<EntityEntry>")
+        @RecipeBuilderMethodDescription(field = "entities")
         public RecipeBuilder entity(Collection<EntityEntry> entities) {
             for (EntityEntry entity : entities) {
                 entity(entity);

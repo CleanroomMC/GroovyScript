@@ -99,7 +99,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
         InfuseRegistry.registerInfuseObject(item, object);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, signature = "InfuseType, int, IIngredient...")
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(InfuseType type, int amount, IIngredient... ingredients) {
         for (ItemStack item : Arrays.stream(ingredients).flatMap(g -> Arrays.stream(g.getMatchingStacks())).collect(Collectors.toList())) {
             add(type, amount, item);
@@ -109,19 +109,19 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
     @MethodDescription(example = {
             @Example("'groovy_example', 10, item('minecraft:ice')"),
             @Example("'groovy_example', 20, item('minecraft:packed_ice')")
-    }, type = MethodDescription.Type.ADDITION, signature = "String, int, IIngredient...")
+    }, type = MethodDescription.Type.ADDITION)
     public void add(String type, int amount, IIngredient... ingredients) {
         add(InfuseRegistry.get(type.toUpperCase(Locale.ROOT)), amount, ingredients);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, signature = "InfuseType, int, Collection<IIngredient>")
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(InfuseType type, int amount, Collection<IIngredient> ingredients) {
         for (ItemStack item : ingredients.stream().flatMap(g -> Arrays.stream(g.getMatchingStacks())).collect(Collectors.toList())) {
             add(type, amount, item);
         }
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, signature = "String, int, Collection<IIngredient>")
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(String type, int amount, Collection<IIngredient> ingredients) {
         add(InfuseRegistry.get(type.toUpperCase(Locale.ROOT)), amount, ingredients);
     }
@@ -134,14 +134,14 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
         }
     }
 
-    @MethodDescription(signature = "IIngredient...")
+    @MethodDescription
     public void remove(IIngredient... ingredients) {
         for (IIngredient item : ingredients) {
             remove(item);
         }
     }
 
-    @MethodDescription(signature = "Collection<IIngredient>")
+    @MethodDescription
     public void remove(Collection<IIngredient> ingredients) {
         for (IIngredient item : ingredients) {
             remove(item);

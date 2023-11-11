@@ -35,7 +35,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, signature = "ItemStack, List<IIngredient>, int")
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(ItemStack output, List<IIngredient> input, int energy) {
         recipeBuilder()
                 .energy(energy)

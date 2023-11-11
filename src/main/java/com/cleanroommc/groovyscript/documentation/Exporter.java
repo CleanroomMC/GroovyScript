@@ -3,8 +3,6 @@ package com.cleanroommc.groovyscript.documentation;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.collect.ComparisonChain;
@@ -17,6 +15,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Exporter {
@@ -24,27 +23,22 @@ public class Exporter {
     private static final String INDEX_FILE_NAME = "index.md";
     private static final String NAV_FILE_NAME = "!navigation.md";
     private static final String PRINT_MOD_DETECTED = "println 'mod \\'%s\\' detected, running script'";
+    private static final Pattern CLASS_NAME_PATTERN = Pattern.compile("(?>\\b)(?>[a-zA-Z0-9]+\\.)+([a-zA-Z0-9$]+)");
 
 
-    public static String simpleName(Method method) {
-        RecipeBuilderMethodDescription recipeBuilderMethodDescription = method.getAnnotation(RecipeBuilderMethodDescription.class);
-        if (recipeBuilderMethodDescription != null && !recipeBuilderMethodDescription.signature().isEmpty()) return recipeBuilderMethodDescription.signature();
-        MethodDescription methodDescription = method.getAnnotation(MethodDescription.class);
-        if (methodDescription != null && !methodDescription.signature().isEmpty()) return methodDescription.signature();
-        return simpleName(method.getParameterTypes());
+    public static String simpleSignature(Method method) {
+        String signature = Arrays.stream(method.getAnnotatedParameterTypes()).map(x -> simpleSignature(x.getType().getTypeName())).collect(Collectors.joining(", "));
+        return method.isVarArgs() ? convertVarArgs(signature) : signature;
     }
 
-    public static String simpleName(Class<?>... classes) {
-        return Arrays.stream(classes).map(Exporter::simpleName).collect(Collectors.joining(", "));
+    private static String simpleSignature(String name) {
+        return CLASS_NAME_PATTERN.matcher(name).replaceAll("$1").replaceAll("\\$", ".");
     }
 
-    public static String simpleName(Class<?> clazz) {
-        return simpleName(clazz.getCanonicalName());
+    private static String convertVarArgs(String name) {
+        return name.substring(0, name.lastIndexOf("[]")) + "..." + name.substring(name.lastIndexOf("[]") + 2);
     }
 
-    public static String simpleName(String name) {
-        return name.substring(name.lastIndexOf(".") + 1);
-    }
 
     public static void generateWiki(File folder, ModSupport.Container<? extends ModPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();

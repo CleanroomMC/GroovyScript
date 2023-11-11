@@ -85,7 +85,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         return removeByEntity((Class<? extends EntityLivingBase>) entity.getEntityClass());
     }
 
-    @MethodDescription(signature = "Class<? extends EntityLivingBase>")
+    @MethodDescription
     public boolean removeByEntity(Class<? extends EntityLivingBase> clazz) {
         for (Map.Entry<ResourceLocation, RunicShearEntityRecipe> x : getRunicShearEntityRecipes().entrySet()) {
             if (x.getValue().getClazz() == clazz) {
@@ -132,7 +132,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
             return this;
         }
 
-        @RecipeBuilderMethodDescription(signature = "Function<EntityLivingBase, ItemStack>")
+        @RecipeBuilderMethodDescription
         public RecipeBuilder functionMap(Function<EntityLivingBase, ItemStack> functionMap) {
             this.functionMap = functionMap;
             return this;

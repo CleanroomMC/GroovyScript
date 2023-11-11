@@ -48,7 +48,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         }
     }
 
-    @MethodDescription(signature = "ItemStack, IIngredient, List<IIngredient>, ItemStack, int, int", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public ArcFurnaceRecipe add(ItemStack output, IIngredient input, List<IIngredient> additives, @Nonnull ItemStack slag, int time, int energyPerTick) {
         Object[] inputs = ArrayUtils.mapToArray(additives, ImmersiveEngineering::toIngredientStack);
         ArcFurnaceRecipe recipe = ArcFurnaceRecipe.addRecipe(output, ImmersiveEngineering.toIngredientStack(input), slag, time, energyPerTick, inputs);
@@ -85,7 +85,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         }
     }
 
-    @MethodDescription(signature = "IIngredient, List<IIngredient>", description = "groovyscript.wiki.removeByInput", example = @Example("item('immersiveengineering:metal:18'), item('immersiveengineering:material:17')"))
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('immersiveengineering:metal:18'), item('immersiveengineering:material:17')"))
     public void removeByInput(IIngredient main, List<IIngredient> inputAndAdditives) {
         if (main == null || main.isEmpty() || inputAndAdditives == null || inputAndAdditives.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
@@ -110,7 +110,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     }
 
 
-    @MethodDescription(signature = "List<IIngredient>", description = "groovyscript.wiki.removeByInput")
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public void removeByInput(List<IIngredient> inputAndAdditives) {
         if (inputAndAdditives == null || inputAndAdditives.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
@@ -122,7 +122,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         removeByInput(inputAndAdditives.remove(0), inputAndAdditives);
     }
 
-    @MethodDescription(signature = "IIngredient...", description = "groovyscript.wiki.removeByInput")
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public void removeByInput(IIngredient... inputAndAdditives) {
         removeByInput(new ArrayList<>(Arrays.asList(inputAndAdditives)));
     }

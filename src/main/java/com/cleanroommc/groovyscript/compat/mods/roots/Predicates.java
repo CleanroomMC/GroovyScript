@@ -86,13 +86,13 @@ public class Predicates extends VirtualizedRegistry<MatchingStates> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(signature = "String...")
+        @RecipeBuilderMethodDescription
         public StateBuilder properties(String... properties) {
             Collections.addAll(this.properties, properties);
             return this;
         }
 
-        @RecipeBuilderMethodDescription(signature = "Collection<String>")
+        @RecipeBuilderMethodDescription
         public StateBuilder properties(Collection<String> properties) {
             this.properties.addAll(properties);
             return this;

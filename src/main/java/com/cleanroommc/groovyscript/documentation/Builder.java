@@ -319,22 +319,21 @@ public class Builder {
         }
 
         public String shortMethodSignature() {
-            return String.format("%s(%s)", getMethod().getName(), annotation.signature().isEmpty() ? Exporter.simpleName(getMethod()) : annotation.signature());
+            return String.format("%s(%s)", getMethod().getName(), Exporter.simpleSignature(getMethod()));
         }
 
         @Override
-        public int compareTo(@NotNull Builder.RecipeBuilderMethod right) {
-            RecipeBuilderMethod left = this;
-            String leftSignature = left.shortMethodSignature();
-            String rightSignature = right.shortMethodSignature();
-            String leftPart = leftSignature.substring(0, leftSignature.indexOf("("));
-            String rightPart = rightSignature.substring(0, rightSignature.indexOf("("));
+        public int compareTo(@NotNull Builder.RecipeBuilderMethod comp) {
+            String thisSignature = this.shortMethodSignature();
+            String compSignature = comp.shortMethodSignature();
+            String thisPart = thisSignature.substring(0, thisSignature.indexOf("("));
+            String compPart = compSignature.substring(0, compSignature.indexOf("("));
             return ComparisonChain.start()
-                    .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
-                    .compare(leftPart.length(), rightPart.length())
-                    .compare(leftPart, rightPart, String::compareToIgnoreCase)
-                    .compare(leftSignature.length(), rightSignature.length())
-                    .compare(leftSignature, rightSignature, String::compareToIgnoreCase)
+                    .compare(this.getAnnotation().priority(), comp.getAnnotation().priority())
+                    .compare(thisPart.length(), compPart.length())
+                    .compare(thisPart, compPart, String::compareToIgnoreCase)
+                    .compare(thisSignature.length(), compSignature.length())
+                    .compare(thisSignature, compSignature, String::compareToIgnoreCase)
                     .result();
         }
     }

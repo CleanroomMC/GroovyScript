@@ -39,7 +39,7 @@ public class Meteor extends VirtualizedRegistry<WayofTime.bloodmagic.meteor.Mete
         restoreFromBackup().forEach(r -> MeteorRegistry.registerMeteor(r.getCatalystStack(), r));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.meteor.add", signature = "ItemStack, List<MeteorComponent>, float, int, int", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.meteor.add", type = MethodDescription.Type.ADDITION)
     public WayofTime.bloodmagic.meteor.Meteor add(ItemStack stack, List<MeteorComponent> componentList, float explosionStrength, int radius, int cost) {
         WayofTime.bloodmagic.meteor.Meteor recipe = new WayofTime.bloodmagic.meteor.Meteor(stack, componentList, explosionStrength, radius);
         recipe.setCost(cost);

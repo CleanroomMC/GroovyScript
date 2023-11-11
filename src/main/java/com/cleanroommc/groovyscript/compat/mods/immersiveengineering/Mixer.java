@@ -80,7 +80,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
-    @MethodDescription(signature = "IIngredient...", description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:sand'), item('minecraft:sand'), item('minecraft:clay_ball'), item('minecraft:gravel')"))
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:sand'), item('minecraft:sand'), item('minecraft:clay_ball'), item('minecraft:gravel')"))
     public void removeByInput(IIngredient... itemInputs) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
                 .add(itemInputs == null || itemInputs.length == 0, () -> "item input must not be empty")
@@ -102,7 +102,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
-    @MethodDescription(signature = "FluidStack, IIngredient...", description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('water'), item('minecraft:speckled_melon')"))
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('water'), item('minecraft:speckled_melon')"))
     public void removeByInput(FluidStack fluidInput, IIngredient... itemInput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
                 .add(IngredientHelper.isEmpty(fluidInput), () -> "fluid input must not be empty")

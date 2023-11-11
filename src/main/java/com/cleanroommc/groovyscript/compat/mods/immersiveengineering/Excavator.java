@@ -79,7 +79,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         return true;
     }
 
-    @MethodDescription(signature = "String...", example = @Example("ore('oreAluminum')"))
+    @MethodDescription(example = @Example("ore('oreAluminum')"))
     public void removeByOres(String... ores) {
         if (ores == null || ores.length == 0) {
             GroovyLog.msg("Error removing Immersive Engineering Excavator entry")
@@ -102,7 +102,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         }
     }
 
-    @MethodDescription(signature = "OreDictIngredient...")
+    @MethodDescription
     public void removeByOres(OreDictIngredient... ores) {
         if (IngredientHelper.isEmpty(ores)) {
             GroovyLog.msg("Error removing Immersive Engineering Excavator entry")
@@ -192,7 +192,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
             return this;
         }
 
-        @RecipeBuilderMethodDescription(signature = "int...", field = "dimensions")
+        @RecipeBuilderMethodDescription(field = "dimensions")
         public RecipeBuilder dimension(int... dimensions) {
             for (int dimension : dimensions) {
                 dimension(dimension);
@@ -200,7 +200,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
             return this;
         }
 
-        @RecipeBuilderMethodDescription(signature = "Collection<Integer>", field = "dimensions")
+        @RecipeBuilderMethodDescription(field = "dimensions")
         public RecipeBuilder dimension(Collection<Integer> dimensions) {
             for (int dimension : dimensions) {
                 dimension(dimension);

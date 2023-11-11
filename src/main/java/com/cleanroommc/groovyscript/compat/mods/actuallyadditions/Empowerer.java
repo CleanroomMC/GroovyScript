@@ -137,7 +137,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(signature = "float...", field = {"red", "green", "blue"})
+        @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
         public RecipeBuilder particleColor(float... color) {
             if (color.length != 3) {
                 GroovyLog.get().warn("Error setting color in Actually Additions Empowerer recipe. color must contain 3 floats, yet it contained {}", color.length);
@@ -149,7 +149,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(signature = "float...", field = {"red", "green", "blue"})
+        @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
         public RecipeBuilder color(float... color) {
             return this.particleColor(color);
         }

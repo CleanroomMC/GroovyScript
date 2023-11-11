@@ -70,7 +70,7 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
         return removeByEntity((Class<? extends EntityLivingBase>) entity.getEntityClass());
     }
 
-    @MethodDescription(signature = "Class<? extends EntityLivingBase>")
+    @MethodDescription
     public boolean removeByEntity(Class<? extends EntityLivingBase> clazz) {
         for (Map.Entry<ResourceLocation, SummonCreatureRecipe> x : ModRecipesAccessor.getSummonCreatureEntries().entrySet()) {
             if (x.getValue().getClazz() == clazz) {

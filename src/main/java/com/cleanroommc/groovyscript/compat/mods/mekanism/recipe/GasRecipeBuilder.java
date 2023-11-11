@@ -21,7 +21,7 @@ public abstract class GasRecipeBuilder<T> extends AbstractRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "Collection<GasStack>")
+    @RecipeBuilderMethodDescription
     public GasRecipeBuilder<T> gasInput(Collection<GasStack> gases) {
         for (GasStack gas : gases) {
             gasInput(gas);
@@ -29,7 +29,7 @@ public abstract class GasRecipeBuilder<T> extends AbstractRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "GasStack...")
+    @RecipeBuilderMethodDescription
     public GasRecipeBuilder<T> gasInput(GasStack... gases) {
         for (GasStack gas : gases) {
             gasInput(gas);
@@ -43,7 +43,7 @@ public abstract class GasRecipeBuilder<T> extends AbstractRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "Collection<GasStack>")
+    @RecipeBuilderMethodDescription
     public GasRecipeBuilder<T> gasOutput(Collection<GasStack> gases) {
         for (GasStack gas : gases) {
             gasOutput(gas);
@@ -51,7 +51,7 @@ public abstract class GasRecipeBuilder<T> extends AbstractRecipeBuilder<T> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription(signature = "GasStack...")
+    @RecipeBuilderMethodDescription
     public GasRecipeBuilder<T> gasOutput(GasStack... gases) {
         for (GasStack gas : gases) {
             gasOutput(gas);

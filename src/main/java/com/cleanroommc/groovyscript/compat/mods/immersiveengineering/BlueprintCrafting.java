@@ -52,7 +52,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
     }
 
-    @MethodDescription(signature = "String, ItemStack, List<IIngredient>", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public BlueprintCraftingRecipe add(String blueprintCategory, ItemStack output, List<IIngredient> inputs) {
         Object[] inputs1 = ArrayUtils.mapToArray(inputs, ImmersiveEngineering::toIngredientStack);
         BlueprintCraftingRecipe recipe = new BlueprintCraftingRecipe(blueprintCategory, output.copy(), inputs1);
@@ -106,7 +106,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
     }
 
-    @MethodDescription(signature = "String, ItemStack...", description = "groovyscript.wiki.removeByInput", example = @Example("'components', item('immersiveengineering:metal:38'), item('immersiveengineering:metal:38'), item('immersiveengineering:metal')"))
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("'components', item('immersiveengineering:metal:38'), item('immersiveengineering:metal:38'), item('immersiveengineering:metal')"))
     public void removeByInput(String blueprintCategory, ItemStack... inputs) {
         if (GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
                 .add(!BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory), () -> "category " + blueprintCategory + " does not exist")

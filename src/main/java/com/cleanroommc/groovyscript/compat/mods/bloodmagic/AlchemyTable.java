@@ -46,7 +46,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes()::add);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemytable.add", signature = "NonNullList<Ingredient>, ItemStack, int, int, int", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemytable.add", type = MethodDescription.Type.ADDITION)
     public RecipeAlchemyTable add(NonNullList<Ingredient> input, ItemStack output, int syphon, int ticks, int minimumTier) {
         RecipeAlchemyTable recipe = new RecipeAlchemyTable(input, output, syphon, ticks, minimumTier);
         add(recipe);
@@ -66,14 +66,14 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", signature = "IIngredient...")
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInput(IIngredient... input) {
         NonNullList<IIngredient> inputs = NonNullList.create();
         Collections.addAll(inputs, input);
         return removeByInput(inputs);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", signature = "NonNullList<IIngredient>",
+    @MethodDescription(description = "groovyscript.wiki.removeByInput",
                        example = @Example("item('minecraft:nether_wart'), item('minecraft:gunpowder')"))
     public boolean removeByInput(NonNullList<IIngredient> input) {
         // Filters down to only recipes which have inputs that match all the input IIngredients (NOTE: a recipe with ABCD would match an input of AB)
