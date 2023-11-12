@@ -208,7 +208,7 @@ public class Builder {
             if (!fieldDocumentation.getValue().isUsed()) continue;
             Property annotation = fieldDocumentation.getValue().getAnnotation();
 
-            out.append("- ").append(I18n.format(fieldDocumentation.getValue().getDescription())).append(".");
+            out.append(fieldDocumentation.getValue().getDescription());
 
             if (annotation.valid().length != 0) {
                 String req = Arrays.stream(annotation.valid())
@@ -296,8 +296,12 @@ public class Builder {
             return annotations.stream().anyMatch(x -> !x.needsOverride());
         }
 
+        private String getFieldTypeInlineCode() {
+            return "`#!groovy " + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
+        }
+
         public String getDescription() {
-            return descriptionLangKey;
+            return "- " + getFieldTypeInlineCode() + I18n.format(descriptionLangKey) + ".";
         }
 
     }

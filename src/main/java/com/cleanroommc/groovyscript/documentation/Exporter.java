@@ -31,7 +31,7 @@ public class Exporter {
         return method.isVarArgs() ? convertVarArgs(signature) : signature;
     }
 
-    private static String simpleSignature(String name) {
+    public static String simpleSignature(String name) {
         return CLASS_NAME_PATTERN.matcher(name).replaceAll("$1").replaceAll("\\$", ".");
     }
 
