@@ -30,6 +30,7 @@ import java.lang.reflect.Field;
  *     <li>{@link #valid()} is an array of {@link Comp} that indicates the requirements of the {@link Property} to pass validation.</li>
  *     <li>{@link #requirement()} is a localization key that states the requirements for the property to pass validation provided the requirements are too
  *     complex to represent via {@link #valid()}.</li>
+ *     <li>{@link #ignoresInheritedMethods()} if this {@link Property} annotation requires any methods targeting the {@link Property} to not be inherited methods.</li>
  *     <li>{@link #needsOverride()} if this {@link Property} annotation needs another {@link Property} annotation with this element set to {@code true} to function.
  *     Used in wrapper classes, such as {@link AbstractRecipeBuilder}, where some or all of the fields may not be needed in subclasses.</li>
  *     <li>{@link #priority()} is an integer that influences the sorting of the {@link Property} relative to other {@link Property Properties}.
@@ -135,10 +136,17 @@ public @interface Property {
     String requirement() default "";
 
     /**
-     * Controls if the property needs an overriding property to enable it. Used in wrapper classes, such as {@link AbstractRecipeBuilder}, where some or all of the fields
-     * may not be needed in subclasses. At least one property must have this element be false for the property to be documented.
+     * Controls if the property ignores any methods targeting the property that are inherited from a parent class.
      *
-     * @return if the property needs an overriding annotation to enable it, defaults to {@code true}
+     * @return if the property should ignore any methods inherited from a parent class, defaults to {@code false}
+     */
+    boolean ignoresInheritedMethods() default false;
+
+    /**
+     * Controls if the property needs an overriding property to enable it. Used in wrapper classes, such as {@link AbstractRecipeBuilder}, where some or all of the fields
+     * may not be needed in subclasses. At least one property must have this element be {@code true} for the property to be documented.
+     *
+     * @return if the property needs an overriding annotation to enable it, defaults to {@code false}
      */
     boolean needsOverride() default false;
 

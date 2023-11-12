@@ -21,8 +21,8 @@ public class Builder {
     private final String reference;
     private final Method builderMethod;
     private final RecipeBuilderDescription annotation;
-    private final Map<String, List<RecipeBuilderMethod>> methods;
     private final Map<String, FieldDocumentation> fields;
+    private final Map<String, List<RecipeBuilderMethod>> methods;
     private final List<Method> registrationMethods;
 
     public Builder(Method builderMethod, String reference, String baseTranslationKey) {
@@ -30,28 +30,9 @@ public class Builder {
         this.reference = reference;
         this.annotation = builderMethod.getAnnotation(RecipeBuilderDescription.class);
         Class<?> builderClass = builderMethod.getReturnType();
-        this.methods = gatherMethods(builderClass);
         this.fields = gatherFields(builderClass, annotation, baseTranslationKey);
+        this.methods = gatherMethods(builderClass, fields);
         this.registrationMethods = gatherRegistrationMethods(builderClass);
-    }
-
-    private static Map<String, List<RecipeBuilderMethod>> gatherMethods(Class<?> builderClass) {
-        Map<String, List<RecipeBuilderMethod>> fieldToModifyingMethods = new HashMap<>();
-        for (Method method : builderClass.getMethods()) {
-            if (!method.isAnnotationPresent(RecipeBuilderMethodDescription.class)) continue;
-            RecipeBuilderMethod pair = new RecipeBuilderMethod(method);
-            for (String target : pair.targetFields()) {
-                fieldToModifyingMethods.computeIfAbsent(target, k -> new ArrayList<>()).add(pair);
-            }
-        }
-
-        fieldToModifyingMethods.forEach((key, value) -> value.sort((left, right) -> ComparisonChain.start()
-                .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
-                .compare(left.getMethod().getName().length(), right.getMethod().getName().length())
-                .compare(left.getMethod().getName(), right.getMethod().getName(), String::compareToIgnoreCase)
-                .result()));
-
-        return fieldToModifyingMethods;
     }
 
     private static Map<String, FieldDocumentation> gatherFields(Class<?> builderClass, RecipeBuilderDescription annotation, String langLocation) {
@@ -86,6 +67,28 @@ public class Builder {
         }
 
         return fields;
+    }
+
+    private static Map<String, List<RecipeBuilderMethod>> gatherMethods(Class<?> builderClass, Map<String, FieldDocumentation> fields) {
+        Map<String, List<RecipeBuilderMethod>> fieldToModifyingMethods = new HashMap<>();
+        for (Method method : builderClass.getMethods()) {
+            if (!method.isAnnotationPresent(RecipeBuilderMethodDescription.class)) continue;
+            RecipeBuilderMethod pair = new RecipeBuilderMethod(method);
+            for (String target : pair.targetFields()) {
+                if (fields.get(target) != null && fields.get(target).isIgnoringInheritedMethods() && !Arrays.asList(builderClass.getDeclaredMethods()).contains(method)) {
+                    continue;
+                }
+                fieldToModifyingMethods.computeIfAbsent(target, k -> new ArrayList<>()).add(pair);
+            }
+        }
+
+        fieldToModifyingMethods.forEach((key, value) -> value.sort((left, right) -> ComparisonChain.start()
+                .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
+                .compare(left.getMethod().getName().length(), right.getMethod().getName().length())
+                .compare(left.getMethod().getName(), right.getMethod().getName(), String::compareToIgnoreCase)
+                .result()));
+
+        return fieldToModifyingMethods;
     }
 
     private static List<Method> gatherRegistrationMethods(Class<?> builderClass) {
@@ -283,6 +286,10 @@ public class Builder {
 
         public Property getAnnotation() {
             return firstAnnotation;
+        }
+
+        public boolean isIgnoringInheritedMethods() {
+            return annotations.stream().anyMatch(Property::ignoresInheritedMethods);
         }
 
         public boolean isUsed() {
