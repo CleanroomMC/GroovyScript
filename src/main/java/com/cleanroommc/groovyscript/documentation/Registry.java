@@ -116,14 +116,18 @@ public class Registry {
         StringBuilder out = new StringBuilder();
         out.append("// ").append(getTitle()).append(":").append("\n");
         out.append("// ").append(WordUtils.wrap(getDescription(), Documentation.MAX_LINE_LENGTH, "\n// ", false)).append("\n\n");
-        for (Method method : methods.get(MethodDescription.Type.VALUE)) out.append(examples(method));
-        if (!methods.get(MethodDescription.Type.VALUE).isEmpty()) out.append("\n");
-        for (Method method : methods.get(MethodDescription.Type.REMOVAL)) out.append(examples(method));
-        if (!methods.get(MethodDescription.Type.REMOVAL).isEmpty()) out.append("\n");
+        out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
+        out.append(documentMethodDescriptionType(MethodDescription.Type.REMOVAL));
         for (Method method : recipeBuilderMethods) out.append(new Builder(method, reference, baseTranslationKey).builderExampleFile()).append("\n");
         if (!recipeBuilderMethods.isEmpty()) out.append("\n");
-        for (Method method : methods.get(MethodDescription.Type.ADDITION)) out.append(examples(method));
-        if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) out.append("\n");
+        out.append(documentMethodDescriptionType(MethodDescription.Type.ADDITION));
+        return out.toString();
+    }
+
+    private String documentMethodDescriptionType(MethodDescription.Type type) {
+        StringBuilder out = new StringBuilder();
+        for (Method method : methods.get(type)) out.append(examples(method));
+        if (!methods.get(type).isEmpty()) out.append("\n");
         return out.toString();
     }
 
