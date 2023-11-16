@@ -352,7 +352,7 @@ public class Builder {
                     .map(Property::requirement)
                     .filter(x -> !x.isEmpty())
                     .findFirst()
-                    .map(s -> I18n.format("groovyscript.wiki.requires", I18n.format(s)))
+                    .map(I18n::format)
                     .orElse("");
         }
 
