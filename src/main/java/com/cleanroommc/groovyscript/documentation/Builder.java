@@ -3,7 +3,9 @@ package com.cleanroommc.groovyscript.documentation;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.resources.I18n;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -17,6 +19,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Builder {
+
+    private static final Map<Character, Character> commaSeparatedParts = ImmutableMap.of(
+            ']', '[',
+            '\'', '\''
+    );
 
     private final String reference;
     private final Method builderMethod;
@@ -133,7 +140,9 @@ public class Builder {
     }
 
     /**
-     * Converts a single string into an array of strings, each starting with a '.' that is not contained within any special zones (comment, string, brackets, etc)
+     * Converts a single string into an array of strings.
+     * Groups of code surrounded by square braces (`[]`) or single quotes (`''`) are split onto separate lines.
+     * Otherwise, each line starts with a period (`.`) provided that it is not contained within any special zones (comment, string, brackets, etc)
      */
     private static List<String> generateParts(String content) {
         ArrayList<String> parts = new ArrayList<>();
@@ -155,6 +164,13 @@ public class Builder {
             else if (current == '{') req.add('}');
             else if (!req.isEmpty() && current == req.get(req.size() - 1)) {
                 req.remove(req.size() - 1);
+            } else if (current == ',' && index > 0) {
+                Character nextChar = commaSeparatedParts.get(content.charAt(index - 1));
+                if (nextChar != null && (content.charAt(index + 1) == nextChar || content.charAt(index + 2) == nextChar)) {
+                    int point = content.indexOf(nextChar, index + 1);
+                    parts.add(content.substring(start, point));
+                    start = point;
+                }
             } else if (req.isEmpty() && current == '.' && start != index) {
                 parts.add(content.substring(start, index));
                 start = index;
@@ -247,9 +263,17 @@ public class Builder {
 
         out.append(reference).append(".").append(builderMethod.getName()).append("()").append("\n");
 
-        for (String part : generateParts(content)) {
-            if (!part.isEmpty()) out.append(String.format("    %s\n", part));
+        List<String> parts = generateParts(content);
+        List<String> output = new ArrayList<>();
+        for (int i = 0; i < parts.size(); i++) {
+            String part = parts.get(i);
+            if (!part.isEmpty()) {
+                int indentation = part.startsWith(".") ? 4 : output.get(i - 1).indexOf(part.charAt(0));
+                output.add(StringUtils.repeat(" ", indentation) + part.trim() + "\n");
+            }
         }
+        out.append(String.join("", output));
+
         if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName())).append("\n");
 
         return out.toString();
