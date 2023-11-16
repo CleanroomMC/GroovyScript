@@ -36,6 +36,17 @@ groovyscript.wiki.fluidInput.value=Sets the fluid inputs of the recipe
 groovyscript.wiki.fluidOutput.value=Sets the fluid outputs of the recipe
 groovyscript.wiki.register=First validates the recipe, returning `null` and outputting errors to the log file if the validation failed, then registers the recipe and returns the registered object. (returns `null` or `%s`).
 
+groovyscript.wiki.craftingrecipe.matrix.required=either the key-based matrix or the ingredient-based matrix can be defined, not both
+groovyscript.wiki.craftingrecipe.output.value=Sets the item output
+groovyscript.wiki.craftingrecipe.recipeFunction.value=Sets an operation that modifies the input items or output item
+groovyscript.wiki.craftingrecipe.recipeAction.value=Sets an operation that happens when the recipe is crafted
+groovyscript.wiki.craftingrecipe.replace.value=Sets if the recipe is removed. A value of 1 removes by the output, and a value of 2 removes by the resource location
+groovyscript.wiki.craftingrecipe.mirrored.value=Sets if the recipe is horizontally mirrored
+groovyscript.wiki.craftingrecipe.keyBasedMatrix.value=Sets the items required in each slot of the grid as char
+groovyscript.wiki.craftingrecipe.keyMap.value=Sets the item the given char corresponds to
+groovyscript.wiki.craftingrecipe.ingredientMatrix.value=Sets the items required in each slot in the grid as IIngredients
+groovyscript.wiki.craftingrecipe.ingredients.value=Sets the items required for the recipe
+
 groovyscript.wiki.removeByInput=Removes all recipes that match the given input
 groovyscript.wiki.removeByOutput=Removes all recipes that match the given output
 groovyscript.wiki.removeByOre=Removes all recipes that match the given ore
@@ -271,6 +282,43 @@ groovyscript.wiki.evilcraft.environmentalaccumulator.cooldowntime.value=Sets the
 groovyscript.wiki.evilcraft.environmentalaccumulator.duration.value=Sets the base time in ticks the recipe takes to process
 groovyscript.wiki.evilcraft.environmentalaccumulator.inputWeather.value=Sets the weather type required to start the recipe
 groovyscript.wiki.evilcraft.environmentalaccumulator.outputWeather.value=Sets the weather type the world is changed to when the recipe is completed
+
+# Extended Crafting
+groovyscript.wiki.extendedcrafting.combinationcrafting.title=Combination Crafting
+groovyscript.wiki.extendedcrafting.combinationcrafting.description=Converts one main item and any number of additional items into an output itemstack, with a configurable rf cost and consumption per tick amount.
+groovyscript.wiki.extendedcrafting.combinationcrafting.note0=By default, there are no Combination recipes
+groovyscript.wiki.extendedcrafting.combinationcrafting.add0=Adds recipes in the format `output`, `cost`, `input`, `pedestals`
+groovyscript.wiki.extendedcrafting.combinationcrafting.add1=Adds recipes in the format `output`, `cost`, `perTick`, `input`, `pedestals`
+groovyscript.wiki.extendedcrafting.combinationcrafting.cost.value=Sets the amount of RF required to complete the craft
+groovyscript.wiki.extendedcrafting.combinationcrafting.pedestals.value=Sets the required items on nearby pedestals
+groovyscript.wiki.extendedcrafting.combinationcrafting.perTick.value=Sets the maximum amount of RF consumed per tick until the entire cost is paid
+
+groovyscript.wiki.extendedcrafting.compressioncrafting.title=Compression Crafting
+groovyscript.wiki.extendedcrafting.compressioncrafting.description=Converts any number of a single item into an output itemstack, with a configurable rf cost, consumption per tick amount, catalyst, and if the catalyst is consumed.
+groovyscript.wiki.extendedcrafting.compressioncrafting.add0=Adds recipes in the format `output`, `input`, `inputCount`, `catalyst`, `consumeCatalyst`, `powerCost`
+groovyscript.wiki.extendedcrafting.compressioncrafting.add1=Adds recipes in the format `output`, `input`, `inputCount`, `catalyst`, `consumeCatalyst`, `powerCost`, `powerRate`
+groovyscript.wiki.extendedcrafting.compressioncrafting.catalyst.value=Sets the catalyst item for the recipe
+groovyscript.wiki.extendedcrafting.compressioncrafting.consumeCatalyst.value=Sets if the catalyst item is consumed when the recipe completes
+groovyscript.wiki.extendedcrafting.compressioncrafting.input.value=Sets the input item or oredict required
+groovyscript.wiki.extendedcrafting.compressioncrafting.inputCount.value=Sets the quantity of input items required
+groovyscript.wiki.extendedcrafting.compressioncrafting.powerCost.value=Sets the amount of RF required to complete the craft
+groovyscript.wiki.extendedcrafting.compressioncrafting.powerRate.value=Sets the maximum amount of RF consumed per tick until the entire cost is paid
+
+groovyscript.wiki.extendedcrafting.endercrafting.title=Ender Crafting
+groovyscript.wiki.extendedcrafting.endercrafting.description=A normal crafting recipe, with the recipe being slowly crafted based on nearby Ender Alternators.
+groovyscript.wiki.extendedcrafting.endercrafting.addShaped0=Adds a shaped crafting recipe in the format `output`, `input`
+groovyscript.wiki.extendedcrafting.endercrafting.addShaped1=Adds a shaped crafting recipe in the format `time`, `output`, `input`
+groovyscript.wiki.extendedcrafting.endercrafting.addShapeless0=Adds a shapeless crafting recipe in the format `output`, `input`
+groovyscript.wiki.extendedcrafting.endercrafting.addShapeless1=Adds a shapeless crafting recipe in the format `time`, `output`, `input`
+groovyscript.wiki.extendedcrafting.endercrafting.time.value=Sets the duration in seconds for the recipe, reduced by each Ender Accelerator
+
+groovyscript.wiki.extendedcrafting.tablecrafting.title=Table Crafting
+groovyscript.wiki.extendedcrafting.tablecrafting.description=A normal crafting recipe, but requiring either a specific tier, or at least a given tier, from 3x3 to 9x9.
+groovyscript.wiki.extendedcrafting.tablecrafting.addShaped0=Adds a shaped crafting recipe in the format `output`, `input`
+groovyscript.wiki.extendedcrafting.tablecrafting.addShaped1=Adds a shaped crafting recipe in the format `tier`, `output`, `input`
+groovyscript.wiki.extendedcrafting.tablecrafting.addShapeless0=Adds a shapeless crafting recipe in the format `output`, `input`
+groovyscript.wiki.extendedcrafting.tablecrafting.addShapeless1=Adds a shapeless crafting recipe in the format `tier`, `output`, `input`
+groovyscript.wiki.extendedcrafting.tablecrafting.tier.value=Sets the tier of table required, with 0 indicating any table size that can fit the recipe
 
 # Immersive Engineering
 groovyscript.wiki.immersiveengineering.alloykiln.title=Alloy Kiln
