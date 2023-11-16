@@ -16,15 +16,15 @@ import java.util.Collection;
 
 public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
-    @Property(value = "groovyscript.wiki.name.value", needsOverride = true, priority = 2000)
+    @Property(value = "groovyscript.wiki.name.value", needsOverride = true, priority = 100, hierarchy = 20)
     protected ResourceLocation name;
-    @Property(value = "groovyscript.wiki.input.value", needsOverride = true, priority = 2000)
+    @Property(value = "groovyscript.wiki.input.value", needsOverride = true, priority = 200, hierarchy = 20)
     protected final IngredientList<IIngredient> input = new IngredientList<>();
-    @Property(value = "groovyscript.wiki.output.value", needsOverride = true, priority = 2000)
+    @Property(value = "groovyscript.wiki.output.value", needsOverride = true, priority = 700, hierarchy = 20)
     protected final ItemStackList output = new ItemStackList();
-    @Property(value = "groovyscript.wiki.fluidInput.value", needsOverride = true, priority = 2000)
+    @Property(value = "groovyscript.wiki.fluidInput.value", needsOverride = true, priority = 250, hierarchy = 20)
     protected final FluidStackList fluidInput = new FluidStackList();
-    @Property(value = "groovyscript.wiki.fluidOutput.value", needsOverride = true, priority = 2000)
+    @Property(value = "groovyscript.wiki.fluidOutput.value", needsOverride = true, priority = 750, hierarchy = 20)
     protected final FluidStackList fluidOutput = new FluidStackList();
 
     public String getRecipeNamePrefix() {

@@ -13,6 +13,13 @@ import java.lang.annotation.*;
 public @interface RecipeBuilderRegistrationMethod {
 
     /**
+     * Hierarchy of the property, relative to other properties applying to the same field.
+     *
+     * @return the property hierarchy (where lower overrides hider)
+     */
+    int hierarchy() default 10;
+
+    /**
      * Priority of the registration method, relative to other registration methods of the same Recipe Builder.
      * Priorities sort entries such that lowest is first, then by the natural order of {@link VirtualizedRegistry#getName()}
      *

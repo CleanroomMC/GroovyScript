@@ -51,18 +51,11 @@ public class Builder {
                                 return false;
                             }))
                     .flatMap(x -> x)
-                    .sorted((left, right) -> ComparisonChain.start().compare(left.priority(), right.priority()).result())
+                    .sorted((left, right) -> ComparisonChain.start().compare(left.hierarchy(), right.hierarchy()).result())
                     .collect(Collectors.toList());
 
-            // Get the first field description
-            String descriptionLangKey = annotations.stream()
-                    .filter(x -> !x.value().isEmpty())
-                    .findFirst()
-                    .map(Property::value)
-                    .orElse(String.format("%s.%s.value", langLocation, field.getName()));
-
             if (!annotations.isEmpty()) {
-                fields.putIfAbsent(field.getName(), new FieldDocumentation(field, annotations, descriptionLangKey));
+                fields.putIfAbsent(field.getName(), new FieldDocumentation(field, annotations, langLocation));
             }
         }
 
@@ -94,6 +87,9 @@ public class Builder {
     private static List<Method> gatherRegistrationMethods(Class<?> builderClass) {
         return Arrays.stream(builderClass.getMethods())
                 .filter(x -> x.isAnnotationPresent(RecipeBuilderRegistrationMethod.class))
+                .sorted((left, right) -> ComparisonChain.start()
+                        .compare(left.getAnnotation(RecipeBuilderRegistrationMethod.class).hierarchy(), right.getAnnotation(RecipeBuilderRegistrationMethod.class).hierarchy())
+                        .result())
                 // Ensure only the first method with a given name is used
                 .filter(distinctByKey(Method::getName))
                 .sorted((left, right) -> ComparisonChain.start()
@@ -204,42 +200,36 @@ public class Builder {
     public String documentMethods() {
         StringBuilder out = new StringBuilder();
 
-        for (Map.Entry<String, FieldDocumentation> fieldDocumentation : fields.entrySet()) {
-            if (!fieldDocumentation.getValue().isUsed()) continue;
-            Property annotation = fieldDocumentation.getValue().getAnnotation();
+        fields.values().stream()
+                .sorted()
+                .filter(FieldDocumentation::isUsed)
+                .forEach(fieldDocumentation -> {
 
-            out.append(fieldDocumentation.getValue().getDescription());
+                    out.append(fieldDocumentation.getDescription());
 
-            if (annotation.valid().length != 0) {
-                String req = Arrays.stream(annotation.valid())
-                        .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
-                        .map(x -> I18n.format(x.type().getKey(), x.value()))
-                        .collect(Collectors.joining(String.format(" %s ", I18n.format(annotation.isOr() ? "groovyscript.wiki.or" : "groovyscript.wiki.and"))));
-                out.append(" ").append(I18n.format("groovyscript.wiki.requires", req));
-            }
+                    if (fieldDocumentation.hasComparison()) {
+                        out.append(" ").append(I18n.format("groovyscript.wiki.requires", fieldDocumentation.getComparison()));
+                    }
 
-            if (annotation.required()) {
-                if (!annotation.requirement().isEmpty()) {
-                    out.append(" ").append(I18n.format("groovyscript.wiki.requires", I18n.format(annotation.requirement())));
-                }
-            } else {
-                String defaultValue = annotation.defaultValue().isEmpty()
-                                      ? defaultValueConverter(fieldDocumentation.getValue().getField().getType())
-                                      : annotation.defaultValue();
+                    if (fieldDocumentation.hasRequirement()) {
+                        out.append(" ").append(I18n.format("groovyscript.wiki.requires", I18n.format(fieldDocumentation.getRequirement())));
+                    }
 
-                out.append(" ").append(I18n.format("groovyscript.wiki.default", defaultValue));
-            }
+                    if (!fieldDocumentation.hasDefaultValue()) {
+                        out.append(" ").append(I18n.format("groovyscript.wiki.default", fieldDocumentation.getDefaultValue()));
+                    }
 
-            out.append("\n\n");
-            out.append(new CodeBlockBuilder()
-                               .line(methods.getOrDefault(fieldDocumentation.getKey(), new ArrayList<>()).stream()
-                                             .sorted()
-                                             .map(RecipeBuilderMethod::shortMethodSignature)
-                                             .distinct()
-                                             .collect(Collectors.toList()))
-                               .indentation(1)
-                               .toString());
-        }
+                    out.append("\n\n");
+
+                    out.append(new CodeBlockBuilder()
+                                       .line(methods.getOrDefault(fieldDocumentation.getField().getName(), new ArrayList<>()).stream()
+                                                     .sorted()
+                                                     .map(RecipeBuilderMethod::shortMethodSignature)
+                                                     .distinct()
+                                                     .collect(Collectors.toList()))
+                                       .indentation(1)
+                                       .toString());
+                });
 
         for (Method registerMethod : registrationMethods) {
             out.append("- ").append(I18n.format("groovyscript.wiki.register", registerMethod.getAnnotatedReturnType().getType().getTypeName())).append("\n\n");
@@ -266,16 +256,16 @@ public class Builder {
     }
 
 
-    private static class FieldDocumentation {
+    private static class FieldDocumentation implements Comparable<FieldDocumentation> {
 
         private final Field field;
-        private final String descriptionLangKey;
+        private final String langLocation;
         private final List<Property> annotations;
         private final Property firstAnnotation;
 
-        public FieldDocumentation(Field field, List<Property> annotations, String descriptionLangKey) {
+        public FieldDocumentation(Field field, List<Property> annotations, String langLocation) {
             this.field = field;
-            this.descriptionLangKey = descriptionLangKey;
+            this.langLocation = langLocation;
             this.annotations = annotations;
             this.firstAnnotation = annotations.get(0);
         }
@@ -288,12 +278,66 @@ public class Builder {
             return firstAnnotation;
         }
 
+        public int priority() {
+            return annotations.stream().map(Property::priority).filter(x -> x != 1000).findFirst().orElse(1000);
+        }
+
+        public String getLangKey() {
+            return annotations.stream()
+                    .map(Property::value)
+                    .filter(value -> !value.isEmpty())
+                    .findFirst()
+                    .orElse(String.format("%s.%s.value", langLocation, field.getName()));
+        }
+
+        public boolean hasDefaultValue() {
+            return !"null".equals(getDefaultValue());
+        }
+
+        public String getDefaultValue() {
+            return annotations.stream()
+                    .filter(x -> !x.defaultValue().isEmpty())
+                    .findFirst()
+                    .map(Property::defaultValue)
+                    .orElse(defaultValueConverter(getField().getType()));
+        }
+
+        public String getValue() {
+            return annotations.stream().filter(x -> !x.value().isEmpty()).findFirst().map(Property::value).orElse("");
+        }
+
+        public boolean hasComparison() {
+            return annotations.stream().anyMatch(x -> x.valid().length != 0);
+        }
+
+        public String getComparison() {
+            Optional<Comp[]> comparison = annotations.stream().map(Property::valid).filter(valid -> valid.length != 0).findFirst();
+            if (!comparison.isPresent()) return "";
+            return Arrays.stream(comparison.get())
+                    .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
+                    .map(x -> I18n.format(x.type().getKey(), x.value()))
+                    .collect(Collectors.joining(String.format(" %s ", "groovyscript.wiki.and")));
+        }
+
+        public boolean hasRequirement() {
+            return annotations.stream().map(Property::requirement).anyMatch(I18n::hasKey);
+        }
+
+        public String getRequirement() {
+            return annotations.stream()
+                    .map(Property::requirement)
+                    .filter(x -> !x.isEmpty())
+                    .findFirst()
+                    .map(s -> I18n.format("groovyscript.wiki.requires", I18n.format(s)))
+                    .orElse("");
+        }
+
         public boolean isIgnoringInheritedMethods() {
-            return annotations.stream().anyMatch(Property::ignoresInheritedMethods);
+            return getAnnotation().ignoresInheritedMethods();
         }
 
         public boolean isUsed() {
-            return annotations.stream().anyMatch(x -> !x.needsOverride());
+            return !getAnnotation().needsOverride();
         }
 
         private String getFieldTypeInlineCode() {
@@ -301,7 +345,14 @@ public class Builder {
         }
 
         public String getDescription() {
-            return "- " + getFieldTypeInlineCode() + I18n.format(descriptionLangKey) + ".";
+            return "- " + getFieldTypeInlineCode() + I18n.format(getLangKey()) + ".";
+        }
+
+        @Override
+        public int compareTo(@NotNull FieldDocumentation comp) {
+            return ComparisonChain.start()
+                    .compare(this.priority(), comp.priority())
+                    .result();
         }
 
     }
@@ -334,7 +385,7 @@ public class Builder {
         }
 
         @Override
-        public int compareTo(@NotNull Builder.RecipeBuilderMethod comp) {
+        public int compareTo(@NotNull RecipeBuilderMethod comp) {
             String thisSignature = this.shortMethodSignature();
             String compSignature = comp.shortMethodSignature();
             String thisPart = thisSignature.substring(0, thisSignature.indexOf("("));

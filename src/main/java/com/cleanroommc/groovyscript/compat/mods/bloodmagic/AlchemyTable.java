@@ -136,11 +136,11 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeAlchemyTable> {
 
-        @Property(required = false, valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int syphon;
-        @Property(required = false, valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int ticks;
-        @Property(required = false, valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LT, value = "AltarTier.MAXTIERS")})
+        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LT, value = "AltarTier.MAXTIERS")})
         private int minimumTier;
 
         @RecipeBuilderMethodDescription

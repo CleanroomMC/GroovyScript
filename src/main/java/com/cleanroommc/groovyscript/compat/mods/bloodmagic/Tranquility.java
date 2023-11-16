@@ -136,13 +136,13 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
 
     public static class RecipeBuilder {
 
-        @Property(required = false)
+        @Property
         private IBlockState blockstate;
-        @Property(required = false)
+        @Property
         private Block block;
         @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private EnumTranquilityType tranquility;
-        @Property(required = false, valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private double value;
 
         @RecipeBuilderMethodDescription

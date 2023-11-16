@@ -25,14 +25,14 @@ import java.lang.reflect.Field;
  *     </li>
  *     <li>{@link #property()} either contains nothing if {@link Property} was created attached to a field, or the relevant {@link Field#getName()} string.</li>
  *     <li>{@link #defaultValue()} a string containing the default value of the property. If empty, defaults to {@code null}.</li>
- *     <li>{@link #required()} if the property is required to be changed from the default value.</li>
- *     <li>{@link #isOr()} is a boolean controlling if, when there are multiple {@link Comp} inside {@link #valid()}, that represents .</li>
  *     <li>{@link #valid()} is an array of {@link Comp} that indicates the requirements of the {@link Property} to pass validation.</li>
  *     <li>{@link #requirement()} is a localization key that states the requirements for the property to pass validation provided the requirements are too
  *     complex to represent via {@link #valid()}.</li>
  *     <li>{@link #ignoresInheritedMethods()} if this {@link Property} annotation requires any methods targeting the {@link Property} to not be inherited methods.</li>
  *     <li>{@link #needsOverride()} if this {@link Property} annotation needs another {@link Property} annotation with this element set to {@code true} to function.
  *     Used in wrapper classes, such as {@link AbstractRecipeBuilder}, where some or all of the fields may not be needed in subclasses.</li>
+ *     <li>{@link #hierarchy()} is an integer that controls the precedence of the {@link Property} annotation when multiple versions of it exist for a single field.
+ *     A lower hierarchy overrides a higher one, with the default having a value of 10.</li>
  *     <li>{@link #priority()} is an integer that influences the sorting of the {@link Property} relative to other {@link Property Properties}.
  *     Should be set to a higher value on {@link Property Properties} that have {@link #needsOverride()} set to {@code true}, and lower on any property added via
  *     {@link ElementType#METHOD} to ensure proper prioritization.</li>
@@ -73,21 +73,7 @@ public @interface Property {
     String defaultValue() default "";
 
     /**
-     * @return if the property is required to be changed from the default value, defaults to {@code true}
-     */
-    boolean required() default true;
-
-    /**
-     * Controls if the array in {@link #valid()} is documented as "only requires one {@link Comp} entry" or "requires all {@link Comp} entries".
-     * Only has an impact if {@link #valid()} has more than one entry.
-     *
-     * @return a {@code boolean} only used if {@link #valid()} has multiple entries, determining if the {@link Comp} array represents
-     * requirements where only one needs to be satisfied ({@code true}) or all need to be satisfied ({@code false}). Defaults to {@code false}.
-     */
-    boolean isOr() default false;
-
-    /**
-     * The primary way to document properties, used in conjunction with {@link #isOr()}.
+     * The primary way to document properties, supplemented by {@link #requirement()}.
      * The three main ways this element is used is to refer to:
      * <br>- a number: Would indicate comparing directly against the number.
      * <br>- an array or list: Would indicate comparing against the length of the array/list.
@@ -118,10 +104,6 @@ public @interface Property {
      *   <td><code>x >= 0 && x <= 5</code></td>
      *   <td><code>valid = {{@literal @}Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)}</code></td>
      *  </tr>
-     *  <tr>
-     *   <td><code>x == 4 || x == 5</code></td>
-     *   <td><code>valid = {{@literal @}Comp("4"), @Comp("5")}, isOr = true</code></td>
-     *  </tr>
      * </table>
      *
      * @return an array of {@link Comp} entries indicating valid values for the property to be.
@@ -149,6 +131,13 @@ public @interface Property {
      * @return if the property needs an overriding annotation to enable it, defaults to {@code false}
      */
     boolean needsOverride() default false;
+
+    /**
+     * Hierarchy of the property, relative to other properties applying to the same field.
+     *
+     * @return the property hierarchy (where lower overrides hider)
+     */
+    int hierarchy() default 10;
 
     /**
      * Priority of the property, relative to other properties applied to the Recipe Builder.

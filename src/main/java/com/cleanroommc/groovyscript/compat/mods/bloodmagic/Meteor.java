@@ -92,13 +92,13 @@ public class Meteor extends VirtualizedRegistry<WayofTime.bloodmagic.meteor.Mete
 
         @Property
         private final List<MeteorComponent> components = new ArrayList<>();
-        @Property(required = false)
+        @Property
         private ItemStack catalyst;
         @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private float explosionStrength;
         @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int radius;
-        @Property(defaultValue = "1000000", required = false, valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(defaultValue = "1000000", valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int cost = 1000000;
 
 

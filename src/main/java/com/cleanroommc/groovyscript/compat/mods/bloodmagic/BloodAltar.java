@@ -123,11 +123,11 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
 
         @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LT, value = "AltarTier.MAXTIERS")})
         private int minimumTier;
-        @Property(required = false, valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int syphon;
-        @Property(required = false, valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int consumeRate;
-        @Property(required = false, valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int drainRate;
 
         @RecipeBuilderMethodDescription

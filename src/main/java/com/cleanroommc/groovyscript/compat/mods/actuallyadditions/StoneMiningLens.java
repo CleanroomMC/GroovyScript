@@ -86,7 +86,7 @@ public class StoneMiningLens extends VirtualizedRegistry<WeightedOre> {
 
         @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private String ore;
-        @Property(required = false, valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int weight;
 
         @RecipeBuilderMethodDescription

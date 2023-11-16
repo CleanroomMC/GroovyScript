@@ -10,9 +10,9 @@ import java.util.Collection;
 
 public abstract class GasRecipeBuilder<T> extends AbstractRecipeBuilder<T> {
 
-    @Property(value = "groovyscript.wiki.mekanism.gasInput.value", needsOverride = true, priority = 2000)
+    @Property(value = "groovyscript.wiki.mekanism.gasInput.value", needsOverride = true, priority = 300, hierarchy = 20)
     protected final GasStackList gasInput = new GasStackList();
-    @Property(value = "groovyscript.wiki.mekanism.gasOutput.value", needsOverride = true, priority = 2000)
+    @Property(value = "groovyscript.wiki.mekanism.gasOutput.value", needsOverride = true, priority = 800, hierarchy = 20)
     protected final GasStackList gasOutput = new GasStackList();
 
     @RecipeBuilderMethodDescription

@@ -77,11 +77,11 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TreasureChestLoot> {
 
-        @Property(required = false, valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int weight;
-        @Property(required = false, valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "max")})
+        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "max")})
         private int min;
-        @Property(required = false, valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.GTE, value = "min")})
+        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.GTE, value = "min")})
         private int max;
 
         @RecipeBuilderMethodDescription

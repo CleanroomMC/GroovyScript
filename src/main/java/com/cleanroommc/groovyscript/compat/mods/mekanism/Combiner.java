@@ -70,7 +70,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CombinerRecipe> {
 
-        @Property(defaultValue = "new ItemStack(Blocks.COBBLESTONE)", required = false)
+        @Property(defaultValue = "new ItemStack(Blocks.COBBLESTONE)")
         private ItemStack extra;
 
         public RecipeBuilder extra(ItemStack extra) {
