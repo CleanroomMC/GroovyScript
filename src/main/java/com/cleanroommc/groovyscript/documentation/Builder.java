@@ -340,7 +340,7 @@ public class Builder {
             return Arrays.stream(comparison.get())
                     .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
                     .map(x -> I18n.format(x.type().getKey(), x.value()))
-                    .collect(Collectors.joining(String.format(" %s ", "groovyscript.wiki.and")));
+                    .collect(Collectors.joining(String.format(" %s ", I18n.format("groovyscript.wiki.and"))));
         }
 
         public boolean hasRequirement() {
