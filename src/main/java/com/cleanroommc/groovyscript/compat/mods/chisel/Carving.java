@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.chisel;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -15,14 +16,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
+        admonition = @Admonition(value = "groovyscript.wiki.chisel.carving.note", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD)
+)
 public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
-
-    private static ICarvingRegistry getRegistry() {
-        if (CarvingUtils.getChiselRegistry() == null) {
-            throw new IllegalStateException("Chisel carving getRegistry() is not yet initialized!");
-        }
-        return CarvingUtils.getChiselRegistry();
-    }
 
     private List<Pair<String, SoundEvent>> sounds;
     private List<String> groupBackup;
@@ -33,6 +31,13 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         this.sounds = new ArrayList<>();
         this.groupBackup = new ArrayList<>();
         this.groupScripted = new ArrayList<>();
+    }
+
+    private static ICarvingRegistry getRegistry() {
+        if (CarvingUtils.getChiselRegistry() == null) {
+            throw new IllegalStateException("Chisel carving getRegistry() is not yet initialized!");
+        }
+        return CarvingUtils.getChiselRegistry();
     }
 
     public static CarvingGroup carvingGroup(String group) {
@@ -53,6 +58,9 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         this.groupScripted = new ArrayList<>();
     }
 
+    @MethodDescription(example = {@Example("'demo', item('minecraft:diamond_block')"),
+                                  @Example("'demo', item('chisel:antiblock:3')"),
+                                  @Example("'demo', item('minecraft:sea_lantern')")}, type = MethodDescription.Type.ADDITION)
     public void addVariation(String groupName, ItemStack item) {
         try {
             getRegistry().addVariation(groupName, CarvingUtils.variationFor(item, 0));
@@ -66,6 +74,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         }
     }
 
+    @MethodDescription(example = {@Example("'antiblock', item('chisel:antiblock:3')"), @Example("'antiblock', item('chisel:antiblock:15')")})
     public void removeVariation(String groupName, ItemStack item) {
         try {
             getRegistry().removeVariation(item, groupName);
@@ -79,6 +88,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         }
     }
 
+    @MethodDescription(example = @Example("'demo', sound('block.glass.break')"), type = MethodDescription.Type.VALUE)
     public void setSound(String group, SoundEvent sound) {
         ICarvingGroup carvingGroup = getRegistry().getGroup(group);
         if (carvingGroup == null) {
@@ -91,11 +101,13 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         setSound(carvingGroup, sound);
     }
 
+    @MethodDescription(type = MethodDescription.Type.VALUE)
     public void setSound(ICarvingGroup group, SoundEvent sound) {
         getRegistry().setVariationSound(group.getName(), sound);
         this.sounds.add(Pair.of(group.getName(), group.getSound()));
     }
 
+    @MethodDescription(example = @Example("'demo'"), type = MethodDescription.Type.ADDITION)
     public void addGroup(String groupName) {
         if (getRegistry().getSortedGroupNames().contains(groupName)) {
             GroovyLog.msg("Error adding Chisel Carving group")
@@ -108,6 +120,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         this.groupScripted.add(groupName);
     }
 
+    @MethodDescription(example = @Example("'blockDiamond'"))
     public void removeGroup(String groupName) {
         if (!getRegistry().getSortedGroupNames().contains(groupName)) {
             GroovyLog.msg("Error removing Chisel Carving group")
@@ -120,6 +133,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         this.groupBackup.add(groupName);
     }
 
+    @MethodDescription(example = @Example(commented = true))
     public void removeAll() {
         getRegistry().getSortedGroupNames().forEach(name -> {
             getRegistry().removeGroup(name);

@@ -183,6 +183,17 @@ groovyscript.wiki.bloodmagic.tranquility.value.value=Sets the amount of Tranquil
 groovyscript.wiki.bloodmagic.tranquility.block.required=either block or blockstate must be defined
 groovyscript.wiki.bloodmagic.tranquility.blockstate.required=either block or blockstate must be defined
 
+# Chisel
+groovyscript.wiki.chisel.carving.title=Carving
+groovyscript.wiki.chisel.carving.description=Sets a group of items any item can be converted between freely, in world and in a GUI
+groovyscript.wiki.chisel.carving.note=You cannot addVariation/removeVariation to chisel groups based on the oredict, you have to modify the oredict directly.
+groovyscript.wiki.chisel.carving.setSound=Sets the sound of the Chisel Group
+groovyscript.wiki.chisel.carving.addGroup=Adds a new Chisel Group with the given name
+groovyscript.wiki.chisel.carving.addVariation=Adds a new Item Variation to the Chisel Group
+groovyscript.wiki.chisel.carving.removeAll=Removes all Chisel Groups and Variations within each Chisel Group
+groovyscript.wiki.chisel.carving.removeGroup=Removes a Chisel Group and all Item Variations with that Chisel Group
+groovyscript.wiki.chisel.carving.removeVariation=Removes an Item Variation from the given Chisel Group
+
 # Draconic Evolution
 groovyscript.wiki.draconicevolution.fusion.title=Fusion
 groovyscript.wiki.draconicevolution.fusion.description=Consumes items and power from up to 54 pedestals of at least a given tier pointing towards a Fusion Crafting Core containing a catalyst to produce an output item.
