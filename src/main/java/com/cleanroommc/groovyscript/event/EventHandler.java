@@ -33,6 +33,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -127,7 +128,7 @@ public class EventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public static void onGuiOpen(GuiOpenEvent event) {
-        if (event.getGui() instanceof GuiMainMenu && !WarningScreen.wasOpened) {
+        if (!FMLLaunchHandler.isDeobfuscatedEnvironment() && event.getGui() instanceof GuiMainMenu && !WarningScreen.wasOpened) {
             WarningScreen.wasOpened = true;
             List<String> warnings = new ArrayList<>();
             if (!Loader.isModLoaded("universaltweaks")) {
