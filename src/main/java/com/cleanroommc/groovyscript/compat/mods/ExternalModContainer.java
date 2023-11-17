@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> {
 
@@ -15,9 +16,9 @@ public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> 
     private final String modName;
     private final Collection<String> aliases;
 
-    public ExternalModContainer(IGroovyContainer groovyContainer, ModPropertyContainer container) {
-        this.groovyContainer = groovyContainer;
-        this.container = container;
+    public ExternalModContainer(@NotNull IGroovyContainer groovyContainer, @NotNull ModPropertyContainer container) {
+        this.groovyContainer = Objects.requireNonNull(groovyContainer);
+        this.container = Objects.requireNonNull(container);
         this.modId = groovyContainer.getModId();
         this.modName = groovyContainer.getModName();
         this.aliases = Collections.unmodifiableCollection(groovyContainer.getAliases());

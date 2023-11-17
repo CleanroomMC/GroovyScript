@@ -31,19 +31,18 @@ import com.cleanroommc.groovyscript.compat.mods.woot.Woot;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 public class ModSupport implements IDynamicGroovyProperty {
 
     private static final Map<String, GroovyContainer<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
+    private static final List<GroovyContainer<? extends ModPropertyContainer>> containerList = new ArrayList<>();
     private static boolean frozen = false;
 
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
@@ -76,7 +75,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<Woot> WOOT = new Container<>("woot", "Woot", Woot::new);
 
     public static Collection<GroovyContainer<? extends ModPropertyContainer>> getAllContainers() {
-        return new ObjectOpenHashSet<>(containers.values());
+        return Collections.unmodifiableList(containerList);
     }
 
     private ModSupport() {
@@ -95,12 +94,21 @@ public class ModSupport implements IDynamicGroovyProperty {
         }
     }
 
-    public void registerContainer(IGroovyContainer container) {
+    public <T extends IGroovyContainer> void registerContainer(Class<T> clazz) {
+        if (clazz.isAnnotationPresent(GroovyPlugin.class)) return;
+        try {
+            registerContainer(clazz.newInstance());
+        } catch (InstantiationException | IllegalAccessException e) {
+            GroovyScript.LOGGER.error("Could not initialize Groovy Container '{}'", clazz.getName());
+        }
+    }
+
+    private void registerContainer(IGroovyContainer container) {
         if (container instanceof GroovyContainer) {
             GroovyScript.LOGGER.error("IGroovyContainer must not extend {}", GroovyContainer.class.getSimpleName());
             return;
         }
-        // if (!Loader.isModLoaded(container.getModId())) return;
+        if (!Loader.isModLoaded(container.getModId())) return;
         ModPropertyContainer modPropertyContainer = container.createModPropertyContainer();
         if (modPropertyContainer == null) {
             modPropertyContainer = new ModPropertyContainer();
@@ -109,6 +117,10 @@ public class ModSupport implements IDynamicGroovyProperty {
     }
 
     void registerContainer(GroovyContainer<?> container) {
+        if (containerList.contains(container) || containers.containsKey(container.getModId())) {
+            throw new IllegalStateException("Container already present!");
+        }
+        containerList.add(container);
         containers.put(container.getModId(), container);
         for (String alias : container.getAliases()) {
             GroovyContainer<?> container2 = containers.put(alias, container);
@@ -129,7 +141,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     @ApiStatus.Internal
     public static void init() {
         frozen = true;
-        for (GroovyContainer<?> container : getAllContainers()) {
+        for (GroovyContainer<?> container : containerList) {
             if (container.isLoaded()) {
                 container.onCompatLoaded(container, reg -> container.get().addRegistry(reg));
                 container.get().initialize();

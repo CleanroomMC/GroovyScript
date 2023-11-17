@@ -8,12 +8,19 @@ import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.machines.MachineRecipe;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, R>> extends VirtualizedRegistry<R> {
 
     protected final RecipeHandler.Recipe<?, ?, R> recipeRegistry;
 
-    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry, String... aliases) {
-        super(aliases);
+    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry, String... aliases1) {
+        this(recipeRegistry, Collections.emptyList(), aliases1);
+    }
+
+    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry, Collection<String> aliases, String... aliases1) {
+        super(true, aliases, aliases1);
         this.recipeRegistry = recipeRegistry;
     }
 

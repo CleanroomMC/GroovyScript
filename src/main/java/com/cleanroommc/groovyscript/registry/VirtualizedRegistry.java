@@ -4,40 +4,70 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.google.common.base.CaseFormat;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
 
-    protected final List<String> aliases;
+    private final List<String> aliases;
+    private Collection<R> backup, scripted;
 
-    protected Collection<R> backup, scripted;
+    public VirtualizedRegistry() {
+        this(true, Collections.emptyList(), new String[0]);
+    }
 
     public VirtualizedRegistry(String... aliases) {
-        this(true, aliases);
+        this(true, Collections.emptyList(), aliases);
+    }
+
+    public VirtualizedRegistry(Collection<String> aliases) {
+        this(true, aliases, new String[0]);
     }
 
     public VirtualizedRegistry(boolean generate, String... aliases) {
-        this.aliases = new ArrayList<>();
-        if (generate) {
-            Collections.addAll(this.aliases, VirtualizedRegistry.generateAliases(this.getClass().getSimpleName()));
-        }
-        Collections.addAll(this.aliases, aliases);
+        this(generate, Collections.emptyList(), aliases);
+    }
+
+    public VirtualizedRegistry(boolean generate, Collection<String> aliases) {
+        this(generate, aliases, new String[0]);
+    }
+
+    public VirtualizedRegistry(boolean generate, @NotNull Collection<String> aliases, String... aliases1) {
+        List<String> aliases2 = aliases.isEmpty() ? new ArrayList<>() : new ArrayList<>(aliases);
+        if (generate) VirtualizedRegistry.generateAliases(aliases, getClass().getSimpleName());
+        Collections.addAll(aliases2, aliases1);
+        aliases2 = aliases2.stream().distinct().collect(Collectors.toList());
+        this.aliases = Collections.unmodifiableList(aliases2);
         initBackup();
         initScripted();
     }
 
-    public static String[] generateAliases(String name) {
-        ArrayList<String> aliases = new ArrayList<>();
+    public static Collection<String> generateAliases(String name) {
+        return generateAliases(name, CaseFormat.UPPER_CAMEL);
+    }
+
+
+    public static Collection<String> generateAliases(String name, CaseFormat caseFormat) {
+        return generateAliases(new ArrayList<>(), caseFormat, name);
+    }
+
+    public static Collection<String> generateAliases(Collection<String> aliases, String name) {
+        return generateAliases(aliases, CaseFormat.UPPER_CAMEL, name);
+    }
+
+    public static Collection<String> generateAliases(Collection<String> aliases, CaseFormat caseFormat, String name) {
+        if (caseFormat != CaseFormat.UPPER_CAMEL) {
+            name = caseFormat.to(CaseFormat.UPPER_CAMEL, name);
+        }
         aliases.add(name);
         aliases.add(name.toLowerCase(Locale.ROOT));
-
         if (name.split("[A-Z]").length > 2) {
             aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, name));
             aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name));
         }
-
-        return aliases.toArray(new String[0]);
+        return aliases;
     }
 
     public static <T> void putAll(String name, T object, Map<String, T> map) {
@@ -53,7 +83,6 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     public void afterScriptLoad() {
-
     }
 
     public List<String> getAliases() {

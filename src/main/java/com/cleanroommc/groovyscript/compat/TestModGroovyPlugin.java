@@ -13,12 +13,12 @@ public class TestModGroovyPlugin implements IGroovyContainer {
 
     @Override
     public @NotNull String getModId() {
-        return "test_id";
+        return GroovyScript.ID;
     }
 
     @Override
     public @NotNull String getModName() {
-        return "TestMod";
+        return GroovyScript.NAME;
     }
 
     @Override

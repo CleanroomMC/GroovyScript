@@ -16,8 +16,7 @@ import java.util.Arrays;
 public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
 
     public ThermalEvaporationPlant() {
-        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, "TEP", "tep");
-        aliases.addAll(Arrays.asList(VirtualizedMekanismRegistry.generateAliases("ThermalEvaporation")));
+        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, VirtualizedMekanismRegistry.generateAliases("ThermalEvaporation"), "TEP", "tep");
     }
 
     public RecipeBuilder recipeBuilder() {
