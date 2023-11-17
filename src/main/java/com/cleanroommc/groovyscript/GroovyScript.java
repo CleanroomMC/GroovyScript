@@ -108,6 +108,7 @@ public class GroovyScript {
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Error initializing sandbox!");
         }
+        ModSupport.INSTANCE.setup(event.getASMHarvestedData());
 
         if (NetworkUtils.isDedicatedClient()) {
             // this resource pack must be added in construction

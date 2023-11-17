@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
+import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.*;
 import com.cleanroommc.groovyscript.compat.mods.actuallyadditions.ActuallyAdditions;
 import com.cleanroommc.groovyscript.compat.mods.advancedmortars.AdvancedMortars;
 import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnergistics2;
@@ -18,8 +18,8 @@ import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCraftin
 import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
-import com.cleanroommc.groovyscript.compat.mods.integrateddynamics.IntegratedDynamics;
 import com.cleanroommc.groovyscript.compat.mods.inspirations.Inspirations;
+import com.cleanroommc.groovyscript.compat.mods.integrateddynamics.IntegratedDynamics;
 import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
@@ -33,6 +33,7 @@ import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +43,7 @@ import java.util.Map;
 
 public class ModSupport implements IDynamicGroovyProperty {
 
-    private static final Map<String, Container<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, GroovyContainer<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
     private static boolean frozen = false;
 
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
@@ -74,36 +75,83 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final Container<TinkersConstruct> TINKERS_CONSTRUCT = new Container<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new, "ticon", "tinkersconstruct");
     public static final Container<Woot> WOOT = new Container<>("woot", "Woot", Woot::new);
 
-    public static Collection<Container<? extends ModPropertyContainer>> getAllContainers() {
+    public static Collection<GroovyContainer<? extends ModPropertyContainer>> getAllContainers() {
         return new ObjectOpenHashSet<>(containers.values());
     }
 
     private ModSupport() {
     }
 
+    @ApiStatus.Internal
+    public void setup(ASMDataTable dataTable) {
+        for (ASMDataTable.ASMData data : dataTable.getAll(GroovyPlugin.class.getCanonicalName())) {
+            try {
+                registerContainer((IGroovyContainer) Class.forName(data.getClassName()).newInstance());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                GroovyScript.LOGGER.error("Could not initialize Groovy Container '{}'", data.getClassName());
+            } catch (ClassCastException e) {
+                GroovyScript.LOGGER.error("Classes annotated with {} must implement {}", GroovyPlugin.class.getSimpleName(), IGroovyContainer.class.getSimpleName());
+            }
+        }
+    }
+
+    public void registerContainer(IGroovyContainer container) {
+        if (container instanceof GroovyContainer) {
+            GroovyScript.LOGGER.error("IGroovyContainer must not extend {}", GroovyContainer.class.getSimpleName());
+            return;
+        }
+        // if (!Loader.isModLoaded(container.getModId())) return;
+        ModPropertyContainer modPropertyContainer = container.createModPropertyContainer();
+        if (modPropertyContainer == null) {
+            modPropertyContainer = new ModPropertyContainer();
+        }
+        new ExternalModContainer(container, modPropertyContainer);
+    }
+
+    void registerContainer(GroovyContainer<?> container) {
+        containers.put(container.getModId(), container);
+        for (String alias : container.getAliases()) {
+            GroovyContainer<?> container2 = containers.put(alias, container);
+            if (container2 != null) {
+                throw new IllegalArgumentException("Alias already exists for: " + container.getModId() + " mod.");
+            }
+        }
+    }
+
     @Override
     @Nullable
     public Object getProperty(String name) {
-        Container<?> container = containers.get(name);
-        if (container != null) {
-            return container.modProperty.get();
-        }
-        return null;
+        GroovyContainer<?> container = containers.get(name);
+        return container != null ? container.get() : null;
     }
 
     @GroovyBlacklist
     @ApiStatus.Internal
     public static void init() {
         frozen = true;
-        for (Container<?> container : getAllContainers()) {
+        for (GroovyContainer<?> container : getAllContainers()) {
             if (container.isLoaded()) {
+                container.onCompatLoaded(container, reg -> container.get().addRegistry(reg));
                 container.get().initialize();
             }
         }
     }
 
+    @NotNull
+    public GroovyContainer<?> getContainer(String mod) {
+        if (!containers.containsKey(mod)) {
+            throw new IllegalStateException("There is no compat registered for '" + mod + "'!");
+        }
+        return containers.get(mod);
+    }
+
+    /**
+     * Will not be removed but made private and renamed to InternalContainer
+     */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "0.8.0")
     @SuppressWarnings("all")
-    public static class Container<T extends ModPropertyContainer> {
+    public static class Container<T extends ModPropertyContainer> extends GroovyContainer<T> {
 
         private final String modId, modName;
         private final Supplier<T> modProperty;
@@ -117,36 +165,38 @@ public class ModSupport implements IDynamicGroovyProperty {
             if (frozen) {
                 throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + modName + "' too late.");
             }
+            if (containers.containsKey(modId)) {
+                throw new IllegalStateException("Compat was already added for " + modId + "!");
+            }
             this.modId = modId;
             this.modName = modName;
             this.modProperty = Suppliers.memoize(modProperty);
             this.loaded = Loader.isModLoaded(modId);
-            containers.put(modId, this);
-            for (String alias : aliases) {
-                Container<?> container = containers.put(alias, this);
-                if (container != null) {
-                    throw new IllegalArgumentException("Alias already exists for: " + container.modId + " mod.");
-                }
-            }
+            ModSupport.INSTANCE.registerContainer(this);
         }
 
+        @Override
         public boolean isLoaded() {
             return loaded;
         }
 
-        public String getId() {
-            return modId;
-        }
-
+        @Override
         public T get() {
             return modProperty == null ? null : isLoaded() ? modProperty.get() : null;
         }
 
         @Override
-        public String toString() {
+        public @NotNull String getModId() {
+            return modId;
+        }
+
+        @Override
+        public @NotNull String getModName() {
             return modName;
         }
 
+        @Override
+        public void onCompatLoaded(GroovyContainer<?> container, IGroovyCompatRegistryContainer registry) {
+        }
     }
-
 }
