@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
-import com.cleanroommc.groovyscript.api.IGroovyCompatRegistryContainer;
 import com.cleanroommc.groovyscript.api.IGroovyContainer;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +21,12 @@ public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> 
         this.modId = groovyContainer.getModId();
         this.modName = groovyContainer.getModName();
         this.aliases = Collections.unmodifiableCollection(groovyContainer.getAliases());
+        if (ModSupport.isFrozen()) {
+            throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + modName + "' too late.");
+        }
+        if (ModSupport.INSTANCE.hasCompatFor(modId)) {
+            throw new IllegalStateException("Compat was already added for " + modId + "!");
+        }
         ModSupport.INSTANCE.registerContainer(this);
     }
 
@@ -35,6 +40,11 @@ public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> 
         return modName;
     }
 
+    @Override
+    public boolean isLoaded() {
+        return true;
+    }
+
     @NotNull
     @Override
     public Collection<String> getAliases() {
@@ -42,8 +52,8 @@ public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> 
     }
 
     @Override
-    public void onCompatLoaded(GroovyContainer<?> container, IGroovyCompatRegistryContainer registry) {
-        groovyContainer.onCompatLoaded(container, registry);
+    public void onCompatLoaded(GroovyContainer<?> container) {
+        groovyContainer.onCompatLoaded(container);
     }
 
     @Override

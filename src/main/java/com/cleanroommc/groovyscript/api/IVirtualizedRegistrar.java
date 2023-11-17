@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 @ApiStatus.NonExtendable
-public interface IGroovyCompatRegistryContainer {
+public interface IVirtualizedRegistrar {
 
     void addRegistry(VirtualizedRegistry<?> registry);
 

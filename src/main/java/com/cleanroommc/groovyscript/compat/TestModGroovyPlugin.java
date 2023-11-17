@@ -2,14 +2,13 @@ package com.cleanroommc.groovyscript.compat;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
-import com.cleanroommc.groovyscript.api.IGroovyCompatRegistryContainer;
-import com.cleanroommc.groovyscript.api.IGroovyContainer;
+import com.cleanroommc.groovyscript.api.IGroovyCompat;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import org.jetbrains.annotations.NotNull;
 
 @GroovyPlugin
-public class TestModGroovyPlugin implements IGroovyContainer {
+public class TestModGroovyPlugin implements IGroovyCompat {
 
     @Override
     public @NotNull String getModId() {
@@ -22,8 +21,8 @@ public class TestModGroovyPlugin implements IGroovyContainer {
     }
 
     @Override
-    public void onCompatLoaded(GroovyContainer<?> container, IGroovyCompatRegistryContainer registry) {
+    public void onCompatLoaded(GroovyContainer<?> container) {
         GroovyScript.LOGGER.info("TestMod container loaded");
-        registry.addRegistry(VanillaModule.furnace);
+        container.getVirtualizedRegistrar().addRegistry(VanillaModule.furnace);
     }
 }

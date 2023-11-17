@@ -155,7 +155,7 @@ crafting.removeByInput(item('minecraft:iron_ingot')) // Remove all recipes conta
 
 
 // Furnace
-mods.test_id.furnace.add(ore('ingotIron'), item('minecraft:diamond')) // exp has a default value of 0.1
+mods.groovyscript.furnace.add(ore('ingotIron'), item('minecraft:diamond')) // exp has a default value of 0.1
 furnace.add(item('minecraft:nether_star'), item('minecraft:clay') * 64, 13)
 
 furnace.recipeBuilder()

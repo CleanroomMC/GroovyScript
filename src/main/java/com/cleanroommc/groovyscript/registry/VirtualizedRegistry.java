@@ -36,7 +36,7 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
 
     public VirtualizedRegistry(boolean generate, @NotNull Collection<String> aliases, String... aliases1) {
         List<String> aliases2 = aliases.isEmpty() ? new ArrayList<>() : new ArrayList<>(aliases);
-        if (generate) VirtualizedRegistry.generateAliases(aliases, getClass().getSimpleName());
+        if (generate) generateAliases(aliases2, getClass().getSimpleName());
         Collections.addAll(aliases2, aliases1);
         aliases2 = aliases2.stream().distinct().collect(Collectors.toList());
         this.aliases = Collections.unmodifiableList(aliases2);

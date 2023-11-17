@@ -28,8 +28,6 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.mods.woot.Woot;
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
@@ -47,32 +45,32 @@ public class ModSupport implements IDynamicGroovyProperty {
 
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
 
-    public static final Container<ActuallyAdditions> ACTUALLY_ADDITIONS = new Container<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
-    public static final Container<AdvancedMortars> ADVANCED_MORTARS = new Container<>("advancedmortars", "Advanced Mortars", AdvancedMortars::new);
-    public static final Container<AppliedEnergistics2> APPLIED_ENERGISTICS_2 = new Container<>("appliedenergistics2", "Applied Energistics 2", AppliedEnergistics2::new, "ae2");
-    public static final Container<AstralSorcery> ASTRAL_SORCERY = new Container<>("astralsorcery", "Astral Sorcery", AstralSorcery::new, "astral", "astral_sorcery", "as");
-    public static final Container<Avaritia> AVARITIA = new Container<>("avaritia", "Avaritia", Avaritia::new);
-    public static final Container<BloodMagic> BLOOD_MAGIC = new Container<>("bloodmagic", "Blood Magic: Alchemical Wizardry", BloodMagic::new, "bm");
-    public static final Container<Botania> BOTANIA = new Container<>("botania", "Botania", Botania::new);
-    public static final Container<Chisel> CHISEL = new Container<>("chisel", "Chisel", Chisel::new);
-    public static final Container<CompactMachines> COMPACT_MACHINES = new Container<>("compactmachines3", "Compact Machines 3", CompactMachines::new, "compactmachines");
-    public static final Container<DraconicEvolution> DRACONIC_EVOLUTION = new Container<>("draconicevolution", "Draconic Evolution", DraconicEvolution::new, "de");
-    public static final Container<EnderIO> ENDER_IO = new Container<>("enderio", "Ender IO", EnderIO::new, "eio");
-    public static final Container<EvilCraft> EVILCRAFT = new Container<>("evilcraft", "EvilCraft", EvilCraft::new);
-    public static final Container<ExtendedCrafting> EXTENDED_CRAFTING = new Container<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
-    public static final Container<Forestry> FORESTRY = new Container<>("forestry", "Forestry", Forestry::new);
-    public static final Container<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new Container<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
-    public static final Container<IC2> INDUSTRIALCRAFT = new Container<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
-    public static final Container<Inspirations> INSPIRATIONS = new Container<>("inspirations", "Inspirations", Inspirations::new);
-    public static final Container<IntegratedDynamics> INTEGRATED_DYNAMICS = new Container<>("integrateddynamics", "Integrated Dynamics", IntegratedDynamics::new, "id");
-    public static final Container<JustEnoughItems> JEI = new Container<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
-    public static final Container<Mekanism> MEKANISM = new Container<>("mekanism", "Mekanism", Mekanism::new);
-    public static final Container<Roots> ROOTS = new Container<>("roots", "Roots 3", Roots::new);
-    public static final Container<Thaumcraft> THAUMCRAFT = new Container<>("thaumcraft", "Thaumcraft", Thaumcraft::new, "tc", "thaum");
-    public static final Container<ThermalExpansion> THERMAL_EXPANSION = new Container<>("thermalexpansion", "Thermal Expansion", ThermalExpansion::new, "te", "thermal");
-    public static final Container<TinkersComplement> TINKERS_COMPLEMENT = new Container<>("tcomplement", "Tinkers Complement", TinkersComplement::new, "tcomp", "tinkerscomplement");
-    public static final Container<TinkersConstruct> TINKERS_CONSTRUCT = new Container<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new, "ticon", "tinkersconstruct");
-    public static final Container<Woot> WOOT = new Container<>("woot", "Woot", Woot::new);
+    public static final GroovyContainer<ActuallyAdditions> ACTUALLY_ADDITIONS = new InternalModContainer<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
+    public static final GroovyContainer<AdvancedMortars> ADVANCED_MORTARS = new InternalModContainer<>("advancedmortars", "Advanced Mortars", AdvancedMortars::new);
+    public static final GroovyContainer<AppliedEnergistics2> APPLIED_ENERGISTICS_2 = new InternalModContainer<>("appliedenergistics2", "Applied Energistics 2", AppliedEnergistics2::new, "ae2");
+    public static final GroovyContainer<AstralSorcery> ASTRAL_SORCERY = new InternalModContainer<>("astralsorcery", "Astral Sorcery", AstralSorcery::new, "astral", "astral_sorcery", "as");
+    public static final GroovyContainer<Avaritia> AVARITIA = new InternalModContainer<>("avaritia", "Avaritia", Avaritia::new);
+    public static final GroovyContainer<BloodMagic> BLOOD_MAGIC = new InternalModContainer<>("bloodmagic", "Blood Magic: Alchemical Wizardry", BloodMagic::new, "bm");
+    public static final GroovyContainer<Botania> BOTANIA = new InternalModContainer<>("botania", "Botania", Botania::new);
+    public static final GroovyContainer<Chisel> CHISEL = new InternalModContainer<>("chisel", "Chisel", Chisel::new);
+    public static final GroovyContainer<CompactMachines> COMPACT_MACHINES = new InternalModContainer<>("compactmachines3", "Compact Machines 3", CompactMachines::new, "compactmachines");
+    public static final GroovyContainer<DraconicEvolution> DRACONIC_EVOLUTION = new InternalModContainer<>("draconicevolution", "Draconic Evolution", DraconicEvolution::new, "de");
+    public static final GroovyContainer<EnderIO> ENDER_IO = new InternalModContainer<>("enderio", "Ender IO", EnderIO::new, "eio");
+    public static final GroovyContainer<EvilCraft> EVILCRAFT = new InternalModContainer<>("evilcraft", "EvilCraft", EvilCraft::new);
+    public static final GroovyContainer<ExtendedCrafting> EXTENDED_CRAFTING = new InternalModContainer<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
+    public static final GroovyContainer<Forestry> FORESTRY = new InternalModContainer<>("forestry", "Forestry", Forestry::new);
+    public static final GroovyContainer<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new InternalModContainer<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
+    public static final GroovyContainer<IC2> INDUSTRIALCRAFT = new InternalModContainer<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
+    public static final GroovyContainer<Inspirations> INSPIRATIONS = new InternalModContainer<>("inspirations", "Inspirations", Inspirations::new);
+    public static final GroovyContainer<IntegratedDynamics> INTEGRATED_DYNAMICS = new InternalModContainer<>("integrateddynamics", "Integrated Dynamics", IntegratedDynamics::new, "id");
+    public static final GroovyContainer<JustEnoughItems> JEI = new InternalModContainer<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
+    public static final GroovyContainer<Mekanism> MEKANISM = new InternalModContainer<>("mekanism", "Mekanism", Mekanism::new);
+    public static final GroovyContainer<Roots> ROOTS = new InternalModContainer<>("roots", "Roots 3", Roots::new);
+    public static final GroovyContainer<Thaumcraft> THAUMCRAFT = new InternalModContainer<>("thaumcraft", "Thaumcraft", Thaumcraft::new, "tc", "thaum");
+    public static final GroovyContainer<ThermalExpansion> THERMAL_EXPANSION = new InternalModContainer<>("thermalexpansion", "Thermal Expansion", ThermalExpansion::new, "te", "thermal");
+    public static final GroovyContainer<TinkersComplement> TINKERS_COMPLEMENT = new InternalModContainer<>("tcomplement", "Tinkers Complement", TinkersComplement::new, "tcomp", "tinkerscomplement");
+    public static final GroovyContainer<TinkersConstruct> TINKERS_CONSTRUCT = new InternalModContainer<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new, "ticon", "tinkersconstruct");
+    public static final GroovyContainer<Woot> WOOT = new InternalModContainer<>("woot", "Woot", Woot::new);
 
     public static Collection<GroovyContainer<? extends ModPropertyContainer>> getAllContainers() {
         return Collections.unmodifiableList(containerList);
@@ -85,16 +83,16 @@ public class ModSupport implements IDynamicGroovyProperty {
     public void setup(ASMDataTable dataTable) {
         for (ASMDataTable.ASMData data : dataTable.getAll(GroovyPlugin.class.getCanonicalName())) {
             try {
-                registerContainer((IGroovyContainer) Class.forName(data.getClassName()).newInstance());
+                registerContainer((IGroovyCompat) Class.forName(data.getClassName()).newInstance());
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 GroovyScript.LOGGER.error("Could not initialize Groovy Container '{}'", data.getClassName());
             } catch (ClassCastException e) {
-                GroovyScript.LOGGER.error("Classes annotated with {} must implement {}", GroovyPlugin.class.getSimpleName(), IGroovyContainer.class.getSimpleName());
+                GroovyScript.LOGGER.error("Classes annotated with {} must implement {}", GroovyPlugin.class.getSimpleName(), IGroovyCompat.class.getSimpleName());
             }
         }
     }
 
-    public <T extends IGroovyContainer> void registerContainer(Class<T> clazz) {
+    public <T extends IGroovyCompat> void registerContainer(Class<T> clazz) {
         if (clazz.isAnnotationPresent(GroovyPlugin.class)) return;
         try {
             registerContainer(clazz.newInstance());
@@ -103,7 +101,7 @@ public class ModSupport implements IDynamicGroovyProperty {
         }
     }
 
-    private void registerContainer(IGroovyContainer container) {
+    private void registerContainer(IGroovyCompat container) {
         if (container instanceof GroovyContainer) {
             GroovyScript.LOGGER.error("IGroovyContainer must not extend {}", GroovyContainer.class.getSimpleName());
             return;
@@ -143,7 +141,7 @@ public class ModSupport implements IDynamicGroovyProperty {
         frozen = true;
         for (GroovyContainer<?> container : containerList) {
             if (container.isLoaded()) {
-                container.onCompatLoaded(container, reg -> container.get().addRegistry(reg));
+                container.onCompatLoaded(container);
                 container.get().initialize();
             }
         }
@@ -157,58 +155,11 @@ public class ModSupport implements IDynamicGroovyProperty {
         return containers.get(mod);
     }
 
-    /**
-     * Will not be removed but made private and renamed to InternalContainer
-     */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "0.8.0")
-    @SuppressWarnings("all")
-    public static class Container<T extends ModPropertyContainer> extends GroovyContainer<T> {
+    public boolean hasCompatFor(String mod) {
+        return containers.containsKey(mod);
+    }
 
-        private final String modId, modName;
-        private final Supplier<T> modProperty;
-        private final boolean loaded;
-
-        public Container(String modId, String modName, @NotNull Supplier<T> modProperty) {
-            this(modId, modName, modProperty, new String[0]);
-        }
-
-        public Container(String modId, String modName, @NotNull Supplier<T> modProperty, String... aliases) {
-            if (frozen) {
-                throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + modName + "' too late.");
-            }
-            if (containers.containsKey(modId)) {
-                throw new IllegalStateException("Compat was already added for " + modId + "!");
-            }
-            this.modId = modId;
-            this.modName = modName;
-            this.modProperty = Suppliers.memoize(modProperty);
-            this.loaded = Loader.isModLoaded(modId);
-            ModSupport.INSTANCE.registerContainer(this);
-        }
-
-        @Override
-        public boolean isLoaded() {
-            return loaded;
-        }
-
-        @Override
-        public T get() {
-            return modProperty == null ? null : isLoaded() ? modProperty.get() : null;
-        }
-
-        @Override
-        public @NotNull String getModId() {
-            return modId;
-        }
-
-        @Override
-        public @NotNull String getModName() {
-            return modName;
-        }
-
-        @Override
-        public void onCompatLoaded(GroovyContainer<?> container, IGroovyCompatRegistryContainer registry) {
-        }
+    public static boolean isFrozen() {
+        return frozen;
     }
 }
