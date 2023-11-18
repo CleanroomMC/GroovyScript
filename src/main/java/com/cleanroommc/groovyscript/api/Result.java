@@ -5,6 +5,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.NoSuchElementException;
 
+/**
+ * An interface that either holds a value or an error.
+ *
+ * @param <T> value type
+ */
 public interface Result<T> {
 
     static <T> Result<T> error() {
