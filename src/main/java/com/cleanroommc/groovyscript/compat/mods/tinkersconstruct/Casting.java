@@ -63,7 +63,7 @@ public class Casting implements IDynamicGroovyProperty {
             return true;
         }
 
-        public boolean removeByOutput(ItemStack output){
+        public boolean removeByOutput(ItemStack output) {
             if (TinkerRegistryAccessor.getTableCastRegistry().removeIf(recipe -> {
                 boolean found = recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER).isItemEqual(output);
                 if (found) addBackup(recipe);
@@ -153,7 +153,8 @@ public class Casting implements IDynamicGroovyProperty {
             @Override
             public @Nullable ICastingRecipe register() {
                 if (!validate()) return null;
-                CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast) : null, fluidInput.get(0), time, consumesCast, false);
+                CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast)
+                                                                                     : null, fluidInput.get(0), time, consumesCast, false);
                 add(recipe);
                 return recipe;
             }
@@ -186,7 +187,7 @@ public class Casting implements IDynamicGroovyProperty {
             return true;
         }
 
-        public boolean removeByOutput(ItemStack output){
+        public boolean removeByOutput(ItemStack output) {
             if (TinkerRegistryAccessor.getBasinCastRegistry().removeIf(recipe -> {
                 boolean found = ItemStack.areItemStacksEqual(recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER), output);
                 if (found) addBackup(recipe);
@@ -277,7 +278,8 @@ public class Casting implements IDynamicGroovyProperty {
             @Override
             public @Nullable ICastingRecipe register() {
                 if (!validate()) return null;
-                CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast) : null, fluidInput.get(0), time, consumesCast, false);
+                CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast)
+                                                                                     : null, fluidInput.get(0), time, consumesCast, false);
                 add(recipe);
                 return recipe;
             }

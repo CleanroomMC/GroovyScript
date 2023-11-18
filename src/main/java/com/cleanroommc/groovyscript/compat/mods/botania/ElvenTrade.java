@@ -29,7 +29,8 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
     }
 
     protected Object[] convertIngredients(IIngredient[] inputs) {
-        return Arrays.stream(inputs).map(input -> input instanceof OreDictIngredient ? ((OreDictIngredient) input).getOreDict() : input.getMatchingStacks()[0]).toArray();
+        return Arrays.stream(inputs).map(input -> input instanceof OreDictIngredient ? ((OreDictIngredient) input).getOreDict()
+                                                                                     : input.getMatchingStacks()[0]).toArray();
     }
 
     public RecipeElvenTrade add(ItemStack[] outputs, IIngredient[] inputs) {
@@ -72,7 +73,8 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
         List<Object> converted = Arrays.asList(convertIngredients(inputs));
         List<IIngredient> list = Arrays.asList(inputs);
         if (BotaniaAPI.elvenTradeRecipes.removeIf(recipe -> {
-            boolean found = recipe.getInputs().stream().allMatch(input -> input instanceof String ? converted.contains(input) : list.stream().anyMatch(i -> i.test((ItemStack) input)));
+            boolean found = recipe.getInputs().stream().allMatch(input -> input instanceof String ? converted.contains(input)
+                                                                                                  : list.stream().anyMatch(i -> i.test((ItemStack) input)));
             if (found) addBackup(recipe);
             return found;
         })) return true;

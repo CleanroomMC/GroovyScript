@@ -1,13 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
 import com.cleanroommc.groovyscript.api.IGameObjectHandler;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.GroovyMaterial;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.MaterialRegistryEvent;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.ToolMaterialBuilder;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.traits.TraitRegistryEvent;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import net.minecraftforge.common.MinecraftForge;
 
 public class TinkersConstruct extends ModPropertyContainer {

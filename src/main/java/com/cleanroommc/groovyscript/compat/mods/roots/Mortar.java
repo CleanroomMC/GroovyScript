@@ -228,7 +228,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
                 List<Ingredient> ingredients = new ArrayList<>();
                 int count = output.get(0).getCount();
 
-                for (int i = 1; i <= 5; i++ ) {
+                for (int i = 1; i <= 5; i++) {
                     ingredients.add(input.get(0).toMcIngredient());
                     ItemStack copy = output.get(0).copy();
                     copy.setCount(i * count);

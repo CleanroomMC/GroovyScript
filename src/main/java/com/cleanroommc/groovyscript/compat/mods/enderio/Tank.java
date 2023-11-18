@@ -223,7 +223,8 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
             if (!validate()) return null;
             Things in = RecipeUtils.toThings(input.get(0));
             Things out = new Things().add(output.getOrEmpty(0));
-            TankMachineRecipe recipe = new TankMachineRecipe(name.toString(), isFilling, in, isFilling ? fluidOutput.get(0) : fluidInput.get(0), out, TankMachineRecipe.Logic.NONE, RecipeLevel.IGNORE);
+            TankMachineRecipe recipe = new TankMachineRecipe(name.toString(), isFilling, in, isFilling ? fluidOutput.get(0)
+                                                                                                       : fluidInput.get(0), out, TankMachineRecipe.Logic.NONE, RecipeLevel.IGNORE);
 
             ModSupport.ENDER_IO.get().tank.add(recipe);
             return recipe;

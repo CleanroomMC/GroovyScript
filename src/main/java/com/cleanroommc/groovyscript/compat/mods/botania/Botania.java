@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.IGameObjectHandler;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconCategory;
 import vazkii.botania.api.lexicon.LexiconEntry;

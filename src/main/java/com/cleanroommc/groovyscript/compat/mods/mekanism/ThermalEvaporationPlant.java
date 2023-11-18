@@ -12,8 +12,6 @@ import mekanism.common.recipe.machines.ThermalEvaporationRecipe;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-
 public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
 
     public ThermalEvaporationPlant() {

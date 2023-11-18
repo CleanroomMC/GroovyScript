@@ -41,7 +41,10 @@ public interface IVirtualizedRegistrar {
             boolean isStatic = Modifier.isStatic(field.getModifiers());
             if (!field.isAnnotationPresent(GroovyBlacklist.class) && VirtualizedRegistry.class.isAssignableFrom(field.getType()) && (!staticOnly || isStatic)) {
                 try {
-                    addRegistry((VirtualizedRegistry<?>) field.get(isStatic ? null : object));
+                    Object o = field.get(isStatic ? null : object);
+                    if (o != null) {
+                        addRegistry((VirtualizedRegistry<?>) o);
+                    }
                 } catch (IllegalAccessException e) {
                     GroovyLog.get().errorMC("Failed to register {} as virtualized registry", field.getName());
                 }

@@ -122,7 +122,8 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         public @Nullable IAnvilRecipe register() {
             if (!validate()) return null;
 
-            if (((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().stream().noneMatch(x -> x.isItemEqual(base))) ((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().add(base);
+            if (((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().stream().noneMatch(x -> x.isItemEqual(base)))
+                ((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().add(base);
 
             IAnvilRecipe recipe = new AnvilRecipe(output.get(0), base, preserveBase);
             recipe.getInputs().addAll(input.stream().map(x -> x.toMcIngredient().getMatchingStacks()[0]).collect(Collectors.toList()));

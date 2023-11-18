@@ -2,8 +2,8 @@ package com.cleanroommc.groovyscript.compat.mods.appliedenergistics2;
 
 import appeng.api.config.TunnelType;
 import com.cleanroommc.groovyscript.api.IGameObjectHandler;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 
 public class AppliedEnergistics2 extends ModPropertyContainer {
 

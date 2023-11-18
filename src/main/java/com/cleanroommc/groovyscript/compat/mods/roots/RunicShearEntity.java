@@ -132,7 +132,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
             msg.add(!input.isEmpty(), () -> "No item inputs allowed, but found " + input.size());
             validateFluids(msg);
             msg.add(output.size() > 1 && functionMap == null, "if output is greater than 1, functionMap must be defined");
-            msg.add(entity == null , "entity must be defined and extended EntityLivingBase, instead it was {}", entity);
+            msg.add(entity == null, "entity must be defined and extended EntityLivingBase, instead it was {}", entity);
         }
 
         @Override

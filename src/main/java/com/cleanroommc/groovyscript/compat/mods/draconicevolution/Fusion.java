@@ -112,7 +112,7 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
             validateFluids(msg);
             msg.add(IngredientHelper.isEmpty(catalyst), "catalyst must not be empty");
             msg.add(tier < 0 || tier > 3, "tier must be between 0 (basic) and 3 (chaotic), yet it was {}", tier);
-            msg.add(energy <= 0 , "energy must be greater than 0, yet it was {}", energy);
+            msg.add(energy <= 0, "energy must be greater than 0, yet it was {}", energy);
         }
 
         @Override

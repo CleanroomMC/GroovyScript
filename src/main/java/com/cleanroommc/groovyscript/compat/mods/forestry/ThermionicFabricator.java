@@ -8,7 +8,6 @@ import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.core.recipes.ShapedRecipeCustom;

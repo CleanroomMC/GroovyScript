@@ -9,7 +9,6 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import groovy.lang.Closure;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

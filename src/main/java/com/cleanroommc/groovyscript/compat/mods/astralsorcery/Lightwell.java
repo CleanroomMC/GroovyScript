@@ -3,12 +3,10 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.core.mixin.astralsorcery.LiquidInteractionAccessor;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.WellLiquefactionAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -18,7 +16,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Map;
 
 public class Lightwell extends VirtualizedRegistry<WellLiquefaction.LiquefactionEntry> {

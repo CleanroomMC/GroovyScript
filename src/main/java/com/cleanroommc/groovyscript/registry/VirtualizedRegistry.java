@@ -6,7 +6,10 @@ import com.cleanroommc.groovyscript.helper.Alias;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
@@ -29,9 +32,6 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
         initBackup();
         initScripted();
     }
-
-
-
 
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
