@@ -87,10 +87,6 @@ public class ModSupport implements IDynamicGroovyProperty {
         for (ASMDataTable.ASMData data : dataTable.getAll(GroovyPlugin.class.getName().replace('.', '/'))) {
             try {
                 Class<?> clazz = Class.forName(data.getClassName().replace('/', '.'));
-                if (!GroovyPlugin.class.isAssignableFrom(clazz)) {
-                    GroovyScript.LOGGER.error("Classes annotated with {} must implement {}", GroovyPlugin.class.getSimpleName(), GroovyPlugin.class.getSimpleName());
-                    continue;
-                }
                 ExternalModContainer emc = registerContainer(findAndSetCompat(clazz));
                 if (emc != null) setContainer(clazz, emc);
             } catch (ClassNotFoundException | InstantiationException e) {

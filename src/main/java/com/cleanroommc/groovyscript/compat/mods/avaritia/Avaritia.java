@@ -6,9 +6,4 @@ public class Avaritia extends ModPropertyContainer {
 
     public final ExtremeCrafting extremeCrafting = new ExtremeCrafting();
     public final Compressor compressor = new Compressor();
-
-    public Avaritia() {
-        addRegistry(this.extremeCrafting);
-        addRegistry(this.compressor);
-    }
 }

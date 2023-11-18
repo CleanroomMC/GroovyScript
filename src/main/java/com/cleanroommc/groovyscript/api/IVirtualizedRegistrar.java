@@ -13,11 +13,11 @@ public interface IVirtualizedRegistrar {
 
     default void addFieldsOf(Object object) {
         for (Field field : object.getClass().getDeclaredFields()) {
-            if (VirtualizedRegistry.class.isAssignableFrom(field.getType()) && field.isAccessible()) {
+            if (!field.isAnnotationPresent(GroovyBlacklist.class) && VirtualizedRegistry.class.isAssignableFrom(field.getType())) {
                 try {
                     addRegistry((VirtualizedRegistry<?>) field.get(Modifier.isStatic(field.getModifiers()) ? null : object));
                 } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
+                    GroovyLog.get().errorMC("Failed to register {} as virtualized registry", field.getName());
                 }
             }
         }
