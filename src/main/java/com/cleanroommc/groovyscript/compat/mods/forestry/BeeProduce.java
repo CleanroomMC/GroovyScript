@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.forestry.recipe.BeeProduct;
 import com.cleanroommc.groovyscript.core.mixin.forestry.AlleleRegistryAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.ApiStatus;
 public class BeeProduce extends ForestryRegistry<BeeProduct> {
 
     public BeeProduce() {
-        super(VirtualizedRegistry.generateAliases("Produce"));
+        super(Alias.generateOf("Produce"));
     }
 
     @Override

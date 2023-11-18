@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -27,8 +28,8 @@ public class Casting implements IDynamicGroovyProperty {
     public final Basin basin = new Basin();
 
     public Casting() {
-        for (String s : VirtualizedRegistry.generateAliases("Table")) this.properties.put(s, this.table);
-        for (String s : VirtualizedRegistry.generateAliases("Basin")) this.properties.put(s, this.basin);
+        for (String s : Alias.generateOf("Table")) this.properties.put(s, this.table);
+        for (String s : Alias.generateOf("Basin")) this.properties.put(s, this.basin);
     }
 
     @Override

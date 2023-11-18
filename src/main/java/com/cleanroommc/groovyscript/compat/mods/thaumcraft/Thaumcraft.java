@@ -11,6 +11,7 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStac
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.Warp;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -45,9 +46,9 @@ public class Thaumcraft extends ModPropertyContainer {
         addRegistry(smeltingBonus);
         addRegistry(warp);
         addRegistry(aspectHelper);
-        VirtualizedRegistry.putAll("ArcaneWorkbench", arcaneWorkbench, altNames);
-        VirtualizedRegistry.putAll("Aspect", aspect, altNames);
-        VirtualizedRegistry.putAll("Research", research, altNames);
+        Alias.putAll("ArcaneWorkbench", arcaneWorkbench, altNames);
+        Alias.putAll("Aspect", aspect, altNames);
+        Alias.putAll("Research", research, altNames);
     }
 
     @Override

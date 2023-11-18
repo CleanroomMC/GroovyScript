@@ -4,9 +4,9 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
 import mekanism.common.recipe.machines.EnrichmentRecipe;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRecipe> {
 
     public EnrichmentChamber() {
-        super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, VirtualizedRegistry.generateAliases("Enricher"));
+        super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, Alias.generateOf("Enricher").andGenerateOfClass(EnrichmentChamber.class));
     }
 
     public RecipeBuilder recipeBuilder() {

@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.ic2.exp;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.core.mixin.ic2.SemiFluidFuelManagerAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class FluidGenerator extends VirtualizedRegistry<Pair<String, ISemiFluidFuelManager.FuelProperty>> {
 
     public FluidGenerator() {
-        super(VirtualizedRegistry.generateAliases("SemiFluidGenerator"));
+        super(Alias.generateOf("SemiFluidGenerator"));
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.blakebr0.extendedcrafting.crafting.CombinationRecipeManager;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -20,7 +21,7 @@ import java.util.Collection;
 public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> {
 
     public CombinationCrafting() {
-        super(VirtualizedRegistry.generateAliases("Combination"));
+        super(Alias.generateOf("Combination"));
     }
 
     @Override

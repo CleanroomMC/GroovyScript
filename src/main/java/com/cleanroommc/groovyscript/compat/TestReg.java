@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
@@ -11,7 +12,7 @@ public class TestReg extends VirtualizedRegistry<String> {
     private static final Set<String> REG = new ObjectOpenHashSet<>();
 
     public TestReg() {
-        super(false, generateAliases("Test"));
+        super(Alias.generateOf("Test"));
     }
 
     @Override

@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
     public AspectHelper() {
-        super("AspectHelper", "aspect_helper");
     }
 
     @Override

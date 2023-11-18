@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.core.mixin.forestry.FabricatorRecipeManagerAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -25,7 +26,7 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
     public final Smelting smelting = new Smelting();
 
     public ThermionicFabricator() {
-        super(VirtualizedRegistry.generateAliases("Fabricator"));
+        super(Alias.generateOf("Fabricator"));
     }
 
     public RecipeBuilder recipeBuilder() {

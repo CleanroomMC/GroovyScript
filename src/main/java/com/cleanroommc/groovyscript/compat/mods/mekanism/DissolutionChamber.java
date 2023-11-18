@@ -5,8 +5,8 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionRecipe> {
 
     public DissolutionChamber() {
-        super(RecipeHandler.Recipe.CHEMICAL_DISSOLUTION_CHAMBER, VirtualizedRegistry.generateAliases("Dissolver"));
+        super(RecipeHandler.Recipe.CHEMICAL_DISSOLUTION_CHAMBER, Alias.generateOf("Dissolver").andGenerateOfClass(DissolutionChamber.class));
     }
 
     public RecipeBuilder recipeBuilder() {
