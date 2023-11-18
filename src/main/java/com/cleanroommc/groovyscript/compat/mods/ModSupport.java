@@ -84,11 +84,11 @@ public class ModSupport implements IDynamicGroovyProperty {
 
     @ApiStatus.Internal
     public void setup(ASMDataTable dataTable) {
-        for (ASMDataTable.ASMData data : dataTable.getAll(GroovyPlugin.class.getCanonicalName())) {
+        for (ASMDataTable.ASMData data : dataTable.getAll(GroovyPlugin.class.getName().replace('.', '/'))) {
             try {
-                Class<?> clazz = Class.forName(data.getClassName());
-                if (!IGroovyCompat.class.isAssignableFrom(clazz)) {
-                    GroovyScript.LOGGER.error("Classes annotated with {} must implement {}", GroovyPlugin.class.getSimpleName(), IGroovyCompat.class.getSimpleName());
+                Class<?> clazz = Class.forName(data.getClassName().replace('/', '.'));
+                if (!GroovyPlugin.class.isAssignableFrom(clazz)) {
+                    GroovyScript.LOGGER.error("Classes annotated with {} must implement {}", GroovyPlugin.class.getSimpleName(), GroovyPlugin.class.getSimpleName());
                     continue;
                 }
                 ExternalModContainer emc = registerContainer(findAndSetCompat(clazz));
@@ -101,8 +101,7 @@ public class ModSupport implements IDynamicGroovyProperty {
         }
     }
 
-    public <T extends IGroovyCompat> void registerContainer(Class<T> clazz) {
-        if (clazz.isAnnotationPresent(GroovyPlugin.class)) return;
+    public <T extends GroovyPlugin> void registerContainer(Class<T> clazz) {
         try {
             registerContainer(clazz.newInstance());
         } catch (InstantiationException | IllegalAccessException e) {
@@ -110,7 +109,7 @@ public class ModSupport implements IDynamicGroovyProperty {
         }
     }
 
-    private ExternalModContainer registerContainer(IGroovyCompat container) {
+    private ExternalModContainer registerContainer(GroovyPlugin container) {
         if (container instanceof GroovyContainer) {
             GroovyScript.LOGGER.error("IGroovyContainer must not extend {}", GroovyContainer.class.getSimpleName());
             return null;
@@ -172,13 +171,13 @@ public class ModSupport implements IDynamicGroovyProperty {
         return frozen;
     }
 
-    private static IGroovyCompat findAndSetCompat(Class<?> clazz) throws Throwable {
+    private static GroovyPlugin findAndSetCompat(Class<?> clazz) throws Throwable {
         Field instanceField = null;
-        IGroovyCompat instance = null;
+        GroovyPlugin instance = null;
         // try to find a field annotated with GroovyPlugin.Instance
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(GroovyPlugin.Instance.class) &&
-                IGroovyCompat.class.isAssignableFrom(field.getType()) &&
+                GroovyPlugin.class.isAssignableFrom(field.getType()) &&
                 Modifier.isStatic(field.getModifiers())) {
                 instanceField = field;
                 Object o = ReflectionHelper.getStaticField(instanceField);
@@ -189,7 +188,7 @@ public class ModSupport implements IDynamicGroovyProperty {
                         continue;
                     }
                     // field already has a value
-                    instance = (IGroovyCompat) o;
+                    instance = (GroovyPlugin) o;
                 }
                 break;
             }
@@ -197,7 +196,7 @@ public class ModSupport implements IDynamicGroovyProperty {
         if (instance == null) {
             // no field found or the field had no value
             // create new instance
-            instance = (IGroovyCompat) clazz.newInstance();
+            instance = (GroovyPlugin) clazz.newInstance();
             if (instanceField != null) {
                 // set the instance to the field
                 ReflectionHelper.setStaticField(instanceField, instance);
@@ -210,7 +209,7 @@ public class ModSupport implements IDynamicGroovyProperty {
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(GroovyPlugin.Instance.class) &&
                 IGroovyContainer.class.isAssignableFrom(field.getType()) &&
-                !IGroovyCompat.class.isAssignableFrom(field.getType()) &&
+                !GroovyPlugin.class.isAssignableFrom(field.getType()) &&
                 Modifier.isStatic(field.getModifiers())) {
                 Object o = ReflectionHelper.getStaticField(field);
                 if (o == null) {

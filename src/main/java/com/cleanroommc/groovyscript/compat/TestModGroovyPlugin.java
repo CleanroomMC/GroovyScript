@@ -2,17 +2,15 @@ package com.cleanroommc.groovyscript.compat;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
-import com.cleanroommc.groovyscript.api.IGroovyCompat;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import org.jetbrains.annotations.NotNull;
 
-@GroovyPlugin
-public class TestModGroovyPlugin implements IGroovyCompat {
+public class TestModGroovyPlugin implements GroovyPlugin {
 
-    @GroovyPlugin.Instance
+    @Instance
     public static final TestModGroovyPlugin INSTANCE = null;
-    @GroovyPlugin.Instance
+    @Instance
     public static final GroovyContainer<?> container = null;
 
     @Override
