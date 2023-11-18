@@ -28,6 +28,7 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.mods.woot.Woot;
+import com.cleanroommc.groovyscript.helper.ReflectionHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
@@ -35,6 +36,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class ModSupport implements IDynamicGroovyProperty {
@@ -83,11 +86,17 @@ public class ModSupport implements IDynamicGroovyProperty {
     public void setup(ASMDataTable dataTable) {
         for (ASMDataTable.ASMData data : dataTable.getAll(GroovyPlugin.class.getCanonicalName())) {
             try {
-                registerContainer((IGroovyCompat) Class.forName(data.getClassName()).newInstance());
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                Class<?> clazz = Class.forName(data.getClassName());
+                if (!IGroovyCompat.class.isAssignableFrom(clazz)) {
+                    GroovyScript.LOGGER.error("Classes annotated with {} must implement {}", GroovyPlugin.class.getSimpleName(), IGroovyCompat.class.getSimpleName());
+                    continue;
+                }
+                ExternalModContainer emc = registerContainer(findAndSetCompat(clazz));
+                if (emc != null) setContainer(clazz, emc);
+            } catch (ClassNotFoundException | InstantiationException e) {
                 GroovyScript.LOGGER.error("Could not initialize Groovy Container '{}'", data.getClassName());
-            } catch (ClassCastException e) {
-                GroovyScript.LOGGER.error("Classes annotated with {} must implement {}", GroovyPlugin.class.getSimpleName(), IGroovyCompat.class.getSimpleName());
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -101,17 +110,17 @@ public class ModSupport implements IDynamicGroovyProperty {
         }
     }
 
-    private void registerContainer(IGroovyCompat container) {
+    private ExternalModContainer registerContainer(IGroovyCompat container) {
         if (container instanceof GroovyContainer) {
             GroovyScript.LOGGER.error("IGroovyContainer must not extend {}", GroovyContainer.class.getSimpleName());
-            return;
+            return null;
         }
-        if (!Loader.isModLoaded(container.getModId())) return;
+        if (!Loader.isModLoaded(container.getModId())) return null;
         ModPropertyContainer modPropertyContainer = container.createModPropertyContainer();
         if (modPropertyContainer == null) {
             modPropertyContainer = new ModPropertyContainer();
         }
-        new ExternalModContainer(container, modPropertyContainer);
+        return new ExternalModContainer(container, modPropertyContainer);
     }
 
     void registerContainer(GroovyContainer<?> container) {
@@ -161,5 +170,54 @@ public class ModSupport implements IDynamicGroovyProperty {
 
     public static boolean isFrozen() {
         return frozen;
+    }
+
+    private static IGroovyCompat findAndSetCompat(Class<?> clazz) throws Throwable {
+        Field instanceField = null;
+        IGroovyCompat instance = null;
+        // try to find a field annotated with GroovyPlugin.Instance
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(GroovyPlugin.Instance.class) &&
+                IGroovyCompat.class.isAssignableFrom(field.getType()) &&
+                Modifier.isStatic(field.getModifiers())) {
+                instanceField = field;
+                Object o = ReflectionHelper.getStaticField(instanceField);
+                if (o != null) {
+                    if (!clazz.isAssignableFrom(o.getClass())) {
+                        // field has a value, but it is not an instance of the annotated class
+                        instanceField = null;
+                        continue;
+                    }
+                    // field already has a value
+                    instance = (IGroovyCompat) o;
+                }
+                break;
+            }
+        }
+        if (instance == null) {
+            // no field found or the field had no value
+            // create new instance
+            instance = (IGroovyCompat) clazz.newInstance();
+            if (instanceField != null) {
+                // set the instance to the field
+                ReflectionHelper.setStaticField(instanceField, instance);
+            }
+        }
+        return instance;
+    }
+
+    private static void setContainer(Class<?> clazz, GroovyContainer<?> container) throws Throwable {
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(GroovyPlugin.Instance.class) &&
+                IGroovyContainer.class.isAssignableFrom(field.getType()) &&
+                !IGroovyCompat.class.isAssignableFrom(field.getType()) &&
+                Modifier.isStatic(field.getModifiers())) {
+                Object o = ReflectionHelper.getStaticField(field);
+                if (o == null) {
+                    ReflectionHelper.setStaticField(field, container);
+                    break;
+                }
+            }
+        }
     }
 }

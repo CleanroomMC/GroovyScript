@@ -10,6 +10,11 @@ import org.jetbrains.annotations.NotNull;
 @GroovyPlugin
 public class TestModGroovyPlugin implements IGroovyCompat {
 
+    @GroovyPlugin.Instance
+    public static final TestModGroovyPlugin INSTANCE = null;
+    @GroovyPlugin.Instance
+    public static final GroovyContainer<?> container = null;
+
     @Override
     public @NotNull String getModId() {
         return GroovyScript.ID;
@@ -23,6 +28,8 @@ public class TestModGroovyPlugin implements IGroovyCompat {
     @Override
     public void onCompatLoaded(GroovyContainer<?> container) {
         GroovyScript.LOGGER.info("TestMod container loaded");
+        GroovyScript.LOGGER.info("The field is '{}'", INSTANCE);
+        GroovyScript.LOGGER.info("The container is '{}'", container);
         container.getVirtualizedRegistrar().addRegistry(VanillaModule.furnace);
     }
 }
