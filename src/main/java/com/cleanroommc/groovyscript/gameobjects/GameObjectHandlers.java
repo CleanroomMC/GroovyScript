@@ -5,7 +5,9 @@ import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterators;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,8 +21,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 
 import static com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager.SPLITTER;
 import static com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager.WILDCARD;
@@ -177,5 +183,26 @@ public class GameObjectHandlers {
             }
         }
         return textformat == null ? Result.error() : Result.some(textformat);
+    }
+
+    private static Map<String, Material> materials;
+
+    public static Result<Material> parseBlockMaterial(String mainArg, Object... args) {
+        if (materials == null) {
+            materials = new Object2ObjectOpenHashMap<>();
+            for (Field field : Material.class.getFields()) {
+                if ((field.getModifiers() & Modifier.STATIC) != 0 && field.getType() == Material.class) {
+                    try {
+                        Material material = (Material) field.get(null);
+                        materials.put(field.getName(), material);
+                        materials.put(field.getName().toLowerCase(Locale.ROOT), material);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+        Material material = materials.get(mainArg);
+        return material == null ? Result.error() : Result.some(material);
     }
 }
