@@ -61,6 +61,4 @@ public abstract class GasRecipeBuilder<T> extends AbstractRecipeBuilder<T> {
         validateItems(msg, 0, 0, 0, 0);
     }
 
-
-
 }

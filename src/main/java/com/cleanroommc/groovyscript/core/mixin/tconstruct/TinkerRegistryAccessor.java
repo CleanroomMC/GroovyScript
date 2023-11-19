@@ -17,6 +17,7 @@ import java.util.Map;
 
 @Mixin(value = TinkerRegistry.class, remap = false)
 public interface TinkerRegistryAccessor {
+
     @Accessor
     static List<DryingRecipe> getDryingRegistry() {
         throw new AssertionError();

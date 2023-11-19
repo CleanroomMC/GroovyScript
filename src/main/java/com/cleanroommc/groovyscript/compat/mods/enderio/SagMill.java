@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.SagRecipe;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 public class SagMill extends VirtualizedRegistry<Recipe> {
 
     public SagMill() {
-        super("SAGMill", "Sag", "sag");
+        super(Alias.of("SAGMill", "sag_mill", "Sag", "sag"));
     }
 
     public RecipeBuilder recipeBuilder() {

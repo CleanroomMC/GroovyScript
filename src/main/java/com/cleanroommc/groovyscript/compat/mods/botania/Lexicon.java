@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Lexicon {
+
     public final Category category = new Category();
     public final Entry entry = new Entry();
     public final Page page = new Page();

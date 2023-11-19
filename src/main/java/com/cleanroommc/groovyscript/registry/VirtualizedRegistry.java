@@ -2,48 +2,35 @@ package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
-import com.google.common.base.CaseFormat;
+import com.cleanroommc.groovyscript.helper.Alias;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
 
-    protected final List<String> aliases;
+    private final List<String> aliases;
+    private Collection<R> backup, scripted;
 
-    protected Collection<R> backup, scripted;
-
-    public VirtualizedRegistry(String... aliases) {
-        this(true, aliases);
+    public VirtualizedRegistry() {
+        this(null);
     }
 
-    public VirtualizedRegistry(boolean generate, String... aliases) {
-        this.aliases = new ArrayList<>();
-        if (generate) {
-            Collections.addAll(this.aliases, VirtualizedRegistry.generateAliases(this.getClass().getSimpleName()));
+    public VirtualizedRegistry(@Nullable Collection<String> aliases) {
+        if (aliases == null) {
+            aliases = Alias.generateOfClass(this);
+        } else if (aliases.isEmpty()) {
+            throw new IllegalArgumentException("VirtualRegistry must have at least one name!");
         }
-        Collections.addAll(this.aliases, aliases);
+        List<String> aliases1 = aliases.stream().distinct().collect(Collectors.toList());
+        this.aliases = Collections.unmodifiableList(aliases1);
         initBackup();
         initScripted();
-    }
-
-    public static String[] generateAliases(String name) {
-        ArrayList<String> aliases = new ArrayList<>();
-        aliases.add(name);
-        aliases.add(name.toLowerCase(Locale.ROOT));
-
-        if (name.split("[A-Z]").length > 2) {
-            aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, name));
-            aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name));
-        }
-
-        return aliases.toArray(new String[0]);
-    }
-
-    public static <T> void putAll(String name, T object, Map<String, T> map) {
-        for (String alias : generateAliases(name)) {
-            map.put(alias, object);
-        }
     }
 
     @GroovyBlacklist
@@ -53,7 +40,6 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     public void afterScriptLoad() {
-
     }
 
     public List<String> getAliases() {

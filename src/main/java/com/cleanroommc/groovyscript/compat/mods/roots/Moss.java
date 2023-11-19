@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.core.mixin.roots.MossConfigAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import epicsquid.mysticallib.util.ConfigUtil;
 import epicsquid.roots.config.MossConfig;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -14,10 +13,7 @@ import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
-
-import static epicsquid.roots.config.MossConfig.MossyCobblestones;
 
 public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> {
 

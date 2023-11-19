@@ -5,10 +5,16 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import forestry.api.core.ForestryAPI;
 import forestry.modules.ForestryModuleUids;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 public abstract class ForestryRegistry<T> extends VirtualizedRegistry<T> {
 
-    public ForestryRegistry(String... aliases) {
+    public ForestryRegistry() {
+    }
+
+    public ForestryRegistry(@Nullable Collection<String> aliases) {
         super(aliases);
     }
 

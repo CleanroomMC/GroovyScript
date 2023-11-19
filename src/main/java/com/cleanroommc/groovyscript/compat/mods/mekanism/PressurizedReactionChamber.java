@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<PressurizedRecipe> {
 
     public PressurizedReactionChamber() {
-        super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, "PRC", "prc");
+        super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, Alias.generateOfClass(PressurizedReactionChamber.class).and("PRC", "prc"));
     }
 
     public RecipeBuilder recipeBuilder() {

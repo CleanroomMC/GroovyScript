@@ -42,6 +42,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         }
         return recipe1;
     }
+
     public MetallurgicInfuserRecipe add(IIngredient ingredient, String infuseType, int infuseAmount, ItemStack output) {
         return add(ingredient, InfuseRegistry.get(infuseType), infuseAmount, output);
     }

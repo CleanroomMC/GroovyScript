@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.content.GroovyResourcePack;
@@ -11,6 +10,7 @@ import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruc
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
 import com.cleanroommc.groovyscript.event.EventHandler;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
@@ -108,6 +108,7 @@ public class GroovyScript {
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Error initializing sandbox!");
         }
+        ModSupport.INSTANCE.setup(event.getASMHarvestedData());
 
         if (NetworkUtils.isDedicatedClient()) {
             // this resource pack must be added in construction

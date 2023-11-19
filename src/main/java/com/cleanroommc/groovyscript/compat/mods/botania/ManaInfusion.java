@@ -27,7 +27,8 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
     }
 
     public RecipeManaInfusion add(ItemStack output, IIngredient input, int mana) {
-        RecipeManaInfusion recipe = new RecipeManaInfusion(output, input instanceof OreDictIngredient ? ((OreDictIngredient) input).getOreDict() : input.getMatchingStacks()[0], mana);
+        RecipeManaInfusion recipe = new RecipeManaInfusion(output, input instanceof OreDictIngredient ? ((OreDictIngredient) input).getOreDict()
+                                                                                                      : input.getMatchingStacks()[0], mana);
         add(recipe);
         return recipe;
     }
@@ -60,7 +61,8 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
 
     public boolean removeByInput(IIngredient input) {
         if (BotaniaAPI.manaInfusionRecipes.removeIf(recipe -> {
-            boolean found = recipe.getInput() instanceof ItemStack ? input.test((ItemStack) recipe.getInput()) : (input instanceof OreDictIngredient && ((OreDictIngredient) input).getOreDict().equals(recipe.getInput()));
+            boolean found = recipe.getInput() instanceof ItemStack ? input.test((ItemStack) recipe.getInput())
+                                                                   : (input instanceof OreDictIngredient && ((OreDictIngredient) input).getOreDict().equals(recipe.getInput()));
             if (found) addBackup(recipe);
             return found;
         })) return true;
@@ -134,7 +136,9 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         @Override
         public @Nullable RecipeManaInfusion register() {
             if (!validate()) return null;
-            RecipeManaInfusion recipe = new RecipeManaInfusion(output.get(0), input.get(0) instanceof OreDictIngredient ? ((OreDictIngredient) input.get(0)).getOreDict() : input.get(0).getMatchingStacks()[0], mana);
+            RecipeManaInfusion recipe = new RecipeManaInfusion(output.get(0),
+                                                               input.get(0) instanceof OreDictIngredient ? ((OreDictIngredient) input.get(0)).getOreDict()
+                                                                                                         : input.get(0).getMatchingStacks()[0], mana);
             if (catalyst != null) recipe.setCatalyst(catalyst);
             add(recipe);
             return recipe;

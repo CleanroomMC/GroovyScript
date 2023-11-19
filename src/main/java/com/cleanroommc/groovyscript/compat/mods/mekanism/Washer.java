@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.helper.Alias;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.GasInput;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
 
     public Washer() {
-        super(RecipeHandler.Recipe.CHEMICAL_WASHER);
+        super(RecipeHandler.Recipe.CHEMICAL_WASHER, Alias.generateOfClass(Washer.class).andGenerate("ChemicalWasher"));
     }
 
     public RecipeBuilder recipeBuilder() {

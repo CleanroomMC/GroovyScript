@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Mixin(value = MixRecipe.class, remap = false)
 public interface MixRecipeAccessor {
+
     @Accessor
     Map<MixAdditive, RecipeMatchRegistry> getAdditives();
 }

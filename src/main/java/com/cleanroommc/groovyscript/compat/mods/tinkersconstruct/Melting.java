@@ -111,12 +111,14 @@ public class Melting extends MeltingRecipeRegistry {
     }
 
     public static class RecipeBuilder extends MeltingRecipeBuilder {
+
         public RecipeBuilder(Melting melting) {
             super(melting, "Tinkers Construct Melting recipe");
         }
     }
 
     public static class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
+
         public EntityMelting() {
             super();
         }
@@ -158,7 +160,7 @@ public class Melting extends MeltingRecipeRegistry {
         public boolean removeByInput(EntityEntry entity) {
             ResourceLocation name = entity.getRegistryName();
             if (TinkerRegistryAccessor.getEntityMeltingRegistry().entrySet().removeIf(entry -> {
-                boolean found = name != null && entry.getKey().equals(name);
+                boolean found = entry.getKey().equals(name);
                 if (found) addBackup(new EntityMeltingRecipe(entry.getKey(), entry.getValue()));
                 return found;
             })) return true;

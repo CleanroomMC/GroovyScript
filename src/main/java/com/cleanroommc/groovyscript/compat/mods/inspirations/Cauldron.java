@@ -29,9 +29,9 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
     private static boolean checkRecipeMatches(ISimpleCauldronRecipe recipe, IIngredient input, ItemStack output, Object inputState, Object outputState) {
         // Check all relevant parts to determine if we need to match them and if they do match.
         return (inputState == null || compareFluids(inputState, recipe.getInputState()))
-            && (outputState == null || compareFluids(outputState, recipe.getState()))
-            && (output == null || output.isItemEqual(recipe.getResult()))
-            && (input == null || recipe.getInput().stream().anyMatch(input));
+               && (outputState == null || compareFluids(outputState, recipe.getState()))
+               && (output == null || output.isItemEqual(recipe.getResult()))
+               && (input == null || recipe.getInput().stream().anyMatch(input));
     }
 
     private static boolean compareFluids(Object first, Object second) {

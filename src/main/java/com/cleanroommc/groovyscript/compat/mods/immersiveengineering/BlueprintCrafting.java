@@ -6,6 +6,7 @@ import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -21,7 +22,7 @@ import java.util.List;
 public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingRecipe> {
 
     public BlueprintCrafting() {
-        super(VirtualizedRegistry.generateAliases("Blueprint"));
+        super(Alias.generateOf("Blueprint"));
     }
 
     public static RecipeBuilder recipeBuilder() {

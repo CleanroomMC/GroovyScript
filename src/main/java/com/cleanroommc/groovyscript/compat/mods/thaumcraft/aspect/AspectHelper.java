@@ -3,8 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
     public AspectHelper() {
-        super("AspectHelper", "aspect_helper");
     }
 
     @Override
@@ -52,7 +51,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     @GroovyBlacklist
     public void addScripted(Object target, AspectStack aspect) {
         AtomicBoolean found = new AtomicBoolean(false);
-        scripted.forEach(scriptedAspect -> {
+        getScriptedRecipes().forEach(scriptedAspect -> {
             if (target instanceof EntityEntry && scriptedAspect.entity != null
                 && ((EntityEntry) target).getName().equals(scriptedAspect.entity.getName())) {
                 found.set(true);
@@ -68,16 +67,16 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
             ArrayList<AspectStack> aspectList = new ArrayList<>();
             aspectList.add(aspect);
             if (target instanceof ItemStack)
-                scripted.add(new AspectListHelper((ItemStack) target, aspectList));
+                addScripted(new AspectListHelper((ItemStack) target, aspectList));
             else if (target instanceof EntityEntry)
-                scripted.add(new AspectListHelper((EntityEntry) target, aspectList));
+                addScripted(new AspectListHelper((EntityEntry) target, aspectList));
         }
     }
 
     @GroovyBlacklist
     public void addBackup(Object target, AspectStack aspect) {
         AtomicBoolean found = new AtomicBoolean(false);
-        backup.forEach(backupAspect -> {
+        getBackupRecipes().forEach(backupAspect -> {
             if (target instanceof EntityEntry && backupAspect.entity != null
                 && ((EntityEntry) target).getName().equals(backupAspect.entity.getName())) {
                 found.set(true);
@@ -93,9 +92,9 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
             ArrayList<AspectStack> aspectList = new ArrayList<>();
             aspectList.add(aspect);
             if (target instanceof ItemStack)
-                backup.add(new AspectListHelper((ItemStack) target, aspectList));
+                addBackup(new AspectListHelper((ItemStack) target, aspectList));
             else if (target instanceof EntityEntry)
-                backup.add(new AspectListHelper((EntityEntry) target, aspectList));
+                addBackup(new AspectListHelper((EntityEntry) target, aspectList));
         }
     }
 

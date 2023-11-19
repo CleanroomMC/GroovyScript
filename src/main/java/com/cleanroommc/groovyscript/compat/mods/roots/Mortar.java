@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -23,7 +24,7 @@ import static epicsquid.roots.init.ModRecipes.getMortarRecipes;
 public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRecipe>> {
 
     public Mortar() {
-        super(VirtualizedRegistry.generateAliases("MortarAndPestle"));
+        super(Alias.generateOf("MortarAndPestle").andGenerateOfClass(Mortar.class));
     }
 
     public static RecipeBuilder recipeBuilder() {
@@ -227,7 +228,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
                 List<Ingredient> ingredients = new ArrayList<>();
                 int count = output.get(0).getCount();
 
-                for (int i = 1; i <= 5; i++ ) {
+                for (int i = 1; i <= 5; i++) {
                     ingredients.add(input.get(0).toMcIngredient());
                     ItemStack copy = output.get(0).copy();
                     copy.setCount(i * count);

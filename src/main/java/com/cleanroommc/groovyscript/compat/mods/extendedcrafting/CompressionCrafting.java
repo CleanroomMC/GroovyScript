@@ -7,6 +7,7 @@ import com.blakebr0.extendedcrafting.item.ItemSingularity;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
 
     public CompressionCrafting() {
-        super(VirtualizedRegistry.generateAliases("Compression"));
+        super(Alias.generateOf("Compression"));
     }
 
     @Override
