@@ -44,6 +44,7 @@ content.createItem('clay_3')
     .register()
 
 content.createFluid('amongium')
+    .setMetalTexture()
     .setColor(0x00FF00)
     .register()
 

@@ -23,8 +23,10 @@ import java.util.List;
 
 public class GroovyFluid extends Fluid {
 
-    private static final ResourceLocation DEFAULT_STILL = new ResourceLocation(GroovyScript.ID, "blocks/fluid");
-    private static final ResourceLocation DEFAULT_FLOWING = new ResourceLocation(GroovyScript.ID, "blocks/fluid_flow");
+    public static final ResourceLocation DEFAULT_STILL = new ResourceLocation(GroovyScript.ID, "blocks/fluid");
+    public static final ResourceLocation DEFAULT_FLOWING = new ResourceLocation(GroovyScript.ID, "blocks/fluid_flow");
+    public static final ResourceLocation METAL_STILL = new ResourceLocation(GroovyScript.ID, "blocks/molten_metal");
+    public static final ResourceLocation METAL_FLOWING = new ResourceLocation(GroovyScript.ID, "blocks/molten_metal_flow");
 
     private static final List<BlockFluidBase> fluidBlocks = new ArrayList<>();
     private static final List<GroovyFluid> fluids = new ArrayList<>();
@@ -120,6 +122,22 @@ public class GroovyFluid extends Fluid {
         public Builder setOverlay(ResourceLocation overlay) {
             this.overlay = overlay;
             return this;
+        }
+
+        public Builder setTexture(ResourceLocation still, ResourceLocation flowing) {
+            return setStill(still).setFlowing(flowing);
+        }
+
+        public Builder setTexture(ResourceLocation still, ResourceLocation flowing, @Nullable ResourceLocation overlay) {
+            return setStill(still).setFlowing(flowing).setOverlay(overlay);
+        }
+
+        public Builder setDefaultTexture() {
+            return setTexture(DEFAULT_STILL, DEFAULT_FLOWING);
+        }
+
+        public Builder setMetalTexture() {
+            return setTexture(METAL_STILL, METAL_FLOWING);
         }
 
         public Builder setColor(int color) {
