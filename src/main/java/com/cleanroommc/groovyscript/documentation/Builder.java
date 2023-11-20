@@ -256,14 +256,13 @@ public class Builder {
     }
 
     private String createBuilder(Example example) {
-        String content = example.value();
         StringBuilder out = new StringBuilder();
 
         if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
 
         out.append(reference).append(".").append(builderMethod.getName()).append("()").append("\n");
 
-        List<String> parts = generateParts(content);
+        List<String> parts = generateParts(example.value());
         List<String> output = new ArrayList<>();
         for (int i = 0; i < parts.size(); i++) {
             String part = parts.get(i);
@@ -376,6 +375,8 @@ public class Builder {
         public int compareTo(@NotNull FieldDocumentation comp) {
             return ComparisonChain.start()
                     .compare(this.priority(), comp.priority())
+                    .compare(this.getField().getName().length(), comp.getField().getName().length())
+                    .compare(this.getField().getName(), comp.getField().getName(), String::compareToIgnoreCase)
                     .result();
         }
 
