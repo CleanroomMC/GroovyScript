@@ -151,6 +151,14 @@ public class Registry {
         out.append("## ").append(I18n.format("groovyscript.wiki.description")).append("\n\n");
         out.append(I18n.format(getDescription())).append("\n\n");
 
+        if (!description.isFullyDocumented()) {
+            out.append(new AdmonitionBuilder()
+                               .type(Admonition.Type.WARNING)
+                               .note(I18n.format("groovyscript.wiki.not_fully_documented"))
+                               .generate());
+            out.append("\n\n");
+        }
+
         Admonition[] admonition = description.admonition();
         for (Admonition note : admonition) {
             out.append(new AdmonitionBuilder()
@@ -159,8 +167,8 @@ public class Registry {
                                .hasTitle(note.hasTitle())
                                .format(note.format())
                                .note(I18n.format(note.value()))
-                               .generate())
-                    .append("\n\n");
+                               .generate());
+            out.append("\n\n");
         }
         return out.toString();
     }

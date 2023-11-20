@@ -27,6 +27,7 @@ import java.lang.annotation.Target;
  *     <li>{@link #location()} is the name of a {@link com.cleanroommc.groovyscript.sandbox.LoadStage} and controls where all methods
  *     inside the {@link RegistryDescription} are generated.</li>
  *     <li>{@link #reloadability()} ()} determines the status of the compat, defaulting to fully reloadable ({@link Reloadability#FULLY}).</li>
+ *     <li>{@link #isFullyDocumented()} informs whether the {@link RegistryDescription} documents all relevant functionality.</li>
  *     <li>{@link #admonition()} is an array of admonition blocks to be generated at the top of the wiki page for additional information,
  *     commonly of the type {@link Admonition.Type#DANGER} to indicate important information.</li>
  *     <li>{@link #category()} determines what words are used to refer to the registry and what it contains.</li>
@@ -83,6 +84,11 @@ public @interface RegistryDescription {
      * @see Reloadability
      */
     Reloadability[] reloadability() default Reloadability.FULLY;
+
+    /**
+     * @return if the registry is fully documented. {@code false} should be accompanied by a TO{@literal }DO or similar
+     */
+    boolean isFullyDocumented() default true;
 
     /**
      * A list of admonitions to be displayed after the description, where the admonitions are formatted based on
