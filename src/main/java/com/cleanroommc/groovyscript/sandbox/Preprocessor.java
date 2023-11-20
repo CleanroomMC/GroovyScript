@@ -1,8 +1,12 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.Packmode;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 
@@ -11,8 +15,26 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.function.Predicate;
 
 public class Preprocessor {
+
+    private static final Object2ObjectArrayMap<String, Predicate<String[]>> PREPROCESSORS = new Object2ObjectArrayMap<>();
+    private static final String[] NO_ARGS = new String[0];
+
+    public static void registerPreprocessor(String name, Predicate<String[]> test) {
+        PREPROCESSORS.put(name.toUpperCase(Locale.ROOT), test);
+    }
+
+    static {
+        registerPreprocessor("NO_RUN", args -> false);
+        registerPreprocessor("DEBUG_ONLY", args -> GroovyScript.getRunConfig().isDebug());
+        registerPreprocessor("NO_RELOAD", args -> !ReloadableRegistryManager.isFirstLoad());
+        registerPreprocessor("MODS_LOADED", Preprocessor::checkModsLoaded);
+        registerPreprocessor("SIDE", Preprocessor::checkSide);
+        registerPreprocessor("PACKMODE", Preprocessor::checkPackmode);
+    }
 
     public static boolean validatePreprocessors(File file) {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -47,20 +69,19 @@ public class Preprocessor {
     }
 
     private static boolean processPreprocessor(String line) {
-        if (line.startsWith("NO_RUN")) {
-            return false;
+        String[] parts = line.split(":", 2);
+        String[] args = NO_ARGS;
+        if (parts.length > 1) {
+            for (int i = 0; i < args.length; i++) {
+                args[i] = args[i].trim();
+            }
         }
-        if (line.startsWith("DEBUG_ONLY")) {
-            return GroovyScript.getRunConfig().isDebug();
-        }
-        if (line.startsWith("NO_RELOAD")) {
-            return !ReloadableRegistryManager.isFirstLoad();
-        }
-        if (line.startsWith("MODS_LOADED")) {
-            return checkModsLoaded(getArguments(line));
-        }
-        if (line.startsWith("SIDE")) {
-            return checkSide(getArguments(line));
+        String s = parts[0];
+        for (ObjectIterator<Object2ObjectMap.Entry<String, Predicate<String[]>>> iterator = PREPROCESSORS.object2ObjectEntrySet().fastIterator(); iterator.hasNext(); ) {
+            Object2ObjectMap.Entry<String, Predicate<String[]>> entry = iterator.next();
+            if (s.equalsIgnoreCase(entry.getKey())) {
+                return entry.getValue().test(args);
+            }
         }
         return true;
     }
@@ -90,15 +111,12 @@ public class Preprocessor {
         return true;
     }
 
-    private static String[] getArguments(String line) {
-        String[] parts = line.split(":", 2);
-        if (parts.length < 2) {
-            return new String[0];
+    private static boolean checkPackmode(String[] modes) {
+        for (String mode : modes) {
+            if (Packmode.getPackmode().equalsIgnoreCase(mode)) {
+                return true;
+            }
         }
-        String[] args = parts[1].split(",");
-        for (int i = 0; i < args.length; i++) {
-            args[i] = args[i].trim();
-        }
-        return args;
+        return false;
     }
 }

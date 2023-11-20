@@ -54,11 +54,9 @@ public class GSCommand extends CommandTreeBase {
             return;
         }
         GroovyLog.get().info("========== Reloading Groovy scripts ==========");
-        long time = System.currentTimeMillis();
-        GroovyScript.getSandbox().run(LoadStage.POST_INIT);
-        time = System.currentTimeMillis() - time;
-        player.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
-        GroovyScript.postScriptRunResult(player, false, true);
+        long time = GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
+        //player.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
+        GroovyScript.postScriptRunResult(player, false, true, false, time);
 
         NetworkHandler.sendToPlayer(new SReloadJei(), player);
     }
@@ -83,9 +81,11 @@ public class GSCommand extends CommandTreeBase {
                 GroovyScript.getSandbox().checkSyntax();
                 time = System.currentTimeMillis() - time;
                 sender.sendMessage(new TextComponentString("Checking syntax took " + time + "ms"));
-                GroovyScript.postScriptRunResult((EntityPlayerMP) sender, false, false);
+                GroovyScript.postScriptRunResult((EntityPlayerMP) sender, false, false, false, time);
             }
         }));
+
+        addSubcommand(new PackmodeCommand());
 
         addSubcommand(new SimpleCommand("hand", (server, sender, args) -> {
             if (sender instanceof EntityPlayer) {

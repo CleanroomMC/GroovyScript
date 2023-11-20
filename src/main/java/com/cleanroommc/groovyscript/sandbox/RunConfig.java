@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.Packmode;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.common.base.CaseFormat;
@@ -9,6 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ModMetadata;
 import org.apache.commons.lang3.tuple.Pair;
@@ -60,6 +62,7 @@ public class RunConfig {
     private final Map<String, List<String>> classes = new Object2ObjectOpenHashMap<>();
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
     // TODO pack modes
+    private final Set<String> packmodes = new ObjectOpenHashSet<>();
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
     // TODO asm
     private final String asmClass = null;
@@ -104,6 +107,7 @@ public class RunConfig {
         this.debug = JsonHelper.getBoolean(json, false, "debug");
         this.classes.clear();
         this.loaderPaths.clear();
+        this.packmodes.clear();
         this.packmodePaths.clear();
 
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";
@@ -158,6 +162,16 @@ public class RunConfig {
         if (errorMsg.getSubMessages().size() > 1) {
             errorMsg.post();
         }
+
+        // packmode
+        JsonObject jsonPackmode = JsonHelper.getJsonObject(json, "packmode");
+        JsonArray modes = JsonHelper.getJsonArray(jsonPackmode, "values", "types");
+        for (JsonElement je : modes) {
+            if (je.isJsonPrimitive()) {
+                this.packmodes.add(je.getAsString());
+            }
+        }
+        Packmode.updatePackmode(JsonHelper.getString(jsonPackmode, "", "current", "default"));
     }
 
     public String getPackName() {
@@ -195,6 +209,10 @@ public class RunConfig {
 
     public boolean isDebug() {
         return debug;
+    }
+
+    public boolean isValidPackmode(String packmode) {
+        return this.packmodes.contains(packmode);
     }
 
     public ResourceLocation makeLoc(String name) {

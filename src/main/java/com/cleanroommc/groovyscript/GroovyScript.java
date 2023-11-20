@@ -164,14 +164,16 @@ public class GroovyScript {
     }
 
     @ApiStatus.Internal
-    public static void runGroovyScriptsInLoader(LoadStage loadStage) {
+    public static long runGroovyScriptsInLoader(LoadStage loadStage) {
         if (loadStage == LoadStage.POST_INIT) {
             Loot.init();
         }
         // called via mixin between fml post init and load complete
         long time = System.currentTimeMillis();
         getSandbox().run(loadStage);
-        LOGGER.info("Running Groovy scripts during {} took {} ms", loadStage.getName(), System.currentTimeMillis() - time);
+        time = System.currentTimeMillis() - time;
+        LOGGER.info("Running Groovy scripts during {} took {} ms", loadStage.getName(), time);
+        return time;
     }
 
     @Mod.EventHandler
@@ -273,12 +275,13 @@ public class GroovyScript {
         return new File(parent, fileJoiner.join(pieces));
     }
 
-    public static void postScriptRunResult(EntityPlayerMP player, boolean startup, boolean running) {
+    public static void postScriptRunResult(EntityPlayerMP player, boolean startup, boolean running, boolean packmode, long time) {
         List<String> errors = GroovyLogImpl.LOG.collectErrors();
         if (errors.isEmpty()) {
             if (!startup) {
                 if (running) {
-                    player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
+                    String s = packmode ? "changes packmode" : "reloaded scripts";
+                    player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully " + s + TextFormatting.WHITE + " in " + time + "ms"));
                 } else {
                     player.sendMessage(new TextComponentString(TextFormatting.GREEN + "No syntax errors found :)"));
                 }

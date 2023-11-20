@@ -74,7 +74,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.player instanceof EntityPlayerMP) {
-            GroovyScript.postScriptRunResult((EntityPlayerMP) event.player, true, true);
+            GroovyScript.postScriptRunResult((EntityPlayerMP) event.player, true, true, false, 0);
         }
         NBTTagCompound tag = event.player.getEntityData();
         NBTTagCompound data = new NBTTagCompound();
