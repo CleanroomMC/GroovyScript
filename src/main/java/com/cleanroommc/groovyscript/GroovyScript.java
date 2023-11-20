@@ -13,7 +13,7 @@ import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
 import com.cleanroommc.groovyscript.documentation.Documentation;
-import com.cleanroommc.groovyscript.documentation.LinkGenerator;
+import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.CReload;
@@ -97,7 +97,7 @@ public class GroovyScript {
         NetworkHandler.init();
         GroovySystem.getMetaClassRegistry().setMetaClassCreationHandle(GrSMetaClassCreationHandle.INSTANCE);
         GroovyDeobfMapper.init();
-        LinkGenerator.init();
+        LinkGeneratorHooks.init();
         ReloadableRegistryManager.init();
         try {
             sandbox = new GroovyScriptSandbox(scriptPath.toURI().toURL());

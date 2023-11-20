@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
@@ -101,7 +102,7 @@ public class Registry {
     }
 
     public String getFileSourceCodeLink() {
-        return LinkGenerator.convert(description.linkGenerator(), registryClass);
+        return LinkGeneratorHooks.convert(description.linkGenerator(), registryClass);
     }
 
     public String getTitle() {

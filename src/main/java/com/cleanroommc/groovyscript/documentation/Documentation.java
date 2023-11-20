@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class Documentation {
     // Matches /*()*/ or /*()!*/ and captures if theres an !
     public static final Pattern ANNOTATION_COMMENT_LOCATION = Pattern.compile("/\\*\\(\\)(!?)\\*/");
     public static final int MAX_LINE_LENGTH = 120;
-    public static final int MINIMUM_COMMENT_LENGTH = 20;
+    public static final boolean USE_VERSION = FMLLaunchHandler.isDeobfuscatedEnvironment();
 
     public static final File EXAMPLES = new File(GroovyScript.getScriptPath());
     public static final File WIKI = new File(new File(GroovyScript.getScriptPath()).getParentFile(), "wiki");
