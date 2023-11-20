@@ -103,7 +103,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
         @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private Enchantment enchantment;
-        @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(ignoresInheritedMethods = true, valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private IIngredient input;
         @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int amount = 0;

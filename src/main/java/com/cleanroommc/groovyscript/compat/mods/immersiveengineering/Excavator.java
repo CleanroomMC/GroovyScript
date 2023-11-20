@@ -145,7 +145,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         private final List<Float> chances = new ArrayList<>();
         @Property
         private final List<Integer> dimensions = new ArrayList<>();
-        @Property
+        @Property(ignoresInheritedMethods = true)
         private String name;
         @Property
         private int weight;

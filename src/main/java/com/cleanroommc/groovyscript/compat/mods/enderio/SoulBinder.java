@@ -90,7 +90,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BasicSoulBinderRecipe> {
 
-        @Property
+        @Property(ignoresInheritedMethods = true)
         private String name;
         @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int xp;
