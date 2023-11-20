@@ -183,6 +183,110 @@ groovyscript.wiki.bloodmagic.tranquility.value.value=Sets the amount of Tranquil
 groovyscript.wiki.bloodmagic.tranquility.block.required=either block or blockstate must be defined
 groovyscript.wiki.bloodmagic.tranquility.blockstate.required=either block or blockstate must be defined
 
+# Botania
+groovyscript.wiki.botania.apothecary.title=Petal Apothecary
+groovyscript.wiki.botania.apothecary.description=Converts item inputs into an item output consuming water and a seed.
+groovyscript.wiki.botania.apothecary.add=Adds recipes in the format `output`, `inputs`
+
+groovyscript.wiki.botania.brew.title=Brew Effect
+groovyscript.wiki.botania.brew.description=Creates a custom brew, but not a recipe for the brew.
+groovyscript.wiki.botania.brew.canInfuseBloodPendant.value=Sets if the custom brew can be infused on a Tainted Blood Pendant, making it a persistent effect at the cost of mana
+groovyscript.wiki.botania.brew.effects.value=Sets the potion effects, quantity, and duration of each when consuming the potion
+groovyscript.wiki.botania.brew.cost.value=Sets the base mana cost to make the brew. The Tainted Blood Pendant and Incense Stick recipes will cost 10 times as much mana
+groovyscript.wiki.botania.brew.color.value=Sets the color of effect
+groovyscript.wiki.botania.brew.name.value=Sets the name of the effect
+groovyscript.wiki.botania.brew.key.value=Sets a unique key for the effect
+groovyscript.wiki.botania.brew.canInfuseIncense.value=Sets if the brew can be infused on a Incense Stick, making it apply the effect persistently in a long-lasting AOE
+groovyscript.wiki.botania.brew.remove=Removes the given brew matching the brew key
+groovyscript.wiki.botania.brew.streamBrews=Iterates through every brew in the brew registry, with the ability to call remove on any element to remove it
+
+groovyscript.wiki.botania.brewrecipe.title=Brew Recipe
+groovyscript.wiki.botania.brewrecipe.description=Converts a non-infused Managlass Vial, Alfglass Flask, Incense Stick, or Tainted Blood Pendant into one infused to hold the given brew at the cost of item inputs and mana.
+groovyscript.wiki.botania.brewrecipe.brew.value=Sets the brew the recipe is being created for
+
+groovyscript.wiki.botania.category.title=Lexicon Category
+groovyscript.wiki.botania.category.description=Category creates a new entry on the front page of the Lexica Botania.
+groovyscript.wiki.botania.category.add0=Adds a Category to the Lexica Botania in the format `name`, `icon`, `priority`
+groovyscript.wiki.botania.category.add1=Adds a Category to the Lexica Botania in the format `name`, `icon` and a priority of 5
+groovyscript.wiki.botania.category.removeCategory=Removes a Category matching the given name
+
+groovyscript.wiki.botania.elventrade.title=Elven Trade
+groovyscript.wiki.botania.elventrade.description=Convert in any number of item inputs into an item output.
+groovyscript.wiki.botania.elventrade.add=Adds recipes in the format `output`, `inputs`
+
+groovyscript.wiki.botania.entry.title=Lexicon Entry
+groovyscript.wiki.botania.entry.description=Entry creates a new entry in a given category.
+groovyscript.wiki.botania.entry.setKnowledgeType=Sets the Knowledge type of the given entry in the format `entry`, `type`
+groovyscript.wiki.botania.entry.add=Adds a new Lexica Botania entry to the given Category in the format `name`, `category`
+groovyscript.wiki.botania.entry.pages.value=Sets the Pages attached to the Entry
+groovyscript.wiki.botania.entry.name.value=Sets the unlocalized name of the Entry
+groovyscript.wiki.botania.entry.icon.value=Sets the default icon of the Entry
+groovyscript.wiki.botania.entry.category.value=Sets the Category the Entry is attached to
+groovyscript.wiki.botania.entry.type.value=Sets the Knowledge Type required to view the Entry. Also determines the color
+groovyscript.wiki.botania.entry.extraRecipes.value=Sets additional items displayed as if they were crafted by a page within the Entry
+groovyscript.wiki.botania.entry.priority.value=Sets if the Entry always appears at the top of the list in a Category
+groovyscript.wiki.botania.entry.removeByCategory=Removes all entries in the given Lexica Botania Category
+groovyscript.wiki.botania.entry.removeEntry=Removes the given Entry from the Lexica Botania
+
+groovyscript.wiki.botania.knowledge.title=Lexicon Knowledge
+groovyscript.wiki.botania.knowledge.description=Creates a new type of knowledge that Lexica Botania entries may be gated with. Can only be created.
+groovyscript.wiki.botania.knowledge.add0=Adds entries in the format `id`, `formatting`, `autoUnlock`
+groovyscript.wiki.botania.knowledge.add1=Adds entries in the format `id`, `formatting`
+groovyscript.wiki.botania.knowledge.streamKnowledgeTypes=Iterates through every entry in the registry
+
+groovyscript.wiki.botania.magnet.title=Magnet
+groovyscript.wiki.botania.magnet.description=Add or remove items from the magnet blacklist
+groovyscript.wiki.botania.magnet.isInBlacklist=Checks if the given Block, IBlockState, or IIngredient is prevented from being interacted with by the magnet
+groovyscript.wiki.botania.magnet.addToBlacklist=Adds the given Block, IBlockState, or IIngredient to the magnet blacklist
+groovyscript.wiki.botania.magnet.removeFromBlacklist=Removes the given Block, IBlockState, or IIngredient from the magnet blacklist
+
+groovyscript.wiki.botania.manainfusion.title=Mana Infusion
+groovyscript.wiki.botania.manainfusion.description=Toss an item into a mana pool with an optional catalyst blockstate below the pool.
+groovyscript.wiki.botania.manainfusion.note=A mana cost greater than 10,000 cannot be converted in a Diluted Mana Pools and a mana cost greater than 1,000,000 cannot be converted in a normal Mana Pool. Both the Fabulous Mana Pool and The Everlasting Guilty Pool have the same capacity as a normal Mana Pool.
+groovyscript.wiki.botania.manainfusion.add=Adds recipes in the format `output`, `input`, `mana`
+groovyscript.wiki.botania.manainfusion.mana.value=Sets the mana cost of converting the item
+groovyscript.wiki.botania.manainfusion.catalyst.value=Sets the IBlockState required below the mana pool
+groovyscript.wiki.botania.manainfusion.removeByCatalyst=Removes all recipes with the given IBlockState catalyst
+
+groovyscript.wiki.botania.orechid.title=Orechid
+groovyscript.wiki.botania.orechid.description=Converts stone blocks into one of a few ore blocks at the cost of mana.
+groovyscript.wiki.botania.orechid.add=Adds recipes in the format `output`, `weight`
+
+groovyscript.wiki.botania.orechidignem.title=Orechid Ignem
+groovyscript.wiki.botania.orechidignem.description=Converts netherrack blocks into one of a few ore blocks at the cost of mana.
+groovyscript.wiki.botania.orechidignem.add=Adds recipes in the format `output`, `weight`
+
+groovyscript.wiki.botania.page.title=Lexicon Page
+groovyscript.wiki.botania.page.description=Page creates a new page to be used in entries.
+groovyscript.wiki.botania.page.add=Adds a page to the given LexiconEntry, in the format `entry`, `page`, `index`
+groovyscript.wiki.botania.page.createTextPage=Returns a `PageText` for use in adding to a LexiconEntry
+groovyscript.wiki.botania.page.createLoreTextPage=Returns a `PageLoreText` for use in adding to a LexiconEntry
+groovyscript.wiki.botania.page.createImagePage=Returns a `PageImage` for use in adding to a LexiconEntry
+groovyscript.wiki.botania.page.createEntityPage=Returns a `PageEntity` for use in adding to a LexiconEntry
+groovyscript.wiki.botania.page.createCraftingPage=Returns a `PageCraftingRecipe` for use in adding to a LexiconEntry
+groovyscript.wiki.botania.page.createBrewingPage=Returns a `PageBrew` for use in adding to a LexiconEntry
+groovyscript.wiki.botania.page.createInfusionPage=Returns a `PageManaInfusionRecipe` for use in adding to a LexiconEntry
+groovyscript.wiki.botania.page.createRunePage=Returns a `PageRuneRecipe` for use in adding to a LexiconEntry
+groovyscript.wiki.botania.page.createPetalPage=Returns a `PagePetalRecipe` for use in adding to a LexiconEntry
+groovyscript.wiki.botania.page.createElvenTradePage=Returns a `PageElvenRecipe` for use in adding to a LexiconEntry
+groovyscript.wiki.botania.page.remove=Removes a page from the given LexiconEntry, in the format `entry`, `index`
+groovyscript.wiki.botania.page.removeByEntry=Removes all pages from the given LexiconEntry
+
+groovyscript.wiki.botania.puredaisy.title=Pure Daisy
+groovyscript.wiki.botania.puredaisy.description=Convert a given block to another blockstate after a period of time.
+groovyscript.wiki.botania.puredaisy.add0=Adds recipes in the format `output`, `input`, `time`
+groovyscript.wiki.botania.puredaisy.add1=Adds recipes in the format `output`, `input`
+groovyscript.wiki.botania.puredaisy.output.value=Sets the output IBlockState
+groovyscript.wiki.botania.puredaisy.input.value=Sets the valid input states
+groovyscript.wiki.botania.puredaisy.input.required=Must be either an IBlockState or String
+groovyscript.wiki.botania.puredaisy.time.value=Sets the duration the recipe takes to complete
+
+groovyscript.wiki.botania.runealtar.title=Rune Altar
+groovyscript.wiki.botania.runealtar.description=Converts a items inputs into an item ouput at the cost of mana when a Livingrock item is thrown atop the altar and right clicked with a Wand of the Forest.
+groovyscript.wiki.botania.runealtar.add=Adds recipes in the format `output`, `mana`, `inputs`
+groovyscript.wiki.botania.runealtar.input.required=Input IIngredients cannot contain Botania's Livingrock Item
+groovyscript.wiki.botania.runealtar.mana.value=Sets the mana cost of processing the recipe
+
 # Chisel
 groovyscript.wiki.chisel.carving.title=Carving
 groovyscript.wiki.chisel.carving.description=Sets a group of items any item can be converted between freely, in world and in a GUI
