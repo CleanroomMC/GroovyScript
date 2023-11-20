@@ -35,7 +35,8 @@ groovyscript.wiki.input.value=Sets the item inputs of the recipe
 groovyscript.wiki.output.value=Sets the item outputs of the recipe
 groovyscript.wiki.fluidInput.value=Sets the fluid inputs of the recipe
 groovyscript.wiki.fluidOutput.value=Sets the fluid outputs of the recipe
-groovyscript.wiki.register=First validates the recipe, returning `null` and outputting errors to the log file if the validation failed, then registers the recipe and returns the registered object. (returns `null` or `%s`).
+groovyscript.wiki.register=First validates the builder, outputting errors to the log file if the validation failed, then registers the builder.
+groovyscript.wiki.register_return=First validates the builder, returning `null` and outputting errors to the log file if the validation failed, then registers the builder and returns the registered object. (returns `null` or `%s`).
 
 groovyscript.wiki.craftingrecipe.matrix.required=either the key-based matrix or the ingredient-based matrix can be defined, not both
 groovyscript.wiki.craftingrecipe.output.value=Sets the item output
@@ -112,6 +113,138 @@ groovyscript.wiki.actuallyadditions.treasurechest.description=A weighted item, w
 groovyscript.wiki.actuallyadditions.treasurechest.weight.value=Sets how likely this loot is to be rolled
 groovyscript.wiki.actuallyadditions.treasurechest.min.value=Sets the minimum stack size given when rolled
 groovyscript.wiki.actuallyadditions.treasurechest.max.value=Sets the maximum stack size given when rolled
+
+# Astral Sorcery
+groovyscript.wiki.astralsorcery.aevitasperkregistry.title=Aevitas Perk Registry
+groovyscript.wiki.astralsorcery.aevitasperkregistry.description=Having the Stone Enrichment perk will convert nearby stone blocks into random ores.
+groovyscript.wiki.astralsorcery.aevitasperkregistry.add=Adds entries in the format `ore`, `weight`
+groovyscript.wiki.astralsorcery.aevitasperkregistry.remove=Removes entries of the given ore
+
+groovyscript.wiki.astralsorcery.chaliceinteraction.title=Chalice Interaction
+groovyscript.wiki.astralsorcery.chaliceinteraction.description=When two chalices containing different fluids are placed nearby, fluid may be consumed to produce an output itemstack.
+groovyscript.wiki.astralsorcery.chaliceinteraction.add=Adds entries in the format `probability`, `component1`, `component2`, `action`
+groovyscript.wiki.astralsorcery.chaliceinteraction.chances.value=Sets the chance to consume fluids from the Chalices
+groovyscript.wiki.astralsorcery.chaliceinteraction.probabilities.value=Sets the chance a given output will occur among all possible combinations of the fluid.
+
+groovyscript.wiki.astralsorcery.constellation.title=Constellation
+groovyscript.wiki.astralsorcery.constellation.description=Create a custom Constellation.
+groovyscript.wiki.astralsorcery.constellation.addSignatureItem=Adds to the constellations signature items, which control the Constellation Paper and Mantle of Stars recipes. Only the first 4 will be used.
+groovyscript.wiki.astralsorcery.constellation.color.value=Sets the color of the Constellation
+groovyscript.wiki.astralsorcery.constellation.name.value=Sets the name of the Constellation
+groovyscript.wiki.astralsorcery.constellation.type.value=Sets the type of Constellation
+groovyscript.wiki.astralsorcery.constellation.connections.value=Sets the stars and connections between stars that map the Constellation
+groovyscript.wiki.astralsorcery.constellation.phases.value=Sets what phase of the moon the Constellation appears in. Only applies if the Constellation type is Minor
+groovyscript.wiki.astralsorcery.constellation.potionEffect.value=Sets the potion effects and strength available via the Stellar Refraction Table
+groovyscript.wiki.astralsorcery.constellation.enchantmentEffect.value=Sets the enchantments and enchantment levels available via the Stellar Refraction Table
+groovyscript.wiki.astralsorcery.constellation.constellation.value=Sets the Constellation being modified
+groovyscript.wiki.astralsorcery.constellation.doStrip.value=Sets if the default signature items of the Constellation will be removed before adding new ones
+groovyscript.wiki.astralsorcery.constellation.items.value=Sets the signature items of the Constellation
+groovyscript.wiki.astralsorcery.constellation.removeAllConstellationMapEffect=Removes all potion and enchantment effects applied via the Stellar Refraction Table for all Constellations
+groovyscript.wiki.astralsorcery.constellation.removeAllSignatureItems=Removes all signature items for all Constellations, to be re-added via `addSignatureItem`
+groovyscript.wiki.astralsorcery.constellation.removeSignatureItems=Removes a Constellation's signature items, to be re-added via `addSignatureItem`
+groovyscript.wiki.astralsorcery.constellation.streamConstellations=Iterates through every Constellation registered, with the ability to call remove on any element to remove it from the game
+groovyscript.wiki.astralsorcery.constellation.removeAll=Removes all Constellations
+
+groovyscript.wiki.astralsorcery.fountain.title=Fountain
+groovyscript.wiki.astralsorcery.fountain.description=Adds virtual aquifers that can be accessed via the Evershifting Fountain's Necromantic Prime.
+groovyscript.wiki.astralsorcery.fountain.add0=Adds an existing `FluidRarityEntry` to the registry
+groovyscript.wiki.astralsorcery.fountain.add1=Adds recipes in the format `fluid`, `rarity`, `guaranteedAmt`, `addRand`
+groovyscript.wiki.astralsorcery.fountain.add2=Adds recipes in the format `fluid`, `rarity`, `guaranteedAmt`, `addRand`
+groovyscript.wiki.astralsorcery.fountain.variance.value=Sets the maximum amount of additional fluid that can be generated in a chunk
+groovyscript.wiki.astralsorcery.fountain.minimumAmount.value=Sets the minimum amount of fluid in a chunk
+groovyscript.wiki.astralsorcery.fountain.fluid.value=Sets the fluid being generated
+groovyscript.wiki.astralsorcery.fountain.rarity.value=Sets the frequency the fluid generates in a chunk
+groovyscript.wiki.astralsorcery.fountain.remove0=Removes an existing `FluidRarityEntry`
+groovyscript.wiki.astralsorcery.fountain.remove1=Removes an entry matching the given `FluidStack`
+groovyscript.wiki.astralsorcery.fountain.remove2=Removes an entry matching the given `Fluid`
+
+groovyscript.wiki.astralsorcery.grindstone.title=Grindstone
+groovyscript.wiki.astralsorcery.grindstone.description=Converts an item into an itemstack with a chance of getting twice the amount after right clicking the grindstone based on weight.
+groovyscript.wiki.astralsorcery.grindstone.add0=Adds a recipe in the format of `input`, `output`, `weight`, with the `secondaryChance` being 0
+groovyscript.wiki.astralsorcery.grindstone.add1=Adds a recipe in the format of `input`, `output`, `weight`, `secondaryChance`
+groovyscript.wiki.astralsorcery.grindstone.secondaryChance.value=Sets the chance of an additional output
+groovyscript.wiki.astralsorcery.grindstone.weight.value=Sets how many interactions it takes to process the recipe
+
+groovyscript.wiki.astralsorcery.infusionaltar.title=Infusion Altar
+groovyscript.wiki.astralsorcery.infusionaltar.description=Consumes buckets of Liquid Starlight when interacted with by a Resonating Wand to convert input items into output itemstacks after a time.
+groovyscript.wiki.astralsorcery.infusionaltar.consumeMultiple.value=Sets if the recipe consumes all 12 buckets of Starlight surrounding the Infusion Altar instead of just one
+groovyscript.wiki.astralsorcery.infusionaltar.chalice.value=Sets if using a chalice speeds up the recipe time
+groovyscript.wiki.astralsorcery.infusionaltar.consumption.value=Sets the chance of consuming a bucket of Starlight
+groovyscript.wiki.astralsorcery.infusionaltar.time.value=Sets the time the recipe takes to complete
+
+groovyscript.wiki.astralsorcery.lighttransmutation.title=Light Transmutation
+groovyscript.wiki.astralsorcery.lighttransmutation.description=Converts an input Block or IBlockState into an output IBlockState after being sent a given amount of starlight, with the ability to require a specific constellation of starlight.
+groovyscript.wiki.astralsorcery.lighttransmutation.inBlock.value=Sets the input Block, recipe will convert any blockstate of the provided block
+groovyscript.wiki.astralsorcery.lighttransmutation.output.value=Sets the output IBlockState
+groovyscript.wiki.astralsorcery.lighttransmutation.input.value=Sets the input IBlockState, recipe will convert only the given blockstate
+groovyscript.wiki.astralsorcery.lighttransmutation.cost.value=Sets the amount of starlight required to complete the craft
+groovyscript.wiki.astralsorcery.lighttransmutation.constellation.value=Sets the required Constellation the starlight must be collected from. Must be either a Major or Weak Constellation
+groovyscript.wiki.astralsorcery.lighttransmutation.inStack.value=Sets the item representing the input Block or IBlockState in JEI
+groovyscript.wiki.astralsorcery.lighttransmutation.outStack.value=Sets the item representing the output IBlockState in JEI
+
+groovyscript.wiki.astralsorcery.lightwell.title=Lightwell
+groovyscript.wiki.astralsorcery.lightwell.description=Converts an input item into fluid, with a chance at breaking every time fluid is produced. The amount of fluid produced per interval can be increased via starlight.
+groovyscript.wiki.astralsorcery.lightwell.add0=Adds recipes in the format `catalyst`, `output`, `productionMultiplier`, `shatterMultiplier`, `color`
+groovyscript.wiki.astralsorcery.lightwell.add1=Adds recipes in the format `catalyst`, `output`, `productionMultiplier`, `shatterMultiplier`
+groovyscript.wiki.astralsorcery.lightwell.output.value=Sets the output fluid
+groovyscript.wiki.astralsorcery.lightwell.shatterMultiplier.value=Sets how likely the catalyst is to shatter when producing fluid, with higher being less likely but never 0
+groovyscript.wiki.astralsorcery.lightwell.color.value=Sets the color of the produced particles
+groovyscript.wiki.astralsorcery.lightwell.catalyst.value=Sets the input item
+groovyscript.wiki.astralsorcery.lightwell.productionMultiplier.value=Sets the base amount of fluid produced per tick
+groovyscript.wiki.astralsorcery.lightwell.remove=
+
+groovyscript.wiki.astralsorcery.mineralisritualregistry.title=Mineralis Ritual Registry
+groovyscript.wiki.astralsorcery.mineralisritualregistry.description=Using a mineralis ritual will convert nearby stone blocks into random ores.
+groovyscript.wiki.astralsorcery.mineralisritualregistry.add=Adds entries in the format `ore`, `weight`
+groovyscript.wiki.astralsorcery.mineralisritualregistry.remove=Removes entries of the given ore
+
+groovyscript.wiki.astralsorcery.perktree.title=Perk Tree
+groovyscript.wiki.astralsorcery.perktree.description=Create a custom perk with a custom effect, at a given location.
+groovyscript.wiki.astralsorcery.perktree.add=Adds the given perk to the perk map
+groovyscript.wiki.astralsorcery.perktree.addConnection=Adds a connection between two perks
+groovyscript.wiki.astralsorcery.perktree.movePerk=Moves the given perk to the x and y co-ords specified in the format `perk`, `x`, `z`
+groovyscript.wiki.astralsorcery.perktree.removeConnection=Removes a connection between two perks
+groovyscript.wiki.astralsorcery.perktree.getPerk=Returns the perk with the given name
+
+groovyscript.wiki.astralsorcery.perktreeconfig.title=Perk Tree Config
+groovyscript.wiki.astralsorcery.perktreeconfig.description=Control the Perk level cap and XP formula.
+groovyscript.wiki.astralsorcery.perktreeconfig.setLevelCap=Sets the maximum level of Astral Sorcery's Perks, between 1 and 100
+groovyscript.wiki.astralsorcery.perktreeconfig.setXpFunction=Sets the Experience cost to advance to the next level, with the Closure taking 2 parameters, `int levelNumber` and `long previousLevelCost` and returning a `long`
+
+groovyscript.wiki.astralsorcery.research.title=Research Pages
+groovyscript.wiki.astralsorcery.research.description=Add custom Research Pages to the Astral Sorcery Book.
+groovyscript.wiki.astralsorcery.research.addNode=Adds a new node to the given category in the format `category`, `node`
+groovyscript.wiki.astralsorcery.research.connectNodes=Adds a connection between two nodes
+groovyscript.wiki.astralsorcery.research.moveNode=Moves the node with the given name to the x and y co-ords specified in the format `name`, `x`, `z`
+groovyscript.wiki.astralsorcery.research.node.value=Sets the itemstack representing the node in the category
+groovyscript.wiki.astralsorcery.research.pages.value=Sets the pages visible within the node
+groovyscript.wiki.astralsorcery.research.name.value=Sets the unlocalized name of the node
+groovyscript.wiki.astralsorcery.research.location.value=Sets the location of the node
+groovyscript.wiki.astralsorcery.research.category.value=Sets the page the node is located on
+groovyscript.wiki.astralsorcery.research.connections.value=Sets what other nodes this node is connected to
+groovyscript.wiki.astralsorcery.research.disconnectNodes=Removes a connection between two nodes
+groovyscript.wiki.astralsorcery.research.removeNode=Removes the node with the given name
+groovyscript.wiki.astralsorcery.research.getNode=Returns the node with the given name
+
+groovyscript.wiki.astralsorcery.starlightaltar.title=Starlight Altar
+groovyscript.wiki.astralsorcery.starlightaltar.description=Allows creation of shaped recipes in the Astral Sorcery Crafting Altar chain.
+groovyscript.wiki.astralsorcery.starlightaltar.craftingTickTime.value=Sets how long the craft will take to complete in ticks
+groovyscript.wiki.astralsorcery.starlightaltar.requiredConstellation.value=Sets the required Constellation for the Rock Crystal to be attuned to. Only applies to Iridescent Altars
+groovyscript.wiki.astralsorcery.starlightaltar.name.value=Sets the name of the recipe, should be unique
+groovyscript.wiki.astralsorcery.starlightaltar.starlightRequired.value=Sets the amount of starlight the recipe requires. Has a cap based on the table tier, of 1000, 2000, 4000, 8000 for Luminous, Starlight, Celestial, and Iridescent respectively
+groovyscript.wiki.astralsorcery.starlightaltar.outerIngredients.value=Sets items placed on nearby relays once the recipe starts. Must be placed manually
+groovyscript.wiki.astralsorcery.starlightaltar.removeByOutput0=Removes all recipes that match the given output in all Altar tiers
+groovyscript.wiki.astralsorcery.starlightaltar.removeByOutput1=Removes all recipes that match the given output in only the specified Altar tier, in the format `output`, `altarLevel`
+
+groovyscript.wiki.astralsorcery.trashperkregistry.title=Trash Perk Registry
+groovyscript.wiki.astralsorcery.trashperkregistry.description=Having the Trash to Treasure perk turns items the player drops in the list defined in the config at 'perks/key_void_trash/DropList' into a chance at random ores.
+groovyscript.wiki.astralsorcery.trashperkregistry.add=Adds entries in the format `ore`, `weight`
+groovyscript.wiki.astralsorcery.trashperkregistry.remove=Removes entries of the given ore
+
+groovyscript.wiki.astralsorcery.treasureshrineregistry.title=Treasure Shrine Registry
+groovyscript.wiki.astralsorcery.treasureshrineregistry.description=When the block in the middle of a Treasure Shrine structure is broken, a random ore from this list will replace it until the Treasure Shrine is exhausted.
+groovyscript.wiki.astralsorcery.treasureshrineregistry.add=Adds entries in the format `ore`, `weight`
+groovyscript.wiki.astralsorcery.treasureshrineregistry.remove=Removes entries of the given ore
 
 
 

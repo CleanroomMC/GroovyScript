@@ -248,7 +248,11 @@ public class Builder {
                 });
 
         for (Method registerMethod : registrationMethods) {
-            out.append("- ").append(I18n.format("groovyscript.wiki.register", registerMethod.getAnnotatedReturnType().getType().getTypeName())).append("\n\n");
+            out.append("- ");
+            String returnType = registerMethod.getAnnotatedReturnType().getType().getTypeName();
+            if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.register"));
+            else out.append(I18n.format("groovyscript.wiki.register_return", returnType));
+            out.append("\n\n");
             out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.getName())).indentation(1).toString());
         }
 
