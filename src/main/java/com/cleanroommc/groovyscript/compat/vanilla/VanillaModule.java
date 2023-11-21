@@ -34,11 +34,6 @@ public class VanillaModule implements IScriptReloadable {
         ExpansionHelper.mixinClass(ItemStack.class, RarityItemStackExpansion.class);
     }
 
-    @GroovyBlacklist
-    public void init() {
-        loot.init();
-    }
-
     @Override
     @GroovyBlacklist
     public void onReload() {
