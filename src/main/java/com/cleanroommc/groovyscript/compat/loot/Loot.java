@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.loot;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootPoolAccessor;
 import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
 import groovy.lang.Closure;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 
-public class Loot {
+public class Loot implements IScriptReloadable {
 
     public LootTableManager tableManager;
     public Map<ResourceLocation, LootTable> tables = new Object2ObjectOpenHashMap<>();
