@@ -18,7 +18,10 @@ public class GroovyLootCondition implements LootCondition {
         if (Arrays.equals(condition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {
             this.condition = condition;
         } else {
-            GroovyLog.msg("Error creating custom loot condition: condition must take the following parameters (java.util.Random, net.minecraft.world.storage.loot.LootContext).").error().post();
+            GroovyLog.msg("Error creating LootCondition:")
+                    .add("condition must take the following parameters (java.util.Random, net.minecraft.world.storage.loot.LootContext)")
+                    .error()
+                    .post();
             this.condition = null;
         }
     }

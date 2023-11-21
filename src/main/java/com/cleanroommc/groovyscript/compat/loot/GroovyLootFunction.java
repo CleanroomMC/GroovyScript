@@ -25,7 +25,10 @@ public class GroovyLootFunction extends LootFunction {
         if (Arrays.equals(function.getParameterTypes(), new Class[]{ItemStack.class, Random.class, LootContext.class})) {
             this.function = function;
         } else {
-            GroovyLog.msg("Error creating custom loot function: function must take the following parameters (net.minecraft.item.ItemStack, java.util.Random, net.minecraft.world.storage.loot.LootContext).").error().post();
+            GroovyLog.msg("Error creating LootFunction:")
+                    .add("function must take the following parameters (net.minecraft.item.ItemStack, java.util.Random, net.minecraft.world.storage.loot.LootContext)")
+                    .error()
+                    .post();
             this.function = null;
         }
     }
