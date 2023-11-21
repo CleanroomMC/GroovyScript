@@ -68,14 +68,14 @@ public class ReloadableRegistryManager {
     @ApiStatus.Internal
     public static void init() {
         registryDummies.put(IRecipe.class, DummyRecipe::new);
-        VanillaModule.loot.init();
+        VanillaModule.INSTANCE.init();
     }
 
     @ApiStatus.Internal
     public static void onReload() {
         GroovyScript.reloadRunConfig();
         reloadForgeRegistries();
-        new VanillaModule().onReload();
+        VanillaModule.INSTANCE.onReload();
         ModSupport.getAllContainers().stream()
                 .filter(GroovyContainer::isLoaded)
                 .map(GroovyContainer::get)
@@ -93,7 +93,7 @@ public class ReloadableRegistryManager {
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
                 .forEach(VirtualizedRegistry::afterScriptLoad);
-        new VanillaModule().afterScriptLoad();
+        VanillaModule.INSTANCE.afterScriptLoad();
         unfreezeForgeRegistries();
     }
 

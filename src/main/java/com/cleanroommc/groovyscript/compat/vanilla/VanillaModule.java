@@ -11,6 +11,8 @@ import net.minecraft.item.ItemStack;
 
 public class VanillaModule implements IScriptReloadable {
 
+    public static final VanillaModule INSTANCE = new VanillaModule();
+
     public static final Crafting crafting = new Crafting();
     public static final Furnace furnace = new Furnace();
     public static final Loot loot = new Loot();
@@ -32,6 +34,11 @@ public class VanillaModule implements IScriptReloadable {
         GroovyScript.getSandbox().registerBinding("InWorldCrafting", inWorldCrafting);
 
         ExpansionHelper.mixinClass(ItemStack.class, RarityItemStackExpansion.class);
+    }
+
+    @GroovyBlacklist
+    public void init() {
+        loot.init();
     }
 
     @Override
