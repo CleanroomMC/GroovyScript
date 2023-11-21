@@ -11,6 +11,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.Fluid;
@@ -177,5 +180,13 @@ public class GameObjectHandlers {
             }
         }
         return textformat == null ? Result.error() : Result.some(textformat);
+    }
+
+    public static @NotNull Result<NBTTagCompound> parseNBT(String mainArg, Object... args) {
+        try {
+            return Result.some(JsonToNBT.getTagFromJson(mainArg));
+        } catch (NBTException e) {
+            return Result.error("unable to parse provided nbt string");
+        }
     }
 }
