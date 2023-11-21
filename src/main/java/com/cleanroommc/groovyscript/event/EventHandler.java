@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.WarningScreen;
 import com.cleanroommc.groovyscript.compat.content.GroovyBlock;
 import com.cleanroommc.groovyscript.compat.content.GroovyItem;
-import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingInfo;
 import com.cleanroommc.groovyscript.compat.vanilla.ICraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.Player;
@@ -26,7 +25,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.Loader;
@@ -103,15 +101,6 @@ public class EventHandler {
                     }
                 }
             }
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onTableLoad(LootTableLoadEvent event) {
-        if (!Loot.TABLES.containsKey(event.getName())) {
-            Loot.TABLES.put(event.getName(), event.getTable());
-        } else {
-            event.setTable(Loot.TABLES.get(event.getName()));
         }
     }
 
