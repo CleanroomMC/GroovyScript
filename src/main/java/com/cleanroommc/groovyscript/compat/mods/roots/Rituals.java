@@ -15,7 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @RegistryDescription(
-        reloadability = RegistryDescription.Reloadability.FLAWED
+        reloadability = RegistryDescription.Reloadability.FLAWED,
+        isFullyDocumented = false // TODO fully document Roots Rituals
 )
 public class Rituals extends VirtualizedRegistry<RitualBase> {
 

@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 @RegistryDescription(
-        reloadability = RegistryDescription.Reloadability.FLAWED
+        reloadability = RegistryDescription.Reloadability.FLAWED,
+        isFullyDocumented = false // TODO fully document Roots Spells
 )
 public class Spells extends VirtualizedRegistry<SpellBase> {
 
