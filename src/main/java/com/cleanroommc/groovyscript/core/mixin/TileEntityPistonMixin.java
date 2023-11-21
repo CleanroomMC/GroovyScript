@@ -70,8 +70,8 @@ public abstract class TileEntityPistonMixin {
 
         EnumFacing enumfacing = this.extending ? this.pistonFacing : this.pistonFacing.getOpposite();
         double d0 = progress - this.progress;
-        List<AxisAlignedBB> list = Lists.<AxisAlignedBB>newArrayList();
-        this.getCollisionRelatedBlockState().addCollisionBoxToList(thisTile.getWorld(), BlockPos.ORIGIN, new AxisAlignedBB(BlockPos.ORIGIN), list, (Entity) null, true);
+        List<AxisAlignedBB> list = Lists.newArrayList();
+        this.getCollisionRelatedBlockState().addCollisionBoxToList(thisTile.getWorld(), BlockPos.ORIGIN, new AxisAlignedBB(BlockPos.ORIGIN), list, null, true);
 
         if (!list.isEmpty()) {
             AxisAlignedBB axisalignedbb = this.moveByPositionAndProgress(this.getMinMaxPiecesAABB(list));

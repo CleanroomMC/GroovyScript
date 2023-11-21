@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.woot;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.woot.AnvilManagerAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
 
     public StygianIronAnvil() {
-        super(VirtualizedRegistry.generateAliases("Anvil"));
+        super(Alias.generateOfClass(StygianIronAnvil.class).andGenerate("Anvil"));
     }
 
     public static RecipeBuilder recipeBuilder() {
@@ -121,7 +122,8 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         public @Nullable IAnvilRecipe register() {
             if (!validate()) return null;
 
-            if (((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().stream().noneMatch(x -> x.isItemEqual(base))) ((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().add(base);
+            if (((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().stream().noneMatch(x -> x.isItemEqual(base)))
+                ((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().add(base);
 
             IAnvilRecipe recipe = new AnvilRecipe(output.get(0), base, preserveBase);
             recipe.getInputs().addAll(input.stream().map(x -> x.toMcIngredient().getMatchingStacks()[0]).collect(Collectors.toList()));

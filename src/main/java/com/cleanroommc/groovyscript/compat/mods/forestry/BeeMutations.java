@@ -3,8 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods.forestry;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.core.mixin.forestry.BeeRootAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeeMutationBuilder;
@@ -22,7 +22,7 @@ import java.util.function.Function;
 public class BeeMutations extends ForestryRegistry<IBeeMutation> {
 
     public BeeMutations() {
-        super(VirtualizedRegistry.generateAliases("Mutations"));
+        super(Alias.generateOf("Mutations"));
     }
 
     @Override
@@ -39,7 +39,8 @@ public class BeeMutations extends ForestryRegistry<IBeeMutation> {
         return ForestryAPI.moduleManager.isModuleEnabled("forestry", ForestryModuleUids.APICULTURE);
     }
 
-    public IBeeMutation add(AlleleBeeSpecies output, AlleleBeeSpecies a, AlleleBeeSpecies b, double chance, @Nullable Function<IBeeMutationBuilder, IMutationBuilder> requirement) {
+    public IBeeMutation add(AlleleBeeSpecies output, AlleleBeeSpecies a, AlleleBeeSpecies b, double chance,
+                            @Nullable Function<IBeeMutationBuilder, IMutationBuilder> requirement) {
         BeeMutation mutation = new BeeMutation(a, b, Objects.requireNonNull(BeeManager.beeRoot).getTemplate(output), (int) Math.round(100 * chance));
         if (requirement != null) mutation = (BeeMutation) requirement.apply(mutation);
         add(mutation);

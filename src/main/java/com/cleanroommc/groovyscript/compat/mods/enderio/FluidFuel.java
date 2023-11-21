@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.enderio;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.core.mixin.enderio.FluidFuelRegisterAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import crazypants.enderio.base.fluid.FluidFuelRegister;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
 
     public FluidFuel() {
-        super(VirtualizedRegistry.generateAliases("CombustionFuel"));
+        super(Alias.generateOf("CombustionFuel"));
     }
 
     public void addFuel(FluidStack fluidStack, int rfPerCycle, int totalBurnTime) {

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.enderio;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.core.mixin.enderio.FluidFuelRegisterAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import crazypants.enderio.base.fluid.FluidFuelRegister;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
 
     public FluidCoolant() {
-        super(VirtualizedRegistry.generateAliases("CombustionCoolant"));
+        super(Alias.generateOf("CombustionCoolant"));
     }
 
     public void addCoolant(FluidStack fluidStack, float degreesPerMb) {

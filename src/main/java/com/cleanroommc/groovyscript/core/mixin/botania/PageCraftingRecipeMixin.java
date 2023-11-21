@@ -21,6 +21,7 @@ import vazkii.botania.common.lexicon.page.PageRecipe;
 
 @Mixin(value = PageCraftingRecipe.class, remap = false)
 public abstract class PageCraftingRecipeMixin extends PageRecipe {
+
     @Shadow
     boolean shapelessRecipe;
     @Shadow
@@ -49,8 +50,8 @@ public abstract class PageCraftingRecipeMixin extends PageRecipe {
                     this.oreDictRecipe = recipe instanceof ShapelessOreRecipe;
 
                     drawGrid:
-                    for(y = 0; y < 3; ++y) {
-                        for(x = 0; x < 3; ++x) {
+                    for (y = 0; y < 3; ++y) {
+                        for (x = 0; x < 3; ++x) {
                             index = y * 3 + x;
                             if (index >= recipe.getIngredients().size()) {
                                 break drawGrid;
@@ -71,10 +72,11 @@ public abstract class PageCraftingRecipeMixin extends PageRecipe {
                             : recipe instanceof ShapedCraftingRecipe ? ((ShapedCraftingRecipe) recipe).getRecipeWidth() : ((ShapedRecipes) recipe).getWidth();
                 int height = oreDictRecipe
                              ? ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, (ShapedOreRecipe) recipe, "height")
-                             : recipe instanceof ShapedCraftingRecipe ? ((ShapedCraftingRecipe) recipe).getRecipeHeight() : ((ShapedRecipes) recipe).getHeight();
+                             : recipe instanceof ShapedCraftingRecipe ? ((ShapedCraftingRecipe) recipe).getRecipeHeight()
+                                                                      : ((ShapedRecipes) recipe).getHeight();
 
-                for(index = 0; index < height; ++index) {
-                    for(x = 0; x < width; ++x) {
+                for (index = 0; index < height; ++index) {
+                    for (x = 0; x < width; ++x) {
                         Ingredient input = recipe.getIngredients().get(index * width + x);
                         ItemStack[] stacks = input.getMatchingStacks();
                         if (stacks.length > 0) {

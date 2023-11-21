@@ -22,7 +22,7 @@ public class ClassicCompressor extends Compressor {
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> ClassicRecipes.compressor.removeRecipe(recipe.getInput()));
-        restoreFromBackup().forEach(recipe -> ClassicRecipes.compressor.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], "" + recipe.hashCode()));
+        restoreFromBackup().forEach(recipe -> ClassicRecipes.compressor.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], String.valueOf(recipe.hashCode())));
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ClassicCompressor extends Compressor {
             xp = 0F;
         }
         MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(new RecipeInput(input), Collections.singleton(output));
-        ClassicRecipes.compressor.addRecipe(recipe.getInput(), output, xp, "" + recipe.hashCode());
+        ClassicRecipes.compressor.addRecipe(recipe.getInput(), output, xp, String.valueOf(recipe.hashCode()));
         addScripted(recipe);
         return recipe;
     }
@@ -119,7 +119,7 @@ public class ClassicCompressor extends Compressor {
 
     @Override
     public void add(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
-        ClassicRecipes.compressor.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], "" + recipe.hashCode());
+        ClassicRecipes.compressor.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], String.valueOf(recipe.hashCode()));
         addScripted(recipe);
     }
 

@@ -22,7 +22,7 @@ public class ClassicMacerator extends Macerator {
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> ClassicRecipes.macerator.removeRecipe(recipe.getInput()));
-        restoreFromBackup().forEach(recipe -> ClassicRecipes.macerator.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], "" + recipe.hashCode()));
+        restoreFromBackup().forEach(recipe -> ClassicRecipes.macerator.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], String.valueOf(recipe.hashCode())));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ClassicMacerator extends Macerator {
             xp = 0F;
         }
         MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(new RecipeInput(input), Collections.singleton(output));
-        ClassicRecipes.macerator.addRecipe(recipe.getInput(), output, xp, "" + recipe.hashCode());
+        ClassicRecipes.macerator.addRecipe(recipe.getInput(), output, xp, String.valueOf(recipe.hashCode()));
         addScripted(recipe);
         return recipe;
     }
@@ -120,7 +120,7 @@ public class ClassicMacerator extends Macerator {
     @Override
     public void add(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
         addScripted(recipe);
-        ClassicRecipes.macerator.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], "" + recipe.hashCode());
+        ClassicRecipes.macerator.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], String.valueOf(recipe.hashCode()));
     }
 
     @Override

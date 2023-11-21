@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -27,8 +28,8 @@ public class Casting implements IDynamicGroovyProperty {
     public final Basin basin = new Basin();
 
     public Casting() {
-        for (String s : VirtualizedRegistry.generateAliases("Table")) this.properties.put(s, this.table);
-        for (String s : VirtualizedRegistry.generateAliases("Basin")) this.properties.put(s, this.basin);
+        for (String s : Alias.generateOf("Table")) this.properties.put(s, this.table);
+        for (String s : Alias.generateOf("Basin")) this.properties.put(s, this.basin);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class Casting implements IDynamicGroovyProperty {
             return true;
         }
 
-        public boolean removeByOutput(ItemStack output){
+        public boolean removeByOutput(ItemStack output) {
             if (TinkerRegistryAccessor.getTableCastRegistry().removeIf(recipe -> {
                 boolean found = recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER).isItemEqual(output);
                 if (found) addBackup(recipe);
@@ -152,7 +153,8 @@ public class Casting implements IDynamicGroovyProperty {
             @Override
             public @Nullable ICastingRecipe register() {
                 if (!validate()) return null;
-                CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast) : null, fluidInput.get(0), time, consumesCast, false);
+                CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast)
+                                                                                     : null, fluidInput.get(0), time, consumesCast, false);
                 add(recipe);
                 return recipe;
             }
@@ -185,7 +187,7 @@ public class Casting implements IDynamicGroovyProperty {
             return true;
         }
 
-        public boolean removeByOutput(ItemStack output){
+        public boolean removeByOutput(ItemStack output) {
             if (TinkerRegistryAccessor.getBasinCastRegistry().removeIf(recipe -> {
                 boolean found = ItemStack.areItemStacksEqual(recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER), output);
                 if (found) addBackup(recipe);
@@ -276,7 +278,8 @@ public class Casting implements IDynamicGroovyProperty {
             @Override
             public @Nullable ICastingRecipe register() {
                 if (!validate()) return null;
-                CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast) : null, fluidInput.get(0), time, consumesCast, false);
+                CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast)
+                                                                                     : null, fluidInput.get(0), time, consumesCast, false);
                 add(recipe);
                 return recipe;
             }

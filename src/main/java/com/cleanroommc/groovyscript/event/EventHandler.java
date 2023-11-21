@@ -4,7 +4,9 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.WarningScreen;
 import com.cleanroommc.groovyscript.compat.content.GroovyBlock;
+import com.cleanroommc.groovyscript.compat.content.GroovyFluid;
 import com.cleanroommc.groovyscript.compat.content.GroovyItem;
+import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingInfo;
 import com.cleanroommc.groovyscript.compat.vanilla.ICraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.Player;
@@ -25,12 +27,15 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -49,6 +54,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         GroovyBlock.initBlocks(event.getRegistry());
+        GroovyFluid.initBlocks(event.getRegistry());
     }
 
     @SubscribeEvent
@@ -56,6 +62,13 @@ public class EventHandler {
     public static void registerModels(ModelRegistryEvent event) {
         GroovyItem.registerModels();
         GroovyBlock.registerModels();
+        GroovyFluid.registerModels();
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void registerTextures(TextureStitchEvent.Post event) {
+        GroovyFluid.initTextures(event.getMap());
     }
 
     @SubscribeEvent
@@ -116,7 +129,7 @@ public class EventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public static void onGuiOpen(GuiOpenEvent event) {
-        if (event.getGui() instanceof GuiMainMenu && !WarningScreen.wasOpened) {
+        if (!FMLLaunchHandler.isDeobfuscatedEnvironment() && event.getGui() instanceof GuiMainMenu && !WarningScreen.wasOpened) {
             WarningScreen.wasOpened = true;
             List<String> warnings = new ArrayList<>();
             if (!Loader.isModLoaded("universaltweaks")) {

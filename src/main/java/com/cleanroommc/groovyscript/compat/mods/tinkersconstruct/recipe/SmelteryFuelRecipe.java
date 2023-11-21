@@ -26,8 +26,6 @@ public class SmelteryFuelRecipe {
         SmelteryFuelRecipe other = (SmelteryFuelRecipe) obj;
 
         if (other.duration != duration) return false;
-        if (other.fluid.isFluidStackIdentical(fluid)) return false;
-
-        return true;
+        return !other.fluid.isFluidStackIdentical(fluid);
     }
 }

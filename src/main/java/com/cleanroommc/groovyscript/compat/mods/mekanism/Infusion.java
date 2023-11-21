@@ -100,7 +100,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
     }
 
     public void remove(IIngredient item) {
-        for (Map.Entry<ItemStack, InfuseObject > entry : InfuseRegistry.getObjectMap().entrySet().stream().filter(x -> item.test(x.getKey())).collect(Collectors.toList())) {
+        for (Map.Entry<ItemStack, InfuseObject> entry : InfuseRegistry.getObjectMap().entrySet().stream().filter(x -> item.test(x.getKey())).collect(Collectors.toList())) {
             objectBackup.add(Pair.of(entry.getKey(), entry.getValue()));
             InfuseRegistry.getObjectMap().remove(entry.getKey());
         }
@@ -119,7 +119,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
     }
 
     public void removeByType(InfuseType type) {
-        for (Map.Entry<ItemStack, InfuseObject > entry : InfuseRegistry.getObjectMap().entrySet().stream().filter(x -> x.getValue().type == type).collect(Collectors.toList())) {
+        for (Map.Entry<ItemStack, InfuseObject> entry : InfuseRegistry.getObjectMap().entrySet().stream().filter(x -> x.getValue().type == type).collect(Collectors.toList())) {
             objectBackup.add(Pair.of(entry.getKey(), entry.getValue()));
             InfuseRegistry.getObjectMap().remove(entry.getKey());
         }

@@ -7,12 +7,19 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.machines.MachineRecipe;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, R>> extends VirtualizedRegistry<R> {
 
     protected final RecipeHandler.Recipe<?, ?, R> recipeRegistry;
 
-    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry, String... aliases) {
+    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry) {
+        this(recipeRegistry, null);
+    }
+
+    public VirtualizedMekanismRegistry(RecipeHandler.Recipe<?, ?, R> recipeRegistry, @Nullable Collection<String> aliases) {
         super(aliases);
         this.recipeRegistry = recipeRegistry;
     }

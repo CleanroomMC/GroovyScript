@@ -54,7 +54,8 @@ public class Materials extends VirtualizedRegistry<GroovyMaterial> {
     public boolean removeTrait(String trait) {
         if (TinkerRegistryAccessor.getTraits().entrySet().removeIf(entry -> {
             boolean found = entry.getKey().equals(trait);
-            if (found) TinkerRegistryAccessor.getMaterials().values().forEach(material -> ((MaterialAccessor) material).getTraits().values().forEach(l -> l.removeIf(t -> t.getIdentifier().equals(trait))));
+            if (found)
+                TinkerRegistryAccessor.getMaterials().values().forEach(material -> ((MaterialAccessor) material).getTraits().values().forEach(l -> l.removeIf(t -> t.getIdentifier().equals(trait))));
             return found;
         })) return true;
         GroovyLog.msg("Error removing Tinkers Construct material trait")

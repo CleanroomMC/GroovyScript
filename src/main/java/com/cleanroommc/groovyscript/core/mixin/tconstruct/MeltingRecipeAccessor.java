@@ -6,6 +6,7 @@ import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
 @Mixin(value = MeltingRecipe.class, remap = false)
 public interface MeltingRecipeAccessor {
+
     @Invoker
     static int invokeCalcTemperature(int temp, int timeAmount) {
         throw new AssertionError();

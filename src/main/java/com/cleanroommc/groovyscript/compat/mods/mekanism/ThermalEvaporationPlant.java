@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import mekanism.common.recipe.RecipeHandler;
@@ -11,13 +12,10 @@ import mekanism.common.recipe.machines.ThermalEvaporationRecipe;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-
 public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
 
     public ThermalEvaporationPlant() {
-        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, "TEP", "tep");
-        aliases.addAll(Arrays.asList(VirtualizedMekanismRegistry.generateAliases("ThermalEvaporation")));
+        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, Alias.generateOf("ThermalEvaporation").and("TEP", "tep"));
     }
 
     public RecipeBuilder recipeBuilder() {

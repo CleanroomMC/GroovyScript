@@ -6,11 +6,13 @@ import org.codehaus.groovy.ast.GroovyClassVisitor;
 import org.codehaus.groovy.classgen.GeneratorContext;
 import org.codehaus.groovy.control.SourceUnit;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+@Pseudo
 @Mixin(targets = "org/codehaus/groovy/control/CompilationUnit$3", remap = false)
 public class CompUnitClassGenMixin {
 

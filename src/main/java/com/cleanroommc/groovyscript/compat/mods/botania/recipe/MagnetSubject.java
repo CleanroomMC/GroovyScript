@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.core.mixin.botania.BotaniaAPIAccessor;
 import net.minecraft.block.Block;
 
 public class MagnetSubject {
+
     public final IIngredient item;
     public final Block block;
     public final int meta;

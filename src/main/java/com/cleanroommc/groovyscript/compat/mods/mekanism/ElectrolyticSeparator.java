@@ -4,8 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.FluidInput;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<SeparatorRecipe> {
 
     public ElectrolyticSeparator() {
-        super(RecipeHandler.Recipe.ELECTROLYTIC_SEPARATOR, VirtualizedRegistry.generateAliases("Separator"));
+        super(RecipeHandler.Recipe.ELECTROLYTIC_SEPARATOR, Alias.generateOf("Separator").andGenerateOfClass(ElectrolyticSeparator.class));
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -58,6 +58,7 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
             this.energy = energy;
             return this;
         }
+
         @Override
         public String getErrorMsg() {
             return "Error adding Mekanism Electrolytic Separator recipe";

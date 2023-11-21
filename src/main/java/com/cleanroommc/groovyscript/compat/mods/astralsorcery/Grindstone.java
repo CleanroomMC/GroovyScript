@@ -13,8 +13,6 @@ import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegi
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.ArrayList;
-
 public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
 
     public static RecipeBuilder recipeBuilder() {

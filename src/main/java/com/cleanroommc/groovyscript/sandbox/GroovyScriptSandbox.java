@@ -14,6 +14,7 @@ import groovy.lang.Closure;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,13 +26,13 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GroovyScriptSandbox extends GroovySandbox {
 
     private final ImportCustomizer importCustomizer = new ImportCustomizer();
+    private final Map<List<StackTraceElement>, AtomicInteger> storedExceptions;
 
     private LoadStage currentLoadStage;
 
@@ -69,6 +70,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
                                          "net.minecraft.util.ResourceLocation",
                                          "net.minecraftforge.fml.common.eventhandler.EventPriority",
                                          "com.cleanroommc.groovyscript.event.EventBusType");
+        this.storedExceptions = new Object2ObjectOpenHashMap<>();
     }
 
     public void checkSyntax() {
@@ -109,9 +111,12 @@ public class GroovyScriptSandbox extends GroovySandbox {
         T result = null;
         try {
             result = closure.call(args);
-        } catch (Exception e) {
-            GroovyLog.get().error("An exception occurred while running a closure!");
-            GroovyLog.get().exception(e);
+        } catch (Throwable t) {
+            this.storedExceptions.computeIfAbsent(Arrays.asList(t.getStackTrace()), k -> {
+                GroovyLog.get().error("An exception occurred while running a closure!");
+                GroovyLog.get().exception(t);
+                return new AtomicInteger();
+            }).addAndGet(1);
         } finally {
             stopRunning();
         }

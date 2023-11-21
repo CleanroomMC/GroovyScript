@@ -5,6 +5,7 @@ import blusunrize.immersiveengineering.api.crafting.BottlingMachineRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> {
 
     public BottlingMachine() {
-        super(VirtualizedRegistry.generateAliases("Bottling"));
+        super(Alias.generateOf("Bottling"));
     }
 
     public static RecipeBuilder recipeBuilder() {

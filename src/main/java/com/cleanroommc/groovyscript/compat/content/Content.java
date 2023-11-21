@@ -8,6 +8,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,6 +37,10 @@ public class Content {
         registerBlock(name, block, new ItemBlock(block));
     }
 
+    public void registerFluid(Fluid fluid) {
+        FluidRegistry.registerFluid(fluid);
+    }
+
     public GroovyItem createItem(String name) {
         return new GroovyItem(name);
     }
@@ -45,6 +51,10 @@ public class Content {
 
     public GroovyBlock createBlock(String name) {
         return new GroovyBlock(name, Material.ROCK);
+    }
+
+    public GroovyFluid.Builder createFluid(String name) {
+        return new GroovyFluid.Builder(name);
     }
 
     public CreativeTabs createCreativeTab(String name, ItemStack icon) {

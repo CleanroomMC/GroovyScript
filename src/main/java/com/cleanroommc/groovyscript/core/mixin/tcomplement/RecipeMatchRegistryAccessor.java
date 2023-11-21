@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 
 @Mixin(value = RecipeMatchRegistry.class, remap = false)
 public interface RecipeMatchRegistryAccessor {
+
     @Accessor
     PriorityQueue<RecipeMatch> getItems();
 }

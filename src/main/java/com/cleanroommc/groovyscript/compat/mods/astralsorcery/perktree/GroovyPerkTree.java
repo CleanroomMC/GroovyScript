@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.PerkTreeAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
@@ -17,7 +18,7 @@ import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.
 public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
 
     public GroovyPerkTree() {
-        super(false, VirtualizedRegistry.generateAliases("PerkTree"));
+        super(Alias.generateOf("PerkTree"));
     }
 
     public static AttributeModifierPerkBuilder attributePerkBuilder() {

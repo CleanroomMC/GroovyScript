@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.BrewerManagerAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -29,7 +30,7 @@ public class Brewer extends VirtualizedRegistry<BrewerManager.BrewerRecipe> {
     private final List<String> validationFluidsBackup = new ArrayList<>();
 
     public Brewer() {
-        super(VirtualizedRegistry.generateAliases("Imbuer"));
+        super(Alias.generateOf("Imbuer").andGenerateOfClass(Brewer.class));
     }
 
     public RecipeBuilder recipeBuilder() {
