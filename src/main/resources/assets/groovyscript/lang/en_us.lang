@@ -1133,3 +1133,60 @@ groovyscript.wiki.thaumcraft.warp.title=Warp
 groovyscript.wiki.thaumcraft.warp.description=Determines if holding an item or equipping a piece of armor or a bauble gives warp, and how much warp it gives
 groovyscript.wiki.thaumcraft.warp.addWarp=Adds Warp to the given item in the format `item`, `amount`
 groovyscript.wiki.thaumcraft.warp.removeWarp=Removes Warp from the given item
+
+# Woot
+groovyscript.wiki.woot.drops.title=Drops
+groovyscript.wiki.woot.drops.description=Controls extra drops given by mobs. Chance and Size are both arrays 4 long, containing the values for levels 0/1/2/3 levels of Looting.
+groovyscript.wiki.woot.drops.add=Adds recipes in the format `wootMobName`, `itemStack`, `chances`, `sizes`
+groovyscript.wiki.woot.drops.name.value=Sets the entity and nbt tags
+groovyscript.wiki.woot.drops.size.value=Sets the quantity of the drop for each level of Looting
+groovyscript.wiki.woot.drops.chance.value=Sets the chance of the drop for each level of Looting
+groovyscript.wiki.woot.drops.removeByEntity=Removes recipes matching the given entity
+groovyscript.wiki.woot.drops.removeByOutput=Removes recipes matching the given output item
+
+groovyscript.wiki.woot.mobconfig.title=Mob Config
+groovyscript.wiki.woot.mobconfig.description=Control the default values or mob-specific values for a large number of effects, a full list can be found at `ipsis.woot.configuration.EnumConfigKey`. A full list can be viewed on [Github](https://github.com/Ipsis/Woot/blob/55e88f5a15d66cc987e676d665d20f4afbe008b8/src/main/java/ipsis/woot/configuration/EnumConfigKey.java#L14)
+groovyscript.wiki.woot.mobconfig.add_normal=Adds configuration to the given entity
+groovyscript.wiki.woot.mobconfig.add_global=Adds configuration to the default map
+groovyscript.wiki.woot.mobconfig.remove=Removes configuration from the given entity for the given config
+groovyscript.wiki.woot.mobconfig.removeByEntity=Removes all configuration for the given entity
+
+groovyscript.wiki.woot.policy.title=Policy
+groovyscript.wiki.woot.policy.description=Controls what entities can be farmed for what items via an entity blacklist, mod blacklist, item output blacklist, item output mod blacklist, and a mob whitelist.
+groovyscript.wiki.woot.policy.note=If the whitelist contains any entities, any entities not in the whitelist are banned (rendering EntityModBlacklist and EntityBlacklist superflous). GenerateOnlyList contains all entities which cannot be captured via shard, meaning the controller would need to be obtained a different way.
+groovyscript.wiki.woot.policy.addToEntityBlacklist=Prevents the given entity from being captured and spawned
+groovyscript.wiki.woot.policy.addToEntityModBlacklist=Prevents entities from the given mod from being captured and spawned
+groovyscript.wiki.woot.policy.addToEntityWhitelist=Prevents all entities not on the list from being spawned, overriding EntityBlacklist and EntityModBlacklist
+groovyscript.wiki.woot.policy.addToGenerateOnlyList=Prevents entities from being captured via shard, but doesn't prevent spawning
+groovyscript.wiki.woot.policy.addToItemBlacklist=Prevents the given item from being dropped by any entity
+groovyscript.wiki.woot.policy.addToItemModBlacklist=Prevents items from the given mod from being dropped by any entity
+groovyscript.wiki.woot.policy.removeFromEntityBlacklist=Removes the given entity from the EntityBlacklist
+groovyscript.wiki.woot.policy.removeFromEntityModBlacklist=Removes the given mod from the EntityModBlacklist
+groovyscript.wiki.woot.policy.removeFromEntityWhitelist=Removes given entity from the EntityWhitelist
+groovyscript.wiki.woot.policy.removeFromGenerateOnlyList=Removes the given entity from the GenerateOnlyList
+groovyscript.wiki.woot.policy.removeFromItemBlacklist=Removes the given item from the ItemBlacklist
+groovyscript.wiki.woot.policy.removeFromItemModBlacklist=Removes the given mod from the ItemModBlacklist
+groovyscript.wiki.woot.policy.removeAllFromEntityBlacklist=Removes all entities from the EntityBlacklist
+groovyscript.wiki.woot.policy.removeAllFromEntityModBlacklist=Removes all mods from the EntityModBlacklist
+groovyscript.wiki.woot.policy.removeAllFromEntityWhitelist=Removes all entities from the EntityWhitelist
+groovyscript.wiki.woot.policy.removeAllFromGenerateOnlyList=Removes all entities from the GenerateOnlyList
+groovyscript.wiki.woot.policy.removeAllFromItemBlacklist=Removes all items from the ItemBlacklist
+groovyscript.wiki.woot.policy.removeAllFromItemModBlacklist=Removes all mods from the ItemModBlacklist
+
+groovyscript.wiki.woot.spawning.title=Spawning
+groovyscript.wiki.woot.spawning.description=Controls item/fluid costs of a given mob or the default cost.
+groovyscript.wiki.woot.spawning.addDefaultFluid=Adds a default fluid requirement to mobs without a specific spawning recipe
+groovyscript.wiki.woot.spawning.addDefaultItem=Adds a default item requirement to mobs without a specific spawning recipe
+groovyscript.wiki.woot.spawning.name.value=Sets the entity being targeted
+groovyscript.wiki.woot.spawning.defaultSpawnRecipe.value=Sets if the default recipes are being targeted instead of a specific entity name
+groovyscript.wiki.woot.spawning.modifying.required=either `name` to be defined and a valid name or `defaultSpawnRecipe` to be true
+groovyscript.wiki.woot.spawning.remove=Removes the recipe for the given entity
+groovyscript.wiki.woot.spawning.removeByEntity=Removes the recipe for the given entity
+
+groovyscript.wiki.woot.stygianironanvil.title=Stygian Iron Anvil
+groovyscript.wiki.woot.stygianironanvil.description=Has a catalyst (which may or may not be consumed) placed on the anvil, with the input items thrown atop the base.
+groovyscript.wiki.woot.stygianironanvil.note0=The anvil must be above a Magma Block and then right clicked with a Hammer, converting the input items into the output item.
+groovyscript.wiki.woot.stygianironanvil.note1=While more than 6 items can function as the input of a Stygian Iron Anvil recipe, only the first 6 are shown in JEI.
+groovyscript.wiki.woot.stygianironanvil.base.value=Sets the itemstack used for the base
+groovyscript.wiki.woot.stygianironanvil.preserveBase.value=Sets if the base is used as a catalyst and not consumed
+groovyscript.wiki.woot.stygianironanvil.removeByBase=Removes all recipes that match the given base item
