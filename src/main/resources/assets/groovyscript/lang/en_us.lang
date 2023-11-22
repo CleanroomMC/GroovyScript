@@ -129,6 +129,17 @@ groovyscript.wiki.actuallyadditions.treasurechest.weight.value=Sets how likely t
 groovyscript.wiki.actuallyadditions.treasurechest.min.value=Sets the minimum stack size given when rolled
 groovyscript.wiki.actuallyadditions.treasurechest.max.value=Sets the maximum stack size given when rolled
 
+# Advanced Mortars
+groovyscript.wiki.advancedmortars.mortar.title=Mortar
+groovyscript.wiki.advancedmortars.mortar.description=Uses any number of specific types of Mortars to convert multiple items into a single output with a possible chance output after a number of player interactions.
+groovyscript.wiki.advancedmortars.mortar.add0=Adds recipes in the format `types`, `output`, `duration`, `inputs`
+groovyscript.wiki.advancedmortars.mortar.add1=Adds recipes in the format `types`, `output`, `duration`, `secondaryOutput`, `secondaryOutputChance`, `inputs`
+groovyscript.wiki.advancedmortars.mortar.types.value=Sets what types of Mortar are allowed to craft the recipe
+groovyscript.wiki.advancedmortars.mortar.types.required=a list of Strings that are `EnumMortarType` entries
+groovyscript.wiki.advancedmortars.mortar.duration.value=Sets how many interactions are required to process the recipe
+groovyscript.wiki.advancedmortars.mortar.secondaryOutput.value=Sets the additional output itemstack
+groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the chance of the additional output itemstack being output
+
 # Astral Sorcery
 groovyscript.wiki.astralsorcery.aevitasperkregistry.title=Aevitas Perk Registry
 groovyscript.wiki.astralsorcery.aevitasperkregistry.description=Having the Stone Enrichment perk will convert nearby stone blocks into random ores.
