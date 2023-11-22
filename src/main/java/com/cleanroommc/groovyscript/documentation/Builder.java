@@ -351,7 +351,7 @@ public class Builder {
         }
 
         public boolean hasRequirement() {
-            return annotations.stream().map(Property::requirement).anyMatch(I18n::hasKey);
+            return annotations.stream().map(Property::requirement).anyMatch(x -> !x.isEmpty());
         }
 
         public String getRequirement() {
