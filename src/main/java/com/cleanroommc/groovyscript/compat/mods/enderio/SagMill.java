@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 public class SagMill extends VirtualizedRegistry<Recipe> {
 
     public SagMill() {
-        super(Alias.of("SAGMill", "sag_mill", "Sag", "sag"));
+        super(Alias.generateOfClass(SagMill.class).andGenerate("Sag").and("SAGMill"));
     }
 
     @RecipeBuilderDescription(example = {
