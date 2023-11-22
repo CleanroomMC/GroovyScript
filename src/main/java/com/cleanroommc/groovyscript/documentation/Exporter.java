@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.collect.ComparisonChain;
@@ -40,7 +40,7 @@ public class Exporter {
     }
 
 
-    public static void generateWiki(File folder, ModSupport.Container<? extends ModPropertyContainer> mod) {
+    public static void generateWiki(File folder, GroovyContainer<? extends ModPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();
 
         List<VirtualizedRegistry<?>> registries = mod.get().getRegistries().stream()
@@ -105,7 +105,7 @@ public class Exporter {
         }
     }
 
-    public static void generateExamples(String target, ModSupport.Container<? extends ModPropertyContainer> mod) {
+    public static void generateExamples(String target, GroovyContainer<? extends ModPropertyContainer> mod) {
         StringBuilder header = new StringBuilder();
         StringBuilder body = new StringBuilder();
 
@@ -113,7 +113,7 @@ public class Exporter {
 
         // Preprocessor to only run script if the mod is loaded
         header.append("\n").append("// Auto generated groovyscript example file").append("\n")
-                .append("// MODS_LOADED: ").append(mod.getId()).append("\n");
+                .append("// MODS_LOADED: ").append(mod.getModId()).append("\n");
 
         // Iterate through every registry of the mod once, in alphabetical order.
         List<VirtualizedRegistry<?>> registries = mod.get().getRegistries().stream()
@@ -139,11 +139,11 @@ public class Exporter {
         imports.stream().distinct().sorted().forEach(i -> header.append("import ").append(i).append("\n"));
 
         // Print that the script was loaded at the end of the header, after any imports have been added.
-        header.append("\n").append(String.format(PRINT_MOD_DETECTED, mod.getId())).append("\n\n")
+        header.append("\n").append(String.format(PRINT_MOD_DETECTED, mod.getModId())).append("\n\n")
                 .append(body);
 
         try {
-            File file = new File(new File(Documentation.EXAMPLES, target), mod.getId() + ".groovy");
+            File file = new File(new File(Documentation.EXAMPLES, target), mod.getModId() + ".groovy");
             Files.write(file.toPath(), header.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();

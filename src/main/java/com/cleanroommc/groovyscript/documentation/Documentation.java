@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
@@ -42,7 +43,7 @@ public class Documentation {
                 File target = new File(EXAMPLES, stage.getName());
                 Files.createDirectories(target.toPath());
 
-                for (ModSupport.Container<? extends ModPropertyContainer> mod : ModSupport.getAllContainers()) {
+                for (GroovyContainer<? extends ModPropertyContainer> mod : ModSupport.getAllContainers()) {
                     if (!mod.isLoaded()) continue;
                     Exporter.generateExamples(stage.getName(), mod);
                 }
@@ -55,9 +56,9 @@ public class Documentation {
     public static void generateWiki() {
         try {
             Files.createDirectories(WIKI.toPath());
-            for (ModSupport.Container<? extends ModPropertyContainer> mod : ModSupport.getAllContainers()) {
+            for (GroovyContainer<? extends ModPropertyContainer> mod : ModSupport.getAllContainers()) {
                 if (!mod.isLoaded()) continue;
-                File target = new File(WIKI, mod.getId());
+                File target = new File(WIKI, mod.getModId());
                 if (target.exists() || Files.createDirectories(target.toPath()) != null) Exporter.generateWiki(target, mod);
                 else GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
             }

@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class Registry {
 
-    private final ModSupport.Container<? extends ModPropertyContainer> mod;
+    private final GroovyContainer<? extends ModPropertyContainer> mod;
     private final VirtualizedRegistry<?> registry;
     private final String baseTranslationKey;
     private final String reference;
@@ -27,11 +27,11 @@ public class Registry {
     private final EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
     private final List<String> imports;
 
-    public Registry(ModSupport.Container<? extends ModPropertyContainer> mod, VirtualizedRegistry<?> registry) {
+    public Registry(GroovyContainer<? extends ModPropertyContainer> mod, VirtualizedRegistry<?> registry) {
         this.mod = mod;
         this.registry = registry;
-        this.baseTranslationKey = String.format("groovyscript.wiki.%s.%s", mod.getId(), registry.getName());
-        this.reference = String.format("mods.%s.%s", mod.getId(), registry.getName());
+        this.baseTranslationKey = String.format("groovyscript.wiki.%s.%s", mod.getModId(), registry.getName());
+        this.reference = String.format("mods.%s.%s", mod.getModId(), registry.getName());
         this.registryClass = registry.getClass();
         this.description = registryClass.getAnnotation(RegistryDescription.class);
 
