@@ -506,6 +506,14 @@ groovyscript.wiki.chisel.carving.removeAll=Removes all Chisel Groups and Variati
 groovyscript.wiki.chisel.carving.removeGroup=Removes a Chisel Group and all Item Variations with that Chisel Group
 groovyscript.wiki.chisel.carving.removeVariation=Removes an Item Variation from the given Chisel Group
 
+# Compact Machines 3
+groovyscript.wiki.compactmachines3.miniaturization.title=Miniaturization
+groovyscript.wiki.compactmachines3.miniaturization.description=Consumes a 3d structure in-world based on keys when an item is thrown into the field.
+groovyscript.wiki.compactmachines3.miniaturization.shape.value=Sets the structure in order of a descending Y-axis
+groovyscript.wiki.compactmachines3.miniaturization.ticks.value=Sets the time in ticks the recipe takes to process before dropping the output item
+groovyscript.wiki.compactmachines3.miniaturization.keyMap.value=Sets the IBlockState, specific NBT, if the metadata is checked, and a representative itemstack for each `char` key
+groovyscript.wiki.compactmachines3.miniaturization.symmetrical.value=Sets if the recipe does not have to test all 4 rotations to determine if the multiblock is valid
+
 # Draconic Evolution
 groovyscript.wiki.draconicevolution.fusion.title=Fusion
 groovyscript.wiki.draconicevolution.fusion.description=Consumes items and power from up to 54 pedestals of at least a given tier pointing towards a Fusion Crafting Core containing a catalyst to produce an output item.
