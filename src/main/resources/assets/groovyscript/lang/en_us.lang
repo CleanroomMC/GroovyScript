@@ -770,6 +770,26 @@ groovyscript.wiki.inspirations.cauldron.removeByFluidOutput=Removes all recipes 
 groovyscript.wiki.inspirations.cauldron.removeByInput=Removes all recipes with the given item input
 groovyscript.wiki.inspirations.cauldron.removeByOutput=Removes all recipes with the given item output
 
+# Integrated Dynamics
+groovyscript.wiki.integrateddynamics.dryingbasin.title=Drying Basin
+groovyscript.wiki.integrateddynamics.dryingbasin.description=Takes either an item or fluid input and gives either an item or fluid output after a duration.
+groovyscript.wiki.integrateddynamics.dryingbasin.basic.value=Sets if the recipe is added to the basic (Drying Basin) machine
+groovyscript.wiki.integrateddynamics.dryingbasin.duration.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.integrateddynamics.dryingbasin.mechanical.value=Sets if the recipe is added to the mechanical (Mechanical Drying Basin) machine
+
+groovyscript.wiki.integrateddynamics.mechanicaldryingbasin.title=Mechanical Drying Basin
+groovyscript.wiki.integrateddynamics.mechanicaldryingbasin.description=Takes either an item or fluid input and gives either an item or fluid output after a duration.
+
+groovyscript.wiki.integrateddynamics.mechanicalsqueezer.title=Mechanical Squeezer
+groovyscript.wiki.integrateddynamics.mechanicalsqueezer.description=Takes an item and can give up to 3 chanced item outputs and a fluid.
+
+groovyscript.wiki.integrateddynamics.squeezer.title=Squeezer
+groovyscript.wiki.integrateddynamics.squeezer.description=Takes an item and can give up to 3 chanced item outputs and a fluid.
+groovyscript.wiki.integrateddynamics.squeezer.basic.value=Sets if the recipe is added to the basic (Squeezer) machine
+groovyscript.wiki.integrateddynamics.squeezer.output.value=Sets the possible item outputs and chance of those outputs being dropped
+groovyscript.wiki.integrateddynamics.squeezer.duration.value=Sets the time in ticks the recipe takes to process in the Mechanical Squeezer, has no effect on the Squeezer
+groovyscript.wiki.integrateddynamics.squeezer.mechanical.value=Sets if the recipe is added to the mechanical (Mechanical Squeezer) machine
+
 # Mekanism
 groovyscript.wiki.mekanism.gasInput.value=Sets the gas inputs of the recipe
 groovyscript.wiki.mekanism.gasOutput.value=Sets the gas outputs of the recipe
