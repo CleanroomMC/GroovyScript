@@ -486,13 +486,13 @@ groovyscript.wiki.botania.puredaisy.add0=Adds recipes in the format `output`, `i
 groovyscript.wiki.botania.puredaisy.add1=Adds recipes in the format `output`, `input`
 groovyscript.wiki.botania.puredaisy.output.value=Sets the output IBlockState
 groovyscript.wiki.botania.puredaisy.input.value=Sets the valid input states
-groovyscript.wiki.botania.puredaisy.input.required=Must be either an IBlockState or String
+groovyscript.wiki.botania.puredaisy.input.required=either an IBlockState or String
 groovyscript.wiki.botania.puredaisy.time.value=Sets the duration the recipe takes to complete
 
 groovyscript.wiki.botania.runealtar.title=Rune Altar
 groovyscript.wiki.botania.runealtar.description=Converts a items inputs into an item ouput at the cost of mana when a Livingrock item is thrown atop the altar and right clicked with a Wand of the Forest.
 groovyscript.wiki.botania.runealtar.add=Adds recipes in the format `output`, `mana`, `inputs`
-groovyscript.wiki.botania.runealtar.input.required=Input IIngredients cannot contain Botania's Livingrock Item
+groovyscript.wiki.botania.runealtar.input.required=that `input` IIngredients cannot contain Botania's Livingrock Item
 groovyscript.wiki.botania.runealtar.mana.value=Sets the mana cost of processing the recipe
 
 # Chisel
@@ -982,8 +982,8 @@ groovyscript.wiki.roots.predicates.below.value=Sets if the predicate checks the 
 groovyscript.wiki.roots.predicates.above.value=Sets if the predicate checks the block above for validation
 groovyscript.wiki.roots.predicates.blockstate.value=Sets the IBlockState compared against
 groovyscript.wiki.roots.predicates.properties.value=Sets what properties of the blockstate are checked, where any properties not checked are
-groovyscript.wiki.roots.predicates.above_or_below.required=Only at most one of either `above` or `below` may be true
-groovyscript.wiki.roots.predicates.properties.required=Each property must be a valid property of the provided `blockstate`
+groovyscript.wiki.roots.predicates.above_or_below.required=that only at most one of either `above` or `below` may be true
+groovyscript.wiki.roots.predicates.properties.required=that each property must be a valid property of the provided `blockstate`
 
 groovyscript.wiki.roots.pyre.title=Pyre
 groovyscript.wiki.roots.pyre.description=Converts 5 input items into the ouput after a period of time when the Pyre is lit on fire.
@@ -1042,7 +1042,7 @@ groovyscript.wiki.thaumcraft.arcaneworkbench.title=Arcane Workbench
 groovyscript.wiki.thaumcraft.arcaneworkbench.description=A special crafting table, allowing additional requirements in the form of Vis Crystals, Vis, and having a specific research.
 groovyscript.wiki.thaumcraft.arcaneworkbench.vis.value=Sets the Vis taken from the aura of the chunk containing the Workbench, or a 3x3 chunk area if the Workbench Charged is installed. Can be reduced by armor and baubles
 groovyscript.wiki.thaumcraft.arcaneworkbench.aspects.value=Sets the Aspect Crystals consumed
-groovyscript.wiki.thaumcraft.arcaneworkbench.aspects.required=Can only be an Aspect of one of the main 6 (`aer`, `ignis`, `aqua`, `terra`, `ordo`, `perditio`), and to a maximum of 64 each
+groovyscript.wiki.thaumcraft.arcaneworkbench.aspects.required=that every Aspect can only be one of the main 6 (`aer`, `ignis`, `aqua`, `terra`, `ordo`, `perditio`), and to a maximum of 64 each
 groovyscript.wiki.thaumcraft.arcaneworkbench.researchKey.value=Sets the research required to craft the recipe
 groovyscript.wiki.thaumcraft.arcaneworkbench.remove=Removes the recipe with the matching name
 
