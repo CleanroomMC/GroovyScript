@@ -17,8 +17,8 @@ groovyscript.wiki.adding_recipes=Adding Recipes
 groovyscript.wiki.adding_entries=Adding Entries
 groovyscript.wiki.removing_recipes=Removing Recipes
 groovyscript.wiki.removing_entries=Removing Entries
-groovyscript.wiki.query_recipes=Getting all recipes
-groovyscript.wiki.query_entries=Getting all entries
+groovyscript.wiki.query_recipes=Getting the value of recipes
+groovyscript.wiki.query_entries=Getting the value of entries
 groovyscript.wiki.recipe_builder=Recipe Builder
 groovyscript.wiki.uses_recipe_builder=Just like other recipe types, the %s also uses a recipe builder.
 groovyscript.wiki.recipe_builder_note=Don't know what a builder is? Check [the builder info page](../../../groovy/builder.md) out.
@@ -139,8 +139,10 @@ groovyscript.wiki.astralsorcery.constellation.enchantmentEffect.value=Sets the e
 groovyscript.wiki.astralsorcery.constellation.constellation.value=Sets the Constellation being modified
 groovyscript.wiki.astralsorcery.constellation.doStrip.value=Sets if the default signature items of the Constellation will be removed before adding new ones
 groovyscript.wiki.astralsorcery.constellation.items.value=Sets the signature items of the Constellation
+groovyscript.wiki.astralsorcery.constellation.remove=Removes the given Constellation and all associated attributes
 groovyscript.wiki.astralsorcery.constellation.removeAllConstellationMapEffect=Removes all potion and enchantment effects applied via the Stellar Refraction Table for all Constellations
 groovyscript.wiki.astralsorcery.constellation.removeAllSignatureItems=Removes all signature items for all Constellations, to be re-added via `addSignatureItem`
+groovyscript.wiki.astralsorcery.constellation.removeConstellationMapEffect=Removes a Constellation's potion and enchantment effects applied via the Stellar Refraction Table
 groovyscript.wiki.astralsorcery.constellation.removeSignatureItems=Removes a Constellation's signature items, to be re-added via `addSignatureItem`
 groovyscript.wiki.astralsorcery.constellation.streamConstellations=Iterates through every Constellation registered, with the ability to call remove on any element to remove it from the game
 groovyscript.wiki.astralsorcery.constellation.removeAll=Removes all Constellations
@@ -191,7 +193,6 @@ groovyscript.wiki.astralsorcery.lightwell.shatterMultiplier.value=Sets how likel
 groovyscript.wiki.astralsorcery.lightwell.color.value=Sets the color of the produced particles
 groovyscript.wiki.astralsorcery.lightwell.catalyst.value=Sets the input item
 groovyscript.wiki.astralsorcery.lightwell.productionMultiplier.value=Sets the base amount of fluid produced per tick
-groovyscript.wiki.astralsorcery.lightwell.remove=
 
 groovyscript.wiki.astralsorcery.mineralisritualregistry.title=Mineralis Ritual Registry
 groovyscript.wiki.astralsorcery.mineralisritualregistry.description=Using a mineralis ritual will convert nearby stone blocks into random ores.
@@ -205,6 +206,7 @@ groovyscript.wiki.astralsorcery.perktree.addConnection=Adds a connection between
 groovyscript.wiki.astralsorcery.perktree.movePerk=Moves the given perk to the x and y co-ords specified in the format `perk`, `x`, `z`
 groovyscript.wiki.astralsorcery.perktree.removeConnection=Removes a connection between two perks
 groovyscript.wiki.astralsorcery.perktree.getPerk=Returns the perk with the given name
+groovyscript.wiki.astralsorcery.perktree.remove=Removes the perk with the given name
 
 groovyscript.wiki.astralsorcery.perktreeconfig.title=Perk Tree Config
 groovyscript.wiki.astralsorcery.perktreeconfig.description=Control the Perk level cap and XP formula.
@@ -595,14 +597,14 @@ groovyscript.wiki.immersiveengineering.blastfurnacefuel.description=Allows an it
 groovyscript.wiki.immersiveengineering.blastfurnacefuel.add=Adds recipes in the format `input`, `time`
 groovyscript.wiki.immersiveengineering.blastfurnacefuel.time.value=Sets the time in ticks the recipe takes to process
 
-groovyscript.wiki.immersiveengineering.blueprintcrafting.title=Blueprint Crafting (Blueprint)
+groovyscript.wiki.immersiveengineering.blueprintcrafting.title=Blueprint Crafting
 groovyscript.wiki.immersiveengineering.blueprintcrafting.description=Converts any number of input itemstacks into an output itemstack, using a blueprint with the category nbt tag as a catalyst.
 groovyscript.wiki.immersiveengineering.blueprintcrafting.add=Adds recipes in the format `output`, `input`, `fluidInput`
 groovyscript.wiki.immersiveengineering.blueprintcrafting.category.value=Sets the required blueprint. Default blueprint options are `components`, `molds`, `bullet`, `specialBullet`, and `electrode`
 groovyscript.wiki.immersiveengineering.blueprintcrafting.removeByCategory=Default blueprint categories are `components`, `molds`, `bullet`, `specialBullet`, and `electrode`
 groovyscript.wiki.immersiveengineering.blueprintcrafting.streamRecipesByCategory=Default blueprint categories are `components`, `molds`, `bullet`, `specialBullet`, and `electrode`
 
-groovyscript.wiki.immersiveengineering.bottlingmachine.title=Bottling Machine (Bottling)
+groovyscript.wiki.immersiveengineering.bottlingmachine.title=Bottling Machine
 groovyscript.wiki.immersiveengineering.bottlingmachine.description=Converts an input itemstack and fluidstack into an output itemstack.
 groovyscript.wiki.immersiveengineering.bottlingmachine.add=Adds recipes in the format `output`, `input`, `fluidInput`
 
@@ -668,7 +670,7 @@ groovyscript.wiki.mekanism.chemicalinfuser.title=Chemical Infuser
 groovyscript.wiki.mekanism.chemicalinfuser.description=Combines two input gas stacks into a output gas stack.
 groovyscript.wiki.mekanism.chemicalinfuser.add=Adds recipes in the format `leftInput`, `rightInput`, `output`
 
-groovyscript.wiki.mekanism.chemicaloxidizer.title=Chemical Oxidizer (Oxidizer)
+groovyscript.wiki.mekanism.chemicaloxidizer.title=Chemical Oxidizer
 groovyscript.wiki.mekanism.chemicaloxidizer.description=Converts an input itemstack into an output gasstack.
 groovyscript.wiki.mekanism.chemicaloxidizer.add=Adds recipes in the format `ingredient`, `output`
 
@@ -685,17 +687,18 @@ groovyscript.wiki.mekanism.crystallizer.title=Crystallizer
 groovyscript.wiki.mekanism.crystallizer.description=Converts an input gasstack into an output itemstack.
 groovyscript.wiki.mekanism.crystallizer.add=Adds recipes in the format `input`, `output`
 
-groovyscript.wiki.mekanism.dissolutionchamber.title=Dissolution Chamber (Dissolver)
+groovyscript.wiki.mekanism.dissolutionchamber.title=Dissolution Chamber
 groovyscript.wiki.mekanism.dissolutionchamber.description=Converts an input itemstack into an output gasstack at the cost of 100mb of Sulfuric Acid.
 groovyscript.wiki.mekanism.dissolutionchamber.add=Adds recipes in the format `ingredient`, `output`
 
-groovyscript.wiki.mekanism.electrolyticseparator.title=Electrolytic Separator (Separator)
+groovyscript.wiki.mekanism.electrolyticseparator.title=Electrolytic Separator
 groovyscript.wiki.mekanism.electrolyticseparator.description=Converts an input fluid into two output gasstacks at the cost of power.
-groovyscript.wiki.mekanism.electrolyticseparator.add=Adds recipes in the format `ingredient`, `output`
+groovyscript.wiki.mekanism.electrolyticseparator.add=Adds recipes in the format `input`, `leftOutput`, `rightOutput`, `energy`
+groovyscript.wiki.mekanism.electrolyticseparator.energy.value=Sets the energy cost of the recipe
 
-groovyscript.wiki.mekanism.enrichmentchamber.title=Enrichment Chamber (Enricher)
+groovyscript.wiki.mekanism.enrichmentchamber.title=Enrichment Chamber
 groovyscript.wiki.mekanism.enrichmentchamber.description=Converts an input itemstack into an output itemstack.
-groovyscript.wiki.mekanism.enrichmentchamber.add=Adds recipes in the format `input`, `leftOutput`, `rightOutput`, `energy`
+groovyscript.wiki.mekanism.enrichmentchamber.add=Adds recipes in the format `ingredient`, `output`
 
 groovyscript.wiki.mekanism.infusion.title=Infusion
 groovyscript.wiki.mekanism.infusion.description=Add new infusion types and itemstacks to those types.
@@ -707,7 +710,7 @@ groovyscript.wiki.mekanism.infusion.remove=Removes IIngredients from any Infusio
 groovyscript.wiki.mekanism.infusion.removeByType=Removes any Infusion Type that matches the given type
 groovyscript.wiki.mekanism.infusion.removeAll=Removes all Infusion Types
 
-groovyscript.wiki.mekanism.injectionchamber.title=Injection Chamber (Injector)
+groovyscript.wiki.mekanism.injectionchamber.title=Injection Chamber
 groovyscript.wiki.mekanism.injectionchamber.description=Converts an input itemstack and 200 of a gasstack into an output itemstack.
 groovyscript.wiki.mekanism.injectionchamber.annotation=Always uses 200 gas
 groovyscript.wiki.mekanism.injectionchamber.add=Adds recipes in the format `ingredient`, `gasInput`, `output`
@@ -724,13 +727,14 @@ groovyscript.wiki.mekanism.osmiumcompressor.description=Converts an input itemst
 groovyscript.wiki.mekanism.osmiumcompressor.annotation=Always uses 200 gas
 groovyscript.wiki.mekanism.osmiumcompressor.add=Adds recipes in the format `ingredient`, `gasInput`, `output`
 
-groovyscript.wiki.mekanism.pressurizedreactionchamber.title=Pressurized Reaction Chamber (PRC)
 groovyscript.wiki.mekanism.pressurizedreactionchamber.description=Converts an input fluidstack, gasstack, and optional itemstack into an output gasstack and optional itemstack.
-groovyscript.wiki.mekanism.pressurizedreactionchamber.add=Adds recipes in the format `ingredient`, `gasInput`, `output`
+groovyscript.wiki.mekanism.pressurizedreactionchamber.add=Adds recipes in the format `inputSolid`, `inputFluid`, `inputGas`, `outputSolid`, `outputGas`, `energy`, `duration`
+groovyscript.wiki.mekanism.pressurizedreactionchamber.energy.value=Sets the energy cost of the recipe
+groovyscript.wiki.mekanism.pressurizedreactionchamber.duration.value=Sets the time in ticks for the recipe to process
 
-groovyscript.wiki.mekanism.purificationchamber.title=Purification Chamber (Purifier)
+groovyscript.wiki.mekanism.purificationchamber.title=Purification Chamber
 groovyscript.wiki.mekanism.purificationchamber.description=Converts an input itemstack and gasstack into an output itemstack.
-groovyscript.wiki.mekanism.purificationchamber.add=Adds recipes in the format `ingredient`, `output`, `secondary`, `chance`
+groovyscript.wiki.mekanism.purificationchamber.add=Adds recipes in the format `ingredient`, `gasInput`, `output`
 
 groovyscript.wiki.mekanism.sawmill.title=Sawmill
 groovyscript.wiki.mekanism.sawmill.description=Converts an input itemstack into an output itemstack, with an optional additional output.
@@ -740,15 +744,16 @@ groovyscript.wiki.mekanism.sawmill.add2=Adds recipes in the format `ingredient`,
 groovyscript.wiki.mekanism.sawmill.extra.value=Sets the extra itemstack produced by the recipe
 groovyscript.wiki.mekanism.sawmill.chance.value=Sets the chance the extra itemstack has to be produced
 
-groovyscript.wiki.mekanism.smelting.title=Smelting (Smelter)
+groovyscript.wiki.mekanism.smelting.title=Smelting
 groovyscript.wiki.mekanism.smelting.description=Converts an input itemstack into an output itemstack in a recipe exclusive to the Smelter. Overrides the default furnace recipe, if applicable.
 groovyscript.wiki.mekanism.smelting.note0=Recipes exclusive to the Mekanism Smelter may not be displayed in JEI
+groovyscript.wiki.mekanism.smelting.add=Adds recipes in the format `ingredient`, `output`
 
-groovyscript.wiki.mekanism.solarneutronactivator.title=Solar Neutron Activator (SNA)
+groovyscript.wiki.mekanism.solarneutronactivator.title=Solar Neutron Activator
 groovyscript.wiki.mekanism.solarneutronactivator.description=Converts an input gasstack into an output gasstack while exposed to the sun.
 groovyscript.wiki.mekanism.solarneutronactivator.add=Adds recipes in the format `input`, `output`
 
-groovyscript.wiki.mekanism.thermalevaporationplant.title=Thermal Evaporation Plant (Thermal Evaporation, TEP)
+groovyscript.wiki.mekanism.thermalevaporationplant.title=Thermal Evaporation Plant
 groovyscript.wiki.mekanism.thermalevaporationplant.description=Converts an input fluidstack into an output fluidstack over time based on multiblock temperature.
 groovyscript.wiki.mekanism.thermalevaporationplant.add=Adds recipes in the format `input`, `output`
 

@@ -271,8 +271,12 @@ public class Builder {
         for (int i = 0; i < parts.size(); i++) {
             String part = parts.get(i);
             if (!part.isEmpty()) {
-                int indentation = part.startsWith(".") ? 4 : output.get(i - 1).indexOf(part.charAt(0));
-                output.add(StringUtils.repeat(" ", indentation) + part.trim() + "\n");
+                int indent = 4;
+                if (!output.isEmpty()) {
+                    int lastIndex = output.get(i - 1).indexOf(part.charAt(0));
+                    if (lastIndex != -1) indent = lastIndex;
+                }
+                output.add(StringUtils.repeat(" ", indent) + part.trim() + "\n");
             }
         }
         out.append(String.join("", output));

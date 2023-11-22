@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipeBuilder;
 import com.cleanroommc.groovyscript.documentation.annotations.Comp;
 import com.cleanroommc.groovyscript.documentation.annotations.Property;
 import com.cleanroommc.groovyscript.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.item.crafting.IRecipe;
@@ -148,6 +149,7 @@ public abstract class TableRecipeBuilder extends CraftingRecipeBuilder {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public IRecipe register() {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding shaped Extended Crafting Table recipe").error()
                     .add((keyBasedMatrix == null || keyBasedMatrix.length == 0) && (ingredientMatrix == null || ingredientMatrix.isEmpty()), () -> "No matrix was defined")
@@ -209,6 +211,7 @@ public abstract class TableRecipeBuilder extends CraftingRecipeBuilder {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public IRecipe register() {
             if (!validate()) return null;
             ShapelessTableRecipe recipe = ShapelessTableRecipe.make(tier, output.copy(), ingredients, recipeFunction, recipeAction);

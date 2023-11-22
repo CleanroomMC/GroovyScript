@@ -56,7 +56,7 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
         movedPerks.clear();
     }
 
-    @MethodDescription(example = @Example("'astralsorcery:magnet_ats_reach'"))
+    @MethodDescription(example = @Example("'astralsorcery:mec_inc_ms_2'"))
     public void remove(String perk) {
         this.remove(this.getPerk(perk), true);
     }

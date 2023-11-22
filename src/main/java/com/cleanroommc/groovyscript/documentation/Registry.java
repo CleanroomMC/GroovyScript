@@ -117,11 +117,11 @@ public class Registry {
         StringBuilder out = new StringBuilder();
         out.append("// ").append(getTitle()).append(":").append("\n");
         out.append("// ").append(WordUtils.wrap(getDescription(), Documentation.MAX_LINE_LENGTH, "\n// ", false)).append("\n\n");
-        out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
         out.append(documentMethodDescriptionType(MethodDescription.Type.REMOVAL));
         for (Method method : recipeBuilderMethods) out.append(new Builder(method, reference, baseTranslationKey).builderExampleFile()).append("\n");
         if (!recipeBuilderMethods.isEmpty()) out.append("\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.ADDITION));
+        out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
         return out.toString();
     }
 

@@ -43,17 +43,15 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
         return new SpellWrapper(spell);
     }
 
-    @RecipeBuilderDescription(example = {
-            @Example(".spell(spell('spell_fey_light')).input(item('minecraft:clay'),item('minecraft:diamond'),item('minecraft:gold_ingot'))"),
-            @Example(".cost(cost('additional_cost'), herb('spirit_herb'), 0.1).cost(cost('all_cost_multiplier'), null, -0.125)")
-    })
+    @RecipeBuilderDescription(example = @Example(".spell(spell('spell_fey_light')).input(item('minecraft:clay'), item('minecraft:diamond'), item('minecraft:gold_ingot'))"))
     public static SpellWrapper.RecipeBuilder recipeBuilder() {
         return new SpellWrapper.RecipeBuilder();
     }
 
     @RecipeBuilderDescription(example = {
             @Example,
-            @Example(".herb(herb('dewgonia'), 0.25)")
+            @Example(".cost(cost('additional_cost'), herb('dewgonia'), 0.25)"),
+            @Example(".cost(cost('additional_cost'), herb('spirit_herb'), 0.1).cost(cost('all_cost_multiplier'), null, -0.125)")
     })
     public static CostBuilder costBuilder() {
         return new CostBuilder();

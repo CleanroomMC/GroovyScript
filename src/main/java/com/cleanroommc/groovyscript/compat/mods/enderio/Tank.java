@@ -93,7 +93,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         return true;
     }
 
-    @MethodDescription(example = @Example("item('minecraft:glass_bottle'), fluid('xpjuice')"))
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.removeFill0", example = @Example("item('minecraft:glass_bottle'), fluid('xpjuice')"))
     public void removeFill(ItemStack input, FluidStack fluid) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing EnderIO Tank filling recipe").error();
         msg.add(IngredientHelper.isEmpty(fluid), () -> "fluid must not be empty");
@@ -115,7 +115,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
     }
 
-    @MethodDescription
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.removeFill1")
     public void removeFill(FluidStack fluid, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing EnderIO Tank filling recipe").error();
         msg.add(IngredientHelper.isEmpty(fluid), () -> "fluid must not be empty");
@@ -137,7 +137,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
     }
 
-    @MethodDescription(example = @Example("item('minecraft:experience_bottle'), fluid('xpjuice')"))
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.removeDrain0", example = @Example("item('minecraft:experience_bottle'), fluid('xpjuice')"))
     public void removeDrain(ItemStack input, FluidStack fluid) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing EnderIO Tank draining recipe").error();
         msg.add(IngredientHelper.isEmpty(fluid), () -> "fluid must not be empty");
@@ -159,7 +159,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
     }
 
-    @MethodDescription
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.removeDrain1")
     public void removeDrain(FluidStack fluid, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing EnderIO Tank draining recipe").error();
         msg.add(IngredientHelper.isEmpty(fluid), () -> "fluid must not be empty");
