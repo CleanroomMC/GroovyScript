@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
@@ -54,21 +55,25 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         addScripted(trigger);
     }
 
-    public void remove(IDustTrigger trigger) {
+    public boolean remove(IDustTrigger trigger) {
         doDirtyReflection();
         Iterator<IDustTrigger> it = IDustTrigger.triggers.iterator();
+        boolean found = false;
         while (it.hasNext()) {
             final IDustTrigger registeredTrigger = it.next();
             if (trigger instanceof DustTriggerSimple && registeredTrigger instanceof DustTriggerSimple
                 && trigger.equals(registeredTrigger)) {
                 it.remove();
                 addBackup(trigger);
+                found = true;
             } else if (trigger instanceof DustTriggerOre && registeredTrigger instanceof DustTriggerOre
                        && trigger.equals(registeredTrigger)) {
                 it.remove();
                 addBackup(trigger);
+                found = true;
             }
         }
+        return found;
     }
 
     public void removeByOutput(ItemStack output) {
@@ -90,6 +95,11 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
                 GroovyLog.msg("Error while applying Salis Mundus effect: " + e).error().post();
             }
         }
+    }
+
+    public SimpleObjectStream<IDustTrigger> streamRecipes() {
+        return new SimpleObjectStream<>(IDustTrigger.triggers)
+                .setRemover(this::remove);
     }
 
     public TriggerBuilder triggerBuilder() {

@@ -7,10 +7,9 @@ import org.jetbrains.annotations.ApiStatus;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.internal.CommonInternals;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Warp extends VirtualizedRegistry<ArrayList<Object>> {
+public class Warp extends VirtualizedRegistry<Warp.InternalWarp> {
 
     public Warp() {
         super();
@@ -20,25 +19,43 @@ public class Warp extends VirtualizedRegistry<ArrayList<Object>> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        removeScripted().forEach(recipe -> this.removeWarp((ItemStack) recipe.get(0)));
-        restoreFromBackup().forEach(recipe -> this.addWarp((ItemStack) recipe.get(0), (int) recipe.get(1)));
+        removeScripted().forEach(recipe -> CommonInternals.warpMap.remove(recipe.getKey()));
+        restoreFromBackup().forEach(recipe -> CommonInternals.warpMap.put(recipe.getKey(), recipe.getWarp()));
     }
 
     public void addWarp(ItemStack item, int amount) {
         ThaumcraftApi.addWarpToItem(item, amount);
-        ArrayList<Object> warp = new ArrayList<>();
-        warp.add(item);
-        warp.add(amount);
-        addScripted(warp);
+        addScripted(new InternalWarp(item, amount));
     }
 
     public void removeWarp(ItemStack item) {
         if (CommonInternals.warpMap.containsKey(Arrays.asList(item.getItem(), item.getItemDamage()))) {
             int amount = CommonInternals.warpMap.remove(Arrays.asList(item.getItem(), item.getItemDamage()));
-            ArrayList<Object> warp = new ArrayList<>();
-            warp.add(item);
-            warp.add(amount);
-            addBackup(warp);
+            addBackup(new InternalWarp(Arrays.asList(item.getItem(), item.getItemDamage()), amount));
+        }
+    }
+
+    public void removeAll() {
+        CommonInternals.warpMap.forEach((key, value) -> addBackup(new InternalWarp(key, value)));
+        CommonInternals.warpMap.clear();
+    }
+
+    public static class InternalWarp {
+
+        private final Object key;
+        private final int warp;
+
+        private InternalWarp(Object key, int warp) {
+            this.key = key;
+            this.warp = warp;
+        }
+
+        public Object getKey() {
+            return key;
+        }
+
+        public int getWarp() {
+            return warp;
         }
     }
 

@@ -77,6 +77,11 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
         return new SimpleObjectStream<>(CommonInternals.smeltingBonus).setRemover(this::remove);
     }
 
+    public void removeAll() {
+        CommonInternals.smeltingBonus.forEach(this::addBackup);
+        CommonInternals.smeltingBonus.clear();
+    }
+
     public SmeltingBonusBuilder recipeBuilder() {
         return new SmeltingBonusBuilder();
     }

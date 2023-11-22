@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
     public AspectHelper() {
-        super("AspectHelper", "aspect_helper");
+        super();
     }
 
     @Override
@@ -292,6 +292,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         private EntityEntry entity;
         private IIngredient object;
         private final ArrayList<AspectStack> aspects = new ArrayList<>();
+        private boolean stripAspects;
 
         public AspectHelperBuilder entity(EntityEntry entity) {
             this.entity = entity;
@@ -315,21 +316,24 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         }
 
         public AspectHelperBuilder stripAspects() {
-            if (entity != null) {
-                ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(entity);
-            } else if (object != null && object instanceof OreDictIngredient) {
-                ModSupport.THAUMCRAFT.get().aspectHelper.removeAll((OreDictIngredient) object);
-            } else if (object != null && IngredientHelper.isItem(object) && !IngredientHelper.isEmpty(object)) {
-                ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(IngredientHelper.toItemStack(object));
-            } else {
-                GroovyLog.msg("Error removing Thaumcraft Aspects from item/entity")
-                        .error()
-                        .post();
-            }
+            stripAspects = !stripAspects;
             return this;
         }
 
         public void register() {
+            if (stripAspects) {
+                if (entity != null) {
+                    ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(entity);
+                } else if (object != null && object instanceof OreDictIngredient) {
+                    ModSupport.THAUMCRAFT.get().aspectHelper.removeAll((OreDictIngredient) object);
+                } else if (object != null && IngredientHelper.isItem(object) && !IngredientHelper.isEmpty(object)) {
+                    ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(IngredientHelper.toItemStack(object));
+                } else {
+                    GroovyLog.msg("Error removing Thaumcraft Aspects from item/entity")
+                            .error()
+                            .post();
+                }
+            }
             aspects.forEach(aspectStack -> {
                 if (entity != null)
                     ModSupport.THAUMCRAFT.get().aspectHelper.add(entity, aspectStack);

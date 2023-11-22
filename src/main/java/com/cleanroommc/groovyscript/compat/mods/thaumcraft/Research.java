@@ -1,7 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
 import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -16,54 +18,90 @@ import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.lib.research.ScanEnchantment;
 import thaumcraft.common.lib.research.ScanPotion;
 
-public class Research {
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class Research extends VirtualizedRegistry<ResearchCategory> {
+
+    protected Collection<IScanThing> scanBackup;
+    protected Collection<IScanThing> scanScripted;
 
     public Research() {
-        //do nothing
+        scanBackup = new ArrayList<>();
+        scanScripted = new ArrayList<>();
+    }
+
+    @Override
+    public void onReload() {
+        removeScripted().forEach(x -> ResearchCategories.researchCategories.remove(x.key));
+        restoreFromBackup().forEach(x -> ResearchCategories.researchCategories.put(x.key, x));
+
+        scanBackup.clear();
+        scanScripted.clear();
+    }
+
+    private void addCategory(ResearchCategory category) {
+        ResearchCategories.researchCategories.put(category.key, category);
+        addScripted(category);
+    }
+
+    private void removeCategory(ResearchCategory category) {
+        ResearchCategories.researchCategories.remove(category.key);
+        addBackup(category);
     }
 
     public void addCategory(String key, String researchkey, AspectList formula, String icon, String background) {
-        ResearchCategories.registerCategory(key, researchkey, formula, new ResourceLocation(icon), new ResourceLocation(background));
+        addCategory(new ResearchCategory(key, researchkey, formula, new ResourceLocation(icon), new ResourceLocation(background)));
     }
 
     public void addCategory(String key, String researchkey, AspectList formula, String icon, String background, String background2) {
-        ResearchCategories.registerCategory(key, researchkey, formula, new ResourceLocation(icon), new ResourceLocation(background), new ResourceLocation(background2));
+        addCategory(new ResearchCategory(key, researchkey, formula, new ResourceLocation(icon), new ResourceLocation(background), new ResourceLocation(background2)));
     }
 
-    public void addScannable(String researchKey, Class entityClass, boolean inheritedClasses) {
-        ScanningManager.addScannableThing(new ScanEntity(researchKey, entityClass, inheritedClasses));
+    private void addScannable(IScanThing scanThing) {
+        scanScripted.add(scanThing);
+        ScanningManager.addScannableThing(scanThing);
     }
 
-    public void addScannable(String researchKey, Class entityClass, boolean inheritedClasses, ThaumcraftApi.EntityTagsNBT tags) {
-        ScanningManager.addScannableThing(new ScanEntity(researchKey, entityClass, inheritedClasses, tags));
+    public void addScannable(String researchKey, Class<?> entityClass, boolean inheritedClasses) {
+        addScannable(new ScanEntity(researchKey, entityClass, inheritedClasses));
+    }
+
+    public void addScannable(String researchKey, Class<?> entityClass, boolean inheritedClasses, ThaumcraftApi.EntityTagsNBT tags) {
+        addScannable(new ScanEntity(researchKey, entityClass, inheritedClasses, tags));
     }
 
     public void addScannable(String researchKey, ItemStack item) {
-        ScanningManager.addScannableThing(new ScanItem(researchKey, item));
+        addScannable(new ScanItem(researchKey, item));
     }
 
     public void addScannable(Block block) {
-        ScanningManager.addScannableThing(new ScanBlock(block));
+        addScannable(new ScanBlock(block));
     }
 
     public void addScannable(String researchKey, Block block) {
-        ScanningManager.addScannableThing(new ScanBlock(researchKey, block));
+        addScannable(new ScanBlock(researchKey, block));
     }
 
     public void addScannable(Material material) {
-        ScanningManager.addScannableThing(new ScanMaterial(material));
+        addScannable(new ScanMaterial(material));
     }
 
     public void addScannable(String researchKey, Material material) {
-        ScanningManager.addScannableThing(new ScanMaterial(researchKey, material));
+        addScannable(new ScanMaterial(researchKey, material));
     }
 
     public void addScannable(Enchantment enchantment) {
-        ScanningManager.addScannableThing(new ScanEnchantment(enchantment));
+        addScannable(new ScanEnchantment(enchantment));
     }
 
     public void addScannable(Potion potion) {
-        ScanningManager.addScannableThing(new ScanPotion(potion));
+        addScannable(new ScanPotion(potion));
+    }
+
+    public void addResearchLocation(ResourceLocation location) {
+        ThaumcraftApi.registerResearchLocation(location);
+        ResearchManager.parseAllResearch();
     }
 
     public void addResearchLocation(String location) {
@@ -77,7 +115,10 @@ public class Research {
     }
 
     public void removeCategory(String key) {
-        ResearchCategories.researchCategories.remove(key);
+        removeCategory(ResearchCategories.researchCategories.get(key));
+    public void removeAllCategories() {
+        ResearchCategories.researchCategories.forEach((k, v) -> addBackup(v));
+        ResearchCategories.researchCategories.clear();
     }
 
     public ResearchCategoryBuilder researchCategoryBuilder() {
@@ -114,6 +155,11 @@ public class Research {
             return this;
         }
 
+        public ResearchCategoryBuilder icon(ResourceLocation icon) {
+            this.icon = icon;
+            return this;
+        }
+
         public ResearchCategoryBuilder icon(String icon) {
             this.icon = new ResourceLocation(icon);
             return this;
@@ -121,6 +167,11 @@ public class Research {
 
         public ResearchCategoryBuilder icon(String mod, String icon) {
             this.icon = new ResourceLocation(mod, icon);
+            return this;
+        }
+
+        public ResearchCategoryBuilder background(ResourceLocation background) {
+            this.background = background;
             return this;
         }
 
@@ -134,6 +185,11 @@ public class Research {
             return this;
         }
 
+        public ResearchCategoryBuilder background2(ResourceLocation background2) {
+            this.background2 = background2;
+            return this;
+        }
+
         public ResearchCategoryBuilder background2(String background2) {
             this.background2 = new ResourceLocation(background2);
             return this;
@@ -144,12 +200,13 @@ public class Research {
             return this;
         }
 
-        public void register() {
-            if (background2 == null) {
-                ResearchCategories.registerCategory(key, researchKey, formula, icon, background);
-            } else {
-                ResearchCategories.registerCategory(key, researchKey, formula, icon, background, background2);
-            }
+        public ResearchCategory register() {
+            ResearchCategory category = background2 == null
+                                        ? new ResearchCategory(key, researchKey, formula, icon, background)
+                                        : new ResearchCategory(key, researchKey, formula, icon, background, background2);
+
+            ModSupport.THAUMCRAFT.get().research.addCategory(category);
+            return category;
         }
     }
 }

@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -22,6 +23,8 @@ import thaumcraft.api.crafting.IThaumcraftRecipe;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 
@@ -106,6 +109,20 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             this.addBackup(recipe);
             ThaumcraftApi.getCraftingRecipes().values().remove(recipe);
         });
+    }
+
+    public SimpleObjectStream<Map.Entry<ResourceLocation, IThaumcraftRecipe>> streamRecipes() {
+        List<Map.Entry<ResourceLocation, IThaumcraftRecipe>> recipes = ThaumcraftApi.getCraftingRecipes().entrySet().stream().filter(x -> x.getValue() instanceof CrucibleRecipe).collect(Collectors.toList());
+        return new SimpleObjectStream<>(recipes)
+                .setRemover(x -> remove((CrucibleRecipe) x));
+    }
+
+    public void removeAll() {
+        List<Map.Entry<ResourceLocation, IThaumcraftRecipe>> recipes = ThaumcraftApi.getCraftingRecipes().entrySet().stream().filter(x -> x.getValue() instanceof CrucibleRecipe).collect(Collectors.toList());
+        for (Map.Entry<ResourceLocation, IThaumcraftRecipe> recipe : recipes) {
+            addBackup((CrucibleRecipe) recipe.getValue());
+            ThaumcraftApi.getCraftingRecipes().remove(recipe.getKey(), recipe.getValue());
+        }
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrucibleRecipe> {
