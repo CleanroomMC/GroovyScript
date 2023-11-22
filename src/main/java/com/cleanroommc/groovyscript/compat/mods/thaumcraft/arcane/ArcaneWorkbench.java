@@ -12,6 +12,10 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import thaumcraft.api.crafting.IArcaneRecipe;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RegistryDescription
 public class ArcaneWorkbench extends VirtualizedRegistry<Void> {
@@ -51,5 +55,16 @@ public class ArcaneWorkbench extends VirtualizedRegistry<Void> {
         return new ArcaneRecipeBuilder.Shapeless();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    public void removeAll() {
+        List<IArcaneRecipe> recipes = ForgeRegistries.RECIPES.getValuesCollection().stream()
+                .filter(recipe -> recipe instanceof IArcaneRecipe)
+                .map(recipe -> (IArcaneRecipe) recipe)
+                .collect(Collectors.toList());
+
+        for (IRecipe recipe : recipes) {
+            ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, recipe.getRegistryName());
+        }
+    }
 }
 
