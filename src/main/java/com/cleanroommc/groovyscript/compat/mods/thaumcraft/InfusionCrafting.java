@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -32,12 +33,14 @@ import java.util.stream.Collectors;
 
 import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 
+@RegistryDescription
 public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation, InfusionRecipe>> {
 
     public InfusionCrafting() {
         super();
     }
 
+    @RecipeBuilderDescription(example = @Example(".researchKey('UNLOCKALCHEMY@3').mainInput(item('minecraft:gunpowder')).output(item('minecraft:gold_ingot')).aspect(aspect('terra') * 20).aspect('ignis', 30).input(crystal('aer')).input(crystal('ignis')).input(crystal('aqua')).input(crystal('terra')).input(crystal('ordo')).instability(10)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -59,6 +62,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public InfusionRecipe add(String research, ItemStack outputResult, int inst, Collection<AspectStack> aspects, IIngredient centralItem, IIngredient... input) {
         Object[] inputs = ArrayUtils.map(input, IIngredient::toMcIngredient, new Ingredient[0]);
         InfusionRecipe infusionRecipe = new InfusionRecipe(research, outputResult, inst, Thaumcraft.makeAspectList(aspects), centralItem.toMcIngredient(), inputs);
@@ -83,6 +87,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         return !recipes.isEmpty();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('thaumcraft:crystal_terra')"))
     public void removeByOutput(IIngredient output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Thaumcraft Infusion Crafting recipe")
@@ -117,12 +122,14 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, IThaumcraftRecipe>> streamRecipes() {
         List<Map.Entry<ResourceLocation, IThaumcraftRecipe>> recipes = ThaumcraftApi.getCraftingRecipes().entrySet().stream().filter(x -> x.getValue() instanceof InfusionRecipe).collect(Collectors.toList());
         return new SimpleObjectStream<>(recipes)
                 .setRemover(x -> remove((InfusionRecipe) x.getValue()));
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         List<Map.Entry<ResourceLocation, IThaumcraftRecipe>> recipes = ThaumcraftApi.getCraftingRecipes().entrySet().stream().filter(x -> x.getValue() instanceof InfusionRecipe).collect(Collectors.toList());
         for (Map.Entry<ResourceLocation, IThaumcraftRecipe> recipe : recipes) {
@@ -133,32 +140,41 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<InfusionRecipe> {
 
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IIngredient mainInput;
+        @Property
         private String researchKey;
+        @Property
         private final AspectList aspects = new AspectList();
+        @Property
         private int instability;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder mainInput(IIngredient ingredient) {
             this.mainInput = ingredient;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder researchKey(String researchKey) {
             this.researchKey = researchKey;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "aspects")
         public RecipeBuilder aspect(AspectStack aspect) {
             this.aspects.add(aspect.getAspect(), aspect.getAmount());
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "aspects")
         public RecipeBuilder aspect(String tag, int amount) {
             Aspect a = AspectBracketHandler.validateAspect(tag);
             if (a != null) this.aspects.add(a, amount);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder instability(int instability) {
             this.instability = instability;
             return this;
@@ -182,6 +198,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable InfusionRecipe register() {
             if (!validate()) return null;
 

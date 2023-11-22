@@ -1,6 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -9,6 +12,7 @@ import thaumcraft.api.internal.CommonInternals;
 
 import java.util.Arrays;
 
+@RegistryDescription
 public class Warp extends VirtualizedRegistry<Warp.InternalWarp> {
 
     public Warp() {
@@ -23,11 +27,13 @@ public class Warp extends VirtualizedRegistry<Warp.InternalWarp> {
         restoreFromBackup().forEach(recipe -> CommonInternals.warpMap.put(recipe.getKey(), recipe.getWarp()));
     }
 
+    @MethodDescription(example = @Example("item('minecraft:pumpkin'), 3"), type = MethodDescription.Type.ADDITION)
     public void addWarp(ItemStack item, int amount) {
         ThaumcraftApi.addWarpToItem(item, amount);
         addScripted(new InternalWarp(item, amount));
     }
 
+    @MethodDescription(example = @Example("item('thaumcraft:void_hoe')"))
     public void removeWarp(ItemStack item) {
         if (CommonInternals.warpMap.containsKey(Arrays.asList(item.getItem(), item.getItemDamage()))) {
             int amount = CommonInternals.warpMap.remove(Arrays.asList(item.getItem(), item.getItemDamage()));
@@ -35,6 +41,7 @@ public class Warp extends VirtualizedRegistry<Warp.InternalWarp> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CommonInternals.warpMap.forEach((key, value) -> addBackup(new InternalWarp(key, value)));
         CommonInternals.warpMap.clear();

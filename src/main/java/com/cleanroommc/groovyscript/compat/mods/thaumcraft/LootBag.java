@@ -3,6 +3,10 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.documentation.annotations.Admonition;
+import com.cleanroommc.groovyscript.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -12,6 +16,10 @@ import thaumcraft.api.internal.WeightedRandomLoot;
 import java.util.ArrayList;
 import java.util.List;
 
+@RegistryDescription(
+        isFullyDocumented = false,
+        admonition = @Admonition(value = "groovyscript.wiki.thaumcraft.lootbag.note", type = Admonition.Type.BUG, format = Admonition.Format.STANDARD)
+)
 public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
 
     public LootBag() {
@@ -52,11 +60,16 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = {
+            @Example("item('minecraft:diamond_block'), 100, 2"),
+            @Example("item('minecraft:dirt'), 100, 0")
+    })
     public void add(ItemStack item, int chance, int rarity) {
         ThaumcraftApi.addLootBagItem(item, chance, rarity);
         addScripted(new InternalLootbag(item, chance, rarity));
     }
 
+    @MethodDescription(example = @Example("item('minecraft:ender_pearl'), 0"))
     public void remove(ItemStack item, int rarity) {
         ArrayList<WeightedRandomLoot> list = getLootbag(rarity);
         List<WeightedRandomLoot> remove = new ArrayList<>();
@@ -69,6 +82,7 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
         list.removeAll(remove);
     }
 
+    @MethodDescription(example = @Example("2"))
     public void removeAll(int rarity) {
         ArrayList<WeightedRandomLoot> list = getLootbag(rarity);
         List<WeightedRandomLoot> remove = new ArrayList<>();

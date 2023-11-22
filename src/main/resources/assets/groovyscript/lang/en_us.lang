@@ -908,3 +908,99 @@ groovyscript.wiki.roots.transmutation.removeByName=Removes the Transmutation rec
 groovyscript.wiki.roots.transmutation.removeByOutput0=Removes the Transmutation recipe for the given output itemstack
 groovyscript.wiki.roots.transmutation.removeByOutput1=Removes the Transmutation recipe for the given output IBlockState
 
+# Thaumcraft
+groovyscript.wiki.thaumcraft.arcaneworkbench.title=Arcane Workbench
+groovyscript.wiki.thaumcraft.arcaneworkbench.description=A special crafting table, allowing additional requirements in the form of Vis Crystals, Vis, and having a specific research.
+groovyscript.wiki.thaumcraft.arcaneworkbench.vis.value=Sets the Vis taken from the aura of the chunk containing the Workbench, or a 3x3 chunk area if the Workbench Charged is installed. Can be reduced by armor and baubles
+groovyscript.wiki.thaumcraft.arcaneworkbench.aspects.value=Sets the Aspect Crystals consumed
+groovyscript.wiki.thaumcraft.arcaneworkbench.aspects.required=Can only be an Aspect of one of the main 6 (`aer`, `ignis`, `aqua`, `terra`, `ordo`, `perditio`), and to a maximum of 64 each
+groovyscript.wiki.thaumcraft.arcaneworkbench.researchKey.value=Sets the research required to craft the recipe
+groovyscript.wiki.thaumcraft.arcaneworkbench.remove=Removes the recipe with the matching name
+
+groovyscript.wiki.thaumcraft.aspect.title=Aspect Creator
+groovyscript.wiki.thaumcraft.aspect.description=Creates a custom Aspect.
+groovyscript.wiki.thaumcraft.aspect.tag.value=Sets the name of the new Aspect
+groovyscript.wiki.thaumcraft.aspect.blend.value=Sets the blend value of the Aspect
+groovyscript.wiki.thaumcraft.aspect.image.value=Sets the resource location of the image used to represent the Aspect
+groovyscript.wiki.thaumcraft.aspect.chatColor.value=Sets the color formatting code used
+groovyscript.wiki.thaumcraft.aspect.components.value=Sets the other Aspects that make up this Aspect
+
+groovyscript.wiki.thaumcraft.aspecthelper.title=Entity/Block Aspects
+groovyscript.wiki.thaumcraft.aspecthelper.description=Controls what Aspects are attached to entities or items.
+groovyscript.wiki.thaumcraft.aspecthelper.entity.value=Sets the entity being modified
+groovyscript.wiki.thaumcraft.aspecthelper.object.value=Sets the item being modified
+groovyscript.wiki.thaumcraft.aspecthelper.aspects.value=Sets the Aspects of the entity or item
+groovyscript.wiki.thaumcraft.aspecthelper.stripAspects.value=Sets if all pre-existing Aspects should be removed from the entity or item before adding Aspects, if any are added
+groovyscript.wiki.thaumcraft.aspecthelper.add_entity=Adds an Aspect to the given entity in the format `entity`, `aspect`
+groovyscript.wiki.thaumcraft.aspecthelper.add_ore=Adds an Aspect to the given oredict in the format `oreDict`, `aspect`
+groovyscript.wiki.thaumcraft.aspecthelper.add_item=Adds an Aspect to the given itemstack in the format `item`, `aspect`
+groovyscript.wiki.thaumcraft.aspecthelper.remove_entity=Removes an Aspect from the given entity in the format `entity`, `aspect`
+groovyscript.wiki.thaumcraft.aspecthelper.remove_ore=Removes an Aspect from the given oredict in the format `oreDict`, `aspect`
+groovyscript.wiki.thaumcraft.aspecthelper.remove_item=Removes an Aspect from the given itemstack in the format `item`, `aspect`
+groovyscript.wiki.thaumcraft.aspecthelper.removeAll_entity=Removes all Aspects from the given entity
+groovyscript.wiki.thaumcraft.aspecthelper.removeAll_ore=Removes all Aspects from the given oredict
+groovyscript.wiki.thaumcraft.aspecthelper.removeAll_item=Removes all Aspects from the given itemstack
+
+groovyscript.wiki.thaumcraft.crucible.title=Crucible
+groovyscript.wiki.thaumcraft.crucible.description=Combines an item with any number of Aspects to drop an output itemstack, potentially requiring a specific research to be completed.
+groovyscript.wiki.thaumcraft.crucible.aspects.value=Sets the Aspects and amounts required to convert
+groovyscript.wiki.thaumcraft.crucible.catalyst.value=Sets the input item
+groovyscript.wiki.thaumcraft.crucible.researchKey.value=Sets the research required to craft the recipe
+groovyscript.wiki.thaumcraft.crucible.add=Adds recipes in the format `researchKey`, `result`, `catalyst`, `tags`
+
+groovyscript.wiki.thaumcraft.dusttrigger.title=Dust Trigger
+groovyscript.wiki.thaumcraft.dusttrigger.description=Converts a block in-world into an item, when interacting with it with Salis Mundus, potentially requiring a specific research to be completed.
+groovyscript.wiki.thaumcraft.dusttrigger.ore.value=Sets the input as an ore
+groovyscript.wiki.thaumcraft.dusttrigger.output.value=Sets the output item, which will be dropped on the ground
+groovyscript.wiki.thaumcraft.dusttrigger.target.value=Sets the input as a block
+groovyscript.wiki.thaumcraft.dusttrigger.research.value=Sets the research required to craft the recipe
+
+groovyscript.wiki.thaumcraft.infusioncrafting.title=Infusion Crafting
+groovyscript.wiki.thaumcraft.infusioncrafting.description=Combines any number of items and aspects together in the Infusion Altar, potentially requiring a specific research to be completed.
+groovyscript.wiki.thaumcraft.infusioncrafting.aspects.value=Sets the Aspects and amounts required to complete the craft
+groovyscript.wiki.thaumcraft.infusioncrafting.mainInput.value=Sets the item on the center pedestal
+groovyscript.wiki.thaumcraft.infusioncrafting.instability.value=Sets the instability of the recipe
+groovyscript.wiki.thaumcraft.infusioncrafting.researchKey.value=Sets the research required to craft the recipe
+groovyscript.wiki.thaumcraft.infusioncrafting.add=Adds recipes in the format `research`, `outputResult`, `inst`, `aspects`, `centralItem`, `input`
+
+groovyscript.wiki.thaumcraft.lootbag.title=Lootbag
+groovyscript.wiki.thaumcraft.lootbag.description=Control what the different rarities of lootbag drop when opened.
+groovyscript.wiki.thaumcraft.lootbag.note=Armor chances are hard coded into randomized loot function, and are not currently removable.
+groovyscript.wiki.thaumcraft.lootbag.add=Adds an item with a given weight to the target lootbag in the format `item`, `chance`, `rarity`
+groovyscript.wiki.thaumcraft.lootbag.remove=Removes an item from the target lootbag in the format `item`, `rarity`
+groovyscript.wiki.thaumcraft.lootbag.removeAll=Removes all items from the target lootbag rarity
+
+groovyscript.wiki.thaumcraft.research.title=Research
+groovyscript.wiki.thaumcraft.research.description=Create or modify existing research entries, which contain helpful information and unlock recipes, and can be gated behind specific items or events.
+groovyscript.wiki.thaumcraft.research.key.value=Sets a unique research key
+groovyscript.wiki.thaumcraft.research.icon.value=Sets the icon to be used for the research category tab
+groovyscript.wiki.thaumcraft.research.formula.value=Sets the aspects required to gain knowledge in this category
+groovyscript.wiki.thaumcraft.research.background.value=Sets the resource location of the background image to use for this category
+groovyscript.wiki.thaumcraft.research.background2.value=Sets the resource location of the foreground image that lies between the background and icons
+groovyscript.wiki.thaumcraft.research.researchKey.value=Sets the research that the player needs to have completed before this category becomes visible. `null` causes it to always be visible
+groovyscript.wiki.thaumcraft.research.addCategory0=Adds Categories in the format `key`, `researchkey`, `formula`, `icon`, `background`
+groovyscript.wiki.thaumcraft.research.addCategory1=Adds Categories in the format `key`, `researchkey`, `formula`, `icon`, `background`, `background2`
+groovyscript.wiki.thaumcraft.research.addResearchLocation=Adds a new location to check for research
+groovyscript.wiki.thaumcraft.research.addScannable0=Adds a new scannable entity in the format `researchKey`, `entityClass`, `inheritedClasses`
+groovyscript.wiki.thaumcraft.research.addScannable1=Adds a new scannable entity in the format `researchKey`, `entityClass`, `inheritedClasses`, `tags`
+groovyscript.wiki.thaumcraft.research.addScannable2=Adds a new scannable item in the format `researchKey`, `item`
+groovyscript.wiki.thaumcraft.research.addScannable3=Adds a new scannable block
+groovyscript.wiki.thaumcraft.research.addScannable4=Adds a new scannable block in the format `researchKey`, `block`
+groovyscript.wiki.thaumcraft.research.addScannable5=Adds a new scannable material
+groovyscript.wiki.thaumcraft.research.addScannable6=Adds a new scannable material in the format `researchKey`, `material`
+groovyscript.wiki.thaumcraft.research.addScannable7=Adds a new scannable enchantment
+groovyscript.wiki.thaumcraft.research.addScannable8=Adds a new scannable potion
+groovyscript.wiki.thaumcraft.research.removeCategory=Removes a Research Category by the name
+
+groovyscript.wiki.thaumcraft.smeltingbonus.title=Smelting Bonus
+groovyscript.wiki.thaumcraft.smeltingbonus.description=Additional item output when smelting a given item in the Infernal Furnace Multiblock.
+groovyscript.wiki.thaumcraft.smeltingbonus.in.value=Sets the input of the smelting operation
+groovyscript.wiki.thaumcraft.smeltingbonus.out.value=Sets the bonus item to be produced from the smelting operation
+groovyscript.wiki.thaumcraft.smeltingbonus.chance.value=Sets the chance of `out` being produced from the smelting operation per attached Arcane Bellows + 1
+groovyscript.wiki.thaumcraft.smeltingbonus.add0=Adds recipes in the format `in`, `out`, with chance having a default value of `0.33F`
+groovyscript.wiki.thaumcraft.smeltingbonus.add1=Adds recipes in the format `in`, `out`, `chance`
+
+groovyscript.wiki.thaumcraft.warp.title=Warp
+groovyscript.wiki.thaumcraft.warp.description=Determines if holding an item or equipping a piece of armor or a bauble gives warp, and how much warp it gives
+groovyscript.wiki.thaumcraft.warp.addWarp=Adds Warp to the given item in the format `item`, `amount`
+groovyscript.wiki.thaumcraft.warp.removeWarp=Removes Warp from the given item

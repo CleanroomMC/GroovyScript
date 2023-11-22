@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
+import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -28,12 +29,14 @@ import java.util.stream.Collectors;
 
 import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 
+@RegistryDescription
 public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
     public Crucible() {
         super();
     }
 
+    @RecipeBuilderDescription(example = @Example(".researchKey('UNLOCKALCHEMY@3').catalyst(item('minecraft:rotten_flesh')).output(item('minecraft:gold_ingot')).aspect(aspect('metallum') * 10)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -58,6 +61,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public CrucibleRecipe add(String researchKey, ItemStack result, IIngredient catalyst, AspectList tags) {
         CrucibleRecipe recipe = new CrucibleRecipe(researchKey, result, catalyst.toMcIngredient(), tags);
         add(recipe);
@@ -83,6 +87,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:gunpowder')"))
     public void removeByOutput(IIngredient output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Thaumcraft Crucible recipe")
@@ -111,12 +116,14 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, IThaumcraftRecipe>> streamRecipes() {
         List<Map.Entry<ResourceLocation, IThaumcraftRecipe>> recipes = ThaumcraftApi.getCraftingRecipes().entrySet().stream().filter(x -> x.getValue() instanceof CrucibleRecipe).collect(Collectors.toList());
         return new SimpleObjectStream<>(recipes)
                 .setRemover(x -> remove((CrucibleRecipe) x));
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         List<Map.Entry<ResourceLocation, IThaumcraftRecipe>> recipes = ThaumcraftApi.getCraftingRecipes().entrySet().stream().filter(x -> x.getValue() instanceof CrucibleRecipe).collect(Collectors.toList());
         for (Map.Entry<ResourceLocation, IThaumcraftRecipe> recipe : recipes) {
@@ -127,26 +134,33 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrucibleRecipe> {
 
+        @Property
         private String researchKey;
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private final AspectList aspects = new AspectList();
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IIngredient catalyst;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder researchKey(String researchKey) {
             this.researchKey = researchKey;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "aspects")
         public RecipeBuilder aspect(AspectStack aspectIn) {
             this.aspects.add(aspectIn.getAspect(), aspectIn.getAmount());
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "aspects")
         public RecipeBuilder aspect(String tag, int amount) {
             Aspect a = AspectBracketHandler.validateAspect(tag);
             if (a != null) this.aspects.add(a, amount);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder catalyst(IIngredient catalyst) {
             this.catalyst = catalyst;
             return this;
@@ -166,6 +180,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable CrucibleRecipe register() {
             if (!validate()) return null;
             return ModSupport.THAUMCRAFT.get().crucible.add(researchKey, this.output.get(0), catalyst, aspects);
