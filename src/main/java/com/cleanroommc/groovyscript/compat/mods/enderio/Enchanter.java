@@ -32,8 +32,8 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".enchantment(enchantment('unbreaking')).input(item('minecraft:diamond'))"),
-            @Example(".enchantment(enchantment('sharpness')).input(item('minecraft:clay')).amountPerLevel(3).xpCostMultiplier(2).customBook(item('minecraft:book')).customLapis(item('minecraft:diamond'))")
+            @Example(".enchantment(enchantment('minecraft:unbreaking')).input(item('minecraft:diamond'))"),
+            @Example(".enchantment(enchantment('minecraft:sharpness')).input(item('minecraft:clay')).amountPerLevel(3).xpCostMultiplier(2).customBook(item('minecraft:book')).customLapis(item('minecraft:diamond'))")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -65,7 +65,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         return true;
     }
 
-    @MethodDescription(example = @Example("enchantment('mending')"))
+    @MethodDescription(example = @Example("enchantment('minecraft:mending')"))
     public void remove(Enchantment enchantment) {
         if (enchantment == null) {
             GroovyLog.get().error("Can't remove EnderIO Enchanter recipe for null enchantment!");

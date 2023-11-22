@@ -104,7 +104,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         return new RecipeBuilder().fill();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond_block')).inputPotion(potionType('fire_resistance')).outputPotion(potionType('strength'))"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).outputPotion(potionType('minecraft:strength'))"), requirement = {
             @Property(property = "input"),
             @Property(property = "inputPotion"),
             @Property(property = "outputPotion")
@@ -113,7 +113,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         return new RecipeBuilder().brewing();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).inputPotion(potionType('fire_resistance')).levels(2)"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).levels(2)"), requirement = {
             @Property(property = "input"),
             @Property(property = "output"),
             @Property(property = "inputPotion", valid = {@Comp("0"), @Comp("1")}),

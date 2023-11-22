@@ -231,7 +231,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         return new ConstellationBuilder();
     }
 
-    @RecipeBuilderDescription(example = @Example(".constellation(constellation('square')).enchantmentEffect(enchantment('luck_of_the_sea'), 1, 3).potionEffect(potion('luck'), 1, 2)"))
+    @RecipeBuilderDescription(example = @Example(".constellation(constellation('square')).enchantmentEffect(enchantment('minecraft:luck_of_the_sea'), 1, 3).potionEffect(potion('minecraft:luck'), 1, 2)"))
     public ConstellationMapEffectBuilder constellationMapEffectBuilder() {
         return new ConstellationMapEffectBuilder();
     }
