@@ -19,7 +19,7 @@ public class Documentation {
     // Matches /*()*/ or /*()!*/ and captures if theres an !
     public static final Pattern ANNOTATION_COMMENT_LOCATION = Pattern.compile("/\\*\\(\\)(!?)\\*/");
     public static final int MAX_LINE_LENGTH = 120;
-    public static final boolean USE_VERSION = FMLLaunchHandler.isDeobfuscatedEnvironment();
+    public static final boolean USE_DEFAULT_BRANCH = FMLLaunchHandler.isDeobfuscatedEnvironment();
 
     public static final File EXAMPLES = new File(GroovyScript.getScriptPath());
     public static final File WIKI = new File(new File(GroovyScript.getScriptPath()).getParentFile(), "wiki");

@@ -31,7 +31,7 @@ public class BasicLinkGenerator implements ILinkGenerator {
     }
 
     protected String path() {
-        return String.format("blob/%s/src/main/java/", Documentation.USE_VERSION ? version() : defaultBranch());
+        return String.format("blob/%s/src/main/java/", Documentation.USE_DEFAULT_BRANCH ? defaultBranch() : version());
     }
 
     protected String internalLocation(String location) {
