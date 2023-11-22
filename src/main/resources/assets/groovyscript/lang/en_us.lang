@@ -727,6 +727,7 @@ groovyscript.wiki.mekanism.osmiumcompressor.description=Converts an input itemst
 groovyscript.wiki.mekanism.osmiumcompressor.annotation=Always uses 200 gas
 groovyscript.wiki.mekanism.osmiumcompressor.add=Adds recipes in the format `ingredient`, `gasInput`, `output`
 
+groovyscript.wiki.mekanism.pressurizedreactionchamber.title=Pressurized Reaction Chamber
 groovyscript.wiki.mekanism.pressurizedreactionchamber.description=Converts an input fluidstack, gasstack, and optional itemstack into an output gasstack and optional itemstack.
 groovyscript.wiki.mekanism.pressurizedreactionchamber.add=Adds recipes in the format `inputSolid`, `inputFluid`, `inputGas`, `outputSolid`, `outputGas`, `energy`, `duration`
 groovyscript.wiki.mekanism.pressurizedreactionchamber.energy.value=Sets the energy cost of the recipe
