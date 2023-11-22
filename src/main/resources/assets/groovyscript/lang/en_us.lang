@@ -140,6 +140,43 @@ groovyscript.wiki.advancedmortars.mortar.duration.value=Sets how many interactio
 groovyscript.wiki.advancedmortars.mortar.secondaryOutput.value=Sets the additional output itemstack
 groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the chance of the additional output itemstack being output
 
+# Applied Energistics 2
+groovyscript.wiki.appliedenergistics2.attunement.title=P2P Attunement
+groovyscript.wiki.appliedenergistics2.attunement.description=Controls using specific items, any items from a mod, or any items with a Capability to convert a P2P into a specific tunnel type.
+groovyscript.wiki.appliedenergistics2.attunement.add0=Adds tunnel attunement for the given item in the format `item`, `tunnel`
+groovyscript.wiki.appliedenergistics2.attunement.add1=Adds tunnel attunement for all items in the given mod in the format `mod`, `tunnel`
+groovyscript.wiki.appliedenergistics2.attunement.add2=Adds tunnel attunement for all items with the given capability in the format `capability`, `tunnel`
+groovyscript.wiki.appliedenergistics2.attunement.remove0=Removes tunnel attunement for the given item in the format `item`, `tunnel`
+groovyscript.wiki.appliedenergistics2.attunement.remove1=Removes tunnel attunement for the given mod in the format `mod`, `tunnel`
+groovyscript.wiki.appliedenergistics2.attunement.remove2=Removes tunnel attunement for the given capability in the format `capability`, `tunnel`
+groovyscript.wiki.appliedenergistics2.attunement.removeByItem=Removes the item from creating any tunnel
+groovyscript.wiki.appliedenergistics2.attunement.removeByMod=Removes the modid from creating any tunnel
+groovyscript.wiki.appliedenergistics2.attunement.removeByCapability=Removes the given Capability from creating any tunnel
+groovyscript.wiki.appliedenergistics2.attunement.removeByTunnel=Remove all ways to create the given tunnel
+
+groovyscript.wiki.appliedenergistics2.cannon.title=Cannon Ammo
+groovyscript.wiki.appliedenergistics2.cannon.description=Item and weight, where weight is a factor in how much damage is dealt.
+groovyscript.wiki.appliedenergistics2.cannon.add=Adds ammo in the format `item`, `value`
+groovyscript.wiki.appliedenergistics2.cannon.remove=Removes the ammo entry for the given item
+
+groovyscript.wiki.appliedenergistics2.grinder.title=Grinder
+groovyscript.wiki.appliedenergistics2.grinder.description=Converts an item into one item, with up to two additional items as chance byproducts after a number of turns.
+groovyscript.wiki.appliedenergistics2.grinder.turns.value=Sets the number of turns of the Hand Crank are required
+groovyscript.wiki.appliedenergistics2.grinder.chance1.value=Sets the chance of the second output item being output
+groovyscript.wiki.appliedenergistics2.grinder.chance2.value=Sets the chance of the third output item being output
+
+groovyscript.wiki.appliedenergistics2.inscriber.title=Inscriber
+groovyscript.wiki.appliedenergistics2.inscriber.description=Converts an item into another item, requiring either one or two additional items as either catalysts or ingredients.
+groovyscript.wiki.appliedenergistics2.inscriber.top.value=Sets the top item of the inscriber recipe
+groovyscript.wiki.appliedenergistics2.inscriber.type.value=Sets the type of recipe, determining if the top/bottom items function as catalysts
+groovyscript.wiki.appliedenergistics2.inscriber.bottom.value=Sets the bottom item of the inscriber recipe
+groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required=either top or bottom to be non-empty
+
+groovyscript.wiki.appliedenergistics2.spatial.title=Spatial Storage Allowed Tile Entities
+groovyscript.wiki.appliedenergistics2.spatial.description=Either the class itself or its String name to add or remove from the Tile Entities allowed in Spatial Storage.
+groovyscript.wiki.appliedenergistics2.spatial.add=Adds the given class to the list of allowed TileEntities to be moved by Spatial Storage
+groovyscript.wiki.appliedenergistics2.spatial.remove=Removes the given class from the list of allowed TileEntities to be moved by Spatial Storage
+
 # Astral Sorcery
 groovyscript.wiki.astralsorcery.aevitasperkregistry.title=Aevitas Perk Registry
 groovyscript.wiki.astralsorcery.aevitasperkregistry.description=Having the Stone Enrichment perk will convert nearby stone blocks into random ores.
