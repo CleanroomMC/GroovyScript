@@ -118,7 +118,6 @@ public class ModSupport implements IDynamicGroovyProperty {
             throw new IllegalStateException("Container already present!");
         }
         containerList.add(container);
-        containers.put(container.getModId(), container);
         for (String alias : container.getAliases()) {
             GroovyContainer<?> container2 = containers.put(alias, container);
             if (container2 != null) {

@@ -2,7 +2,10 @@ package com.cleanroommc.groovyscript.documentation.annotations;
 
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Indicates that the method is the final step used in a RecipeBuilder, and adds the recipe created

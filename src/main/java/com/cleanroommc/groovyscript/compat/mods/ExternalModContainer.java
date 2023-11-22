@@ -1,11 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
 import com.cleanroommc.groovyscript.api.IGroovyContainer;
+import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Set;
 
 public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> {
 
@@ -20,7 +22,9 @@ public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> 
         this.container = Objects.requireNonNull(container);
         this.modId = groovyContainer.getModId();
         this.modName = groovyContainer.getModName();
-        this.aliases = Collections.unmodifiableCollection(groovyContainer.getAliases());
+        Set<String> aliasSet = Sets.newHashSet(groovyContainer.getAliases());
+        aliasSet.add(modId);
+        this.aliases = Collections.unmodifiableCollection(aliasSet);
         if (ModSupport.isFrozen()) {
             throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + modName + "' too late.");
         }

@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.documentation.annotations;
 
-import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 
 import java.lang.annotation.ElementType;

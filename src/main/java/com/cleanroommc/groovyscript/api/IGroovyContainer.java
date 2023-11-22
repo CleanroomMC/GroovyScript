@@ -46,7 +46,7 @@ public interface IGroovyContainer {
      */
     @NotNull
     default Collection<String> getAliases() {
-        return Collections.emptyList();
+        return Collections.singletonList(getModId());
     }
 
     /**
