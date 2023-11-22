@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
 
     public SagMillGrinding() {
-        super(VirtualizedRegistry.generateAliases("Grinding"));
+        super(Alias.generateOf("Grinding"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay_ball')).chance(6.66).power(0.001).grinding(3.33).duration(10000)"))

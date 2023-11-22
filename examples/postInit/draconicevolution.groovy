@@ -1,5 +1,5 @@
 
-if (!isLoaded('draconicevolution')) return
+// MODS_LOADED: draconicevolution
 println 'mod \'draconicevolution\' detected, running script'
 
 // Fusion:

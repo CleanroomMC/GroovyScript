@@ -177,6 +177,14 @@ public class RunConfig {
         return packId;
     }
 
+    public String getPackOrModId() {
+        return this.invalidPackId ? GroovyScript.ID : this.packId;
+    }
+
+    public String getPackOrModName() {
+        return this.packName.isEmpty() ? GroovyScript.NAME : this.packName;
+    }
+
     public boolean isValidPackId() {
         return !invalidPackId;
     }
@@ -221,6 +229,7 @@ public class RunConfig {
             try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile)
+                        .filter(Preprocessor::validatePreprocessors)
                         .sorted(Comparator.comparing(File::getPath))
                         .forEach(file -> {
                             if (files.containsKey(file)) {

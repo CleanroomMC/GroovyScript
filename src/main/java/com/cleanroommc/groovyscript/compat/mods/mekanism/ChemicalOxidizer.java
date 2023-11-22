@@ -6,8 +6,8 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecipe> {
 
     public ChemicalOxidizer() {
-        super(RecipeHandler.Recipe.CHEMICAL_OXIDIZER, VirtualizedRegistry.generateAliases("Oxidizer"));
+        super(RecipeHandler.Recipe.CHEMICAL_OXIDIZER, Alias.generateOf("Oxidizer").andGenerateOfClass(ChemicalOxidizer.class));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(ore('dustGold')).gasOutput(gas('gold'))"))

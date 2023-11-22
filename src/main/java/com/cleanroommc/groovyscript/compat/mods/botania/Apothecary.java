@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 public class Apothecary extends VirtualizedRegistry<RecipePetals> {
 
     public Apothecary() {
-        super(VirtualizedRegistry.generateAliases("PetalApothecary"));
+        super(Alias.generateOf("PetalApothecary"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(ore('blockGold'), ore('ingotIron'), item('minecraft:apple')).output(item('minecraft:golden_apple'))"))
@@ -38,7 +39,8 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipePetals add(ItemStack output, IIngredient... inputs) {
-        RecipePetals recipe = new RecipePetals(output, Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict() : i.getMatchingStacks()[0]).toArray());
+        RecipePetals recipe = new RecipePetals(output, Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
+                                                                                                                     : i.getMatchingStacks()[0]).toArray());
         add(recipe);
         return recipe;
     }
@@ -72,9 +74,11 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('runeFireB')"))
     public boolean removeByInput(IIngredient... inputs) {
-        List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict() : i.getMatchingStacks()[0]).collect(Collectors.toList());
+        List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
+                                                                                               : i.getMatchingStacks()[0]).collect(Collectors.toList());
         if (BotaniaAPI.petalRecipes.removeIf(recipe -> {
-            boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> o instanceof String || i instanceof String ? o.equals(i) : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));
+            boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> o instanceof String || i instanceof String ? o.equals(i)
+                                                                                                                                                  : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));
             if (found) addBackup(recipe);
             return found;
         })) return true;
@@ -121,7 +125,8 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
         @RecipeBuilderRegistrationMethod
         public @Nullable RecipePetals register() {
             if (!validate()) return null;
-            RecipePetals recipe = new RecipePetals(output.get(0), input.stream().map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict() : i.getMatchingStacks()[0]).toArray());
+            RecipePetals recipe = new RecipePetals(output.get(0), input.stream().map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
+                                                                                                                         : i.getMatchingStacks()[0]).toArray());
             add(recipe);
             return recipe;
         }

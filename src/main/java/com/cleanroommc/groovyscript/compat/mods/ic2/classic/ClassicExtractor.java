@@ -22,12 +22,12 @@ public class ClassicExtractor extends Extractor {
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> ClassicRecipes.extractor.removeRecipe(recipe.getInput()));
-        restoreFromBackup().forEach(recipe -> ClassicRecipes.extractor.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], "" + recipe.hashCode()));
+        restoreFromBackup().forEach(recipe -> ClassicRecipes.extractor.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], String.valueOf(recipe.hashCode())));
     }
 
     @Override
     public void add(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
-        ClassicRecipes.extractor.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], "" + recipe.hashCode());
+        ClassicRecipes.extractor.addRecipe(recipe.getInput(), (ItemStack) recipe.getOutput().toArray()[0], String.valueOf(recipe.hashCode()));
         addScripted(recipe);
     }
 
@@ -61,7 +61,7 @@ public class ClassicExtractor extends Extractor {
             xp = 0F;
         }
         MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(new RecipeInput(input), Collections.singleton(output));
-        ClassicRecipes.extractor.addRecipe(recipe.getInput(), output, xp, "" + recipe.hashCode());
+        ClassicRecipes.extractor.addRecipe(recipe.getInput(), output, xp, String.valueOf(recipe.hashCode()));
         addScripted(recipe);
         return recipe;
     }

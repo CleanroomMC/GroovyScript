@@ -16,7 +16,10 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
 

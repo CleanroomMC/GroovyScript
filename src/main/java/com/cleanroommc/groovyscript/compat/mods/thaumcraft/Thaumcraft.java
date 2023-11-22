@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
-import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
-import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
+import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IGameObjectHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane.ArcaneWorkbench;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.Aspect;
@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStac
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.Warp;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApiHelper;
@@ -46,11 +47,8 @@ public class Thaumcraft extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        BracketHandlerManager.registerBracketHandler("aspect", AspectBracketHandler.INSTANCE);
-        BracketHandlerManager.registerBracketHandler("crystal", s -> {
-            thaumcraft.api.aspects.Aspect aspect = thaumcraft.api.aspects.Aspect.getAspect(s);
-            return aspect == null ? null : ThaumcraftApiHelper.makeCrystal(aspect);
-        });
+        GameObjectHandlerManager.registerGameObjectHandler("thaumcraft", "aspect", IGameObjectHandler.wrapStringGetter(Thaumcraft::getAspect, AspectStack::new));
+        GameObjectHandlerManager.registerGameObjectHandler("thaumcraft", "crystal", IGameObjectHandler.wrapStringGetter(Thaumcraft::getAspect, ThaumcraftApiHelper::makeCrystal));
         ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
         ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);
     }
@@ -63,4 +61,13 @@ public class Thaumcraft extends ModPropertyContainer {
         return list;
     }
 
+    public static thaumcraft.api.aspects.Aspect validateAspect(String tag) {
+        thaumcraft.api.aspects.Aspect aspect = thaumcraft.api.aspects.Aspect.getAspect(tag);
+        if (aspect == null) GroovyLog.msg("Can't find aspect for name {}!", tag).error().post();
+        return aspect;
+    }
+
+    public static thaumcraft.api.aspects.Aspect getAspect(String tag) {
+        return thaumcraft.api.aspects.Aspect.getAspect(tag);
+    }
 }

@@ -1,5 +1,5 @@
 
-if (!isLoaded('immersiveengineering')) return
+// MODS_LOADED: immersiveengineering
 println 'mod \'immersiveengineering\' detected, running script'
 
 // Alloy Kiln:

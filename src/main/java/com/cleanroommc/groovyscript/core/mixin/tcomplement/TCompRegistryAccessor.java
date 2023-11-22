@@ -16,6 +16,7 @@ import java.util.Map;
 
 @Mixin(value = TCompRegistry.class, remap = false)
 public interface TCompRegistryAccessor {
+
     @Accessor
     static List<MeltingRecipe> getMeltingOverrides() {
         throw new AssertionError();

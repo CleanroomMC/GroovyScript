@@ -1,5 +1,5 @@
 
-if (!isLoaded('enderio')) return
+// MODS_LOADED: enderio
 println 'mod \'enderio\' detected, running script'
 
 // Alloy Smelter (Alloying):

@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import mekanism.common.recipe.RecipeHandler;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
 
     public Smelting() {
-        super(RecipeHandler.Recipe.ENERGIZED_SMELTER, VirtualizedMekanismRegistry.generateAliases("Smelter"));
+        super(RecipeHandler.Recipe.ENERGIZED_SMELTER, Alias.generateOf("Smelter").andGenerateOfClass(Smelting.class));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay_ball')).output(item('minecraft:clay'))"))

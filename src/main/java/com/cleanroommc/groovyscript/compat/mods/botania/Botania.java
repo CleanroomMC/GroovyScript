@@ -1,7 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
-import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
+import com.cleanroommc.groovyscript.api.IGameObjectHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconCategory;
 import vazkii.botania.api.lexicon.LexiconEntry;
@@ -53,6 +54,6 @@ public class Botania extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        BracketHandlerManager.registerBracketHandler("brew", s -> BotaniaAPI.brewMap.getOrDefault(s, BotaniaAPI.fallbackBrew));
+        GameObjectHandlerManager.registerGameObjectHandler("botania", "brew", IGameObjectHandler.wrapStringGetter(BotaniaAPI.brewMap::get, false), BotaniaAPI.fallbackBrew);
     }
 }

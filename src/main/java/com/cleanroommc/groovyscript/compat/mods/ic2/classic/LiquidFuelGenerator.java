@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -14,7 +15,7 @@ import java.util.Map;
 public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator.LFGRecipe> {
 
     public LiquidFuelGenerator() {
-        super(VirtualizedRegistry.generateAliases("FluidGenerator"));
+        super(Alias.generateOf("FluidGenerator"));
     }
 
     @Override

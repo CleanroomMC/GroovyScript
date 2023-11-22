@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import net.minecraft.util.ResourceLocation;
 import thaumcraft.api.aspects.AspectList;
 
@@ -80,7 +80,7 @@ public class Aspect extends VirtualizedRegistry<thaumcraft.api.aspects.Aspect> {
 
         @RecipeBuilderMethodDescription(field = "components")
         public AspectBuilder component(String tag, int amount) {
-            thaumcraft.api.aspects.Aspect a = AspectBracketHandler.validateAspect(tag);
+            thaumcraft.api.aspects.Aspect a = Thaumcraft.validateAspect(tag);
             if (a != null) this.components.add(a, amount);
             return this;
         }

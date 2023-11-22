@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
@@ -20,14 +19,13 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.IThaumcraftRecipe;
+import thaumcraft.common.config.ConfigRecipes;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 
 @RegistryDescription
 public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
@@ -50,14 +48,14 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             if (!ThaumcraftApi.getCraftingRecipes().containsValue(recipe))
                 ThaumcraftApi.addCrucibleRecipe(new ResourceLocation(recipe.getRecipeOutput().toString()), recipe);
         });
-        compileGroups();
+        ConfigRecipes.compileGroups();
     }
 
     public void add(CrucibleRecipe recipe) {
         if (recipe != null) {
             addScripted(recipe);
             ThaumcraftApi.addCrucibleRecipe(new ResourceLocation(recipe.getRecipeOutput().getDisplayName()), recipe);
-            compileGroups();
+            ConfigRecipes.compileGroups();
         }
     }
 
@@ -155,7 +153,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
         @RecipeBuilderMethodDescription(field = "aspects")
         public RecipeBuilder aspect(String tag, int amount) {
-            Aspect a = AspectBracketHandler.validateAspect(tag);
+            Aspect a = Thaumcraft.validateAspect(tag);
             if (a != null) this.aspects.add(a, amount);
             return this;
         }

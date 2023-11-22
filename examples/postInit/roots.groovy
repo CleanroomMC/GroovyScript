@@ -1,5 +1,5 @@
 
-if (!isLoaded('roots')) return
+// MODS_LOADED: roots
 println 'mod \'roots\' detected, running script'
 
 // Bracket Handlers

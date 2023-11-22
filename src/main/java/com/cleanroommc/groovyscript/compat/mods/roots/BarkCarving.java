@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -23,7 +24,7 @@ import static epicsquid.roots.init.ModRecipes.*;
 public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, BarkRecipe>> {
 
     public BarkCarving() {
-        super(VirtualizedRegistry.generateAliases("Bark"));
+        super(Alias.generateOf("Bark").andGenerateOfClass(BarkCarving.class));
     }
 
     @RecipeBuilderDescription(example = {

@@ -148,7 +148,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
     public void validateName() {
         if (name == null) {
-            name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate(getRecipeNamePrefix()));
+            name = RecipeName.generateRl(getRecipeNamePrefix());
         }
     }
 

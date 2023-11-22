@@ -155,7 +155,7 @@ crafting.removeByInput(item('minecraft:iron_ingot')) // Remove all recipes conta
 
 
 // Furnace
-furnace.add(ore('ingotIron'), item('minecraft:diamond')) // exp has a default value of 0.1
+//furnace.add(ore('ingotIron'), item('minecraft:diamond')) // exp has a default value of 0.1
 furnace.add(item('minecraft:nether_star'), item('minecraft:clay') * 64, 13)
 
 furnace.recipeBuilder()
@@ -218,10 +218,10 @@ item('minecraft:golden_apple').setRarity(textformat('-1'))
 
 
 // Use eventManager.listen and listen to the desired event.
-eventManager.listen({ BlockEvent.BreakEvent event -> {
+/*eventManager.listen({ BlockEvent.BreakEvent event -> {
     event.setCanceled(true) // Many events can be canceled.
     event.player.sendMessage(new TextComponentString("${event.getState().getBlock().getLocalizedName()} Block was prevent from being broken"))
-}})
+}})*/
 
 // The outer parentheses and inner curly braces are optional.
 eventManager.listen { EnderTeleportEvent event ->

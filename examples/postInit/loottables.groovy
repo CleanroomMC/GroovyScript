@@ -1,8 +1,5 @@
 
-if (isReloading()) {
-    println 'Cancelled running script loot'
-    return
-}
+// NO_RELOAD
 
 def pyramidLootTable = loot.getTable(resource('minecraft:chests/stronghold_library'))
 

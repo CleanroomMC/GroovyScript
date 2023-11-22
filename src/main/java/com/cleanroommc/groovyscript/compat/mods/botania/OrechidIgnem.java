@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.compat.mods.botania.recipe.OrechidRecipe;
 import com.cleanroommc.groovyscript.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import vazkii.botania.api.BotaniaAPI;
 
 import java.util.ArrayList;

@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.core.mixin.enderio.FluidFuelRegisterAccessor
 import com.cleanroommc.groovyscript.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import crazypants.enderio.base.fluid.FluidFuelRegister;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
 
     public FluidCoolant() {
-        super(VirtualizedRegistry.generateAliases("CombustionCoolant"));
+        super(Alias.generateOf("CombustionCoolant"));
     }
 
     @MethodDescription(example = @Example("fluid('xpjuice'), 1000"), type = MethodDescription.Type.ADDITION)

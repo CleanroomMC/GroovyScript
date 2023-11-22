@@ -6,8 +6,8 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.AdvancedMachineInput;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecipe> {
 
     public InjectionChamber() {
-        super(RecipeHandler.Recipe.CHEMICAL_INJECTION_CHAMBER, VirtualizedRegistry.generateAliases("Injector"));
+        super(RecipeHandler.Recipe.CHEMICAL_INJECTION_CHAMBER, Alias.generateOf("Injector").andGenerateOfClass(InjectionChamber.class));
     }
 
     @RecipeBuilderDescription(example = @Example(value = ".input(item('minecraft:diamond')).gasInput(gas('water'))/*()!*/.output(item('minecraft:nether_star'))", annotations = "groovyscript.wiki.mekanism.injectionchamber.annotation"))

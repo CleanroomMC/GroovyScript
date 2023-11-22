@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.ic2.classic;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -12,7 +13,7 @@ import net.minecraft.item.ItemStack;
 public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer.ElectrolyzerRecipe> {
 
     public ClassicElectrolyzer() {
-        super(false, VirtualizedRegistry.generateAliases("Electrolyzer"));
+        super(Alias.generateOf("Electrolyzer"));
     }
 
     @Override

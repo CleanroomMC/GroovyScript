@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -25,7 +26,7 @@ import static epicsquid.roots.init.ModRecipes.getMortarRecipes;
 public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRecipe>> {
 
     public Mortar() {
-        super(VirtualizedRegistry.generateAliases("MortarAndPestle"));
+        super(Alias.generateOf("MortarAndPestle").andGenerateOfClass(Mortar.class));
     }
 
     @RecipeBuilderDescription(example = {

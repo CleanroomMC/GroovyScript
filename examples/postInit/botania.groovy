@@ -1,9 +1,9 @@
-import net.minecraft.potion.PotionEffect
-import net.minecraft.util.text.TextFormatting
 
-if (!isLoaded('botania')) return
+// MODS_LOADED: botania
 println 'mod \'botania\' detected, running script'
 
+import net.minecraft.potion.PotionEffect
+import net.minecraft.util.text.TextFormatting
 
 // Bracket Handlers
 // Brew:

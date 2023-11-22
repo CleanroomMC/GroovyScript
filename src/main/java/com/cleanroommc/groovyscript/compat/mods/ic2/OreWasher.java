@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.ic2;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -19,7 +20,7 @@ import java.util.List;
 public class OreWasher extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
     public OreWasher() {
-        super(VirtualizedRegistry.generateAliases("OreWashingPlant"));
+        super(Alias.generateOf("OreWashingPlant"));
     }
 
     @Override

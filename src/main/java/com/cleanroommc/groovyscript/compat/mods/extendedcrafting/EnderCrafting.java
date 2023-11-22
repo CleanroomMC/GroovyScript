@@ -50,7 +50,7 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.endercrafting.addShaped1", type = MethodDescription.Type.ADDITION)
     public IRecipe addShaped(int time, ItemStack output, List<List<IIngredient>> input) {
-        return shapedBuilder()
+        return (IRecipe) shapedBuilder()
                 .matrix(input)
                 .time(time)
                 .output(output)
@@ -64,7 +64,7 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.endercrafting.addShapeless1", type = MethodDescription.Type.ADDITION)
     public IRecipe addShapeless(int time, ItemStack output, List<IIngredient> input) {
-        return shapelessBuilder()
+        return (IRecipe) shapelessBuilder()
                 .input(input)
                 .time(time)
                 .output(output)

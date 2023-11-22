@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.core.mixin.astralsorcery.OreTypesAccessor;
 import com.cleanroommc.groovyscript.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -22,7 +23,7 @@ public class OreChance extends VirtualizedRegistry<OreEntry> {
     private final OreTypesAccessor REGISTRY;
 
     public OreChance(String name, OreTypes registry) {
-        super(false, VirtualizedRegistry.generateAliases(name));
+        super(Alias.generateOf(name));
         REGISTRY = (OreTypesAccessor) registry;
     }
 

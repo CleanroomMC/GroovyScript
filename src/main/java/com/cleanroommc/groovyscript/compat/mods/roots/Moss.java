@@ -7,29 +7,21 @@ import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import epicsquid.mysticallib.util.ConfigUtil;
+import epicsquid.roots.config.MossConfig;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
-
-import static epicsquid.roots.config.MossConfig.MossyCobblestones;
 
 @RegistryDescription
 public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> {
 
     public Moss() {
         super();
-        // Roots adds the default ingredients after we have to, but only does so if mossyCobblestones is null.
-        // So we define it here to prevent NPEs and make sure we still respect the config.
-        // Probably a better way to do this, but it works.
-        if (MossConfigAccessor.getMossyCobblestones() == null) {
-            MossConfigAccessor.setMossyCobblestones(ConfigUtil.parseMap(new HashMap<>(), ConfigUtil::parseItemStack, ConfigUtil::parseItemStack, ",", MossyCobblestones));
-        }
+        MossConfig.getMossyCobblestones(); // Initialize backing map first, this way we can respect its config
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:clay'))"))

@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
-import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
@@ -181,7 +180,7 @@ public class Research extends VirtualizedRegistry<ResearchCategory> {
 
         @RecipeBuilderMethodDescription(field = "formula")
         public ResearchCategoryBuilder formulaAspect(String tag, int amount) {
-            Aspect a = AspectBracketHandler.validateAspect(tag);
+            Aspect a = Thaumcraft.validateAspect(tag);
             if (a != null) this.formula.add(a, amount);
             return this;
         }

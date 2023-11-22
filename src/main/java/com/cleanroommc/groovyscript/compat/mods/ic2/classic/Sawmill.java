@@ -21,7 +21,7 @@ public class Sawmill extends VirtualizedRegistry<IMachineRecipeList.RecipeEntry>
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> ClassicRecipes.sawMill.removeRecipe(recipe));
-        restoreFromBackup().forEach(recipe -> ClassicRecipes.sawMill.addRecipe(recipe.getInput(), recipe.getOutput(), "" + recipe.hashCode()));
+        restoreFromBackup().forEach(recipe -> ClassicRecipes.sawMill.addRecipe(recipe.getInput(), recipe.getOutput(), String.valueOf(recipe.hashCode())));
     }
 
     public IMachineRecipeList.RecipeEntry add(ItemStack output, IIngredient input) {
@@ -32,7 +32,7 @@ public class Sawmill extends VirtualizedRegistry<IMachineRecipeList.RecipeEntry>
                 .postIfNotEmpty()) {
             return null;
         }
-        IMachineRecipeList.RecipeEntry entry = new IMachineRecipeList.RecipeEntry(new RecipeInput(input), new MachineOutput(null, output), "" + output.hashCode());
+        IMachineRecipeList.RecipeEntry entry = new IMachineRecipeList.RecipeEntry(new RecipeInput(input), new MachineOutput(null, output), String.valueOf(output.hashCode()));
         ClassicRecipes.sawMill.addRecipe(entry.getInput(), entry.getOutput(), entry.getRecipeID());
         addScripted(entry);
         return entry;
@@ -53,7 +53,7 @@ public class Sawmill extends VirtualizedRegistry<IMachineRecipeList.RecipeEntry>
                     .post();
             xp = 0F;
         }
-        IMachineRecipeList.RecipeEntry entry = new IMachineRecipeList.RecipeEntry(new RecipeInput(input), new MachineExpOutput(null, xp, output), "" + output.hashCode());
+        IMachineRecipeList.RecipeEntry entry = new IMachineRecipeList.RecipeEntry(new RecipeInput(input), new MachineExpOutput(null, xp, output), String.valueOf(output.hashCode()));
         ClassicRecipes.sawMill.addRecipe(entry.getInput(), entry.getOutput(), entry.getRecipeID());
         addScripted(entry);
         return entry;

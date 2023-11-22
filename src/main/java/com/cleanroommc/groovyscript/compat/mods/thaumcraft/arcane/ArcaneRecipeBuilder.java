@@ -2,7 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.brackets.AspectBracketHandler;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipeBuilder;
 import com.cleanroommc.groovyscript.documentation.annotations.Comp;
@@ -55,7 +55,7 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
 
     @RecipeBuilderMethodDescription(field = "aspects")
     public ArcaneRecipeBuilder aspect(String tag, int amount) {
-        Aspect a = AspectBracketHandler.validateAspect(tag);
+        Aspect a = Thaumcraft.validateAspect(tag);
         if (a != null) this.aspects.add(a, amount);
         return this;
     }

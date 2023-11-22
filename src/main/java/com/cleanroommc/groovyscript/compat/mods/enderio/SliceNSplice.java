@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.ManyToOneRecipe;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeUtils;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -27,7 +28,7 @@ import java.util.List;
 public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
 
     public SliceNSplice() {
-        super(VirtualizedRegistry.generateAliases("SliceAndSplice"));
+        super(Alias.generateOf("SliceAndSplice"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), null, item('minecraft:clay')).input(null, item('minecraft:clay'), null).output(item('minecraft:gold_ingot')).energy(1000).xp(5)"))

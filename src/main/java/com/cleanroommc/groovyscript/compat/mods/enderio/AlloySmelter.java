@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeLeafNodeAccesso
 import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeNodeAccessor;
 import com.cleanroommc.groovyscript.core.mixin.enderio.TriItemLookupAccessor;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -38,7 +39,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
     private Set<IManyToOneRecipe> removalQueue;
 
     public AlloySmelter() {
-        super(VirtualizedRegistry.generateAliases("Alloying"));
+        super(Alias.generateOf("Alloying"));
     }
 
     @RecipeBuilderDescription(example = {

@@ -43,7 +43,10 @@ content.createItem('clay_3')
     .setEnchantedEffect() // Optional boolean, controls if the enchanted effect plays on the item
     .register()
 
-
+content.createFluid('amongium')
+    .setMetalTexture()
+    .setColor(0x00FF00)
+    .register()
 
 // You can register any item created, even items created via custom means.
 content.registerItem('snack', (new ItemFood(20, 10, false) {

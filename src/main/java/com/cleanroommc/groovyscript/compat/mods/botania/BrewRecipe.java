@@ -66,9 +66,12 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:iron_ingot')"))
     public boolean removeByInput(IIngredient... inputs) {
-        List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict() : i.getMatchingStacks()[0]).collect(Collectors.toList());
+        List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
+                                                                                               : i.getMatchingStacks()[0]).collect(Collectors.toList());
         if (BotaniaAPI.brewRecipes.removeIf(recipe -> {
-            boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> (i instanceof String || o instanceof String) ? i.equals(o) : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));
+            boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> (i instanceof String || o instanceof String)
+                                                                                                       ? i.equals(o)
+                                                                                                       : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));
             if (found) addBackup(recipe);
             return found;
         })) return true;
@@ -129,7 +132,8 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
         @RecipeBuilderRegistrationMethod
         public @Nullable RecipeBrew register() {
             if (!validate()) return null;
-            RecipeBrew recipe = new RecipeBrew(brew, input.stream().map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict() : i.getMatchingStacks()[0]).toArray());
+            RecipeBrew recipe = new RecipeBrew(brew, input.stream().map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
+                                                                                                            : i.getMatchingStacks()[0]).toArray());
             add(recipe);
             return recipe;
         }
