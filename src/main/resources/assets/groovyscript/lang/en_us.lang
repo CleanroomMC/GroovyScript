@@ -742,6 +742,34 @@ groovyscript.wiki.immersiveengineering.squeezer.description=Converts an input it
 groovyscript.wiki.immersiveengineering.squeezer.add=Adds recipes in the format `fluidOutput`, `itemOutput`, `input`, `energy`
 groovyscript.wiki.immersiveengineering.squeezer.energy.value=Sets the amount of power consumed to complete the recipe
 
+# Inspirations
+groovyscript.wiki.inspirations.anvilsmashing.title=Anvil Smashing
+groovyscript.wiki.inspirations.anvilsmashing.description=Converts a Block or IBlockState into an IBlockState when an anvil falls on top of it (from any height).
+groovyscript.wiki.inspirations.anvilsmashing.add=Adds an Anvil Smashing recipe in the format `input`, `output`
+groovyscript.wiki.inspirations.anvilsmashing.output.value=Sets the output IBlockState that replaces the input
+groovyscript.wiki.inspirations.anvilsmashing.input.required=either `inputBlock` or `inputBlockState` to be non-null
+groovyscript.wiki.inspirations.anvilsmashing.inputBlock.value=Sets the input Block
+groovyscript.wiki.inspirations.anvilsmashing.inputBlockState.value=Sets the input IBlockState
+groovyscript.wiki.inspirations.anvilsmashing.remove=Removes an Anvil Smashing recipe in the format `input`, `output`
+groovyscript.wiki.inspirations.anvilsmashing.remove_material=Removes an Anvil Smashing recipe matching the given input material
+groovyscript.wiki.inspirations.anvilsmashing.removeByInput=Removes an Anvil Smashing recipe with the given Block or IBlockState input
+groovyscript.wiki.inspirations.anvilsmashing.removeByOutput=Removes all Anvil Smashing recipes with the given IBlockState output
+
+groovyscript.wiki.inspirations.cauldron.title=Cauldron
+groovyscript.wiki.inspirations.cauldron.description=Converts up to 1 itemstack and up to 1 fluid into up to 1 itemstack or up to 1 fluid, with a boiling boolean and variable amount of fluid consumed or produced.
+groovyscript.wiki.inspirations.cauldron.note=Cauldrons have a cap of either 3 or 4 levels, depending on the config.
+groovyscript.wiki.inspirations.cauldron.dye.value=Sets the dye color fluid required for the input
+groovyscript.wiki.inspirations.cauldron.type.value=Sets what type of recipe is being processed
+groovyscript.wiki.inspirations.cauldron.sound.value=Sets the sound played when the recipe is crafted
+groovyscript.wiki.inspirations.cauldron.levels.value=Sets the level of fluid in the cauldron, where each bottle is a single level
+groovyscript.wiki.inspirations.cauldron.boiling.value=Sets if the cauldon must be boiling, requiring fire or another heat source beneath
+groovyscript.wiki.inspirations.cauldron.inputPotion.value=Sets the input potion type
+groovyscript.wiki.inspirations.cauldron.outputPotion.value=Sets the output potion type
+groovyscript.wiki.inspirations.cauldron.removeByFluidInput=Removes all recipes with the given fluid input
+groovyscript.wiki.inspirations.cauldron.removeByFluidOutput=Removes all recipes with the given fluid output
+groovyscript.wiki.inspirations.cauldron.removeByInput=Removes all recipes with the given item input
+groovyscript.wiki.inspirations.cauldron.removeByOutput=Removes all recipes with the given item output
+
 # Mekanism
 groovyscript.wiki.mekanism.gasInput.value=Sets the gas inputs of the recipe
 groovyscript.wiki.mekanism.gasOutput.value=Sets the gas outputs of the recipe
