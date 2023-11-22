@@ -311,7 +311,16 @@ groovyscript.wiki.astralsorcery.treasureshrineregistry.description=When the bloc
 groovyscript.wiki.astralsorcery.treasureshrineregistry.add=Adds entries in the format `ore`, `weight`
 groovyscript.wiki.astralsorcery.treasureshrineregistry.remove=Removes entries of the given ore
 
+# Avaritia
+groovyscript.wiki.avaritia.compressor.title=Compressor
+groovyscript.wiki.avaritia.compressor.description=Converts any number of a single item into an output itemstack.
+groovyscript.wiki.avaritia.compressor.add=Adds recipes in the format `output`, `input`, `cost`
+groovyscript.wiki.avaritia.compressor.inputCount.value=Sets the amount of items required to convert
 
+groovyscript.wiki.avaritia.extremecrafting.title=Extreme Crafting
+groovyscript.wiki.avaritia.extremecrafting.description=A normal crafting table, by 9x9 instead.
+groovyscript.wiki.avaritia.extremecrafting.addShaped=Adds a shaped crafting recipe in the format `output`, `input`
+groovyscript.wiki.avaritia.extremecrafting.addShapeless=Adds a shapeless crafting recipe in the format `output`, `input`
 
 # Blood Magic
 groovyscript.wiki.bloodmagic.alchemyarray.title=Alchemy Array
