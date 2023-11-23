@@ -21,7 +21,7 @@ import java.util.Map;
 public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
 
     public FluidFuel() {
-        super(Alias.generateOf("CombustionFuel"));
+        super(Alias.generateOfClassAnd(FluidFuel.class, "CombustionFuel"));
     }
 
     @MethodDescription(example = @Example("fluid('lava'), 500, 1000"), type = MethodDescription.Type.ADDITION)

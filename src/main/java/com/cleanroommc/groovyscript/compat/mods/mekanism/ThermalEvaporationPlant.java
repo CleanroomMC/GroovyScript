@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
 
     public ThermalEvaporationPlant() {
-        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, Alias.generateOf("ThermalEvaporation").and("TEP", "tep"));
+        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, Alias.generateOfClassAnd(ThermalEvaporationPlant.class, "ThermalEvaporation").and("TEP", "tep"));
     }
 
     @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).fluidOutput(fluid('steam'))"))

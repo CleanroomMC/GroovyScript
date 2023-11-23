@@ -20,7 +20,7 @@ import java.util.List;
 public class Centrifuge extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
     public Centrifuge() {
-        super(Alias.generateOf("ThermalCentrifuge"));
+        super(Alias.generateOfClassAnd(Centrifuge.class, "ThermalCentrifuge"));
     }
 
     @Override

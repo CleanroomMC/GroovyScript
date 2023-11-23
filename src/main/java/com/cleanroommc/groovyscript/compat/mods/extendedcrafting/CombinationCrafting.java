@@ -25,7 +25,7 @@ import java.util.Collection;
 public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> {
 
     public CombinationCrafting() {
-        super(Alias.generateOf("Combination"));
+        super(Alias.generateOfClassAnd(CombinationCrafting.class, "Combination"));
     }
 
     @Override

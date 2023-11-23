@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecipe> {
 
     public InjectionChamber() {
-        super(RecipeHandler.Recipe.CHEMICAL_INJECTION_CHAMBER, Alias.generateOf("Injector").andGenerateOfClass(InjectionChamber.class));
+        super(RecipeHandler.Recipe.CHEMICAL_INJECTION_CHAMBER, Alias.generateOfClassAnd(InjectionChamber.class, "Injector"));
     }
 
     @RecipeBuilderDescription(example = @Example(value = ".input(item('minecraft:diamond')).gasInput(gas('water'))/*()!*/.output(item('minecraft:nether_star'))", annotations = "groovyscript.wiki.mekanism.injectionchamber.annotation"))

@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
 
     public CompressionCrafting() {
-        super(Alias.generateOf("Compression"));
+        super(Alias.generateOfClassAnd(CompressionCrafting.class, "Compression"));
     }
 
     @Override

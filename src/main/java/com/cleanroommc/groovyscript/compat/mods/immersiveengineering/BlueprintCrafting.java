@@ -24,7 +24,7 @@ import java.util.List;
 public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingRecipe> {
 
     public BlueprintCrafting() {
-        super(Alias.generateOf("Blueprint"));
+        super(Alias.generateOfClassAnd(BlueprintCrafting.class, "Blueprint"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), ore('ingotGold')).output(item('minecraft:clay')).category('groovy')"))

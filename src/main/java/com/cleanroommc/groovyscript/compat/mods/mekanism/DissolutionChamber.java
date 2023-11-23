@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionRecipe> {
 
     public DissolutionChamber() {
-        super(RecipeHandler.Recipe.CHEMICAL_DISSOLUTION_CHAMBER, Alias.generateOf("Dissolver").andGenerateOfClass(DissolutionChamber.class));
+        super(RecipeHandler.Recipe.CHEMICAL_DISSOLUTION_CHAMBER, Alias.generateOfClassAnd(DissolutionChamber.class, "Dissolver"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:packed_ice')).gasOutput(gas('water') * 2000)"))

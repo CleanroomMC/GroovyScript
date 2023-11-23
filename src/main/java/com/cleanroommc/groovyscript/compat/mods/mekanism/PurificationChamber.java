@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class PurificationChamber extends VirtualizedMekanismRegistry<PurificationRecipe> {
 
     public PurificationChamber() {
-        super(RecipeHandler.Recipe.PURIFICATION_CHAMBER, Alias.generateOf("Purifier").andGenerateOfClass(PurificationChamber.class));
+        super(RecipeHandler.Recipe.PURIFICATION_CHAMBER, Alias.generateOfClassAnd(PurificationChamber.class, "Purifier"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).gasInput(gas('deuterium')).output(item('minecraft:nether_star'))"))

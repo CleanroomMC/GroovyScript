@@ -24,7 +24,7 @@ import static epicsquid.roots.init.ModRecipes.*;
 public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, BarkRecipe>> {
 
     public BarkCarving() {
-        super(Alias.generateOf("Bark").andGenerateOfClass(BarkCarving.class));
+        super(Alias.generateOfClassAnd(BarkCarving.class, "Bark"));
     }
 
     @RecipeBuilderDescription(example = {

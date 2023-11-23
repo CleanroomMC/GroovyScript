@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
 
     public Washer() {
-        super(RecipeHandler.Recipe.CHEMICAL_WASHER, Alias.generateOfClass(Washer.class).andGenerate("ChemicalWasher"));
+        super(RecipeHandler.Recipe.CHEMICAL_WASHER, Alias.generateOfClassAnd(Washer.class, "ChemicalWasher"));
     }
 
     @RecipeBuilderDescription(example = @Example(".gasInput(gas('water') * 10).gasOutput(gas('hydrogen') * 20)"))

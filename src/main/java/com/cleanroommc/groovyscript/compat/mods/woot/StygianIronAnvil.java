@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
 
     public StygianIronAnvil() {
-        super(Alias.generateOfClass(StygianIronAnvil.class).andGenerate("Anvil"));
+        super(Alias.generateOfClassAnd(StygianIronAnvil.class, "Anvil"));
     }
 
     @RecipeBuilderDescription(example = {

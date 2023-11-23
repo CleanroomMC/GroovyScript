@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecipe> {
 
     public ChemicalOxidizer() {
-        super(RecipeHandler.Recipe.CHEMICAL_OXIDIZER, Alias.generateOf("Oxidizer").andGenerateOfClass(ChemicalOxidizer.class));
+        super(RecipeHandler.Recipe.CHEMICAL_OXIDIZER, Alias.generateOfClassAnd(ChemicalOxidizer.class, "Oxidizer"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(ore('dustGold')).gasOutput(gas('gold'))"))

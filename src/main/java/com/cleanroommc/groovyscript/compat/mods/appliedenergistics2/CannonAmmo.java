@@ -16,7 +16,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class CannonAmmo extends VirtualizedRegistry<Pair<ItemStack, Double>> {
 
     public CannonAmmo() {
-        super(Alias.generateOf("Cannon"));
+        super(Alias.generateOfClassAnd(CannonAmmo.class, "Cannon"));
     }
 
     @Override

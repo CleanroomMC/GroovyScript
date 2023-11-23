@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<SeparatorRecipe> {
 
     public ElectrolyticSeparator() {
-        super(RecipeHandler.Recipe.ELECTROLYTIC_SEPARATOR, Alias.generateOf("Separator").andGenerateOfClass(ElectrolyticSeparator.class));
+        super(RecipeHandler.Recipe.ELECTROLYTIC_SEPARATOR, Alias.generateOfClassAnd(ElectrolyticSeparator.class, "Separator"));
     }
 
     @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('lava') * 10).gasOutput(gas('cleanGold') * 5, gas('cleanCopper') * 3).energy(3000)"))

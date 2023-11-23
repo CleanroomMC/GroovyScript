@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
 
     public Smelting() {
-        super(RecipeHandler.Recipe.ENERGIZED_SMELTER, Alias.generateOf("Smelter").andGenerateOfClass(Smelting.class));
+        super(RecipeHandler.Recipe.ENERGIZED_SMELTER, Alias.generateOfClassAnd(Smelting.class, "Smelter"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay_ball')).output(item('minecraft:clay'))"))

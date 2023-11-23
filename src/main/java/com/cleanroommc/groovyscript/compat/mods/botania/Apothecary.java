@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class Apothecary extends VirtualizedRegistry<RecipePetals> {
 
     public Apothecary() {
-        super(Alias.generateOf("PetalApothecary"));
+        super(Alias.generateOfClassAnd(Apothecary.class, "PetalApothecary"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(ore('blockGold'), ore('ingotIron'), item('minecraft:apple')).output(item('minecraft:golden_apple'))"))

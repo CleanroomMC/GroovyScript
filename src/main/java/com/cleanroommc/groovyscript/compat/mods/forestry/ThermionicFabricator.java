@@ -25,7 +25,7 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
     public final Smelting smelting = new Smelting();
 
     public ThermionicFabricator() {
-        super(Alias.generateOf("Fabricator"));
+        super(Alias.generateOfClassAnd(ThermionicFabricator.class, "Fabricator"));
     }
 
     public RecipeBuilder recipeBuilder() {

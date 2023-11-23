@@ -26,7 +26,7 @@ import static epicsquid.roots.init.ModRecipes.getMortarRecipes;
 public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRecipe>> {
 
     public Mortar() {
-        super(Alias.generateOf("MortarAndPestle").andGenerateOfClass(Mortar.class));
+        super(Alias.generateOfClassAnd(Mortar.class, "MortarAndPestle"));
     }
 
     @RecipeBuilderDescription(example = {

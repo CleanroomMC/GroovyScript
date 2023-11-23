@@ -154,10 +154,10 @@ groovyscript.wiki.appliedenergistics2.attunement.removeByMod=Removes the modid f
 groovyscript.wiki.appliedenergistics2.attunement.removeByCapability=Removes the given Capability from creating any tunnel
 groovyscript.wiki.appliedenergistics2.attunement.removeByTunnel=Remove all ways to create the given tunnel
 
-groovyscript.wiki.appliedenergistics2.cannon.title=Cannon Ammo
-groovyscript.wiki.appliedenergistics2.cannon.description=Item and weight, where weight is a factor in how much damage is dealt.
-groovyscript.wiki.appliedenergistics2.cannon.add=Adds ammo in the format `item`, `value`
-groovyscript.wiki.appliedenergistics2.cannon.remove=Removes the ammo entry for the given item
+groovyscript.wiki.appliedenergistics2.cannonammo.title=Cannon Ammo
+groovyscript.wiki.appliedenergistics2.cannonammo.description=Item and weight, where weight is a factor in how much damage is dealt.
+groovyscript.wiki.appliedenergistics2.cannonammo.add=Adds ammo in the format `item`, `value`
+groovyscript.wiki.appliedenergistics2.cannonammo.remove=Removes the ammo entry for the given item
 
 groovyscript.wiki.appliedenergistics2.grinder.title=Grinder
 groovyscript.wiki.appliedenergistics2.grinder.description=Converts an item into one item, with up to two additional items as chance byproducts after a number of turns.
@@ -1049,6 +1049,7 @@ groovyscript.wiki.thaumcraft.arcaneworkbench.remove=Removes the recipe with the 
 groovyscript.wiki.thaumcraft.aspect.title=Aspect Creator
 groovyscript.wiki.thaumcraft.aspect.description=Creates a custom Aspect.
 groovyscript.wiki.thaumcraft.aspect.tag.value=Sets the name of the new Aspect
+groovyscript.wiki.thaumcraft.aspect.tag.required=the name must be a unique string
 groovyscript.wiki.thaumcraft.aspect.blend.value=Sets the blend value of the Aspect
 groovyscript.wiki.thaumcraft.aspect.image.value=Sets the resource location of the image used to represent the Aspect
 groovyscript.wiki.thaumcraft.aspect.chatColor.value=Sets the color formatting code used
@@ -1056,6 +1057,7 @@ groovyscript.wiki.thaumcraft.aspect.components.value=Sets the other Aspects that
 
 groovyscript.wiki.thaumcraft.aspecthelper.title=Entity/Block Aspects
 groovyscript.wiki.thaumcraft.aspecthelper.description=Controls what Aspects are attached to entities or items.
+groovyscript.wiki.thaumcraft.aspecthelper.target.required=either entity or object must be defined, but not both
 groovyscript.wiki.thaumcraft.aspecthelper.entity.value=Sets the entity being modified
 groovyscript.wiki.thaumcraft.aspecthelper.object.value=Sets the item being modified
 groovyscript.wiki.thaumcraft.aspecthelper.aspects.value=Sets the Aspects of the entity or item
@@ -1079,6 +1081,7 @@ groovyscript.wiki.thaumcraft.crucible.add=Adds recipes in the format `researchKe
 
 groovyscript.wiki.thaumcraft.dusttrigger.title=Dust Trigger
 groovyscript.wiki.thaumcraft.dusttrigger.description=Converts a block in-world into an item, when interacting with it with Salis Mundus, potentially requiring a specific research to be completed.
+groovyscript.wiki.thaumcraft.dusttrigger.target.required=either ore or target must be defined, but not both
 groovyscript.wiki.thaumcraft.dusttrigger.ore.value=Sets the input as an ore
 groovyscript.wiki.thaumcraft.dusttrigger.output.value=Sets the output item, which will be dropped on the ground
 groovyscript.wiki.thaumcraft.dusttrigger.target.value=Sets the input as a block

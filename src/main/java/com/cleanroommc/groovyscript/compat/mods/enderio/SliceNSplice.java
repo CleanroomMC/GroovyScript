@@ -28,7 +28,7 @@ import java.util.List;
 public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
 
     public SliceNSplice() {
-        super(Alias.generateOf("SliceAndSplice"));
+        super(Alias.generateOfClassAnd(SliceNSplice.class, "SliceAndSplice"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), null, item('minecraft:clay')).input(null, item('minecraft:clay'), null).output(item('minecraft:gold_ingot')).energy(1000).xp(5)"))

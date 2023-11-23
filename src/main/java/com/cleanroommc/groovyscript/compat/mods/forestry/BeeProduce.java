@@ -16,7 +16,7 @@ import org.jetbrains.annotations.ApiStatus;
 public class BeeProduce extends ForestryRegistry<BeeProduct> {
 
     public BeeProduce() {
-        super(Alias.generateOf("Produce"));
+        super(Alias.generateOfClassAnd(BeeProduce.class, "Produce"));
     }
 
     @Override

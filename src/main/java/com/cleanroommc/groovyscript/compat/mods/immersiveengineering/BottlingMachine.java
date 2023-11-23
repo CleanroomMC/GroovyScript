@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> {
 
     public BottlingMachine() {
-        super(Alias.generateOf("Bottling"));
+        super(Alias.generateOfClassAnd(BottlingMachine.class, "Bottling"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).fluidInput(fluid('water')).output(item('minecraft:clay'))"))

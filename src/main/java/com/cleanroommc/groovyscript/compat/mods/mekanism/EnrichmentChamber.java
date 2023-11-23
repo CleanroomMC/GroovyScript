@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRecipe> {
 
     public EnrichmentChamber() {
-        super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, Alias.generateOf("Enricher").andGenerateOfClass(EnrichmentChamber.class));
+        super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, Alias.generateOfClassAnd(EnrichmentChamber.class, "Enricher"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay_ball')).output(item('minecraft:nether_star'))"))

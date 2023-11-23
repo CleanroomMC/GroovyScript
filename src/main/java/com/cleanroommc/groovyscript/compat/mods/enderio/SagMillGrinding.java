@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
 
     public SagMillGrinding() {
-        super(Alias.generateOf("Grinding"));
+        super(Alias.generateOfClassAnd(SagMillGrinding.class, "Grinding"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay_ball')).chance(6.66).power(0.001).grinding(3.33).duration(10000)"))
