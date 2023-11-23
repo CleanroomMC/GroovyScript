@@ -24,7 +24,7 @@ public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeut
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.solarneutronactivator.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('water'), gas('hydrogen')", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('water'), gas('hydrogen')", commented = true))
     public SolarNeutronRecipe add(GasStack input, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Solar Neutron Activator recipe").error();
         msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");

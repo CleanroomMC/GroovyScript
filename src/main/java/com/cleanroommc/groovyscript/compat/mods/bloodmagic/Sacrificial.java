@@ -36,7 +36,7 @@ public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Inte
         restoreFromBackup().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getSacrificial().remove(pair.getKey()));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.sacrificial.add", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public boolean add(ResourceLocation entity, int value) {
         if (EntityList.getClass(entity) != null) {
             ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getSacrificial().put(entity, value);
@@ -46,12 +46,12 @@ public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Inte
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.sacrificial.add", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public boolean add(String entity, int value) {
         return add(new ResourceLocation(entity), value);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.sacrificial.add", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public boolean add(Entity entity, int value) {
         return add(entity.getName(), value);
     }

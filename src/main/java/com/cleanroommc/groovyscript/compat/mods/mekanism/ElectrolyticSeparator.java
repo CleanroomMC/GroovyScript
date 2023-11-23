@@ -26,7 +26,7 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.electrolyticseparator.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "fluid('lava') * 10, gas('cleanGold') * 5, gas('cleanCopper') * 3, 3000", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "fluid('lava') * 10, gas('cleanGold') * 5, gas('cleanCopper') * 3, 3000", commented = true))
     public SeparatorRecipe add(FluidStack input, GasStack leftOutput, GasStack rightOutput, double energy) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Electrolytic Separator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");

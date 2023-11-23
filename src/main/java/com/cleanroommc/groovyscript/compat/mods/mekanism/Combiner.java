@@ -25,7 +25,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.combiner.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "ore('gemQuartz') * 8, item('minecraft:netherrack'), item('minecraft:quartz_ore')", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "ore('gemQuartz') * 8, item('minecraft:netherrack'), item('minecraft:quartz_ore')", commented = true))
     public CombinerRecipe add(IIngredient ingredient, ItemStack extra, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crusher recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

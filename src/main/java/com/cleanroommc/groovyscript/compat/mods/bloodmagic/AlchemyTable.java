@@ -46,7 +46,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes()::add);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemytable.add", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeAlchemyTable add(NonNullList<Ingredient> input, ItemStack output, int syphon, int ticks, int minimumTier) {
         RecipeAlchemyTable recipe = new RecipeAlchemyTable(input, output, syphon, ticks, minimumTier);
         add(recipe);

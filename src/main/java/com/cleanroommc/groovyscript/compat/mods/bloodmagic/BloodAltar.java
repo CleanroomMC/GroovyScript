@@ -47,7 +47,7 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes()::add);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.bloodaltar.add", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeBloodAltar add(Ingredient input, ItemStack output, int minimumTier, int syphon, int consumeRate, int drainRate) {
         RecipeBloodAltar recipe = new RecipeBloodAltar(input, output, minimumTier, syphon, consumeRate, drainRate);
         add(recipe);

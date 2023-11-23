@@ -27,7 +27,7 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.dissolutionchamber.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:packed_ice'), gas('water')", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:packed_ice'), gas('water')", commented = true))
     public DissolutionRecipe add(IIngredient ingredient, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Dissolution Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

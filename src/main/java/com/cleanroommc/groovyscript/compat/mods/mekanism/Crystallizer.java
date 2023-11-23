@@ -25,7 +25,7 @@ public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.crystallizer.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('cleanGold'), item('minecraft:gold_ingot')", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('cleanGold'), item('minecraft:gold_ingot')", commented = true))
     public CrystallizerRecipe add(GasStack input, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crystallizer recipe").error();
         msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");

@@ -31,7 +31,7 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.smelting.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond_block'), item('minecraft:clay')", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond_block'), item('minecraft:clay')", commented = true))
     public SmeltingRecipe add(IIngredient ingredient, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Smelter recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

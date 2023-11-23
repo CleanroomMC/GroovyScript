@@ -29,7 +29,7 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.osmiumcompressor.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond'), gas('hydrogen'), item('minecraft:nether_star')", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond'), gas('hydrogen'), item('minecraft:nether_star')", commented = true))
     public OsmiumCompressorRecipe add(IIngredient ingredient, GasStack gasInput, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Osmium Compressor recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

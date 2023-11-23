@@ -23,7 +23,7 @@ public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuser
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.chemicalinfuser.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('copper') * 10, gas('iron'), gas('gold') * 15", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('copper') * 10, gas('iron'), gas('gold') * 15", commented = true))
     public ChemicalInfuserRecipe add(GasStack leftInput, GasStack rightInput, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Chemical Infuser recipe").error();
         msg.add(Mekanism.isEmpty(leftInput), () -> "left gas input must not be empty");

@@ -27,7 +27,7 @@ public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecip
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.injectionchamber.add", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond'), gas('water'), item('minecraft:nether_star')", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond'), gas('water'), item('minecraft:nether_star')", commented = true))
     public InjectionRecipe add(IIngredient ingredient, GasStack gasInput, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Injection Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

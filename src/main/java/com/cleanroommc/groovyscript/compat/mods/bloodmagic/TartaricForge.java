@@ -41,7 +41,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes()::add);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tartaricforge.add", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeTartaricForge add(NonNullList<Ingredient> input, ItemStack output, double minimumSouls, double soulDrain) {
         double minimum;
         if (minimumSouls < soulDrain) {
