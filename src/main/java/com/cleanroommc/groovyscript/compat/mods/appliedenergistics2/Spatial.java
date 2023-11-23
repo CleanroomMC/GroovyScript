@@ -2,10 +2,10 @@ package com.cleanroommc.groovyscript.compat.mods.appliedenergistics2;
 
 import appeng.api.AEApi;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.appliedenergistics2.MovableTileRegistryAccessor;
-import com.cleanroommc.groovyscript.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.tileentity.TileEntity;
 

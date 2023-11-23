@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.woot;
 
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.woot.WootConfigurationManagerAccessor;
-import com.cleanroommc.groovyscript.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import ipsis.Woot;
 import ipsis.woot.configuration.EnumConfigKey;

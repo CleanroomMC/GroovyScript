@@ -2,12 +2,12 @@ package com.cleanroommc.groovyscript.compat.mods.avaritia;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipeBuilder;
-import com.cleanroommc.groovyscript.documentation.annotations.Comp;
-import com.cleanroommc.groovyscript.documentation.annotations.Property;
-import com.cleanroommc.groovyscript.documentation.annotations.RecipeBuilderMethodDescription;
-import com.cleanroommc.groovyscript.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import morph.avaritia.recipe.extreme.IExtremeRecipe;

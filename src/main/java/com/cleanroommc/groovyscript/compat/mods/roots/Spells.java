@@ -2,8 +2,8 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModifierAccessor;
-import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.api.Herb;
@@ -223,12 +223,12 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
             return this;
         }
 
-        @com.cleanroommc.groovyscript.documentation.annotations.Property(property = "name")
-        @com.cleanroommc.groovyscript.documentation.annotations.Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"),
-                                                                                                      @Comp(type = Comp.Type.LTE, value = "5")})
+        @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "name")
+        @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"),
+                                                                                                          @Comp(type = Comp.Type.LTE, value = "5")})
         public static class RecipeBuilder extends AbstractRecipeBuilder<SpellBase.SpellRecipe> {
 
-            @com.cleanroommc.groovyscript.documentation.annotations.Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+            @com.cleanroommc.groovyscript.api.documentation.annotations.Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
             private SpellBase spell;
 
             public RecipeBuilder() {
@@ -268,7 +268,7 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
 
     public static class CostBuilder extends AbstractRecipeBuilder<Map<CostType, IModifierCost>> {
 
-        @com.cleanroommc.groovyscript.documentation.annotations.Property
+        @com.cleanroommc.groovyscript.api.documentation.annotations.Property
         List<IModifierCost> list = new ArrayList<>();
 
         @RecipeBuilderMethodDescription(field = "list")

@@ -2,10 +2,10 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.PerkLevelManagerAccessor;
-import com.cleanroommc.groovyscript.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import groovy.lang.Closure;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;

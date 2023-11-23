@@ -2,11 +2,11 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.botania.recipe.MagnetSubject;
 import com.cleanroommc.groovyscript.core.mixin.botania.BotaniaAPIAccessor;
-import com.cleanroommc.groovyscript.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

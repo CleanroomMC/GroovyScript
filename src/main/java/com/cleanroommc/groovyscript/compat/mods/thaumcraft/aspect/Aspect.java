@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import net.minecraft.util.ResourceLocation;
 import thaumcraft.api.aspects.AspectList;
 

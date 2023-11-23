@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
-import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

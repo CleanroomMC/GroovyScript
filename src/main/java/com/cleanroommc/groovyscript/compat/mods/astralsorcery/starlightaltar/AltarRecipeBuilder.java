@@ -2,13 +2,13 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipeBuilder;
-import com.cleanroommc.groovyscript.documentation.annotations.Comp;
-import com.cleanroommc.groovyscript.documentation.annotations.Property;
-import com.cleanroommc.groovyscript.documentation.annotations.RecipeBuilderMethodDescription;
-import com.cleanroommc.groovyscript.documentation.annotations.RecipeBuilderRegistrationMethod;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;

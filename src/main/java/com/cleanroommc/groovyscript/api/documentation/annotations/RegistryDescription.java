@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.documentation.annotations;
+package com.cleanroommc.groovyscript.api.documentation.annotations;
 
 import com.cleanroommc.groovyscript.Tags;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;

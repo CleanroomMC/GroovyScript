@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.enderio;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
@@ -9,7 +10,6 @@ import com.cleanroommc.groovyscript.core.mixin.enderio.AlloyRecipeManagerAccesso
 import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeLeafNodeAccessor;
 import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeNodeAccessor;
 import com.cleanroommc.groovyscript.core.mixin.enderio.TriItemLookupAccessor;
-import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;

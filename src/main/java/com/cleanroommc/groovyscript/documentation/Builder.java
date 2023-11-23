@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableMap;

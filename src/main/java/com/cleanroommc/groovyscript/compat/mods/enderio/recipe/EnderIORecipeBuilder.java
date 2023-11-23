@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio.recipe;
 
-import com.cleanroommc.groovyscript.documentation.annotations.Property;
-import com.cleanroommc.groovyscript.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import crazypants.enderio.base.recipe.RecipeLevel;
 

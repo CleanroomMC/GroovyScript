@@ -2,9 +2,9 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ResearchNodeAccessor;
-import com.cleanroommc.groovyscript.documentation.annotations.*;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.client.gui.journal.page.*;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;

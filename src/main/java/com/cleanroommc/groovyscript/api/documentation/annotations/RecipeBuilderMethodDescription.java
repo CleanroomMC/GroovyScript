@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.documentation.annotations;
+package com.cleanroommc.groovyscript.api.documentation.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

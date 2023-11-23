@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.documentation;
 
-import com.cleanroommc.groovyscript.documentation.annotations.Admonition;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;

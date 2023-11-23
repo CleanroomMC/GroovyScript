@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism.recipe;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.documentation.annotations.Property;
-import com.cleanroommc.groovyscript.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import mekanism.api.gas.GasStack;
 

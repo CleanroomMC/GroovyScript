@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.documentation.annotations;
+package com.cleanroommc.groovyscript.api.documentation.annotations;
 
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;

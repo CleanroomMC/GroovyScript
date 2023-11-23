@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
-import com.cleanroommc.groovyscript.documentation.annotations.RecipeBuilderRegistrationMethod;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
 import org.jetbrains.annotations.Nullable;
 
 /**
