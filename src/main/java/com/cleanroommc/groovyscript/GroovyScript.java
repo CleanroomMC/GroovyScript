@@ -49,6 +49,7 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
@@ -154,7 +155,7 @@ public class GroovyScript {
         GameObjectHandlerManager.init();
         VanillaModule.initializeBinding();
         ModSupport.init();
-        Documentation.generate();
+        if (FMLLaunchHandler.isDeobfuscatedEnvironment()) Documentation.generate();
 
         runGroovyScriptsInLoader(LoadStage.PRE_INIT);
 
