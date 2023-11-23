@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.loot;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
 import com.google.common.collect.Lists;
 import groovy.lang.Closure;
 import net.minecraft.enchantment.Enchantment;
@@ -22,10 +23,7 @@ import net.minecraft.world.storage.loot.conditions.RandomChanceWithLooting;
 import net.minecraft.world.storage.loot.functions.*;
 import org.apache.logging.log4j.Level;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class LootEntryBuilder {
 
@@ -237,6 +235,10 @@ public class LootEntryBuilder {
         }
     }
 
+    public LootEntryBuilder setNBT(Map<String, Object> tag) {
+        return this.setNBT(NbtHelper.ofMap(tag), EMPTY_CONDITIONS);
+    }
+
     public LootEntryBuilder setNBT(NBTTagCompound tag) {
         return this.setNBT(tag, EMPTY_CONDITIONS);
     }
@@ -248,6 +250,10 @@ public class LootEntryBuilder {
             out.add("could not parse nbt string");
             return this;
         }
+    }
+
+    public LootEntryBuilder setNBT(Map<String, Object> tag, LootCondition... conditions) {
+        return this.setNBT(NbtHelper.ofMap(tag), conditions);
     }
 
     public LootEntryBuilder setNBT(NBTTagCompound tag, LootCondition... conditions) {
