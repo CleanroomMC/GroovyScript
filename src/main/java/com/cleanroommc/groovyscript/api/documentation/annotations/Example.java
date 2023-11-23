@@ -1,8 +1,5 @@
 package com.cleanroommc.groovyscript.api.documentation.annotations;
 
-import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
-import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -31,7 +28,7 @@ public @interface Example {
 
     /**
      * For recipe builders, this will be a string that is a valid one-line series of methods to create a Recipe Builder that will
-     * pass the {@link IRecipeBuilder#validate()} check and be successfully registered.
+     * pass the {@link com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder#validate() IRecipeBuilder#validate()} check and be successfully registered.
      * <br>
      * For methods, this should be exclusive the parameters of the method. e.g. {@code "item('minecraft:clay')"}<br>
      * Any comments for the wiki should be marked by
@@ -46,7 +43,7 @@ public @interface Example {
 
     /**
      * As imports must be added to the top of the file, any imports must be split out and explicitly noted for the example(s) to function.
-     * Some imports are imported to all files by default via {@link GroovyScriptSandbox#getImportCustomizer()}.
+     * Some imports are imported to all files by default via {@link com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox#getImportCustomizer() GroovyScriptSandbox#getImportCustomizer()}.
      * <br>
      * This should contain an array of full import packages, e.g. {@code {"net.minecraft.item.Item", "net.minecraft.item.ItemStack"}}
      *

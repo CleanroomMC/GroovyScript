@@ -1,7 +1,5 @@
 package com.cleanroommc.groovyscript.api.documentation.annotations;
 
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -24,7 +22,7 @@ public @interface RecipeBuilderRegistrationMethod {
 
     /**
      * Priority of the registration method, relative to other registration methods of the same Recipe Builder.
-     * Priorities sort entries such that lowest is first, then by the natural order of {@link VirtualizedRegistry#getName()}
+     * Priorities sort entries such that lowest is first, then by the natural order of {@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() VirtualizedRegistry#getName()}
      *
      * @return the method priority
      */

@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.api.documentation.annotations;
 
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.base.CaseFormat;
 
 import java.lang.annotation.Retention;
@@ -19,7 +18,7 @@ public @interface Admonition {
      * The localization key for the admonition description, should be in the format of
      * <br>
      * <code>
-     * groovyscript.wiki.{@link VirtualizedRegistry#getName()}.note{index of note in array}
+     * groovyscript.wiki.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() VirtualizedRegistry#getName()}.note{index of note in array}
      * </code>
      *
      * @return localization key for the admonition description
