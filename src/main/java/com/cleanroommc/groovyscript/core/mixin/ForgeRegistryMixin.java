@@ -87,7 +87,9 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
             }
             Integer id = this.ids.inverse().remove(entry);
             Object ownerOverride = this.owners.inverse().remove(entry);
-            this.backups.add(Triple.of(entry, id, ownerOverride));
+            if (this.scripted == null || !this.scripted.contains(entry)) {
+                this.backups.add(Triple.of(entry, id, ownerOverride));
+            }
             groovyscript$putDummy(entry, name, id, ownerOverride);
         }
     }

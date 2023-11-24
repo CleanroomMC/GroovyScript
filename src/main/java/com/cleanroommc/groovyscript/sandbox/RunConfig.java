@@ -3,11 +3,13 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.Packmode;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.common.base.CaseFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -45,6 +47,8 @@ public class RunConfig {
         JsonArray postInit = new JsonArray();
         loaders.add("postInit", postInit);
         postInit.add("postInit/");
+        JsonObject packmode = new JsonObject();
+        packmode.add("values", new JsonArray());
         return json;
     }
 
@@ -56,12 +60,12 @@ public class RunConfig {
         modMetadata.version = "0.0.0";
     }
 
+    private JsonObject rawRunConfig;
     private final String packName;
     private final String packId;
     private final String version;
     private final Map<String, List<String>> classes = new Object2ObjectOpenHashMap<>();
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
-    // TODO pack modes
     private final Set<String> packmodes = new ObjectOpenHashSet<>();
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
     // TODO asm
@@ -83,6 +87,7 @@ public class RunConfig {
     }
 
     public RunConfig(JsonObject json) {
+        this.rawRunConfig = json;
         String name = JsonHelper.getString(json, "", "packName", "name");
         String id = JsonHelper.getString(json, "", "packId", "id");
         Pattern idPattern = Pattern.compile("[a-z_]+");
@@ -104,6 +109,7 @@ public class RunConfig {
         if (GroovyScript.isSandboxLoaded() && GroovyScript.getSandbox().isRunning()) {
             throw new RuntimeException();
         }
+        this.rawRunConfig = json;
         this.debug = JsonHelper.getBoolean(json, false, "debug");
         this.classes.clear();
         this.loaderPaths.clear();
@@ -168,10 +174,13 @@ public class RunConfig {
         JsonArray modes = JsonHelper.getJsonArray(jsonPackmode, "values", "types");
         for (JsonElement je : modes) {
             if (je.isJsonPrimitive()) {
-                this.packmodes.add(je.getAsString());
+                String pm = Alias.autoConvertTo(je.getAsString(), CaseFormat.UPPER_CAMEL);
+                Alias.generateAliases(this.packmodes, pm, CaseFormat.UPPER_CAMEL);
             }
         }
-        Packmode.updatePackmode(JsonHelper.getString(jsonPackmode, "", "current", "default"));
+        if (Packmode.getPackmode() == null || Packmode.getPackmode().isEmpty()) {
+            Packmode.updatePackmode(JsonHelper.getString(jsonPackmode, "", "current", "default"));
+        }
     }
 
     public String getPackName() {
@@ -213,6 +222,19 @@ public class RunConfig {
 
     public boolean isValidPackmode(String packmode) {
         return this.packmodes.contains(packmode);
+    }
+
+    @ApiStatus.Internal
+    public void writeAndSavePackmode(String mode) {
+        JsonObject packmode = JsonHelper.getJsonObject(this.rawRunConfig, (JsonObject) null, "packmode");
+        if (packmode == null) {
+            packmode = new JsonObject();
+            this.rawRunConfig.add("packmode", packmode);
+        }
+        String current = JsonHelper.getString(packmode, null, "current");
+        if (current != null && current.equals(mode)) return;
+        packmode.addProperty("current", mode);
+        JsonHelper.saveJson(GroovyScript.getRunConfigFile(), this.rawRunConfig);
     }
 
     public ResourceLocation makeLoc(String name) {

@@ -222,6 +222,14 @@ public class GroovyScript {
     }
 
     @NotNull
+    public static File getRunConfigFile() {
+        if (runConfigFile == null) {
+            throw new IllegalStateException("GroovyScript is not yet loaded!");
+        }
+        return runConfigFile;
+    }
+
+    @NotNull
     public static GroovyScriptSandbox getSandbox() {
         if (sandbox == null) {
             throw new IllegalStateException("GroovyScript is not yet loaded!");

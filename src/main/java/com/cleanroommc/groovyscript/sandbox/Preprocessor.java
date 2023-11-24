@@ -3,7 +3,9 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.Packmode;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.google.common.base.CaseFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
@@ -72,6 +74,7 @@ public class Preprocessor {
         String[] parts = line.split(":", 2);
         String[] args = NO_ARGS;
         if (parts.length > 1) {
+            args = parts[1].split(",");
             for (int i = 0; i < args.length; i++) {
                 args[i] = args[i].trim();
             }
@@ -113,7 +116,7 @@ public class Preprocessor {
 
     private static boolean checkPackmode(String[] modes) {
         for (String mode : modes) {
-            if (Packmode.getPackmode().equalsIgnoreCase(mode)) {
+            if (Packmode.getPackmode().equals(Alias.autoConvertTo(mode, CaseFormat.LOWER_UNDERSCORE))) {
                 return true;
             }
         }

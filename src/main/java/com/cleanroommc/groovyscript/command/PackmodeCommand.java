@@ -2,6 +2,9 @@ package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.Packmode;
+import com.cleanroommc.groovyscript.network.IPacket;
+import com.cleanroommc.groovyscript.network.NetworkHandler;
+import com.cleanroommc.groovyscript.network.SReloadJei;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -28,11 +31,12 @@ public class PackmodeCommand extends CommandBase {
     public void execute(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String @NotNull [] args) throws CommandException {
         if (args.length == 0) throw new CommandException("Missing packmode");
         String packmode = args[0];
-        if (!GroovyScript.getRunConfig().isValidPackmode(packmode)) throw new CommandException("Invalid packmode: " + packmode);
+        if (!Packmode.isValidPackmode(packmode)) throw new CommandException("Invalid packmode: " + packmode);
         Packmode.updatePackmode(packmode);
         sender.sendMessage(new TextComponentString("Changing packmode to " + packmode + ". This might take a minute."));
         long time = GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
         GroovyScript.postScriptRunResult((EntityPlayerMP) sender, false, true, true, time);
+        NetworkHandler.sendToPlayer(new SReloadJei(), (EntityPlayerMP) sender);
         MinecraftForge.EVENT_BUS.post(new Packmode.ChangeEvent());
     }
 }
