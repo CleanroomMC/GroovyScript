@@ -146,12 +146,12 @@ public class GroovyScript {
 
     @ApiStatus.Internal
     public static void initializeGroovyPreInit() {
+        // called via mixin in between construction and fml pre init
         boolean wasNull = Loader.instance().activeModContainer() == null;
         if (wasNull) {
             Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get(ID));
         }
 
-        // called via mixin in between construction and fml pre init
         GameObjectHandlerManager.init();
         VanillaModule.initializeBinding();
         ModSupport.init();
