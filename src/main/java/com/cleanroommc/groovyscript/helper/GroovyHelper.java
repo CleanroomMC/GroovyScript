@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.helper;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.Packmode;
+import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;

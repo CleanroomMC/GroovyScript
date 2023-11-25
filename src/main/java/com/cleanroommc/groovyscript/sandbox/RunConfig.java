@@ -1,15 +1,14 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.Packmode;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.google.common.base.CaseFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -66,7 +65,8 @@ public class RunConfig {
     private final String version;
     private final Map<String, List<String>> classes = new Object2ObjectOpenHashMap<>();
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
-    private final Set<String> packmodes = new ObjectOpenHashSet<>();
+    private final List<String> packmodeList = new ArrayList<>();
+    private final Set<String> packmodeSet = new ObjectOpenHashSet<>();
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
     // TODO asm
     private final String asmClass = null;
@@ -113,7 +113,8 @@ public class RunConfig {
         this.debug = JsonHelper.getBoolean(json, false, "debug");
         this.classes.clear();
         this.loaderPaths.clear();
-        this.packmodes.clear();
+        this.packmodeList.clear();
+        this.packmodeSet.clear();
         this.packmodePaths.clear();
 
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";
@@ -175,11 +176,21 @@ public class RunConfig {
         for (JsonElement je : modes) {
             if (je.isJsonPrimitive()) {
                 String pm = Alias.autoConvertTo(je.getAsString(), CaseFormat.UPPER_CAMEL);
-                Alias.generateAliases(this.packmodes, pm, CaseFormat.UPPER_CAMEL);
+                if (!this.packmodeSet.contains(pm)) {
+                    Alias alias = Alias.generateOf(pm, CaseFormat.UPPER_CAMEL);
+                    this.packmodeList.add(alias.get(alias.size() - 1));
+                    this.packmodeSet.addAll(alias);
+                }
             }
         }
-        if (Packmode.getPackmode() == null || Packmode.getPackmode().isEmpty()) {
-            Packmode.updatePackmode(JsonHelper.getString(jsonPackmode, "", "current", "default"));
+        if (!Packmode.hasPackmode()) {
+            String pm = JsonHelper.getString(jsonPackmode, null, "current", "default");
+            if (pm == null) {
+                if (!this.packmodeList.isEmpty()) {
+                    pm = this.packmodeList.get(0);
+                }
+            }
+            if (pm != null) Packmode.updatePackmode(pm);
         }
     }
 
@@ -221,7 +232,15 @@ public class RunConfig {
     }
 
     public boolean isValidPackmode(String packmode) {
-        return this.packmodes.contains(packmode);
+        return this.packmodeSet.contains(packmode);
+    }
+
+    public boolean arePackmodesConfigured() {
+        return !this.packmodeSet.isEmpty();
+    }
+
+    public List<String> getPackmodeList() {
+        return Collections.unmodifiableList(packmodeList);
     }
 
     @ApiStatus.Internal

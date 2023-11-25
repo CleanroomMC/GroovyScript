@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.Packmode;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.Alias;
+import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.google.common.base.CaseFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
@@ -18,21 +18,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class Preprocessor {
 
-    private static final Object2ObjectArrayMap<String, Predicate<String[]>> PREPROCESSORS = new Object2ObjectArrayMap<>();
+    private static final Object2ObjectArrayMap<String, BiPredicate<File, String[]>> PREPROCESSORS = new Object2ObjectArrayMap<>();
     private static final String[] NO_ARGS = new String[0];
 
-    public static void registerPreprocessor(String name, Predicate<String[]> test) {
+    public static void registerPreprocessor(String name, BiPredicate<File, String[]> test) {
         PREPROCESSORS.put(name.toUpperCase(Locale.ROOT), test);
     }
 
     static {
-        registerPreprocessor("NO_RUN", args -> false);
-        registerPreprocessor("DEBUG_ONLY", args -> GroovyScript.getRunConfig().isDebug());
-        registerPreprocessor("NO_RELOAD", args -> !ReloadableRegistryManager.isFirstLoad());
+        registerPreprocessor("NO_RUN", (file, args) -> false);
+        registerPreprocessor("DEBUG_ONLY", (file, args) -> GroovyScript.getRunConfig().isDebug());
+        registerPreprocessor("NO_RELOAD", (file, args) -> !ReloadableRegistryManager.isFirstLoad());
         registerPreprocessor("MODS_LOADED", Preprocessor::checkModsLoaded);
         registerPreprocessor("SIDE", Preprocessor::checkSide);
         registerPreprocessor("PACKMODE", Preprocessor::checkPackmode);
@@ -60,7 +61,7 @@ public class Preprocessor {
                     isComment = false;
                 }
 
-                if (!processPreprocessor(line)) {
+                if (!processPreprocessor(file, line)) {
                     return false;
                 }
             }
@@ -70,7 +71,7 @@ public class Preprocessor {
         return true;
     }
 
-    private static boolean processPreprocessor(String line) {
+    private static boolean processPreprocessor(File file, String line) {
         String[] parts = line.split(":", 2);
         String[] args = NO_ARGS;
         if (parts.length > 1) {
@@ -80,16 +81,16 @@ public class Preprocessor {
             }
         }
         String s = parts[0];
-        for (ObjectIterator<Object2ObjectMap.Entry<String, Predicate<String[]>>> iterator = PREPROCESSORS.object2ObjectEntrySet().fastIterator(); iterator.hasNext(); ) {
-            Object2ObjectMap.Entry<String, Predicate<String[]>> entry = iterator.next();
+        for (ObjectIterator<Object2ObjectMap.Entry<String, BiPredicate<File, String[]>>> iterator = PREPROCESSORS.object2ObjectEntrySet().fastIterator(); iterator.hasNext(); ) {
+            Object2ObjectMap.Entry<String, BiPredicate<File, String[]>> entry = iterator.next();
             if (s.equalsIgnoreCase(entry.getKey())) {
-                return entry.getValue().test(args);
+                return entry.getValue().test(file, args);
             }
         }
         return true;
     }
 
-    private static boolean checkModsLoaded(String[] mods) {
+    private static boolean checkModsLoaded(File file, String[] mods) {
         for (String mod : mods) {
             if (!Loader.isModLoaded(mod)) {
                 return false;
@@ -98,9 +99,9 @@ public class Preprocessor {
         return true;
     }
 
-    private static boolean checkSide(String[] sides) {
+    private static boolean checkSide(File file, String[] sides) {
         if (sides.length != 1) {
-            GroovyLog.get().error("Side preprocessor should have exactly one argument, but found {}", Arrays.asList(sides));
+            GroovyLog.get().error("Side preprocessor in file '{}' should have exactly one argument, but found {}", file.getName(), Arrays.asList(sides));
             return true;
         }
         String side = sides[0].toUpperCase();
@@ -110,13 +111,15 @@ public class Preprocessor {
         if (side.equals("SERVER")) {
             return FMLCommonHandler.instance().getSide().isServer();
         }
-        GroovyLog.get().error("Side processor argument must be CLIENT or SERVER (lower case is allowed too)");
+        GroovyLog.get().error("Side processor argument in file '{}' must be CLIENT or SERVER (lower case is allowed too)", file.getName());
         return true;
     }
 
-    private static boolean checkPackmode(String[] modes) {
+    private static boolean checkPackmode(File file, String[] modes) {
         for (String mode : modes) {
-            if (Packmode.getPackmode().equals(Alias.autoConvertTo(mode, CaseFormat.LOWER_UNDERSCORE))) {
+            if (!GroovyScript.getRunConfig().isValidPackmode(mode)) {
+                GroovyLog.get().error("The packmode '{}' specified in file '{}' does not exist. Valid values are {}", mode, file.getName(), GroovyScript.getRunConfig().getPackmodeList());
+            } else if (Packmode.getPackmode().equals(Alias.autoConvertTo(mode, CaseFormat.LOWER_UNDERSCORE))) {
                 return true;
             }
         }

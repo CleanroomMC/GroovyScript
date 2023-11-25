@@ -6,7 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
-import com.cleanroommc.groovyscript.network.SReloadJei;
+import com.cleanroommc.groovyscript.network.SReloadScripts;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -58,7 +58,7 @@ public class GSCommand extends CommandTreeBase {
         //player.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
         GroovyScript.postScriptRunResult(player, false, true, false, time);
 
-        NetworkHandler.sendToPlayer(new SReloadJei(), player);
+        NetworkHandler.sendToPlayer(new SReloadScripts(null, false, true), player);
     }
 
     public GSCommand() {

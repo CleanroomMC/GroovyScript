@@ -13,9 +13,16 @@ import com.cleanroommc.groovyscript.compat.vanilla.Player;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.InventoryCraftingAccess;
 import com.cleanroommc.groovyscript.core.mixin.SlotCraftingAccess;
+import com.cleanroommc.groovyscript.network.NetworkHandler;
+import com.cleanroommc.groovyscript.network.SReloadScripts;
+import com.cleanroommc.groovyscript.packmode.Packmode;
+import com.cleanroommc.groovyscript.packmode.PackmodeSaveData;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import groovy.lang.Closure;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -25,6 +32,7 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -73,9 +81,22 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!event.player.world.isRemote && Packmode.needsPackmode()) {
+            PackmodeSaveData saveData = PackmodeSaveData.get(event.player.world);
+            if (Packmode.hasPackmode() && saveData.isDedicatedServer()) {
+                // if the world is a dedicated server or a lan server the packmode should be synced with each player
+                NetworkHandler.sendToPlayer(new SReloadScripts(saveData.getPackmode(), true, true), (EntityPlayerMP) event.player);
+            } else if (!Packmode.getPackmode().equals(saveData.getPackmode()) && !saveData.isDedicatedServer()) {
+                // otherwise we are on a single player world, and we can just set and reload the packmode
+                SReloadScripts.updatePackmode(event.player, saveData.getPackmode());
+                NetworkHandler.sendToPlayer(new SReloadScripts(null, true, true), (EntityPlayerMP) event.player);
+            }
+
+        }
         if (event.player instanceof EntityPlayerMP) {
             GroovyScript.postScriptRunResult((EntityPlayerMP) event.player, true, true, false, 0);
         }
+
         NBTTagCompound tag = event.player.getEntityData();
         NBTTagCompound data = new NBTTagCompound();
         if (tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
@@ -86,6 +107,7 @@ public class EventHandler {
             data.setBoolean(Player.GIVEN_ITEMS, true);
             tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
         }
+
     }
 
     @SubscribeEvent
