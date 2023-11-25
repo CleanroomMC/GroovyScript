@@ -77,6 +77,7 @@ public class Registry {
                 .compareFalseFirst(left.isAnnotationPresent(MethodDescription.class), right.isAnnotationPresent(MethodDescription.class))
                 .compare(left.getAnnotation(MethodDescription.class).priority(), right.getAnnotation(MethodDescription.class).priority())
                 .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
+                .compare(Exporter.simpleSignature(left), Exporter.simpleSignature(right), String::compareToIgnoreCase)
                 .result());
         return methods;
     }
