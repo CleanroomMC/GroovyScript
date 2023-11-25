@@ -96,6 +96,8 @@ public class Builder {
                 .filter(x -> x.isAnnotationPresent(RecipeBuilderRegistrationMethod.class))
                 .sorted((left, right) -> ComparisonChain.start()
                         .compare(left.getAnnotation(RecipeBuilderRegistrationMethod.class).hierarchy(), right.getAnnotation(RecipeBuilderRegistrationMethod.class).hierarchy())
+                        // Specifically de-prioritize Object classes
+                        .compareFalseFirst(left.getReturnType() == Object.class, right.getReturnType() == Object.class)
                         .result())
                 // Ensure only the first method with a given name is used
                 .filter(distinctByKey(Method::getName))

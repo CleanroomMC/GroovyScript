@@ -14,7 +14,8 @@ import java.lang.annotation.Target;
 public @interface RecipeBuilderRegistrationMethod {
 
     /**
-     * Hierarchy of the property, relative to other properties applying to the same field.
+     * Hierarchy of the property, relative to other properties applying to the same method.
+     * Annotations on methods that return {@link Object} are of lower priority by default.
      *
      * @return the property hierarchy (where lower overrides hider)
      */

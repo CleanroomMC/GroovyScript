@@ -24,6 +24,6 @@ public interface IRecipeBuilder<T> {
      * @return the built recipe or null if values are invalid
      */
     @Nullable
-    @RecipeBuilderRegistrationMethod(hierarchy = 20)
+    @RecipeBuilderRegistrationMethod
     T register();
 }

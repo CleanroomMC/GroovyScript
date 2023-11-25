@@ -96,7 +96,7 @@ public abstract class ExtremeRecipeBuilder extends CraftingRecipeBuilder {
         }
 
         @Override
-        @RecipeBuilderRegistrationMethod
+        @RecipeBuilderRegistrationMethod(hierarchy = 5)
         public IExtremeRecipe register() {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding shaped Extended Crafting Table recipe").error()
                     .add((keyBasedMatrix == null || keyBasedMatrix.length == 0) && (ingredientMatrix == null || ingredientMatrix.isEmpty()), () -> "No matrix was defined")
@@ -165,7 +165,7 @@ public abstract class ExtremeRecipeBuilder extends CraftingRecipeBuilder {
         }
 
         @Override
-        @RecipeBuilderRegistrationMethod
+        @RecipeBuilderRegistrationMethod(hierarchy = 5)
         public IExtremeRecipe register() {
             if (!validate()) return null;
             validateName();
