@@ -92,12 +92,7 @@ public class LootPoolBuilder {
     }
 
     public LootPoolBuilder condition(Closure<Object> customCondition) {
-        if (Arrays.equals(customCondition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {
-            this.poolConditions.add(new GroovyLootCondition(customCondition));
-        } else {
-            out.add("custom LootConditions require parameters (java.util.Random, net.minecraft.world.storage.loot.LootContext)");
-        }
-
+        this.poolConditions.add(new GroovyLootCondition(customCondition));
         return this;
     }
 

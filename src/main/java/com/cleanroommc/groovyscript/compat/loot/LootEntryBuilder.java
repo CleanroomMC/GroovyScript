@@ -108,7 +108,7 @@ public class LootEntryBuilder {
     }
 
     public LootEntryBuilder function(Closure<Object> function, LootCondition condition) {
-        return this.function(function, new LootCondition[]{condition});
+        return this.function(function, EMPTY_CONDITIONS);
     }
 
     public LootEntryBuilder function(Closure<Object> function, LootCondition... conditions) {
@@ -301,12 +301,7 @@ public class LootEntryBuilder {
     }
 
     public LootEntryBuilder condition(Closure<Object> customCondition) {
-        if (Arrays.equals(customCondition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {
-            this.conditions.add(new GroovyLootCondition(customCondition));
-        } else {
-            out.add("custom LootConditions require parameters (java.util.Random, net.minecraft.world.storage.loot.LootContext)");
-        }
-
+        this.conditions.add(new GroovyLootCondition(customCondition));
         return this;
     }
 
