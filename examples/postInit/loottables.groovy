@@ -1,8 +1,4 @@
 
-import java.util.Random
-import net.minecraft.item.ItemStack
-import net.minecraft.world.storage.loot.LootContext
-
 def strongholdLibraryLootTable = loot.getTable(resource('minecraft:chests/stronghold_library'))
 
 def strongholdLibraryMainPool = strongholdLibraryLootTable.getPool('main')
@@ -26,7 +22,7 @@ chickenLootTable.addPool(
         .entry(
             loot.entryBuilder()
             .item(item('minecraft:diamond'))
-            .function{ ItemStack stack, Random random, LootContext context ->
+            .function{ stack, random, context ->
                 stack.setCount(10)
                 return stack
             }
@@ -34,7 +30,7 @@ chickenLootTable.addPool(
             .quality(1)
             .build()
         )
-        .condition{ Random random, LootContext context -> random.nextFloat() < 0.05f }
+        .condition{ random, context -> random.nextFloat() < 0.05f }
         .rollsRange(1.0f, 3.0f)
         .bonusRollsRange(0.0f, 0.0f)
         .build()
