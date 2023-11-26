@@ -121,7 +121,7 @@ public class ReloadableRegistryManager {
      */
     @ApiStatus.Internal
     @SideOnly(Side.CLIENT)
-    public static long reloadJei(boolean msgPlayer) {
+    public static void reloadJei(boolean msgPlayer) {
         if (ModSupport.JEI.isLoaded()) {
             JeiProxyAccessor jeiProxy = (JeiProxyAccessor) JustEnoughItems.getProxy();
             long time = System.currentTimeMillis();
@@ -130,9 +130,7 @@ public class ReloadableRegistryManager {
             if (msgPlayer) {
                 Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Reloading JEI took " + time + "ms"));
             }
-            return time;
         }
-        return 0;
     }
 
     private static void reloadForgeRegistries() {
