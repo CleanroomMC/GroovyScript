@@ -29,6 +29,7 @@
   ],
   "client": [
     "DefaultResourcePackAccessor",
+    "GuiCreateWorldMixin",
     "GuiScreenMixin"
   ]
 }
