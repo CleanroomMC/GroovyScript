@@ -1,18 +1,14 @@
 package com.cleanroommc.groovyscript.command;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SReloadScripts;
 import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.cleanroommc.groovyscript.packmode.PackmodeSaveData;
-import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
 public class PackmodeCommand extends CommandBase {
@@ -34,15 +30,9 @@ public class PackmodeCommand extends CommandBase {
         if (!Packmode.needsPackmode()) throw new CommandException("Packmodes are not configured!");
         String packmode = args[0];
         if (!Packmode.isValidPackmode(packmode)) throw new CommandException("Invalid packmode: " + packmode);
-        Packmode.updatePackmode(packmode);
+        SReloadScripts.updatePackmode(sender, packmode);
         PackmodeSaveData saveData = PackmodeSaveData.get(server);
         saveData.setPackmode(Packmode.getPackmode());
-        //Packmode.setWorldPackmode(server.getEntityWorld().getWorldInfo(), Packmode.getPackmode());
-        sender.sendMessage(new TextComponentString("Changing packmode to " + packmode + ". This might take a minute."));
-        long time = GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
-        GroovyScript.postScriptRunResult((EntityPlayerMP) sender, false, true, true, time);
         NetworkHandler.sendToPlayer(new SReloadScripts(null, true, true), (EntityPlayerMP) sender);
-        MinecraftForge.EVENT_BUS.post(new Packmode.ChangeEvent());
-        //server.getWorld(0).loadData()
     }
 }

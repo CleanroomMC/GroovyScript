@@ -29,7 +29,7 @@ import groovy.lang.GroovySystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.item.Item;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -284,29 +284,29 @@ public class GroovyScript {
         return new File(parent, fileJoiner.join(pieces));
     }
 
-    public static void postScriptRunResult(EntityPlayerMP player, boolean startup, boolean running, boolean packmode, long time) {
+    public static void postScriptRunResult(ICommandSender sender, boolean onlyLogFails, boolean running, boolean packmode, long time) {
         List<String> errors = GroovyLogImpl.LOG.collectErrors();
         if (errors.isEmpty()) {
-            if (!startup) {
+            if (!onlyLogFails) {
                 if (running) {
                     String s = packmode ? "changes packmode" : "reloaded scripts";
-                    player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully " + s + TextFormatting.WHITE + " in " + time + "ms"));
+                    sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully " + s + TextFormatting.WHITE + " in " + time + "ms"));
                 } else {
-                    player.sendMessage(new TextComponentString(TextFormatting.GREEN + "No syntax errors found :)"));
+                    sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "No syntax errors found :)"));
                 }
             }
         } else {
             String executing = running ? "running" : "checking";
-            player.sendMessage(new TextComponentString(TextFormatting.RED + "Found " + errors.size() + " errors while " + executing + " scripts"));
+            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found " + errors.size() + " errors while " + executing + " scripts"));
             int n = errors.size();
             if (errors.size() >= 10) {
-                player.sendMessage(new TextComponentString("Displaying the first 7 errors:"));
+                sender.sendMessage(new TextComponentString("Displaying the first 7 errors:"));
                 n = 7;
             }
             for (int i = 0; i < n; i++) {
-                player.sendMessage(new TextComponentString(TextFormatting.RED + errors.get(i)));
+                sender.sendMessage(new TextComponentString(TextFormatting.RED + errors.get(i)));
             }
-            player.server.commandManager.executeCommand(player, "/gs log");
+            GSCommand.postLogFiles(sender);
         }
     }
 }

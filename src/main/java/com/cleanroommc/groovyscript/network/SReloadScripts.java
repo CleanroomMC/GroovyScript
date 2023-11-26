@@ -6,9 +6,10 @@ import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.common.MinecraftForge;
 
 public class SReloadScripts implements IPacket {
 
@@ -57,10 +58,12 @@ public class SReloadScripts implements IPacket {
                 Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Finished updating packmode and JEI. Enjoy :)"));
             }
         }
+        GroovyScript.postScriptRunResult(Minecraft.getMinecraft().player, true, true, true, 0);
+        MinecraftForge.EVENT_BUS.post(new Packmode.ChangeEvent(Packmode.getPackmode()));
         return null;
     }
 
-    public static void updatePackmode(EntityPlayer player, String packmode) {
+    public static void updatePackmode(ICommandSender player, String packmode) {
         player.sendMessage(new TextComponentString("Updating packmode to '" + packmode + "'. This might take a few minutes."));
         Packmode.updatePackmode(packmode);
         GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);

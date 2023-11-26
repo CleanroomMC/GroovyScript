@@ -57,5 +57,14 @@ public class Packmode {
 
     public static class ChangeEvent extends Event {
 
+        private final String packmode;
+
+        public ChangeEvent(String packmode) {
+            this.packmode = packmode;
+        }
+
+        public String getPackmode() {
+            return packmode;
+        }
     }
 }

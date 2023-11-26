@@ -17,12 +17,10 @@ import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SReloadScripts;
 import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.cleanroommc.groovyscript.packmode.PackmodeSaveData;
-import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
-import com.cleanroommc.groovyscript.sandbox.LoadStage;
+import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import groovy.lang.Closure;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -32,7 +30,6 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -84,6 +81,14 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        // clear all errors and post them if on client
+        if (event.player.world.isRemote) {
+            GroovyScript.postScriptRunResult(event.player, true, true, false, 0);
+        } else {
+            GroovyLogImpl.LOG.collectErrors();
+        }
+
+        // check world packmode and change if needed
         if (!event.player.world.isRemote && Packmode.needsPackmode()) {
             PackmodeSaveData saveData = PackmodeSaveData.get(event.player.world);
             if (Packmode.hasPackmode() && saveData.isDedicatedServer()) {
@@ -96,10 +101,8 @@ public class EventHandler {
             }
 
         }
-        if (event.player instanceof EntityPlayerMP) {
-            GroovyScript.postScriptRunResult((EntityPlayerMP) event.player, true, true, false, 0);
-        }
 
+        // give starter items to player
         NBTTagCompound tag = event.player.getEntityData();
         NBTTagCompound data = new NBTTagCompound();
         if (tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
@@ -110,7 +113,6 @@ public class EventHandler {
             data.setBoolean(Player.GIVEN_ITEMS, true);
             tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
         }
-
     }
 
     @SubscribeEvent
