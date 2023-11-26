@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.google.common.base.CaseFormat;
+import io.sommers.packmode.api.PackModeAPI;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -117,8 +119,9 @@ public class Preprocessor {
 
     private static boolean checkPackmode(File file, String[] modes) {
         for (String mode : modes) {
-            if (!GroovyScript.getRunConfig().isValidPackmode(mode)) {
-                GroovyLog.get().error("The packmode '{}' specified in file '{}' does not exist. Valid values are {}", mode, file.getName(), GroovyScript.getRunConfig().getPackmodeList());
+            if (!Packmode.isValidPackmode(mode)) {
+                List<String> valid = GroovyScript.getRunConfig().isIntegratePackmodeMod() ? PackModeAPI.getInstance().getPackModes() : GroovyScript.getRunConfig().getPackmodeList();
+                GroovyLog.get().error("The packmode '{}' specified in file '{}' does not exist. Valid values are {}", mode, file.getName(), valid);
             } else if (Packmode.getPackmode().equals(Alias.autoConvertTo(mode, CaseFormat.LOWER_UNDERSCORE))) {
                 return true;
             }

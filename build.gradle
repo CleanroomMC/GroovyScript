@@ -100,6 +100,11 @@ dependencies {
 
     implementation 'curse.maven:jei-238222:3040523'
 
+    compileOnly rfg.deobf('curse.maven:packmode-278398:2567799')
+    if (project.debug_packmode.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:packmode-278398:2567799')
+    }
+
     compileOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
     if (project.debug_avaritia.toBoolean() || project.debug_draconic_evolution.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')

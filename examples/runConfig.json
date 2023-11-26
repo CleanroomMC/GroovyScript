@@ -21,6 +21,6 @@
       "hard"
     ],
     "default": "normal",
-    "current": "normal"
+    "integratePackmodeMod": false
   }
 }

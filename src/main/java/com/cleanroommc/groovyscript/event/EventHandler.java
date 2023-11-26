@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.compat.WarningScreen;
 import com.cleanroommc.groovyscript.compat.content.GroovyBlock;
 import com.cleanroommc.groovyscript.compat.content.GroovyFluid;
 import com.cleanroommc.groovyscript.compat.content.GroovyItem;
-import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingInfo;
 import com.cleanroommc.groovyscript.compat.vanilla.ICraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.Player;
@@ -35,7 +34,6 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -99,7 +97,6 @@ public class EventHandler {
                 SReloadScripts.updatePackmode(event.player, saveData.getPackmode());
                 NetworkHandler.sendToPlayer(new SReloadScripts(null, true, true), (EntityPlayerMP) event.player);
             }
-
         }
 
         // give starter items to player
@@ -163,19 +160,29 @@ public class EventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public static void onGuiOpen(GuiOpenEvent event) {
-        if (!FMLLaunchHandler.isDeobfuscatedEnvironment() && event.getGui() instanceof GuiMainMenu && !WarningScreen.wasOpened) {
+        if (event.getGui() instanceof GuiMainMenu && !WarningScreen.wasOpened) {
             WarningScreen.wasOpened = true;
             List<String> warnings = new ArrayList<>();
-            if (!Loader.isModLoaded("universaltweaks")) {
-                warnings.add("UniversalTweaks is not loaded! It fixes a recipe book bug by removing it.\n" +
-                             "Consider adding UniversalTweaks to your mods and make sure to enable recipe book removal in the config");
-            } else if (isUTRecipeBookEnabled()) {
-                warnings.add("UniversalTweaks is loaded, but the recipe book is still enabled. This will cause issue with Groovyscript!\n" +
-                             "Please set 'Remove Recipe Book' to true in the misc category!");
+            if (!FMLLaunchHandler.isDeobfuscatedEnvironment()) {
+                if (!Loader.isModLoaded("universaltweaks")) {
+                    warnings.add("UniversalTweaks is not loaded! It fixes a recipe book bug by removing it.\n" +
+                                 "Consider adding UniversalTweaks to your mods and make sure to enable recipe book removal in the config");
+                } else if (isUTRecipeBookEnabled()) {
+                    warnings.add("UniversalTweaks is loaded, but the recipe book is still enabled. This will cause issue with Groovyscript!\n" +
+                                 "Please set 'Remove Recipe Book' to true in the misc category!");
+                }
+                if (Loader.isModLoaded("inworldcrafting")) {
+                    warnings.add("InWorldCrafting mod was detected. InWorldCrafting is obsolete since GroovyScript implements its functionality on its own.\n" +
+                                 "Consider using GroovyScript and removing InWorldCrafting.");
+                }
             }
-            if (Loader.isModLoaded("inworldcrafting")) {
-                warnings.add("InWorldCrafting mod was detected. InWorldCrafting is obsolete since GroovyScript implements its functionality on its own.\n" +
-                             "Consider using GroovyScript and removing InWorldCrafting.");
+            if ((GroovyScript.getRunConfig().getPackmodeConfigState() & 1) != 0) {
+                warnings.add("Integration with the packmode mod is enabled, but the packmode mod is not installed.\n" +
+                             "Please disable integration or install the mod.");
+            }
+            if ((GroovyScript.getRunConfig().getPackmodeConfigState() & 2) != 0) {
+                warnings.add("Integration with the packmode mod is enabled, but packmodes are also configured in GroovyScript.\n" +
+                             "You should use the packmode mod to configure packmodes if integration is enabled.");
             }
             if (!warnings.isEmpty()) {
                 event.setGui(new WarningScreen(warnings));

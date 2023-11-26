@@ -2,8 +2,10 @@ package com.cleanroommc.groovyscript.packmode;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.google.common.base.CaseFormat;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -17,6 +19,13 @@ public class PackmodeButton extends GuiButton {
         super(buttonId, x, y, widthIn, heightIn, "");
         this.enabled = Packmode.needsPackmode();
         updatePackmode();
+    }
+
+    @Override
+    public void drawButton(@NotNull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        if (this.enabled) {
+            super.drawButton(mc, mouseX, mouseY, partialTicks);
+        }
     }
 
     public void updatePackmode() {

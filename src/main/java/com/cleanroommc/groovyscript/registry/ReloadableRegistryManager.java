@@ -72,7 +72,7 @@ public class ReloadableRegistryManager {
 
     @ApiStatus.Internal
     public static void onReload() {
-        GroovyScript.reloadRunConfig();
+        GroovyScript.reloadRunConfig(false);
         reloadForgeRegistries();
         VanillaModule.INSTANCE.onReload();
         ModSupport.getAllContainers().stream()

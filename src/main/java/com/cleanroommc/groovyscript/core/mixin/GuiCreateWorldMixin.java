@@ -31,19 +31,23 @@ public class GuiCreateWorldMixin extends GuiScreen {
 
     @Inject(method = "initGui", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiCreateWorld;showMoreWorldOptions(Z)V", shift = At.Shift.BEFORE))
     public void init(CallbackInfo ci) {
-        GuiCreateWorld this$0 = (GuiCreateWorld) (Object) this;
-        this.packmodeButton = addButton(new PackmodeButton(65, this$0.width / 2 + 25, 115, 150, 20));
-        this.btnGameMode.x = this$0.width / 2 - 175;
+        if (Packmode.needsPackmode()) {
+            GuiCreateWorld this$0 = (GuiCreateWorld) (Object) this;
+            this.packmodeButton = addButton(new PackmodeButton(65, this$0.width / 2 + 25, 115, 150, 20));
+            this.btnGameMode.x = this$0.width / 2 - 175;
+        }
     }
 
     @Inject(method = "showMoreWorldOptions", at = @At("HEAD"))
     public void showMoreWorldOptions(boolean toggle, CallbackInfo ci) {
-        this.packmodeButton.visible = !toggle;
+        if (Packmode.needsPackmode()) {
+            this.packmodeButton.visible = !toggle;
+        }
     }
 
     @Inject(method = "actionPerformed", at = @At("TAIL"))
     public void actionPerformed(GuiButton button, CallbackInfo ci) {
-        if (button.id == 65) {
+        if (Packmode.needsPackmode() && button.id == 65) {
             this.packmodeButton.updatePackmode();
         }
     }
@@ -59,14 +63,16 @@ public class GuiCreateWorldMixin extends GuiScreen {
 
     @Inject(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiCreateWorld;drawString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V", ordinal = 6, shift = At.Shift.BEFORE), cancellable = true)
     public void draw(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        GuiCreateWorld this$0 = (GuiCreateWorld) (Object) this;
-        String s = this.gameModeDesc1 + " " + this.gameModeDesc2;
-        this.fontRenderer.drawSplitString(s, this$0.width / 2 - 175, 137, 150, -6250336);
-        if (Packmode.needsPackmode() && this.packmodeButton.getDesc() != null) {
+        if (Packmode.needsPackmode()) {
+            GuiCreateWorld this$0 = (GuiCreateWorld) (Object) this;
+            String s = this.gameModeDesc1 + " " + this.gameModeDesc2;
+            this.fontRenderer.drawSplitString(s, this$0.width / 2 - 185, 137, 170, -6250336);
             s = this.packmodeButton.getDesc();
-            this.fontRenderer.drawSplitString(s, this$0.width / 2 + 25, 137, 150, -6250336);
+            if (s != null) {
+                this.fontRenderer.drawSplitString(s, this$0.width / 2 + 15, 137, 170, -6250336);
+            }
+            super.drawScreen(mouseX, mouseY, partialTicks);
+            ci.cancel();
         }
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        ci.cancel();
     }
 }

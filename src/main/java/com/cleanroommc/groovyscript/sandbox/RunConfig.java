@@ -14,6 +14,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModMetadata;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
@@ -49,6 +50,10 @@ public class RunConfig {
         postInit.add("postInit/");
         JsonObject packmode = new JsonObject();
         packmode.add("values", new JsonArray());
+        packmode.addProperty("default", "");
+        packmode.addProperty("_comment", "By default the packmode is not synced with the packmode mod. You can enable integration, but you can no longer change packmode on the fly.");
+        packmode.addProperty("integratePackmodeMod", false);
+        json.add("packmode", packmode);
         return json;
     }
 
@@ -68,12 +73,15 @@ public class RunConfig {
     private final List<String> packmodeList = new ArrayList<>();
     private final Set<String> packmodeSet = new ObjectOpenHashSet<>();
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
+    private boolean integratePackmodeMod = false;
     // TODO asm
     private final String asmClass = null;
     private boolean debug;
 
+
     private final boolean invalidPackId;
     private boolean warnedAboutInvalidPackId = false;
+    private int packmodeConfigState;
 
     public static final String[] GROOVY_SUFFIXES = {".groovy", ".gvy", ".gy", ".gsh"};
 
@@ -104,7 +112,7 @@ public class RunConfig {
     }
 
     @ApiStatus.Internal
-    public void reload(JsonObject json) {
+    public void reload(JsonObject json, boolean init) {
         if (GroovyScript.isSandboxLoaded() && GroovyScript.getSandbox().isRunning()) {
             throw new RuntimeException();
         }
@@ -114,6 +122,7 @@ public class RunConfig {
         this.packmodeList.clear();
         this.packmodeSet.clear();
         this.packmodePaths.clear();
+        this.packmodeConfigState = 0;
 
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";
         String replacement = getSeparator();
@@ -170,6 +179,7 @@ public class RunConfig {
 
         // packmode
         JsonObject jsonPackmode = JsonHelper.getJsonObject(json, "packmode");
+        if (init) this.integratePackmodeMod = JsonHelper.getBoolean(jsonPackmode, false, "integratePackmodeMod");
         JsonArray modes = JsonHelper.getJsonArray(jsonPackmode, "values", "types");
         for (JsonElement je : modes) {
             if (je.isJsonPrimitive()) {
@@ -181,7 +191,12 @@ public class RunConfig {
                 }
             }
         }
-        if (!Packmode.hasPackmode()) {
+        if (this.integratePackmodeMod && arePackmodesConfigured()) {
+            this.packmodeConfigState |= 2;
+            GroovyLog.get().error("Integration with the packmode mod is enabled, but packmodes are also configured in GroovyScript,");
+            GroovyLog.get().error("You should use the packmode mod to configure packmodes if integration is enabled,");
+        }
+        if (arePackmodesConfigured() && !Packmode.hasPackmode()) {
             String pm;
             if (!GroovyScriptConfig.packmode.isEmpty()) {
                 pm = GroovyScriptConfig.packmode;
@@ -248,6 +263,24 @@ public class RunConfig {
 
     public ResourceLocation makeLoc(String name) {
         return new ResourceLocation(getPackId(), name);
+    }
+
+    @ApiStatus.Internal
+    public void initPackmode() {
+        if (this.integratePackmodeMod && !Loader.isModLoaded("packmode")) {
+            this.integratePackmodeMod = false;
+            this.packmodeConfigState |= 1;
+            GroovyLog.get().error("Integration with the packmode mod is enabled, but the packmode mod is not installed.");
+            GroovyLog.get().error("Please disable integration or install the mod,");
+        }
+    }
+
+    public boolean isIntegratePackmodeMod() {
+        return integratePackmodeMod;
+    }
+
+    public int getPackmodeConfigState() {
+        return packmodeConfigState;
     }
 
     public Collection<File> getClassFiles(String loader) {

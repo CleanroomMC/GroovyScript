@@ -4,7 +4,6 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.content.GroovyResourcePack;
-import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
@@ -120,6 +119,7 @@ public class GroovyScript {
         }
 
         FluidRegistry.enableUniversalBucket();
+        getRunConfig().initPackmode();
     }
 
     @Mod.EventHandler
@@ -142,7 +142,7 @@ public class GroovyScript {
         }
         runConfigFile = new File(scriptPath, "runConfig.json");
         resourcesFile = new File(scriptPath, "assets");
-        reloadRunConfig();
+        reloadRunConfig(true);
     }
 
     @ApiStatus.Internal
@@ -244,7 +244,7 @@ public class GroovyScript {
     }
 
     @ApiStatus.Internal
-    public static void reloadRunConfig() {
+    public static void reloadRunConfig(boolean init) {
         JsonElement element = JsonHelper.loadJson(runConfigFile);
         if (element == null || !element.isJsonObject()) element = new JsonObject();
         JsonObject json = element.getAsJsonObject();
@@ -256,7 +256,7 @@ public class GroovyScript {
                 runConfig = new RunConfig(json);
             }
         }
-        runConfig.reload(json);
+        runConfig.reload(json, init);
     }
 
     private static RunConfig createRunConfig(JsonObject json) {
