@@ -11,6 +11,8 @@ import net.minecraft.item.ItemStack;
 
 public class VanillaModule implements IScriptReloadable {
 
+    public static final VanillaModule INSTANCE = new VanillaModule();
+
     public static final Crafting crafting = new Crafting();
     public static final Furnace furnace = new Furnace();
     public static final Loot loot = new Loot();
@@ -34,10 +36,16 @@ public class VanillaModule implements IScriptReloadable {
         ExpansionHelper.mixinClass(ItemStack.class, RarityItemStackExpansion.class);
     }
 
+    @GroovyBlacklist
+    public void init() {
+        loot.init();
+    }
+
     @Override
     @GroovyBlacklist
     public void onReload() {
         furnace.onReload();
+        loot.onReload();
         oreDict.onReload();
         rarity.onReload();
         player.onReload();
@@ -48,6 +56,7 @@ public class VanillaModule implements IScriptReloadable {
     @GroovyBlacklist
     public void afterScriptLoad() {
         furnace.afterScriptLoad();
+        loot.afterScriptLoad();
         inWorldCrafting.afterScriptLoad();
     }
 
