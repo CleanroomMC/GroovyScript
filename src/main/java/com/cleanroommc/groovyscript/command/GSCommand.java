@@ -39,7 +39,7 @@ import net.minecraftforge.server.command.CommandTreeBase;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.nio.file.Path;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,18 +55,12 @@ public class GSCommand extends CommandTreeBase {
         }
         GroovyLog.get().info("========== Reloading Groovy scripts ==========");
         long time = GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
-        //player.sendMessage(new TextComponentString("Reloading Groovy took " + time + "ms"));
         GroovyScript.postScriptRunResult(player, false, true, false, time);
-
         NetworkHandler.sendToPlayer(new SReloadScripts(null, false, true), player);
     }
 
     public GSCommand() {
-
-        addSubcommand(new SimpleCommand("log", (server, sender, args) -> {
-            sender.sendMessage(getTextForFile("Groovy Log", GroovyLog.get().getLogFilerPath(), new TextComponentString("Click to open GroovyScript log")));
-            sender.sendMessage(getTextForFile("Minecraft Log", GroovyLog.get().getLogFilerPath().getParent(), new TextComponentString("Click to open Minecraft log")));
-        }));
+        addSubcommand(new SimpleCommand("log", (server, sender, args) -> postLogFiles(sender)));
 
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
             if (sender instanceof EntityPlayerMP) {
@@ -169,7 +163,7 @@ public class GSCommand extends CommandTreeBase {
                 GroovyLog.get().getWriter().println(" - " + tab.getTabLabel());
             }
             sender.sendMessage(new TextComponentString("Creative tabs has been logged to the ")
-                                       .appendSibling(GSCommand.getTextForFile("Groovy Log", GroovyLog.get().getLogFilerPath(), new TextComponentString("Click to open GroovyScript log"))));
+                                       .appendSibling(GSCommand.getTextForFile("Groovy Log", GroovyLog.get().getLogFilerPath().toString(), new TextComponentString("Click to open GroovyScript log"))));
         }));
 
         if (ModSupport.MEKANISM.isLoaded()) {
@@ -198,10 +192,15 @@ public class GSCommand extends CommandTreeBase {
         return "/gs []";
     }
 
-    public static ITextComponent getTextForFile(String name, Path path, ITextComponent hoverText) {
+    public static void postLogFiles(ICommandSender sender) {
+        sender.sendMessage(getTextForFile("Groovy Log", GroovyLog.get().getLogFilerPath().toString(), new TextComponentString("Click to open GroovyScript log")));
+        sender.sendMessage(getTextForFile("Minecraft Log", GroovyLog.get().getLogFilerPath().getParent().toString() + File.separator + "latest.log", new TextComponentString("Click to open Minecraft log")));
+    }
+
+    public static ITextComponent getTextForFile(String name, String path, ITextComponent hoverText) {
         return new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + name))
                 .setStyle(new Style()
-                                  .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path.toString()))
+                                  .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path))
                                   .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText)));
     }
 
