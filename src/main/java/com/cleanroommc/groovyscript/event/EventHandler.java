@@ -117,15 +117,6 @@ public class EventHandler {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onTableLoad(LootTableLoadEvent event) {
-        if (!Loot.TABLES.containsKey(event.getName())) {
-            Loot.TABLES.put(event.getName(), event.getTable());
-        } else {
-            event.setTable(Loot.TABLES.get(event.getName()));
-        }
-    }
-
     @SubscribeEvent
     public static void onExplosion(ExplosionEvent.Detonate event) {
         for (Entity entity : event.getAffectedEntities()) {

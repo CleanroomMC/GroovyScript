@@ -165,9 +165,6 @@ public class GroovyScript {
 
     @ApiStatus.Internal
     public static void runGroovyScriptsInLoader(LoadStage loadStage) {
-        if (loadStage == LoadStage.POST_INIT) {
-            Loot.init();
-        }
         // called via mixin between fml post init and load complete
         long time = System.currentTimeMillis();
         getSandbox().run(loadStage);

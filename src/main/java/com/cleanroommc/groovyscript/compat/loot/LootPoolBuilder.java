@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.compat.loot;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import groovy.lang.Closure;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
@@ -23,19 +25,28 @@ public class LootPoolBuilder {
     private String name;
     private final List<LootEntry> lootEntries = new ArrayList<>();
     private final List<LootCondition> poolConditions = new ArrayList<>();
-    private RandomValueRange rolls;
-    private RandomValueRange bonusRolls;
+    private RandomValueRange rolls = new RandomValueRange(1);
+    private RandomValueRange bonusRolls = new RandomValueRange(0);
+    private String tableName;
     private final GroovyLog.Msg out = GroovyLog.msg("Error creating GroovyScript LootPool").warn();
-
-    public LootPoolBuilder() {
-    }
-
-    public LootPoolBuilder(String name) {
-        this.name = name;
-    }
 
     public LootPoolBuilder name(String name) {
         this.name = name;
+        return this;
+    }
+
+    public LootPoolBuilder name(ResourceLocation name) {
+        this.name = name.toString();
+        return this;
+    }
+
+    public LootPoolBuilder table(String table) {
+        this.tableName = table;
+        return this;
+    }
+
+    public LootPoolBuilder table(ResourceLocation table) {
+        this.tableName = table.toString();
         return this;
     }
 
@@ -45,7 +56,8 @@ public class LootPoolBuilder {
     }
 
     public LootPoolBuilder entry(ItemStack stack, int weight) {
-        this.lootEntries.add(new LootEntryBuilder(stack.getItem().getRegistryName().getNamespace() + ":" + stack.getMetadata())
+        this.lootEntries.add(new LootEntryBuilder()
+                                     .name(stack.getItem().getRegistryName().getNamespace() + ":" + stack.getMetadata())
                                      .item(stack)
                                      .weight(weight).build());
         return this;
@@ -80,13 +92,12 @@ public class LootPoolBuilder {
     }
 
     public LootPoolBuilder condition(Closure<Object> customCondition) {
-        if (Arrays.equals(customCondition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {
-            this.poolConditions.add(new GroovyLootCondition(customCondition));
-        } else {
-            out.add("custom LootConditions require parameters (java.util.Random, net.minecraft.world.storage.loot.LootContext)");
-        }
-
+        this.poolConditions.add(new GroovyLootCondition(customCondition));
         return this;
+    }
+
+    public LootPoolBuilder rollsRange(float value) {
+        return rollsRange(value, value);
     }
 
     public LootPoolBuilder rollsRange(float min, float max) {
@@ -96,6 +107,10 @@ public class LootPoolBuilder {
         return this;
     }
 
+    public LootPoolBuilder bonusRollsRange(float value) {
+        return rollsRange(value, value);
+    }
+
     public LootPoolBuilder bonusRollsRange(float min, float max) {
         out.add(min < 0.0f, () -> "rollRange minimum cannot be less than 0.");
         out.add(max < 0.0f, () -> "rollRange maximum cannot be less than 0.");
@@ -103,14 +118,26 @@ public class LootPoolBuilder {
         return this;
     }
 
-    private boolean validate() {
+    private boolean validate(boolean validateForRegister) {
         if (name == null || name.isEmpty()) out.add("No name provided").error();
+        if (validateForRegister) {
+            if (tableName == null || tableName.isEmpty() || VanillaModule.loot.getTable(tableName) == null) out.add("No valid LootTable specified").error();
+            else if (name != null && !name.isEmpty() && VanillaModule.loot.getTable(tableName) != null && VanillaModule.loot.getTable(tableName).getPool(name) != null) out.add("No valid LootPool specified for table " + tableName).error();
+        }
         out.postIfNotEmpty();
         return out.getLevel() != Level.ERROR;
     }
 
     public LootPool build() {
+        if (!validate(false)) return null;
         return new LootPool(lootEntries.toArray(new LootEntry[0]), poolConditions.toArray(new LootCondition[0]), rolls, bonusRolls, name);
+    }
+
+    public void register() {
+        if (!validate(true)) return;
+        VanillaModule.loot.getTable(tableName).addPool(
+                new LootPool(lootEntries.toArray(new LootEntry[0]), poolConditions.toArray(new LootCondition[0]), rolls, bonusRolls, name)
+        );
     }
 
 }
