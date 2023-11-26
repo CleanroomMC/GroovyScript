@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
@@ -59,7 +60,6 @@ public class RunConfig {
         modMetadata.version = "0.0.0";
     }
 
-    private JsonObject rawRunConfig;
     private final String packName;
     private final String packId;
     private final String version;
@@ -87,7 +87,6 @@ public class RunConfig {
     }
 
     public RunConfig(JsonObject json) {
-        this.rawRunConfig = json;
         String name = JsonHelper.getString(json, "", "packName", "name");
         String id = JsonHelper.getString(json, "", "packId", "id");
         Pattern idPattern = Pattern.compile("[a-z_]+");
@@ -109,7 +108,6 @@ public class RunConfig {
         if (GroovyScript.isSandboxLoaded() && GroovyScript.getSandbox().isRunning()) {
             throw new RuntimeException();
         }
-        this.rawRunConfig = json;
         this.debug = JsonHelper.getBoolean(json, false, "debug");
         this.classes.clear();
         this.loaderPaths.clear();
@@ -184,10 +182,15 @@ public class RunConfig {
             }
         }
         if (!Packmode.hasPackmode()) {
-            String pm = JsonHelper.getString(jsonPackmode, null, "current", "default");
-            if (pm == null) {
-                if (!this.packmodeList.isEmpty()) {
-                    pm = this.packmodeList.get(0);
+            String pm;
+            if (!GroovyScriptConfig.packmode.isEmpty()) {
+                pm = GroovyScriptConfig.packmode;
+            } else {
+                pm = JsonHelper.getString(jsonPackmode, null, "default");
+                if (pm == null) {
+                    if (!this.packmodeList.isEmpty()) {
+                        pm = this.packmodeList.get(0);
+                    }
                 }
             }
             if (pm != null) Packmode.updatePackmode(pm);
@@ -241,19 +244,6 @@ public class RunConfig {
 
     public List<String> getPackmodeList() {
         return Collections.unmodifiableList(packmodeList);
-    }
-
-    @ApiStatus.Internal
-    public void writeAndSavePackmode(String mode) {
-        JsonObject packmode = JsonHelper.getJsonObject(this.rawRunConfig, (JsonObject) null, "packmode");
-        if (packmode == null) {
-            packmode = new JsonObject();
-            this.rawRunConfig.add("packmode", packmode);
-        }
-        String current = JsonHelper.getString(packmode, null, "current");
-        if (current != null && current.equals(mode)) return;
-        packmode.addProperty("current", mode);
-        JsonHelper.saveJson(GroovyScript.getRunConfigFile(), this.rawRunConfig);
     }
 
     public ResourceLocation makeLoc(String name) {

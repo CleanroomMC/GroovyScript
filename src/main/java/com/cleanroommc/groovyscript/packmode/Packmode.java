@@ -1,10 +1,13 @@
 package com.cleanroommc.groovyscript.packmode;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.google.common.base.CaseFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +39,8 @@ public class Packmode {
     public static void updatePackmode(String packmode) {
         if (!isValidPackmode(packmode)) throw new IllegalArgumentException("Undefined packmode '" + packmode + "'");
         Packmode.packmode = Alias.autoConvertTo(packmode, CaseFormat.LOWER_UNDERSCORE);
-        GroovyScript.getRunConfig().writeAndSavePackmode(Packmode.packmode);
+        GroovyScriptConfig.packmode = Packmode.packmode;
+        ConfigManager.load(GroovyScript.ID, Config.Type.INSTANCE);
     }
 
     public static boolean isValidPackmode(String mode) {

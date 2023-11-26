@@ -31,9 +31,8 @@ import java.util.function.Supplier;
 public class ReloadableRegistryManager {
 
     private static final AtomicBoolean firstLoad = new AtomicBoolean(true);
-    private static final Map<Class<?>, Supplier<?>> registryDummies = new Object2ObjectOpenHashMap<>();
+    private static final Map<Class<? extends IForgeRegistryEntry<?>>, Supplier<? extends IForgeRegistryEntry<?>>> registryDummies = new Object2ObjectOpenHashMap<>();
 
-    // TODO still needed?
     private static final Map<Class<?>, List<Object>> recipeRecovery = new Object2ObjectOpenHashMap<>();
     private static final Map<Class<?>, List<Object>> scriptRecipes = new Object2ObjectOpenHashMap<>();
 
@@ -54,12 +53,12 @@ public class ReloadableRegistryManager {
     }
 
     public static <T> List<T> restore(Class<?> registryClass, @SuppressWarnings("unused") Class<T> recipeClass) {
-        @SuppressWarnings("unchecked") List<T> recoveredRecipes = (List<T>) recipeRecovery.remove(registryClass);
+        List<T> recoveredRecipes = (List<T>) recipeRecovery.remove(registryClass);
         return recoveredRecipes == null ? Collections.emptyList() : recoveredRecipes;
     }
 
     public static <T> List<T> unmarkScripted(Class<?> registryClass, @SuppressWarnings("unused") Class<T> recipeClass) {
-        @SuppressWarnings("unchecked") List<T> marked = (List<T>) scriptRecipes.remove(registryClass);
+        List<T> marked = (List<T>) scriptRecipes.remove(registryClass);
         return marked == null ? Collections.emptyList() : marked;
     }
 

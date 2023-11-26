@@ -194,7 +194,6 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
         availabilityMap.set(id);
     }
 
-    @SuppressWarnings("unchecked")
     private void grs$do(Consumer<IReloadableForgeRegistry<V>> consumer) {
         if (frozen == null) frozen = (IReloadableForgeRegistry<V>) RegistryManager.FROZEN.getRegistry(superType);
         if (vanilla == null) vanilla = (IReloadableForgeRegistry<V>) RegistryManager.VANILLA.getRegistry(superType);

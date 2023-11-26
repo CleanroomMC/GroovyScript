@@ -36,9 +36,12 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -154,6 +157,13 @@ public class EventHandler {
             if (entity instanceof EntityItem) {
                 VanillaModule.inWorldCrafting.explosion.findAndRunRecipe((EntityItem) entity);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onConfigChange(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.getModID().equals(GroovyScript.ID)) {
+            ConfigManager.sync(GroovyScript.ID, Config.Type.INSTANCE);
         }
     }
 
