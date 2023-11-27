@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.helper;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
@@ -73,5 +74,13 @@ public class GroovyHelper {
 
     public static boolean isDedicatedServer() {
         return FMLCommonHandler.instance().getSide().isServer();
+    }
+
+    public static String getPackmode() {
+        return Packmode.getPackmode();
+    }
+
+    public static boolean isPackmode(String packmode) {
+        return getPackmode().equalsIgnoreCase(packmode);
     }
 }

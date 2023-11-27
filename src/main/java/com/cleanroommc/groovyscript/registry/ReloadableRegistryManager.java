@@ -31,9 +31,8 @@ import java.util.function.Supplier;
 public class ReloadableRegistryManager {
 
     private static final AtomicBoolean firstLoad = new AtomicBoolean(true);
-    private static final Map<Class<?>, Supplier<?>> registryDummies = new Object2ObjectOpenHashMap<>();
+    private static final Map<Class<? extends IForgeRegistryEntry<?>>, Supplier<? extends IForgeRegistryEntry<?>>> registryDummies = new Object2ObjectOpenHashMap<>();
 
-    // TODO still needed?
     private static final Map<Class<?>, List<Object>> recipeRecovery = new Object2ObjectOpenHashMap<>();
     private static final Map<Class<?>, List<Object>> scriptRecipes = new Object2ObjectOpenHashMap<>();
 
@@ -54,12 +53,12 @@ public class ReloadableRegistryManager {
     }
 
     public static <T> List<T> restore(Class<?> registryClass, @SuppressWarnings("unused") Class<T> recipeClass) {
-        @SuppressWarnings("unchecked") List<T> recoveredRecipes = (List<T>) recipeRecovery.remove(registryClass);
+        List<T> recoveredRecipes = (List<T>) recipeRecovery.remove(registryClass);
         return recoveredRecipes == null ? Collections.emptyList() : recoveredRecipes;
     }
 
     public static <T> List<T> unmarkScripted(Class<?> registryClass, @SuppressWarnings("unused") Class<T> recipeClass) {
-        @SuppressWarnings("unchecked") List<T> marked = (List<T>) scriptRecipes.remove(registryClass);
+        List<T> marked = (List<T>) scriptRecipes.remove(registryClass);
         return marked == null ? Collections.emptyList() : marked;
     }
 
@@ -73,7 +72,7 @@ public class ReloadableRegistryManager {
 
     @ApiStatus.Internal
     public static void onReload() {
-        GroovyScript.reloadRunConfig();
+        GroovyScript.reloadRunConfig(false);
         reloadForgeRegistries();
         VanillaModule.INSTANCE.onReload();
         ModSupport.getAllContainers().stream()
@@ -122,13 +121,15 @@ public class ReloadableRegistryManager {
      */
     @ApiStatus.Internal
     @SideOnly(Side.CLIENT)
-    public static void reloadJei() {
+    public static void reloadJei(boolean msgPlayer) {
         if (ModSupport.JEI.isLoaded()) {
             JeiProxyAccessor jeiProxy = (JeiProxyAccessor) JustEnoughItems.getProxy();
             long time = System.currentTimeMillis();
             jeiProxy.getStarter().start(jeiProxy.getPlugins(), jeiProxy.getTextures());
             time = System.currentTimeMillis() - time;
-            Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Reloading JEI took " + time + "ms"));
+            if (msgPlayer) {
+                Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Reloading JEI took " + time + "ms"));
+            }
         }
     }
 

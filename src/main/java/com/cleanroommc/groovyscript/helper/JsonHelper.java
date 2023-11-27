@@ -61,7 +61,9 @@ public class JsonHelper {
         for (String key : keys) {
             if (json.has(key)) {
                 JsonElement jsonElement = json.get(key);
-                return jsonElement.getAsString();
+                if (jsonElement.isJsonPrimitive()) {
+                    return jsonElement.getAsString();
+                }
             }
         }
         return defaultValue;

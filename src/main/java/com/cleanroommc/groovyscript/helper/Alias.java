@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.helper;
 
 import com.google.common.base.CaseFormat;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Alias extends ArrayList<String> {
 
@@ -95,5 +97,26 @@ public class Alias extends ArrayList<String> {
         for (String alias : generateAliases(new ArrayList<>(), name, caseFormat)) {
             map.put(alias, object);
         }
+    }
+
+    private static final Pattern lowerCamel = Pattern.compile("[a-z]+[a-zA-Z]*");
+    private static final Pattern upperCamel = Pattern.compile("[A-Z][a-zA-Z]*");
+    private static final Pattern lowerUnderscore = Pattern.compile("[a-z]+(_[a-z]+)*");
+    private static final Pattern upperUnderscore = Pattern.compile("[A-Z]+(_[A-Z]+)*");
+
+    @NotNull
+    public static CaseFormat detectCaseFormat(String s) {
+        if (s == null || s.isEmpty()) throw new IllegalArgumentException("String must not be empty");
+        if (lowerCamel.matcher(s).matches()) return CaseFormat.LOWER_CAMEL;
+        if (upperCamel.matcher(s).matches()) return CaseFormat.UPPER_CAMEL;
+        if (lowerUnderscore.matcher(s).matches()) return CaseFormat.LOWER_UNDERSCORE;
+        if (upperUnderscore.matcher(s).matches()) return CaseFormat.UPPER_UNDERSCORE;
+        throw new IllegalArgumentException("String has invalid format!");
+    }
+
+    public static String autoConvertTo(String s, CaseFormat format) {
+        CaseFormat fromFormat = detectCaseFormat(s);
+        if (fromFormat == format) return s;
+        return fromFormat.to(format, s);
     }
 }
