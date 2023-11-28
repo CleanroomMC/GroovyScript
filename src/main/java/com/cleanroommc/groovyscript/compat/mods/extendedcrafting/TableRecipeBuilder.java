@@ -65,7 +65,7 @@ public abstract class TableRecipeBuilder extends CraftingRecipeBuilder {
 
     public static class Shaped extends TableRecipeBuilder {
 
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value", defaultValue = "\\` \\` = IIngredient.EMPTY", priority = 200)
+        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value", defaultValue = "' ' = IIngredient.EMPTY", priority = 200)
         private final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
         private final List<String> errors = new ArrayList<>();
         @Property("groovyscript.wiki.craftingrecipe.mirrored.value")

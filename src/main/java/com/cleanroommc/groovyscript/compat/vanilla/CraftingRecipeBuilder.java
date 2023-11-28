@@ -130,7 +130,7 @@ public abstract class CraftingRecipeBuilder {
         protected boolean mirrored = false;
         @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", priority = 200, hierarchy = 20)
         protected String[] keyBasedMatrix;
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value", defaultValue = "\\` \\` = IIngredient.EMPTY", priority = 210, hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value", defaultValue = "' ' = IIngredient.EMPTY", priority = 210, hierarchy = 20)
         protected final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
 
         @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}, priority = 200, hierarchy = 20)

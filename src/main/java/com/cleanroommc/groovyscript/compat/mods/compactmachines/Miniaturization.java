@@ -81,7 +81,7 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<org.dave.compactmachines3.miniaturization.MultiblockRecipe> {
 
-        @Property(defaultValue = "\\` \\` = air, \\`_\\` = air")
+        @Property(defaultValue = "' ' = air, '_' = air")
         private final Char2ObjectOpenHashMap<ReferenceValues> keyMap = new Char2ObjectOpenHashMap<>();
         private final List<String> errors = new ArrayList<>();
         @Property

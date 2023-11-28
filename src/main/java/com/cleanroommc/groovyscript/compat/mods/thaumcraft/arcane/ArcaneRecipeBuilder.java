@@ -76,7 +76,7 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
         protected boolean mirrored = false;
         @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", priority = 200)
         private String[] keyBasedMatrix;
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value", defaultValue = "\\` \\` = IIngredient.EMPTY", priority = 210)
+        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value", defaultValue = "' ' = IIngredient.EMPTY", priority = 210)
         private final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
 
         @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}, priority = 200)
