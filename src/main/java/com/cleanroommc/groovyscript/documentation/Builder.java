@@ -233,7 +233,7 @@ public class Builder {
                         out.append(" ").append(I18n.format("groovyscript.wiki.requires", I18n.format(fieldDocumentation.getRequirement())));
                     }
 
-                    if (!fieldDocumentation.hasDefaultValue()) {
+                    if (fieldDocumentation.hasDefaultValue()) {
                         out.append(" ").append(I18n.format("groovyscript.wiki.default", fieldDocumentation.getDefaultValue()));
                     }
 
@@ -324,7 +324,7 @@ public class Builder {
         }
 
         public boolean hasDefaultValue() {
-            return !"null".equals(getDefaultValue());
+            return !"null".equals(getDefaultValue()) && !getDefaultValue().isEmpty();
         }
 
         public String getDefaultValue() {
