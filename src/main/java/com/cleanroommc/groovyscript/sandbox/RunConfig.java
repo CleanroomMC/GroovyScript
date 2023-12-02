@@ -100,7 +100,7 @@ public class RunConfig {
         Pattern idPattern = Pattern.compile("[a-z_]+");
         this.invalidPackId = id.isEmpty() || !idPattern.matcher(id).matches();
         if (name.isEmpty() && !this.invalidPackId) {
-            name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_UNDERSCORE, id).replace('_', ' ');
+            name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, id).replace('_', ' ');
         }
         this.packName = name;
         this.packId = id;

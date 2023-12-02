@@ -8,10 +8,12 @@ import com.cleanroommc.groovyscript.core.mixin.loot.LootTableAccessor;
 import groovy.lang.Closure;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
@@ -31,8 +33,9 @@ public class Loot implements IScriptReloadable {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void afterScriptLoad() {
-        if (Minecraft.getMinecraft().isIntegratedServerRunning() && Minecraft.getMinecraft().getIntegratedServer() != null) {
-            for (WorldServer world : Minecraft.getMinecraft().getIntegratedServer().worlds) {
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (server != null) {
+            for (WorldServer world : server.worlds) {
                 world.getLootTableManager().reloadLootTables();
             }
         }

@@ -42,6 +42,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -88,6 +89,7 @@ public class GroovyScript {
     private static File resourcesFile;
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
+    private static ModContainer scriptMod;
 
     private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
@@ -151,26 +153,20 @@ public class GroovyScript {
         GameObjectHandlerManager.init();
         VanillaModule.initializeBinding();
         ModSupport.init();
-
-        boolean wasNull = Loader.instance().activeModContainer() == null;
-        if (wasNull) {
-            Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get(ID));
-        }
-
         runGroovyScriptsInLoader(LoadStage.PRE_INIT);
-
-        if (wasNull) {
-            Loader.instance().setActiveModContainer(null);
-        }
     }
 
     @ApiStatus.Internal
     public static long runGroovyScriptsInLoader(LoadStage loadStage) {
         // called via mixin between fml post init and load complete
+        if (scriptMod == null) scriptMod = Loader.instance().getIndexedModList().get(getRunConfig().getPackId());
+        ModContainer current = Loader.instance().activeModContainer();
+        Loader.instance().setActiveModContainer(scriptMod);
         long time = System.currentTimeMillis();
         getSandbox().run(loadStage);
         time = System.currentTimeMillis() - time;
         LOGGER.info("Running Groovy scripts during {} took {} ms", loadStage.getName(), time);
+        Loader.instance().setActiveModContainer(current);
         return time;
     }
 

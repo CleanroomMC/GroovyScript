@@ -16,6 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
@@ -74,6 +76,7 @@ public class GroovyBlock extends Block {
 
     @GroovyBlacklist
     @ApiStatus.Internal
+    @SideOnly(Side.CLIENT)
     public static void registerModels() {
         for (Pair<Block, ItemBlock> pair : BLOCKS.values()) {
             Item item = pair.getRight();
