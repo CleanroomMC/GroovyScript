@@ -47,14 +47,4 @@ public class Loot implements IScriptReloadable {
         }
     }
 
-    public LootTable getTable(ResourceLocation name) {
-        LootTable lootTable = tables.get(name);
-        if (lootTable == null) GroovyLog.msg("GroovyScript found 0 LootTable(s) named " + name).post();
-        return lootTable;
-    }
-
-    public LootTable getTable(String name) {
-        return getTable(new ResourceLocation(name));
-    }
-
 }

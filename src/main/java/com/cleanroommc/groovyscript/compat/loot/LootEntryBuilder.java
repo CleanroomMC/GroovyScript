@@ -35,7 +35,7 @@ public class LootEntryBuilder {
     private int quality;
     private final List<LootFunction> functions = new ArrayList<>();
     private final List<LootCondition> conditions = new ArrayList<>();
-    private String tableName;
+    private ResourceLocation tableName;
     private String poolName;
     private final GroovyLog.Msg out = GroovyLog.msg("Error creating GroovyScript LootPool").warn();
 
@@ -76,12 +76,12 @@ public class LootEntryBuilder {
     }
 
     public LootEntryBuilder table(String table) {
-        this.tableName = table;
+        this.tableName = new ResourceLocation(table);
         return this;
     }
 
     public LootEntryBuilder table(ResourceLocation table) {
-        this.tableName = table.toString();
+        this.tableName = table;
         return this;
     }
 
@@ -317,9 +317,9 @@ public class LootEntryBuilder {
         if (quality < 0) out.add("quality < 0 may make the loot entry unable to be rolled");
 
         if (validateForRegister) {
-            if (tableName == null || tableName.isEmpty() || VanillaModule.loot.getTable(tableName) == null) out.add("No valid LootTable specified").error();
-            else if (poolName == null || poolName.isEmpty() || VanillaModule.loot.getTable(tableName).getPool(poolName) == null) out.add("No valid LootPool specified").error();
-            else if (VanillaModule.loot.getTable(tableName).getPool(poolName).getEntry(name) != null) out.add("Attempted to add duplicate key " + name + " to " + tableName + " - " + poolName);
+            if (tableName == null || VanillaModule.loot.tables.get(tableName) == null) out.add("No valid LootTable specified").error();
+            else if (poolName == null || poolName.isEmpty() || VanillaModule.loot.tables.get(tableName).getPool(poolName) == null) out.add("No valid LootPool specified").error();
+            else if (VanillaModule.loot.tables.get(tableName).getPool(poolName).getEntry(name) != null) out.add("Attempted to add duplicate entry " + name + " to " + tableName + " - " + poolName);
         }
 
         out.postIfNotEmpty();
@@ -333,7 +333,7 @@ public class LootEntryBuilder {
 
     public void register() {
         if (!validate(true)) return;
-        VanillaModule.loot.getTable(tableName).getPool(poolName).addEntry(
+        VanillaModule.loot.tables.get(tableName).getPool(poolName).addEntry(
                 new LootEntryItem(item, weight, quality, functions.toArray(new LootFunction[0]), conditions.toArray(new LootCondition[0]), name)
         );
     }

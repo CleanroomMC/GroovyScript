@@ -24,7 +24,9 @@ public class LootTablesLoadedEvent extends Event {
         public static final LootTable EMPTY_LOOT_TABLE = new LootTable(new LootPool[0]);
 
         public LootTable getTable(ResourceLocation name) {
-            return VanillaModule.loot.getTable(name);
+            LootTable lootTable = VanillaModule.loot.tables.get(name);
+            if (lootTable == null) GroovyLog.msg("GroovyScript found 0 LootTable(s) named " + name).post();
+            return lootTable;
         }
 
         public LootTable getTable(String name) {
