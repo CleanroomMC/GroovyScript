@@ -2,33 +2,33 @@
 import com.cleanroommc.groovyscript.event.LootTablesLoadedEvent
 
 event_manager.listen { LootTablesLoadedEvent event ->
-    patchStrongholdLibraryLT()
-    patchChickenLT()
-    patchZombieLT()
-    //loot.printTables()
-    //loot.printPools()
-    //loot.printEntries()
+    patchStrongholdLibraryLT(event)
+    patchChickenLT(event)
+    patchZombieLT(event)
+    //event.loot.printTables()
+    //event.loot.printPools()
+    //event.loot.printEntries()
 }
 
-def patchStrongholdLibraryLT() {
-    loot.getTable('minecraft:chests/stronghold_library').getPool('main').addEntry(
-        loot.entryBuilder()
+def patchStrongholdLibraryLT(event) {
+    event.loot.getTable('minecraft:chests/stronghold_library').getPool('main').addEntry(
+        event.loot.entryBuilder()
             .name('minecraft:diamond_block')
             .item(item('minecraft:diamond_block'))
             .weight(1)
             .quality(1)
             .build()
     )
-    loot.printEntries('minecraft:chests/stronghold_library', 'main')
+    event.loot.printEntries('minecraft:chests/stronghold_library', 'main')
 }
 
-def patchChickenLT() {
-    loot.getTable('minecraft:entities/chicken').removePool('main')
-    loot.getTable('minecraft:entities/chicken').addPool(
-        loot.poolBuilder()
+def patchChickenLT(event) {
+    event.loot.getTable('minecraft:entities/chicken').removePool('main')
+    event.loot.getTable('minecraft:entities/chicken').addPool(
+        event.loot.poolBuilder()
             .name('main')
             .entry(
-                loot.entryBuilder()
+                event.loot.entryBuilder()
                     .item(item('minecraft:diamond'))
                     .function{ stack, random, context ->
                         stack.setCount(10)
@@ -45,13 +45,13 @@ def patchChickenLT() {
     )
 }
 
-def patchZombieLT() {
-    loot.getTable('minecraft:entities/zombie').removePool('main')
-    loot.getTable('minecraft:entities/zombie').addPool(
-        loot.poolBuilder()
+def patchZombieLT(event) {
+    event.loot.getTable('minecraft:entities/zombie').removePool('main')
+    event.loot.getTable('minecraft:entities/zombie').addPool(
+        event.loot.poolBuilder()
             .name('main')
             .entry(
-                loot.entryBuilder()
+                event.loot.entryBuilder()
                     .item(item('minecraft:potato'))
                     .weight(1)
                     .quality(1)
