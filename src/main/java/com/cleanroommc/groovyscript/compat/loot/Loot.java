@@ -20,14 +20,19 @@ import java.util.Map;
 
 public class Loot implements IScriptReloadable {
 
-    public LootTableManager tableManager;
+    public static final LootTable EMPTY_LOOT_TABLE = new LootTable(new LootPool[0]);
     public Map<ResourceLocation, LootTable> tables = new Object2ObjectOpenHashMap<>();
 
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
         tables.clear();
-        tableManager = new LootTableManager(null);
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (server != null) {
+            for (WorldServer world : server.worlds) {
+                world.getLootTableManager().reloadLootTables();
+            }
+        }
     }
 
     @GroovyBlacklist
@@ -41,12 +46,6 @@ public class Loot implements IScriptReloadable {
         }
     }
 
-    @ApiStatus.Internal
-    @GroovyBlacklist
-    public void init() {
-        tableManager = new LootTableManager(null);
-    }
-
     public LootTable getTable(ResourceLocation name) {
         LootTable lootTable = tables.get(name);
         if (lootTable == null) GroovyLog.msg("GroovyScript found 0 LootTable(s) named " + name).post();
@@ -55,14 +54,6 @@ public class Loot implements IScriptReloadable {
 
     public LootTable getTable(String name) {
         return getTable(new ResourceLocation(name));
-    }
-
-    public void removeTable(ResourceLocation name) {
-        tables.put(name, LootTable.EMPTY_LOOT_TABLE);
-    }
-
-    public void removeTable(String name) {
-        tables.put(new ResourceLocation(name), LootTable.EMPTY_LOOT_TABLE);
     }
 
     public LootPoolBuilder poolBuilder() {

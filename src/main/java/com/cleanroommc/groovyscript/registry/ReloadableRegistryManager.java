@@ -67,7 +67,6 @@ public class ReloadableRegistryManager {
     @ApiStatus.Internal
     public static void init() {
         registryDummies.put(IRecipe.class, DummyRecipe::new);
-        VanillaModule.INSTANCE.init();
     }
 
     @ApiStatus.Internal
