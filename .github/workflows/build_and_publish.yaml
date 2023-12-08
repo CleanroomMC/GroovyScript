@@ -132,14 +132,62 @@ jobs:
           fi
 
       - name: Publish Minecraft Mods
-        if: ${{ inputs.publish-cf-mr == true }}
-        uses: ./.github/workflows/publish_to_cf_mr.yaml
+        if: ${{ inputs.publish-cf-mr }}
+        uses: Kir-Antipov/mc-publish@v3.2
         with:
-          version: "${{ inputs.version }}"
-          release-type: "${{ inputs.release-type }}"
+          curseforge-id: 687577
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          modrinth-id: GJaDRTrb
+          modrinth-featured: true
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          files-primary: build/libs/!(*-@(dev|sources|javadoc)).jar
+          files-secondary: build/libs/*-@(dev|sources|javadoc).jar
+          name: ${GITHUB_REPOSITORY#*/}-${{ github.event.inputs.version }}
+          version: ${{ github.event.inputs.version }}
+          version-type: ${{ github.event.inputs.release-type }}
+          changelog-file: build/changelog.md
+          loaders: |
+            forge
+          game-versions: |
+            1.12.2
+          dependencies: |
+            mixin-booter@8.3(required)
+            actually-additions(optional)
+            advanced-mortars(optional)
+            applied-energistics-2(optional)
+            astral-sorcery(optional)
+            avaritia-1-10(optional)
+            blood-magic(optional)
+            botania(optional)
+            chisel(optional)
+            compact-machines(optional)
+            constructs-armory(optional)
+            draconic-evolution(optional)
+            ender-io(optional)
+            evilcraft(optional)
+            extended-crafting(optional)
+            forestry(optional)
+            had-enough-items(optional)
+            ic2-classic(optional)
+            immersive-engineering(optional)
+            industrial-craft(optional)
+            inspirations(optional)
+            integrated-dynamics(optional)
+            mekanism(optional)
+            roots(optional)
+            thaumcraft(optional)
+            thermal-expansion(optional)
+            tinkers-construct(optional)
+            tinkers-complement(optional)
+            woot(optional)
+          java: |
+            8
+          retry-attempts: 2
 
       - name: Publish to maven
-        if: ${{ inputs.publish-maven == true }}
+        if: ${{ inputs.publish-maven }}
         uses: gradle/gradle-build-action@v2
         with:
           arguments: publish
