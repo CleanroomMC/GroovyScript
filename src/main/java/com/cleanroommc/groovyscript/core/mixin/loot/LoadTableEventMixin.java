@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = LootTableManager.class, remap = false)
+@Mixin(value = LootTableManager.class)
 public abstract class LoadTableEventMixin {
 
     @Shadow
