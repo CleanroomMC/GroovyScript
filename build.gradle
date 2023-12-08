@@ -86,13 +86,13 @@ dependencies {
     implementation 'zone.rong:mixinbooter:8.3'
 
     String mixin = modUtils.enableMixins('org.spongepowered:mixin:0.8.3')
-    api (mixin) {
+    api(mixin) {
         transitive = false
     }
     annotationProcessor 'org.ow2.asm:asm-debug-all:5.2'
     annotationProcessor 'com.google.guava:guava:24.1.1-jre'
     annotationProcessor 'com.google.code.gson:gson:2.8.6'
-    annotationProcessor (mixin) {
+    annotationProcessor(mixin) {
         transitive = false
     }
 
@@ -175,12 +175,12 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:common-capabilities-247007:3053017')
         runtimeOnly rfg.deobf('curse.maven:integrated-dynamics-236307:3159505')
     }
-    
+
     compileOnly rfg.deobf('curse.maven:compact-machines-224218:2707509')
     if (project.debug_compact_machines.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:compact-machines-224218:2707509')
     }
-    
+
     compileOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
     if (project.debug_actually_additions.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
@@ -295,12 +295,12 @@ dependencies {
     }
 
     compileOnly 'com.enderio.core:EnderCore:1.12.2-+'
-    compileOnly ('com.enderio:EnderIO:1.12.2-+') {
+    compileOnly('com.enderio:EnderIO:1.12.2-+') {
         transitive = false
     }
     if (project.debug_enderio.toBoolean()) {
         runtimeOnly 'com.enderio.core:EnderCore:1.12.2-+'
-        runtimeOnly ('com.enderio:EnderIO:1.12.2-+') {
+        runtimeOnly('com.enderio:EnderIO:1.12.2-+') {
             transitive = false
         }
     }
@@ -325,7 +325,7 @@ processResources {
     // replace stuff in mcmod.info, nothing else
     filesMatching(['mcmod.info', 'pack.mcmeta']) { fcd ->
         // replace version and mcversion
-        fcd.expand (
+        fcd.expand(
                 'version': project.version,
                 'mcversion': project.minecraft.version
         )
@@ -344,35 +344,37 @@ jar {
         attributes(attribute_map)
     }
     // Add all embedded dependencies into the jar
-    from(provider{ configurations.embed.collect {it.isDirectory() ? it : zipTree(it)} })
+    from(provider { configurations.embed.collect { it.isDirectory() ? it : zipTree(it) } })
 }
 
 idea {
     module { inheritOutputDirs = true }
-    project { settings {
-        runConfigurations {
-            "1. Run Client"(Gradle) {
-                taskNames = ['runClient']
+    project {
+        settings {
+            runConfigurations {
+                "1. Run Client"(Gradle) {
+                    taskNames = ['runClient']
+                }
+                "2. Run Server"(Gradle) {
+                    taskNames = ['runServer']
+                }
+                "3. Run Obfuscated Client"(Gradle) {
+                    taskNames = ['runObfClient']
+                }
+                "4. Run Obfuscated Server"(Gradle) {
+                    taskNames = ['runObfServer']
+                }
             }
-            "2. Run Server"(Gradle) {
-                taskNames = ['runServer']
-            }
-            "3. Run Obfuscated Client"(Gradle) {
-                taskNames = ['runObfClient']
-            }
-            "4. Run Obfuscated Server"(Gradle) {
-                taskNames = ['runObfServer']
+            compiler.javac {
+                afterEvaluate {
+                    javacAdditionalOptions = '-encoding utf8'
+                    moduleJavacAdditionalOptions = [
+                            (project.name + ".main"): tasks.compileJava.options.compilerArgs.collect { '"' + it + '"' }.join(' ')
+                    ]
+                }
             }
         }
-        compiler.javac {
-            afterEvaluate {
-                javacAdditionalOptions = '-encoding utf8'
-                moduleJavacAdditionalOptions = [
-                        (project.name + ".main"): tasks.compileJava.options.compilerArgs.collect { '"' + it + '"' }.join(' ')
-                ]
-            }
-        }
-    }}
+    }
 }
 
 tasks.named("processIdeaSettings").configure {
@@ -380,6 +382,13 @@ tasks.named("processIdeaSettings").configure {
 }
 
 publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId project.archivesBaseName
+        }
+    }
     repositories {
         maven {
             name 'CleanroomMC'
