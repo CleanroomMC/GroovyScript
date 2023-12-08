@@ -132,14 +132,14 @@ jobs:
           fi
 
       - name: Publish Minecraft Mods
-        if: "${{ inputs.publish-cf-mr == 'true' }}"
+        if: ${{ inputs.publish-cf-mr == true }}
         uses: ./.github/workflows/publish_to_cf_mr.yaml
         with:
           version: "${{ inputs.version }}"
           release-type: "${{ inputs.release-type }}"
 
       - name: Publish to maven
-        if: "${{ inputs.publish-maven == 'true' }}"
+        if: ${{ inputs.publish-maven == true }}
         uses: gradle/gradle-build-action@v2
         with:
           arguments: publish
