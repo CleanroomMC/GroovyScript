@@ -132,7 +132,7 @@ jobs:
 
       - name: Publish Minecraft Mods
         if: "${{ inputs.publish-cf-mr == 'true' }}"
-        uses: publish_to_cf_mr.yaml
+        uses: ./.github/workflows/publish_to_cf_mr.yaml
         with:
           version: "${{ inputs.version }}"
           release-type: "${{ inputs.release-type }}"
