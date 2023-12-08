@@ -144,7 +144,7 @@ jobs:
 
           files-primary: build/libs/!(*-@(dev|sources|javadoc)).jar
           files-secondary: build/libs/*-@(dev|sources|javadoc).jar
-          name: ${GITHUB_REPOSITORY#*/}-${{ github.event.inputs.version }}
+          name: "${GITHUB_REPOSITORY#*/}-${{ github.event.inputs.version }}"
           version: ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release-type }}
           changelog-file: build/changelog.md
