@@ -7,6 +7,8 @@ import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconCategory;
 import vazkii.botania.api.lexicon.LexiconEntry;
 
+import java.util.function.Supplier;
+
 public class Botania extends ModPropertyContainer {
 
     public final ElvenTrade elvenTrade = new ElvenTrade();
@@ -52,8 +54,10 @@ public class Botania extends ModPropertyContainer {
         return null;
     }
 
+    // using BotaniaAPI.brewMap::get crashes
+    @SuppressWarnings("Convert2MethodRef")
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("botania", "brew", IGameObjectHandler.wrapStringGetter(BotaniaAPI.brewMap::get, false), BotaniaAPI.fallbackBrew);
+        GameObjectHandlerManager.registerGameObjectHandler("botania", "brew", (IGameObjectHandler<vazkii.botania.api.brew.Brew>) IGameObjectHandler.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false), (Supplier<vazkii.botania.api.brew.Brew>) () -> BotaniaAPI.fallbackBrew);
     }
 }
