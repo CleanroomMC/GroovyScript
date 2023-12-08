@@ -3,7 +3,7 @@
 # Then it generates a log, based on commits.
 # After that builds a jar and uploads it to curseforge/modrinth/GitHub releases
 
-name: Publish mod version
+name: Publish mod version (deprecated)
 
 on:
   workflow_dispatch:
