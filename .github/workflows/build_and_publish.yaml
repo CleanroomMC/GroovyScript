@@ -121,13 +121,14 @@ jobs:
 
       - name: Get Changelog
         run: |
+          mkdir -p build
           RELEASE_URL="https://api.github.com/repos/${{ github.repository }}/releases/tags/v${{ inputs.version }}"
           RELEASE_JSON=$(curl -sSL $RELEASE_URL)
-          CHANGELOG=echo $RELEASE_JSON | jq -r '.body'
+          CHANGELOG=$RELEASE_JSON | jq -r '.body'
           if [ $CHANGELOG == "null" ]; then
-            echo "No changelog found" > "build/changelog.md"
+            echo "No changelog found" > build/changelog.md
           else
-            echo "$CHANGELOG" > "build/changelog.md"
+            echo "$CHANGELOG" > build/changelog.md
           fi
 
       - name: Publish Minecraft Mods
