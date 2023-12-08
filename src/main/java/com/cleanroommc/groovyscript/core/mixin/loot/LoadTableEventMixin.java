@@ -1,26 +1,30 @@
 package com.cleanroommc.groovyscript.core.mixin.loot;
 
-import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.event.LootTablesLoadedEvent;
+import com.google.common.cache.LoadingCache;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableManager;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.common.MinecraftForge;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = ForgeEventFactory.class, remap = false)
+@Mixin(value = LootTableManager.class)
 public abstract class LoadTableEventMixin {
 
-    @Inject(method = "loadLootTable", at = @At("RETURN"), cancellable = true)
-    private static void injection(ResourceLocation name, LootTable table, LootTableManager lootTableManager, CallbackInfoReturnable<LootTable> cir) {
-        if (VanillaModule.loot.tables.containsKey(name)) {
-            cir.setReturnValue(VanillaModule.loot.tables.get(name));
-        } else {
-            VanillaModule.loot.tables.put(name, cir.getReturnValue());
-        }
+    @Shadow
+    @Final
+    private LoadingCache<ResourceLocation, LootTable> registeredLootTables;
+
+    @Inject(method = "reloadLootTables", at = @At("RETURN"))
+    private void injection(CallbackInfo ci) {
+        VanillaModule.loot.tables.putAll(this.registeredLootTables.asMap());
+        MinecraftForge.EVENT_BUS.post(new LootTablesLoadedEvent());
     }
 
 }

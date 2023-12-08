@@ -27,7 +27,7 @@ public class LootPoolBuilder {
     private final List<LootCondition> poolConditions = new ArrayList<>();
     private RandomValueRange rolls = new RandomValueRange(1);
     private RandomValueRange bonusRolls = new RandomValueRange(0);
-    private String tableName;
+    private ResourceLocation tableName;
     private final GroovyLog.Msg out = GroovyLog.msg("Error creating GroovyScript LootPool").warn();
 
     public LootPoolBuilder name(String name) {
@@ -41,12 +41,12 @@ public class LootPoolBuilder {
     }
 
     public LootPoolBuilder table(String table) {
-        this.tableName = table;
+        this.tableName = new ResourceLocation(table);
         return this;
     }
 
     public LootPoolBuilder table(ResourceLocation table) {
-        this.tableName = table.toString();
+        this.tableName = table;
         return this;
     }
 
@@ -121,8 +121,9 @@ public class LootPoolBuilder {
     private boolean validate(boolean validateForRegister) {
         if (name == null || name.isEmpty()) out.add("No name provided").error();
         if (validateForRegister) {
-            if (tableName == null || tableName.isEmpty() || VanillaModule.loot.getTable(tableName) == null) out.add("No valid LootTable specified").error();
-            else if (name != null && !name.isEmpty() && VanillaModule.loot.getTable(tableName) != null && VanillaModule.loot.getTable(tableName).getPool(name) != null) out.add("No valid LootPool specified for table " + tableName).error();
+            if (tableName == null || !VanillaModule.loot.tables.containsKey(tableName)) out.add("No valid LootTable specified").error();
+            else if (name == null || name.isEmpty()) out.add("LootPool must have a name specified with .name()").error();
+            else if (VanillaModule.loot.tables.get(tableName).getPool(name) != null) out.add("Attempted to add duplicate pool " + name + " to " + tableName).error();
         }
         out.postIfNotEmpty();
         return out.getLevel() != Level.ERROR;
@@ -135,7 +136,7 @@ public class LootPoolBuilder {
 
     public void register() {
         if (!validate(true)) return;
-        VanillaModule.loot.getTable(tableName).addPool(
+        VanillaModule.loot.tables.get(tableName).addPool(
                 new LootPool(lootEntries.toArray(new LootEntry[0]), poolConditions.toArray(new LootCondition[0]), rolls, bonusRolls, name)
         );
     }
