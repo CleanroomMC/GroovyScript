@@ -100,7 +100,7 @@ public class ReloadableRegistryManager {
     }
 
     public static <V extends IForgeRegistryEntry<V>> void addRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name, V entry) {
-        ((IReloadableForgeRegistry<V>) registry).registerEntry(entry.setRegistryName(name));
+        ((IReloadableForgeRegistry<V>) registry).groovyScript$registerEntry(entry.setRegistryName(name));
     }
 
     public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, String name) {
@@ -108,11 +108,16 @@ public class ReloadableRegistryManager {
     }
 
     public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name) {
-        ((IReloadableForgeRegistry<V>) registry).removeEntry(name);
+        ((IReloadableForgeRegistry<V>) registry).groovyScript$removeEntry(name);
     }
 
     public static <V extends IForgeRegistryEntry<V>> Supplier<V> getDummySupplier(Class<V> registryClass) {
         return (Supplier<V>) registryDummies.getOrDefault(registryClass, () -> null);
+    }
+
+    public static boolean hasNonDummyRecipe(ResourceLocation rl) {
+        IRecipe recipe = ForgeRegistries.RECIPES.getValue(rl);
+        return recipe != null && recipe.canFit(1000, 1000);
     }
 
     /**
@@ -133,7 +138,7 @@ public class ReloadableRegistryManager {
     }
 
     private static void reloadForgeRegistries() {
-        ((IReloadableForgeRegistry<?>) ForgeRegistries.RECIPES).onReload();
+        ((IReloadableForgeRegistry<?>) ForgeRegistries.RECIPES).groovyScript$onReload();
     }
 
     private static void unfreezeForgeRegistries() {
