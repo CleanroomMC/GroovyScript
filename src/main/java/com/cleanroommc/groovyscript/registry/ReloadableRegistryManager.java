@@ -80,7 +80,9 @@ public class ReloadableRegistryManager {
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
                 .forEach(VirtualizedRegistry::onReload);
-        JeiPlugin.reload();
+        if (ModSupport.JEI.isLoaded()) {
+            JeiPlugin.reload();
+        }
     }
 
     @ApiStatus.Internal
