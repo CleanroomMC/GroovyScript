@@ -13,6 +13,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +44,7 @@ public class GroovyFluid extends Fluid {
 
     @GroovyBlacklist
     @ApiStatus.Internal
+    @SideOnly(Side.CLIENT)
     public static void initTextures(TextureMap map) {
         for (GroovyFluid fluid : fluids) {
             map.registerSprite(fluid.flowing);
@@ -54,6 +57,7 @@ public class GroovyFluid extends Fluid {
 
     @GroovyBlacklist
     @ApiStatus.Internal
+    @SideOnly(Side.CLIENT)
     public static void registerModels() {
         for (BlockFluidBase block : fluidBlocks) {
             ModelLoader.setCustomStateMapper(block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());

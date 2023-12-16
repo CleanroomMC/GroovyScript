@@ -1,14 +1,16 @@
 package com.cleanroommc.groovyscript.core.mixin;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.registry.VirtualizedForgeRegistryEntry;
 import com.google.common.collect.BiMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import org.apache.commons.lang3.tuple.Triple;
+import net.minecraftforge.registries.RegistryManager;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.BitSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -50,105 +53,171 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     @Final
     private BitSet availabilityMap;
 
-    @Unique
-    private Set<Triple<V, Integer, Object>> backups;
-    @Unique
-    private Set<V> scripted;
-    @Unique
-    private Supplier<V> dummySupplier;
+    @Shadow
+    public abstract V remove(ResourceLocation key);
+
+    @Shadow
+    @Final
+    private Class<V> superType;
+    @Shadow
+    @Final
+    private RegistryManager stage;
+    @Unique private Set<VirtualizedForgeRegistryEntry<V>> groovyScript$backups;
+    @Unique private Set<V> groovyScript$scripted;
+    @Unique private Supplier<V> groovyScript$dummySupplier;
     @Unique
     @Final
-    private final Set<ResourceLocation> dummies = new ObjectOpenHashSet<>();
+    private final Set<ResourceLocation> groovyScript$dummies = new ObjectOpenHashSet<>();
+
+    @Unique private IReloadableForgeRegistry<V> groovyScript$vanilla;
+    @Unique private IReloadableForgeRegistry<V> groovyScript$frozen;
 
     @Override
-    public V registerEntry(V registryEntry) {
+    public V groovyScript$registerEntry(V registryEntry) {
+        if (stage != RegistryManager.ACTIVE) throw new IllegalStateException("Do not modify VANILLA or FROZEN registry directly!");
         if (registryEntry != null) {
             ResourceLocation rl = registryEntry.getRegistryName();
             if (rl != null) {
-                groovyscript$removeDummy(rl);
+                groovyScript$removeDummy(rl, DummyContext.ADDITION);
             }
         }
-        V newEntry = getValue(add(-1, registryEntry, null));
+        int id = add(-1, registryEntry, null);
+        V newEntry = getValue(id);
         if (newEntry == registryEntry) {
-            if (this.scripted == null) {
-                this.scripted = new ObjectOpenHashSet<>();
+            if (this.groovyScript$scripted == null) {
+                this.groovyScript$scripted = new ObjectOpenHashSet<>();
             }
-            this.scripted.add(registryEntry);
+            this.groovyScript$scripted.add(registryEntry);
+            Object owner = this.owners.inverse().get(registryEntry);
+            groovyScript$initReg();
+            this.groovyScript$vanilla.groovyScript$forceAdd(registryEntry, id, owner);
+            this.groovyScript$frozen.groovyScript$forceAdd(registryEntry, id, owner);
         }
         return newEntry;
     }
 
     @Override
-    public void removeEntry(ResourceLocation name) {
+    public void groovyScript$removeEntry(ResourceLocation name) {
+        if (stage != RegistryManager.ACTIVE) throw new IllegalStateException("Do not modify VANILLA or FROZEN registry directly!");
+        if (this.groovyScript$dummies.contains(name)) return;
         V entry = this.names.remove(name);
         if (entry != null) {
-            if (this.backups == null) {
-                this.backups = new ObjectOpenHashSet<>();
+            if (this.groovyScript$backups == null) {
+                this.groovyScript$backups = new ObjectOpenHashSet<>();
             }
             Integer id = this.ids.inverse().remove(entry);
             Object ownerOverride = this.owners.inverse().remove(entry);
-            this.backups.add(Triple.of(entry, id, ownerOverride));
-            groovyscript$putDummy(entry, name, id, ownerOverride);
+            if (id == null) throw new IllegalStateException();
+            if (this.groovyScript$scripted == null || !this.groovyScript$scripted.contains(entry)) {
+                this.groovyScript$backups.add(new VirtualizedForgeRegistryEntry<>(entry, id, ownerOverride));
+            }
+            V dummy = groovyScript$putDummy(entry, name, id, ownerOverride, DummyContext.REMOVAL);
+            groovyScript$initReg();
+            this.groovyScript$vanilla.groovyScript$putDummy(dummy, entry, name, id, ownerOverride);
+            this.groovyScript$frozen.groovyScript$putDummy(dummy, entry, name, id, ownerOverride);
         }
     }
 
     @Override
-    public void onReload() {
+    public void groovyScript$onReload() {
+        if (stage != RegistryManager.ACTIVE) throw new IllegalStateException("Do not modify VANILLA or FROZEN registry directly!");
         unfreeze();
-        if (this.scripted != null) {
-            for (V entry : this.scripted) {
+        groovyScript$initReg();
+        if (this.groovyScript$scripted != null) {
+            for (V entry : this.groovyScript$scripted) {
                 ResourceLocation rl = this.names.inverse().remove(entry);
                 Integer id = this.ids.inverse().remove(entry);
                 Object owner = this.owners.inverse().remove(entry);
-                groovyscript$putDummy(entry, rl, id, owner);
+                if (id == null || rl == null) continue; // can happen, but no one knows why
+                V dummy = groovyScript$putDummy(entry, rl, id, owner, DummyContext.RELOADING);
+                this.groovyScript$vanilla.groovyScript$putDummy(dummy, entry, rl, id, owner);
+                this.groovyScript$frozen.groovyScript$putDummy(dummy, entry, rl, id, owner);
             }
-            this.scripted = null;
+            this.groovyScript$scripted = null;
         }
-        if (this.backups != null) {
-            for (Triple<V, Integer, Object> entry : this.backups) {
-                this.names.put(entry.getLeft().getRegistryName(), entry.getLeft());
-                this.ids.put(entry.getMiddle(), entry.getLeft());
-                this.owners.put(entry.getRight(), entry.getLeft());
-                this.dummies.remove(entry.getLeft().getRegistryName());
+        if (this.groovyScript$backups != null) {
+            for (VirtualizedForgeRegistryEntry<V> entry : this.groovyScript$backups) {
+                this.names.put(entry.getValue().getRegistryName(), entry.getValue());
+                this.ids.put(entry.getId(), entry.getValue());
+                this.owners.put(entry.getOverride(), entry.getValue());
+                this.groovyScript$dummies.remove(entry.getValue().getRegistryName());
+                this.groovyScript$vanilla.groovyScript$forceAdd(entry.getValue(), entry.getId(), entry.getOverride());
+                this.groovyScript$frozen.groovyScript$forceAdd(entry.getValue(), entry.getId(), entry.getOverride());
             }
-            this.backups = null;
+            this.groovyScript$backups = null;
         }
     }
 
-    public void groovyscript$putDummy(V entry, ResourceLocation rl, Integer id, Object owner) {
-        if (entry == null || rl == null || id == null) return;
-        V dummy = groovyscript$getDummy(rl);
+    @Unique
+    public V groovyScript$putDummy(V entry, ResourceLocation rl, Integer id, Object owner, DummyContext context) {
+        if (entry == null || rl == null || id == null) {
+            GroovyLog.get().errorMC("Error putting dummy in forge registry for {} during {} at stage {}. Are null: entry-{}, name-{}, id-{}",
+                                    superType.getSimpleName(), context.name().toLowerCase(Locale.ROOT), stage.getName(), entry == null, rl == null, id == null);
+            return null;
+        }
+        V dummy = groovyScript$getDummy(rl);
+        groovyScript$putDummy(dummy, entry, rl, id, owner);
+        return dummy;
+    }
+
+    @Override
+    public void groovyScript$putDummy(V dummy, V entry, ResourceLocation rl, int id, Object owner) {
         if (dummy != null) {
             this.names.put(rl, dummy);
             this.ids.put(id, dummy);
             if (owner != null) {
                 this.owners.put(owner, dummy);
             }
-            this.dummies.add(rl);
+            this.groovyScript$dummies.add(rl);
         }
     }
 
-    public void groovyscript$removeDummy(ResourceLocation rl) {
+    @Unique
+    public void groovyScript$removeDummy(ResourceLocation rl, DummyContext context) {
         V dummy = this.names.remove(rl);
         if (dummy != null) {
-            int id = this.ids.inverse().remove(dummy);
+            Integer id = this.ids.inverse().remove(dummy);
+            if (id == null) GroovyLog.get().errorMC("No id found while removing a dummy with name '{}' from {} registry at stage {}.",
+                                                    rl, superType.getSimpleName(), stage.getName());
+            else this.availabilityMap.clear(id);
             this.owners.inverse().remove(dummy);
-            this.availabilityMap.clear(id);
         }
-        this.dummies.remove(rl);
+        this.groovyScript$dummies.remove(rl);
     }
 
+    @Unique
     @Nullable
-    public V groovyscript$getDummy(ResourceLocation rl) {
+    public V groovyScript$getDummy(ResourceLocation rl) {
         if (dummyFactory != null) {
             return dummyFactory.createDummy(rl);
         }
-        if (dummySupplier == null) {
-            dummySupplier = ReloadableRegistryManager.getDummySupplier(getRegistrySuperType());
+        if (groovyScript$dummySupplier == null) {
+            groovyScript$dummySupplier = ReloadableRegistryManager.getDummySupplier(getRegistrySuperType());
         }
-        V value = dummySupplier.get();
+        V value = groovyScript$dummySupplier.get();
         if (value != null) value.setRegistryName(rl);
         return value;
+    }
+
+    @Override
+    public void groovyScript$forceAdd(V entry, int id, Object owner) {
+        names.put(entry.getRegistryName(), entry);
+        ids.put(id, entry);
+        if (owner != null) owners.put(owner, entry);
+        availabilityMap.set(id);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Unique
+    private void groovyScript$initReg() {
+        if (groovyScript$frozen == null || groovyScript$frozen.groovyScript$isDummy()) {
+            groovyScript$frozen = (IReloadableForgeRegistry<V>) RegistryManager.FROZEN.getRegistry(superType);
+            if (groovyScript$frozen == null) groovyScript$frozen = new DummyRFG<>();
+        }
+        if (groovyScript$vanilla == null || groovyScript$vanilla.groovyScript$isDummy()) {
+            groovyScript$vanilla = (IReloadableForgeRegistry<V>) RegistryManager.VANILLA.getRegistry(superType);
+            if (groovyScript$vanilla == null) groovyScript$vanilla = new DummyRFG<>();
+        }
     }
 }
 

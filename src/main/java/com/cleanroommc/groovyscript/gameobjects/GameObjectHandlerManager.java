@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -65,6 +66,7 @@ public class GameObjectHandlerManager {
         registerGameObjectHandler("profession", IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS));
         registerGameObjectHandler("creativeTab", GameObjectHandlers::parseCreativeTab);
         registerGameObjectHandler("textformat", GameObjectHandlers::parseTextFormatting);
+        registerGameObjectHandler("nbt", GameObjectHandlers::parseNBT);
     }
 
     /**

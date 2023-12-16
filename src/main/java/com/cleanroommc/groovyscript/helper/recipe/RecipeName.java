@@ -20,6 +20,6 @@ public class RecipeName {
     }
 
     public static ResourceLocation generateRl(String prefix) {
-        return new ResourceLocation(GroovyScript.getRunConfig().getPackId(), prefix + Integer.toHexString(nextId--));
+        return new ResourceLocation(GroovyScript.getRunConfig().getPackId(), generate(prefix));
     }
 }

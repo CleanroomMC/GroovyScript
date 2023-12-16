@@ -10,10 +10,17 @@
     "preInit": [
       "preInit/"
     ],
-    "init": [
-    ],
+    "init": [],
     "postInit": [
       "postInit/"
     ]
+  },
+  "packmode": {
+    "values": [
+      "normal",
+      "hard"
+    ],
+    "default": "normal",
+    "integratePackmodeMod": false
   }
 }

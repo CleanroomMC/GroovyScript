@@ -19,6 +19,11 @@ groovyscript.recipe.piston_push.min_level=Min harvest level: %d
 groovyscript.recipe.chance_produce=§2%s§7 chance to produce output
 groovyscript.recipe.chance_consume=§2%s§7 chance to get consumed
 
+groovyscript.packmode.normal.name=Normal
+groovyscript.packmode.normal.description=A normal pack mode. Nothing special.
+groovyscript.packmode.hard.name=Hard
+groovyscript.packmode.hard.description=Hard mode. Everything requires at least 50 diamonds and nether stars.
+
 
 # Wiki
 groovyscript.wiki.categories=Categories

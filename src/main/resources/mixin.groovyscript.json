@@ -23,12 +23,14 @@
     "groovy.CompUnitClassGenMixin",
     "groovy.Java8Mixin",
     "groovy.MetaClassImplMixin",
+    "loot.LoadTableEventMixin",
     "loot.LootPoolAccessor",
     "loot.LootTableAccessor",
     "loot.LootTableMixin"
   ],
   "client": [
     "DefaultResourcePackAccessor",
+    "GuiCreateWorldMixin",
     "GuiScreenMixin"
   ]
 }

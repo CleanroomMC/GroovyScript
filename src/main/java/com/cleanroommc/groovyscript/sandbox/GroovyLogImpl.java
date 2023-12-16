@@ -39,7 +39,8 @@ public class GroovyLogImpl implements GroovyLog {
     private List<String> errors = new ArrayList<>();
 
     private GroovyLogImpl() {
-        File logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() + File.separator + getLogFileName());
+        File logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() +
+                                File.separator + "logs" + File.separator + getLogFileName());
         logFilePath = logFile.toPath();
         PrintWriter tempWriter;
         try {

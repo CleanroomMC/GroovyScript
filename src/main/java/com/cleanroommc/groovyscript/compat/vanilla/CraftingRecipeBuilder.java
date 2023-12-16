@@ -120,7 +120,7 @@ public abstract class CraftingRecipeBuilder {
     @GroovyBlacklist
     public void validateName() {
         if (name == null) {
-            name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate(getRecipeNamePrefix()));
+            name = RecipeName.generateRl(getRecipeNamePrefix());
         }
     }
 
@@ -221,11 +221,12 @@ public abstract class CraftingRecipeBuilder {
         @Override
         @RecipeBuilderRegistrationMethod
         public IRecipe register() {
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shaped Crafting recipe").error()
+            validateName();
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shaped Crafting recipe '{}'", this.name).error()
                     .add((keyBasedMatrix == null || keyBasedMatrix.length == 0) && (ingredientMatrix == null || ingredientMatrix.isEmpty()), () -> "No matrix was defined")
-                    .add(keyBasedMatrix != null && ingredientMatrix != null, () -> "A key based matrix AND a ingredient based matrix was defined. This is not allowed!");
+                    .add(keyBasedMatrix != null && ingredientMatrix != null, () -> "A key based matrix AND a ingredient based matrix was defined. This is not allowed!")
+                    .add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty");
             if (msg.postIfNotEmpty()) return null;
-            msg.add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty");
 
             ShapedCraftingRecipe recipe = null;
             if (keyBasedMatrix != null) {
@@ -236,7 +237,8 @@ public abstract class CraftingRecipeBuilder {
 
             if (recipe != null) {
                 handleReplace();
-                validateName();
+                msg.add(ReloadableRegistryManager.hasNonDummyRecipe(this.name), () -> "a recipe with that name already exists! Either replace or remove the recipe first");
+                if (msg.postIfNotEmpty()) return null;
                 ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             }
 
@@ -283,9 +285,10 @@ public abstract class CraftingRecipeBuilder {
         @Override
         @RecipeBuilderRegistrationMethod
         public IRecipe register() {
+            validateName();
             IngredientHelper.trim(ingredients);
-            if (GroovyLog.msg("Error adding Minecraft Shapeless Crafting recipe")
-                    .add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty")
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shapeless Crafting recipe '{}'", this.name);
+            if (msg.add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty")
                     .add(ingredients.isEmpty(), () -> "inputs must not be empty")
                     .add(ingredients.size() > width * height, () -> "maximum inputs are " + (width * height) + " but found " + ingredients.size())
                     .error()
@@ -293,8 +296,9 @@ public abstract class CraftingRecipeBuilder {
                 return null;
             }
             handleReplace();
+            msg.add(ReloadableRegistryManager.hasNonDummyRecipe(this.name), () -> "a recipe with that name already exists! Either replace or remove the recipe first");
+            if (msg.postIfNotEmpty()) return null;
             ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), ingredients, recipeFunction, recipeAction);
-            validateName();
             ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             return recipe;
         }

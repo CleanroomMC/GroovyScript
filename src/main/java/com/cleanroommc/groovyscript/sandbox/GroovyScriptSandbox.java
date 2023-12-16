@@ -11,6 +11,7 @@ import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
+import groovy.lang.GroovyRuntimeException;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
@@ -89,11 +90,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
             super.load();
-        } catch (IOException | ScriptException | ResourceException e) {
-            GroovyLog.get().errorMC("An Exception occurred trying to run groovy!");
+        } catch (IOException | ScriptException | ResourceException | GroovyRuntimeException e) {
+            GroovyLog.get().errorMC("An exception occurred while trying to run groovy code!");
             GroovyScript.LOGGER.throwing(e);
-        } catch (Exception e) {
-            GroovyLog.get().exception(e);
+        } catch (Throwable t) {
+            GroovyLog.get().exception(t);
         } finally {
             this.currentLoadStage = null;
         }

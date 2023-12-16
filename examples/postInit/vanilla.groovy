@@ -150,7 +150,7 @@ crafting.shapedBuilder()
 crafting.remove('minecraft:mossy_stonebrick') // Remove the entry with the recipe ID
 crafting.remove(resource('minecraft:stonebrick'))
 crafting.removeByOutput(item('minecraft:gold_ingot')) // Remove all recipes with the output
-crafting.removeByInput(item('minecraft:iron_ingot')) // Remove all recipes containing the ingredient as an input
+//crafting.removeByInput(item('minecraft:iron_ingot')) // Remove all recipes containing the ingredient as an input
 //crafting.removeAll()
 
 

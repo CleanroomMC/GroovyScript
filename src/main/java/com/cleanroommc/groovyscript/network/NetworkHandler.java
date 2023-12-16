@@ -21,7 +21,7 @@ public class NetworkHandler {
     private static int packetId = 0;
 
     public static void init() {
-        registerS2C(SReloadJei.class);
+        registerS2C(SReloadScripts.class);
         registerS2C(SCopy.class);
         registerC2S(CReload.class);
     }
