@@ -70,7 +70,7 @@ import java.util.Random;
 @Mod(modid = GroovyScript.ID,
      name = GroovyScript.NAME,
      version = GroovyScript.VERSION,
-     dependencies = "after:universaltweaks@[1.8.0,);",
+     dependencies = "after:mixinbooter@[8.0,);",
      guiFactory = "com.cleanroommc.groovyscript.DisabledConfigGui")
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
