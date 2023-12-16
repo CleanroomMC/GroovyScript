@@ -74,6 +74,7 @@ jobs:
               echo "publish-gh=${{ inputs.publish-gh }}" >> $GITHUB_ENV
             fi
           fi
+          echo "file_name=${GITHUB_REPOSITORY#*/}-${{ github.event.inputs.version }}" >> $GITHUB_ENV
 
       - name: Set version
         if: env.UPDATED == 'false' # only change new version if it's not already updated
@@ -144,7 +145,7 @@ jobs:
 
           files-primary: build/libs/!(*-@(dev|sources|javadoc)).jar
           files-secondary: build/libs/*-@(dev|sources|javadoc).jar
-          name: "${GITHUB_REPOSITORY#*/}-${{ github.event.inputs.version }}"
+          name: $file_name
           version: ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release-type }}
           changelog-file: build/changelog.md
