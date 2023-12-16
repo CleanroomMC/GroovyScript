@@ -161,13 +161,13 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new SimpleCommand("generateWiki", (server, sender, args) -> {
             Documentation.generateWiki();
             sender.sendMessage(new TextComponentString("Generated a local version of the Groovyscript wiki has been generated to the ")
-                                       .appendSibling(getTextForFile("Wiki Folder", Documentation.WIKI.toPath(), new TextComponentString("Click to open the generated GroovyScript wiki folder"))));
+                                       .appendSibling(getTextForFile("Wiki Folder", Documentation.WIKI.toPath().toString(), new TextComponentString("Click to open the generated GroovyScript wiki folder"))));
         }, "generateDoc", "generateDocs", "generateDocumentation"));
 
         addSubcommand(new SimpleCommand("generateExamples", (server, sender, args) -> {
             Documentation.generateExamples();
             sender.sendMessage(new TextComponentString("Generated examples for the enabled Groovyscript compat to the ")
-                                       .appendSibling(getTextForFile("Examples Folder", Documentation.EXAMPLES.toPath(), new TextComponentString("Click to open the Groovyscript examples folder"))));
+                                       .appendSibling(getTextForFile("Examples Folder", Documentation.EXAMPLES.toPath().toString(), new TextComponentString("Click to open the Groovyscript examples folder"))));
         }));
 
         addSubcommand(new SimpleCommand("creativeTabs", (server, sender, args) -> {
