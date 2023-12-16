@@ -11,7 +11,6 @@ import net.minecraft.world.storage.loot.LootContext;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
-import java.util.Random;
 
 public class PerkTreeConfig extends VirtualizedRegistry<Closure<Long>> {
 
@@ -19,7 +18,7 @@ public class PerkTreeConfig extends VirtualizedRegistry<Closure<Long>> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        this.setXpFunction(null);
+        this.xpFunction = null;
         this.setLevelCap(30);
     }
 
@@ -30,12 +29,15 @@ public class PerkTreeConfig extends VirtualizedRegistry<Closure<Long>> {
             GroovyLog.msg("Warning: Astral Perk xp closures must take the following parameters (int levelNumber, long previousLevelXp)").debug().post();
         }
         this.xpFunction = func;
-        ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).getLevelMap().clear();
-        ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).generateLevelMap();
+        resetLevelMap();
     }
 
     public void setLevelCap(int cap) {
         PerkLevelManagerAccessor.setLevelCap(cap);
+        resetLevelMap();
+    }
+
+    private void resetLevelMap() {
         ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).getLevelMap().clear();
         ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).generateLevelMap();
     }
