@@ -9,7 +9,6 @@ import java.util.regex.Matcher;
 
 public class CodeBlockBuilder {
 
-
     private final List<String> lines = new ArrayList<>();
     private final List<String> annotations = new ArrayList<>();
     private final List<String> highlight = new ArrayList<>();

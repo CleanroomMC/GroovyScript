@@ -1,9 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
+import net.minecraftforge.fml.common.Loader;
+
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-import com.google.common.collect.Sets;
-import net.minecraftforge.fml.common.Loader;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -36,9 +37,9 @@ class InternalModContainer<T extends ModPropertyContainer> extends GroovyContain
         this.modName = modName;
         this.modProperty = Suppliers.memoize(modProperty);
         this.loaded = Loader.isModLoaded(modId);
-        Set<String> aliasSet = Sets.newHashSet(aliases);
+        Set<String> aliasSet = new ObjectOpenHashSet<>(aliases);
         aliasSet.add(modId);
-        this.aliases = Collections.unmodifiableCollection(aliasSet);
+        this.aliases = Collections.unmodifiableSet(aliasSet);
         ModSupport.INSTANCE.registerContainer(this);
     }
 

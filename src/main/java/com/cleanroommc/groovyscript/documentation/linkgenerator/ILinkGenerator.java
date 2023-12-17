@@ -6,7 +6,6 @@ package com.cleanroommc.groovyscript.documentation.linkgenerator;
  */
 public interface ILinkGenerator {
 
-
     String id();
 
     default String extension() {
@@ -14,5 +13,4 @@ public interface ILinkGenerator {
     }
 
     String convert(String location);
-
 }

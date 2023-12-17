@@ -3,7 +3,9 @@ package com.cleanroommc.groovyscript.documentation;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.ImmutableMap;
+import it.unimi.dsi.fastutil.chars.Char2CharArrayMap;
+import it.unimi.dsi.fastutil.chars.Char2CharMap;
+
 import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -20,10 +22,11 @@ import java.util.stream.Stream;
 
 public class Builder {
 
-    private static final Map<Character, Character> commaSeparatedParts = ImmutableMap.of(
-            ']', '[',
-            '\'', '\''
-    );
+    private static final Char2CharMap commaSeparatedParts = new Char2CharArrayMap() {{
+            put(']','[');
+            put('\'', '\'');
+            defaultReturnValue(Character.MIN_VALUE);
+    }};
 
     private final String reference;
     private final Method builderMethod;
@@ -167,8 +170,8 @@ public class Builder {
             else if (!req.isEmpty() && current == req.get(req.size() - 1)) {
                 req.remove(req.size() - 1);
             } else if (current == ',' && index > 0) {
-                Character nextChar = commaSeparatedParts.get(content.charAt(index - 1));
-                if (nextChar != null && (content.charAt(index + 1) == nextChar || content.charAt(index + 2) == nextChar)) {
+                char nextChar = commaSeparatedParts.get(content.charAt(index - 1));
+                if (nextChar != Character.MIN_VALUE && (content.charAt(index + 1) == nextChar || content.charAt(index + 2) == nextChar)) {
                     int point = content.indexOf(nextChar, index + 1);
                     parts.add(content.substring(start, point));
                     start = point;
@@ -268,7 +271,15 @@ public class Builder {
 
         out.append(reference).append(".").append(builderMethod.getName()).append("()").append("\n");
 
-        List<String> parts = generateParts(example.value());
+        out.append(String.join("", getOutputs(generateParts(example.value()))));
+
+        if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName())).append("\n");
+
+        return out.toString();
+    }
+
+    @NotNull
+    private static List<String> getOutputs(List<String> parts) {
         List<String> output = new ArrayList<>();
         for (int i = 0; i < parts.size(); i++) {
             String part = parts.get(i);
@@ -281,11 +292,7 @@ public class Builder {
                 output.add(StringUtils.repeat(" ", indent) + part.trim() + "\n");
             }
         }
-        out.append(String.join("", output));
-
-        if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName())).append("\n");
-
-        return out.toString();
+        return output;
     }
 
 
