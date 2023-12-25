@@ -92,7 +92,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             super.load();
         } catch (IOException | ScriptException | ResourceException | GroovyRuntimeException e) {
             GroovyLog.get().errorMC("An exception occurred while trying to run groovy code!");
-            GroovyScript.LOGGER.throwing(e);
+            GroovyLog.get().exception(e);
         } catch (Throwable t) {
             GroovyLog.get().exception(t);
         } finally {
