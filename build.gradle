@@ -907,6 +907,8 @@ if (cfApiKey.isPresent() || deploymentDebug.toBoolean()) {
                     }
                     String[] parts = dep.split(':')
                     String type = parts[0], slug = parts[1]
+                    def types = ['req': 'requiredDependency', 'opt': 'optionalDependency', 'embed': 'embeddedLibrary', 'incomp': 'incompatible', 'fail': 'incompatible']
+                    if (types.containsKey(type)) type = types[type]
                     if (!(type in ['requiredDependency', 'embeddedLibrary', 'optionalDependency', 'tool', 'incompatible'])) {
                         throw new Exception('Invalid Curseforge dependency type: ' + type)
                     }
@@ -949,7 +951,7 @@ if (modrinthApiKey.isPresent() || deploymentDebug.toBoolean()) {
             }
             String[] parts = dep.split(':')
             String[] qual = parts[0].split('-')
-            addModrinthDep(qual[0], qual[1], parts[1])
+            addModrinthDep(qual[0], qual.length == 0 ? 'project' : qual[1], parts[1])
         }
     }
     tasks.modrinth.dependsOn(build)
@@ -958,9 +960,13 @@ if (modrinthApiKey.isPresent() || deploymentDebug.toBoolean()) {
 
 def addModrinthDep(String scope, String type, String name) {
     com.modrinth.minotaur.dependencies.Dependency dep
+    def types = ['req': 'required', 'opt': 'optional', 'embed': 'embedded', 'incomp': 'incompatible', 'fail': 'incompatible']
+    if (types.containsKey(scope)) scope = types[scope]
     if (!(scope in ['required', 'optional', 'incompatible', 'embedded'])) {
         throw new Exception('Invalid modrinth dependency scope: ' + scope)
     }
+    types = ['proj': 'project', '': 'project', 'p': 'project', 'ver': 'version', 'v': 'version']
+    if (types.containsKey(type)) type = types[type]
     switch (type) {
         case 'project':
             dep = new ModDependency(name, scope)
