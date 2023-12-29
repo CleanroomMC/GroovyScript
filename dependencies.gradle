@@ -24,8 +24,6 @@
 dependencies {
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 
-    implementation 'curse.maven:jei-238222:3040523'
-
     compileOnly rfg.deobf('curse.maven:packmode-278398:2567799')
     if (project.debug_packmode.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:packmode-278398:2567799')

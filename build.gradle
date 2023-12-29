@@ -362,6 +362,9 @@ minecraft {
                 '-Dlegacy.debugClassLoadingSave=true'
         ])
     }
+    if (project.debug_use_examples_folder.toBoolean()) {
+        extraRunJvmArguments.add('-Dgroovyscript.use_examples_folder=true')
+    }
 }
 
 if (coreModClass) {
