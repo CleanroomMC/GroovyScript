@@ -75,7 +75,7 @@ import java.util.Random;
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
 
-    public static final String ID = Tags.ID;
+    public static final String ID = Tags.MODID;
     public static final String NAME = "GroovyScript";
     public static final String VERSION = Tags.VERSION;
 
