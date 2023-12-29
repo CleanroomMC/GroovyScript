@@ -90,8 +90,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
             super.load();
-        } catch (IOException | ScriptException | ResourceException | GroovyRuntimeException e) {
-            GroovyLog.get().errorMC("An exception occurred while trying to run groovy code!");
+        } catch (IOException | ScriptException | ResourceException e) {
+            GroovyLog.get().errorMC("An exception occurred while trying to run groovy code! This is might be a internal groovy issue.");
             GroovyLog.get().exception(e);
         } catch (Throwable t) {
             GroovyLog.get().exception(t);

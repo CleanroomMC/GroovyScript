@@ -254,7 +254,7 @@ public class GroovyLogImpl implements GroovyLog {
                 writeLogLine("\t\tat " + line);
             }
         }
-        throwable.printStackTrace();
+        GroovyScript.LOGGER.throwing(throwable);
     }
 
     private List<String> prepareStackTrace(StackTraceElement[] stackTrace) {
