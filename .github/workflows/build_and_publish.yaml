@@ -155,7 +155,7 @@ jobs:
         env:
           MODRINTH_API_KEY: ${{ secrets.MODRINTH_TOKEN }}
           CHANGELOG_LOCATION: ${{ env.CHANGELOG_LOCATION }}
-          RELEASE_TYPE: ${{ inputs.release-type }}"
+          RELEASE_TYPE: ${{ inputs.release-type }}
         with:
           arguments: 'modrinth'
           generate-job-summary: false
