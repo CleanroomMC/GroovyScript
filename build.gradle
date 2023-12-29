@@ -954,7 +954,7 @@ if (modrinthApiKey.isPresent() || deploymentDebug.toBoolean()) {
             }
             String[] parts = dep.split(':')
             String[] qual = parts[0].split('-')
-            addModrinthDep(qual[0], qual.length == 0 ? 'project' : qual[1], parts[1])
+            addModrinthDep(qual[0], qual.length > 1 ? qual[1] : 'project', parts[1])
         }
     }
     tasks.modrinth.dependsOn(build)

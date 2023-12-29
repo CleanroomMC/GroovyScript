@@ -57,6 +57,7 @@ jobs:
         id: read_version
         run: |
           mod_version=$(grep "modVersion" gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
+          echo "Current mod version: ${{mod_version}}"
           if [ "$mod_version" == "${{inputs.version}}" ]; then
             echo "UPDATED=true" >> $GITHUB_ENV
           else
