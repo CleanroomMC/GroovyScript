@@ -232,7 +232,7 @@ public abstract class GroovySandbox {
         }
     }
 
-    private Class<?> loadScriptClass(GroovyScriptEngine engine, File file) {
+    protected Class<?> loadScriptClass(GroovyScriptEngine engine, File file) {
         Class<?> scriptClass = null;
         try {
             try {

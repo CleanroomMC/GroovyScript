@@ -107,7 +107,7 @@ public class GroovyScript {
         GroovyDeobfMapper.init();
         ReloadableRegistryManager.init();
         try {
-            sandbox = new GroovyScriptSandbox(scriptPath.toURI().toURL());
+            sandbox = new GroovyScriptSandbox(scriptPath);
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Error initializing sandbox!");
         }
