@@ -357,7 +357,7 @@ public class GroovyLogImpl implements GroovyLog {
         }
 
         public Msg info() {
-            return level(Level.ERROR);
+            return level(Level.INFO);
         }
 
         public Msg debug() {
