@@ -39,7 +39,12 @@ public enum GroovyEventManager {
             GroovyLog.get().error("Event listeners' only parameter should be the Event class you are trying to listen to.");
             return;
         }
-        EventListener listener = new EventListener(eventBusType, eventPriority, eventListener);
+        listen(eventPriority, eventBusType, (Class<? extends Event>) eventClass, eventListener);
+    }
+
+    @GroovyBlacklist
+    public void listen(EventPriority priority, EventBusType eventBusType, Class<? extends Event> eventClass, Closure<?> eventListener) {
+        EventListener listener = new EventListener(eventBusType, priority, eventClass, eventListener);
         LoadStage loadStage = GroovyScript.getSandbox().getCurrentLoader();
         if (loadStage != null && loadStage.isReloadable()) {
             this.listeners.add(listener);
@@ -70,6 +75,10 @@ public enum GroovyEventManager {
         private IEventListener wrappedListener = this;
 
         private EventListener(EventBusType busType, EventPriority priority, Closure<?> listener) {
+            this(busType, priority, listener.getParameterTypes()[0], listener);
+        }
+
+        private EventListener(EventBusType busType, EventPriority priority, Class<?> eventClass, Closure<?> listener) {
             switch (busType) {
                 case ORE_GENERATION:
                     this.eventBus = MinecraftForge.ORE_GEN_BUS;
@@ -82,11 +91,10 @@ public enum GroovyEventManager {
                     break;
             }
             this.listener = listener;
-            this.register(priority);
+            this.register(priority, eventClass);
         }
 
-        private void register(EventPriority priority) {
-            Class<?> eventClass = listener.getParameterTypes()[0];
+        private void register(EventPriority priority, Class<?> eventClass) {
             if (IContextSetter.class.isAssignableFrom(eventClass)) {
                 final ModContainer owner = Loader.instance().activeModContainer();
                 this.wrappedListener = event -> {

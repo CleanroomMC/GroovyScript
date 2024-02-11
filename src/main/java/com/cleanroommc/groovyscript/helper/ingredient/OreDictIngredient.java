@@ -2,10 +2,12 @@ package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
-import com.google.common.collect.Iterators;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
+
+import com.google.common.collect.Iterators;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -16,7 +18,6 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
     private final String oreDict;
     private int count = 1;
 
-    // TODO wildcards like "ingot*"
     public OreDictIngredient(String oreDict) {
         this.oreDict = oreDict;
     }
