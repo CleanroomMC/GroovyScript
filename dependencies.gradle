@@ -238,4 +238,8 @@ dependencies {
 
 minecraft {
     injectedTags.put 'GROOVY_VERSION', groovy_version
+
+    if (project.debug_use_examples_folder.toBoolean()) {
+        extraRunJvmArguments.add('-Dgroovyscript.use_examples_folder=true')
+    }
 }
