@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.core.GroovyScriptCore;
 import com.google.common.eventbus.EventBus;
 import net.minecraftforge.fml.common.DummyModContainer;
 import net.minecraftforge.fml.common.LoadController;
@@ -10,17 +11,14 @@ import java.io.File;
 
 public class ScriptModContainer extends DummyModContainer {
 
-    private final File source;
-
     public ScriptModContainer() {
         super(RunConfig.modMetadata);
-        this.source = (File) FMLInjectionData.data()[6];
-        GroovyScript.initializeRunConfig(this.source);
+        GroovyScript.initializeRunConfig((File) FMLInjectionData.data()[6]);
     }
 
     @Override
     public File getSource() {
-        return source;
+        return GroovyScriptCore.source;
     }
 
     @Override
