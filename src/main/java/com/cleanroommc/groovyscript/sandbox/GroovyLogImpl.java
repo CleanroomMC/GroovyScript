@@ -288,6 +288,17 @@ public class GroovyLogImpl implements GroovyLog {
             ModContainer mod = Loader.instance().activeModContainer();
             return mod != null ? mod.getModId() : GroovyScript.ID;
         }
+        if (isDebug()) { // Find line number when debug is on
+            for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+                if (element.getFileName() == null) {
+                    continue;
+                }
+                if (element.getFileName().endsWith(".groovy")) {
+                    source += (":" + element.getLineNumber());
+                    break;
+                }
+            }
+        }
         return source;
     }
 
