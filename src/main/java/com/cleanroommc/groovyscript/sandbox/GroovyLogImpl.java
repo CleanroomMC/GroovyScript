@@ -293,7 +293,7 @@ public class GroovyLogImpl implements GroovyLog {
                 if (element.getFileName() == null) {
                     continue;
                 }
-                if (element.getFileName().endsWith(".groovy")) {
+                if (RunConfig.isGroovyFile(element.getFileName())) {
                     source += (":" + element.getLineNumber());
                     break;
                 }
