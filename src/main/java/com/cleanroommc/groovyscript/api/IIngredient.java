@@ -40,6 +40,17 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
         return orIngredient;
     }
 
+    // >> operator
+    default boolean rightShift(ItemStack ingredient) {
+        return isCase(ingredient) && getAmount() >= ingredient.getCount();
+    }
+
+    // in operator
+    // item('minecraft:iron_ingot') in ore('ingotIron') // true
+    default boolean isCase(ItemStack ingredient) {
+        return ingredient != null && test(ingredient);
+    }
+
     @Override
     default IIngredient withAmount(int amount) {
         IIngredient iIngredientStack = exactCopy();
