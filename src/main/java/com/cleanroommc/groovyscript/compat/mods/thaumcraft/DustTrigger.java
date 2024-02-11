@@ -118,9 +118,9 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
 
         @Property
         private String research;
-        @Property(requirement = "groovyscript.wiki.thaumcraft.dusttrigger.target.required")
+        @Property(requirement = "groovyscript.wiki.thaumcraft.dust_trigger.target.required")
         private String ore;
-        @Property(requirement = "groovyscript.wiki.thaumcraft.dusttrigger.target.required")
+        @Property(requirement = "groovyscript.wiki.thaumcraft.dust_trigger.target.required")
         private Block target;
         @Property
         private ItemStack output;

@@ -38,12 +38,12 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
         TableRecipeManager.getInstance().getRecipes().addAll(restoreFromBackup());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.tablecrafting.addShaped0", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.table_crafting.addShaped0", type = MethodDescription.Type.ADDITION)
     public ITieredRecipe addShaped(ItemStack output, List<List<IIngredient>> input) {
         return addShaped(0, output, input);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.tablecrafting.addShaped1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.table_crafting.addShaped1", type = MethodDescription.Type.ADDITION)
     public ITieredRecipe addShaped(int tier, ItemStack output, List<List<IIngredient>> input) {
         return (ITieredRecipe) shapedBuilder()
                 .matrix(input)
@@ -52,12 +52,12 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
                 .register();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.tablecrafting.addShapeless0", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.table_crafting.addShapeless0", type = MethodDescription.Type.ADDITION)
     public ITieredRecipe addShapeless(ItemStack output, List<List<IIngredient>> input) {
         return addShaped(0, output, input);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.tablecrafting.addShapeless1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.table_crafting.addShapeless1", type = MethodDescription.Type.ADDITION)
     public ITieredRecipe addShapeless(int tier, ItemStack output, List<IIngredient> input) {
         return (ITieredRecipe) shapelessBuilder()
                 .input(input)

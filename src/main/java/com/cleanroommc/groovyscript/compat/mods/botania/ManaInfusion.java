@@ -15,7 +15,7 @@ import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipeManaInfusion;
 
 @RegistryDescription(
-        admonition = @Admonition(value = "groovyscript.wiki.botania.manainfusion.note", type = Admonition.Type.WARNING)
+        admonition = @Admonition(value = "groovyscript.wiki.botania.mana_infusion.note", type = Admonition.Type.WARNING)
 )
 public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
 

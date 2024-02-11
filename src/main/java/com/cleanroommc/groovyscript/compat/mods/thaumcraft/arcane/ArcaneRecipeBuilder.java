@@ -27,7 +27,7 @@ public abstract class ArcaneRecipeBuilder extends CraftingRecipeBuilder {
 
     @Property
     protected String researchKey;
-    @Property(requirement = "groovyscript.wiki.thaumcraft.arcaneworkbench.aspects.required")
+    @Property(requirement = "groovyscript.wiki.thaumcraft.arcane_workbench.aspects.required")
     protected final AspectList aspects = new AspectList();
     @Property
     protected int vis;

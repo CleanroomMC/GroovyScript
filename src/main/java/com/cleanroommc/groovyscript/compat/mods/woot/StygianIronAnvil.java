@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 
 @RegistryDescription(
         admonition = {
-                @Admonition("groovyscript.wiki.woot.stygianironanvil.note0"),
-                @Admonition(value = "groovyscript.wiki.woot.stygianironanvil.note1", type = Admonition.Type.WARNING)
+                @Admonition("groovyscript.wiki.woot.stygian_iron_anvil.note0"),
+                @Admonition(value = "groovyscript.wiki.woot.stygian_iron_anvil.note1", type = Admonition.Type.WARNING)
         }
 )
 public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {

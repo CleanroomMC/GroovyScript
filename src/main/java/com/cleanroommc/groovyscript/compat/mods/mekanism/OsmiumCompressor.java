@@ -24,7 +24,7 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
         super(RecipeHandler.Recipe.OSMIUM_COMPRESSOR);
     }
 
-    @RecipeBuilderDescription(example = @Example(value = ".input(item('minecraft:diamond')).gasInput(gas('hydrogen'))/*()!*/.output(item('minecraft:nether_star'))", annotations = "groovyscript.wiki.mekanism.osmiumcompressor.annotation"))
+    @RecipeBuilderDescription(example = @Example(value = ".input(item('minecraft:diamond')).gasInput(gas('hydrogen'))/*()!*/.output(item('minecraft:nether_star'))", annotations = "groovyscript.wiki.mekanism.osmium_compressor.annotation"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

@@ -28,14 +28,14 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         BotaniaAPI.pureDaisyRecipes.addAll(restoreFromBackup());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.botania.puredaisy.add0", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.botania.pure_daisy.add0", type = MethodDescription.Type.ADDITION)
     public RecipePureDaisy add(IBlockState output, IBlockState input, int time) {
         RecipePureDaisy recipe = new RecipePureDaisy(input, output, time);
         add(recipe);
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.botania.puredaisy.add1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.botania.pure_daisy.add1", type = MethodDescription.Type.ADDITION)
     public RecipePureDaisy add(IBlockState output, IBlockState input) {
         return add(output, input, RecipePureDaisy.DEFAULT_TIME);
     }
@@ -124,7 +124,7 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         protected int time = RecipePureDaisy.DEFAULT_TIME;
         @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         protected IBlockState output;
-        @Property(ignoresInheritedMethods = true, requirement = "groovyscript.wiki.botania.puredaisy.input.required", valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, requirement = "groovyscript.wiki.botania.pure_daisy.input.required", valid = @Comp(value = "null", type = Comp.Type.NOT))
         protected Object input;
 
         @RecipeBuilderMethodDescription

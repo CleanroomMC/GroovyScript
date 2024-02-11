@@ -240,7 +240,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
         return fluidInputs;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.starlightaltar.removeByOutput0")
+    @MethodDescription(description = "groovyscript.wiki.astralsorcery.starlight_altar.removeByOutput0")
     public void removeByOutput(ItemStack output) {
         removeByOutput(output, TileAltar.AltarLevel.DISCOVERY);
         removeByOutput(output, TileAltar.AltarLevel.ATTUNEMENT);
@@ -248,7 +248,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
         removeByOutput(output, TileAltar.AltarLevel.TRAIT_CRAFT);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.starlightaltar.removeByOutput1")
+    @MethodDescription(description = "groovyscript.wiki.astralsorcery.starlight_altar.removeByOutput1")
     public void removeByOutput(ItemStack output, TileAltar.AltarLevel altarLevel) {
         AltarRecipeRegistry.recipes.get(altarLevel).removeIf(recipe -> {
             if (recipe.getOutputForMatching().isItemEqual(output)) {

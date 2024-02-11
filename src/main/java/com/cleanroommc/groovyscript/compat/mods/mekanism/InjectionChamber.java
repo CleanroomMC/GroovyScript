@@ -22,7 +22,7 @@ public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecip
         super(RecipeHandler.Recipe.CHEMICAL_INJECTION_CHAMBER, Alias.generateOfClassAnd(InjectionChamber.class, "Injector"));
     }
 
-    @RecipeBuilderDescription(example = @Example(value = ".input(item('minecraft:diamond')).gasInput(gas('water'))/*()!*/.output(item('minecraft:nether_star'))", annotations = "groovyscript.wiki.mekanism.injectionchamber.annotation"))
+    @RecipeBuilderDescription(example = @Example(value = ".input(item('minecraft:diamond')).gasInput(gas('water'))/*()!*/.output(item('minecraft:nether_star'))", annotations = "groovyscript.wiki.mekanism.injection_chamber.annotation"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

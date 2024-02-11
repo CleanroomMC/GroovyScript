@@ -100,32 +100,32 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspecthelper.add_entity", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.add_entity", type = MethodDescription.Type.ADDITION)
     public void add(EntityEntry entity, AspectStack aspect) {
         this.add(entity, aspect, true);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspecthelper.add_ore", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.add_ore", type = MethodDescription.Type.ADDITION)
     public void add(OreDictIngredient oreDict, AspectStack aspect) {
         this.add(oreDict, aspect, true);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspecthelper.add_item", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.add_item", type = MethodDescription.Type.ADDITION)
     public void add(ItemStack item, AspectStack aspect) {
         this.add(item, aspect, true);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspecthelper.remove_entity")
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.remove_entity")
     public void remove(EntityEntry entity, AspectStack aspect) {
         this.remove(entity, aspect, true);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspecthelper.remove_ore")
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.remove_ore")
     public void remove(OreDictIngredient oreDict, AspectStack aspect) {
         this.remove(oreDict, aspect, true);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspecthelper.remove_item")
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.remove_item")
     public void remove(ItemStack item, AspectStack aspect) {
         this.remove(item, aspect, true);
     }
@@ -254,7 +254,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                 .post();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspecthelper.removeAll_entity")
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.removeAll_entity")
     public void removeAll(EntityEntry entity) {
         if (entity != null) {
             for (ThaumcraftApi.EntityTags e : CommonInternals.scanEntities) {
@@ -271,7 +271,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                 .post();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspecthelper.removeAll_ore")
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.removeAll_ore")
     public void removeAll(OreDictIngredient oreDic) {
         List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDic.getOreDict());
         if (ores != null && ores.size() > 0) {
@@ -287,7 +287,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspecthelper.removeAll_item")
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.removeAll_item")
     public void removeAll(ItemStack target) {
         for (Aspect a : CommonInternals.objectTags.get(CommonInternals.generateUniqueItemstackId(target)).getAspects())
             this.remove(target, new AspectStack(a, CommonInternals.objectTags.get(CommonInternals.generateUniqueItemstackId(target)).getAmount(a)));
@@ -304,9 +304,9 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
     public static class AspectHelperBuilder {
 
-        @Property(requirement = "groovyscript.wiki.thaumcraft.aspecthelper.target.required")
+        @Property(requirement = "groovyscript.wiki.thaumcraft.aspect_helper.target.required")
         private EntityEntry entity;
-        @Property(requirement = "groovyscript.wiki.thaumcraft.aspecthelper.target.required")
+        @Property(requirement = "groovyscript.wiki.thaumcraft.aspect_helper.target.required")
         private IIngredient object;
         @Property
         private final ArrayList<AspectStack> aspects = new ArrayList<>();

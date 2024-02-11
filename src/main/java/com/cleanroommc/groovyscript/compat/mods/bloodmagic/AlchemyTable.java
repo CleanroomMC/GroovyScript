@@ -23,7 +23,7 @@ import java.util.Collections;
         admonition = @Admonition(type = Admonition.Type.DANGER,
                                  format = Admonition.Format.STANDARD,
                                  hasTitle = true,
-                                 value = "groovyscript.wiki.bloodmagic.alchemytable.note0")
+                                 value = "groovyscript.wiki.bloodmagic.alchemy_table.note0")
 )
 public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
 

@@ -37,12 +37,12 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.compressioncrafting.add0", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.compression_crafting.add0", type = MethodDescription.Type.ADDITION)
     public CompressorRecipe add(ItemStack output, IIngredient input, int inputCount, IIngredient catalyst, boolean consumeCatalyst, int powerCost) {
         return add(output, input, inputCount, catalyst, consumeCatalyst, powerCost, ModConfig.confCompressorRFRate);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.compressioncrafting.add1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.compression_crafting.add1", type = MethodDescription.Type.ADDITION)
     public CompressorRecipe add(ItemStack output, IIngredient input, int inputCount, IIngredient catalyst, boolean consumeCatalyst, int powerCost, int powerRate) {
         return add(new CompressorRecipe(output, input.toMcIngredient(), inputCount, catalyst.toMcIngredient(), consumeCatalyst, powerCost, powerRate));
     }

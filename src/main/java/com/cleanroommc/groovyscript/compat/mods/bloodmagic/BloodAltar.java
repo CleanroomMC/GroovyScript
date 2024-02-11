@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription(
         admonition = {
-                @Admonition("groovyscript.wiki.bloodmagic.bloodaltar.note0"),
-                @Admonition(value = "groovyscript.wiki.bloodmagic.bloodaltar.note1",
+                @Admonition("groovyscript.wiki.bloodmagic.blood_altar.note0"),
+                @Admonition(value = "groovyscript.wiki.bloodmagic.blood_altar.note1",
                             type = Admonition.Type.DANGER,
                             format = Admonition.Format.STANDARD,
                             hasTitle = true)

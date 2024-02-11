@@ -87,11 +87,11 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {
 
-        @Property("groovyscript.wiki.integrateddynamics.dryingbasin.basic.value")
+        @Property("groovyscript.wiki.integrateddynamics.drying_basin.basic.value")
         private boolean basic;
-        @Property("groovyscript.wiki.integrateddynamics.dryingbasin.mechanical.value")
+        @Property("groovyscript.wiki.integrateddynamics.drying_basin.mechanical.value")
         private boolean mechanical;
-        @Property(value = "groovyscript.wiki.integrateddynamics.dryingbasin.duration.value", defaultValue = "10")
+        @Property(value = "groovyscript.wiki.integrateddynamics.drying_basin.duration.value", defaultValue = "10")
         private int duration = 10;
 
         @RecipeBuilderMethodDescription

@@ -43,12 +43,12 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
         EnderCrafterRecipeManager.getInstance().getRecipes().addAll(restoreFromBackup());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.endercrafting.addShaped0", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.ender_crafting.addShaped0", type = MethodDescription.Type.ADDITION)
     public IRecipe addShaped(ItemStack output, List<List<IIngredient>> input) {
         return addShaped(ModConfig.confEnderTimeRequired, output, input);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.endercrafting.addShaped1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.ender_crafting.addShaped1", type = MethodDescription.Type.ADDITION)
     public IRecipe addShaped(int time, ItemStack output, List<List<IIngredient>> input) {
         return (IRecipe) shapedBuilder()
                 .matrix(input)
@@ -57,12 +57,12 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
                 .register();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.endercrafting.addShapeless0", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.ender_crafting.addShapeless0", type = MethodDescription.Type.ADDITION)
     public IRecipe addShapeless(ItemStack output, List<List<IIngredient>> input) {
         return addShaped(ModConfig.confEnderTimeRequired, output, input);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.endercrafting.addShapeless1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.ender_crafting.addShapeless1", type = MethodDescription.Type.ADDITION)
     public IRecipe addShapeless(int time, ItemStack output, List<IIngredient> input) {
         return (IRecipe) shapelessBuilder()
                 .input(input)

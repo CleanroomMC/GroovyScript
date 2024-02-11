@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @RegistryDescription(
-        admonition = @Admonition(value = "groovyscript.wiki.extendedcrafting.combinationcrafting.note0", type = Admonition.Type.INFO, format = Admonition.Format.STANDARD)
+        admonition = @Admonition(value = "groovyscript.wiki.extendedcrafting.combination_crafting.note0", type = Admonition.Type.INFO, format = Admonition.Format.STANDARD)
 )
 public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> {
 
@@ -42,12 +42,12 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.combinationcrafting.add0", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.combination_crafting.add0", type = MethodDescription.Type.ADDITION)
     public CombinationRecipe add(ItemStack output, long cost, Ingredient input, NonNullList<Ingredient> pedestals) {
         return add(output, cost, ModConfig.confCraftingCoreRFRate, input, pedestals);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.combinationcrafting.add1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.extendedcrafting.combination_crafting.add1", type = MethodDescription.Type.ADDITION)
     public CombinationRecipe add(ItemStack output, long cost, int perTick, Ingredient input, NonNullList<Ingredient> pedestals) {
         return add(new CombinationRecipe(output, cost, perTick, input, pedestals));
     }

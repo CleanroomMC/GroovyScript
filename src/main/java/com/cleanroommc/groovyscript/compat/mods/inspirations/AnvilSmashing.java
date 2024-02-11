@@ -91,7 +91,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.inspirations.anvilsmashing.remove_material")
+    @MethodDescription(description = "groovyscript.wiki.inspirations.anvil_smashing.remove_material")
     public boolean remove(Material material) {
         if (!InspirationsRegistryAccessor.getAnvilBreaking().contains(material)) return false;
         materialBackup.add(material);
@@ -153,9 +153,9 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<Object> {
 
-        @Property(requirement = "groovyscript.wiki.inspirations.anvilsmashing.input.required")
+        @Property(requirement = "groovyscript.wiki.inspirations.anvil_smashing.input.required")
         private IBlockState inputBlockState;
-        @Property(requirement = "groovyscript.wiki.inspirations.anvilsmashing.input.required")
+        @Property(requirement = "groovyscript.wiki.inspirations.anvil_smashing.input.required")
         private Block inputBlock;
         @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IBlockState output;

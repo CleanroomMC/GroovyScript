@@ -18,7 +18,7 @@ import java.util.List;
 
 @RegistryDescription(
         isFullyDocumented = false,
-        admonition = @Admonition(value = "groovyscript.wiki.thaumcraft.lootbag.note", type = Admonition.Type.BUG, format = Admonition.Format.STANDARD)
+        admonition = @Admonition(value = "groovyscript.wiki.thaumcraft.loot_bag.note", type = Admonition.Type.BUG, format = Admonition.Format.STANDARD)
 )
 public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
 

@@ -36,12 +36,12 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
         ThaumcraftApi.addSmeltingBonus(bonus.in, bonus.out, bonus.chance);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.smeltingbonus.add0", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.smelting_bonus.add0", type = MethodDescription.Type.ADDITION)
     public void add(IIngredient in, ItemStack out) {
         this.add(in, out, 0.33F);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.thaumcraft.smeltingbonus.add1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.smelting_bonus.add1", type = MethodDescription.Type.ADDITION)
     public void add(IIngredient in, ItemStack out, float chance) {
         if (in instanceof OreDictIngredient) {
             ThaumcraftApi.addSmeltingBonus(((OreDictIngredient) in).getOreDict(), out, chance);

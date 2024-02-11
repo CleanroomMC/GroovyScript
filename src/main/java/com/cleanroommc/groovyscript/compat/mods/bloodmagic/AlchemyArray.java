@@ -39,19 +39,19 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes()::add);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemyarray.add0", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemy_array.add0", type = MethodDescription.Type.ADDITION)
     public RecipeAlchemyArray add(Ingredient input, Ingredient catalyst, ItemStack output) {
         RecipeAlchemyArray recipe = new RecipeAlchemyArray(input, catalyst, output, null);
         add(recipe);
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemyarray.add1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemy_array.add1", type = MethodDescription.Type.ADDITION)
     public RecipeAlchemyArray add(Ingredient input, Ingredient catalyst, ItemStack output, String circleTexture) {
         return add(input, catalyst, output, new ResourceLocation(circleTexture));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemyarray.add1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemy_array.add1", type = MethodDescription.Type.ADDITION)
     public RecipeAlchemyArray add(Ingredient input, Ingredient catalyst, ItemStack output, ResourceLocation circleTexture) {
         RecipeAlchemyArray recipe = new RecipeAlchemyArray(input, catalyst, output, circleTexture);
         add(recipe);

@@ -67,7 +67,7 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.roots.flowergeneration.removeByFlower0", example = @Example("blockstate('minecraft:red_flower:2')"))
+    @MethodDescription(description = "groovyscript.wiki.roots.flower_generation.removeByFlower0", example = @Example("blockstate('minecraft:red_flower:2')"))
     public boolean removeByFlower(IBlockState flower) {
         for (Map.Entry<ResourceLocation, FlowerRecipe> x : getFlowerRecipes().entrySet()) {
             if (x.getValue().getFlower() == flower) {
@@ -79,12 +79,12 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.roots.flowergeneration.removeByFlower1", example = @Example("block('minecraft:red_flower'), 1"))
+    @MethodDescription(description = "groovyscript.wiki.roots.flower_generation.removeByFlower1", example = @Example("block('minecraft:red_flower'), 1"))
     public boolean removeByFlower(Block flower, int meta) {
         return removeByFlower(flower.getStateFromMeta(meta));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.roots.flowergeneration.removeByFlower2", example = @Example("block('minecraft:red_flower')"))
+    @MethodDescription(description = "groovyscript.wiki.roots.flower_generation.removeByFlower2", example = @Example("block('minecraft:red_flower')"))
     public boolean removeByFlower(Block flower) {
         boolean found = false;
         for (IBlockState state : flower.getBlockState().getValidStates()) {
@@ -93,7 +93,7 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         return found;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.roots.flowergeneration.removeByFlower3", example = @Example("item('minecraft:red_flower:3')"))
+    @MethodDescription(description = "groovyscript.wiki.roots.flower_generation.removeByFlower3", example = @Example("item('minecraft:red_flower:3')"))
     public boolean removeByFlower(ItemStack output) {
         return removeByFlower(((ItemBlock) output.getItem()).getBlock().getStateFromMeta(output.getMetadata()));
     }

@@ -17,7 +17,7 @@ import java.util.Map;
 import static epicsquid.roots.init.ModRecipes.*;
 
 @RegistryDescription(
-        admonition = @Admonition(value = "groovyscript.wiki.roots.feycrafter.note", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD)
+        admonition = @Admonition(value = "groovyscript.wiki.roots.fey_crafter.note", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD)
 )
 public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCraftingRecipe>> {
 
