@@ -29,10 +29,7 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:packmode-278398:2567799')
     }
 
-    compileOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
-    if (project.debug_avaritia.toBoolean() || project.debug_draconic_evolution.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
-    }
+    api("codechicken:codechickenlib:3.2.3.358")
 
     compileOnly rfg.deobf('curse.maven:avaritia_1_10-261348:3143349')
     if (project.debug_avaritia.toBoolean()) {
@@ -66,10 +63,8 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
     }
 
-    compileOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
     compileOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
     if (project.debug_thermal.toBoolean() || project.debug_draconic_evolution.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:codechicken_lib_1_8-242818:2779848')
         runtimeOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
     }
 
@@ -218,13 +213,13 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:tinkers-complement-272671:2843439')
     }
 
-    compileOnly 'com.enderio.core:EnderCore:1.12.2-+'
-    compileOnly('com.enderio:EnderIO:1.12.2-+') {
+    compileOnly 'com.enderio:endercore:0.5.78'
+    compileOnly('crazypants:enderio:5.3.72') {
         transitive = false
     }
     if (project.debug_enderio.toBoolean()) {
-        runtimeOnly 'com.enderio.core:EnderCore:1.12.2-+'
-        runtimeOnly('com.enderio:EnderIO:1.12.2-+') {
+        runtimeOnly 'com.enderio:endercore:0.5.78'
+        runtimeOnly('crazypants:enderio:5.3.72') {
             transitive = false
         }
     }
@@ -239,4 +234,8 @@ dependencies {
     if (project.debug_adv_mortars.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:advancedmortars-283777:2780626')
     }
+}
+
+minecraft {
+    injectedTags.put 'GROOVY_VERSION', groovy_version
 }
