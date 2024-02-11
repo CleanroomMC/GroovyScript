@@ -76,6 +76,7 @@ public abstract class GroovySandbox {
     protected GroovyScriptEngine createScriptEngine() {
         GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment);
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
+        config.setSourceEncoding("UTF-8");
         engine.setConfig(config);
         initEngine(engine, config);
         return engine;
