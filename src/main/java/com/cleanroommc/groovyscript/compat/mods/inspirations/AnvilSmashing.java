@@ -157,7 +157,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         private IBlockState inputBlockState;
         @Property(requirement = "groovyscript.wiki.inspirations.anvilsmashing.input.required")
         private Block inputBlock;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IBlockState output;
 
 

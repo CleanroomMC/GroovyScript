@@ -130,7 +130,7 @@ public class Drops extends VirtualizedRegistry<Object> {
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ItemStack> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private WootMobName name;
         @Property(valid = @Comp("4"))
         private final List<Integer> chance = new ArrayList<>();

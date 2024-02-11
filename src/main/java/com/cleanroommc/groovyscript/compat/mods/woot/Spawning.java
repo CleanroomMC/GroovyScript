@@ -109,7 +109,7 @@ public class Spawning extends VirtualizedRegistry<Pair<WootMobName, SpawnRecipe>
 
         @Property(requirement = "groovyscript.wiki.woot.spawning.modifying.required")
         private boolean defaultSpawnRecipe = false;
-        @Property(requirement = "groovyscript.wiki.woot.spawning.modifying.required")
+        @Property(ignoresInheritedMethods = true, requirement = "groovyscript.wiki.woot.spawning.modifying.required")
         private WootMobName name;
         //@Property
         //private boolean efficiency;
