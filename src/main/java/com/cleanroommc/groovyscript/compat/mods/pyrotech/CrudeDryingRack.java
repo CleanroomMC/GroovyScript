@@ -7,13 +7,18 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CrudeDryingRackRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public class CrudeDryingRack extends VirtualizedRegistry<CrudeDryingRackRecipe> {
     @Override
     public void onReload() {
-        removeScripted().forEach(recipe -> ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE.remove(recipe.getRegistryName()));
-        getBackupRecipes().forEach(ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE::register);
+        ForgeRegistry<CrudeDryingRackRecipe> registry = (ForgeRegistry<CrudeDryingRackRecipe>) ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE;
+        if (registry.isLocked()) {
+            registry.unfreeze();
+        }
+        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getBackupRecipes().forEach(registry::register);
     }
 
     public RecipeBuilder recipeBuilder() {

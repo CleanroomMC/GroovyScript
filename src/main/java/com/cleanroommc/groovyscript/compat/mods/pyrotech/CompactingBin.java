@@ -7,13 +7,18 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CompactingBinRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public class CompactingBin extends VirtualizedRegistry<CompactingBinRecipe> {
     @Override
     public void onReload() {
-        removeScripted().forEach(recipe -> ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.remove(recipe.getRegistryName()));
-        getBackupRecipes().forEach(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE::register);
+        ForgeRegistry<CompactingBinRecipe> registry = (ForgeRegistry<CompactingBinRecipe>) ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE;
+        if (registry.isLocked()) {
+            registry.unfreeze();
+        }
+        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getBackupRecipes().forEach(registry::register);
     }
 
 

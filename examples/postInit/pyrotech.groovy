@@ -1,6 +1,5 @@
 // MODS_LOADED: pyrotech
 
-
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.AnvilRecipe;
 
 println 'mod \'pyrotech\' detected, running script'
@@ -109,7 +108,6 @@ mods.pyrotech.soakingpot.recipeBuilder()
     .register()
 
 mods.pyrotech.soakingpot.removeByOutput(item('pyrotech:material', 54))
-
 
 
 

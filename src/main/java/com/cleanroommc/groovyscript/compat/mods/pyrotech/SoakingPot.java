@@ -7,13 +7,18 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.SoakingPotRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public class SoakingPot extends VirtualizedRegistry<SoakingPotRecipe> {
     @Override
     public void onReload() {
-        removeScripted().forEach(recipe -> ModuleTechBasic.Registries.SOAKING_POT_RECIPE.remove(recipe.getRegistryName()));
-        getBackupRecipes().forEach(ModuleTechBasic.Registries.SOAKING_POT_RECIPE::register);
+        ForgeRegistry<SoakingPotRecipe> registry = (ForgeRegistry<SoakingPotRecipe>) ModuleTechBasic.Registries.SOAKING_POT_RECIPE;
+        if (registry.isLocked()) {
+            registry.unfreeze();
+        }
+        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getBackupRecipes().forEach(registry::register);
     }
 
     public RecipeBuilder recipeBuilder() {

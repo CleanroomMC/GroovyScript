@@ -7,13 +7,18 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.ChoppingBlockRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public class ChoppingBlock extends VirtualizedRegistry<ChoppingBlockRecipe> {
     @Override
     public void onReload() {
-        removeScripted().forEach(recipe -> ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE.remove(recipe.getRegistryName()));
-        getBackupRecipes().forEach(ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE::register);
+        ForgeRegistry<ChoppingBlockRecipe> registry = (ForgeRegistry<ChoppingBlockRecipe>) ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE;
+        if (registry.isLocked()) {
+            registry.unfreeze();
+        }
+        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getBackupRecipes().forEach(registry::register);
     }
 
 

@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -10,13 +9,18 @@ import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.BarrelRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public class Barrel extends VirtualizedRegistry<BarrelRecipe> {
     @Override
     public void onReload() {
-        removeScripted().forEach(recipe -> ModuleTechBasic.Registries.BARREL_RECIPE.remove(recipe.getRegistryName()));
-        getBackupRecipes().forEach(ModuleTechBasic.Registries.BARREL_RECIPE::register);
+        ForgeRegistry<BarrelRecipe> registry = (ForgeRegistry<BarrelRecipe>) ModuleTechBasic.Registries.BARREL_RECIPE;
+        if (registry.isLocked()) {
+            registry.unfreeze();
+        }
+        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getBackupRecipes().forEach(registry::register);
     }
 
     public RecipeBuilder recipeBuilder() {

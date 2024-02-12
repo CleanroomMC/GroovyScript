@@ -5,15 +5,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CompactingBinRecipe;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CompostBinRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistry;
 
 public class CompostBin extends VirtualizedRegistry<CompostBinRecipe> {
     @Override
     public void onReload() {
-        removeScripted().forEach(recipe -> ModuleTechBasic.Registries.COMPOST_BIN_RECIPE.remove(recipe.getRegistryName()));
-        getBackupRecipes().forEach(ModuleTechBasic.Registries.COMPOST_BIN_RECIPE::register);
+        ForgeRegistry<CompostBinRecipe> registry = (ForgeRegistry<CompostBinRecipe>) ModuleTechBasic.Registries.COMPOST_BIN_RECIPE;
+        if (registry.isLocked()) {
+            registry.unfreeze();
+        }
+        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getBackupRecipes().forEach(registry::register);
     }
 
     public void add(CompostBinRecipe recipe) {
