@@ -17,7 +17,9 @@ public class CrudeDryingRack extends VirtualizedRegistry<CrudeDryingRackRecipe> 
         if (registry.isLocked()) {
             registry.unfreeze();
         }
-        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getScriptedRecipes().forEach(recipe -> {
+            registry.remove(recipe.getRegistryName());
+        });
         getBackupRecipes().forEach(registry::register);
     }
 
@@ -48,7 +50,6 @@ public class CrudeDryingRack extends VirtualizedRegistry<CrudeDryingRackRecipe> 
         }
         ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getInput().test(input)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -63,7 +64,6 @@ public class CrudeDryingRack extends VirtualizedRegistry<CrudeDryingRackRecipe> 
         }
         ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getOutput().isItemEqual(output)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -92,13 +92,14 @@ public class CrudeDryingRack extends VirtualizedRegistry<CrudeDryingRackRecipe> 
             validateItems(msg, 1, 1, 1, 1);
             msg.add(dryTime < 0, "dryTime must be a non negative integer, yet it was {}", dryTime);
             msg.add(name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
         }
 
         @Override
         public @Nullable CrudeDryingRackRecipe register() {
             if (!validate()) return null;
             CrudeDryingRackRecipe recipe = new CrudeDryingRackRecipe(output.get(0), input.get(0).toMcIngredient(), dryTime).setRegistryName(name);
-            ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE.register(recipe);
+            PyroTech.crudeDryingRack.add(recipe);
             return recipe;
         }
     }

@@ -17,7 +17,9 @@ public class SoakingPot extends VirtualizedRegistry<SoakingPotRecipe> {
         if (registry.isLocked()) {
             registry.unfreeze();
         }
-        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getScriptedRecipes().forEach(recipe -> {
+            registry.remove(recipe.getRegistryName());
+        });
         getBackupRecipes().forEach(registry::register);
     }
 
@@ -48,7 +50,6 @@ public class SoakingPot extends VirtualizedRegistry<SoakingPotRecipe> {
         }
         ModuleTechBasic.Registries.SOAKING_POT_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getInputItem().test(input)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -63,7 +64,6 @@ public class SoakingPot extends VirtualizedRegistry<SoakingPotRecipe> {
         }
         ModuleTechBasic.Registries.SOAKING_POT_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getOutput().isItemEqual(output)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -98,13 +98,15 @@ public class SoakingPot extends VirtualizedRegistry<SoakingPotRecipe> {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);
             msg.add(name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.SOAKING_POT_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+
         }
 
         @Override
         public @Nullable SoakingPotRecipe register() {
             if (!validate()) return null;
             SoakingPotRecipe recipe = new SoakingPotRecipe(output.get(0), input.get(0).toMcIngredient(), fluidInput.get(0), campfireRequired, time).setRegistryName(name);
-            ModuleTechBasic.Registries.SOAKING_POT_RECIPE.register(recipe);
+            PyroTech.soakingPot.add(recipe);
             return recipe;
         }
     }

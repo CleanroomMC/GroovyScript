@@ -19,7 +19,9 @@ public class Barrel extends VirtualizedRegistry<BarrelRecipe> {
         if (registry.isLocked()) {
             registry.unfreeze();
         }
-        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getScriptedRecipes().forEach(recipe -> {
+            registry.remove(recipe.getRegistryName());
+        });
         getBackupRecipes().forEach(registry::register);
     }
 
@@ -81,6 +83,8 @@ public class Barrel extends VirtualizedRegistry<BarrelRecipe> {
             validateFluids(msg, 1, 1, 1, 1);
             msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
             msg.add(name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.BARREL_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+
         }
 
         @Override
@@ -91,7 +95,8 @@ public class Barrel extends VirtualizedRegistry<BarrelRecipe> {
             Ingredient[] inputIngredient = input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new);
 
             BarrelRecipe recipe = new BarrelRecipe(fluidOutput.get(0), inputIngredient, fluidInput.get(0), duration).setRegistryName(name);
-            ModuleTechBasic.Registries.BARREL_RECIPE.register(recipe);
+            PyroTech.barrel.add(recipe);
+
             return recipe;
         }
     }

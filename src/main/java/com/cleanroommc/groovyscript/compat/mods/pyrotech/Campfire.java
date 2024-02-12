@@ -17,7 +17,9 @@ public class Campfire extends VirtualizedRegistry<CampfireRecipe> {
         if (registry.isLocked()) {
             registry.unfreeze();
         }
-        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getScriptedRecipes().forEach(recipe -> {
+            registry.remove(recipe.getRegistryName());
+        });
         getBackupRecipes().forEach(registry::register);
     }
 
@@ -48,7 +50,6 @@ public class Campfire extends VirtualizedRegistry<CampfireRecipe> {
         }
         ModuleTechBasic.Registries.CAMPFIRE_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getInput().test(input)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -63,7 +64,6 @@ public class Campfire extends VirtualizedRegistry<CampfireRecipe> {
         }
         ModuleTechBasic.Registries.CAMPFIRE_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getOutput().isItemEqual(output)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -92,13 +92,15 @@ public class Campfire extends VirtualizedRegistry<CampfireRecipe> {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
             msg.add(name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.CAMPFIRE_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+
         }
 
         @Override
         public @Nullable CampfireRecipe register() {
             if (!validate()) return null;
             CampfireRecipe recipe = new CampfireRecipe(output.get(0), input.get(0).toMcIngredient(), duration).setRegistryName(name);
-            ModuleTechBasic.Registries.CAMPFIRE_RECIPE.register(recipe);
+            PyroTech.campfire.add(recipe);
             return recipe;
         }
     }

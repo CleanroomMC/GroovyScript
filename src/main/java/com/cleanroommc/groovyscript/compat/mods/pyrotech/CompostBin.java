@@ -18,12 +18,14 @@ public class CompostBin extends VirtualizedRegistry<CompostBinRecipe> {
         if (registry.isLocked()) {
             registry.unfreeze();
         }
-        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getScriptedRecipes().forEach(recipe -> {
+            registry.remove(recipe.getRegistryName());
+        });
         getBackupRecipes().forEach(registry::register);
     }
 
     public void add(CompostBinRecipe recipe) {
-        if (recipe != null) {
+        if (recipe != null && ModuleTechBasic.Registries.COMPOST_BIN_RECIPE.getValue(recipe.getRegistryName()) == null) {
             addScripted(recipe);
             ModuleTechBasic.Registries.COMPOST_BIN_RECIPE.register(recipe);
         }
@@ -56,7 +58,6 @@ public class CompostBin extends VirtualizedRegistry<CompostBinRecipe> {
         }
         ModuleTechBasic.Registries.COMPOST_BIN_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getInput().isItemEqual(input)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -71,7 +72,6 @@ public class CompostBin extends VirtualizedRegistry<CompostBinRecipe> {
         }
         ModuleTechBasic.Registries.COMPOST_BIN_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getOutput().isItemEqual(output)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });

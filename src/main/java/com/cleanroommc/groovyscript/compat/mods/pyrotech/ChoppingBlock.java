@@ -17,7 +17,9 @@ public class ChoppingBlock extends VirtualizedRegistry<ChoppingBlockRecipe> {
         if (registry.isLocked()) {
             registry.unfreeze();
         }
-        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getScriptedRecipes().forEach(recipe -> {
+            registry.remove(recipe.getRegistryName());
+        });
         getBackupRecipes().forEach(registry::register);
     }
 
@@ -49,7 +51,6 @@ public class ChoppingBlock extends VirtualizedRegistry<ChoppingBlockRecipe> {
         }
         ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getInput().test(input)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -64,7 +65,6 @@ public class ChoppingBlock extends VirtualizedRegistry<ChoppingBlockRecipe> {
         }
         ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getOutput().isItemEqual(output)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -101,6 +101,7 @@ public class ChoppingBlock extends VirtualizedRegistry<ChoppingBlockRecipe> {
             msg.add(quantities < 0, "quantities must be a non negative integer, yet it was {}", quantities);
             msg.add(chops < 0, "chops must be a non negative integer, yet it was {}", chops);
             msg.add(name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
 
 
         }
@@ -109,7 +110,7 @@ public class ChoppingBlock extends VirtualizedRegistry<ChoppingBlockRecipe> {
         public @Nullable ChoppingBlockRecipe register() {
             if (!validate()) return null;
             ChoppingBlockRecipe recipe = new ChoppingBlockRecipe(output.get(0), input.get(0).toMcIngredient(), new int[]{chops}, new int[]{quantities}).setRegistryName(name);
-            ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE.register(recipe);
+            PyroTech.choppingBlock.add(recipe);
             return recipe;
         }
     }

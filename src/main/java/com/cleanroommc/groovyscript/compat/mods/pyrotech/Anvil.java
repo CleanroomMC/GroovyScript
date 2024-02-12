@@ -17,7 +17,10 @@ public class Anvil extends VirtualizedRegistry<AnvilRecipe> {
         if (registry.isLocked()) {
             registry.unfreeze();
         }
-        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getScriptedRecipes().forEach(recipe -> {
+            registry.remove(recipe.getRegistryName());
+        });
+
         getBackupRecipes().forEach(registry::register);
     }
 
@@ -48,7 +51,6 @@ public class Anvil extends VirtualizedRegistry<AnvilRecipe> {
         }
         ModuleTechBasic.Registries.ANVIL_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getOutput().isItemEqual(output)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -92,6 +94,8 @@ public class Anvil extends VirtualizedRegistry<AnvilRecipe> {
             msg.add(type == null, "type cannot be null. ");
             msg.add(tier == null, "tier cannot be null.");
             msg.add(name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.ANVIL_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+
         }
 
         @Override
@@ -99,7 +103,7 @@ public class Anvil extends VirtualizedRegistry<AnvilRecipe> {
             if (!validate()) return null;
 
             AnvilRecipe recipe = new AnvilRecipe(output.get(0), input.get(0).toMcIngredient(), hits, type, tier).setRegistryName(name);
-            ModuleTechBasic.Registries.ANVIL_RECIPE.register(recipe);
+            PyroTech.anvil.add(recipe);
             return recipe;
         }
     }

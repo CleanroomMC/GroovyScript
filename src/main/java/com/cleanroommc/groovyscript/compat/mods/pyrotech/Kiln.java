@@ -18,7 +18,9 @@ public class Kiln extends VirtualizedRegistry<KilnPitRecipe> {
         if (registry.isLocked()) {
             registry.unfreeze();
         }
-        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getScriptedRecipes().forEach(recipe -> {
+            registry.remove(recipe.getRegistryName());
+        });
         getBackupRecipes().forEach(registry::register);
     }
 
@@ -49,7 +51,6 @@ public class Kiln extends VirtualizedRegistry<KilnPitRecipe> {
         }
         ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getInput().test(input)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -64,7 +65,6 @@ public class Kiln extends VirtualizedRegistry<KilnPitRecipe> {
         }
         ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getOutput().isItemEqual(output)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -107,6 +107,7 @@ public class Kiln extends VirtualizedRegistry<KilnPitRecipe> {
             msg.add(burnTime < 0, "burnTime must be a non negative integer, yet it was {}", burnTime);
             msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
             msg.add(name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
 
         }
 
@@ -114,7 +115,7 @@ public class Kiln extends VirtualizedRegistry<KilnPitRecipe> {
         public @Nullable KilnPitRecipe register() {
             if (!validate()) return null;
             KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutputs).setRegistryName(name);
-            ModuleTechBasic.Registries.KILN_PIT_RECIPE.register(recipe);
+            PyroTech.kiln.add(recipe);
             return recipe;
         }
     }

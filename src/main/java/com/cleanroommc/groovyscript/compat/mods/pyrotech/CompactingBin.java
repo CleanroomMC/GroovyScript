@@ -17,7 +17,9 @@ public class CompactingBin extends VirtualizedRegistry<CompactingBinRecipe> {
         if (registry.isLocked()) {
             registry.unfreeze();
         }
-        removeScripted().forEach(recipe -> registry.remove(recipe.getRegistryName()));
+        getScriptedRecipes().forEach(recipe -> {
+            registry.remove(recipe.getRegistryName());
+        });
         getBackupRecipes().forEach(registry::register);
     }
 
@@ -49,7 +51,6 @@ public class CompactingBin extends VirtualizedRegistry<CompactingBinRecipe> {
         }
         ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getInput().test(input)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -64,7 +65,6 @@ public class CompactingBin extends VirtualizedRegistry<CompactingBinRecipe> {
         }
         ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValuesCollection().forEach(recipe -> {
             if (recipe.getOutput().isItemEqual(output)) {
-                addBackup(recipe);
                 remove(recipe);
             }
         });
@@ -95,13 +95,15 @@ public class CompactingBin extends VirtualizedRegistry<CompactingBinRecipe> {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(toolUses < 0, "toolUses must be a non negative integer, yet it was {}", toolUses);
             msg.add(name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+
         }
 
         @Override
         public @Nullable CompactingBinRecipe register() {
             if (!validate()) return null;
             CompactingBinRecipe recipe = new CompactingBinRecipe(output.get(0), input.get(0).toMcIngredient(), toolUses).setRegistryName(name);
-            ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.register(recipe);
+            PyroTech.compactingBin.add(recipe);
             return recipe;
         }
     }

@@ -4,17 +4,17 @@ import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 
 public class PyroTech extends ModPropertyContainer {
 
-    public final Barrel barrel = new Barrel();
-    public final Campfire campfire = new Campfire();
-    public final ChoppingBlock choppingBlock = new ChoppingBlock();
-    public final CompactingBin compactingBin = new CompactingBin();
-    public final CompostBin compostBin = new CompostBin();
-    public final CrudeDryingRack crudeDryingRack = new CrudeDryingRack();
-    public final DryingRack dryingRack = new DryingRack();
-    public final Kiln kiln = new Kiln();
-    public final Anvil anvil = new Anvil();
-    public final SoakingPot soakingPot = new SoakingPot();
-    public final TanningRack tanningRack = new TanningRack();
+    public static final Barrel barrel = new Barrel();
+    public static final Campfire campfire = new Campfire();
+    public static final ChoppingBlock choppingBlock = new ChoppingBlock();
+    public static final CompactingBin compactingBin = new CompactingBin();
+    public static final CompostBin compostBin = new CompostBin();
+    public static final CrudeDryingRack crudeDryingRack = new CrudeDryingRack();
+    public static final DryingRack dryingRack = new DryingRack();
+    public static final Kiln kiln = new Kiln();
+    public static final Anvil anvil = new Anvil();
+    public static final SoakingPot soakingPot = new SoakingPot();
+    public static final TanningRack tanningRack = new TanningRack();
 
     public PyroTech() {
         addRegistry(barrel);
