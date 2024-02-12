@@ -24,6 +24,7 @@ import com.cleanroommc.groovyscript.compat.mods.inspirations.Inspirations;
 import com.cleanroommc.groovyscript.compat.mods.integrateddynamics.IntegratedDynamics;
 import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
+import com.cleanroommc.groovyscript.compat.mods.pyrotech.PyroTech;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
 import com.cleanroommc.groovyscript.compat.mods.tcomplement.TinkersComplement;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
@@ -75,7 +76,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final GroovyContainer<TinkersComplement> TINKERS_COMPLEMENT = new InternalModContainer<>("tcomplement", "Tinkers Complement", TinkersComplement::new, "tcomp", "tinkerscomplement");
     public static final GroovyContainer<TinkersConstruct> TINKERS_CONSTRUCT = new InternalModContainer<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new, "ticon", "tinkersconstruct");
     public static final GroovyContainer<Woot> WOOT = new InternalModContainer<>("woot", "Woot", Woot::new);
-
+    public static final GroovyContainer<PyroTech> PYROTECH = new InternalModContainer<>("pyrotech", "Pyrotech", PyroTech::new);
     public static Collection<GroovyContainer<? extends ModPropertyContainer>> getAllContainers() {
         return Collections.unmodifiableList(containerList);
     }

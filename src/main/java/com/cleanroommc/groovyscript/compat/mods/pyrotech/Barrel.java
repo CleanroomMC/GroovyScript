@@ -1,0 +1,94 @@
+package com.cleanroommc.groovyscript.compat.mods.pyrotech;
+
+import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.ArrayUtils;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.BarrelRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
+
+public class Barrel extends VirtualizedRegistry<BarrelRecipe> {
+    @Override
+    public void onReload() {
+        removeScripted().forEach(recipe -> ModuleTechBasic.Registries.BARREL_RECIPE.remove(recipe.getRegistryName()));
+        getBackupRecipes().forEach(ModuleTechBasic.Registries.BARREL_RECIPE::register);
+    }
+
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
+    }
+
+
+    public void add(BarrelRecipe recipe) {
+        if (recipe != null) {
+            addScripted(recipe);
+            ModuleTechBasic.Registries.BARREL_RECIPE.register(recipe);
+        }
+    }
+
+    public boolean remove(BarrelRecipe recipe) {
+        if (recipe == null) return false;
+        addBackup(recipe);
+        ModuleTechBasic.Registries.BARREL_RECIPE.remove(recipe.getRegistryName());
+        return true;
+    }
+
+    public void removeByOutput(FluidStack output) {
+        if (GroovyLog.msg("Error removing barrel recipe")
+                .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
+        ModuleTechBasic.Registries.BARREL_RECIPE.getValuesCollection().forEach(recipe -> {
+            if (recipe.getOutput().isFluidEqual(output)) {
+                addBackup(recipe);
+                remove(recipe);
+            }
+        });
+    }
+
+    public void removeAll() {
+        ModuleTechBasic.Registries.BARREL_RECIPE.getValuesCollection().forEach(this::addBackup);
+        ModuleTechBasic.Registries.BARREL_RECIPE.clear();
+    }
+
+    public static class RecipeBuilder extends AbstractRecipeBuilder<BarrelRecipe> {
+
+        private int duration;
+
+        public RecipeBuilder duration(int time) {
+            this.duration = time;
+            return this;
+        }
+        @Override
+        public String getErrorMsg() {
+            return "Error adding Pyrotech Barrel Recipe";
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
+            validateItems(msg, 4, 4, 0, 0);
+            validateFluids(msg, 1, 1, 1, 1);
+            msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
+            msg.add(name == null, "name cannot be null.");
+        }
+
+        @Override
+        public @Nullable BarrelRecipe register() {
+            if (!validate()) return null;
+
+            // Because you need Ingredient[] to register a recipe
+            Ingredient[] inputIngredient = input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new);
+
+            BarrelRecipe recipe = new BarrelRecipe(fluidOutput.get(0), inputIngredient, fluidInput.get(0), duration).setRegistryName(name);
+            ModuleTechBasic.Registries.BARREL_RECIPE.register(recipe);
+            return recipe;
+        }
+    }
+}
