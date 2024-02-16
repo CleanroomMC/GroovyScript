@@ -79,11 +79,9 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        // clear all errors and post them if on client
-        if (event.player.world.isRemote) {
+        // clear all errors and post
+        if (!event.player.world.isRemote) {
             GroovyScript.postScriptRunResult(event.player, true, true, false, 0);
-        } else {
-            GroovyLogImpl.LOG.collectErrors();
         }
 
         // check world packmode and change if needed
