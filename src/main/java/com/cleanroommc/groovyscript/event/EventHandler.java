@@ -17,7 +17,6 @@ import com.cleanroommc.groovyscript.network.SReloadScripts;
 import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.cleanroommc.groovyscript.packmode.PackmodeSaveData;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
-import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import groovy.lang.Closure;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiMainMenu;

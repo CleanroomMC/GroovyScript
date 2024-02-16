@@ -146,6 +146,7 @@ public class ReloadableRegistryManager {
             // Reflection, method doesn't exist in JEI
             var filter = Internal.getIngredientFilter();
             try {
+                //noinspection JavaReflectionMemberAccess
                 IngredientFilter.class.getDeclaredMethod("block").invoke(filter);
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {}
         }
