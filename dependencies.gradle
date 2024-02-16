@@ -234,6 +234,11 @@ dependencies {
     if (project.debug_adv_mortars.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:advancedmortars-283777:2780626')
     }
+
+    compileOnly rfg.deobf('curse.maven:aether-255308:3280119')
+    if (project.debug_aether.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:aether-255308:3280119')
+    }
 }
 
 minecraft {

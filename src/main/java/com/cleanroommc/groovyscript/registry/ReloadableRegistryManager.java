@@ -9,6 +9,11 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.jei.JeiProxyAccessor;
+import com.gildedgames.the_aether.api.accessories.AetherAccessory;
+import com.gildedgames.the_aether.api.enchantments.AetherEnchantment;
+import com.gildedgames.the_aether.api.enchantments.AetherEnchantmentFuel;
+import com.gildedgames.the_aether.api.freezables.AetherFreezable;
+import com.gildedgames.the_aether.api.freezables.AetherFreezableFuel;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mezz.jei.JustEnoughItems;
 import mezz.jei.Internal;
@@ -18,6 +23,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.ForgeRegistry;
@@ -154,6 +160,13 @@ public class ReloadableRegistryManager {
 
     private static void reloadForgeRegistries() {
         ((IReloadableForgeRegistry<?>) ForgeRegistries.RECIPES).groovyScript$onReload();
+        if (ModSupport.AETHER.isLoaded()) {
+            ((IReloadableForgeRegistry<?>) GameRegistry.findRegistry(AetherEnchantment.class)).groovyScript$onReload();
+            ((IReloadableForgeRegistry<?>) GameRegistry.findRegistry(AetherEnchantmentFuel.class)).groovyScript$onReload();
+            ((IReloadableForgeRegistry<?>) GameRegistry.findRegistry(AetherFreezable.class)).groovyScript$onReload();
+            ((IReloadableForgeRegistry<?>) GameRegistry.findRegistry(AetherFreezableFuel.class)).groovyScript$onReload();
+            ((IReloadableForgeRegistry<?>) GameRegistry.findRegistry(AetherAccessory.class)).groovyScript$onReload();
+        }
     }
 
     private static void unfreezeForgeRegistries() {
