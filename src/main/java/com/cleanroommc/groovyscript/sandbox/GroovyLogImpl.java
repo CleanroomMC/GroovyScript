@@ -245,11 +245,11 @@ public class GroovyLogImpl implements GroovyLog {
         this.errors.add(msg);
         writeLogLine(formatLine("ERROR", "An exception occurred while running scripts. Look at latest.log for a full stacktrace:"));
         writeLogLine("\t" + msg);
-        Pattern pattern = Pattern.compile("(\\w*).run\\(\\1.groovy:(\\d*)\\)");
+        Pattern pattern = Pattern.compile("(\\w*).run\\(\\1(\\.\\w*):(\\d*)\\)");
         for (String line : prepareStackTrace(throwable.getStackTrace())) {
             Matcher matcher = pattern.matcher(line);
-            if (matcher.matches()) {
-                writeLogLine("\t\tin " + matcher.group(1) + ".groovy in line " + matcher.group(2));
+            if (matcher.matches() && RunConfig.isGroovyFile(matcher.group(2))) {
+                writeLogLine("\t\tin " + matcher.group(1) + matcher.group(2) + " in line " + matcher.group(3));
             } else {
                 writeLogLine("\t\tat " + line);
             }
