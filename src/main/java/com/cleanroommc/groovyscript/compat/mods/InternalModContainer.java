@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
-import net.minecraftforge.fml.common.Loader;
-
+import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -15,26 +15,29 @@ import java.util.Set;
  * Will not be removed but made private and renamed to InternalContainer
  */
 @SuppressWarnings("all")
-class InternalModContainer<T extends ModPropertyContainer> extends GroovyContainer<T> {
+public class InternalModContainer<T extends ModPropertyContainer> extends GroovyContainer<T> {
 
-    private final String modId, modName;
+    private final String modId, containerName;
     private final Supplier<T> modProperty;
     private final boolean loaded;
     private final Collection<String> aliases;
 
-    public InternalModContainer(String modId, String modName, @NotNull Supplier<T> modProperty) {
-        this(modId, modName, modProperty, new String[0]);
+    InternalModContainer(String modId, String containerName, @NotNull Supplier<T> modProperty) {
+        this(modId, containerName, modProperty, new String[0]);
     }
 
-    public InternalModContainer(String modId, String modName, @NotNull Supplier<T> modProperty, String... aliases) {
+    InternalModContainer(String modId, String containerName, @NotNull Supplier<T> modProperty, String... aliases) {
+        super(GroovyPlugin.Priority.NONE);
         if (ModSupport.isFrozen()) {
-            throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + modName + "' too late.");
+            throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + containerName + "' too late.");
         }
         if (ModSupport.INSTANCE.hasCompatFor(modId)) {
-            throw new IllegalStateException("Compat was already added for " + modId + "!");
+            GroovyScript.LOGGER.error("Error while trying to add internal compat!");
+            GroovyScript.LOGGER.error("Internal mod compat must be added from GroovyScript before any other compat, but");
+            throw new IllegalStateException("compat was already added for " + modId + "!");
         }
         this.modId = modId;
-        this.modName = modName;
+        this.containerName = GroovyScript.NAME + " - " + containerName;
         this.modProperty = Suppliers.memoize(modProperty);
         this.loaded = Loader.isModLoaded(modId);
         Set<String> aliasSet = new ObjectOpenHashSet<>(aliases);
@@ -65,8 +68,8 @@ class InternalModContainer<T extends ModPropertyContainer> extends GroovyContain
     }
 
     @Override
-    public @NotNull String getModName() {
-        return modName;
+    public @NotNull String getContainerName() {
+        return containerName;
     }
 
     @Override

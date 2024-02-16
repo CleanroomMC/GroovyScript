@@ -104,12 +104,28 @@ public class ModSupport implements IDynamicGroovyProperty {
             GroovyScript.LOGGER.error("GroovyPlugin must not extend {}", GroovyContainer.class.getSimpleName());
             return;
         }
+        if (ModSupport.isFrozen()) {
+            throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + container.getContainerName() + "' too late.");
+        }
         if (!Loader.isModLoaded(container.getModId())) return;
+        if (hasCompatFor(container.getModId())) {
+            GroovyContainer<?> current = getContainer(container.getModId());
+            if (current.getOverridePriority().ordinal() >= container.getOverridePriority().ordinal()) {
+                // the existing container has a higher priority, keep it
+                GroovyScript.LOGGER.info("Overriding GroovyScript compat plugin '{}' by plugin '{}'", container.getContainerName(), current.getContainerName());
+                return;
+            }
+            // the existing container has a lower priority, yeet it
+            GroovyScript.LOGGER.info("Overriding GroovyScript compat plugin '{}' by plugin '{}'", current.getContainerName(), container.getContainerName());
+            containers.values().removeIf(c -> c == current);
+            containerList.removeIf(c -> c == current);
+        }
+
         ModPropertyContainer modPropertyContainer = container.createModPropertyContainer();
         if (modPropertyContainer == null) {
             modPropertyContainer = new ModPropertyContainer();
         }
-        new ExternalModContainer(container, modPropertyContainer);
+        registerContainer(new ExternalModContainer(container, modPropertyContainer));
         externalPluginClasses.add(container.getClass());
     }
 

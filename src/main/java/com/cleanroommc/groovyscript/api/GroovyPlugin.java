@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.api;
 
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -28,5 +29,41 @@ public interface GroovyPlugin extends IGroovyContainer {
     @ApiStatus.NonExtendable
     default boolean isLoaded() {
         return true;
+    }
+
+    @Override
+    @NotNull
+    default String getContainerName() {
+        return "PLACEHOLDERNAME-" + getModName();
+    }
+
+    /**
+     * Returns the override priority. Defines how this plugin should behave when another container with the same mod id exists.
+     * The return value should be as low as possible. Internal container always return {@link Priority#NONE}.
+     * @return the override priority
+     * @see Priority
+     */
+    @NotNull
+    default Priority getOverridePriority() {
+        return Priority.NONE;
+    }
+
+    enum Priority {
+        /**
+         * Default. Can be overridden by anything and can't override anything.
+         */
+        NONE,
+        /**
+         * Can override containers with priority NONE.
+         */
+        OVERRIDE,
+        /**
+         * Can override containers with priority NONE, OVERRIDE.
+         */
+        OVERRIDE_HIGH,
+        /**
+         * Can override containers with priority NONE, OVERRIDE, OVERRIDE_HIGH.
+         */
+        OVERRIDE_HIGHEST
     }
 }

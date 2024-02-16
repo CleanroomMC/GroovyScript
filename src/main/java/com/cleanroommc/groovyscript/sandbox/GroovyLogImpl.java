@@ -115,13 +115,13 @@ public class GroovyLogImpl implements GroovyLog {
             // has multiple log lines or the main message and the first sub message are to long ->
             // log each sub message in a single line, starting with the main message
             writeLogLine(formatLine(level, main + ": "));
-            for (int i = 0; i < messages.size(); i++) {
-                writeLogLine(formatLine(level, " - " + messages.get(i)));
+            for (String message : messages) {
+                writeLogLine(formatLine(level, " - " + message));
             }
             if (msg.shouldLogToMc()) {
                 logger.log(msg.getLevel(), main + " in line " + GroovyScript.getSandbox().getCurrentLine() + " : - ");
-                for (int i = 0; i < messages.size(); i++) {
-                    logger.log(msg.getLevel(), " - " + messages.get(i));
+                for (String message : messages) {
+                    logger.log(msg.getLevel(), " - " + message);
                 }
             }
         }
@@ -245,16 +245,16 @@ public class GroovyLogImpl implements GroovyLog {
         this.errors.add(msg);
         writeLogLine(formatLine("ERROR", "An exception occurred while running scripts. Look at latest.log for a full stacktrace:"));
         writeLogLine("\t" + msg);
-        Pattern pattern = Pattern.compile("(\\w*).run\\(\\1.groovy:(\\d*)\\)");
+        Pattern pattern = Pattern.compile("(\\w*).run\\(\\1(\\.\\w*):(\\d*)\\)");
         for (String line : prepareStackTrace(throwable.getStackTrace())) {
             Matcher matcher = pattern.matcher(line);
-            if (matcher.matches()) {
-                writeLogLine("\t\tin " + matcher.group(1) + ".groovy in line " + matcher.group(2));
+            if (matcher.matches() && RunConfig.isGroovyFile(matcher.group(2))) {
+                writeLogLine("\t\tin " + matcher.group(1) + matcher.group(2) + " in line " + matcher.group(3));
             } else {
                 writeLogLine("\t\tat " + line);
             }
         }
-        throwable.printStackTrace();
+        GroovyScript.LOGGER.throwing(throwable);
     }
 
     private List<String> prepareStackTrace(StackTraceElement[] stackTrace) {
@@ -287,6 +287,17 @@ public class GroovyLogImpl implements GroovyLog {
         if (source == null) {
             ModContainer mod = Loader.instance().activeModContainer();
             return mod != null ? mod.getModId() : GroovyScript.ID;
+        }
+        if (isDebug()) { // Find line number when debug is on
+            for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+                if (element.getFileName() == null) {
+                    continue;
+                }
+                if (RunConfig.isGroovyFile(element.getFileName())) {
+                    source += (":" + element.getLineNumber());
+                    break;
+                }
+            }
         }
         return source;
     }
@@ -357,7 +368,7 @@ public class GroovyLogImpl implements GroovyLog {
         }
 
         public Msg info() {
-            return level(Level.ERROR);
+            return level(Level.INFO);
         }
 
         public Msg debug() {

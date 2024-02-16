@@ -19,8 +19,12 @@ on:
           - 'release'
           - 'beta'
           - 'alpha'
-      publish-cf-mr:
-        description: Publish to CF / MR
+      publish-cf:
+        description: Publish to CF
+        default: true
+        type: boolean
+      publish-mr:
+        description: Publish to MR
         default: true
         type: boolean
       publish-gh:
@@ -37,6 +41,9 @@ on:
         required: true
         type: boolean
 
+env:
+  CHANGELOG_LOCATION: "build/gh_changelog.md"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -49,7 +56,8 @@ jobs:
       - name: Read current mod version
         id: read_version
         run: |
-          mod_version=$(grep "mod_version" gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
+          mod_version=$(grep "modVersion" gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
+          echo "Current mod version: $mod_version"
           if [ "$mod_version" == "${{inputs.version}}" ]; then
             echo "UPDATED=true" >> $GITHUB_ENV
           else
@@ -68,17 +76,16 @@ jobs:
             fi
             echo "publish-gh=${{ inputs.publish-gh }}" >> $GITHUB_ENV
           else
-            if [ "${{ inputs.publish-cf-mr }}" == "true" ]; then
+            if [ "${{ inputs.publish-cf }}" == "true" ] || [ "${{ inputs.publish-mr }}" == "true" ]; then
               echo "publish-gh=true" >> $GITHUB_ENV
             else
               echo "publish-gh=${{ inputs.publish-gh }}" >> $GITHUB_ENV
             fi
           fi
-          echo "file_name=${GITHUB_REPOSITORY#*/}-${{ github.event.inputs.version }}" >> $GITHUB_ENV
 
       - name: Set version
         if: env.UPDATED == 'false' # only change new version if it's not already updated
-        run: sed -i "s/mod_version.*=.*/mod_version = ${{ github.event.inputs.version }}/g" gradle.properties
+        run: sed -i "s/modVersion.*=.*/modVersion = ${{ github.event.inputs.version }}/g" gradle.properties
 
       - name: Commit and push gradle.properties
         if: env.UPDATED == 'false' # only push new version if it's not already updated
@@ -127,65 +134,32 @@ jobs:
           RELEASE_JSON=$(curl -sSL $RELEASE_URL)
           CHANGELOG="$(echo $RELEASE_JSON | jq -r '.body')"
           if [ "$CHANGELOG" == "null" ]; then
-            echo "No changelog found" > build/changelog.md
+            echo "No changelog found" > $CHANGELOG_LOCATION
           else
-            echo "$CHANGELOG" > build/changelog.md
+            echo "$CHANGELOG" > $CHANGELOG_LOCATION
           fi
 
-      - name: Publish Minecraft Mods
-        if: ${{ inputs.publish-cf-mr }}
-        uses: Kir-Antipov/mc-publish@v3.2
+      - name: Publish to Curseforge
+        if: ${{ inputs.publish-cf }}
+        uses: gradle/gradle-build-action@v2
+        env:
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_TOKEN }}
+          CHANGELOG_LOCATION: ${{ env.CHANGELOG_LOCATION }}
+          RELEASE_TYPE: ${{ inputs.release-type }}
         with:
-          curseforge-id: 687577
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          arguments: 'curseforge'
+          generate-job-summary: false
 
-          modrinth-id: GJaDRTrb
-          modrinth-featured: true
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
-          files-primary: build/libs/!(*-@(dev|sources|javadoc)).jar
-          files-secondary: build/libs/*-@(dev|sources|javadoc).jar
-          name: $file_name
-          version: ${{ github.event.inputs.version }}
-          version-type: ${{ github.event.inputs.release-type }}
-          changelog-file: build/changelog.md
-          loaders: |
-            forge
-          game-versions: |
-            1.12.2
-          dependencies: |
-            mixin-booter@8.3(required)
-            actually-additions(optional)
-            advanced-mortars(optional)
-            applied-energistics-2(optional)
-            astral-sorcery(optional)
-            avaritia-1-10(optional)
-            blood-magic(optional)
-            botania(optional)
-            chisel(optional)
-            compact-machines(optional)
-            constructs-armory(optional)
-            draconic-evolution(optional)
-            ender-io(optional)
-            evilcraft(optional)
-            extended-crafting(optional)
-            forestry(optional)
-            had-enough-items(optional)
-            ic2-classic(optional)
-            immersive-engineering(optional)
-            industrial-craft(optional)
-            inspirations(optional)
-            integrated-dynamics(optional)
-            mekanism(optional)
-            roots(optional)
-            thaumcraft(optional)
-            thermal-expansion(optional)
-            tinkers-construct(optional)
-            tinkers-complement(optional)
-            woot(optional)
-          java: |
-            8
-          retry-attempts: 2
+      - name: Publish to Modrinth
+        if: ${{ inputs.publish-mr }}
+        uses: gradle/gradle-build-action@v2
+        env:
+          MODRINTH_API_KEY: ${{ secrets.MODRINTH_TOKEN }}
+          CHANGELOG_LOCATION: ${{ env.CHANGELOG_LOCATION }}
+          RELEASE_TYPE: ${{ inputs.release-type }}
+        with:
+          arguments: 'modrinth'
+          generate-job-summary: false
 
       - name: Publish to maven
         if: ${{ inputs.publish-maven }}
@@ -193,5 +167,5 @@ jobs:
         with:
           arguments: publish
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_NAME }}
+          MAVEN_USER: ${{ secrets.MAVEN_NAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
