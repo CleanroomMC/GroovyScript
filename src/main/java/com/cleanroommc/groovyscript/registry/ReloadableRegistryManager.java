@@ -11,6 +11,8 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.jei.JeiProxyAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mezz.jei.JustEnoughItems;
+import mezz.jei.Internal;
+import mezz.jei.ingredients.IngredientFilter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +28,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
+import java.lang.reflect.InvocationTargetException;
 
 @GroovyBlacklist
 public class ReloadableRegistryManager {
@@ -136,6 +139,15 @@ public class ReloadableRegistryManager {
             if (msgPlayer) {
                 Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Reloading JEI took " + time + "ms"));
             }
+
+            // Fix: HEI Removals Disappearing on Reload
+            // Reloads the Removed Ingredients (Actually removes them)
+            // Must use Internal, no other way to get IngredientFilter
+            // Reflection, method doesn't exist in JEI
+            var filter = Internal.getIngredientFilter();
+            try {
+                IngredientFilter.class.getDeclaredMethod("block").invoke(filter);
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {}
         }
     }
 
