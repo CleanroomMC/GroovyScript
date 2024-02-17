@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.Alias;
@@ -13,16 +14,19 @@ import mekanism.common.recipe.machines.EnrichmentRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRecipe> {
 
     public EnrichmentChamber() {
-        super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, Alias.generateOf("Enricher").andGenerateOfClass(EnrichmentChamber.class));
+        super(RecipeHandler.Recipe.ENRICHMENT_CHAMBER, Alias.generateOfClassAnd(EnrichmentChamber.class, "Enricher"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay_ball')).output(item('minecraft:nether_star'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:clay_ball'), item('minecraft:nether_star')", commented = true))
     public EnrichmentRecipe add(IIngredient ingredient, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Enrichment Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -40,6 +44,7 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
         return recipe1;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:diamond')"))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");
@@ -59,6 +64,8 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
         return found;
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<EnrichmentRecipe> {
 
         @Override
@@ -73,6 +80,7 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable EnrichmentRecipe register() {
             if (!validate()) return null;
             EnrichmentRecipe recipe = null;

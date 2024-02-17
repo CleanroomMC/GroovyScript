@@ -2,6 +2,10 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.infuse.InfuseObject;
@@ -15,6 +19,15 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
+        reloadability = RegistryDescription.Reloadability.FLAWED,
+        admonition = @Admonition(type = Admonition.Type.DANGER,
+                                 format = Admonition.Format.STANDARD,
+                                 hasTitle = true,
+                                 value = "groovyscript.wiki.mekanism.infusion.note0"),
+        priority = 100
+)
 public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
 
     private List<Pair<ItemStack, InfuseObject>> objectBackup;
@@ -55,6 +68,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
         this.objectScripted = new ArrayList<>();
     }
 
+    @MethodDescription(example = @Example("'groovy_example', resource('placeholdername:blocks/example')"), type = MethodDescription.Type.ADDITION, priority = 500)
     public void addType(String name, ResourceLocation resource) {
         InfuseType infuse = new InfuseType(name.toUpperCase(Locale.ROOT), resource);
         infuse.unlocalizedName = name.toLowerCase(Locale.ROOT);
@@ -63,42 +77,56 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
         InfuseRegistry.registerInfuseType(infuse);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, priority = 500)
     public void addType(String name, String resource) {
         addType(name, new ResourceLocation(resource));
     }
 
+    @MethodDescription
     public boolean removeType(String name) {
         addBackup(Pair.of(name.toUpperCase(Locale.ROOT), InfuseRegistry.get(name)));
         InfuseRegistry.getInfuseMap().remove(name.toUpperCase(Locale.ROOT));
         return true;
     }
 
+    @MethodDescription(example = {
+            @Example("infusion('diamond'), 100, item('minecraft:clay')"),
+            @Example("infusion('carbon'), 100, item('minecraft:gold_ingot')")
+    }, type = MethodDescription.Type.ADDITION)
     public void add(InfuseType type, int amount, ItemStack item) {
         InfuseObject object = new InfuseObject(type, amount);
         this.objectScripted.add(Pair.of(item, object));
         InfuseRegistry.registerInfuseObject(item, object);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(InfuseType type, int amount, IIngredient... ingredients) {
         for (ItemStack item : Arrays.stream(ingredients).flatMap(g -> Arrays.stream(g.getMatchingStacks())).collect(Collectors.toList())) {
             add(type, amount, item);
         }
     }
 
+    @MethodDescription(example = {
+            @Example("'groovy_example', 10, item('minecraft:ice')"),
+            @Example("'groovy_example', 20, item('minecraft:packed_ice')")
+    }, type = MethodDescription.Type.ADDITION)
     public void add(String type, int amount, IIngredient... ingredients) {
         add(InfuseRegistry.get(type.toUpperCase(Locale.ROOT)), amount, ingredients);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(InfuseType type, int amount, Collection<IIngredient> ingredients) {
         for (ItemStack item : ingredients.stream().flatMap(g -> Arrays.stream(g.getMatchingStacks())).collect(Collectors.toList())) {
             add(type, amount, item);
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(String type, int amount, Collection<IIngredient> ingredients) {
         add(InfuseRegistry.get(type.toUpperCase(Locale.ROOT)), amount, ingredients);
     }
 
+    @MethodDescription(example = @Example("ore('dustDiamond')"))
     public void remove(IIngredient item) {
         for (Map.Entry<ItemStack, InfuseObject> entry : InfuseRegistry.getObjectMap().entrySet().stream().filter(x -> item.test(x.getKey())).collect(Collectors.toList())) {
             objectBackup.add(Pair.of(entry.getKey(), entry.getValue()));
@@ -106,18 +134,24 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
         }
     }
 
+    @MethodDescription
     public void remove(IIngredient... ingredients) {
         for (IIngredient item : ingredients) {
             remove(item);
         }
     }
 
+    @MethodDescription
     public void remove(Collection<IIngredient> ingredients) {
         for (IIngredient item : ingredients) {
             remove(item);
         }
     }
 
+    @MethodDescription(example = {
+            @Example("infusion('carbon')"),
+            @Example(value = "infusion('diamond')", commented = true)
+    })
     public void removeByType(InfuseType type) {
         for (Map.Entry<ItemStack, InfuseObject> entry : InfuseRegistry.getObjectMap().entrySet().stream().filter(x -> x.getValue().type == type).collect(Collectors.toList())) {
             objectBackup.add(Pair.of(entry.getKey(), entry.getValue()));
@@ -125,10 +159,12 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
         }
     }
 
+    @MethodDescription
     public void removeByType(String type) {
         removeByType(InfuseRegistry.get(type.toUpperCase(Locale.ROOT)));
     }
 
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         InfuseRegistry.getInfuseMap().forEach((l, r) -> addBackup(Pair.of(l, r)));
         InfuseRegistry.getInfuseMap().clear();

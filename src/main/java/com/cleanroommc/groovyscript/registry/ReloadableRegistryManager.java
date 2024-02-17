@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.registry;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
+import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -10,7 +11,9 @@ import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.jei.JeiProxyAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import mezz.jei.Internal;
 import mezz.jei.JustEnoughItems;
+import mezz.jei.ingredients.IngredientFilter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -23,6 +26,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
@@ -72,14 +76,13 @@ public class ReloadableRegistryManager {
     @ApiStatus.Internal
     public static void onReload() {
         GroovyScript.reloadRunConfig(false);
-        reloadForgeRegistries();
         VanillaModule.INSTANCE.onReload();
         ModSupport.getAllContainers().stream()
                 .filter(GroovyContainer::isLoaded)
                 .map(GroovyContainer::get)
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
-                .forEach(VirtualizedRegistry::onReload);
+                .forEach(IScriptReloadable::onReload);
         if (ModSupport.JEI.isLoaded()) {
             JeiPlugin.reload();
         }
@@ -92,7 +95,7 @@ public class ReloadableRegistryManager {
                 .map(GroovyContainer::get)
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
-                .forEach(VirtualizedRegistry::afterScriptLoad);
+                .forEach(IScriptReloadable::afterScriptLoad);
         VanillaModule.INSTANCE.afterScriptLoad();
         unfreezeForgeRegistries();
     }
@@ -103,6 +106,13 @@ public class ReloadableRegistryManager {
 
     public static <V extends IForgeRegistryEntry<V>> void addRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name, V entry) {
         ((IReloadableForgeRegistry<V>) registry).groovyScript$registerEntry(entry.setRegistryName(name));
+    }
+
+    public static <V extends IForgeRegistryEntry<V>> void addRegistryEntry(IForgeRegistry<V> registry, V entry) {
+        if (entry.getRegistryName() == null) {
+            throw new IllegalArgumentException("Expected the name to have a registry name. Add it or use a different method!");
+        }
+        ((IReloadableForgeRegistry<V>) registry).groovyScript$registerEntry(entry);
     }
 
     public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, String name) {
@@ -136,11 +146,23 @@ public class ReloadableRegistryManager {
             if (msgPlayer) {
                 Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Reloading JEI took " + time + "ms"));
             }
+
+            // Fix: HEI Removals Disappearing on Reload
+            // Reloads the Removed Ingredients (Actually removes them)
+            // Must use Internal, no other way to get IngredientFilter
+            // Reflection, method doesn't exist in JEI
+            var filter = Internal.getIngredientFilter();
+            try {
+                //noinspection JavaReflectionMemberAccess
+                IngredientFilter.class.getDeclaredMethod("block").invoke(filter);
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {}
         }
     }
 
-    private static void reloadForgeRegistries() {
-        ((IReloadableForgeRegistry<?>) ForgeRegistries.RECIPES).groovyScript$onReload();
+    protected static void reloadForgeRegistries(IForgeRegistry<?>... registries) {
+        for (IForgeRegistry<?> registry : registries) {
+            ((IReloadableForgeRegistry<?>) registry).groovyScript$onReload();
+        }
     }
 
     private static void unfreezeForgeRegistries() {

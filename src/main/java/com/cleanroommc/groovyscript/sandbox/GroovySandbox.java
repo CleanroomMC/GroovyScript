@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.helper.Alias;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
@@ -60,6 +61,13 @@ public abstract class GroovySandbox {
         Objects.requireNonNull(obj);
         for (String alias : Alias.generateOf(name)) {
             bindings.put(alias, obj);
+        }
+    }
+
+    public void registerBinding(INamed named) {
+        Objects.requireNonNull(named);
+        for (String alias : named.getAliases()) {
+            bindings.put(alias, named);
         }
     }
 

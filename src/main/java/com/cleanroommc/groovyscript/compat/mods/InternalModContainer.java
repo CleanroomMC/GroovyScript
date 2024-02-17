@@ -4,8 +4,13 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fml.common.Loader;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Will not be removed but made private and renamed to InternalContainer
@@ -16,6 +21,7 @@ public class InternalModContainer<T extends ModPropertyContainer> extends Groovy
     private final String modId, containerName;
     private final Supplier<T> modProperty;
     private final boolean loaded;
+    private final Collection<String> aliases;
 
     InternalModContainer(String modId, String containerName, @NotNull Supplier<T> modProperty) {
         this(modId, containerName, modProperty, new String[0]);
@@ -35,12 +41,21 @@ public class InternalModContainer<T extends ModPropertyContainer> extends Groovy
         this.containerName = GroovyScript.NAME + " - " + containerName;
         this.modProperty = Suppliers.memoize(modProperty);
         this.loaded = Loader.isModLoaded(modId);
+        Set<String> aliasSet = new ObjectOpenHashSet<>(aliases);
+        aliasSet.add(modId);
+        this.aliases = Collections.unmodifiableSet(aliasSet);
         ModSupport.INSTANCE.registerContainer(this);
     }
 
     @Override
     public boolean isLoaded() {
         return loaded;
+    }
+
+    @NotNull
+    @Override
+    public Collection<String> getAliases() {
+        return aliases;
     }
 
     @Override

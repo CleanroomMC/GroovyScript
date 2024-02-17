@@ -17,7 +17,7 @@ import java.util.Map;
 public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger.HeatExchangerRecipe> {
 
     public LiquidHeatExchanger() {
-        super(Alias.generateOf("HeatExchanger"));
+        super(Alias.generateOfClassAnd(LiquidHeatExchanger.class, "HeatExchanger"));
     }
 
     @Override

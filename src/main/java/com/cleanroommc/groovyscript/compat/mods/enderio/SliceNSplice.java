@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.enderio;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.ManyToOneRecipe;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
@@ -23,16 +24,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@RegistryDescription
 public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
 
     public SliceNSplice() {
-        super(Alias.generateOf("SliceAndSplice"));
+        super(Alias.generateOfClassAnd(SliceNSplice.class, "SliceAndSplice"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), null, item('minecraft:clay')).input(null, item('minecraft:clay'), null).output(item('minecraft:gold_ingot')).energy(1000).xp(5)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(ItemStack output, List<IIngredient> input, int energy) {
         recipeBuilder()
                 .energy(energy)
@@ -59,6 +63,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('enderio:item_material:40')"))
     public void remove(ItemStack output) {
         int count = 0;
         Iterator<IManyToOneRecipe> iter = SliceAndSpliceRecipeManager.getInstance().getRecipes().iterator();
@@ -75,6 +80,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("[item('enderio:item_alloy_ingot:7'), item('enderio:block_enderman_skull'), item('enderio:item_alloy_ingot:7'), item('minecraft:potion').withNbt(['Potion': 'minecraft:water']), item('enderio:item_basic_capacitor'), item('minecraft:potion').withNbt(['Potion': 'minecraft:water'])]"))
     public void removeByInput(List<ItemStack> input) {
         IRecipe recipe = SliceAndSpliceRecipeManager.getInstance().getRecipeForInputs(RecipeLevel.IGNORE, RecipeUtils.getMachineInputs(input));
         if (recipe instanceof IManyToOneRecipe) {
@@ -91,26 +97,34 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         restoreFromBackup().forEach(SliceAndSpliceRecipeManager.getInstance().getRecipes()::add);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IManyToOneRecipe> streamRecipes() {
         return new SimpleObjectStream<>(SliceAndSpliceRecipeManager.getInstance().getRecipes())
                 .setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         SliceAndSpliceRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         SliceAndSpliceRecipeManager.getInstance().getRecipes().clear();
     }
 
+    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
 
+        @Property(valid = @Comp(value = "0",type = Comp.Type.GTE))
         private float xp;
+        @Property(valid = @Comp(value = "0",type = Comp.Type.GT))
         private int energy;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder xp(float xp) {
             this.xp = xp;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
@@ -133,6 +147,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable IRecipe register() {
             if (!validate()) return null;
             RecipeOutput recipeOutput = new RecipeOutput(output.get(0), 1, xp);

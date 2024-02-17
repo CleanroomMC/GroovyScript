@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.woot;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.woot.AnvilManagerAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
@@ -16,12 +17,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Collectors;
 
+@RegistryDescription(
+        admonition = {
+                @Admonition("groovyscript.wiki.woot.stygian_iron_anvil.note0"),
+                @Admonition(value = "groovyscript.wiki.woot.stygian_iron_anvil.note1", type = Admonition.Type.WARNING)
+        }
+)
 public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
 
     public StygianIronAnvil() {
-        super(Alias.generateOfClass(StygianIronAnvil.class).andGenerate("Anvil"));
+        super(Alias.generateOfClassAnd(StygianIronAnvil.class, "Anvil"));
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:diamond'),item('minecraft:diamond'),item('minecraft:diamond')).base(item('minecraft:gold_ingot')).output(item('minecraft:clay')).preserveBase(true)"),
+            @Example(".input(item('minecraft:diamond'), item('minecraft:gold_ingot'), item('minecraft:iron_ingot'), item('minecraft:diamond_block'), item('minecraft:gold_block'), item('minecraft:iron_bars'), item('minecraft:magma')).base(item('minecraft:clay')).output(item('minecraft:clay')).preserveBase()")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -53,6 +64,7 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         return true;
     }
 
+    @MethodDescription(example = @Example("item('minecraft:iron_bars')"))
     public boolean removeByBase(ItemStack base) {
         return Woot.anvilManager.getRecipes().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getBaseItem(), base)) {
@@ -63,6 +75,7 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('woot:stygianironplate')"))
     public boolean removeByOutput(ItemStack output) {
         return Woot.anvilManager.getRecipes().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getCopyOutput(), output)) {
@@ -73,32 +86,41 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         Woot.anvilManager.getRecipes().forEach(this::addBackup);
         Woot.anvilManager.getRecipes().clear();
     }
 
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IAnvilRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Woot.anvilManager.getRecipes())
                 .setRemover(this::remove);
     }
 
+    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "Integer.MAX_VALUE")})
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IAnvilRecipe> {
 
+        @Property(defaultValue = "ItemStack.EMPTY", valid = @Comp(value = "isEmpty", type = Comp.Type.NOT))
         private ItemStack base = ItemStack.EMPTY;
+        @Property
         private boolean preserveBase = false;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder base(ItemStack base) {
             this.base = base;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder preserveBase(boolean preserveBase) {
             this.preserveBase = preserveBase;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder preserveBase() {
             this.preserveBase = !this.preserveBase;
             return this;
@@ -119,6 +141,7 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable IAnvilRecipe register() {
             if (!validate()) return null;
 

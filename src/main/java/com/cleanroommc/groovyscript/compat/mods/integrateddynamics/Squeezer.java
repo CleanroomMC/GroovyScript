@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.integrateddynamics;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -16,12 +17,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@RegistryDescription
 public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> {
 
     public Squeezer() {
         super();
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:clay_ball'), 1F).output(item('minecraft:clay_ball') * 2, 0.7F).output(item('minecraft:clay_ball') * 10, 0.2F).fluidOutput(fluid('lava') * 2000).mechanical().duration(5)"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay'), 0.5F)"),
+            @Example(".input(item('minecraft:diamond')).fluidOutput(fluid('lava') * 10)")
+    }, requirement = @Property(property = "basic", defaultValue = "true"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder().basic();
     }
@@ -49,6 +56,7 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInput(ItemStack input) {
         return org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
@@ -59,43 +67,57 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
         org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> streamRecipes() {
         return new SimpleObjectStream<>(org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> {
 
+        @Property(value = "groovyscript.wiki.integrateddynamics.squeezer.output.value", ignoresInheritedMethods = true, valid = {
+                @Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "3")})
         private final List<IngredientRecipeComponent> output = new ArrayList<>();
+        @Property(value = "groovyscript.wiki.integrateddynamics.squeezer.duration.value", defaultValue = "10")
         private int duration = 10;
+        @Property("groovyscript.wiki.integrateddynamics.squeezer.basic.value")
         private boolean basic;
+        @Property("groovyscript.wiki.integrateddynamics.squeezer.mechanical.value")
         private boolean mechanical;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder basic(boolean is) {
             this.basic = is;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder basic() {
             this.basic = !basic;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder mechanical(boolean is) {
             this.mechanical = is;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder mechanical() {
             this.mechanical = !mechanical;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(ItemStack output, float chance) {
             IngredientRecipeComponent target = new IngredientRecipeComponent(output);
             target.setChance(chance);
@@ -103,11 +125,13 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(ItemStack output) {
             this.output.add(new IngredientRecipeComponent(output));
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder duration(int duration) {
             this.duration = duration;
             return this;
@@ -129,6 +153,7 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent> register() {
             if (!validate()) return null;
 

@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
@@ -21,12 +22,18 @@ import java.util.List;
 import static epicsquid.roots.init.ModRecipes.addMortarRecipe;
 import static epicsquid.roots.init.ModRecipes.getMortarRecipes;
 
+@RegistryDescription
 public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRecipe>> {
 
     public Mortar() {
-        super(Alias.generateOf("MortarAndPestle").andGenerateOfClass(Mortar.class));
+        super(Alias.generateOfClassAnd(Mortar.class, "MortarAndPestle"));
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".name('clay_mortar').input(item('minecraft:stone'),item('minecraft:gold_ingot'),item('minecraft:stone'),item('minecraft:gold_ingot'),item('minecraft:stone')).generate(false).output(item('minecraft:clay')).color(1, 0, 0.1, 1, 0, 0.1)"),
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).color(0, 0, 0.1)"),
+            @Example(".input(item('minecraft:diamond'), item('minecraft:diamond')).output(item('minecraft:gold_ingot') * 16).red(0).green1(0.5).green2(1)")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -60,6 +67,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
         return null;
     }
 
+    @MethodDescription(example = @Example("resource('roots:wheat_flour')"))
     public boolean removeByName(ResourceLocation name) {
         return ModRecipesAccessor.getMortarRecipes().entrySet().removeIf(x -> {
             // Some Mortar recipe names are generated via [base]_x. If we are removing eg "wheat_flour" we should detect and remove all 5 variants
@@ -71,6 +79,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
         });
     }
 
+    @MethodDescription(example = @Example("item('minecraft:string')"))
     public boolean removeByOutput(ItemStack output) {
         return ModRecipesAccessor.getMortarRecipes().entrySet().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getValue().getResult(), output)) {
@@ -81,93 +90,118 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipesAccessor.getMortarRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         ModRecipesAccessor.getMortarRecipes().clear();
     }
 
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MortarRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getMortarRecipes())
                 .setRemover(r -> this.removeByName(r.getRegistryName()));
     }
 
+    @Property(property = "name")
+    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "5")})
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MortarRecipe> {
 
+        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
         private float red1 = 1.0F;
+        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
         private float green1 = 1.0F;
+        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
         private float blue1 = 1.0F;
+        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
         private float red2 = 1.0F;
+        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
         private float green2 = 1.0F;
+        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
         private float blue2 = 1.0F;
+        @Property(defaultValue = "true")
         private boolean generate = true;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder red1(float red1) {
             this.red1 = red1;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder green1(float green1) {
             this.green1 = green1;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder blue1(float blue1) {
             this.blue1 = blue1;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder red2(float red2) {
             this.red2 = red2;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder green2(float green2) {
             this.green2 = green2;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder blue2(float blue2) {
             this.blue2 = blue2;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"red1", "red2"})
         public RecipeBuilder red(float red1, float red2) {
             this.red1 = red1;
             this.red2 = red2;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"red1", "red2"})
         public RecipeBuilder red(float red) {
             this.red1 = red;
             this.red2 = red;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"green1", "green2"})
         public RecipeBuilder green(float green1, float green2) {
             this.green1 = green1;
             this.green2 = green2;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"green1", "green2"})
         public RecipeBuilder green(float green) {
             this.green1 = green;
             this.green2 = green;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"blue1", "blue2"})
         public RecipeBuilder blue(float blue1, float blue2) {
             this.blue1 = blue1;
             this.blue2 = blue2;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"blue1", "blue2"})
         public RecipeBuilder blue(float blue) {
             this.blue1 = blue;
             this.blue2 = blue;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"red1", "green1", "blue1", "red2", "green2", "blue2"})
         public RecipeBuilder color(float red1, float green1, float blue1, float red2, float green2, float blue2) {
             this.red1 = red1;
             this.red2 = red2;
@@ -178,6 +212,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"red1", "green1", "blue1", "red2", "green2", "blue2"})
         public RecipeBuilder color(float red, float green, float blue) {
             this.red1 = red;
             this.red2 = red;
@@ -188,11 +223,13 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder generate(boolean generate) {
             this.generate = generate;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder generate() {
             this.generate = !this.generate;
             return this;
@@ -221,6 +258,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable MortarRecipe register() {
             if (!validate()) return null;
 

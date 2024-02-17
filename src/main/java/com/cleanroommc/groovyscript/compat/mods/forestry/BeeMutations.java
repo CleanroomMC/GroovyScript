@@ -22,7 +22,7 @@ import java.util.function.Function;
 public class BeeMutations extends ForestryRegistry<IBeeMutation> {
 
     public BeeMutations() {
-        super(Alias.generateOf("Mutations"));
+        super(Alias.generateOfClassAnd(BeeMutations.class, "Mutations"));
     }
 
     @Override

@@ -11,19 +11,14 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.Warp;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.AspectList;
 
 import java.util.Collection;
 
 public class Thaumcraft extends ModPropertyContainer {
-
-    private final Object2ObjectOpenHashMap<String, Object> altNames = new Object2ObjectOpenHashMap<>();
 
     public final Crucible crucible = new Crucible();
     public final InfusionCrafting infusionCrafting = new InfusionCrafting();
@@ -45,9 +40,9 @@ public class Thaumcraft extends ModPropertyContainer {
         addRegistry(smeltingBonus);
         addRegistry(warp);
         addRegistry(aspectHelper);
-        Alias.putAll("ArcaneWorkbench", arcaneWorkbench, altNames);
-        Alias.putAll("Aspect", aspect, altNames);
-        Alias.putAll("Research", research, altNames);
+        addRegistry(arcaneWorkbench);
+        addRegistry(aspect);
+        addRegistry(research);
     }
 
     @Override
@@ -56,12 +51,6 @@ public class Thaumcraft extends ModPropertyContainer {
         GameObjectHandlerManager.registerGameObjectHandler("thaumcraft", "crystal", IGameObjectHandler.wrapStringGetter(Thaumcraft::getAspect, ThaumcraftApiHelper::makeCrystal));
         ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
         ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);
-    }
-
-    @Override
-    public @Nullable Object getProperty(String name) {
-        Object o = super.getProperty(name);
-        return o != null ? o : altNames.get(name);
     }
 
     public static AspectList makeAspectList(Collection<AspectStack> aspects) {

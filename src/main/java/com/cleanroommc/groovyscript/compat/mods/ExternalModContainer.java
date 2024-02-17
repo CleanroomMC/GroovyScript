@@ -2,11 +2,14 @@ package com.cleanroommc.groovyscript.compat.mods;
 
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.cleanroommc.groovyscript.api.IGroovyContainer;
+
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Set;
 
 public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> {
 
@@ -22,7 +25,9 @@ public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> 
         this.container = Objects.requireNonNull(container);
         this.modId = groovyContainer.getModId();
         this.containerName = groovyContainer.getContainerName();
-        this.aliases = Collections.unmodifiableCollection(groovyContainer.getAliases());
+        Set<String> aliasSet = new ObjectOpenHashSet<>(groovyContainer.getAliases());
+        aliasSet.add(modId);
+        this.aliases = Collections.unmodifiableSet(aliasSet);
     }
 
     @Override

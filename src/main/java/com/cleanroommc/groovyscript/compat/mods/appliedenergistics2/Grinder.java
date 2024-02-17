@@ -4,6 +4,7 @@ import appeng.api.AEApi;
 import appeng.api.features.IGrinderRecipe;
 import appeng.api.features.IGrinderRecipeBuilder;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -14,12 +15,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
 
     public Grinder() {
         super();
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'), item('minecraft:gold_ingot'), item('minecraft:diamond')).turns(1).chance1(0.5).chance2(0.3)"),
+            @Example(".input(item('minecraft:stone')).output(item('minecraft:clay') * 4).turns(10)")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -40,6 +46,7 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         addBackup(recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:gold_ingot')"))
     public void removeByInput(ItemStack input) {
         List<IGrinderRecipe> recipes = AEApi.instance().registries().grinder().getRecipes().stream().filter(x -> ItemStack.areItemStacksEqual(x.getInput(), input)).collect(Collectors.toList());
         for (IGrinderRecipe recipe : recipes) {
@@ -48,6 +55,7 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:quartz')"))
     public void removeByOutput(ItemStack output) {
         List<IGrinderRecipe> recipes = AEApi.instance().registries().grinder().getRecipes().stream().filter(x -> ItemStack.areItemStacksEqual(x.getOutput(), output)).collect(Collectors.toList());
         for (IGrinderRecipe recipe : recipes) {
@@ -56,6 +64,7 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         for (IGrinderRecipe recipe : AEApi.instance().registries().grinder().getRecipes()) {
             AEApi.instance().registries().grinder().removeRecipe(recipe);
@@ -63,29 +72,38 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         }
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "3")})
     public static class RecipeBuilder extends AbstractRecipeBuilder<IGrinderRecipe> {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private int turns;
+        @Property(defaultValue = "1.0f", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
         private float chance1 = 1.0f;
+        @Property(defaultValue = "1.0f", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
         private float chance2 = 1.0f;
 
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder turns(int turns) {
             this.turns = turns;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"chance1", "chance2"})
         public RecipeBuilder chance(float chance1, float chance2) {
             this.chance1 = chance1;
             this.chance2 = chance2;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder chance1(float chance) {
             this.chance1 = chance;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder chance2(float chance) {
             this.chance2 = chance;
             return this;
@@ -106,6 +124,7 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable IGrinderRecipe register() {
             if (!validate()) return null;
             IGrinderRecipeBuilder builder = AEApi.instance().registries().grinder().builder()
