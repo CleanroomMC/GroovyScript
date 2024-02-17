@@ -2,7 +2,12 @@ package com.cleanroommc.groovyscript.server;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.GroovyScriptConfig;
+import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import com.cleanroommc.groovyscript.server.provider.*;
+import com.google.gson.Gson;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
+import net.minecraft.launchwrapper.Launch;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.CancelChecker;
 import org.eclipse.lsp4j.jsonrpc.CompletableFutures;
@@ -11,11 +16,16 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either3;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.*;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
+@SuppressWarnings("deprecation")
 public class GroovyServer implements LanguageServer, LanguageClientAware, TextDocumentService, WorkspaceService {
 
     @SuppressWarnings("InfiniteLoopStatement")
@@ -34,6 +44,16 @@ public class GroovyServer implements LanguageServer, LanguageClientAware, TextDo
             }
         }
     }
+
+    public ScanResult scanResult = new ClassGraph()
+            .enableClassInfo()
+            .enableSystemJarsAndModules()
+            .overrideClassLoaders(Launch.classLoader)
+            .acceptPaths("*")
+            .rejectClasses(GroovySecurityManager.INSTANCE.getBannedClasses().stream().map(Class::getName).toArray(String[]::new))
+            .rejectPackages(GroovySecurityManager.INSTANCE.getBannedPackages().stream().toArray(String[]::new))
+            .acceptClasses(GroovySecurityManager.INSTANCE.getWhiteListedClasses().stream().map(Class::getName).toArray(String[]::new))
+            .scan();
 
     public ClientCapabilities clientCapabilities;
     public LanguageClient client;
@@ -60,7 +80,7 @@ public class GroovyServer implements LanguageServer, LanguageClientAware, TextDo
 
         var completion = new CompletionOptions();
         completion.setResolveProvider(true);
-        completion.setTriggerCharacters(List.of()); // TODO: set
+        completion.setTriggerCharacters(Collections.emptyList()); // TODO: set
         serverCapabilities.setCompletionProvider(completion);
 
         serverCapabilities.setDeclarationProvider(true);
@@ -85,13 +105,13 @@ public class GroovyServer implements LanguageServer, LanguageClientAware, TextDo
         serverCapabilities.setRenameProvider(rename);
 
         var semanticTokensLegend = new SemanticTokensLegend();
-        semanticTokensLegend.setTokenModifiers(List.of()); // TODO: set
-        semanticTokensLegend.setTokenTypes(List.of()); // TODO: set
+        semanticTokensLegend.setTokenModifiers(Collections.emptyList()); // TODO: set
+        semanticTokensLegend.setTokenTypes(Collections.emptyList()); // TODO: set
         var semanticTokens = new SemanticTokensWithRegistrationOptions(semanticTokensLegend, true, true);
         serverCapabilities.setSemanticTokensProvider(semanticTokens);
 
         var signatureHelp = new SignatureHelpOptions();
-        signatureHelp.setTriggerCharacters(List.of()); // TODO: set
+        signatureHelp.setTriggerCharacters(Collections.emptyList()); // TODO: set
         serverCapabilities.setSignatureHelpProvider(signatureHelp);
 
         serverCapabilities.setDocumentSymbolProvider(true);
@@ -213,6 +233,17 @@ public class GroovyServer implements LanguageServer, LanguageClientAware, TextDo
 
     @Override
     public CompletableFuture<Hover> hover(HoverParams params) {
+        System.out.println("GroovyServer::hover =>");
+        System.out.println("    size:" + scanResult.getAllClasses().size());
+
+        var file = GroovyScript.getScriptFile().toPath().resolve("scan.graph").toFile();
+        try (var fr = new FileWriter(file);
+             var br = new BufferedWriter(fr);) {
+            br.write(scanResult.getAllClasses().generateGraphVizDotFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return mapCompile(cancelToken -> HoverProvider.provide(params));
     }
 
