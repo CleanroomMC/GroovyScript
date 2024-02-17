@@ -224,17 +224,20 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         RecipesAS.capeCraftingRecipes.put(constellation, recipe);
     }
 
-    @RecipeBuilderDescription(template = "constellation1")
+    @RecipeBuilderDescription(example = {
+            @Example(".major().name('square').color(0xE01903).connection(12, 2, 2, 2).connection(12, 12, 12, 2).connection(2, 12, 12, 12).connection(2, 2, 2, 12)"),
+            @Example(value = ".minor().name('slow').connection(10, 5, 5, 5).connection(5, 10, 5, 5).connection(3, 3, 3, 3).phase(MoonPhase.FULL)", imports = "hellfirepvp.astralsorcery.common.constellation.MoonPhase")
+    })
     public ConstellationBuilder constellationBuilder() {
         return new ConstellationBuilder();
     }
 
-    @RecipeBuilderDescription(template = "constellation2")
+    @RecipeBuilderDescription(example = @Example(".constellation(constellation('square')).enchantmentEffect(enchantment('minecraft:luck_of_the_sea'), 1, 3).potionEffect(potion('minecraft:luck'), 1, 2)"))
     public ConstellationMapEffectBuilder constellationMapEffectBuilder() {
         return new ConstellationMapEffectBuilder();
     }
 
-    @RecipeBuilderDescription(template = "constellation3")
+    @RecipeBuilderDescription(example = @Example(".constellation(constellation('square')).addItem(ore('gemDiamond')).addItem(item('minecraft:water_bucket')).addItem(item('minecraft:rabbit_foot')).addItem(item('minecraft:fish'))"))
     public SignatureItemsHelper signatureItems() {
         return new SignatureItemsHelper();
     }
