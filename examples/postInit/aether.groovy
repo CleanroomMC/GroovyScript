@@ -8,9 +8,10 @@ mods.aether_legacy.enchanter.recipeBuilder()
     .time(200)
     .register()
 
-mods.aether_legacy.enchanter.addFuel(item('minecraft:blaze_rod'), 2400)
 
 mods.aether_legacy.enchanter.removeByOutput(item('aether_legacy:enchanted_gravitite'))
+
+mods.aether_legacy.enchanterFuel.add(item('minecraft:blaze_rod'), 1000)
 
 mods.aether_legacy.freezer.recipeBuilder()
     .input(item('minecraft:clay'))
@@ -19,9 +20,9 @@ mods.aether_legacy.freezer.recipeBuilder()
     .register()
 
 
-mods.aether_legacy.freezer.addFuel(item('minecraft:packed_ice'), 1000)
-
 mods.aether_legacy.freezer.removeByOutput(item('minecraft:obsidian'))
+
+mods.aether_legacy.freezerFuel.add(item('minecraft:packed_ice'), 1000)
 
 mods.aether_legacy.accessory.recipeBuilder()
     .input(item('minecraft:shield'))

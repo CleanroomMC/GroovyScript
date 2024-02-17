@@ -1,24 +1,27 @@
 package com.cleanroommc.groovyscript.compat.mods.aether;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
-import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.gildedgames.the_aether.api.accessories.AccessoryType;
 import com.gildedgames.the_aether.api.accessories.AetherAccessory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
-public class Accessory {
+public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
 
-    private IForgeRegistry<AetherAccessory> accessories = GameRegistry.findRegistry(AetherAccessory.class);
     private static final AccessoryType[] VALUES = AccessoryType.values();
+
+    public Accessory() {
+        super(GameRegistry.findRegistry(AetherAccessory.class), Alias.generateOfClass(AetherAccessory.class));
+    }
 
     public void add(AetherAccessory accessory) {
         if (accessory != null) {
-            ((IReloadableForgeRegistry<AetherAccessory>) accessories).groovyScript$registerEntry(accessory);
+            ReloadableRegistryManager.addRegistryEntry(this.getRegistry(),accessory);
         }
     }
 
@@ -36,8 +39,6 @@ public class Accessory {
     public RecipeBuilder recipeBuilder() { return new RecipeBuilder(); }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<AetherAccessory> {
-
-        private IForgeRegistry<AetherAccessory> accessories = GameRegistry.findRegistry(AetherAccessory.class);
 
         private AccessoryType accessoryType = AccessoryType.MISC;
 
@@ -59,7 +60,7 @@ public class Accessory {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg);
-            msg.add(accessories.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(Aether.accessory.getRegistry().getValue(name) != null, "tried to register {}, but it already exists.", name);
         }
 
         @Override
@@ -67,7 +68,7 @@ public class Accessory {
             if (!validate()) return null;
 
             AetherAccessory accessory = new AetherAccessory(input.get(0).getMatchingStacks()[0], accessoryType);
-            ModSupport.AETHER.get().accessory.add(accessory);
+            Aether.accessory.add(accessory);
             return accessory;
         }
     }

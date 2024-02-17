@@ -1,26 +1,26 @@
 package com.cleanroommc.groovyscript.compat.mods.aether;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
-import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.gildedgames.the_aether.api.freezables.AetherFreezable;
-import com.gildedgames.the_aether.api.freezables.AetherFreezableFuel;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
-public class Freezer {
-    private IForgeRegistry<AetherFreezable> freezables = GameRegistry.findRegistry(AetherFreezable.class);
-    private IForgeRegistry<AetherFreezableFuel> freezableFuels = GameRegistry.findRegistry(AetherFreezableFuel.class);
+public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
+
+    public Freezer() {
+        super(GameRegistry.findRegistry(AetherFreezable.class), Alias.generateOfClass(AetherFreezable.class));
+    }
 
     public RecipeBuilder recipeBuilder() { return new RecipeBuilder(); }
 
     public void add(AetherFreezable freezable) {
         if (freezable != null) {
-            ((IReloadableForgeRegistry<AetherFreezable>) freezables).groovyScript$registerEntry(freezable);
+            ReloadableRegistryManager.addRegistryEntry(this.getRegistry(),freezable);
         }
     }
     public void add(ItemStack input, ItemStack output, int timeRequired) {
@@ -29,32 +29,22 @@ public class Freezer {
     }
     public boolean remove(AetherFreezable freezable) {
         if (freezable == null) return false;
-        ReloadableRegistryManager.removeRegistryEntry(freezables, freezable.getRegistryName());
+        ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(), freezable.getRegistryName());
         return true;
     }
 
     public void removeByOutput(ItemStack output) {
-        freezables.getValuesCollection().forEach(freezable -> {
+        this.getRegistry().getValuesCollection().forEach(freezable -> {
             if (freezable.getOutput().isItemEqual(output)) {
-                ReloadableRegistryManager.removeRegistryEntry(freezables,freezable.getRegistryName());
+                ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(),freezable.getRegistryName());
             }
         });
     }
 
-    public void addFuel(AetherFreezableFuel freezableFuel) {
-        if (freezableFuel != null) {
-            ((IReloadableForgeRegistry<AetherFreezableFuel>) freezableFuels).groovyScript$registerEntry(freezableFuel);
-        }
-    }
 
-    public void addFuel(ItemStack fuel, int timeGiven) {
-        AetherFreezableFuel freezableFuel = new AetherFreezableFuel(fuel, timeGiven);
-        addFuel(freezableFuel);
-    }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<AetherFreezable> {
 
-        private IForgeRegistry<AetherFreezable> freezables = GameRegistry.findRegistry(AetherFreezable.class);
         private int time;
 
         public RecipeBuilder time(int time) {
@@ -72,14 +62,14 @@ public class Freezer {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
             msg.add(time < 0, "time must be a non-negative integer, yet it was {}", time);
-            msg.add(freezables.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(Aether.freezer.getRegistry().getValue(name) != null, "tried to register {}, but it already exists.", name);
         }
 
         @Override
         public @Nullable AetherFreezable register() {
             if (!validate()) return null;
             AetherFreezable freezable = new AetherFreezable(input.get(0).getMatchingStacks()[0], output.get(0), time);
-            ModSupport.AETHER.get().freezer.add(freezable);
+            Aether.freezer.add(freezable);
             return freezable;
         }
     }
