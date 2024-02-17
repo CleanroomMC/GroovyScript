@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.documentation.linkgenerator;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.Tags;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 
@@ -15,7 +16,7 @@ import com.cleanroommc.groovyscript.documentation.Documentation;
 public class BasicLinkGenerator implements ILinkGenerator {
 
     public String id() {
-        return Tags.ID;
+        return GroovyScript.ID;
     }
 
     protected String domain() {

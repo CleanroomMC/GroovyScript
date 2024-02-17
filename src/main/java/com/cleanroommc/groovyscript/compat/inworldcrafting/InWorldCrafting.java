@@ -7,6 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public class InWorldCrafting implements IScriptReloadable {
 
     public final FluidToFluid fluidToFluid = new FluidToFluid();
@@ -36,6 +39,11 @@ public class InWorldCrafting implements IScriptReloadable {
         this.explosion.afterScriptLoad();
         this.burning.afterScriptLoad();
         this.pistonPush.afterScriptLoad();
+    }
+
+    @Override
+    public Collection<String> getAliases() {
+        return Collections.emptyList();
     }
 
     public static EntityItem spawnItem(World world, BlockPos pos, ItemStack item) {

@@ -22,7 +22,7 @@ public class Documentation {
     public static final boolean USE_DEFAULT_BRANCH = FMLLaunchHandler.isDeobfuscatedEnvironment();
 
     public static final File EXAMPLES = new File(GroovyScript.getScriptPath());
-    public static final File WIKI = new File(new File(GroovyScript.getScriptPath()).getParentFile(), "wiki");
+    public static final File WIKI = new File(GroovyScript.getScriptFile().getParentFile(), "wiki");
 
     private static final boolean GENERATE_EXAMPLES = true;
     private static final boolean GENERATE_WIKI = true;

@@ -1,10 +1,11 @@
 package com.cleanroommc.groovyscript.documentation;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
 
@@ -25,7 +26,6 @@ public class Exporter {
     private static final String PRINT_MOD_DETECTED = "println 'mod \\'%s\\' detected, running script'";
     private static final Pattern CLASS_NAME_PATTERN = Pattern.compile("(?>\\b)(?>[a-zA-Z0-9]+\\.)+([a-zA-Z0-9$]+)");
 
-
     public static String simpleSignature(Method method) {
         String signature = Arrays.stream(method.getAnnotatedParameterTypes()).map(x -> simpleSignature(x.getType().getTypeName())).collect(Collectors.joining(", "));
         return method.isVarArgs() ? convertVarArgs(signature) : signature;
@@ -43,7 +43,7 @@ public class Exporter {
     public static void generateWiki(File folder, GroovyContainer<? extends ModPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();
 
-        List<VirtualizedRegistry<?>> registries = mod.get().getRegistries().stream()
+        List<IScriptReloadable> registries = mod.get().getRegistries().stream()
                 .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
                 .distinct()
                 .sorted((left, right) -> ComparisonChain.start()
@@ -54,7 +54,7 @@ public class Exporter {
 
         if (registries.isEmpty()) return;
 
-        for (VirtualizedRegistry<?> registry : registries) {
+        for (IScriptReloadable registry : registries) {
             Registry example = new Registry(mod, registry);
 
             String location = String.format("%s.md", registry.getName());
@@ -63,7 +63,7 @@ public class Exporter {
                 File file = new File(folder, location);
                 Files.write(file.toPath(), example.documentationBlock().trim().concat("\n").getBytes());
             } catch (IOException e) {
-                e.printStackTrace();
+                GroovyScript.LOGGER.throwing(e);
             }
         }
 
@@ -94,14 +94,14 @@ public class Exporter {
             File file = new File(folder, INDEX_FILE_NAME);
             Files.write(file.toPath(), index.toString().getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
+            GroovyScript.LOGGER.throwing(e);
         }
 
         try {
             File file = new File(folder, NAV_FILE_NAME);
             Files.write(file.toPath(), navigation.toString().getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
+            GroovyScript.LOGGER.throwing(e);
         }
     }
 
@@ -116,7 +116,7 @@ public class Exporter {
                 .append("// MODS_LOADED: ").append(mod.getModId()).append("\n");
 
         // Iterate through every registry of the mod once, in alphabetical order.
-        List<VirtualizedRegistry<?>> registries = mod.get().getRegistries().stream()
+        List<IScriptReloadable> registries = mod.get().getRegistries().stream()
                 .distinct()
                 .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
                 .filter(x -> x.getClass().getAnnotation(RegistryDescription.class).location().equals(target))
@@ -128,14 +128,14 @@ public class Exporter {
 
         if (registries.isEmpty()) return;
 
-        for (VirtualizedRegistry<?> registry : registries) {
+        for (IScriptReloadable registry : registries) {
             GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", mod.toString(), registry.getName()).debug().post();
             Registry example = new Registry(mod, registry);
             imports.addAll(example.getImports());
             body.append(example.exampleBlock());
         }
 
-        if (imports.size() >= 1) header.append("\n");
+        if (!imports.isEmpty()) header.append("\n");
         imports.stream().distinct().sorted().forEach(i -> header.append("import ").append(i).append("\n"));
 
         // Print that the script was loaded at the end of the header, after any imports have been added.
@@ -146,8 +146,7 @@ public class Exporter {
             File file = new File(new File(Documentation.EXAMPLES, target), mod.getModId() + ".groovy");
             Files.write(file.toPath(), header.toString().getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
+            GroovyScript.LOGGER.throwing(e);
         }
     }
-
 }

@@ -9,6 +9,9 @@ import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.item.ItemStack;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public class VanillaModule implements IScriptReloadable {
 
     public static final VanillaModule INSTANCE = new VanillaModule();
@@ -55,4 +58,8 @@ public class VanillaModule implements IScriptReloadable {
         inWorldCrafting.afterScriptLoad();
     }
 
+    @Override
+    public Collection<String> getAliases() {
+        return Collections.emptyList();
+    }
 }

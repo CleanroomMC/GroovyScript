@@ -2,10 +2,11 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.google.common.collect.ComparisonChain;
 import it.unimi.dsi.fastutil.chars.Char2CharArrayMap;
 import it.unimi.dsi.fastutil.chars.Char2CharMap;
-
 import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -23,11 +24,12 @@ import java.util.stream.Stream;
 public class Builder {
 
     private static final Char2CharMap commaSeparatedParts = new Char2CharArrayMap() {{
-            put(']','[');
-            put('\'', '\'');
-            defaultReturnValue(Character.MIN_VALUE);
+        put(']', '[');
+        put('\'', '\'');
+        defaultReturnValue(Character.MIN_VALUE);
     }};
 
+    private final GroovyContainer<? extends ModPropertyContainer> mod;
     private final String reference;
     private final Method builderMethod;
     private final RecipeBuilderDescription annotation;
@@ -35,7 +37,8 @@ public class Builder {
     private final Map<String, List<RecipeBuilderMethod>> methods;
     private final List<Method> registrationMethods;
 
-    public Builder(Method builderMethod, String reference, String baseTranslationKey) {
+    public Builder(GroovyContainer<? extends ModPropertyContainer> mod, Method builderMethod, String reference, String baseTranslationKey) {
+        this.mod = mod;
         this.builderMethod = builderMethod;
         this.reference = reference;
         this.annotation = builderMethod.getAnnotation(RecipeBuilderDescription.class);

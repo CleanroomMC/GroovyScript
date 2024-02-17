@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -223,20 +224,17 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         RecipesAS.capeCraftingRecipes.put(constellation, recipe);
     }
 
-    @RecipeBuilderDescription(example = {
-            @Example(".major().name('square').color(0xE01903).connection(12, 2, 2, 2).connection(12, 12, 12, 2).connection(2, 12, 12, 12).connection(2, 2, 2, 12)"),
-            @Example(value = ".minor().name('slow').connection(10, 5, 5, 5).connection(5, 10, 5, 5).connection(3, 3, 3, 3).phase(MoonPhase.FULL)", imports = "hellfirepvp.astralsorcery.common.constellation.MoonPhase")
-    })
+    @RecipeBuilderDescription(template = "constellation1")
     public ConstellationBuilder constellationBuilder() {
         return new ConstellationBuilder();
     }
 
-    @RecipeBuilderDescription(example = @Example(".constellation(constellation('square')).enchantmentEffect(enchantment('minecraft:luck_of_the_sea'), 1, 3).potionEffect(potion('minecraft:luck'), 1, 2)"))
+    @RecipeBuilderDescription(template = "constellation2")
     public ConstellationMapEffectBuilder constellationMapEffectBuilder() {
         return new ConstellationMapEffectBuilder();
     }
 
-    @RecipeBuilderDescription(example = @Example(".constellation(constellation('square')).addItem(ore('gemDiamond')).addItem(item('minecraft:water_bucket')).addItem(item('minecraft:rabbit_foot')).addItem(item('minecraft:fish'))"))
+    @RecipeBuilderDescription(template = "constellation3")
     public SignatureItemsHelper signatureItems() {
         return new SignatureItemsHelper();
     }
@@ -361,7 +359,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
                 default:
                     return;
             }
-            HashMap<Point, StarLocation> addedStars = new HashMap<>();
+            Map<Point, StarLocation> addedStars = new Object2ObjectOpenHashMap<>();
             this.connections.forEach(connection -> {
                 StarLocation s1, s2;
                 if (addedStars.containsKey(connection.p1)) {

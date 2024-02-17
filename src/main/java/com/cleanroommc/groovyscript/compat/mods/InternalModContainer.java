@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.minecraftforge.fml.common.Loader;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

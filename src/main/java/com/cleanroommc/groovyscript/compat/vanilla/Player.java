@@ -104,6 +104,10 @@ public class Player implements IScriptReloadable {
     @Override
     @GroovyBlacklist
     public void afterScriptLoad() {
+    }
 
+    @Override
+    public Collection<String> getAliases() {
+        return Collections.emptyList();
     }
 }

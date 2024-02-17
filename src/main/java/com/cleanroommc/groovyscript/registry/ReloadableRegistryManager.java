@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.registry;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
+import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -82,7 +83,7 @@ public class ReloadableRegistryManager {
                 .map(GroovyContainer::get)
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
-                .forEach(VirtualizedRegistry::onReload);
+                .forEach(IScriptReloadable::onReload);
         if (ModSupport.JEI.isLoaded()) {
             JeiPlugin.reload();
         }
@@ -95,7 +96,7 @@ public class ReloadableRegistryManager {
                 .map(GroovyContainer::get)
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
-                .forEach(VirtualizedRegistry::afterScriptLoad);
+                .forEach(IScriptReloadable::afterScriptLoad);
         VanillaModule.INSTANCE.afterScriptLoad();
         unfreezeForgeRegistries();
     }
