@@ -128,4 +128,20 @@ public class GroovySecurityManager {
         Set<String> methods = bannedMethods.get(receiver);
         return methods == null || !methods.contains(method);
     }
+
+    public List<String> getBannedPackages() {
+        return Collections.unmodifiableList(bannedPackages);
+    }
+
+    public Set<Class<?>> getBannedClasses() {
+        return Collections.unmodifiableSet(bannedClasses);
+    }
+
+    public Map<Class<?>, Set<String>> getBannedMethods() {
+        return Collections.unmodifiableMap(bannedMethods);
+    }
+
+    public Set<Class<?>> getWhiteListedClasses() {
+        return Collections.unmodifiableSet(whiteListedClasses);
+    }
 }

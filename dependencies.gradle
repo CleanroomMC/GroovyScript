@@ -24,6 +24,9 @@
 dependencies {
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 
+    // TODO: check if there is anything to exclude
+    embed "io.github.classgraph:classgraph:4.8.165"
+
     lsp4j("org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1") {
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.google.code.gson', module: 'gson'
