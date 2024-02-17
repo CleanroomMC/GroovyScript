@@ -140,14 +140,6 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> {
                 .register();
     }
 
-    public void remove(String name) {
-        ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name);
-    }
-
-    public void remove(ResourceLocation name) {
-        ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name);
-    }
-
     public void removeByOutput(IIngredient output) {
         removeByOutput(output, true);
     }
@@ -213,20 +205,6 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> {
         }
         for (ResourceLocation location : recipesToRemove) {
             ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, location);
-        }
-    }
-
-    public SimpleObjectStream<IRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ForgeRegistries.RECIPES.getValuesCollection()).setRemover(recipe -> {
-            ResourceLocation key = ForgeRegistries.RECIPES.getKey(recipe);
-            if (key != null) ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, key);
-            return key != null;
-        });
-    }
-
-    public void removeAll() {
-        for (IRecipe recipe : ForgeRegistries.RECIPES) {
-            ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, recipe.getRegistryName());
         }
     }
 

@@ -1,44 +1,28 @@
 package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.AnvilRecipe;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
-public class Anvil extends VirtualizedRegistry<AnvilRecipe> {
-    @Override
-    public void onReload() {
-        ForgeRegistry<AnvilRecipe> registry = (ForgeRegistry<AnvilRecipe>) ModuleTechBasic.Registries.ANVIL_RECIPE;
-        if (registry.isLocked()) {
-            registry.unfreeze();
-        }
-        getScriptedRecipes().forEach(recipe -> {
-            registry.remove(recipe.getRegistryName());
-        });
+public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
 
-        getBackupRecipes().forEach(registry::register);
+    public Anvil() {
+        super(ModuleTechBasic.Registries.ANVIL_RECIPE, Alias.generateOfClass(Anvil.class));
     }
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    public void add(AnvilRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ModuleTechBasic.Registries.ANVIL_RECIPE.register(recipe);
-        }
-    }
-
     public boolean remove(AnvilRecipe recipe) {
         if (recipe == null) return false;
-        addBackup(recipe);
-        ModuleTechBasic.Registries.ANVIL_RECIPE.remove(recipe.getRegistryName());
+        remove(recipe.getRegistryName());
         return true;
     }
 
@@ -54,11 +38,6 @@ public class Anvil extends VirtualizedRegistry<AnvilRecipe> {
                 remove(recipe);
             }
         });
-    }
-
-    public void removeAll() {
-        ModuleTechBasic.Registries.ANVIL_RECIPE.getValuesCollection().forEach(this::addBackup);
-        ModuleTechBasic.Registries.ANVIL_RECIPE.clear();
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<AnvilRecipe> {
@@ -77,6 +56,7 @@ public class Anvil extends VirtualizedRegistry<AnvilRecipe> {
             this.type = type;
             return this;
         }
+
         public RecipeBuilder tier(AnvilRecipe.EnumTier tier) {
             this.tier = tier;
             return this;
@@ -95,7 +75,6 @@ public class Anvil extends VirtualizedRegistry<AnvilRecipe> {
             msg.add(tier == null, "tier cannot be null.");
             msg.add(name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.ANVIL_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
-
         }
 
         @Override

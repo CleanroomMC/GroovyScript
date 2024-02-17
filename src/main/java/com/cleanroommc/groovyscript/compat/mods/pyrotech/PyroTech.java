@@ -29,6 +29,4 @@ public class PyroTech extends ModPropertyContainer {
         addRegistry(soakingPot);
         addRegistry(tanningRack);
     }
-
-
 }
