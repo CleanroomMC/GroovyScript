@@ -4,7 +4,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 
-public interface IScriptReloadable {
+public interface IScriptReloadable extends INamed {
 
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
@@ -13,14 +13,4 @@ public interface IScriptReloadable {
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     void afterScriptLoad();
-
-    Collection<String> getAliases();
-
-    default String getName() {
-        Collection<String> aliases = getAliases();
-        if (aliases.isEmpty()) {
-            return "EmptyName";
-        }
-        return aliases.iterator().next();
-    }
 }
