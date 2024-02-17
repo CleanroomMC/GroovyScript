@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -18,8 +19,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
 
+    @RecipeBuilderDescription(example = @Example(".input(ore('gemEmerald'), item('minecraft:apple')).output(item('minecraft:diamond')).mana(500)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -31,6 +34,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         BotaniaAPI.runeAltarRecipes.addAll(restoreFromBackup());
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeRuneAltar add(ItemStack output, int mana, IIngredient... inputs) {
         RecipeRuneAltar recipe = new RecipeRuneAltar(output, mana, Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient
                                                                                                   ? ((OreDictIngredient) i).getOreDict()
@@ -51,6 +55,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         return BotaniaAPI.runeAltarRecipes.remove(recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('botania:rune:1')"))
     public boolean removeByOutput(IIngredient output) {
         if (BotaniaAPI.runeAltarRecipes.removeIf(recipe -> {
             boolean found = output.test(recipe.getOutput());
@@ -65,6 +70,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('runeEarthB')"))
     public boolean removeByInput(IIngredient... inputs) {
         List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
                                                                                                : i.getMatchingStacks()[0]).collect(Collectors.toList());
@@ -83,23 +89,30 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('feather'), ore('string')"))
     public boolean removeByInputs(IIngredient... inputs) {
         return removeByInput(inputs);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BotaniaAPI.runeAltarRecipes.forEach(this::addBackup);
         BotaniaAPI.runeAltarRecipes.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipeRuneAltar> streamRecipes() {
         return new SimpleObjectStream<>(BotaniaAPI.runeAltarRecipes).setRemover(this::remove);
     }
 
+    @Property(property = "input", requirement = "groovyscript.wiki.botania.rune_altar.input.required", valid = @Comp("1"))
+    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeRuneAltar> {
 
+        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
         protected int mana;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder mana(int amount) {
             this.mana = amount;
             return this;
@@ -120,6 +133,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable RecipeRuneAltar register() {
             if (!validate()) return null;
             RecipeRuneAltar recipe = new RecipeRuneAltar(output.get(0), mana, input.stream().map(i -> i instanceof OreDictIngredient

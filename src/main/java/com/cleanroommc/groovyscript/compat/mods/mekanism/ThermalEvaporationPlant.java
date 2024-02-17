@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.Alias;
@@ -12,16 +13,19 @@ import mekanism.common.recipe.machines.ThermalEvaporationRecipe;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<ThermalEvaporationRecipe> {
 
     public ThermalEvaporationPlant() {
-        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, Alias.generateOf("ThermalEvaporation").and("TEP", "tep"));
+        super(RecipeHandler.Recipe.THERMAL_EVAPORATION_PLANT, Alias.generateOfClassAnd(ThermalEvaporationPlant.class, "ThermalEvaporation").and("TEP", "tep"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).fluidOutput(fluid('steam'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "fluid('water'), fluid('steam')", commented = true))
     public ThermalEvaporationRecipe add(FluidStack input, FluidStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Solar Neutron Activator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
@@ -34,6 +38,7 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         return recipe;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('water')"))
     public boolean removeByInput(FluidStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Solar Neutron Activator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
@@ -48,6 +53,8 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         return false;
     }
 
+    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "fluidOutput", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ThermalEvaporationRecipe> {
 
         @Override
@@ -62,6 +69,7 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable ThermalEvaporationRecipe register() {
             if (!validate()) return null;
             ThermalEvaporationRecipe recipe = new ThermalEvaporationRecipe(fluidInput.get(0), fluidOutput.get(0));

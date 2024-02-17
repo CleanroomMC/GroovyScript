@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
@@ -13,16 +14,19 @@ import mekanism.common.recipe.machines.SeparatorRecipe;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<SeparatorRecipe> {
 
     public ElectrolyticSeparator() {
-        super(RecipeHandler.Recipe.ELECTROLYTIC_SEPARATOR, Alias.generateOf("Separator").andGenerateOfClass(ElectrolyticSeparator.class));
+        super(RecipeHandler.Recipe.ELECTROLYTIC_SEPARATOR, Alias.generateOfClassAnd(ElectrolyticSeparator.class, "Separator"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('lava') * 10).gasOutput(gas('cleanGold') * 5, gas('cleanCopper') * 3).energy(3000)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "fluid('lava') * 10, gas('cleanGold') * 5, gas('cleanCopper') * 3, 3000", commented = true))
     public SeparatorRecipe add(FluidStack input, GasStack leftOutput, GasStack rightOutput, double energy) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Electrolytic Separator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
@@ -36,6 +40,7 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
         return recipe;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('water')"))
     public boolean removeByInput(FluidStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Electrolytic Separator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
@@ -50,8 +55,11 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
         return false;
     }
 
+    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "gasOutput", valid = @Comp("2"))
     public static class RecipeBuilder extends GasRecipeBuilder<SeparatorRecipe> {
 
+        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private double energy;
 
         public RecipeBuilder energy(double energy) {
@@ -73,6 +81,7 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable SeparatorRecipe register() {
             if (!validate()) return null;
             SeparatorRecipe recipe = new SeparatorRecipe(fluidInput.get(0), energy, gasOutput.get(0), gasOutput.get(1));

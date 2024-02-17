@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationBaseAccessor;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationMapEffectRegistryAccessor;
@@ -26,6 +27,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -37,6 +39,9 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES
+)
 public class Constellation extends VirtualizedRegistry<IConstellation> {
 
     private final HashMap<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsAdded = new HashMap<>();
@@ -88,7 +93,8 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         ConstellationRegistry.registerConstellation(constellation);
     }
 
-    private boolean remove(IConstellation constellation) {
+    @MethodDescription(example = @Example("constellation('bootes')"))
+    public boolean remove(IConstellation constellation) {
         if (ConstellationRegistryAccessor.getConstellationList() == null) return false;
         addBackup(constellation);
         this.removeConstellationMapEffect(constellation);
@@ -102,11 +108,13 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         return false;
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IConstellation> streamConstellations() {
         return new SimpleObjectStream<>(ConstellationRegistryAccessor.getConstellationList())
                 .setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ConstellationRegistryAccessor.getConstellationList().forEach(this::addBackup);
         ConstellationRegistryAccessor.getConstellationList().clear();
@@ -119,7 +127,8 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         this.constellationMapEffectsAdded.put(constellation, ConstellationMapEffectRegistry.registerMapEffect(constellation, enchantmentEffectList, potionEffectList));
     }
 
-    private void removeConstellationMapEffect(IConstellation constellation) {
+    @MethodDescription(example = @Example("constellation('discidia')"))
+    public void removeConstellationMapEffect(IConstellation constellation) {
         if (ConstellationMapEffectRegistryAccessor.getEffectRegistry() == null) return;
         if (ConstellationMapEffectRegistryAccessor.getEffectRegistry().containsKey(constellation)) {
             this.constellationMapEffectsRemoved.put(constellation, ConstellationMapEffectRegistryAccessor.getEffectRegistry().get(constellation));
@@ -127,6 +136,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         }
     }
 
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAllConstellationMapEffect() {
         ConstellationRegistryAccessor.getConstellationList().forEach(constellation -> {
             this.constellationMapEffectsRemoved.put(constellation, ConstellationMapEffectRegistryAccessor.getEffectRegistry().get(constellation));
@@ -134,10 +144,12 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         });
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     private void addSignatureItem(IConstellation constellation, ItemHandle item) {
         constellation.addSignatureItem(item);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void addSignatureItem(IConstellation constellation, IIngredient ing) {
         if (!this.signatureItemsAdded.containsKey(constellation)) {
             this.signatureItemsAdded.put(constellation, new ArrayList<>());
@@ -146,21 +158,25 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         constellation.addSignatureItem(AstralSorcery.toItemHandle(ing));
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void addSignatureItem(IConstellation constellation, IIngredient... ings) {
         for (IIngredient ing : ings) {
             this.addSignatureItem(constellation, ing);
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void addSignatureItem(IConstellation constellation, Collection<IIngredient> ings) {
         ings.forEach(ing -> this.addSignatureItem(constellation, ing));
     }
 
+    @MethodDescription(example = @Example("constellation('discidia')"))
     public void removeSignatureItems(IConstellation constellation) {
         this.signatureItemsRemoved.put(constellation, ((ConstellationBaseAccessor) constellation).getSignatureItems());
         ((ConstellationBaseAccessor) constellation).getSignatureItems().clear();
     }
 
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAllSignatureItems() {
         ConstellationRegistryAccessor.getConstellationList().forEach(constellation -> {
             this.signatureItemsRemoved.put(constellation, ((ConstellationBaseAccessor) constellation).getSignatureItems());
@@ -208,51 +224,68 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         RecipesAS.capeCraftingRecipes.put(constellation, recipe);
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".major().name('square').color(0xE01903).connection(12, 2, 2, 2).connection(12, 12, 12, 2).connection(2, 12, 12, 12).connection(2, 2, 2, 12)"),
+            @Example(value = ".minor().name('slow').connection(10, 5, 5, 5).connection(5, 10, 5, 5).connection(3, 3, 3, 3).phase(MoonPhase.FULL)", imports = "hellfirepvp.astralsorcery.common.constellation.MoonPhase")
+    })
     public ConstellationBuilder constellationBuilder() {
         return new ConstellationBuilder();
     }
 
+    @RecipeBuilderDescription(example = @Example(".constellation(constellation('square')).enchantmentEffect(enchantment('minecraft:luck_of_the_sea'), 1, 3).potionEffect(potion('minecraft:luck'), 1, 2)"))
     public ConstellationMapEffectBuilder constellationMapEffectBuilder() {
         return new ConstellationMapEffectBuilder();
     }
 
+    @RecipeBuilderDescription(example = @Example(".constellation(constellation('square')).addItem(ore('gemDiamond')).addItem(item('minecraft:water_bucket')).addItem(item('minecraft:rabbit_foot')).addItem(item('minecraft:fish'))"))
     public SignatureItemsHelper signatureItems() {
         return new SignatureItemsHelper();
     }
 
     public static class ConstellationBuilder {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private final ArrayList<Point2PointConnection> connections = new ArrayList<>();
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE)) // TODO note that this is only if type is MINOR
         private final ArrayList<MoonPhase> phases = new ArrayList<>();
+        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private String name;
+        @Property(defaultValue = "Major: #2843CC, Weak: #432CB0, Minor: #5D197F")
         private Color color = null;
+        @Property
         private ConstellationBuilder.Type type;
 
+        @RecipeBuilderMethodDescription
         public ConstellationBuilder name(String name) {
             this.name = name;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public ConstellationBuilder color(int color) {
             this.color = new Color(color);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public ConstellationBuilder major() {
             this.type = Type.MAJOR;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public ConstellationBuilder minor() {
             this.type = Type.MINOR;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public ConstellationBuilder weak() {
             this.type = Type.WEAK;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "connections")
         public ConstellationBuilder connection(int x1, int y1, int x2, int y2) {
             Point2PointConnection connection = new Point2PointConnection(x1, y1, x2, y2);
             if (!connections.contains(connection)) {
@@ -261,16 +294,19 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "phases")
         public ConstellationBuilder phase(MoonPhase moonPhase) {
             this.phases.add(moonPhase);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "phases")
         public ConstellationBuilder phase(MoonPhase... moonPhases) {
             this.phases.addAll(Arrays.asList(moonPhases));
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "phases")
         public ConstellationBuilder phase(Collection<MoonPhase> moonPhases) {
             this.phases.addAll(moonPhases);
             return this;
@@ -309,6 +345,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             return true;
         }
 
+        @RecipeBuilderRegistrationMethod
         public void register() {
             if (!validate()) return;
             IConstellation constellation;
@@ -325,7 +362,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
                 default:
                     return;
             }
-            HashMap<Point, StarLocation> addedStars = new HashMap<>();
+            Map<Point, StarLocation> addedStars = new Object2ObjectOpenHashMap<>();
             this.connections.forEach(connection -> {
                 StarLocation s1, s2;
                 if (addedStars.containsKey(connection.p1)) {
@@ -355,20 +392,26 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
 
     public static class ConstellationMapEffectBuilder {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE)) // TODO note that this is only if other is empty
         private final List<ConstellationMapEffectRegistry.EnchantmentMapEffect> enchantmentEffect = new ArrayList<>();
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE)) // TODO note that this is only if other is empty
         private final List<ConstellationMapEffectRegistry.PotionMapEffect> potionEffect = new ArrayList<>();
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IConstellation constellation = null;
 
+        @RecipeBuilderMethodDescription
         public ConstellationMapEffectBuilder constellation(IConstellation constellation) {
             this.constellation = constellation;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public ConstellationMapEffectBuilder enchantmentEffect(Enchantment ench, int min, int max) {
             this.enchantmentEffect.add(new ConstellationMapEffectRegistry.EnchantmentMapEffect(ench, min, max));
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public ConstellationMapEffectBuilder potionEffect(Potion potion, int min, int max) {
             this.potionEffect.add(new ConstellationMapEffectRegistry.PotionMapEffect(potion, min, max));
             return this;
@@ -383,6 +426,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             return !out.postIfNotEmpty();
         }
 
+        @RecipeBuilderRegistrationMethod
         public void register() {
             if (!validate()) return;
             ModSupport.ASTRAL_SORCERY.get().constellation.addConstellationMapEffect(constellation, enchantmentEffect, potionEffect);
@@ -392,25 +436,32 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
 
     public static class SignatureItemsHelper {
 
+        @Property
         private final ArrayList<IIngredient> items = new ArrayList<>();
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IConstellation constellation = null;
+        @Property
         private boolean doStrip = false;
 
+        @RecipeBuilderMethodDescription
         public SignatureItemsHelper constellation(IConstellation constellation) {
             this.constellation = constellation;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "doStrip")
         public SignatureItemsHelper stripItems() {
             this.doStrip = true;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "items")
         public SignatureItemsHelper addItem(IIngredient ing) {
             this.items.add(ing);
             return this;
         }
 
+        @RecipeBuilderRegistrationMethod
         public void register() {
             if (this.constellation != null) {
                 if (this.doStrip) ModSupport.ASTRAL_SORCERY.get().constellation.removeSignatureItems(this.constellation);

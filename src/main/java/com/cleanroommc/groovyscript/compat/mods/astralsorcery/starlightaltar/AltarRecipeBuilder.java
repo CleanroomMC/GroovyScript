@@ -2,6 +2,10 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipeBuilder;
@@ -18,15 +22,24 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+@Property(property = "replace", needsOverride = true)
+@Property(property = "mirrored", needsOverride = true)
+@Property(property = "recipeFunction", needsOverride = true)
+@Property(property = "recipeAction", needsOverride = true)
 public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
 
     private final TileAltar.AltarLevel altarLevel;
+    @Property(needsOverride = true)
     private final ArrayList<IIngredient> outerIngredients = new ArrayList<>();
+    @Property(ignoresInheritedMethods = true)
     protected String name;
     protected ItemHandle[] inputs = null;
     protected ItemHandle[] outerInputs = null;
+    @Property(needsOverride = true)
     protected int starlightRequired = 0;
+    @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
     protected int craftingTickTime = 1;
+    @Property
     private IConstellation requiredConstellation = null;
 
     public AltarRecipeBuilder(int width, int height, TileAltar.AltarLevel level) {
@@ -35,16 +48,19 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
         this.keyMap.put(' ', IIngredient.EMPTY);
     }
 
+    @RecipeBuilderMethodDescription
     public AltarRecipeBuilder name(String name) {
         this.name = name;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "inputs")
     public AltarRecipeBuilder input(ItemHandle[] inputs) {
         this.inputs = inputs;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
     public AltarRecipeBuilder row(String row) {
         if (this.keyBasedMatrix == null)
             this.keyBasedMatrix = new String[]{row};
@@ -53,51 +69,61 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "ingredientMatrix")
     public AltarRecipeBuilder matrix(List<List<IIngredient>> matrix) {
         this.ingredientMatrix = matrix;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "ingredientMatrix")
     public AltarRecipeBuilder shape(List<List<IIngredient>> matrix) {
         this.ingredientMatrix = matrix;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
     public AltarRecipeBuilder matrix(String... matrix) {
         this.keyBasedMatrix = matrix;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
     public AltarRecipeBuilder shape(String... matrix) {
         this.keyBasedMatrix = matrix;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "starlightRequired")
     public AltarRecipeBuilder starlight(int starlight) {
         this.starlightRequired = starlight;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "craftingTickTime")
     public AltarRecipeBuilder craftTime(int ticks) {
         this.craftingTickTime = ticks;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "requiredConstellation")
     public AltarRecipeBuilder constellation(IConstellation constellation) {
         this.requiredConstellation = constellation;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "outerIngredients")
     public AltarRecipeBuilder outerInput(IIngredient ing) {
         this.outerIngredients.add(ing);
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "outerIngredients")
     public AltarRecipeBuilder outerInput(IIngredient... ings) {
         this.outerIngredients.addAll(Arrays.asList(ings));
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "outerIngredients")
     public AltarRecipeBuilder outerInput(Collection<IIngredient> ings) {
         this.outerIngredients.addAll(ings);
         return this;
@@ -172,6 +198,7 @@ public class AltarRecipeBuilder extends CraftingRecipeBuilder.Shaped {
     }
 
     @Override
+    @RecipeBuilderRegistrationMethod
     public IRecipe register() {
         if (!validate()) return null;
 

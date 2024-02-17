@@ -16,7 +16,7 @@ import java.util.Map;
 public class FluidGenerator extends VirtualizedRegistry<Pair<String, ISemiFluidFuelManager.FuelProperty>> {
 
     public FluidGenerator() {
-        super(Alias.generateOf("SemiFluidGenerator"));
+        super(Alias.generateOfClassAnd(FluidGenerator.class, "SemiFluidGenerator"));
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -13,8 +14,12 @@ import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipeManaInfusion;
 
+@RegistryDescription(
+        admonition = @Admonition(value = "groovyscript.wiki.botania.mana_infusion.note", type = Admonition.Type.WARNING)
+)
 public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
 
+    @RecipeBuilderDescription(example = @Example(".input(ore('ingotGold')).output(item('botania:manaresource', 1)).mana(500).catalyst(blockstate('minecraft:stone'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -26,6 +31,7 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         BotaniaAPI.manaInfusionRecipes.addAll(restoreFromBackup());
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeManaInfusion add(ItemStack output, IIngredient input, int mana) {
         RecipeManaInfusion recipe = new RecipeManaInfusion(output, input instanceof OreDictIngredient ? ((OreDictIngredient) input).getOreDict()
                                                                                                       : input.getMatchingStacks()[0], mana);
@@ -45,6 +51,7 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         return BotaniaAPI.manaInfusionRecipes.remove(recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('botania:managlass')"))
     public boolean removeByOutput(ItemStack output) {
         if (BotaniaAPI.manaInfusionRecipes.removeIf(recipe -> {
             boolean found = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
@@ -59,6 +66,7 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:ender_pearl')"))
     public boolean removeByInput(IIngredient input) {
         if (BotaniaAPI.manaInfusionRecipes.removeIf(recipe -> {
             boolean found = recipe.getInput() instanceof ItemStack ? input.test((ItemStack) recipe.getInput())
@@ -74,6 +82,7 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         return false;
     }
 
+    @MethodDescription(example = @Example("blockstate('botania:alchemycatalyst')"))
     public boolean removeByCatalyst(IBlockState catalyst) {
         if (BotaniaAPI.manaInfusionRecipes.removeIf(recipe -> {
             if (recipe.getCatalyst() == null) return false;
@@ -89,34 +98,44 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BotaniaAPI.manaInfusionRecipes.forEach(this::addBackup);
         BotaniaAPI.manaInfusionRecipes.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipeManaInfusion> streamRecipes() {
         return new SimpleObjectStream<>(BotaniaAPI.manaInfusionRecipes).setRemover(this::remove);
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeManaInfusion> {
 
+        @Property(defaultValue = "100", valid = @Comp(value = "1", type = Comp.Type.GTE))
         protected int mana = 100;
+        @Property
         protected IBlockState catalyst;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder mana(int amount) {
             this.mana = amount;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder catalyst(IBlockState block) {
             this.catalyst = block;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "catalyst")
         public RecipeBuilder useAlchemy() {
             return catalyst(RecipeManaInfusion.alchemyState);
         }
 
+        @RecipeBuilderMethodDescription(field = "catalyst")
         public RecipeBuilder useConjuration() {
             return catalyst(RecipeManaInfusion.conjurationState);
         }
@@ -134,6 +153,7 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable RecipeManaInfusion register() {
             if (!validate()) return null;
             RecipeManaInfusion recipe = new RecipeManaInfusion(output.get(0),

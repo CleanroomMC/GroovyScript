@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.integrateddynamics;
 
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -8,12 +9,14 @@ import org.cyclops.cyclopscore.recipe.custom.component.DurationRecipeProperties;
 import org.cyclops.cyclopscore.recipe.custom.component.IngredientRecipeComponent;
 import org.cyclops.cyclopscore.recipe.custom.component.IngredientsAndFluidStackRecipeComponent;
 
+@RegistryDescription
 public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> {
 
     public MechanicalSqueezer() {
         super();
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay') * 16, 0.9F)"), requirement = @Property(property = "mechanical", defaultValue = "true"))
     public Squeezer.RecipeBuilder recipeBuilder() {
         return new Squeezer.RecipeBuilder().mechanical();
     }
@@ -41,6 +44,7 @@ public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRe
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInput(ItemStack input) {
         return org.cyclops.integrateddynamics.block.BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
@@ -51,11 +55,13 @@ public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRe
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         org.cyclops.integrateddynamics.block.BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
         org.cyclops.integrateddynamics.block.BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> streamRecipes() {
         return new SimpleObjectStream<>(org.cyclops.integrateddynamics.block.BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);

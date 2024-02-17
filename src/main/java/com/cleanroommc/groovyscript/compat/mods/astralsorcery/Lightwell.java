@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.WellLiquefactionAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.util.Map;
 
+@RegistryDescription
 public class Lightwell extends VirtualizedRegistry<WellLiquefaction.LiquefactionEntry> {
 
     private static Map<ItemStack, WellLiquefaction.LiquefactionEntry> getRegistry() {
@@ -27,6 +29,10 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         return WellLiquefactionAccessor.getRegisteredLiquefactions();
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".catalyst(item('minecraft:stone')).output(fluid('astralsorcery.liquidstarlight')).productionMultiplier(1.0F).shatterMultiplier(15.0F).catalystColor(16725260)"),
+            @Example(".catalyst(item('minecraft:obsidian')).output(fluid('astralsorcery.liquidstarlight')).productionMultiplier(1.0F).shatterMultiplier(15.0F)")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -44,10 +50,12 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         addScripted(recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.astralsorcery.lightwell.add0", type = MethodDescription.Type.ADDITION)
     public void add(ItemStack catalyst, Fluid output, float productionMultiplier, float shatterMultiplier, @Nullable Color color) {
         add(new WellLiquefaction.LiquefactionEntry(catalyst, output, productionMultiplier, shatterMultiplier, color));
     }
 
+    @MethodDescription(description = "groovyscript.wiki.astralsorcery.lightwell.add1", type = MethodDescription.Type.ADDITION)
     public void add(ItemStack catalyst, Fluid output, float productionMultiplier, float shatterMultiplier) {
         add(new WellLiquefaction.LiquefactionEntry(catalyst, output, productionMultiplier, shatterMultiplier, null));
     }
@@ -57,6 +65,7 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         return getRegistry().remove(recipe.catalyst) != null;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByCatalyst", example = @Example("item('minecraft:ice')"))
     public void removeByCatalyst(ItemStack catalyst) {
         WellLiquefaction.getRegisteredLiquefactions().forEach(le -> {
             if (le.catalyst.isItemEqual(catalyst)) {
@@ -65,10 +74,12 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:packed_ice')"))
     public void removeByInput(ItemStack input) {
         removeByCatalyst(input);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('lava')"))
     public void removeByOutput(FluidStack fluid) {
         getRegistry().entrySet().removeIf(entry -> {
             if (entry.getValue().producing.equals(fluid.getFluid())) {
@@ -79,11 +90,13 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<WellLiquefaction.LiquefactionEntry> streamRecipes() {
         return new SimpleObjectStream<>(WellLiquefaction.getRegisteredLiquefactions())
                 .setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getRegistry().values().forEach(this::addBackup);
         getRegistry().clear();
@@ -91,47 +104,60 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
 
     public static class RecipeBuilder implements IRecipeBuilder<WellLiquefaction.LiquefactionEntry> {
 
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private ItemStack catalyst = null;
+        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private Fluid output = null;
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private float productionMultiplier = 0.0F;
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private float shatterMultiplier = 0.0F;
+        @Property
         private Color color = null;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder catalyst(ItemStack catalyst) {
             this.catalyst = catalyst;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(FluidStack output) {
             this.output = output.getFluid();
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder productionMultiplier(float productionMultiplier) {
             this.productionMultiplier = productionMultiplier;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder shatterMultiplier(float shatterMultiplier) {
             this.shatterMultiplier = shatterMultiplier;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "color")
         public RecipeBuilder catalystColor(Color color) {
             this.color = color;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "color")
         public RecipeBuilder catalystColor(int rgb) {
             this.color = new Color(rgb);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "color")
         public RecipeBuilder catalystColor(int r, int g, int b) {
             this.color = new Color(r, g, b);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "color")
         public RecipeBuilder catalystColor(int r, int g, int b, int a) {
             this.color = new Color(r, g, b, a);
             return this;
@@ -155,6 +181,7 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
             return out.getLevel() != Level.ERROR;
         }
 
+        @RecipeBuilderRegistrationMethod
         public WellLiquefaction.LiquefactionEntry register() {
             if (!validate()) return null;
             WellLiquefaction.LiquefactionEntry recipe = new WellLiquefaction.LiquefactionEntry(catalyst, output, productionMultiplier, shatterMultiplier, color);

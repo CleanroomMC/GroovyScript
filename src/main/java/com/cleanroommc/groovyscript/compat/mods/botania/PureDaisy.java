@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -12,8 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipePureDaisy;
 
+@RegistryDescription
 public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
 
+    @RecipeBuilderDescription(example = @Example(".input(ore('plankWood')).output(blockstate('minecraft:clay')).time(5)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -25,12 +28,14 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         BotaniaAPI.pureDaisyRecipes.addAll(restoreFromBackup());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.botania.pure_daisy.add0", type = MethodDescription.Type.ADDITION)
     public RecipePureDaisy add(IBlockState output, IBlockState input, int time) {
         RecipePureDaisy recipe = new RecipePureDaisy(input, output, time);
         add(recipe);
         return recipe;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.botania.pure_daisy.add1", type = MethodDescription.Type.ADDITION)
     public RecipePureDaisy add(IBlockState output, IBlockState input) {
         return add(output, input, RecipePureDaisy.DEFAULT_TIME);
     }
@@ -47,6 +52,7 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         return BotaniaAPI.pureDaisyRecipes.remove(recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("blockstate('botania:livingrock')"))
     public boolean removeByOutput(IBlockState output) {
         if (BotaniaAPI.pureDaisyRecipes.removeIf(recipe -> {
             boolean found = recipe.getOutputState().equals(output);
@@ -61,6 +67,7 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInput(String input) {
         if (BotaniaAPI.pureDaisyRecipes.removeIf(recipe -> {
             boolean found = recipe.getInput() instanceof String && recipe.getInput().equals(input);
@@ -75,10 +82,12 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('logWood')"))
     public boolean removeByInput(OreDictIngredient input) {
         return removeByInput(input.getOreDict());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("blockstate('minecraft:water')"))
     public boolean removeByInput(IBlockState input) {
         if (BotaniaAPI.pureDaisyRecipes.removeIf(recipe -> {
             boolean found = (recipe.getInput() instanceof IBlockState && recipe.getInput().equals(input)) || (recipe.getInput() instanceof Block && recipe.getInput() == input.getBlock());
@@ -93,49 +102,61 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInput(Block input) {
         return removeByInput(input.getDefaultState());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BotaniaAPI.pureDaisyRecipes.forEach(this::addBackup);
         BotaniaAPI.pureDaisyRecipes.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipePureDaisy> streamRecipes() {
         return new SimpleObjectStream<>(BotaniaAPI.pureDaisyRecipes).setRemover(this::remove);
     }
 
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipePureDaisy> {
 
+        @Property(defaultValue = "RecipePureDaisy.DEFAULT_TIME (150)", valid = @Comp(value = "0", type = Comp.Type.GTE))
         protected int time = RecipePureDaisy.DEFAULT_TIME;
+        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         protected IBlockState output;
+        @Property(ignoresInheritedMethods = true, requirement = "groovyscript.wiki.botania.pure_daisy.input.required", valid = @Comp(value = "null", type = Comp.Type.NOT))
         protected Object input;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int amount) {
             this.time = amount;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(IBlockState output) {
             this.output = output;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(IBlockState input) {
             this.input = input;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(Block input) {
             return input(input.getDefaultState());
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(String input) {
             this.input = input;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(OreDictIngredient input) {
             return input(input.getOreDict());
         }
@@ -155,6 +176,7 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable RecipePureDaisy register() {
             if (!validate()) return null;
             RecipePureDaisy recipe = new RecipePureDaisy(input, output, time);

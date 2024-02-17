@@ -3,6 +3,8 @@ package com.cleanroommc.groovyscript.helper.recipe;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.helper.ingredient.FluidStackList;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
@@ -14,16 +16,22 @@ import java.util.Collection;
 
 public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
+    @Property(value = "groovyscript.wiki.name.value", needsOverride = true, priority = 100, hierarchy = 20)
     protected ResourceLocation name;
+    @Property(value = "groovyscript.wiki.input.value", needsOverride = true, priority = 200, hierarchy = 20)
     protected final IngredientList<IIngredient> input = new IngredientList<>();
+    @Property(value = "groovyscript.wiki.output.value", needsOverride = true, priority = 700, hierarchy = 20)
     protected final ItemStackList output = new ItemStackList();
+    @Property(value = "groovyscript.wiki.fluidInput.value", needsOverride = true, priority = 250, hierarchy = 20)
     protected final FluidStackList fluidInput = new FluidStackList();
+    @Property(value = "groovyscript.wiki.fluidOutput.value", needsOverride = true, priority = 750, hierarchy = 20)
     protected final FluidStackList fluidOutput = new FluidStackList();
 
     public String getRecipeNamePrefix() {
         return "groovyscript_";
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> name(String name) {
         if (name.contains(":")) {
             this.name = new ResourceLocation(name);
@@ -33,16 +41,19 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> name(ResourceLocation name) {
         this.name = name;
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> input(IIngredient ingredient) {
         this.input.add(ingredient);
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> input(IIngredient... ingredients) {
         for (IIngredient ingredient : ingredients) {
             input(ingredient);
@@ -50,6 +61,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> input(Collection<IIngredient> ingredients) {
         for (IIngredient ingredient : ingredients) {
             input(ingredient);
@@ -57,11 +69,13 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> output(ItemStack output) {
         this.output.add(output);
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> output(ItemStack... outputs) {
         for (ItemStack output : outputs) {
             output(output);
@@ -69,6 +83,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> output(Collection<ItemStack> outputs) {
         for (ItemStack output : outputs) {
             output(output);
@@ -76,11 +91,13 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> fluidInput(FluidStack ingredient) {
         this.fluidInput.add(ingredient);
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> fluidInput(FluidStack... ingredients) {
         for (FluidStack ingredient : ingredients) {
             fluidInput(ingredient);
@@ -88,6 +105,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> fluidInput(Collection<FluidStack> ingredients) {
         for (FluidStack ingredient : ingredients) {
             fluidInput(ingredient);
@@ -95,11 +113,13 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> fluidOutput(FluidStack output) {
         this.fluidOutput.add(output);
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> fluidOutput(FluidStack... outputs) {
         for (FluidStack output : outputs) {
             fluidOutput(output);
@@ -107,6 +127,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public AbstractRecipeBuilder<T> fluidOutput(Collection<FluidStack> outputs) {
         for (FluidStack output : outputs) {
             fluidOutput(output);

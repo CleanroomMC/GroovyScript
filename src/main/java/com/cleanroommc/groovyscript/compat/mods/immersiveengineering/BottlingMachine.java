@@ -4,6 +4,7 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.BottlingMachineRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -17,12 +18,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> {
 
     public BottlingMachine() {
-        super(Alias.generateOf("Bottling"));
+        super(Alias.generateOfClassAnd(BottlingMachine.class, "Bottling"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).fluidInput(fluid('water')).output(item('minecraft:clay'))"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -40,6 +43,7 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public BottlingMachineRecipe add(ItemStack output, IIngredient input, FluidStack fluidInput) {
         BottlingMachineRecipe recipe = new BottlingMachineRecipe(output.copy(), ImmersiveEngineering.toIngredientStack(input), fluidInput);
         add(recipe);
@@ -54,6 +58,7 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:potion').withNbt([Potion:'minecraft:mundane'])"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Bottling Machine recipe")
@@ -76,6 +81,7 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:sponge'), fluid('water') * 1000"))
     public void removeByInput(ItemStack input, FluidStack inputFluid) {
         if (GroovyLog.msg("Error removing Immersive Engineering Bottling Machine recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "item input must not be empty")
@@ -96,15 +102,20 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BottlingMachineRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BottlingMachineRecipe.recipeList).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BottlingMachineRecipe.recipeList.forEach(this::addBackup);
         BottlingMachineRecipe.recipeList.clear();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "fluidInput", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BottlingMachineRecipe> {
 
         @Override
@@ -119,6 +130,7 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable BottlingMachineRecipe register() {
             if (!validate()) return null;
             BottlingMachineRecipe recipe = new BottlingMachineRecipe(output.get(0), ImmersiveEngineering.toIngredientStack(input.get(0)), fluidInput.get(0));

@@ -2,6 +2,8 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism.recipe;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.common.recipe.RecipeHandler;
@@ -45,11 +47,13 @@ public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, 
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<R> streamRecipes() {
         return new SimpleObjectStream<>(recipeRegistry.get().values())
                 .setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         recipeRegistry.get().values().forEach(this::addBackup);
         recipeRegistry.get().clear();

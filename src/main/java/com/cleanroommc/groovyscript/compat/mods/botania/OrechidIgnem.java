@@ -2,12 +2,16 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.botania.recipe.OrechidRecipe;
 import vazkii.botania.api.BotaniaAPI;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RegistryDescription
 public class OrechidIgnem extends Orechid {
 
     @Override
@@ -43,6 +47,7 @@ public class OrechidIgnem extends Orechid {
     }
 
     @Override
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("'oreQuartz'"))
     public boolean removeByOutput(String output) {
         if (BotaniaAPI.oreWeightsNether.containsKey(output)) {
             addBackup(new OrechidRecipe(output, BotaniaAPI.getOreWeightNether(output)));
@@ -58,6 +63,7 @@ public class OrechidIgnem extends Orechid {
     }
 
     @Override
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getAllRecipes().forEach(this::addBackup);
         BotaniaAPI.oreWeightsNether.clear();

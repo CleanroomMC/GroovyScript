@@ -80,11 +80,14 @@ public class Alias extends ArrayList<String> {
         if (caseFormat != CaseFormat.UPPER_CAMEL) {
             name = caseFormat.to(CaseFormat.UPPER_CAMEL, name);
         }
-        aliases.add(name);
-        aliases.add(name.toLowerCase(Locale.ROOT));
         if (name.split("[A-Z]").length > 2) {
-            aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, name));
             aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name));
+            aliases.add(name.toLowerCase(Locale.ROOT));
+            aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, name));
+            aliases.add(name);
+        } else {
+            aliases.add(name.toLowerCase(Locale.ROOT));
+            aliases.add(name);
         }
         return aliases;
     }
