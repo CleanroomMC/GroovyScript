@@ -7,6 +7,10 @@ import org.eclipse.lsp4j.DocumentColorParams;
 
 import java.util.List;
 
+/* TODO:
+    - implement
+    - allow extensions from mods
+ */
 public class ColorProvider {
 
     public static List<ColorPresentation> provide(ColorPresentationParams params) {

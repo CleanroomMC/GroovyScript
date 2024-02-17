@@ -5,6 +5,9 @@ import org.eclipse.lsp4j.FoldingRangeRequestParams;
 
 import java.util.List;
 
+/* TODO:
+    - implement
+ */
 public class FoldingRangeProvider {
 
     public static List<FoldingRange> provide(FoldingRangeRequestParams params) {

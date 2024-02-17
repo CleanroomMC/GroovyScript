@@ -7,6 +7,10 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
 import java.util.List;
 
+/* TODO:
+    - implement
+    - allow extensions from mods for bracket handlers
+ */
 public class CompletionProvider {
 
     public static Either<List<CompletionItem>, CompletionList> provide(CompletionParams params) {

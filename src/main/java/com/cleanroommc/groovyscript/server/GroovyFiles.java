@@ -3,8 +3,9 @@ package com.cleanroommc.groovyscript.server;
 import org.eclipse.lsp4j.*;
 
 public class GroovyFiles {
+
     private final GroovyServer server;
-    
+
     protected GroovyFiles(GroovyServer server) {
         this.server = server;
     }

@@ -7,6 +7,9 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
 import java.util.List;
 
+/* TODO:
+    - implement
+ */
 public class DeclarationProvider {
 
     public static Either<List<? extends Location>, List<? extends LocationLink>> provide(DeclarationParams params) {
