@@ -61,6 +61,7 @@ public class GroovySecurityManager {
         banPackage("com.cleanroommc.groovyscript.core");
         banPackage("com.cleanroommc.groovyscript.registry");
         banPackage("com.cleanroommc.groovyscript.sandbox");
+        banPackage("com.cleanroommc.groovyscript.server");
     }
 
     public void unBanClass(Class<?> clazz) {

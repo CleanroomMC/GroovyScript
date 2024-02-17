@@ -23,6 +23,7 @@ import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.security.GrSMetaClassCreationHandle;
+import com.cleanroommc.groovyscript.server.GroovyServer;
 import com.google.common.base.Joiner;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -183,6 +184,8 @@ public class GroovyScript {
                                                                 .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
                                                                 .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
         });
+
+        if (GroovyScriptConfig.server) new Thread(GroovyServer::listen).start();
     }
 
     @Mod.EventHandler
