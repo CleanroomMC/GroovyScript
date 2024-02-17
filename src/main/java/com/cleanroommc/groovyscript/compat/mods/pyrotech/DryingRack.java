@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -12,6 +13,7 @@ import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
 
 
@@ -19,6 +21,9 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         super(ModuleTechBasic.Registries.DRYING_RACK_RECIPE, Alias.generateOfClass(DryingRack.class));
     }
 
+    @RecipeBuilderDescription(example =
+        @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).dryTime(260).name('iron_to_gold_drying_rack')")
+    )
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -30,6 +35,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing drying rack recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -44,6 +50,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing drying rack recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -59,10 +66,15 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
     }
 
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<DryingRackRecipe> {
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int dryTime;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder dryTime(int time) {
             this.dryTime = time;
             return this;
@@ -82,6 +94,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
 
         }
 
+        @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable DryingRackRecipe register() {
             if (!validate()) return null;

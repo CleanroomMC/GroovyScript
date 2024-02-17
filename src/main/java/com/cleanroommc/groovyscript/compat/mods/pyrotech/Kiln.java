@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -10,14 +11,18 @@ import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-
+@RegistryDescription
 public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
+
 
 
     public Kiln() {
         super(ModuleTechBasic.Registries.KILN_PIT_RECIPE, Alias.generateOfClass(Kiln.class));
     }
 
+    @RecipeBuilderDescription(example =
+        @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutputs(item('minecraft:wheat'),item('minecraft:carrot'),item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items')")
+    )
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -28,6 +33,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing pit kiln recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -42,6 +48,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('pyrotech:bucket_clay')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing pit kiln recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -57,22 +64,32 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
     }
 
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<KilnPitRecipe> {
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int burnTime;
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private float failureChance;
+
+        @Property
         private ItemStack[] failureOutputs;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder burnTime(int time) {
             this.burnTime = time;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder failureChance(float chance) {
             this.failureChance = chance;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder failureOutputs(ItemStack[] failureOutputs) {
             this.failureOutputs = failureOutputs;
             return this;
@@ -93,6 +110,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
 
         }
 
+        @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable KilnPitRecipe register() {
             if (!validate()) return null;

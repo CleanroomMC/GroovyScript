@@ -24,10 +24,10 @@ public class Documentation {
     public static final File EXAMPLES = new File(GroovyScript.getScriptPath());
     public static final File WIKI = new File(new File(GroovyScript.getScriptFile().getParentFile(), "build"), "wiki");
 
-    private static final boolean GENERATE_EXAMPLES = false;
-    private static final boolean GENERATE_WIKI = false;
+    private static final boolean GENERATE_EXAMPLES = true;
+    private static final boolean GENERATE_WIKI = true;
     // Kills the game as soon as the wiki or examples are generated.
-    private static final boolean TEST_AND_CRASH = false;
+    private static final boolean TEST_AND_CRASH = true;
 
     public static void generate() {
         if (GENERATE_EXAMPLES) generateExamples();

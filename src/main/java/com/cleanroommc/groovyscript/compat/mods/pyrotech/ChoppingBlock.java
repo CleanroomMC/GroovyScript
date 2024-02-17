@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -12,6 +13,7 @@ import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CompactingBinRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
 
     public ChoppingBlock() {
@@ -19,6 +21,9 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
     }
 
 
+    @RecipeBuilderDescription(example =
+        @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).chops(25).quantity(2).name('diamond_to_emerald_chopping_block')")
+    )
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -29,6 +34,7 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:log2')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing chopping block recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -43,6 +49,7 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:planks', 4)"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing chopping block recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -57,16 +64,23 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         };
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<ChoppingBlockRecipe> {
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int chops;
+
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int quantities;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder chops(int chops) {
             this.chops = chops;
             return this;
         }
-
+        @RecipeBuilderMethodDescription
         public RecipeBuilder quantity(int quantities) {
             this.quantities = quantities;
             return this;
@@ -84,9 +98,9 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
             msg.add(chops < 0, "chops must be a non negative integer, yet it was {}", chops);
             msg.add(name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
-
         }
 
+        @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable ChoppingBlockRecipe register() {
             if (!validate()) return null;

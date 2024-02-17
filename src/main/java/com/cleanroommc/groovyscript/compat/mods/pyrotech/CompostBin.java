@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -12,6 +13,7 @@ import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
 
 
@@ -19,6 +21,9 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         super(ModuleTechBasic.Registries.COMPOST_BIN_RECIPE, Alias.generateOfClass(CompostBin.class));
     }
 
+    @RecipeBuilderDescription(example =
+        @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald') * 4).compostValue(25).name('diamond_to_emerald_compost_bin')")
+    )
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -30,6 +35,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:golden_carrot')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing compost bin recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -44,6 +50,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing compost bin recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -58,10 +65,15 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         };
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompostBinRecipe> {
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int compostValue;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder compostValue(int compostValue) {
             this.compostValue = compostValue;
             return this;
@@ -82,6 +94,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
 
         }
 
+        @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable CompostBinRecipe register() {
             if (!validate()) return null;

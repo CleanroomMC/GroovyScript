@@ -2,22 +2,26 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CampfireRecipe;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.ChoppingBlockRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
 
     public Campfire() {
         super(ModuleTechBasic.Registries.CAMPFIRE_RECIPE, Alias.generateOfClass(Campfire.class));
     }
 
+    @RecipeBuilderDescription(example =
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald')")
+    )
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -28,6 +32,7 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:porkchop')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing campfire recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -42,6 +47,7 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:cooked_porkchop')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing campfire recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -56,10 +62,15 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         }
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<CampfireRecipe> {
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int duration;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder duration(int time) {
             this.duration = time;
             return this;
@@ -79,6 +90,7 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
 
         }
 
+        @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable CampfireRecipe register() {
             if (!validate()) return null;
