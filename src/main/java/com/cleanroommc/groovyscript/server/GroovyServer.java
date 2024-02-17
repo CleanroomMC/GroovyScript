@@ -70,6 +70,8 @@ public class GroovyServer implements LanguageServer, LanguageClientAware, TextDo
 
         serverCapabilities.setFoldingRangeProvider(true);
 
+        serverCapabilities.setDocumentHighlightProvider(true);
+
         serverCapabilities.setHoverProvider(true);
 
         var inlayHint = new InlayHintRegistrationOptions();
@@ -202,6 +204,11 @@ public class GroovyServer implements LanguageServer, LanguageClientAware, TextDo
     @Override
     public CompletableFuture<List<FoldingRange>> foldingRange(FoldingRangeRequestParams params) {
         return mapCompile(cancelToken -> FoldingRangeProvider.provide(params));
+    }
+
+    @Override
+    public CompletableFuture<List<? extends DocumentHighlight>> documentHighlight(DocumentHighlightParams params) {
+        return mapCompile(cancelToken -> HighlightProvider.provide(params));
     }
 
     @Override

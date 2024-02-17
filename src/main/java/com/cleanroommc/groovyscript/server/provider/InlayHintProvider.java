@@ -5,6 +5,9 @@ import org.eclipse.lsp4j.InlayHintParams;
 
 import java.util.List;
 
+/* TODO:
+    - implement
+ */
 public class InlayHintProvider {
 
     public static List<InlayHint> provide(InlayHintParams params) {

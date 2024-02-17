@@ -5,6 +5,9 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
 import java.util.List;
 
+/* TODO:
+    - implement
+ */
 @SuppressWarnings("deprecation")
 public class SymbolProvider {
 
