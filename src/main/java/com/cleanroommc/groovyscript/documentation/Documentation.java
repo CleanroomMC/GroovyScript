@@ -24,10 +24,10 @@ public class Documentation {
     public static final File EXAMPLES = new File(GroovyScript.getScriptPath());
     public static final File WIKI = new File(new File(GroovyScript.getScriptFile().getParentFile(), "build"), "wiki");
 
-    private static final boolean GENERATE_EXAMPLES = true;
-    private static final boolean GENERATE_WIKI = true;
+    private static final boolean GENERATE_EXAMPLES = false;
+    private static final boolean GENERATE_WIKI = false;
     // Kills the game as soon as the wiki or examples are generated.
-    private static final boolean TEST_AND_CRASH = true;
+    private static final boolean TEST_AND_CRASH = false;
 
     public static void generate() {
         if (GENERATE_EXAMPLES) generateExamples();
@@ -48,7 +48,7 @@ public class Documentation {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            GroovyScript.LOGGER.throwing(e);
         }
     }
 
@@ -62,7 +62,7 @@ public class Documentation {
                 else GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            GroovyScript.LOGGER.throwing(e);
         }
     }
 }
