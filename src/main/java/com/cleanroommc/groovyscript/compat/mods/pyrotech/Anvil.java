@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.AnvilRecipe;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.BarrelRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,11 +34,11 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        ModuleTechBasic.Registries.ANVIL_RECIPE.getValuesCollection().forEach(recipe -> {
+        for (AnvilRecipe recipe : getRegistry()) {
             if (recipe.getOutput().isItemEqual(output)) {
                 remove(recipe);
             }
-        });
+        };
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<AnvilRecipe> {

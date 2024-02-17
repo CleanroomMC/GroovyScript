@@ -1,43 +1,32 @@
 package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.DryingRackRecipe;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
-public class DryingRack extends VirtualizedRegistry<DryingRackRecipe> {
-    @Override
-    public void onReload() {
-        ForgeRegistry<DryingRackRecipe> registry = (ForgeRegistry<DryingRackRecipe>) ModuleTechBasic.Registries.DRYING_RACK_RECIPE;
-        if (registry.isLocked()) {
-            registry.unfreeze();
-        }
-        getScriptedRecipes().forEach(recipe -> {
-            registry.remove(recipe.getRegistryName());
-        });
-        getBackupRecipes().forEach(registry::register);
+public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
+
+
+    public DryingRack() {
+        super(ModuleTechBasic.Registries.DRYING_RACK_RECIPE, Alias.generateOfClass(DryingRack.class));
     }
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    public void add(DryingRackRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ModuleTechBasic.Registries.DRYING_RACK_RECIPE.register(recipe);
-        }
-    }
 
     public boolean remove(DryingRackRecipe recipe) {
         if (recipe == null) return false;
-        addBackup(recipe);
-        ModuleTechBasic.Registries.DRYING_RACK_RECIPE.remove(recipe.getRegistryName());
+        remove(recipe.getRegistryName());
         return true;
     }
 
@@ -48,31 +37,27 @@ public class DryingRack extends VirtualizedRegistry<DryingRackRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        ModuleTechBasic.Registries.DRYING_RACK_RECIPE.getValuesCollection().forEach(recipe -> {
+        for (DryingRackRecipe recipe : getRegistry()) {
             if (recipe.getInput().test(input)) {
                 remove(recipe);
             }
-        });
+        }
     }
 
-    public void removeByOutput(ItemStack output) {
+    public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing drying rack recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
                 .error()
                 .postIfNotEmpty()) {
             return;
         }
-        ModuleTechBasic.Registries.DRYING_RACK_RECIPE.getValuesCollection().forEach(recipe -> {
-            if (recipe.getOutput().isItemEqual(output)) {
+        for (DryingRackRecipe recipe : getRegistry()) {
+            if (output.test(recipe.getOutput())) {
                 remove(recipe);
             }
-        });
+        }
     }
 
-    public void removeAll() {
-        ModuleTechBasic.Registries.DRYING_RACK_RECIPE.getValuesCollection().forEach(this::addBackup);
-        ModuleTechBasic.Registries.DRYING_RACK_RECIPE.clear();
-    }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<DryingRackRecipe> {
 
@@ -82,6 +67,7 @@ public class DryingRack extends VirtualizedRegistry<DryingRackRecipe> {
             this.dryTime = time;
             return this;
         }
+
         @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Drying Rack Recipe";

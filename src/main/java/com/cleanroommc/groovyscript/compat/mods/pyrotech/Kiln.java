@@ -1,44 +1,30 @@
 package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
-public class Kiln extends VirtualizedRegistry<KilnPitRecipe> {
+public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
 
-    @Override
-    public void onReload() {
-        ForgeRegistry<KilnPitRecipe> registry = (ForgeRegistry<KilnPitRecipe>) ModuleTechBasic.Registries.KILN_PIT_RECIPE;
-        if (registry.isLocked()) {
-            registry.unfreeze();
-        }
-        getScriptedRecipes().forEach(recipe -> {
-            registry.remove(recipe.getRegistryName());
-        });
-        getBackupRecipes().forEach(registry::register);
+
+    public Kiln() {
+        super(ModuleTechBasic.Registries.KILN_PIT_RECIPE, Alias.generateOfClass(Kiln.class));
     }
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    public void add(KilnPitRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ModuleTechBasic.Registries.KILN_PIT_RECIPE.register(recipe);
-        }
-    }
-
     public boolean remove(KilnPitRecipe recipe) {
         if (recipe == null) return false;
-        addBackup(recipe);
-        ModuleTechBasic.Registries.KILN_PIT_RECIPE.remove(recipe.getRegistryName());
+        remove(recipe.getRegistryName());
         return true;
     }
 
@@ -49,31 +35,27 @@ public class Kiln extends VirtualizedRegistry<KilnPitRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValuesCollection().forEach(recipe -> {
+        for (KilnPitRecipe recipe : getRegistry()) {
             if (recipe.getInput().test(input)) {
                 remove(recipe);
             }
-        });
+        }
     }
 
-    public void removeByOutput(ItemStack output) {
+    public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing pit kiln recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
                 .error()
                 .postIfNotEmpty()) {
             return;
         }
-        ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValuesCollection().forEach(recipe -> {
-            if (recipe.getOutput().isItemEqual(output)) {
+        for (KilnPitRecipe recipe : getRegistry()) {
+            if (output.test(recipe.getOutput())) {
                 remove(recipe);
             }
-        });
+        }
     }
 
-    public void removeAll() {
-        ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValuesCollection().forEach(this::addBackup);
-        ModuleTechBasic.Registries.KILN_PIT_RECIPE.clear();
-    }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<KilnPitRecipe> {
 

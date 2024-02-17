@@ -17,7 +17,7 @@ mods.pyrotech.barrel.recipeBuilder()
     .name('diamond_emerald_and_water_to_amongium') // required
     .register()
 
-mods.pyrotech.barrel.removeByOutput(fluid('freckleberry_wine') * 1000)
+// mods.pyrotech.barrel.removeByOutput(fluid('freckleberry_wine') * 1000)
 
 mods.pyrotech.campfire.recipeBuilder()
     .input(item('minecraft:diamond'))
@@ -25,8 +25,6 @@ mods.pyrotech.campfire.recipeBuilder()
     .duration(400)
     .name('diamond_campfire_to_emerald') // required
     .register()
-
-mods.pyrotech.campfire.removeByOutput(item('minecraft:cooked_porkchop'))
 
 mods.pyrotech.choppingblock.recipeBuilder()
     .input(item('minecraft:diamond'))
@@ -36,10 +34,6 @@ mods.pyrotech.choppingblock.recipeBuilder()
     .name('diamond_to_emerald_chopping_block') // required
     .register()
 
-mods.pyrotech.choppingblock.removeByOutput(item('minecraft:planks', 4) * 4)
-
-mods.pyrotech.choppingblock.removeByInput(item('minecraft:log2', 1))
-
 mods.pyrotech.compactingbin.recipeBuilder()
     .input(item('minecraft:diamond'))
     .output(item('minecraft:emerald'))
@@ -47,11 +41,14 @@ mods.pyrotech.compactingbin.recipeBuilder()
     .name('diamond_to_emerald_compacting_bin') // required
     .register()
 
-mods.pyrotech.compactingbin.removeByInput(item('minecraft:snowball') * 4)
 
-mods.pyrotech.compactingbin.removeByOutput(item('minecraft:bone_block'))
+mods.pyrotech.compostbin.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .output(item('minecraft:emerald') * 4)
+    .compostValue(25)
+    .name('diamond_to_emerald_compost_bin') // required
+    .register()
 
-mods.pyrotech.compostbin.add(item('minecraft:diamond'), item('minecraft:emerald') * 4, 10)
 mods.pyrotech.compostbin.removeByInput(item('minecraft:golden_carrot'))
 
 mods.pyrotech.crudedryingrack.recipeBuilder()
