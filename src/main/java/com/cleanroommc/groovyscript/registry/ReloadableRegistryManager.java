@@ -11,8 +11,8 @@ import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.jei.JeiProxyAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import mezz.jei.JustEnoughItems;
 import mezz.jei.Internal;
+import mezz.jei.JustEnoughItems;
 import mezz.jei.ingredients.IngredientFilter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.crafting.IRecipe;
@@ -26,10 +26,10 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
-import java.lang.reflect.InvocationTargetException;
 
 @GroovyBlacklist
 public class ReloadableRegistryManager {
@@ -76,7 +76,7 @@ public class ReloadableRegistryManager {
     @ApiStatus.Internal
     public static void onReload() {
         GroovyScript.reloadRunConfig(false);
-        reloadForgeRegistries();
+        reloadForgeRegistries(ForgeRegistries.RECIPES);
         VanillaModule.INSTANCE.onReload();
         ModSupport.getAllContainers().stream()
                 .filter(GroovyContainer::isLoaded)
@@ -107,6 +107,13 @@ public class ReloadableRegistryManager {
 
     public static <V extends IForgeRegistryEntry<V>> void addRegistryEntry(IForgeRegistry<V> registry, ResourceLocation name, V entry) {
         ((IReloadableForgeRegistry<V>) registry).groovyScript$registerEntry(entry.setRegistryName(name));
+    }
+
+    public static <V extends IForgeRegistryEntry<V>> void addRegistryEntry(IForgeRegistry<V> registry, V entry) {
+        if (entry.getRegistryName() == null) {
+            throw new IllegalArgumentException("Expected the name to have a registry name. Add it or use a different method!");
+        }
+        ((IReloadableForgeRegistry<V>) registry).groovyScript$registerEntry(entry);
     }
 
     public static <V extends IForgeRegistryEntry<V>> void removeRegistryEntry(IForgeRegistry<V> registry, String name) {
@@ -153,8 +160,10 @@ public class ReloadableRegistryManager {
         }
     }
 
-    private static void reloadForgeRegistries() {
-        ((IReloadableForgeRegistry<?>) ForgeRegistries.RECIPES).groovyScript$onReload();
+    protected static void reloadForgeRegistries(IForgeRegistry<?>... registries) {
+        for (IForgeRegistry<?> registry : registries) {
+            ((IReloadableForgeRegistry<?>) registry).groovyScript$onReload();
+        }
     }
 
     private static void unfreezeForgeRegistries() {
