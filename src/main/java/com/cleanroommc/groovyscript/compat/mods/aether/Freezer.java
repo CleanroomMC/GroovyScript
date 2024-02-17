@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.aether;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -10,12 +11,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
 
     public Freezer() {
         super(GameRegistry.findRegistry(AetherFreezable.class), Alias.generateOfClass(AetherFreezable.class));
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'))" +
+                                                 ".output(item('minecraft:dirt'))" +
+                                                 ".time(200)"))
     public RecipeBuilder recipeBuilder() { return new RecipeBuilder(); }
 
     public void add(AetherFreezable freezable) {
@@ -23,6 +28,7 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
             ReloadableRegistryManager.addRegistryEntry(this.getRegistry(),freezable);
         }
     }
+
     public void add(ItemStack input, ItemStack output, int timeRequired) {
         AetherFreezable freezable = new AetherFreezable(input, output, timeRequired);
         add(freezable);
@@ -33,6 +39,7 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:obsidian')"))
     public void removeByOutput(ItemStack output) {
         this.getRegistry().getValuesCollection().forEach(freezable -> {
             if (freezable.getOutput().isItemEqual(output)) {
@@ -42,11 +49,14 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
     }
 
 
-
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AetherFreezable> {
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int time;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
@@ -65,6 +75,8 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
             msg.add(Aether.freezer.getRegistry().getValue(name) != null, "tried to register {}, but it already exists.", name);
         }
 
+
+        @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable AetherFreezable register() {
             if (!validate()) return null;

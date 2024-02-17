@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.aether;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
 
 
@@ -17,6 +19,10 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
         super(GameRegistry.findRegistry(AetherEnchantment.class), Alias.generateOfClass(AetherEnchantment.class));
     }
 
+    @RecipeBuilderDescription(example = @Example(
+                                                 ".input(item('minecraft:clay'))" +
+                                                 ".output(item('minecraft:diamond'))" +
+                                                 ".time(200)"))
     public RecipeBuilder recipeBuilder() { return new RecipeBuilder(); }
 
     public void add(AetherEnchantment enchantment) {
@@ -30,6 +36,7 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
         add(enchantment);
     }
 
+
     public boolean remove(AetherEnchantment enchantment) {
         if (enchantment == null) return false;
 
@@ -37,6 +44,7 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('aether_legacy:enchanted_gravitite')"))
     public void removeByOutput(ItemStack output) {
         this.getRegistry().getValuesCollection().forEach(enchantment -> {
             if (enchantment.getOutput().isItemEqual(output)) {
@@ -46,12 +54,15 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
     }
 
 
-
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AetherEnchantment> {
 
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int time;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
@@ -70,6 +81,7 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
             msg.add(Aether.enchanter.getRegistry().getValue(name) != null, "tried to register {}, but it already exists.", name);
         }
 
+        @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable AetherEnchantment register() {
             if (!validate()) return null;
