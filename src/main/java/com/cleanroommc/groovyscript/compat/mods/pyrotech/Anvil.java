@@ -20,9 +20,9 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:diamond') * 4).output(item('minecraft:emerald') * 2).hits(5).type(AnvilRecipe.EnumType.HAMMER).tier(AnvilRecipe.EnumTier.GRANITE).name('diamond_to_emerald_granite_anvil')"),
-            @Example(".input(item('minecraft:diamond') * 8).output(item('minecraft:nether_star') * 1).hits(10).type(AnvilRecipe.EnumType.PICKAXE).tier(AnvilRecipe.EnumTier.IRONCLAD).name('diamond_to_nether_star_ironclad_anvil')"),
-            @Example(".input(item('minecraft:diamond') * 4).output(item('minecraft:gold_ingot') * 16).hits(5).type(AnvilRecipe.EnumType.PICKAXE).tier(AnvilRecipe.EnumTier.OBSIDIAN).name('diamond_to_gold_obsidian_anvil')")
+            @Example(".input(item('minecraft:diamond') * 4).output(item('minecraft:emerald') * 2).hits(5).typeHammer().tierGranite().name('diamond_to_emerald_granite_anvil')"),
+            @Example(".input(item('minecraft:diamond') * 8).output(item('minecraft:nether_star') * 1).hits(10).typePickaxe().tierIronclad().name('diamond_to_nether_star_ironclad_anvil')"),
+            @Example(".input(item('minecraft:diamond') * 4).output(item('minecraft:gold_ingot') * 16).hits(5).typePickaxe().tierObsidian().name('diamond_to_gold_obsidian_anvil')")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -77,12 +77,12 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         }
 
         @RecipeBuilderMethodDescription(field = "type")
-        public RecipeBuilder hammer() {
+        public RecipeBuilder typeHammer() {
             return type(AnvilRecipe.EnumType.HAMMER);
         }
 
         @RecipeBuilderMethodDescription(field = "type")
-        public RecipeBuilder pickaxe() {
+        public RecipeBuilder typePickaxe() {
             return type(AnvilRecipe.EnumType.PICKAXE);
         }
 
@@ -93,17 +93,17 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         }
 
         @RecipeBuilderMethodDescription(field = "tier")
-        public RecipeBuilder granite() {
+        public RecipeBuilder tierGranite() {
             return tier(AnvilRecipe.EnumTier.GRANITE);
         }
 
         @RecipeBuilderMethodDescription(field = "tier")
-        public RecipeBuilder ironclad() {
+        public RecipeBuilder tierIronclad() {
             return tier(AnvilRecipe.EnumTier.IRONCLAD);
         }
 
         @RecipeBuilderMethodDescription(field = "tier")
-        public RecipeBuilder obsidian() {
+        public RecipeBuilder tierObsidian() {
             return tier(AnvilRecipe.EnumTier.OBSIDIAN);
         }
 
