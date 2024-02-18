@@ -1,4 +1,5 @@
 
+// MODS_LOADED: mekanism
 import net.minecraftforge.client.event.TextureStitchEvent
 
 if (!isLoaded('mekanism')) return

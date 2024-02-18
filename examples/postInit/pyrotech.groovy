@@ -2,6 +2,8 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: pyrotech
 
+import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.AnvilRecipe
+
 println 'mod \'pyrotech\' detected, running script'
 
 // groovyscript.wiki.pyrotech.anvil.title:
@@ -49,7 +51,6 @@ mods.pyrotech.barrel.recipeBuilder()
     .duration(1000)
     .name('diamond_emerald_and_water_to_amongium')
     .register()
-    .register()
 
 
 // groovyscript.wiki.pyrotech.campfire.title:
@@ -84,15 +85,15 @@ mods.pyrotech.chopping_block.recipeBuilder()
 // groovyscript.wiki.pyrotech.compacting_bin.title:
 // groovyscript.wiki.pyrotech.compacting_bin.description
 
-mods.pyrotech.compacting_bin.removeByInput(item('minecraft:snowball'))
-mods.pyrotech.compacting_bin.removeByOutput(item('minecraft:bone_block'))
+//mods.pyrotech.compacting_bin.removeByInput(item('minecraft:snowball'))
+//mods.pyrotech.compacting_bin.removeByOutput(item('minecraft:bone_block'))
 
-mods.pyrotech.compacting_bin.recipeBuilder()
+/*mods.pyrotech.compacting_bin.recipeBuilder()
     .input(item('minecraft:diamond'))
     .output(item('minecraft:emerald'))
     .toolUses(5)
     .name('diamond_to_emerald_compacting_bin')
-    .register()
+    .register()*/
 
 
 // groovyscript.wiki.pyrotech.compost_bin.title:
