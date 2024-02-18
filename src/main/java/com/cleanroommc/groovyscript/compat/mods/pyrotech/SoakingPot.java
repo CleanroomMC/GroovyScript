@@ -28,13 +28,6 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         return new RecipeBuilder();
     }
 
-
-    public boolean remove(SoakingPotRecipe recipe) {
-        if (recipe == null) return false;
-        remove(recipe.getRegistryName());
-        return true;
-    }
-
     @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing soaking pot recipe")

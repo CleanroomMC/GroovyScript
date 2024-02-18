@@ -28,12 +28,6 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         return new RecipeBuilder();
     }
 
-    public boolean remove(ChoppingBlockRecipe recipe) {
-        if (recipe == null) return false;
-        remove(recipe.getRegistryName());
-        return true;
-    }
-
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:log2')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing chopping block recipe")

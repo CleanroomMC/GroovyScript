@@ -27,12 +27,6 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         return new RecipeBuilder();
     }
 
-    public boolean remove(KilnPitRecipe recipe) {
-        if (recipe == null) return false;
-        remove(recipe.getRegistryName());
-        return true;
-    }
-
     @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing pit kiln recipe")

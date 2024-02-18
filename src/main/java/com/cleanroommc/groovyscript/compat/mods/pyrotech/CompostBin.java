@@ -28,13 +28,6 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         return new RecipeBuilder();
     }
 
-
-    public boolean remove(CompostBinRecipe recipe) {
-        if (recipe == null) return false;
-        remove(recipe.getRegistryName());
-        return true;
-    }
-
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:golden_carrot')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing compost bin recipe")

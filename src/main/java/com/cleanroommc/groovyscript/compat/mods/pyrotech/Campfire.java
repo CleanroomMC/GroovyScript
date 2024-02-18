@@ -20,16 +20,10 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
     }
 
     @RecipeBuilderDescription(example =
-            @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald')")
+    @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald')")
     )
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
-    }
-
-    public boolean remove(CampfireRecipe recipe) {
-        if (recipe == null) return false;
-        remove(recipe.getRegistryName());
-        return true;
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:porkchop')"))

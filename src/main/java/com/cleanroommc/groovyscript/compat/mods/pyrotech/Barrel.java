@@ -27,13 +27,6 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
         return new RecipeBuilder();
     }
 
-
-    public boolean remove(BarrelRecipe recipe) {
-        if (recipe == null) return false;
-        remove(recipe.getRegistryName());
-        return true;
-    }
-
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('freckleberry_wine') * 1000"))
     public void removeByOutput(FluidStack output) {
         if (GroovyLog.msg("Error removing barrel recipe")

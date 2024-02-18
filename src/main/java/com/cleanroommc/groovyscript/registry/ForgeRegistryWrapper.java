@@ -3,7 +3,10 @@ package com.cleanroommc.groovyscript.registry;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.AnvilRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -60,12 +63,20 @@ public class ForgeRegistryWrapper<T extends IForgeRegistryEntry<T>> implements I
         ReloadableRegistryManager.removeRegistryEntry(this.registry, loc);
     }
 
+    public boolean remove(T recipe) {
+        if (recipe == null) return false;
+        remove(recipe.getRegistryName());
+        return true;
+    }
+
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         for (T recipe : this.registry) {
             ReloadableRegistryManager.removeRegistryEntry(this.registry, recipe.getRegistryName());
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<T> streamRecipes() {
         return new SimpleObjectStream<>(this.registry.getValuesCollection()).setRemover(recipe -> {
             ResourceLocation key = this.registry.getKey(recipe);

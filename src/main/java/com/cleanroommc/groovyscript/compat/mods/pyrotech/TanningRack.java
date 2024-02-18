@@ -28,13 +28,6 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         return new RecipeBuilder();
     }
 
-
-    public boolean remove(TanningRackRecipe recipe) {
-        if (recipe == null) return false;
-        remove(recipe.getRegistryName());
-        return true;
-    }
-
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing tanning rack recipe")
