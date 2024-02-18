@@ -76,10 +76,35 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
+        public RecipeBuilder hammer() {
+            return type(AnvilRecipe.EnumType.HAMMER);
+        }
+
+        @RecipeBuilderMethodDescription(field = "type")
+        public RecipeBuilder pickaxe() {
+            return type(AnvilRecipe.EnumType.PICKAXE);
+        }
+
         @RecipeBuilderMethodDescription
         public RecipeBuilder tier(AnvilRecipe.EnumTier tier) {
             this.tier = tier;
             return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "tier")
+        public RecipeBuilder granite() {
+            return tier(AnvilRecipe.EnumTier.GRANITE);
+        }
+
+        @RecipeBuilderMethodDescription(field = "tier")
+        public RecipeBuilder ironclad() {
+            return tier(AnvilRecipe.EnumTier.IRONCLAD);
+        }
+
+        @RecipeBuilderMethodDescription(field = "tier")
+        public RecipeBuilder obsidian() {
+            return tier(AnvilRecipe.EnumTier.OBSIDIAN);
         }
 
         @Override
