@@ -2,12 +2,7 @@ package com.cleanroommc.groovyscript.server;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.GroovyScriptConfig;
-import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import com.cleanroommc.groovyscript.server.provider.*;
-import com.google.gson.Gson;
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ScanResult;
-import net.minecraft.launchwrapper.Launch;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.CancelChecker;
 import org.eclipse.lsp4j.jsonrpc.CompletableFutures;
@@ -16,9 +11,6 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either3;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.*;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Collections;
 import java.util.List;
@@ -45,15 +37,7 @@ public class GroovyServer implements LanguageServer, LanguageClientAware, TextDo
         }
     }
 
-    public ScanResult scanResult = new ClassGraph()
-            .enableClassInfo()
-            .enableSystemJarsAndModules()
-            .overrideClassLoaders(Launch.classLoader)
-            .acceptPaths("*")
-            .rejectClasses(GroovySecurityManager.INSTANCE.getBannedClasses().stream().map(Class::getName).toArray(String[]::new))
-            .rejectPackages(GroovySecurityManager.INSTANCE.getBannedPackages().stream().toArray(String[]::new))
-            .acceptClasses(GroovySecurityManager.INSTANCE.getWhiteListedClasses().stream().map(Class::getName).toArray(String[]::new))
-            .scan();
+    public GroovyCompiler compiler = new GroovyCompiler(this);
 
     public ClientCapabilities clientCapabilities;
     public LanguageClient client;
@@ -168,9 +152,7 @@ public class GroovyServer implements LanguageServer, LanguageClientAware, TextDo
     }
 
     @Override
-    public void didChangeConfiguration(DidChangeConfigurationParams params) {
-
-    }
+    public void didChangeConfiguration(DidChangeConfigurationParams params) {}
 
     @Override
     public void didChangeWatchedFiles(DidChangeWatchedFilesParams params) {
@@ -233,17 +215,6 @@ public class GroovyServer implements LanguageServer, LanguageClientAware, TextDo
 
     @Override
     public CompletableFuture<Hover> hover(HoverParams params) {
-        System.out.println("GroovyServer::hover =>");
-        System.out.println("    size:" + scanResult.getAllClasses().size());
-
-        var file = GroovyScript.getScriptFile().toPath().resolve("scan.graph").toFile();
-        try (var fr = new FileWriter(file);
-             var br = new BufferedWriter(fr);) {
-            br.write(scanResult.getAllClasses().generateGraphVizDotFile());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
         return mapCompile(cancelToken -> HoverProvider.provide(params));
     }
 
