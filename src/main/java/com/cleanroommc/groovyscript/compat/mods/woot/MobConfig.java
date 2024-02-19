@@ -17,10 +17,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class MobConfig extends VirtualizedRegistry<Pair<String, Integer>> {
 
-    public MobConfig() {
-        super();
-    }
-
     @Override
     public void onReload() {
         restoreFromBackup().forEach(pair -> ((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMobMap().put(pair.getKey(), pair.getValue()));

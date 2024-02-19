@@ -106,7 +106,7 @@ public class ClassicCompressor extends Compressor {
 
     public boolean remove(IMachineRecipeList.RecipeEntry entry) {
         addBackup(new MachineRecipe<>(entry.getInput(), entry.getOutput().getAllOutputs()));
-        return ClassicRecipes.compressor.removeRecipe(entry.getInput()).size() > 0;
+        return !ClassicRecipes.compressor.removeRecipe(entry.getInput()).isEmpty();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class ClassicCompressor extends Compressor {
     @Override
     public boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
         addBackup(recipe);
-        return ClassicRecipes.compressor.removeRecipe(recipe.getInput()).size() > 0;
+        return !ClassicRecipes.compressor.removeRecipe(recipe.getInput()).isEmpty();
     }
 
     @Override

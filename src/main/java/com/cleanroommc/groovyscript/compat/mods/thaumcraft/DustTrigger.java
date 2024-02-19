@@ -28,10 +28,6 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         restoreFromBackup().forEach(this::add);
     }
 
-    public DustTrigger() {
-        super();
-    }
-
     private Field simpleTriggerResult;
     private Field oreTriggerResult;
     private boolean didReflection = false;

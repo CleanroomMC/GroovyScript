@@ -17,10 +17,6 @@ import java.util.List;
 @RegistryDescription
 public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
 
-    public Crusher() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

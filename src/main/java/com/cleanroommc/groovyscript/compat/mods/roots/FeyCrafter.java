@@ -21,10 +21,6 @@ import static epicsquid.roots.init.ModRecipes.*;
 )
 public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCraftingRecipe>> {
 
-    public FeyCrafter() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".name('clay_craft').input(item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone')) // Must be exactly 5.output(item('minecraft:clay')).xp(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

@@ -150,13 +150,13 @@ public class GSCommand extends CommandTreeBase {
             }
         }));
 
-        addSubcommand(new SimpleCommand("wiki", (server, sender, args) -> {
-            sender.sendMessage(new TextComponentString("GroovyScript wiki")
-                                       .setStyle(new Style()
-                                                         .setColor(TextFormatting.GOLD)
-                                                         .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open wiki in browser")))
-                                                         .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://groovyscript-docs.readthedocs.io/en/latest/"))));
-        }, "doc", "docs", "documentation"));
+        addSubcommand(new SimpleCommand("wiki", (server, sender, args) ->
+                sender.sendMessage(new TextComponentString("GroovyScript wiki")
+                                           .setStyle(new Style()
+                                                             .setColor(TextFormatting.GOLD)
+                                                             .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open wiki in browser")))
+                                                             .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://groovyscript-docs.readthedocs.io/en/latest/"))))
+                , "doc", "docs", "documentation"));
 
         addSubcommand(new SimpleCommand("generateWiki", (server, sender, args) -> {
             Documentation.generateWiki();

@@ -20,10 +20,6 @@ import java.util.Map;
 @RegistryDescription
 public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, ChrysopoeiaRecipe>> {
 
-    public Chrysopoeia() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_transmute').input(item('minecraft:gold_ingot')).output(item('minecraft:clay'))"),
             @Example(".input(item('minecraft:diamond') * 3).output(item('minecraft:gold_ingot') * 3)")

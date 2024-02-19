@@ -18,10 +18,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
 
-    public Crusher() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'), item('minecraft:diamond')).chance(100)"),
             @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:diamond') * 12)")

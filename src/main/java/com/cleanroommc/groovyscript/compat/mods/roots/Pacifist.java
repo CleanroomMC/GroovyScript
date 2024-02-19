@@ -23,10 +23,6 @@ import static epicsquid.roots.init.ModRecipes.getPacifistEntities;
 )
 public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, PacifistEntry>> {
 
-    public Pacifist() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".name('wither_skeleton_pacifist').entity(entity('minecraft:wither_skeleton'))"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

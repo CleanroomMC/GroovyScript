@@ -15,10 +15,6 @@ import static epicsquid.roots.init.ModRecipes.getLifeEssenceList;
 )
 public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivingBase>> {
 
-    public LifeEssence() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(getLifeEssenceList()::remove);

@@ -21,10 +21,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
 
-    public Inscriber() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockGlass')).output(item('minecraft:diamond')).top(item('minecraft:diamond')).bottom(item('minecraft:diamond')).inscribe()"),
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).top(item('minecraft:diamond'))")

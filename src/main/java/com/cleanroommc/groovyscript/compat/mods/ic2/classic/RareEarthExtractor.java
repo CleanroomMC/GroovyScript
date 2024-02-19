@@ -11,10 +11,6 @@ import net.minecraft.item.ItemStack;
 
 public class RareEarthExtractor extends VirtualizedRegistry<IRareEarthExtractorRecipeList.EarthEntry> {
 
-    public RareEarthExtractor() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> ClassicRecipes.earthExtractor.removeEntry(recipe.getItem()));

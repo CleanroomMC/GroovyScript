@@ -20,10 +20,6 @@ import java.awt.*;
 @RegistryDescription
 public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
 
-    public Empowerer() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".mainInput(item('minecraft:clay')).input(item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay')).output(item('minecraft:diamond')).time(50).energy(1000).red(0.5).green(0.3).blue(0.2)"),
             @Example(".mainInput(item('minecraft:clay')).input(item('minecraft:diamond'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay')).output(item('minecraft:diamond') * 2).time(50).color(0.5, 0.3, 0.2)"),

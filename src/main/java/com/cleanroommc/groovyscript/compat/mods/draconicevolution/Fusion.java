@@ -18,10 +18,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
 
-    public Fusion() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(RecipeManager.FUSION_REGISTRY::remove);

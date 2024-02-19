@@ -35,10 +35,6 @@ import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 @RegistryDescription
 public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation, InfusionRecipe>> {
 
-    public InfusionCrafting() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".researchKey('UNLOCKALCHEMY@3').mainInput(item('minecraft:gunpowder')).output(item('minecraft:gold_ingot')).aspect(aspect('terra') * 20).aspect('ignis', 30).input(crystal('aer')).input(crystal('ignis')).input(crystal('aqua')).input(crystal('terra')).input(crystal('ordo')).instability(10)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

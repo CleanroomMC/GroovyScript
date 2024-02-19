@@ -82,6 +82,7 @@ public class ReloadableRegistryManager {
                 .map(GroovyContainer::get)
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
+                .filter(IScriptReloadable::isEnabled)
                 .forEach(IScriptReloadable::onReload);
         if (ModSupport.JEI.isLoaded()) {
             JeiPlugin.reload();
@@ -95,6 +96,7 @@ public class ReloadableRegistryManager {
                 .map(GroovyContainer::get)
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
+                .filter(IScriptReloadable::isEnabled)
                 .forEach(IScriptReloadable::afterScriptLoad);
         VanillaModule.INSTANCE.afterScriptLoad();
         unfreezeForgeRegistries();

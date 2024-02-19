@@ -18,10 +18,6 @@ import java.util.Map;
 
 public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe>> {
 
-    public Electrolyzer() {
-        super();
-    }
-
     @Override
     public void onReload() {
         Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> fluidMap = ((ElectrolyzerRecipeManagerAccessor) Recipes.electrolyzer).getFluidMap();

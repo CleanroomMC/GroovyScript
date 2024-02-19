@@ -11,7 +11,6 @@ import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
-import groovy.lang.GroovyRuntimeException;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;

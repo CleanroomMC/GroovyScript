@@ -38,7 +38,7 @@ public class InternalModContainer<T extends ModPropertyContainer> extends Groovy
             throw new IllegalStateException("compat was already added for " + modId + "!");
         }
         this.modId = modId;
-        this.containerName = GroovyScript.NAME + " - " + containerName;
+        this.containerName = containerName;
         this.modProperty = Suppliers.memoize(modProperty);
         this.loaded = Loader.isModLoaded(modId);
         Set<String> aliasSet = new ObjectOpenHashSet<>(aliases);
