@@ -60,6 +60,7 @@ public class ShapedCraftingRecipe extends CraftingRecipe implements IShapedRecip
     /**
      * Based on {@link net.minecraft.item.crafting.ShapedRecipes#checkMatch(InventoryCrafting, int, int, boolean)}
      */
+    @SuppressWarnings("JavadocReference")
     protected MatchList checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
         MatchList matches = new MatchList();
         for (int x = 0; x < inv.getWidth(); x++) {
