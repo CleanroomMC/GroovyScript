@@ -315,7 +315,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         private boolean validate() {
             ArrayList<String> errors = new ArrayList<>();
 
-            if (this.name == null || this.name.equals(""))
+            if (this.name == null || "".equals(this.name))
                 errors.add("name must be provided");
             if (this.connections.equals(new ArrayList<>()))
                 errors.add("connections must not be empty");

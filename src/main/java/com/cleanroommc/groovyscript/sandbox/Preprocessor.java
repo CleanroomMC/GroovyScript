@@ -106,10 +106,10 @@ public class Preprocessor {
             return true;
         }
         String side = sides[0].toUpperCase();
-        if (side.equals("CLIENT")) {
+        if ("CLIENT".equals(side)) {
             return FMLCommonHandler.instance().getSide().isClient();
         }
-        if (side.equals("SERVER")) {
+        if ("SERVER".equals(side)) {
             return FMLCommonHandler.instance().getSide().isServer();
         }
         GroovyLog.get().error("Side processor argument in file '{}' must be CLIENT or SERVER (lower case is allowed too)", file.getName());

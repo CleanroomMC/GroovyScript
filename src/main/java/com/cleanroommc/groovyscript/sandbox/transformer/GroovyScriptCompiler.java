@@ -61,7 +61,7 @@ public class GroovyScriptCompiler extends CompilationCustomizer {
     }
 
     public void forbidIfFinalizer(MethodNode m) {
-        if (m.getName().equals("finalize") && m.isVoidMethod() && !m.isPrivate() && !m.isStatic()) {
+        if ("finalize".equals(m.getName()) && m.isVoidMethod() && !m.isPrivate() && !m.isStatic()) {
             boolean safe = false;
             for (Parameter p : m.getParameters()) {
                 if (!p.hasInitialExpression()) {

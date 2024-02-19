@@ -74,7 +74,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
     }
 
     public @Nullable AbstractAltarRecipe add(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, TileAltar.AltarLevel altarLevel, IConstellation requiredConstellation, ItemHandle[] outerInputs) {
-        if (name == null || name.equals(""))
+        if (name == null || "".equals(name))
             name = RecipeName.generate("starlight_altar_recipe");
         final int starlightConsumed = MathHelper.clamp(starlightRequired, 1, altarLevel.getStarlightMaxStorage());
         final List<Integer> fluidStacks = this.computeFluidConsumptionSlots(inputs);
