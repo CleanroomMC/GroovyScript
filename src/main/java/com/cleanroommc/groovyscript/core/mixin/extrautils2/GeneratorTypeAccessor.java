@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.core.mixin.extrautilities2;
+package com.cleanroommc.groovyscript.core.mixin.extrautils2;
 
 import com.rwtema.extrautils2.blocks.BlockPassiveGenerator;
 import net.minecraft.util.ResourceLocation;

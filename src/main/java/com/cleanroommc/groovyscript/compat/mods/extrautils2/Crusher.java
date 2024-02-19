@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.mods.extrautilities2;
+package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -22,10 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
-
-    public Crusher() {
-        super();
-    }
 
     @Override
     public void onReload() {

@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.mods.extrautilities2;
+package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -24,10 +24,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
-
-    public Resonator() {
-        super();
-    }
 
     @Override
     public void onReload() {
@@ -87,6 +83,11 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    public interface ShouldProgress {
+
+        boolean run(TileEntity resonator, int frequency, ItemStack input);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<IResonatorRecipe> {
@@ -185,11 +186,5 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
             ModSupport.EXTRA_UTILITIES_2.get().resonator.add(recipe);
             return recipe;
         }
-    }
-
-
-    public interface ShouldProgress {
-
-        boolean run(TileEntity resonator, int frequency, ItemStack input);
     }
 }

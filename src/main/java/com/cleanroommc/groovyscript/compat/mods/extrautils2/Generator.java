@@ -1,10 +1,11 @@
-package com.cleanroommc.groovyscript.compat.mods.extrautilities2;
+package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.rwtema.extrautils2.api.machine.*;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
+import com.rwtema.extrautils2.api.machine.IMachineRecipe;
+import com.rwtema.extrautils2.api.machine.Machine;
+import com.rwtema.extrautils2.api.machine.XUMachineCrusher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class Generator extends VirtualizedRegistry<IMachineRecipe> {
     final Machine generator;
 
     public Generator(Machine generator) {
-        super(false, generator.name);
+        super(Alias.generateOf(generator.name));
         this.generator = generator;
     }
 

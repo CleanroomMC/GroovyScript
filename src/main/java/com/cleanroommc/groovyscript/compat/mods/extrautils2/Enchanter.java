@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.mods.extrautilities2;
+package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -14,10 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
-
-    public Enchanter() {
-        super();
-    }
 
     @Override
     public void onReload() {

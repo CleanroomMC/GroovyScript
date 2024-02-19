@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.mods.extrautilities2;
+package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.rwtema.extrautils2.api.machine.IMachineRecipe;
-import com.rwtema.extrautils2.api.machine.XUMachineCrusher;
 import com.rwtema.extrautils2.api.machine.XUMachineFurnace;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,10 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
-
-    public Furnace() {
-        super();
-    }
 
     @Override
     public void onReload() {
@@ -44,7 +39,7 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
 
     public SimpleObjectStream<IMachineRecipe> streamRecipes() {
         List<IMachineRecipe> list = new ArrayList<>();
-        for (IMachineRecipe recipe : XUMachineCrusher.INSTANCE.recipes_registry) {
+        for (IMachineRecipe recipe : XUMachineFurnace.INSTANCE.recipes_registry) {
             list.add(recipe);
         }
         return new SimpleObjectStream<>(list).setRemover(this::remove);
@@ -98,9 +93,9 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
         @Override
         public IMachineRecipe register() {
             if (!validate()) return null;
-            com.rwtema.extrautils2.api.machine.RecipeBuilder builder = com.rwtema.extrautils2.api.machine.RecipeBuilder.newbuilder(com.rwtema.extrautils2.api.machine.XUMachineFurnace.INSTANCE);
-            builder.setItemInput(com.rwtema.extrautils2.api.machine.XUMachineFurnace.INPUT, Arrays.asList(input.get(0).getMatchingStacks()), input.get(0).getAmount());
-            builder.setItemOutput(com.rwtema.extrautils2.api.machine.XUMachineFurnace.OUTPUT, output.get(0));
+            com.rwtema.extrautils2.api.machine.RecipeBuilder builder = com.rwtema.extrautils2.api.machine.RecipeBuilder.newbuilder(XUMachineFurnace.INSTANCE);
+            builder.setItemInput(XUMachineFurnace.INPUT, Arrays.asList(input.get(0).getMatchingStacks()), input.get(0).getAmount());
+            builder.setItemOutput(XUMachineFurnace.OUTPUT, output.get(0));
             builder.setEnergy(energy);
             builder.setProcessingTime(time);
 
