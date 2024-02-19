@@ -27,10 +27,6 @@ import java.util.Map;
 )
 public class Spells extends VirtualizedRegistry<SpellBase> {
 
-    public Spells() {
-        super();
-    }
-
     public static SpellWrapper spell(String spell) {
         return new SpellWrapper(spell);
     }

@@ -14,10 +14,6 @@ import net.minecraft.item.ItemStack;
 
 public class Sawmill extends VirtualizedRegistry<IMachineRecipeList.RecipeEntry> {
 
-    public Sawmill() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> ClassicRecipes.sawMill.removeRecipe(recipe));

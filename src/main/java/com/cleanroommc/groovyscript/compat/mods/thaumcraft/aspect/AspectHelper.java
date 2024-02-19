@@ -25,9 +25,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @RegistryDescription
 public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
-    public AspectHelper() {
-    }
-
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal

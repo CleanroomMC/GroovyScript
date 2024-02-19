@@ -29,10 +29,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
 
-    public StarlightAltar() {
-        super();
-    }
-
     @RecipeBuilderDescription(priority = 100, example = @Example(".output(item('minecraft:water_bucket')).row('   ').row(' B ').row('   ').key('B', item('minecraft:bucket')).starlight(1).craftTime(10)"))
     @Property(property = "ingredientMatrix", valid = {@Comp(value = "0", type = Comp.Type.GT), @Comp(value = "9", type = Comp.Type.LTE)})
     @Property(property = "outerIngredients", valid = @Comp("0"))

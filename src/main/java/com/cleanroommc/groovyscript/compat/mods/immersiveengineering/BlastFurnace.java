@@ -18,10 +18,6 @@ import java.util.List;
 @RegistryDescription
 public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
 
-    public BlastFurnace() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).time(100).slag(item('minecraft:gold_nugget'))"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

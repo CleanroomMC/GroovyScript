@@ -30,10 +30,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
-    public Crucible() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".researchKey('UNLOCKALCHEMY@3').catalyst(item('minecraft:rotten_flesh')).output(item('minecraft:gold_ingot')).aspect(aspect('metallum') * 10)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

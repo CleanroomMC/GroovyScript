@@ -11,10 +11,6 @@ import org.cyclops.cyclopscore.recipe.custom.component.IngredientAndFluidStackRe
 @RegistryDescription
 public class MechanicalDryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {
 
-    public MechanicalDryingBasin() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).fluidInput(fluid('water') * 50).fluidOutput(fluid('lava') * 20000).duration(300)"), requirement = @Property(property = "mechanical", defaultValue = "true"))
     public DryingBasin.RecipeBuilder recipeBuilder() {
         return new DryingBasin.RecipeBuilder().mechanical();

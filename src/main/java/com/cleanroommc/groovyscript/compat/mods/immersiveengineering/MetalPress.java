@@ -20,10 +20,6 @@ import java.util.List;
 @RegistryDescription
 public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
 
-    public MetalPress() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".mold(item('minecraft:diamond')).input(ore('ingotGold')).output(item('minecraft:clay')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

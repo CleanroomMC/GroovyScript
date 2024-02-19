@@ -20,10 +20,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
 
-    public Squeezer() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('lava')).energy(100)"),
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).energy(100)"),

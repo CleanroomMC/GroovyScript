@@ -18,10 +18,6 @@ import java.util.List;
 @RegistryDescription
 public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
 
-    public CokeOven() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).time(100).creosote(50)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

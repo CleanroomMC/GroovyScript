@@ -12,10 +12,6 @@ import org.cyclops.cyclopscore.recipe.custom.component.IngredientsAndFluidStackR
 @RegistryDescription
 public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> {
 
-    public MechanicalSqueezer() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay') * 16, 0.9F)"), requirement = @Property(property = "mechanical", defaultValue = "true"))
     public Squeezer.RecipeBuilder recipeBuilder() {
         return new Squeezer.RecipeBuilder().mechanical();

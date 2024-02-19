@@ -20,10 +20,6 @@ import java.util.Map;
 
 public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
 
-    public Pulverizer() {
-        super();
-    }
-
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

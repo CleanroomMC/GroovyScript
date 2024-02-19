@@ -27,10 +27,6 @@ import static epicsquid.roots.init.ModRecipes.getFlowerRecipes;
 )
 public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation, FlowerRecipe>> {
 
-    public FlowerGeneration() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".name('clay_flower').flower(blockstate('minecraft:clay'))"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

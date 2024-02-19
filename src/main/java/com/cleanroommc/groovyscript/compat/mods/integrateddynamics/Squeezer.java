@@ -20,10 +20,6 @@ import java.util.List;
 @RegistryDescription
 public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> {
 
-    public Squeezer() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:clay_ball'), 1F).output(item('minecraft:clay_ball') * 2, 0.7F).output(item('minecraft:clay_ball') * 10, 0.2F).fluidOutput(fluid('lava') * 2000).mechanical().duration(5)"),
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay'), 0.5F)"),

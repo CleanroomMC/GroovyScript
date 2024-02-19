@@ -20,10 +20,6 @@ public class Rarity {
 
     private final List<Pair<Closure<Boolean>, IRarity>> rarities = new ArrayList<>();
 
-    public Rarity() {
-        super();
-    }
-
     public IRarity check(ItemStack testStack) {
         for (Pair<Closure<Boolean>, IRarity> pair : this.rarities) {
             if (ClosureHelper.call(false, pair.getKey(), testStack)) {

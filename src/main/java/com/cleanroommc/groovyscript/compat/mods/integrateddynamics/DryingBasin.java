@@ -16,10 +16,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {
 
-    public DryingBasin() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).fluidInput(fluid('water') * 500).fluidOutput(fluid('lava') * 2000).mechanical().duration(5)"),
             @Example(".output(item('minecraft:clay')).fluidInput(fluid('water') * 2000)")

@@ -16,10 +16,6 @@ import org.apache.commons.lang3.tuple.Pair;
 )
 public class Policy extends VirtualizedRegistry<Pair<Policy.PolicyType, Object>> {
 
-    public Policy() {
-        super();
-    }
-
     @Override
     public void onReload() {
         restoreFromBackup().forEach(pair -> {

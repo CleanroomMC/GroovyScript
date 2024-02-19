@@ -17,10 +17,6 @@ import net.minecraft.util.ResourceLocation;
 )
 public class Modifiers extends VirtualizedRegistry<ResourceLocation> {
 
-    public Modifiers() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(ModifierRegistryAccessor.getDisabledModifiers()::remove);

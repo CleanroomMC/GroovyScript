@@ -27,10 +27,6 @@ import static epicsquid.roots.init.ModRecipes.removeTransmutationRecipe;
 @RegistryDescription
 public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, TransmutationRecipe>> {
 
-    public Transmutation() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_duping').start(blockstate('minecraft:clay')).output(item('minecraft:clay_ball') * 30).condition(mods.roots.predicates.stateBuilder().blockstate(blockstate('minecraft:gold_block')).below().register())"),
             @Example(".start(mods.roots.predicates.stateBuilder().blockstate(blockstate('minecraft:yellow_flower:type=dandelion')).properties('type').register()).state(blockstate('minecraft:gold_block')).condition(mods.roots.predicates.above(mods.roots.predicates.LEAVES))"),

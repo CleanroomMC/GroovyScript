@@ -18,10 +18,6 @@ import javax.annotation.Nonnull;
 @RegistryDescription
 public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
 
-    public Fermenter() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('water')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

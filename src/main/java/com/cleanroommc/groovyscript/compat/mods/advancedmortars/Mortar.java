@@ -23,10 +23,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Mortar extends VirtualizedRegistry<RecipeMortar> {
 
-    public Mortar() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".type('stone').duration(2).output(item('minecraft:grass')).input(item('minecraft:dirt'))"),
             @Example(".type('emerald').duration(4).output(item('minecraft:wheat_seeds') * 16).secondaryOutput(item('minecraft:melon_seeds')).input(ore('cropWheat'))"),

@@ -20,10 +20,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class Compost extends VirtualizedRegistry<CompostRecipe> {
 
-    public Compost() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).inputDisplay(blockstate('minecraft:clay')).outputDisplay(blockstate('minecraft:diamond_block'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

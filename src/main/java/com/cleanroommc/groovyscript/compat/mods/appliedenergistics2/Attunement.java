@@ -17,10 +17,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Attunement extends VirtualizedRegistry<Pair<Object, TunnelType>> {
 
-    public Attunement() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(pair -> {

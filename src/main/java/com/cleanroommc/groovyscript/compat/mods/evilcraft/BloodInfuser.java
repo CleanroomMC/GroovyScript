@@ -19,10 +19,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> {
 
-    public BloodInfuser() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:clay')).fluidInput(fluid('evilcraftblood') * 1000).tier(3).duration(100).xp(10000)"),
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).fluidInput(100000)"),

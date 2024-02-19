@@ -19,10 +19,6 @@ import java.util.Locale;
 @RegistryDescription
 public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> {
 
-    public EnvironmentalAccumulator() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:clay') * 2).inputWeather(weather('clear')).outputWeather(weather('rain')).processingspeed(1).cooldowntime(1000).duration(10)"),
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).inputWeather(weather('rain')).outputWeather(weather('lightning')).speed(10).cooldown(1)"),
