@@ -8,7 +8,6 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
 import forestry.modules.ForestryModuleUids;
-import org.jetbrains.annotations.Nullable;
 
 public class Forestry extends ModPropertyContainer {
 
@@ -39,18 +38,6 @@ public class Forestry extends ModPropertyContainer {
         addRegistry(beeMutations);
     }
 
-    @Override
-    public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("forestry", "species", Forestry::parseSpecies);
-    }
-
-    @Override
-    public @Nullable Object getProperty(String name) {
-        Object registry = super.getProperty(name);
-        if (registry instanceof ForestryRegistry<?> && !((ForestryRegistry<?>) registry).isEnabled()) return null;
-        return registry;
-    }
-
     public static Result<AlleleBeeSpecies> parseSpecies(String mainArg, Object... args) {
         if (!ForestryAPI.moduleManager.isModuleEnabled("forestry", ForestryModuleUids.APICULTURE)) {
             return Result.error("Can't get bee species while apiculture is disabled.");
@@ -70,5 +57,10 @@ public class Forestry extends ModPropertyContainer {
     protected static String getNormalName(String name) {
         String capital = name.substring(0, 1).toUpperCase() + name.substring(1);
         return "species" + capital;
+    }
+
+    @Override
+    public void initialize() {
+        GameObjectHandlerManager.registerGameObjectHandler("forestry", "species", Forestry::parseSpecies);
     }
 }
