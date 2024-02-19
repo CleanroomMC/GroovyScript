@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.cyclops.cyclopscore.recipe.custom.api.IRecipe;
+import org.cyclops.evilcraft.Configs;
 import org.cyclops.evilcraft.block.EnvironmentalAccumulatorConfig;
 import org.cyclops.evilcraft.core.recipe.custom.EnvironmentalAccumulatorRecipeComponent;
 import org.cyclops.evilcraft.core.recipe.custom.EnvironmentalAccumulatorRecipeProperties;
@@ -21,6 +22,11 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
 
     public EnvironmentalAccumulator() {
         super();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return Configs.isEnabled(EnvironmentalAccumulatorConfig.class);
     }
 
     @RecipeBuilderDescription(example = {
