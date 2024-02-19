@@ -6,12 +6,17 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
+import com.google.common.base.Joiner;
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Documentation {
@@ -55,11 +60,24 @@ public class Documentation {
     public static void generateWiki() {
         try {
             Files.createDirectories(WIKI.toPath());
+            List<String> missingLangKeys = new ArrayList<>();
             for (GroovyContainer<? extends ModPropertyContainer> mod : ModSupport.getAllContainers()) {
                 if (!mod.isLoaded()) continue;
                 File target = new File(WIKI, mod.getModId());
-                if (target.exists() || Files.createDirectories(target.toPath()) != null) Exporter.generateWiki(target, mod);
-                else GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
+                if (target.exists() || Files.createDirectories(target.toPath()) != null) {
+                    Set<String> missingModLangKeys = new ObjectLinkedOpenHashSet<>();
+                    Exporter.generateWiki(target, mod, missingModLangKeys);
+                    if (!missingModLangKeys.isEmpty()) {
+                        missingLangKeys.add("");
+                        missingLangKeys.add("# " + mod.getContainerName());
+                        missingModLangKeys.forEach(s -> missingLangKeys.add(s + "="));
+                    }
+                } else {
+                    GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
+                }
+            }
+            if (!missingLangKeys.isEmpty()) {
+                GroovyLog.get().infoMC("The following lang keys could not be found:\n" + Joiner.on('\n').join(missingLangKeys));
             }
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);

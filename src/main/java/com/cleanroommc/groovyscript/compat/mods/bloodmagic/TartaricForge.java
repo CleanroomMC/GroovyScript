@@ -22,10 +22,6 @@ import java.util.Collections;
 @RegistryDescription
 public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
 
-    public TartaricForge() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).output(item('minecraft:gold_ingot')).soulDrain(5).minimumSouls(10)"),
             @Example(".input(item('minecraft:gold_ingot'), item('minecraft:clay')).output(item('minecraft:diamond')).drain(200).minimumSouls(500)")

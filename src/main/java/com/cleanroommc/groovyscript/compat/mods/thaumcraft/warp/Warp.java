@@ -15,10 +15,6 @@ import java.util.Arrays;
 @RegistryDescription
 public class Warp extends VirtualizedRegistry<Warp.InternalWarp> {
 
-    public Warp() {
-        super();
-    }
-
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal

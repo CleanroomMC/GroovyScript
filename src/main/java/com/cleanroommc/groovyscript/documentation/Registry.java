@@ -26,10 +26,12 @@ public class Registry {
     private final List<Method> recipeBuilderMethods;
     private final EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
     private final List<String> imports;
+    private final Collection<String> missingLangKeys;
 
-    public Registry(GroovyContainer<? extends ModPropertyContainer> mod, IScriptReloadable registry) {
+    public Registry(GroovyContainer<? extends ModPropertyContainer> mod, IScriptReloadable registry, Collection<String> missingLangKeys) {
         this.mod = mod;
         this.registry = registry;
+        this.missingLangKeys = missingLangKeys;
         this.baseTranslationKey = String.format("groovyscript.wiki.%s.%s", mod.getModId(), registry.getName());
         this.reference = String.format("mods.%s.%s", mod.getModId(), registry.getName());
         this.registryClass = registry.getClass();
@@ -60,6 +62,14 @@ public class Registry {
         this.recipeBuilderMethods = sortGrSRecipeBuilderDescriptionMethods(recipeBuilderMethods);
         methods.forEach((k, v) -> this.methods.put(k, sortGrSMethodDescriptionMethods(v)));
         this.imports = imports;
+    }
+
+    public String lang(String key) {
+        if (!I18n.hasKey(key)) {
+            this.missingLangKeys.add(key);
+            return key;
+        }
+        return I18n.format(key);
     }
 
     private static List<Method> sortGrSRecipeBuilderDescriptionMethods(List<Method> methods) {
@@ -107,11 +117,11 @@ public class Registry {
     }
 
     public String getTitle() {
-        return I18n.format(description.title().isEmpty() ? String.format("%s.title", baseTranslationKey) : description.title());
+        return lang(description.title().isEmpty() ? String.format("%s.title", baseTranslationKey) : description.title());
     }
 
     public String getDescription() {
-        return I18n.format(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description());
+        return lang(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description());
     }
 
     public String exampleBlock() {
@@ -119,7 +129,7 @@ public class Registry {
         out.append("// ").append(getTitle()).append(":").append("\n");
         out.append("// ").append(WordUtils.wrap(getDescription(), Documentation.MAX_LINE_LENGTH, "\n// ", false)).append("\n\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.REMOVAL));
-        for (Method method : recipeBuilderMethods) out.append(new Builder(mod, method, reference, baseTranslationKey).builderExampleFile()).append("\n");
+        for (Method method : recipeBuilderMethods) out.append(new Builder(mod, method, reference, baseTranslationKey, this.missingLangKeys).builderExampleFile()).append("\n");
         if (!recipeBuilderMethods.isEmpty()) out.append("\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.ADDITION));
         out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
@@ -150,7 +160,7 @@ public class Registry {
     private String generateDescription() {
         StringBuilder out = new StringBuilder();
         out.append("## ").append(I18n.format("groovyscript.wiki.description")).append("\n\n");
-        out.append(I18n.format(getDescription())).append("\n\n");
+        out.append(getDescription()).append("\n\n");
 
         if (!description.isFullyDocumented()) {
             out.append(new AdmonitionBuilder()
@@ -167,7 +177,7 @@ public class Registry {
                                .title(note.title())
                                .hasTitle(note.hasTitle())
                                .format(note.format())
-                               .note(I18n.format(note.value()))
+                               .note(lang(note.value()))
                                .generate());
             out.append("\n\n");
         }
@@ -198,11 +208,11 @@ public class Registry {
         StringBuilder out = new StringBuilder();
 
         out.append("### ").append(I18n.format("groovyscript.wiki.recipe_builder")).append("\n\n")
-                .append(I18n.format("groovyscript.wiki.uses_recipe_builder", I18n.format(getTitle()))).append("\n\n")
+                .append(I18n.format("groovyscript.wiki.uses_recipe_builder", getTitle())).append("\n\n")
                 .append(I18n.format("groovyscript.wiki.recipe_builder_note")).append("\n\n");
 
         for (Method method : recipeBuilderMethods) {
-            Builder builder = new Builder(mod, method, reference, baseTranslationKey);
+            Builder builder = new Builder(mod, method, reference, baseTranslationKey, this.missingLangKeys);
             out.append(new AdmonitionBuilder()
                                .type(Admonition.Type.ABSTRACT)
                                .hasTitle(true)
@@ -228,7 +238,7 @@ public class Registry {
             out.append("## ").append(I18n.format("groovyscript.wiki.editing_values")).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.VALUE))).append("\n");
         }
         if (!methods.get(MethodDescription.Type.ADDITION).isEmpty() || !recipeBuilderMethods.isEmpty()) {
-            out.append("## ").append(I18n.format(description.category().adding())).append("\n\n");
+            out.append("## ").append(lang(description.category().adding())).append("\n\n");
             if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) {
                 out.append(documentMethods(methods.get(MethodDescription.Type.ADDITION))).append("\n");
             }
@@ -237,10 +247,10 @@ public class Registry {
             }
         }
         if (!methods.get(MethodDescription.Type.REMOVAL).isEmpty()) {
-            out.append("## ").append(I18n.format(description.category().removing())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.REMOVAL))).append("\n");
+            out.append("## ").append(lang(description.category().removing())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.REMOVAL))).append("\n");
         }
         if (!methods.get(MethodDescription.Type.QUERY).isEmpty()) {
-            out.append("## ").append(I18n.format(description.category().query())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.QUERY), true)).append("\n");
+            out.append("## ").append(lang(description.category().query())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.QUERY), true)).append("\n");
         }
         out.append("\n");
 
@@ -284,7 +294,7 @@ public class Registry {
         String lang = desc.isEmpty() ? String.format("%s.%s", baseTranslationKey, method.getName()) : desc;
 
         return String.format("- %s:\n\n%s",
-                             I18n.format(lang),
+                             lang(lang),
                              new CodeBlockBuilder()
                                      .line(methodExample(method, Exporter.simpleSignature(method)))
                                      .indentation(1)

@@ -12,6 +12,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.cyclops.cyclopscore.recipe.custom.api.IRecipe;
 import org.cyclops.cyclopscore.recipe.custom.component.IngredientRecipeComponent;
+import org.cyclops.evilcraft.Configs;
+import org.cyclops.evilcraft.block.BloodInfuserConfig;
 import org.cyclops.evilcraft.core.recipe.custom.DurationXpRecipeProperties;
 import org.cyclops.evilcraft.core.recipe.custom.IngredientFluidStackAndTierRecipeComponent;
 import org.jetbrains.annotations.Nullable;
@@ -19,8 +21,9 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> {
 
-    public BloodInfuser() {
-        super();
+    @Override
+    public boolean isEnabled() {
+        return Configs.isEnabled(BloodInfuserConfig.class);
     }
 
     @RecipeBuilderDescription(example = {

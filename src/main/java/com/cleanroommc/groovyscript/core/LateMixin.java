@@ -25,6 +25,7 @@ public class LateMixin implements ILateMixinLoader {
             "inspirations",
             "jei",
             "mekanism",
+            "pyrotech",
             "roots",
             "tcomplement",
             "tconstruct",

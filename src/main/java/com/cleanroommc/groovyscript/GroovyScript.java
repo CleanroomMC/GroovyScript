@@ -8,7 +8,6 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
-import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.event.EventHandler;

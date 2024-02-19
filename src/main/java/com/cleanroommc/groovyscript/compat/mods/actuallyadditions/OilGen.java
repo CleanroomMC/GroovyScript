@@ -16,10 +16,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
 
-    public OilGen() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('water')).amount(1000).time(50)"),
             @Example(".fluidInput(fluid('lava') * 50).time(100)")

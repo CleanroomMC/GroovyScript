@@ -29,10 +29,6 @@ import java.util.List;
 @RegistryDescription
 public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
 
-    public SoulBinder() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).entity(entity('minecraft:zombie'), entity('minecraft:enderman')).name('groovy_example').energy(1000).xp(5)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

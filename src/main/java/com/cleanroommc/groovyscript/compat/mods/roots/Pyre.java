@@ -19,10 +19,6 @@ import static epicsquid.roots.init.ModRecipes.*;
 @RegistryDescription
 public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftingRecipe>> {
 
-    public Pyre() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_from_fire').input(item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone')).output(item('minecraft:clay')).xp(5).time(1)"),
             @Example(".input(item('minecraft:gold_ingot'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:stone'),item('minecraft:stone')).output(item('minecraft:diamond') * 32).levels(5).burnTime(1000)")

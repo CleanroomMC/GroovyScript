@@ -181,7 +181,7 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
         }
 
         public RecipeBuilder key(String key, IIngredient item) {
-            if (key != null && !key.equals(" ") && !key.equals("\\")) this.keys.put(key.charAt(0), item);
+            if (key != null && !" ".equals(key) && !"\\".equals(key)) this.keys.put(key.charAt(0), item);
             return this;
         }
 

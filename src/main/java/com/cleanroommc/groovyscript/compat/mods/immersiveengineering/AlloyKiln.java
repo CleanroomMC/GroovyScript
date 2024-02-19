@@ -19,10 +19,6 @@ import java.util.List;
 @RegistryDescription
 public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
 
-    public AlloyKiln() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), ore('ingotGold')).output(item('minecraft:clay'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

@@ -27,10 +27,6 @@ import java.util.List;
 @RegistryDescription
 public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
-    public Enchanter() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".enchantment(enchantment('minecraft:unbreaking')).input(item('minecraft:diamond'))"),
             @Example(".enchantment(enchantment('minecraft:sharpness')).input(item('minecraft:clay')).amountPerLevel(3).xpCostMultiplier(2).customBook(item('minecraft:book')).customLapis(item('minecraft:diamond'))")

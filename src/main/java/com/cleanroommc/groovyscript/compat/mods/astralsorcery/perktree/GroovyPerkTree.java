@@ -63,7 +63,7 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
     }
 
     void remove(AbstractPerk perk, boolean doBackup) {
-        if (PERK_TREE.getConnectedPerks(perk).size() > 0) {
+        if (!PERK_TREE.getConnectedPerks(perk).isEmpty()) {
             ArrayList<AbstractPerk> connectedPerks = new ArrayList<>(PERK_TREE.getConnectedPerks(perk));
             connectedPerks.forEach(connectedPerk -> this.removeConnection(perk, connectedPerk, doBackup));
         }

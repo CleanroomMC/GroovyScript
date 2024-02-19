@@ -19,10 +19,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecipe> {
 
-    public AtomicReconstructor() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).energyUse(1000)"),
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).energy(1000)"),

@@ -29,10 +29,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
 
-    public StarlightAltar() {
-        super();
-    }
-
     @RecipeBuilderDescription(priority = 100, example = @Example(".output(item('minecraft:water_bucket')).row('   ').row(' B ').row('   ').key('B', item('minecraft:bucket')).starlight(1).craftTime(10)"))
     @Property(property = "ingredientMatrix", valid = {@Comp(value = "0", type = Comp.Type.GT), @Comp(value = "9", type = Comp.Type.LTE)})
     @Property(property = "outerIngredients", valid = @Comp("0"))
@@ -78,7 +74,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
     }
 
     public @Nullable AbstractAltarRecipe add(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, TileAltar.AltarLevel altarLevel, IConstellation requiredConstellation, ItemHandle[] outerInputs) {
-        if (name == null || name.equals(""))
+        if (name == null || "".equals(name))
             name = RecipeName.generate("starlight_altar_recipe");
         final int starlightConsumed = MathHelper.clamp(starlightRequired, 1, altarLevel.getStarlightMaxStorage());
         final List<Integer> fluidStacks = this.computeFluidConsumptionSlots(inputs);

@@ -239,6 +239,16 @@ dependencies {
     if (project.debug_aether.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:aether-255308:3280119')
     }
+    
+    compileOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
+    compileOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
+
+    if (project.debug_pyrotech.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
+        runtimeOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
+        runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
+    }
+
 }
 
 minecraft {

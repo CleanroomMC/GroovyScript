@@ -21,10 +21,6 @@ import static epicsquid.roots.init.ModRecipes.removeAnimalHarvestRecipe;
 @RegistryDescription
 public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, AnimalHarvestRecipe>> {
 
-    public AnimalHarvest() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".name('wither_skeleton_harvest').entity(entity('minecraft:wither_skeleton'))"),
             @Example(".entity(entity('minecraft:enderman'))")

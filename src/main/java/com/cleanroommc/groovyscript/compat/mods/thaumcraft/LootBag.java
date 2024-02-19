@@ -22,10 +22,6 @@ import java.util.List;
 )
 public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
 
-    public LootBag() {
-        super();
-    }
-
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal

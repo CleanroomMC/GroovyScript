@@ -25,9 +25,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @RegistryDescription
 public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
-    public AspectHelper() {
-    }
-
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal
@@ -161,7 +158,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     public void add(OreDictIngredient oreDic, AspectStack aspect, boolean doBackup) {
         if (oreDic != null && aspect != null) {
             List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDic.getOreDict());
-            if (ores != null && ores.size() > 0) {
+            if (ores != null && !ores.isEmpty()) {
 
                 for (ItemStack ore : ores) {
                     try {
@@ -220,7 +217,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     public void remove(OreDictIngredient oreDic, AspectStack aspect, boolean doBackup) {
         if (oreDic != null && aspect != null) {
             List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDic.getOreDict());
-            if (ores != null && ores.size() > 0) {
+            if (ores != null && !ores.isEmpty()) {
 
                 for (ItemStack ore : ores) {
                     try {
@@ -274,7 +271,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.removeAll_ore")
     public void removeAll(OreDictIngredient oreDic) {
         List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDic.getOreDict());
-        if (ores != null && ores.size() > 0) {
+        if (ores != null && !ores.isEmpty()) {
 
             for (ItemStack ore : ores) {
                 try {

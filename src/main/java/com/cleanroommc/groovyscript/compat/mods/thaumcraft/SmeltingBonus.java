@@ -20,10 +20,6 @@ import java.util.List;
 @RegistryDescription
 public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus> {
 
-    public SmeltingBonus() {
-        super();
-    }
-
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal

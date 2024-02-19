@@ -119,10 +119,6 @@ public class Melting extends MeltingRecipeRegistry {
 
     public static class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
 
-        public EntityMelting() {
-            super();
-        }
-
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }

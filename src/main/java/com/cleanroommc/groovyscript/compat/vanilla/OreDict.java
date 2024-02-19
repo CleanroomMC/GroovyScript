@@ -17,10 +17,6 @@ import java.util.List;
 
 public class OreDict extends VirtualizedRegistry<OreDictEntry> {
 
-    public OreDict() {
-        super();
-    }
-
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal

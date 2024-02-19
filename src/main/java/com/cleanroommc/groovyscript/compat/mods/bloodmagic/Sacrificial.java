@@ -20,10 +20,6 @@ import java.util.Map;
 @RegistryDescription
 public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Integer>> {
 
-    public Sacrificial() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".entity('minecraft:enderman').value(1000)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
