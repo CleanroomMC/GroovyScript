@@ -21,10 +21,21 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
     }
 
     @RecipeBuilderDescription(example = @Example(
-            ".input(item('minecraft:diamond'),item('minecraft:diamond'),item('minecraft:diamond'),item('minecraft:emerald')).fluidInput(fluid('water') * 1000).fluidOutput(fluid('amongium') * 1000).duration(1000).name('diamond_emerald_and_water_to_amongium').register()")
+            ".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:emerald')).fluidInput(fluid('water') * 1000).fluidOutput(fluid('amongium') * 1000).duration(1000).name('diamond_emerald_and_water_to_amongium')")
     )
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'iron_dirt_water_to_lava', ore('ingotIron'), ore('ingotIron'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000"))
+    public BarrelRecipe add(String name, IIngredient input1, IIngredient input2, IIngredient input3, IIngredient input4, FluidStack fInput, FluidStack fOutput, int duration) {
+        return recipeBuilder()
+                .duration(duration)
+                .name(name)
+                .input(input1, input2, input3, input4)
+                .fluidInput(fInput)
+                .fluidOutput(fOutput)
+                .register();
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('freckleberry_wine') * 1000"))
@@ -69,7 +80,6 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
             msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
             msg.add(name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.BARREL_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
-
         }
 
         @RecipeBuilderRegistrationMethod

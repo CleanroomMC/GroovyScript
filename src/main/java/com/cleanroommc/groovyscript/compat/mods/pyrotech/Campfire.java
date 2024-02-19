@@ -19,11 +19,19 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         super(ModuleTechBasic.Registries.CAMPFIRE_RECIPE, Alias.generateOfClass(Campfire.class));
     }
 
-    @RecipeBuilderDescription(example =
-    @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald')")
-    )
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1000"))
+    public CampfireRecipe add(String name, IIngredient input, ItemStack output, int duration) {
+        return recipeBuilder()
+                .duration(duration)
+                .name(name)
+                .input(input)
+                .output(output)
+                .register();
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:porkchop')"))
@@ -81,7 +89,6 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
             msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
             msg.add(name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.CAMPFIRE_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
-
         }
 
         @RecipeBuilderRegistrationMethod

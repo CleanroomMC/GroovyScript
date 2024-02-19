@@ -8,7 +8,6 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.TanningRackRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -21,11 +20,20 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         super(ModuleTechBasic.Registries.TANNING_RACK_RECIPE, Alias.generateOfClass(TanningRack.class));
     }
 
-    @RecipeBuilderDescription(example =
-        @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).dryTime(260).name('iron_to_gold_drying_rack')")
-    )
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).dryTime(260).name('iron_to_gold_drying_rack')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, item('minecraft:clay_ball')"))
+    public TanningRackRecipe add(String name, IIngredient input, ItemStack output, int dryTime, ItemStack failureItem) {
+        return recipeBuilder()
+                .dryTime(dryTime)
+                .failureItem(failureItem)
+                .name(name)
+                .input(input)
+                .output(output)
+                .register();
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat')"))

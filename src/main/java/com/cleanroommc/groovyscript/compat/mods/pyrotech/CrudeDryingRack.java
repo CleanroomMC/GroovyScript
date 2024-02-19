@@ -9,7 +9,6 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CrudeDryingRackRecipe;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,11 +20,19 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
         super(ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE, Alias.generateOfClass(CrudeDryingRack.class));
     }
 
-    @RecipeBuilderDescription(example =
-        @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).dryTime(260).name('diamond_to_emerald_crude_drying_rack')")
-    )
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).dryTime(260).name('diamond_to_emerald_crude_drying_rack')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200"))
+    public CrudeDryingRackRecipe add(String name, IIngredient input, ItemStack output, int dryTime) {
+        return recipeBuilder()
+                .dryTime(dryTime)
+                .name(name)
+                .input(input)
+                .output(output)
+                .register();
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat')"))
@@ -42,6 +49,7 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
             }
         }
     }
+
     @MethodDescription(description = "groovyscript.wiki.removeByOutput")
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing crude drying rack recipe")

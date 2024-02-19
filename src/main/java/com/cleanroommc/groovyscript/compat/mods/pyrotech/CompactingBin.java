@@ -9,7 +9,6 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CompactingBinRecipe;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,11 +20,19 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
         super(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE, Alias.generateOfClass(CompactingBin.class));
     }
 
-    @RecipeBuilderDescription(example =
-        @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).toolUses(5).name('diamond_to_emerald_compacting_bin')")
-    )
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).toolUses(5).name('diamond_to_emerald_compacting_bin')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9"))
+    public CompactingBinRecipe add(String name, IIngredient input, ItemStack output, int hits) {
+        return recipeBuilder()
+                .toolUses(hits)
+                .name(name)
+                .input(input)
+                .output(output)
+                .register();
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:snowball')"))
@@ -72,7 +79,6 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
             return this;
         }
 
-
         @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Compacting Bin Recipe";
@@ -84,7 +90,6 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
             msg.add(toolUses < 0, "toolUses must be a non negative integer, yet it was {}", toolUses);
             msg.add(name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
-
         }
 
         @RecipeBuilderRegistrationMethod

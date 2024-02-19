@@ -5,26 +5,39 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.DryingRackRecipe;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
 @RegistryDescription
 public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
-
-
 
     public Kiln() {
         super(ModuleTechBasic.Registries.KILN_PIT_RECIPE, Alias.generateOfClass(Kiln.class));
     }
 
-    @RecipeBuilderDescription(example =
-        @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutputs(item('minecraft:wheat'),item('minecraft:carrot'),item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items')")
-    )
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')]"))
+    public KilnPitRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, Iterable<ItemStack> failureOutput) {
+        return recipeBuilder()
+                .burnTime(burnTime)
+                .failureChance(failureChance)
+                .failureOutput(failureOutput)
+                .name(name)
+                .input(input)
+                .output(output)
+                .register();
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput")
@@ -57,7 +70,6 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         }
     }
 
-
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = @Comp("1"))
     @Property(property = "name")
@@ -69,7 +81,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         private float failureChance;
 
         @Property
-        private ItemStack[] failureOutputs;
+        private final ItemStackList failureOutput = new ItemStackList();
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder burnTime(int time) {
@@ -84,8 +96,22 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         }
 
         @RecipeBuilderMethodDescription
-        public RecipeBuilder failureOutputs(ItemStack[] failureOutputs) {
-            this.failureOutputs = failureOutputs;
+        public RecipeBuilder failureOutput(ItemStack failureOutputs) {
+            this.failureOutput.add(failureOutputs);
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder failureOutput(ItemStack... failureOutputs) {
+            for (ItemStack itemStack : failureOutputs) {
+                failureOutput(itemStack);
+            }
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder failureOutput(Iterable<ItemStack> failureOutputs) {
+            for (ItemStack itemStack : failureOutputs) failureOutput(itemStack);
             return this;
         }
 
@@ -97,18 +123,19 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
+            this.failureOutput.trim();
+            validateCustom(msg, failureOutput, 1, 100, "failure output");
             msg.add(burnTime < 0, "burnTime must be a non negative integer, yet it was {}", burnTime);
             msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
             msg.add(name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
-
         }
 
         @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable KilnPitRecipe register() {
             if (!validate()) return null;
-            KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutputs).setRegistryName(name);
+            KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(name);
             PyroTech.kiln.add(recipe);
             return recipe;
         }

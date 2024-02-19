@@ -9,7 +9,8 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.ChoppingBlockRecipe;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CompactingBinRecipe;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,9 +22,7 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
     }
 
 
-    @RecipeBuilderDescription(example =
-        @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).chops(25).quantity(2).name('diamond_to_emerald_chopping_block')")
-    )
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).chops(25, 1).chops(20, 1).chops(15, 1).chops(10, 2).name('diamond_to_emerald_chopping_block')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -55,7 +54,8 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
             if (output.test(recipe.getOutput())) {
                 remove(recipe);
             }
-        };
+        }
+        ;
     }
 
     @Property(property = "input", valid = @Comp("1"))
@@ -63,20 +63,14 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<ChoppingBlockRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
-        private int chops;
+        @Property
+        private final IntList chops = new IntArrayList();
+        private final IntList quantities = new IntArrayList();
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
-        private int quantities;
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder chops(int chops) {
-            this.chops = chops;
-            return this;
-        }
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder quantity(int quantities) {
-            this.quantities = quantities;
+        @RecipeBuilderMethodDescription(field = {"chops, quantities"})
+        public RecipeBuilder chops(int chops, int quantities) {
+            this.chops.add(chops);
+            this.quantities.add(quantities);
             return this;
         }
 
@@ -88,8 +82,7 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
-            msg.add(quantities < 0, "quantities must be a non negative integer, yet it was {}", quantities);
-            msg.add(chops < 0, "chops must be a non negative integer, yet it was {}", chops);
+            msg.add(quantities.isEmpty(), "cops and quantities must be a non negative integer, yet it was {}", quantities.size());
             msg.add(name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
         }
@@ -98,8 +91,7 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         @Override
         public @Nullable ChoppingBlockRecipe register() {
             if (!validate()) return null;
-            ChoppingBlockRecipe recipe = new ChoppingBlockRecipe(output.get(0), input.get(0).toMcIngredient(), new int[]{chops}, new int[]{
-                    quantities}).setRegistryName(name);
+            ChoppingBlockRecipe recipe = new ChoppingBlockRecipe(output.get(0), input.get(0).toMcIngredient(), chops.toIntArray(), quantities.toIntArray()).setRegistryName(name);
             PyroTech.choppingBlock.add(recipe);
             return recipe;
         }

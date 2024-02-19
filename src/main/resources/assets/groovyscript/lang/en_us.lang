@@ -1206,48 +1206,58 @@ groovyscript.wiki.pyrotech.anvil.description=When using hammer or pickaxe it can
 groovyscript.wiki.pyrotech.anvil.hits.value=Sets how often the item needs to be hit
 groovyscript.wiki.pyrotech.anvil.tier.value=Sets the tier of the required anvil (Granite, Ironclad, Obsidian)
 groovyscript.wiki.pyrotech.anvil.type.value=Sets the type of tool required (Hammer, Pickaxe)
+groovyscript.wiki.pyrotech.anvil.add=Adds recipes in the format `name`, `input`, `output`, `hits`, `tier`, `type`
 
 groovyscript.wiki.pyrotech.barrel.title=Barrel
 groovyscript.wiki.pyrotech.barrel.description=Over time converts a fluid with four items into a new fluid
 groovyscript.wiki.pyrotech.barrel.duration.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.barrel.add=Adds recipes in the format `name`, `input1`, `input2`, `input3`, `input4`, `fluidInput`, `fluidOutput`, `duration`
 
 groovyscript.wiki.pyrotech.campfire.title=Campfire
 groovyscript.wiki.pyrotech.campfire.description=Can cook food
 groovyscript.wiki.pyrotech.campfire.duration.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.campfire.add=Adds recipes in the format `name`, `input`, `output`, `duration`
 
 groovyscript.wiki.pyrotech.chopping_block.title=Chopping Block
 groovyscript.wiki.pyrotech.chopping_block.description=When using a axe it can convert items
-groovyscript.wiki.pyrotech.chopping_block.chops.value=Sets how often the item needs to be hit
-groovyscript.wiki.pyrotech.chopping_block.quantities.value=
+groovyscript.wiki.pyrotech.chopping_block.chops.value=Sets how often the item needs to be hit with output amount. Call it 4 times for 4 different tiers (Crude, Stone, Iron, Diamond)
 
 groovyscript.wiki.pyrotech.compacting_bin.title=Compacting Bin
 groovyscript.wiki.pyrotech.compacting_bin.description=When using a shovel it can convert items
 groovyscript.wiki.pyrotech.compacting_bin.toolUses.value=Sets how often the item needs to be hit
+groovyscript.wiki.pyrotech.compacting_bin.add=Adds recipes in the format `name`, `input`, `output`, `hits`
 
 groovyscript.wiki.pyrotech.compost_bin.title=Compost Bin
 groovyscript.wiki.pyrotech.compost_bin.description=Can convert multiple items into a new one when its full
 groovyscript.wiki.pyrotech.compost_bin.compostValue.value=Sets how much the items fills the bin
+groovyscript.wiki.pyrotech.compost_bin.add=Adds recipes in the format `name`, `input`, `output`, `compostValue`
 
 groovyscript.wiki.pyrotech.crude_drying_rack.title=Crude Drying Rack
 groovyscript.wiki.pyrotech.crude_drying_rack.description=Converts an item over time into a new one
 groovyscript.wiki.pyrotech.crude_drying_rack.dryTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.crude_drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`
 
 groovyscript.wiki.pyrotech.drying_rack.title=Drying Rack
 groovyscript.wiki.pyrotech.drying_rack.description=Converts an item over time into a new one
 groovyscript.wiki.pyrotech.drying_rack.dryTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`
 
 groovyscript.wiki.pyrotech.kiln.title=Kiln
 groovyscript.wiki.pyrotech.kiln.description=Converts an item into a new one by burning it. Has a chance to fail
 groovyscript.wiki.pyrotech.kiln.burnTime.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.kiln.failureChance.value=Sets the chance to fail the recipe
 groovyscript.wiki.pyrotech.kiln.failureOutputs.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.kiln.failureOutput.value=
+groovyscript.wiki.pyrotech.kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
 
 groovyscript.wiki.pyrotech.soaking_pot.title=Soaking Pot
 groovyscript.wiki.pyrotech.soaking_pot.description=Converts an item into a new one by soaking it in a liquid. Can require a campfire
 groovyscript.wiki.pyrotech.soaking_pot.time.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.soaking_pot.campfireRequired.value=Sets if a campfire is required underneath
+groovyscript.wiki.pyrotech.soaking_pot.add=Adds recipes in the format `name`, `input`, `output`, `time`
 
 groovyscript.wiki.pyrotech.tanning_rack.title=Tanning Rack
 groovyscript.wiki.pyrotech.tanning_rack.description=Converts an item over time into a new one
 groovyscript.wiki.pyrotech.tanning_rack.dryTime.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.tanning_rack.failureItem.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.tanning_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`, `failureItem`

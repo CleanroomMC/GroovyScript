@@ -9,7 +9,6 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.DryingRackRecipe;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,11 +20,19 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         super(ModuleTechBasic.Registries.DRYING_RACK_RECIPE, Alias.generateOfClass(DryingRack.class));
     }
 
-    @RecipeBuilderDescription(example =
-        @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).dryTime(260).name('iron_to_gold_drying_rack')")
-    )
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).dryTime(260).name('iron_to_gold_drying_rack')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200"))
+    public DryingRackRecipe add(String name, IIngredient input, ItemStack output, int dryTime) {
+        return recipeBuilder()
+                .dryTime(dryTime)
+                .name(name)
+                .input(input)
+                .output(output)
+                .register();
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat')"))
@@ -58,7 +65,6 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         }
     }
 
-
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = @Comp("1"))
     @Property(property = "name")
@@ -84,7 +90,6 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
             msg.add(dryTime < 0, "dryTime must be a non negative integer, yet it was {}", dryTime);
             msg.add(name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.DRYING_RACK_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
-
         }
 
         @RecipeBuilderRegistrationMethod

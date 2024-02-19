@@ -1,16 +1,19 @@
 package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
+import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.AnvilRecipe;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.BarrelRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 @RegistryDescription
 public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
@@ -28,6 +31,28 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9, 'granite', 'hammer'"))
+    public AnvilRecipe add(String name, IIngredient input, ItemStack output, int hits, String tier, String type) {
+        AnvilRecipe.EnumTier enumTier = EnumHelper.valueOfNullable(AnvilRecipe.EnumTier.class, tier, false);
+        AnvilRecipe.EnumType enumType = EnumHelper.valueOfNullable(AnvilRecipe.EnumType.class, type, false);
+        if (enumTier == null || enumType == null) {
+            GroovyLog.msg("Error adding pyrotech anvil recipe")
+                    .add(enumTier == null, "tier with name {} does not exist. Valid values are {}.", tier, Arrays.toString(AnvilRecipe.EnumTier.values()))
+                    .add(enumTier == null, "type with name {} does not exist. Valid values are {}.", tier, Arrays.toString(AnvilRecipe.EnumType.values()))
+                    .error()
+                    .post();
+            return null;
+        }
+        return recipeBuilder()
+                .hits(hits)
+                .tier(enumTier)
+                .type(enumType)
+                .name(name)
+                .input(input)
+                .output(output)
+                .register();
+    }
+
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:stone_slab', 3)"))
     public void removeByOutput(ItemStack output) {
         if (GroovyLog.msg("Error removing pyrotech anvil recipe")
@@ -40,7 +65,8 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
             if (recipe.getOutput().isItemEqual(output)) {
                 remove(recipe);
             }
-        };
+        }
+        ;
     }
 
     @Property(property = "input", valid = @Comp("1"))

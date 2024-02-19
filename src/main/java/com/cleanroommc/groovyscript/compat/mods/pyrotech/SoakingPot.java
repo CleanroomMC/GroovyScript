@@ -8,24 +8,32 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.SoakingPotRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription
 public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
 
-
     public SoakingPot() {
         super(ModuleTechBasic.Registries.SOAKING_POT_RECIPE, Alias.generateOfClass(SoakingPot.class));
     }
 
-    @RecipeBuilderDescription(example =
-        @Example(".input(item('minecraft:diamond')).fluidInput(fluid('amongium') * 125).output(item('minecraft:emerald')).time(400).campfireRequired(true).name('diamond_to_emerald_with_amongium_soaking_pot')")
-    )
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).fluidInput(fluid('amongium') * 125).output(item('minecraft:emerald')).time(400).campfireRequired(true).name('diamond_to_emerald_with_amongium_soaking_pot')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'dirt_to_apple', item('minecraft:dirt'), fluid('water'), item('minecraft:apple'), 1200"))
+    public SoakingPotRecipe add(String name, IIngredient input, FluidStack fluidInput, ItemStack output, int time) {
+        return recipeBuilder()
+                .time(time)
+                .name(name)
+                .input(input)
+                .fluidInput(fluidInput)
+                .output(output)
+                .register();
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput")
@@ -93,7 +101,6 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
             validateFluids(msg, 1, 1, 0, 0);
             msg.add(name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.SOAKING_POT_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
-
         }
 
         @Override
