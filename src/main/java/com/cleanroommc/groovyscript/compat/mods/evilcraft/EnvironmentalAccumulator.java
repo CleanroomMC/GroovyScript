@@ -20,10 +20,6 @@ import java.util.Locale;
 @RegistryDescription
 public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> {
 
-    public EnvironmentalAccumulator() {
-        super();
-    }
-
     @Override
     public boolean isEnabled() {
         return Configs.isEnabled(EnvironmentalAccumulatorConfig.class);

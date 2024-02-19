@@ -67,7 +67,7 @@ public class ClassicMacerator extends Macerator {
 
     public boolean remove(IMachineRecipeList.RecipeEntry entry) {
         addBackup(new MachineRecipe<>(entry.getInput(), entry.getOutput().getAllOutputs()));
-        return ClassicRecipes.macerator.removeRecipe(entry.getInput()).size() > 0;
+        return !ClassicRecipes.macerator.removeRecipe(entry.getInput()).isEmpty();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class ClassicMacerator extends Macerator {
     @Override
     public boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
         addBackup(recipe);
-        return ClassicRecipes.macerator.removeRecipe(recipe.getInput()).size() > 0;
+        return !ClassicRecipes.macerator.removeRecipe(recipe.getInput()).isEmpty();
     }
 
     @Override

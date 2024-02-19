@@ -24,10 +24,6 @@ import static epicsquid.roots.init.ModRecipes.getRunicShearEntityRecipes;
 @RegistryDescription
 public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation, RunicShearEntityRecipe>> {
 
-    public RunicShearEntity() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_from_wither_skeletons').entity(entity('minecraft:wither_skeleton')).output(item('minecraft:clay')).cooldown(1000)"),
             @Example(".name('creeper_at_the_last_moment').entity(entity('minecraft:creeper')).output(item('minecraft:diamond'), item('minecraft:nether_star')).functionMap({ entityLivingBase -> entityLivingBase.hasIgnited() ? item('minecraft:nether_star') : item('minecraft:dirt') })"),

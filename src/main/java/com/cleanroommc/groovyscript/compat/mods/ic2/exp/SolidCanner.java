@@ -18,10 +18,6 @@ import java.util.List;
 
 public class SolidCanner extends VirtualizedRegistry<MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> {
 
-    public SolidCanner() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> remove(recipe, false));

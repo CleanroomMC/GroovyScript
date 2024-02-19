@@ -115,7 +115,7 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
                 errors.add("key must be a single char, but found '" + c + "'");
                 return this;
             }
-            if (c.equals("_") || c.equals(" ")) {
+            if ("_".equals(c) || " ".equals(c)) {
                 errors.add("key cannot be an underscore('_') or a space(' ')");
                 return this;
             }

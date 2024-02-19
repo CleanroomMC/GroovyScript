@@ -28,10 +28,6 @@ import org.jetbrains.annotations.Nullable;
 )
 public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
 
-    public BloodAltar() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot')).minimumTier(0).drainRate(5).syphon(10).consumeRate(5)"),
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).tier(3).drainRate(100).syphon(50000).consumeRate(500)")

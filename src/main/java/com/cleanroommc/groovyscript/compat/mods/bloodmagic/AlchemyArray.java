@@ -20,10 +20,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
 
-    public AlchemyArray() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).catalyst(item('bloodmagic:slate:1')).output(item('minecraft:gold_ingot')).texture('bloodmagic:textures/models/AlchemyArrays/LightSigil.png')"),
             @Example(".input(item('minecraft:clay')).catalyst(item('minecraft:gold_ingot')).output(item('minecraft:diamond'))")

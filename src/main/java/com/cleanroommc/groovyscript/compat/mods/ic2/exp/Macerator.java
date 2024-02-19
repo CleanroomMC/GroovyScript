@@ -16,10 +16,6 @@ import java.util.*;
 
 public class Macerator extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
-    public Macerator() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> remove(recipe, false));

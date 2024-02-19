@@ -17,10 +17,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
 
-    public Refinery() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water'), fluid('water')).fluidOutput(fluid('lava')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

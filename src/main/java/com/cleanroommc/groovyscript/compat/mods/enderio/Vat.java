@@ -27,10 +27,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Vat extends VirtualizedRegistry<VatRecipe> {
 
-    public Vat() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(fluid('lava')).output(fluid('hootch')).baseMultiplier(2).itemInputLeft(item('minecraft:clay'), 2).itemInputLeft(item('minecraft:clay_ball'), 0.5).itemInputRight(item('minecraft:diamond'), 5).itemInputRight(item('minecraft:diamond_block'), 50).itemInputRight(item('minecraft:gold_block'), 10).itemInputRight(item('minecraft:gold_ingot'), 1).itemInputRight(item('minecraft:gold_nugget'), 0.1).energy(1000).tierEnhanced()"),
             @Example(".input(fluid('hootch') * 100).output(fluid('water') * 50).itemInputLeft(item('minecraft:clay_ball'), 1).itemInputRight(item('minecraft:diamond'), 1).energy(1000).tierNormal()"),

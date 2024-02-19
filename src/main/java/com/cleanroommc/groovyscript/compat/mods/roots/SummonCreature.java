@@ -25,10 +25,6 @@ import static epicsquid.roots.init.ModRecipes.*;
 @RegistryDescription
 public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, SummonCreatureRecipe>> {
 
-    public SummonCreature() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".name('wither_skeleton_from_clay').input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).entity(entity('minecraft:wither_skeleton'))"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

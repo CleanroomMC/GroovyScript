@@ -20,10 +20,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
 
-    public Squeezer() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('lava')).energy(100)"),
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).energy(100)"),
@@ -179,7 +175,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 1);
             validateFluids(msg, 0, 0, 0, 1);
-            msg.add(fluidOutput.size() == 0 && output.size() == 0, "Either a fluid output or an item output must be defined");
+            msg.add(fluidOutput.isEmpty() && output.isEmpty(), "Either a fluid output or an item output must be defined");
         }
 
         @Override

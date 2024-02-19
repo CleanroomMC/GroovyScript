@@ -24,10 +24,6 @@ import java.util.List;
 @RegistryDescription
 public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> {
 
-    public Squeezer() {
-        super();
-    }
-
     @Override
     public boolean isEnabled() {
         return Configs.isEnabled(BlockSqueezerConfig.class);

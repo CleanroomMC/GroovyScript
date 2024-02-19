@@ -15,10 +15,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
 
-    public TreasureChest() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay')).weight(50).min(16).max(32)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

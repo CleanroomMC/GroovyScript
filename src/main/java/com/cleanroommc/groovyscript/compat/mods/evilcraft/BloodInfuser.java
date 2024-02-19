@@ -21,10 +21,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> {
 
-    public BloodInfuser() {
-        super();
-    }
-
     @Override
     public boolean isEnabled() {
         return Configs.isEnabled(BloodInfuserConfig.class);

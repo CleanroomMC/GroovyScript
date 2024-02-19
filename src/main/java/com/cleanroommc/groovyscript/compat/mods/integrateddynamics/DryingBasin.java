@@ -20,10 +20,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {
 
-    public DryingBasin() {
-        super();
-    }
-
     @Override
     public boolean isEnabled() {
         return Configs.isEnabled(BlockDryingBasinConfig.class);

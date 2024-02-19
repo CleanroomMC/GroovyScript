@@ -15,10 +15,6 @@ import org.cyclops.integrateddynamics.block.BlockMechanicalSqueezerConfig;
 @RegistryDescription
 public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> {
 
-    public MechanicalSqueezer() {
-        super();
-    }
-
     @Override
     public boolean isEnabled() {
         return Configs.isEnabled(BlockMechanicalSqueezerConfig.class);

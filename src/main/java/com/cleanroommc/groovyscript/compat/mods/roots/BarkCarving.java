@@ -57,7 +57,7 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
 
     public ResourceLocation findRecipeByInput(BlockPlanks.EnumType input) {
         for (BarkRecipe entry : getBarkRecipes()) {
-            if (entry.getType().equals(input)) return entry.getName();
+            if (entry.getType() == input) return entry.getName();
         }
         return null;
     }

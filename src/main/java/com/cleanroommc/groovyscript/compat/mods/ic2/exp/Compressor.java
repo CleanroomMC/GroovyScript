@@ -16,10 +16,6 @@ import java.util.*;
 
 public class Compressor extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
-    public Compressor() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> remove(recipe, false));

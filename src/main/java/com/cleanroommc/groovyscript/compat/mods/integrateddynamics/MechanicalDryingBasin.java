@@ -14,10 +14,6 @@ import org.cyclops.integrateddynamics.block.BlockMechanicalDryingBasinConfig;
 @RegistryDescription
 public class MechanicalDryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {
 
-    public MechanicalDryingBasin() {
-        super();
-    }
-
     @Override
     public boolean isEnabled() {
         return Configs.isEnabled(BlockMechanicalDryingBasinConfig.class);

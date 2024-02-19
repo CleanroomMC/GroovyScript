@@ -22,10 +22,6 @@ import static epicsquid.roots.init.ModRecipes.getRunicShearRecipes;
 @RegistryDescription
 public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, RunicShearRecipe>> {
 
-    public RunicShearBlock() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_from_runic_diamond').state(blockstate('minecraft:diamond_block')).replacementState(blockstate('minecraft:air')).output(item('minecraft:clay') * 64).displayItem(item('minecraft:diamond') * 9)"),
             @Example(".state(mods.roots.predicates.stateBuilder().blockstate(blockstate('minecraft:yellow_flower:type=dandelion')).properties('type').register()).replacementState(blockstate('minecraft:red_flower:type=poppy')).output(item('minecraft:gold_ingot'))")
