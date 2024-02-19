@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
@@ -146,12 +147,14 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
     public abstract void validate(GroovyLog.Msg msg);
 
+    @GroovyBlacklist
     public void validateName() {
         if (name == null) {
             name = RecipeName.generateRl(getRecipeNamePrefix());
         }
     }
 
+    @GroovyBlacklist
     public void validateFluids(GroovyLog.Msg msg, int minFluidInput, int maxFluidInput, int minFluidOutput, int maxFluidOutput) {
         fluidInput.trim();
         fluidOutput.trim();
@@ -159,6 +162,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         msg.add(fluidOutput.size() < minFluidOutput || fluidOutput.size() > maxFluidOutput, () -> getRequiredString(minFluidOutput, maxFluidOutput, "fluid output") + ", but found " + fluidOutput.size());
     }
 
+    @GroovyBlacklist
     public void validateItems(GroovyLog.Msg msg, int minInput, int maxInput, int minOutput, int maxOutput) {
         input.trim();
         output.trim();
@@ -166,12 +170,19 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         msg.add(output.size() < minOutput || output.size() > maxOutput, () -> getRequiredString(minOutput, maxOutput, "item output") + ", but found " + output.size());
     }
 
+    @GroovyBlacklist
     public void validateItems(GroovyLog.Msg msg) {
         validateItems(msg, 0, 0, 0, 0);
     }
 
+    @GroovyBlacklist
     public void validateFluids(GroovyLog.Msg msg) {
         validateFluids(msg, 0, 0, 0, 0);
+    }
+
+    @GroovyBlacklist
+    public void validateCustom(GroovyLog.Msg msg, Collection<?> collection, int min, int max, String type) {
+        msg.add(collection.size() < min || collection.size() > max, () -> getRequiredString(min, max, type) + ", but found " + collection.size());
     }
 
     protected static String getRequiredString(int min, int max, String type) {

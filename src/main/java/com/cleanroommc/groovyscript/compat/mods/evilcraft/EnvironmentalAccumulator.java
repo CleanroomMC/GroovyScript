@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.cyclops.cyclopscore.recipe.custom.api.IRecipe;
+import org.cyclops.evilcraft.Configs;
 import org.cyclops.evilcraft.block.EnvironmentalAccumulatorConfig;
 import org.cyclops.evilcraft.core.recipe.custom.EnvironmentalAccumulatorRecipeComponent;
 import org.cyclops.evilcraft.core.recipe.custom.EnvironmentalAccumulatorRecipeProperties;
@@ -18,6 +19,11 @@ import java.util.Locale;
 
 @RegistryDescription
 public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> {
+
+    @Override
+    public boolean isEnabled() {
+        return Configs.isEnabled(EnvironmentalAccumulatorConfig.class);
+    }
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:clay') * 2).inputWeather(weather('clear')).outputWeather(weather('rain')).processingspeed(1).cooldowntime(1000).duration(10)"),

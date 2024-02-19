@@ -12,6 +12,10 @@ import org.cyclops.cyclopscore.recipe.custom.component.DummyPropertiesComponent;
 import org.cyclops.cyclopscore.recipe.custom.component.DurationRecipeProperties;
 import org.cyclops.cyclopscore.recipe.custom.component.IngredientRecipeComponent;
 import org.cyclops.cyclopscore.recipe.custom.component.IngredientsAndFluidStackRecipeComponent;
+import org.cyclops.integrateddynamics.Configs;
+import org.cyclops.integrateddynamics.block.BlockMechanicalSqueezer;
+import org.cyclops.integrateddynamics.block.BlockSqueezer;
+import org.cyclops.integrateddynamics.block.BlockSqueezerConfig;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -19,6 +23,11 @@ import java.util.List;
 
 @RegistryDescription
 public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> {
+
+    @Override
+    public boolean isEnabled() {
+        return Configs.isEnabled(BlockSqueezerConfig.class);
+    }
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:clay_ball'), 1F).output(item('minecraft:clay_ball') * 2, 0.7F).output(item('minecraft:clay_ball') * 10, 0.2F).fluidOutput(fluid('lava') * 2000).mechanical().duration(5)"),
@@ -31,8 +40,8 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
 
     @Override
     public void onReload() {
-        removeScripted().forEach(org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes()::remove);
-        restoreFromBackup().forEach(org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes()::add);
+        removeScripted().forEach(BlockSqueezer.getInstance().getRecipeRegistry().allRecipes()::remove);
+        restoreFromBackup().forEach(BlockSqueezer.getInstance().getRecipeRegistry().allRecipes()::add);
     }
 
     public void add(IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent> recipe) {
@@ -42,19 +51,19 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
     public void add(IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent> recipe, boolean add) {
         if (recipe == null) return;
         addScripted(recipe);
-        if (add) org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().add(recipe);
+        if (add) BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().add(recipe);
     }
 
     public boolean remove(IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent> recipe) {
         if (recipe == null) return false;
         addBackup(recipe);
-        org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().remove(recipe);
+        BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().remove(recipe);
         return true;
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInput(ItemStack input) {
-        return org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
+        return BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
                 addBackup(r);
                 return true;
@@ -65,13 +74,13 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
-        org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().clear();
+        BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
+        BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().clear();
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> streamRecipes() {
-        return new SimpleObjectStream<>(org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().allRecipes())
+        return new SimpleObjectStream<>(BlockSqueezer.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);
     }
 
@@ -146,6 +155,8 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
             msg.add(mechanical && duration < 0, "duration must be a non negative integer if mechanical is true, yet it was {}", duration);
             msg.add(output.isEmpty() && fluidOutput.isEmpty(), "either output or fluidOutput must have an entry, yet both were empty");
             msg.add(!basic && !mechanical, "either basic or mechanical must be true");
+            msg.add(basic && !ModSupport.INTEGRATED_DYNAMICS.get().squeezer.isEnabled(), "basic is enabled, yet the Squeezer is disabled via config");
+            msg.add(mechanical && !ModSupport.INTEGRATED_DYNAMICS.get().mechanicalSqueezer.isEnabled(), "mechanic is enabled, yet the Mechanical Squeezer is disabled via config");
         }
 
         @Override
@@ -155,7 +166,7 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
 
             if (basic) {
                 ModSupport.INTEGRATED_DYNAMICS.get().squeezer.add(
-                        org.cyclops.integrateddynamics.block.BlockSqueezer.getInstance().getRecipeRegistry().registerRecipe(
+                        BlockSqueezer.getInstance().getRecipeRegistry().registerRecipe(
                                 new IngredientRecipeComponent(input.get(0).toMcIngredient()),
                                 new IngredientsAndFluidStackRecipeComponent(output, fluidOutput.getOrEmpty(0)),
                                 new DummyPropertiesComponent()
@@ -163,7 +174,7 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
             }
             if (mechanical) {
                 ModSupport.INTEGRATED_DYNAMICS.get().mechanicalSqueezer.add(
-                        org.cyclops.integrateddynamics.block.BlockMechanicalSqueezer.getInstance().getRecipeRegistry().registerRecipe(
+                        BlockMechanicalSqueezer.getInstance().getRecipeRegistry().registerRecipe(
                                 new IngredientRecipeComponent(input.get(0).toMcIngredient()),
                                 new IngredientsAndFluidStackRecipeComponent(output, fluidOutput.getOrEmpty(0)),
                                 new DurationRecipeProperties(duration)

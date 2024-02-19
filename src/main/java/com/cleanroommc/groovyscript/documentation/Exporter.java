@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class Exporter {
     }
 
 
-    public static void generateWiki(File folder, GroovyContainer<? extends ModPropertyContainer> mod) {
+    public static void generateWiki(File folder, GroovyContainer<? extends ModPropertyContainer> mod, Set<String> missingLangKeys) {
         List<String> fileLinks = new ArrayList<>();
 
         List<IScriptReloadable> registries = mod.get().getRegistries().stream()
@@ -55,7 +56,7 @@ public class Exporter {
         if (registries.isEmpty()) return;
 
         for (IScriptReloadable registry : registries) {
-            Registry example = new Registry(mod, registry);
+            Registry example = new Registry(mod, registry, missingLangKeys);
 
             String location = String.format("%s.md", registry.getName());
             fileLinks.add(String.format("* [%s](./%s)", example.getTitle(), location));
@@ -130,7 +131,7 @@ public class Exporter {
 
         for (IScriptReloadable registry : registries) {
             GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", mod.toString(), registry.getName()).debug().post();
-            Registry example = new Registry(mod, registry);
+            Registry example = new Registry(mod, registry, new ArrayList<>());
             imports.addAll(example.getImports());
             body.append(example.exampleBlock());
         }
