@@ -234,6 +234,17 @@ dependencies {
     if (project.debug_adv_mortars.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:advancedmortars-283777:2780626')
     }
+
+    compileOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
+    compileOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
+
+    if (project.debug_pyrotech.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
+        runtimeOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
+        runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
+    }
+
+
 }
 
 minecraft {

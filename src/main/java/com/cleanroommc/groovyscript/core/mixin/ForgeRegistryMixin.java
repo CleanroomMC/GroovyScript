@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 import java.util.BitSet;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -75,13 +76,10 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     @Override
     public V groovyScript$registerEntry(V registryEntry) {
         if (stage != RegistryManager.ACTIVE) throw new IllegalStateException("Do not modify VANILLA or FROZEN registry directly!");
-        if (registryEntry != null) {
-            ResourceLocation rl = registryEntry.getRegistryName();
-            if (rl != null) {
-                groovyScript$removeDummy(rl, DummyContext.ADDITION);
-            }
-        }
-        int id = add(-1, registryEntry, null);
+        Objects.requireNonNull(registryEntry);
+        Objects.requireNonNull(registryEntry.getRegistryName());
+        int id = groovyScript$removeDummy(registryEntry.getRegistryName(), DummyContext.ADDITION);
+        id = add(id, registryEntry, null);
         V newEntry = getValue(id);
         if (newEntry == registryEntry) {
             if (this.groovyScript$scripted == null) {
@@ -107,7 +105,9 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
             }
             Integer id = this.ids.inverse().remove(entry);
             Object ownerOverride = this.owners.inverse().remove(entry);
-            if (id == null) throw new IllegalStateException();
+            if (id == null) {
+                throw new IllegalStateException(GroovyLog.format("Found recipe for {}, but no id! Entry {}", name, entry));
+            }
             if (this.groovyScript$scripted == null || !this.groovyScript$scripted.contains(entry)) {
                 this.groovyScript$backups.add(new VirtualizedForgeRegistryEntry<>(entry, id, ownerOverride));
             }
@@ -173,16 +173,22 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     }
 
     @Unique
-    public void groovyScript$removeDummy(ResourceLocation rl, DummyContext context) {
+    public int groovyScript$removeDummy(ResourceLocation rl, DummyContext context) {
         V dummy = this.names.remove(rl);
+        int id0 = -1;
         if (dummy != null) {
             Integer id = this.ids.inverse().remove(dummy);
-            if (id == null) GroovyLog.get().errorMC("No id found while removing a dummy with name '{}' from {} registry at stage {}.",
-                                                    rl, superType.getSimpleName(), stage.getName());
-            else this.availabilityMap.clear(id);
+            if (id == null) {
+                GroovyLog.get().errorMC("No id found while removing a dummy with name '{}' from {} registry at stage {}.",
+                                        rl, superType.getSimpleName(), stage.getName());
+            } else {
+                this.availabilityMap.clear(id);
+                id0 = id;
+            }
             this.owners.inverse().remove(dummy);
         }
         this.groovyScript$dummies.remove(rl);
+        return id0;
     }
 
     @Unique
