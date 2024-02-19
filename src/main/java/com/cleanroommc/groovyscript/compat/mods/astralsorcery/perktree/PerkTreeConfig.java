@@ -9,8 +9,6 @@ import com.cleanroommc.groovyscript.core.mixin.astralsorcery.PerkLevelManagerAcc
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import groovy.lang.Closure;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.storage.loot.LootContext;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
