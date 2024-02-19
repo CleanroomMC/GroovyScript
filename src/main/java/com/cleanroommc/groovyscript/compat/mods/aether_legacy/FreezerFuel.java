@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class FreezerFuel extends ForgeRegistryWrapper<AetherFreezableFuel> {
 
     public FreezerFuel() {
-        super(GameRegistry.findRegistry(AetherFreezableFuel.class), Alias.generateOf("freezerFuel"));
+        super(GameRegistry.findRegistry(AetherFreezableFuel.class), Alias.generateOf("FreezerFuel"));
     }
 
     public void add(AetherFreezableFuel freezableFuel) {

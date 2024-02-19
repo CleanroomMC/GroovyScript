@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class EnchanterFuel extends ForgeRegistryWrapper<AetherEnchantmentFuel> {
 
     public EnchanterFuel() {
-        super(GameRegistry.findRegistry(AetherEnchantmentFuel.class), Alias.generateOf("enchanterFuel"));
+        super(GameRegistry.findRegistry(AetherEnchantmentFuel.class), Alias.generateOf("EnchanterFuel"));
     }
 
     public void add(AetherEnchantmentFuel enchantmentFuel) {

@@ -16,11 +16,13 @@ import org.jetbrains.annotations.Nullable;
 public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
 
     public Freezer() {
-        super(GameRegistry.findRegistry(AetherFreezable.class), Alias.generateOf("freezer"));
+        super(GameRegistry.findRegistry(AetherFreezable.class), Alias.generateOf("Freezer"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:dirt')).time(200)"))
-    public RecipeBuilder recipeBuilder() {return new RecipeBuilder();}
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
+    }
 
     public void add(AetherFreezable freezable) {
         if (freezable != null) {

@@ -19,7 +19,7 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
     private static final AccessoryType[] VALUES = AccessoryType.values();
 
     public Accessory() {
-        super(GameRegistry.findRegistry(AetherAccessory.class), Alias.generateOf("accessory"));
+        super(GameRegistry.findRegistry(AetherAccessory.class), Alias.generateOf("Accessory"));
     }
 
     public void add(AetherAccessory accessory) {
@@ -68,7 +68,9 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:shield')).accessoryType('shield')"))
-    public RecipeBuilder recipeBuilder() {return new RecipeBuilder();}
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
+    }
 
     @Property(property = "input", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AetherAccessory> {

@@ -16,11 +16,13 @@ import org.jetbrains.annotations.Nullable;
 public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
 
     public Enchanter() {
-        super(GameRegistry.findRegistry(AetherEnchantment.class), Alias.generateOf("enchanter"));
+        super(GameRegistry.findRegistry(AetherEnchantment.class), Alias.generateOf("Enchanter"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).time(200)"))
-    public RecipeBuilder recipeBuilder() {return new RecipeBuilder();}
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
+    }
 
     public void add(AetherEnchantment enchantment) {
         if (enchantment != null) {
