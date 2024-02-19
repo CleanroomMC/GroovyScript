@@ -1,10 +1,9 @@
-//import ipsis.woot.configuration.EnumConfigKey
-//import ipsis.woot.util.WootMobName
 
-//import ipsis.woot.util.WootMobName
-
-if (!isLoaded('woot')) return
+// MODS_LOADED: woot
 println 'mod \'woot\' detected, running script'
+
+import ipsis.woot.configuration.EnumConfigKey
+import ipsis.woot.util.WootMobName
 
 // Note:
 // Drops, Spawning, Policy, and Mob Config can also be controlled via .json config file
@@ -50,7 +49,7 @@ mods.woot.drops.recipeBuilder()
     .size(5, 10, 20, 50)
     .register()
 
-//mods.woot.drops.removeByEntity(new WootMobName('minecraft:ender_dragon'))
+mods.woot.drops.removeByEntity(new WootMobName('minecraft:ender_dragon'))
 mods.woot.drops.removeByEntity(entity('minecraft:ender_dragon'))
 mods.woot.drops.removeByEntity('minecraft:ender_dragon')
 mods.woot.drops.removeByEntity('minecraft:ender_dragon', '') // NBT tag
@@ -72,8 +71,8 @@ mods.woot.spawning.recipeBuilder()
     .register()
 
 
-//mods.woot.spawning.remove(new WootMobName('minecraft:ender_dragon'))
-//mods.woot.spawning.removeByEntity(new WootMobName('minecraft:ender_dragon'))
+mods.woot.spawning.remove(new WootMobName('minecraft:ender_dragon'))
+mods.woot.spawning.removeByEntity(new WootMobName('minecraft:ender_dragon'))
 mods.woot.spawning.removeByEntity(entity('minecraft:ender_dragon'))
 mods.woot.spawning.removeByEntity('minecraft:ender_dragon')
 mods.woot.spawning.removeByEntity('minecraft:ender_dragon', '') // NBT tag

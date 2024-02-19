@@ -11,9 +11,12 @@ import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
+import groovy.lang.GroovyRuntimeException;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import org.codehaus.groovy.control.CompilerConfiguration;
@@ -24,15 +27,15 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GroovyScriptSandbox extends GroovySandbox {
 
     private final ImportCustomizer importCustomizer = new ImportCustomizer();
+    private final Map<List<StackTraceElement>, AtomicInteger> storedExceptions;
 
     private LoadStage currentLoadStage;
-    private boolean checkSyntaxMode = false;
 
     public GroovyScriptSandbox(URL... scriptEnvironment) {
         super(scriptEnvironment);
@@ -41,71 +44,65 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
         this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
         this.importCustomizer.addImports("net.minecraft.world.World",
-                                    "net.minecraft.block.state.IBlockState",
-                                    "net.minecraft.block.Block",
-                                    "net.minecraft.block.SoundType",
-                                    "net.minecraft.enchantment.Enchantment",
-                                    "net.minecraft.entity.Entity",
-                                    "net.minecraft.entity.player.EntityPlayer",
-                                    "net.minecraft.init.Biomes",
-                                    "net.minecraft.init.Blocks",
-                                    "net.minecraft.init.Enchantments",
-                                    "net.minecraft.init.Items",
-                                    "net.minecraft.init.MobEffects",
-                                    "net.minecraft.init.PotionTypes",
-                                    "net.minecraft.init.SoundEvents",
-                                    "net.minecraft.item.EnumRarity",
-                                    "net.minecraft.item.Item",
-                                    "net.minecraft.item.ItemStack",
-                                    "net.minecraft.nbt.NBTTagCompound",
-                                    "net.minecraft.nbt.NBTTagList",
-                                    "net.minecraft.tileentity.TileEntity",
-                                    "net.minecraft.util.math.BlockPos",
-                                    "net.minecraft.util.DamageSource",
-                                    "net.minecraft.util.EnumHand",
-                                    "net.minecraft.util.EnumHandSide",
-                                    "net.minecraft.util.EnumFacing",
-                                    "net.minecraft.util.ResourceLocation",
-                                    "net.minecraftforge.fml.common.eventhandler.EventPriority",
-                                    "com.cleanroommc.groovyscript.event.EventBusType");
+                                         "net.minecraft.block.state.IBlockState",
+                                         "net.minecraft.block.Block",
+                                         "net.minecraft.block.SoundType",
+                                         "net.minecraft.enchantment.Enchantment",
+                                         "net.minecraft.entity.Entity",
+                                         "net.minecraft.entity.player.EntityPlayer",
+                                         "net.minecraft.init.Biomes",
+                                         "net.minecraft.init.Blocks",
+                                         "net.minecraft.init.Enchantments",
+                                         "net.minecraft.init.Items",
+                                         "net.minecraft.init.MobEffects",
+                                         "net.minecraft.init.PotionTypes",
+                                         "net.minecraft.init.SoundEvents",
+                                         "net.minecraft.item.EnumRarity",
+                                         "net.minecraft.item.Item",
+                                         "net.minecraft.item.ItemStack",
+                                         "net.minecraft.nbt.NBTTagCompound",
+                                         "net.minecraft.nbt.NBTTagList",
+                                         "net.minecraft.tileentity.TileEntity",
+                                         "net.minecraft.util.math.BlockPos",
+                                         "net.minecraft.util.DamageSource",
+                                         "net.minecraft.util.EnumHand",
+                                         "net.minecraft.util.EnumHandSide",
+                                         "net.minecraft.util.EnumFacing",
+                                         "net.minecraft.util.ResourceLocation",
+                                         "net.minecraftforge.fml.common.eventhandler.EventPriority",
+                                         "com.cleanroommc.groovyscript.event.EventBusType");
+        this.storedExceptions = new Object2ObjectOpenHashMap<>();
     }
 
     public void checkSyntax() {
-        load(LoadStage.PRE_INIT, false, true);
+        GroovyScriptEngine engine = createScriptEngine();
+        Binding binding = createBindings();
+        Set<File> executedClasses = new ObjectOpenHashSet<>();
+
         for (LoadStage loadStage : LoadStage.getLoadStages()) {
-            if (loadStage != LoadStage.PRE_INIT) {
-                load(loadStage, false, false);
-            }
+            GroovyLog.get().info("Checking syntax in loader '{}'", this.currentLoadStage);
+            this.currentLoadStage = loadStage;
+            load(engine, binding, executedClasses, false);
         }
     }
 
-    public void checkSyntax(LoadStage loadStage) {
-        load(loadStage, false, true);
-    }
-
     public void run(LoadStage currentLoadStage) {
-        load(currentLoadStage, true, true);
-    }
-
-    public void load(LoadStage currentLoadStage, boolean run, boolean loadClasses) {
-        this.checkSyntaxMode = !run;
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
-            super.load(run, loadClasses);
+            super.load();
         } catch (IOException | ScriptException | ResourceException e) {
-            GroovyLog.get().errorMC("An Exception occurred trying to run groovy!");
-            GroovyScript.LOGGER.throwing(e);
-        } catch (Exception e) {
+            GroovyLog.get().errorMC("An exception occurred while trying to run groovy code! This is might be a internal groovy issue.");
             GroovyLog.get().exception(e);
+        } catch (Throwable t) {
+            GroovyLog.get().exception(t);
         } finally {
             this.currentLoadStage = null;
-            this.checkSyntaxMode = false;
         }
     }
 
     @ApiStatus.Internal
     @Override
-    public void load(boolean run, boolean loadClasses) throws Exception {
+    public void load() throws Exception {
         throw new UnsupportedOperationException("Use run(Loader loader) instead!");
     }
 
@@ -115,9 +112,12 @@ public class GroovyScriptSandbox extends GroovySandbox {
         T result = null;
         try {
             result = closure.call(args);
-        } catch (Exception e) {
-            GroovyLog.get().error("An exception occurred while running a closure!");
-            GroovyLog.get().exception(e);
+        } catch (Throwable t) {
+            this.storedExceptions.computeIfAbsent(Arrays.asList(t.getStackTrace()), k -> {
+                GroovyLog.get().error("An exception occurred while running a closure!");
+                GroovyLog.get().exception(t);
+                return new AtomicInteger();
+            }).addAndGet(1);
         } finally {
             stopRunning();
         }
@@ -138,11 +138,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void preRun() {
-        if (this.checkSyntaxMode) {
-            GroovyLog.get().info("Checking syntax in loader '{}'", this.currentLoadStage);
-        } else {
-            GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoadStage);
-        }
+        GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoadStage);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         if (this.currentLoadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
@@ -153,9 +149,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected boolean shouldRunFile(File file) {
-        if (!this.checkSyntaxMode) {
-            GroovyLog.get().info(" - executing {}", file.toString());
-        }
+        GroovyLog.get().info(" - executing {}", file.toString());
         return true;
     }
 

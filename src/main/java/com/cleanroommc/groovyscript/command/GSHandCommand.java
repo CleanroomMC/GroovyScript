@@ -31,6 +31,8 @@ public class GSHandCommand {
         messages.add(new TextComponentString("Item:"));
         messages.add(TextCopyable.string(item, itemPretty).build());
         GuiScreen.setClipboardString(item);
+        String copy = stack.getItem().getTranslationKey(stack);
+        messages.add(TextCopyable.string(copy, "Translation key: " + TextFormatting.YELLOW + copy).build());
     }
 
     public static void blockStateInformation(List<ITextComponent> messages, @NotNull IBlockState state) {

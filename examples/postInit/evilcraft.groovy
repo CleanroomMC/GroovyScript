@@ -1,5 +1,5 @@
 
-if (!isLoaded('evilcraft')) return
+// MODS_LOADED: evilcraft
 println 'mod \'evilcraft\' detected, running script'
 
 // Weather Bracket Handler

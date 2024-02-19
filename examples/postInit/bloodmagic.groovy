@@ -1,5 +1,5 @@
 
-if (!isLoaded('bloodmagic')) return
+// MODS_LOADED: bloodmagic
 println 'mod \'bloodmagic\' detected, running script'
 
 

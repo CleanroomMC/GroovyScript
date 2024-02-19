@@ -1,16 +1,18 @@
 package com.cleanroommc.groovyscript;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.content.GroovyResourcePack;
-import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
+import com.cleanroommc.groovyscript.documentation.Documentation;
+import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
+import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.event.EventHandler;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
@@ -29,7 +31,7 @@ import groovy.lang.GroovySystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.item.Item;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -39,9 +41,11 @@ import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -49,6 +53,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
@@ -57,19 +63,23 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.Random;
 
 @GroovyBlacklist
-@Mod(modid = GroovyScript.ID, name = GroovyScript.NAME, version = GroovyScript.VERSION)
+@Mod(modid = GroovyScript.ID,
+     name = GroovyScript.NAME,
+     version = GroovyScript.VERSION,
+     dependencies = "after:mixinbooter@[8.0,);",
+     guiFactory = "com.cleanroommc.groovyscript.DisabledConfigGui")
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
 
-    public static final String ID = Tags.ID;
+    public static final String ID = Tags.MODID;
     public static final String NAME = "GroovyScript";
     public static final String VERSION = Tags.VERSION;
 
@@ -83,11 +93,14 @@ public class GroovyScript {
     private static File resourcesFile;
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
+    private static ModContainer scriptMod;
 
     private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
 
     private static final Joiner fileJoiner = Joiner.on(File.separator);
+
+    public static final Random RND = new Random();
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
@@ -96,12 +109,14 @@ public class GroovyScript {
         NetworkHandler.init();
         GroovySystem.getMetaClassRegistry().setMetaClassCreationHandle(GrSMetaClassCreationHandle.INSTANCE);
         GroovyDeobfMapper.init();
+        LinkGeneratorHooks.init();
         ReloadableRegistryManager.init();
         try {
             sandbox = new GroovyScriptSandbox(scriptPath.toURI().toURL());
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Error initializing sandbox!");
         }
+        ModSupport.INSTANCE.setup(event.getASMHarvestedData());
 
         if (NetworkUtils.isDedicatedClient()) {
             // this resource pack must be added in construction
@@ -109,6 +124,9 @@ public class GroovyScript {
             reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
             ClientRegistry.registerKeyBinding(reloadKey);
         }
+
+        FluidRegistry.enableUniversalBucket();
+        getRunConfig().initPackmode();
     }
 
     @Mod.EventHandler
@@ -124,44 +142,38 @@ public class GroovyScript {
     @ApiStatus.Internal
     public static void initializeRunConfig(File minecraftHome) {
         // If we are launching with the environment variable set to use the examples folder, use the examples folder for easy and consistent testing.
-        if (ManagementFactory.getRuntimeMXBean().getInputArguments().contains("-Dgroovyscript.use_examples_folder=true")) {
+        if (Boolean.parseBoolean(System.getProperty("groovyscript.use_examples_folder"))) {
             scriptPath = new File(minecraftHome.getParentFile(), "examples");
         } else {
             scriptPath = new File(minecraftHome, "groovy");
         }
         runConfigFile = new File(scriptPath, "runConfig.json");
         resourcesFile = new File(scriptPath, "assets");
-        reloadRunConfig();
+        reloadRunConfig(true);
     }
 
     @ApiStatus.Internal
     public static void initializeGroovyPreInit() {
         // called via mixin in between construction and fml pre init
-        BracketHandlerManager.init();
+        GameObjectHandlerManager.init();
         VanillaModule.initializeBinding();
         ModSupport.init();
-
-        boolean wasNull = Loader.instance().activeModContainer() == null;
-        if (wasNull) {
-            Loader.instance().setActiveModContainer(Loader.instance().getIndexedModList().get(ID));
-        }
-
+        if (FMLLaunchHandler.isDeobfuscatedEnvironment()) Documentation.generate();
         runGroovyScriptsInLoader(LoadStage.PRE_INIT);
-
-        if (wasNull) {
-            Loader.instance().setActiveModContainer(null);
-        }
     }
 
     @ApiStatus.Internal
-    public static void runGroovyScriptsInLoader(LoadStage loadStage) {
-        if (loadStage == LoadStage.POST_INIT) {
-            Loot.init();
-        }
+    public static long runGroovyScriptsInLoader(LoadStage loadStage) {
         // called via mixin between fml post init and load complete
+        if (scriptMod == null) scriptMod = Loader.instance().getIndexedModList().get(getRunConfig().getPackId());
+        ModContainer current = Loader.instance().activeModContainer();
+        Loader.instance().setActiveModContainer(scriptMod);
         long time = System.currentTimeMillis();
         getSandbox().run(loadStage);
-        LOGGER.info("Running Groovy scripts during {} took {} ms", loadStage.getName(), System.currentTimeMillis() - time);
+        time = System.currentTimeMillis() - time;
+        LOGGER.info("Running Groovy scripts during {} took {} ms", loadStage.getName(), time);
+        Loader.instance().setActiveModContainer(current);
+        return time;
     }
 
     @Mod.EventHandler
@@ -210,6 +222,14 @@ public class GroovyScript {
     }
 
     @NotNull
+    public static File getRunConfigFile() {
+        if (runConfigFile == null) {
+            throw new IllegalStateException("GroovyScript is not yet loaded!");
+        }
+        return runConfigFile;
+    }
+
+    @NotNull
     public static GroovyScriptSandbox getSandbox() {
         if (sandbox == null) {
             throw new IllegalStateException("GroovyScript is not yet loaded!");
@@ -226,7 +246,7 @@ public class GroovyScript {
     }
 
     @ApiStatus.Internal
-    public static void reloadRunConfig() {
+    public static void reloadRunConfig(boolean init) {
         JsonElement element = JsonHelper.loadJson(runConfigFile);
         if (element == null || !element.isJsonObject()) element = new JsonObject();
         JsonObject json = element.getAsJsonObject();
@@ -238,7 +258,7 @@ public class GroovyScript {
                 runConfig = new RunConfig(json);
             }
         }
-        runConfig.reload(json);
+        runConfig.reload(json, init);
     }
 
     private static RunConfig createRunConfig(JsonObject json) {
@@ -263,28 +283,29 @@ public class GroovyScript {
         return new File(parent, fileJoiner.join(pieces));
     }
 
-    public static void postScriptRunResult(EntityPlayerMP player, boolean startup, boolean running) {
+    public static void postScriptRunResult(ICommandSender sender, boolean onlyLogFails, boolean running, boolean packmode, long time) {
         List<String> errors = GroovyLogImpl.LOG.collectErrors();
         if (errors.isEmpty()) {
-            if (!startup) {
+            if (!onlyLogFails) {
                 if (running) {
-                    player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully ran scripts"));
+                    String s = packmode ? "changes packmode" : "reloaded scripts";
+                    sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully " + s + TextFormatting.WHITE + " in " + time + "ms"));
                 } else {
-                    player.sendMessage(new TextComponentString(TextFormatting.GREEN + "No syntax errors found :)"));
+                    sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "No syntax errors found :)"));
                 }
             }
         } else {
             String executing = running ? "running" : "checking";
-            player.sendMessage(new TextComponentString(TextFormatting.RED + "Found " + errors.size() + " errors while " + executing + " scripts"));
+            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found " + errors.size() + " errors while " + executing + " scripts"));
             int n = errors.size();
             if (errors.size() >= 10) {
-                player.sendMessage(new TextComponentString("Displaying the first 7 errors:"));
+                sender.sendMessage(new TextComponentString("Displaying the first 7 errors:"));
                 n = 7;
             }
             for (int i = 0; i < n; i++) {
-                player.sendMessage(new TextComponentString(TextFormatting.RED + errors.get(i)));
+                sender.sendMessage(new TextComponentString(TextFormatting.RED + errors.get(i)));
             }
-            player.server.commandManager.executeCommand(player, "/gs log");
+            GSCommand.postLogFiles(sender);
         }
     }
 }

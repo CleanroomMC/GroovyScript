@@ -2,11 +2,12 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
@@ -14,16 +15,19 @@ import mekanism.common.recipe.machines.DissolutionRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionRecipe> {
 
     public DissolutionChamber() {
-        super(RecipeHandler.Recipe.CHEMICAL_DISSOLUTION_CHAMBER, VirtualizedRegistry.generateAliases("Dissolver"));
+        super(RecipeHandler.Recipe.CHEMICAL_DISSOLUTION_CHAMBER, Alias.generateOfClassAnd(DissolutionChamber.class, "Dissolver"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:packed_ice')).gasOutput(gas('water') * 2000)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:packed_ice'), gas('water')", commented = true))
     public DissolutionRecipe add(IIngredient ingredient, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Dissolution Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -41,6 +45,7 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
         return recipe1;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('mekanism:oreblock:0')"))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");
@@ -60,6 +65,8 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
         return found;
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "gasOutput", valid = @Comp("1"))
     public static class RecipeBuilder extends GasRecipeBuilder<DissolutionRecipe> {
 
         @Override
@@ -75,6 +82,7 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable DissolutionRecipe register() {
             if (!validate()) return null;
             DissolutionRecipe recipe = null;

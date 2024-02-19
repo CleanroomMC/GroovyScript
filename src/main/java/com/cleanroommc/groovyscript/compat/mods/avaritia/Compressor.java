@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.avaritia;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 
+@RegistryDescription
 public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
 
     @Override
@@ -31,6 +33,7 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('avaritia:singularity', 0)"))
     public boolean removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing avaritia compressor recipe")
@@ -48,15 +51,18 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         AvaritiaRecipeManager.COMPRESSOR_RECIPES.values().forEach(this::addBackup);
         AvaritiaRecipeManager.COMPRESSOR_RECIPES.values().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ICompressorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AvaritiaRecipeManager.COMPRESSOR_RECIPES.values()).setRemover(this::remove);
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay_ball') * 100).output(item('minecraft:nether_star')).inputCount(100)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -66,6 +72,7 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         addScripted(recipe);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:nether_star'), item('minecraft:clay_ball'), 100"))
     public void add(ItemStack output, IIngredient input, int cost) {
         recipeBuilder()
                 .inputCount(cost)
@@ -74,11 +81,15 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
                 .register();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public class RecipeBuilder extends AbstractRecipeBuilder<ICompressorRecipe> {
 
+        @Property(defaultValue = "300")
         private int inputCount = 300;
 
         @Override
+        @RecipeBuilderMethodDescription(field = {"input", "inputCount"})
         public AbstractRecipeBuilder<ICompressorRecipe> input(IIngredient ingredient) {
             if (ingredient == null) return this;
             if (ingredient.getAmount() > 1) {
@@ -87,6 +98,7 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
             return super.input(ingredient.withAmount(1));
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder inputCount(int inputCount) {
             this.inputCount = inputCount;
             return this;
@@ -113,6 +125,7 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable ICompressorRecipe register() {
             if (!validate()) return null;
             CompressorRecipe recipe = new CompressorRecipe(this.output.get(0), this.inputCount, true, Collections.singletonList(this.input.get(0).toMcIngredient()));

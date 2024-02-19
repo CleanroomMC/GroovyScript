@@ -14,7 +14,7 @@ public class CraftingInfo {
     public CraftingInfo(InventoryCrafting inventory, @UnknownNullability EntityPlayer player) {
         this.inventory = inventory;
         this.player = player;
-        this.world = player.world;
+        this.world = player == null ? null : player.world;
     }
 
     public InventoryCrafting getInventory() {
@@ -26,7 +26,10 @@ public class CraftingInfo {
     }
 
     public int getDimension() {
-        return this.world.provider.getDimension();
+        if (this.world != null) {
+            return this.world.provider.getDimension();
+        }
+        return 0;
     }
 
     public World getWorld() {

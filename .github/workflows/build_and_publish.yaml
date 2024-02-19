@@ -1,0 +1,171 @@
+# This workflow must be manually triggered. It accepts a version and a release type.
+# First it sets the version in gradle.properties to the new version and pushes it.
+# Then it generates a log, based on commits.
+# After that builds a jar and uploads it to curseforge/modrinth/GitHub releases
+
+name: Build and Publish mod
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Mod version'
+        required: true
+      release-type:
+        description: 'Release type'
+        type: choice
+        default: 'beta'
+        options:
+          - 'release'
+          - 'beta'
+          - 'alpha'
+      publish-cf:
+        description: Publish to CF
+        default: true
+        type: boolean
+      publish-mr:
+        description: Publish to MR
+        default: true
+        type: boolean
+      publish-gh:
+        description: Publish to Github
+        default: true
+        type: boolean
+      publish-maven:
+        description: Publish to maven
+        default: true
+        type: boolean
+      overwrite:
+        description: 'Overwrite current tag (if exists)'
+        default: false
+        required: true
+        type: boolean
+
+env:
+  CHANGELOG_LOCATION: "build/gh_changelog.md"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT }}
+
+      - name: Read current mod version
+        id: read_version
+        run: |
+          mod_version=$(grep "modVersion" gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
+          echo "Current mod version: $mod_version"
+          if [ "$mod_version" == "${{inputs.version}}" ]; then
+            echo "UPDATED=true" >> $GITHUB_ENV
+          else
+            echo "UPDATED=false" >> $GITHUB_ENV
+          fi
+
+      # Abort if a tag already exists and the mod is updated to that version and overwriting is not allowed
+      # If the tag does not exist force publish to gh if publishing to cf/mr (for changelog)
+      - name: Check if tag already exists
+        run: |
+          if git rev-parse --verify --quiet "v${{ github.event.inputs.version }}"; then
+            if [ "${{ inputs.publish-gh }}" == "true" ] && [ "$UPDATED" == "true" ] && [ "${{ inputs.overwrite }}" == "false" ]; then
+              echo "Version tag ${{ github.event.inputs.version }} already exists and the mod is updated to that version and overwriting is forbidden."
+              echo "Aborting workflow!"
+              exit 1
+            fi
+            echo "publish-gh=${{ inputs.publish-gh }}" >> $GITHUB_ENV
+          else
+            if [ "${{ inputs.publish-cf }}" == "true" ] || [ "${{ inputs.publish-mr }}" == "true" ]; then
+              echo "publish-gh=true" >> $GITHUB_ENV
+            else
+              echo "publish-gh=${{ inputs.publish-gh }}" >> $GITHUB_ENV
+            fi
+          fi
+
+      - name: Set version
+        if: env.UPDATED == 'false' # only change new version if it's not already updated
+        run: sed -i "s/modVersion.*=.*/modVersion = ${{ github.event.inputs.version }}/g" gradle.properties
+
+      - name: Commit and push gradle.properties
+        if: env.UPDATED == 'false' # only push new version if it's not already updated
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Bump version to ${{ github.event.inputs.version }}"
+          commit_options: "--no-verify"
+          file_pattern: gradle.properties
+          tagging_message: "v${{ github.event.inputs.version }}"
+
+      - name: Check for publishing
+        run: |
+          if [ "$publish-gh" == "false" ] && [ "${{ inputs.publish-cf-mr }}" == "false" ] && [ "${{ inputs.publish-maven }}" == "false" ]; then
+            echo "Not publishing to Github, Curse, Modrinth or Maven."
+            exit 0
+          fi
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build jars
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+
+      - name: Publish to GitHub
+        if: env.publish-gh == 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v${{ inputs.version }}"
+          token: ${{ secrets.PAT }}
+          files: "build/libs/*.jar"
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+
+      - name: Get Changelog
+        run: |
+          mkdir -p build
+          RELEASE_URL="https://api.github.com/repos/${{ github.repository }}/releases/tags/v${{ inputs.version }}"
+          RELEASE_JSON=$(curl -sSL $RELEASE_URL)
+          CHANGELOG="$(echo $RELEASE_JSON | jq -r '.body')"
+          if [ "$CHANGELOG" == "null" ]; then
+            echo "No changelog found" > $CHANGELOG_LOCATION
+          else
+            echo "$CHANGELOG" > $CHANGELOG_LOCATION
+          fi
+
+      - name: Publish to Curseforge
+        if: ${{ inputs.publish-cf }}
+        uses: gradle/gradle-build-action@v2
+        env:
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_TOKEN }}
+          CHANGELOG_LOCATION: ${{ env.CHANGELOG_LOCATION }}
+          RELEASE_TYPE: ${{ inputs.release-type }}
+        with:
+          arguments: 'curseforge'
+          generate-job-summary: false
+
+      - name: Publish to Modrinth
+        if: ${{ inputs.publish-mr }}
+        uses: gradle/gradle-build-action@v2
+        env:
+          MODRINTH_API_KEY: ${{ secrets.MODRINTH_TOKEN }}
+          CHANGELOG_LOCATION: ${{ env.CHANGELOG_LOCATION }}
+          RELEASE_TYPE: ${{ inputs.release-type }}
+        with:
+          arguments: 'modrinth'
+          generate-job-summary: false
+
+      - name: Publish to maven
+        if: ${{ inputs.publish-maven }}
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publish
+        env:
+          MAVEN_USER: ${{ secrets.MAVEN_NAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}

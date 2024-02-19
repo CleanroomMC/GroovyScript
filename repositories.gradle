@@ -1,0 +1,11 @@
+// Add any additional repositories for your dependencies here
+
+repositories {
+    maven {
+        url 'http://maven.tterrag.com/'
+        allowInsecureProtocol = true
+    }
+    maven {
+        url 'https://mvnrepository.com/artifact/org.apache.groovy/groovy'
+    }
+}

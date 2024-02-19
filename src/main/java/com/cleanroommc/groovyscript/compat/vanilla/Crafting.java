@@ -3,8 +3,10 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
@@ -15,9 +17,13 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Crafting {
+public class Crafting extends ForgeRegistryWrapper<IRecipe> {
 
     private static final Char2ObjectOpenHashMap<IIngredient> fallbackChars = new Char2ObjectOpenHashMap<>();
+
+    public Crafting() {
+        super(ForgeRegistries.RECIPES, Alias.generateOf("Crafting"));
+    }
 
     @GroovyBlacklist
     public static IIngredient getFallback(char c) {

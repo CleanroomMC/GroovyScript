@@ -1,5 +1,5 @@
 
-if (!isLoaded('mekanism')) return
+// MODS_LOADED: mekanism
 println 'mod \'mekanism\' detected, running script'
 
 // Bracket Handlers

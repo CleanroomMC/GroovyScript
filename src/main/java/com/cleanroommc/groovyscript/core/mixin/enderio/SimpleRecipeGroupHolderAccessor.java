@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin(targets = "crazypants.enderio.base.recipe.MachineRecipeRegistry$SimpleRecipeGroupHolder")
+@Mixin(targets = "crazypants.enderio.base.recipe.MachineRecipeRegistry$SimpleRecipeGroupHolder", remap = false)
 public interface SimpleRecipeGroupHolderAccessor {
 
     @Accessor

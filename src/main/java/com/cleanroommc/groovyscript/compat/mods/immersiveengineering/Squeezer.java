@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 import blusunrize.immersiveengineering.api.crafting.SqueezerRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -16,12 +17,18 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
 
     public Squeezer() {
         super();
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('lava')).energy(100)"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).energy(100)"),
+            @Example(".input(item('minecraft:clay')).fluidOutput(fluid('water')).energy(100)")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -39,6 +46,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public SqueezerRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, IIngredient input, int energy) {
         SqueezerRecipe recipe = new SqueezerRecipe(fluidOutput, itemOutput, ImmersiveEngineering.toIngredientStack(input), energy);
         add(recipe);
@@ -53,6 +61,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('plantoil')"))
     public void removeByOutput(FluidStack fluidOutput) {
         if (IngredientHelper.isEmpty(fluidOutput)) {
             GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
@@ -75,6 +84,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
     public void removeByOutput(FluidStack fluidOutput, ItemStack itemOutput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
                 .add(IngredientHelper.isEmpty(fluidOutput), () -> "fluid output must not be empty")
@@ -95,6 +105,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:material:18')"))
     public void removeByOutput(ItemStack itemOutput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
                 .add(IngredientHelper.isEmpty(itemOutput), () -> "item input must not be empty")
@@ -116,6 +127,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat_seeds')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
@@ -133,19 +145,26 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<SqueezerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(SqueezerRecipe.recipeList).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         SqueezerRecipe.recipeList.forEach(this::addBackup);
         SqueezerRecipe.recipeList.clear();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+    @Property(property = "fluidOutput", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
     private static class RecipeBuilder extends AbstractRecipeBuilder<SqueezerRecipe> {
 
+        @Property
         private int energy;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
@@ -164,6 +183,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable SqueezerRecipe register() {
             if (!validate()) return null;
             SqueezerRecipe recipe = new SqueezerRecipe(fluidOutput.getOrEmpty(0), output.getOrEmpty(0), ImmersiveEngineering.toIngredientStack(input.get(0)), energy);

@@ -5,6 +5,16 @@ import net.minecraftforge.event.entity.living.EnderTeleportEvent
 import net.minecraftforge.event.world.BlockEvent
 import net.minecraft.util.text.TextComponentString
 
+def ore_iron = ore('ingotIron')
+def item_iron = item('minecraft:iron_ingot')
+log.info(item_iron in ore_iron) // true
+log.info(item_iron in item_iron) // true
+log.info(ore_iron in item_iron) // false
+log.info(item_iron << ore_iron) // true
+log.info((item_iron * 3) << ore_iron) // false
+log.info(ore_iron >> item_iron) // true
+log.info(ore_iron >> (item_iron * 3)) // false
+
 // Crafting recipes are typically created via recipe builder, but also have shorthand versions for some common uses.
 // Here are a series of examples, with the shorthand and corresponding recipe builder:
 
@@ -150,12 +160,12 @@ crafting.shapedBuilder()
 crafting.remove('minecraft:mossy_stonebrick') // Remove the entry with the recipe ID
 crafting.remove(resource('minecraft:stonebrick'))
 crafting.removeByOutput(item('minecraft:gold_ingot')) // Remove all recipes with the output
-crafting.removeByInput(item('minecraft:iron_ingot')) // Remove all recipes containing the ingredient as an input
+//crafting.removeByInput(item('minecraft:iron_ingot')) // Remove all recipes containing the ingredient as an input
 //crafting.removeAll()
 
 
 // Furnace
-furnace.add(ore('ingotIron'), item('minecraft:diamond')) // exp has a default value of 0.1
+//furnace.add(ore('ingotIron'), item('minecraft:diamond')) // exp has a default value of 0.1
 furnace.add(item('minecraft:nether_star'), item('minecraft:clay') * 64, 13)
 
 furnace.recipeBuilder()
@@ -218,10 +228,10 @@ item('minecraft:golden_apple').setRarity(textformat('-1'))
 
 
 // Use eventManager.listen and listen to the desired event.
-eventManager.listen({ BlockEvent.BreakEvent event -> {
+/*eventManager.listen({ BlockEvent.BreakEvent event -> {
     event.setCanceled(true) // Many events can be canceled.
     event.player.sendMessage(new TextComponentString("${event.getState().getBlock().getLocalizedName()} Block was prevent from being broken"))
-}})
+}})*/
 
 // The outer parentheses and inner curly braces are optional.
 eventManager.listen { EnderTeleportEvent event ->

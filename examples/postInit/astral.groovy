@@ -1,8 +1,8 @@
-import net.minecraft.util.math.MathHelper
 
-if (!isLoaded('astralsorcery')) return
+// MODS_LOADED: astralsorcery
 println 'mod \'astralsorcery\' detected, running script'
 
+import net.minecraft.util.math.MathHelper
 
 // Constellation bracket handler:
 // Major (Bright) Constellations:

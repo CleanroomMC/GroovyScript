@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
+import com.cleanroommc.groovyscript.api.IGameObjectHandler;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
+import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
@@ -11,8 +13,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Locale;
 
 public class Mekanism extends ModPropertyContainer {
 
@@ -62,11 +62,11 @@ public class Mekanism extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        BracketHandlerManager.registerBracketHandler("gas", s -> {
+        GameObjectHandlerManager.registerGameObjectHandler("mekanism", "gas", (s, args) -> {
             Gas gas = GasRegistry.getGas(s);
-            return gas == null ? null : new GasStack(gas, 1);
+            return gas == null ? Result.error() : Result.some(new GasStack(gas, 1));
         });
-        BracketHandlerManager.registerBracketHandler("infusion", s -> InfuseRegistry.get(s.toUpperCase(Locale.ROOT)));
+        GameObjectHandlerManager.registerGameObjectHandler("mekanism", "infusion", IGameObjectHandler.wrapStringGetter(InfuseRegistry::get, true));
     }
 
     @Optional.Method(modid = "mekanism")

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 import blusunrize.immersiveengineering.api.crafting.BlastFurnaceRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -14,8 +15,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.BlastFurnaceFuel> {
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).time(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -33,6 +36,7 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public BlastFurnaceRecipe.BlastFurnaceFuel add(IIngredient input, int time) {
         BlastFurnaceRecipe.BlastFurnaceFuel recipe = new BlastFurnaceRecipe.BlastFurnaceFuel(ImmersiveEngineering.toIngredientStack(input), time);
         add(recipe);
@@ -47,6 +51,7 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('immersiveengineering:material:6')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
@@ -67,19 +72,24 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BlastFurnaceRecipe.BlastFurnaceFuel> streamRecipes() {
         return new SimpleObjectStream<>(BlastFurnaceRecipe.blastFuels).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BlastFurnaceRecipe.blastFuels.forEach(this::addBackup);
         BlastFurnaceRecipe.blastFuels.clear();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlastFurnaceRecipe.BlastFurnaceFuel> {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int time;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
@@ -98,6 +108,7 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable BlastFurnaceRecipe.BlastFurnaceFuel register() {
             if (!validate()) return null;
             BlastFurnaceRecipe.BlastFurnaceFuel recipe = new BlastFurnaceRecipe.BlastFurnaceFuel(ImmersiveEngineering.toIngredientStack(input.get(0)), time);

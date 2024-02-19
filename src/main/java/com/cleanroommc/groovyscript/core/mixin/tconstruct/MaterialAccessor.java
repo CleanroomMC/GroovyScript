@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Mixin(value = Material.class, remap = false)
 public interface MaterialAccessor {
+
     @Accessor
     Map<String, List<ITrait>> getTraits();
 }

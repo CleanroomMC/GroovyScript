@@ -2,7 +2,11 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.OreTypesAccessor;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -10,12 +14,16 @@ import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.base.sets.OreEntry;
 import org.jetbrains.annotations.ApiStatus;
 
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
+        priority = 2000
+)
 public class OreChance extends VirtualizedRegistry<OreEntry> {
 
     private final OreTypesAccessor REGISTRY;
 
     public OreChance(String name, OreTypes registry) {
-        super(false, VirtualizedRegistry.generateAliases(name));
+        super(Alias.generateOf(name));
         REGISTRY = (OreTypesAccessor) registry;
     }
 
@@ -54,6 +62,7 @@ public class OreChance extends VirtualizedRegistry<OreEntry> {
         REGISTRY.add(entry);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("ore('blockDiamond'), 10000"))
     public void add(String ore, int weight) {
         if (weight <= 0) {
             GroovyLog.msg("Error adding Astral Sorcery OreChance. Weight must be a positive integer.").error().post();
@@ -78,10 +87,12 @@ public class OreChance extends VirtualizedRegistry<OreEntry> {
         return remove(entry.oreName);
     }
 
+    @MethodDescription(example = @Example("ore('oreDiamond')"))
     public boolean remove(OreDictIngredient entry) {
         return remove(entry.getOreDict());
     }
 
+    @MethodDescription
     public boolean remove(String ore) {
         return REGISTRY.getEntries().removeIf(entry -> {
             if (entry.oreName.equals(ore)) {
@@ -93,11 +104,13 @@ public class OreChance extends VirtualizedRegistry<OreEntry> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<OreEntry> streamRecipes() {
         return new SimpleObjectStream<>(REGISTRY.getEntries())
                 .setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         REGISTRY.getEntries().forEach(this::addBackup);
         REGISTRY.getEntries().clear();

@@ -22,18 +22,17 @@ public class GroovyLootFunction extends LootFunction {
 
     public GroovyLootFunction(LootCondition[] conditions, Closure<Object> function) {
         super(conditions);
-        if (Arrays.equals(function.getParameterTypes(), new Class[]{ItemStack.class, Random.class, LootContext.class})) {
-            this.function = function;
-        } else {
-            GroovyLog.msg("Error creating custom loot function: function must take the following parameters (net.minecraft.item.ItemStack, java.util.Random, net.minecraft.world.storage.loot.LootContext).").error().post();
-            this.function = null;
+        this.function = function;
+        if (!Arrays.equals(function.getParameterTypes(), new Class[]{ItemStack.class, Random.class, LootContext.class})) {
+            GroovyLog.msg("Warning: LootFunction closures must take the following parameters (net.minecraft.item.ItemStack, java.util.Random, net.minecraft.world.storage.loot.LootContext)")
+                    .debug()
+                    .post();
         }
     }
 
     @Override
     public @NotNull ItemStack apply(@NotNull ItemStack stack, @NotNull Random rand, @NotNull LootContext context) {
-        if (function == null) return ItemStack.EMPTY;
-        return ClosureHelper.call(ItemStack.EMPTY, function, stack, rand, context);
+        return ClosureHelper.call(stack, function, stack, rand, context);
     }
 
 }

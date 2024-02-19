@@ -1,13 +1,14 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
+import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.GroovyPerkTree;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.PerkTreeConfig;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar.StarlightAltar;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationRegistryAccessor;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -53,13 +54,13 @@ public class AstralSorcery extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        BracketHandlerManager.registerBracketHandler("constellation", s -> {
+        GameObjectHandlerManager.registerGameObjectHandler("astralsorcery", "constellation", (s, args) -> {
             for (IConstellation constellation : ConstellationRegistryAccessor.getConstellationList()) {
                 if (constellation.getSimpleName().equalsIgnoreCase(s)) {
-                    return constellation;
+                    return Result.some(constellation);
                 }
             }
-            return null;
+            return Result.error();
         });
         ExpansionHelper.mixinClass(ItemStack.class, CrystalItemStackExpansion.class);
     }
@@ -69,5 +70,4 @@ public class AstralSorcery extends ModPropertyContainer {
         if (ingredient instanceof OreDictIngredient) return new ItemHandle(((OreDictIngredient) ingredient).getOreDict());
         return new ItemHandle(ingredient.getMatchingStacks());
     }
-
 }

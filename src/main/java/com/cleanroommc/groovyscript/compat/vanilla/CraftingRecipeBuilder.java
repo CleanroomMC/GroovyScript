@@ -4,6 +4,10 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
@@ -25,10 +29,15 @@ import java.util.Map;
 
 public abstract class CraftingRecipeBuilder {
 
+    @Property(value = "groovyscript.wiki.craftingrecipe.output.value", valid = @Comp(value = "null", type = Comp.Type.NOT), priority = 700, hierarchy = 20)
     protected ItemStack output;
+    @Property(value = "groovyscript.wiki.name.value", priority = 100, hierarchy = 20)
     protected ResourceLocation name;
+    @Property(value = "groovyscript.wiki.craftingrecipe.recipeFunction.value", priority = 1500, hierarchy = 20)
     protected Closure<ItemStack> recipeFunction;
+    @Property(value = "groovyscript.wiki.craftingrecipe.recipeAction.value", priority = 1550, hierarchy = 20)
     protected Closure<Void> recipeAction;
+    @Property(value = "groovyscript.wiki.craftingrecipe.replace.value", hierarchy = 20)
     protected byte replace = 0;
 
     protected int width, height;
@@ -38,6 +47,7 @@ public abstract class CraftingRecipeBuilder {
         this.height = height;
     }
 
+    @RecipeBuilderMethodDescription
     public CraftingRecipeBuilder name(String name) {
         if (name.contains(":")) {
             this.name = new ResourceLocation(name);
@@ -47,36 +57,43 @@ public abstract class CraftingRecipeBuilder {
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public CraftingRecipeBuilder name(ResourceLocation name) {
         this.name = name;
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public CraftingRecipeBuilder output(ItemStack item) {
         this.output = item;
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public CraftingRecipeBuilder recipeFunction(Closure<ItemStack> recipeFunction) {
         this.recipeFunction = recipeFunction;
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public CraftingRecipeBuilder recipeAction(Closure<Void> recipeAction) {
         this.recipeAction = recipeAction;
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public CraftingRecipeBuilder replace() {
         this.replace = 1;
         return this;
     }
 
+    @RecipeBuilderMethodDescription
     public CraftingRecipeBuilder replaceByName() {
         this.replace = 2;
         return this;
     }
 
+    @RecipeBuilderRegistrationMethod
     public abstract Object register();
 
     @GroovyBlacklist
@@ -103,16 +120,20 @@ public abstract class CraftingRecipeBuilder {
     @GroovyBlacklist
     public void validateName() {
         if (name == null) {
-            name = new ResourceLocation(GroovyScript.getRunConfig().getPackId(), RecipeName.generate(getRecipeNamePrefix()));
+            name = RecipeName.generateRl(getRecipeNamePrefix());
         }
     }
 
     public static class Shaped extends CraftingRecipeBuilder {
 
+        @Property(value = "groovyscript.wiki.craftingrecipe.mirrored.value", hierarchy = 20)
         protected boolean mirrored = false;
+        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", priority = 200, hierarchy = 20)
         protected String[] keyBasedMatrix;
+        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value", defaultValue = "' ' = IIngredient.EMPTY", priority = 210, hierarchy = 20)
         protected final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
 
+        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}, priority = 200, hierarchy = 20)
         protected List<List<IIngredient>> ingredientMatrix;
 
         protected final List<String> errors = new ArrayList<>();
@@ -122,25 +143,30 @@ public abstract class CraftingRecipeBuilder {
             keyMap.put(' ', IIngredient.EMPTY);
         }
 
+        @RecipeBuilderMethodDescription
         public Shaped mirrored(boolean mirrored) {
             this.mirrored = mirrored;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public Shaped mirrored() {
             return mirrored(true);
         }
 
+        @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
         public Shaped matrix(String... matrix) {
             this.keyBasedMatrix = matrix;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
         public Shaped shape(String... matrix) {
             this.keyBasedMatrix = matrix;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
         public Shaped row(String row) {
             if (this.keyBasedMatrix == null) {
                 this.keyBasedMatrix = new String[]{row};
@@ -150,12 +176,14 @@ public abstract class CraftingRecipeBuilder {
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "keyMap")
         public Shaped key(char c, IIngredient ingredient) {
             this.keyMap.put(c, ingredient);
             return this;
         }
 
         // groovy doesn't have char literals
+        @RecipeBuilderMethodDescription(field = "keyMap")
         public Shaped key(String c, IIngredient ingredient) {
             if (c == null || c.length() != 1) {
                 errors.add("key must be a single char, but found '" + c + "'");
@@ -165,6 +193,7 @@ public abstract class CraftingRecipeBuilder {
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "keyMap")
         public Shaped key(Map<String, IIngredient> map) {
             for (Map.Entry<String, IIngredient> x : map.entrySet()) {
                 key(x.getKey(), x.getValue());
@@ -172,11 +201,13 @@ public abstract class CraftingRecipeBuilder {
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "ingredientMatrix")
         public Shaped matrix(List<List<IIngredient>> matrix) {
             this.ingredientMatrix = matrix;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "ingredientMatrix")
         public Shaped shape(List<List<IIngredient>> matrix) {
             this.ingredientMatrix = matrix;
             return this;
@@ -188,12 +219,14 @@ public abstract class CraftingRecipeBuilder {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public IRecipe register() {
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shaped Crafting recipe").error()
+            validateName();
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shaped Crafting recipe '{}'", this.name).error()
                     .add((keyBasedMatrix == null || keyBasedMatrix.length == 0) && (ingredientMatrix == null || ingredientMatrix.isEmpty()), () -> "No matrix was defined")
-                    .add(keyBasedMatrix != null && ingredientMatrix != null, () -> "A key based matrix AND a ingredient based matrix was defined. This is not allowed!");
+                    .add(keyBasedMatrix != null && ingredientMatrix != null, () -> "A key based matrix AND a ingredient based matrix was defined. This is not allowed!")
+                    .add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty");
             if (msg.postIfNotEmpty()) return null;
-            msg.add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty");
 
             ShapedCraftingRecipe recipe = null;
             if (keyBasedMatrix != null) {
@@ -204,7 +237,8 @@ public abstract class CraftingRecipeBuilder {
 
             if (recipe != null) {
                 handleReplace();
-                validateName();
+                msg.add(ReloadableRegistryManager.hasNonDummyRecipe(this.name), () -> "a recipe with that name already exists! Either replace or remove the recipe first");
+                if (msg.postIfNotEmpty()) return null;
                 ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             }
 
@@ -214,17 +248,20 @@ public abstract class CraftingRecipeBuilder {
 
     public static class Shapeless extends CraftingRecipeBuilder {
 
+        @Property(value = "groovyscript.wiki.craftingrecipe.ingredients.value", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}, priority = 250, hierarchy = 20)
         private final List<IIngredient> ingredients = new ArrayList<>();
 
         public Shapeless(int width, int height) {
             super(width, height);
         }
 
+        @RecipeBuilderMethodDescription(field = "ingredients")
         public Shapeless input(IIngredient ingredient) {
             ingredients.add(ingredient);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "ingredients")
         public Shapeless input(IIngredient... ingredients) {
             if (ingredients != null)
                 for (IIngredient ingredient : ingredients)
@@ -232,6 +269,7 @@ public abstract class CraftingRecipeBuilder {
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "ingredients")
         public Shapeless input(Collection<IIngredient> ingredients) {
             if (ingredients != null && !ingredients.isEmpty())
                 for (IIngredient ingredient : ingredients)
@@ -245,10 +283,12 @@ public abstract class CraftingRecipeBuilder {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public IRecipe register() {
+            validateName();
             IngredientHelper.trim(ingredients);
-            if (GroovyLog.msg("Error adding Minecraft Shapeless Crafting recipe")
-                    .add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty")
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shapeless Crafting recipe '{}'", this.name);
+            if (msg.add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty")
                     .add(ingredients.isEmpty(), () -> "inputs must not be empty")
                     .add(ingredients.size() > width * height, () -> "maximum inputs are " + (width * height) + " but found " + ingredients.size())
                     .error()
@@ -256,8 +296,9 @@ public abstract class CraftingRecipeBuilder {
                 return null;
             }
             handleReplace();
+            msg.add(ReloadableRegistryManager.hasNonDummyRecipe(this.name), () -> "a recipe with that name already exists! Either replace or remove the recipe first");
+            if (msg.postIfNotEmpty()) return null;
             ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), ingredients, recipeFunction, recipeAction);
-            validateName();
             ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             return recipe;
         }

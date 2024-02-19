@@ -2,7 +2,8 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.api.INamed;
+import com.cleanroommc.groovyscript.helper.Alias;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
 import groovy.lang.Script;
@@ -58,8 +59,15 @@ public abstract class GroovySandbox {
     public void registerBinding(String name, Object obj) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(obj);
-        for (String alias : VirtualizedRegistry.generateAliases(name)) {
+        for (String alias : Alias.generateOf(name)) {
             bindings.put(alias, obj);
+        }
+    }
+
+    public void registerBinding(INamed named) {
+        Objects.requireNonNull(named);
+        for (String alias : named.getAliases()) {
+            bindings.put(alias, named);
         }
     }
 
@@ -73,32 +81,45 @@ public abstract class GroovySandbox {
         currentSandbox.set(null);
     }
 
-    public void load(boolean run, boolean loadClasses) throws Exception {
+    protected GroovyScriptEngine createScriptEngine() {
+        GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment);
+        CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
+        config.setSourceEncoding("UTF-8");
+        engine.setConfig(config);
+        initEngine(engine, config);
+        return engine;
+    }
+
+    protected Binding createBindings() {
+        Binding binding = new Binding(this.bindings);
+        postInitBindings(binding);
+        return binding;
+    }
+
+    public void load() throws Exception {
         currentSandbox.set(this);
         preRun();
 
-        GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment);
-        CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
-        engine.setConfig(config);
-        initEngine(engine, config);
-        Binding binding = new Binding(bindings);
-        postInitBindings(binding);
+        GroovyScriptEngine engine = createScriptEngine();
+        Binding binding = createBindings();
         Set<File> executedClasses = new ObjectOpenHashSet<>();
 
-        running.set(run);
+        running.set(true);
         try {
-            if (loadClasses) {
-                // load and run any configured class files
-                loadClassScripts(engine, binding, executedClasses, run);
-            }
-            // now run all script files
-            loadScripts(engine, binding, executedClasses, run);
+            load(engine, binding, executedClasses, true);
         } finally {
             running.set(false);
             postRun();
             currentSandbox.set(null);
             setCurrentScript(null);
         }
+    }
+
+    protected void load(GroovyScriptEngine engine, Binding binding, Set<File> executedClasses, boolean run) {
+        // load and run any configured class files
+        loadClassScripts(engine, binding, executedClasses, run);
+        // now run all script files
+        loadScripts(engine, binding, executedClasses, run);
     }
 
     protected void loadScripts(GroovyScriptEngine engine, Binding binding, Set<File> executedClasses, boolean run) {
@@ -128,6 +149,7 @@ public abstract class GroovySandbox {
 
     protected void loadClassScripts(GroovyScriptEngine engine, Binding binding, Set<File> executedClasses, boolean run) {
         for (File classFile : getClassFiles()) {
+            if (executedClasses.contains(classFile)) continue;
             Class<?> clazz = loadScriptClass(engine, classFile);
             if (clazz == null) {
                 // loading script fails if the file is a script that depends on a class file that isn't loaded yet

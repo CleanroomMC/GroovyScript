@@ -5,6 +5,7 @@ import appeng.api.features.IInscriberRecipe;
 import appeng.api.features.IInscriberRecipeBuilder;
 import appeng.api.features.InscriberProcessType;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -17,12 +18,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
 
     public Inscriber() {
         super();
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(ore('blockGlass')).output(item('minecraft:diamond')).top(item('minecraft:diamond')).bottom(item('minecraft:diamond')).inscribe()"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).top(item('minecraft:diamond'))")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -43,6 +49,7 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
         addBackup(recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('appliedenergistics2:material:59')"))
     public void removeByOutput(ItemStack output) {
         List<IInscriberRecipe> recipes = AEApi.instance().registries().inscriber().getRecipes().stream().filter(x -> ItemStack.areItemStacksEqual(x.getOutput(), output)).collect(Collectors.toList());
         for (IInscriberRecipe recipe : recipes) {
@@ -51,6 +58,7 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         for (IInscriberRecipe recipe : AEApi.instance().registries().inscriber().getRecipes()) {
             AEApi.instance().registries().inscriber().removeRecipe(recipe);
@@ -59,38 +67,49 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
     }
 
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IInscriberRecipe> {
 
+        @Property(defaultValue = "InscriberProcessType.PRESS", valid = @Comp(value = "null", type = Comp.Type.NOT))
         private InscriberProcessType type = InscriberProcessType.PRESS;
+        @Property(defaultValue = "ItemStack.EMPTY", requirement = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required")
         private ItemStack top = ItemStack.EMPTY;
+        @Property(defaultValue = "ItemStack.EMPTY", requirement = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required")
         private ItemStack bottom = ItemStack.EMPTY;
 
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder type(InscriberProcessType type) {
             this.type = type;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder type(String type) {
             this.type = InscriberProcessType.valueOf(type.toUpperCase(Locale.ROOT));
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public RecipeBuilder press() {
             this.type = InscriberProcessType.PRESS;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public RecipeBuilder inscribe() {
             this.type = InscriberProcessType.INSCRIBE;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder top(ItemStack top) {
             this.top = top;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder bottom(ItemStack bottom) {
             this.bottom = bottom;
             return this;
@@ -110,6 +129,7 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable IInscriberRecipe register() {
             if (!validate()) return null;
             IInscriberRecipeBuilder builder = AEApi.instance().registries().inscriber().builder()

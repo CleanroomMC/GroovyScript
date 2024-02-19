@@ -1,5 +1,5 @@
 
-if (!isLoaded('inspirations')) return
+// MODS_LOADED: inspirations
 println 'mod \'inspirations\' detected, running script'
 
 // Cauldron:

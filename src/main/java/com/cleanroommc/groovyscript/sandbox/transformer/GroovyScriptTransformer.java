@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
-import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import org.codehaus.groovy.ast.ClassCodeExpressionTransformer;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
 
-    private static final ClassNode bracketHandlerClass = ClassHelper.makeCached(BracketHandlerManager.class);
+    private static final ClassNode bracketHandlerClass = ClassHelper.makeCached(GameObjectHandlerManager.class);
     private final SourceUnit source;
     private final ClassNode classNode;
 
@@ -76,7 +76,7 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
         }
         if (expression.isImplicitThis() && argCount > 0) {
             String name = expression.getMethodAsString();
-            if (BracketHandlerManager.getBracketHandler(name) != null) {
+            if (GameObjectHandlerManager.hasGameObjectHandler(name)) {
                 List<Expression> args;
                 if (expression.getArguments() instanceof TupleExpression) {
                     args = ((TupleExpression) expression.getArguments()).getExpressions();
@@ -84,7 +84,7 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
                     args = new ArrayList<>();
                 }
                 args.add(0, new ConstantExpression(name));
-                return makeCheckedCall(bracketHandlerClass, "handleBracket", args.toArray(new Expression[0]));
+                return makeCheckedCall(bracketHandlerClass, "getGameObject", args.toArray(new Expression[0]));
             }
         }
         return expression;

@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -14,8 +15,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES
+)
 public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
 
+    @RecipeBuilderDescription(example = @Example(value = ".key('groovy_example_brew').name('Groovy Brew').color(0x00FFFF).cost(100).effect(new PotionEffect(potion('minecraft:strength'), 1800, 3), new PotionEffect(potion('minecraft:speed'), 1800, 2), new PotionEffect(potion('minecraft:weakness'), 3600, 1)).incense(true).bloodPendant(true)", imports = "net.minecraft.potion.PotionEffect"))
     public BrewBuilder brewBuilder() {
         return new BrewBuilder();
     }
@@ -39,80 +44,101 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
         return BotaniaAPI.brewMap.remove(brew.getKey()) != null;
     }
 
+    @MethodDescription
     public boolean remove(String brew) {
         if (brew == null) return false;
         addBackup(BotaniaAPI.brewMap.get(brew));
         return BotaniaAPI.brewMap.remove(brew) != null;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BotaniaAPI.brewMap.forEach((l, r) -> this.addBackup(r));
         BotaniaAPI.brewMap.clear();
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<vazkii.botania.api.brew.Brew> streamBrews() {
         return new SimpleObjectStream<>(BotaniaAPI.brewMap.values());
     }
 
     public static class BrewBuilder extends AbstractRecipeBuilder<vazkii.botania.api.brew.Brew> {
 
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), priority = 100)
         protected String key;
+        @Property(ignoresInheritedMethods = true, priority = 200)
         protected String name;
+        @Property(defaultValue = "0xFFFFFF", valid = @Comp(value = "null", type = Comp.Type.NOT))
         protected int color = 0xFFFFFF;
+        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
         protected int cost;
+        @Property(defaultValue = "true", priority = 1100)
         protected boolean canInfuseIncense = true;
+        @Property(defaultValue = "true", priority = 1200)
         protected boolean canInfuseBloodPendant = true;
+        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
         protected List<PotionEffect> effects = new ArrayList<>();
 
+        @RecipeBuilderMethodDescription
         public BrewBuilder key(String key) {
             this.key = key;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public BrewBuilder name(String name) {
             this.name = name;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public BrewBuilder color(int color) {
             this.color = color;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public BrewBuilder cost(int cost) {
             this.cost = cost;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "cost")
         public BrewBuilder mana(int mana) {
             return cost(mana);
         }
 
+        @RecipeBuilderMethodDescription(field = "canInfuseIncense")
         public BrewBuilder incense(boolean incense) {
             this.canInfuseIncense = incense;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "canInfuseIncense")
         public BrewBuilder incense() {
             this.canInfuseIncense = !canInfuseIncense;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "canInfuseBloodPendant")
         public BrewBuilder bloodPendant(boolean bloodPendant) {
             this.canInfuseBloodPendant = bloodPendant;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "canInfuseBloodPendant")
         public BrewBuilder bloodPendant() {
             this.canInfuseBloodPendant = !canInfuseBloodPendant;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "effects")
         public BrewBuilder effect(PotionEffect effect) {
             this.effects.add(effect);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "effects")
         public BrewBuilder effect(PotionEffect... effects) {
             for (PotionEffect effect : effects) {
                 effect(effect);
@@ -120,6 +146,7 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "effects")
         public BrewBuilder effect(Collection<PotionEffect> effects) {
             for (PotionEffect effect : effects) {
                 effect(effect);
@@ -144,6 +171,7 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
 
         @Nullable
         @Override
+        @RecipeBuilderRegistrationMethod
         public vazkii.botania.api.brew.Brew register() {
             if (!validate()) return null;
             if (name == null) name = key;

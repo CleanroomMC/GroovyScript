@@ -1,10 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.evilcraft;
 
-import com.cleanroommc.groovyscript.brackets.BracketHandlerManager;
+import com.cleanroommc.groovyscript.api.IGameObjectHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import org.cyclops.evilcraft.core.weather.WeatherType;
-
-import java.util.Locale;
 
 public class EvilCraft extends ModPropertyContainer {
 
@@ -18,6 +17,6 @@ public class EvilCraft extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        BracketHandlerManager.registerBracketHandler("weather", s -> WeatherType.valueOf(s.toUpperCase(Locale.ROOT)));
+        GameObjectHandlerManager.registerGameObjectHandler("evilcraft", "weather", IGameObjectHandler.wrapStringGetter(WeatherType::valueOf, true));
     }
 }

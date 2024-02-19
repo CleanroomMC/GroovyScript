@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin(value = LootTable.class)
+@Mixin(LootTable.class)
 public interface LootTableAccessor {
 
-    @Accessor
+    @Accessor("pools")
     List<LootPool> getPools();
 
 }

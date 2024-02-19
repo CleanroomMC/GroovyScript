@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.recipe.transmutation.*;
@@ -12,6 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES
+)
 public class Predicates extends VirtualizedRegistry<MatchingStates> {
 
     public WorldBlockStatePredicate ANY = WorldBlockStatePredicate.TRUE;
@@ -28,6 +32,13 @@ public class Predicates extends VirtualizedRegistry<MatchingStates> {
     public void onReload() {
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".blockstate(blockstate('minecraft:red_flower'))"),
+            @Example(".block(block('minecraft:red_flower'))"),
+            @Example(".blockstate(blockstate('minecraft:red_flower:type=poppy')).properties('type')"),
+            @Example(".blockstate(blockstate('minecraft:log:axis=z:variant=oak')).properties('axis').above()"),
+            @Example(".blockstate(blockstate('minecraft:log')).below()")
+    })
     public StateBuilder stateBuilder() {
         return new StateBuilder();
     }
@@ -54,36 +65,46 @@ public class Predicates extends VirtualizedRegistry<MatchingStates> {
 
     public static class StateBuilder extends AbstractRecipeBuilder<MatchingStates> {
 
+        @Property(requirement = "groovyscript.wiki.roots.predicates.properties.required")
         private final Collection<String> properties = new ArrayList<>();
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IBlockState blockstate;
+        @Property(requirement = "groovyscript.wiki.roots.predicates.above_or_below.required")
         private boolean above = false;
+        @Property(requirement = "groovyscript.wiki.roots.predicates.above_or_below.required")
         private boolean below = false;
 
+        @RecipeBuilderMethodDescription
         public StateBuilder blockstate(IBlockState blockstate) {
             this.blockstate = blockstate;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "blockstate")
         public StateBuilder block(Block block) {
             this.blockstate = block.getDefaultState();
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public StateBuilder properties(String... properties) {
             Collections.addAll(this.properties, properties);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public StateBuilder properties(Collection<String> properties) {
             this.properties.addAll(properties);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public StateBuilder above() {
             this.above = true;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public StateBuilder below() {
             this.below = true;
             return this;
@@ -110,6 +131,7 @@ public class Predicates extends VirtualizedRegistry<MatchingStates> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable MatchingStates register() {
             if (!validate()) return null;
             BlockStateContainer container = blockstate.getBlock().getBlockState();
