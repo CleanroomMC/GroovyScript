@@ -308,7 +308,7 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
         @RecipeBuilderRegistrationMethod
         public @Nullable Map<CostType, IModifierCost> register() {
             if (!validate()) return null;
-            if (list.size() == 0) return epicsquid.roots.modifiers.Cost.noCost();
+            if (list.isEmpty()) return epicsquid.roots.modifiers.Cost.noCost();
             return epicsquid.roots.modifiers.Cost.of(list.toArray(new IModifierCost[0]));
         }
     }

@@ -112,7 +112,7 @@ public class ClassicExtractor extends Extractor {
 
     public boolean remove(IMachineRecipeList.RecipeEntry entry) {
         addBackup(new MachineRecipe<>(entry.getInput(), entry.getOutput().getAllOutputs()));
-        return ClassicRecipes.extractor.removeRecipe(entry.getInput()).size() > 0;
+        return !ClassicRecipes.extractor.removeRecipe(entry.getInput()).isEmpty();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class ClassicExtractor extends Extractor {
     @Override
     public boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {
         addBackup(recipe);
-        return ClassicRecipes.extractor.removeRecipe(recipe.getInput()).size() > 0;
+        return !ClassicRecipes.extractor.removeRecipe(recipe.getInput()).isEmpty();
     }
 
 

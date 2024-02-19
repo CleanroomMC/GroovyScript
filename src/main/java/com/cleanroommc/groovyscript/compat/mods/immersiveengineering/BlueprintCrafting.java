@@ -79,7 +79,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
             return;
         }
         List<BlueprintCraftingRecipe> list = BlueprintCraftingRecipe.recipeList.removeAll(blueprintCategory);
-        if (list.size() > 0) {
+        if (!list.isEmpty()) {
             list.forEach(this::addBackup);
         }
     }

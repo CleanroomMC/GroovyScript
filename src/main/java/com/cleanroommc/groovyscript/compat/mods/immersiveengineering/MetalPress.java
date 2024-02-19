@@ -165,7 +165,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         msg.add(!MetalPressRecipe.recipeList.containsKey(comparable), () -> mold + " is not a valid mold");
         if (msg.postIfNotEmpty()) return;
         List<MetalPressRecipe> list = MetalPressRecipe.recipeList.removeAll(ApiUtils.createComparableItemStack(mold, false));
-        if (list.size() > 0) list.forEach(this::addBackup);
+        if (!list.isEmpty()) list.forEach(this::addBackup);
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))

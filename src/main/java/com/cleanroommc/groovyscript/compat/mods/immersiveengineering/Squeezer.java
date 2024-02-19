@@ -175,7 +175,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 1);
             validateFluids(msg, 0, 0, 0, 1);
-            msg.add(fluidOutput.size() == 0 && output.size() == 0, "Either a fluid output or an item output must be defined");
+            msg.add(fluidOutput.isEmpty() && output.isEmpty(), "Either a fluid output or an item output must be defined");
         }
 
         @Override

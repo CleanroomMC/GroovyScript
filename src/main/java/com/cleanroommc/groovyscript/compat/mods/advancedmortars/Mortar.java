@@ -49,7 +49,7 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
 
     @MethodDescription(description = "groovyscript.wiki.advancedmortars.mortar.add1", type = MethodDescription.Type.ADDITION, example = @Example("['iron', 'wood'], item('minecraft:tnt') * 5, 4, item('minecraft:tnt'), 0.7, [ore('ingotIron'), ore('ingotIron'), ore('ingotIron'), ore('ingotIron'),ore('ingotIron'), ore('ingotIron'), ore('ingotIron'), ore('ingotIron')]"))
     public void add(List<String> types, ItemStack output, int duration, ItemStack secondaryOutput, float secondaryOutputChance, List<IIngredient> inputs) {
-        if (inputs == null || inputs.size() == 0) return;
+        if (inputs == null || inputs.isEmpty()) return;
         if (inputs.size() > 8) {
             GroovyLog.msg("Error adding Advanced Mortars recipe")
                     .add("maximum number of 8 input ingredients exceeded: " + inputs.size())

@@ -319,7 +319,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
                 errors.add("name must be provided");
             if (this.connections.equals(new ArrayList<>()))
                 errors.add("connections must not be empty");
-            if (this.type.equals(Type.MINOR) && this.phases.size() == 0)
+            if (!this.phases.isEmpty())
                 errors.add("minor constellations require at least one moon phase");
 
             if (!errors.isEmpty()) {
