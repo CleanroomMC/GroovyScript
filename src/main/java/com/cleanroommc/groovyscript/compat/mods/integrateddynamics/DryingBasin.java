@@ -11,6 +11,10 @@ import net.minecraft.item.ItemStack;
 import org.cyclops.cyclopscore.recipe.custom.api.IRecipe;
 import org.cyclops.cyclopscore.recipe.custom.component.DurationRecipeProperties;
 import org.cyclops.cyclopscore.recipe.custom.component.IngredientAndFluidStackRecipeComponent;
+import org.cyclops.integrateddynamics.Configs;
+import org.cyclops.integrateddynamics.block.BlockDryingBasin;
+import org.cyclops.integrateddynamics.block.BlockDryingBasinConfig;
+import org.cyclops.integrateddynamics.block.BlockMechanicalDryingBasin;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription
@@ -18,6 +22,11 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
 
     public DryingBasin() {
         super();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return Configs.isEnabled(BlockDryingBasinConfig.class);
     }
 
     @RecipeBuilderDescription(example = {
@@ -30,8 +39,8 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
 
     @Override
     public void onReload() {
-        removeScripted().forEach(org.cyclops.integrateddynamics.block.BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes()::remove);
-        restoreFromBackup().forEach(org.cyclops.integrateddynamics.block.BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes()::add);
+        removeScripted().forEach(BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes()::remove);
+        restoreFromBackup().forEach(BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes()::add);
     }
 
     public void add(IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties> recipe) {
@@ -41,19 +50,19 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
     public void add(IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties> recipe, boolean add) {
         if (recipe == null) return;
         addScripted(recipe);
-        if (add) org.cyclops.integrateddynamics.block.BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().add(recipe);
+        if (add) BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().add(recipe);
     }
 
     public boolean remove(IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties> recipe) {
         if (recipe == null) return false;
         addBackup(recipe);
-        org.cyclops.integrateddynamics.block.BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().remove(recipe);
+        BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().remove(recipe);
         return true;
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInput(ItemStack input) {
-        return org.cyclops.integrateddynamics.block.BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
+        return BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
                 addBackup(r);
                 return true;
@@ -64,7 +73,7 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput")
     public boolean removeByOutput(ItemStack input) {
-        return org.cyclops.integrateddynamics.block.BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
+        return BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getOutput().getIngredient().test(input)) {
                 addBackup(r);
                 return true;
@@ -75,13 +84,13 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        org.cyclops.integrateddynamics.block.BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
-        org.cyclops.integrateddynamics.block.BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().clear();
+        BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
+        BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().clear();
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> streamRecipes() {
-        return new SimpleObjectStream<>(org.cyclops.integrateddynamics.block.BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes())
+        return new SimpleObjectStream<>(BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);
     }
 
@@ -137,6 +146,8 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
             msg.add(output.isEmpty() && fluidOutput.isEmpty(), "either output or fluidOutput must have an entry, yet both were empty");
             msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
             msg.add(!basic && !mechanical, "either basic or mechanical must be true");
+            msg.add(basic && !ModSupport.INTEGRATED_DYNAMICS.get().dryingBasin.isEnabled(), "basic is enabled, yet the Drying Basin is disabled via config");
+            msg.add(mechanical && !ModSupport.INTEGRATED_DYNAMICS.get().mechanicalDryingBasin.isEnabled(), "mechanic is enabled, yet the Mechanical Drying Basin is disabled via config");
         }
 
         @Override
@@ -148,7 +159,7 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
 
             if (basic) {
                 ModSupport.INTEGRATED_DYNAMICS.get().dryingBasin.add(
-                        org.cyclops.integrateddynamics.block.BlockDryingBasin.getInstance().getRecipeRegistry().registerRecipe(
+                        BlockDryingBasin.getInstance().getRecipeRegistry().registerRecipe(
                                 new IngredientAndFluidStackRecipeComponent(itemInput, true, fluidInput.getOrEmpty(0)),
                                 new IngredientAndFluidStackRecipeComponent(output.get(0), fluidOutput.getOrEmpty(0)),
                                 new DurationRecipeProperties(duration)
@@ -156,7 +167,7 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
             }
             if (mechanical) {
                 ModSupport.INTEGRATED_DYNAMICS.get().mechanicalDryingBasin.add(
-                        org.cyclops.integrateddynamics.block.BlockMechanicalDryingBasin.getInstance().getRecipeRegistry().registerRecipe(
+                        BlockMechanicalDryingBasin.getInstance().getRecipeRegistry().registerRecipe(
                                 new IngredientAndFluidStackRecipeComponent(itemInput, true, fluidInput.getOrEmpty(0)),
                                 new IngredientAndFluidStackRecipeComponent(output.getOrEmpty(0), fluidOutput.getOrEmpty(0)),
                                 new DurationRecipeProperties(duration)
