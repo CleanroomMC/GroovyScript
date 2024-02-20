@@ -45,7 +45,7 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:bookshelf')"))
     public void removeByInput(IIngredient input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineEnchanter.INSTANCE.recipes_registry) {
@@ -62,25 +62,6 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
             XUMachineEnchanter.INSTANCE.recipes_registry.removeRecipe(recipe);
         }
     }
-
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
-    public void removeByOutput(ItemStack input) {
-        List<IMachineRecipe> agony = new ArrayList<>();
-        for (IMachineRecipe recipe : XUMachineEnchanter.INSTANCE.recipes_registry) {
-            for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
-                for (ItemStack stack : mapMapPair.getKey().get(XUMachineEnchanter.OUTPUT)) {
-                    if (input.isItemEqual(stack)) {
-                        agony.add(recipe);
-                    }
-                }
-            }
-        }
-        for (IMachineRecipe recipe : agony) {
-            addBackup(recipe);
-            XUMachineEnchanter.INSTANCE.recipes_registry.removeRecipe(recipe);
-        }
-    }
-
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IMachineRecipe> streamRecipes() {

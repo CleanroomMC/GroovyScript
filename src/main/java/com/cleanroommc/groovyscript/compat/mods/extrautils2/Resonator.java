@@ -18,6 +18,7 @@ import com.rwtema.extrautils2.utils.Lang;
 import groovy.lang.Closure;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.items.ItemHandlerHelper;
 import org.codehaus.groovy.runtime.MethodClosure;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,10 +42,10 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('extrautils2:ingredients:4')"))
     public boolean removeByOutput(ItemStack output) {
         return TileResonator.resonatorRecipes.removeIf(r -> {
-            if (r.getOutput().equals(output)) {
+            if (ItemHandlerHelper.canItemStacksStack(r.getOutput(), output)) {
                 addBackup(r);
                 return true;
             }
@@ -52,7 +53,7 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:quartz_block')"))
     public boolean removeByInput(ItemStack input) {
         return TileResonator.resonatorRecipes.removeIf(r -> {
             if (r.getInputs().contains(input)) {
@@ -89,6 +90,7 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).rainbow().energy(1000)"),
             @Example(".input(item('minecraft:gold_block')).output(item('minecraft:clay') * 5).energy(100)"),
+            @Example(".input(item('minecraft:redstone')).output(item('extrautils2:ingredients:4')).ownerTag().energy(5000)"),
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -121,6 +123,12 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         @RecipeBuilderMethodDescription(field = "energy")
         public RecipeBuilder cost(int totalCost) {
             return energy(totalCost);
+        }
+
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder ownerTag() {
+            this.ownerTag = !ownerTag;
+            return this;
         }
 
         @RecipeBuilderMethodDescription
@@ -194,6 +202,7 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
 
         @Nullable
         @Override
+        @RecipeBuilderRegistrationMethod
         public IResonatorRecipe register() {
             if (!validate()) return null;
             IResonatorRecipe recipe = new ResonatorRecipe(input.get(0).getMatchingStacks()[0], output.get(0), energy, ownerTag) {

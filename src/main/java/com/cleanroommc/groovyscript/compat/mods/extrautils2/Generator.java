@@ -99,7 +99,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove0")
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove0", example = @Example("'extrautils2:generator_culinary', item('minecraft:apple')"))
     public boolean remove(String name, ItemStack input) {
         Machine machine = MachineRegistry.getMachine(name);
         if (machine == null) {
@@ -133,7 +133,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove1")
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove1", example = @Example("'extrautils2:generator_lava', fluid('lava')"))
     public boolean remove(String name, FluidStack input) {
         Machine machine = MachineRegistry.getMachine(name);
         if (machine == null) {
@@ -162,7 +162,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         return new SimpleObjectStream<>(list).setRemover(x -> x.getKey().recipes_registry.removeRecipe(x.getValue()));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator", priority = 2000)
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator")
     public void removeByGenerator(Machine machine) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : machine.recipes_registry) {
@@ -174,7 +174,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator", priority = 2000)
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator", example = @Example("'extrautils2:generator_death'"))
     public void removeByGenerator(String name) {
         Machine machine = MachineRegistry.getMachine(name);
         if (machine == null) {
@@ -184,7 +184,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         removeByGenerator(machine);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator", priority = 2000)
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator")
     public void removeByGenerator(ResourceLocation name) {
         removeByGenerator(name.toString());
     }

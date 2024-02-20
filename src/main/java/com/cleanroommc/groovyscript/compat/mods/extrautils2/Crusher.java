@@ -46,49 +46,13 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
-    public void removeByInput(ItemStack input) {
-        List<IMachineRecipe> agony = new ArrayList<>();
-        for (IMachineRecipe recipe : XUMachineCrusher.INSTANCE.recipes_registry) {
-            for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
-                for (ItemStack stack : mapMapPair.getKey().get(XUMachineCrusher.INPUT)) {
-                    if (input.isItemEqual(stack)) {
-                        agony.add(recipe);
-                    }
-                }
-            }
-        }
-        for (IMachineRecipe recipe : agony) {
-            addBackup(recipe);
-            XUMachineCrusher.INSTANCE.recipes_registry.removeRecipe(recipe);
-        }
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:blaze_rod')"))
     public void removeByInput(IIngredient input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineCrusher.INSTANCE.recipes_registry) {
             for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
                 for (ItemStack stack : mapMapPair.getKey().get(XUMachineCrusher.INPUT)) {
                     if (input.test(stack)) {
-                        agony.add(recipe);
-                    }
-                }
-            }
-        }
-        for (IMachineRecipe recipe : agony) {
-            addBackup(recipe);
-            XUMachineCrusher.INSTANCE.recipes_registry.removeRecipe(recipe);
-        }
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
-    public void removeByOutput(ItemStack input) {
-        List<IMachineRecipe> agony = new ArrayList<>();
-        for (IMachineRecipe recipe : XUMachineCrusher.INSTANCE.recipes_registry) {
-            for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
-                for (ItemStack stack : mapMapPair.getKey().get(XUMachineCrusher.OUTPUT)) {
-                    if (input.isItemEqual(stack)) {
                         agony.add(recipe);
                     }
                 }
@@ -122,7 +86,10 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
     }
 
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).energy(1000).time(5)"))
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).energy(1000).time(5)"),
+            @Example(".input(item('minecraft:blaze_rod')).output(item('minecraft:gold_ingot') * 3).output(item('minecraft:gold_ingot')).chance(0.2f).energy(1000).time(5)"),
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -135,8 +102,8 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
         private int energy;
         @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private int time;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private int chance;
+        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        private float chance;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
@@ -151,7 +118,7 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
         }
 
         @RecipeBuilderMethodDescription
-        public RecipeBuilder chance(int chance) {
+        public RecipeBuilder chance(float chance) {
             this.chance = chance;
             return this;
         }
@@ -167,7 +134,7 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
             validateFluids(msg);
             msg.add(energy < 0, () -> "energy must not be negative");
             msg.add(time <= 0, () -> "time must not be less than or equal to 0");
-            msg.add(chance < 0, () -> "chance must not be negative");
+            msg.add(chance < 0 || chance > 1, "chance must be between 0 and 1, yet it was {}", chance);
         }
 
         @Override
