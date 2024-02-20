@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -280,11 +279,10 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
             validateFluids(msg, generatorValues.hasFluid, generatorValues.hasFluid, 0, 0);
             // If we have any current error messages, note that slot requirements vary based on the generator.
             msg.add(msg.hasSubMessages(), "different generators have different slot requirements");
-            msg.add(energy < 0, () -> "energy must not be negative");
+            msg.add(energy <= 0, () -> "energy must not be less than or equal to 0");
             msg.add(energyPerTick <= 0, () -> "energyPerTick must not be less than or equal to 0");
         }
 
-        @Nullable
         @Override
         public IMachineRecipe register() {
             if (!validate()) return null;

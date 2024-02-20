@@ -9,22 +9,24 @@ import com.rwtema.extrautils2.tile.TilePassiveGenerator;
 import groovy.lang.Closure;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GridPowerPassiveGenerator extends VirtualizedRegistry<ResourceLocation> {
+public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPassiveGenerator.GeneratorType, IWorldPowerMultiplier>> {
 
     public final Map<ResourceLocation, Float> basePowerMap = new HashMap<>();
-    public final Map<ResourceLocation, float[]> scalingMap = new HashMap<>();
     public final Map<ResourceLocation, Closure<Float>> powerLevelMap = new HashMap<>();
+    private final Map<ResourceLocation, float[]> scalingMap = new HashMap<>();
 
     @Override
     public void onReload() {
         basePowerMap.clear();
         scalingMap.clear();
         powerLevelMap.clear();
+        removeScripted().forEach(x -> ((GeneratorTypeAccessor) x.getKey()).setPowerMultiplier(x.getValue()));
     }
 
     public void afterScriptLoad() {
@@ -40,6 +42,23 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<ResourceLocat
             }
             accessor.setCaps(IWorldPowerMultiplier.createCapsTree(caps));
         }
+    }
+
+    public void setPowerMultiplier(BlockPassiveGenerator.GeneratorType generator, IWorldPowerMultiplier worldPowerMultiplier) {
+        addScripted(Pair.of(generator, worldPowerMultiplier));
+        ((GeneratorTypeAccessor) generator).setPowerMultiplier(worldPowerMultiplier);
+    }
+
+    public void setPowerMultiplier(ResourceLocation generator, IWorldPowerMultiplier worldPowerMultiplier) {
+        Arrays.stream(BlockPassiveGenerator.GeneratorType.values())
+                .filter(x -> ((GeneratorTypeAccessor) x).getKey().equals(generator))
+                .findFirst()
+                .ifPresent(x -> setPowerMultiplier(x, worldPowerMultiplier));
+    }
+
+    @MethodDescription(type = MethodDescription.Type.VALUE)
+    public void setPowerMultiplier(String generator, IWorldPowerMultiplier worldPowerMultiplier) {
+        setPowerMultiplier(new ResourceLocation(generator), worldPowerMultiplier);
     }
 
     public void setPowerLevel(ResourceLocation generator, Closure<Float> powerLevel) {
@@ -60,12 +79,24 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<ResourceLocat
                 .post();
     }
 
+    public void setPowerLevel(String generator, Closure<Float> powerLevel) {
+        setPowerLevel(new ResourceLocation(generator), powerLevel);
+    }
+
     public void setBasePower(ResourceLocation generator, float basePower) {
         basePowerMap.put(generator, basePower);
     }
 
+    public void setBasePower(String generator, float basePower) {
+        setBasePower(new ResourceLocation(generator), basePower);
+    }
+
     public void setScaling(ResourceLocation generator, float... scaling) {
         scalingMap.put(generator, scaling);
+    }
+
+    public void setScaling(String generator, float... scaling) {
+        setScaling(new ResourceLocation(generator), scaling);
     }
 
 }

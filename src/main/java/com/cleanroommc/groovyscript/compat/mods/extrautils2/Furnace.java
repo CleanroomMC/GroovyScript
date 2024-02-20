@@ -7,11 +7,14 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.rwtema.extrautils2.api.machine.IMachineRecipe;
 import com.rwtema.extrautils2.api.machine.XUMachineFurnace;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
 
@@ -36,6 +39,41 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
         }
         return false;
     }
+
+    public void removeByInput(IIngredient input) {
+        List<IMachineRecipe> agony = new ArrayList<>();
+        for (IMachineRecipe recipe : XUMachineFurnace.INSTANCE.recipes_registry) {
+            for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
+                for (ItemStack stack : mapMapPair.getKey().get(XUMachineFurnace.INPUT)) {
+                    if (input.test(stack)) {
+                        agony.add(recipe);
+                    }
+                }
+            }
+        }
+        for (IMachineRecipe recipe : agony) {
+            addBackup(recipe);
+            XUMachineFurnace.INSTANCE.recipes_registry.removeRecipe(recipe);
+        }
+    }
+
+    public void removeByOutput(ItemStack input) {
+        List<IMachineRecipe> agony = new ArrayList<>();
+        for (IMachineRecipe recipe : XUMachineFurnace.INSTANCE.recipes_registry) {
+            for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
+                for (ItemStack stack : mapMapPair.getKey().get(XUMachineFurnace.OUTPUT)) {
+                    if (input.isItemEqual(stack)) {
+                        agony.add(recipe);
+                    }
+                }
+            }
+        }
+        for (IMachineRecipe recipe : agony) {
+            addBackup(recipe);
+            XUMachineFurnace.INSTANCE.recipes_registry.removeRecipe(recipe);
+        }
+    }
+
 
     public SimpleObjectStream<IMachineRecipe> streamRecipes() {
         List<IMachineRecipe> list = new ArrayList<>();
@@ -89,7 +127,6 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
             msg.add(time <= 0, () -> "time must not be less than or equal to 0");
         }
 
-        @Nullable
         @Override
         public IMachineRecipe register() {
             if (!validate()) return null;

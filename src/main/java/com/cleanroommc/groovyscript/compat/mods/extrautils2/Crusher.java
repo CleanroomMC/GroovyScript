@@ -14,7 +14,6 @@ import com.rwtema.extrautils2.api.machine.XUMachineCrusher;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -155,7 +154,6 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
             msg.add(chance < 0, () -> "chance must not be negative");
         }
 
-        @Nullable
         @Override
         public IMachineRecipe register() {
             if (!validate()) return null;
