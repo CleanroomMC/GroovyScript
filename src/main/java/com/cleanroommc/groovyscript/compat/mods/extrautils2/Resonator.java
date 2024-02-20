@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 
+@RegistryDescription
 public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
 
     @Override
@@ -39,6 +41,7 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         return recipe;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
     public boolean removeByOutput(ItemStack output) {
         return TileResonator.resonatorRecipes.removeIf(r -> {
             if (r.getOutput().equals(output)) {
@@ -49,6 +52,7 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInput(ItemStack input) {
         return TileResonator.resonatorRecipes.removeIf(r -> {
             if (r.getInputs().contains(input)) {
@@ -71,16 +75,21 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IResonatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TileResonator.resonatorRecipes).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TileResonator.resonatorRecipes.forEach(this::addBackup);
         TileResonator.resonatorRecipes.clear();
     }
 
-
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).rainbow().energy(1000)"),
+            @Example(".input(item('minecraft:gold_block')).output(item('minecraft:clay') * 5).energy(100)"),
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -90,32 +99,43 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         boolean run(TileEntity resonator, int frequency, ItemStack input);
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IResonatorRecipe> {
 
+        @Property(valid = @Comp(value = "100", type = Comp.Type.GTE))
         private int energy;
+        @Property
         private boolean ownerTag = false;
+        @Property
         private String requirementText = "";
+        @Property
         private Closure<Boolean> shouldProgress = null;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "energy")
         public RecipeBuilder cost(int totalCost) {
             return energy(totalCost);
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder ownerTag(boolean ownerTag) {
             this.ownerTag = ownerTag;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder requirementText(String requirementText) {
             this.requirementText = requirementText;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder shouldProgress(Closure<Boolean> shouldProgress) {
             if (shouldProgress == null) {
                 GroovyLog.msg("Extra Utilities 2 Resonator shouldProgress closure must be defined")
@@ -135,6 +155,8 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
             return this;
         }
 
+        @SuppressWarnings("unchecked")
+        @RecipeBuilderMethodDescription(field = {"requirementText", "shouldProgress"})
         public RecipeBuilder rainbow() {
             this.requirementText = Lang.translate("[Requires an active Rainbow Generator]");
 

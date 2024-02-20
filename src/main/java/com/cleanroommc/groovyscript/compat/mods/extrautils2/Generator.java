@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.extrautils2.MachineInitAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -18,8 +19,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>> {
 
+    @RecipeBuilderDescription(example = {
+            @Example(".generator('extrautils2:generator_pink').input(item('minecraft:clay')).energy(1000).energyPerTick(100)"),
+            @Example(".generator('extrautils2:generator_slime').input(item('minecraft:clay') * 3).input(item('minecraft:gold_ingot')).energy(1000000).energyPerTick(100)"),
+            @Example(".generator('extrautils2:generator_redstone').input(item('minecraft:clay') * 3).fluidInput(fluid('water') * 300).energy(1000).energyPerTick(100)"),
+            @Example(".generator('extrautils2:generator_lava').fluidInput(fluid('water') * 300).energy(100).energyPerTick(1000)")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -72,6 +80,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         return remove(name.toString(), recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove0")
     public boolean remove(Machine machine, ItemStack input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : machine.recipes_registry) {
@@ -90,6 +99,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove0")
     public boolean remove(String name, ItemStack input) {
         Machine machine = MachineRegistry.getMachine(name);
         if (machine == null) {
@@ -99,10 +109,12 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         return remove(machine, input);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove0")
     public boolean remove(ResourceLocation name, ItemStack input) {
         return remove(name.toString(), input);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove1")
     public boolean remove(Machine machine, FluidStack input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : machine.recipes_registry) {
@@ -121,6 +133,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove1")
     public boolean remove(String name, FluidStack input) {
         Machine machine = MachineRegistry.getMachine(name);
         if (machine == null) {
@@ -130,11 +143,13 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         return remove(machine, input);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove1")
     public boolean remove(ResourceLocation name, FluidStack input) {
         return remove(name.toString(), input);
     }
 
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Pair<Machine, IMachineRecipe>> streamRecipes() {
         List<Pair<Machine, IMachineRecipe>> list = new ArrayList<>();
         for (Generators name : Generators.values()) {
@@ -147,6 +162,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         return new SimpleObjectStream<>(list).setRemover(x -> x.getKey().recipes_registry.removeRecipe(x.getValue()));
     }
 
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator", priority = 2000)
     public void removeByGenerator(Machine machine) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : machine.recipes_registry) {
@@ -158,6 +174,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator", priority = 2000)
     public void removeByGenerator(String name) {
         Machine machine = MachineRegistry.getMachine(name);
         if (machine == null) {
@@ -167,10 +184,12 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         removeByGenerator(machine);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator", priority = 2000)
     public void removeByGenerator(ResourceLocation name) {
         removeByGenerator(name.toString());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         for (Generators name : Generators.values()) {
             Machine machine = MachineRegistry.getMachine(name.toString());
@@ -233,30 +252,40 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
 
     }
 
+    @Property(property = "input", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+    @Property(property = "fluidInput", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
     public static class RecipeBuilder extends AbstractRecipeBuilder<IMachineRecipe> {
 
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private Machine generator;
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private int energy;
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private int energyPerTick;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder generator(Machine generator) {
             this.generator = generator;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder generator(String name) {
             return generator(MachineRegistry.getMachine(name));
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder generator(ResourceLocation name) {
             return generator(name.toString());
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energyPerTick(int energyPerTick) {
             this.energyPerTick = energyPerTick;
             return this;
@@ -284,6 +313,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public IMachineRecipe register() {
             if (!validate()) return null;
 

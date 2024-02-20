@@ -1,11 +1,15 @@
 package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.rwtema.extrautils2.api.machine.IMachineRecipe;
+import com.rwtema.extrautils2.api.machine.MachineSlotFluid;
+import com.rwtema.extrautils2.api.machine.MachineSlotItem;
 import com.rwtema.extrautils2.api.machine.XUMachineFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -16,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+@RegistryDescription
 public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
 
     @Override
@@ -40,6 +45,7 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public void removeByInput(IIngredient input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineFurnace.INSTANCE.recipes_registry) {
@@ -57,6 +63,7 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
     public void removeByOutput(ItemStack input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineFurnace.INSTANCE.recipes_registry) {
@@ -75,6 +82,7 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
     }
 
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IMachineRecipe> streamRecipes() {
         List<IMachineRecipe> list = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineFurnace.INSTANCE.recipes_registry) {
@@ -83,6 +91,7 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
         return new SimpleObjectStream<>(list).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineFurnace.INSTANCE.recipes_registry) {
@@ -94,21 +103,27 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
         }
     }
 
-
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).energy(1000).time(5)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IMachineRecipe> {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int energy;
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private int time;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
@@ -128,6 +143,7 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public IMachineRecipe register() {
             if (!validate()) return null;
             com.rwtema.extrautils2.api.machine.RecipeBuilder builder = com.rwtema.extrautils2.api.machine.RecipeBuilder.newbuilder(XUMachineFurnace.INSTANCE);

@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+@RegistryDescription
 public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
 
     @Override
@@ -43,6 +45,7 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public void removeByInput(IIngredient input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineEnchanter.INSTANCE.recipes_registry) {
@@ -60,6 +63,7 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
     public void removeByOutput(ItemStack input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineEnchanter.INSTANCE.recipes_registry) {
@@ -78,6 +82,7 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
     }
 
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IMachineRecipe> streamRecipes() {
         List<IMachineRecipe> list = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineEnchanter.INSTANCE.recipes_registry) {
@@ -86,6 +91,7 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
         return new SimpleObjectStream<>(list).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineEnchanter.INSTANCE.recipes_registry) {
@@ -98,20 +104,27 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
     }
 
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_ingot'), item('minecraft:diamond')).output(item('minecraft:clay')).energy(1000).time(5)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
     public static class RecipeBuilder extends AbstractRecipeBuilder<IMachineRecipe> {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int energy;
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private int time;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
@@ -131,6 +144,7 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public IMachineRecipe register() {
             if (!validate()) return null;
             com.rwtema.extrautils2.api.machine.RecipeBuilder builder = com.rwtema.extrautils2.api.machine.RecipeBuilder.newbuilder(XUMachineEnchanter.INSTANCE);

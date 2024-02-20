@@ -656,6 +656,46 @@ groovyscript.wiki.extendedcrafting.table_crafting.addShapeless0=Adds a shapeless
 groovyscript.wiki.extendedcrafting.table_crafting.addShapeless1=Adds a shapeless crafting recipe in the format `tier`, `output`, `input`
 groovyscript.wiki.extendedcrafting.table_crafting.tier.value=Sets the tier of table required, with 0 indicating any table size that can fit the recipe
 
+# Extra Utilities 2
+groovyscript.wiki.extrautils2.crusher.title=Crusher
+groovyscript.wiki.extrautils2.crusher.description=Converts an input itemstack into an output itemstack with a chance of an additional itemstack output, consuming energy.
+groovyscript.wiki.extrautils2.crusher.chance.value=Sets the chance of the second itemstack being output
+groovyscript.wiki.extrautils2.crusher.energy.value=Sets the energy cost of the recipe
+groovyscript.wiki.extrautils2.crusher.time.value=Sets the time in ticks the recipe takes
+
+groovyscript.wiki.extrautils2.enchanter.title=Enchanter
+groovyscript.wiki.extrautils2.enchanter.description=Converts two input itemstacks into an output itemstack, consuming energy and require nearby enchantment power providers.
+groovyscript.wiki.extrautils2.enchanter.energy.value=Sets the energy cost of the recipe
+groovyscript.wiki.extrautils2.enchanter.time.value=Sets the time in ticks the recipe takes
+
+groovyscript.wiki.extrautils2.furnace.title=Furnace
+groovyscript.wiki.extrautils2.furnace.description=Converts an input itemstack into an output itemstack, consuming energy.
+groovyscript.wiki.extrautils2.furnace.energy.value=Sets the energy cost of the recipe
+groovyscript.wiki.extrautils2.furnace.time.value=Sets the time in ticks the recipe takes
+
+groovyscript.wiki.extrautils2.generator.title=Generators
+groovyscript.wiki.extrautils2.generator.description=Converts up to two input itemstacks and an input fluidstack into energy over time.
+groovyscript.wiki.extrautils2.generator.remove0=Removes a Generator recipe in the format `generator`, `itemstack`
+groovyscript.wiki.extrautils2.generator.remove1=Removes a Generator recipe in the format `generator`, `fluidstack`
+groovyscript.wiki.extrautils2.generator.removeByGenerator=Removes all recipes with given generator
+groovyscript.wiki.extrautils2.generator.energy.value=Sets the total energy produced by the recipe
+groovyscript.wiki.extrautils2.generator.energyPerTick.value=Sets the energy produced per tick by the recipe
+groovyscript.wiki.extrautils2.generator.generator.value=Sets the generator the recipe is added to. Some generators require different numbers of input itemstacks or fluidstacks
+
+groovyscript.wiki.extrautils2.grid_power_passive_generator.title=Grid Power Generators
+groovyscript.wiki.extrautils2.grid_power_passive_generator.description=Passively produces Grid Power into the Owner's GP network
+groovyscript.wiki.extrautils2.grid_power_passive_generator.setBasePower=Sets the base power produced by the given generator in the format `generator`, `basePower`. Typically only impacts the tooltip, and setPowerLevel is required to make effective changes
+groovyscript.wiki.extrautils2.grid_power_passive_generator.setPowerLevel=Sets the function used to determine what the Grid Power produced by the given generator given its position in the world in the format `generator` and the Closure taking 2 parameters, `TilePassiveGenerator generator` and `World world` and returning a `float`
+groovyscript.wiki.extrautils2.grid_power_passive_generator.setPowerMultiplier=Sets an additional multiplier applied to the generator after base power and power level are calculated, but before scaling is applied
+groovyscript.wiki.extrautils2.grid_power_passive_generator.setScaling=Sets the function used to determine what the Grid Power produced by the given generator is reduced by in the format `generator`, `scaling`. Scaling consists of floats controlling first how much GP the effect will activate at followed by the multiplier.
+
+groovyscript.wiki.extrautils2.resonator.title=Resonator
+groovyscript.wiki.extrautils2.resonator.description=Converts and input itemstack into an output itemstack, consuming Grid Power from the Owner's GP network. Can also require an active Rainbow Generator.
+groovyscript.wiki.extrautils2.resonator.energy.value=Sets the total Grid Power required for the recipe in 1/100ths of a single GP (int 1000 = 10 GP)
+groovyscript.wiki.extrautils2.resonator.ownerTag.value=Sets if the output itemstack should gain an NBT tag attaching the player who placed the Resonator to the itemstack. Notably used for Red Coal, to determine the bonus burn time from Grid Power
+groovyscript.wiki.extrautils2.resonator.requirementText.value=Sets the text in JEI displaying an additional requirement for the recipe to run
+groovyscript.wiki.extrautils2.resonator.shouldProgress.value=Sets the function used to determine if the recipe should run, with the Closure taking 3 paramenters, `TileEntity resonator`, `int frequency`, `ItemStack input` and returning a `boolean`
+
 # Immersive Engineering
 groovyscript.wiki.immersiveengineering.alloy_kiln.title=Alloy Kiln
 groovyscript.wiki.immersiveengineering.alloy_kiln.description=Converts two input itemstacks into an output itemstack, consuming fuel (based on burn time).

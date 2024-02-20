@@ -1,6 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.extrautils2.GeneratorTypeAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.rwtema.extrautils2.blocks.BlockPassiveGenerator;
@@ -15,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+@RegistryDescription
 public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPassiveGenerator.GeneratorType, IWorldPowerMultiplier>> {
 
     public final Map<ResourceLocation, Float> basePowerMap = new HashMap<>();
@@ -44,11 +48,13 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.VALUE)
     public void setPowerMultiplier(BlockPassiveGenerator.GeneratorType generator, IWorldPowerMultiplier worldPowerMultiplier) {
         addScripted(Pair.of(generator, worldPowerMultiplier));
         ((GeneratorTypeAccessor) generator).setPowerMultiplier(worldPowerMultiplier);
     }
 
+    @MethodDescription(example = @Example(value = "resource('generators:wind'), IWorldPowerMultiplier.CONSTANT", imports = "com.rwtema.extrautils2.power.IWorldPowerMultiplier"), type = MethodDescription.Type.VALUE)
     public void setPowerMultiplier(ResourceLocation generator, IWorldPowerMultiplier worldPowerMultiplier) {
         Arrays.stream(BlockPassiveGenerator.GeneratorType.values())
                 .filter(x -> ((GeneratorTypeAccessor) x).getKey().equals(generator))
@@ -61,6 +67,8 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
         setPowerMultiplier(new ResourceLocation(generator), worldPowerMultiplier);
     }
 
+    @MethodDescription(type = MethodDescription.Type.VALUE,
+                       example = @Example(value = "resource('generators:solar'), { TilePassiveGenerator generator, World world -> 100f }", imports = "com.rwtema.extrautils2.tile.TilePassiveGenerator"))
     public void setPowerLevel(ResourceLocation generator, Closure<Float> powerLevel) {
         if (powerLevel == null) {
             GroovyLog.msg("Extra Utilities 2 Grid Power Passive Generator powerLevel closure must be defined")
@@ -79,22 +87,30 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
                 .post();
     }
 
+    @MethodDescription(type = MethodDescription.Type.VALUE)
     public void setPowerLevel(String generator, Closure<Float> powerLevel) {
         setPowerLevel(new ResourceLocation(generator), powerLevel);
     }
 
+    @MethodDescription(example = {
+            @Example("resource('generators:player_wind_up'), 100f"),
+            @Example("resource('generators:creative'), 5f")
+    }, type = MethodDescription.Type.VALUE)
     public void setBasePower(ResourceLocation generator, float basePower) {
         basePowerMap.put(generator, basePower);
     }
 
+    @MethodDescription(type = MethodDescription.Type.VALUE)
     public void setBasePower(String generator, float basePower) {
         setBasePower(new ResourceLocation(generator), basePower);
     }
 
+    @MethodDescription(example = @Example("resource('generators:creative'), 500.0F, 0.5F, 1000.0F, 0.25F, 1500.0F, 0.05F"), type = MethodDescription.Type.VALUE)
     public void setScaling(ResourceLocation generator, float... scaling) {
         scalingMap.put(generator, scaling);
     }
 
+    @MethodDescription(type = MethodDescription.Type.VALUE)
     public void setScaling(String generator, float... scaling) {
         setScaling(new ResourceLocation(generator), scaling);
     }
