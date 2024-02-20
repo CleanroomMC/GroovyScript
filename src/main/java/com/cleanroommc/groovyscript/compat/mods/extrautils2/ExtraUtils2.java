@@ -9,6 +9,7 @@ public class ExtraUtils2 extends ModPropertyContainer {
     public final Enchanter enchanter = new Enchanter();
     public final Furnace furnace = new Furnace();
     public final GridPowerPassiveGenerator gridPowerPassiveGenerator = new GridPowerPassiveGenerator();
+    public final Generator generator = new Generator();
 
     public ExtraUtils2() {
         addRegistry(resonator);
@@ -16,21 +17,7 @@ public class ExtraUtils2 extends ModPropertyContainer {
         addRegistry(enchanter);
         addRegistry(furnace);
         addRegistry(gridPowerPassiveGenerator);
-//        addRegistry(Generator.furnace);
-//        addRegistry(Generator.survivalist);
-//        addRegistry(Generator.culinary);
-//        addRegistry(Generator.potion);
-//        addRegistry(Generator.tnt);
-//        addRegistry(Generator.lava);
-//        addRegistry(Generator.pink);
-//        addRegistry(Generator.netherstar);
-//        addRegistry(Generator.ender);
-//        addRegistry(Generator.redstone);
-//        addRegistry(Generator.overclock);
-//        addRegistry(Generator.dragon);
-//        addRegistry(Generator.ice);
-//        addRegistry(Generator.death);
-//        addRegistry(Generator.enchant);
-//        addRegistry(Generator.slime);
+        addRegistry(generator);
     }
+
 }

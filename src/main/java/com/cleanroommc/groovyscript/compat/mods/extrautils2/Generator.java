@@ -1,81 +1,310 @@
 package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
-import com.cleanroommc.groovyscript.helper.Alias;
+import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.core.mixin.extrautils2.MachineInitAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.rwtema.extrautils2.api.machine.IMachineRecipe;
-import com.rwtema.extrautils2.api.machine.Machine;
-import com.rwtema.extrautils2.api.machine.XUMachineCrusher;
+import com.rwtema.extrautils2.api.machine.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import static com.rwtema.extrautils2.api.machine.XUMachineGenerators.*;
+public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>> {
 
-public class Generator extends VirtualizedRegistry<IMachineRecipe> {
-
-    public static Generator furnace = new Generator(FURNACE_GENERATOR);
-    public static Generator survivalist = new Generator(SURVIVALIST_GENERATOR);
-    public static Generator culinary = new Generator(CULINARY_GENERATOR);
-    public static Generator potion = new Generator(POTION_GENERATOR);
-    public static Generator tnt = new Generator(TNT_GENERATOR);
-    public static Generator lava = new Generator(LAVA_GENERATOR);
-    public static Generator pink = new Generator(PINK_GENERATOR);
-    public static Generator netherstar = new Generator(NETHERSTAR_GENERATOR);
-    public static Generator ender = new Generator(ENDER_GENERATOR);
-    public static Generator redstone = new Generator(REDSTONE_GENERATOR);
-    public static Generator overclock = new Generator(OVERCLOCK_GENERATOR);
-    public static Generator dragon = new Generator(DRAGON_GENERATOR);
-    public static Generator ice = new Generator(ICE_GENERATOR);
-    public static Generator death = new Generator(DEATH_GENERATOR);
-    public static Generator enchant = new Generator(ENCHANT_GENERATOR);
-    public static Generator slime = new Generator(SLIME_GENERATOR);
-
-    final Machine generator;
-
-    public Generator(Machine generator) {
-        super(Alias.generateOf(generator.name));
-        this.generator = generator;
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
     }
 
     @Override
     public void onReload() {
-        removeScripted().forEach(generator.recipes_registry::removeRecipe);
-        restoreFromBackup().forEach(generator.recipes_registry::addRecipe);
+        removeScripted().forEach(x -> x.getKey().recipes_registry.removeRecipe(x.getValue()));
+        restoreFromBackup().forEach(x -> x.getKey().recipes_registry.addRecipe(x.getValue()));
     }
 
-    public IMachineRecipe add(IMachineRecipe recipe) {
+    public IMachineRecipe add(Machine machine, IMachineRecipe recipe) {
         if (recipe != null) {
-            addScripted(recipe);
-            generator.recipes_registry.addRecipe(recipe);
+            machine.recipes_registry.addRecipe(recipe);
+            addScripted(Pair.of(machine, recipe));
         }
         return recipe;
     }
 
-    public boolean remove(IMachineRecipe recipe) {
-        if (generator.recipes_registry.removeRecipe(recipe)) {
-            addBackup(recipe);
+    public IMachineRecipe add(String name, IMachineRecipe recipe) {
+        Machine machine = MachineRegistry.getMachine(name);
+        if (machine == null) {
+            GroovyLog.get().error("machine cannot be null");
+            return null;
+        }
+        return add(machine, recipe);
+    }
+
+    public IMachineRecipe add(ResourceLocation name, IMachineRecipe recipe) {
+        return add(name.toString(), recipe);
+    }
+
+    public boolean remove(Machine machine, IMachineRecipe recipe) {
+        if (machine.recipes_registry.removeRecipe(recipe)) {
+            addBackup(Pair.of(machine, recipe));
             return true;
         }
         return false;
     }
 
-    public SimpleObjectStream<IMachineRecipe> streamRecipes() {
-        List<IMachineRecipe> list = new ArrayList<>();
-        for (IMachineRecipe recipe : XUMachineCrusher.INSTANCE.recipes_registry) {
-            list.add(recipe);
+    public boolean remove(String name, IMachineRecipe recipe) {
+        Machine machine = MachineRegistry.getMachine(name);
+        if (machine == null) {
+            GroovyLog.get().error("machine cannot be null");
+            return false;
         }
-        return new SimpleObjectStream<>(list).setRemover(this::remove);
+        return remove(machine, recipe);
     }
 
-    public void removeAll() {
+    public boolean remove(ResourceLocation name, IMachineRecipe recipe) {
+        return remove(name.toString(), recipe);
+    }
+
+    public boolean remove(Machine machine, ItemStack input) {
         List<IMachineRecipe> agony = new ArrayList<>();
-        for (IMachineRecipe recipe : generator.recipes_registry) {
+        for (IMachineRecipe recipe : machine.recipes_registry) {
+            for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
+                for (ItemStack stack : mapMapPair.getKey().get(XUMachineGenerators.INPUT_ITEM)) {
+                    if (input.isItemEqual(stack)) {
+                        agony.add(recipe);
+                    }
+                }
+            }
+        }
+        for (IMachineRecipe recipe : agony) {
+            addBackup(Pair.of(machine, recipe));
+            machine.recipes_registry.removeRecipe(recipe);
+        }
+        return false;
+    }
+
+    public boolean remove(String name, ItemStack input) {
+        Machine machine = MachineRegistry.getMachine(name);
+        if (machine == null) {
+            GroovyLog.get().error("machine cannot be null");
+            return false;
+        }
+        return remove(machine, input);
+    }
+
+    public boolean remove(ResourceLocation name, ItemStack input) {
+        return remove(name.toString(), input);
+    }
+
+    public boolean remove(Machine machine, FluidStack input) {
+        List<IMachineRecipe> agony = new ArrayList<>();
+        for (IMachineRecipe recipe : machine.recipes_registry) {
+            for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
+                for (FluidStack stack : mapMapPair.getValue().get(XUMachineGenerators.INPUT_FLUID)) {
+                    if (input.isFluidEqual(stack)) {
+                        agony.add(recipe);
+                    }
+                }
+            }
+        }
+        for (IMachineRecipe recipe : agony) {
+            addBackup(Pair.of(machine, recipe));
+            machine.recipes_registry.removeRecipe(recipe);
+        }
+        return false;
+    }
+
+    public boolean remove(String name, FluidStack input) {
+        Machine machine = MachineRegistry.getMachine(name);
+        if (machine == null) {
+            GroovyLog.get().error("machine cannot be null");
+            return false;
+        }
+        return remove(machine, input);
+    }
+
+    public boolean remove(ResourceLocation name, FluidStack input) {
+        return remove(name.toString(), input);
+    }
+
+
+    public SimpleObjectStream<Pair<Machine, IMachineRecipe>> streamRecipes() {
+        List<Pair<Machine, IMachineRecipe>> list = new ArrayList<>();
+        for (Generators name : Generators.values()) {
+            Machine generator = MachineRegistry.getMachine(name.toString());
+            if (generator == null) continue; // given that this is in an enum this should never happen. inb4 trollface
+            for (IMachineRecipe recipe : generator.recipes_registry) {
+                list.add(Pair.of(generator, recipe));
+            }
+        }
+        return new SimpleObjectStream<>(list).setRemover(x -> x.getKey().recipes_registry.removeRecipe(x.getValue()));
+    }
+
+    public void removeByGenerator(Machine machine) {
+        List<IMachineRecipe> agony = new ArrayList<>();
+        for (IMachineRecipe recipe : machine.recipes_registry) {
             agony.add(recipe);
         }
         for (IMachineRecipe recipe : agony) {
-            addBackup(recipe);
-            generator.recipes_registry.removeRecipe(recipe);
+            addBackup(Pair.of(machine, recipe));
+            machine.recipes_registry.removeRecipe(recipe);
         }
     }
+
+    public void removeByGenerator(String name) {
+        Machine machine = MachineRegistry.getMachine(name);
+        if (machine == null) {
+            GroovyLog.get().error("machine cannot be null");
+            return;
+        }
+        removeByGenerator(machine);
+    }
+
+    public void removeByGenerator(ResourceLocation name) {
+        removeByGenerator(name.toString());
+    }
+
+    public void removeAll() {
+        for (Generators name : Generators.values()) {
+            Machine machine = MachineRegistry.getMachine(name.toString());
+            if (machine == null) continue;
+            removeByGenerator(machine);
+        }
+    }
+
+    public enum Generators {
+
+        FURNACE("extrautils2:generator"),
+        SURVIVALIST("extrautils2:generator_survival"),
+        CULINARY("extrautils2:generator_culinary"),
+        POTION("extrautils2:generator_potion"),
+        TNT("extrautils2:generator_tnt"),
+        LAVA("extrautils2:generator_lava", 0, true),
+        PINK("extrautils2:generator_pink"),
+        NETHERSTAR("extrautils2:generator_netherstar"),
+        ENDER("extrautils2:generator_ender"),
+        REDSTONE("extrautils2:generator_redstone", 1, true),
+        OVERCLOCK("extrautils2:generator_overclock"),
+        DRAGON("extrautils2:generator_dragonsbreath"),
+        ICE("extrautils2:generator_ice"),
+        DEATH("extrautils2:generator_death"),
+        ENCHANT("extrautils2:generator_enchant"),
+        SLIME("extrautils2:generator_slime", 2);
+
+        private final String location;
+        private final int itemSlots;
+        private final int hasFluid;
+
+        Generators(String location) {
+            this.location = location;
+            this.itemSlots = 1;
+            this.hasFluid = 0;
+        }
+
+        Generators(String location, int itemSlots) {
+            this.location = location;
+            this.itemSlots = itemSlots;
+            this.hasFluid = 0;
+        }
+
+        Generators(String location, int itemSlots, boolean hasFluid) {
+            this.location = location;
+            this.itemSlots = itemSlots;
+            this.hasFluid = hasFluid ? 1 : 0;
+        }
+
+        public static Generators byName(String name) {
+            for (Generators generator : values()) {
+                if (generator.toString().equals(name)) return generator;
+            }
+            return null;
+        }
+
+        public String toString() {
+            return location;
+        }
+
+    }
+
+    public static class RecipeBuilder extends AbstractRecipeBuilder<IMachineRecipe> {
+
+        private Machine generator;
+        private int energy;
+        private int energyPerTick;
+
+        public RecipeBuilder generator(Machine generator) {
+            this.generator = generator;
+            return this;
+        }
+
+        public RecipeBuilder generator(String name) {
+            return generator(MachineRegistry.getMachine(name));
+        }
+
+        public RecipeBuilder generator(ResourceLocation name) {
+            return generator(name.toString());
+        }
+
+        public RecipeBuilder energy(int energy) {
+            this.energy = energy;
+            return this;
+        }
+
+        public RecipeBuilder energyPerTick(int energyPerTick) {
+            this.energyPerTick = energyPerTick;
+            return this;
+        }
+
+        @Override
+        public String getErrorMsg() {
+            return "Error adding Extra Utilities 2 Generator recipe";
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
+            msg.add(generator == null, "generator must be defined");
+            Generators generatorValues = Generators.byName(generator.name);
+            if (generatorValues == null) {
+                msg.add("could not find a generator with the name {}", generator.name);
+                return;
+            }
+            validateItems(msg, generatorValues.itemSlots, generatorValues.itemSlots, 0, 0);
+            validateFluids(msg, generatorValues.hasFluid, generatorValues.hasFluid, 0, 0);
+            // If we have any current error messages, note that slot requirements vary based on the generator.
+            msg.add(msg.hasSubMessages(), "different generators have different slot requirements");
+            msg.add(energy < 0, () -> "energy must not be negative");
+            msg.add(energyPerTick <= 0, () -> "energyPerTick must not be less than or equal to 0");
+        }
+
+        @Nullable
+        @Override
+        public IMachineRecipe register() {
+            if (!validate()) return null;
+
+            com.rwtema.extrautils2.api.machine.RecipeBuilder builder = com.rwtema.extrautils2.api.machine.RecipeBuilder.newbuilder(generator);
+            builder.setRFRate(energy, energyPerTick);
+            if (!input.isEmpty()) {
+                builder.setItemInput(XUMachineGenerators.INPUT_ITEM, Arrays.stream(input.get(0).getMatchingStacks()).collect(Collectors.toList()), input.get(0).getAmount());
+                if (input.size() == 2) {
+                    builder.setItemInput(MachineInitAccessor.getSLOT_SLIME_SECONDARY(), Arrays.stream(input.get(1).getMatchingStacks()).collect(Collectors.toList()), input.get(1).getAmount());
+                }
+            }
+
+            if (!fluidInput.isEmpty()) {
+                builder.setFluidInputFluidStack(XUMachineGenerators.INPUT_FLUID, fluidInput.get(0));
+            }
+            IMachineRecipe recipe = builder.build();
+            ModSupport.EXTRA_UTILITIES_2.get().generator.add(generator, recipe);
+            return recipe;
+        }
+    }
+
 }
