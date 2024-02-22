@@ -97,7 +97,6 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg);
-            msg.add(Aether.accessory.getRegistry().getValue(name) != null, "tried to register {}, but it already exists.", name);
         }
 
         @RecipeBuilderRegistrationMethod

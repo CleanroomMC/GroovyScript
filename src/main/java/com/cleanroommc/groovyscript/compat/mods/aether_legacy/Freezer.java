@@ -86,7 +86,6 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
             msg.add(time < 0, "time must be a non-negative integer, yet it was {}", time);
-            msg.add(Aether.freezer.getRegistry().getValue(name) != null, "tried to register {}, but it already exists.", name);
         }
 
         @RecipeBuilderRegistrationMethod
