@@ -43,6 +43,13 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:chisel-235279:2915375')
     }
 
+    compileOnly rfg.deobf('curse.maven:bwm-suite-246760:3289033')
+    compileOnly rfg.deobf('curse.maven:bwm-core-294335:2624990')
+    if (project.debug_better_with_mods.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:bwm-suite-246760:3289033')
+        runtimeOnly rfg.deobf('curse.maven:bwm-core-294335:2624990')
+    }
+
     compileOnly rfg.deobf('curse.maven:mantle-74924:2713386')
     if (project.debug_inspirations.toBoolean() || project.debug_tinkers.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:mantle-74924:2713386')
