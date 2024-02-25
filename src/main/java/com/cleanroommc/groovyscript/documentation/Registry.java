@@ -247,11 +247,11 @@ public class Registry {
         return out.toString();
     }
 
-    private String documentMethods(List<Method> methods) {
+    public String documentMethods(List<Method> methods) {
         return documentMethods(methods, false);
     }
 
-    private String documentMethods(List<Method> methods, boolean preventExamples) {
+    public String documentMethods(List<Method> methods, boolean preventExamples) {
         StringBuilder out = new StringBuilder();
         List<String> exampleLines = new ArrayList<>();
         List<String> annotations = new ArrayList<>();

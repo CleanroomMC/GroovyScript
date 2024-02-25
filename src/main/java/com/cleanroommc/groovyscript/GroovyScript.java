@@ -24,7 +24,7 @@ import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.security.GrSMetaClassCreationHandle;
-import com.cleanroommc.groovyscript.server.GroovyServer;
+import com.cleanroommc.groovyscript.server.GroovyScriptLanguageServer;
 import com.google.common.base.Joiner;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -55,6 +55,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import net.prominic.groovyls.GroovyLanguageServer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -186,7 +187,7 @@ public class GroovyScript {
                                                                 .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
         });
 
-        if (GroovyScriptConfig.server) new Thread(GroovyServer::listen).start();
+        if (GroovyScriptConfig.server) new Thread(GroovyScriptLanguageServer::listen).start();
     }
 
     @Mod.EventHandler

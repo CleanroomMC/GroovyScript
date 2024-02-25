@@ -39,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ModSupport implements IDynamicGroovyProperty {
 
@@ -147,6 +148,15 @@ public class ModSupport implements IDynamicGroovyProperty {
     public Object getProperty(String name) {
         GroovyContainer<?> container = containers.get(name);
         return container != null ? container.get() : null;
+    }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        for (var entry : containers.entrySet()) {
+            properties.put(entry.getKey(), entry.getValue().get());
+        }
+        return properties;
     }
 
     @GroovyBlacklist
