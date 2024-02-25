@@ -1,6 +1,7 @@
 import * as net from "net";
 import * as lc from "vscode-languageclient/node";
 import * as vscode from "vscode";
+import { extensionStatusBar } from "./gui/extensionStatusBarProvider";
 
 let client: lc.LanguageClient;
 let outputChannel: vscode.OutputChannel;
@@ -38,12 +39,18 @@ async function startClient() {
 	};
 
 	client = new lc.LanguageClient("groovyscript", "groovyscript", serverOptions, clientOptions);
+	
 	await client.start();
+
+	extensionStatusBar.running();
 }
 
 async function stopClient() {
-	if (!client) return;
-	await client.stop();
+	if (!client || !client.isRunning()) return;
+	try {
+		await client.stop();
+	} catch {
+	}
 }
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -54,6 +61,9 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	context.subscriptions.push(extensionStatusBar);
+	extensionStatusBar.startUp();
 
 	await startClient();
 }

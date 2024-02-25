@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class GameObjectHandlerManager {
@@ -46,6 +47,10 @@ public class GameObjectHandlerManager {
 
     public static boolean hasGameObjectHandler(String key) {
         return bracketHandlers.containsKey(key);
+    }
+
+    public static Set<String> getGameObjectHandlers() {
+        return bracketHandlers.keySet();
     }
 
     public static void init() {
