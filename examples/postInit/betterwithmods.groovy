@@ -9,7 +9,7 @@ println 'mod \'betterwithmods\' detected, running script'
 
 mods.betterwithmods.anvil_crafting.removeByInput(item('minecraft:redstone'))
 mods.betterwithmods.anvil_crafting.removeByOutput(item('betterwithmods:steel_block'))
-mods.betterwithmods.anvil_crafting.removeAll()
+// mods.betterwithmods.anvil_crafting.removeAll()
 
 mods.betterwithmods.anvil_crafting.shapedBuilder()
     .output(item('minecraft:diamond') * 32)
@@ -39,7 +39,7 @@ mods.betterwithmods.anvil_crafting.shapelessBuilder()
 
 mods.betterwithmods.cauldron.removeByInput(item('minecraft:gunpowder'))
 mods.betterwithmods.cauldron.removeByOutput(item('minecraft:gunpowder'))
-mods.betterwithmods.cauldron.removeAll()
+// mods.betterwithmods.cauldron.removeAll()
 
 mods.betterwithmods.cauldron.recipeBuilder()
     .input(item('minecraft:clay'))
@@ -54,12 +54,12 @@ mods.betterwithmods.cauldron.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.betterwithmods.crucible.title:
-// groovyscript.wiki.betterwithmods.crucible.description
+// Crucible:
+// Converts a large number of items into other items, with the ability to require specific amounts of heat.
 
 mods.betterwithmods.crucible.removeByInput(item('minecraft:gunpowder'))
 mods.betterwithmods.crucible.removeByOutput(item('minecraft:gunpowder'))
-mods.betterwithmods.crucible.removeAll()
+// mods.betterwithmods.crucible.removeAll()
 
 mods.betterwithmods.crucible.recipeBuilder()
     .input(item('minecraft:clay'))
@@ -79,7 +79,7 @@ mods.betterwithmods.crucible.recipeBuilder()
 
 mods.betterwithmods.kiln.removeByInput(item('minecraft:end_stone'))
 mods.betterwithmods.kiln.removeByOutput(item('minecraft:brick'))
-mods.betterwithmods.kiln.removeAll()
+// mods.betterwithmods.kiln.removeAll()
 
 mods.betterwithmods.kiln.recipeBuilder()
     .input(item('minecraft:clay'))
@@ -99,7 +99,7 @@ mods.betterwithmods.kiln.recipeBuilder()
 
 mods.betterwithmods.mill_stone.removeByInput(item('minecraft:netherrack'))
 mods.betterwithmods.mill_stone.removeByOutput(item('minecraft:blaze_powder'))
-mods.betterwithmods.mill_stone.removeAll()
+// mods.betterwithmods.mill_stone.removeAll()
 
 mods.betterwithmods.mill_stone.recipeBuilder()
     .input(item('minecraft:diamond') * 2)
@@ -117,7 +117,7 @@ mods.betterwithmods.mill_stone.recipeBuilder()
 
 mods.betterwithmods.saw.removeByInput(item('minecraft:vine'))
 mods.betterwithmods.saw.removeByOutput(item('minecraft:pumpkin'))
-mods.betterwithmods.saw.removeAll()
+// mods.betterwithmods.saw.removeAll()
 
 mods.betterwithmods.saw.recipeBuilder()
     .input(item('minecraft:diamond_block'))
@@ -130,7 +130,7 @@ mods.betterwithmods.saw.recipeBuilder()
 
 mods.betterwithmods.turntable.removeByInput(item('betterwithmods:unfired_pottery'))
 mods.betterwithmods.turntable.removeByOutput(item('minecraft:clay_ball'))
-mods.betterwithmods.turntable.removeAll()
+// mods.betterwithmods.turntable.removeAll()
 
 mods.betterwithmods.turntable.recipeBuilder()
     .input(item('minecraft:gold_block'))
