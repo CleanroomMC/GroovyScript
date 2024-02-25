@@ -343,6 +343,24 @@ groovyscript.wiki.betterwithmods.crucible.heat.value=Sets if the Cauldron requir
 groovyscript.wiki.betterwithmods.crucible.priority.value=Sets the priority of the recipe in relation to other valid recipes for the given items
 groovyscript.wiki.betterwithmods.crucible.ignoreHeat.value=Sets if the Cauldron requires any heat source below it
 
+groovyscript.wiki.betterwithmods.heat.title=Heat
+groovyscript.wiki.betterwithmods.heat.description=Creates new levels or adds new blocks to old heat levels.
+groovyscript.wiki.betterwithmods.heat.note0=Anything using heat levels will create a new JEI tab for each heat level it has recipes for. This will have a lang key name.
+groovyscript.wiki.betterwithmods.heat.add=Adds new heat levels in the format `heat`, `ingredient`
+
+groovyscript.wiki.betterwithmods.hopper.title=Filtered Hopper
+groovyscript.wiki.betterwithmods.hopper.description=Recipes for the Filtered Hopper to process. The filter targeted must allow the input item in to function.
+groovyscript.wiki.betterwithmods.hopper.name.value=Sets the name of the filter used for the recipe, the input item must be capable of passing through the filter to be processed
+groovyscript.wiki.betterwithmods.hopper.inWorldItemOutput.value=Sets the items dropped in-world when the recipe is processed
+
+groovyscript.wiki.betterwithmods.hopper_filters.title=Hopper Filters
+groovyscript.wiki.betterwithmods.hopper_filters.description=Items placed in the middle slot of the Filtered Hopper to restrict what is capable of passing through.
+groovyscript.wiki.betterwithmods.hopper_filters.filter.value=Sets the filter itemstack
+groovyscript.wiki.betterwithmods.hopper_filters.filtered.value=Sets the valid items allowed through the filter
+groovyscript.wiki.betterwithmods.hopper_filters.removeByFilter=Removes all filters with the given filter item
+groovyscript.wiki.betterwithmods.hopper_filters.removeByFiltered=Removes all filters with the given items allowed through the filter
+groovyscript.wiki.betterwithmods.hopper_filters.removeByName=Removes the filter with the given name
+
 groovyscript.wiki.betterwithmods.kiln.title=Kiln
 groovyscript.wiki.betterwithmods.kiln.description=Converts a block into up to three output itemstacks, with the ability to require specific amounts of heat.
 groovyscript.wiki.betterwithmods.kiln.heat.value=Sets if the Kiln requires a normal fire (1) or a Stoked Fire (2) below it

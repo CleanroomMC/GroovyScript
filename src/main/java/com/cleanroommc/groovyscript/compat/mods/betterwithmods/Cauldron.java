@@ -22,7 +22,7 @@ public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).heat(2)"),
-            @Example(".input(item('minecraft:diamond') * 2).output(item('minecraft:gold_ingot') * 16).ignoreHeat()")
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot') * 16).ignoreHeat()")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

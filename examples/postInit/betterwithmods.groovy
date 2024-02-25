@@ -48,7 +48,7 @@ mods.betterwithmods.cauldron.recipeBuilder()
     .register()
 
 mods.betterwithmods.cauldron.recipeBuilder()
-    .input(item('minecraft:diamond') * 2)
+    .input(item('minecraft:diamond'))
     .output(item('minecraft:gold_ingot') * 16)
     .ignoreHeat()
     .register()
@@ -68,9 +68,55 @@ mods.betterwithmods.crucible.recipeBuilder()
     .register()
 
 mods.betterwithmods.crucible.recipeBuilder()
-    .input(item('minecraft:diamond') * 2)
+    .input(item('minecraft:diamond'))
     .output(item('minecraft:gold_ingot') * 16)
     .ignoreHeat()
+    .register()
+
+
+// Heat:
+// Creates new levels or adds new blocks to old heat levels.
+
+mods.betterwithmods.heat.add(4, item('minecraft:redstone_block'), item('minecraft:redstone_torch'))
+mods.betterwithmods.heat.add(3, 'torch')
+
+// Filtered Hopper:
+// Recipes for the Filtered Hopper to process. The filter targeted must allow the input item in to function.
+
+mods.betterwithmods.hopper.removeByInput(item('minecraft:gunpowder'))
+mods.betterwithmods.hopper.removeByOutput(item('minecraft:gunpowder'))
+// mods.betterwithmods.hopper.removeAll()
+
+mods.betterwithmods.hopper.recipeBuilder()
+    .name('betterwithmods:iron_bar')
+    .input(ore('sand'))
+    .output(item('minecraft:clay'))
+    .inWorldItemOutput(item('minecraft:gold_ingot'))
+    .register()
+
+mods.betterwithmods.hopper.recipeBuilder()
+    .name('betterwithmods:wicker')
+    .input(item('minecraft:clay'))
+    .inWorldItemOutput(item('minecraft:gold_ingot'))
+    .register()
+
+
+// Hopper Filters:
+// Items placed in the middle slot of the Filtered Hopper to restrict what is capable of passing through.
+
+mods.betterwithmods.hopper_filters.removeByFilter(item('minecraft:trapdoor'))
+mods.betterwithmods.hopper_filters.removeByName('betterwithmods:ladder')
+// mods.betterwithmods.hopper_filters.removeAll()
+
+mods.betterwithmods.hopper_filters.recipeBuilder()
+    .name('too_weak_to_stop')
+    .filter(item('minecraft:string'))
+    .register()
+
+mods.betterwithmods.hopper_filters.recipeBuilder()
+    .name('groovyscript:clay_only')
+    .filter(item('minecraft:clay'))
+    .input(item('minecraft:clay'))
     .register()
 
 
@@ -102,7 +148,7 @@ mods.betterwithmods.mill_stone.removeByOutput(item('minecraft:blaze_powder'))
 // mods.betterwithmods.mill_stone.removeAll()
 
 mods.betterwithmods.mill_stone.recipeBuilder()
-    .input(item('minecraft:diamond') * 2)
+    .input(item('minecraft:diamond'))
     .output(item('minecraft:gold_ingot') * 16)
     .register()
 

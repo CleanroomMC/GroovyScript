@@ -11,6 +11,9 @@ public class BetterWithMods extends ModPropertyContainer {
     public final MillStone millStone = new MillStone();
     public final Saw saw = new Saw();
     public final Turntable turntable = new Turntable();
+    public final Heat heat = new Heat();
+    public final Hopper hopper = new Hopper();
+    public final HopperFilters hopperFilters = new HopperFilters();
 
     public BetterWithMods() {
         addRegistry(anvilCrafting);
@@ -20,5 +23,9 @@ public class BetterWithMods extends ModPropertyContainer {
         addRegistry(millStone);
         addRegistry(saw);
         addRegistry(turntable);
+        addRegistry(heat);
+        addRegistry(hopper);
+        addRegistry(hopperFilters);
     }
+
 }

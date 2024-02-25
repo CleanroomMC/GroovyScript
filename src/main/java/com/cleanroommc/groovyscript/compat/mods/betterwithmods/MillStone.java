@@ -27,7 +27,7 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:diamond') * 2).output(item('minecraft:gold_ingot') * 16)"),
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot') * 16)"),
             @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:gold_ingot'), item('minecraft:gold_block'), item('minecraft:clay'))")
     })
     public RecipeBuilder recipeBuilder() {
