@@ -25,6 +25,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.jetbrains.annotations.ApiStatus;
+import sonar.core.integration.jei.JEISonarPlugin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -143,6 +144,15 @@ public class ReloadableRegistryManager {
         if (ModSupport.JEI.isLoaded()) {
             JeiProxyAccessor jeiProxy = (JeiProxyAccessor) JustEnoughItems.getProxy();
             long time = System.currentTimeMillis();
+
+            // Calculator adds its categories to JEISonarPlugin#providers every time JeiStarter#start() is called
+            // So, to prevent duplicate categories, we need to clear the List before running.
+            if (ModSupport.CALCULATOR.isLoaded()) {
+                jeiProxy.getPlugins().forEach(plugin -> {
+                    if (plugin instanceof JEISonarPlugin) ((JEISonarPlugin) plugin).providers.clear();
+                });
+            }
+
             jeiProxy.getStarter().start(jeiProxy.getPlugins(), jeiProxy.getTextures());
             time = System.currentTimeMillis() - time;
             if (msgPlayer) {
