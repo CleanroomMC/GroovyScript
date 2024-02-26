@@ -6,10 +6,15 @@ import java.net.URLDecoder;
 
 public final class URIUtils {
 
-    public static URI toUri(String uri) {
+    public static URI toUri(String uriString) {
         try {
             // for some reason vscode like to output garbage like file:///c%3A/Users/..
-            return URI.create(URLDecoder.decode(uri, "UTF-8"));
+            var decodedUriString = URLDecoder.decode(uriString, "UTF-8");
+
+            if (decodedUriString.matches("^file:///[a-z]:/.*$")) {
+                decodedUriString = "file:///" + decodedUriString.substring(8, 9).toUpperCase() + decodedUriString.substring(9);
+            }
+            return URI.create(decodedUriString);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

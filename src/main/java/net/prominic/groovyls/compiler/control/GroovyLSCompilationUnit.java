@@ -20,27 +20,34 @@
 package net.prominic.groovyls.compiler.control;
 
 import groovy.lang.GroovyClassLoader;
+import net.prominic.groovyls.compiler.ILanguageServerContext;
+import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
 import org.codehaus.groovy.ast.CompileUnit;
 import org.codehaus.groovy.ast.ModuleNode;
-import org.codehaus.groovy.control.CompilationUnit;
-import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.SourceUnit;
+import org.codehaus.groovy.control.*;
 import org.codehaus.groovy.tools.GroovyClass;
+import org.jetbrains.annotations.Nullable;
 
+import java.net.URI;
 import java.security.CodeSource;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GroovyLSCompilationUnit extends CompilationUnit {
 
-    public GroovyLSCompilationUnit(CompilerConfiguration config) {
-        this(config, null, null);
-    }
+    private final ILanguageServerContext languageServerContext;
+    @Nullable
+    private ASTNodeVisitor visitor;
 
-    public GroovyLSCompilationUnit(CompilerConfiguration config, CodeSource security, GroovyClassLoader loader) {
+    @Nullable
+    private URI previousContext;
+
+    public GroovyLSCompilationUnit(CompilerConfiguration config, CodeSource security, GroovyClassLoader loader, ILanguageServerContext languageServerContext) {
         super(config, security, loader);
+        this.languageServerContext = languageServerContext;
         this.errorCollector = new LanguageServerErrorCollector(config);
     }
 
@@ -72,5 +79,62 @@ public class GroovyLSCompilationUnit extends CompilationUnit {
 
     public void removeSource(SourceUnit sourceUnit) {
         removeSources(Collections.singletonList(sourceUnit));
+    }
+
+    @Override
+    public void compile() throws CompilationFailedException {
+        // AST is completely built after the canonicalization phase
+        // for code intelligence, we shouldn't need to go further
+        // http://groovy-lang.org/metaprogramming.html#_compilation_phases_guide
+        try {
+            compile(Phases.CANONICALIZATION);
+        } catch (CompilationFailedException e) {
+            // ignore
+        }
+    }
+
+    private ASTNodeVisitor visitAST(Set<URI> uris) {
+        if (visitor == null || uris.isEmpty()) {
+            visitor = new ASTNodeVisitor();
+            visitor.visitCompilationUnit(this);
+        } else {
+            visitor.visitCompilationUnit(this, uris);
+        }
+
+        return visitor;
+    }
+
+    private ASTNodeVisitor compileAndVisitAST() {
+        previousContext = null;
+
+        compile();
+        return visitAST(Collections.emptySet());
+    }
+
+    private ASTNodeVisitor compileAndVisitAST(@Nullable URI context) {
+        if (context == null) {
+            return compileAndVisitAST();
+        }
+
+        previousContext = context;
+
+        compile();
+        return visitAST(Collections.singleton(context));
+    }
+
+    public ASTNodeVisitor recompileAndVisitASTIfContextChanged(@Nullable URI context) {
+        var isChanged = context == null || languageServerContext.getFileContentsTracker().getChangedURIs().contains(context);
+
+        languageServerContext.getFileContentsTracker().resetChangedFiles();
+
+        if ((previousContext == null || previousContext.equals(context)) && visitor != null && !isChanged) {
+            return visitor;
+        }
+
+        if (context != null) {
+            languageServerContext.getFileContentsTracker().forceChanged(context);
+        }
+
+        return compileAndVisitAST(context);
     }
 }

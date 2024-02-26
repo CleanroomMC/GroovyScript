@@ -7,8 +7,11 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import net.minecraft.launchwrapper.Launch;
 import net.prominic.groovyls.compiler.ILanguageServerContext;
+import net.prominic.groovyls.util.FileContentsTracker;
 
 public class GroovyScriptLanguageServerContext implements ILanguageServerContext {
+
+    private final FileContentsTracker fileContentsTracker = new FileContentsTracker();
 
     private ScanResult scanResult = new ClassGraph()
             .enableClassInfo()
@@ -27,5 +30,10 @@ public class GroovyScriptLanguageServerContext implements ILanguageServerContext
 
     public ScanResult getScanResult() {
         return this.scanResult;
+    }
+
+    @Override
+    public FileContentsTracker getFileContentsTracker() {
+        return fileContentsTracker;
     }
 }

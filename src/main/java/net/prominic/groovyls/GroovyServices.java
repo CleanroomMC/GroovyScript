@@ -19,97 +19,40 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import net.prominic.groovyls.compiler.ILanguageServerContext;
 import net.prominic.groovyls.compiler.ast.ASTContext;
+import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
+import net.prominic.groovyls.compiler.control.GroovyLSCompilationUnit;
+import net.prominic.groovyls.config.ICompilationUnitFactory;
+import net.prominic.groovyls.providers.*;
+import net.prominic.groovyls.util.GroovyLanguageServerUtils;
 import net.prominic.groovyls.util.URIUtils;
+import net.prominic.lsp.utils.Positions;
 import org.codehaus.groovy.GroovyBugError;
 import org.codehaus.groovy.ast.ASTNode;
-import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.ErrorCollector;
-import org.codehaus.groovy.control.Phases;
 import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
 import org.codehaus.groovy.syntax.SyntaxException;
-import org.eclipse.lsp4j.CompletionItem;
-import org.eclipse.lsp4j.CompletionList;
-import org.eclipse.lsp4j.CompletionParams;
-import org.eclipse.lsp4j.DefinitionParams;
-import org.eclipse.lsp4j.Diagnostic;
-import org.eclipse.lsp4j.DiagnosticSeverity;
-import org.eclipse.lsp4j.DidChangeConfigurationParams;
-import org.eclipse.lsp4j.DidChangeTextDocumentParams;
-import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
-import org.eclipse.lsp4j.DidCloseTextDocumentParams;
-import org.eclipse.lsp4j.DidOpenTextDocumentParams;
-import org.eclipse.lsp4j.DidSaveTextDocumentParams;
-import org.eclipse.lsp4j.DocumentSymbol;
-import org.eclipse.lsp4j.DocumentSymbolParams;
-import org.eclipse.lsp4j.Hover;
-import org.eclipse.lsp4j.HoverParams;
-import org.eclipse.lsp4j.Location;
-import org.eclipse.lsp4j.LocationLink;
-import org.eclipse.lsp4j.Position;
-import org.eclipse.lsp4j.PublishDiagnosticsParams;
-import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.ReferenceParams;
-import org.eclipse.lsp4j.RenameParams;
-import org.eclipse.lsp4j.SignatureHelp;
-import org.eclipse.lsp4j.SignatureHelpParams;
-import org.eclipse.lsp4j.SymbolInformation;
-import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
-import org.eclipse.lsp4j.TextDocumentIdentifier;
-import org.eclipse.lsp4j.TypeDefinitionParams;
-import org.eclipse.lsp4j.VersionedTextDocumentIdentifier;
-import org.eclipse.lsp4j.WorkspaceEdit;
-import org.eclipse.lsp4j.WorkspaceSymbol;
-import org.eclipse.lsp4j.WorkspaceSymbolParams;
+import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
+import org.jetbrains.annotations.Nullable;
 
-import groovy.lang.GroovyClassLoader;
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ClassGraphException;
-import io.github.classgraph.ScanResult;
-import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
-import net.prominic.groovyls.compiler.control.GroovyLSCompilationUnit;
-import net.prominic.groovyls.config.ICompilationUnitFactory;
-import net.prominic.groovyls.providers.CompletionProvider;
-import net.prominic.groovyls.providers.DefinitionProvider;
-import net.prominic.groovyls.providers.DocumentSymbolProvider;
-import net.prominic.groovyls.providers.HoverProvider;
-import net.prominic.groovyls.providers.ReferenceProvider;
-import net.prominic.groovyls.providers.RenameProvider;
-import net.prominic.groovyls.providers.SignatureHelpProvider;
-import net.prominic.groovyls.providers.TypeDefinitionProvider;
-import net.prominic.groovyls.providers.WorkspaceSymbolProvider;
-import net.prominic.groovyls.util.FileContentsTracker;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
-import net.prominic.lsp.utils.Positions;
+import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class GroovyServices implements TextDocumentService, WorkspaceService, LanguageClientAware {
 
@@ -120,12 +63,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     private Path workspaceRoot;
     private ICompilationUnitFactory compilationUnitFactory;
     private final ILanguageServerContext languageServerContext;
-    private GroovyLSCompilationUnit compilationUnit;
-    private ASTNodeVisitor astVisitor;
     private Map<URI, List<Diagnostic>> prevDiagnosticsByFile;
-    private FileContentsTracker fileContentsTracker = new FileContentsTracker();
-    private GroovyClassLoader classLoader = null;
-    private URI previousContext = null;
 
     public GroovyServices(ICompilationUnitFactory factory, ILanguageServerContext languageServerContext) {
         compilationUnitFactory = factory;
@@ -134,7 +72,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
     public void setWorkspaceRoot(Path workspaceRoot) {
         this.workspaceRoot = workspaceRoot;
-        createOrUpdateCompilationUnit();
+        compilationUnitFactory.invalidateCompilationUnit();
     }
 
     @Override
@@ -146,23 +84,32 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
     @Override
     public void didOpen(DidOpenTextDocumentParams params) {
-        fileContentsTracker.didOpen(params);
+        languageServerContext.getFileContentsTracker().didOpen(params);
         URI uri = URIUtils.toUri(params.getTextDocument().getUri());
-        compileAndVisitAST(uri);
+
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
+
+        compileAndVisitAST(unit, uri);
     }
 
     @Override
     public void didChange(DidChangeTextDocumentParams params) {
-        fileContentsTracker.didChange(params);
+        languageServerContext.getFileContentsTracker().didChange(params);
         URI uri = URIUtils.toUri(params.getTextDocument().getUri());
-        compileAndVisitAST(uri);
+
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
+
+        compileAndVisitAST(unit, uri);
     }
 
     @Override
     public void didClose(DidCloseTextDocumentParams params) {
-        fileContentsTracker.didClose(params);
+        languageServerContext.getFileContentsTracker().didClose(params);
         URI uri = URIUtils.toUri(params.getTextDocument().getUri());
-        compileAndVisitAST(uri);
+
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
+
+        compileAndVisitAST(unit, uri);
     }
 
     @Override
@@ -172,14 +119,13 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
     @Override
     public void didChangeWatchedFiles(DidChangeWatchedFilesParams params) {
-        boolean isSameUnit = createOrUpdateCompilationUnit();
         Set<URI> urisWithChanges = params.getChanges().stream().map(fileEvent -> URIUtils.toUri(fileEvent.getUri()))
                 .collect(Collectors.toSet());
-        compile();
-        if (isSameUnit) {
-            visitAST(urisWithChanges);
-        } else {
-            visitAST();
+
+        for (URI uri : urisWithChanges) {
+            var unit = compilationUnitFactory.create(workspaceRoot, uri);
+
+            compileAndVisitAST(unit, uri);
         }
     }
 
@@ -207,11 +153,6 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
         if (!classpathList.equals(compilationUnitFactory.getAdditionalClasspathList())) {
             compilationUnitFactory.setAdditionalClasspathList(classpathList);
-
-            createOrUpdateCompilationUnit();
-            compile();
-            visitAST();
-            previousContext = null;
         }
     }
 
@@ -220,9 +161,15 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     @Override
     public CompletableFuture<Hover> hover(HoverParams params) {
         URI uri = URIUtils.toUri(params.getTextDocument().getUri());
-        recompileIfContextChanged(uri);
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
-        HoverProvider provider = new HoverProvider(new ASTContext(astVisitor, languageServerContext));
+        var visitor = compileAndVisitAST(unit, uri);
+
+        if (visitor == null) {
+            return CompletableFuture.completedFuture(null);
+        }
+
+        HoverProvider provider = new HoverProvider(new ASTContext(visitor, languageServerContext));
         return provider.provideHover(params.getTextDocument(), params.getPosition());
     }
 
@@ -231,13 +178,14 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
         TextDocumentIdentifier textDocument = params.getTextDocument();
         Position position = params.getPosition();
         URI uri = URIUtils.toUri(textDocument.getUri());
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
-        recompileIfContextChanged(uri);
+        var visitor = compileAndVisitAST(unit, uri);
 
         String originalSource = null;
-        ASTNode offsetNode = astVisitor.getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
+        ASTNode offsetNode = visitor.getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
         if (offsetNode == null) {
-            originalSource = fileContentsTracker.getContents(uri);
+            originalSource = languageServerContext.getFileContentsTracker().getContents(uri);
             VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(
                     textDocument.getUri(), 1);
             int offset = Positions.getOffset(originalSource, position);
@@ -264,7 +212,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
         CompletableFuture<Either<List<CompletionItem>, CompletionList>> result = null;
         try {
-            CompletionProvider provider = new CompletionProvider(new ASTContext(astVisitor, languageServerContext));
+            CompletionProvider provider = new CompletionProvider(new ASTContext(visitor, languageServerContext));
             result = provider.provideCompletion(params.getTextDocument(), params.getPosition(), params.getContext());
         } finally {
             if (originalSource != null) {
@@ -285,9 +233,11 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(
             DefinitionParams params) {
         URI uri = URIUtils.toUri(params.getTextDocument().getUri());
-        recompileIfContextChanged(uri);
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
-        DefinitionProvider provider = new DefinitionProvider(new ASTContext(astVisitor, languageServerContext));
+        var visitor = compileAndVisitAST(unit, uri);
+
+        DefinitionProvider provider = new DefinitionProvider(new ASTContext(visitor, languageServerContext));
         return provider.provideDefinition(params.getTextDocument(), params.getPosition());
     }
 
@@ -296,13 +246,14 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
         TextDocumentIdentifier textDocument = params.getTextDocument();
         Position position = params.getPosition();
         URI uri = URIUtils.toUri(textDocument.getUri());
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
-        recompileIfContextChanged(uri);
+        var visitor = compileAndVisitAST(unit, uri);
 
         String originalSource = null;
-        ASTNode offsetNode = astVisitor.getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
+        ASTNode offsetNode = visitor.getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
         if (offsetNode == null) {
-            originalSource = fileContentsTracker.getContents(uri);
+            originalSource = languageServerContext.getFileContentsTracker().getContents(uri);
             VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(
                     textDocument.getUri(), 1);
             TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent(
@@ -321,7 +272,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
         }
 
         try {
-            SignatureHelpProvider provider = new SignatureHelpProvider(new ASTContext(astVisitor, languageServerContext));
+            SignatureHelpProvider provider = new SignatureHelpProvider(new ASTContext(visitor, languageServerContext));
             return provider.provideSignatureHelp(params.getTextDocument(), params.getPosition());
         } finally {
             if (originalSource != null) {
@@ -340,18 +291,22 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> typeDefinition(
             TypeDefinitionParams params) {
         URI uri = URIUtils.toUri(params.getTextDocument().getUri());
-        recompileIfContextChanged(uri);
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
-        TypeDefinitionProvider provider = new TypeDefinitionProvider(new ASTContext(astVisitor, languageServerContext));
+        var visitor = compileAndVisitAST(unit, uri);
+
+        TypeDefinitionProvider provider = new TypeDefinitionProvider(new ASTContext(visitor, languageServerContext));
         return provider.provideTypeDefinition(params.getTextDocument(), params.getPosition());
     }
 
     @Override
     public CompletableFuture<List<? extends Location>> references(ReferenceParams params) {
         URI uri = URIUtils.toUri(params.getTextDocument().getUri());
-        recompileIfContextChanged(uri);
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
-        ReferenceProvider provider = new ReferenceProvider(new ASTContext(astVisitor, languageServerContext));
+        var visitor = compileAndVisitAST(unit, uri);
+
+        ReferenceProvider provider = new ReferenceProvider(new ASTContext(visitor, languageServerContext));
         return provider.provideReferences(params.getTextDocument(), params.getPosition());
     }
 
@@ -359,115 +314,46 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     public CompletableFuture<List<Either<SymbolInformation, DocumentSymbol>>> documentSymbol(
             DocumentSymbolParams params) {
         URI uri = URIUtils.toUri(params.getTextDocument().getUri());
-        recompileIfContextChanged(uri);
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
-        DocumentSymbolProvider provider = new DocumentSymbolProvider(new ASTContext(astVisitor, languageServerContext));
+        var visitor = compileAndVisitAST(unit, uri);
+
+        DocumentSymbolProvider provider = new DocumentSymbolProvider(new ASTContext(visitor, languageServerContext));
         return provider.provideDocumentSymbols(params.getTextDocument());
     }
 
     @Override
     public CompletableFuture<Either<List<? extends SymbolInformation>, List<? extends WorkspaceSymbol>>> symbol(WorkspaceSymbolParams params) {
-        WorkspaceSymbolProvider provider = new WorkspaceSymbolProvider(new ASTContext(astVisitor, languageServerContext));
+        var unit = compilationUnitFactory.create(workspaceRoot, null);
+
+        var visitor = compileAndVisitAST(unit, null);
+
+        WorkspaceSymbolProvider provider = new WorkspaceSymbolProvider(new ASTContext(visitor, languageServerContext));
         return provider.provideWorkspaceSymbols(params.getQuery()).thenApply(Either::forLeft);
     }
 
     @Override
     public CompletableFuture<WorkspaceEdit> rename(RenameParams params) {
         URI uri = URIUtils.toUri(params.getTextDocument().getUri());
-        recompileIfContextChanged(uri);
+        var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
-        RenameProvider provider = new RenameProvider(new ASTContext(astVisitor, languageServerContext), fileContentsTracker);
+        var visitor = compileAndVisitAST(unit, uri);
+
+        RenameProvider provider = new RenameProvider(new ASTContext(visitor, languageServerContext), languageServerContext.getFileContentsTracker());
         return provider.provideRename(params);
     }
 
-    // --- INTERNAL
-
-    private void visitAST() {
-        if (compilationUnit == null) {
-            return;
-        }
-        astVisitor = new ASTNodeVisitor();
-        astVisitor.visitCompilationUnit(compilationUnit);
-    }
-
-    private void visitAST(Set<URI> uris) {
-        if (astVisitor == null) {
-            visitAST();
-            return;
-        }
-        if (compilationUnit == null) {
-            return;
-        }
-        astVisitor.visitCompilationUnit(compilationUnit, uris);
-    }
-
-    private boolean createOrUpdateCompilationUnit() {
-        if (compilationUnit != null) {
-            File targetDirectory = compilationUnit.getConfiguration().getTargetDirectory();
-            if (targetDirectory != null && targetDirectory.exists()) {
-                try {
-                    Files.walk(targetDirectory.toPath()).sorted(Comparator.reverseOrder()).map(Path::toFile)
-                            .forEach(File::delete);
-                } catch (IOException e) {
-                    GroovyScript.LOGGER.error("Failed to delete target directory: {}", targetDirectory.getAbsolutePath());
-                    compilationUnit = null;
-                    return false;
-                }
-            }
-        }
-
-        GroovyLSCompilationUnit oldCompilationUnit = compilationUnit;
-        compilationUnit = compilationUnitFactory.create(workspaceRoot, fileContentsTracker);
-        fileContentsTracker.resetChangedFiles();
-
-        if (compilationUnit != null) {
-            File targetDirectory = compilationUnit.getConfiguration().getTargetDirectory();
-            if (targetDirectory != null && !targetDirectory.exists() && !targetDirectory.mkdirs()) {
-                GroovyScript.LOGGER.error("Failed to create target directory: {}", targetDirectory.getAbsolutePath());
-            }
-        }
-
-        return compilationUnit != null && compilationUnit.equals(oldCompilationUnit);
-    }
-
-    protected void recompileIfContextChanged(URI newContext) {
-        if (previousContext == null || previousContext.equals(newContext)) {
-            return;
-        }
-        fileContentsTracker.forceChanged(newContext);
-        compileAndVisitAST(newContext);
-    }
-
-    private void compileAndVisitAST(URI contextURI) {
-        Set<URI> uris = Collections.singleton(contextURI);
-        boolean isSameUnit = createOrUpdateCompilationUnit();
-        compile();
-        if (isSameUnit) {
-            visitAST(uris);
-        } else {
-            visitAST();
-        }
-        previousContext = contextURI;
-    }
-
-    private void compile() {
-        if (compilationUnit == null) {
-            return;
-        }
+    private @Nullable ASTNodeVisitor compileAndVisitAST(GroovyLSCompilationUnit compilationUnit, URI context) {
         try {
-            // AST is completely built after the canonicalization phase
-            // for code intelligence, we shouldn't need to go further
-            // http://groovy-lang.org/metaprogramming.html#_compilation_phases_guide
-            compilationUnit.compile(Phases.CANONICALIZATION);
-        } catch (CompilationFailedException e) {
-            // ignore
-        } catch (GroovyBugError e) {
+            return compilationUnit.recompileAndVisitASTIfContextChanged(context);
+        } catch (GroovyBugError | Exception e) {
             GroovyScript.LOGGER.error("Unexpected exception in language server when compiling Groovy.", e);
-        } catch (Exception e) {
-            GroovyScript.LOGGER.error("Unexpected exception in language server when compiling Groovy.", e);
+        } finally {
+            Set<PublishDiagnosticsParams> diagnostics = handleErrorCollector(compilationUnit.getErrorCollector());
+            diagnostics.stream().forEach(languageClient::publishDiagnostics);
         }
-        Set<PublishDiagnosticsParams> diagnostics = handleErrorCollector(compilationUnit.getErrorCollector());
-        diagnostics.stream().forEach(languageClient::publishDiagnostics);
+
+        return null;
     }
 
     private Set<PublishDiagnosticsParams> handleErrorCollector(ErrorCollector collector) {

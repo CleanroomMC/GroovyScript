@@ -19,11 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.config;
 
+import net.prominic.groovyls.compiler.control.GroovyLSCompilationUnit;
+import org.jetbrains.annotations.Nullable;
+
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.List;
-
-import net.prominic.groovyls.compiler.control.GroovyLSCompilationUnit;
-import net.prominic.groovyls.util.FileContentsTracker;
 
 public interface ICompilationUnitFactory {
 	/**
@@ -39,5 +40,5 @@ public interface ICompilationUnitFactory {
 	/**
 	 * Returns a compilation unit.
 	 */
-	public GroovyLSCompilationUnit create(Path workspaceRoot, FileContentsTracker fileContentsTracker);
+    GroovyLSCompilationUnit create(Path workspaceRoot, @Nullable URI context);
 }
