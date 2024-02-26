@@ -19,51 +19,27 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-
-import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
-import io.github.classgraph.ClassMemberInfo;
+import io.github.classgraph.*;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.DocUtils;
+import net.prominic.groovyls.compiler.util.GroovyASTUtils;
+import net.prominic.groovyls.compiler.util.GroovyReflectionUtils;
+import net.prominic.groovyls.util.CompletionItemFactory;
+import net.prominic.groovyls.util.GroovyLanguageServerUtils;
 import net.prominic.groovyls.util.URIUtils;
-import org.codehaus.groovy.ast.ASTNode;
-import org.codehaus.groovy.ast.AnnotatedNode;
-import org.codehaus.groovy.ast.ClassNode;
-import org.codehaus.groovy.ast.FieldNode;
-import org.codehaus.groovy.ast.ImportNode;
-import org.codehaus.groovy.ast.MethodNode;
-import org.codehaus.groovy.ast.ModuleNode;
-import org.codehaus.groovy.ast.PropertyNode;
-import org.codehaus.groovy.ast.VariableScope;
+import org.codehaus.groovy.ast.*;
 import org.codehaus.groovy.ast.expr.*;
 import org.codehaus.groovy.ast.stmt.BlockStatement;
 import org.codehaus.groovy.ast.stmt.Statement;
-import org.eclipse.lsp4j.CompletionContext;
-import org.eclipse.lsp4j.CompletionItem;
-import org.eclipse.lsp4j.CompletionItemKind;
-import org.eclipse.lsp4j.CompletionList;
-import org.eclipse.lsp4j.MarkupContent;
-import org.eclipse.lsp4j.MarkupKind;
-import org.eclipse.lsp4j.Position;
-import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.TextDocumentIdentifier;
-import org.eclipse.lsp4j.TextEdit;
+import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import org.jetbrains.annotations.NotNull;
 
-import io.github.classgraph.ClassInfo;
-import io.github.classgraph.PackageInfo;
-import net.prominic.groovyls.compiler.util.GroovyASTUtils;
-import net.prominic.groovyls.compiler.util.GroovydocUtils;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
+import java.net.URI;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class CompletionProvider {
 
@@ -149,9 +125,8 @@ public class CompletionProvider {
                     return false;
                 })
                 .map(handler -> {
-                    var completionItem = new CompletionItem();
-                    completionItem.setLabel(handler);
-                    completionItem.setKind(CompletionItemKind.Method);
+                    var completionItem = CompletionItemFactory.createCompletion(CompletionItemKind.Method, handler);
+                    completionItem.setDetail("(global scope)");
                     return completionItem;
                 }).collect(Collectors.toList());
 
@@ -209,10 +184,8 @@ public class CompletionProvider {
             }
             return true;
         }).map(classNode -> {
-            CompletionItem item = new CompletionItem();
-            item.setLabel(classNode.getName());
+            CompletionItem item = CompletionItemFactory.createCompletion(classNode, classNode.getName());
             item.setTextEdit(Either.forLeft(new TextEdit(importRange, classNode.getName())));
-            item.setKind(GroovyLanguageServerUtils.astNodeToCompletionItemKind(classNode));
             if (classNode.getNameWithoutPackage().startsWith(importText)) {
                 item.setSortText(classNode.getNameWithoutPackage());
             }
@@ -234,10 +207,8 @@ public class CompletionProvider {
             }
             return false;
         }).map(packageInfo -> {
-            CompletionItem item = new CompletionItem();
-            item.setLabel(packageInfo.getName());
+            CompletionItem item = CompletionItemFactory.createCompletion(CompletionItemKind.Module, packageInfo.getName());
             item.setTextEdit(Either.forLeft(new TextEdit(importRange, packageInfo.getName())));
-            item.setKind(CompletionItemKind.Module);
             return item;
         }).collect(Collectors.toList());
         items.addAll(packageItems);
@@ -257,10 +228,9 @@ public class CompletionProvider {
             }
             return true;
         }).map(classInfo -> {
-            CompletionItem item = new CompletionItem();
-            item.setLabel(classInfo.getName());
+            CompletionItem item = CompletionItemFactory.createCompletion(classInfoToCompletionItemKind(classInfo), classInfo.getName());
+
             item.setTextEdit(Either.forLeft(new TextEdit(importRange, classInfo.getName())));
-            item.setKind(classInfoToCompletionItemKind(classInfo));
             if (classInfo.getSimpleName().startsWith(importText)) {
                 item.setSortText(classInfo.getSimpleName());
             }
@@ -318,11 +288,14 @@ public class CompletionProvider {
             }
             return false;
         }).map(property -> {
-            CompletionItem item = new CompletionItem();
-            item.setLabel(property.getName());
-            item.setKind(GroovyLanguageServerUtils.astNodeToCompletionItemKind(property));
+            CompletionItem item = CompletionItemFactory.createCompletion(property, property.getName());
+
+            if (!property.isDynamicTyped()) {
+                item.setDetail(property.getType().getNameWithoutPackage());
+            }
+
             String markdownDocs = DocUtils.getMarkdownDescription(property, astContext);
-            ;
+
             if (markdownDocs != null) {
                 item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
             }
@@ -338,11 +311,13 @@ public class CompletionProvider {
             }
             return false;
         }).map(field -> {
-            CompletionItem item = new CompletionItem();
-            item.setLabel(field.getName());
-            item.setKind(GroovyLanguageServerUtils.astNodeToCompletionItemKind(field));
+            CompletionItem item = CompletionItemFactory.createCompletion(field, field.getName());
+
+            if (!field.isDynamicTyped()) {
+                item.setDetail(field.getType().getNameWithoutPackage());
+            }
+
             String markdownDocs = DocUtils.getMarkdownDescription(field, astContext);
-            ;
             if (markdownDocs != null) {
                 item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
             }
@@ -358,21 +333,62 @@ public class CompletionProvider {
             // overloads can cause duplicates
             if (methodName.startsWith(memberNamePrefix) && !existingNames.contains(methodName)) {
                 existingNames.add(methodName);
-                return true;
+                return GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext).isPresent();
             }
             return false;
         }).map(method -> {
-            CompletionItem item = new CompletionItem();
-            item.setLabel(method.getName());
-            item.setKind(GroovyLanguageServerUtils.astNodeToCompletionItemKind(method));
+            CompletionItem item = CompletionItemFactory.createCompletion(method, method.getName());
+
+            var details = getMethodNodeDetails(method);
+            item.setLabelDetails(details);
+
             String markdownDocs = DocUtils.getMarkdownDescription(method, astContext);
-            ;
             if (markdownDocs != null) {
                 item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
             }
             return item;
         }).collect(Collectors.toList());
         items.addAll(methodItems);
+    }
+
+    @NotNull
+    private static CompletionItemLabelDetails getMethodNodeDetails(MethodNode method) {
+        var detailBuilder = new StringBuilder();
+        detailBuilder.append("(");
+        var parameters = method.getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            var parameter = parameters[i];
+            detailBuilder.append(parameter.isDynamicTyped() ? "?" : parameter.getType().getNameWithoutPackage());
+            if (i < parameters.length - 1) {
+                detailBuilder.append(",");
+            }
+        }
+        detailBuilder.append(") -> ");
+        detailBuilder.append(method.getReturnType().getNameWithoutPackage());
+
+        var details = new CompletionItemLabelDetails();
+        details.setDetail(detailBuilder.toString());
+        return details;
+    }
+
+    @NotNull
+    private static CompletionItemLabelDetails getMethodInfoDetails(MethodInfo methodInfo) {
+        var detailBuilder = new StringBuilder();
+        detailBuilder.append("(");
+        MethodParameterInfo[] info = methodInfo.getParameterInfo();
+        for (int i = 0; i < info.length; i++) {
+            var parameterInfo = info[i];
+            detailBuilder.append(parameterInfo.getTypeSignatureOrTypeDescriptor().toStringWithSimpleNames());
+            if (i < info.length - 1) {
+                detailBuilder.append(",");
+            }
+        }
+        detailBuilder.append(") -> ");
+        detailBuilder.append(methodInfo.getTypeSignatureOrTypeDescriptor().getResultType().toStringWithSimpleNames());
+
+        var details = new CompletionItemLabelDetails();
+        details.setDetail(detailBuilder.toString());
+        return details;
     }
 
     private void populateItemsFromExpression(Expression leftSide, String memberNamePrefix, List<CompletionItem> items) {
@@ -394,9 +410,10 @@ public class CompletionProvider {
             }
             existingNames.add(variableName);
 
-            CompletionItem item = new CompletionItem();
-            item.setLabel(variableName);
-            item.setKind(CompletionItemKind.Variable);
+            var item = CompletionItemFactory.createCompletion(CompletionItemKind.Variable, variableName);
+
+            item.setDetail("(global scope)");
+
             items.add(item);
         });
 
@@ -407,16 +424,18 @@ public class CompletionProvider {
                     String methodName = methodInfo.getName();
                     if (methodName.startsWith(memberNamePrefix) && !existingNames.contains(methodName)) {
                         existingNames.add(methodName);
-                        return true;
+                        return GroovyReflectionUtils.resolveMethodFromMethodInfo(methodInfo, astContext).isPresent();
                     }
                     return false;
                 })
                 .map(methodInfo -> {
-                    CompletionItem item = new CompletionItem();
-                    item.setLabel(methodInfo.getName());
-                    item.setKind(CompletionItemKind.Method);
+                    var item = CompletionItemFactory.createCompletion(CompletionItemKind.Method, methodInfo.getName());
+
+                    var details = getMethodInfoDetails(methodInfo);
+                    item.setLabelDetails(details);
                     return item;
-                }).collect(Collectors.toList());
+                })
+                .collect(Collectors.toList());
         items.addAll(staticMethodItems);
     }
 
@@ -435,9 +454,12 @@ public class CompletionProvider {
             }
             return false;
         }).map(variable -> {
-            CompletionItem item = new CompletionItem();
-            item.setLabel(variable.getName());
-            item.setKind(GroovyLanguageServerUtils.astNodeToCompletionItemKind((ASTNode) variable));
+            var item = CompletionItemFactory.createCompletion((ASTNode) variable, variable.getName());
+
+            if (!variable.isDynamicTyped()) {
+                item.setDetail(variable.getType().getName());
+            }
+
             if (variable instanceof AnnotatedNode) {
                 AnnotatedNode annotatedVar = (AnnotatedNode) variable;
                 String markdownDocs = DocUtils.getMarkdownDescription(annotatedVar, astContext);
@@ -508,12 +530,9 @@ public class CompletionProvider {
         }).map(classNode -> {
             String className = classNode.getName();
             String packageName = classNode.getPackageName();
-            CompletionItem item = new CompletionItem();
-            item.setLabel(classNode.getNameWithoutPackage());
-            item.setKind(GroovyLanguageServerUtils.astNodeToCompletionItemKind(classNode));
+            CompletionItem item = CompletionItemFactory.createCompletion(classNode, classNode.getNameWithoutPackage());
             item.setDetail(packageName);
             String markdownDocs = DocUtils.getMarkdownDescription(classNode, astContext);
-            ;
             if (markdownDocs != null) {
                 item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
             }
@@ -547,10 +566,8 @@ public class CompletionProvider {
         }).map(classInfo -> {
             String className = classInfo.getName();
             String packageName = classInfo.getPackageName();
-            CompletionItem item = new CompletionItem();
-            item.setLabel(classInfo.getSimpleName());
+            CompletionItem item = CompletionItemFactory.createCompletion(classInfoToCompletionItemKind(classInfo), classInfo.getSimpleName());
             item.setDetail(packageName);
-            item.setKind(classInfoToCompletionItemKind(classInfo));
             if (packageName != null && !packageName.equals(enclosingPackageName) && !importNames.contains(className)) {
                 List<TextEdit> additionalTextEdits = new ArrayList<>();
                 TextEdit addImportEdit = createAddImportTextEdit(className, addImportRange);
