@@ -16,6 +16,7 @@ public class LateMixin implements ILateMixinLoader {
             "astralsorcery",
             "bloodmagic",
             "botania",
+            "calculator",
             "draconicevolution",
             "enderio",
             "extendedcrafting",
