@@ -145,6 +145,35 @@ groovyscript.wiki.advancedmortars.mortar.duration.value=Sets how many interactio
 groovyscript.wiki.advancedmortars.mortar.secondaryOutput.value=Sets the additional output itemstack
 groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the chance of the additional output itemstack being output
 
+
+# Alchemistry
+groovyscript.wiki.alchemistry.atomizer.title=Atomizer
+groovyscript.wiki.alchemistry.atomizer.description=
+groovyscript.wiki.alchemistry.atomizer.reversible.value=Sets if the recipe will also create a Liquifier recipe to invert the process
+
+groovyscript.wiki.alchemistry.combiner.title=Chemical Combiner
+groovyscript.wiki.alchemistry.combiner.description=Converts up to 9 input itemstacks into an output itemstack.
+groovyscript.wiki.alchemistry.combiner.gamestage.value=Sets the required gamestage to add the recipe
+
+groovyscript.wiki.alchemistry.dissolver.title=Chemical Dissolver
+groovyscript.wiki.alchemistry.dissolver.description=Converts an input itemstack into any number of output itemstacks, divided in any manner between different chances, with the ability to run multiple rolls to produce additional outputs.
+groovyscript.wiki.alchemistry.dissolver.rolls.value=Sets the number of rolls to produce outputs
+groovyscript.wiki.alchemistry.dissolver.reversible.value=Sets if the recipe will also create a Chemical Combiner to invert the process. Only properly works on some recipes
+groovyscript.wiki.alchemistry.dissolver.probabilityGroup.value=Sets the probability sets rolled to produce output
+groovyscript.wiki.alchemistry.dissolver.relativeProbability.value=Sets if there is guaranteed to always be one and exactly one set output, or if each set is rolled individually
+
+groovyscript.wiki.alchemistry.electrolyzer.title=Electrolyzer
+groovyscript.wiki.alchemistry.electrolyzer.description=Converts an input fluidstack into up to 4 output itemstacks, with the 3rd and 4th output itemstacks being able to have chances applied to them. May require a catalyst input itemstack, which may also have a chance to be consumed.
+groovyscript.wiki.alchemistry.electrolyzer.chance.value=Sets the output chance of the 3rd and 4th output itemstacks
+groovyscript.wiki.alchemistry.electrolyzer.consumptionChance.value=Sets the chance the catalyst input itemstack has to be consumed
+
+groovyscript.wiki.alchemistry.evaporator.title=Evaporator
+groovyscript.wiki.alchemistry.evaporator.description=Converts an input fluidstack into an output fluidstack, taking a set amount of time.
+
+groovyscript.wiki.alchemistry.liquifier.title=Liquifier
+groovyscript.wiki.alchemistry.liquifier.description=Converts an input itemstack into an output fluidstack, consuming a set amount of power.
+
+
 # Applied Energistics 2
 groovyscript.wiki.appliedenergistics2.attunement.title=P2P Attunement
 groovyscript.wiki.appliedenergistics2.attunement.description=Controls using specific items, any items from a mod, or any items with a Capability to convert a P2P into a specific tunnel type.
