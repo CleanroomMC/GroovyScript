@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -145,9 +146,9 @@ public class ReloadableRegistryManager {
             JeiProxyAccessor jeiProxy = (JeiProxyAccessor) JustEnoughItems.getProxy();
             long time = System.currentTimeMillis();
 
-            // Calculator adds its categories to JEISonarPlugin#providers every time JeiStarter#start() is called
+            // Sonar Core adds its categories to JEISonarPlugin#providers every time JeiStarter#start() is called
             // So, to prevent duplicate categories, we need to clear the List before running.
-            if (ModSupport.CALCULATOR.isLoaded()) {
+            if (Loader.isModLoaded("sonarcore")) {
                 jeiProxy.getPlugins().forEach(plugin -> {
                     if (plugin instanceof JEISonarPlugin) ((JEISonarPlugin) plugin).providers.clear();
                 });
