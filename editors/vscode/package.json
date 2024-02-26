@@ -10,7 +10,7 @@
     "Other"
   ],
   "activationEvents": [
-    "workspaceContains:*/runConfig.json"
+    "workspaceContains:**/runConfig.json"
   ],
   "main": "./out/main.js",
   "contributes": {
