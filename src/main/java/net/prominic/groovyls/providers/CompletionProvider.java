@@ -20,6 +20,7 @@
 package net.prominic.groovyls.providers;
 
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import groovy.lang.Script;
 import io.github.classgraph.*;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.DocUtils;
@@ -328,26 +329,28 @@ public class CompletionProvider {
 
     private void populateItemsFromMethods(List<MethodNode> methods, String memberNamePrefix, Set<String> existingNames,
                                           List<CompletionItem> items) {
-        List<CompletionItem> methodItems = methods.stream().filter(method -> {
-            String methodName = method.getName();
-            // overloads can cause duplicates
-            if (methodName.startsWith(memberNamePrefix) && !existingNames.contains(methodName)) {
-                existingNames.add(methodName);
-                return GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext).isPresent();
-            }
-            return false;
-        }).map(method -> {
-            CompletionItem item = CompletionItemFactory.createCompletion(method, method.getName());
+        List<CompletionItem> methodItems = methods.stream()
+                .filter(method -> (!method.getName().equals("main") && !method.getName().equals("run")) || !method.getDeclaringClass().getSuperClass().equals(new ClassNode(Script.class)))
+                .filter(method -> {
+                    String methodName = method.getName();
+                    // overloads can cause duplicates
+                    if (methodName.startsWith(memberNamePrefix) && !existingNames.contains(methodName)) {
+                        existingNames.add(methodName);
+                        return GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext).isPresent();
+                    }
+                    return false;
+                }).map(method -> {
+                    CompletionItem item = CompletionItemFactory.createCompletion(method, method.getName());
 
-            var details = getMethodNodeDetails(method);
-            item.setLabelDetails(details);
+                    var details = getMethodNodeDetails(method);
+                    item.setLabelDetails(details);
 
-            String markdownDocs = DocUtils.getMarkdownDescription(method, astContext);
-            if (markdownDocs != null) {
-                item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
-            }
-            return item;
-        }).collect(Collectors.toList());
+                    String markdownDocs = DocUtils.getMarkdownDescription(method, astContext);
+                    if (markdownDocs != null) {
+                        item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
+                    }
+                    return item;
+                }).collect(Collectors.toList());
         items.addAll(methodItems);
     }
 
