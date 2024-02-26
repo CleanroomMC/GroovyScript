@@ -1,7 +1,7 @@
 {
   "name": "groovyscript",
   "displayName": "groovyscript",
-  "description": "GroovyScript language server for Visual Studio Code",
+  "description": "GroovyScript language client for Visual Studio Code",
   "version": "1.0.0",
   "engines": {
     "vscode": "^1.81.0"
@@ -18,17 +18,19 @@
       {
         "command": "groovyscript.reconnect",
         "title": "Reconnect",
-        "category": "groovyscript"
+        "category": "GroovyScript"
       }
     ],
     "configuration": {
-      "title": "groovyscript",
+      "title": "GroovyScript",
       "properties": {
         "groovyscript.port": {
           "type": [
             "number"
           ],
-          "default": 1337
+          "default": 8000,
+          "title": "Language server port",
+          "description": "Port specified in config of GroovyScript Language Server"
         }
       }
     }
