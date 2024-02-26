@@ -19,6 +19,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.config;
 
+import com.cleanroommc.groovyscript.GroovyScript;
+import net.prominic.groovyls.compiler.ILanguageServerContext;
+import net.prominic.groovyls.compiler.control.GroovyLSCompilationUnit;
+import net.prominic.groovyls.util.FileContentsTracker;
+import org.codehaus.groovy.control.SourceUnit;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -26,50 +33,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.SourceUnit;
-
-import com.cleanroommc.groovyscript.GroovyScript;
-
-import groovy.lang.GroovyClassLoader;
-import net.prominic.groovyls.compiler.control.GroovyLSCompilationUnit;
-import net.prominic.groovyls.compiler.control.io.StringReaderSourceWithURI;
-import net.prominic.groovyls.util.FileContentsTracker;
-import org.jetbrains.annotations.NotNull;
-
-public class CompilationUnitFactory implements ICompilationUnitFactory {
+public class CompilationUnitFactory extends CompilationUnitFactoryBase {
 
     protected static final String FILE_EXTENSION_GROOVY = ".groovy";
+    private final ILanguageServerContext languageServerContext;
 
     protected GroovyLSCompilationUnit compilationUnit;
-    protected CompilerConfiguration config;
-    protected GroovyClassLoader classLoader;
-    protected List<String> additionalClasspathList;
 
-    public CompilationUnitFactory() {
+    public CompilationUnitFactory(ILanguageServerContext languageServerContext) {
+        this.languageServerContext = languageServerContext;
     }
 
-    public List<String> getAdditionalClasspathList() {
-        return additionalClasspathList;
-    }
-
-    public void setAdditionalClasspathList(List<String> additionalClasspathList) {
-        this.additionalClasspathList = additionalClasspathList;
-        invalidateCompilationUnit();
-    }
-
+    @Override
     public void invalidateCompilationUnit() {
+        super.invalidateCompilationUnit();
         compilationUnit = null;
-        config = null;
-        classLoader = null;
     }
 
-    public GroovyLSCompilationUnit create(Path workspaceRoot, FileContentsTracker fileContentsTracker) {
+    public GroovyLSCompilationUnit create(Path workspaceRoot, @Nullable URI context) {
         if (config == null) {
             config = getConfiguration();
         }
@@ -78,12 +62,17 @@ public class CompilationUnitFactory implements ICompilationUnitFactory {
             classLoader = getClassLoader();
         }
 
-        Set<URI> changedUris = fileContentsTracker.getChangedURIs();
+        Set<URI> changedUris = null;
         if (compilationUnit == null) {
-            compilationUnit = new GroovyLSCompilationUnit(config, null, classLoader);
+            compilationUnit = new GroovyLSCompilationUnit(config, null, classLoader, languageServerContext);
             // we don't care about changed URIs if there's no compilation unit yet
-            changedUris = null;
         } else {
+            changedUris = languageServerContext.getFileContentsTracker().getChangedURIs();
+        }
+
+        var fileContentsTracker = languageServerContext.getFileContentsTracker();
+
+        if (changedUris != null && !changedUris.isEmpty()) {
             compilationUnit.setClassLoader(classLoader);
             final Set<URI> urisToRemove = changedUris;
             List<SourceUnit> sourcesToRemove = new ArrayList<>();
@@ -114,55 +103,6 @@ public class CompilationUnitFactory implements ICompilationUnitFactory {
         }
 
         return compilationUnit;
-    }
-
-    protected GroovyClassLoader getClassLoader() {
-        return new GroovyClassLoader(ClassLoader.getSystemClassLoader().getParent(), config, true);
-    }
-
-    protected CompilerConfiguration getConfiguration() {
-        CompilerConfiguration config = new CompilerConfiguration();
-
-        Map<String, Boolean> optimizationOptions = new HashMap<>();
-        optimizationOptions.put(CompilerConfiguration.GROOVYDOC, true);
-        config.setOptimizationOptions(optimizationOptions);
-
-        List<String> classpathList = new ArrayList<>();
-        getClasspathList(classpathList);
-        config.setClasspathList(classpathList);
-
-        return config;
-    }
-
-    protected void getClasspathList(List<String> result) {
-        if (additionalClasspathList == null) {
-            return;
-        }
-
-        for (String entry : additionalClasspathList) {
-            boolean mustBeDirectory = false;
-            if (entry.endsWith("*")) {
-                entry = entry.substring(0, entry.length() - 1);
-                mustBeDirectory = true;
-            }
-
-            File file = new File(entry);
-            if (!file.exists()) {
-                continue;
-            }
-            if (file.isDirectory()) {
-                for (File child : file.listFiles()) {
-                    if (!child.getName().endsWith(".jar") || !child.isFile()) {
-                        continue;
-                    }
-                    result.add(child.getPath());
-                }
-            } else if (!mustBeDirectory && file.isFile()) {
-                if (file.getName().endsWith(".jar")) {
-                    result.add(entry);
-                }
-            }
-        }
     }
 
     protected void addDirectoryToCompilationUnit(Path dirPath, GroovyLSCompilationUnit compilationUnit,
@@ -199,14 +139,5 @@ public class CompilationUnitFactory implements ICompilationUnitFactory {
             String contents = fileContentsTracker.getContents(uri);
             addOpenFileToCompilationUnit(uri, contents, compilationUnit);
         });
-    }
-
-    protected void addOpenFileToCompilationUnit(URI uri, String contents, GroovyLSCompilationUnit compilationUnit) {
-        Path filePath = Paths.get(uri);
-        SourceUnit sourceUnit = new SourceUnit(filePath.toString(),
-                                               new StringReaderSourceWithURI(contents, uri, compilationUnit.getConfiguration()),
-                                               compilationUnit.getConfiguration(), compilationUnit.getClassLoader(),
-                                               compilationUnit.getErrorCollector());
-        compilationUnit.addSource(sourceUnit);
     }
 }

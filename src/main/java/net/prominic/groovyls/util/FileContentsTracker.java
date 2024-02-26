@@ -19,6 +19,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.util;
 
+import net.prominic.lsp.utils.Positions;
+import org.eclipse.lsp4j.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URI;
@@ -28,14 +31,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import org.eclipse.lsp4j.DidChangeTextDocumentParams;
-import org.eclipse.lsp4j.DidCloseTextDocumentParams;
-import org.eclipse.lsp4j.DidOpenTextDocumentParams;
-import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
-
-import net.prominic.lsp.utils.Positions;
 
 public class FileContentsTracker {
 
@@ -105,7 +100,7 @@ public class FileContentsTracker {
                 }
                 return builder.toString();
             } catch (IOException e) {
-                return null;
+                return "";
             } finally {
                 if (reader != null) {
                     try {
@@ -115,7 +110,7 @@ public class FileContentsTracker {
                 }
             }
         }
-        return openFiles.get(uri);
+        return openFiles.getOrDefault(uri, "");
     }
 
     public void setContents(URI uri, String contents) {

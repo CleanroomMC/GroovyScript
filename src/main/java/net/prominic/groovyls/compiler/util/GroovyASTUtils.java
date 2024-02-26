@@ -19,41 +19,21 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.compiler.util;
 
+import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
+import net.prominic.groovyls.compiler.ast.ASTContext;
+import net.prominic.groovyls.util.ClassGraphUtils;
+import net.prominic.groovyls.util.GroovyLanguageServerUtils;
+import org.codehaus.groovy.ast.*;
+import org.codehaus.groovy.ast.expr.*;
+import org.codehaus.groovy.ast.stmt.ExpressionStatement;
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
+import org.objectweb.asm.Opcodes;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
-import groovy.lang.Script;
-import net.prominic.groovyls.compiler.ast.ASTContext;
-import org.codehaus.groovy.ast.ASTNode;
-import org.codehaus.groovy.ast.ClassNode;
-import org.codehaus.groovy.ast.FieldNode;
-import org.codehaus.groovy.ast.ImportNode;
-import org.codehaus.groovy.ast.MethodNode;
-import org.codehaus.groovy.ast.ModuleNode;
-import org.codehaus.groovy.ast.Parameter;
-import org.codehaus.groovy.ast.PropertyNode;
-import org.codehaus.groovy.ast.Variable;
-import org.codehaus.groovy.ast.expr.ArgumentListExpression;
-import org.codehaus.groovy.ast.expr.BinaryExpression;
-import org.codehaus.groovy.ast.expr.ClassExpression;
-import org.codehaus.groovy.ast.expr.ConstantExpression;
-import org.codehaus.groovy.ast.expr.ConstructorCallExpression;
-import org.codehaus.groovy.ast.expr.DeclarationExpression;
-import org.codehaus.groovy.ast.expr.Expression;
-import org.codehaus.groovy.ast.expr.MethodCall;
-import org.codehaus.groovy.ast.expr.MethodCallExpression;
-import org.codehaus.groovy.ast.expr.PropertyExpression;
-import org.codehaus.groovy.ast.expr.VariableExpression;
-import org.codehaus.groovy.ast.stmt.ExpressionStatement;
-import org.eclipse.lsp4j.Position;
-import org.eclipse.lsp4j.Range;
-
-import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
-import org.objectweb.asm.Opcodes;
 
 public class GroovyASTUtils {
 
@@ -231,8 +211,9 @@ public class GroovyASTUtils {
 
         if (classNode != null && node instanceof VariableExpression) {
             var binding = context.getLanguageServerContext().getSandbox().getBindings().get(((VariableExpression) node).getName());
+            var classInfo = ClassGraphUtils.resolveAllowedClassInfo(classNode, context);
 
-            if (binding != null && context.getLanguageServerContext().getScanResult().getClassInfo(classNode.getName()).implementsInterface(IDynamicGroovyProperty.class)) {
+            if (classInfo != null && binding != null && (classInfo.loadClass().equals(IDynamicGroovyProperty.class) || classInfo.implementsInterface(IDynamicGroovyProperty.class))) {
                 final ClassNode finalClassNode = classNode;
                 return ((IDynamicGroovyProperty) binding).getProperties().entrySet().stream()
                         .filter(entry -> entry.getValue() != null)

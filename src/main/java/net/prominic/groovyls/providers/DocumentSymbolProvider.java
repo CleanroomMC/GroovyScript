@@ -19,27 +19,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
-import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-
 import net.prominic.groovyls.compiler.ast.ASTContext;
+import net.prominic.groovyls.compiler.util.GroovyASTUtils;
+import net.prominic.groovyls.util.GroovyLanguageServerUtils;
 import net.prominic.groovyls.util.URIUtils;
-import org.codehaus.groovy.ast.ASTNode;
-import org.codehaus.groovy.ast.ClassNode;
-import org.codehaus.groovy.ast.FieldNode;
-import org.codehaus.groovy.ast.MethodNode;
-import org.codehaus.groovy.ast.PropertyNode;
+import org.codehaus.groovy.ast.*;
 import org.eclipse.lsp4j.DocumentSymbol;
 import org.eclipse.lsp4j.SymbolInformation;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
-import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
-import net.prominic.groovyls.compiler.util.GroovyASTUtils;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
+import java.net.URI;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class DocumentSymbolProvider {
 
