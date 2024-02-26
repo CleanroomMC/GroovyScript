@@ -4,21 +4,20 @@ import * as vscode from "vscode";
 import { extensionStatusBar } from "./gui/extensionStatusBarProvider";
 
 let client: lc.LanguageClient;
-let outputChannel: vscode.OutputChannel;
-let traceOutputChannel: vscode.OutputChannel;
+let outputChannel = vscode.window.createOutputChannel("GroovyScript Language Server");
+let traceOutputChannel = vscode.window.createOutputChannel("GroovyScript Language Server Trace");
 
 async function startClient() {
-	if (!outputChannel) {
-		outputChannel = vscode.window.createOutputChannel("GroovyScript Language Server");
-	}
-
-	if (!traceOutputChannel) {
-		traceOutputChannel = vscode.window.createOutputChannel("GroovyScript Language Server Trace");
-	}
-
 	const serverOptions = () => {
 		const configuration = vscode.workspace.getConfiguration("groovyscript");
-		let socket = net.connect({ port: configuration.get<number>("port") ?? 8000 });
+        const port = configuration.get<number>("port", 8000);
+        outputChannel.appendLine(`Connecting to GroovyScript Language Server at port ${port}`);
+        let socket = net.connect({port: port});
+        socket.on("error", (err) => {
+            extensionStatusBar.setError();
+            outputChannel.appendLine(err.toString());
+            stopClient();
+        });
 		let result: lc.StreamInfo = {
 			writer: socket,
 			reader: socket
@@ -38,11 +37,18 @@ async function startClient() {
 		traceOutputChannel,
 	};
 
-	client = new lc.LanguageClient("groovyscript", "groovyscript", serverOptions, clientOptions);
-	
-	await client.start();
+    client = new lc.LanguageClient("groovyscript", "GroovyScript", serverOptions, clientOptions)
 
-	extensionStatusBar.running();
+    try {
+        await client.start();
+    } catch (e) {
+        extensionStatusBar.setError();
+        outputChannel.appendLine(e.toString());
+        return;
+    }
+
+    extensionStatusBar.running();
+    outputChannel.appendLine("Connected to GroovyScript Language Server");
 }
 
 async function stopClient() {
@@ -54,9 +60,10 @@ async function stopClient() {
 }
 
 export async function activate(context: vscode.ExtensionContext) {
-    // FIXME: this does not work if the server was restarted.
 	let disposable = vscode.commands.registerCommand("groovyscript.reconnect", async () => {
+        outputChannel.appendLine("Reconnecting...");
 		await stopClient();
+        extensionStatusBar.startUp();
 		await startClient();
 	});
 
