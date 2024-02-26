@@ -482,7 +482,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
                         Range range = GroovyLanguageServerUtils.syntaxExceptionToRange(cause);
                         Diagnostic diagnostic = new Diagnostic();
                         diagnostic.setRange(range);
-                        diagnostic.setSeverity(cause.isFatal() ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning);
+                        diagnostic.setSeverity(DiagnosticSeverity.Error);
                         diagnostic.setMessage(cause.getMessage());
                         URI uri = Paths.get(cause.getSourceLocator()).toUri();
                         diagnosticsByFile.computeIfAbsent(uri, (key) -> new ArrayList<>()).add(diagnostic);
