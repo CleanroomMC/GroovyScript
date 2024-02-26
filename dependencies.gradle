@@ -37,10 +37,10 @@ dependencies {
     }
 
     compileOnly rfg.deobf("curse.maven:sonar-core-239418:2645156")
-    compileOnly rfg.deobf("curse.maven:calculator-225104:2643351")
+    compileOnly rfg.deobf("curse.maven:calculator-225104:2847174")
     if (project.debug_calculator.toBoolean()) {
         runtimeOnly rfg.deobf("curse.maven:sonar-core-239418:2645156")
-        runtimeOnly rfg.deobf("curse.maven:calculator-225104:2643351")
+        runtimeOnly rfg.deobf("curse.maven:calculator-225104:2847174")
     }
 
     compileOnly rfg.deobf("curse.maven:ctm-267602:2915363")
