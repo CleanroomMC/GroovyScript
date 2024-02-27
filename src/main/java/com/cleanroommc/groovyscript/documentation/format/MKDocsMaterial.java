@@ -7,14 +7,14 @@ import java.util.List;
 public class MKDocsMaterial implements IFormat {
 
     @Override
-    public String admonitionStart(Admonition.Format format) {
+    public String admonitionStart(Admonition.Format format, Admonition.Type type, String title) {
         switch (format) {
             case COLLAPSED:
-                return "???";
+                return String.join(" ", "???", type.toString(), title);
             case EXPANDED:
-                return "???+";
+                return String.join(" ", "???+", type.toString(), title);
             default:
-                return "!!!";
+                return String.join(" ", "!!!", type.toString(), title);
         }
     }
 
@@ -27,6 +27,10 @@ public class MKDocsMaterial implements IFormat {
     public String codeBlockHighlights(List<String> highlight) {
         if (highlight.isEmpty()) return "";
         return " hl_lines=\"" + String.join(" ", highlight) + "\"";
+    }
+
+    public boolean allowsIndentation() {
+        return true;
     }
 
 }

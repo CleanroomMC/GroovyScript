@@ -10,7 +10,7 @@ public interface IFormat {
      * @param format what format is being used
      * @return the string to begin the admonition for the given format
      */
-    String admonitionStart(Admonition.Format format);
+    String admonitionStart(Admonition.Format format, Admonition.Type type, String title);
 
     /**
      * @param format what format is being used
@@ -23,5 +23,7 @@ public interface IFormat {
      * @return the string to highlight those lines for the given format
      */
     String codeBlockHighlights(List<String> highlight);
+
+    boolean allowsIndentation();
 
 }
