@@ -20,7 +20,7 @@ public class Vue implements IFormat {
 
     @Override
     public String admonitionEnd(Admonition.Format format) {
-        return ":::\n";
+        return "\n:::";
     }
 
     @Override
