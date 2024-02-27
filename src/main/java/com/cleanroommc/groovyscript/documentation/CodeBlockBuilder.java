@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.documentation;
 
+import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -61,12 +62,14 @@ public class CodeBlockBuilder {
     }
 
     public List<String> generate() {
+        return generate(Documentation.DEFAULT_FORMAT);
+    }
+
+    public List<String> generate(IFormat format) {
         List<String> out = new ArrayList<>();
         String indent = StringUtils.repeat("    ", indentation);
 
-        String hl_lines = highlight.isEmpty() ? "" : (" hl_lines=\"" + String.join(" ", highlight) + "\"");
-
-        out.add(indent + "```" + lang + hl_lines);
+        out.add(indent + "```" + lang + format.codeBlockHighlights(highlight));
         for (String line : lines) out.add(indent + line);
         out.add(indent + "```");
 

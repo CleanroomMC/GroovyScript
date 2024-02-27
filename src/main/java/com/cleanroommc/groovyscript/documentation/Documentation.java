@@ -5,6 +5,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.documentation.format.IFormat;
+import com.cleanroommc.groovyscript.documentation.format.OutputFormat;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.client.resources.I18n;
@@ -27,11 +29,14 @@ public class Documentation {
     public static final File EXAMPLES = new File(GroovyScript.getScriptPath());
     public static final File WIKI = new File(new File(GroovyScript.getScriptFile().getParentFile(), "build"), "wiki");
 
+    public static final IFormat DEFAULT_FORMAT = OutputFormat.VUE;
+
     private static final boolean GENERATE_EXAMPLES = false;
-    private static final boolean GENERATE_WIKI = true;
-    private static final boolean LOG_MISSING_KEYS = true;
+    private static final boolean GENERATE_WIKI = false;
     // Kills the game as soon as the wiki or examples are generated.
     private static final boolean TEST_AND_CRASH = false;
+
+    private static final boolean LOG_MISSING_KEYS = true;
 
     private static final Set<String> missingLangKeys = new ObjectLinkedOpenHashSet<>();
 
