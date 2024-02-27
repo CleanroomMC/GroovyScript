@@ -383,7 +383,8 @@ public class Builder {
         }
 
         private String getFieldTypeInlineCode() {
-            return "`#!groovy " + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
+            //return "`#!groovy " + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
+            return "`" + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
         }
 
         public String getDescription() {
