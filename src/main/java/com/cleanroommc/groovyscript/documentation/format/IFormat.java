@@ -10,13 +10,13 @@ public interface IFormat {
      * @param format what format is being used
      * @return the string to begin the admonition for the given format
      */
-    String admonitionStart(Admonition.Format format, Admonition.Type type, String title);
+    String admonitionStart(Admonition.Format format, Admonition.Type type, int indentation, String title);
 
     /**
      * @param format what format is being used
      * @return the string to end the admonition for the given format
      */
-    String admonitionEnd(Admonition.Format format);
+    String admonitionEnd(Admonition.Format format, int indentation);
 
     /**
      * @param highlight a list of strings indicating what lines should be highlighted

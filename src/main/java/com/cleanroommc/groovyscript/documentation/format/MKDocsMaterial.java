@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 public class MKDocsMaterial implements IFormat {
 
     @Override
-    public String admonitionStart(Admonition.Format format, Admonition.Type type, String title) {
+    public String admonitionStart(Admonition.Format format, Admonition.Type type, int indentation, String title) {
         switch (format) {
             case COLLAPSED:
                 return Stream.of(" ", "???", type.toString(), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
@@ -22,7 +22,7 @@ public class MKDocsMaterial implements IFormat {
     }
 
     @Override
-    public String admonitionEnd(Admonition.Format format) {
+    public String admonitionEnd(Admonition.Format format, int indentation) {
         return "";
     }
 

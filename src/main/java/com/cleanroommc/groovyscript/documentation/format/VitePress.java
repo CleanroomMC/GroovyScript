@@ -11,20 +11,23 @@ import java.util.stream.Stream;
 public class VitePress implements IFormat {
 
     @Override
-    public String admonitionStart(Admonition.Format format, Admonition.Type type, String title) {
+    public String admonitionStart(Admonition.Format format, Admonition.Type type, int indentation, String title) {
+        // Technically limits admonitions on VitePress to only have a maximum of 7 depth.
+        // If all 7 depth is used, that design should be rethought anyway.
+        String front = StringUtils.repeat(":", 10 - indentation);
         switch (format) {
             case COLLAPSED:
-                return Stream.of(":::", "details", type.toString().toUpperCase(Locale.ROOT), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
+                return Stream.of(front, "details", type.toString().toUpperCase(Locale.ROOT), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
             case EXPANDED:
-                return Stream.of(":::", "details", type.toString().toUpperCase(Locale.ROOT), title, "{open}").filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
+                return Stream.of(front, "details", type.toString().toUpperCase(Locale.ROOT), title, "{open}").filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
             default:
-                return Stream.of(":::", type.toString().toLowerCase(Locale.ROOT), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
+                return Stream.of(front, type.toString().toLowerCase(Locale.ROOT), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
         }
     }
 
     @Override
-    public String admonitionEnd(Admonition.Format format) {
-        return "\n:::";
+    public String admonitionEnd(Admonition.Format format, int indentation) {
+        return "\n" + StringUtils.repeat(":", 10 - indentation);
     }
 
     @Override
