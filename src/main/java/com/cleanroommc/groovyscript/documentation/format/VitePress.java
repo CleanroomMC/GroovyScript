@@ -4,7 +4,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 
 import java.util.List;
 
-public class Vue implements IFormat {
+public class VitePress implements IFormat {
 
     @Override
     public String admonitionStart(Admonition.Format format) {

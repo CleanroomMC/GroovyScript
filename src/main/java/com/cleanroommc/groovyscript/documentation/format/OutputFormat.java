@@ -3,8 +3,8 @@ package com.cleanroommc.groovyscript.documentation.format;
 
 public class OutputFormat {
 
-    public static MKDocs MKDOCS = new MKDocs();
-    public static Vue VUE = new Vue();
+    public static MKDocsMaterial MKDOCS_MATERIAL = new MKDocsMaterial();
+    public static VitePress VITEPRESS = new VitePress();
 
     private OutputFormat() {
     }

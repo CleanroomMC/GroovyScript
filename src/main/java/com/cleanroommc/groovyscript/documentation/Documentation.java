@@ -29,7 +29,7 @@ public class Documentation {
     public static final File EXAMPLES = new File(GroovyScript.getScriptPath());
     public static final File WIKI = new File(new File(GroovyScript.getScriptFile().getParentFile(), "build"), "wiki");
 
-    public static final IFormat DEFAULT_FORMAT = OutputFormat.VUE;
+    public static final IFormat DEFAULT_FORMAT = OutputFormat.VITEPRESS;
 
     private static final boolean GENERATE_EXAMPLES = false;
     private static final boolean GENERATE_WIKI = false;
