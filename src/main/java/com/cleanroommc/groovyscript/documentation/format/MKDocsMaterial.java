@@ -1,8 +1,11 @@
 package com.cleanroommc.groovyscript.documentation.format;
 
 import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MKDocsMaterial implements IFormat {
 
@@ -10,11 +13,11 @@ public class MKDocsMaterial implements IFormat {
     public String admonitionStart(Admonition.Format format, Admonition.Type type, String title) {
         switch (format) {
             case COLLAPSED:
-                return String.join(" ", "???", type.toString(), title);
+                return Stream.of(" ", "???", type.toString(), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
             case EXPANDED:
-                return String.join(" ", "???+", type.toString(), title);
+                return Stream.of(" ", "???+", type.toString(), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
             default:
-                return String.join(" ", "!!!", type.toString(), title);
+                return Stream.of(" ", "!!!", type.toString(), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
         }
     }
 
