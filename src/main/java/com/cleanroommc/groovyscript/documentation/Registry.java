@@ -201,17 +201,18 @@ public class Registry {
                 .append(I18n.format("groovyscript.wiki.uses_recipe_builder", getTitle())).append("\n\n")
                 .append(I18n.format("groovyscript.wiki.recipe_builder_note")).append("\n\n");
 
-        for (Method method : recipeBuilderMethods) {
-            Builder builder = new Builder(mod, method, reference, baseTranslationKey);
+        for (int i = 0; i < recipeBuilderMethods.size(); i++) {
+            Builder builder = new Builder(mod, recipeBuilderMethods.get(i), reference, baseTranslationKey);
             out.append(new AdmonitionBuilder()
                                .type(Admonition.Type.ABSTRACT)
                                .hasTitle(true)
-                               .title(methodExample(method))
+                               .title(methodExample(recipeBuilderMethods.get(i)))
                                .note(builder.documentMethods().split("\n"))
                                .note("\n")
                                .note(builder.builderAdmonition().split("\n"))
-                               .generate())
-                    .append("\n\n");
+                               .note("\n")
+                               .generate());
+            if (i < recipeBuilderMethods.size() - 1) out.append("\n\n");
         }
         return out.toString();
     }
@@ -274,6 +275,7 @@ public class Registry {
                                              .annotation(annotations)
                                              .generate())
                                .generate());
+            out.append("\n");
         }
 
         return out.toString();

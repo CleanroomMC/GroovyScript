@@ -20,7 +20,7 @@ public class VitePress implements IFormat {
 
     @Override
     public String admonitionEnd(Admonition.Format format) {
-        return "\n:::";
+        return ":::";
     }
 
     @Override
