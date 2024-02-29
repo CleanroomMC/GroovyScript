@@ -18,7 +18,10 @@ import java.util.ArrayList;
 @RegistryDescription
 public class PrecisionChamber extends VirtualizedRegistry<CalculatorRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'))"))
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'), item('calculator:circuitdamaged:4'))"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond'), item('minecraft:diamond'))")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -42,7 +45,7 @@ public class PrecisionChamber extends VirtualizedRegistry<CalculatorRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:sand')"))
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:clay')"))
     public boolean removeByInput(ItemStack input) {
         return PrecisionChamberRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -85,7 +88,7 @@ public class PrecisionChamber extends VirtualizedRegistry<CalculatorRecipe> {
     }
 
     @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+    @Property(property = "output", valid = @Comp("2"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
         @Override
@@ -95,7 +98,7 @@ public class PrecisionChamber extends VirtualizedRegistry<CalculatorRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 1, 1, 2);
+            validateItems(msg, 1, 1, 2, 2);
             validateFluids(msg);
         }
 

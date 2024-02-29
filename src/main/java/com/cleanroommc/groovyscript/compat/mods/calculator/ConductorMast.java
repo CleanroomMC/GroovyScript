@@ -19,7 +19,7 @@ import java.util.List;
 @RegistryDescription
 public class ConductorMast extends VirtualizedRegistry<DefaultSonarRecipe.Value> {
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'))"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).value(100)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.compat.mods.calculator;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -14,11 +13,12 @@ import sonar.calculator.mod.common.recipes.CalculatorRecipe;
 import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @RegistryDescription
 public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'))"))
+    @RecipeBuilderDescription(example = @Example(".output(item('minecraft:diamond'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -69,7 +69,6 @@ public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("2"))
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
@@ -80,7 +79,7 @@ public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 2, 2, 1, 1);
+            validateItems(msg, 0, 0, 1, 1);
             validateFluids(msg);
         }
 
@@ -89,10 +88,18 @@ public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
         public @Nullable CalculatorRecipe register() {
             if (!validate()) return null;
 
-            CalculatorRecipe recipe = AnalysingChamberRecipes.instance()
-                    .buildDefaultRecipe(Calculator.toSonarRecipeObjectList(input), output, new ArrayList<>(), false);
+            // TODO how do i represent this
+            //50
+            //100
+            //1000
+            //2000
+            //10000
+            //20000
 
-            ModSupport.CALCULATOR.get().analysingChamber.add(recipe);
+            CalculatorRecipe recipe = AnalysingChamberRecipes.instance()
+                    .buildDefaultRecipe(Arrays.asList(1, 1), output, new ArrayList<>(), false);
+
+            //ModSupport.CALCULATOR.get().analysingChamber.add(recipe);
             return recipe;
         }
     }

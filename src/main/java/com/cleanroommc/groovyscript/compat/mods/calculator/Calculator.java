@@ -18,12 +18,12 @@ import java.util.List;
 public class Calculator extends ModPropertyContainer {
 
     public final AlgorithmSeparator algorithmSeparator = new AlgorithmSeparator();
-    public final AnalysingChamber analysingChamber = new AnalysingChamber();
+    //public final AnalysingChamber analysingChamber = new AnalysingChamber();
     //public final AtomicCalculator atomicCalculator = new AtomicCalculator();
     //public final Calculator calculator = new Calculator();
     public final ConductorMast conductorMast = new ConductorMast();
     public final ExtractionChamber extractionChamber = new ExtractionChamber();
-    public final FabricationChamber fabricationChamber = new FabricationChamber();
+    //public final FabricationChamber fabricationChamber = new FabricationChamber();
     //public final FlawlessCalculator flawlessCalculator = new FlawlessCalculator();
     public final GlowstoneExtractor glowstoneExtractor = new GlowstoneExtractor();
     public final HealthProcessor healthProcessor = new HealthProcessor();
@@ -39,12 +39,12 @@ public class Calculator extends ModPropertyContainer {
 
     public Calculator() {
         addRegistry(algorithmSeparator);
-        addRegistry(analysingChamber);
+        //addRegistry(analysingChamber);
         //addRegistry(atomicCalculator);//Recipes.Types.ATOMIC, AtomicCalculatorRecipes.instance());
         //addRegistry(calculator);//Recipes.Types.CALCULATOR, CalculatorRecipes.instance());
         addRegistry(conductorMast);
         addRegistry(extractionChamber);
-        addRegistry(fabricationChamber);
+        //addRegistry(fabricationChamber);
         //addRegistry(flawlessCalculator);//Recipes.Types.FLAWLESS, FlawlessCalculatorRecipes.instance());
         addRegistry(glowstoneExtractor);
         addRegistry(healthProcessor);

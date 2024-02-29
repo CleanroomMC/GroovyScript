@@ -4,7 +4,6 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 @RegistryDescription
 public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'))"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'), item('minecraft:diamond'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -27,7 +26,7 @@ public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
     @Override
     public void onReload() {
         removeScripted().forEach(AlgorithmSeparatorRecipes.instance().getRecipes()::remove);
-        restoreFromBackup().forEach(AlgorithmSeparatorRecipes.instance()::addRecipe);
+        restoreFromBackup().forEach(AlgorithmSeparatorRecipes.instance().getRecipes()::add);
     }
 
     public void add(CalculatorRecipe recipe) {
@@ -75,7 +74,7 @@ public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        AlgorithmSeparatorRecipes.instance().getRecipes().forEach(x -> addBackup(x));
+        AlgorithmSeparatorRecipes.instance().getRecipes().forEach(this::addBackup);
         AlgorithmSeparatorRecipes.instance().getRecipes().clear();
     }
 
@@ -86,7 +85,7 @@ public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
     }
 
     @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+    @Property(property = "output", valid = @Comp("2"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
         @Override
@@ -96,7 +95,7 @@ public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 1, 1, 2);
+            validateItems(msg, 1, 1, 2, 2);
             validateFluids(msg);
         }
 
@@ -106,7 +105,7 @@ public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
             if (!validate()) return null;
 
             CalculatorRecipe recipe = AlgorithmSeparatorRecipes.instance()
-                    .buildDefaultRecipe(IngredientHelper.toIngredientNonNullList(input), output, new ArrayList<>(), false);
+                    .buildDefaultRecipe(Calculator.toSonarRecipeObjectList(input), output, new ArrayList<>(), false);
 
             ModSupport.CALCULATOR.get().algorithmSeparator.add(recipe);
             return recipe;

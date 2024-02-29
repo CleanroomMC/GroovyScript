@@ -19,7 +19,10 @@ import java.util.List;
 @RegistryDescription
 public class ExtractionChamber extends VirtualizedRegistry<CalculatorRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'))"))
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'))"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).isDamaged()")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -86,21 +89,21 @@ public class ExtractionChamber extends VirtualizedRegistry<CalculatorRecipe> {
     }
 
     @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
         @Property
-        private boolean hasChance;
+        private boolean isDamaged;
 
         @RecipeBuilderMethodDescription
-        public RecipeBuilder hasChance() {
-            this.hasChance = !hasChance;
+        public RecipeBuilder isDamaged() {
+            this.isDamaged = !isDamaged;
             return this;
         }
 
         @RecipeBuilderMethodDescription
-        public RecipeBuilder hasChance(boolean hasChance) {
-            this.hasChance = hasChance;
+        public RecipeBuilder isDamaged(boolean isDamaged) {
+            this.isDamaged = isDamaged;
             return this;
         }
 
@@ -111,7 +114,7 @@ public class ExtractionChamber extends VirtualizedRegistry<CalculatorRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 1, 1, 2);
+            validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
         }
 
@@ -122,7 +125,8 @@ public class ExtractionChamber extends VirtualizedRegistry<CalculatorRecipe> {
 
             List<Object> specialOutput = new ArrayList<>();
             specialOutput.add(output.get(0));
-            if (output.size() == 2 && hasChance) specialOutput.add(new ExtractionChamberRecipes.ExtractionChamberOutput(output.get(1)));
+            specialOutput.add(new ExtractionChamberRecipes.ExtractionChamberOutput(new ItemStack(
+                    isDamaged ? sonar.calculator.mod.Calculator.circuitDamaged : sonar.calculator.mod.Calculator.circuitDirty, 1, 32767)));
 
             CalculatorRecipe recipe = ExtractionChamberRecipes.instance()
                     .buildDefaultRecipe(Calculator.toSonarRecipeObjectList(input), specialOutput, new ArrayList<>(), false);

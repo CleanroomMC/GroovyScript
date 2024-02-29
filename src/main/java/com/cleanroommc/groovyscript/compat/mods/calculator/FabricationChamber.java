@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.compat.mods.calculator;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 @RegistryDescription
 public class FabricationChamber extends VirtualizedRegistry<FabricationSonarRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'))"))
+    @RecipeBuilderDescription(example = @Example(".input(item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1])).output(item('minecraft:diamond'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -107,7 +106,7 @@ public class FabricationChamber extends VirtualizedRegistry<FabricationSonarReci
             FabricationSonarRecipe recipe = FabricationChamberRecipes.instance()
                     .buildDefaultRecipe(Calculator.toSonarRecipeObjectList(input), output, new ArrayList<>(), false);
 
-            ModSupport.CALCULATOR.get().fabricationChamber.add(recipe);
+            //ModSupport.CALCULATOR.get().fabricationChamber.add(recipe);
             return recipe;
         }
     }
