@@ -17,6 +17,32 @@ mods.calculator.algorithm_separator.recipeBuilder()
     .register()
 
 
+// groovyscript.wiki.calculator.atomic_calculator.title:
+// groovyscript.wiki.calculator.atomic_calculator.description
+
+mods.calculator.atomic_calculator.removeByInput(item('minecraft:end_stone'))
+mods.calculator.atomic_calculator.removeByOutput(item('calculator:firediamond'))
+// mods.calculator.atomic_calculator.removeAll()
+
+mods.calculator.atomic_calculator.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'))
+    .output(item('minecraft:gold_ingot') * 4)
+    .register()
+
+
+// groovyscript.wiki.calculator.basic_calculator.title:
+// groovyscript.wiki.calculator.basic_calculator.description
+
+mods.calculator.basic_calculator.removeByInput(item('minecraft:cobblestone'))
+mods.calculator.basic_calculator.removeByOutput(item('calculator:reinforcedironingot'))
+// mods.calculator.basic_calculator.removeAll()
+
+mods.calculator.basic_calculator.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:clay'))
+    .output(item('minecraft:gold_ingot'))
+    .register()
+
+
 // Conductor Mast:
 // Converts an input itemstack into an output itemstack, costing a configurable amount of power. This power can only be
 // gained via the Conductor Mast's semi-regular generation of lightning strikes.
@@ -48,6 +74,19 @@ mods.calculator.extraction_chamber.recipeBuilder()
     .input(item('minecraft:gold_ingot'))
     .output(item('minecraft:clay'))
     .isDamaged()
+    .register()
+
+
+// groovyscript.wiki.calculator.flawless_calculator.title:
+// groovyscript.wiki.calculator.flawless_calculator.description
+
+mods.calculator.flawless_calculator.removeByInput(item('minecraft:obsidian'))
+mods.calculator.flawless_calculator.removeByOutput(item('minecraft:ender_pearl'))
+// mods.calculator.flawless_calculator.removeAll()
+
+mods.calculator.flawless_calculator.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'))
+    .output(item('minecraft:gold_ingot') * 16)
     .register()
 
 
@@ -143,6 +182,19 @@ mods.calculator.restoration_chamber.removeByOutput(item('calculator:circuitboard
 mods.calculator.restoration_chamber.recipeBuilder()
     .input(item('minecraft:clay'))
     .output(item('minecraft:diamond'))
+    .register()
+
+
+// groovyscript.wiki.calculator.scientific_calculator.title:
+// groovyscript.wiki.calculator.scientific_calculator.description
+
+mods.calculator.scientific_calculator.removeByInput(item('calculator:smallamethyst'))
+mods.calculator.scientific_calculator.removeByOutput(item('calculator:redstoneingot'))
+// mods.calculator.scientific_calculator.removeAll()
+
+mods.calculator.scientific_calculator.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:clay'))
+    .output(item('minecraft:gold_ingot') * 2)
     .register()
 
 

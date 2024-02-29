@@ -19,12 +19,12 @@ public class Calculator extends ModPropertyContainer {
 
     public final AlgorithmSeparator algorithmSeparator = new AlgorithmSeparator();
     //public final AnalysingChamber analysingChamber = new AnalysingChamber();
-    //public final AtomicCalculator atomicCalculator = new AtomicCalculator();
-    //public final Calculator calculator = new Calculator();
+    public final AtomicCalculator atomicCalculator = new AtomicCalculator();
+    public final BasicCalculator basicCalculator = new BasicCalculator();
     public final ConductorMast conductorMast = new ConductorMast();
     public final ExtractionChamber extractionChamber = new ExtractionChamber();
     //public final FabricationChamber fabricationChamber = new FabricationChamber();
-    //public final FlawlessCalculator flawlessCalculator = new FlawlessCalculator();
+    public final FlawlessCalculator flawlessCalculator = new FlawlessCalculator();
     public final GlowstoneExtractor glowstoneExtractor = new GlowstoneExtractor();
     public final HealthProcessor healthProcessor = new HealthProcessor();
     public final PrecisionChamber precisionChamber = new PrecisionChamber();
@@ -32,19 +32,19 @@ public class Calculator extends ModPropertyContainer {
     public final ReassemblyChamber reassemblyChamber = new ReassemblyChamber();
     public final RedstoneExtractor redstoneExtractor = new RedstoneExtractor();
     public final RestorationChamber restorationChamber = new RestorationChamber();
-    //public final Scientific scientific = new Scientific();
+    public final ScientificCalculator scientificCalculator = new ScientificCalculator();
     public final StarchExtractor starchExtractor = new StarchExtractor();
     public final StoneSeparator stoneSeparator = new StoneSeparator();
 
     public Calculator() {
         addRegistry(algorithmSeparator);
         //addRegistry(analysingChamber);
-        //addRegistry(atomicCalculator);//Recipes.Types.ATOMIC, AtomicCalculatorRecipes.instance());
-        //addRegistry(calculator);//Recipes.Types.CALCULATOR, CalculatorRecipes.instance());
+        addRegistry(atomicCalculator);
+        addRegistry(basicCalculator);
         addRegistry(conductorMast);
         addRegistry(extractionChamber);
         //addRegistry(fabricationChamber);
-        //addRegistry(flawlessCalculator);//Recipes.Types.FLAWLESS, FlawlessCalculatorRecipes.instance());
+        addRegistry(flawlessCalculator);
         addRegistry(glowstoneExtractor);
         addRegistry(healthProcessor);
         addRegistry(precisionChamber);
@@ -52,7 +52,7 @@ public class Calculator extends ModPropertyContainer {
         addRegistry(reassemblyChamber);
         addRegistry(redstoneExtractor);
         addRegistry(restorationChamber);
-        //addRegistry(scientific);//Recipes.Types.SCIENTIFIC, ScientificRecipes.instance());
+        addRegistry(scientificCalculator);
         addRegistry(starchExtractor);
         addRegistry(stoneSeparator);
     }

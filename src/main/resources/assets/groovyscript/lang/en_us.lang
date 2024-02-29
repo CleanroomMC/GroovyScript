@@ -505,6 +505,12 @@ groovyscript.wiki.botania.rune_altar.mana.value=Sets the mana cost of processing
 groovyscript.wiki.calculator.algorithm_separator.title=Algorithm Separator
 groovyscript.wiki.calculator.algorithm_separator.description=Converts an input itemstack into two output itemstacks.
 
+groovyscript.wiki.calculator.atomic_calculator.title=Atomic Calculator
+groovyscript.wiki.calculator.atomic_calculator.description=Converts three input itemstacks into one output itemstack.
+
+groovyscript.wiki.calculator.basic_calculator.title=Calculator
+groovyscript.wiki.calculator.basic_calculator.description=Converts two input itemstacks into one output itemstack.
+
 groovyscript.wiki.calculator.conductor_mast.title=Conductor Mast
 groovyscript.wiki.calculator.conductor_mast.description=Converts an input itemstack into an output itemstack, costing a configurable amount of power. This power can only be gained via the Conductor Mast's semi-regular generation of lightning strikes.
 groovyscript.wiki.calculator.conductor_mast.value.value=Sets the amount of power required to make the conversion
@@ -512,6 +518,9 @@ groovyscript.wiki.calculator.conductor_mast.value.value=Sets the amount of power
 groovyscript.wiki.calculator.extraction_chamber.title=Extraction Chamber
 groovyscript.wiki.calculator.extraction_chamber.description=Converts an input itemstack into an output itemstack, and gives either a Dirty or Damaged Circuit.
 groovyscript.wiki.calculator.extraction_chamber.isDamaged.value=Sets if the Circuit is a Damaged Circuit or a Dirty Circuit.
+
+groovyscript.wiki.calculator.flawless_calculator.title=Flawless Calculator
+groovyscript.wiki.calculator.flawless_calculator.description=Converts four input itemstacks into one output itemstack.
 
 groovyscript.wiki.calculator.glowstone_extractor.title=Glowstone Extractor
 groovyscript.wiki.calculator.glowstone_extractor.description=Converts an input itemstack into power, at the cost of a burnable fuel.
@@ -536,6 +545,9 @@ groovyscript.wiki.calculator.redstone_extractor.value.value=Sets the duration in
 
 groovyscript.wiki.calculator.restoration_chamber.title=Restoration Chamber
 groovyscript.wiki.calculator.restoration_chamber.description=Converts an input itemstack into an output itemstack, typically a Dirty Circuit.
+
+groovyscript.wiki.calculator.scientific_calculator.title=Scientific Calculator
+groovyscript.wiki.calculator.scientific_calculator.description=Converts two input itemstacks into one output itemstack.
 
 groovyscript.wiki.calculator.starch_extractor.title=Starch Extractor
 groovyscript.wiki.calculator.starch_extractor.description=Converts an input itemstack into power, at the cost of a burnable fuel.
