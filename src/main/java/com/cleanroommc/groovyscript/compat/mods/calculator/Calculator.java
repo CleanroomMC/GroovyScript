@@ -23,7 +23,7 @@ public class Calculator extends ModPropertyContainer {
     public final BasicCalculator basicCalculator = new BasicCalculator();
     public final ConductorMast conductorMast = new ConductorMast();
     public final ExtractionChamber extractionChamber = new ExtractionChamber();
-    //public final FabricationChamber fabricationChamber = new FabricationChamber();
+    public final FabricationChamber fabricationChamber = new FabricationChamber();
     public final FlawlessCalculator flawlessCalculator = new FlawlessCalculator();
     public final GlowstoneExtractor glowstoneExtractor = new GlowstoneExtractor();
     public final HealthProcessor healthProcessor = new HealthProcessor();
@@ -43,7 +43,7 @@ public class Calculator extends ModPropertyContainer {
         addRegistry(basicCalculator);
         addRegistry(conductorMast);
         addRegistry(extractionChamber);
-        //addRegistry(fabricationChamber);
+        addRegistry(fabricationChamber);
         addRegistry(flawlessCalculator);
         addRegistry(glowstoneExtractor);
         addRegistry(healthProcessor);

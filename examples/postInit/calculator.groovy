@@ -77,6 +77,25 @@ mods.calculator.extraction_chamber.recipeBuilder()
     .register()
 
 
+// Fabrication Chamber:
+// Converts Stable and Analysed Circuits into output itemstacks.
+
+mods.calculator.fabrication_chamber.removeByInput(item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1]))
+mods.calculator.fabrication_chamber.removeByOutput(item('calculator:calculatorassembly'))
+// mods.calculator.fabrication_chamber.removeAll()
+
+mods.calculator.fabrication_chamber.recipeBuilder()
+    .input(item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1]), item('minecraft:clay'))
+    .output(item('minecraft:diamond'))
+    .register()
+
+mods.calculator.fabrication_chamber.recipeBuilder()
+    .input(item('calculator:circuitboard:0').withNbt([Stable: 0, Analysed: true]), item('calculator:circuitboard:1').withNbt([Stable: 0, Analysed: true]), item('calculator:circuitboard:2').withNbt([Stable: 0, Analysed: true]), item('calculator:circuitboard:3').withNbt([Stable: 0, Analysed: true]), item('calculator:circuitboard:4').withNbt([Stable: 0, Analysed: true]), )
+    .input(item('calculator:circuitboard:0').withNbt([Stable: 1, Analysed: true]), item('calculator:circuitboard:1').withNbt([Stable: 1, Analysed: true]), item('calculator:circuitboard:2').withNbt([Stable: 1, Analysed: true]), item('calculator:circuitboard:3').withNbt([Stable: 1, Analysed: true]), item('calculator:circuitboard:4').withNbt([Stable: 1, Analysed: true]), )
+    .output(item('minecraft:clay'))
+    .register()
+
+
 // Flawless Calculator:
 // Converts four input itemstacks into one output itemstack.
 

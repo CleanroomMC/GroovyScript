@@ -519,6 +519,9 @@ groovyscript.wiki.calculator.extraction_chamber.title=Extraction Chamber
 groovyscript.wiki.calculator.extraction_chamber.description=Converts an input itemstack into an output itemstack, and gives either a Dirty or Damaged Circuit.
 groovyscript.wiki.calculator.extraction_chamber.isDamaged.value=Sets if the Circuit is a Damaged Circuit or a Dirty Circuit.
 
+groovyscript.wiki.calculator.fabrication_chamber.title=Fabrication Chamber
+groovyscript.wiki.calculator.fabrication_chamber.description=Converts Stable and Analysed Circuits into output itemstacks.
+
 groovyscript.wiki.calculator.flawless_calculator.title=Flawless Calculator
 groovyscript.wiki.calculator.flawless_calculator.description=Converts four input itemstacks into one output itemstack.
 
