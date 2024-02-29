@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.calculator;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -41,6 +42,10 @@ import java.util.Arrays;
         }
 )
 public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
+
+    public AnalysingChamber() {
+        super(Alias.generateOfClass(AnalysingChamber.class).andGenerate("AnalyzingChamber"));
+    }
 
     @RecipeBuilderDescription(example = {
             @Example(".slot(6).location(1).output(item('minecraft:diamond'))"),
