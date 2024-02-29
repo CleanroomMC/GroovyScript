@@ -35,7 +35,6 @@ public class Calculator extends ModPropertyContainer {
     //public final Scientific scientific = new Scientific();
     public final StarchExtractor starchExtractor = new StarchExtractor();
     public final StoneSeparator stoneSeparator = new StoneSeparator();
-    //public final TreeHarvest treeHarvest = new TreeHarvest();
 
     public Calculator() {
         addRegistry(algorithmSeparator);
@@ -56,7 +55,6 @@ public class Calculator extends ModPropertyContainer {
         //addRegistry(scientific);//Recipes.Types.SCIENTIFIC, ScientificRecipes.instance());
         addRegistry(starchExtractor);
         addRegistry(stoneSeparator);
-        //addRegistry(treeHarvest);//Recipes.Types.HARVEST, TreeHarvestRecipes.instance());
     }
 
 
