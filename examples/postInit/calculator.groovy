@@ -17,8 +17,8 @@ mods.calculator.algorithm_separator.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.calculator.atomic_calculator.title:
-// groovyscript.wiki.calculator.atomic_calculator.description
+// Atomic Calculator:
+// Converts three input itemstacks into one output itemstack.
 
 mods.calculator.atomic_calculator.removeByInput(item('minecraft:end_stone'))
 mods.calculator.atomic_calculator.removeByOutput(item('calculator:firediamond'))
@@ -30,8 +30,8 @@ mods.calculator.atomic_calculator.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.calculator.basic_calculator.title:
-// groovyscript.wiki.calculator.basic_calculator.description
+// Calculator:
+// Converts two input itemstacks into one output itemstack.
 
 mods.calculator.basic_calculator.removeByInput(item('minecraft:cobblestone'))
 mods.calculator.basic_calculator.removeByOutput(item('calculator:reinforcedironingot'))
@@ -77,8 +77,8 @@ mods.calculator.extraction_chamber.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.calculator.flawless_calculator.title:
-// groovyscript.wiki.calculator.flawless_calculator.description
+// Flawless Calculator:
+// Converts four input itemstacks into one output itemstack.
 
 mods.calculator.flawless_calculator.removeByInput(item('minecraft:obsidian'))
 mods.calculator.flawless_calculator.removeByOutput(item('minecraft:ender_pearl'))
@@ -185,8 +185,8 @@ mods.calculator.restoration_chamber.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.calculator.scientific_calculator.title:
-// groovyscript.wiki.calculator.scientific_calculator.description
+// Scientific Calculator:
+// Converts two input itemstacks into one output itemstack.
 
 mods.calculator.scientific_calculator.removeByInput(item('calculator:smallamethyst'))
 mods.calculator.scientific_calculator.removeByOutput(item('calculator:redstoneingot'))
