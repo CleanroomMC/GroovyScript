@@ -18,7 +18,7 @@ import java.util.List;
 public class Calculator extends ModPropertyContainer {
 
     public final AlgorithmSeparator algorithmSeparator = new AlgorithmSeparator();
-    //public final AnalysingChamber analysingChamber = new AnalysingChamber();
+    public final AnalysingChamber analysingChamber = new AnalysingChamber();
     public final AtomicCalculator atomicCalculator = new AtomicCalculator();
     public final BasicCalculator basicCalculator = new BasicCalculator();
     public final ConductorMast conductorMast = new ConductorMast();
@@ -38,7 +38,7 @@ public class Calculator extends ModPropertyContainer {
 
     public Calculator() {
         addRegistry(algorithmSeparator);
-        //addRegistry(analysingChamber);
+        addRegistry(analysingChamber);
         addRegistry(atomicCalculator);
         addRegistry(basicCalculator);
         addRegistry(conductorMast);

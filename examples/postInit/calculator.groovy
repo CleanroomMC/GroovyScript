@@ -17,6 +17,26 @@ mods.calculator.algorithm_separator.recipeBuilder()
     .register()
 
 
+// Analysing Chamber:
+// Takes a non-analysed Circuit and analyses it, converting it into usable Stable or Analysed Circuit. Will produce power
+// and item outputs based on randomly generated NBT data.
+
+mods.calculator.analysing_chamber.removeByInput(item('sonarcore:reinforceddirtblock'))
+// mods.calculator.analysing_chamber.removeAll()
+
+mods.calculator.analysing_chamber.recipeBuilder()
+    .slot(6)
+    .location(1)
+    .output(item('minecraft:diamond'))
+    .register()
+
+mods.calculator.analysing_chamber.recipeBuilder()
+    .slot(1)
+    .location(18)
+    .output(item('minecraft:clay'))
+    .register()
+
+
 // Atomic Calculator:
 // Converts three input itemstacks into one output itemstack.
 
@@ -85,7 +105,7 @@ mods.calculator.fabrication_chamber.removeByOutput(item('calculator:calculatoras
 // mods.calculator.fabrication_chamber.removeAll()
 
 mods.calculator.fabrication_chamber.recipeBuilder()
-    .input(item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1]), item('minecraft:clay'))
+    .input(item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1]))
     .output(item('minecraft:diamond'))
     .register()
 
