@@ -26,3 +26,5 @@ mods.draconicevolution.fusion.recipeBuilder()
 
 mods.draconicevolution.fusion.removeByCatalyst(item('draconicevolution:chaos_shard'))
 //mods.draconicevolution.fusion.removeAll()
+
+mods.draconicevolution.energyCore.setOuterBlock(2, 'minecraft:diamond_block')
