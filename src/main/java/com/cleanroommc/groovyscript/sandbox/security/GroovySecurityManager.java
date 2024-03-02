@@ -96,12 +96,42 @@ public class GroovySecurityManager {
     }
 
     public boolean isValid(Method method) {
-        return isValidMethod(method.getDeclaringClass(), method.getName()) &&
-               !method.isAnnotationPresent(GroovyBlacklist.class);
+        return isValidMethod(method.getDeclaringClass(), method.getName()) && checkAnnotation(method);
+    }
+
+    private boolean checkAnnotation(Method method) {
+        GroovyBlacklist anno = null;
+        if (method.isAnnotationPresent(GroovyBlacklist.class)) {
+            anno = method.getAnnotation(GroovyBlacklist.class);
+        } else {
+            Class<?> clazz = method.getDeclaringClass();
+            while (clazz != null && clazz != Object.class) {
+                try {
+                    Method method1 = clazz.getMethod(method.getName(), method.getParameterTypes());
+                    if (method1.isAnnotationPresent(GroovyBlacklist.class)) {
+                        anno = method1.getAnnotation(GroovyBlacklist.class);
+                        break;
+                    }
+                } catch (NoSuchMethodException ignored) {
+                }
+                for (Class<?> interfaze : clazz.getInterfaces()) {
+                    try {
+                        Method method1 = interfaze.getMethod(method.getName(), method.getParameterTypes());
+                        if (method.isAnnotationPresent(GroovyBlacklist.class)) {
+                            anno = method1.getAnnotation(GroovyBlacklist.class);
+                            break;
+                        }
+                    } catch (NoSuchMethodException ignored) {
+                    }
+                }
+                clazz = clazz.getSuperclass();
+            }
+        }
+        return anno == null || anno.removeFromBlacklist();
     }
 
     public boolean isValid(Field field) {
-        return !field.isAnnotationPresent(GroovyBlacklist.class);
+        return !field.isAnnotationPresent(GroovyBlacklist.class) || field.getAnnotation(GroovyBlacklist.class).removeFromBlacklist();
     }
 
     public boolean isValid(Class<?> clazz) {
@@ -120,7 +150,8 @@ public class GroovySecurityManager {
     }
 
     public boolean isValidClass(Class<?> clazz) {
-        return !bannedClasses.contains(clazz) && !clazz.isAnnotationPresent(GroovyBlacklist.class);
+        return !bannedClasses.contains(clazz) &&
+               (!clazz.isAnnotationPresent(GroovyBlacklist.class) || clazz.getAnnotation(GroovyBlacklist.class).removeFromBlacklist());
     }
 
     public boolean isValidMethod(Class<?> receiver, String method) {
