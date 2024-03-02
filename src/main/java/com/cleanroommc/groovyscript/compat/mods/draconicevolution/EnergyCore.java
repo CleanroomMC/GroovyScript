@@ -5,6 +5,9 @@ import com.brandon3055.draconicevolution.world.EnergyCoreStructure;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.draconicevolution.EnergyCoreStructureAccessor;
 import com.cleanroommc.groovyscript.core.mixin.draconicevolution.MultiBlockStorageAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
@@ -16,6 +19,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.Arrays;
 import java.util.Collection;
 
+@RegistryDescription
 public class EnergyCore implements IScriptReloadable {
 
     private static final String DRACONIUM = "draconicevolution:draconium_block";
@@ -94,24 +98,9 @@ public class EnergyCore implements IScriptReloadable {
         (inner ? this.inner : this.outer)[tier - 1] = edit;
     }
 
-    public EnergyCore setInnerBlock(int tier, String id) {
-        if (!ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id))) {
-            GroovyLog.get().error("Can't set block '{}' as inner block of tier {} of Draconic Evolution Energy Core, because the block doesn't exist!", id, tier);
-            return this;
-        }
-        replaceBlock(tier, id, true);
-        return this;
-    }
-
-    public EnergyCore setOuterBlock(int tier, String id) {
-        if (!ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id))) {
-            GroovyLog.get().error("Can't set block '{}' as outer block of tier {} of Draconic Evolution Energy Core, because the block doesn't exist!", id, tier);
-            return this;
-        }
-        replaceBlock(tier, id, false);
-        return this;
-    }
-
+    @MethodDescription(description = "groovyscript.wiki.draconicevolution.inner_block", type = MethodDescription.Type.VALUE, example = {
+            @Example("7, block('minecraft:clay')")
+    })
     public EnergyCore setInnerBlock(int tier, Block block) {
         if (block == null) {
             GroovyLog.msg("Error setting inner block of tier {} Draconic Evolution Energy Core", tier)
@@ -124,6 +113,10 @@ public class EnergyCore implements IScriptReloadable {
         return this;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.draconicevolution.outer_block", type = MethodDescription.Type.VALUE, example = {
+            @Example("7, block('minecraft:diamond_block')"),
+            @Example("2, block('minecraft:diamond_block')")
+    })
     public EnergyCore setOuterBlock(int tier, Block block) {
         if (block == null) {
             GroovyLog.msg("Error setting outer block of tier {} Draconic Evolution Energy Core", tier)

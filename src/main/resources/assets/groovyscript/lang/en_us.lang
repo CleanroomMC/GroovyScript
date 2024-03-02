@@ -520,6 +520,10 @@ groovyscript.wiki.compactmachines3.miniaturization.keyMap.value=Sets the IBlockS
 groovyscript.wiki.compactmachines3.miniaturization.symmetrical.value=Sets if the recipe does not have to test all 4 rotations to determine if the multiblock is valid
 
 # Draconic Evolution
+groovyscript.wiki.draconicevolution.energy_core.title=Energy Core
+groovyscript.wiki.draconicevolution.energy_core.description=A multiblock which stores energy
+groovyscript.wiki.draconicevolution.outer_block=Sets the inner block for the multiblock in the format `tier`, `block`
+groovyscript.wiki.draconicevolution.inner_block=Sets the outer block for the multiblock in the format `tier`, `block`
 groovyscript.wiki.draconicevolution.fusion.title=Fusion
 groovyscript.wiki.draconicevolution.fusion.description=Consumes items and power from up to 54 pedestals of at least a given tier pointing towards a Fusion Crafting Core containing a catalyst to produce an output item.
 groovyscript.wiki.draconicevolution.fusion.catalyst.value=Sets the item used in the center Fusion Crafting Controller block
