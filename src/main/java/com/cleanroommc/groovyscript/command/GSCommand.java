@@ -166,6 +166,10 @@ public class GSCommand extends CommandTreeBase {
                                        .appendSibling(GSCommand.getTextForFile("Groovy Log", GroovyLog.get().getLogFilerPath().toString(), new TextComponentString("Click to open GroovyScript log"))));
         }));
 
+        addSubcommand(new SimpleCommand("deleteClassCache", (server, sender, args) -> {
+            GroovyScript.getSandbox().deleteClassCache();
+        }));
+
         if (ModSupport.MEKANISM.isLoaded()) {
             addSubcommand(new GSMekanismCommand());
         }

@@ -10,10 +10,6 @@ import com.cleanroommc.groovyscript.helper.GroovyHelper;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
-
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.MinecraftForge;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,6 +20,9 @@ import groovy.util.ResourceException;
 import groovy.util.ScriptException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.MinecraftForge;
+import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.jetbrains.annotations.ApiStatus;
@@ -45,7 +44,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     private final Map<List<StackTraceElement>, AtomicInteger> storedExceptions;
 
     private final Map<String, Entry> index = new Object2ObjectOpenHashMap<>();
-    private final Map<String, Entry> cachedClosures = new Object2ObjectOpenHashMap<>();
+    private final List<Entry> cachedClosures = new ArrayList<>();
 
     public static class Entry {
 
@@ -57,6 +56,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
         public Entry(String path, long lastEdited) {
             this.path = path;
             this.lastEdited = lastEdited;
+        }
+
+        private void onCompile(byte[] data, Class<?> clazz, File basePath) {
+            this.data = data;
+            onCompile(clazz, basePath);
         }
 
         private void onCompile(Class<?> clazz, File basePath) {
@@ -116,33 +120,33 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
         this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
         this.importCustomizer.addImports("net.minecraft.world.World",
-                "net.minecraft.block.state.IBlockState",
-                "net.minecraft.block.Block",
-                "net.minecraft.block.SoundType",
-                "net.minecraft.enchantment.Enchantment",
-                "net.minecraft.entity.Entity",
-                "net.minecraft.entity.player.EntityPlayer",
-                "net.minecraft.init.Biomes",
-                "net.minecraft.init.Blocks",
-                "net.minecraft.init.Enchantments",
-                "net.minecraft.init.Items",
-                "net.minecraft.init.MobEffects",
-                "net.minecraft.init.PotionTypes",
-                "net.minecraft.init.SoundEvents",
-                "net.minecraft.item.EnumRarity",
-                "net.minecraft.item.Item",
-                "net.minecraft.item.ItemStack",
-                "net.minecraft.nbt.NBTTagCompound",
-                "net.minecraft.nbt.NBTTagList",
-                "net.minecraft.tileentity.TileEntity",
-                "net.minecraft.util.math.BlockPos",
-                "net.minecraft.util.DamageSource",
-                "net.minecraft.util.EnumHand",
-                "net.minecraft.util.EnumHandSide",
-                "net.minecraft.util.EnumFacing",
-                "net.minecraft.util.ResourceLocation",
-                "net.minecraftforge.fml.common.eventhandler.EventPriority",
-                "com.cleanroommc.groovyscript.event.EventBusType");
+                                         "net.minecraft.block.state.IBlockState",
+                                         "net.minecraft.block.Block",
+                                         "net.minecraft.block.SoundType",
+                                         "net.minecraft.enchantment.Enchantment",
+                                         "net.minecraft.entity.Entity",
+                                         "net.minecraft.entity.player.EntityPlayer",
+                                         "net.minecraft.init.Biomes",
+                                         "net.minecraft.init.Blocks",
+                                         "net.minecraft.init.Enchantments",
+                                         "net.minecraft.init.Items",
+                                         "net.minecraft.init.MobEffects",
+                                         "net.minecraft.init.PotionTypes",
+                                         "net.minecraft.init.SoundEvents",
+                                         "net.minecraft.item.EnumRarity",
+                                         "net.minecraft.item.Item",
+                                         "net.minecraft.item.ItemStack",
+                                         "net.minecraft.nbt.NBTTagCompound",
+                                         "net.minecraft.nbt.NBTTagList",
+                                         "net.minecraft.tileentity.TileEntity",
+                                         "net.minecraft.util.math.BlockPos",
+                                         "net.minecraft.util.DamageSource",
+                                         "net.minecraft.util.EnumHand",
+                                         "net.minecraft.util.EnumHandSide",
+                                         "net.minecraft.util.EnumFacing",
+                                         "net.minecraft.util.ResourceLocation",
+                                         "net.minecraftforge.fml.common.eventhandler.EventPriority",
+                                         "com.cleanroommc.groovyscript.event.EventBusType");
         this.storedExceptions = new Object2ObjectOpenHashMap<>();
         readIndex();
     }
@@ -162,17 +166,33 @@ public class GroovyScriptSandbox extends GroovySandbox {
                 }
             }
         }
+        JsonArray closures = json.getAsJsonArray("closures");
+        for (JsonElement element : closures) {
+            if (element.isJsonPrimitive()) {
+                Entry entry = new Entry(element.getAsString(), -1);
+                this.index.put(entry.path, entry);
+                entry.readData(this.basePath);
+                this.cachedClosures.add(entry);
+            }
+        }
     }
 
     private void writeIndex() {
         JsonObject json = new JsonObject();
+        json.addProperty("!DANGER!", "DO NOT EDIT THIS FILE!!!");
         JsonArray index = new JsonArray();
         json.add("index", index);
+        JsonArray closures = new JsonArray();
+        json.add("closures", closures);
         for (Map.Entry<String, Entry> entry : this.index.entrySet()) {
-            JsonObject jsonEntry = new JsonObject();
-            index.add(jsonEntry);
-            jsonEntry.addProperty("path", entry.getValue().path);
-            jsonEntry.addProperty("lm", entry.getValue().lastEdited);
+            if (entry.getValue().isClosure()) {
+                closures.add(entry.getValue().path);
+            } else {
+                JsonObject jsonEntry = new JsonObject();
+                jsonEntry.addProperty("path", entry.getValue().path);
+                jsonEntry.addProperty("lm", entry.getValue().lastEdited);
+                index.add(jsonEntry);
+            }
         }
         JsonHelper.saveJson(new File(this.basePath, "compiled/index.json"), json);
     }
@@ -231,11 +251,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
     }
 
     @ApiStatus.Internal
-    public void onCompileScript(String name, byte[] code, boolean closure) {
+    public void onCompileScript(String name, Class<?> clazz, byte[] code, boolean closure) {
         if (closure) {
-            Entry entry = this.index.computeIfAbsent(name, n -> new Entry(n, -1));
-            entry.data = code;
-            this.cachedClosures.put(name, entry);
+            this.index.computeIfAbsent(name, n -> new Entry(n, -1)).onCompile(code, clazz, this.basePath);
             return;
         }
         if (File.separatorChar != '/') {
@@ -245,8 +263,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
         int index = name.indexOf(base);
         if (index < 0) throw new IllegalArgumentException();
         String shortName = name.substring(index + base.length() + 1);
-
-        this.index.computeIfAbsent(shortName, n -> new Entry(n, 0)).data = code;
+        this.index.computeIfAbsent(shortName, n -> new Entry(n, 0)).onCompile(code, clazz, this.basePath);
     }
 
     @Override
@@ -256,6 +273,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
         if (entry == null) {
             entry = new Entry(file.toString(), lastModified);
             this.index.put(file.toString(), entry);
+        } else if (entry.isClosure()) {
+            throw new IllegalStateException("Closures are not loaded like this. What's going on?");
         }
         if (lastModified <= entry.lastEdited && entry.clazz == null && entry.data != null) {
             String name = entry.path;
@@ -264,12 +283,13 @@ public class GroovyScriptSandbox extends GroovySandbox {
             i = name.lastIndexOf('.');
             if (i >= 0) name = name.substring(0, i);
             entry.clazz = engine.getGroovyClassLoader().defineClass(name, entry.data);
+            GroovyLog.get().debug(" script {} is already compiled", file);
         } else if (entry.clazz == null || lastModified > entry.lastEdited) {
-            GroovyLog.get().info(" compiling {}", file);
+            GroovyLog.get().debug(" compiling script {}", file);
             entry.onCompile(super.loadScriptClass(engine, file), this.basePath);
             entry.lastEdited = lastModified;
         } else {
-            GroovyLog.get().info(" script {} is already compiled", file);
+            GroovyLog.get().debug(" script {} is already compiled and loaded", file);
         }
         return entry.clazz;
     }
@@ -283,8 +303,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
         if (!this.cachedClosures.isEmpty()) {
-            this.cachedClosures.values().forEach(entry -> engine.getGroovyClassLoader().defineClass(entry.path, entry.data));
-            this.cachedClosures.clear();
+            // this needs to be done in every loader for some reason
+            this.cachedClosures.forEach(entry -> entry.clazz = engine.getGroovyClassLoader().defineClass(entry.path, entry.data));
         }
         config.addCompilationCustomizers(GroovyScriptCompiler.transformer());
         config.addCompilationCustomizers(this.importCustomizer);
@@ -335,5 +355,14 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     public ImportCustomizer getImportCustomizer() {
         return importCustomizer;
+    }
+
+    @ApiStatus.Internal
+    public void deleteClassCache() {
+        try {
+            FileUtils.cleanDirectory(new File(this.basePath, "compiled"));
+        } catch (IOException e) {
+            GroovyScript.LOGGER.throwing(e);
+        }
     }
 }

@@ -24,6 +24,6 @@ public class GroovyClassLoaderMixin {
     @Inject(method = "createClass", at = @At("RETURN"))
     public void onCreateClass(byte[] code, ClassNode classNode, CallbackInfoReturnable<Class<?>> cir) {
         boolean closure = Pattern.compile(".*_closure[0-9]+").matcher(classNode.getName()).matches();
-        GroovyScript.getSandbox().onCompileScript(closure ? classNode.getName() : su.getName(), code, closure);
+        GroovyScript.getSandbox().onCompileScript(closure ? classNode.getName() : su.getName(), cir.getClass(), code, closure);
     }
 }
