@@ -4,6 +4,7 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.CokeOvenRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -14,12 +15,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@RegistryDescription
 public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
 
-    public CokeOven() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).time(100).creosote(50)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -37,6 +36,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public CokeOvenRecipe add(ItemStack output, IIngredient input, int time, int creosoteOutput) {
         CokeOvenRecipe recipe = new CokeOvenRecipe(output.copy(), ImmersiveEngineering.toIEInput(input), time, creosoteOutput);
         add(recipe);
@@ -51,6 +51,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:material:6')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Coke Oven recipe")
@@ -70,6 +71,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         list.forEach(this::addBackup);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:log')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Coke Oven recipe")
@@ -92,25 +94,33 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CokeOvenRecipe> streamRecipes() {
         return new SimpleObjectStream<>(CokeOvenRecipe.recipeList).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CokeOvenRecipe.recipeList.forEach(this::addBackup);
         CokeOvenRecipe.recipeList.clear();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CokeOvenRecipe> {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int time;
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int creosote;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder creosote(int creosote) {
             this.creosote = creosote;
             return this;
@@ -130,6 +140,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable CokeOvenRecipe register() {
             if (!validate()) return null;
             CokeOvenRecipe recipe = new CokeOvenRecipe(output.get(0), ImmersiveEngineering.toIEInput(input.get(0)), time, creosote);

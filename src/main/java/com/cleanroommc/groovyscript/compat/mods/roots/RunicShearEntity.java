@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -20,12 +21,14 @@ import java.util.function.Function;
 
 import static epicsquid.roots.init.ModRecipes.getRunicShearEntityRecipes;
 
+@RegistryDescription
 public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation, RunicShearEntityRecipe>> {
 
-    public RunicShearEntity() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".name('clay_from_wither_skeletons').entity(entity('minecraft:wither_skeleton')).output(item('minecraft:clay')).cooldown(1000)"),
+            @Example(".name('creeper_at_the_last_moment').entity(entity('minecraft:creeper')).output(item('minecraft:diamond'), item('minecraft:nether_star')).functionMap({ entityLivingBase -> entityLivingBase.hasIgnited() ? item('minecraft:nether_star') : item('minecraft:dirt') })"),
+            @Example(".entity(entity('minecraft:witch')).output(item('minecraft:clay'))")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -53,6 +56,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         return null;
     }
 
+    @MethodDescription(example = @Example("resource('roots:slime_strange_ooze')"))
     public boolean removeByName(ResourceLocation name) {
         RunicShearEntityRecipe recipe = getRunicShearEntityRecipes().get(name);
         if (recipe == null) return false;
@@ -61,6 +65,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         return true;
     }
 
+    @MethodDescription(example = @Example("item('roots:fey_leather')"))
     public boolean removeByOutput(ItemStack output) {
         return getRunicShearEntityRecipes().entrySet().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getValue().getDrop(), output)) {
@@ -71,10 +76,12 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         });
     }
 
+    @MethodDescription(example = @Example("entity('minecraft:chicken')"))
     public boolean removeByEntity(EntityEntry entity) {
         return removeByEntity((Class<? extends EntityLivingBase>) entity.getEntityClass());
     }
 
+    @MethodDescription
     public boolean removeByEntity(Class<? extends EntityLivingBase> clazz) {
         for (Map.Entry<ResourceLocation, RunicShearEntityRecipe> x : getRunicShearEntityRecipes().entrySet()) {
             if (x.getValue().getClazz() == clazz) {
@@ -86,32 +93,42 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getRunicShearEntityRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getRunicShearEntityRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, RunicShearEntityRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(getRunicShearEntityRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
+    @Property(property = "name")
+    @Property(property = "output", valid = @Comp(type = Comp.Type.GTE, value = "1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RunicShearEntityRecipe> {
 
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private Class<? extends EntityLivingBase> entity;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private int cooldown;
+        @Property
         private Function<EntityLivingBase, ItemStack> functionMap;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder entity(EntityEntry entity) {
             this.entity = (Class<? extends EntityLivingBase>) entity.getEntityClass();
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder cooldown(int cooldown) {
             this.cooldown = cooldown;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder functionMap(Function<EntityLivingBase, ItemStack> functionMap) {
             this.functionMap = functionMap;
             return this;
@@ -136,6 +153,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable RunicShearEntityRecipe register() {
             if (!validate()) return null;
             RunicShearEntityRecipe recipe;

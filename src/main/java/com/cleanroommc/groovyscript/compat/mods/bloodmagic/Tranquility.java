@@ -4,6 +4,7 @@ import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.incense.EnumTranquilityType;
 import WayofTime.bloodmagic.incense.TranquilityStack;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.bloodmagic.BloodMagicValueManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -18,12 +19,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, TranquilityStack>> {
 
-    public Tranquility() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".block(block('minecraft:obsidian')).tranquility('LAVA').value(10)"),
+            @Example(".block(block('minecraft:obsidian')).tranquility('WATER').value(10)"),
+            @Example(".blockstate(blockstate('minecraft:obsidian')).tranquility('LAVA').value(500)")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -34,18 +37,21 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
         restoreFromBackup().forEach(pair -> ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().put(pair.getKey(), pair.getValue()));
     }
 
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tranquility.add0", type = MethodDescription.Type.ADDITION)
     public void add(Block block, String tranquility, double value) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
             add(state, tranquility, value);
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tranquility.add1", type = MethodDescription.Type.ADDITION)
     public void add(Block block, TranquilityStack tranquility) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
             add(state, tranquility);
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tranquility.add2", type = MethodDescription.Type.ADDITION)
     public void add(IBlockState blockstate, String tranquility, double value) {
         for (EnumTranquilityType type : EnumTranquilityType.values()) {
             if (type.name().equalsIgnoreCase(tranquility)) {
@@ -59,23 +65,27 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
                 .post();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tranquility.add3", type = MethodDescription.Type.ADDITION)
     public void add(IBlockState blockstate, TranquilityStack tranquility) {
         addScripted(Pair.of(blockstate, tranquility));
         ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().put(blockstate, tranquility);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tranquility.remove0", example = @Example("block('minecraft:dirt'), 'EARTHEN'"))
     public void remove(Block block, String tranquility) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
             remove(state, tranquility);
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tranquility.remove1")
     public void remove(Block block, EnumTranquilityType tranquility) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
             remove(state, tranquility);
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tranquility.remove2", example = @Example("blockstate('minecraft:netherrack'), 'FIRE'"))
     public void remove(IBlockState blockstate, String tranquility) {
         for (EnumTranquilityType type : EnumTranquilityType.values()) {
             if (type.name().equalsIgnoreCase(tranquility)) {
@@ -89,6 +99,8 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
                 .post();
     }
 
+
+    @MethodDescription(description = "groovyscript.wiki.bloodmagic.tranquility.remove3")
     public boolean remove(IBlockState blockstate, EnumTranquilityType tranquility) {
         for (Map.Entry<IBlockState, TranquilityStack> entry : BloodMagicAPI.INSTANCE.getValueManager().getTranquility().entrySet()) {
             if (entry.getKey() == blockstate && entry.getValue().type == tranquility) {
@@ -105,11 +117,13 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().forEach((l, r) -> this.addBackup(Pair.of(l, r)));
         ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<IBlockState, TranquilityStack>> streamRecipes() {
         return new SimpleObjectStream<>(((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().entrySet())
                 .setRemover(r -> this.remove(r.getKey(), r.getValue().type));
@@ -118,11 +132,16 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
 
     public static class RecipeBuilder {
 
+        @Property
         private IBlockState blockstate;
+        @Property
         private Block block;
+        @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private EnumTranquilityType tranquility;
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private double value;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder blockstate(IBlockState blockstate) {
             this.blockstate = blockstate;
             if (this.block != null) {
@@ -134,6 +153,7 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder block(Block block) {
             this.block = block;
             if (this.blockstate != null) {
@@ -145,11 +165,13 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder tranquility(EnumTranquilityType tranquility) {
             this.tranquility = tranquility;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "tranquility")
         public RecipeBuilder tranquility(String tranquility) {
             StringBuilder names = new StringBuilder();
             for (EnumTranquilityType type : EnumTranquilityType.values()) {
@@ -165,6 +187,7 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder value(double value) {
             this.value = value;
             return this;
@@ -183,6 +206,7 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
             return !msg.postIfNotEmpty();
         }
 
+        @RecipeBuilderRegistrationMethod
         public @Nullable Object register() {
             if (!validate()) return null;
             TranquilityStack stack = new TranquilityStack(tranquility, value);

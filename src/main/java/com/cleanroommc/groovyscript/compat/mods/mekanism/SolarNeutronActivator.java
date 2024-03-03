@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
@@ -11,16 +12,19 @@ import mekanism.common.recipe.inputs.GasInput;
 import mekanism.common.recipe.machines.SolarNeutronRecipe;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeutronRecipe> {
 
     public SolarNeutronActivator() {
         super(RecipeHandler.Recipe.SOLAR_NEUTRON_ACTIVATOR, Alias.generateOfClass(SolarNeutronActivator.class).and("SNA", "sna"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".gasInput(gas('water')).gasOutput(gas('hydrogen'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('water'), gas('hydrogen')", commented = true))
     public SolarNeutronRecipe add(GasStack input, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Solar Neutron Activator recipe").error();
         msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
@@ -33,6 +37,7 @@ public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeut
         return recipe;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("gas('lithium')"))
     public boolean removeByInput(GasStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Solar Neutron Activator recipe").error();
         msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
@@ -47,6 +52,8 @@ public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeut
         return false;
     }
 
+    @Property(property = "gasInput", valid = @Comp("1"))
+    @Property(property = "gasOutput", valid = @Comp("1"))
     public static class RecipeBuilder extends GasRecipeBuilder<SolarNeutronRecipe> {
 
         @Override
@@ -62,6 +69,7 @@ public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeut
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable SolarNeutronRecipe register() {
             if (!validate()) return null;
             SolarNeutronRecipe recipe = new SolarNeutronRecipe(gasInput.get(0), gasOutput.get(0));

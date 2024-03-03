@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
@@ -16,16 +17,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<PressurizedRecipe> {
 
     public PressurizedReactionChamber() {
         super(RecipeHandler.Recipe.PRESSURIZED_REACTION_CHAMBER, Alias.generateOfClass(PressurizedReactionChamber.class).and("PRC", "prc"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).gasInput(gas('water')).input(item('minecraft:clay_ball')).gasOutput(gas('ethene'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription
     public PressurizedRecipe add(IIngredient inputSolid, FluidStack inputFluid, GasStack inputGas, ItemStack outputSolid, GasStack outputGas, double energy, int duration) {
         PressurizedRecipe r = null;
         for (ItemStack item : inputSolid.getMatchingStacks()) {
@@ -37,6 +41,7 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
         return r;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('logWood'), fluid('water'), gas('oxygen')"))
     public boolean removeByInput(IIngredient inputSolid, FluidStack inputFluid, GasStack inputGas) {
         if (GroovyLog.msg("Error removing Mekanism Pressurized Reaction Chamber recipe").error()
                 .add(IngredientHelper.isEmpty(inputSolid), () -> "item input must not be empty")
@@ -60,9 +65,16 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
         return found;
     }
 
+    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "gasInput", valid = @Comp("1"))
+    @Property(property = "gasOutput", valid = @Comp("1"))
     public static class RecipeBuilder extends GasRecipeBuilder<PressurizedRecipe> {
 
+        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int duration;
+        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private double energy;
 
         public RecipeBuilder duration(int duration) {
@@ -90,6 +102,7 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable PressurizedRecipe register() {
             if (!validate()) return null;
             PressurizedOutput pressurizedOutput = new PressurizedOutput(output.getOrEmpty(0), gasOutput.get(0));

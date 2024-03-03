@@ -2,6 +2,9 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.botania.recipe.OrechidRecipe;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -11,6 +14,7 @@ import vazkii.botania.api.BotaniaAPI;
 import java.util.ArrayList;
 import java.util.List;
 
+@RegistryDescription
 public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
 
     @Override
@@ -26,12 +30,14 @@ public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
         return recipes;
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public OrechidRecipe add(String output, int weight) {
         OrechidRecipe recipe = new OrechidRecipe(output, weight);
         add(recipe);
         return recipe;
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = {@Example("ore('oreEmerald'), 1350"), @Example("ore('blockGold'), 1800")})
     public OrechidRecipe add(OreDictIngredient output, int weight) {
         return add(output.getOreDict(), weight);
     }
@@ -52,6 +58,7 @@ public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("'oreCoal'"))
     public boolean removeByOutput(String output) {
         if (BotaniaAPI.oreWeights.containsKey(output)) {
             addBackup(new OrechidRecipe(output, BotaniaAPI.getOreWeight(output)));
@@ -66,15 +73,18 @@ public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = {@Example(value = "ore('oreEmerald')", commented = true), @Example(value = "ore('oreQuartz')", commented = true)})
     public boolean removeByOutput(OreDictIngredient output) {
         return removeByOutput(output.getOreDict());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getAllRecipes().forEach(this::addBackup);
         BotaniaAPI.oreWeights.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<OrechidRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getAllRecipes(), false).setRemover(this::remove);
     }

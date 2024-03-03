@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.compactmachines;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -17,8 +18,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachines3.miniaturization.MultiblockRecipe> {
 
+    @RecipeBuilderDescription(example = {
+            @Example(".name('diamond_rectangle').input(item('minecraft:clay')).output(item('minecraft:clay')).symmetrical().ticks(10).shape([['www', 'www']]).key('w', blockstate('minecraft:diamond_block'))"),
+            @Example(".name('groovy_rocket').input(item('minecraft:diamond')).output(item('minecraft:clay') * 64).symmetrical().ticks(5400).key('a', blockstate('minecraft:stained_glass:0')).key('b', blockstate('minecraft:stained_glass:1')).key('c', blockstate('minecraft:stained_glass:2')).key('d', blockstate('minecraft:stained_glass:3')).key('e', blockstate('minecraft:diamond_block')).key('f', blockstate('minecraft:stained_glass:5')).key('g', blockstate('minecraft:stained_glass:6')).layer('       ', '       ', '   a   ', '  aaa  ', '   a   ', '       ', '       ').layer('       ', '   b   ', '  aaa  ', ' baaab ', '  aaa  ', '   b   ', '       ').layer('       ', '   c   ', '  cac  ', ' caeac ', '  cac  ', '   c   ', '       ').layer('       ', '   a   ', '  aaa  ', ' aaeaa ', '  aaa  ', '   a   ', '       ').layer('       ', '   a   ', '  aaa  ', ' aaeaa ', '  aaa  ', '   a   ', '       ').layer('       ', '   a   ', '  aaa  ', ' aaeaa ', '  aaa  ', '   a   ', '       ').layer('       ', '   g   ', '  cac  ', ' caeac ', '  cac  ', '   f   ', '       ').layer('       ', '   a   ', '  aaa  ', ' aaeaa ', '  aaa  ', '   a   ', '       ').layer('       ', '   a   ', '  aaa  ', ' aaeaa ', '  aaa  ', '   a   ', '       ').layer('       ', '   a   ', '  aaa  ', ' aaeaa ', '  aaa  ', '   a   ', '       ').layer('       ', '   c   ', '  cac  ', ' caeac ', '  cac  ', '   c   ', '       ').layer('       ', '   a   ', '  aaa  ', ' aaaaa ', '  aaa  ', '   a   ', '       ').layer('   a   ', '  ccc  ', ' cdddc ', 'acdddca', ' cdddc ', '  ccc  ', '   a   ')\n")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -39,6 +45,7 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
         return MultiblockRecipes.getRecipes().removeIf(r -> r == recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:ender_pearl')"))
     public void removeByInput(ItemStack input) {
         for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : MultiblockRecipes.getRecipes().stream().filter(r -> r.getCatalystStack().isItemEqual(input)).collect(Collectors.toList())) {
             addBackup(recipe);
@@ -46,10 +53,12 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:redstone')"))
     public void removeByCatalyst(ItemStack catalyst) {
         removeByInput(catalyst);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('compactmachines3:machine:3')"))
     public void removeByOutput(ItemStack output) {
         for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : MultiblockRecipes.getRecipes().stream().filter(r -> r.getTargetStack().isItemEqual(output)).collect(Collectors.toList())) {
             addBackup(recipe);
@@ -57,44 +66,56 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MultiblockRecipes.getRecipes().forEach(this::addBackup);
         MultiblockRecipes.getRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<org.dave.compactmachines3.miniaturization.MultiblockRecipe> streamRecipes() {
         return new SimpleObjectStream<>(MultiblockRecipes.getRecipes()).setRemover(this::remove);
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<org.dave.compactmachines3.miniaturization.MultiblockRecipe> {
 
+        @Property(defaultValue = "' ' = air, '_' = air")
         private final Char2ObjectOpenHashMap<ReferenceValues> keyMap = new Char2ObjectOpenHashMap<>();
         private final List<String> errors = new ArrayList<>();
+        @Property
         List<List<String>> shape = new ArrayList<>();
+        @Property
         private boolean symmetrical;
+        @Property(defaultValue = "100")
         private int ticks = 100;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder shape(List<List<String>> shape) {
             this.shape = shape;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "shape")
         public RecipeBuilder layer(List<String> layer) {
             this.shape.add(layer);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "shape")
         public RecipeBuilder layer(String... layer) {
             return layer(Arrays.asList(layer));
         }
 
         // groovy doesn't have char literals
+        @RecipeBuilderMethodDescription(field = "keyMap")
         public RecipeBuilder key(String c, IBlockState state, NBTTagCompound nbt, boolean ignoreMeta, ItemStack reference) {
             if (c == null || c.length() != 1) {
                 errors.add("key must be a single char, but found '" + c + "'");
                 return this;
             }
-            if (c.equals("_") || c.equals(" ")) {
+            if ("_".equals(c) || " ".equals(c)) {
                 errors.add("key cannot be an underscore('_') or a space(' ')");
                 return this;
             }
@@ -102,37 +123,45 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "keyMap")
         public RecipeBuilder key(String c, IBlockState state, NBTTagCompound nbt, boolean ignoreMeta) {
             return key(c, state, nbt, ignoreMeta, null);
         }
 
+        @RecipeBuilderMethodDescription(field = "keyMap")
         public RecipeBuilder key(String c, IBlockState state, NBTTagCompound nbt) {
             return key(c, state, nbt, false, null);
         }
 
+        @RecipeBuilderMethodDescription(field = "keyMap")
         public RecipeBuilder key(String c, IBlockState state, boolean ignoreMeta) {
             return key(c, state, null, ignoreMeta, null);
         }
 
+        @RecipeBuilderMethodDescription(field = "keyMap")
         public RecipeBuilder key(String c, IBlockState state) {
             return key(c, state, null, false, null);
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder symmetrical(boolean symmetrical) {
             this.symmetrical = symmetrical;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder symmetrical() {
             this.symmetrical = !symmetrical;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder ticks(int ticks) {
             this.ticks = ticks;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder duration(int duration) {
             return ticks(duration);
         }
@@ -160,6 +189,7 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
 
         @Nullable
         @Override
+        @RecipeBuilderRegistrationMethod
         public org.dave.compactmachines3.miniaturization.MultiblockRecipe register() {
             if (!validate()) return null;
 

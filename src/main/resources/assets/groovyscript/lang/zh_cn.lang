@@ -1,0 +1,20 @@
+groovyscript.command.copy.hover=点击以复制
+groovyscript.command.copy.copied_start=已将 [
+groovyscript.command.copy.copied_end=] 复制到剪切板
+
+key.categories.groovyscript=GroovyScript
+key.groovyscript.reload=重载脚本
+
+groovyscript.jei.category.groovyscript:fluid_recipe.name=世界内流体合成配方
+groovyscript.jei.category.groovyscript:explosion.name=爆炸配方
+groovyscript.jei.category.groovyscript:burning.name=燃烧配方
+groovyscript.jei.category.groovyscript:piston_push.name=活塞推动配方
+
+groovyscript.recipe.fluid_recipe=将物品丢入流体中以转化
+groovyscript.recipe.explosion=爆炸物品以转化
+groovyscript.recipe.burning=点燃物品以转化
+groovyscript.recipe.piston_push=将物品推向方块以转化
+groovyscript.recipe.piston_push.max_items=每次最多能推动的物品数：%d
+groovyscript.recipe.piston_push.min_level=最低挖掘等级：%d
+groovyscript.recipe.chance_produce=§2%s§7 几率产出
+groovyscript.recipe.chance_consume=§2%s§7 几率消耗

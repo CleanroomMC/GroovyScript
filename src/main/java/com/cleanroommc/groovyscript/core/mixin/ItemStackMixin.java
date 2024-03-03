@@ -10,18 +10,24 @@ import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
-import groovy.lang.Closure;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
+
+import groovy.lang.Closure;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value = ItemStack.class)
 public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMarkable {
+
+    @Shadow
+    public abstract boolean isEmpty();
 
     @Unique
     protected Closure<Object> matchCondition;
@@ -79,7 +85,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     @Override
     public boolean test(ItemStack stack) {
         if (!OreDictionary.itemMatches(groovyscript$getThis(), stack, false) ||
-            (matchCondition != null && !ClosureHelper.call(true, matchCondition, stack))) {
+                (matchCondition != null && !ClosureHelper.call(true, matchCondition, stack))) {
             return false;
         }
         if (nbtMatcher != null) {
@@ -191,13 +197,15 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
         VanillaModule.oreDict.remove(ingredient.getOreDict(), groovyscript$getThis());
     }
 
-    public boolean isCase(OreDictIngredient ingredient) {
-        ItemStack itemStack = groovyscript$getThis();
-        for (ItemStack stack : OreDictionary.getOres(ingredient.getOreDict())) {
-            if (OreDictionary.itemMatches(itemStack, stack, false)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean leftShift(IIngredient ingredient) {
+        return ingredient.isCase(groovyscript$getThis()) && ingredient.getAmount() >= getAmount();
+    }
+
+    public boolean isSameExact(ItemStack itemStack) {
+        return ItemStack.areItemStacksEqual(groovyscript$getThis(), itemStack);
+    }
+
+    public boolean isSame(ItemStack itemStack, boolean ignoreNbt) {
+        return ItemStack.areItemsEqual(groovyscript$getThis(), itemStack) && (ignoreNbt || ItemStack.areItemStackTagsEqual(groovyscript$getThis(), itemStack));
     }
 }

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
@@ -11,16 +12,19 @@ import mekanism.common.recipe.inputs.GasInput;
 import mekanism.common.recipe.machines.WasherRecipe;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
 
     public Washer() {
-        super(RecipeHandler.Recipe.CHEMICAL_WASHER, Alias.generateOfClass(Washer.class).andGenerate("ChemicalWasher"));
+        super(RecipeHandler.Recipe.CHEMICAL_WASHER, Alias.generateOfClassAnd(Washer.class, "ChemicalWasher"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".gasInput(gas('water') * 10).gasOutput(gas('hydrogen') * 20)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('water'), gas('hydrogen')", commented = true))
     public WasherRecipe add(GasStack input, GasStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Washer recipe").error();
         msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
@@ -33,6 +37,7 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
         return recipe;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("gas('iron')"))
     public boolean removeByInput(GasStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Washer recipe").error();
         msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
@@ -47,6 +52,8 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
         return false;
     }
 
+    @Property(property = "gasInput", valid = @Comp("1"))
+    @Property(property = "gasOutput", valid = @Comp("1"))
     public static class RecipeBuilder extends GasRecipeBuilder<WasherRecipe> {
 
         @Override
@@ -62,6 +69,7 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable WasherRecipe register() {
             if (!validate()) return null;
             WasherRecipe recipe = new WasherRecipe(gasInput.get(0), gasOutput.get(0));

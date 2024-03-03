@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -21,10 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@RegistryDescription
 public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
-
-    public AspectHelper() {
-    }
 
     @Override
     @GroovyBlacklist
@@ -98,26 +97,32 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.add_entity", type = MethodDescription.Type.ADDITION)
     public void add(EntityEntry entity, AspectStack aspect) {
         this.add(entity, aspect, true);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.add_ore", type = MethodDescription.Type.ADDITION)
     public void add(OreDictIngredient oreDict, AspectStack aspect) {
         this.add(oreDict, aspect, true);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.add_item", type = MethodDescription.Type.ADDITION)
     public void add(ItemStack item, AspectStack aspect) {
         this.add(item, aspect, true);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.remove_entity")
     public void remove(EntityEntry entity, AspectStack aspect) {
         this.remove(entity, aspect, true);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.remove_ore")
     public void remove(OreDictIngredient oreDict, AspectStack aspect) {
         this.remove(oreDict, aspect, true);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.remove_item")
     public void remove(ItemStack item, AspectStack aspect) {
         this.remove(item, aspect, true);
     }
@@ -153,7 +158,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     public void add(OreDictIngredient oreDic, AspectStack aspect, boolean doBackup) {
         if (oreDic != null && aspect != null) {
             List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDic.getOreDict());
-            if (ores != null && ores.size() > 0) {
+            if (ores != null && !ores.isEmpty()) {
 
                 for (ItemStack ore : ores) {
                     try {
@@ -212,7 +217,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     public void remove(OreDictIngredient oreDic, AspectStack aspect, boolean doBackup) {
         if (oreDic != null && aspect != null) {
             List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDic.getOreDict());
-            if (ores != null && ores.size() > 0) {
+            if (ores != null && !ores.isEmpty()) {
 
                 for (ItemStack ore : ores) {
                     try {
@@ -246,6 +251,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                 .post();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.removeAll_entity")
     public void removeAll(EntityEntry entity) {
         if (entity != null) {
             for (ThaumcraftApi.EntityTags e : CommonInternals.scanEntities) {
@@ -262,9 +268,10 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
                 .post();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.removeAll_ore")
     public void removeAll(OreDictIngredient oreDic) {
         List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDic.getOreDict());
-        if (ores != null && ores.size() > 0) {
+        if (ores != null && !ores.isEmpty()) {
 
             for (ItemStack ore : ores) {
                 try {
@@ -277,58 +284,78 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.removeAll_item")
     public void removeAll(ItemStack target) {
         for (Aspect a : CommonInternals.objectTags.get(CommonInternals.generateUniqueItemstackId(target)).getAspects())
             this.remove(target, new AspectStack(a, CommonInternals.objectTags.get(CommonInternals.generateUniqueItemstackId(target)).getAmount(a)));
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".object(item('minecraft:stone')).stripAspects().aspect(aspect('ignis') * 20).aspect('ordo', 5)"),
+            @Example(".object(ore('cropPumpkin')).stripAspects().aspect(aspect('herba') * 20)"),
+            @Example(".entity(entity('minecraft:chicken')).stripAspects().aspect('bestia', 20)")
+    })
     public AspectHelperBuilder aspectBuilder() {
         return new AspectHelperBuilder();
     }
 
     public static class AspectHelperBuilder {
 
+        @Property(requirement = "groovyscript.wiki.thaumcraft.aspect_helper.target.required")
         private EntityEntry entity;
+        @Property(requirement = "groovyscript.wiki.thaumcraft.aspect_helper.target.required")
         private IIngredient object;
+        @Property
         private final ArrayList<AspectStack> aspects = new ArrayList<>();
+        @Property
+        private boolean stripAspects;
 
+        @RecipeBuilderMethodDescription
         public AspectHelperBuilder entity(EntityEntry entity) {
             this.entity = entity;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public AspectHelperBuilder object(IIngredient object) {
             this.object = object;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "aspects")
         public AspectHelperBuilder aspect(AspectStack aspect) {
             this.aspects.add(aspect);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "aspects")
         public AspectHelperBuilder aspect(String tag, int amount) {
             Aspect a = Thaumcraft.validateAspect(tag);
             if (a != null) this.aspects.add(new AspectStack(a, amount));
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public AspectHelperBuilder stripAspects() {
-            if (entity != null) {
-                ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(entity);
-            } else if (object != null && object instanceof OreDictIngredient) {
-                ModSupport.THAUMCRAFT.get().aspectHelper.removeAll((OreDictIngredient) object);
-            } else if (object != null && IngredientHelper.isItem(object) && !IngredientHelper.isEmpty(object)) {
-                ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(IngredientHelper.toItemStack(object));
-            } else {
-                GroovyLog.msg("Error removing Thaumcraft Aspects from item/entity")
-                        .error()
-                        .post();
-            }
+            stripAspects = !stripAspects;
             return this;
         }
 
+        @RecipeBuilderRegistrationMethod
         public void register() {
+            if (stripAspects) {
+                if (entity != null) {
+                    ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(entity);
+                } else if (object != null && object instanceof OreDictIngredient) {
+                    ModSupport.THAUMCRAFT.get().aspectHelper.removeAll((OreDictIngredient) object);
+                } else if (object != null && IngredientHelper.isItem(object) && !IngredientHelper.isEmpty(object)) {
+                    ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(IngredientHelper.toItemStack(object));
+                } else {
+                    GroovyLog.msg("Error removing Thaumcraft Aspects from item/entity")
+                            .error()
+                            .post();
+                }
+            }
             aspects.forEach(aspectStack -> {
                 if (entity != null)
                     ModSupport.THAUMCRAFT.get().aspectHelper.add(entity, aspectStack);

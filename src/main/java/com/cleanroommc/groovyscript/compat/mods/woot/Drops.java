@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.woot;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.woot.CustomDropAccessor;
 import com.cleanroommc.groovyscript.core.mixin.woot.CustomDropsRepositoryAccessor;
@@ -18,12 +19,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@RegistryDescription
 public class Drops extends VirtualizedRegistry<Object> {
 
-    public Drops() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".name('minecraft:zombie').output(item('minecraft:clay')).chance(10, 30, 60, 100).size(5, 10, 20, 50)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -36,6 +35,7 @@ public class Drops extends VirtualizedRegistry<Object> {
         );
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(WootMobName wootMobName, ItemStack itemStack, List<Integer> chances, List<Integer> sizes) {
         Woot.customDropsRepository.addDrop(wootMobName, itemStack, chances, sizes);
         // get the drop we just added, but painfully
@@ -60,6 +60,7 @@ public class Drops extends VirtualizedRegistry<Object> {
         });
     }
 
+    @MethodDescription(example = @Example(value = "new WootMobName('minecraft:ender_dragon')", imports = "ipsis.woot.util.WootMobName"))
     public boolean removeByEntity(WootMobName name) {
         return ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops().removeIf(d -> {
             if (((CustomDropAccessor) d).getWootMobName().equals(name)) {
@@ -70,18 +71,22 @@ public class Drops extends VirtualizedRegistry<Object> {
         });
     }
 
+    @MethodDescription(example = @Example("entity('minecraft:ender_dragon')"))
     public boolean removeByEntity(EntityEntry entity) {
         return removeByEntity(new WootMobName(entity.getName()));
     }
 
+    @MethodDescription(example = @Example("'minecraft:ender_dragon'"))
     public boolean removeByEntity(String name) {
         return removeByEntity(new WootMobName(name));
     }
 
+    @MethodDescription(example = @Example("'minecraft:ender_dragon', ''"))
     public boolean removeByEntity(String name, String tag) {
         return removeByEntity(new WootMobName(name, tag));
     }
 
+    @MethodDescription(example = @Example("item('minecraft:dragon_breath')"))
     public boolean removeByOutput(ItemStack output) {
         return ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops().removeIf(d -> {
             if (ItemStack.areItemStacksEqual(((CustomDropAccessor) d).getItemStack(), output)) {
@@ -92,11 +97,13 @@ public class Drops extends VirtualizedRegistry<Object> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops().forEach(this::addBackup);
         ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Object> streamRecipes() {
         return new SimpleObjectStream<>(((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops())
                 .setRemover(this::remove);
@@ -116,37 +123,47 @@ public class Drops extends VirtualizedRegistry<Object> {
                target.getSizeMap().values().containsAll(sizes);
     }
 
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ItemStack> {
 
+        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private WootMobName name;
+        @Property(valid = @Comp("4"))
         private final List<Integer> chance = new ArrayList<>();
+        @Property(valid = @Comp("4"))
         private final List<Integer> size = new ArrayList<>();
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder name(WootMobName name) {
             this.name = name;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder name(EntityEntry entity) {
             this.name = new WootMobName(entity.getName());
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder name(String name) {
             this.name = new WootMobName(name);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder name(String name, String tag) {
             this.name = new WootMobName(name, tag);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder chance(int chance) {
             this.chance.add(chance);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder chance(int... chances) {
             for (int chance : chances) {
                 chance(chance);
@@ -154,6 +171,7 @@ public class Drops extends VirtualizedRegistry<Object> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder chance(Collection<Integer> chances) {
             for (int chance : chances) {
                 chance(chance);
@@ -161,11 +179,13 @@ public class Drops extends VirtualizedRegistry<Object> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder size(int size) {
             this.size.add(size);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder size(int... sizes) {
             for (int size : sizes) {
                 size(size);
@@ -173,6 +193,7 @@ public class Drops extends VirtualizedRegistry<Object> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder size(Collection<Integer> sizes) {
             for (int size : sizes) {
                 size(size);
@@ -195,6 +216,7 @@ public class Drops extends VirtualizedRegistry<Object> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable ItemStack register() {
             if (!validate()) return null;
             ModSupport.WOOT.get().drops.add(name, output.get(0), chance, size);

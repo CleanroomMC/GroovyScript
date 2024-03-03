@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.inspirations;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.inspirations.InspirationsRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -24,6 +25,9 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+@RegistryDescription(
+        admonition = @Admonition("groovyscript.wiki.inspirations.cauldron.note")
+)
 public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
 
     private static boolean checkRecipeMatches(ISimpleCauldronRecipe recipe, IIngredient input, ItemStack output, Object inputState, Object outputState) {
@@ -40,34 +44,92 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         return false;
     }
 
+    @RecipeBuilderDescription(example = @Example(".standard().input(item('minecraft:gold_ingot')).fluidInput(fluid('lava')).output(item('minecraft:clay')).boiling().sound(sound('minecraft:block.anvil.destroy')).levels(3)"), requirement = {
+            @Property(property = "type"),
+            @Property(property = "input"),
+            @Property(property = "output"),
+            @Property(property = "fluidInput"),
+            @Property(property = "fluidOutput"),
+            @Property(property = "inputPotion"),
+            @Property(property = "outputPotion"),
+            @Property(property = "dye"),
+            @Property(property = "boiling"),
+            @Property(property = "levels"),
+            @Property(property = "sound")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidInput(fluid('lava')).levels(3).sound(sound('minecraft:block.anvil.destroy'))"), requirement = {
+            @Property(property = "input"),
+            @Property(property = "output"),
+            @Property(property = "fluidInput"),
+            @Property(property = "boiling"),
+            @Property(property = "levels"),
+            @Property(property = "sound")
+    })
     public RecipeBuilder recipeBuilderStandard() {
         return new RecipeBuilder().standard();
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:stone:3')).fluidInput(fluid('water')).fluidOutput(fluid('milk')).levels(2)"), requirement = {
+            @Property(property = "input"),
+            @Property(property = "fluidInput"),
+            @Property(property = "fluidOutput"),
+            @Property(property = "boiling"),
+            @Property(property = "levels"),
+            @Property(property = "sound")
+    })
     public RecipeBuilder recipeBuilderTransform() {
         return new RecipeBuilder().transform();
     }
 
+    @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay')).fluidInput(fluid('milk'), fluid('lava'))"), requirement = {
+            @Property(property = "fluidInput", valid = @Comp("2")),
+            @Property(property = "output")
+    })
     public RecipeBuilder recipeBuilderMix() {
         return new RecipeBuilder().mix();
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).fluidInput(fluid('milk')).sound(sound('minecraft:block.anvil.destroy'))"), requirement = {
+            @Property(property = "input"),
+            @Property(property = "output"),
+            @Property(property = "fluidInput"),
+            @Property(property = "boiling"),
+            @Property(property = "sound")
+    })
     public RecipeBuilder recipeBuilderFill() {
         return new RecipeBuilder().fill();
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).outputPotion(potionType('minecraft:strength'))"), requirement = {
+            @Property(property = "input"),
+            @Property(property = "inputPotion"),
+            @Property(property = "outputPotion")
+    })
     public RecipeBuilder recipeBuilderBrewing() {
         return new RecipeBuilder().brewing();
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).levels(2)"), requirement = {
+            @Property(property = "input"),
+            @Property(property = "output"),
+            @Property(property = "inputPotion", valid = {@Comp("0"), @Comp("1")}),
+            @Property(property = "boiling"),
+            @Property(property = "levels")
+    })
     public RecipeBuilder recipeBuilderPotion() {
         return new RecipeBuilder().potion();
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).dye('blue').levels(2)"), requirement = {
+            @Property(property = "input"),
+            @Property(property = "output"),
+            @Property(property = "dye"),
+            @Property(property = "levels")
+    })
     public RecipeBuilder recipeBuilderDye() {
         return new RecipeBuilder().dye();
     }
@@ -90,6 +152,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         return true;
     }
 
+    @MethodDescription(example = @Example("item('minecraft:ghast_tear')"))
     public void removeByInput(IIngredient input) {
         for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, input, null, null, null))
@@ -99,6 +162,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         }
     }
 
+    @MethodDescription(example = @Example("item('minecraft:piston')"))
     public void removeByOutput(ItemStack output) {
         for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, null, output, null, null))
@@ -108,6 +172,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         }
     }
 
+    @MethodDescription
     public void removeByFluidInput(Fluid input) {
         for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, null, null, input, null))
@@ -117,10 +182,12 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         }
     }
 
+    @MethodDescription(example = @Example("fluid('mushroom_stew')"))
     public void removeByFluidInput(FluidStack input) {
         removeByFluidInput(input.getFluid());
     }
 
+    @MethodDescription
     public void removeByFluidOutput(Fluid output) {
         for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, null, null, null, output))
@@ -130,28 +197,43 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         }
     }
 
+    @MethodDescription(example = @Example("fluid('beetroot_soup')"))
     public void removeByFluidOutput(FluidStack output) {
         removeByFluidOutput(output.getFluid());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         InspirationsRegistryAccessor.getCauldronRecipes().forEach(this::addBackup);
         InspirationsRegistryAccessor.getCauldronRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ICauldronRecipe> streamRecipes() {
         return new SimpleObjectStream<>(InspirationsRegistryAccessor.getCauldronRecipes())
                 .setRemover(this::remove);
     }
 
+    @Property(property = "input", valid = @Comp("1"), needsOverride = true)
+    @Property(property = "output", valid = @Comp("1"), needsOverride = true)
+    @Property(property = "fluidInput", valid = @Comp("1"), needsOverride = true)
+    @Property(property = "fluidOutput", valid = @Comp("1"), needsOverride = true)
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICauldronRecipe> {
 
+        @Property(needsOverride = true)
         private RecipeType type;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
         private PotionType inputPotion;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
         private PotionType outputPotion;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
         private EnumDyeColor dye;
+        @Property(needsOverride = true)
         private Boolean boiling = null;
+        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE),
+                           @Comp(value = "`InspirationsRegistry.getCauldronMax()`", type = Comp.Type.LTE)}, needsOverride = true)
         private int levels;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
         private SoundEvent sound;
 
         public static RecipeMatch recipeMatchFromIngredient(IIngredient ingredient, int amount) {
@@ -162,82 +244,100 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
             return recipeMatchFromIngredient(ingredient, 1);
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder type(RecipeType type) {
             this.type = type;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder type(String type) {
             return type(RecipeType.valueOf(type.toUpperCase(Locale.ROOT)));
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public RecipeBuilder standard() {
             return type(RecipeType.STANDARD);
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public RecipeBuilder transform() {
             return type(RecipeType.TRANSFORM);
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public RecipeBuilder mix() {
             return type(RecipeType.MIX);
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public RecipeBuilder fill() {
             return type(RecipeType.FILL);
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public RecipeBuilder brewing() {
             return type(RecipeType.BREWING);
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public RecipeBuilder potion() {
             return type(RecipeType.POTION);
         }
 
+        @RecipeBuilderMethodDescription(field = "type")
         public RecipeBuilder dye() {
             return type(RecipeType.DYE);
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder inputPotion(PotionType inputPotion) {
             this.inputPotion = inputPotion;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder outputPotion(PotionType outputPotion) {
             this.outputPotion = outputPotion;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder dye(EnumDyeColor dye) {
             this.dye = dye;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder dye(String dye) {
             return dye(EnumDyeColor.valueOf(dye.toUpperCase(Locale.ROOT)));
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder boiling(Boolean boiling) {
             this.boiling = boiling;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder boiling() {
             this.boiling = boiling == null || !boiling;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder levels(int levels) {
             this.levels = levels;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder sound(SoundEvent sound) {
             this.sound = sound;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder sound(String sound) {
             return sound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(sound)));
         }
@@ -298,6 +398,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable ICauldronRecipe register() {
             if (!validate()) return null;
 

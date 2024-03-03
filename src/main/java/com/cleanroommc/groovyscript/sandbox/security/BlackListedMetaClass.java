@@ -1,5 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox.security;
 
+import com.cleanroommc.groovyscript.sandbox.RunConfig;
+
 import groovy.lang.*;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.control.CompilationUnit;
@@ -163,13 +165,16 @@ public class BlackListedMetaClass implements MetaClass {
             if (idx > 0) {
                 groovyFile = groovyFile.substring(0, idx);
             }
-            groovyFile = groovyFile.replace('.', '/') + ".groovy";
+            groovyFile = groovyFile.replace('.', '/');
 
-            //System.out.println("Attempting to load: " + groovyFile);
-            URL url = theClass.getClassLoader().getResource(groovyFile);
-            if (url == null) {
-                url = Thread.currentThread().getContextClassLoader().getResource(groovyFile);
+            URL url = null;
+            for (String suffix : RunConfig.GROOVY_SUFFIXES) {
+                url = theClass.getClassLoader().getResource(groovyFile + suffix);
+                if (url != null) break;
+                url = Thread.currentThread().getContextClassLoader().getResource(groovyFile + suffix);
+                if (url != null) break;
             }
+
             if (url != null) {
                 try {
 

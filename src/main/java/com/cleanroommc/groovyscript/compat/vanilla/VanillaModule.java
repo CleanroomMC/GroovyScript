@@ -9,6 +9,9 @@ import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.item.ItemStack;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public class VanillaModule implements IScriptReloadable {
 
     public static final VanillaModule INSTANCE = new VanillaModule();
@@ -23,7 +26,7 @@ public class VanillaModule implements IScriptReloadable {
     public static final InWorldCrafting inWorldCrafting = new InWorldCrafting();
 
     public static void initializeBinding() {
-        GroovyScript.getSandbox().registerBinding("Crafting", crafting);
+        GroovyScript.getSandbox().registerBinding(crafting);
         GroovyScript.getSandbox().registerBinding("Furnace", furnace);
         GroovyScript.getSandbox().registerBinding("Loot", loot);
         GroovyScript.getSandbox().registerBinding("OreDict", oreDict);
@@ -39,6 +42,7 @@ public class VanillaModule implements IScriptReloadable {
     @Override
     @GroovyBlacklist
     public void onReload() {
+        crafting.onReload();
         furnace.onReload();
         loot.onReload();
         oreDict.onReload();
@@ -55,4 +59,8 @@ public class VanillaModule implements IScriptReloadable {
         inWorldCrafting.afterScriptLoad();
     }
 
+    @Override
+    public Collection<String> getAliases() {
+        return Collections.emptyList();
+    }
 }

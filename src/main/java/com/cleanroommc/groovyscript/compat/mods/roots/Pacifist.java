@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.roots.PacifistEntryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -17,12 +18,12 @@ import java.util.Map;
 
 import static epicsquid.roots.init.ModRecipes.getPacifistEntities;
 
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES
+)
 public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, PacifistEntry>> {
 
-    public Pacifist() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".name('wither_skeleton_pacifist').entity(entity('minecraft:wither_skeleton'))"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -49,6 +50,7 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
         return null;
     }
 
+    @MethodDescription(example = @Example("resource('minecraft:chicken')"))
     public boolean removeByName(ResourceLocation name) {
         PacifistEntry recipe = getPacifistEntities().get(name);
         if (recipe == null) return false;
@@ -57,10 +59,12 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
         return true;
     }
 
+    @MethodDescription(example = @Example("entity('minecraft:cow')"))
     public boolean removeByEntity(EntityEntry entity) {
         return removeByClass(entity.getEntityClass());
     }
 
+    @MethodDescription
     public boolean removeByClass(Class<? extends Entity> clazz) {
         return getPacifistEntities().entrySet().removeIf(x -> {
             if (x.getValue().getEntityClass().equals(clazz)) {
@@ -71,20 +75,25 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getPacifistEntities().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getPacifistEntities().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, PacifistEntry>> streamRecipes() {
         return new SimpleObjectStream<>(getPacifistEntities().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
+    @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<PacifistEntry> {
 
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private Class<? extends Entity> entity;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder entity(EntityEntry entity) {
             this.entity = entity.getEntityClass();
             return this;
@@ -108,6 +117,7 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable PacifistEntry register() {
             if (!validate()) return null;
             PacifistEntry recipe = new PacifistEntry(entity, name.toString());

@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeUtils;
 import com.cleanroommc.groovyscript.core.mixin.enderio.SimpleRecipeGroupHolderAccessor;
@@ -25,12 +26,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@RegistryDescription
 public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
 
-    public Tank() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".drain().input(item('minecraft:clay')).output(item('minecraft:diamond')).fluidInput(fluid('water') * 500)"),
+            @Example(".fill().input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('water') * 500)"),
+            @Example(".drain().input(item('minecraft:diamond')).fluidInput(fluid('fire_water') * 8000)"),
+            @Example(".fill().input(item('minecraft:diamond')).fluidOutput(fluid('fire_water') * 8000)")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -40,10 +44,12 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         addScripted(recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.addFill0", type = MethodDescription.Type.ADDITION)
     public void addFill(IIngredient input, FluidStack inputFluid, ItemStack output) {
         addFill(GroovyScript.getRunConfig().getPackId() + ":" + RecipeName.generate("groovyscript_enderio_tank_"), input, inputFluid, output);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.addFill1", type = MethodDescription.Type.ADDITION)
     public void addFill(String recipeName, IIngredient input, FluidStack inputFluid, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding EnderIO Tank filling recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
@@ -57,10 +63,12 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         add(rec);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.addDrain0", type = MethodDescription.Type.ADDITION)
     public void addDrain(IIngredient input, FluidStack outputFluid, ItemStack output) {
         addDrain(GroovyScript.getRunConfig().getPackId() + ":" + RecipeName.generate("groovyscript_enderio_tank_"), input, outputFluid, output);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.addDrain1", type = MethodDescription.Type.ADDITION)
     public void addDrain(String recipeName, IIngredient input, FluidStack outputFluid, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding EnderIO Tank draining recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
@@ -81,6 +89,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.removeFill0", example = @Example("item('minecraft:glass_bottle'), fluid('xpjuice')"))
     public void removeFill(ItemStack input, FluidStack fluid) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing EnderIO Tank filling recipe").error();
         msg.add(IngredientHelper.isEmpty(fluid), () -> "fluid must not be empty");
@@ -102,6 +111,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.removeFill1")
     public void removeFill(FluidStack fluid, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing EnderIO Tank filling recipe").error();
         msg.add(IngredientHelper.isEmpty(fluid), () -> "fluid must not be empty");
@@ -123,6 +133,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.removeDrain0", example = @Example("item('minecraft:experience_bottle'), fluid('xpjuice')"))
     public void removeDrain(ItemStack input, FluidStack fluid) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing EnderIO Tank draining recipe").error();
         msg.add(IngredientHelper.isEmpty(fluid), () -> "fluid must not be empty");
@@ -144,6 +155,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.enderio.tank.removeDrain1")
     public void removeDrain(FluidStack fluid, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing EnderIO Tank draining recipe").error();
         msg.add(IngredientHelper.isEmpty(fluid), () -> "fluid must not be empty");
@@ -171,6 +183,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         restoreFromBackup().forEach(MachineRecipeRegistry.instance::registerRecipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<TankMachineRecipe> streamRecipes() {
         List<TankMachineRecipe> list = new ArrayList<>();
         list.addAll((Collection<? extends TankMachineRecipe>) MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.TANK_FILLING).values());
@@ -178,6 +191,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         return new SimpleObjectStream<>(list).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.TANK_FILLING).forEach((r, l) -> addBackup((TankMachineRecipe) l));
         ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_FILLING)).getRecipes().clear();
@@ -185,15 +199,22 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_EMPTYING)).getRecipes().clear();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "fluidInput", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
     public static class RecipeBuilder extends AbstractRecipeBuilder<TankMachineRecipe> {
 
+        @Property
         private boolean isFilling;
 
+        @RecipeBuilderMethodDescription(field = "isFilling")
         public RecipeBuilder fill() {
             this.isFilling = true;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "isFilling")
         public RecipeBuilder drain() {
             this.isFilling = false;
             return this;
@@ -219,6 +240,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable TankMachineRecipe register() {
             if (!validate()) return null;
             Things in = RecipeUtils.toThings(input.get(0));

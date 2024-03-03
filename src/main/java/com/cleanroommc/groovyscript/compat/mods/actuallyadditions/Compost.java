@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -16,12 +17,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class Compost extends VirtualizedRegistry<CompostRecipe> {
 
-    public Compost() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).inputDisplay(blockstate('minecraft:clay')).outputDisplay(blockstate('minecraft:diamond_block'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -56,6 +55,7 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('actuallyadditions:item_canola_seed')"))
     public boolean removeByInput(IIngredient input) {
         return ActuallyAdditionsAPI.COMPOST_RECIPES.removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
@@ -66,6 +66,7 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('actuallyadditions:item_fertilizer')"))
     public boolean removeByOutput(ItemStack output) {
         return ActuallyAdditionsAPI.COMPOST_RECIPES.removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
@@ -76,26 +77,34 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.COMPOST_RECIPES.forEach(this::addBackup);
         ActuallyAdditionsAPI.COMPOST_RECIPES.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CompostRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.COMPOST_RECIPES)
                 .setRemover(this::remove);
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompostRecipe> {
 
+        @Property(property = "inputDisplay", valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private IBlockState inputDisplay;
+        @Property(property = "outputDisplay", valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private IBlockState outputDisplay;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder inputDisplay(IBlockState inputDisplay) {
             this.inputDisplay = inputDisplay;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder outputDisplay(IBlockState outputDisplay) {
             this.outputDisplay = outputDisplay;
             return this;
@@ -115,6 +124,7 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable CompostRecipe register() {
             if (!validate()) return null;
             CompostRecipe recipe = new CompostRecipe(input.get(0).toMcIngredient(), inputDisplay, output.get(0), outputDisplay);

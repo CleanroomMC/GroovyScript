@@ -19,10 +19,6 @@ import java.util.List;
 
 public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> {
 
-    public FluidCanner() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> remove(recipe, false));

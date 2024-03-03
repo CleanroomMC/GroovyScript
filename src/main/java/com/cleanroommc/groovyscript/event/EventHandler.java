@@ -17,7 +17,6 @@ import com.cleanroommc.groovyscript.network.SReloadScripts;
 import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.cleanroommc.groovyscript.packmode.PackmodeSaveData;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
-import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import groovy.lang.Closure;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -79,11 +78,9 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        // clear all errors and post them if on client
-        if (event.player.world.isRemote) {
+        // clear all errors and post
+        if (!event.player.world.isRemote) {
             GroovyScript.postScriptRunResult(event.player, true, true, false, 0);
-        } else {
-            GroovyLogImpl.LOG.collectErrors();
         }
 
         // check world packmode and change if needed

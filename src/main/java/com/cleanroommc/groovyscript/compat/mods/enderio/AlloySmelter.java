@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.enderio;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
@@ -31,15 +32,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
 
     @GroovyBlacklist
     private Set<IManyToOneRecipe> removalQueue;
 
     public AlloySmelter() {
-        super(Alias.generateOf("Alloying"));
+        super(Alias.generateOfClassAnd(AlloySmelter.class, "Alloying"));
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:diamond') * 4, item('minecraft:clay') * 32).output(item('minecraft:nether_star')).energy(100000).xp(500).tierEnhanced()"),
+            @Example(".input(item('minecraft:clay') * 4, item('minecraft:diamond')).output(item('minecraft:obsidian')).tierNormal()"),
+            @Example(".input(item('minecraft:diamond') * 4, item('minecraft:gold_ingot') * 2).output(item('minecraft:clay') * 4).tierSimple()"),
+            @Example(".input(item('minecraft:diamond') * 2, item('minecraft:gold_nugget') * 2).output(item('minecraft:clay') * 4).tierAny()")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -72,6 +80,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('enderio:item_material:70')"))
     public void remove(ItemStack output) {
         List<IManyToOneRecipe> recipes = find(output);
         if (!recipes.isEmpty()) {
@@ -136,6 +145,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IManyToOneRecipe> streamRecipes() {
         List<IManyToOneRecipe> list = MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ALLOYSMELTER).values().stream()
                 .filter(r -> r instanceof IManyToOneRecipe)
@@ -144,6 +154,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
                 .setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         AlloyRecipeManagerAccessor accessor = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
         @SuppressWarnings("unchecked")
@@ -160,10 +171,16 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
     }
 
 
+    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "3")})
+    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "energy", valid = @Comp(type = Comp.Type.GT, value = "0"))
+    @Property(property = "level")
     public static class RecipeBuilder extends EnderIORecipeBuilder<Void> {
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private float xp;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder xp(float xp) {
             this.xp = xp;
             return this;
@@ -183,6 +200,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable Void register() {
             if (!validate()) return null;
             AlloyRecipeManager.getInstance().addRecipe(true, ArrayUtils.mapToList(input, RecipeInput::new, new NNList<>()), output.get(0), energy, xp, level);

@@ -15,10 +15,6 @@ import java.util.Map;
 
 public class Fermenter extends VirtualizedRegistry<Pair<String, IFermenterRecipeManager.FermentationProperty>> {
 
-    public Fermenter() {
-        super();
-    }
-
     @Override
     public void onReload() {
         Map<String, IFermenterRecipeManager.FermentationProperty> fluidMap = ((FermenterRecipeManagerAccessor) Recipes.fermenter).getFluidMap();

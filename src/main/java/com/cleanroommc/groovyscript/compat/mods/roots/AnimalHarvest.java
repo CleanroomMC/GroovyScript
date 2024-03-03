@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -17,12 +18,13 @@ import java.util.Map;
 import static epicsquid.roots.init.ModRecipes.getAnimalHarvestRecipes;
 import static epicsquid.roots.init.ModRecipes.removeAnimalHarvestRecipe;
 
+@RegistryDescription
 public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, AnimalHarvestRecipe>> {
 
-    public AnimalHarvest() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".name('wither_skeleton_harvest').entity(entity('minecraft:wither_skeleton'))"),
+            @Example(".entity(entity('minecraft:enderman'))")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -49,6 +51,7 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
         return null;
     }
 
+    @MethodDescription(example = @Example("resource('roots:chicken')"))
     public boolean removeByName(ResourceLocation name) {
         AnimalHarvestRecipe recipe = getAnimalHarvestRecipes().get(name);
         if (recipe == null) return false;
@@ -57,6 +60,7 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
         return true;
     }
 
+    @MethodDescription(example = @Example("entity('minecraft:pig')"))
     public boolean removeByEntity(EntityEntry entity) {
         for (Map.Entry<ResourceLocation, AnimalHarvestRecipe> x : getAnimalHarvestRecipes().entrySet()) {
             if (x.getValue().matches(entity.getEntityClass())) {
@@ -68,20 +72,25 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getAnimalHarvestRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getAnimalHarvestRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, AnimalHarvestRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(getAnimalHarvestRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
+    @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<AnimalHarvestRecipe> {
 
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private Class<? extends EntityLivingBase> entity;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder entity(EntityEntry entity) {
             this.entity = (Class<? extends EntityLivingBase>) entity.getEntityClass();
             return this;
@@ -105,6 +114,7 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable AnimalHarvestRecipe register() {
             if (!validate()) return null;
             AnimalHarvestRecipe recipe = new AnimalHarvestRecipe(name, entity);

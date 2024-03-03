@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -11,12 +12,13 @@ import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.recipe.WeightedOre;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class NetherMiningLens extends VirtualizedRegistry<WeightedOre> {
 
-    public NetherMiningLens() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".ore(ore('blockDiamond')).weight(100)"),
+            @Example(".ore('blockGold').weight(100)")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -47,10 +49,12 @@ public class NetherMiningLens extends VirtualizedRegistry<WeightedOre> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOre", example = @Example("ore('oreQuartz')"))
     public boolean removeByOre(OreDictIngredient ore) {
         return this.removeByOre(ore.getOreDict());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOre", example = @Example("'oreQuartz'"))
     public boolean removeByOre(String oreName) {
         return ActuallyAdditionsAPI.NETHERRACK_ORES.removeIf(recipe -> {
             boolean found = oreName.equals(recipe.name);
@@ -61,31 +65,39 @@ public class NetherMiningLens extends VirtualizedRegistry<WeightedOre> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.NETHERRACK_ORES.forEach(this::addBackup);
         ActuallyAdditionsAPI.NETHERRACK_ORES.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<WeightedOre> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.NETHERRACK_ORES)
                 .setRemover(this::remove);
     }
 
+
     public static class RecipeBuilder extends AbstractRecipeBuilder<WeightedOre> {
 
+        @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private String ore;
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int weight;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder ore(String ore) {
             this.ore = ore;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "ore")
         public RecipeBuilder ore(OreDictIngredient ore) {
             this.ore = ore.getOreDict();
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder weight(int weight) {
             this.weight = weight;
             return this;
@@ -105,6 +117,7 @@ public class NetherMiningLens extends VirtualizedRegistry<WeightedOre> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable WeightedOre register() {
             if (!validate()) return null;
             WeightedOre recipe = new WeightedOre(ore, weight);

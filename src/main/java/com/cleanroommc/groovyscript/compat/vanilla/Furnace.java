@@ -17,10 +17,6 @@ import java.util.Map;
 
 public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
-    public Furnace() {
-        super();
-    }
-
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

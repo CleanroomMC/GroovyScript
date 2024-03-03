@@ -6,12 +6,15 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import zone.rong.mixinbooter.IEarlyMixinLoader;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 @IFMLLoadingPlugin.Name("GroovyScript-Core")
 @IFMLLoadingPlugin.MCVersion(ForgeVersion.mcVersion)
 public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
+
+    public static File source;
 
     @Override
     public String[] getASMTransformerClass() {
@@ -31,6 +34,7 @@ public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
     public void injectData(Map<String, Object> data) {
+        source = (File) data.getOrDefault("coremodLocation", null);
     }
 
     @Override

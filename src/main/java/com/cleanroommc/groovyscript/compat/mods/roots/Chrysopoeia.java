@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -16,12 +17,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+@RegistryDescription
 public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, ChrysopoeiaRecipe>> {
 
-    public Chrysopoeia() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".name('clay_transmute').input(item('minecraft:gold_ingot')).output(item('minecraft:clay'))"),
+            @Example(".input(item('minecraft:diamond') * 3).output(item('minecraft:gold_ingot') * 3)")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -55,6 +57,7 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
         return null;
     }
 
+    @MethodDescription(example = @Example("resource('roots:gold_from_silver')"))
     public boolean removeByName(ResourceLocation name) {
         ChrysopoeiaRecipe recipe = ModRecipesAccessor.getChrysopoeiaRecipes().get(name);
         if (recipe == null) return false;
@@ -63,6 +66,7 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
         return true;
     }
 
+    @MethodDescription(example = @Example("item('minecraft:iron_nugget')"))
     public boolean removeByOutput(ItemStack output) {
         for (Map.Entry<ResourceLocation, ChrysopoeiaRecipe> entry : ModRecipesAccessor.getChrysopoeiaRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(entry.getValue().getOutput(), output)) {
@@ -74,6 +78,7 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
         return false;
     }
 
+    @MethodDescription(example = @Example("item('minecraft:rotten_flesh')"))
     public boolean removeByInput(ItemStack output) {
         for (Map.Entry<ResourceLocation, ChrysopoeiaRecipe> entry : ModRecipesAccessor.getChrysopoeiaRecipes().entrySet()) {
             if (entry.getValue().getIngredient().getIngredient().test(output)) {
@@ -85,16 +90,21 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipesAccessor.getChrysopoeiaRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         ModRecipesAccessor.getChrysopoeiaRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, ChrysopoeiaRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipesAccessor.getChrysopoeiaRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
+    @Property(property = "name")
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ChrysopoeiaRecipe> {
 
 //        overload, byproductChance, and byproduct are all unused
@@ -136,6 +146,7 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable ChrysopoeiaRecipe register() {
             if (!validate()) return null;
             ChrysopoeiaRecipe recipe = new ChrysopoeiaRecipe(new IngredientWithStack(IngredientHelper.toItemStack(input.get(0))), output.get(0)/*, byproduct, overload, byproductChance*/);

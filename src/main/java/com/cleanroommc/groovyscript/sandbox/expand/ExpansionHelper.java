@@ -143,7 +143,7 @@ public class ExpansionHelper {
                 // true static method
                 metaMethod = new NewStaticMetaMethod(self.getTheCachedClass(), method);
             }
-        } else if (method.getDeclaringClass().getTheClass() != Object.class || method.getName().equals("toString")) {
+        } else if (method.getDeclaringClass().getTheClass() != Object.class || "toString".equals(method.getName())) {
             metaMethod = new MixinInstanceMetaMethod(method, mixin);
         } else {
             return;

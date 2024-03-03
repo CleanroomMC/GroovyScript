@@ -17,7 +17,7 @@ import java.util.*;
 public class BlockCutter extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
     public BlockCutter() {
-        super(Alias.generateOf("Cutter"));
+        super(Alias.generateOfClassAnd(BlockCutter.class, "Cutter"));
     }
 
     @Override

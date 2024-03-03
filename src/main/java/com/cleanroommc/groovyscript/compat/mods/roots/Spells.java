@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModifierAccessor;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -20,11 +21,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+@RegistryDescription(
+        reloadability = RegistryDescription.Reloadability.FLAWED,
+        isFullyDocumented = false // TODO fully document Roots Spells
+)
 public class Spells extends VirtualizedRegistry<SpellBase> {
-
-    public Spells() {
-        super();
-    }
 
     public static SpellWrapper spell(String spell) {
         return new SpellWrapper(spell);
@@ -38,10 +39,16 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
         return new SpellWrapper(spell);
     }
 
+    @RecipeBuilderDescription(example = @Example(".spell(spell('spell_fey_light')).input(item('minecraft:clay'), item('minecraft:diamond'), item('minecraft:gold_ingot'))"))
     public static SpellWrapper.RecipeBuilder recipeBuilder() {
         return new SpellWrapper.RecipeBuilder();
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example,
+            @Example(".cost(cost('additional_cost'), herb('dewgonia'), 0.25)"),
+            @Example(".cost(cost('additional_cost'), herb('spirit_herb'), 0.1).cost(cost('all_cost_multiplier'), null, -0.125)")
+    })
     public static CostBuilder costBuilder() {
         return new CostBuilder();
     }
@@ -212,8 +219,12 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
             return this;
         }
 
+        @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "name")
+        @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"),
+                                                                                                          @Comp(type = Comp.Type.LTE, value = "5")})
         public static class RecipeBuilder extends AbstractRecipeBuilder<SpellBase.SpellRecipe> {
 
+            @com.cleanroommc.groovyscript.api.documentation.annotations.Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
             private SpellBase spell;
 
             public RecipeBuilder() {
@@ -223,6 +234,7 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
                 this.spell = spell;
             }
 
+            @RecipeBuilderMethodDescription
             public RecipeBuilder spell(SpellBase spell) {
                 this.spell = spell;
                 return this;
@@ -240,6 +252,7 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
             }
 
             @Override
+            @RecipeBuilderRegistrationMethod
             public @Nullable SpellBase.SpellRecipe register() {
                 if (!validate()) return null;
                 SpellBase.SpellRecipe recipe = new SpellBase.SpellRecipe(input.stream().map(IIngredient::toMcIngredient).toArray());
@@ -251,25 +264,31 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
 
     public static class CostBuilder extends AbstractRecipeBuilder<Map<CostType, IModifierCost>> {
 
+        @com.cleanroommc.groovyscript.api.documentation.annotations.Property
         List<IModifierCost> list = new ArrayList<>();
 
+        @RecipeBuilderMethodDescription(field = "list")
         public CostBuilder cost(CostType cost, double value, IModifierCore herb) {
             list.add(new epicsquid.roots.modifiers.Cost(cost, value, herb));
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "list")
         public CostBuilder cost(CostType cost, IModifierCore herb, double value) {
             return this.cost(cost, value, herb);
         }
 
+        @RecipeBuilderMethodDescription(field = "list")
         public CostBuilder cost(CostType cost, Herb herb, double value) {
             return this.cost(cost, value, ModifierCores.fromHerb(herb));
         }
 
+        @RecipeBuilderMethodDescription(field = "list")
         public CostBuilder cost(CostType cost, double value) {
             return this.cost(cost, value, null);
         }
 
+        @RecipeBuilderMethodDescription(field = "list")
         public CostBuilder cost(CostType cost) {
             return this.cost(cost, 0.0, null);
         }
@@ -286,9 +305,10 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable Map<CostType, IModifierCost> register() {
             if (!validate()) return null;
-            if (list.size() == 0) return epicsquid.roots.modifiers.Cost.noCost();
+            if (list.isEmpty()) return epicsquid.roots.modifiers.Cost.noCost();
             return epicsquid.roots.modifiers.Cost.of(list.toArray(new IModifierCost[0]));
         }
     }

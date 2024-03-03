@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -21,13 +22,12 @@ import java.util.Map;
 
 import static epicsquid.roots.init.ModRecipes.getFlowerRecipes;
 
-
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES
+)
 public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation, FlowerRecipe>> {
 
-    public FlowerGeneration() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".name('clay_flower').flower(blockstate('minecraft:clay'))"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -54,6 +54,7 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         return null;
     }
 
+    @MethodDescription(example = @Example("resource('roots:dandelion')"))
     public boolean removeByName(ResourceLocation name) {
         FlowerRecipe recipe = getFlowerRecipes().get(name);
         if (recipe == null) return false;
@@ -62,6 +63,7 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.roots.flower_generation.removeByFlower0", example = @Example("blockstate('minecraft:red_flower:2')"))
     public boolean removeByFlower(IBlockState flower) {
         for (Map.Entry<ResourceLocation, FlowerRecipe> x : getFlowerRecipes().entrySet()) {
             if (x.getValue().getFlower() == flower) {
@@ -73,10 +75,12 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.roots.flower_generation.removeByFlower1", example = @Example("block('minecraft:red_flower'), 1"))
     public boolean removeByFlower(Block flower, int meta) {
         return removeByFlower(flower.getStateFromMeta(meta));
     }
 
+    @MethodDescription(description = "groovyscript.wiki.roots.flower_generation.removeByFlower2", example = @Example("block('minecraft:red_flower')"))
     public boolean removeByFlower(Block flower) {
         boolean found = false;
         for (IBlockState state : flower.getBlockState().getValidStates()) {
@@ -85,30 +89,37 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         return found;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.roots.flower_generation.removeByFlower3", example = @Example("item('minecraft:red_flower:3')"))
     public boolean removeByFlower(ItemStack output) {
         return removeByFlower(((ItemBlock) output.getItem()).getBlock().getStateFromMeta(output.getMetadata()));
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getFlowerRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getFlowerRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, FlowerRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(getFlowerRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
+    @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<FlowerRecipe> {
 
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IBlockState flower;
         private final List<Ingredient> allowedSoils = new ArrayList<>();
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder flower(IBlockState flower) {
             this.flower = flower;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder flower(Block flower, int meta) {
             this.flower = flower.getStateFromMeta(meta);
             return this;
@@ -153,6 +164,7 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable FlowerRecipe register() {
             if (!validate()) return null;
             FlowerRecipe recipe = new FlowerRecipe(name, flower, allowedSoils);

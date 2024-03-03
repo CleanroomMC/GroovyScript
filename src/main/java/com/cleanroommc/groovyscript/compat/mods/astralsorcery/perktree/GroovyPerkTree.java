@@ -1,6 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.PerkTreeAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -15,7 +18,15 @@ import java.util.HashMap;
 
 import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.PERK_TREE;
 
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
+        isFullyDocumented = false // TODO fully document GroovyPerkTree
+)
 public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
+
+    private final HashMap<AbstractPerk, ArrayList<ResourceLocation>> scriptedConnections = new HashMap<>();
+    private final HashMap<AbstractPerk, ArrayList<ResourceLocation>> removedConnections = new HashMap<>();
+    private final HashMap<AbstractPerk, Point> movedPerks = new HashMap<>();
 
     public GroovyPerkTree() {
         super(Alias.generateOf("PerkTree"));
@@ -28,10 +39,6 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
     public static AttributeModifierPerkBuilder.PerkModifierBuilder effectBuilder() {
         return new AttributeModifierPerkBuilder.PerkModifierBuilder();
     }
-
-    private final HashMap<AbstractPerk, ArrayList<ResourceLocation>> scriptedConnections = new HashMap<>();
-    private final HashMap<AbstractPerk, ArrayList<ResourceLocation>> removedConnections = new HashMap<>();
-    private final HashMap<AbstractPerk, Point> movedPerks = new HashMap<>();
 
     @Override
     @GroovyBlacklist
@@ -50,12 +57,13 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
         movedPerks.clear();
     }
 
-    void remove(String perk) {
+    @MethodDescription(example = @Example("'astralsorcery:mec_inc_ms_2'"))
+    public void remove(String perk) {
         this.remove(this.getPerk(perk), true);
     }
 
     void remove(AbstractPerk perk, boolean doBackup) {
-        if (PERK_TREE.getConnectedPerks(perk).size() > 0) {
+        if (!PERK_TREE.getConnectedPerks(perk).isEmpty()) {
             ArrayList<AbstractPerk> connectedPerks = new ArrayList<>(PERK_TREE.getConnectedPerks(perk));
             connectedPerks.forEach(connectedPerk -> this.removeConnection(perk, connectedPerk, doBackup));
         }
@@ -66,15 +74,18 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
         ((PerkTreeAccessor) PERK_TREE).setFrozen(true);
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public AbstractPerk getPerk(String perk) {
         return PERK_TREE.getPerk(new ResourceLocation(perk));
     }
 
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public AbstractPerk getPerk(ResourceLocation perk) {
         return PERK_TREE.getPerk(perk);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("mods.astralsorcery.perktree.getPerk('astralsorcery:magnet_ats_reach'), 30, 30"))
     public void movePerk(AbstractPerk perk, int x, int y) {
         this.movePerk(perk, x, y, true);
     }
@@ -85,6 +96,7 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
         perk.getOffset().y = y;
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public PerkTree.PointConnector add(AbstractPerk perk) {
         return this.add(perk, true);
     }
@@ -112,6 +124,7 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
         return tree;
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void addConnection(String perk1, String perk2) {
         this.addConnection(this.getPerk(perk1), this.getPerk(perk2), true);
     }
@@ -131,6 +144,7 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
         ((PerkTreeAccessor) PERK_TREE).setFrozen(true);
     }
 
+    @MethodDescription
     public void removeConnection(String perk1, String perk2) {
         this.removeConnection(this.getPerk(perk1), this.getPerk(perk2), true);
     }

@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.LightOreTransmutationsAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -18,15 +19,19 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+@RegistryDescription
 public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutations.Transmutation> {
 
     private static List<LightOreTransmutations.Transmutation> getRegistry() {
         if (LightOreTransmutationsAccessor.getRegisteredTransmutations() == null) {
             throw new IllegalStateException("Astral Sorcery Light Transmutation getRegisteredTransmutations() is not yet initialized!");
         }
-        return (ArrayList<LightOreTransmutations.Transmutation>) LightOreTransmutationsAccessor.getRegisteredTransmutations();
+        return (List<LightOreTransmutations.Transmutation>) LightOreTransmutationsAccessor.getRegisteredTransmutations();
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(block('minecraft:stone')).output(block('astralsorcery:blockmarble')).cost(100.0).constellation(constellation('armara')).inputDisplayStack(item('minecraft:stone')).outputDisplayStack(item('minecraft:dye:15').withNbt([display:[Name:'Marble']])) "),
+            @Example(".input(blockstate('minecraft:pumpkin')).output(blockstate('minecraft:diamond_block')).cost(0)")})
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -64,6 +69,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         return getRegistry().removeIf(rec -> rec.equals(recipe));
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("blockstate('minecraft:sandstone')"))
     public void removeByInput(IBlockState block) {
         getRegistry().removeIf(rec -> {
             if (rec.matchesInput(block)) {
@@ -74,10 +80,12 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("block('minecraft:netherrack')"))
     public void removeByInput(Block block) {
         removeByInput(block.getDefaultState());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("blockstate('minecraft:cake')"))
     public void removeByOutput(IBlockState block) {
         getRegistry().removeIf(rec -> {
             if (rec.matchesOutput(block)) {
@@ -88,15 +96,18 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("block('minecraft:lapis_block')"))
     public void removeByOutput(Block block) {
         removeByOutput(block.getDefaultState());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<LightOreTransmutations.Transmutation> streamRecipes() {
         return new SimpleObjectStream<>(getRegistry())
                 .setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getRegistry().forEach(this::addBackup);
         getRegistry().clear();
@@ -104,49 +115,64 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightOreTransmutations.Transmutation> {
 
+        @Property(valid = {@Comp(value = "null", type = Comp.Type.NOT), @Comp(value = "input", type = Comp.Type.NOT)})
         private Block inBlock = null;
+        @Property(ignoresInheritedMethods = true, valid = {@Comp(value = "null", type = Comp.Type.NOT), @Comp(value = "inBlock", type = Comp.Type.NOT)})
         private IBlockState input = null;
+        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IBlockState output = null;
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private double cost = 0;
+        @Property
         private ItemStack outStack = null;
+        @Property
         private ItemStack inStack = null;
+        @Property
         private IWeakConstellation constellation = null;
 
+        @RecipeBuilderMethodDescription(field = "inStack")
         public RecipeBuilder inputDisplayStack(ItemStack item) {
             this.inStack = item;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "outStack")
         public RecipeBuilder outputDisplayStack(ItemStack item) {
             this.outStack = item;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "inBlock")
         public RecipeBuilder input(Block target) {
             this.inBlock = target;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(IBlockState target) {
             this.input = target;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(Block target) {
             this.output = target.getDefaultState();
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(IBlockState target) {
             this.output = target;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder cost(double cost) {
             this.cost = cost;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder constellation(IWeakConstellation constellation) {
             this.constellation = constellation;
             return this;
@@ -167,6 +193,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
             if (outStack == null && output != null) outStack = new ItemStack(output.getBlock());
         }
 
+        @RecipeBuilderRegistrationMethod
         public LightOreTransmutations.Transmutation register() {
             if (!validate()) return null;
             LightOreTransmutations.Transmutation recipe;

@@ -45,13 +45,10 @@ public interface IGameObjectHandler<T> {
     static <T extends Enum<T>> IGameObjectHandler<T> wrapEnum(Class<T> enumClass, boolean caseSensitive) {
         Map<String, T> map = new Object2ObjectOpenHashMap<>();
         for (T t : enumClass.getEnumConstants()) {
-            map.put(t.name(), t);
-            if (caseSensitive) {
-                map.put(t.name().toUpperCase(Locale.ROOT), t);
-            }
+            map.put(caseSensitive ? t.name() : t.name().toUpperCase(Locale.ROOT), t);
         }
         return (s, args) -> {
-            T t = map.get(s);
+            T t = map.get(caseSensitive ? s : s.toUpperCase(Locale.ROOT));
             return t == null ? Result.error() : Result.some(t);
         };
     }

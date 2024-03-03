@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -14,8 +15,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
+        admonition = @Admonition(value = "groovyscript.wiki.immersiveengineering.excavator.note0",
+                                 type = Admonition.Type.WARNING,
+                                 format = Admonition.Format.STANDARD)
+)
 public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.MineralMix, Integer>> {
 
+    @RecipeBuilderDescription(example = {
+            @Example(".name('demo').weight(20000).fail(0.5).ore(ore('blockDiamond'), 50).ore('blockGold', 10).dimension(0, 1)"),
+            @Example(".name('demo').weight(2000).fail(0.1).ore(ore('blockDiamond'), 50).dimension(-1, 1).blacklist()")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -33,6 +44,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public ExcavatorHandler.MineralMix add(String name, int mineralWeight, float failChance, String[] ores, float[] chances) {
         ExcavatorHandler.MineralMix recipe = new ExcavatorHandler.MineralMix(name, failChance, ores, chances);
         add(recipe, mineralWeight);
@@ -49,6 +61,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         return false;
     }
 
+    @MethodDescription(example = @Example("'silt'"))
     public boolean removeByMineral(String key) {
         List<ExcavatorHandler.MineralMix> entries = ExcavatorHandler.mineralList.keySet().stream()
                 .filter(r -> r.name.equalsIgnoreCase(key))
@@ -66,6 +79,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         return true;
     }
 
+    @MethodDescription(example = @Example("ore('oreAluminum')"))
     public void removeByOres(String... ores) {
         if (ores == null || ores.length == 0) {
             GroovyLog.msg("Error removing Immersive Engineering Excavator entry")
@@ -88,6 +102,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         }
     }
 
+    @MethodDescription
     public void removeByOres(OreDictIngredient... ores) {
         if (IngredientHelper.isEmpty(ores)) {
             GroovyLog.msg("Error removing Immersive Engineering Excavator entry")
@@ -110,10 +125,12 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ExcavatorHandler.MineralMix, Integer>> streamRecipes() {
         return new SimpleObjectStream<>(ExcavatorHandler.mineralList.entrySet()).setRemover(r -> this.remove(r.getKey()));
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ExcavatorHandler.mineralList.forEach((r, l) -> addBackup(Pair.of(r, l)));
         ExcavatorHandler.mineralList.clear();
@@ -122,46 +139,60 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExcavatorHandler.MineralMix> {
 
-        private String name;
-        private int weight;
-        private float fail;
+        @Property(valid = @Comp("chances"))
         private final List<String> ores = new ArrayList<>();
+        @Property(valid = @Comp("ores"))
         private final List<Float> chances = new ArrayList<>();
+        @Property
         private final List<Integer> dimensions = new ArrayList<>();
+        @Property(ignoresInheritedMethods = true)
+        private String name;
+        @Property
+        private int weight;
+        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        private float fail;
+        @Property
         private boolean blacklist = true;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder name(String name) {
             this.name = name;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder weight(int weight) {
             this.weight = weight;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder fail(float fail) {
             this.fail = fail;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"ores", "chances"})
         public RecipeBuilder ore(String ore, float chance) {
             this.ores.add(ore);
             this.chances.add(chance);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"ores", "chances"})
         public RecipeBuilder ore(OreDictIngredient ore, float chance) {
             this.ores.add(ore.getOreDict());
             this.chances.add(chance);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "dimensions")
         public RecipeBuilder dimension(int dimension) {
             this.dimensions.add(dimension);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "dimensions")
         public RecipeBuilder dimension(int... dimensions) {
             for (int dimension : dimensions) {
                 dimension(dimension);
@@ -169,6 +200,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "dimensions")
         public RecipeBuilder dimension(Collection<Integer> dimensions) {
             for (int dimension : dimensions) {
                 dimension(dimension);
@@ -176,11 +208,13 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder blacklist(boolean blacklist) {
             this.blacklist = blacklist;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder blacklist() {
             this.blacklist = !blacklist;
             return this;
@@ -200,6 +234,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable ExcavatorHandler.MineralMix register() {
             if (!validate()) return null;
             float[] chanceArray = new float[chances.size()];

@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -12,12 +13,13 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
 
-    public OilGen() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".fluidInput(fluid('water')).amount(1000).time(50)"),
+            @Example(".fluidInput(fluid('lava') * 50).time(100)")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -52,14 +54,17 @@ public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('canolaoil')"))
     public boolean removeByInput(FluidStack fluid) {
         return this.removeByInput(fluid.getFluid());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('canolaoil').getFluid()"))
     public boolean removeByInput(Fluid fluid) {
         return this.removeByInput(fluid.getName());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("'refinedcanolaoil'"))
     public boolean removeByInput(String fluid) {
         return ActuallyAdditionsAPI.OIL_GENERATOR_RECIPES.removeIf(recipe -> {
             boolean found = fluid.equals(recipe.fluidName);
@@ -70,32 +75,41 @@ public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.OIL_GENERATOR_RECIPES.forEach(this::addBackup);
         ActuallyAdditionsAPI.OIL_GENERATOR_RECIPES.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<OilGenRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.OIL_GENERATOR_RECIPES)
                 .setRemover(this::remove);
     }
 
+
+    @Property(property = "fluidInput", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<OilGenRecipe> {
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int amount;
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int time;
 
+        @RecipeBuilderMethodDescription(field = {"fluidInput", "amount"})
         public RecipeBuilder fluidInput(FluidStack fluid) {
             this.fluidInput.add(fluid);
             if (this.amount == 0) this.amount = fluid.amount;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder amount(int amount) {
             this.amount = amount;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
@@ -115,6 +129,7 @@ public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable OilGenRecipe register() {
             if (!validate()) return null;
             OilGenRecipe recipe = new OilGenRecipe(fluidInput.get(0).getFluid().getName(), amount, time);

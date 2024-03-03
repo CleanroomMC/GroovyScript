@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.inspirations;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.inspirations.InspirationsRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -18,6 +19,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockState>> {
 
     private Collection<Pair<Block, IBlockState>> blockBackup;
@@ -41,6 +43,10 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
     }
 
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(blockstate('minecraft:diamond_block')).output(blockstate('minecraft:clay'))"),
+            @Example(".input(blockstate('minecraft:clay')).output(blockstate('minecraft:air'))")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -57,16 +63,19 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         materialBackup = new ArrayList<>();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(IBlockState input, IBlockState output) {
         addScripted(Pair.of(input, output));
         InspirationsRegistry.registerAnvilSmashing(input, output);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(Block input, IBlockState output) {
         addBlockScripted(Pair.of(input, output));
         InspirationsRegistry.registerAnvilSmashing(input, output);
     }
 
+    @MethodDescription
     public boolean remove(IBlockState input, IBlockState output) {
         if (!InspirationsRegistryAccessor.getAnvilSmashing().get(input).equals(output)) return false;
         addBackup(Pair.of(input, output));
@@ -74,6 +83,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         return true;
     }
 
+    @MethodDescription
     public boolean remove(Block input, IBlockState output) {
         if (!InspirationsRegistryAccessor.getAnvilSmashingBlocks().get(input).equals(output)) return false;
         addBlockBackup(Pair.of(input, output));
@@ -81,6 +91,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.inspirations.anvil_smashing.remove_material")
     public boolean remove(Material material) {
         if (!InspirationsRegistryAccessor.getAnvilBreaking().contains(material)) return false;
         materialBackup.add(material);
@@ -88,6 +99,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         return true;
     }
 
+    @MethodDescription
     public void removeByInput(IBlockState input) {
         for (Map.Entry<IBlockState, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashing().entrySet().stream()
                 .filter(r -> r.getKey().equals(input))
@@ -97,6 +109,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         }
     }
 
+    @MethodDescription(example = @Example("blockstate('minecraft:packed_ice')"))
     public void removeByInput(Block input) {
         for (Map.Entry<Block, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashingBlocks().entrySet().stream()
                 .filter(r -> r.getKey().equals(input))
@@ -106,6 +119,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         }
     }
 
+    @MethodDescription(example = @Example("blockstate('minecraft:cobblestone')"))
     public void removeByOutput(IBlockState output) {
         for (Map.Entry<IBlockState, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashing().entrySet().stream()
                 .filter(r -> r.getValue().equals(output))
@@ -121,6 +135,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         InspirationsRegistryAccessor.getAnvilSmashing().forEach((a, b) -> addBackup(Pair.of(a, b)));
         InspirationsRegistryAccessor.getAnvilSmashing().clear();
@@ -130,6 +145,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         InspirationsRegistryAccessor.getAnvilBreaking().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<IBlockState, IBlockState>> streamRecipes() {
         return new SimpleObjectStream<>(InspirationsRegistryAccessor.getAnvilSmashing().entrySet())
                 .setRemover(r -> remove(r.getKey(), r.getValue()));
@@ -137,21 +153,27 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<Object> {
 
+        @Property(requirement = "groovyscript.wiki.inspirations.anvil_smashing.input.required")
         private IBlockState inputBlockState;
+        @Property(requirement = "groovyscript.wiki.inspirations.anvil_smashing.input.required")
         private Block inputBlock;
+        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IBlockState output;
 
 
+        @RecipeBuilderMethodDescription(field = "inputBlock")
         public RecipeBuilder input(Block input) {
             this.inputBlock = input;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "inputBlockState")
         public RecipeBuilder input(IBlockState input) {
             this.inputBlockState = input;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(IBlockState output) {
             this.output = output;
             return this;
@@ -169,6 +191,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable Object register() {
             if (!validate()) return null;
             if (inputBlock == null) {

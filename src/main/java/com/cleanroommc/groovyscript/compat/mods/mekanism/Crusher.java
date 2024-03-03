@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -12,16 +13,19 @@ import mekanism.common.recipe.machines.CrusherRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
 
     public Crusher() {
         super(RecipeHandler.Recipe.CRUSHER);
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay_ball')).output(item('minecraft:gold_ingot'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:clay_ball'), item('minecraft:gold_ingot')", commented = true))
     public CrusherRecipe add(IIngredient ingredient, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crusher recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -39,6 +43,7 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
         return recipe1;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('ingotTin')"))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");
@@ -58,6 +63,8 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
         return found;
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrusherRecipe> {
 
         @Override
@@ -72,6 +79,7 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable CrusherRecipe register() {
             if (!validate()) return null;
             CrusherRecipe recipe = null;

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -18,12 +19,13 @@ import java.util.Map;
 
 import static epicsquid.roots.init.ModRecipes.getRunicShearRecipes;
 
+@RegistryDescription
 public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, RunicShearRecipe>> {
 
-    public RunicShearBlock() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".name('clay_from_runic_diamond').state(blockstate('minecraft:diamond_block')).replacementState(blockstate('minecraft:air')).output(item('minecraft:clay') * 64).displayItem(item('minecraft:diamond') * 9)"),
+            @Example(".state(mods.roots.predicates.stateBuilder().blockstate(blockstate('minecraft:yellow_flower:type=dandelion')).properties('type').register()).replacementState(blockstate('minecraft:red_flower:type=poppy')).output(item('minecraft:gold_ingot'))")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -50,6 +52,7 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
         return null;
     }
 
+    @MethodDescription(example = @Example("resource('roots:wildewheet')"))
     public boolean removeByName(ResourceLocation name) {
         RunicShearRecipe recipe = getRunicShearRecipes().get(name);
         if (recipe == null) return false;
@@ -58,6 +61,7 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
         return true;
     }
 
+    @MethodDescription(example = @Example("blockstate('minecraft:beetroots:age=3')"))
     public boolean removeByState(IBlockState state) {
         for (Map.Entry<ResourceLocation, RunicShearRecipe> x : getRunicShearRecipes().entrySet()) {
             if (x.getValue().matches(state)) {
@@ -69,6 +73,7 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
         return false;
     }
 
+    @MethodDescription(example = @Example("item('roots:spirit_herb')"))
     public boolean removeByOutput(ItemStack output) {
         for (Map.Entry<ResourceLocation, RunicShearRecipe> x : getRunicShearRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getDrop(), output)) {
@@ -80,37 +85,48 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getRunicShearRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getRunicShearRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, RunicShearRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(getRunicShearRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
+    @Property(property = "name")
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RunicShearRecipe> {
 
+        @Property
         private ItemStack displayItem;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private BlockStatePredicate state;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IBlockState replacementState;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder displayItem(ItemStack displayItem) {
             this.displayItem = displayItem;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder state(IBlockState state) {
             this.state = new StatePredicate(state);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder state(BlockStatePredicate state) {
             this.state = state;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder replacementState(IBlockState replacementState) {
             this.replacementState = replacementState;
             return this;
@@ -138,6 +154,7 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable RunicShearRecipe register() {
             if (!validate()) return null;
             RunicShearRecipe recipe = new RunicShearRecipe(name, state, replacementState, output.get(0), displayItem);

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -23,12 +24,14 @@ import java.util.Optional;
 
 import static epicsquid.roots.init.ModRecipes.removeTransmutationRecipe;
 
+@RegistryDescription
 public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, TransmutationRecipe>> {
 
-    public Transmutation() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".name('clay_duping').start(blockstate('minecraft:clay')).output(item('minecraft:clay_ball') * 30).condition(mods.roots.predicates.stateBuilder().blockstate(blockstate('minecraft:gold_block')).below().register())"),
+            @Example(".start(mods.roots.predicates.stateBuilder().blockstate(blockstate('minecraft:yellow_flower:type=dandelion')).properties('type').register()).state(blockstate('minecraft:gold_block')).condition(mods.roots.predicates.above(mods.roots.predicates.LEAVES))"),
+            @Example(".start(blockstate('minecraft:diamond_block')).state(blockstate('minecraft:gold_block'))")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -55,6 +58,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         return null;
     }
 
+    @MethodDescription(example = @Example("resource('roots:redstone_block_to_glowstone')"))
     public boolean removeByName(ResourceLocation name) {
         TransmutationRecipe recipe = ModRecipesAccessor.getTransmutationRecipes().get(name);
         if (recipe == null) return false;
@@ -63,6 +67,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         return true;
     }
 
+    @MethodDescription
     public boolean removeByInput(IBlockState input) {
         return ModRecipesAccessor.getTransmutationRecipes().entrySet().removeIf(x -> {
             if (x.getValue().getStartPredicate().test(input)) {
@@ -73,6 +78,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.roots.transmutation.removeByOutput0", example = @Example("item('minecraft:dye:3')"))
     public boolean removeByOutput(ItemStack output) {
         return ModRecipesAccessor.getTransmutationRecipes().entrySet().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getValue().getStack(), output)) {
@@ -83,6 +89,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.roots.transmutation.removeByOutput1", example = @Example("blockstate('minecraft:log:variant=jungle')"))
     public boolean removeByOutput(IBlockState output) {
         return ModRecipesAccessor.getTransmutationRecipes().entrySet().removeIf(x -> {
             Optional<IBlockState> state = x.getValue().getState();
@@ -103,42 +110,54 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipesAccessor.getTransmutationRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         ModRecipesAccessor.getTransmutationRecipes().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, TransmutationRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipesAccessor.getTransmutationRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
+    @Property(property = "name")
+    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
     public static class RecipeBuilder extends AbstractRecipeBuilder<TransmutationRecipe> {
 
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private BlockStatePredicate start;
+        @Property
         private IBlockState state;
+        @Property(defaultValue = "WorldBlockStatePredicate.TRUE")
         private WorldBlockStatePredicate condition = WorldBlockStatePredicate.TRUE;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder start(BlockStatePredicate start) {
             this.start = start;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder start(IBlockState start) {
             this.start = new StatePredicate(start);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder state(IBlockState state) {
             this.state = state;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "state")
         public RecipeBuilder output(IBlockState state) {
             this.state = state;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder condition(WorldBlockStatePredicate condition) {
             this.condition = condition;
             return this;
@@ -163,6 +182,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable TransmutationRecipe register() {
             if (!validate()) return null;
             TransmutationRecipe recipe = new TransmutationRecipe(start);

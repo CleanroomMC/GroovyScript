@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.enderio;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -23,12 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Vat extends VirtualizedRegistry<VatRecipe> {
 
-    public Vat() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".input(fluid('lava')).output(fluid('hootch')).baseMultiplier(2).itemInputLeft(item('minecraft:clay'), 2).itemInputLeft(item('minecraft:clay_ball'), 0.5).itemInputRight(item('minecraft:diamond'), 5).itemInputRight(item('minecraft:diamond_block'), 50).itemInputRight(item('minecraft:gold_block'), 10).itemInputRight(item('minecraft:gold_ingot'), 1).itemInputRight(item('minecraft:gold_nugget'), 0.1).energy(1000).tierEnhanced()"),
+            @Example(".input(fluid('hootch') * 100).output(fluid('water') * 50).itemInputLeft(item('minecraft:clay_ball'), 1).itemInputRight(item('minecraft:diamond'), 1).energy(1000).tierNormal()"),
+            @Example(".input(fluid('water')).output(fluid('hootch')).itemInputLeft(item('minecraft:clay'), 2).itemInputLeft(item('minecraft:clay_ball'), 0.5).itemInputRight(item('minecraft:diamond'), 5).itemInputRight(item('minecraft:gold_ingot'), 1).energy(1000).tierAny()")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -46,6 +49,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('nutrient_distillation')"))
     public void remove(FluidStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.get().error("Error removing EnderIO Vat recipe for empty output!");
@@ -69,11 +73,13 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         recipes.addAll(restoreFromBackup());
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<VatRecipe> streamRecipes() {
         return new SimpleObjectStream<>(VatRecipeManager.getInstance().getRecipes().stream().map(r -> (VatRecipe) r).collect(Collectors.toList()))
                 .setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         VatRecipeManager.getInstance().getRecipes().forEach(r -> addBackup((VatRecipe) r));
         VatRecipeManager.getInstance().getRecipes().clear();
@@ -81,58 +87,76 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
 
     public static class RecipeBuilder implements IRecipeBuilder<Recipe> {
 
-        private FluidStack output;
-        private FluidStack input;
-        private float baseMultiplier = 1;
+        @Property
         private final IngredientList<IIngredient> itemInputs1 = new IngredientList<>();
+        @Property
         private final IngredientList<IIngredient> itemInputs2 = new IngredientList<>();
+        @Property
         private final FloatList multipliers1 = new FloatArrayList();
+        @Property
         private final FloatList multipliers2 = new FloatArrayList();
-        private int energy = 0;
+        @Property(value = "groovyscript.wiki.enderio.level.value", defaultValue = "RecipeLevel.IGNORE")
         protected RecipeLevel level = RecipeLevel.IGNORE;
+        @Property(ignoresInheritedMethods = true, valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        private FluidStack output;
+        @Property(ignoresInheritedMethods = true, valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        private FluidStack input;
+        @Property(defaultValue = "1", valid = @Comp(type = Comp.Type.GT, value = "0"))
+        private float baseMultiplier = 1;
+        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
+        private int energy = 0;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(FluidStack input) {
             this.input = input;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(FluidStack output) {
             this.output = output;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder baseMultiplier(float baseMultiplier) {
             this.baseMultiplier = baseMultiplier;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"itemInputs1", "multipliers1"})
         public RecipeBuilder itemInputLeft(IIngredient ingredient, float multiplier) {
             itemInputs1.add(ingredient);
             multipliers1.add(multiplier);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"itemInputs2", "multipliers2"})
         public RecipeBuilder itemInputRight(IIngredient ingredient, float multiplier) {
             itemInputs2.add(ingredient);
             multipliers2.add(multiplier);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "level")
         public RecipeBuilder tierNormal() {
             this.level = RecipeLevel.NORMAL;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "level")
         public RecipeBuilder tierEnhanced() {
             this.level = RecipeLevel.ADVANCED;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "level")
         public RecipeBuilder tierAny() {
             this.level = RecipeLevel.IGNORE;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
@@ -151,6 +175,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable Recipe register() {
             if (!validate()) return null;
             List<IRecipeInput> inputs = new ArrayList<>();

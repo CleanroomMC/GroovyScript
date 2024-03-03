@@ -96,9 +96,7 @@ public class JeiPlugin implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(Blocks.STICKY_PISTON), PistonPushRecipeCategory.UID);
 
         List<FluidRecipeCategory.RecipeWrapper> recipeWrappers = new ArrayList<>();
-        FluidRecipe.forEach(fluidRecipe -> {
-            recipeWrappers.add(new FluidRecipeCategory.RecipeWrapper(fluidRecipe));
-        });
+        FluidRecipe.forEach(fluidRecipe -> recipeWrappers.add(new FluidRecipeCategory.RecipeWrapper(fluidRecipe)));
         registry.addRecipes(recipeWrappers, FluidRecipeCategory.UID);
         registry.addRecipes(VanillaModule.inWorldCrafting.explosion.getRecipeWrappers(), ExplosionRecipeCategory.UID);
         registry.addRecipes(VanillaModule.inWorldCrafting.burning.getRecipeWrappers(), BurningRecipeCategory.UID);

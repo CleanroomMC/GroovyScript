@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -19,12 +20,18 @@ import java.util.Map;
 
 import static epicsquid.roots.init.ModRecipes.*;
 
+@RegistryDescription
 public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, BarkRecipe>> {
 
     public BarkCarving() {
-        super(Alias.generateOf("Bark").andGenerateOfClass(BarkCarving.class));
+        super(Alias.generateOfClassAnd(BarkCarving.class, "Bark"));
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".name('gold_bark').input(item('minecraft:clay')).output(item('minecraft:gold_ingot'))"),
+            @Example(".blockstate(blockstate('minecraft:gold_block')).output(item('minecraft:diamond'))"),
+            @Example(".input(blockstate('minecraft:diamond_block')).output(item('minecraft:clay') * 10)")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -50,7 +57,7 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
 
     public ResourceLocation findRecipeByInput(BlockPlanks.EnumType input) {
         for (BarkRecipe entry : getBarkRecipes()) {
-            if (entry.getType().equals(input)) return entry.getName();
+            if (entry.getType() == input) return entry.getName();
         }
         return null;
     }
@@ -69,6 +76,7 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
         return null;
     }
 
+    @MethodDescription(example = @Example("resource('roots:wildwood')"))
     public boolean removeByName(ResourceLocation name) {
         BarkRecipe recipe = getBarkRecipeByName(name);
         if (recipe == null) return false;
@@ -77,6 +85,7 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
         return true;
     }
 
+    @MethodDescription(example = @Example("item('minecraft:log')"))
     public boolean removeByInput(ItemStack input) {
         for (Map.Entry<ResourceLocation, BarkRecipe> x : getBarkRecipeMap().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getBlockStack(), input)) {
@@ -88,10 +97,12 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
         return false;
     }
 
+    @MethodDescription(example = @Example("item('minecraft:log:1')"))
     public boolean removeByBlock(ItemStack block) {
         return removeByInput(block);
     }
 
+    @MethodDescription(example = @Example("item('roots:bark_dark_oak')"))
     public boolean removeByOutput(ItemStack output) {
         for (Map.Entry<ResourceLocation, BarkRecipe> x : getBarkRecipeMap().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getItem(), output)) {
@@ -103,22 +114,29 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getBarkRecipeMap().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getBarkRecipeMap().clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BarkRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getBarkRecipes())
                 .setRemover(r -> this.removeByName(r.getName()));
     }
 
+    @Property(property = "name")
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BarkRecipe> {
 
+        @RecipeBuilderMethodDescription(field = "input")
         public RecipeBuilder blockstate(IBlockState blockstate) {
             return this.input(blockstate);
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(IBlockState blockstate) {
             this.input.add(IngredientHelper.toIIngredient(new ItemStack(blockstate.getBlock(), 1, blockstate.getBlock().damageDropped(blockstate))));
             return this;
@@ -141,6 +159,7 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable BarkRecipe register() {
             if (!validate()) return null;
             BarkRecipe recipe;

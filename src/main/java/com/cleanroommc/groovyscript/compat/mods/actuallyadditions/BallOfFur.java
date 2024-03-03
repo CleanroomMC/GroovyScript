@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -11,12 +12,10 @@ import de.ellpeck.actuallyadditions.api.recipe.BallOfFurReturn;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
 
-    public BallOfFur() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay') * 32).weight(15)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -47,6 +46,7 @@ public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:feather')"))
     public boolean removeByOutput(ItemStack output) {
         return ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.removeIf(recipe -> {
             boolean found = ItemStack.areItemStacksEqual(recipe.returnItem, output);
@@ -57,20 +57,25 @@ public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.forEach(this::addBackup);
         ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BallOfFurReturn> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS)
                 .setRemover(this::remove);
     }
 
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BallOfFurReturn> {
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int weight;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder weight(int weight) {
             this.weight = weight;
             return this;
@@ -89,6 +94,7 @@ public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable BallOfFurReturn register() {
             if (!validate()) return null;
             BallOfFurReturn recipe = new BallOfFurReturn(output.get(0), weight);

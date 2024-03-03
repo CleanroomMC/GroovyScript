@@ -96,7 +96,7 @@ public class IC2 extends ModPropertyContainer {
 
     public static boolean isExp() {
         for (ModContainer container : Loader.instance().getActiveModList()) {
-            if (container.getModId().equals("ic2")) {
+            if ("ic2".equals(container.getModId())) {
                 return container.getMetadata().version.contains("ex");
             }
         }

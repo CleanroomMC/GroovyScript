@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 import blusunrize.immersiveengineering.api.crafting.CrusherRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -13,12 +14,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@RegistryDescription
 public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
 
-    public Crusher() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -36,6 +35,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public CrusherRecipe add(ItemStack output, IIngredient input, int energy) {
         CrusherRecipe recipe = new CrusherRecipe(output.copy(), ImmersiveEngineering.toIngredientStack(input), energy);
         add(recipe);
@@ -50,6 +50,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:sand')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
@@ -68,6 +69,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         list.forEach(this::addBackup);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('immersiveengineering:material:7')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
@@ -86,19 +88,25 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         list.forEach(this::addBackup);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CrusherRecipe> streamRecipes() {
         return new SimpleObjectStream<>(CrusherRecipe.recipeList).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CrusherRecipe.recipeList.forEach(this::addBackup);
         CrusherRecipe.recipeList.clear();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrusherRecipe> {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int energy;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
@@ -117,6 +125,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable CrusherRecipe register() {
             if (!validate()) return null;
             CrusherRecipe recipe = new CrusherRecipe(output.get(0), input.get(0), energy);

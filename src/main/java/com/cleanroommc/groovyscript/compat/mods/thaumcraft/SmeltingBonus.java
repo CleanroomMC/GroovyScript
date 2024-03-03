@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -16,11 +17,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@RegistryDescription
 public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus> {
-
-    public SmeltingBonus() {
-        super();
-    }
 
     @Override
     @GroovyBlacklist
@@ -34,10 +32,12 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
         ThaumcraftApi.addSmeltingBonus(bonus.in, bonus.out, bonus.chance);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.smelting_bonus.add0", type = MethodDescription.Type.ADDITION)
     public void add(IIngredient in, ItemStack out) {
         this.add(in, out, 0.33F);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.thaumcraft.smelting_bonus.add1", type = MethodDescription.Type.ADDITION)
     public void add(IIngredient in, ItemStack out, float chance) {
         if (in instanceof OreDictIngredient) {
             ThaumcraftApi.addSmeltingBonus(((OreDictIngredient) in).getOreDict(), out, chance);
@@ -62,6 +62,7 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
         return removed;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:gold_nugget')"))
     public void removeByOutput(ItemStack output) {
         List<ThaumcraftApi.SmeltBonus> remove = new ArrayList<>();
         for (ThaumcraftApi.SmeltBonus bonus : CommonInternals.smeltingBonus) {
@@ -73,30 +74,47 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
         CommonInternals.smeltingBonus.removeAll(remove);
     }
 
-    public SimpleObjectStream<ThaumcraftApi.SmeltBonus> stream() {
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    public SimpleObjectStream<ThaumcraftApi.SmeltBonus> streamRecipes() {
         return new SimpleObjectStream<>(CommonInternals.smeltingBonus).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    public void removeAll() {
+        CommonInternals.smeltingBonus.forEach(this::addBackup);
+        CommonInternals.smeltingBonus.clear();
+    }
+
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:cobblestone')).output(item('minecraft:stone_button')).chance(0.2F)"),
+            @Example(".input(ore('stone')).output(item('minecraft:obsidian'))")
+    })
     public SmeltingBonusBuilder recipeBuilder() {
         return new SmeltingBonusBuilder();
     }
 
     public static class SmeltingBonusBuilder {
 
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IIngredient in = null;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private ItemStack out = null;
+        @Property(defaultValue = "0.33F")
         private float chance = 0.33F;
 
+        @RecipeBuilderMethodDescription(field = "in")
         public SmeltingBonusBuilder input(IIngredient input) {
             this.in = input;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "out")
         public SmeltingBonusBuilder output(ItemStack output) {
             this.out = output;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public SmeltingBonusBuilder chance(float chance) {
             this.chance = chance;
             return this;
@@ -115,6 +133,7 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
             return true;
         }
 
+        @RecipeBuilderRegistrationMethod
         public void register() {
             if (validate()) {
                 ModSupport.THAUMCRAFT.get().smeltingBonus.add(in, out, chance);

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 import blusunrize.immersiveengineering.api.crafting.BlastFurnaceRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -14,12 +15,10 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+@RegistryDescription
 public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
 
-    public BlastFurnace() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).time(100).slag(item('minecraft:gold_nugget'))"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -37,6 +36,7 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public BlastFurnaceRecipe add(ItemStack output, IIngredient input, int time, @Nonnull ItemStack slag) {
         BlastFurnaceRecipe recipe = new BlastFurnaceRecipe(output.copy(), ImmersiveEngineering.toIEInput(input), time, IngredientHelper.copy(slag));
         add(recipe);
@@ -51,6 +51,7 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:metal:8')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
@@ -70,6 +71,7 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         list.forEach(this::addBackup);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:iron_block')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
@@ -89,25 +91,33 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BlastFurnaceRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BlastFurnaceRecipe.recipeList).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BlastFurnaceRecipe.recipeList.forEach(this::addBackup);
         BlastFurnaceRecipe.recipeList.clear();
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlastFurnaceRecipe> {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int time;
+        @Property
         private ItemStack slag;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder slag(ItemStack slag) {
             this.slag = slag;
             return this;
@@ -127,6 +137,7 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable BlastFurnaceRecipe register() {
             if (!validate()) return null;
             return ModSupport.IMMERSIVE_ENGINEERING.get().blastFurnace.add(output.get(0), input.get(0), time, slag);

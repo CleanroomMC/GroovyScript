@@ -16,10 +16,6 @@ import java.util.*;
 
 public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerRecipe> {
 
-    public MetalFormer() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> remove(recipe.type, recipe.recipe, false));

@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.crafting.RefineryRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -13,12 +14,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
 
-    public Refinery() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water'), fluid('water')).fluidOutput(fluid('lava')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -36,6 +35,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RefineryRecipe add(FluidStack output, FluidStack input0, FluidStack input1, int energy) {
         RefineryRecipe recipe = new RefineryRecipe(output, input0, input1, energy);
         add(recipe);
@@ -50,6 +50,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example(value = "fluid('biodiesel')", commented = true))
     public void removeByOutput(FluidStack fluidOutput) {
         if (IngredientHelper.isEmpty(fluidOutput)) {
             GroovyLog.msg("Error removing Immersive Engineering Refinery recipe")
@@ -72,6 +73,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('plantoil'), fluid('ethanol')"))
     public void removeByInput(FluidStack input0, FluidStack input1) {
         if (GroovyLog.msg("Error removing Immersive Engineering Refinery recipe")
                 .add(IngredientHelper.isEmpty(input0), () -> "fluid input 1 must not be empty")
@@ -92,19 +94,25 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RefineryRecipe> streamRecipes() {
         return new SimpleObjectStream<>(RefineryRecipe.recipeList).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         RefineryRecipe.recipeList.forEach(this::addBackup);
         RefineryRecipe.recipeList.clear();
     }
 
+    @Property(property = "fluidInput", valid = @Comp("2"))
+    @Property(property = "fluidOutput", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RefineryRecipe> {
 
+        @Property
         private int energy;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
@@ -122,6 +130,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable RefineryRecipe register() {
             if (!validate()) return null;
             RefineryRecipe recipe = new RefineryRecipe(fluidOutput.get(0), fluidInput.get(0), fluidInput.get(1), energy);

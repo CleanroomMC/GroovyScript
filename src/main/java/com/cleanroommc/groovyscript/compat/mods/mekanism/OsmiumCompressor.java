@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
@@ -16,16 +17,19 @@ import mekanism.common.recipe.outputs.ItemStackOutput;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompressorRecipe> {
 
     public OsmiumCompressor() {
         super(RecipeHandler.Recipe.OSMIUM_COMPRESSOR);
     }
 
+    @RecipeBuilderDescription(example = @Example(value = ".input(item('minecraft:diamond')).gasInput(gas('hydrogen'))/*()!*/.output(item('minecraft:nether_star'))", annotations = "groovyscript.wiki.mekanism.osmium_compressor.annotation"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond'), gas('hydrogen'), item('minecraft:nether_star')", commented = true))
     public OsmiumCompressorRecipe add(IIngredient ingredient, GasStack gasInput, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Osmium Compressor recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -43,6 +47,7 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
         return recipe1;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('dustRefinedObsidian'), gas('liquidosmium')"))
     public boolean removeByInput(IIngredient ingredient, GasStack gasInput) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Osmium Compressor recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -63,6 +68,9 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
         return found;
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "gasInput", defaultValue = "MekanismFluids.LiquidOsmium", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
     public static class RecipeBuilder extends GasRecipeBuilder<OsmiumCompressorRecipe> {
 
         @Override
@@ -78,6 +86,7 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable OsmiumCompressorRecipe register() {
             if (!validate()) return null;
             Gas gas = gasInput.isEmpty() ? MekanismFluids.LiquidOsmium : gasInput.get(0).getGas();

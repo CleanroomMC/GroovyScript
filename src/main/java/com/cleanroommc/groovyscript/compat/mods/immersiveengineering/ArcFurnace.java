@@ -4,6 +4,7 @@ import blusunrize.immersiveengineering.api.crafting.ArcFurnaceRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -20,12 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
 
-    public ArcFurnace() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".mainInput(item('minecraft:diamond')).input(item('minecraft:diamond'), ore('ingotGold')).output(item('minecraft:clay')).time(100).energyPerTick(100).slag(item('minecraft:gold_nugget'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -45,6 +44,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public ArcFurnaceRecipe add(ItemStack output, IIngredient input, List<IIngredient> additives, @Nonnull ItemStack slag, int time, int energyPerTick) {
         Object[] inputs = ArrayUtils.mapToArray(additives, ImmersiveEngineering::toIngredientStack);
         ArcFurnaceRecipe recipe = ArcFurnaceRecipe.addRecipe(output, ImmersiveEngineering.toIngredientStack(input), slag, time, energyPerTick, inputs);
@@ -60,6 +60,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:metal:7')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
@@ -80,6 +81,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('immersiveengineering:metal:18'), item('immersiveengineering:material:17')"))
     public void removeByInput(IIngredient main, List<IIngredient> inputAndAdditives) {
         if (main == null || main.isEmpty() || inputAndAdditives == null || inputAndAdditives.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
@@ -104,6 +106,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     }
 
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public void removeByInput(List<IIngredient> inputAndAdditives) {
         if (inputAndAdditives == null || inputAndAdditives.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
@@ -115,63 +118,81 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         removeByInput(inputAndAdditives.remove(0), inputAndAdditives);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public void removeByInput(IIngredient... inputAndAdditives) {
         removeByInput(new ArrayList<>(Arrays.asList(inputAndAdditives)));
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ArcFurnaceRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ArcFurnaceRecipe.recipeList).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ArcFurnaceRecipe.recipeList.forEach(this::addBackup);
         ArcFurnaceRecipe.recipeList.clear();
     }
 
+    @Property(property = "input", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ArcFurnaceRecipe> {
 
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private int time;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IIngredient mainInput;
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private int energyPerTick;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private ItemStack slag = ItemStack.EMPTY;
+        @Property
         private String specialRecipeType;
 
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder mainInput(IIngredient mainInput) {
             this.mainInput = mainInput;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energyPerTick(int energy) {
             this.energyPerTick = energy;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder slag(ItemStack slag) {
             this.slag = slag;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder specialRecipeType(String specialRecipeType) {
             this.specialRecipeType = specialRecipeType;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "specialRecipeType")
         public RecipeBuilder alloying() {
             this.specialRecipeType = "Alloying";
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "specialRecipeType")
         public RecipeBuilder ores() {
             this.specialRecipeType = "Ores";
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "specialRecipeType")
         public RecipeBuilder recycling() {
             this.specialRecipeType = "Recycling";
             return this;
@@ -196,6 +217,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable ArcFurnaceRecipe register() {
             if (!validate()) return null;
             Object[] additives = ArrayUtils.mapToArray(input, ImmersiveEngineering::toIngredientStack);

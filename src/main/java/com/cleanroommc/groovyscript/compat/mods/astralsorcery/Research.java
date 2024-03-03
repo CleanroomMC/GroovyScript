@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ResearchNodeAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -22,6 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES
+)
 public class Research extends VirtualizedRegistry<ResearchNode> {
 
     private final HashMap<ResearchNode, ResearchProgression> scriptedCategories = new HashMap<>();
@@ -63,10 +67,12 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         removedCategories.clear();
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public ResearchNode getNode(String name) {
         return ResearchProgression.findNode(name);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void addNode(ResearchProgression category, ResearchNode node) {
         this.addNode(category, node, true);
     }
@@ -79,6 +85,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         category.getRegistry().register(node);
     }
 
+    @MethodDescription(example = @Example("'CPAPER'"))
     public void removeNode(String name) {
         if (ResearchProgression.findNode(name) != null) {
             ResearchProgression.findProgression(ResearchProgression.findNode(name)).forEach(category -> {
@@ -97,6 +104,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         category.getResearchNodes().removeIf(registeredNode -> node.getSimpleName().equals(registeredNode.getSimpleName()));
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'SOOTYMARBLE', 5, 6"))
     public void moveNode(String name, int x, int z) {
         ResearchNode node = this.getNode(name);
         if (node != null)
@@ -111,6 +119,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         ((ResearchNodeAccessor) node).setZ(z);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'MY_TEST_RESEARCH2', 'ENHANCED_COLLECTOR'"))
     public void connectNodes(String source, String dest) {
         this.connectNodes(this.getNode(source), this.getNode(dest), true);
     }
@@ -125,6 +134,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         dest.addSourceConnectionFrom(source);
     }
 
+    @MethodDescription(example = @Example("'MY_TEST_RESEARCH', 'ALTAR1'"))
     public void disconnectNodes(String node1, String node2) {
         ResearchNode first = this.getNode(node1);
         ResearchNode second = this.getNode(node2);
@@ -146,6 +156,10 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         node1.getConnectionsTo().remove(node2);
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".name('MY_TEST_RESEARCH').point(5,5).icon(item('minecraft:pumpkin')).discovery().page(mods.astralsorcery.research.pageBuilder().textPage('GROOVYSCRIPT.RESEARCH.PAGE.TEST')).page(mods.astralsorcery.research.pageBuilder().emptyPage()).connectionFrom('ALTAR1')"),
+            @Example(".name('MY_TEST_RESEARCH2').point(5,5).icon(item('minecraft:pumpkin')).constellation().page(mods.astralsorcery.research.pageBuilder().textPage('GROOVYSCRIPT.RESEARCH.PAGE.TEST2')).page(mods.astralsorcery.research.pageBuilder().constellationRecipePage(item('minecraft:pumpkin')))")
+    })
     public ResearchNodeBuilder researchBuilder() {
         return new ResearchNodeBuilder();
     }
@@ -156,69 +170,86 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
 
     public static class ResearchNodeBuilder {
 
-        private ResearchProgression category;
-        private ItemStack node;
+        @Property
         private final ArrayList<IJournalPage> pages = new ArrayList<>();
-        private String name;
-        private Point location;
+        @Property
         private final ArrayList<ResearchNode> connections = new ArrayList<>();
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        private ResearchProgression category;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        private ItemStack node;
+        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
+        private String name;
+        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        private Point location;
 
-
+        @RecipeBuilderMethodDescription(field = "category")
         public ResearchNodeBuilder discovery() {
             this.category = ResearchProgression.DISCOVERY;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "category")
         public ResearchNodeBuilder exploration() {
             this.category = ResearchProgression.BASIC_CRAFT;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "category")
         public ResearchNodeBuilder attunement() {
             this.category = ResearchProgression.ATTUNEMENT;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "category")
         public ResearchNodeBuilder constellation() {
             this.category = ResearchProgression.CONSTELLATION;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "category")
         public ResearchNodeBuilder radiance() {
             this.category = ResearchProgression.RADIANCE;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "category")
         public ResearchNodeBuilder brilliance() {
             this.category = ResearchProgression.BRILLIANCE;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "node")
         public ResearchNodeBuilder icon(ItemStack item) {
             this.node = item;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "pages")
         public ResearchNodeBuilder page(IJournalPage page) {
             this.pages.add(page);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public ResearchNodeBuilder name(String name) {
             this.name = name;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "location")
         public ResearchNodeBuilder point(int x, int y) {
             this.location = new Point(x, y);
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "connections")
         public ResearchNodeBuilder connectionFrom(String source) {
             this.connections.add(ModSupport.ASTRAL_SORCERY.get().research.getNode(source));
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "connections")
         public ResearchNodeBuilder connectionFrom(ResearchNode source) {
             this.connections.add(source);
             return this;
@@ -227,7 +258,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         private boolean validate() {
             GroovyLog.Msg out = GroovyLog.msg("Error adding Research Node to Astral Sorcery Journal").error();
 
-            if (this.name == null || this.name.equals("")) {
+            if (this.name == null || "".equals(this.name)) {
                 out.add("Name not provided.");
             }
             if (this.node == null || this.node.isItemEqual(ItemStack.EMPTY)) {
@@ -243,6 +274,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
             return !out.postIfNotEmpty();
         }
 
+        @RecipeBuilderRegistrationMethod
         public void register() {
             if (!validate()) return;
             ResearchNode researchNode = new ResearchNode(this.node, this.name, this.location.x, this.location.y);

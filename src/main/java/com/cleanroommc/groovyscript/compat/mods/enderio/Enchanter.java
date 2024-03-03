@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.enderio;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.CustomEnchanterRecipe;
 import com.cleanroommc.groovyscript.core.mixin.enderio.SimpleRecipeGroupHolderAccessor;
@@ -23,12 +24,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@RegistryDescription
 public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
-    public Enchanter() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".enchantment(enchantment('minecraft:unbreaking')).input(item('minecraft:diamond'))"),
+            @Example(".enchantment(enchantment('minecraft:sharpness')).input(item('minecraft:clay')).amountPerLevel(3).xpCostMultiplier(2).customBook(item('minecraft:book')).customLapis(item('minecraft:diamond'))")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -44,6 +46,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         addScripted(recipe);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(Enchantment enchantment, IIngredient input) {
         recipeBuilder()
                 .enchantment(enchantment)
@@ -58,6 +61,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         return true;
     }
 
+    @MethodDescription(example = @Example("enchantment('minecraft:mending')"))
     public void remove(Enchantment enchantment) {
         if (enchantment == null) {
             GroovyLog.get().error("Can't remove EnderIO Enchanter recipe for null enchantment!");
@@ -79,11 +83,13 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<EnchanterRecipe> streamRecipes() {
         return new SimpleObjectStream<>((Collection<EnchanterRecipe>) MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ENCHANTER).values())
                 .setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ENCHANTER).forEach((r, l) -> addBackup((EnchanterRecipe) l));
         ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.ENCHANTER)).getRecipes().clear();
@@ -91,38 +97,50 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
     public static class RecipeBuilder implements IRecipeBuilder<EnchanterRecipe> {
 
+        @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private Enchantment enchantment;
+        @Property(ignoresInheritedMethods = true, valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private IIngredient input;
+        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int amount = 0;
+        @Property(defaultValue = "1")
         private double costMultiplier = 1;
+        @Property(defaultValue = "ore('gemLapis')", valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private IIngredient lapis = new OreDictIngredient("gemLapis");
+        @Property(defaultValue = "item('minecraft:writable_book')", valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private IIngredient book = IngredientHelper.toIIngredient(new ItemStack(Items.WRITABLE_BOOK));
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder enchantment(Enchantment enchantment) {
             this.enchantment = enchantment;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(IIngredient ingredient) {
             this.input = ingredient;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "amount")
         public RecipeBuilder amountPerLevel(int amount) {
             this.amount = amount;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "costMultiplier")
         public RecipeBuilder xpCostMultiplier(double costMultiplier) {
             this.costMultiplier = costMultiplier;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "book")
         public RecipeBuilder customBook(IIngredient book) {
             this.book = book;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "lapis")
         public RecipeBuilder customLapis(IIngredient lapis) {
             this.lapis = lapis;
             return this;
@@ -141,6 +159,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable EnchanterRecipe register() {
             if (!validate()) return null;
             EnchanterRecipe recipe = new CustomEnchanterRecipe(input, amount, enchantment, costMultiplier, lapis, book);

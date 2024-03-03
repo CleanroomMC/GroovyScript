@@ -2,7 +2,7 @@ package com.cleanroommc.groovyscript.api;
 
 import org.jetbrains.annotations.ApiStatus;
 
-public interface IScriptReloadable {
+public interface IScriptReloadable extends INamed {
 
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
@@ -11,5 +11,10 @@ public interface IScriptReloadable {
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     void afterScriptLoad();
+
+    @GroovyBlacklist
+    default boolean isEnabled() {
+        return true;
+    }
 
 }

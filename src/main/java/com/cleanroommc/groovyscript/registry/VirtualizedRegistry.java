@@ -6,14 +6,12 @@ import com.cleanroommc.groovyscript.helper.Alias;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
 
+    protected final String name;
     private final List<String> aliases;
     private Collection<R> backup, scripted;
 
@@ -28,6 +26,7 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
             throw new IllegalArgumentException("VirtualRegistry must have at least one name!");
         }
         List<String> aliases1 = aliases.stream().distinct().collect(Collectors.toList());
+        this.name = aliases1.get(0).toLowerCase(Locale.ROOT);
         this.aliases = Collections.unmodifiableList(aliases1);
         initBackup();
         initScripted();
@@ -40,6 +39,10 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     public void afterScriptLoad() {
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<String> getAliases() {

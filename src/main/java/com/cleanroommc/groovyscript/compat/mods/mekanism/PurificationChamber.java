@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
@@ -15,16 +16,19 @@ import mekanism.common.recipe.outputs.ItemStackOutput;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class PurificationChamber extends VirtualizedMekanismRegistry<PurificationRecipe> {
 
     public PurificationChamber() {
-        super(RecipeHandler.Recipe.PURIFICATION_CHAMBER, Alias.generateOf("Purifier").andGenerateOfClass(PurificationChamber.class));
+        super(RecipeHandler.Recipe.PURIFICATION_CHAMBER, Alias.generateOfClassAnd(PurificationChamber.class, "Purifier"));
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).gasInput(gas('deuterium')).output(item('minecraft:nether_star'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond'), gas('oxygen'), item('minecraft:nether_star')", commented = true))
     public PurificationRecipe add(IIngredient ingredient, GasStack gasInput, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Purification Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -42,6 +46,7 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
         return recipe1;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('mekanism:oreblock:0'), gas('oxygen')"))
     public boolean removeByInput(IIngredient ingredient, GasStack gasInput) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Purification Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -62,6 +67,9 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
         return found;
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "gasInput", valid = @Comp("1"))
     public static class RecipeBuilder extends GasRecipeBuilder<PurificationRecipe> {
 
         @Override
@@ -77,6 +85,7 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable PurificationRecipe register() {
             if (!validate()) return null;
             PurificationRecipe recipe = null;

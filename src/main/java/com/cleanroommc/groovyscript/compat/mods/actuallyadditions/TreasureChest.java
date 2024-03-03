@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -11,12 +12,10 @@ import de.ellpeck.actuallyadditions.api.recipe.TreasureChestLoot;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
 
-    public TreasureChest() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay')).weight(50).min(16).max(32)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -47,6 +46,7 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:iron_ingot')"))
     public boolean removeByOutput(ItemStack output) {
         return ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.returnItem, output);
@@ -57,32 +57,42 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.forEach(this::addBackup);
         ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<TreasureChestLoot> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.TREASURE_CHEST_LOOT)
                 .setRemover(this::remove);
     }
 
+
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TreasureChestLoot> {
 
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int weight;
+        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "max")})
         private int min;
+        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.GTE, value = "min")})
         private int max;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder weight(int weight) {
             this.weight = weight;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder min(int min) {
             this.min = min;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder max(int max) {
             this.max = max;
             return this;
@@ -104,6 +114,7 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable TreasureChestLoot register() {
             if (!validate()) return null;
             TreasureChestLoot recipe = new TreasureChestLoot(output.get(0), weight, min, max);

@@ -25,7 +25,7 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
     public final Smelting smelting = new Smelting();
 
     public ThermionicFabricator() {
-        super(Alias.generateOf("Fabricator"));
+        super(Alias.generateOfClassAnd(ThermionicFabricator.class, "Fabricator"));
     }
 
     public RecipeBuilder recipeBuilder() {
@@ -142,7 +142,7 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
         }
 
         public RecipeBuilder key(String key, IIngredient item) {
-            if (key != null && !key.equals(" ") && !key.equals("\\")) this.keys.put(key.charAt(0), item);
+            if (key != null && !" ".equals(key) && !"\\".equals(key)) this.keys.put(key.charAt(0), item);
             return this;
         }
 

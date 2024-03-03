@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -12,16 +13,19 @@ import mekanism.common.recipe.machines.CombinerRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
 
     public Combiner() {
         super(RecipeHandler.Recipe.COMBINER);
     }
 
+    @RecipeBuilderDescription(example = @Example(".input(ore('gemQuartz') * 8).extra(item('minecraft:netherrack')).output(item('minecraft:quartz_ore'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "ore('gemQuartz') * 8, item('minecraft:netherrack'), item('minecraft:quartz_ore')", commented = true))
     public CombinerRecipe add(IIngredient ingredient, ItemStack extra, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crusher recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -41,6 +45,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
         return recipe1;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:flint'), item('minecraft:cobblestone')"))
     public boolean removeByInput(IIngredient ingredient, ItemStack extra) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Combiner recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -61,8 +66,11 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
         return found;
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CombinerRecipe> {
 
+        @Property(defaultValue = "new ItemStack(Blocks.COBBLESTONE)")
         private ItemStack extra;
 
         public RecipeBuilder extra(ItemStack extra) {
@@ -82,6 +90,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable CombinerRecipe register() {
             if (!validate()) return null;
             CombinerRecipe recipe = null;

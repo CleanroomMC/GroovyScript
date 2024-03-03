@@ -5,6 +5,7 @@ import blusunrize.immersiveengineering.api.ComparableItemStack;
 import blusunrize.immersiveengineering.api.crafting.MetalPressRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -16,12 +17,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@RegistryDescription
 public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
 
-    public MetalPress() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".mold(item('minecraft:diamond')).input(ore('ingotGold')).output(item('minecraft:clay')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -39,6 +38,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public MetalPressRecipe add(ItemStack output, IIngredient input, ItemStack mold, int energy) {
         MetalPressRecipe recipe = new MetalPressRecipe(output.copy(), ImmersiveEngineering.toIngredientStack(input), ApiUtils.createComparableItemStack(mold, true), energy);
         add(recipe);
@@ -53,6 +53,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:material:2')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Metal Press recipe")
@@ -71,6 +72,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         list.forEach(this::addBackup);
     }
 
+    @MethodDescription(example = @Example("item('immersiveengineering:mold'), item('immersiveengineering:metal:31')"))
     public void removeByOutput(ItemStack mold, ItemStack output) {
         boolean moldEmpty = IngredientHelper.isEmpty(mold);
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Immersive Engineering Metal Press recipe")
@@ -98,6 +100,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         }
     }
 
+    @MethodDescription(example = @Example("item('immersiveengineering:mold'), item('immersiveengineering:metal:8')"))
     public void removeByInput(ItemStack mold, ItemStack input) {
         boolean moldEmpty = IngredientHelper.isEmpty(mold);
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Immersive Engineering Metal Press recipe")
@@ -126,6 +129,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:iron_ingot')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
@@ -147,6 +151,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         }
     }
 
+    @MethodDescription(example = @Example("item('immersiveengineering:mold:4')"))
     public void removeByMold(ItemStack mold) {
         boolean moldEmpty = IngredientHelper.isEmpty(mold);
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Immersive Engineering Metal Press recipe")
@@ -160,29 +165,37 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         msg.add(!MetalPressRecipe.recipeList.containsKey(comparable), () -> mold + " is not a valid mold");
         if (msg.postIfNotEmpty()) return;
         List<MetalPressRecipe> list = MetalPressRecipe.recipeList.removeAll(ApiUtils.createComparableItemStack(mold, false));
-        if (list.size() > 0) list.forEach(this::addBackup);
+        if (!list.isEmpty()) list.forEach(this::addBackup);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MetalPressRecipe.recipeList.values().forEach(this::addBackup);
         MetalPressRecipe.recipeList.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MetalPressRecipe> streamRecipes() {
         List<MetalPressRecipe> recipes = new ArrayList<>(MetalPressRecipe.recipeList.values());
         return new SimpleObjectStream<>(recipes).setRemover(this::remove);
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MetalPressRecipe> {
 
+        @Property
         private int energy;
+        @Property(valid = @Comp(value = "empty", type = Comp.Type.NOT))
         private ItemStack mold = ItemStack.EMPTY;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder mold(ItemStack mold) {
             this.mold = mold;
             return this;
@@ -201,6 +214,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable MetalPressRecipe register() {
             if (!validate()) return null;
             MetalPressRecipe recipe = new MetalPressRecipe(output.get(0), ImmersiveEngineering.toIngredientStack(input.get(0)), ApiUtils.createComparableItemStack(mold, true), energy);

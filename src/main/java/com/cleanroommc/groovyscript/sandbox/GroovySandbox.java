@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.helper.Alias;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
@@ -63,6 +64,13 @@ public abstract class GroovySandbox {
         }
     }
 
+    public void registerBinding(INamed named) {
+        Objects.requireNonNull(named);
+        for (String alias : named.getAliases()) {
+            bindings.put(alias, named);
+        }
+    }
+
     protected void startRunning() {
         currentSandbox.set(this);
         this.running.set(true);
@@ -76,6 +84,7 @@ public abstract class GroovySandbox {
     protected GroovyScriptEngine createScriptEngine() {
         GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment);
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
+        config.setSourceEncoding("UTF-8");
         engine.setConfig(config);
         initEngine(engine, config);
         return engine;

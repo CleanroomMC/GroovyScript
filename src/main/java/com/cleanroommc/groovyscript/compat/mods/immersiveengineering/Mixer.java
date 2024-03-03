@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 import blusunrize.immersiveengineering.api.crafting.MixerRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -16,12 +17,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Mixer extends VirtualizedRegistry<MixerRecipe> {
 
-    public Mixer() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), ore('ingotGold'), ore('ingotGold'), ore('ingotGold')).fluidInput(fluid('water')).fluidOutput(fluid('lava')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -39,6 +38,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public MixerRecipe add(FluidStack fluidOutput, FluidStack fluidInput, int energy, List<IIngredient> itemInput) {
         Object[] inputs = ArrayUtils.mapToArray(itemInput, ImmersiveEngineering::toIngredientStack);
         MixerRecipe recipe = new MixerRecipe(fluidOutput, fluidInput, inputs, energy);
@@ -54,6 +54,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('potion').withNbt([Potion:'minecraft:night_vision'])"))
     public void removeByOutput(FluidStack fluidOutput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
                 .add(IngredientHelper.isEmpty(fluidOutput), () -> "fluid output must not be empty")
@@ -75,6 +76,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:sand'), item('minecraft:sand'), item('minecraft:clay_ball'), item('minecraft:gravel')"))
     public void removeByInput(IIngredient... itemInputs) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
                 .add(itemInputs == null || itemInputs.length == 0, () -> "item input must not be empty")
@@ -96,6 +98,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('water'), item('minecraft:speckled_melon')"))
     public void removeByInput(FluidStack fluidInput, IIngredient... itemInput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
                 .add(IngredientHelper.isEmpty(fluidInput), () -> "fluid input must not be empty")
@@ -119,19 +122,27 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MixerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(MixerRecipe.recipeList).setRemover(this::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MixerRecipe.recipeList.forEach(this::addBackup);
         MixerRecipe.recipeList.clear();
     }
 
+    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})
+    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "fluidOutput", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MixerRecipe> {
 
+        @Property
         private int energy;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
             this.energy = energy;
             return this;
@@ -149,6 +160,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable MixerRecipe register() {
             if (!validate()) return null;
             Object[] inputs = ArrayUtils.mapToArray(input, ImmersiveEngineering::toIngredientStack);

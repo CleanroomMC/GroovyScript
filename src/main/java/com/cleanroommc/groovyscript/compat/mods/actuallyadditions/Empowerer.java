@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -16,12 +17,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
+@RegistryDescription
 public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
 
-    public Empowerer() {
-        super();
-    }
-
+    @RecipeBuilderDescription(example = {
+            @Example(".mainInput(item('minecraft:clay')).input(item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay')).output(item('minecraft:diamond')).time(50).energy(1000).red(0.5).green(0.3).blue(0.2)"),
+            @Example(".mainInput(item('minecraft:clay')).input(item('minecraft:diamond'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay')).output(item('minecraft:diamond') * 2).time(50).color(0.5, 0.3, 0.2)"),
+            @Example(".mainInput(item('minecraft:diamond')).input(item('minecraft:diamond'),item('minecraft:gold_ingot'),item('minecraft:diamond'),item('minecraft:gold_ingot')).output(item('minecraft:dirt') * 8).time(50).particleColor(0x00FF88)"),
+            @Example(".input(item('minecraft:gold_ingot'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay')).output(item('minecraft:diamond')).time(50)")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -52,6 +56,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('actuallyadditions:item_crystal')"))
     public boolean removeByInput(IIngredient input) {
         return ActuallyAdditionsAPI.EMPOWERER_RECIPES.removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
@@ -62,6 +67,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('actuallyadditions:item_misc:24')"))
     public boolean removeByOutput(ItemStack output) {
         return ActuallyAdditionsAPI.EMPOWERER_RECIPES.removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
@@ -72,45 +78,62 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         });
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.EMPOWERER_RECIPES.forEach(this::addBackup);
         ActuallyAdditionsAPI.EMPOWERER_RECIPES.clear();
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<EmpowererRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.EMPOWERER_RECIPES)
                 .setRemover(this::remove);
     }
 
+
+    @Property(property = "input", valid = {@Comp(value = "4", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})
+    @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<EmpowererRecipe> {
 
+        @Property
         private IIngredient mainInput;
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int energyPerStand;
+        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int time;
-        private float red = 0;
-        private float green = 0;
-        private float blue = 0;
+        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        private float red;
+        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        private float green;
+        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        private float blue;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder mainInput(IIngredient mainInput) {
             this.mainInput = mainInput;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energyPerStand(int energyPerStand) {
             this.energyPerStand = energyPerStand;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "energyPerStand")
         public RecipeBuilder energy(int energy) {
             this.energyPerStand = energy;
             return this;
         }
 
+
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
         public RecipeBuilder particleColor(float... color) {
             if (color.length != 3) {
                 GroovyLog.get().warn("Error setting color in Actually Additions Empowerer recipe. color must contain 3 floats, yet it contained {}", color.length);
@@ -122,10 +145,13 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
         public RecipeBuilder color(float... color) {
             return this.particleColor(color);
         }
 
+
+        @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
         public RecipeBuilder particleColor(int hex) {
             Color color = new Color(hex);
             this.red = color.getRed() / 255f;
@@ -134,20 +160,25 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
             return this;
         }
 
+
+        @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
         public RecipeBuilder color(int hex) {
             return this.particleColor(hex);
         }
 
+        @RecipeBuilderMethodDescription(priority = 100)
         public RecipeBuilder red(float red) {
             this.red = red;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(priority = 100)
         public RecipeBuilder green(float green) {
             this.green = green;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(priority = 100)
         public RecipeBuilder blue(float blue) {
             this.blue = blue;
             return this;
@@ -174,6 +205,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable EmpowererRecipe register() {
             if (!validate()) return null;
             EmpowererRecipe recipe = new EmpowererRecipe(

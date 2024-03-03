@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.core.mixin.roots.RitualBaseAccessor;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -13,11 +14,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+@RegistryDescription(
+        reloadability = RegistryDescription.Reloadability.FLAWED,
+        isFullyDocumented = false // TODO fully document Roots Rituals
+)
 public class Rituals extends VirtualizedRegistry<RitualBase> {
-
-    public Rituals() {
-        super();
-    }
 
     public static RitualWrapper ritual(String ritual) {
         return ritual(RitualRegistry.getRitual(ritual));
@@ -27,6 +28,7 @@ public class Rituals extends VirtualizedRegistry<RitualBase> {
         return new RitualWrapper(ritual);
     }
 
+    @RecipeBuilderDescription(example = @Example(".ritual(ritual('ritual_healing_aura')).input(item('minecraft:clay'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'))"))
     public static RitualWrapper.RecipeBuilder recipeBuilder() {
         return new RitualWrapper.RecipeBuilder();
     }
@@ -111,8 +113,11 @@ public class Rituals extends VirtualizedRegistry<RitualBase> {
             return this.set("duration", value);
         }
 
+        @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "name")
+        @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "input", valid = @Comp("5"))
         public static class RecipeBuilder extends AbstractRecipeBuilder<RitualBase.RitualRecipe> {
 
+            @com.cleanroommc.groovyscript.api.documentation.annotations.Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
             private RitualBase ritual;
 
             public RecipeBuilder() {
@@ -122,6 +127,7 @@ public class Rituals extends VirtualizedRegistry<RitualBase> {
                 this.ritual = ritual;
             }
 
+            @RecipeBuilderMethodDescription
             public RecipeBuilder ritual(RitualBase ritual) {
                 this.ritual = ritual;
                 return this;
@@ -140,6 +146,7 @@ public class Rituals extends VirtualizedRegistry<RitualBase> {
             }
 
             @Override
+            @RecipeBuilderRegistrationMethod
             public @Nullable RitualBase.RitualRecipe register() {
                 if (!validate()) return null;
                 RitualBase.RitualRecipe recipe = new RitualBase.RitualRecipe(ritual, input.stream().map(IIngredient::toMcIngredient).toArray());
