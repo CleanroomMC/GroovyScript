@@ -2,24 +2,26 @@ package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import groovy.lang.GroovyClassLoader;
-import org.codehaus.groovy.ast.ClassNode;
-import org.codehaus.groovy.control.SourceUnit;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = GroovyClassLoader.ClassCollector.class, remap = false)
+import java.net.URL;
+
+/**
+ * If a script depends on another script and the there is a compiled cache for the script, it needs to be loaded manually.
+ */
+@Mixin(value = GroovyClassLoader.class, remap = false)
 public class GroovyClassLoaderMixin {
 
-    @Shadow
-    @Final
-    private SourceUnit su;
-
-    @Inject(method = "createClass", at = @At("RETURN"))
-    public void onCreateClass(byte[] code, ClassNode classNode, CallbackInfoReturnable<Class<?>> cir) {
-        GroovyScript.getSandbox().onCompileClass(su, su.getName(), cir.getReturnValue(), code, classNode.getName().contains("$"));
+    @Inject(method = "recompile", at = @At("HEAD"), cancellable = true)
+    public void onRecompile(URL source, String className, Class<?> oldClass, CallbackInfoReturnable<Class<?>> cir) {
+        if (source != null && oldClass == null) {
+            Class<?> c = GroovyScript.getSandbox().onRecompileClass((GroovyClassLoader) (Object) this, source, className);
+            if (c != null) {
+                cir.setReturnValue(c);
+            }
+        }
     }
 }

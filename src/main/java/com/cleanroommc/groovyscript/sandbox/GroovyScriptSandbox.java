@@ -15,6 +15,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
+import groovy.lang.GroovyClassLoader;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
@@ -222,6 +223,20 @@ public class GroovyScriptSandbox extends GroovySandbox {
         CompiledClass innerClass = comp;
         if (inner) innerClass = comp.findInnerClass(clazz.getName());
         innerClass.onCompile(code, clazz, this.cachePath);
+    }
+
+    @ApiStatus.Internal
+    public Class<?> onRecompileClass(GroovyClassLoader classLoader, URL source, String className) {
+        String path = source.toExternalForm();
+        CompiledScript cs = this.index.get(getShortPath(path));
+        Class<?> c = null;
+        if (cs != null) {
+            if (cs.clazz == null && cs.readData(this.cachePath)) {
+                cs.ensureLoaded(classLoader, this.cachePath);
+            }
+            c = cs.clazz;
+        }
+        return c;
     }
 
     @Override

@@ -20,6 +20,7 @@
     "SlotCraftingAccess",
     "TileEntityPistonMixin",
     "groovy.AsmDecompilerMixin",
+    "groovy.ClassCollectorMixin",
     "groovy.CompUnitClassGenMixin",
     "groovy.GroovyClassLoaderMixin",
     "groovy.Java8Mixin",
