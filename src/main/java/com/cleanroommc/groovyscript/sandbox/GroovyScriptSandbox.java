@@ -214,12 +214,17 @@ public class GroovyScriptSandbox extends GroovySandbox {
         String shortPath = getShortPath(path);
         // if the script was compiled because another script depends on it, the source unit is wrong
         // we need to find the source unit of the compiled class
-        // TODO stop groovy from force compiling script dependencies
         SourceUnit trueSource = su.getAST().getUnit().getScriptSourceLocation(mainClassName(clazz.getName()));
         String truePath = trueSource == null ? shortPath : getShortPath(trueSource.getName());
+        if (shortPath.equals(truePath) &&
+            su.getAST().getMainClassName() != null &&
+            !su.getAST().getMainClassName().equals(clazz.getName())) {
+            inner = true;
+        }
         GroovyLog.get().debugMC("Compiled class {}, path {}. Inner: {}", clazz.getName(), shortPath, inner);
 
-        CompiledScript comp = this.index.computeIfAbsent(truePath, k -> new CompiledScript(k, inner ? -1 : 0));
+        boolean finalInner = inner;
+        CompiledScript comp = this.index.computeIfAbsent(truePath, k -> new CompiledScript(k, finalInner ? -1 : 0));
         CompiledClass innerClass = comp;
         if (inner) innerClass = comp.findInnerClass(clazz.getName());
         innerClass.onCompile(code, clazz, this.cachePath);
@@ -295,7 +300,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected boolean shouldRunFile(File file) {
-        GroovyLog.get().info(" - executing {}", file.toString());
+        //GroovyLog.get().info(" - executing {}", file.toString());
         return true;
     }
 
