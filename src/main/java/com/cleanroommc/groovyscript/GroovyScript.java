@@ -111,7 +111,7 @@ public class GroovyScript {
         LinkGeneratorHooks.init();
         ReloadableRegistryManager.init();
         try {
-            sandbox = new GroovyScriptSandbox(scriptPath);
+            sandbox = new GroovyScriptSandbox(scriptPath, makeFile(Loader.instance().getConfigDir().getParentFile(), "cache", "groovy"));
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Error initializing sandbox!");
         }

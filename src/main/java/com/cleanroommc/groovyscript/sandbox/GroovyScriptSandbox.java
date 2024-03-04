@@ -24,97 +24,36 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GroovyScriptSandbox extends GroovySandbox {
 
+    private final File cachePath;
     private final File basePath;
     private final ImportCustomizer importCustomizer = new ImportCustomizer();
     private final Map<List<StackTraceElement>, AtomicInteger> storedExceptions;
 
-    private final Map<String, Entry> index = new Object2ObjectOpenHashMap<>();
-    private final List<Entry> cachedClosures = new ArrayList<>();
+    private final Map<String, CompiledScript> index = new Object2ObjectOpenHashMap<>();
 
-    public static class Entry {
-
-        private final String path;
-        private long lastEdited;
-        private byte[] data;
-        private Class<?> clazz;
-
-        public Entry(String path, long lastEdited) {
-            this.path = path;
-            this.lastEdited = lastEdited;
-        }
-
-        private void onCompile(byte[] data, Class<?> clazz, File basePath) {
-            this.data = data;
-            onCompile(clazz, basePath);
-        }
-
-        private void onCompile(Class<?> clazz, File basePath) {
-            this.clazz = clazz;
-            if (this.data == null) throw new IllegalStateException("The class doesnt seem to be compiled yet. (" + this.path + ")");
-            try {
-                File file = getDataFile(basePath);
-                file.getParentFile().mkdirs();
-                try (FileOutputStream stream = new FileOutputStream(file)) {
-                    stream.write(this.data);
-                    stream.flush();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        private void readData(File basePath) {
-            File file = getDataFile(basePath);
-            if (!file.exists()) return;
-            try {
-                this.data = Files.readAllBytes(file.toPath());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        private File getDataFile(File basePath) {
-            return new File(basePath, "compiled/" + this.path.replace(File.separatorChar, '.') + ".clz");
-        }
-
-        public boolean isClosure() {
-            return lastEdited < 0;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null) return false;
-            Entry entry = (Entry) o;
-            return Objects.equals(path, entry.path);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(path);
-        }
-    }
+    public static final boolean WRITE_CACHE = true;
 
     private LoadStage currentLoadStage;
 
-    public GroovyScriptSandbox(File basePath) throws MalformedURLException {
+    public GroovyScriptSandbox(File basePath, File cachePath) throws MalformedURLException {
         super(new URL[]{basePath.toURI().toURL()});
         this.basePath = basePath;
+        this.cachePath = cachePath;
         registerBinding("Mods", ModSupport.INSTANCE);
         registerBinding("Log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
@@ -152,49 +91,54 @@ public class GroovyScriptSandbox extends GroovySandbox {
     }
 
     private void readIndex() {
-        JsonElement jsonElement = JsonHelper.loadJson(new File(this.basePath, "compiled/index.json"));
+        JsonElement jsonElement = JsonHelper.loadJson(new File(this.cachePath, "_index.json"));
         if (jsonElement == null || !jsonElement.isJsonObject()) return;
         JsonObject json = jsonElement.getAsJsonObject();
         JsonArray index = json.getAsJsonArray("index");
         for (JsonElement element : index) {
             if (element.isJsonObject()) {
                 JsonObject jsonEntry = element.getAsJsonObject();
-                Entry entry = new Entry(jsonEntry.get("path").getAsString(), jsonEntry.get("lm").getAsLong());
-                if (new File(this.basePath, entry.path).exists()) {
-                    this.index.put(entry.path, entry);
-                    entry.readData(this.basePath);
+                CompiledScript compiledScript = new CompiledScript(jsonEntry.get("path").getAsString(), jsonEntry.get("name").getAsString(), jsonEntry.get("lm").getAsLong());
+                if (new File(this.basePath, compiledScript.path).exists()) {
+                    if (jsonEntry.has("inner")) {
+                        for (JsonElement element1 : jsonEntry.getAsJsonArray("inner")) {
+                            compiledScript.innerClasses.add(new CompiledClass(element1.getAsString()));
+                        }
+                    }
+                    this.index.put(compiledScript.path, compiledScript);
+                    //entry.readData(this.cachePath);
                 }
-            }
-        }
-        JsonArray closures = json.getAsJsonArray("closures");
-        for (JsonElement element : closures) {
-            if (element.isJsonPrimitive()) {
-                Entry entry = new Entry(element.getAsString(), -1);
-                this.index.put(entry.path, entry);
-                entry.readData(this.basePath);
-                this.cachedClosures.add(entry);
             }
         }
     }
 
     private void writeIndex() {
+        if (!WRITE_CACHE) return;
         JsonObject json = new JsonObject();
         json.addProperty("!DANGER!", "DO NOT EDIT THIS FILE!!!");
         JsonArray index = new JsonArray();
         json.add("index", index);
-        JsonArray closures = new JsonArray();
-        json.add("closures", closures);
-        for (Map.Entry<String, Entry> entry : this.index.entrySet()) {
-            if (entry.getValue().isClosure()) {
-                closures.add(entry.getValue().path);
-            } else {
-                JsonObject jsonEntry = new JsonObject();
-                jsonEntry.addProperty("path", entry.getValue().path);
-                jsonEntry.addProperty("lm", entry.getValue().lastEdited);
-                index.add(jsonEntry);
-            }
+        for (Map.Entry<String, CompiledScript> entry : this.index.entrySet()) {
+            JsonObject jsonEntry = compiledClassToJson(entry.getValue());
+            index.add(jsonEntry);
         }
-        JsonHelper.saveJson(new File(this.basePath, "compiled/index.json"), json);
+        JsonHelper.saveJson(new File(this.cachePath, "_index.json"), json);
+    }
+
+    @NotNull
+    private static JsonObject compiledClassToJson(CompiledScript compiledScript) {
+        JsonObject jsonEntry = new JsonObject();
+        jsonEntry.addProperty("name", compiledScript.getName());
+        jsonEntry.addProperty("path", compiledScript.path);
+        jsonEntry.addProperty("lm", compiledScript.lastEdited);
+        if (!compiledScript.innerClasses.isEmpty()) {
+            JsonArray inner = new JsonArray();
+            for (CompiledClass comp : compiledScript.innerClasses) {
+                inner.add(comp.name);
+            }
+            jsonEntry.add("inner", inner);
+        }
+        return jsonEntry;
     }
 
     public void checkSyntax() {
@@ -250,48 +194,65 @@ public class GroovyScriptSandbox extends GroovySandbox {
         return result;
     }
 
-    @ApiStatus.Internal
-    public void onCompileScript(String name, Class<?> clazz, byte[] code, boolean closure) {
-        if (closure) {
-            this.index.computeIfAbsent(name, n -> new Entry(n, -1)).onCompile(code, clazz, this.basePath);
-            return;
-        }
+    private static String mainClassName(String name) {
+        return name.contains("$") ? name.split("\\$", 2)[0] : name;
+    }
+
+    private String getShortPath(String path) {
         if (File.separatorChar != '/') {
-            name = name.replace('/', File.separatorChar);
+            path = path.replace('/', File.separatorChar);
         }
         String base = this.basePath.toString();
-        int index = name.indexOf(base);
+        int index = path.indexOf(base);
         if (index < 0) throw new IllegalArgumentException();
-        String shortName = name.substring(index + base.length() + 1);
-        this.index.computeIfAbsent(shortName, n -> new Entry(n, 0)).onCompile(code, clazz, this.basePath);
+        return path.substring(index + base.length() + 1);
+    }
+
+    @ApiStatus.Internal
+    public void onCompileClass(SourceUnit su, String path, Class<?> clazz, byte[] code, boolean inner) {
+        String shortPath = getShortPath(path);
+        // if the script was compiled because another script depends on it, the source unit is wrong
+        // we need to find the source unit of the compiled class
+        // TODO stop groovy from force compiling script dependencies
+        SourceUnit trueSource = su.getAST().getUnit().getScriptSourceLocation(mainClassName(clazz.getName()));
+        String truePath = trueSource == null ? shortPath : getShortPath(trueSource.getName());
+        GroovyLog.get().debugMC("Compiled class {}, path {}. Inner: {}", clazz.getName(), shortPath, inner);
+
+        CompiledScript comp = this.index.computeIfAbsent(truePath, k -> new CompiledScript(k, inner ? -1 : 0));
+        CompiledClass innerClass = comp;
+        if (inner) innerClass = comp.findInnerClass(clazz.getName());
+        innerClass.onCompile(code, clazz, this.cachePath);
     }
 
     @Override
     protected Class<?> loadScriptClass(GroovyScriptEngine engine, File file) {
+        GroovyLog.get().debugMC("Loading script {}", file);
         long lastModified = new File(this.basePath, file.toString()).lastModified();
-        Entry entry = this.index.get(file.toString());
-        if (entry == null) {
-            entry = new Entry(file.toString(), lastModified);
-            this.index.put(file.toString(), entry);
-        } else if (entry.isClosure()) {
-            throw new IllegalStateException("Closures are not loaded like this. What's going on?");
-        }
-        if (lastModified <= entry.lastEdited && entry.clazz == null && entry.data != null) {
-            String name = entry.path;
-            int i = name.lastIndexOf(File.separatorChar);
-            if (i >= 0) name = entry.path.substring(i + 1);
-            i = name.lastIndexOf('.');
-            if (i >= 0) name = name.substring(0, i);
-            entry.clazz = engine.getGroovyClassLoader().defineClass(name, entry.data);
-            GroovyLog.get().debug(" script {} is already compiled", file);
-        } else if (entry.clazz == null || lastModified > entry.lastEdited) {
-            GroovyLog.get().debug(" compiling script {}", file);
-            entry.onCompile(super.loadScriptClass(engine, file), this.basePath);
-            entry.lastEdited = lastModified;
+        CompiledScript comp = this.index.get(file.toString());
+
+        if (comp != null && lastModified <= comp.lastEdited && comp.clazz == null && comp.readData(this.cachePath)) {
+
+            GroovyLog.get().debugMC(" script {} is already compiled", file);
+            comp.ensureLoaded(engine.getGroovyClassLoader(), this.cachePath);
+
+        } else if (comp == null || comp.clazz == null || lastModified > comp.lastEdited) {
+            if (comp == null) {
+                comp = new CompiledScript(file.toString(), 0);
+                this.index.put(file.toString(), comp);
+            }
+            GroovyLog.get().debugMC(" compiling script {}", file);
+            Class<?> clazz = super.loadScriptClass(engine, file);
+            if (comp.clazz == null) {
+                GroovyLog.get().debugMC("Class for {} was loaded, but didnt receive class created callback! Index: {}", file, this.index);
+                comp.clazz = clazz;
+            }
+            comp.lastEdited = lastModified;
+
         } else {
-            GroovyLog.get().debug(" script {} is already compiled and loaded", file);
+            GroovyLog.get().debugMC(" script {} is already compiled and loaded", file);
+            comp.ensureLoaded(engine.getGroovyClassLoader(), this.cachePath);
         }
-        return entry.clazz;
+        return comp.clazz;
     }
 
     @Override
@@ -302,17 +263,13 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
-        if (!this.cachedClosures.isEmpty()) {
-            // this needs to be done in every loader for some reason
-            this.cachedClosures.forEach(entry -> entry.clazz = engine.getGroovyClassLoader().defineClass(entry.path, entry.data));
-        }
         config.addCompilationCustomizers(GroovyScriptCompiler.transformer());
         config.addCompilationCustomizers(this.importCustomizer);
     }
 
     @Override
     protected void preRun() {
-        GroovyLog.get().info("Running scripts in loader '{}'", this.currentLoadStage);
+        GroovyLog.get().infoMC("Running scripts in loader '{}'", this.currentLoadStage);
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
         if (this.currentLoadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.onReload();
