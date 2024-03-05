@@ -78,7 +78,7 @@ public abstract class GroovySandbox {
 
     protected void stopRunning() {
         this.running.set(false);
-        currentSandbox.set(null);
+        currentSandbox.remove();
     }
 
     protected GroovyScriptEngine createScriptEngine() {
@@ -126,6 +126,7 @@ public abstract class GroovySandbox {
         for (File scriptFile : getScriptFiles()) {
             if (!executedClasses.contains(scriptFile)) {
                 Class<?> clazz = loadScriptClass(engine, scriptFile);
+                if (clazz == GroovyLog.class) continue; // preprocessor returned false
                 if (clazz == null) {
                     GroovyLog.get().errorMC("Error loading script for {}", scriptFile.getPath());
                     GroovyLog.get().errorMC("Did you forget to register your class file in your run config?");
@@ -151,6 +152,7 @@ public abstract class GroovySandbox {
         for (File classFile : getClassFiles()) {
             if (executedClasses.contains(classFile)) continue;
             Class<?> clazz = loadScriptClass(engine, classFile);
+            if (clazz == GroovyLog.class) continue; // preprocessor returned false
             if (clazz == null) {
                 // loading script fails if the file is a script that depends on a class file that isn't loaded yet
                 // we cant determine if the file is a script or a class

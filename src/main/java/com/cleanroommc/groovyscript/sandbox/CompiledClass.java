@@ -55,7 +55,15 @@ class CompiledClass {
         }
     }
 
-    private File getDataFile(File basePath) {
+    public void deleteCache(File cachePath) {
+        try {
+            Files.deleteIfExists(getDataFile(cachePath).toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected File getDataFile(File basePath) {
         return new File(basePath, this.name + ".clz");
     }
 

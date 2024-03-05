@@ -283,27 +283,34 @@ public class RunConfig {
         return packmodeConfigState;
     }
 
-    public Collection<File> getClassFiles(String loader) {
+    public boolean isLoaderConfigured(String loader) {
+        List<String> path = this.classes.get(loader);
+        if (path != null && !path.isEmpty()) return true;
+        path = this.loaderPaths.get(loader);
+        return path != null && !path.isEmpty();
+    }
+
+    public Collection<File> getClassFiles(File root, String loader) {
         List<String> paths = this.classes.get("all");
         paths = paths == null ? new ArrayList<>() : new ArrayList<>(paths);
         if (this.classes.containsKey(loader)) {
             paths.addAll(this.classes.get(loader));
         }
-        return getSortedFilesOf(paths);
+        return getSortedFilesOf(root, paths);
     }
 
-    public Collection<File> getSortedFiles(String loader) {
+    public Collection<File> getSortedFiles(File root, String loader) {
         List<String> paths = loaderPaths.get(loader);
         if (paths == null || paths.isEmpty()) return Collections.emptyList();
-        return getSortedFilesOf(paths);
+        return getSortedFilesOf(root, paths);
     }
 
-    private Collection<File> getSortedFilesOf(Collection<String> paths) {
+    private Collection<File> getSortedFilesOf(File root, Collection<String> paths) {
         Object2IntLinkedOpenHashMap<File> files = new Object2IntLinkedOpenHashMap<>();
         String separator = getSeparator();
 
         for (String path : paths) {
-            File rootFile = new File(GroovyScript.getScriptPath() + File.separator + path);
+            File rootFile = new File(root, path);
             if (!rootFile.exists()) {
                 continue;
             }
@@ -311,7 +318,7 @@ public class RunConfig {
             try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile)
-                        .filter(Preprocessor::validatePreprocessors)
+                        //.filter(Preprocessor::validatePreprocessors)
                         .sorted(Comparator.comparing(File::getPath))
                         .forEach(file -> {
                             if (files.containsKey(file)) {
@@ -326,8 +333,7 @@ public class RunConfig {
                 throw new RuntimeException(e);
             }
         }
-        Path mainPath = GroovyScript.getScriptFile().toPath();
-        return files.keySet().stream().map(file -> mainPath.relativize(file.toPath()).toFile()).collect(Collectors.toList());
+        return new ArrayList<>(files.keySet());
     }
 
     private static String sanitizePath(String path) {
