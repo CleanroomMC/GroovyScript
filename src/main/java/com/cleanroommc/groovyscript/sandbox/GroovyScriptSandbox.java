@@ -195,7 +195,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
         return path.substring(index + base.length() + 1);
     }
 
-    // TODO auto delete cache for deleted scripts
+    /**
+     * Called via mixin when groovy compiled a class from scripts.
+     */
     @ApiStatus.Internal
     public void onCompileClass(SourceUnit su, String path, Class<?> clazz, byte[] code, boolean inner) {
         String shortPath = getShortPath(path);
@@ -216,6 +218,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
         innerClass.onCompile(code, clazz, this.cacheRoot);
     }
 
+    /**
+     * Called via mixin when a script class needs to be recompiled. This happens when a script was loaded because
+     * another script depends on it. Groovy will then try to compile the script again. If we already compiled the class
+     * we just stop the compilation process.
+     */
     @ApiStatus.Internal
     public Class<?> onRecompileClass(GroovyClassLoader classLoader, URL source, String className) {
         String path = source.toExternalForm();
