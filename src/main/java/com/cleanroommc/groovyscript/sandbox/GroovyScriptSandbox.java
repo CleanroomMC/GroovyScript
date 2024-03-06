@@ -348,6 +348,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @ApiStatus.Internal
     public void deleteClassCache() {
+        this.index.clear();
         try {
             FileUtils.cleanDirectory(this.cacheRoot);
         } catch (IOException e) {
