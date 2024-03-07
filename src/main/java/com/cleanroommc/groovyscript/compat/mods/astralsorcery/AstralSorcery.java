@@ -54,7 +54,7 @@ public class AstralSorcery extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("astralsorcery", "constellation", (s, args) -> {
+        GameObjectHandlerManager.registerGameObjectHandler("astralsorcery", "constellation", IConstellation.class, (s, args) -> {
             for (IConstellation constellation : ConstellationRegistryAccessor.getConstellationList()) {
                 if (constellation.getSimpleName().equalsIgnoreCase(s)) {
                     return Result.some(constellation);

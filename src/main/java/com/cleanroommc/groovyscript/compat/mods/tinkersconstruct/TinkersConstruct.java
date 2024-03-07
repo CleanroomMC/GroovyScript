@@ -9,6 +9,8 @@ import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.traits
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import net.minecraftforge.common.MinecraftForge;
+import slimeknights.tconstruct.library.materials.Material;
+import slimeknights.tconstruct.library.traits.ITrait;
 
 public class TinkersConstruct extends ModPropertyContainer {
 
@@ -31,9 +33,12 @@ public class TinkersConstruct extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("tconstruct", "toolMaterial", IGameObjectHandler.wrapStringGetter(TinkerRegistryAccessor.getMaterials()::get));
-        GameObjectHandlerManager.registerGameObjectHandler("tconstruct", "toolTrait", IGameObjectHandler.wrapStringGetter(TinkerRegistryAccessor.getTraits()::get));
-        GameObjectHandlerManager.registerGameObjectHandler("tconstruct", "armorTrait", IGameObjectHandler.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")));
+        GameObjectHandlerManager.registerGameObjectHandler("tconstruct", "toolMaterial", Material.class,
+                                                           IGameObjectHandler.wrapStringGetter(TinkerRegistryAccessor.getMaterials()::get));
+        GameObjectHandlerManager.registerGameObjectHandler("tconstruct", "toolTrait", ITrait.class,
+                                                           IGameObjectHandler.wrapStringGetter(TinkerRegistryAccessor.getTraits()::get));
+        GameObjectHandlerManager.registerGameObjectHandler("tconstruct", "armorTrait", ITrait.class,
+                                                           IGameObjectHandler.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")));
     }
 
     public static void init() {

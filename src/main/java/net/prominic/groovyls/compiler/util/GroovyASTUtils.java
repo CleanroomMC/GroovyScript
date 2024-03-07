@@ -20,6 +20,7 @@
 package net.prominic.groovyls.compiler.util;
 
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.util.ClassGraphUtils;
 import net.prominic.groovyls.util.GroovyLanguageServerUtils;
@@ -279,6 +280,23 @@ public class GroovyASTUtils {
                 return methodNode.getReturnType();
             }
             return expression.getType();
+        } else if (node instanceof StaticMethodCallExpression expr) {
+            if (GameObjectHandlerManager.class.getName().equals(expr.getOwnerType().getName()) &&
+                "getGameObject".equals(expr.getMethod()) &&
+                expr.getArguments() instanceof ArgumentListExpression args &&
+                !args.getExpressions().isEmpty() &&
+                args.getExpression(0) instanceof ConstantExpression constExpr &&
+                constExpr.getValue() instanceof String name) {
+                Class<?> ret = GameObjectHandlerManager.getReturnTypeOf(name);
+                if (ret != null) {
+                    return ClassHelper.makeCached(ret);
+                }
+            }
+            MethodNode methodNode = GroovyASTUtils.getMethodFromCallExpression(expr, context);
+            if (methodNode != null) {
+                return methodNode.getReturnType();
+            }
+            return expr.getType();
         } else if (node instanceof PropertyExpression) {
             PropertyExpression expression = (PropertyExpression) node;
 

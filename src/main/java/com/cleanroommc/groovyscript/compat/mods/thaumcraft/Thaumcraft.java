@@ -47,8 +47,10 @@ public class Thaumcraft extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("thaumcraft", "aspect", IGameObjectHandler.wrapStringGetter(Thaumcraft::getAspect, AspectStack::new));
-        GameObjectHandlerManager.registerGameObjectHandler("thaumcraft", "crystal", IGameObjectHandler.wrapStringGetter(Thaumcraft::getAspect, ThaumcraftApiHelper::makeCrystal));
+        GameObjectHandlerManager.registerGameObjectHandler("thaumcraft", "aspect", AspectStack.class,
+                                                           IGameObjectHandler.wrapStringGetter(Thaumcraft::getAspect, AspectStack::new));
+        GameObjectHandlerManager.registerGameObjectHandler("thaumcraft", "crystal",
+                                                           ItemStack.class, IGameObjectHandler.wrapStringGetter(Thaumcraft::getAspect, ThaumcraftApiHelper::makeCrystal));
         ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
         ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);
     }

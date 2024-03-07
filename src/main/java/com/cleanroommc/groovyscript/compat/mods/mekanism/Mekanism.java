@@ -9,6 +9,7 @@ import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.api.infuse.InfuseRegistry;
+import mekanism.api.infuse.InfuseType;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
@@ -62,11 +63,12 @@ public class Mekanism extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("mekanism", "gas", (s, args) -> {
+        GameObjectHandlerManager.registerGameObjectHandler("mekanism", "gas", GasStack.class, (s, args) -> {
             Gas gas = GasRegistry.getGas(s);
             return gas == null ? Result.error() : Result.some(new GasStack(gas, 1));
         });
-        GameObjectHandlerManager.registerGameObjectHandler("mekanism", "infusion", IGameObjectHandler.wrapStringGetter(InfuseRegistry::get, true));
+        GameObjectHandlerManager.registerGameObjectHandler("mekanism", "infusion", InfuseType.class,
+                                                           IGameObjectHandler.wrapStringGetter(InfuseRegistry::get, true));
     }
 
     @Optional.Method(modid = "mekanism")

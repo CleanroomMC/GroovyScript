@@ -61,6 +61,6 @@ public class Forestry extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("forestry", "species", Forestry::parseSpecies);
+        GameObjectHandlerManager.registerGameObjectHandler("forestry", "species", AlleleBeeSpecies.class, Forestry::parseSpecies);
     }
 }

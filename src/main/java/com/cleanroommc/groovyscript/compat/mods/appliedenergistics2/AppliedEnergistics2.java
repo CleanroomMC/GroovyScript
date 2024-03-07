@@ -23,6 +23,7 @@ public class AppliedEnergistics2 extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("appliedenergistics2", "tunnel", IGameObjectHandler.wrapEnum(TunnelType.class, false));
+        GameObjectHandlerManager.registerGameObjectHandler("appliedenergistics2", "tunnel", TunnelType.class,
+                                                           IGameObjectHandler.wrapEnum(TunnelType.class, false));
     }
 }

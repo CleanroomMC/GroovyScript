@@ -116,21 +116,33 @@ public class CompletionProvider {
 
     private static void populateItemsFromGameObjects(String memberNamePrefix,
                                                      Set<String> existingNames, List<CompletionItem> items) {
-        var completionItems = GameObjectHandlerManager.getGameObjectHandlers().stream()
+        GameObjectHandlerManager.getGameObjectHandlers().stream()
                 .filter(handler -> {
-                    if (handler.startsWith(memberNamePrefix) && !existingNames.contains(handler)) {
-                        existingNames.add(handler);
+                    if (handler.getName().startsWith(memberNamePrefix) && !existingNames.contains(handler.getName())) {
+                        existingNames.add(handler.getName());
                         return true;
                     }
                     return false;
-                })
-                .map(handler -> {
-                    var completionItem = CompletionItemFactory.createCompletion(CompletionItemKind.Method, handler);
-                    completionItem.setDetail("(global scope)");
-                    return completionItem;
-                }).collect(Collectors.toList());
-
-        items.addAll(completionItems);
+                }).forEach(handler -> {
+                    for (Class<?>[] paramTypes : handler.getParamTypes()) {
+                        var completionItem = CompletionItemFactory.createCompletion(CompletionItemKind.Method, handler.getName());
+                        completionItem.setDetail("(global scope)");
+                        StringBuilder builder = new StringBuilder().append('(');
+                        for (int i = 0; i < paramTypes.length; i++) {
+                            var parameter = paramTypes[i];
+                            builder.append(parameter.getSimpleName());
+                            if (i < paramTypes.length - 1) {
+                                builder.append(",");
+                            }
+                        }
+                        builder.append(") -> ");
+                        builder.append(handler.getReturnType().getSimpleName());
+                        CompletionItemLabelDetails details = new CompletionItemLabelDetails();
+                        details.setDetail(builder.toString());
+                        completionItem.setLabelDetails(details);
+                        items.add(completionItem);
+                    }
+                });
     }
 
     private void populateItemsFromPropertyExpression(PropertyExpression propExpr, Position position,

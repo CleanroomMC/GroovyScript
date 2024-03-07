@@ -58,6 +58,8 @@ public class Botania extends ModPropertyContainer {
     @SuppressWarnings("Convert2MethodRef")
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("botania", "brew", (IGameObjectHandler<vazkii.botania.api.brew.Brew>) IGameObjectHandler.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false), (Supplier<vazkii.botania.api.brew.Brew>) () -> BotaniaAPI.fallbackBrew);
+        GameObjectHandlerManager.registerGameObjectHandler("botania", "brew", vazkii.botania.api.brew.Brew.class,
+                                                           IGameObjectHandler.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false),
+                                                           (Supplier<vazkii.botania.api.brew.Brew>) () -> BotaniaAPI.fallbackBrew);
     }
 }

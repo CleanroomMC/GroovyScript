@@ -2,18 +2,31 @@ package com.cleanroommc.groovyscript.gameobjects;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IGameObjectHandler;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class GameObjectHandlerManager {
@@ -21,56 +34,68 @@ public class GameObjectHandlerManager {
     private static final Map<String, GameObjectHandler<?>> bracketHandlers = new Object2ObjectOpenHashMap<>();
     public static final String EMPTY = "empty", WILDCARD = "*", SPLITTER = ":";
 
-    public static <T> void registerGameObjectHandler(@Nullable String mod, String key, IGameObjectHandler<T> handler, Supplier<T> defaultValue) {
+    public static <T> GameObjectHandler<T> registerGameObjectHandler(@Nullable String mod, String key, Class<T> returnType, IGameObjectHandler<T> handler, Supplier<T> defaultValue) {
         if (StringUtils.isEmpty(key) || handler == null || defaultValue == null) throw new NullPointerException();
         if (bracketHandlers.containsKey(key)) {
             throw new IllegalArgumentException("Bracket handler already exists for key " + key);
         }
-        bracketHandlers.put(key, new GameObjectHandler<>(key, mod, handler, defaultValue));
+        GameObjectHandler<T> goh = new GameObjectHandler<>(key, mod, handler, defaultValue, returnType);
+        bracketHandlers.put(key, goh);
+        return goh;
     }
 
-    public static <T> void registerGameObjectHandler(@Nullable String mod, String key, IGameObjectHandler<T> handler, T defaultValue) {
-        registerGameObjectHandler(mod, key, handler, (Supplier<T>) () -> defaultValue);
+    public static <T> GameObjectHandler<T> registerGameObjectHandler(@Nullable String mod, String key, Class<T> returnType, IGameObjectHandler<T> handler, T defaultValue) {
+        return registerGameObjectHandler(mod, key, returnType, handler, (Supplier<T>) () -> defaultValue);
     }
 
-    public static <T> void registerGameObjectHandler(@Nullable String mod, String key, IGameObjectHandler<T> handler) {
-        registerGameObjectHandler(mod, key, handler, (Supplier<T>) () -> null);
+    public static <T> GameObjectHandler<T> registerGameObjectHandler(@Nullable String mod, String key, Class<T> returnType, IGameObjectHandler<T> handler) {
+        return registerGameObjectHandler(mod, key, returnType, handler, (Supplier<T>) () -> null);
     }
 
-    public static <T> void registerGameObjectHandler(String key, IGameObjectHandler<T> handler, Supplier<T> defaultValue) {
-        registerGameObjectHandler(null, key, handler, defaultValue);
+    public static <T> GameObjectHandler<T> registerGameObjectHandler(String key, Class<T> returnType, IGameObjectHandler<T> handler, Supplier<T> defaultValue) {
+        return registerGameObjectHandler(null, key, returnType, handler, defaultValue);
     }
 
-    public static <T> void registerGameObjectHandler(String key, IGameObjectHandler<T> handler) {
-        registerGameObjectHandler(null, key, handler);
+    public static <T> GameObjectHandler<T> registerGameObjectHandler(String key, Class<T> returnType, IGameObjectHandler<T> handler) {
+        return registerGameObjectHandler(null, key, returnType, handler);
     }
 
     public static boolean hasGameObjectHandler(String key) {
         return bracketHandlers.containsKey(key);
     }
 
-    public static Set<String> getGameObjectHandlers() {
-        return bracketHandlers.keySet();
+    public static Collection<GameObjectHandler<?>> getGameObjectHandlers() {
+        return bracketHandlers.values();
+    }
+
+    public static Class<?> getReturnTypeOf(String name) {
+        GameObjectHandler<?> goh = bracketHandlers.get(name);
+        return goh == null ? null : goh.getReturnType();
     }
 
     public static void init() {
-        registerGameObjectHandler("resource", GameObjectHandlers::parseResourceLocation);
-        registerGameObjectHandler("ore", (s, args) -> s.contains("*") ? Result.some(OreDictWildcardIngredient.of(s)) : Result.some(new OreDictIngredient(s)));
-        registerGameObjectHandler("item", GameObjectHandlers::parseItemStack, () -> ItemStack.EMPTY);
-        registerGameObjectHandler("liquid", GameObjectHandlers::parseFluidStack);
-        registerGameObjectHandler("fluid", GameObjectHandlers::parseFluidStack);
-        registerGameObjectHandler("block", IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.BLOCKS));
-        registerGameObjectHandler("blockstate", GameObjectHandlers::parseBlockState);
-        registerGameObjectHandler("enchantment", IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS));
-        registerGameObjectHandler("potion", IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.POTIONS));
-        registerGameObjectHandler("potionType", IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.POTION_TYPES));
-        registerGameObjectHandler("sound", IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS));
-        registerGameObjectHandler("entity", IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.ENTITIES));
-        registerGameObjectHandler("biome", IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.BIOMES));
-        registerGameObjectHandler("profession", IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS));
-        registerGameObjectHandler("creativeTab", GameObjectHandlers::parseCreativeTab);
-        registerGameObjectHandler("textformat", GameObjectHandlers::parseTextFormatting);
-        registerGameObjectHandler("nbt", GameObjectHandlers::parseNBT);
+        registerGameObjectHandler("resource", ResourceLocation.class, GameObjectHandlers::parseResourceLocation)
+                .withDesc(String.class, String.class);
+        registerGameObjectHandler("ore", IIngredient.class, (s, args) -> s.contains("*") ? Result.some(OreDictWildcardIngredient.of(s)) : Result.some(new OreDictIngredient(s)));
+        registerGameObjectHandler("item", ItemStack.class, GameObjectHandlers::parseItemStack, () -> ItemStack.EMPTY)
+                .withDesc(String.class, int.class);
+        registerGameObjectHandler("liquid", FluidStack.class, GameObjectHandlers::parseFluidStack);
+        registerGameObjectHandler("fluid", FluidStack.class, GameObjectHandlers::parseFluidStack);
+        registerGameObjectHandler("block", Block.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.BLOCKS));
+        registerGameObjectHandler("blockstate", IBlockState.class, GameObjectHandlers::parseBlockState)
+                .withDesc(String.class, int.class)
+                .withDesc(String.class, String[].class);
+        registerGameObjectHandler("enchantment", Enchantment.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS));
+        registerGameObjectHandler("potion", Potion.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.POTIONS));
+        registerGameObjectHandler("potionType", PotionType.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.POTION_TYPES));
+        registerGameObjectHandler("sound", SoundEvent.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS));
+        registerGameObjectHandler("entity", EntityEntry.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.ENTITIES));
+        registerGameObjectHandler("biome", Biome.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.BIOMES));
+        registerGameObjectHandler("profession", VillagerRegistry.VillagerProfession.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS));
+        registerGameObjectHandler("creativeTab", CreativeTabs.class, GameObjectHandlers::parseCreativeTab);
+        registerGameObjectHandler("textformat", TextFormatting.class, GameObjectHandlers::parseTextFormatting)
+                .withDesc(int.class);
+        registerGameObjectHandler("nbt", NBTTagCompound.class, GameObjectHandlers::parseNBT);
     }
 
     /**
@@ -96,12 +121,16 @@ public class GameObjectHandlerManager {
         private final String mod;
         private final IGameObjectHandler<T> handler;
         private final Supplier<T> defaultValue;
+        private final Class<T> returnType;
+        private final List<Class<?>[]> paramTypes = new ArrayList<>();
 
-        private GameObjectHandler(String name, String mod, IGameObjectHandler<T> handler, Supplier<T> defaultValue) {
+        private GameObjectHandler(String name, String mod, IGameObjectHandler<T> handler, Supplier<T> defaultValue, Class<T> returnType) {
             this.name = name;
             this.mod = mod;
             this.handler = handler;
             this.defaultValue = defaultValue;
+            this.returnType = returnType;
+            withDesc(String.class);
         }
 
         private T invoke(String s, Object... args) {
@@ -118,6 +147,27 @@ public class GameObjectHandlerManager {
                 return this.defaultValue.get();
             }
             return Objects.requireNonNull(t.getValue(), "Bracket handler result must contain a non-null value!");
+        }
+
+        public String getMod() {
+            return mod;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public GameObjectHandler<T> withDesc(Class<?>... paramTypes) {
+            this.paramTypes.add(paramTypes);
+            return this;
+        }
+
+        public List<Class<?>[]> getParamTypes() {
+            return this.paramTypes;
+        }
+
+        public Class<T> getReturnType() {
+            return returnType;
         }
     }
 }

@@ -17,6 +17,7 @@ public class EvilCraft extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("evilcraft", "weather", IGameObjectHandler.wrapStringGetter(WeatherType::valueOf, true));
+        GameObjectHandlerManager.registerGameObjectHandler("evilcraft", "weather", WeatherType.class,
+                                                           IGameObjectHandler.wrapStringGetter(WeatherType::valueOf, true));
     }
 }
