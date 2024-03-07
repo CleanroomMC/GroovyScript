@@ -1,9 +1,8 @@
-package com.cleanroommc.groovyscript.compat.mods.aether_legacy;
+package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
@@ -24,23 +23,10 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
         return new RecipeBuilder();
     }
 
-    public void add(AetherEnchantment enchantment) {
-        if (enchantment != null) {
-            ReloadableRegistryManager.addRegistryEntry(this.getRegistry(), enchantment);
-        }
-    }
-
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(ItemStack input, ItemStack output, int timeRequired) {
         AetherEnchantment enchantment = new AetherEnchantment(input, output, timeRequired);
         add(enchantment);
-    }
-
-    public boolean remove(AetherEnchantment enchantment) {
-        if (enchantment == null) return false;
-
-        ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(), enchantment.getRegistryName());
-        return true;
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('aether_legacy:enchanted_gravitite')"))
@@ -50,18 +36,6 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
                 ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(), enchantment.getRegistryName());
             }
         });
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        this.getRegistry().getValuesCollection().forEach(enchantment -> {
-            ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(), enchantment.getRegistryName());
-        });
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<AetherEnchantment> streamRecipes() {
-        return new SimpleObjectStream<>(this.getRegistry().getValuesCollection()).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.compat.mods.aether_legacy;
+package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 

@@ -1,9 +1,8 @@
-package com.cleanroommc.groovyscript.compat.mods.aether_legacy;
+package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
@@ -22,12 +21,6 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
         super(GameRegistry.findRegistry(AetherAccessory.class), Alias.generateOf("Accessory"));
     }
 
-    public void add(AetherAccessory accessory) {
-        if (accessory != null) {
-            ReloadableRegistryManager.addRegistryEntry(this.getRegistry(), accessory);
-        }
-    }
-
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(ItemStack item, String type) {
         AccessoryType accessoryType = AccessoryType.MISC;
@@ -40,12 +33,6 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
         add(accessory);
     }
 
-    public boolean remove(AetherAccessory accessory) {
-        if (accessory == null) return false;
-        ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(), accessory.getRegistryName());
-        return true;
-    }
-
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('aether_legacy:iron_pendant')"))
     public void removeByInput(ItemStack input) {
         this.getRegistry().getValuesCollection().forEach(accessory -> {
@@ -53,18 +40,6 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
                 ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(), accessory.getRegistryName());
             }
         });
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        this.getRegistry().getValuesCollection().forEach(accessory -> {
-            ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(), accessory.getRegistryName());
-        });
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<AetherAccessory> streamEntries() {
-        return new SimpleObjectStream<>(this.getRegistry().getValuesCollection()).setRemover(this::remove);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:shield')).accessoryType('shield')"))
