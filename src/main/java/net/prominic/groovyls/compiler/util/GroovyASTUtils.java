@@ -29,6 +29,7 @@ import org.codehaus.groovy.ast.expr.*;
 import org.codehaus.groovy.ast.stmt.ExpressionStatement;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 
 import java.util.Collections;
@@ -106,8 +107,47 @@ public class GroovyASTUtils {
             return new VariableExpression(variableExpression.getName(), new ClassNode(binding.getClass()));
         } else if (node instanceof Variable) {
             return node;
+        } else if (node instanceof MethodCallExpression methodCallExpression) {
+            return getDefinition(methodCallExpression.getObjectExpression(), strict, context);
+        } else if (node instanceof StaticMethodCallExpression staticMethodCallExpression) {
+            var gameObjectName = getAccessedGameObjectName(staticMethodCallExpression);
+
+            if (gameObjectName != null) {
+                var gameObjectReturnType = GameObjectHandlerManager.getReturnTypeOf(gameObjectName);
+
+                if (gameObjectReturnType == null) {
+                    return null;
+                }
+
+                var methodNode = new MethodNode(gameObjectName, Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+                                                ClassHelper.makeCached(gameObjectReturnType),
+                                                new Parameter[]{
+                                                        new Parameter(ClassHelper.makeCached(String.class), "mainArg"),
+                                                        new Parameter(ClassHelper.makeCached(Object[].class), "args")
+                                                },
+                                                null,
+                                                null
+                );
+
+                methodNode.setDeclaringClass(ClassHelper.makeCached(GameObjectHandlerManager.class));
+
+                return methodNode;
+            }
+
+            return GroovyASTUtils.getMethodFromCallExpression(staticMethodCallExpression, context);
         }
         return null;
+    }
+
+    private static @Nullable String getAccessedGameObjectName(StaticMethodCallExpression staticMethodCallExpression) {
+        return staticMethodCallExpression.getOwnerType().equals(ClassHelper.makeCached(GameObjectHandlerManager.class)) &&
+               staticMethodCallExpression.getMethod().equals("getGameObject") &&
+               staticMethodCallExpression.getArguments() instanceof ArgumentListExpression argumentListExpression &&
+               !argumentListExpression.getExpressions().isEmpty() &&
+               argumentListExpression.getExpression(0) instanceof ConstantExpression objectNameConstantExpression &&
+               GameObjectHandlerManager.hasGameObjectHandler(objectNameConstantExpression.getText()) ?
+               objectNameConstantExpression.getText() :
+               null;
     }
 
     public static ASTNode getTypeDefinition(ASTNode node, ASTContext context) {
@@ -281,17 +321,11 @@ public class GroovyASTUtils {
             }
             return expression.getType();
         } else if (node instanceof StaticMethodCallExpression expr) {
-            if (GameObjectHandlerManager.class.getName().equals(expr.getOwnerType().getName()) &&
-                "getGameObject".equals(expr.getMethod()) &&
-                expr.getArguments() instanceof ArgumentListExpression args &&
-                !args.getExpressions().isEmpty() &&
-                args.getExpression(0) instanceof ConstantExpression constExpr &&
-                constExpr.getValue() instanceof String name) {
-                Class<?> ret = GameObjectHandlerManager.getReturnTypeOf(name);
-                if (ret != null) {
-                    return ClassHelper.makeCached(ret);
-                }
+            var gameObjectName = getAccessedGameObjectName(expr);
+            if (gameObjectName != null) {
+                return ClassHelper.makeCached(GameObjectHandlerManager.getReturnTypeOf(gameObjectName));
             }
+
             MethodNode methodNode = GroovyASTUtils.getMethodFromCallExpression(expr, context);
             if (methodNode != null) {
                 return methodNode.getReturnType();
@@ -353,6 +387,11 @@ public class GroovyASTUtils {
             if (constructorType != null) {
                 return constructorType.getDeclaredConstructors().stream().map(constructor -> (MethodNode) constructor)
                         .collect(Collectors.toList());
+            }
+        } else if (node instanceof StaticMethodCallExpression staticMethodCallExpression) {
+            var ownerType = staticMethodCallExpression.getOwnerType();
+            if (ownerType != null) {
+                return ownerType.getMethods(staticMethodCallExpression.getMethod());
             }
         }
         return Collections.emptyList();
