@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.content;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.cleanroommc.groovyscript.sandbox.FileUtil;
 import com.google.gson.JsonObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -69,7 +70,7 @@ public class GroovyFluid extends Fluid {
     }
 
     private static void checkBlockState(ResourceLocation loc) {
-        File file = GroovyScript.makeFile(GroovyScript.getResourcesFile(), loc.getNamespace(), "blockstates", loc.getPath() + ".json");
+        File file = FileUtil.makeFile(GroovyScript.getResourcesFile().getPath(), loc.getNamespace(), "blockstates", loc.getPath() + ".json");
         if (!file.exists()) {
             JsonObject stateJson = new JsonObject();
             stateJson.addProperty("forge_marker", 1);

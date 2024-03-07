@@ -10,20 +10,24 @@ import java.nio.file.Files;
 
 class CompiledClass {
 
+    public static final String CLASS_SUFFIX = ".clz";
+
+    final String path;
     String name;
     byte[] data;
     Class<?> clazz;
 
-    public CompiledClass(String name) {
+    public CompiledClass(String path, String name) {
+        this.path = path;
         this.name = name;
     }
 
-    public void onCompile(byte[] data, Class<?> clazz, File basePath) {
+    public void onCompile(byte[] data, Class<?> clazz, String basePath) {
         this.data = data;
         onCompile(clazz, basePath);
     }
 
-    public void onCompile(Class<?> clazz, File basePath) {
+    public void onCompile(Class<?> clazz, String basePath) {
         this.clazz = clazz;
         this.name = clazz.getName();
         if (this.data == null) {
@@ -43,7 +47,7 @@ class CompiledClass {
         }
     }
 
-    public boolean readData(File basePath) {
+    public boolean readData(String basePath) {
         if (this.data != null) return true;
         File file = getDataFile(basePath);
         if (!file.exists()) return false;
@@ -55,7 +59,7 @@ class CompiledClass {
         }
     }
 
-    public void deleteCache(File cachePath) {
+    public void deleteCache(String cachePath) {
         try {
             Files.deleteIfExists(getDataFile(cachePath).toPath());
         } catch (IOException e) {
@@ -63,12 +67,16 @@ class CompiledClass {
         }
     }
 
-    protected File getDataFile(File basePath) {
-        return new File(basePath, this.name + ".clz");
+    protected File getDataFile(String basePath) {
+        return FileUtil.makeFile(basePath, FileUtil.getParent(this.path), this.name + CLASS_SUFFIX);
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     @Override

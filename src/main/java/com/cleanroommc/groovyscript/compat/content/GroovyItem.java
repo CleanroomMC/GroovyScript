@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.cleanroommc.groovyscript.sandbox.FileUtil;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -117,7 +118,7 @@ public class GroovyItem extends Item {
     }
 
     private static void checkModelFile(ResourceLocation loc) {
-        File modelFile = GroovyScript.makeFile(GroovyScript.getResourcesFile(), loc.getNamespace(), "models", "item", loc.getPath() + ".json");
+        File modelFile = FileUtil.makeFile(GroovyScript.getResourcesFile().getPath(), loc.getNamespace(), "models", "item", loc.getPath() + ".json");
         if (!modelFile.exists()) {
             JsonObject modelJson = new JsonObject();
             modelJson.addProperty("parent", "item/generated");

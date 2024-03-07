@@ -107,7 +107,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
         }
         for (JsonElement element : json.getAsJsonArray("index")) {
             if (element.isJsonObject()) {
-                CompiledScript cs = CompiledScript.fromJson(element.getAsJsonObject(), this.scriptRoot, this.cacheRoot);
+                CompiledScript cs = CompiledScript.fromJson(element.getAsJsonObject(), this.scriptRoot.getPath(), this.cacheRoot.getPath());
                 if (cs != null) {
                     this.index.put(cs.path, cs);
                 }
@@ -185,26 +185,16 @@ public class GroovyScriptSandbox extends GroovySandbox {
         return name.contains("$") ? name.split("\\$", 2)[0] : name;
     }
 
-    private String getShortPath(String path) {
-        if (File.separatorChar != '/') {
-            path = path.replace('/', File.separatorChar);
-        }
-        String base = this.scriptRoot.toString();
-        int index = path.indexOf(base);
-        if (index < 0) throw new IllegalArgumentException();
-        return path.substring(index + base.length() + 1);
-    }
-
     /**
      * Called via mixin when groovy compiled a class from scripts.
      */
     @ApiStatus.Internal
     public void onCompileClass(SourceUnit su, String path, Class<?> clazz, byte[] code, boolean inner) {
-        String shortPath = getShortPath(path);
+        String shortPath = FileUtil.relativize(this.scriptRoot.getPath(), path);
         // if the script was compiled because another script depends on it, the source unit is wrong
         // we need to find the source unit of the compiled class
         SourceUnit trueSource = su.getAST().getUnit().getScriptSourceLocation(mainClassName(clazz.getName()));
-        String truePath = trueSource == null ? shortPath : getShortPath(trueSource.getName());
+        String truePath = trueSource == null ? shortPath : FileUtil.relativize(this.scriptRoot.getPath(), trueSource.getName());
         if (shortPath.equals(truePath) &&
             su.getAST().getMainClassName() != null &&
             !su.getAST().getMainClassName().equals(clazz.getName())) {
@@ -215,7 +205,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
         CompiledScript comp = this.index.computeIfAbsent(truePath, k -> new CompiledScript(k, finalInner ? -1 : 0));
         CompiledClass innerClass = comp;
         if (inner) innerClass = comp.findInnerClass(clazz.getName());
-        innerClass.onCompile(code, clazz, this.cacheRoot);
+        innerClass.onCompile(code, clazz, this.cacheRoot.getPath());
     }
 
     /**
@@ -226,11 +216,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @ApiStatus.Internal
     public Class<?> onRecompileClass(GroovyClassLoader classLoader, URL source, String className) {
         String path = source.toExternalForm();
-        CompiledScript cs = this.index.get(getShortPath(path));
+        CompiledScript cs = this.index.get(FileUtil.relativize(this.scriptRoot.getPath(), path));
         Class<?> c = null;
         if (cs != null) {
-            if (cs.clazz == null && cs.readData(this.cacheRoot)) {
-                cs.ensureLoaded(classLoader, this.cacheRoot);
+            if (cs.clazz == null && cs.readData(this.cacheRoot.getPath())) {
+                cs.ensureLoaded(classLoader, this.cacheRoot.getPath());
             }
             c = cs.clazz;
         }
@@ -243,13 +233,13 @@ public class GroovyScriptSandbox extends GroovySandbox {
         long lastModified = file.lastModified();
         CompiledScript comp = this.index.get(relativeFile.toString());
 
-        if (comp != null && lastModified <= comp.lastEdited && comp.clazz == null && comp.readData(this.cacheRoot)) {
+        if (comp != null && lastModified <= comp.lastEdited && comp.clazz == null && comp.readData(this.cacheRoot.getPath())) {
             // class is not loaded, but the cached class bytes are still valid
             if (!comp.checkPreprocessors(this.scriptRoot)) {
                 return GroovyLog.class;
             }
             GroovyLog.get().debugMC(" script {} is already compiled", relativeFile);
-            comp.ensureLoaded(engine.getGroovyClassLoader(), this.cacheRoot);
+            comp.ensureLoaded(engine.getGroovyClassLoader(), this.cacheRoot.getPath());
 
         } else if (comp == null || comp.clazz == null || lastModified > comp.lastEdited) {
             // class is not loaded and class bytes don't exist yet or script has been edited
@@ -265,7 +255,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             comp.lastEdited = lastModified;
             if (!comp.checkPreprocessors(this.scriptRoot)) {
                 // delete class bytes to make sure it's recompiled once the preprocessors returns true
-                comp.deleteCache(this.cacheRoot);
+                comp.deleteCache(this.cacheRoot.getPath());
                 comp.clazz = null;
                 comp.data = null;
                 return GroovyLog.class;
@@ -282,7 +272,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
                 return GroovyLog.class;
             }
             GroovyLog.get().debugMC(" script {} is already compiled and loaded", relativeFile);
-            comp.ensureLoaded(engine.getGroovyClassLoader(), this.cacheRoot);
+            comp.ensureLoaded(engine.getGroovyClassLoader(), this.cacheRoot.getPath());
         }
         return comp.clazz;
     }

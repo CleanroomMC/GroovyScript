@@ -15,7 +15,6 @@ import java.util.List;
 
 class CompiledScript extends CompiledClass {
 
-    final String path;
     final List<CompiledClass> innerClasses = new ArrayList<>();
     long lastEdited;
     List<String> preprocessors = null;
@@ -25,8 +24,7 @@ class CompiledScript extends CompiledClass {
     }
 
     public CompiledScript(String path, String name, long lastEdited) {
-        super(name);
-        this.path = path;
+        super(path, name);
         this.lastEdited = lastEdited;
     }
 
@@ -40,12 +38,12 @@ class CompiledScript extends CompiledClass {
                 return comp;
             }
         }
-        CompiledClass comp = new CompiledClass(clazz);
+        CompiledClass comp = new CompiledClass(this.path, clazz);
         this.innerClasses.add(comp);
         return comp;
     }
 
-    public void ensureLoaded(GroovyClassLoader classLoader, File basePath) {
+    public void ensureLoaded(GroovyClassLoader classLoader, String basePath) {
         for (CompiledClass comp : this.innerClasses) {
             if (comp.clazz == null) {
                 if (comp.readData(basePath)) {
@@ -83,12 +81,12 @@ class CompiledScript extends CompiledClass {
         return jsonEntry;
     }
 
-    public static CompiledScript fromJson(JsonObject json, File scriptRoot, File cacheRoot) {
+    public static CompiledScript fromJson(JsonObject json, String scriptRoot, String cacheRoot) {
         CompiledScript cs = new CompiledScript(json.get("path").getAsString(), JsonHelper.getString(json, null, "name"), json.get("lm").getAsLong());
         if (new File(scriptRoot, cs.path).exists()) {
             if (json.has("inner")) {
                 for (JsonElement element : json.getAsJsonArray("inner")) {
-                    cs.innerClasses.add(new CompiledClass(element.getAsString()));
+                    cs.innerClasses.add(new CompiledClass(cs.path, element.getAsString()));
                 }
             }
             if (json.has("preprocessors")) {
@@ -105,7 +103,7 @@ class CompiledScript extends CompiledClass {
     }
 
     @Override
-    public void deleteCache(File cachePath) {
+    public void deleteCache(String cachePath) {
         super.deleteCache(cachePath);
         for (CompiledClass cc : this.innerClasses) {
             cc.deleteCache(cachePath);

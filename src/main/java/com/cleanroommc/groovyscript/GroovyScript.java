@@ -18,13 +18,9 @@ import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.NetworkUtils;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
-import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
-import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
-import com.cleanroommc.groovyscript.sandbox.LoadStage;
-import com.cleanroommc.groovyscript.sandbox.RunConfig;
+import com.cleanroommc.groovyscript.sandbox.*;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.security.GrSMetaClassCreationHandle;
-import com.google.common.base.Joiner;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovySystem;
@@ -97,8 +93,6 @@ public class GroovyScript {
     private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
 
-    private static final Joiner fileJoiner = Joiner.on(File.separator);
-
     public static final Random RND = new Random();
 
     @Mod.EventHandler
@@ -111,7 +105,7 @@ public class GroovyScript {
         LinkGeneratorHooks.init();
         ReloadableRegistryManager.init();
         try {
-            sandbox = new GroovyScriptSandbox(scriptPath, makeFile(Loader.instance().getConfigDir().getParentFile(), "cache", "groovy"));
+            sandbox = new GroovyScriptSandbox(scriptPath, FileUtil.makeFile(FileUtil.getMinecraftHome(), "cache", "groovy"));
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Error initializing sandbox!");
         }
@@ -276,14 +270,6 @@ public class GroovyScript {
             }
         }
         return new RunConfig(json);
-    }
-
-    public static File makeFile(String... pieces) {
-        return new File(fileJoiner.join(pieces));
-    }
-
-    public static File makeFile(File parent, String... pieces) {
-        return new File(parent, fileJoiner.join(pieces));
     }
 
     public static void postScriptRunResult(ICommandSender sender, boolean onlyLogFails, boolean running, boolean packmode, long time) {
