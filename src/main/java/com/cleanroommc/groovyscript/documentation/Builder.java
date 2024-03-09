@@ -215,6 +215,7 @@ public class Builder {
         return new AdmonitionBuilder()
                 .note(new CodeBlockBuilder().line(builder().split("\n")).annotation(annotations()).generate())
                 .type(Admonition.Type.EXAMPLE)
+                .indentation(1)
                 .generate();
     }
 
