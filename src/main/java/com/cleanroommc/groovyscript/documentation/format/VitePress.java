@@ -39,4 +39,8 @@ public class VitePress implements IFormat {
         return false;
     }
 
+    public boolean requiresNavFile() {
+        return false;
+    }
+
 }

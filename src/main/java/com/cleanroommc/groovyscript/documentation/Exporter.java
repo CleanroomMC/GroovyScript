@@ -97,11 +97,13 @@ public class Exporter {
             GroovyScript.LOGGER.throwing(e);
         }
 
-        try {
-            File file = new File(folder, NAV_FILE_NAME);
-            Files.write(file.toPath(), navigation.toString().getBytes());
-        } catch (IOException e) {
-            GroovyScript.LOGGER.throwing(e);
+        if (Documentation.DEFAULT_FORMAT.requiresNavFile()) {
+            try {
+                File file = new File(folder, NAV_FILE_NAME);
+                Files.write(file.toPath(), navigation.toString().getBytes());
+            } catch (IOException e) {
+                GroovyScript.LOGGER.throwing(e);
+            }
         }
     }
 

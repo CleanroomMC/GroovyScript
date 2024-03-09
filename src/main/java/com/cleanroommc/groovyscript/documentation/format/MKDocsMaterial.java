@@ -33,4 +33,8 @@ public class MKDocsMaterial implements IFormat {
         return true;
     }
 
+    public boolean requiresNavFile() {
+        return true;
+    }
+
 }
