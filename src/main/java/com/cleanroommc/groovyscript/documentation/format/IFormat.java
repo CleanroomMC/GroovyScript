@@ -24,6 +24,8 @@ public interface IFormat {
      */
     String codeBlockHighlights(List<String> highlight);
 
+    String removeTableOfContentsText();
+
     boolean allowsIndentation();
 
     boolean requiresNavFile();

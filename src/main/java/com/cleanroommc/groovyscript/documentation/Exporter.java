@@ -72,7 +72,7 @@ public class Exporter {
 
         StringBuilder index = new StringBuilder()
                 .append("---").append("\n")
-                .append("hide: toc").append("\n") // Removes the table of contents from the sidebar of indexes.
+                .append(Documentation.DEFAULT_FORMAT.removeTableOfContentsText()).append("\n") // Removes the table of contents from the sidebar of indexes.
                 .append("---").append("\n\n\n")
                 .append("# ").append(mod).append("\n\n")
                 .append("## ").append(I18n.format("groovyscript.wiki.categories")).append("\n\n")

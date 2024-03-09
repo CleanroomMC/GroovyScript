@@ -35,6 +35,10 @@ public class VitePress implements IFormat {
         return ":no-line-numbers {" + String.join(",", highlight) + "}";
     }
 
+    public String removeTableOfContentsText() {
+        return "aside: false";
+    }
+
     public boolean allowsIndentation() {
         return false;
     }

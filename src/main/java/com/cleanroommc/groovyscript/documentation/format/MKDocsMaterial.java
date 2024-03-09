@@ -29,6 +29,10 @@ public class MKDocsMaterial implements IFormat {
         return " hl_lines=\"" + String.join(" ", highlight) + "\"";
     }
 
+    public String removeTableOfContentsText() {
+        return "hide: toc";
+    }
+
     public boolean allowsIndentation() {
         return true;
     }
