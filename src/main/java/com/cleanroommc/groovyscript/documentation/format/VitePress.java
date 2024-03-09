@@ -1,12 +1,12 @@
 package com.cleanroommc.groovyscript.documentation.format;
 
 import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class VitePress implements IFormat {
 
@@ -15,14 +15,13 @@ public class VitePress implements IFormat {
         // Technically limits admonitions on VitePress to only have a maximum of 7 depth.
         // If all 7 depth is used, that design should be rethought anyway.
         String front = StringUtils.repeat(":", 10 - indentation);
-        switch (format) {
-            case COLLAPSED:
-                return Stream.of(front, "details", type.toString().toUpperCase(Locale.ROOT), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
-            case EXPANDED:
-                return Stream.of(front, "details", type.toString().toUpperCase(Locale.ROOT), title, "{open}").filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
-            default:
-                return Stream.of(front, type.toString().toLowerCase(Locale.ROOT), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
-        }
+        String name = type.toString().toLowerCase(Locale.ROOT);
+        String visibleTitle = title.isEmpty() ? type.toString() : title;
+        return (switch (format) {
+            case COLLAPSED -> Lists.newArrayList(front, "details", visibleTitle, String.format("{id=\"%s\"}", name));
+            case EXPANDED -> Lists.newArrayList(front, "details", visibleTitle, String.format("{open id=\"%s\"}", name));
+            case STANDARD -> Lists.newArrayList(front, "info", visibleTitle, String.format("{id=\"%s\"}", name));
+        }).stream().filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
     }
 
     @Override

@@ -65,7 +65,7 @@ public class AdmonitionBuilder {
         StringBuilder out = new StringBuilder();
         String indent = StringUtils.repeat("    ", indentation);
 
-        out.append(indent).append(format.admonitionStart(admonitionFormat, admonitionType, indentation, hasTitle ? title : ""));
+        out.append(format.admonitionStart(admonitionFormat, admonitionType, indentation, hasTitle ? title : ""));
         out.append("\n");
 
         for (int i = 0; i < note.size(); i++) {
@@ -77,7 +77,7 @@ public class AdmonitionBuilder {
             if (i < note.size() - 1) out.append("\n");
         }
 
-        out.append(format.admonitionEnd(admonitionFormat, indentation));
+        out.append(indent).append(format.admonitionEnd(admonitionFormat, indentation));
 
         return out.toString();
     }

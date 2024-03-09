@@ -1,24 +1,21 @@
 package com.cleanroommc.groovyscript.documentation.format;
 
 import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MKDocsMaterial implements IFormat {
 
     @Override
     public String admonitionStart(Admonition.Format format, Admonition.Type type, int indentation, String title) {
-        switch (format) {
-            case COLLAPSED:
-                return Stream.of(" ", "???", type.toString(), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
-            case EXPANDED:
-                return Stream.of(" ", "???+", type.toString(), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
-            default:
-                return Stream.of(" ", "!!!", type.toString(), title).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
-        }
+        return (switch (format) {
+            case COLLAPSED -> Lists.newArrayList("???", type.toString(), title);
+            case EXPANDED -> Lists.newArrayList("???+", type.toString(), title);
+            case STANDARD -> Lists.newArrayList("!!!", type.toString(), title);
+        }).stream().filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
     }
 
     @Override
