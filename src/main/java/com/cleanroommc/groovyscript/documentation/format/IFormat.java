@@ -26,6 +26,8 @@ public interface IFormat {
 
     String removeTableOfContentsText();
 
+    boolean hasTitleTemplate();
+
     boolean allowsIndentation();
 
     boolean requiresNavFile();

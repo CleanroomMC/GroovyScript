@@ -33,6 +33,10 @@ public class MKDocsMaterial implements IFormat {
         return "hide: toc";
     }
 
+    public boolean hasTitleTemplate() {
+        return false;
+    }
+
     public boolean allowsIndentation() {
         return true;
     }

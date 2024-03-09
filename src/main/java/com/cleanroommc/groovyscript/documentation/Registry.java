@@ -136,6 +136,7 @@ public class Registry {
     private String generateHeader() {
         StringBuilder out = new StringBuilder();
         out.append("---\n").append("title: \"").append(getTitle()).append("\"\n");
+        if (Documentation.DEFAULT_FORMAT.hasTitleTemplate()) out.append("titleTemplate: \"").append(mod).append(" | CleanroomMC").append("\"\n");
         out.append("description: \"").append(getDescription()).append("\"\n");
         String link = getFileSourceCodeLink();
         if (!link.isEmpty()) out.append("source_code_link: \"").append(link).append("\"\n");

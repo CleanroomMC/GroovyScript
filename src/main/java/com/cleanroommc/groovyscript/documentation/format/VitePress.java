@@ -39,6 +39,10 @@ public class VitePress implements IFormat {
         return "aside: false";
     }
 
+    public boolean hasTitleTemplate() {
+        return true;
+    }
+
     public boolean allowsIndentation() {
         return false;
     }
