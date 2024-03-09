@@ -89,7 +89,7 @@ public @interface MethodDescription {
         /**
          * Modifies or changes a value or setting. Does not add, remove, or query the registry.
          */
-        VALUE;
+        VALUE
     }
 
 }

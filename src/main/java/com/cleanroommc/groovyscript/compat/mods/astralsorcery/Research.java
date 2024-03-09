@@ -258,7 +258,7 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         private boolean validate() {
             GroovyLog.Msg out = GroovyLog.msg("Error adding Research Node to Astral Sorcery Journal").error();
 
-            if (this.name == null || this.name.equals("")) {
+            if (this.name == null || "".equals(this.name)) {
                 out.add("Name not provided.");
             }
             if (this.node == null || this.node.isItemEqual(ItemStack.EMPTY)) {

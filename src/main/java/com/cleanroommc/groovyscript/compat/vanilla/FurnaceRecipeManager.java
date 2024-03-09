@@ -11,7 +11,7 @@ import java.util.Objects;
 @GroovyBlacklist
 public class FurnaceRecipeManager {
 
-    public static ObjectOpenCustomHashSet<ItemStack> inputMap = new ObjectOpenCustomHashSet<>(new Hash.Strategy<ItemStack>() {
+    public static ObjectOpenCustomHashSet<ItemStack> inputMap = new ObjectOpenCustomHashSet<>(new Hash.Strategy<>() {
         @Override
         public int hashCode(ItemStack o) {
             return Objects.hash(o.getItem(), o.getMetadata());

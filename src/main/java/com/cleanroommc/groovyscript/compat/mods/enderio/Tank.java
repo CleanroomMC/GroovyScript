@@ -29,10 +29,6 @@ import java.util.List;
 @RegistryDescription
 public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
 
-    public Tank() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".drain().input(item('minecraft:clay')).output(item('minecraft:diamond')).fluidInput(fluid('water') * 500)"),
             @Example(".fill().input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('water') * 500)"),

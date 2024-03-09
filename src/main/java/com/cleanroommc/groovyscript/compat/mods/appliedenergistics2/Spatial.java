@@ -14,10 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 )
 public class Spatial extends VirtualizedRegistry<Class<? extends TileEntity>> {
 
-    public Spatial() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(((MovableTileRegistryAccessor) AEApi.instance().registries().movable()).getTest()::remove);

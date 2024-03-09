@@ -20,10 +20,6 @@ import java.util.Map;
 @RegistryDescription
 public class Meteor extends VirtualizedRegistry<WayofTime.bloodmagic.meteor.Meteor> {
 
-    public Meteor() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".catalyst(item('minecraft:gold_ingot')).component(ore('oreIron'), 10).component(ore('oreDiamond'), 10).component(ore('stone'), 70).radius(7).explosionStrength(10).cost(1000)"),
             @Example(".catalyst(item('minecraft:clay')).component('blockClay', 10).radius(20).explosionStrength(20)")

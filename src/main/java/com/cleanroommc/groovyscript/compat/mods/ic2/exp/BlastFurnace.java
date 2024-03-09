@@ -20,10 +20,6 @@ import java.util.List;
 
 public class BlastFurnace extends VirtualizedRegistry<MachineRecipe<IRecipeInput, Collection<ItemStack>>> {
 
-    public BlastFurnace() {
-        super();
-    }
-
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> remove(recipe, false));

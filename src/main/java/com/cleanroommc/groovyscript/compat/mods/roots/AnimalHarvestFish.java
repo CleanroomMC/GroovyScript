@@ -20,10 +20,6 @@ import static epicsquid.roots.init.ModRecipes.removeAnimalHarvestFishRecipe;
 @RegistryDescription
 public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation, AnimalHarvestFishRecipe>> {
 
-    public AnimalHarvestFish() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_fish').weight(50).output(item('minecraft:clay'))"),
             @Example(".weight(13).fish(item('minecraft:gold_ingot'))")

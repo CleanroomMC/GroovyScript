@@ -22,10 +22,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, TranquilityStack>> {
 
-    public Tranquility() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".block(block('minecraft:obsidian')).tranquility('LAVA').value(10)"),
             @Example(".block(block('minecraft:obsidian')).tranquility('WATER').value(10)"),

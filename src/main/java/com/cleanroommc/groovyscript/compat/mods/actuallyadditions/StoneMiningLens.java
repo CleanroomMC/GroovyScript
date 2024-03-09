@@ -15,10 +15,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class StoneMiningLens extends VirtualizedRegistry<WeightedOre> {
 
-    public StoneMiningLens() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".ore(ore('blockDiamond')).weight(100)"),
             @Example(".ore('blockGold').weight(100)")

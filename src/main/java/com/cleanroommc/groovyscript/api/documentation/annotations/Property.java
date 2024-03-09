@@ -66,6 +66,7 @@ public @interface Property {
      * @return what the default value is, defaults to {@code false}, {@code 0}, {@code 0.0f}, {@code "null"}, etc depending on the property class.
      * @see com.cleanroommc.groovyscript.documentation.Builder#defaultValueConverter
      */
+    @SuppressWarnings("JavadocReference")
     String defaultValue() default "";
 
     /**

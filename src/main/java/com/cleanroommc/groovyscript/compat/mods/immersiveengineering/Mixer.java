@@ -20,10 +20,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Mixer extends VirtualizedRegistry<MixerRecipe> {
 
-    public Mixer() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), ore('ingotGold'), ore('ingotGold'), ore('ingotGold')).fluidInput(fluid('water')).fluidOutput(fluid('lava')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

@@ -23,10 +23,6 @@ import java.util.Map;
 @RegistryDescription
 public class Spawning extends VirtualizedRegistry<Pair<WootMobName, SpawnRecipe>> {
 
-    public Spawning() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".name('minecraft:zombie').input(item('minecraft:clay')).fluidInput(fluid('water'))"),
             @Example(".defaultSpawnRecipe(true).input(item('minecraft:gold_ingot'), item('minecraft:diamond'))")

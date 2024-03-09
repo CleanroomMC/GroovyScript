@@ -22,10 +22,6 @@ import java.util.Optional;
 @RegistryDescription
 public class Drops extends VirtualizedRegistry<Object> {
 
-    public Drops() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".name('minecraft:zombie').output(item('minecraft:clay')).chance(10, 30, 60, 100).size(5, 10, 20, 50)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

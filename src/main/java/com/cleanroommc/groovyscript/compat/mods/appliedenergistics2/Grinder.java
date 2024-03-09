@@ -18,10 +18,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
 
-    public Grinder() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'), item('minecraft:gold_ingot'), item('minecraft:diamond')).turns(1).chance1(0.5).chance2(0.3)"),
             @Example(".input(item('minecraft:stone')).output(item('minecraft:clay') * 4).turns(10)")

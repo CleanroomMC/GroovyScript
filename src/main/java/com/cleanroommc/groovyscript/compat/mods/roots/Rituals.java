@@ -20,10 +20,6 @@ import java.util.Collection;
 )
 public class Rituals extends VirtualizedRegistry<RitualBase> {
 
-    public Rituals() {
-        super();
-    }
-
     public static RitualWrapper ritual(String ritual) {
         return ritual(RitualRegistry.getRitual(ritual));
     }

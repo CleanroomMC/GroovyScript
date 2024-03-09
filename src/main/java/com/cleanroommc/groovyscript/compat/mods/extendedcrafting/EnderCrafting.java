@@ -17,10 +17,6 @@ import java.util.List;
 @RegistryDescription
 public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
 
-    public EnderCrafting() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".output(item('minecraft:stone')).matrix('BXX', 'X B').key('B', item('minecraft:stone')).key('X', item('minecraft:gold_ingot')).time(1).mirrored()"),
             @Example(".output(item('minecraft:diamond') * 32).matrix([[item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')]]).time(1)")

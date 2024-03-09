@@ -27,10 +27,6 @@ import java.util.Collections;
 )
 public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
 
-    public AlchemyTable() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond'), item('minecraft:diamond')).output(item('minecraft:clay')).ticks(100).minimumTier(2).syphon(500)"),
             @Example(".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('bloodmagic:slate'), item('bloodmagic:slate')).output(item('minecraft:clay')).time(2000).tier(5).drain(25000)")

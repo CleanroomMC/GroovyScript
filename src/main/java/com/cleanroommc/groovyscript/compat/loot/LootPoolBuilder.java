@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import groovy.lang.Closure;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.RandomValueRange;
@@ -16,9 +15,7 @@ import net.minecraft.world.storage.loot.conditions.RandomChanceWithLooting;
 import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class LootPoolBuilder {
 

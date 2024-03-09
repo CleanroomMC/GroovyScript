@@ -24,10 +24,6 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
 
-    public ArcFurnace() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".mainInput(item('minecraft:diamond')).input(item('minecraft:diamond'), ore('ingotGold')).output(item('minecraft:clay')).time(100).energyPerTick(100).slag(item('minecraft:gold_nugget'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

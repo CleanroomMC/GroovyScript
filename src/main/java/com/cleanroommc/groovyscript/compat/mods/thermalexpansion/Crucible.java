@@ -24,10 +24,6 @@ public class Crucible extends VirtualizedRegistry<CrucibleManager.CrucibleRecipe
     private final List<ComparableItemStackValidatedNBT> lavaSetScripted = new ArrayList<>();
     private final List<ComparableItemStackValidatedNBT> lavaSetBackup = new ArrayList<>();
 
-    public Crucible() {
-        super();
-    }
-
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal

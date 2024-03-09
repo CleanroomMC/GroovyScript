@@ -26,7 +26,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         if (LightOreTransmutationsAccessor.getRegisteredTransmutations() == null) {
             throw new IllegalStateException("Astral Sorcery Light Transmutation getRegisteredTransmutations() is not yet initialized!");
         }
-        return (ArrayList<LightOreTransmutations.Transmutation>) LightOreTransmutationsAccessor.getRegisteredTransmutations();
+        return (List<LightOreTransmutations.Transmutation>) LightOreTransmutationsAccessor.getRegisteredTransmutations();
     }
 
     @RecipeBuilderDescription(example = {

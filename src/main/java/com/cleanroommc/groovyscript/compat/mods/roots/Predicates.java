@@ -24,10 +24,6 @@ public class Predicates extends VirtualizedRegistry<MatchingStates> {
     public BlocksPredicate WATER = new WaterPredicate();
     public LeavesPredicate LEAVES = new LeavesPredicate();
 
-    public Predicates() {
-        super();
-    }
-
     @Override
     public void onReload() {
     }

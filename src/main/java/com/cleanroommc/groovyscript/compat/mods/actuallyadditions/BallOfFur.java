@@ -15,10 +15,6 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
 
-    public BallOfFur() {
-        super();
-    }
-
     @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay') * 32).weight(15)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
