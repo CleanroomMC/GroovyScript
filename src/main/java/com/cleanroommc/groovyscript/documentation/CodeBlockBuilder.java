@@ -13,6 +13,7 @@ public class CodeBlockBuilder {
     private final List<String> lines = new ArrayList<>();
     private final List<String> annotations = new ArrayList<>();
     private final List<String> highlight = new ArrayList<>();
+    private final List<Integer> focus = new ArrayList<>();
     private String lang = "groovy";
     private int indentation;
 
@@ -56,6 +57,11 @@ public class CodeBlockBuilder {
         return this;
     }
 
+    public CodeBlockBuilder focus(Integer focus) {
+        this.focus.add(focus);
+        return this;
+    }
+
     public CodeBlockBuilder indentation(int indentation) {
         this.indentation = indentation;
         return this;
@@ -75,18 +81,34 @@ public class CodeBlockBuilder {
 
         if (!annotations.isEmpty()) out.add("");
 
-        int i = 0;
-        for (int x = 0; x < out.size(); x++) {
-            Matcher matcher = Documentation.ANNOTATION_COMMENT_LOCATION.matcher(out.get(x));
-            StringBuffer sb = new StringBuffer();
-            while (matcher.find()) {
-                matcher.appendReplacement(sb, String.format("/*(%d)$1*/", 1 + i));
-                out.add(String.format("%s%d. %s", indent, 1 + i, annotations.get(i)));
-                i++;
+        if (Documentation.DEFAULT_FORMAT.usesFocusInCodeBlocks()) {
+            int i = 0;
+            for (int x = 0; x < out.size(); x++) {
+                Matcher matcher = Documentation.ANNOTATION_COMMENT_LOCATION.matcher(out.get(x));
+                StringBuffer sb = new StringBuffer();
+                while (matcher.find()) {
+                    matcher.appendReplacement(sb, String.format("/* %s */", annotations.get(i)));
+                    i++;
+                }
+                matcher.appendTail(sb);
+                if (focus.contains(x)) out.set(x, sb + " // [!code focus]");
+                else out.set(x, sb.toString());
             }
-            matcher.appendTail(sb);
-            out.set(x, sb.toString());
+        } else {
+            int i = 0;
+            for (int x = 0; x < out.size(); x++) {
+                Matcher matcher = Documentation.ANNOTATION_COMMENT_LOCATION.matcher(out.get(x));
+                StringBuffer sb = new StringBuffer();
+                while (matcher.find()) {
+                    matcher.appendReplacement(sb, String.format("/*(%d)$1*/", 1 + i));
+                    out.add(String.format("%s%d. %s", indent, 1 + i, annotations.get(i)));
+                    i++;
+                }
+                matcher.appendTail(sb);
+                out.set(x, sb.toString());
+            }
         }
+
 
         out.add("\n");
 

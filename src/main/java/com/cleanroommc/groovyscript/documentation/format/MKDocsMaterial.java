@@ -45,4 +45,8 @@ public class MKDocsMaterial implements IFormat {
         return true;
     }
 
+    public boolean usesFocusInCodeBlocks() {
+        return false;
+    }
+
 }

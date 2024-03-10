@@ -32,4 +32,6 @@ public interface IFormat {
 
     boolean requiresNavFile();
 
+    boolean usesFocusInCodeBlocks();
+
 }

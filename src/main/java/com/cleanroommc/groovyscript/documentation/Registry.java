@@ -189,8 +189,9 @@ public class Registry {
         out.append(new CodeBlockBuilder()
                            .line(packages)
                            .annotation(I18n.format("groovyscript.wiki.defaultPackage"))
-                           // Highlighting is based on the line count, and is 1-indexed
+                           // Highlighting and focusing are based on the line count, and is 1-indexed
                            .highlight(String.valueOf(1 + target))
+                           .focus(1 + target)
                            .toString());
         return out.toString();
     }
