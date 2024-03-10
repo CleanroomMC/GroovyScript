@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +28,11 @@ public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
+    public EvaporatorRecipe add(FluidStack input, ItemStack output) {
+        return new RecipeBuilder().fluidInput(input).output(output).register();
     }
 
     public EvaporatorRecipe add(EvaporatorRecipe recipe) {

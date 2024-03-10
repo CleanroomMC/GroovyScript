@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +29,11 @@ public class Atomizer extends VirtualizedRegistry<AtomizerRecipe> {
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
+    public AtomizerRecipe add(FluidStack input, ItemStack output) {
+        return new RecipeBuilder().fluidInput(input).output(output).register();
     }
 
     public AtomizerRecipe add(AtomizerRecipe recipe) {

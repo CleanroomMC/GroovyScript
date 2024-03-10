@@ -149,6 +149,7 @@ groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the ch
 # Alchemistry
 groovyscript.wiki.alchemistry.atomizer.title=Atomizer
 groovyscript.wiki.alchemistry.atomizer.description=Converts a non-element into its component elements.
+groovyscript.wiki.alchemistry.atomizer.add=Adds recipes in the format `input`, `output`
 groovyscript.wiki.alchemistry.atomizer.reversible.value=Sets if the recipe will also create a Liquifier recipe to invert the process
 
 groovyscript.wiki.alchemistry.combiner.title=Chemical Combiner
@@ -168,9 +169,11 @@ groovyscript.wiki.alchemistry.electrolyzer.chance.value=Sets the output chance o
 groovyscript.wiki.alchemistry.electrolyzer.consumptionChance.value=Sets the chance the catalyst input itemstack has to be consumed
 
 groovyscript.wiki.alchemistry.evaporator.title=Evaporator
+groovyscript.wiki.alchemistry.evaporator.add=Adds recipes in the format `input`, `output`
 groovyscript.wiki.alchemistry.evaporator.description=Converts an input fluidstack into an output fluidstack, taking a set amount of time.
 
 groovyscript.wiki.alchemistry.liquifier.title=Liquifier
+groovyscript.wiki.alchemistry.liquifier.add=Adds recipes in the format `input`, `output`
 groovyscript.wiki.alchemistry.liquifier.description=Converts an input itemstack into an output fluidstack, consuming a set amount of power.
 
 
