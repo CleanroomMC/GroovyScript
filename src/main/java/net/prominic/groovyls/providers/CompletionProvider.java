@@ -39,6 +39,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CompletionProvider {
 
@@ -53,14 +54,36 @@ public class CompletionProvider {
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> provideCompletion(
             TextDocumentIdentifier textDocument, Position position, CompletionContext context) {
         URI uri = URIUtils.toUri(textDocument.getUri());
-        ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
-        if (offsetNode == null) {
-            return CompletableFuture.completedFuture(Either.forLeft(Collections.emptyList()));
-        }
-        ASTNode parentNode = astContext.getVisitor().getParent(offsetNode);
 
         isIncomplete = false;
         List<CompletionItem> items = new ArrayList<>();
+
+        ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
+        if (offsetNode != null) {
+            populateItemsFromNode(position, offsetNode, items);
+        }
+        populateKeywords(items);
+
+        if (isIncomplete) {
+            return CompletableFuture.completedFuture(Either.forRight(new CompletionList(true, items)));
+        }
+        return CompletableFuture.completedFuture(Either.forLeft(items));
+    }
+
+    private void populateKeywords(List<CompletionItem> items) {
+        items.addAll(Stream.of("def", "assert", "if", "for", "else", "while", "switch", "case", "break", "continue", "return",
+                               "transient", "import", "class", "extends", "implements", "enum", "try", "catch", "finally", "throw", "new", "in", "as",
+                               "instanceof", "super", "this", "null", "true", "false", "void", "byte", "short", "int", "long", "float", "double", "boolean",
+                               "private", "public", "protected")
+                             .map(keyword -> {
+                                 var item = new CompletionItem(keyword);
+                                 item.setKind(CompletionItemKind.Keyword);
+                                 return item;
+                             }).collect(Collectors.toList()));
+    }
+
+    private void populateItemsFromNode(Position position, ASTNode offsetNode, List<CompletionItem> items) {
+        ASTNode parentNode = astContext.getVisitor().getParent(offsetNode);
 
         if (offsetNode instanceof PropertyExpression) {
             populateItemsFromPropertyExpression((PropertyExpression) offsetNode, position, items);
@@ -82,14 +105,11 @@ public class CompletionProvider {
             populateItemsFromScope(offsetNode, "", items);
         } else if (offsetNode instanceof Statement) {
             populateItemsFromScope(offsetNode, "", items);
+        } else if (offsetNode instanceof ClosureExpression) {
+            populateItemsFromScope(offsetNode, "", items);
         } else if (offsetNode instanceof StaticMethodCallExpression) {
             populateItemsFromStaticMethodCallExpression((StaticMethodCallExpression) offsetNode, position, items);
         }
-
-        if (isIncomplete) {
-            return CompletableFuture.completedFuture(Either.forRight(new CompletionList(true, items)));
-        }
-        return CompletableFuture.completedFuture(Either.forLeft(items));
     }
 
     private void populateItemsFromStaticMethodCallExpression(StaticMethodCallExpression methodCallExpr, Position position, List<CompletionItem> items) {
