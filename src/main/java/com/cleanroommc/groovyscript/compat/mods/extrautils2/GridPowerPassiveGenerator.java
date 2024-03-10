@@ -10,20 +10,22 @@ import com.rwtema.extrautils2.blocks.BlockPassiveGenerator;
 import com.rwtema.extrautils2.power.IWorldPowerMultiplier;
 import com.rwtema.extrautils2.tile.TilePassiveGenerator;
 import groovy.lang.Closure;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 @RegistryDescription
 public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPassiveGenerator.GeneratorType, IWorldPowerMultiplier>> {
 
-    public final Map<ResourceLocation, Float> basePowerMap = new HashMap<>();
-    public final Map<ResourceLocation, Closure<Float>> powerLevelMap = new HashMap<>();
-    private final Map<ResourceLocation, float[]> scalingMap = new HashMap<>();
+    public final Map<ResourceLocation, Float> basePowerMap = new Object2FloatOpenHashMap<>();
+    public final Map<ResourceLocation, Closure<Float>> powerLevelMap = new Object2ObjectOpenHashMap<>();
+    private final Map<ResourceLocation, float[]> scalingMap = new Object2ObjectArrayMap<>();
 
     @Override
     public void onReload() {
