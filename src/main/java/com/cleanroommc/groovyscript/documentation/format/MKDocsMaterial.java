@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 
 public class MKDocsMaterial implements IFormat {
 
+    public String linkToBuilder() {
+        return "../../../groovy/builder.md";
+    }
+
     @Override
     public String admonitionStart(Admonition.Format format, Admonition.Type type, int indentation, String title) {
         return (switch (format) {

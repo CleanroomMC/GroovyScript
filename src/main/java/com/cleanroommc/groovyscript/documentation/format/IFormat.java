@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface IFormat {
 
+    String linkToBuilder();
+
     /**
      * @param format what format is being used
      * @return the string to begin the admonition for the given format

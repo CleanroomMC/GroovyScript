@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
 
 public class VitePress implements IFormat {
 
+    public String linkToBuilder() {
+        return "../../groovy/builder.md";
+    }
+
     @Override
     public String admonitionStart(Admonition.Format format, Admonition.Type type, int indentation, String title) {
         // Technically limits admonitions on VitePress to only have a maximum of 7 depth.

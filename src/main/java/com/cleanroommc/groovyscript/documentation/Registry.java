@@ -201,7 +201,7 @@ public class Registry {
 
         out.append("### ").append(I18n.format("groovyscript.wiki.recipe_builder")).append("\n\n")
                 .append(I18n.format("groovyscript.wiki.uses_recipe_builder", getTitle())).append("\n\n")
-                .append(I18n.format("groovyscript.wiki.recipe_builder_note")).append("\n\n");
+                .append(I18n.format("groovyscript.wiki.recipe_builder_note", Documentation.DEFAULT_FORMAT.linkToBuilder())).append("\n\n");
 
         for (int i = 0; i < recipeBuilderMethods.size(); i++) {
             Builder builder = new Builder(mod, recipeBuilderMethods.get(i), reference, baseTranslationKey);
