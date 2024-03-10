@@ -57,24 +57,28 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
     }
 
     @MethodDescription(example = @Example("item('minecraft:trapdoor')"))
-    public boolean removeByFilter(ItemStack input) {
+    public boolean removeByFilter(IIngredient input) {
         return ((HopperFiltersAccessor) BWRegistry.HOPPER_FILTERS).getFILTERS().values().removeIf(r -> {
-            if (r.getFilter().test(input)) {
-                addBackup(r);
-                return true;
+            for (ItemStack item : r.getFilter().getMatchingStacks()) {
+                if (input.test(item)) {
+                    addBackup(r);
+                    return true;
+                }
             }
             return false;
         });
     }
 
     @MethodDescription
-    public boolean removeByFiltered(ItemStack output) {
+    public boolean removeByFiltered(IIngredient output) {
         return ((HopperFiltersAccessor) BWRegistry.HOPPER_FILTERS).getFILTERS().values().removeIf(r -> {
             if (!(r instanceof HopperFilter)) return false;
             for (Ingredient ingredient : ((HopperFilter) r).getFiltered()) {
-                if (ingredient.test(output)) {
-                    addBackup(r);
-                    return true;
+                for (ItemStack item : ingredient.getMatchingStacks()) {
+                    if (output.test(item)) {
+                        addBackup(r);
+                        return true;
+                    }
                 }
             }
             return false;

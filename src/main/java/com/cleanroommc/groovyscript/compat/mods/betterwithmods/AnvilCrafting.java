@@ -57,9 +57,9 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('betterwithmods:steel_block')"))
-    public boolean removeByOutput(ItemStack output) {
+    public boolean removeByOutput(IIngredient output) {
         return AnvilCraftingManager.ANVIL_CRAFTING.removeIf(r -> {
-            if (r.getRecipeOutput().equals(output)) {
+            if (output.test(r.getRecipeOutput())) {
                 addBackup(r);
                 return true;
             }
@@ -68,21 +68,18 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:redstone')"))
-    public boolean removeByInput(ItemStack input) {
+    public boolean removeByInput(IIngredient input) {
         return AnvilCraftingManager.ANVIL_CRAFTING.removeIf(r -> {
             for (Ingredient ingredient : r.getIngredients()) {
-                if (ingredient.test(input)) {
-                    addBackup(r);
-                    return true;
+                for (ItemStack item : ingredient.getMatchingStacks()) {
+                    if (input.test(item)) {
+                        addBackup(r);
+                        return true;
+                    }
                 }
             }
             return false;
         });
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
-    public boolean removeByInput(IIngredient input) {
-        return removeByInput(IngredientHelper.toItemStack(input));
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)

@@ -7,12 +7,10 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Collectors;
@@ -51,10 +49,10 @@ public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:gunpowder')"))
-    public boolean removeByOutput(ItemStack output) {
+    public boolean removeByOutput(IIngredient output) {
         return BWRegistry.CAULDRON.getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
-                if (ItemHandlerHelper.canItemStacksStack(itemstack, output)) {
+                if (output.test(itemstack)) {
                     addBackup(r);
                     return true;
                 }
@@ -64,21 +62,18 @@ public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:gunpowder')"))
-    public boolean removeByInput(ItemStack input) {
+    public boolean removeByInput(IIngredient input) {
         return BWRegistry.CAULDRON.getRecipes().removeIf(r -> {
             for (Ingredient ingredient : r.getInputs()) {
-                if (ingredient.test(input)) {
-                    addBackup(r);
-                    return true;
+                for (ItemStack item : ingredient.getMatchingStacks()) {
+                    if (input.test(item)) {
+                        addBackup(r);
+                        return true;
+                    }
                 }
             }
             return false;
         });
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
-    public boolean removeByInput(IIngredient input) {
-        return removeByInput(IngredientHelper.toItemStack(input));
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
