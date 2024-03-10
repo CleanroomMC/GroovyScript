@@ -10,9 +10,7 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription
@@ -60,19 +58,14 @@ public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("element('water')"))
-    public boolean removeByInput(ItemStack input) {
+    public boolean removeByInput(IIngredient input) {
         return ModRecipes.INSTANCE.getLiquifierRecipes().removeIf(r -> {
-            if (ItemHandlerHelper.canItemStacksStack(r.getInput(), input)) {
+            if (input.test(r.getInput())) {
                 addBackup(r);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
-    public boolean removeByInput(IIngredient input) {
-        return removeByInput(IngredientHelper.toItemStack(input));
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)

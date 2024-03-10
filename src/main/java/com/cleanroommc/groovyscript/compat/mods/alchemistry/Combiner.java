@@ -12,7 +12,6 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -56,9 +55,9 @@ public class Combiner extends VirtualizedRegistry<CombinerRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:glowstone')"))
-    public boolean removeByOutput(ItemStack output) {
+    public boolean removeByOutput(IIngredient output) {
         return ModRecipes.INSTANCE.getCombinerRecipes().removeIf(r -> {
-            if (ItemHandlerHelper.canItemStacksStack(r.getOutput(), output)) {
+            if (output.test(r.getOutput())) {
                 addBackup(r);
                 return true;
             }
@@ -67,21 +66,16 @@ public class Combiner extends VirtualizedRegistry<CombinerRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("element('carbon')"))
-    public boolean removeByInput(ItemStack input) {
+    public boolean removeByInput(IIngredient input) {
         return ModRecipes.INSTANCE.getCombinerRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInputs()) {
-                if (ItemHandlerHelper.canItemStacksStack(itemstack, input)) {
+                if (input.test(itemstack)) {
                     addBackup(r);
                     return true;
                 }
             }
             return false;
         });
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
-    public boolean removeByInput(IIngredient input) {
-        return removeByInput(IngredientHelper.toItemStack(input));
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)

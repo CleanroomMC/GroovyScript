@@ -8,10 +8,8 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,9 +47,9 @@ public class Atomizer extends VirtualizedRegistry<AtomizerRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example(value = "item('alchemistry:compound:7')", commented = true))
-    public boolean removeByOutput(ItemStack output) {
+    public boolean removeByOutput(IIngredient output) {
         return ModRecipes.INSTANCE.getAtomizerRecipes().removeIf(r -> {
-            if (r.getOutput().equals(output)) {
+            if (output.test(r.getOutput())) {
                 addBackup(r);
                 return true;
             }
@@ -68,11 +66,6 @@ public class Atomizer extends VirtualizedRegistry<AtomizerRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
-    public boolean removeByInput(IIngredient input) {
-        return removeByInput(IngredientHelper.toFluidStack(input));
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
