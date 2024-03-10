@@ -46,7 +46,7 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:bookshelf')"))
-    public void removeByInput(IIngredient input) {
+    public boolean removeByInput(IIngredient input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineEnchanter.INSTANCE.recipes_registry) {
             for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
@@ -61,6 +61,7 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
             addBackup(recipe);
             XUMachineEnchanter.INSTANCE.recipes_registry.removeRecipe(recipe);
         }
+        return !agony.isEmpty();
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)

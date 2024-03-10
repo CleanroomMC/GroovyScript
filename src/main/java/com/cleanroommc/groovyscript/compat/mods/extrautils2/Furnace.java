@@ -46,7 +46,7 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:emerald_ore')"))
-    public void removeByInput(IIngredient input) {
+    public boolean removeByInput(IIngredient input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineFurnace.INSTANCE.recipes_registry) {
             for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
@@ -61,6 +61,7 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
             addBackup(recipe);
             XUMachineFurnace.INSTANCE.recipes_registry.removeRecipe(recipe);
         }
+        return !agony.isEmpty();
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)

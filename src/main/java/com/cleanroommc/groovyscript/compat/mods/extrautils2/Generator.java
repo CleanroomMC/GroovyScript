@@ -96,7 +96,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
             addBackup(Pair.of(machine, recipe));
             machine.recipes_registry.removeRecipe(recipe);
         }
-        return false;
+        return !agony.isEmpty();
     }
 
     @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove0", example = @Example("'extrautils2:generator_culinary', item('minecraft:apple')"))
@@ -130,7 +130,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
             addBackup(Pair.of(machine, recipe));
             machine.recipes_registry.removeRecipe(recipe);
         }
-        return false;
+        return !agony.isEmpty();
     }
 
     @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.remove1", example = @Example("'extrautils2:generator_lava', fluid('lava')"))
@@ -163,7 +163,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
     }
 
     @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator")
-    public void removeByGenerator(Machine machine) {
+    public boolean removeByGenerator(Machine machine) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : machine.recipes_registry) {
             agony.add(recipe);
@@ -172,21 +172,22 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
             addBackup(Pair.of(machine, recipe));
             machine.recipes_registry.removeRecipe(recipe);
         }
+        return !agony.isEmpty();
     }
 
     @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator", example = @Example("'extrautils2:generator_death'"))
-    public void removeByGenerator(String name) {
+    public boolean removeByGenerator(String name) {
         Machine machine = MachineRegistry.getMachine(name);
         if (machine == null) {
             GroovyLog.get().error("machine cannot be null");
-            return;
+            return false;
         }
-        removeByGenerator(machine);
+        return removeByGenerator(machine);
     }
 
     @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator")
-    public void removeByGenerator(ResourceLocation name) {
-        removeByGenerator(name.toString());
+    public boolean removeByGenerator(ResourceLocation name) {
+        return removeByGenerator(name.toString());
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))

@@ -47,7 +47,7 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:blaze_rod')"))
-    public void removeByInput(IIngredient input) {
+    public boolean removeByInput(IIngredient input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineCrusher.INSTANCE.recipes_registry) {
             for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
@@ -62,6 +62,7 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
             addBackup(recipe);
             XUMachineCrusher.INSTANCE.recipes_registry.removeRecipe(recipe);
         }
+        return !agony.isEmpty();
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
