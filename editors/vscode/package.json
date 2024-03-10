@@ -33,7 +33,13 @@
           "description": "Port specified in config of GroovyScript Language Server"
         }
       }
-    }
+    },
+    "snippets": [
+      {
+        "language": "groovy",
+        "path": "./snippets/groovyscript.snippets.json"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run build-base -- --minify",

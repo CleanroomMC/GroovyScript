@@ -1,0 +1,19 @@
+{
+    "Check is mod loaded": {
+        "prefix": "is mod loaded",
+        "description": "Check if the mod is loaded",
+        "body": [
+            "if (!isLoaded('${1:modname}')) return",
+            "println 'mod \\'${1:modname}\\' detected, running script'"
+        ]
+    },
+    "Listen for event": {
+        "prefix": "listen forge event",
+        "description": "Listen for a forge event",
+        "body": [
+            "eventManager.listen { ${1:eventtype} event ->",
+            "",
+            "}"
+        ]
+    }
+}
