@@ -19,31 +19,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
+import com.cleanroommc.groovyscript.GroovyScript;
+import net.prominic.groovyls.compiler.ast.ASTContext;
+import net.prominic.groovyls.compiler.util.GroovyASTUtils;
+import net.prominic.groovyls.util.GroovyNodeToStringUtils;
+import net.prominic.groovyls.util.URIUtils;
+import org.codehaus.groovy.ast.*;
+import org.eclipse.lsp4j.*;
+
 import java.net.URI;
 import java.util.concurrent.CompletableFuture;
-
-import net.prominic.groovyls.compiler.ast.ASTContext;
-import net.prominic.groovyls.compiler.util.DocUtils;
-import net.prominic.groovyls.compiler.util.MkDocUtils;
-import net.prominic.groovyls.util.URIUtils;
-import org.codehaus.groovy.ast.ASTNode;
-import org.codehaus.groovy.ast.AnnotatedNode;
-import org.codehaus.groovy.ast.ClassNode;
-import org.codehaus.groovy.ast.MethodNode;
-import org.codehaus.groovy.ast.Variable;
-import org.eclipse.lsp4j.Hover;
-import org.eclipse.lsp4j.MarkupContent;
-import org.eclipse.lsp4j.MarkupKind;
-import org.eclipse.lsp4j.Position;
-import org.eclipse.lsp4j.TextDocumentIdentifier;
-
-import com.cleanroommc.groovyscript.GroovyScript;
-
-import groovy.lang.groovydoc.Groovydoc;
-import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
-import net.prominic.groovyls.compiler.util.GroovyASTUtils;
-import net.prominic.groovyls.compiler.util.GroovydocUtils;
-import net.prominic.groovyls.util.GroovyNodeToStringUtils;
 
 public class HoverProvider {
 
@@ -72,7 +57,7 @@ public class HoverProvider {
 
         String documentation = null;
         if (definitionNode instanceof AnnotatedNode annotatedNode) {
-            documentation = DocUtils.getMarkdownDescription(annotatedNode, astContext);
+            documentation = astContext.getLanguageServerContext().getDocumentationFactory().getDocumentation(annotatedNode, astContext);
         }
 
         StringBuilder contentsBuilder = new StringBuilder();

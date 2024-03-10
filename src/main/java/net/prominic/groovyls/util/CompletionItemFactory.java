@@ -1,14 +1,24 @@
 package net.prominic.groovyls.util;
 
+import net.prominic.groovyls.compiler.ast.ASTContext;
 import org.codehaus.groovy.ast.ASTNode;
-import org.eclipse.lsp4j.CompletionItem;
-import org.eclipse.lsp4j.CompletionItemKind;
-import org.eclipse.lsp4j.InsertTextFormat;
+import org.codehaus.groovy.ast.AnnotatedNode;
+import org.eclipse.lsp4j.*;
 
 public class CompletionItemFactory {
 
-    public static CompletionItem createCompletion(ASTNode node, String label) {
-        return createCompletion(GroovyLanguageServerUtils.astNodeToCompletionItemKind(node), label);
+    public static CompletionItem createCompletion(ASTNode node, String label, ASTContext astContext) {
+        var completionItem = createCompletion(GroovyLanguageServerUtils.astNodeToCompletionItemKind(node), label);
+
+        if (node instanceof AnnotatedNode annotatedNode) {
+            var documentation = astContext.getLanguageServerContext().getDocumentationFactory().getDocumentation(annotatedNode, astContext);
+
+            if (documentation != null) {
+                completionItem.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, documentation));
+            }
+        }
+
+        return completionItem;
     }
 
     public static CompletionItem createCompletion(CompletionItemKind kind, String label) {

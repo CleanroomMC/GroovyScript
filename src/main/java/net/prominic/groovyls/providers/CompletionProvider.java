@@ -22,7 +22,6 @@ package net.prominic.groovyls.providers;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import io.github.classgraph.*;
 import net.prominic.groovyls.compiler.ast.ASTContext;
-import net.prominic.groovyls.compiler.util.DocUtils;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
 import net.prominic.groovyls.compiler.util.GroovyReflectionUtils;
 import net.prominic.groovyls.util.CompletionItemFactory;
@@ -196,14 +195,10 @@ public class CompletionProvider {
             }
             return true;
         }).map(classNode -> {
-            CompletionItem item = CompletionItemFactory.createCompletion(classNode, classNode.getName());
+            CompletionItem item = CompletionItemFactory.createCompletion(classNode, classNode.getName(), astContext);
             item.setTextEdit(Either.forLeft(new TextEdit(importRange, classNode.getName())));
             if (classNode.getNameWithoutPackage().startsWith(importText)) {
                 item.setSortText(classNode.getNameWithoutPackage());
-            }
-            String markdownDocs = DocUtils.getMarkdownDescription(classNode, astContext);
-            if (markdownDocs != null) {
-                item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
             }
             return item;
         }).collect(Collectors.toList());
@@ -300,16 +295,10 @@ public class CompletionProvider {
             }
             return false;
         }).map(property -> {
-            CompletionItem item = CompletionItemFactory.createCompletion(property, property.getName());
+            CompletionItem item = CompletionItemFactory.createCompletion(property, property.getName(), astContext);
 
             if (!property.isDynamicTyped()) {
                 item.setDetail(property.getType().getNameWithoutPackage());
-            }
-
-            String markdownDocs = DocUtils.getMarkdownDescription(property, astContext);
-
-            if (markdownDocs != null) {
-                item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
             }
             return item;
         }).collect(Collectors.toList());
@@ -323,15 +312,10 @@ public class CompletionProvider {
             }
             return false;
         }).map(field -> {
-            CompletionItem item = CompletionItemFactory.createCompletion(field, field.getName());
+            CompletionItem item = CompletionItemFactory.createCompletion(field, field.getName(), astContext);
 
             if (!field.isDynamicTyped()) {
                 item.setDetail(field.getType().getNameWithoutPackage());
-            }
-
-            String markdownDocs = DocUtils.getMarkdownDescription(field, astContext);
-            if (markdownDocs != null) {
-                item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
             }
             return item;
         }).collect(Collectors.toList());
@@ -350,15 +334,11 @@ public class CompletionProvider {
                     }
                     return false;
                 }).map(method -> {
-                    CompletionItem item = CompletionItemFactory.createCompletion(method, method.getName());
+                    CompletionItem item = CompletionItemFactory.createCompletion(method, method.getName(), astContext);
 
                     var details = getMethodNodeDetails(method);
                     item.setLabelDetails(details);
 
-                    String markdownDocs = DocUtils.getMarkdownDescription(method, astContext);
-                    if (markdownDocs != null) {
-                        item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
-                    }
                     return item;
                 }).collect(Collectors.toList());
         items.addAll(methodItems);
@@ -467,19 +447,10 @@ public class CompletionProvider {
             }
             return false;
         }).map(variable -> {
-            var item = CompletionItemFactory.createCompletion((ASTNode) variable, variable.getName());
+            var item = CompletionItemFactory.createCompletion((ASTNode) variable, variable.getName(), astContext);
 
             if (!variable.isDynamicTyped()) {
                 item.setDetail(variable.getType().getName());
-            }
-
-            if (variable instanceof AnnotatedNode) {
-                AnnotatedNode annotatedVar = (AnnotatedNode) variable;
-                String markdownDocs = DocUtils.getMarkdownDescription(annotatedVar, astContext);
-                ;
-                if (markdownDocs != null) {
-                    item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
-                }
             }
             return item;
         }).collect(Collectors.toList());
@@ -543,12 +514,8 @@ public class CompletionProvider {
         }).map(classNode -> {
             String className = classNode.getName();
             String packageName = classNode.getPackageName();
-            CompletionItem item = CompletionItemFactory.createCompletion(classNode, classNode.getNameWithoutPackage());
+            CompletionItem item = CompletionItemFactory.createCompletion(classNode, classNode.getNameWithoutPackage(), astContext);
             item.setDetail(packageName);
-            String markdownDocs = DocUtils.getMarkdownDescription(classNode, astContext);
-            if (markdownDocs != null) {
-                item.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
-            }
             if (packageName != null && !packageName.equals(enclosingPackageName) && !importNames.contains(className)) {
                 List<TextEdit> additionalTextEdits = new ArrayList<>();
                 TextEdit addImportEdit = createAddImportTextEdit(className, addImportRange);

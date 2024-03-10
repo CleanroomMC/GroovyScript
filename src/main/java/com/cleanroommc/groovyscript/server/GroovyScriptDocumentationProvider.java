@@ -1,4 +1,4 @@
-package net.prominic.groovyls.compiler.util;
+package com.cleanroommc.groovyscript.server;
 
 import com.cleanroommc.groovyscript.api.IGroovyContainer;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
@@ -6,16 +6,20 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.Registry;
 import net.prominic.groovyls.compiler.ast.ASTContext;
+import net.prominic.groovyls.compiler.documentation.IDocumentationProvider;
+import net.prominic.groovyls.compiler.util.GroovyReflectionUtils;
 import org.codehaus.groovy.ast.AnnotatedNode;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.MethodNode;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Objects;
 
-public class MkDocUtils {
+public class GroovyScriptDocumentationProvider implements IDocumentationProvider {
 
-    public static String mkDocToMarkdownDescription(AnnotatedNode node, ASTContext context) {
+    @Override
+    public @Nullable String getDocumentation(AnnotatedNode node, ASTContext context) {
         var builder = new StringBuilder();
 
         if (node instanceof MethodNode methodNode && methodNode.getDeclaringClass().implementsInterface(new ClassNode(IScriptReloadable.class))) {
@@ -28,7 +32,7 @@ public class MkDocUtils {
                             var method = GroovyReflectionUtils.resolveMethodFromMethodNode(methodNode, context);
 
                             if (method.isPresent() && method.get().isAnnotationPresent(MethodDescription.class)) {
-                                return new Registry(groovyContainer, methodRegistry.get()).documentMethods(Collections.singletonList(method.get()), true);
+                                return new Registry(groovyContainer, methodRegistry.get(), Collections.emptyList()).documentMethods(Collections.singletonList(method.get()), true);
                             }
                         }
 

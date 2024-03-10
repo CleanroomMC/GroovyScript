@@ -7,6 +7,8 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import net.minecraft.launchwrapper.Launch;
 import net.prominic.groovyls.compiler.ILanguageServerContext;
+import net.prominic.groovyls.compiler.documentation.DocumentationFactory;
+import net.prominic.groovyls.compiler.documentation.GroovydocProvider;
 import net.prominic.groovyls.util.FileContentsTracker;
 
 public class GroovyScriptLanguageServerContext implements ILanguageServerContext {
@@ -24,6 +26,8 @@ public class GroovyScriptLanguageServerContext implements ILanguageServerContext
             .acceptClasses(GroovySecurityManager.INSTANCE.getWhiteListedClasses().stream().map(Class::getName).toArray(String[]::new))
             .scan();
 
+    private final DocumentationFactory documentationFactory = new DocumentationFactory(new GroovyScriptDocumentationProvider(), new GroovydocProvider());
+
     public GroovyScriptSandbox getSandbox() {
         return GroovyScript.getSandbox();
     }
@@ -35,5 +39,10 @@ public class GroovyScriptLanguageServerContext implements ILanguageServerContext
     @Override
     public FileContentsTracker getFileContentsTracker() {
         return fileContentsTracker;
+    }
+
+    @Override
+    public DocumentationFactory getDocumentationFactory() {
+        return documentationFactory;
     }
 }

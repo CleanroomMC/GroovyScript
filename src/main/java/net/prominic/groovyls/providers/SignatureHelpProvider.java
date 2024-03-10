@@ -19,14 +19,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 import net.prominic.groovyls.compiler.ast.ASTContext;
-import net.prominic.groovyls.compiler.util.DocUtils;
+import net.prominic.groovyls.compiler.util.GroovyASTUtils;
+import net.prominic.groovyls.util.GroovyLanguageServerUtils;
+import net.prominic.groovyls.util.GroovyNodeToStringUtils;
 import net.prominic.groovyls.util.URIUtils;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.MethodNode;
@@ -34,22 +30,13 @@ import org.codehaus.groovy.ast.Parameter;
 import org.codehaus.groovy.ast.expr.ArgumentListExpression;
 import org.codehaus.groovy.ast.expr.Expression;
 import org.codehaus.groovy.ast.expr.MethodCall;
-import org.eclipse.lsp4j.MarkupContent;
-import org.eclipse.lsp4j.MarkupKind;
-import org.eclipse.lsp4j.ParameterInformation;
-import org.eclipse.lsp4j.Position;
-import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.SignatureHelp;
-import org.eclipse.lsp4j.SignatureInformation;
-import org.eclipse.lsp4j.TextDocumentIdentifier;
-import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import org.eclipse.lsp4j.*;
 
-import groovy.lang.groovydoc.Groovydoc;
-import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
-import net.prominic.groovyls.compiler.util.GroovyASTUtils;
-import net.prominic.groovyls.compiler.util.GroovydocUtils;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
-import net.prominic.groovyls.util.GroovyNodeToStringUtils;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class SignatureHelpProvider {
 
@@ -100,8 +87,8 @@ public class SignatureHelpProvider {
             SignatureInformation sigInfo = new SignatureInformation();
             sigInfo.setLabel(GroovyNodeToStringUtils.methodToString(method, astContext));
             sigInfo.setParameters(parameters);
-            String markdownDocs = DocUtils.getMarkdownDescription(method, astContext);
-            ;
+            String markdownDocs = astContext.getLanguageServerContext().getDocumentationFactory().getDocumentation(method, astContext);
+
             if (markdownDocs != null) {
                 sigInfo.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, markdownDocs));
             }
