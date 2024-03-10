@@ -54,18 +54,14 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:quartz_block')"))
-    public boolean removeByInput(ItemStack input) {
+    public boolean removeByInput(IIngredient input) {
         return TileResonator.resonatorRecipes.removeIf(r -> {
-            if (r.getInputs().contains(input)) {
+            if (input.test(r.getInputs().get(0))) {
                 addBackup(r);
                 return true;
             }
             return false;
         });
-    }
-
-    public boolean removeByInput(IIngredient input) {
-        return removeByInput(IngredientHelper.toItemStack(input));
     }
 
     public boolean remove(IResonatorRecipe recipe) {
