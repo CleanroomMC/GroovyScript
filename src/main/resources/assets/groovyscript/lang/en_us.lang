@@ -148,7 +148,7 @@ groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the ch
 
 # Alchemistry
 groovyscript.wiki.alchemistry.atomizer.title=Atomizer
-groovyscript.wiki.alchemistry.atomizer.description=
+groovyscript.wiki.alchemistry.atomizer.description=Converts a non-element into its component elements.
 groovyscript.wiki.alchemistry.atomizer.reversible.value=Sets if the recipe will also create a Liquifier recipe to invert the process
 
 groovyscript.wiki.alchemistry.combiner.title=Chemical Combiner
