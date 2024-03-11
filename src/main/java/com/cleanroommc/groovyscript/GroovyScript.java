@@ -105,6 +105,10 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
+        if (Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
+            new Thread(GroovyScriptLanguageServer::listen).start();
+        }
+
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
@@ -185,8 +189,6 @@ public class GroovyScript {
                                                                 .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
                                                                 .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
         });
-
-        if (GroovyScriptConfig.server) new Thread(GroovyScriptLanguageServer::listen).start();
     }
 
     @Mod.EventHandler
