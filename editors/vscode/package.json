@@ -1,8 +1,15 @@
 {
   "name": "groovyscript",
-  "displayName": "groovyscript",
+  "displayName": "GroovyScript",
   "description": "GroovyScript language client for Visual Studio Code",
-  "version": "1.0.0",
+  "icon": "./logo.png",
+  "version": "1.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CleanroomMC/GroovyScript.git",
+    "directory": "editors/vscode"
+  },
+  "publisher": "CleanroomMC",
   "engines": {
     "vscode": "^1.81.0"
   },
