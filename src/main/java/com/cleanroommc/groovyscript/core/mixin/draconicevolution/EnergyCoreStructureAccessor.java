@@ -5,7 +5,7 @@ import com.brandon3055.draconicevolution.world.EnergyCoreStructure;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(EnergyCoreStructure.class)
+@Mixin(value = EnergyCoreStructure.class, remap = false)
 public interface EnergyCoreStructureAccessor {
 
     @Accessor
