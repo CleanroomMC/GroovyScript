@@ -78,6 +78,7 @@ public class CompletionProvider {
                              .map(keyword -> {
                                  var item = new CompletionItem(keyword);
                                  item.setKind(CompletionItemKind.Keyword);
+                                 item.setSortText("zzz" + keyword);
                                  return item;
                              }).collect(Collectors.toList()));
     }
