@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
-import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.gildedgames.the_aether.api.enchantments.AetherEnchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
 
     public Enchanter() {
-        super(GameRegistry.findRegistry(AetherEnchantment.class), Alias.generateOf("Enchanter"));
+        super(GameRegistry.findRegistry(AetherEnchantment.class), Alias.generateOfClass(Enchanter.class));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).time(200)"))
@@ -30,10 +30,10 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('aether_legacy:enchanted_gravitite')"))
-    public void removeByOutput(ItemStack output) {
+    public void removeByOutput(IIngredient output) {
         this.getRegistry().getValuesCollection().forEach(enchantment -> {
-            if (enchantment.getOutput().isItemEqual(output)) {
-                ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(), enchantment.getRegistryName());
+            if (output.test(enchantment.getOutput())) {
+                remove(enchantment);
             }
         });
     }

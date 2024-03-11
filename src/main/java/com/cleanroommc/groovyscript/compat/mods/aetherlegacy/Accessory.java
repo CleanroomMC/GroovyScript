@@ -1,43 +1,46 @@
 package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
+import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
-import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.gildedgames.the_aether.api.accessories.AccessoryType;
 import com.gildedgames.the_aether.api.accessories.AetherAccessory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 @RegistryDescription
 public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
 
-    private static final AccessoryType[] VALUES = AccessoryType.values();
-
     public Accessory() {
-        super(GameRegistry.findRegistry(AetherAccessory.class), Alias.generateOf("Accessory"));
+        super(GameRegistry.findRegistry(AetherAccessory.class), Alias.generateOfClass(Accessory.class));
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(ItemStack item, String type) {
-        AccessoryType accessoryType = AccessoryType.MISC;
-        for (AccessoryType value : VALUES) {
-            if (value.getDisplayName().equalsIgnoreCase(type)) {
-                accessoryType = value;
-            }
+        AccessoryType accessoryType = EnumHelper.valueOfNullable(AccessoryType.class, type, false);
+        if (accessoryType == null) {
+            GroovyLog.msg("Error adding Aether accessory")
+                    .add(accessoryType == null, "type with name {} does not exist. Valid values are {}.", type, Arrays.toString(AccessoryType.values()))
+                    .error()
+                    .post();
+            return;
         }
         AetherAccessory accessory = new AetherAccessory(item, accessoryType);
         add(accessory);
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('aether_legacy:iron_pendant')"))
-    public void removeByInput(ItemStack input) {
+    public void removeByInput(IIngredient input) {
         this.getRegistry().getValuesCollection().forEach(accessory -> {
-            if (accessory.getAccessoryStack().isItemEqual(input)) {
-                ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(), accessory.getRegistryName());
+            if (input.test(accessory.getAccessoryStack())) {
+                remove(accessory);
             }
         });
     }
@@ -51,15 +54,17 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<AetherAccessory> {
 
         @Property
-        private AccessoryType accessoryType = AccessoryType.MISC;
+        private AccessoryType accessoryType;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder accessoryType(String type) {
-            for (AccessoryType value : VALUES) {
-                if (value.getDisplayName().equalsIgnoreCase(type)) {
-                    accessoryType = value;
-                }
-            }
+            accessoryType = EnumHelper.valueOfNullable(AccessoryType.class, type, false);
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder accessoryType(AccessoryType type) {
+            accessoryType = type;
             return this;
         }
 
@@ -72,6 +77,7 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg);
+            msg.add(accessoryType == null, "type with name {} does not exist. Valid values are {}.", accessoryType.toString(), Arrays.toString(AccessoryType.values()));
         }
 
         @RecipeBuilderRegistrationMethod

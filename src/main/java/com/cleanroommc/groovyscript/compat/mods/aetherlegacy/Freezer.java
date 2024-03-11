@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
-import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.gildedgames.the_aether.api.freezables.AetherFreezable;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
 
     public Freezer() {
-        super(GameRegistry.findRegistry(AetherFreezable.class), Alias.generateOf("Freezer"));
+        super(GameRegistry.findRegistry(AetherFreezable.class), Alias.generateOfClass(Freezer.class));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:dirt')).time(200)"))
@@ -30,10 +30,10 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:obsidian')"))
-    public void removeByOutput(ItemStack output) {
+    public void removeByOutput(IIngredient output) {
         this.getRegistry().getValuesCollection().forEach(freezable -> {
-            if (freezable.getOutput().isItemEqual(output)) {
-                ReloadableRegistryManager.removeRegistryEntry(this.getRegistry(), freezable.getRegistryName());
+            if (output.test(freezable.getOutput())) {
+                remove(freezable);
             }
         });
     }
