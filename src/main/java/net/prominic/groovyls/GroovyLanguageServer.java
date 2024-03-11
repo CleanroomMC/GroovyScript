@@ -62,7 +62,7 @@ public class GroovyLanguageServer implements LanguageServer, LanguageClientAware
             groovyServices.setWorkspaceRoot(workspaceRoot);
         }
 
-        CompletionOptions completionOptions = new CompletionOptions(false, Arrays.asList("."));
+        CompletionOptions completionOptions = new CompletionOptions(false, Arrays.asList(".", "'", "\""));
         ServerCapabilities serverCapabilities = new ServerCapabilities();
         serverCapabilities.setCompletionProvider(completionOptions);
         serverCapabilities.setTextDocumentSync(TextDocumentSyncKind.Full);

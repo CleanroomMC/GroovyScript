@@ -21,6 +21,8 @@ package net.prominic.groovyls.providers;
 
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import io.github.classgraph.*;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
 import net.prominic.groovyls.compiler.util.GroovyReflectionUtils;
@@ -110,6 +112,30 @@ public class CompletionProvider {
             populateItemsFromScope(offsetNode, "", items);
         } else if (offsetNode instanceof StaticMethodCallExpression) {
             populateItemsFromStaticMethodCallExpression((StaticMethodCallExpression) offsetNode, position, items);
+        } else if (offsetNode instanceof ConstantExpression) {
+            populateItemsFromConstantExpression((ConstantExpression) offsetNode, parentNode, items);
+        }
+    }
+
+    // TODO this will change
+    private void populateItemsFromConstantExpression(ConstantExpression node, ASTNode parent, List<CompletionItem> items) {
+        if (node.getType().getName().equals(String.class.getName())) {
+            ASTNode parentParent = astContext.getVisitor().getParent(parent);
+            if (parentParent instanceof StaticMethodCallExpression expr &&
+                expr.getOwnerType().getName().equals(GameObjectHandlerManager.class.getName()) &&
+                expr.getMethod().equals("getGameObject") &&
+                expr.getArguments() instanceof ArgumentListExpression args && !args.getExpressions().isEmpty() &&
+                args.getExpression(0) instanceof ConstantExpression expr1 && expr1.getValue() instanceof String name &&
+                GameObjectHandlerManager.hasGameObjectHandler(name)) {
+                if ("item".equals(name)) {
+                    for (ResourceLocation rl : ForgeRegistries.ITEMS.getKeys()) {
+                        String item = rl.toString();
+                        CompletionItem completionItem = new CompletionItem(item);
+                        completionItem.setKind(CompletionItemKind.Constant);
+                        items.add(completionItem);
+                    }
+                }
+            }
         }
     }
 
