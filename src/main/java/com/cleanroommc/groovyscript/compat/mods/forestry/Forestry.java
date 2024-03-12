@@ -68,7 +68,7 @@ public class Forestry extends ModPropertyContainer {
         GameObjectHandler.builder("species", AlleleBeeSpecies.class)
                 .mod("forestry")
                 .parser(Forestry::parseSpecies)
-                .completerOfNamed(AlleleManager.alleleRegistry.getRegisteredAlleles()::keySet, s -> s.replace('.', ':')) // elements don't have names
+                .completerOfNamed(() -> AlleleManager.alleleRegistry.getRegisteredAlleles().keySet(), s -> s.replace('.', ':')) // elements don't have names
                 .register();
     }
 }
