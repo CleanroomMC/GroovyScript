@@ -72,7 +72,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final GroovyContainer<JustEnoughItems> JEI = new InternalModContainer<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
     public static final GroovyContainer<Mekanism> MEKANISM = new InternalModContainer<>("mekanism", "Mekanism", Mekanism::new);
     public static final GroovyContainer<PyroTech> PYROTECH = new InternalModContainer<>("pyrotech", "Pyrotech", PyroTech::new);
-    public static final GroovyContainer<Roots> ROOTS = new InternalModContainer<>("roots", "Roots 3", Roots::new);
+    public static final GroovyContainer<Roots> ROOTS = new InternalModContainer<>("roots", "Roots 3", () -> new Roots());
     public static final GroovyContainer<Thaumcraft> THAUMCRAFT = new InternalModContainer<>("thaumcraft", "Thaumcraft", Thaumcraft::new, "tc", "thaum");
     public static final GroovyContainer<ThermalExpansion> THERMAL_EXPANSION = new InternalModContainer<>("thermalexpansion", "Thermal Expansion", ThermalExpansion::new, "te", "thermal");
     public static final GroovyContainer<TinkersComplement> TINKERS_COMPLEMENT = new InternalModContainer<>("tcomplement", "Tinkers Complement", TinkersComplement::new, "tcomp", "tinkerscomplement");

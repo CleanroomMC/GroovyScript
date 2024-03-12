@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.IGameObjectHandler;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlers;
 import epicsquid.roots.api.Herb;
 import epicsquid.roots.init.HerbRegistry;
@@ -12,6 +12,7 @@ import epicsquid.roots.modifiers.Modifier;
 import epicsquid.roots.modifiers.ModifierRegistry;
 import epicsquid.roots.ritual.RitualBase;
 import epicsquid.roots.ritual.RitualRegistry;
+import epicsquid.roots.spell.FakeSpell;
 import epicsquid.roots.spell.SpellBase;
 import epicsquid.roots.spell.SpellRegistry;
 import net.minecraft.util.ResourceLocation;
@@ -63,11 +64,32 @@ public class Roots extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("roots", "ritual", RitualBase.class, IGameObjectHandler.wrapStringGetter(RitualRegistry::getRitual));
-        GameObjectHandlerManager.registerGameObjectHandler("roots", "herb", Herb.class, IGameObjectHandler.wrapStringGetter(HerbRegistry::getHerbByName));
-        GameObjectHandlerManager.registerGameObjectHandler("roots", "cost", CostType.class, IGameObjectHandler.wrapEnum(CostType.class, false));
-        GameObjectHandlerManager.registerGameObjectHandler("roots", "spell", SpellBase.class, Roots::getSpell);
-        GameObjectHandlerManager.registerGameObjectHandler("roots", "modifier", Modifier.class, Roots::getModifier);
+        GameObjectHandler.builder("ritual", RitualBase.class)
+                .mod("roots")
+                .parser(IGameObjectHandler.wrapStringGetter(RitualRegistry::getRitual))
+                .completerOfNames(RitualRegistry.ritualRegistry::keySet)
+                .register();
+        GameObjectHandler.builder("herb", Herb.class)
+                .mod("roots")
+                .parser(IGameObjectHandler.wrapStringGetter(HerbRegistry::getHerbByName))
+                .completerOfNames(HerbRegistry.registry::keySet)
+                .register();
+        GameObjectHandler.builder("cost", CostType.class)
+                .mod("roots")
+                .parser(IGameObjectHandler.wrapEnum(CostType.class, false))
+                .completerOfEnum(CostType.class, false)
+                .register();
+        GameObjectHandler.builder("spell", SpellBase.class)
+                .mod("roots")
+                .parser(Roots::getSpell)
+                .completer(SpellRegistry.spellRegistry::keySet)
+                .defaultValue(() -> FakeSpell.INSTANCE)
+                .register();
+        GameObjectHandler.builder("modifier", Modifier.class)
+                .mod("roots")
+                .parser(Roots::getModifier)
+                .completerOfNamed(ModifierRegistry::getModifiers, v -> v.getRegistryName().toString())
+                .register();
     }
 
     private static Result<SpellBase> getSpell(String s, Object... args) {

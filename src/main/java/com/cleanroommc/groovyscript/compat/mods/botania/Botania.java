@@ -2,12 +2,10 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.IGameObjectHandler;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconCategory;
 import vazkii.botania.api.lexicon.LexiconEntry;
-
-import java.util.function.Supplier;
 
 public class Botania extends ModPropertyContainer {
 
@@ -58,8 +56,11 @@ public class Botania extends ModPropertyContainer {
     @SuppressWarnings("Convert2MethodRef")
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("botania", "brew", vazkii.botania.api.brew.Brew.class,
-                                                           IGameObjectHandler.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false),
-                                                           (Supplier<vazkii.botania.api.brew.Brew>) () -> BotaniaAPI.fallbackBrew);
+        GameObjectHandler.builder("brew", vazkii.botania.api.brew.Brew.class)
+                .mod("botania")
+                .parser(IGameObjectHandler.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false))
+                .completerOfNames(BotaniaAPI.brewMap::keySet)
+                .defaultValue(() -> BotaniaAPI.fallbackBrew)
+                .register();
     }
 }

@@ -1,11 +1,12 @@
 package com.cleanroommc.groovyscript.gameobjects;
 
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IGameObjectHandler;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
+import com.cleanroommc.groovyscript.server.Completions;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -19,83 +20,102 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Map;
 
 public class GameObjectHandlerManager {
 
     private static final Map<String, GameObjectHandler<?>> bracketHandlers = new Object2ObjectOpenHashMap<>();
     public static final String EMPTY = "empty", WILDCARD = "*", SPLITTER = ":";
 
-    public static <T> GameObjectHandler<T> registerGameObjectHandler(@Nullable String mod, String key, Class<T> returnType, IGameObjectHandler<T> handler, Supplier<T> defaultValue) {
-        if (StringUtils.isEmpty(key) || handler == null || defaultValue == null) throw new NullPointerException();
-        if (bracketHandlers.containsKey(key)) {
-            throw new IllegalArgumentException("Bracket handler already exists for key " + key);
-        }
-        GameObjectHandler<T> goh = new GameObjectHandler<>(key, mod, handler, defaultValue, returnType);
-        bracketHandlers.put(key, goh);
-        return goh;
-    }
-
-    public static <T> GameObjectHandler<T> registerGameObjectHandler(@Nullable String mod, String key, Class<T> returnType, IGameObjectHandler<T> handler, T defaultValue) {
-        return registerGameObjectHandler(mod, key, returnType, handler, (Supplier<T>) () -> defaultValue);
-    }
-
-    public static <T> GameObjectHandler<T> registerGameObjectHandler(@Nullable String mod, String key, Class<T> returnType, IGameObjectHandler<T> handler) {
-        return registerGameObjectHandler(mod, key, returnType, handler, (Supplier<T>) () -> null);
-    }
-
-    public static <T> GameObjectHandler<T> registerGameObjectHandler(String key, Class<T> returnType, IGameObjectHandler<T> handler, Supplier<T> defaultValue) {
-        return registerGameObjectHandler(null, key, returnType, handler, defaultValue);
-    }
-
-    public static <T> GameObjectHandler<T> registerGameObjectHandler(String key, Class<T> returnType, IGameObjectHandler<T> handler) {
-        return registerGameObjectHandler(null, key, returnType, handler);
-    }
-
-    public static boolean hasGameObjectHandler(String key) {
-        return bracketHandlers.containsKey(key);
-    }
-
-    public static Collection<GameObjectHandler<?>> getGameObjectHandlers() {
-        return bracketHandlers.values();
-    }
-
-    public static Class<?> getReturnTypeOf(String name) {
-        GameObjectHandler<?> goh = bracketHandlers.get(name);
-        return goh == null ? null : goh.getReturnType();
+    static void registerGameObjectHandler(GameObjectHandler<?> goh) {
+        bracketHandlers.put(goh.getName(), goh);
     }
 
     public static void init() {
-        registerGameObjectHandler("resource", ResourceLocation.class, GameObjectHandlers::parseResourceLocation)
-                .withDesc(String.class, String.class);
-        registerGameObjectHandler("ore", IIngredient.class, (s, args) -> s.contains("*") ? Result.some(OreDictWildcardIngredient.of(s)) : Result.some(new OreDictIngredient(s)));
-        registerGameObjectHandler("item", ItemStack.class, GameObjectHandlers::parseItemStack, () -> ItemStack.EMPTY)
-                .withDesc(String.class, int.class);
-        registerGameObjectHandler("liquid", FluidStack.class, GameObjectHandlers::parseFluidStack);
-        registerGameObjectHandler("fluid", FluidStack.class, GameObjectHandlers::parseFluidStack);
-        registerGameObjectHandler("block", Block.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.BLOCKS));
-        registerGameObjectHandler("blockstate", IBlockState.class, GameObjectHandlers::parseBlockState)
-                .withDesc(String.class, int.class)
-                .withDesc(String.class, String[].class);
-        registerGameObjectHandler("enchantment", Enchantment.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS));
-        registerGameObjectHandler("potion", Potion.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.POTIONS));
-        registerGameObjectHandler("potionType", PotionType.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.POTION_TYPES));
-        registerGameObjectHandler("sound", SoundEvent.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS));
-        registerGameObjectHandler("entity", EntityEntry.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.ENTITIES));
-        registerGameObjectHandler("biome", Biome.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.BIOMES));
-        registerGameObjectHandler("profession", VillagerRegistry.VillagerProfession.class, IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS));
-        registerGameObjectHandler("creativeTab", CreativeTabs.class, GameObjectHandlers::parseCreativeTab);
-        registerGameObjectHandler("textformat", TextFormatting.class, GameObjectHandlers::parseTextFormatting)
-                .withDesc(int.class);
-        registerGameObjectHandler("nbt", NBTTagCompound.class, GameObjectHandlers::parseNBT);
+        GameObjectHandler.builder("resource", ResourceLocation.class)
+                .parser(GameObjectHandlers::parseResourceLocation)
+                .addSignature(String.class)
+                .addSignature(String.class, String.class)
+                .register();
+        GameObjectHandler.builder("ore", IIngredient.class)
+                .parser((s, args) -> s.contains(WILDCARD) ? Result.some(OreDictWildcardIngredient.of(s)) : Result.some(new OreDictIngredient(s)))
+                .completerOfNames(OreDictionaryAccessor::getIdToName)
+                .register();
+        GameObjectHandler.builder("item", ItemStack.class)
+                .parser(GameObjectHandlers::parseItemStack)
+                .addSignature(String.class)
+                .addSignature(String.class, int.class)
+                .defaultValue(() -> ItemStack.EMPTY)
+                .completer(ForgeRegistries.ITEMS)
+                .register();
+        GameObjectHandler.builder("liquid", FluidStack.class)
+                .parser(GameObjectHandlers::parseFluidStack)
+                .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
+                .register();
+        GameObjectHandler.builder("fluid", FluidStack.class)
+                .parser(GameObjectHandlers::parseFluidStack)
+                .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
+                .register();
+        GameObjectHandler.builder("block", Block.class)
+                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.BLOCKS))
+                .completer(ForgeRegistries.BLOCKS)
+                .register();
+        GameObjectHandler.builder("blockstate", IBlockState.class)
+                .parser(GameObjectHandlers::parseBlockState)
+                .addSignature(String.class)
+                .addSignature(String.class, int.class)
+                .addSignature(String.class, String[].class)
+                .completer(ForgeRegistries.BLOCKS)
+                .register();
+        GameObjectHandler.builder("enchantment", Enchantment.class)
+                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS))
+                .completer(ForgeRegistries.ENCHANTMENTS)
+                .register();
+        GameObjectHandler.builder("potion", Potion.class)
+                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.POTIONS))
+                .completer(ForgeRegistries.POTIONS)
+                .register();
+        GameObjectHandler.builder("potionType", PotionType.class)
+                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.POTION_TYPES))
+                .completer(ForgeRegistries.POTION_TYPES)
+                .register();
+        GameObjectHandler.builder("sound", SoundEvent.class)
+                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS))
+                .completer(ForgeRegistries.SOUND_EVENTS)
+                .register();
+        GameObjectHandler.builder("entity", EntityEntry.class)
+                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.ENTITIES))
+                .completer(ForgeRegistries.ENTITIES)
+                .register();
+        GameObjectHandler.builder("biome", Biome.class)
+                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.BIOMES))
+                .completer(ForgeRegistries.BIOMES)
+                .register();
+        GameObjectHandler.builder("profession", VillagerRegistry.VillagerProfession.class)
+                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS))
+                .completer(ForgeRegistries.VILLAGER_PROFESSIONS)
+                .register();
+        GameObjectHandler.builder("creativeTab", CreativeTabs.class)
+                .parser(GameObjectHandlers::parseCreativeTab)
+                .completerOfNamed(() -> Arrays.asList(CreativeTabs.CREATIVE_TAB_ARRAY), CreativeTabs::getTabLabel)
+                .register();
+        GameObjectHandler.builder("textformat", TextFormatting.class)
+                .parser(GameObjectHandlers::parseTextFormatting)
+                .completerOfNamed(() -> Arrays.asList(TextFormatting.values()), format -> format.name().toLowerCase(Locale.ROOT).replaceAll("[^a-z]", ""))
+                .register();
+        GameObjectHandler.builder("nbt", NBTTagCompound.class)
+                .parser(GameObjectHandlers::parseNBT)
+                .register();
     }
 
     /**
@@ -115,59 +135,22 @@ public class GameObjectHandlerManager {
         return null;
     }
 
-    public static class GameObjectHandler<T> {
+    public static boolean hasGameObjectHandler(String key) {
+        return bracketHandlers.containsKey(key);
+    }
 
-        private final String name;
-        private final String mod;
-        private final IGameObjectHandler<T> handler;
-        private final Supplier<T> defaultValue;
-        private final Class<T> returnType;
-        private final List<Class<?>[]> paramTypes = new ArrayList<>();
+    public static Collection<GameObjectHandler<?>> getGameObjectHandlers() {
+        return bracketHandlers.values();
+    }
 
-        private GameObjectHandler(String name, String mod, IGameObjectHandler<T> handler, Supplier<T> defaultValue, Class<T> returnType) {
-            this.name = name;
-            this.mod = mod;
-            this.handler = handler;
-            this.defaultValue = defaultValue;
-            this.returnType = returnType;
-            withDesc(String.class);
-        }
+    public static Class<?> getReturnTypeOf(String name) {
+        GameObjectHandler<?> goh = bracketHandlers.get(name);
+        return goh == null ? null : goh.getReturnType();
+    }
 
-        private T invoke(String s, Object... args) {
-            Result<T> t = Objects.requireNonNull(handler.parse(s, args), "Bracket handlers must return a non null result!");
-            if (t.hasError()) {
-                if (this.mod == null) {
-                    GroovyLog.get().error("Can't find {} for name {}!", name, s);
-                } else {
-                    GroovyLog.get().error("Can't find {} {} for name {}!", mod, name, s);
-                }
-                if (t.getError() != null && !t.getError().isEmpty()) {
-                    GroovyLog.get().error(" - reason: {}", t.getError());
-                }
-                return this.defaultValue.get();
-            }
-            return Objects.requireNonNull(t.getValue(), "Bracket handler result must contain a non-null value!");
-        }
-
-        public String getMod() {
-            return mod;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public GameObjectHandler<T> withDesc(Class<?>... paramTypes) {
-            this.paramTypes.add(paramTypes);
-            return this;
-        }
-
-        public List<Class<?>[]> getParamTypes() {
-            return this.paramTypes;
-        }
-
-        public Class<T> getReturnType() {
-            return returnType;
-        }
+    public static void provideCompletion(String name, int index, Completions items) {
+        GameObjectHandler.Completer completer = bracketHandlers.get(name).getCompleter();
+        if (completer == null) return;
+        completer.complete(index, items);
     }
 }

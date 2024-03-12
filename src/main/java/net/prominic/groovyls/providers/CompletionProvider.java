@@ -20,9 +20,8 @@
 package net.prominic.groovyls.providers;
 
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.server.Completions;
 import io.github.classgraph.*;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
 import net.prominic.groovyls.compiler.util.GroovyReflectionUtils;
@@ -41,12 +40,11 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CompletionProvider {
 
     private final ASTContext astContext;
-    private int maxItemCount = 1000;
+    //private int maxItemCount = 1000;
     private boolean isIncomplete = false;
 
     public CompletionProvider(ASTContext astContext) {
@@ -57,8 +55,7 @@ public class CompletionProvider {
             TextDocumentIdentifier textDocument, Position position, CompletionContext context) {
         URI uri = URIUtils.toUri(textDocument.getUri());
 
-        isIncomplete = false;
-        List<CompletionItem> items = new ArrayList<>();
+        Completions items = new Completions(1000);
 
         ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
         if (offsetNode != null) {
@@ -66,26 +63,23 @@ public class CompletionProvider {
         }
         populateKeywords(items);
 
-        if (isIncomplete) {
-            return CompletableFuture.completedFuture(Either.forRight(new CompletionList(true, items)));
-        }
-        return CompletableFuture.completedFuture(Either.forLeft(items));
+        return CompletableFuture.completedFuture(items.getResult(this.isIncomplete));
     }
 
-    private void populateKeywords(List<CompletionItem> items) {
-        items.addAll(Stream.of("def", "assert", "if", "for", "else", "while", "switch", "case", "break", "continue", "return",
-                               "transient", "import", "class", "extends", "implements", "enum", "try", "catch", "finally", "throw", "new", "in", "as",
-                               "instanceof", "super", "this", "null", "true", "false", "void", "byte", "short", "int", "long", "float", "double", "boolean",
-                               "private", "public", "protected")
-                             .map(keyword -> {
-                                 var item = new CompletionItem(keyword);
-                                 item.setKind(CompletionItemKind.Keyword);
-                                 item.setSortText("zzz" + keyword);
-                                 return item;
-                             }).collect(Collectors.toList()));
+    private void populateKeywords(Completions items) {
+        items.addAll(new String[]{"def", "assert", "if", "for", "else", "while", "switch", "case", "break", "continue", "return",
+                                  "transient", "import", "class", "extends", "implements", "enum", "try", "catch", "finally", "throw", "new", "in", "as",
+                                  "instanceof", "super", "this", "null", "true", "false", "void", "byte", "short", "int", "long", "float", "double", "boolean",
+                                  "private", "public", "protected"},
+                     s -> {
+                         var item = new CompletionItem(s);
+                         item.setKind(CompletionItemKind.Keyword);
+                         item.setSortText("zzz" + s);
+                         return item;
+                     });
     }
 
-    private void populateItemsFromNode(Position position, ASTNode offsetNode, List<CompletionItem> items) {
+    private void populateItemsFromNode(Position position, ASTNode offsetNode, Completions items) {
         ASTNode parentNode = astContext.getVisitor().getParent(offsetNode);
 
         if (offsetNode instanceof PropertyExpression) {
@@ -118,7 +112,7 @@ public class CompletionProvider {
     }
 
     // TODO this will change
-    private void populateItemsFromConstantExpression(ConstantExpression node, ASTNode parent, List<CompletionItem> items) {
+    private void populateItemsFromConstantExpression(ConstantExpression node, ASTNode parent, Completions items) {
         if (node.getType().getName().equals(String.class.getName())) {
             ASTNode parentParent = astContext.getVisitor().getParent(parent);
             if (parentParent instanceof StaticMethodCallExpression expr &&
@@ -127,19 +121,21 @@ public class CompletionProvider {
                 expr.getArguments() instanceof ArgumentListExpression args && !args.getExpressions().isEmpty() &&
                 args.getExpression(0) instanceof ConstantExpression expr1 && expr1.getValue() instanceof String name &&
                 GameObjectHandlerManager.hasGameObjectHandler(name)) {
-                if ("item".equals(name)) {
-                    for (ResourceLocation rl : ForgeRegistries.ITEMS.getKeys()) {
-                        String item = rl.toString();
-                        CompletionItem completionItem = new CompletionItem(item);
-                        completionItem.setKind(CompletionItemKind.Constant);
-                        items.add(completionItem);
+                int index = -1;
+                if (args.getExpressions().size() > 1) {
+                    for (int i = 1; i < args.getExpressions().size(); i++) {
+                        if (args.getExpression(i) == node) {
+                            index = i - 1;
+                            break;
+                        }
                     }
                 }
+                GameObjectHandlerManager.provideCompletion(name, index, items);
             }
         }
     }
 
-    private void populateItemsFromStaticMethodCallExpression(StaticMethodCallExpression methodCallExpr, Position position, List<CompletionItem> items) {
+    private void populateItemsFromStaticMethodCallExpression(StaticMethodCallExpression methodCallExpr, Position position, Completions items) {
         Set<String> existingNames = new HashSet<>();
 
         if (methodCallExpr.getOwnerType().getTypeClass().equals(GameObjectHandlerManager.class) && methodCallExpr.getMethod().equals("getGameObject")) {
@@ -161,7 +157,7 @@ public class CompletionProvider {
     }
 
     private static void populateItemsFromGameObjects(String memberNamePrefix,
-                                                     Set<String> existingNames, List<CompletionItem> items) {
+                                                     Set<String> existingNames, Completions items) {
         GameObjectHandlerManager.getGameObjectHandlers().stream()
                 .filter(handler -> {
                     if (handler.getName().startsWith(memberNamePrefix) && !existingNames.contains(handler.getName())) {
@@ -192,7 +188,7 @@ public class CompletionProvider {
     }
 
     private void populateItemsFromPropertyExpression(PropertyExpression propExpr, Position position,
-                                                     List<CompletionItem> items) {
+                                                     Completions items) {
         Range propertyRange = GroovyLanguageServerUtils.astNodeToRange(propExpr.getProperty());
         if (propertyRange == null) {
             return;
@@ -202,7 +198,7 @@ public class CompletionProvider {
     }
 
     private void populateItemsFromMethodCallExpression(MethodCallExpression methodCallExpr, Position position,
-                                                       List<CompletionItem> items) {
+                                                       Completions items) {
         Range methodRange = GroovyLanguageServerUtils.astNodeToRange(methodCallExpr.getMethod());
         if (methodRange == null) {
             return;
@@ -211,7 +207,7 @@ public class CompletionProvider {
         populateItemsFromExpression(methodCallExpr.getObjectExpression(), memberName, items);
     }
 
-    private void populateItemsFromImportNode(ImportNode importNode, Position position, List<CompletionItem> items) {
+    private void populateItemsFromImportNode(ImportNode importNode, Position position, Completions items) {
         Range importRange = GroovyLanguageServerUtils.astNodeToRange(importNode);
         if (importRange == null) {
             return;
@@ -225,7 +221,7 @@ public class CompletionProvider {
                                                                                         astContext);
         String enclosingPackageName = enclosingModule.getPackageName();
         List<String> importNames = enclosingModule.getImports().stream()
-                .map(otherImportNode -> otherImportNode.getClassName()).collect(Collectors.toList());
+                .map(ImportNode::getClassName).collect(Collectors.toList());
 
         List<CompletionItem> localClassItems = astContext.getVisitor().getClassNodes().stream().filter(classNode -> {
             String packageName = classNode.getPackageName();
@@ -293,7 +289,7 @@ public class CompletionProvider {
         items.addAll(classItems);
     }
 
-    private void populateItemsFromClassNode(ClassNode classNode, Position position, List<CompletionItem> items) {
+    private void populateItemsFromClassNode(ClassNode classNode, Position position, Completions items) {
         ASTNode parentNode = astContext.getVisitor().getParent(classNode);
         if (!(parentNode instanceof ClassNode)) {
             return;
@@ -312,7 +308,7 @@ public class CompletionProvider {
     }
 
     private void populateItemsFromConstructorCallExpression(ConstructorCallExpression constructorCallExpr,
-                                                            Position position, List<CompletionItem> items) {
+                                                            Position position, Completions items) {
         Range typeRange = GroovyLanguageServerUtils.astNodeToRange(constructorCallExpr.getType());
         if (typeRange == null) {
             return;
@@ -322,7 +318,7 @@ public class CompletionProvider {
     }
 
     private void populateItemsFromVariableExpression(VariableExpression varExpr, Position position,
-                                                     List<CompletionItem> items) {
+                                                     Completions items) {
         Range varRange = GroovyLanguageServerUtils.astNodeToRange(varExpr);
         if (varRange == null) {
             return;
@@ -332,7 +328,7 @@ public class CompletionProvider {
     }
 
     private void populateItemsFromPropertiesAndFields(List<PropertyNode> properties, List<FieldNode> fields,
-                                                      String memberNamePrefix, Set<String> existingNames, List<CompletionItem> items) {
+                                                      String memberNamePrefix, Set<String> existingNames, Completions items) {
         List<CompletionItem> propItems = properties.stream().filter(property -> {
             String name = property.getName();
             // sometimes, a property and a field will have the same name
@@ -370,7 +366,7 @@ public class CompletionProvider {
     }
 
     private void populateItemsFromMethods(List<MethodNode> methods, String memberNamePrefix, Set<String> existingNames,
-                                          List<CompletionItem> items) {
+                                          Completions items) {
         List<CompletionItem> methodItems = methods.stream()
                 .filter(method -> {
                     String methodName = method.getName();
@@ -431,7 +427,7 @@ public class CompletionProvider {
         return details;
     }
 
-    private void populateItemsFromExpression(Expression leftSide, String memberNamePrefix, List<CompletionItem> items) {
+    private void populateItemsFromExpression(Expression leftSide, String memberNamePrefix, Completions items) {
         Set<String> existingNames = new HashSet<>();
 
         List<PropertyNode> properties = GroovyASTUtils.getPropertiesForLeftSideOfPropertyExpression(leftSide, astContext);
@@ -480,7 +476,7 @@ public class CompletionProvider {
     }
 
     private void populateItemsFromVariableScope(VariableScope variableScope, String memberNamePrefix,
-                                                Set<String> existingNames, List<CompletionItem> items) {
+                                                Set<String> existingNames, Completions items) {
         populateItemsFromGameObjects(memberNamePrefix, existingNames, items);
         populateItemsFromGlobalScope(memberNamePrefix, existingNames, items);
 
@@ -504,7 +500,7 @@ public class CompletionProvider {
         items.addAll(variableItems);
     }
 
-    private void populateItemsFromScope(ASTNode node, String namePrefix, List<CompletionItem> items) {
+    private void populateItemsFromScope(ASTNode node, String namePrefix, Completions items) {
         Set<String> existingNames = new HashSet<>();
         ASTNode current = node;
         while (current != null) {
@@ -529,12 +525,12 @@ public class CompletionProvider {
     }
 
     private void populateTypes(ASTNode offsetNode, String namePrefix, Set<String> existingNames,
-                               List<CompletionItem> items) {
+                               Completions items) {
         populateTypes(offsetNode, namePrefix, existingNames, true, true, true, items);
     }
 
     private void populateTypes(ASTNode offsetNode, String namePrefix, Set<String> existingNames, boolean includeClasses,
-                               boolean includeInterfaces, boolean includeEnums, List<CompletionItem> items) {
+                               boolean includeInterfaces, boolean includeEnums, Completions items) {
         Range addImportRange = GroovyASTUtils.findAddImportRange(offsetNode, astContext);
 
         ModuleNode enclosingModule = (ModuleNode) GroovyASTUtils.getEnclosingNodeOfType(offsetNode, ModuleNode.class,
@@ -544,13 +540,7 @@ public class CompletionProvider {
                 .collect(Collectors.toList());
 
         List<CompletionItem> localClassItems = astContext.getVisitor().getClassNodes().stream().filter(classNode -> {
-            if (isIncomplete) {
-                return false;
-            }
-            if (existingNames.size() >= maxItemCount) {
-                isIncomplete = true;
-                return false;
-            }
+            if (items.reachedLimit()) return false;
             String classNameWithoutPackage = classNode.getNameWithoutPackage();
             String className = classNode.getName();
             if (classNameWithoutPackage.startsWith(namePrefix) && !existingNames.contains(className)) {
@@ -576,13 +566,7 @@ public class CompletionProvider {
         List<ClassInfo> classes = astContext.getLanguageServerContext().getScanResult().getAllClasses();
 
         List<CompletionItem> classItems = classes.stream().filter(classInfo -> {
-            if (isIncomplete) {
-                return false;
-            }
-            if (existingNames.size() >= maxItemCount) {
-                isIncomplete = true;
-                return false;
-            }
+            if (items.reachedLimit()) return false;
             String className = classInfo.getName();
             String classNameWithoutPackage = classInfo.getSimpleName();
             if (classNameWithoutPackage.startsWith(namePrefix) && !existingNames.contains(className)) {

@@ -7,7 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.Materi
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.ToolMaterialBuilder;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.traits.TraitRegistryEvent;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import net.minecraftforge.common.MinecraftForge;
 import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.traits.ITrait;
@@ -33,12 +33,22 @@ public class TinkersConstruct extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("tconstruct", "toolMaterial", Material.class,
-                                                           IGameObjectHandler.wrapStringGetter(TinkerRegistryAccessor.getMaterials()::get));
-        GameObjectHandlerManager.registerGameObjectHandler("tconstruct", "toolTrait", ITrait.class,
-                                                           IGameObjectHandler.wrapStringGetter(TinkerRegistryAccessor.getTraits()::get));
-        GameObjectHandlerManager.registerGameObjectHandler("tconstruct", "armorTrait", ITrait.class,
-                                                           IGameObjectHandler.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")));
+        GameObjectHandler.builder("toolMaterial", Material.class)
+                .mod("tconstruct")
+                .parser(IGameObjectHandler.wrapStringGetter(TinkerRegistryAccessor.getMaterials()::get))
+                .completerOfNames(TinkerRegistryAccessor.getMaterials()::keySet)
+                .register();
+        GameObjectHandler.builder("toolTrait", ITrait.class)
+                .mod("tconstruct")
+                .parser(IGameObjectHandler.wrapStringGetter(TinkerRegistryAccessor.getTraits()::get))
+                .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet, v -> v.endsWith("_armor") ? null : v) // only suggest non armor traits
+                .register();
+        GameObjectHandler.builder("armorTrait", ITrait.class)
+                .mod("tconstruct")
+                .parser(IGameObjectHandler.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")))
+                .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet, v -> v.endsWith("_armor") ? v.substring(0, v.length() - 6)
+                                                                                                        : null) // only suggest armor traits
+                .register();
     }
 
     public static void init() {
