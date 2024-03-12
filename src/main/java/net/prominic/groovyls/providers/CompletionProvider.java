@@ -111,7 +111,6 @@ public class CompletionProvider {
         }
     }
 
-    // TODO this will change
     private void populateItemsFromConstantExpression(ConstantExpression node, ASTNode parent, Completions items) {
         if (node.getType().getName().equals(String.class.getName())) {
             ASTNode parentParent = astContext.getVisitor().getParent(parent);
@@ -455,6 +454,7 @@ public class CompletionProvider {
 
         List<CompletionItem> staticMethodItems = astContext.getLanguageServerContext().getSandbox().getStaticImports().stream()
                 .map(staticImport -> astContext.getLanguageServerContext().getScanResult().getClassInfo(staticImport.getName()))
+                .filter(Objects::nonNull)
                 .flatMap(classInfo -> classInfo.getMethodInfo().stream().filter(ClassMemberInfo::isStatic))
                 .filter(methodInfo -> {
                     String methodName = methodInfo.getName();
