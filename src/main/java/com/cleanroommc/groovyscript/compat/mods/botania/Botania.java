@@ -59,7 +59,7 @@ public class Botania extends ModPropertyContainer {
         GameObjectHandler.builder("brew", vazkii.botania.api.brew.Brew.class)
                 .mod("botania")
                 .parser(IGameObjectHandler.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false))
-                .completerOfNames(BotaniaAPI.brewMap::keySet)
+                .completerOfNames(() -> BotaniaAPI.brewMap.keySet())
                 .defaultValue(() -> BotaniaAPI.fallbackBrew)
                 .register();
     }
