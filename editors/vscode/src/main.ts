@@ -10,14 +10,14 @@ let traceOutputChannel = vscode.window.createOutputChannel("GroovyScript Languag
 async function startClient() {
 	const serverOptions = () => {
 		const configuration = vscode.workspace.getConfiguration("groovyscript");
-        let port = configuration.get<number>("port", 25564);
-        outputChannel.appendLine(`Connecting to GroovyScript Language Server at port ${port}`);
-        let socket = net.connect({port: port});
-        socket.on("error", (err) => {
-            extensionStatusBar.setError();
-            outputChannel.appendLine(err.toString());
-            stopClient();
-        });
+		let port = configuration.get<number>("port", 25564);
+		outputChannel.appendLine(`Connecting to GroovyScript Language Server at port ${port}`);
+		let socket = net.connect({ port: port });
+		socket.on("error", (err) => {
+			extensionStatusBar.setError();
+			outputChannel.appendLine(err.toString());
+			stopClient();
+		});
 		let result: lc.StreamInfo = {
 			writer: socket,
 			reader: socket
@@ -37,18 +37,18 @@ async function startClient() {
 		traceOutputChannel,
 	};
 
-    client = new lc.LanguageClient("groovyscript", "GroovyScript", serverOptions, clientOptions)
+	client = new lc.LanguageClient("groovyscript", "GroovyScript", serverOptions, clientOptions)
 
-    try {
-        await client.start();
-    } catch (e) {
-        extensionStatusBar.setError();
-        outputChannel.appendLine(e.toString());
-        return;
-    }
+	try {
+		await client.start();
+	} catch (e) {
+		extensionStatusBar.setError();
+		outputChannel.appendLine(e.toString());
+		return;
+	}
 
-    extensionStatusBar.running();
-    outputChannel.appendLine("Connected to GroovyScript Language Server");
+	extensionStatusBar.running();
+	outputChannel.appendLine("Connected to GroovyScript Language Server");
 }
 
 async function stopClient() {
@@ -61,9 +61,9 @@ async function stopClient() {
 
 export async function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand("groovyscript.reconnect", async () => {
-        outputChannel.appendLine("Reconnecting...");
+		outputChannel.appendLine("Reconnecting...");
 		await stopClient();
-        extensionStatusBar.startUp();
+		extensionStatusBar.startUp();
 		await startClient();
 	});
 
