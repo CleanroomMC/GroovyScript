@@ -1,7 +1,5 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
-import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import org.codehaus.groovy.ast.ClassCodeExpressionTransformer;
 import org.codehaus.groovy.ast.ClassHelper;
@@ -30,8 +28,7 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
     }
 
     private static Expression makeCheckedCall(ClassNode classNode, String name, Expression... arguments) {
-        return new StaticMethodCallExpression(classNode, name,
-                                              new ArgumentListExpression(arguments));
+        return new StaticMethodCallExpression(classNode, name, new ArgumentListExpression(arguments));
     }
 
     @Override
