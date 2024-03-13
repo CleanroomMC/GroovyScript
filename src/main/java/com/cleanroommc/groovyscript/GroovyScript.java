@@ -93,6 +93,7 @@ public class GroovyScript {
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
     private static ModContainer scriptMod;
+    private static Thread languageServerThread;
 
     private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
@@ -104,7 +105,7 @@ public class GroovyScript {
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
         if (Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
-            new Thread(GroovyScriptLanguageServer::listen).start();
+            runLanguageServer();
         }
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -310,5 +311,12 @@ public class GroovyScript {
             }
             GSCommand.postLogFiles(sender);
         }
+    }
+
+    public static boolean runLanguageServer() {
+        if (languageServerThread != null) return false;
+        languageServerThread = new Thread(GroovyScriptLanguageServer::listen);
+        languageServerThread.start();
+        return true;
     }
 }

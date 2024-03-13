@@ -179,6 +179,14 @@ public class GSCommand extends CommandTreeBase {
                                        .appendSibling(GSCommand.getTextForFile("Groovy Log", GroovyLog.get().getLogFilerPath().toString(), new TextComponentString("Click to open GroovyScript log"))));
         }));
 
+        addSubcommand(new SimpleCommand("runLS", (server, sender, args) -> {
+            if (GroovyScript.runLanguageServer()) {
+                sender.sendMessage(new TextComponentString("Starting language server"));
+            } else {
+                sender.sendMessage(new TextComponentString("Language server is already running"));
+            }
+        }));
+
         if (ModSupport.MEKANISM.isLoaded()) {
             addSubcommand(new GSMekanismCommand());
         }
