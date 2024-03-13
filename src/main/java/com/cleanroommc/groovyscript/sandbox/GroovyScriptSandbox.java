@@ -72,7 +72,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
                                          "net.minecraft.util.EnumFacing",
                                          "net.minecraft.util.ResourceLocation",
                                          "net.minecraftforge.fml.common.eventhandler.EventPriority",
-                                         "com.cleanroommc.groovyscript.event.EventBusType");
+                                         "com.cleanroommc.groovyscript.event.EventBusType",
+                                         "net.minecraftforge.fml.relauncher.Side",
+                                         "net.minecraftforge.fml.relauncher.SideOnly");
         this.storedExceptions = new Object2ObjectOpenHashMap<>();
     }
 

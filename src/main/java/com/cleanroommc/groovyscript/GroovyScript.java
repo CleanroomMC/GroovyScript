@@ -8,8 +8,8 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
-import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.documentation.Documentation;
+import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
@@ -54,8 +54,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
-import net.prominic.groovyls.GroovyLanguageServer;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
