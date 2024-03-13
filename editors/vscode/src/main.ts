@@ -10,7 +10,7 @@ let traceOutputChannel = vscode.window.createOutputChannel("GroovyScript Languag
 async function startClient() {
 	const serverOptions = () => {
 		const configuration = vscode.workspace.getConfiguration("groovyscript");
-        const port = configuration.get<number>("port", 8000);
+        let port = configuration.get<number>("port", 25564);
         outputChannel.appendLine(`Connecting to GroovyScript Language Server at port ${port}`);
         let socket = net.connect({port: port});
         socket.on("error", (err) => {

@@ -32,12 +32,10 @@
       "title": "GroovyScript",
       "properties": {
         "groovyscript.port": {
-          "type": [
-            "number"
-          ],
-          "default": 8000,
+          "type": "number",
+          "default": 25564,
           "title": "Language server port",
-          "description": "Port specified in config of GroovyScript Language Server"
+          "description": "Port to connect to GroovyScript mod"
         }
       }
     },

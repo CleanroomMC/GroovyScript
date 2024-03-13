@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.server;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.prominic.groovyls.GroovyLanguageServer;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
@@ -17,7 +18,7 @@ public class GroovyScriptLanguageServer extends GroovyLanguageServer {
 
         while (true) {
             var server = new GroovyScriptLanguageServer(languageServerContext);
-            try (var serverSocket = new ServerSocket(8000);
+            try (var serverSocket = new ServerSocket(GroovyScriptConfig.languageServerPort);
                  var socket = serverSocket.accept()) {
 
                 GroovyScript.LOGGER.info("Accepted connection from: {}", socket.getInetAddress());
