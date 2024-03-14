@@ -107,7 +107,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
         this.cacheVersion = json.get("version").getAsInt();
         if (this.cacheVersion != 1) {
             // only version 1 allowed currently
-            deleteClassCache();
+            deleteScriptCache();
             return;
         }
         for (JsonElement element : json.getAsJsonArray("index")) {
@@ -346,12 +346,14 @@ public class GroovyScriptSandbox extends GroovySandbox {
     }
 
     @ApiStatus.Internal
-    public void deleteClassCache() {
+    public boolean deleteScriptCache() {
         this.index.clear();
         try {
             FileUtils.cleanDirectory(this.cacheRoot);
+            return true;
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
+            return false;
         }
     }
 }

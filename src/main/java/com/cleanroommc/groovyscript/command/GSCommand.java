@@ -179,8 +179,12 @@ public class GSCommand extends CommandTreeBase {
                                        .appendSibling(GSCommand.getTextForFile("Groovy Log", GroovyLog.get().getLogFilerPath().toString(), new TextComponentString("Click to open GroovyScript log"))));
         }));
 
-        addSubcommand(new SimpleCommand("deleteClassCache", (server, sender, args) -> {
-            GroovyScript.getSandbox().deleteClassCache();
+        addSubcommand(new SimpleCommand("deleteScriptCache", (server, sender, args) -> {
+            if (GroovyScript.getSandbox().deleteScriptCache()) {
+                sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Deleted groovy script cache"));
+            } else {
+                sender.sendMessage(new TextComponentString(TextFormatting.RED + "An error occurred while deleting groovy script cache"));
+            }
         }));
 
         addSubcommand(new SimpleCommand("runLS", (server, sender, args) -> {
