@@ -61,6 +61,7 @@ public class GroovySecurityManager {
         banPackage("com.cleanroommc.groovyscript.core");
         banPackage("com.cleanroommc.groovyscript.registry");
         banPackage("com.cleanroommc.groovyscript.sandbox");
+        banPackage("com.cleanroommc.groovyscript.server");
     }
 
     public void unBanClass(Class<?> clazz) {
@@ -126,5 +127,21 @@ public class GroovySecurityManager {
     public boolean isValidMethod(Class<?> receiver, String method) {
         Set<String> methods = bannedMethods.get(receiver);
         return methods == null || !methods.contains(method);
+    }
+
+    public List<String> getBannedPackages() {
+        return Collections.unmodifiableList(bannedPackages);
+    }
+
+    public Set<Class<?>> getBannedClasses() {
+        return Collections.unmodifiableSet(bannedClasses);
+    }
+
+    public Map<Class<?>, Set<String>> getBannedMethods() {
+        return Collections.unmodifiableMap(bannedMethods);
+    }
+
+    public Set<Class<?>> getWhiteListedClasses() {
+        return Collections.unmodifiableSet(whiteListedClasses);
     }
 }

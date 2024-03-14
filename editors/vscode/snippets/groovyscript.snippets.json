@@ -1,0 +1,54 @@
+{
+    "Check is mod loaded preprocessor": {
+        "scope": "groovy",
+        "prefix": "is mod loaded",
+        "description": "Check if the mod is loaded",
+        "body": [
+            "// MODS_LOADED: ${1:modname}"
+        ]
+    },
+    "Check for Packmode": {
+        "scope": "groovy",
+        "prefix": "is packmode",
+        "description": "Check if the mod is loaded",
+        "body": [
+            "// PACKMODE: ${1:packmode}"
+        ]
+    },
+    "SideOnly annotation": {
+        "scope": "groovy",
+        "prefix": "client only",
+        "description": "@SideOnly(Side.CLIENT)",
+        "body": [
+            "@SideOnly(Side.CLIENT)"
+        ]
+    },
+    "Listen for event": {
+        "scope": "groovy",
+        "prefix": "listen forge event",
+        "description": "Listen for a forge event",
+        "body": [
+            "event_manager.listen { ${1:eventtype} event ->",
+            "\t$2",
+            "}"
+        ]
+    },
+    "Shaped crafting recipe": {
+        "scope": "groovy",
+        "prefix": "shaped crafting",
+        "description": "Create a shaped crafting recipe",
+        "body": [
+            "crafting.addShaped('${1:recipe_name}', item('${2:output}', [",
+            "\t[$3]",
+            "])"
+        ]
+    },
+    "Shapeless crafting recipe": {
+        "scope": "groovy",
+        "prefix": "shapeless crafting",
+        "description": "Create a shapeless crafting recipe",
+        "body": [
+            "crafting.addShapeless('${1:recipe_name}', item('${2:output}', [$3]))"
+        ]
+    }
+}

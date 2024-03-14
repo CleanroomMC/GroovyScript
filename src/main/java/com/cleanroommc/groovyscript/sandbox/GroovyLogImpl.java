@@ -283,7 +283,7 @@ public class GroovyLogImpl implements GroovyLog {
     }
 
     private String getSource() {
-        String source = GroovyScript.getSandbox().getCurrentScript();
+        String source = GroovyScript.isSandboxLoaded() ? GroovyScript.getSandbox().getCurrentScript() : null;
         if (source == null) {
             ModContainer mod = Loader.instance().activeModContainer();
             return mod != null ? mod.getModId() : GroovyScript.ID;

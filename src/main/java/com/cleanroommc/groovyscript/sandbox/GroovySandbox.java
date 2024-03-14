@@ -44,6 +44,7 @@ public abstract class GroovySandbox {
     private final URL[] scriptEnvironment;
     private final ThreadLocal<Boolean> running = ThreadLocal.withInitial(() -> false);
     private final Map<String, Object> bindings = new Object2ObjectOpenHashMap<>();
+    private final Set<Class<?>> staticImports = new HashSet<>();
 
     protected GroovySandbox(URL[] scriptEnvironment) {
         if (scriptEnvironment == null || scriptEnvironment.length == 0) {
@@ -69,6 +70,15 @@ public abstract class GroovySandbox {
         for (String alias : named.getAliases()) {
             bindings.put(alias, named);
         }
+    }
+
+    protected void registerStaticImports(Class<?>... classes) {
+        Objects.requireNonNull(classes);
+        if (classes.length == 0) {
+            throw new IllegalArgumentException("Static imports must not be empty!");
+        }
+
+        Collections.addAll(staticImports, classes);
     }
 
     protected void startRunning() {
@@ -216,6 +226,10 @@ public abstract class GroovySandbox {
 
     public Map<String, Object> getBindings() {
         return bindings;
+    }
+
+    public Set<Class<?>> getStaticImports() {
+        return staticImports;
     }
 
     public String getCurrentScript() {

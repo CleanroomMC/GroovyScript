@@ -21,6 +21,8 @@ import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.*;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.security.GrSMetaClassCreationHandle;
+import com.cleanroommc.groovyscript.server.GroovyScriptLanguageServer;
+import com.google.common.base.Joiner;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovySystem;
@@ -89,6 +91,7 @@ public class GroovyScript {
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
     private static ModContainer scriptMod;
+    private static Thread languageServerThread;
 
     private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
@@ -97,6 +100,10 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
+        if (Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
+            runLanguageServer();
+        }
+
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
@@ -296,5 +303,12 @@ public class GroovyScript {
             }
             GSCommand.postLogFiles(sender);
         }
+    }
+
+    public static boolean runLanguageServer() {
+        if (languageServerThread != null) return false;
+        languageServerThread = new Thread(GroovyScriptLanguageServer::listen);
+        languageServerThread.start();
+        return true;
     }
 }

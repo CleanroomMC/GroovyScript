@@ -1,0 +1,14 @@
+configurations {
+    lsp4j
+    implementation.extendsFrom(lsp4j)
+}
+
+jar {
+    from provider {
+        configurations.lsp4j.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }, {
+        exclude 'META-INF', 'META-INF/**', 'about*.html'
+    }
+}

@@ -183,6 +183,14 @@ public class GSCommand extends CommandTreeBase {
             GroovyScript.getSandbox().deleteClassCache();
         }));
 
+        addSubcommand(new SimpleCommand("runLS", (server, sender, args) -> {
+            if (GroovyScript.runLanguageServer()) {
+                sender.sendMessage(new TextComponentString("Starting language server"));
+            } else {
+                sender.sendMessage(new TextComponentString("Language server is already running"));
+            }
+        }));
+
         if (ModSupport.MEKANISM.isLoaded()) {
             addSubcommand(new GSMekanismCommand());
         }

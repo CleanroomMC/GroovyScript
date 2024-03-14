@@ -22,7 +22,7 @@ import java.util.function.Function;
  * The first argument is always a string. The other can be anything.
  */
 @FunctionalInterface
-public interface IGameObjectHandler<T> {
+public interface IGameObjectParser<T> {
 
     /**
      * Parses a object based on input arguments
@@ -33,7 +33,7 @@ public interface IGameObjectHandler<T> {
     @NotNull
     Result<T> parse(String mainArg, Object[] args);
 
-    static <T extends IForgeRegistryEntry<T>> IGameObjectHandler<T> wrapForgeRegistry(IForgeRegistry<T> forgeRegistry) {
+    static <T extends IForgeRegistryEntry<T>> IGameObjectParser<T> wrapForgeRegistry(IForgeRegistry<T> forgeRegistry) {
         return (s, args) -> {
             Result<ResourceLocation> rl = GameObjectHandlers.parseResourceLocation(s, args);
             if (rl.hasError()) return Result.error(rl.getError());
@@ -42,7 +42,7 @@ public interface IGameObjectHandler<T> {
         };
     }
 
-    static <T extends Enum<T>> IGameObjectHandler<T> wrapEnum(Class<T> enumClass, boolean caseSensitive) {
+    static <T extends Enum<T>> IGameObjectParser<T> wrapEnum(Class<T> enumClass, boolean caseSensitive) {
         Map<String, T> map = new Object2ObjectOpenHashMap<>();
         for (T t : enumClass.getEnumConstants()) {
             map.put(caseSensitive ? t.name() : t.name().toUpperCase(Locale.ROOT), t);
@@ -53,11 +53,11 @@ public interface IGameObjectHandler<T> {
         };
     }
 
-    static <T> IGameObjectHandler<T> wrapStringGetter(Function<String, T> getter) {
+    static <T> IGameObjectParser<T> wrapStringGetter(Function<String, T> getter) {
         return wrapStringGetter(getter, false);
     }
 
-    static <T> IGameObjectHandler<T> wrapStringGetter(Function<String, T> getter, boolean isUpperCase) {
+    static <T> IGameObjectParser<T> wrapStringGetter(Function<String, T> getter, boolean isUpperCase) {
         return (s, args) -> {
             if (args.length > 0) {
                 return Result.error("extra arguments are not allowed");
@@ -67,11 +67,11 @@ public interface IGameObjectHandler<T> {
         };
     }
 
-    static <T, V> IGameObjectHandler<T> wrapStringGetter(Function<String, V> getter, Function<V, @NotNull T> trueTypeFunction) {
+    static <T, V> IGameObjectParser<T> wrapStringGetter(Function<String, V> getter, Function<V, @NotNull T> trueTypeFunction) {
         return wrapStringGetter(getter, trueTypeFunction, false);
     }
 
-    static <T, V> IGameObjectHandler<T> wrapStringGetter(Function<String, V> getter, Function<V, @NotNull T> trueTypeFunction, boolean isUpperCase) {
+    static <T, V> IGameObjectParser<T> wrapStringGetter(Function<String, V> getter, Function<V, @NotNull T> trueTypeFunction, boolean isUpperCase) {
         return (s, args) -> {
             if (args.length > 0) {
                 return Result.error("extra arguments are not allowed");
