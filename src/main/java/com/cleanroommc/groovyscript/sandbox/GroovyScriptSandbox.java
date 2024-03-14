@@ -41,7 +41,10 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("Mods", ModSupport.INSTANCE);
         registerBinding("Log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
+
         this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
+        registerStaticImports(GroovyHelper.class, MathHelper.class);
+
         this.importCustomizer.addImports("net.minecraft.world.World",
                                          "net.minecraft.block.state.IBlockState",
                                          "net.minecraft.block.Block",
@@ -69,7 +72,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
                                          "net.minecraft.util.EnumFacing",
                                          "net.minecraft.util.ResourceLocation",
                                          "net.minecraftforge.fml.common.eventhandler.EventPriority",
-                                         "com.cleanroommc.groovyscript.event.EventBusType");
+                                         "com.cleanroommc.groovyscript.event.EventBusType",
+                                         "net.minecraftforge.fml.relauncher.Side",
+                                         "net.minecraftforge.fml.relauncher.SideOnly");
         this.storedExceptions = new Object2ObjectOpenHashMap<>();
     }
 

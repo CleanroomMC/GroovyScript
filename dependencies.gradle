@@ -24,6 +24,18 @@
 dependencies {
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 
+    // TODO: check if there is anything to exclude
+    embed "io.github.classgraph:classgraph:4.8.165"
+
+    lsp4j("org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1") {
+        exclude group: 'com.google.guava', module: 'guava'
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    lsp4j("org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.20.1") {
+        exclude group: 'com.google.guava', module: 'guava'
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+
     compileOnly rfg.deobf('curse.maven:packmode-278398:2567799')
     if (project.debug_packmode.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:packmode-278398:2567799')
@@ -230,14 +242,10 @@ dependencies {
     }
 
     compileOnly 'com.enderio:endercore:0.5.78'
-    compileOnly('crazypants:enderio:5.3.72') {
-        transitive = false
-    }
+    compileOnly 'crazypants:enderio:5.3.72'
     if (project.debug_enderio.toBoolean()) {
         runtimeOnly 'com.enderio:endercore:0.5.78'
-        runtimeOnly('crazypants:enderio:5.3.72') {
-            transitive = false
-        }
+        runtimeOnly 'crazypants:enderio:5.3.72'
     }
 
     compileOnly rfg.deobf('curse.maven:forestry-59751:2918418')
@@ -255,7 +263,7 @@ dependencies {
     if (project.debug_aether.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:aether-255308:3280119')
     }
-    
+
     compileOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
     compileOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
 
@@ -264,7 +272,6 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
         runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
     }
-
 }
 
 minecraft {
@@ -272,5 +279,8 @@ minecraft {
 
     if (project.debug_use_examples_folder.toBoolean()) {
         extraRunJvmArguments.add('-Dgroovyscript.use_examples_folder=true')
+    }
+    if (project.debug_run_ls.toBoolean()) {
+        extraRunJvmArguments.add('-Dgroovyscript.run_ls=true')
     }
 }

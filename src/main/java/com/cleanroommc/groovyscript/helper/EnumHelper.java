@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.helper;
 
-import com.cleanroommc.groovyscript.api.IGameObjectHandler;
+import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.NotNull;
@@ -12,15 +12,15 @@ public class EnumHelper {
 
     private static final Object[] EMPTY = new Object[0];
 
-    private static final Map<Class<? extends Enum<?>>, IGameObjectHandler<?>> cs = new Object2ObjectOpenHashMap<>();
-    private static final Map<Class<? extends Enum<?>>, IGameObjectHandler<?>> ncs = new Object2ObjectOpenHashMap<>();
+    private static final Map<Class<? extends Enum<?>>, IGameObjectParser<?>> cs = new Object2ObjectOpenHashMap<>();
+    private static final Map<Class<? extends Enum<?>>, IGameObjectParser<?>> ncs = new Object2ObjectOpenHashMap<>();
 
     @NotNull
     public static <T extends Enum<T>> Result<T> valueOf(Class<T> clazz, String s, boolean caseSensitive) {
         var map = caseSensitive ? cs : ncs;
-        IGameObjectHandler<?> goh = map.get(clazz);
+        IGameObjectParser<?> goh = map.get(clazz);
         if (goh == null) {
-            goh = IGameObjectHandler.wrapEnum(clazz, caseSensitive);
+            goh = IGameObjectParser.wrapEnum(clazz, caseSensitive);
             map.put(clazz, goh);
         }
         return (Result<T>) goh.parse(s, EMPTY);

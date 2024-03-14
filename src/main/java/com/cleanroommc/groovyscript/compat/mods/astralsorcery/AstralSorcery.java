@@ -8,7 +8,7 @@ import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.GroovyPer
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.PerkTreeConfig;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar.StarlightAltar;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationRegistryAccessor;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -54,14 +54,18 @@ public class AstralSorcery extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("astralsorcery", "constellation", (s, args) -> {
-            for (IConstellation constellation : ConstellationRegistryAccessor.getConstellationList()) {
-                if (constellation.getSimpleName().equalsIgnoreCase(s)) {
-                    return Result.some(constellation);
-                }
-            }
-            return Result.error();
-        });
+        GameObjectHandler.builder("constellation", IConstellation.class)
+                .mod("astralsorcery")
+                .parser((s, args) -> {
+                    for (IConstellation constellation : ConstellationRegistryAccessor.getConstellationList()) {
+                        if (constellation.getSimpleName().equalsIgnoreCase(s)) {
+                            return Result.some(constellation);
+                        }
+                    }
+                    return Result.error();
+                })
+                .completerOfNamed(ConstellationRegistryAccessor::getConstellationList, IConstellation::getSimpleName)
+                .register();
         ExpansionHelper.mixinClass(ItemStack.class, CrystalItemStackExpansion.class);
     }
 

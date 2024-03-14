@@ -8,8 +8,8 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
-import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.documentation.Documentation;
+import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
@@ -23,6 +23,7 @@ import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.security.GrSMetaClassCreationHandle;
+import com.cleanroommc.groovyscript.server.GroovyScriptLanguageServer;
 import com.google.common.base.Joiner;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -53,7 +54,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
@@ -93,6 +93,7 @@ public class GroovyScript {
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
     private static ModContainer scriptMod;
+    private static Thread languageServerThread;
 
     private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
@@ -103,6 +104,10 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
+        if (Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
+            runLanguageServer();
+        }
+
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
@@ -306,5 +311,12 @@ public class GroovyScript {
             }
             GSCommand.postLogFiles(sender);
         }
+    }
+
+    public static boolean runLanguageServer() {
+        if (languageServerThread != null) return false;
+        languageServerThread = new Thread(GroovyScriptLanguageServer::listen);
+        languageServerThread.start();
+        return true;
     }
 }
