@@ -145,6 +145,23 @@ groovyscript.wiki.advancedmortars.mortar.duration.value=Sets how many interactio
 groovyscript.wiki.advancedmortars.mortar.secondaryOutput.value=Sets the additional output itemstack
 groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the chance of the additional output itemstack being output
 
+# Aether Legacy
+groovyscript.wiki.aether_legacy.enchanter.title=Enchanter
+groovyscript.wiki.aether_legacy.enchanter.description=Enchanting is a mechanic used to create new items, as well as repair tools, armor, and weapons, using the Altar block.
+groovyscript.wiki.aether_legacy.enchanter.add=Adds an Enchanting recipe in the format `input`, `output`, `time`.
+groovyscript.wiki.aether_legacy.enchanter_fuel.title=Enchanter Fuel
+groovyscript.wiki.aether_legacy.enchanter_fuel.description=By default, the Enchantar (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
+groovyscript.wiki.aether_legacy.enchanter_fuel.add=Adds an Enchanting fuel in the format `item`, `timeGiven`.
+groovyscript.wiki.aether_legacy.freezer.title=Freezer
+groovyscript.wiki.aether_legacy.freezer.description=The Freezer is used to turn certain items into frozen versions.
+groovyscript.wiki.aether_legacy.freezer.add=Adds a Freezer recipe in the format `input`, `output`, `time`.
+groovyscript.wiki.aether_legacy.freezer_fuel.title=Freezer
+groovyscript.wiki.aether_legacy.freezer_fuel.description= By default, the Freezer takes Icestone as fuel. Using GroovyScript, custom fuels can be added.
+groovyscript.wiki.aether_legacy.freezer_fuel.add=Adds a Freezer fuel in the format `item`, `timeGiven`.
+groovyscript.wiki.aether_legacy.accessory.title=Accessory
+groovyscript.wiki.aether_legacy.accessory.description=The Aether Accessory system.
+groovyscript.wiki.aether_legacy.accessory.add=Adds an Accessory in the format `item`, `type`, where type is one of the following: "Ring", "Pendant", "Cape", "Shield", "Glove", or "Misc".
+
 # Applied Energistics 2
 groovyscript.wiki.appliedenergistics2.attunement.title=P2P Attunement
 groovyscript.wiki.appliedenergistics2.attunement.description=Controls using specific items, any items from a mod, or any items with a Capability to convert a P2P into a specific tunnel type.

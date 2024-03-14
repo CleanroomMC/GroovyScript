@@ -235,6 +235,11 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:advancedmortars-283777:2780626')
     }
 
+    compileOnly rfg.deobf('curse.maven:aether-255308:3280119')
+    if (project.debug_aether.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:aether-255308:3280119')
+    }
+    
     compileOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
     compileOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
 
@@ -243,7 +248,6 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
         runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
     }
-
 
 }
 
