@@ -3,7 +3,7 @@
   "displayName": "GroovyScript",
   "description": "GroovyScript language client for Visual Studio Code",
   "icon": "./logo.png",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/CleanroomMC/GroovyScript.git",
