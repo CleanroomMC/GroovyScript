@@ -7,17 +7,18 @@ import net.prominic.groovyls.GroovyLanguageServer;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.services.LanguageClient;
 
+import java.io.File;
 import java.net.ServerSocket;
 
 public class GroovyScriptLanguageServer extends GroovyLanguageServer {
 
     @SuppressWarnings("InfiniteLoopStatement")
-    public static void listen() {
+    public static void listen(File root) {
         GroovyLog.get().infoMC("Starting Language server");
         var languageServerContext = new GroovyScriptLanguageServerContext();
 
         while (true) {
-            var server = new GroovyScriptLanguageServer(languageServerContext);
+            var server = new GroovyScriptLanguageServer(root, languageServerContext);
             try (var serverSocket = new ServerSocket(GroovyScriptConfig.languageServerPort);
                  var socket = serverSocket.accept()) {
 
@@ -33,7 +34,7 @@ public class GroovyScriptLanguageServer extends GroovyLanguageServer {
         }
     }
 
-    public GroovyScriptLanguageServer(GroovyScriptLanguageServerContext languageServerContext) {
-        super(new GroovyScriptCompilationUnitFactory(languageServerContext), languageServerContext);
+    public GroovyScriptLanguageServer(File root, GroovyScriptLanguageServerContext languageServerContext) {
+        super(new GroovyScriptCompilationUnitFactory(root, languageServerContext), languageServerContext);
     }
 }

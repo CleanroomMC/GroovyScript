@@ -20,11 +20,12 @@ import java.util.stream.Stream;
 
 public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBase {
 
+    private final File root;
     private final GroovyScriptLanguageServerContext languageServerContext;
-
     private final Map<URI, GroovyLSCompilationUnit> compilationUnitsByScript = new HashMap<>();
 
-    public GroovyScriptCompilationUnitFactory(GroovyScriptLanguageServerContext languageServerContext) {
+    public GroovyScriptCompilationUnitFactory(File root, GroovyScriptLanguageServerContext languageServerContext) {
+        this.root = root;
         this.languageServerContext = languageServerContext;
     }
 
@@ -93,7 +94,7 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
 
     protected Stream<Path> getAllClasses() {
         return LoadStage.getLoadStages().stream().map(LoadStage::getName)
-                .flatMap(loader -> GroovyScript.getRunConfig().getClassFiles(loader).stream())
+                .flatMap(loader -> GroovyScript.getRunConfig().getClassFiles(this.root, loader).stream())
                 .map(File::toPath)
                 .map(path -> GroovyScript.getScriptFile().toPath().resolve(path));
     }

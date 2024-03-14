@@ -341,6 +341,10 @@ public class GroovyScriptSandbox extends GroovySandbox {
         return importCustomizer;
     }
 
+    public File getScriptRoot() {
+        return scriptRoot;
+    }
+
     @ApiStatus.Internal
     public void deleteClassCache() {
         this.index.clear();
