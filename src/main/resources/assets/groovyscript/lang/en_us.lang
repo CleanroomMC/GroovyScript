@@ -145,6 +145,22 @@ groovyscript.wiki.advancedmortars.mortar.duration.value=Sets how many interactio
 groovyscript.wiki.advancedmortars.mortar.secondaryOutput.value=Sets the additional output itemstack
 groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the chance of the additional output itemstack being output
 
+# Aether Legacy
+groovyscript.wiki.aether_legacy.enchanter.title=Enchanter
+groovyscript.wiki.aether_legacy.enchanter.description=Enchanting is a mechanic used to create new items, as well as repair tools, armor, and weapons, using the Altar block.
+groovyscript.wiki.aether_legacy.enchanter.add=Adds an Enchanting recipe in the format `input`, `output`, `time`.
+groovyscript.wiki.aether_legacy.enchanter_fuel.title=Enchanter Fuel
+groovyscript.wiki.aether_legacy.enchanter_fuel.description=By default, the Enchantar (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
+groovyscript.wiki.aether_legacy.enchanter_fuel.add=Adds an Enchanting fuel in the format `item`, `timeGiven`.
+groovyscript.wiki.aether_legacy.freezer.title=Freezer
+groovyscript.wiki.aether_legacy.freezer.description=The Freezer is used to turn certain items into frozen versions.
+groovyscript.wiki.aether_legacy.freezer.add=Adds a Freezer recipe in the format `input`, `output`, `time`.
+groovyscript.wiki.aether_legacy.freezer_fuel.title=Freezer
+groovyscript.wiki.aether_legacy.freezer_fuel.description= By default, the Freezer takes Icestone as fuel. Using GroovyScript, custom fuels can be added.
+groovyscript.wiki.aether_legacy.freezer_fuel.add=Adds a Freezer fuel in the format `item`, `timeGiven`.
+groovyscript.wiki.aether_legacy.accessory.title=Accessory
+groovyscript.wiki.aether_legacy.accessory.description=The Aether Accessory system.
+groovyscript.wiki.aether_legacy.accessory.add=Adds an Accessory in the format `item`, `type`, where type is one of the following: "Ring", "Pendant", "Cape", "Shield", "Glove", or "Misc".
 
 # Alchemistry
 groovyscript.wiki.alchemistry.atomizer.title=Atomizer
@@ -175,7 +191,6 @@ groovyscript.wiki.alchemistry.evaporator.description=Converts an input fluidstac
 groovyscript.wiki.alchemistry.liquifier.title=Liquifier
 groovyscript.wiki.alchemistry.liquifier.add=Adds recipes in the format `input`, `output`
 groovyscript.wiki.alchemistry.liquifier.description=Converts an input itemstack into an output fluidstack, consuming a set amount of power.
-
 
 # Applied Energistics 2
 groovyscript.wiki.appliedenergistics2.attunement.title=P2P Attunement
@@ -358,6 +373,63 @@ groovyscript.wiki.avaritia.extreme_crafting.title=Extreme Crafting
 groovyscript.wiki.avaritia.extreme_crafting.description=A normal crafting table, by 9x9 instead.
 groovyscript.wiki.avaritia.extreme_crafting.addShaped=Adds a shaped crafting recipe in the format `output`, `input`
 groovyscript.wiki.avaritia.extreme_crafting.addShapeless=Adds a shapeless crafting recipe in the format `output`, `input`
+
+# Better With Mods
+groovyscript.wiki.betterwithmods.anvil_crafting.title=Anvil Crafting
+groovyscript.wiki.betterwithmods.anvil_crafting.description=Similar to a normal crafting table, but 4x4 instead.
+
+groovyscript.wiki.betterwithmods.cauldron.title=Cauldron
+groovyscript.wiki.betterwithmods.cauldron.description=Converts a large number of items into other items, with the ability to require specific amounts of heat.
+groovyscript.wiki.betterwithmods.cauldron.heat.value=Sets if the Cauldron requires a normal fire (1) or a Stoked Fire (2) below it
+groovyscript.wiki.betterwithmods.cauldron.priority.value=Sets the priority of the recipe in relation to other valid recipes for the given items
+groovyscript.wiki.betterwithmods.cauldron.ignoreHeat.value=Sets if the Cauldron requires any heat source below it
+
+groovyscript.wiki.betterwithmods.crucible.title=Crucible
+groovyscript.wiki.betterwithmods.crucible.description=Converts a large number of items into other items, with the ability to require specific amounts of heat.
+groovyscript.wiki.betterwithmods.crucible.heat.value=Sets if the Cauldron requires a normal fire (1) or a Stoked Fire (2) below it
+groovyscript.wiki.betterwithmods.crucible.priority.value=Sets the priority of the recipe in relation to other valid recipes for the given items
+groovyscript.wiki.betterwithmods.crucible.ignoreHeat.value=Sets if the Cauldron requires any heat source below it
+
+groovyscript.wiki.betterwithmods.heat.title=Heat
+groovyscript.wiki.betterwithmods.heat.description=Creates new levels or adds new blocks to old heat levels.
+groovyscript.wiki.betterwithmods.heat.note0=Anything using heat levels will create a new JEI tab for each heat level it has recipes for. This will have a lang key name.
+groovyscript.wiki.betterwithmods.heat.add=Adds new heat levels in the format `heat`, `ingredient`
+
+groovyscript.wiki.betterwithmods.hopper.title=Filtered Hopper
+groovyscript.wiki.betterwithmods.hopper.description=Recipes for the Filtered Hopper to process. The filter targeted must allow the input item in to function.
+groovyscript.wiki.betterwithmods.hopper.name.value=Sets the name of the filter used for the recipe, the input item must be capable of passing through the filter to be processed
+groovyscript.wiki.betterwithmods.hopper.inWorldItemOutput.value=Sets the items dropped in-world when the recipe is processed
+
+groovyscript.wiki.betterwithmods.hopper_filters.title=Hopper Filters
+groovyscript.wiki.betterwithmods.hopper_filters.description=Items placed in the middle slot of the Filtered Hopper to restrict what is capable of passing through.
+groovyscript.wiki.betterwithmods.hopper_filters.filter.value=Sets the filter itemstack
+groovyscript.wiki.betterwithmods.hopper_filters.filtered.value=Sets the valid items allowed through the filter
+groovyscript.wiki.betterwithmods.hopper_filters.removeByFilter=Removes all filters with the given filter item
+groovyscript.wiki.betterwithmods.hopper_filters.removeByFiltered=Removes all filters with the given items allowed through the filter
+groovyscript.wiki.betterwithmods.hopper_filters.removeByName=Removes the filter with the given name
+
+groovyscript.wiki.betterwithmods.kiln.title=Kiln
+groovyscript.wiki.betterwithmods.kiln.description=Converts a block into up to three output itemstacks, with the ability to require specific amounts of heat.
+groovyscript.wiki.betterwithmods.kiln.heat.value=Sets if the Kiln requires a normal fire (1) or a Stoked Fire (2) below it
+groovyscript.wiki.betterwithmods.kiln.input.value=Sets the input block of the recipe
+groovyscript.wiki.betterwithmods.kiln.ignoreHeat.value=Sets if the Kiln requires any heat source below it
+
+groovyscript.wiki.betterwithmods.mill_stone.title=Mill Stone
+groovyscript.wiki.betterwithmods.mill_stone.description=Converts input itemstacks into output itemstacks after being ground via rotation power for a given time.
+groovyscript.wiki.betterwithmods.mill_stone.ticks.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.betterwithmods.mill_stone.priority.value=Sets the priority of the recipe in relation to other valid recipes for the given items
+groovyscript.wiki.betterwithmods.mill_stone.soundEvent.value=Sets what sound is played by the mill during the recipe
+
+groovyscript.wiki.betterwithmods.saw.title=Saw
+groovyscript.wiki.betterwithmods.saw.description=Converts a block into output itemstacks after being powered via rotation power.
+groovyscript.wiki.betterwithmods.saw.input.value=Sets the input block of the recipe
+
+groovyscript.wiki.betterwithmods.turntable.title=Turntable
+groovyscript.wiki.betterwithmods.turntable.description=Converts a block into an output block and up to two itemstacks after being powered via rotation power.
+groovyscript.wiki.betterwithmods.turntable.input.value=Sets the input block
+groovyscript.wiki.betterwithmods.turntable.rotations.value=Sets the number of rotations required to complete the recipe
+groovyscript.wiki.betterwithmods.turntable.outputBlock.value=Sets the blockstate that replaces the input block
+
 
 # Blood Magic
 groovyscript.wiki.bloodmagic.alchemy_array.title=Alchemy Array
