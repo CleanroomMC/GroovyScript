@@ -6,7 +6,8 @@ import al132.alchemistry.chemistry.CompoundRegistry;
 import al132.alchemistry.chemistry.ElementRegistry;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
+import net.minecraft.item.ItemStack;
 
 public class Alchemistry extends ModPropertyContainer {
 
@@ -30,18 +31,23 @@ public class Alchemistry extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("alchemistry", "element", (s, args) -> {
-            String parsedName = s.trim().toLowerCase().replace(" ", "_");
-            ChemicalCompound compound = CompoundRegistry.INSTANCE.get(parsedName);
-            if (compound == null || compound.toItemStack(1).isEmpty()) {
-                ChemicalElement element = ElementRegistry.INSTANCE.get(parsedName);
-                if (element == null || element.toItemStack(1).isEmpty()) {
-                    return Result.error();
-                }
-                return Result.some(element.toItemStack(1));
-            }
-            return Result.some(compound.toItemStack(1));
-        });
+        GameObjectHandler.builder("element", ItemStack.class)
+                .mod("alchemistry")
+                .parser((s, args) -> {
+                    String parsedName = s.trim().toLowerCase().replace(" ", "_");
+                    ChemicalCompound compound = CompoundRegistry.INSTANCE.get(parsedName);
+                    if (compound == null || compound.toItemStack(1).isEmpty()) {
+                        ChemicalElement element = ElementRegistry.INSTANCE.get(parsedName);
+                        if (element == null || element.toItemStack(1).isEmpty()) {
+                            return Result.error();
+                        }
+                        return Result.some(element.toItemStack(1));
+                    }
+                    return Result.some(compound.toItemStack(1));
+                })
+                .defaultValue(() -> ItemStack.EMPTY)
+                .completerOfNamed(CompoundRegistry.INSTANCE::compounds, ChemicalCompound::getName)
+                .completerOfNamed(ElementRegistry.INSTANCE::getAllElements, ChemicalElement::getName)
+                .register();
     }
-
 }

@@ -149,7 +149,7 @@ public class GameObjectHandlerManager {
     }
 
     public static void provideCompletion(String name, int index, Completions items) {
-        GameObjectHandler.Completer completer = bracketHandlers.get(name).getCompleter();
+        Completer completer = bracketHandlers.get(name).getCompleter();
         if (completer == null) return;
         completer.complete(index, items);
     }

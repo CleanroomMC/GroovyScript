@@ -242,14 +242,10 @@ dependencies {
     }
 
     compileOnly 'com.enderio:endercore:0.5.78'
-    compileOnly('crazypants:enderio:5.3.72') {
-        transitive = false
-    }
+    compileOnly 'crazypants:enderio:5.3.72'
     if (project.debug_enderio.toBoolean()) {
         runtimeOnly 'com.enderio:endercore:0.5.78'
-        runtimeOnly('crazypants:enderio:5.3.72') {
-            transitive = false
-        }
+        runtimeOnly 'crazypants:enderio:5.3.72'
     }
 
     compileOnly rfg.deobf('curse.maven:forestry-59751:2918418')
@@ -267,7 +263,7 @@ dependencies {
     if (project.debug_aether.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:aether-255308:3280119')
     }
-    
+
     compileOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
     compileOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
 
@@ -276,7 +272,6 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
         runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
     }
-
 }
 
 minecraft {

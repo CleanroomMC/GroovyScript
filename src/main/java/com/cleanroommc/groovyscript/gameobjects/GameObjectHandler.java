@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.gameobjects;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IGameObjectHandler;
 import com.cleanroommc.groovyscript.api.Result;
-import com.cleanroommc.groovyscript.server.Completions;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -75,39 +74,6 @@ public class GameObjectHandler<T> {
         return completer;
     }
 
-    @FunctionalInterface
-    public interface Completer {
-
-        void complete(int paramIndex, Completions items);
-
-        static <V> Completer ofNamed(Supplier<Iterable<V>> values, Function<V, String> toString, int preferredParamIndex) {
-            return ofValues(values, v -> {
-                String s = toString.apply(v);
-                if (s != null) {
-                    var item = new CompletionItem(toString.apply(v));
-                    item.setKind(CompletionItemKind.Constant);
-                    return item;
-                }
-                return null;
-            }, preferredParamIndex);
-        }
-
-        static <V> Completer ofValues(Supplier<Iterable<V>> values, Function<V, CompletionItem> toCompletionItem, int preferredParamIndex) {
-            return (paramIndex, items) -> {
-                if (preferredParamIndex < 0 || preferredParamIndex == paramIndex) {
-                    items.addAll(values.get(), toCompletionItem);
-                }
-            };
-        }
-
-        default Completer and(Completer other) {
-            return (paramIndex, items) -> {
-                complete(paramIndex, items);
-                other.complete(paramIndex, items);
-            };
-        }
-    }
-
     public static class Builder<T> {
 
         private final String name;
@@ -139,7 +105,11 @@ public class GameObjectHandler<T> {
         }
 
         public Builder<T> completer(Completer completer) {
-            this.completer = completer;
+            if (this.completer == null) {
+                this.completer = completer;
+            } else {
+                this.completer = this.completer.and(completer);
+            }
             return this;
         }
 
