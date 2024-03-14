@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.gameobjects;
 
-import com.cleanroommc.groovyscript.api.IGameObjectHandler;
+import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
@@ -34,11 +34,11 @@ import java.util.Map;
 
 public class GameObjectHandlerManager {
 
-    private static final Map<String, GameObjectHandler<?>> bracketHandlers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, GameObjectHandler<?>> handlers = new Object2ObjectOpenHashMap<>();
     public static final String EMPTY = "empty", WILDCARD = "*", SPLITTER = ":";
 
     static void registerGameObjectHandler(GameObjectHandler<?> goh) {
-        bracketHandlers.put(goh.getName(), goh);
+        handlers.put(goh.getName(), goh);
     }
 
     public static void init() {
@@ -67,7 +67,7 @@ public class GameObjectHandlerManager {
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
                 .register();
         GameObjectHandler.builder("block", Block.class)
-                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.BLOCKS))
+                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.BLOCKS))
                 .completer(ForgeRegistries.BLOCKS)
                 .register();
         GameObjectHandler.builder("blockstate", IBlockState.class)
@@ -78,31 +78,31 @@ public class GameObjectHandlerManager {
                 .completer(ForgeRegistries.BLOCKS)
                 .register();
         GameObjectHandler.builder("enchantment", Enchantment.class)
-                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS))
+                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS))
                 .completer(ForgeRegistries.ENCHANTMENTS)
                 .register();
         GameObjectHandler.builder("potion", Potion.class)
-                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.POTIONS))
+                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.POTIONS))
                 .completer(ForgeRegistries.POTIONS)
                 .register();
         GameObjectHandler.builder("potionType", PotionType.class)
-                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.POTION_TYPES))
+                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.POTION_TYPES))
                 .completer(ForgeRegistries.POTION_TYPES)
                 .register();
         GameObjectHandler.builder("sound", SoundEvent.class)
-                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS))
+                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS))
                 .completer(ForgeRegistries.SOUND_EVENTS)
                 .register();
         GameObjectHandler.builder("entity", EntityEntry.class)
-                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.ENTITIES))
+                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.ENTITIES))
                 .completer(ForgeRegistries.ENTITIES)
                 .register();
         GameObjectHandler.builder("biome", Biome.class)
-                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.BIOMES))
+                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.BIOMES))
                 .completer(ForgeRegistries.BIOMES)
                 .register();
         GameObjectHandler.builder("profession", VillagerRegistry.VillagerProfession.class)
-                .parser(IGameObjectHandler.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS))
+                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS))
                 .completer(ForgeRegistries.VILLAGER_PROFESSIONS)
                 .register();
         GameObjectHandler.builder("creativeTab", CreativeTabs.class)
@@ -128,7 +128,7 @@ public class GameObjectHandlerManager {
      */
     @Nullable
     public static Object getGameObject(String name, String mainArg, Object... args) {
-        GameObjectHandler<?> gameObjectHandler = bracketHandlers.get(name);
+        GameObjectHandler<?> gameObjectHandler = handlers.get(name);
         if (gameObjectHandler != null) {
             return gameObjectHandler.invoke(mainArg, args);
         }
@@ -136,20 +136,20 @@ public class GameObjectHandlerManager {
     }
 
     public static boolean hasGameObjectHandler(String key) {
-        return bracketHandlers.containsKey(key);
+        return handlers.containsKey(key);
     }
 
     public static Collection<GameObjectHandler<?>> getGameObjectHandlers() {
-        return bracketHandlers.values();
+        return handlers.values();
     }
 
     public static Class<?> getReturnTypeOf(String name) {
-        GameObjectHandler<?> goh = bracketHandlers.get(name);
+        GameObjectHandler<?> goh = handlers.get(name);
         return goh == null ? null : goh.getReturnType();
     }
 
     public static void provideCompletion(String name, int index, Completions items) {
-        Completer completer = bracketHandlers.get(name).getCompleter();
+        Completer completer = handlers.get(name).getCompleter();
         if (completer == null) return;
         completer.complete(index, items);
     }

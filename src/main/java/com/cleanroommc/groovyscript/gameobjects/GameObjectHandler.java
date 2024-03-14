@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.gameobjects;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IGameObjectHandler;
+import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
@@ -22,13 +22,13 @@ public class GameObjectHandler<T> {
 
     private final String name;
     private final String mod;
-    private final IGameObjectHandler<T> handler;
+    private final IGameObjectParser<T> handler;
     private final Supplier<T> defaultValue;
     private final Class<T> returnType;
     private final List<Class<?>[]> paramTypes;
     private final Completer completer;
 
-    private GameObjectHandler(String name, String mod, IGameObjectHandler<T> handler, Supplier<T> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer) {
+    private GameObjectHandler(String name, String mod, IGameObjectParser<T> handler, Supplier<T> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer) {
         this.name = name;
         this.mod = mod;
         this.handler = handler;
@@ -78,7 +78,7 @@ public class GameObjectHandler<T> {
 
         private final String name;
         private String mod;
-        private IGameObjectHandler<T> handler;
+        private IGameObjectParser<T> handler;
         private Supplier<T> defaultValue;
         private final Class<T> returnType;
         private final List<Class<?>[]> paramTypes = new ArrayList<>();
@@ -94,13 +94,8 @@ public class GameObjectHandler<T> {
             return this;
         }
 
-        public Builder<T> parser(IGameObjectHandler<T> handler) {
+        public Builder<T> parser(IGameObjectParser<T> handler) {
             this.handler = handler;
-            return this;
-        }
-
-        public Builder<T> defaultValue(Supplier<T> defaultValue) {
-            this.defaultValue = defaultValue;
             return this;
         }
 
@@ -135,6 +130,11 @@ public class GameObjectHandler<T> {
 
         public <V extends IForgeRegistryEntry<V>> Builder<T> completer(IForgeRegistry<V> values) {
             return completer(values::getKeys);
+        }
+
+        public Builder<T> defaultValue(Supplier<T> defaultValue) {
+            this.defaultValue = defaultValue;
+            return this;
         }
 
         public Builder<T> addSignature(Class<?>... paramTypes) {

@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.api.IGameObjectHandler;
+import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
@@ -66,17 +66,17 @@ public class Roots extends ModPropertyContainer {
     public void initialize() {
         GameObjectHandler.builder("ritual", RitualBase.class)
                 .mod("roots")
-                .parser(IGameObjectHandler.wrapStringGetter(RitualRegistry::getRitual))
+                .parser(IGameObjectParser.wrapStringGetter(RitualRegistry::getRitual))
                 .completerOfNames(RitualRegistry.ritualRegistry::keySet)
                 .register();
         GameObjectHandler.builder("herb", Herb.class)
                 .mod("roots")
-                .parser(IGameObjectHandler.wrapStringGetter(HerbRegistry::getHerbByName))
+                .parser(IGameObjectParser.wrapStringGetter(HerbRegistry::getHerbByName))
                 .completerOfNames(HerbRegistry.registry::keySet)
                 .register();
         GameObjectHandler.builder("cost", CostType.class)
                 .mod("roots")
-                .parser(IGameObjectHandler.wrapEnum(CostType.class, false))
+                .parser(IGameObjectParser.wrapEnum(CostType.class, false))
                 .completerOfEnum(CostType.class, false)
                 .register();
         GameObjectHandler.builder("spell", SpellBase.class)

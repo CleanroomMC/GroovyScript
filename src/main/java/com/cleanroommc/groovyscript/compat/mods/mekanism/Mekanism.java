@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
-import com.cleanroommc.groovyscript.api.IGameObjectHandler;
+import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
@@ -73,7 +73,7 @@ public class Mekanism extends ModPropertyContainer {
                 .register();
         GameObjectHandler.builder("infusion", InfuseType.class)
                 .mod("mekanism")
-                .parser(IGameObjectHandler.wrapStringGetter(InfuseRegistry::get, true))
+                .parser(IGameObjectParser.wrapStringGetter(InfuseRegistry::get, true))
                 .completerOfNames(InfuseRegistry.getInfuseMap()::keySet)
                 .register();
     }

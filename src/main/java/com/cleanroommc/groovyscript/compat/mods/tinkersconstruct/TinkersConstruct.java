@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
-import com.cleanroommc.groovyscript.api.IGameObjectHandler;
+import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.GroovyMaterial;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.MaterialRegistryEvent;
@@ -35,17 +35,17 @@ public class TinkersConstruct extends ModPropertyContainer {
     public void initialize() {
         GameObjectHandler.builder("toolMaterial", Material.class)
                 .mod("tconstruct")
-                .parser(IGameObjectHandler.wrapStringGetter(TinkerRegistryAccessor.getMaterials()::get))
+                .parser(IGameObjectParser.wrapStringGetter(TinkerRegistryAccessor.getMaterials()::get))
                 .completerOfNames(TinkerRegistryAccessor.getMaterials()::keySet)
                 .register();
         GameObjectHandler.builder("toolTrait", ITrait.class)
                 .mod("tconstruct")
-                .parser(IGameObjectHandler.wrapStringGetter(TinkerRegistryAccessor.getTraits()::get))
+                .parser(IGameObjectParser.wrapStringGetter(TinkerRegistryAccessor.getTraits()::get))
                 .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet, v -> v.endsWith("_armor") ? null : v) // only suggest non armor traits
                 .register();
         GameObjectHandler.builder("armorTrait", ITrait.class)
                 .mod("tconstruct")
-                .parser(IGameObjectHandler.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")))
+                .parser(IGameObjectParser.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")))
                 .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet, v -> v.endsWith("_armor") ? v.substring(0, v.length() - 6)
                                                                                                         : null) // only suggest armor traits
                 .register();
