@@ -36,6 +36,15 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:avaritia_1_10-261348:3143349')
     }
 
+    compileOnly rfg.deobf("curse.maven:shadowfacts-forgelin-248453:2785465")
+    compileOnly rfg.deobf("curse.maven:alchemylib-293426:2761706")
+    compileOnly rfg.deobf("curse.maven:alchemistry-293425:3186612")
+    if (project.debug_alchemistry.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:shadowfacts-forgelin-248453:2785465')
+        runtimeOnly rfg.deobf('curse.maven:alchemylib-293426:2761706')
+        runtimeOnly rfg.deobf('curse.maven:alchemistry-293425:3186612')
+    }
+
     compileOnly rfg.deobf("curse.maven:ctm-267602:2915363")
     compileOnly rfg.deobf("curse.maven:chisel-235279:2915375")
     if (project.debug_chisel.toBoolean()) {
