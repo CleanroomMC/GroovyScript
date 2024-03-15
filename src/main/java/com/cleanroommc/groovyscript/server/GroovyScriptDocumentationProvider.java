@@ -32,7 +32,7 @@ public class GroovyScriptDocumentationProvider implements IDocumentationProvider
                             var method = GroovyReflectionUtils.resolveMethodFromMethodNode(methodNode, context);
 
                             if (method.isPresent() && method.get().isAnnotationPresent(MethodDescription.class)) {
-                                return new Registry(groovyContainer, methodRegistry.get(), Collections.emptyList()).documentMethods(Collections.singletonList(method.get()), true);
+                                return new Registry(groovyContainer, methodRegistry.get()).documentMethods(Collections.singletonList(method.get()), true);
                             }
                         }
 
