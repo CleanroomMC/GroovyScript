@@ -39,7 +39,6 @@ public class Roots extends ModPropertyContainer {
     public final SummonCreature summonCreature = new SummonCreature();
     public final Transmutation transmutation = new Transmutation();
 
-
     public Roots() {
         addRegistry(animalHarvest);
         addRegistry(animalHarvestFish);
@@ -67,7 +66,7 @@ public class Roots extends ModPropertyContainer {
         GameObjectHandler.builder("ritual", RitualBase.class)
                 .mod("roots")
                 .parser(IGameObjectParser.wrapStringGetter(RitualRegistry::getRitual))
-                .completerOfNames(RitualRegistry.ritualRegistry::keySet)
+                .completerOfNames(() -> RitualRegistry.ritualRegistry.keySet())
                 .register();
         GameObjectHandler.builder("herb", Herb.class)
                 .mod("roots")
@@ -83,7 +82,7 @@ public class Roots extends ModPropertyContainer {
                 .mod("roots")
                 .parser(Roots::getSpell)
                 .completer(SpellRegistry.spellRegistry::keySet)
-                .defaultValue(() -> FakeSpell.INSTANCE)
+                .defaultValueSup(() -> Result.some(FakeSpell.INSTANCE))  // crashes otherwise
                 .register();
         GameObjectHandler.builder("modifier", Modifier.class)
                 .mod("roots")

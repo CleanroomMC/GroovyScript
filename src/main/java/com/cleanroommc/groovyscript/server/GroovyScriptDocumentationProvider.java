@@ -26,7 +26,9 @@ public class GroovyScriptDocumentationProvider implements IDocumentationProvider
             ModSupport.getAllContainers().stream()
                     .filter(IGroovyContainer::isLoaded)
                     .map(groovyContainer -> {
-                        var methodRegistry = groovyContainer.get().getRegistries().stream().filter(registry -> registry.getClass().equals(methodNode.getDeclaringClass().getTypeClass())).findFirst();
+                        var methodRegistry = groovyContainer.get().getRegistries().stream()
+                                .filter(registry -> registry.getClass().equals(methodNode.getDeclaringClass().getTypeClass()))
+                                .findFirst();
 
                         if (methodRegistry.isPresent()) {
                             var method = GroovyReflectionUtils.resolveMethodFromMethodNode(methodNode, context);

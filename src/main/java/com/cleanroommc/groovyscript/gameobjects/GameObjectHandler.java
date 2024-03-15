@@ -23,12 +23,12 @@ public class GameObjectHandler<T> {
     private final String name;
     private final String mod;
     private final IGameObjectParser<T> handler;
-    private final Supplier<T> defaultValue;
+    private final Supplier<Result<T>> defaultValue;
     private final Class<T> returnType;
     private final List<Class<?>[]> paramTypes;
     private final Completer completer;
 
-    private GameObjectHandler(String name, String mod, IGameObjectParser<T> handler, Supplier<T> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer) {
+    private GameObjectHandler(String name, String mod, IGameObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer) {
         this.name = name;
         this.mod = mod;
         this.handler = handler;
@@ -49,7 +49,8 @@ public class GameObjectHandler<T> {
             if (t.getError() != null && !t.getError().isEmpty()) {
                 GroovyLog.get().error(" - reason: {}", t.getError());
             }
-            return this.defaultValue.get();
+            t = this.defaultValue.get();
+            return t.hasError() ? null : t.getValue();
         }
         return Objects.requireNonNull(t.getValue(), "Bracket handler result must contain a non-null value!");
     }
@@ -79,7 +80,7 @@ public class GameObjectHandler<T> {
         private final String name;
         private String mod;
         private IGameObjectParser<T> handler;
-        private Supplier<T> defaultValue;
+        private Supplier<Result<T>> defaultValue;
         private final Class<T> returnType;
         private final List<Class<?>[]> paramTypes = new ArrayList<>();
         private Completer completer;
@@ -133,6 +134,10 @@ public class GameObjectHandler<T> {
         }
 
         public Builder<T> defaultValue(Supplier<T> defaultValue) {
+            return defaultValueSup(() -> Result.some(defaultValue.get()));
+        }
+
+        public Builder<T> defaultValueSup(Supplier<Result<T>> defaultValue) {
             this.defaultValue = defaultValue;
             return this;
         }
