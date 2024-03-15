@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.FileUtil;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -82,5 +83,13 @@ public class GroovyHelper {
 
     public static boolean isPackmode(String packmode) {
         return getPackmode().equalsIgnoreCase(packmode);
+    }
+
+    public static String getMinecraftHome() {
+        return GroovyScript.getMinecraftHome().getPath();
+    }
+
+    public static File file(String... parts) {
+        return new File(GroovyScript.getMinecraftHome(), FileUtil.makePath(parts));
     }
 }
