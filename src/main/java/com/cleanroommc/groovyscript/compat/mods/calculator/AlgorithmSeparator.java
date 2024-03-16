@@ -1,13 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.calculator;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.AlgorithmSeparatorRecipes;
 import sonar.calculator.mod.common.recipes.CalculatorRecipe;
@@ -43,11 +43,11 @@ public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('calculator:tanzaniteleaves')"))
-    public boolean removeByInput(ItemStack input) {
+    public boolean removeByInput(IIngredient input) {
         return AlgorithmSeparatorRecipes.instance().getRecipes().removeIf(recipe -> {
             for (ISonarRecipeObject recipeInput : recipe.inputs()) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
-                    if (ItemHandlerHelper.canItemStacksStack(itemStack, input)) {
+                    if (input.test(itemStack)) {
                         addBackup(recipe);
                         return true;
                     }
@@ -58,11 +58,11 @@ public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('calculator:weakeneddiamond')"))
-    public boolean removeByOutput(ItemStack output) {
+    public boolean removeByOutput(IIngredient output) {
         return AlgorithmSeparatorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
-                    if (ItemHandlerHelper.canItemStacksStack(itemStack, output)) {
+                    if (output.test(itemStack)) {
                         addBackup(r);
                         return true;
                     }

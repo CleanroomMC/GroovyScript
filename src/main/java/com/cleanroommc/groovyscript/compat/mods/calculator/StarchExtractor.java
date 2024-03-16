@@ -1,20 +1,19 @@
 package com.cleanroommc.groovyscript.compat.mods.calculator;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.StarchExtractorRecipes;
 import sonar.core.recipes.DefaultSonarRecipe;
 import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.Arrays;
-import java.util.List;
 
 @RegistryDescription
 public class StarchExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Value> {
@@ -44,11 +43,11 @@ public class StarchExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Valu
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:apple')"))
-    public boolean removeByInput(ItemStack input) {
+    public boolean removeByInput(IIngredient input) {
         return StarchExtractorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
-                    if (ItemHandlerHelper.canItemStacksStack(itemStack, input)) {
+                    if (input.test(itemStack)) {
                         addBackup(r);
                         return true;
                     }
