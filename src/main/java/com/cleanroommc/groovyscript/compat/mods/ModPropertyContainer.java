@@ -6,6 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ModPropertyContainer implements IDynamicGroovyProperty {
@@ -39,6 +40,11 @@ public class ModPropertyContainer implements IDynamicGroovyProperty {
             return null;
         }
         return registry;
+    }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        return new HashMap<>(registries);
     }
 
     /**

@@ -2,6 +2,8 @@ package com.cleanroommc.groovyscript.api;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 /**
  * When this is implemented on a class, {@link #getProperty(String)} will be called when groovy tries to get a field from this class
  */
@@ -26,4 +28,11 @@ public interface IDynamicGroovyProperty {
     default boolean setProperty(String name, @Nullable Object value) {
         return false;
     }
+
+    /**
+     * Returns all properties stored in this object.
+     *
+     * @return all properties
+     */
+    Map<String, Object> getProperties();
 }

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
+import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -10,11 +11,11 @@ import java.util.List;
 public class AdmonitionBuilder {
 
     private final List<String> note = new ArrayList<>();
-    private Admonition.Type type = Admonition.Type.NOTE;
+    private Admonition.Type admonitionType = Admonition.Type.NOTE;
     private String title = "";
     private boolean hasTitle;
     private int indentation;
-    private Admonition.Format format = Admonition.Format.EXPANDED;
+    private Admonition.Format admonitionFormat = Admonition.Format.EXPANDED;
 
     public AdmonitionBuilder note(String note) {
         this.note.add(note);
@@ -32,7 +33,7 @@ public class AdmonitionBuilder {
     }
 
     public AdmonitionBuilder type(Admonition.Type type) {
-        this.type = type;
+        this.admonitionType = type;
         return this;
     }
 
@@ -52,24 +53,31 @@ public class AdmonitionBuilder {
     }
 
     public AdmonitionBuilder format(Admonition.Format format) {
-        this.format = format;
+        this.admonitionFormat = format;
         return this;
     }
 
     public String generate() {
+        return generate(Documentation.DEFAULT_FORMAT);
+    }
+
+    public String generate(IFormat format) {
         StringBuilder out = new StringBuilder();
         String indent = StringUtils.repeat("    ", indentation);
 
-        out.append(indent).append(format);
-        out.append(" ").append(type);
-        if (hasTitle) out.append(" \"").append(title).append("\"");
+        out.append(format.admonitionStart(admonitionFormat, admonitionType, indentation, hasTitle ? title : ""));
         out.append("\n");
 
         for (int i = 0; i < note.size(); i++) {
             String line = note.get(i);
-            if (!line.trim().isEmpty()) out.append(indent).append("    ").append(line);
+            if (!line.trim().isEmpty()) {
+                if (format.allowsIndentation()) out.append(indent).append("    ");
+                out.append(line);
+            }
             if (i < note.size() - 1) out.append("\n");
         }
+
+        out.append(indent).append(format.admonitionEnd(admonitionFormat, indentation));
 
         return out.toString();
     }

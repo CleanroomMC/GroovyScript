@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.compat.content.GroovyResourcePack;
@@ -8,8 +9,8 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
-import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.documentation.Documentation;
+import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
@@ -17,13 +18,10 @@ import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.NetworkUtils;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
-import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
-import com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox;
-import com.cleanroommc.groovyscript.sandbox.LoadStage;
-import com.cleanroommc.groovyscript.sandbox.RunConfig;
+import com.cleanroommc.groovyscript.sandbox.*;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.security.GrSMetaClassCreationHandle;
-import com.google.common.base.Joiner;
+import com.cleanroommc.groovyscript.server.GroovyScriptLanguageServer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovySystem;
@@ -53,7 +51,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
@@ -93,11 +90,10 @@ public class GroovyScript {
     private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
     private static ModContainer scriptMod;
+    private static Thread languageServerThread;
 
     private static KeyBinding reloadKey;
     private static long timeSinceLastUse = 0;
-
-    private static final Joiner fileJoiner = Joiner.on(File.separator);
 
     public static final Random RND = new Random();
 
@@ -111,7 +107,7 @@ public class GroovyScript {
         LinkGeneratorHooks.init();
         ReloadableRegistryManager.init();
         try {
-            sandbox = new GroovyScriptSandbox(scriptPath.toURI().toURL());
+            sandbox = new GroovyScriptSandbox(scriptPath, FileUtil.makeFile(FileUtil.getMinecraftHome(), "cache", "groovy"));
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Error initializing sandbox!");
         }
@@ -126,6 +122,10 @@ public class GroovyScript {
 
         FluidRegistry.enableUniversalBucket();
         getRunConfig().initPackmode();
+
+        if (Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
+            runLanguageServer();
+        }
     }
 
     @Mod.EventHandler
@@ -164,6 +164,10 @@ public class GroovyScript {
     @ApiStatus.Internal
     public static long runGroovyScriptsInLoader(LoadStage loadStage) {
         // called via mixin between fml post init and load complete
+        if (!getRunConfig().isLoaderConfigured(loadStage.getName())) {
+            GroovyLog.get().infoMC("Skipping load stage {}, since no scripts are configured!", loadStage.getName());
+            return -1;
+        }
         if (scriptMod == null) scriptMod = Loader.instance().getIndexedModList().get(getRunConfig().getPackId());
         ModContainer current = Loader.instance().activeModContainer();
         Loader.instance().setActiveModContainer(scriptMod);
@@ -274,14 +278,6 @@ public class GroovyScript {
         return new RunConfig(json);
     }
 
-    public static File makeFile(String... pieces) {
-        return new File(fileJoiner.join(pieces));
-    }
-
-    public static File makeFile(File parent, String... pieces) {
-        return new File(parent, fileJoiner.join(pieces));
-    }
-
     public static void postScriptRunResult(ICommandSender sender, boolean onlyLogFails, boolean running, boolean packmode, long time) {
         List<String> errors = GroovyLogImpl.LOG.collectErrors();
         if (errors.isEmpty()) {
@@ -306,5 +302,12 @@ public class GroovyScript {
             }
             GSCommand.postLogFiles(sender);
         }
+    }
+
+    public static boolean runLanguageServer() {
+        if (languageServerThread != null) return false;
+        languageServerThread = new Thread(() -> GroovyScriptLanguageServer.listen(getSandbox().getScriptRoot()));
+        languageServerThread.start();
+        return true;
     }
 }
