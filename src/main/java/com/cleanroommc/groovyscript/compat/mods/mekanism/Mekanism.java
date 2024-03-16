@@ -1,14 +1,15 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
-import com.cleanroommc.groovyscript.api.IGameObjectHandler;
+import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
 import mekanism.api.infuse.InfuseRegistry;
+import mekanism.api.infuse.InfuseType;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
@@ -62,11 +63,19 @@ public class Mekanism extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("mekanism", "gas", (s, args) -> {
-            Gas gas = GasRegistry.getGas(s);
-            return gas == null ? Result.error() : Result.some(new GasStack(gas, 1));
-        });
-        GameObjectHandlerManager.registerGameObjectHandler("mekanism", "infusion", IGameObjectHandler.wrapStringGetter(InfuseRegistry::get, true));
+        GameObjectHandler.builder("gas", GasStack.class)
+                .mod("mekanism")
+                .parser((s, args) -> {
+                    Gas gas = GasRegistry.getGas(s);
+                    return gas == null ? Result.error() : Result.some(new GasStack(gas, 1));
+                })
+                .completerOfNamed(GasRegistry::getRegisteredGasses, Gas::getName)
+                .register();
+        GameObjectHandler.builder("infusion", InfuseType.class)
+                .mod("mekanism")
+                .parser(IGameObjectParser.wrapStringGetter(InfuseRegistry::get, true))
+                .completerOfNames(InfuseRegistry.getInfuseMap()::keySet)
+                .register();
     }
 
     @Optional.Method(modid = "mekanism")

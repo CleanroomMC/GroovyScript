@@ -8,8 +8,6 @@ import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.google.common.base.CaseFormat;
 import io.sommers.packmode.api.PackModeAPI;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 
@@ -17,9 +15,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.function.BiPredicate;
 
 public class Preprocessor {
@@ -40,7 +36,8 @@ public class Preprocessor {
         registerPreprocessor("PACKMODE", Preprocessor::checkPackmode);
     }
 
-    public static boolean validatePreprocessors(File file) {
+    public static List<String> parsePreprocessors(File file) {
+        List<String> preprocessors = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             boolean isComment = false;
             String line;
@@ -56,20 +53,34 @@ public class Preprocessor {
                     line = line.substring(2).trim();
                     if (line.isEmpty()) continue;
                 } else if (!isComment) {
-                    return true;
+                    return preprocessors.isEmpty() ? Collections.emptyList() : preprocessors;
                 }
                 if (isComment && line.endsWith("*/")) {
                     isComment = false;
                 }
 
-                if (!processPreprocessor(file, line)) {
-                    return false;
+                if (isPreprocessor(line)) {
+                    preprocessors.add(line);
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return preprocessors.isEmpty() ? Collections.emptyList() : preprocessors;
+    }
+
+    public static boolean validatePreprocessor(File file, List<String> preprocessors) {
+        for (String pp : preprocessors) {
+            if (!processPreprocessor(file, pp)) {
+                return false;
+            }
+        }
         return true;
+    }
+
+    private static boolean isPreprocessor(String line) {
+        String s = line.split(":", 2)[0];
+        return PREPROCESSORS.containsKey(s.toUpperCase(Locale.ROOT));
     }
 
     private static boolean processPreprocessor(File file, String line) {
@@ -82,13 +93,8 @@ public class Preprocessor {
             }
         }
         String s = parts[0];
-        for (ObjectIterator<Object2ObjectMap.Entry<String, BiPredicate<File, String[]>>> iterator = PREPROCESSORS.object2ObjectEntrySet().fastIterator(); iterator.hasNext(); ) {
-            Object2ObjectMap.Entry<String, BiPredicate<File, String[]>> entry = iterator.next();
-            if (s.equalsIgnoreCase(entry.getKey())) {
-                return entry.getValue().test(file, args);
-            }
-        }
-        return true;
+        BiPredicate<File, String[]> preprocessor = PREPROCESSORS.get(s.toUpperCase(Locale.ROOT));
+        return preprocessor.test(file, args);
     }
 
     private static boolean checkModsLoaded(File file, String[] mods) {
@@ -119,7 +125,8 @@ public class Preprocessor {
     private static boolean checkPackmode(File file, String[] modes) {
         for (String mode : modes) {
             if (!Packmode.isValidPackmode(mode)) {
-                List<String> valid = GroovyScript.getRunConfig().isIntegratePackmodeMod() ? PackModeAPI.getInstance().getPackModes() : GroovyScript.getRunConfig().getPackmodeList();
+                List<String> valid = GroovyScript.getRunConfig().isIntegratePackmodeMod() ? PackModeAPI.getInstance().getPackModes()
+                                                                                          : GroovyScript.getRunConfig().getPackmodeList();
                 GroovyLog.get().error("The packmode '{}' specified in file '{}' does not exist. Valid values are {}", mode, file.getName(), valid);
             } else if (Packmode.getPackmode().equals(Alias.autoConvertTo(mode, CaseFormat.LOWER_UNDERSCORE))) {
                 return true;

@@ -37,6 +37,11 @@ public class Casting implements IDynamicGroovyProperty {
         return properties.get(name);
     }
 
+    @Override
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
     public static class Table extends VirtualizedRegistry<ICastingRecipe> {
 
         public RecipeBuilder recipeBuilder() {

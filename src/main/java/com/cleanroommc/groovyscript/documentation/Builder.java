@@ -36,29 +36,19 @@ public class Builder {
     private final Map<String, FieldDocumentation> fields;
     private final Map<String, List<RecipeBuilderMethod>> methods;
     private final List<Method> registrationMethods;
-    private final Collection<String> missingLangKeys;
 
-    public Builder(GroovyContainer<? extends ModPropertyContainer> mod, Method builderMethod, String reference, String baseTranslationKey, Collection<String> missingLangKeys) {
+    public Builder(GroovyContainer<? extends ModPropertyContainer> mod, Method builderMethod, String reference, String baseTranslationKey) {
         this.mod = mod;
         this.builderMethod = builderMethod;
         this.reference = reference;
         this.annotation = builderMethod.getAnnotation(RecipeBuilderDescription.class);
-        this.missingLangKeys = missingLangKeys;
         Class<?> builderClass = builderMethod.getReturnType();
-        this.fields = gatherFields(builderClass, annotation, baseTranslationKey, missingLangKeys);
+        this.fields = gatherFields(builderClass, annotation, baseTranslationKey);
         this.methods = gatherMethods(builderClass, fields);
         this.registrationMethods = gatherRegistrationMethods(builderClass);
     }
 
-    public String lang(String key) {
-        if (!I18n.hasKey(key)) {
-            this.missingLangKeys.add(key);
-            return key;
-        }
-        return I18n.format(key);
-    }
-
-    private static Map<String, FieldDocumentation> gatherFields(Class<?> builderClass, RecipeBuilderDescription annotation, String langLocation, Collection<String> missingLangKeys) {
+    private static Map<String, FieldDocumentation> gatherFields(Class<?> builderClass, RecipeBuilderDescription annotation, String langLocation) {
         Map<String, FieldDocumentation> fields = new HashMap<>();
         List<Field> allFields = getAllFields(builderClass);
         for (Field field : allFields) {
@@ -78,7 +68,7 @@ public class Builder {
                     .collect(Collectors.toList());
 
             if (!annotations.isEmpty()) {
-                fields.putIfAbsent(field.getName(), new FieldDocumentation(field, annotations, langLocation, missingLangKeys));
+                fields.putIfAbsent(field.getName(), new FieldDocumentation(field, annotations, langLocation));
             }
         }
 
@@ -203,11 +193,29 @@ public class Builder {
         return parts;
     }
 
+    @NotNull
+    private static List<String> getOutputs(List<String> parts) {
+        List<String> output = new ArrayList<>();
+        for (int i = 0; i < parts.size(); i++) {
+            String part = parts.get(i);
+            if (!part.isEmpty()) {
+                int indent = 4;
+                if (!output.isEmpty()) {
+                    int lastIndex = output.get(i - 1).indexOf(part.charAt(0));
+                    if (lastIndex != -1) indent = lastIndex;
+                }
+                output.add(StringUtils.repeat(" ", indent) + part.trim() + "\n");
+            }
+        }
+        return output;
+    }
+
     public String builderAdmonition() {
         if (annotation.example().length == 0) return "";
         return new AdmonitionBuilder()
                 .note(new CodeBlockBuilder().line(builder().split("\n")).annotation(annotations()).generate())
                 .type(Admonition.Type.EXAMPLE)
+                .indentation(1)
                 .generate();
     }
 
@@ -228,7 +236,7 @@ public class Builder {
     }
 
     public List<String> annotations() {
-        return Arrays.stream(annotation.example()).flatMap(example -> Arrays.stream(example.annotations())).map(this::lang).collect(Collectors.toList());
+        return Arrays.stream(annotation.example()).flatMap(example -> Arrays.stream(example.annotations())).map(Documentation::translate).collect(Collectors.toList());
     }
 
     public String documentMethods() {
@@ -246,7 +254,7 @@ public class Builder {
                     }
 
                     if (fieldDocumentation.hasRequirement()) {
-                        out.append(" ").append(I18n.format("groovyscript.wiki.requires", lang(fieldDocumentation.getRequirement())));
+                        out.append(" ").append(I18n.format("groovyscript.wiki.requires", fieldDocumentation.getRequirement()));
                     }
 
                     if (fieldDocumentation.hasDefaultValue()) {
@@ -291,46 +299,18 @@ public class Builder {
         return out.toString();
     }
 
-    @NotNull
-    private static List<String> getOutputs(List<String> parts) {
-        List<String> output = new ArrayList<>();
-        for (int i = 0; i < parts.size(); i++) {
-            String part = parts.get(i);
-            if (!part.isEmpty()) {
-                int indent = 4;
-                if (!output.isEmpty()) {
-                    int lastIndex = output.get(i - 1).indexOf(part.charAt(0));
-                    if (lastIndex != -1) indent = lastIndex;
-                }
-                output.add(StringUtils.repeat(" ", indent) + part.trim() + "\n");
-            }
-        }
-        return output;
-    }
-
-
     private static class FieldDocumentation implements Comparable<FieldDocumentation> {
 
         private final Field field;
         private final String langLocation;
         private final List<Property> annotations;
         private final Property firstAnnotation;
-        private final Collection<String> missingLangKeys;
 
-        public FieldDocumentation(Field field, List<Property> annotations, String langLocation, Collection<String> missingLangKeys) {
+        public FieldDocumentation(Field field, List<Property> annotations, String langLocation) {
             this.field = field;
             this.langLocation = langLocation;
             this.annotations = annotations;
             this.firstAnnotation = annotations.get(0);
-            this.missingLangKeys = missingLangKeys;
-        }
-
-        public String lang(String key, Object... args) {
-            if (!I18n.hasKey(key)) {
-                this.missingLangKeys.add(key);
-                return key;
-            }
-            return I18n.format(key, args);
         }
 
         public Field getField() {
@@ -378,7 +358,7 @@ public class Builder {
             if (!comparison.isPresent()) return "";
             return Arrays.stream(comparison.get())
                     .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
-                    .map(x -> lang(x.type().getKey(), x.value()))
+                    .map(x -> Documentation.translate(x.type().getKey(), x.value()))
                     .collect(Collectors.joining(String.format(" %s ", I18n.format("groovyscript.wiki.and"))));
         }
 
@@ -391,7 +371,7 @@ public class Builder {
                     .map(Property::requirement)
                     .filter(x -> !x.isEmpty())
                     .findFirst()
-                    .map(this::lang)
+                    .map(Documentation::translate)
                     .orElse("");
         }
 
@@ -404,11 +384,12 @@ public class Builder {
         }
 
         private String getFieldTypeInlineCode() {
-            return "`#!groovy " + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
+            //return "`#!groovy " + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
+            return "`" + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
         }
 
         public String getDescription() {
-            return "- " + getFieldTypeInlineCode() + lang(getLangKey()) + ".";
+            return "- " + getFieldTypeInlineCode() + Documentation.translate(getLangKey()) + ".";
         }
 
         @Override

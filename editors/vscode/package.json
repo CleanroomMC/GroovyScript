@@ -1,0 +1,67 @@
+{
+  "name": "groovyscript",
+  "displayName": "GroovyScript",
+  "description": "GroovyScript language client for Visual Studio Code",
+  "icon": "./logo.png",
+  "version": "1.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CleanroomMC/GroovyScript.git",
+    "directory": "editors/vscode"
+  },
+  "publisher": "CleanroomMC",
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/runConfig.json"
+  ],
+  "main": "./out/main.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "groovyscript.reconnect",
+        "title": "Reconnect",
+        "category": "GroovyScript"
+      }
+    ],
+    "configuration": {
+      "title": "GroovyScript",
+      "properties": {
+        "groovyscript.port": {
+          "type": "number",
+          "default": 25564,
+          "title": "Language server port",
+          "description": "Port to connect to GroovyScript mod"
+        }
+      }
+    },
+    "snippets": [
+      {
+        "language": "groovy",
+        "path": "./snippets/groovyscript.snippets.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build-base -- --minify",
+    "package": "vsce package -o groovy-analyzer.vsix",
+    "build-base": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node --target=node16",
+    "build": "npm run build-base -- --sourcemap",
+    "watch": "npm run build-base -- --sourcemap --watch",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "@types/vscode": "^1.81.0",
+    "esbuild": "^0.20.0"
+  }
+}

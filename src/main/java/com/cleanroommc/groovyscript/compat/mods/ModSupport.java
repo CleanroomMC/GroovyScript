@@ -6,9 +6,12 @@ import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.compat.mods.actuallyadditions.ActuallyAdditions;
 import com.cleanroommc.groovyscript.compat.mods.advancedmortars.AdvancedMortars;
+import com.cleanroommc.groovyscript.compat.mods.aetherlegacy.Aether;
+import com.cleanroommc.groovyscript.compat.mods.alchemistry.Alchemistry;
 import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnergistics2;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
+import com.cleanroommc.groovyscript.compat.mods.betterwithmods.BetterWithMods;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
 import com.cleanroommc.groovyscript.compat.mods.chisel.Chisel;
@@ -41,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ModSupport implements IDynamicGroovyProperty {
 
@@ -53,9 +57,12 @@ public class ModSupport implements IDynamicGroovyProperty {
 
     public static final GroovyContainer<ActuallyAdditions> ACTUALLY_ADDITIONS = new InternalModContainer<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
     public static final GroovyContainer<AdvancedMortars> ADVANCED_MORTARS = new InternalModContainer<>("advancedmortars", "Advanced Mortars", AdvancedMortars::new);
+    public static final GroovyContainer<Aether> AETHER = new InternalModContainer<>("aether_legacy", "The Aether", Aether::new, "aether");
+    public static final GroovyContainer<Alchemistry> ALCHEMISTRY = new InternalModContainer<>("alchemistry", "Alchemistry", Alchemistry::new);
     public static final GroovyContainer<AppliedEnergistics2> APPLIED_ENERGISTICS_2 = new InternalModContainer<>("appliedenergistics2", "Applied Energistics 2", AppliedEnergistics2::new, "ae2");
     public static final GroovyContainer<AstralSorcery> ASTRAL_SORCERY = new InternalModContainer<>("astralsorcery", "Astral Sorcery", AstralSorcery::new, "astral");
     public static final GroovyContainer<Avaritia> AVARITIA = new InternalModContainer<>("avaritia", "Avaritia", Avaritia::new);
+    public static final GroovyContainer<BetterWithMods> BETTER_WITH_MODS = new InternalModContainer<>("betterwithmods", "Better With Mods", BetterWithMods::new);
     public static final GroovyContainer<BloodMagic> BLOOD_MAGIC = new InternalModContainer<>("bloodmagic", "Blood Magic: Alchemical Wizardry", BloodMagic::new, "bm");
     public static final GroovyContainer<Botania> BOTANIA = new InternalModContainer<>("botania", "Botania", Botania::new);
     public static final GroovyContainer<Chisel> CHISEL = new InternalModContainer<>("chisel", "Chisel", Chisel::new);
@@ -150,6 +157,15 @@ public class ModSupport implements IDynamicGroovyProperty {
     public Object getProperty(String name) {
         GroovyContainer<?> container = containers.get(name);
         return container != null ? container.get() : null;
+    }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        for (var entry : containers.entrySet()) {
+            properties.put(entry.getKey(), entry.getValue().get());
+        }
+        return properties;
     }
 
     @GroovyBlacklist
