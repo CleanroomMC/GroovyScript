@@ -9,17 +9,11 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.rwtema.extrautils2.api.machine.IMachineRecipe;
-import com.rwtema.extrautils2.api.machine.MachineSlotFluid;
-import com.rwtema.extrautils2.api.machine.MachineSlotItem;
 import com.rwtema.extrautils2.api.machine.XUMachineCrusher;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @RegistryDescription
 public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
@@ -50,12 +44,8 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
     public boolean removeByInput(IIngredient input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineCrusher.INSTANCE.recipes_registry) {
-            for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
-                for (ItemStack stack : mapMapPair.getKey().get(XUMachineCrusher.INPUT)) {
-                    if (input.test(stack)) {
-                        agony.add(recipe);
-                    }
-                }
+            if (recipe.getJEIInputItemExamples().stream().flatMap(x -> x.getKey().get(XUMachineCrusher.INPUT).stream()).anyMatch(input)) {
+                agony.add(recipe);
             }
         }
         for (IMachineRecipe recipe : agony) {

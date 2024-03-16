@@ -7,7 +7,10 @@ import com.cleanroommc.groovyscript.core.mixin.extrautils2.MachineInitAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.rwtema.extrautils2.api.machine.*;
+import com.rwtema.extrautils2.api.machine.IMachineRecipe;
+import com.rwtema.extrautils2.api.machine.Machine;
+import com.rwtema.extrautils2.api.machine.MachineRegistry;
+import com.rwtema.extrautils2.api.machine.XUMachineGenerators;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -16,7 +19,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RegistryDescription
@@ -84,12 +86,8 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
     public boolean remove(Machine machine, ItemStack input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : machine.recipes_registry) {
-            for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
-                for (ItemStack stack : mapMapPair.getKey().get(XUMachineGenerators.INPUT_ITEM)) {
-                    if (input.isItemEqual(stack)) {
-                        agony.add(recipe);
-                    }
-                }
+            if (recipe.getJEIInputItemExamples().stream().flatMap(x -> x.getKey().get(XUMachineGenerators.INPUT_ITEM).stream()).anyMatch(input::isItemEqual)) {
+                agony.add(recipe);
             }
         }
         for (IMachineRecipe recipe : agony) {
@@ -118,12 +116,8 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
     public boolean remove(Machine machine, FluidStack input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : machine.recipes_registry) {
-            for (Pair<Map<MachineSlotItem, List<ItemStack>>, Map<MachineSlotFluid, List<FluidStack>>> mapMapPair : recipe.getJEIInputItemExamples()) {
-                for (FluidStack stack : mapMapPair.getValue().get(XUMachineGenerators.INPUT_FLUID)) {
-                    if (input.isFluidEqual(stack)) {
-                        agony.add(recipe);
-                    }
-                }
+            if (recipe.getJEIInputItemExamples().stream().flatMap(x -> x.getValue().get(XUMachineGenerators.INPUT_FLUID).stream()).anyMatch(input::isFluidEqual)) {
+                agony.add(recipe);
             }
         }
         for (IMachineRecipe recipe : agony) {
