@@ -670,6 +670,7 @@ groovyscript.wiki.extrautils2.enchanter.time.value=Sets the time in ticks the re
 
 groovyscript.wiki.extrautils2.furnace.title=Furnace
 groovyscript.wiki.extrautils2.furnace.description=Converts an input itemstack into an output itemstack, consuming energy.
+groovyscript.wiki.extrautils2.furnace.removeWarning=When removing items, keep in mind that the default registry mostly contains INPUT items allowing any metadata. This means you cannot do `item('minecraft:emerald_ore')` and instead must do `item('minecraft:emerald_ore:*')`
 groovyscript.wiki.extrautils2.furnace.energy.value=Sets the energy cost of the recipe
 groovyscript.wiki.extrautils2.furnace.time.value=Sets the time in ticks the recipe takes
 

@@ -14,7 +14,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@RegistryDescription
+@RegistryDescription(
+        admonition = @Admonition(type = Admonition.Type.WARNING,
+                                 format = Admonition.Format.STANDARD,
+                                 hasTitle = true,
+                                 value = "groovyscript.wiki.extrautils2.furnace.removeWarning")
+)
 public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
 
     @Override
@@ -39,7 +44,7 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:emerald_ore')"))
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:emerald_ore:*')"))
     public boolean removeByInput(IIngredient input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineFurnace.INSTANCE.recipes_registry) {

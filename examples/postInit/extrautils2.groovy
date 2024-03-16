@@ -47,7 +47,7 @@ mods.extrautils2.enchanter.recipeBuilder()
 // Furnace:
 // Converts an input itemstack into an output itemstack, consuming energy.
 
-mods.extrautils2.furnace.removeByInput(item('minecraft:emerald_ore'))
+mods.extrautils2.furnace.removeByInput(item('minecraft:emerald_ore:*'))
 // mods.extrautils2.furnace.removeAll()
 
 mods.extrautils2.furnace.recipeBuilder()
