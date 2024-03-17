@@ -41,7 +41,7 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:packmode-278398:2567799')
     }
 
-    compileOnly "codechicken:codechickenlib:3.2.3.358"
+    api "codechicken:codechickenlib:3.2.3.358"
 
     compileOnly rfg.deobf('curse.maven:avaritia_1_10-261348:3143349')
     if (project.debug_avaritia.toBoolean()) {

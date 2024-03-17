@@ -122,15 +122,14 @@ public class GroovyScript {
 
         FluidRegistry.enableUniversalBucket();
         getRunConfig().initPackmode();
-
-        if (Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
-            runLanguageServer();
-        }
     }
 
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
         if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) TinkersConstruct.init();
+        if (Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
+            runLanguageServer();
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
