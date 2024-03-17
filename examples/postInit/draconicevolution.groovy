@@ -7,9 +7,9 @@ println 'mod \'draconicevolution\' detected, running script'
 // Energy Core:
 // A multiblock which stores energy
 
-mods.draconicevolution.energy_core.setInnerBlock(7, block('minecraft:clay'))
-mods.draconicevolution.energy_core.setOuterBlock(2, block('minecraft:diamond_block'))
-mods.draconicevolution.energy_core.setOuterBlock(7, block('minecraft:diamond_block'))
+mods.draconicevolution.energy_core.setInnerBlock(7, blockstate('minecraft:stone', 1))
+mods.draconicevolution.energy_core.setOuterBlock(2, blockstate('minecraft:diamond_block'))
+mods.draconicevolution.energy_core.setOuterBlock(7, blockstate('minecraft:diamond_block'))
 
 // Fusion:
 // Consumes items and power from up to 54 pedestals of at least a given tier pointing towards a Fusion Crafting Core

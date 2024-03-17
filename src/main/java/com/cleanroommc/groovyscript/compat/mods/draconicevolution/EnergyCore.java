@@ -1,19 +1,17 @@
 package com.cleanroommc.groovyscript.compat.mods.draconicevolution;
 
-import com.brandon3055.brandonscore.lib.MultiBlockStorage;
-import com.brandon3055.draconicevolution.world.EnergyCoreStructure;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.core.mixin.draconicevolution.EnergyCoreStructureAccessor;
-import com.cleanroommc.groovyscript.core.mixin.draconicevolution.MultiBlockStorageAccessor;
+import com.cleanroommc.groovyscript.compat.mods.draconicevolution.helpers.BlockStateEnergyCoreStructure;
+import com.cleanroommc.groovyscript.compat.mods.draconicevolution.helpers.BlockStateMultiblockStorage;
+import com.cleanroommc.groovyscript.compat.mods.draconicevolution.helpers.BlockStates;
 import com.cleanroommc.groovyscript.helper.Alias;
-import net.minecraft.block.Block;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import com.cleanroommc.groovyscript.helper.ArrayUtils;
+import net.minecraft.block.state.IBlockState;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
@@ -22,24 +20,23 @@ import java.util.Collection;
 @RegistryDescription
 public class EnergyCore implements IScriptReloadable {
 
-    private static final String DRACONIUM = "draconicevolution:draconium_block";
-    private static final String DRACONIC = "draconicevolution:draconic_block";
-    private static final String REDSTONE = "minecraft:redstone_block";
-
     private int version = 0;
-    private MultiBlockStorage[] original;
-    private MultiBlockStorage[] edited;
-    private String[] inner;
-    private String[] outer;
+    private BlockStates[][][][] original;
+    private BlockStates[][][][] edited;
+    private BlockStates[] inner;
+    private BlockStates[] outer;
 
     private void init() {
         if (this.original != null) return;
-        EnergyCoreStructure ecs = new EnergyCoreStructure();
-        ecs.initialize(null);
-        this.original = ((EnergyCoreStructureAccessor) ecs).getStructureTiers();
-        this.edited = Arrays.copyOf(this.original, this.original.length);
-        this.inner = new String[this.original.length];
-        this.outer = new String[this.original.length];
+        BlockStateEnergyCoreStructure bsecs = new BlockStateEnergyCoreStructure(null);
+        this.original = new BlockStates[bsecs.getStructureTiers().length][][][];
+        BlockStateMultiblockStorage[] structureTiers = bsecs.getStructureTiers();
+        // deep copy structure
+        for (int i = 0; i < structureTiers.length; i++) {
+            this.original[i] = ArrayUtils.deepCopy3d(structureTiers[i].getStructure(), null);
+        }
+        this.inner = new BlockStates[this.original.length];
+        this.outer = new BlockStates[this.original.length];
         onReload(); // increases version to 1
     }
 
@@ -51,11 +48,11 @@ public class EnergyCore implements IScriptReloadable {
     @Override
     public void onReload() {
         if (this.original == null) return;
-        this.edited = Arrays.copyOf(this.original, this.original.length);
-        Arrays.fill(this.inner, REDSTONE);
-        Arrays.fill(this.outer, DRACONIUM);
-        this.inner[this.inner.length - 1] = DRACONIUM;
-        this.outer[this.outer.length - 1] = DRACONIC;
+        this.edited = ArrayUtils.deepCopy4d(this.original, this.edited);
+        Arrays.fill(this.inner, BlockStates.redstone());
+        Arrays.fill(this.outer, BlockStates.draconium());
+        this.inner[this.inner.length - 1] = BlockStates.draconium();
+        this.outer[this.outer.length - 1] = BlockStates.draconic();
         this.version++;
     }
 
@@ -69,13 +66,13 @@ public class EnergyCore implements IScriptReloadable {
 
     @GroovyBlacklist
     @ApiStatus.Internal
-    public void applyEdit(MultiBlockStorage[] mbs) {
+    public void applyEdit(BlockStateMultiblockStorage[] mbs) {
         for (int i = 0; i < mbs.length; i++) {
-            ((MultiBlockStorageAccessor) mbs[i]).setBlockStorage(((MultiBlockStorageAccessor) this.edited[i]).getBlockStorage());
+            mbs[i].setStructure(this.edited[i]);
         }
     }
 
-    private void replaceBlock(int tier, String edit, boolean inner) {
+    private void replaceBlock(int tier, BlockStates edit, boolean inner) {
         if (tier < 1 || tier > 8) {
             GroovyLog.msg("Error setting block of Draconic Evolution Energy Core")
                     .add("Tier {} is invalid. Must be between 1 and 8")
@@ -84,12 +81,12 @@ public class EnergyCore implements IScriptReloadable {
             return;
         }
         init();
-        String old = inner ? this.inner[tier - 1] : this.outer[tier - 1];
-        String[][][] blocks = ((MultiBlockStorageAccessor) this.edited[tier - 1]).getBlockStorage();
+        BlockStates old = inner ? this.inner[tier - 1] : this.outer[tier - 1];
+        BlockStates[][][] blocks = this.edited[tier - 1];
         for (int i = 0; i < blocks.length; i++) {
             for (int j = 0; j < blocks[i].length; j++) {
                 for (int k = 0; k < blocks[i][j].length; k++) {
-                    if (old.equals(blocks[i][j][k])) {
+                    if (old == blocks[i][j][k]) {
                         blocks[i][j][k] = edit;
                     }
                 }
@@ -99,33 +96,33 @@ public class EnergyCore implements IScriptReloadable {
     }
 
     @MethodDescription(description = "groovyscript.wiki.draconicevolution.inner_block", type = MethodDescription.Type.VALUE, example = {
-            @Example("7, block('minecraft:clay')")
+            @Example("7, blockstate('minecraft:stone', 1)")
     })
-    public EnergyCore setInnerBlock(int tier, Block block) {
-        if (block == null) {
+    public EnergyCore setInnerBlock(int tier, IBlockState... blockStates) {
+        if (blockStates == null || blockStates.length == 0) {
             GroovyLog.msg("Error setting inner block of tier {} Draconic Evolution Energy Core", tier)
-                    .add("block must not be null")
+                    .add("block states must not be null or empty")
                     .error()
                     .post();
             return this;
         }
-        replaceBlock(tier, block.getRegistryName().toString(), true);
+        replaceBlock(tier, BlockStates.of(blockStates), true);
         return this;
     }
 
     @MethodDescription(description = "groovyscript.wiki.draconicevolution.outer_block", type = MethodDescription.Type.VALUE, example = {
-            @Example("7, block('minecraft:diamond_block')"),
-            @Example("2, block('minecraft:diamond_block')")
+            @Example("7, blockstate('minecraft:diamond_block')"),
+            @Example("2, blockstate('minecraft:diamond_block')")
     })
-    public EnergyCore setOuterBlock(int tier, Block block) {
-        if (block == null) {
+    public EnergyCore setOuterBlock(int tier, IBlockState... blockStates) {
+        if (blockStates == null || blockStates.length == 0) {
             GroovyLog.msg("Error setting outer block of tier {} Draconic Evolution Energy Core", tier)
-                    .add("block must not be null")
+                    .add("block states must not be null or empty")
                     .error()
                     .post();
             return this;
         }
-        replaceBlock(tier, block.getRegistryName().toString(), false);
+        replaceBlock(tier, BlockStates.of(blockStates), false);
         return this;
     }
 }
