@@ -66,25 +66,15 @@ public @interface Admonition {
         /**
          * A box which is fully expanded at all times.
          */
-        STANDARD("!!!"),
+        STANDARD,
         /**
          * A box which can be toggled between only rendering the title and the full text. Defaults to the collapsed form (only the title visible).
          */
-        COLLAPSED("???"),
+        COLLAPSED,
         /**
          * A box which can be toggled between only rendering the title and the full text. Defaults to the expanded form (both title and text visible).
          */
-        EXPANDED("???+");
-
-        private final String type;
-
-        Format(String type) {
-            this.type = type;
-        }
-
-        public String toString() {
-            return type;
-        }
+        EXPANDED;
     }
 
 

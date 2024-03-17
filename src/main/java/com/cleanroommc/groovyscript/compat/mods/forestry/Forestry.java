@@ -2,7 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.forestry;
 
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
@@ -44,7 +44,11 @@ public class Forestry extends ModPropertyContainer {
         }
         String[] parts = mainArg.split(":");
         if (parts.length < 2) {
-            Result.error("Can't find bee species for '{}'", mainArg);
+            if (args.length > 0 && args[0] instanceof String s) {
+                parts = new String[]{parts[0], s};
+            } else {
+                Result.error("Can't find bee species for '{}'", mainArg);
+            }
         }
         IAlleleBeeSpecies species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(parts[0] + "." + parts[1]);
         if (species instanceof AlleleBeeSpecies) return Result.some((AlleleBeeSpecies) species);
@@ -61,6 +65,10 @@ public class Forestry extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandlerManager.registerGameObjectHandler("forestry", "species", Forestry::parseSpecies);
+        GameObjectHandler.builder("species", AlleleBeeSpecies.class)
+                .mod("forestry")
+                .parser(Forestry::parseSpecies)
+                .completerOfNamed(() -> AlleleManager.alleleRegistry.getRegisteredAlleles().keySet(), s -> s.replace('.', ':')) // elements don't have names
+                .register();
     }
 }
