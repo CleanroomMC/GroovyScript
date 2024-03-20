@@ -84,7 +84,7 @@ public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, Lis
         addScripted(Pair.of(Lists.newArrayList(target), Lists.newArrayList(description)));
     }
 
-    @MethodDescription(example = @Example("item('thaumcraft:triple_meat_treat')"))
+    @MethodDescription(example = @Example(value = "item('thaumcraft:triple_meat_treat')", commented = true))
     public void remove(List<IIngredient> target) {
         addBackup(Pair.of(target, null));
     }

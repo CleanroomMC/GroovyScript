@@ -2,8 +2,6 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: jei
 
-import com.buuz135.thaumicjei.ThaumcraftJEIPlugin
-import mekanism.client.jei.MekanismJEI
 import mezz.jei.api.ingredients.VanillaTypes
 
 println 'mod \'jei\' detected, running script'
@@ -26,7 +24,7 @@ mods.jei.category.hideCategory('minecraft.fuel')
 // Description Category:
 // Modify the description of the input items, where the description is a unique JEI tab containing text.
 
-mods.jei.description.remove(item('thaumcraft:triple_meat_treat'))
+// mods.jei.description.remove(item('thaumcraft:triple_meat_treat'))
 
 mods.jei.description.add(item('minecraft:clay'), ['wow', 'this', 'is', 'neat'])
 mods.jei.description.add(item('minecraft:gold_ingot'), 'groovyscript.recipe.fluid_recipe')
@@ -37,12 +35,12 @@ mods.jei.description.add(item('minecraft:gold_ingot'), 'groovyscript.recipe.flui
 mods.jei.ingredient.hide(fluid('water'))
 mods.jei.ingredient.hide(item('minecraft:stone:1'), item('minecraft:stone:3'))
 mods.jei.ingredient.hide(VanillaTypes.ITEM, item('minecraft:bed:*'))
-mods.jei.ingredient.hide(MekanismJEI.TYPE_GAS, gas('tritium'))
-mods.jei.ingredient.hideByType(ThaumcraftJEIPlugin.ASPECT_LIST)
+// mods.jei.ingredient.hide(mekanism.client.jei.MekanismJEI.TYPE_GAS, gas('tritium'))
 // mods.jei.ingredient.hideByType(VanillaTypes.ITEM)
 // mods.jei.ingredient.hideByType(VanillaTypes.FLUID)
-// mods.jei.ingredient.hideByType(MekanismJEI.TYPE_GAS)
 // mods.jei.ingredient.hideByType(VanillaTypes.ENCHANT)
+// mods.jei.ingredient.hideByType(mekanism.client.jei.MekanismJEI.TYPE_GAS)
+// mods.jei.ingredient.hideByType(com.buuz135.thaumicjei.ThaumcraftJEIPlugin.ASPECT_LIST)
 // mods.jei.ingredient.hideAll()
 
 mods.jei.ingredient.add(item('minecraft:stone:1').withNbt([display:[Name:'Special Granite']]))

@@ -114,7 +114,7 @@ public class Ingredient extends VirtualizedRegistry<Void> {
         hiddenIngredients.computeIfAbsent(type, k -> new ArrayList<>()).addAll(entries);
     }
 
-    @MethodDescription(example = @Example(value = "MekanismJEI.TYPE_GAS, gas('tritium')", imports = "mekanism.client.jei.MekanismJEI"))
+    @MethodDescription(example = @Example(value = "mekanism.client.jei.MekanismJEI.TYPE_GAS, gas('tritium')", commented = true))
     public void hide(IIngredientType<?> type, Object... entries) {
         hide(type, Arrays.asList(entries));
     }
@@ -158,8 +158,8 @@ public class Ingredient extends VirtualizedRegistry<Void> {
     }
 
     @MethodDescription(example = {
-            @Example(value = "ThaumcraftJEIPlugin.ASPECT_LIST", imports = "com.buuz135.thaumicjei.ThaumcraftJEIPlugin"),
-            @Example(value = "MekanismJEI.TYPE_GAS", imports = "mekanism.client.jei.MekanismJEI", commented = true),
+            @Example(value = "com.buuz135.thaumicjei.ThaumcraftJEIPlugin.ASPECT_LIST", commented = true),
+            @Example(value = "mekanism.client.jei.MekanismJEI.TYPE_GAS", commented = true),
             @Example(value = "VanillaTypes.ITEM", imports = "mezz.jei.api.ingredients.VanillaTypes", commented = true),
             @Example(value = "VanillaTypes.ENCHANT", imports = "mezz.jei.api.ingredients.VanillaTypes", commented = true),
             @Example(value = "VanillaTypes.FLUID", imports = "mezz.jei.api.ingredients.VanillaTypes", commented = true),
