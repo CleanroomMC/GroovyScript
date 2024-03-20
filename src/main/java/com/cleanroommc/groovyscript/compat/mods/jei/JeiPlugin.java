@@ -91,6 +91,7 @@ public class JeiPlugin implements IModPlugin {
         registry.addRecipes(VanillaModule.inWorldCrafting.pistonPush.getRecipeWrappers(), PistonPushRecipeCategory.UID);
 
         ModSupport.JEI.get().description.applyAdditions(modRegistry);
+        ModSupport.JEI.get().catalyst.applyChanges(registry);
     }
 
     @Override
