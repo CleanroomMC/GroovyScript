@@ -154,7 +154,7 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
             GroovyLog.msg("Extra Utilities 2 Resonator shouldProgress closure requires a closure with exactly three parameters:")
                     .add("net.minecraft.tileentity.TileEntity resonator, int frequency, net.minecraft.item.ItemStack input in that order.")
                     .add("but had {}, {}, {} instead", (Object[]) shouldProgress.getParameterTypes())
-                    .error()
+                    .debug()
                     .post();
             return this;
         }

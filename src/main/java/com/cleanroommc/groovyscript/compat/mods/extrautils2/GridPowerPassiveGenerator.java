@@ -85,7 +85,7 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
         GroovyLog.msg("Extra Utilities 2 Grid Power Passive Generator powerLevel closure requires a closure with exactly two parameters:")
                 .add("com.rwtema.extrautils2.tile.TilePassiveGenerator generator, net.minecraft.world.World world in that order.")
                 .add("but had {}, {} instead", (Object[]) powerLevel.getParameterTypes())
-                .error()
+                .debug()
                 .post();
     }
 
