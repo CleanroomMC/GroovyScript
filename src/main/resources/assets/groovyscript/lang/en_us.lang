@@ -795,6 +795,35 @@ groovyscript.wiki.integrateddynamics.squeezer.output.value=Sets the possible ite
 groovyscript.wiki.integrateddynamics.squeezer.duration.value=Sets the time in ticks the recipe takes to process in the Mechanical Squeezer, has no effect on the Squeezer
 groovyscript.wiki.integrateddynamics.squeezer.mechanical.value=Sets if the recipe is added to the mechanical (Mechanical Squeezer) machine
 
+# Just Enough Items
+groovyscript.wiki.jei.catalyst.title=Category Catalysts
+groovyscript.wiki.jei.catalyst.description=Modify the items shown on the left of JEI Categories which indicate where the recipe takes place
+groovyscript.wiki.jei.catalyst.add=Adds the given catalyst items to the given category
+groovyscript.wiki.jei.catalyst.remove=Removes the given catalyst items from the given category
+groovyscript.wiki.jei.catalyst.removeByType=Removes all catalyst items from the given category
+
+groovyscript.wiki.jei.category.title=Categories
+groovyscript.wiki.jei.category.description=Modify the Categories visible in JEI, each of which contain recipes and are associated with specific blocks, typically machines.
+groovyscript.wiki.jei.category.note0=Hidden Categories will still take up load time, and recipes contained within can still be processed. This only prevents seeing Categories.
+groovyscript.wiki.jei.category.hideCategory=Hides the given category from JEI
+groovyscript.wiki.jei.category.hideAll=Hides all categories from JEI
+
+groovyscript.wiki.jei.description.title=Description Category
+groovyscript.wiki.jei.description.description=Modify the description of the input items, where the description is a unique JEI tab containing text.
+groovyscript.wiki.jei.description.add=Adds the given description to the given ingredients, translating the description lines as needed
+groovyscript.wiki.jei.description.remove=Removes any description from the given ingredients
+
+groovyscript.wiki.jei.ingredient.title=Ingredient Sidebar
+groovyscript.wiki.jei.ingredient.description=Modify what ingredients show up in the search menu sidebar.
+groovyscript.wiki.jei.ingredient.note0=Hidden ingredients will still take up load time, and recipes to create them can still be done. This only prevents seeing the ingredients in JEI.
+groovyscript.wiki.jei.ingredient.add=Adds the given ingredient with its given NBT data to JEI
+groovyscript.wiki.jei.ingredient.hide=Hides the ingredient from JEI
+groovyscript.wiki.jei.ingredient.hideByType=Hides all ingredients of the given type
+groovyscript.wiki.jei.ingredient.removeAndHide=Removes the vanilla crafting recipe for the given ItemStack and hides the item from JEI
+groovyscript.wiki.jei.ingredient.yeet=Alias for `removeAndHide`
+groovyscript.wiki.jei.ingredient.hideAll=Hides all ingredients of all types from the sidebar. Functionally disables JEI
+
+
 # Mekanism
 groovyscript.wiki.mekanism.gasInput.value=Sets the gas inputs of the recipe
 groovyscript.wiki.mekanism.gasOutput.value=Sets the gas outputs of the recipe
