@@ -97,6 +97,7 @@ public class JeiPlugin implements IModPlugin {
         jeiRuntime = iJeiRuntime;
 
         ModSupport.JEI.get().ingredient.applyChanges(itemRegistry);
+        ModSupport.JEI.get().category.applyChanges(recipeRegistry);
     }
 
     public static SimpleCommand getJeiCategoriesCommand() {
