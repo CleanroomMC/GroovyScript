@@ -48,6 +48,13 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:avaritia_1_10-261348:3143349')
     }
 
+    compileOnly rfg.deobf("curse.maven:sonar-core-239418:2645156")
+    compileOnly rfg.deobf("curse.maven:calculator-225104:2847174")
+    if (project.debug_calculator.toBoolean()) {
+        runtimeOnly rfg.deobf("curse.maven:sonar-core-239418:2645156")
+        runtimeOnly rfg.deobf("curse.maven:calculator-225104:2847174")
+    }
+
     compileOnly rfg.deobf("curse.maven:shadowfacts-forgelin-248453:2785465")
     compileOnly rfg.deobf("curse.maven:alchemylib-293426:2761706")
     compileOnly rfg.deobf("curse.maven:alchemistry-293425:3186612")
