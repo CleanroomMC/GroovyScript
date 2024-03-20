@@ -89,6 +89,8 @@ public class JeiPlugin implements IModPlugin {
         registry.addRecipes(VanillaModule.inWorldCrafting.explosion.getRecipeWrappers(), ExplosionRecipeCategory.UID);
         registry.addRecipes(VanillaModule.inWorldCrafting.burning.getRecipeWrappers(), BurningRecipeCategory.UID);
         registry.addRecipes(VanillaModule.inWorldCrafting.pistonPush.getRecipeWrappers(), PistonPushRecipeCategory.UID);
+
+        ModSupport.JEI.get().description.applyAdditions(modRegistry);
     }
 
     @Override
@@ -98,6 +100,7 @@ public class JeiPlugin implements IModPlugin {
 
         ModSupport.JEI.get().ingredient.applyChanges(itemRegistry);
         ModSupport.JEI.get().category.applyChanges(recipeRegistry);
+        ModSupport.JEI.get().description.applyRemovals(recipeRegistry);
     }
 
     public static SimpleCommand getJeiCategoriesCommand() {
