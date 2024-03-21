@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
@@ -147,15 +146,14 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
                         .post();
                 return this;
             }
-            if (Arrays.equals(shouldProgress.getParameterTypes(), new Class[]{TileEntity.class, int.class, ItemStack.class})) {
-                this.shouldProgress = shouldProgress;
-                return this;
+            if (!Arrays.equals(shouldProgress.getParameterTypes(), new Class[]{TileEntity.class, int.class, ItemStack.class})) {
+                GroovyLog.msg("Extra Utilities 2 Resonator shouldProgress closure should be a closure with exactly three parameters:")
+                        .add("net.minecraft.tileentity.TileEntity resonator, int frequency, net.minecraft.item.ItemStack input in that order.")
+                        .add("but had {}, {}, {} instead", (Object[]) shouldProgress.getParameterTypes())
+                        .debug()
+                        .post();
             }
-            GroovyLog.msg("Extra Utilities 2 Resonator shouldProgress closure requires a closure with exactly three parameters:")
-                    .add("net.minecraft.tileentity.TileEntity resonator, int frequency, net.minecraft.item.ItemStack input in that order.")
-                    .add("but had {}, {}, {} instead", (Object[]) shouldProgress.getParameterTypes())
-                    .debug()
-                    .post();
+            this.shouldProgress = shouldProgress;
             return this;
         }
 

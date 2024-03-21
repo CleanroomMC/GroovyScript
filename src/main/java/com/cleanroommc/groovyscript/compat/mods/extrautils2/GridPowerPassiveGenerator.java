@@ -78,15 +78,14 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
                     .post();
             return;
         }
-        if (Arrays.equals(powerLevel.getParameterTypes(), new Class[]{TilePassiveGenerator.class, World.class})) {
-            this.powerLevelMap.put(generator, powerLevel);
-            return;
+        if (!Arrays.equals(powerLevel.getParameterTypes(), new Class[]{TilePassiveGenerator.class, World.class})) {
+            GroovyLog.msg("Extra Utilities 2 Grid Power Passive Generator powerLevel closure should be a closure with exactly two parameters:")
+                    .add("com.rwtema.extrautils2.tile.TilePassiveGenerator generator, net.minecraft.world.World world in that order.")
+                    .add("but had {}, {} instead", (Object[]) powerLevel.getParameterTypes())
+                    .debug()
+                    .post();
         }
-        GroovyLog.msg("Extra Utilities 2 Grid Power Passive Generator powerLevel closure requires a closure with exactly two parameters:")
-                .add("com.rwtema.extrautils2.tile.TilePassiveGenerator generator, net.minecraft.world.World world in that order.")
-                .add("but had {}, {} instead", (Object[]) powerLevel.getParameterTypes())
-                .debug()
-                .post();
+        this.powerLevelMap.put(generator, powerLevel);
     }
 
     @MethodDescription(type = MethodDescription.Type.VALUE)
