@@ -21,6 +21,7 @@ public class LateMixin implements ILateMixinLoader {
             "draconicevolution",
             "enderio",
             "extendedcrafting",
+            "extrautils2",
             "forestry",
             "ic2_classic",
             "ic2_exp",

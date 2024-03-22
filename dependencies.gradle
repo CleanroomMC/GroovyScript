@@ -98,6 +98,11 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
     }
 
+    compileOnly rfg.deobf('curse.maven:extra-utilities-2-225561:2678374')
+    if (project.debug_extra_utilities_2.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:extra-utilities-2-225561:2678374')
+    }
+
     compileOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
     if (project.debug_thermal.toBoolean() || project.debug_draconic_evolution.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
