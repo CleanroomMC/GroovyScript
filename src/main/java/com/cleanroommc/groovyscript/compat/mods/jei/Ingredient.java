@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -28,6 +29,10 @@ public class Ingredient extends VirtualizedRegistry<Void> {
     private final Map<IIngredientType<?>, List<Object>> addedIngredients = new Object2ObjectOpenHashMap<>();
     private final List<IIngredientType<?>> hiddenTypes = new ArrayList<>();
     private boolean hideAllIngredients;
+
+    public Ingredient() {
+        super(Alias.generateOfClass(Ingredient.class).andGenerate("Sidebar"));
+    }
 
     /**
      * Called by {@link JeiPlugin#onRuntimeAvailable}
