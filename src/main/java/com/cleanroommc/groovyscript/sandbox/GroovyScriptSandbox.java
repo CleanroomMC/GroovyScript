@@ -65,7 +65,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("Mods", ModSupport.INSTANCE);
         registerBinding("Log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
-        registerBinding("MinecraftHome", GroovyScript.getMinecraftHome());
 
         this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
         registerStaticImports(GroovyHelper.class, MathHelper.class);
