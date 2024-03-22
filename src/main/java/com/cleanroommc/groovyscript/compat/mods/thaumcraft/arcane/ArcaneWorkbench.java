@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.registry.NamedRegistry;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.crafting.IRecipe;
@@ -18,15 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class ArcaneWorkbench extends VirtualizedRegistry<Void> {
+public class ArcaneWorkbench extends NamedRegistry {
 
     public static final ResourceLocation DEFAULT = new ResourceLocation("");
-
-    @Override
-    @GroovyBlacklist
-    public void onReload() {
-        // do nothing
-    }
 
     public void add(String name, IRecipe recipe) {
         ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
