@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
@@ -43,7 +44,7 @@ public class Exporter {
     public static void generateWiki(File folder, GroovyContainer<? extends ModPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();
 
-        List<IScriptReloadable> registries = mod.get().getRegistries().stream()
+        List<INamed> registries = mod.get().getRegistries().stream()
                 .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
                 .distinct()
                 .sorted((left, right) -> ComparisonChain.start()
@@ -54,7 +55,7 @@ public class Exporter {
 
         if (registries.isEmpty()) return;
 
-        for (IScriptReloadable registry : registries) {
+        for (INamed registry : registries) {
             Registry example = new Registry(mod, registry);
 
             String location = String.format("%s.md", registry.getName());
@@ -118,7 +119,7 @@ public class Exporter {
                 .append("// MODS_LOADED: ").append(mod.getModId()).append("\n");
 
         // Iterate through every registry of the mod once, in alphabetical order.
-        List<IScriptReloadable> registries = mod.get().getRegistries().stream()
+        List<INamed> registries = mod.get().getRegistries().stream()
                 .distinct()
                 .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
                 .filter(x -> x.getClass().getAnnotation(RegistryDescription.class).location().equals(target))
@@ -130,7 +131,7 @@ public class Exporter {
 
         if (registries.isEmpty()) return;
 
-        for (IScriptReloadable registry : registries) {
+        for (INamed registry : registries) {
             GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", mod.toString(), registry.getName()).debug().post();
             Registry example = new Registry(mod, registry);
             imports.addAll(example.getImports());
