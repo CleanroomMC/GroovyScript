@@ -12,6 +12,8 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,7 +64,8 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        for (IGrinderRecipe recipe : AEApi.instance().registries().grinder().getRecipes()) {
+        Collection<IGrinderRecipe> recipes = new ArrayList<>(AEApi.instance().registries().grinder().getRecipes());
+        for (IGrinderRecipe recipe : recipes) {
             AEApi.instance().registries().grinder().removeRecipe(recipe);
             addBackup(recipe);
         }
