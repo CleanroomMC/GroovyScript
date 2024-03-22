@@ -1,13 +1,13 @@
 package com.cleanroommc.groovyscript.registry;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.INamed;
-import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.helper.Alias;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public abstract class NamedRegistry implements INamed {
@@ -24,9 +24,8 @@ public abstract class NamedRegistry implements INamed {
         if (local.isEmpty()) {
             throw new IllegalArgumentException("NamedRegistry must have at least one name!");
         }
-        List<String> aliases1 = local.stream().distinct().collect(Collectors.toList());
-        this.name = aliases1.get(0).toLowerCase(Locale.ROOT);
-        this.aliases = Collections.unmodifiableList(aliases1);
+        this.aliases = Collections.unmodifiableList(local.stream().distinct().collect(Collectors.toList()));
+        this.name = this.aliases.get(0).toLowerCase(Locale.ROOT);
     }
 
     public String getName() {
