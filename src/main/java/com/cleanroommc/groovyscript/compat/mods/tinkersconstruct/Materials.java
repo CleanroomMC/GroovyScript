@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.GroovyMaterial;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.GroovyMaterialIntegration;
@@ -10,20 +9,15 @@ import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.traits
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.MaterialAccessor;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.NamedRegistry;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.traits.ITrait;
 
-public class Materials extends VirtualizedRegistry<GroovyMaterial> {
+public class Materials extends NamedRegistry {
 
     public ToolMaterialBuilder materialBuilder(String name) {
         return new ToolMaterialBuilder(name);
-    }
-
-    @Override
-    @GroovyBlacklist
-    public void onReload() {
     }
 
     public void addTrait(GroovyTrait trait) {
