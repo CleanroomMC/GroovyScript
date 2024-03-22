@@ -6,25 +6,24 @@ import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.AnvilRecipe;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 
-public class ForgeRegistryWrapper<T extends IForgeRegistryEntry<T>> implements IScriptReloadable {
+public class ForgeRegistryWrapper<T extends IForgeRegistryEntry<T>> extends NamedRegistry implements IScriptReloadable {
 
     private final IForgeRegistry<T> registry;
-    private final Collection<String> aliases;
+
+    public ForgeRegistryWrapper(IForgeRegistry<T> registry) {
+        this(registry, null);
+    }
 
     public ForgeRegistryWrapper(IForgeRegistry<T> registry, Collection<String> aliases) {
+        super(aliases);
         this.registry = Objects.requireNonNull(registry);
-        this.aliases = Collections.unmodifiableCollection(aliases);
     }
 
     @GroovyBlacklist
@@ -41,11 +40,6 @@ public class ForgeRegistryWrapper<T extends IForgeRegistryEntry<T>> implements I
     @GroovyBlacklist
     @Override
     public void afterScriptLoad() {}
-
-    @Override
-    public Collection<String> getAliases() {
-        return aliases;
-    }
 
     public void add(T entry) {
         if (entry != null) {
