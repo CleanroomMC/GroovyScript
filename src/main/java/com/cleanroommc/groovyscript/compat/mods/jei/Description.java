@@ -7,7 +7,6 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.jei.IngredientInfoRecipeAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.google.common.collect.Lists;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.IRecipeRegistry;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -16,6 +15,8 @@ import mezz.jei.plugins.jei.info.IngredientInfoRecipeCategory;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -71,17 +72,17 @@ public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, Lis
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(List<IIngredient> target, String... description) {
-        addScripted(Pair.of(target, Lists.newArrayList(description)));
+        addScripted(Pair.of(target, Arrays.asList(description)));
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:clay'), ['wow', 'this', 'is', 'neat']"))
     public void add(IIngredient target, List<String> description) {
-        addScripted(Pair.of(Lists.newArrayList(target), description));
+        addScripted(Pair.of(Collections.singletonList(target), description));
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:gold_ingot'), 'groovyscript.recipe.fluid_recipe'"))
     public void add(IIngredient target, String... description) {
-        addScripted(Pair.of(Lists.newArrayList(target), Lists.newArrayList(description)));
+        addScripted(Pair.of(Collections.singletonList(target), Arrays.asList(description)));
     }
 
     @MethodDescription(example = @Example(value = "item('thaumcraft:triple_meat_treat')", commented = true))
@@ -91,7 +92,7 @@ public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, Lis
 
     @MethodDescription
     public void remove(IIngredient... target) {
-        addBackup(Pair.of(Lists.newArrayList(target), null));
+        addBackup(Pair.of(Arrays.asList(target), null));
     }
 
 }
