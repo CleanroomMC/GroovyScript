@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox.security;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import sun.misc.Unsafe;
 
 import java.io.FilePermission;
@@ -54,7 +55,7 @@ public class SandboxSecurityManager extends SecurityManager {
     }
 
     public void uninstall() {
-        System.setSecurityManager(this.parent);
+        UNSAFE.putObject(securityFieldBase, securityFieldOffset, this.parent);
     }
 
     public void checkFile(Permission perm) {
@@ -62,6 +63,7 @@ public class SandboxSecurityManager extends SecurityManager {
             String path = filePerm.getName();
             Class<?>[] classContext = getClassContext();
             if (!path.startsWith(GroovyScript.getMinecraftHome().getPath())) {
+                if (FMLLaunchHandler.isDeobfuscatedEnvironment() && path.startsWith(GroovyScript.getScriptPath())) return;
                 for (Class<?> clazz : classContext) {
                     if (ClassLoader.class.isAssignableFrom(clazz)) {
                         // allow loading classes
