@@ -229,6 +229,13 @@ groovyscript.wiki.appliedenergistics2.spatial.description=Either the class itsel
 groovyscript.wiki.appliedenergistics2.spatial.add=Adds the given class to the list of allowed TileEntities to be moved by Spatial Storage
 groovyscript.wiki.appliedenergistics2.spatial.remove=Removes the given class from the list of allowed TileEntities to be moved by Spatial Storage
 
+
+# Arcane Archives
+groovyscript.wiki.arcanearchives.gem_cutting_table.title=Gem Cutting Table
+groovyscript.wiki.arcanearchives.gem_cutting_table.description=Converts any number of itemstacks into a single output itemstack via selecting the desired output itemstack in the GUI.
+groovyscript.wiki.arcanearchives.gem_cutting_table.note0=While more than 8 items can function as the input of a Stygian Iron Anvil recipe, only the first 8 are shown in JEI.
+
+
 # Astral Sorcery
 groovyscript.wiki.astralsorcery.aevitas_perk_registry.title=Aevitas Perk Registry
 groovyscript.wiki.astralsorcery.aevitas_perk_registry.description=Having the Stone Enrichment perk will convert nearby stone blocks into random ores.
