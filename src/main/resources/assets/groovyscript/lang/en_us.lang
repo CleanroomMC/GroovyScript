@@ -625,7 +625,7 @@ groovyscript.wiki.compactmachines3.miniaturization.symmetrical.value=Sets if the
 
 # Draconic Evolution
 groovyscript.wiki.draconicevolution.energy_core.title=Energy Core
-groovyscript.wiki.draconicevolution.energy_core.description=A multiblock which stores energy
+groovyscript.wiki.draconicevolution.energy_core.description=A multiblock with 8 tiers for storing large amounts of energy.
 groovyscript.wiki.draconicevolution.outer_block=Sets the inner block for the multiblock in the format `tier`, `block`
 groovyscript.wiki.draconicevolution.inner_block=Sets the outer block for the multiblock in the format `tier`, `block`
 groovyscript.wiki.draconicevolution.fusion.title=Fusion
