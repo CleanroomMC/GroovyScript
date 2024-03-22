@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.gildedgames.the_aether.api.enchantments.AetherEnchantment;
@@ -15,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
 
     public Enchanter() {
-        super(GameRegistry.findRegistry(AetherEnchantment.class), Alias.generateOfClass(Enchanter.class));
+        super(GameRegistry.findRegistry(AetherEnchantment.class));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).time(200)"))

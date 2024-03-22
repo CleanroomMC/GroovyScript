@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.gildedgames.the_aether.api.freezables.AetherFreezable;
@@ -15,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
 
     public Freezer() {
-        super(GameRegistry.findRegistry(AetherFreezable.class), Alias.generateOfClass(Freezer.class));
+        super(GameRegistry.findRegistry(AetherFreezable.class));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:dirt')).time(200)"))

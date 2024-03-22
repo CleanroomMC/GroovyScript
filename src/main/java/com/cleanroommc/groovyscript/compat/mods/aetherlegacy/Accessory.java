@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -19,7 +18,7 @@ import java.util.Arrays;
 public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
 
     public Accessory() {
-        super(GameRegistry.findRegistry(AetherAccessory.class), Alias.generateOfClass(Accessory.class));
+        super(GameRegistry.findRegistry(AetherAccessory.class));
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
