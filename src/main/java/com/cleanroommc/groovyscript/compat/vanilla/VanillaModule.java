@@ -30,7 +30,6 @@ public class VanillaModule implements IScriptReloadable {
         GroovyScript.getSandbox().registerBinding(furnace);
         GroovyScript.getSandbox().registerBinding(loot);
         GroovyScript.getSandbox().registerBinding(oreDict);
-        GroovyScript.getSandbox().registerBinding(oreDict);
         GroovyScript.getSandbox().registerBinding(player);
         GroovyScript.getSandbox().registerBinding(content);
         GroovyScript.getSandbox().registerBinding(rarity);
