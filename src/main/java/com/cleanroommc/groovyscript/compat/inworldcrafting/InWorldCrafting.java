@@ -2,15 +2,13 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
+import com.cleanroommc.groovyscript.registry.NamedRegistry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Collection;
-import java.util.Collections;
-
-public class InWorldCrafting implements IScriptReloadable {
+public class InWorldCrafting extends NamedRegistry implements IScriptReloadable {
 
     public final FluidToFluid fluidToFluid = new FluidToFluid();
     public final FluidToItem fluidToItem = new FluidToItem();
@@ -39,11 +37,6 @@ public class InWorldCrafting implements IScriptReloadable {
         this.explosion.afterScriptLoad();
         this.burning.afterScriptLoad();
         this.pistonPush.afterScriptLoad();
-    }
-
-    @Override
-    public Collection<String> getAliases() {
-        return Collections.emptyList();
     }
 
     public static EntityItem spawnItem(World world, BlockPos pos, ItemStack item) {

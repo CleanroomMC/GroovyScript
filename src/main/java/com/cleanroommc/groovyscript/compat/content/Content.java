@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.content;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.registry.NamedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,7 +14,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Content {
+public class Content extends NamedRegistry {
 
     public CreativeTabs defaultTab;
 

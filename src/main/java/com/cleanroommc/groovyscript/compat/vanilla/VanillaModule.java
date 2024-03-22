@@ -27,14 +27,14 @@ public class VanillaModule implements IScriptReloadable {
 
     public static void initializeBinding() {
         GroovyScript.getSandbox().registerBinding(crafting);
-        GroovyScript.getSandbox().registerBinding("Furnace", furnace);
-        GroovyScript.getSandbox().registerBinding("Loot", loot);
-        GroovyScript.getSandbox().registerBinding("OreDict", oreDict);
-        GroovyScript.getSandbox().registerBinding("OreDictionary", oreDict);
-        GroovyScript.getSandbox().registerBinding("Player", player);
-        GroovyScript.getSandbox().registerBinding("Content", content);
-        GroovyScript.getSandbox().registerBinding("Rarity", rarity);
-        GroovyScript.getSandbox().registerBinding("InWorldCrafting", inWorldCrafting);
+        GroovyScript.getSandbox().registerBinding(furnace);
+        GroovyScript.getSandbox().registerBinding(loot);
+        GroovyScript.getSandbox().registerBinding(oreDict);
+        GroovyScript.getSandbox().registerBinding(oreDict);
+        GroovyScript.getSandbox().registerBinding(player);
+        GroovyScript.getSandbox().registerBinding(content);
+        GroovyScript.getSandbox().registerBinding(rarity);
+        GroovyScript.getSandbox().registerBinding(inWorldCrafting);
 
         ExpansionHelper.mixinClass(ItemStack.class, RarityItemStackExpansion.class);
     }
