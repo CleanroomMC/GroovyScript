@@ -181,6 +181,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     public <T> T runClosure(Closure<T> closure, Object... args) {
         startRunning();
+        securityManager.install();
         T result = null;
         try {
             result = closure.call(args);
@@ -191,6 +192,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
                 return new AtomicInteger();
             }).addAndGet(1);
         } finally {
+            securityManager.uninstall();
             stopRunning();
         }
         return result;
