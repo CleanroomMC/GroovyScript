@@ -45,9 +45,6 @@ public class SandboxSecurityManager extends SecurityManager {
 
     public SandboxSecurityManager() {
         this.parent = System.getSecurityManager();
-        if (this.parent == null) {
-            throw new NullPointerException();
-        }
     }
 
     public void install() {
@@ -77,18 +74,18 @@ public class SandboxSecurityManager extends SecurityManager {
 
     @Override
     public Object getSecurityContext() {
-        return parent.getSecurityContext();
+        return parent != null ? parent.getSecurityContext() : super.getSecurityContext();
     }
 
     @Override
     public void checkPermission(Permission perm) {
-        parent.checkPermission(perm);
+        if (parent != null) parent.checkPermission(perm);
         checkFile(perm);
     }
 
     @Override
     public void checkPermission(Permission perm, Object context) {
-        parent.checkPermission(perm, context);
+        if (parent != null) parent.checkPermission(perm, context);
         checkFile(perm);
     }
 }
