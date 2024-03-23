@@ -86,9 +86,10 @@ public class EvaporatingBasin extends VirtualizedRegistry<IEvaporatingBasinRecip
     @Property(property = "fluidInput", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IEvaporatingBasinRecipe> {
 
-        @Property
+        @Property(defaultValue = "fluidInput amount")
         private int time;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;

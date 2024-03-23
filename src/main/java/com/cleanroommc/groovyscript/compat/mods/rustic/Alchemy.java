@@ -132,6 +132,7 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
@@ -160,18 +161,6 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
                                                           fluidInput.isEmpty() ? new FluidStack(FluidRegistry.WATER, 125) : fluidInput.getOrEmpty(0),
                                                           time, advanced);
 
-//            if (false) {
-//                if (advanced) {
-//                    var inputArray = input.stream().map(IngredientHelper::toItemStack).toArray(ItemStack[]::new);
-//                    recipe = effect == null
-//                             ? new AdvancedCondenserRecipe(output.get(0), modifier, inputArray)
-//                             : new AdvancedCondenserRecipe(effect, modifier, inputArray);
-//                } else {
-//                    recipe = effect == null
-//                             ? new BasicCondenserRecipe(output.get(0), IngredientHelper.toItemStack(input.get(0)), IngredientHelper.toItemStack(input.get(1)))
-//                             : new BasicCondenserRecipe(effect, IngredientHelper.toItemStack(input.get(0)), IngredientHelper.toItemStack(input.get(1)));
-//                }
-//            }
             ModSupport.RUSTIC.get().alchemy.add(recipe);
             return recipe;
         }
