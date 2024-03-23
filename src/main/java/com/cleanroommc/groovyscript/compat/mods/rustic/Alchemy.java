@@ -87,7 +87,7 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2 or 3", type = Comp.Type.LTE)})
-    @Property(property = "fluidInput", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+    @Property(property = "fluidInput", defaultValue = "fluid('water') * 125", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
     @Property(property = "output", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICondenserRecipe> {
 
