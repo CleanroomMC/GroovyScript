@@ -224,6 +224,11 @@ dependencies {
         runtimeOnly 'curse.maven:thaumic_jei-285492:2705304'
     }
 
+    compileOnly rfg.deobf('curse.maven:rustic-256141:3107974')
+    if (project.debug_rustic.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:rustic-256141:3107974')
+    }
+
     compileOnly rfg.deobf('curse.maven:astralsorcery-sorcery-241721:3044416')
     if (project.debug_astral.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:astralsorcery-sorcery-241721:3044416')
