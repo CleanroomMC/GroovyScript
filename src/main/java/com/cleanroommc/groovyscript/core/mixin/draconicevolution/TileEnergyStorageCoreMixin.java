@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.core.mixin.draconicevolution;
 
 import com.brandon3055.draconicevolution.blocks.tileentity.TileEnergyStorageCore;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.helpers.BlockStateEnergyCoreStructure;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,6 +22,7 @@ public abstract class TileEnergyStorageCoreMixin {
 
     @Inject(method = "update", at = @At("HEAD"))
     public void update(CallbackInfo ci) {
+        if (!GroovyScriptConfig.compat.draconicEvolutionEnergyCore) return;
         TileEnergyStorageCore tile = (TileEnergyStorageCore) (Object) this;
         if (!tile.getWorld().isRemote && ticksElapsed % 500 != 0 && ((BlockStateEnergyCoreStructure) tile.coreStructure).checkVersion()) {
             validateStructure();
@@ -29,6 +31,7 @@ public abstract class TileEnergyStorageCoreMixin {
 
     @Inject(method = "validateStructure", at = @At("HEAD"), cancellable = true)
     public void validateStructure(CallbackInfoReturnable<Boolean> cir) {
+        if (!GroovyScriptConfig.compat.draconicEvolutionEnergyCore) return;
         TileEnergyStorageCore tile = (TileEnergyStorageCore) (Object) this;
         boolean valid = tile.checkStabilizers();
         var helper = ((BlockStateEnergyCoreStructure) tile.coreStructure).getHelper();

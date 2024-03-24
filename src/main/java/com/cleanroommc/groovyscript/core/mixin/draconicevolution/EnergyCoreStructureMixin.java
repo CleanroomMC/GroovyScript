@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.core.mixin.draconicevolution;
 
 import com.brandon3055.draconicevolution.blocks.tileentity.TileEnergyStorageCore;
 import com.brandon3055.draconicevolution.world.EnergyCoreStructure;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.helpers.BlockStateEnergyCoreStructure;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +17,8 @@ public abstract class EnergyCoreStructureMixin {
      */
     @Inject(method = "initialize", at = @At("HEAD"), cancellable = true)
     public void initialize(TileEnergyStorageCore core, CallbackInfoReturnable<EnergyCoreStructure> cir) {
-        cir.setReturnValue(new BlockStateEnergyCoreStructure(core));
+        if (GroovyScriptConfig.compat.draconicEvolutionEnergyCore) {
+            cir.setReturnValue(new BlockStateEnergyCoreStructure(core));
+        }
     }
 }

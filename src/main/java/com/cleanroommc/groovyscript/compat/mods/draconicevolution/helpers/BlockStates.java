@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.draconicevolution.helpers;
 
 import com.brandon3055.draconicevolution.DEFeatures;
+import com.cleanroommc.groovyscript.GroovyScript;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -101,9 +102,11 @@ public class BlockStates {
 
     @SuppressWarnings("deprecation")
     public static IBlockState transformStackToState(ItemStack stack) {
-        if (!(stack.getItem() instanceof ItemBlock block))
-            throw new IllegalArgumentException("[LabsDraconicEvolution] Stack's Item must extend ItemBlock!");
-        return block.getBlock().getStateFromMeta(stack.getMetadata());
+        if (stack.getItem() instanceof ItemBlock block) {
+            return block.getBlock().getStateFromMeta(stack.getMetadata());
+        }
+        GroovyScript.LOGGER.throwing(new IllegalArgumentException("Stack's Item must extend ItemBlock!"));
+        return Blocks.AIR.getDefaultState();
     }
 
     @Override

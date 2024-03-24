@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.core.mixin.draconicevolution;
 
 import com.brandon3055.draconicevolution.blocks.tileentity.TileInvisECoreBlock;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.helpers.TileInvisECoreBlockLogic;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.helpers.TileInvisECoreBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,30 +46,40 @@ public class TileInvisECoreBlockMixin implements TileInvisECoreBlockState {
 
     @Inject(method = "revert", at = @At("HEAD"), cancellable = true)
     public void revert(CallbackInfo ci) {
-        TileInvisECoreBlockLogic.revert((TileInvisECoreBlock) (Object) this);
+        if (GroovyScriptConfig.compat.draconicEvolutionEnergyCore) {
+            TileInvisECoreBlockLogic.revert((TileInvisECoreBlock) (Object) this);
+        }
         ci.cancel();
     }
 
     @Inject(method = "getUpdatePacket()Lnet/minecraft/network/play/server/SPacketUpdateTileEntity;", at = @At("HEAD"), cancellable = true, remap = true)
     public void getUpdatePacket(CallbackInfoReturnable<SPacketUpdateTileEntity> cir) {
-        cir.setReturnValue(TileInvisECoreBlockLogic.getUpdatePacket((TileInvisECoreBlock) (Object) this));
+        if (GroovyScriptConfig.compat.draconicEvolutionEnergyCore) {
+            cir.setReturnValue(TileInvisECoreBlockLogic.getUpdatePacket((TileInvisECoreBlock) (Object) this));
+        }
     }
 
     @Inject(method = "onDataPacket", at = @At("HEAD"), cancellable = true)
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt, CallbackInfo ci) {
-        TileInvisECoreBlockLogic.onDataPacket((TileInvisECoreBlock) (Object) this, pkt);
-        ci.cancel();
+        if (GroovyScriptConfig.compat.draconicEvolutionEnergyCore) {
+            TileInvisECoreBlockLogic.onDataPacket((TileInvisECoreBlock) (Object) this, pkt);
+            ci.cancel();
+        }
     }
 
     @Inject(method = "writeExtraNBT", at = @At("HEAD"), cancellable = true)
     public void writeExtraNBT(NBTTagCompound compound, CallbackInfo ci) {
-        TileInvisECoreBlockLogic.writeExtraNBT((TileInvisECoreBlock) (Object) this, compound);
-        ci.cancel();
+        if (GroovyScriptConfig.compat.draconicEvolutionEnergyCore) {
+            TileInvisECoreBlockLogic.writeExtraNBT((TileInvisECoreBlock) (Object) this, compound);
+            ci.cancel();
+        }
     }
 
     @Inject(method = "readExtraNBT", at = @At("HEAD"), cancellable = true)
     public void readExtraNBT(NBTTagCompound compound, CallbackInfo ci) {
-        TileInvisECoreBlockLogic.readExtraNBT((TileInvisECoreBlock) (Object) this, compound);
-        ci.cancel();
+        if (GroovyScriptConfig.compat.draconicEvolutionEnergyCore) {
+            TileInvisECoreBlockLogic.readExtraNBT((TileInvisECoreBlock) (Object) this, compound);
+            ci.cancel();
+        }
     }
 }

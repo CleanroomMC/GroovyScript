@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.core.mixin.draconicevolution;
 
 import com.brandon3055.draconicevolution.blocks.tileentity.TileEnergyCoreStabilizer;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.helpers.TileEnergyCoreStabilizerLogic;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +14,8 @@ public abstract class TileEnergyCoreStabilizerMixin {
 
     @Inject(method = "getBlocksForFrameMove", at = @At("HEAD"), cancellable = true)
     private void getBlocksForFrameMove(CallbackInfoReturnable<Iterable<BlockPos>> cir) {
-        cir.setReturnValue(TileEnergyCoreStabilizerLogic.getBlocksForFrameMove((TileEnergyCoreStabilizer) (Object) this));
+        if (GroovyScriptConfig.compat.draconicEvolutionEnergyCore) {
+            cir.setReturnValue(TileEnergyCoreStabilizerLogic.getBlocksForFrameMove((TileEnergyCoreStabilizer) (Object) this));
+        }
     }
 }
