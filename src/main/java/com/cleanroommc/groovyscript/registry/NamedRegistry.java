@@ -25,7 +25,7 @@ public abstract class NamedRegistry implements INamed {
             throw new IllegalArgumentException("NamedRegistry must have at least one name!");
         }
         this.aliases = Collections.unmodifiableList(local.stream().distinct().collect(Collectors.toList()));
-        this.name = this.aliases.get(0).toLowerCase(Locale.ROOT);
+        this.name = this.aliases.get(0).toLowerCase(Locale.ENGLISH);
     }
 
     public String getName() {
