@@ -86,9 +86,6 @@ public class ReloadableRegistryManager {
                 .flatMap(Collection::stream)
                 .filter(IScriptReloadable::isEnabled)
                 .forEach(IScriptReloadable::onReload);
-        if (ModSupport.JEI.isLoaded()) {
-            JeiPlugin.reload();
-        }
     }
 
     @ApiStatus.Internal
