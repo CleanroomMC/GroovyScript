@@ -167,6 +167,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void runScript(Script script) {
+        GroovyLog.get().info(" - running {}", script.getClass().getName());
         securityManager.install();
         super.runScript(script);
         securityManager.uninstall();
@@ -253,14 +254,12 @@ public class GroovyScriptSandbox extends GroovySandbox {
         if (comp != null && lastModified <= comp.lastEdited && comp.clazz == null && comp.readData(this.cacheRoot.getPath())) {
             // class is not loaded, but the cached class bytes are still valid
             if (!comp.checkPreprocessors(this.scriptRoot)) {
-                return GroovyLog.class;
+                return GroovyLog.class; // failed preprocessor check
             }
-            GroovyLog.get().debugMC(" script {} is already compiled", relativeFile);
             comp.ensureLoaded(engine.getGroovyClassLoader(), this.cacheRoot.getPath());
 
         } else if (comp == null || comp.clazz == null || lastModified > comp.lastEdited) {
             // class is not loaded and class bytes don't exist yet or script has been edited
-            GroovyLog.get().debugMC(" compiling script {}", relativeFile);
             if (comp == null) {
                 comp = new CompiledScript(relativeFile.toString(), 0);
                 this.index.put(relativeFile.toString(), comp);
@@ -275,20 +274,19 @@ public class GroovyScriptSandbox extends GroovySandbox {
                 comp.deleteCache(this.cacheRoot.getPath());
                 comp.clazz = null;
                 comp.data = null;
-                return GroovyLog.class;
+                return GroovyLog.class; // failed preprocessor check
             }
             Class<?> clazz = super.loadScriptClass(engine, relativeFile);
             if (comp.clazz == null) {
                 // should not happen
-                GroovyLog.get().debugMC("Class for {} was loaded, but didnt receive class created callback! Index: {}", relativeFile, this.index);
+                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback! Index: {}", relativeFile, this.index);
                 comp.clazz = clazz;
             }
         } else {
             // class is loaded and script wasn't edited
             if (!comp.checkPreprocessors(this.scriptRoot)) {
-                return GroovyLog.class;
+                return GroovyLog.class; // failed preprocessor check
             }
-            GroovyLog.get().debugMC(" script {} is already compiled and loaded", relativeFile);
             comp.ensureLoaded(engine.getGroovyClassLoader(), this.cacheRoot.getPath());
         }
         return comp.clazz;
