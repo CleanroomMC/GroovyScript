@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.sandbox;
 
-import com.google.common.base.Joiner;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,8 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class FileUtil {
-
-    private static final Joiner fileJoiner = Joiner.on(File.separator);
 
     public static String relativize(String rootPath, String longerThanRootPath) {
         if (File.separatorChar != '/') {
@@ -30,7 +27,26 @@ public class FileUtil {
     }
 
     public static String makePath(String... pieces) {
-        return fileJoiner.join(pieces);
+        if (pieces == null || pieces.length == 0) return StringUtils.EMPTY;
+        if (pieces.length == 1) return sanitizePath(pieces[0]);
+        StringBuilder builder = new StringBuilder();
+        for (String piece : pieces) {
+            if (piece != null && !piece.isEmpty()) {
+                builder.append(sanitizePath(piece)).append(File.separatorChar);
+            }
+        }
+        if (builder.length() > 0) {
+            builder.deleteCharAt(builder.length() - 1);
+        }
+        return builder.toString();
+    }
+
+    public static String sanitizePath(String path) {
+        return path.replace(getOtherSeparatorChar(), File.separatorChar);
+    }
+
+    public static char getOtherSeparatorChar() {
+        return File.separatorChar == '/' ? '\\' : '/';
     }
 
     public static File makeFile(String... pieces) {
