@@ -3,24 +3,20 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.DryingRackRecipe;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 @RegistryDescription
 public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
 
     public Kiln() {
-        super(ModuleTechBasic.Registries.KILN_PIT_RECIPE, Alias.generateOfClass(Kiln.class));
+        super(ModuleTechBasic.Registries.KILN_PIT_RECIPE);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items')"))
@@ -28,7 +24,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')]"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')]"))
     public KilnPitRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, Iterable<ItemStack> failureOutput) {
         return recipeBuilder()
                 .burnTime(burnTime)
@@ -75,13 +71,12 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<KilnPitRecipe> {
 
+        @Property
+        private final ItemStackList failureOutput = new ItemStackList();
         @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int burnTime;
         @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private float failureChance;
-
-        @Property
-        private final ItemStackList failureOutput = new ItemStackList();
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder burnTime(int time) {

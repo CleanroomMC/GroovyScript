@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -18,7 +17,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
 
 
     public CompostBin() {
-        super(ModuleTechBasic.Registries.COMPOST_BIN_RECIPE, Alias.generateOfClass(CompostBin.class));
+        super(ModuleTechBasic.Registries.COMPOST_BIN_RECIPE);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald') * 4).compostValue(25).name('diamond_to_emerald_compost_bin')"))
@@ -26,7 +25,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'iron_to_clay2', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 2"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay2', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 2"))
     public CompostBinRecipe add(String name, IIngredient input, ItemStack output, int compostValue) {
         return recipeBuilder()
                 .compostValue(compostValue)
@@ -64,7 +63,6 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
                 remove(recipe);
             }
         }
-        ;
     }
 
     @Property(property = "input", valid = @Comp("1"))

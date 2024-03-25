@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.IReloadableForgeRegistry;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
@@ -84,7 +85,10 @@ public class ReloadableRegistryManager {
                 .map(GroovyContainer::get)
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
-                .filter(IScriptReloadable::isEnabled)
+                .distinct()
+                .filter(INamed::isEnabled)
+                .filter(IScriptReloadable.class::isInstance)
+                .map(IScriptReloadable.class::cast)
                 .forEach(IScriptReloadable::onReload);
     }
 
@@ -95,7 +99,10 @@ public class ReloadableRegistryManager {
                 .map(GroovyContainer::get)
                 .map(ModPropertyContainer::getRegistries)
                 .flatMap(Collection::stream)
-                .filter(IScriptReloadable::isEnabled)
+                .distinct()
+                .filter(INamed::isEnabled)
+                .filter(IScriptReloadable.class::isInstance)
+                .map(IScriptReloadable.class::cast)
                 .forEach(IScriptReloadable::afterScriptLoad);
         VanillaModule.INSTANCE.afterScriptLoad();
         unfreezeForgeRegistries();
