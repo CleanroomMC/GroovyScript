@@ -95,41 +95,49 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
         @Property
         private boolean ignoreHeat;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(BlockIngredient input) {
             this.input = input;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(String input) {
             this.input = new BlockIngredient(input);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(List<ItemStack> input) {
             this.input = new BlockIngredient(input);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(ItemStack... input) {
             this.input = new BlockIngredient(input);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(IIngredient input) {
             this.input = new BlockIngredient(input.toMcIngredient());
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder heat(int heat) {
             this.heat = heat;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder ignoreHeat(boolean ignoreHeat) {
             this.ignoreHeat = ignoreHeat;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder ignoreHeat() {
             this.ignoreHeat = !ignoreHeat;
             return this;
