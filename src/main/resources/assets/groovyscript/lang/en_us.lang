@@ -624,7 +624,7 @@ groovyscript.wiki.calculator.atomic_calculator.description=Converts three input 
 groovyscript.wiki.calculator.analysing_chamber.title=Analysing Chamber
 groovyscript.wiki.calculator.analysing_chamber.description=Takes a non-analysed Circuit and analyses it, converting it into usable Stable or Analysed Circuit. Will produce power and item outputs based on randomly generated NBT data.
 groovyscript.wiki.calculator.analysing_chamber.note0=When a void upgrade is installed in the Analysing Chamber, slots 1 and 2 will be voided as trash, but 3, 4, 5, and 6 will continue giving outputs.
-groovyscript.wiki.calculator.analysing_chamber.note1=JEI incorrectly represents the chance to obtain an output. 6% is actually 2%, 0.2% is actually 1%, 0.1% is correct, 0.02% is actually 0.05%, 0.001% is correct, and 0% is actually 0.005%.
+groovyscript.wiki.calculator.analysing_chamber.note1=JEI incorrectly represents the chance to obtain an output. 6%% is actually 2%%, 0.2%% is actually 1%%, 0.1%% is correct, 0.02%% is actually 0.05%%, 0.001%% is correct, and 0%% is actually 0.005%%.
 groovyscript.wiki.calculator.analysing_chamber.slot.value=What pool the output is in
 groovyscript.wiki.calculator.analysing_chamber.location.value=Specific number to be rolled to gain the output. Duplicate numbers are *not* validated, and will not be output.
 
@@ -748,7 +748,7 @@ groovyscript.wiki.enderio.sag_mill_grinding.title=Sag Mill Grinding
 groovyscript.wiki.enderio.sag_mill_grinding.description=Add a new Griding Ball for use in a Sag Mill with the given output multiplier, power multiplier, chance multiplier, and duration (in base power used).
 groovyscript.wiki.enderio.sag_mill_grinding.duration.value=Sets the amount of power used in recipes before the grinding ball is consumed
 groovyscript.wiki.enderio.sag_mill_grinding.chance.value=Sets the chance to double all outputs in recipes with an applicable bonusType
-groovyscript.wiki.enderio.sag_mill_grinding.grinding.value=Sets the chance to increase outputs up to 100% with an applicable bonusType
+groovyscript.wiki.enderio.sag_mill_grinding.grinding.value=Sets the chance to increase outputs up to 100%% with an applicable bonusType
 groovyscript.wiki.enderio.sag_mill_grinding.power.value=Sets the power multiplier to recipes processed with the grinding ball
 groovyscript.wiki.enderio.sag_mill_grinding.remove=Removes the Grinding Ball item
 
