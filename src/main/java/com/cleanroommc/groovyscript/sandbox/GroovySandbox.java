@@ -174,7 +174,7 @@ public abstract class GroovySandbox {
     }
 
     protected void runScript(Script script){
-        setCurrentScript(script.toString());
+        setCurrentScript(script.getClass().getName());
         script.run();
         setCurrentScript(null);
     }
