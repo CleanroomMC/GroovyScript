@@ -148,11 +148,7 @@ public abstract class GroovySandbox {
                 }
                 if (shouldRunFile(scriptFile)) {
                     Script script = InvokerHelper.createScript(clazz, binding);
-                    if (run) {
-                        setCurrentScript(scriptFile.toString());
-                        script.run();
-                        setCurrentScript(null);
-                    }
+                    if (run) runScript(script);
                 }
             }
         }
@@ -172,13 +168,15 @@ public abstract class GroovySandbox {
             if (clazz.getSuperclass() != Script.class && shouldRunFile(classFile)) {
                 executedClasses.add(classFile);
                 Script script = InvokerHelper.createScript(clazz, binding);
-                if (run) {
-                    setCurrentScript(script.toString());
-                    script.run();
-                    setCurrentScript(null);
-                }
+                if (run) runScript(script);
             }
         }
+    }
+
+    protected void runScript(Script script){
+        setCurrentScript(script.toString());
+        script.run();
+        setCurrentScript(null);
     }
 
     public <T> T runClosure(Closure<T> closure, Object... args) {

@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.event.ScriptRunEvent;
 import com.cleanroommc.groovyscript.helper.GroovyHelper;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.security.SandboxSecurityManager;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -16,6 +17,7 @@ import com.google.gson.JsonObject;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
 import groovy.lang.GroovyClassLoader;
+import groovy.lang.Script;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
@@ -38,6 +40,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GroovyScriptSandbox extends GroovySandbox {
+
+    private static final SandboxSecurityManager securityManager = new SandboxSecurityManager();
 
     private final File cacheRoot;
     private final File scriptRoot;
@@ -64,7 +68,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
         this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
         registerStaticImports(GroovyHelper.class, MathHelper.class);
-
         this.importCustomizer.addImports("net.minecraft.world.World",
                                          "net.minecraft.block.state.IBlockState",
                                          "net.minecraft.block.Block",
@@ -162,6 +165,13 @@ public class GroovyScriptSandbox extends GroovySandbox {
         }
     }
 
+    @Override
+    protected void runScript(Script script) {
+        securityManager.install();
+        super.runScript(script);
+        securityManager.uninstall();
+    }
+
     @ApiStatus.Internal
     @Override
     public void load() throws Exception {
@@ -171,6 +181,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     public <T> T runClosure(Closure<T> closure, Object... args) {
         startRunning();
+        securityManager.install();
         T result = null;
         try {
             result = closure.call(args);
@@ -181,6 +192,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
                 return new AtomicInteger();
             }).addAndGet(1);
         } finally {
+            securityManager.uninstall();
             stopRunning();
         }
         return result;

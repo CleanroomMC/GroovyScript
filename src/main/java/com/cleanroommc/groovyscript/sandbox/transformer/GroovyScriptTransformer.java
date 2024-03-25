@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import org.codehaus.groovy.ast.ClassCodeExpressionTransformer;
 import org.codehaus.groovy.ast.ClassHelper;
@@ -8,6 +9,7 @@ import org.codehaus.groovy.ast.Parameter;
 import org.codehaus.groovy.ast.expr.*;
 import org.codehaus.groovy.control.SourceUnit;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +50,9 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
         }
         if (expr instanceof MethodCallExpression) {
             return checkValid((MethodCallExpression) expr);
+        }
+        if (expr instanceof ConstructorCallExpression cce && cce.getType().getName().equals(File.class.getName())) {
+            GroovyLog.get().warn("Detected `new File(...)` usage. Use `file(...)` instead!");
         }
         return expr;
     }
