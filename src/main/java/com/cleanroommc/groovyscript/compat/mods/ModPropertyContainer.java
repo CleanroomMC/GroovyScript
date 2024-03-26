@@ -6,7 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 public class ModPropertyContainer implements IDynamicGroovyProperty {
@@ -15,7 +15,7 @@ public class ModPropertyContainer implements IDynamicGroovyProperty {
 
     public ModPropertyContainer() {
         this.registries = new Object2ObjectOpenHashMap<>();
-        ((IVirtualizedRegistrar) this::addRegistry).addFieldsOf(this);
+        ((IRegistrar) this::addRegistry).addFieldsOf(this);
     }
 
     protected void addRegistry(INamed registry) {
@@ -44,7 +44,7 @@ public class ModPropertyContainer implements IDynamicGroovyProperty {
 
     @Override
     public Map<String, Object> getProperties() {
-        return new HashMap<>(registries);
+        return Collections.unmodifiableMap(this.registries);
     }
 
     /**

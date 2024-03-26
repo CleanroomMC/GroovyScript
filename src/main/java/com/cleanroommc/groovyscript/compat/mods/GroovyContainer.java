@@ -27,8 +27,15 @@ public abstract class GroovyContainer<T extends ModPropertyContainer> implements
         return getContainerName();
     }
 
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.1.0")
     @GroovyBlacklist
-    public IVirtualizedRegistrar getVirtualizedRegistrar() {
+    public IRegistrar getVirtualizedRegistrar() {
+        return getRegistrar();
+    }
+
+    @GroovyBlacklist
+    public IRegistrar getRegistrar() {
         if (!isLoaded()) return null;
         T t = get();
         return t::addRegistry;
