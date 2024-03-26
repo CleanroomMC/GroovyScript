@@ -69,8 +69,6 @@ public class ReloadableRegistryManager {
         return marked == null ? Collections.emptyList() : marked;
     }
 
-    // end
-
     @ApiStatus.Internal
     public static void init() {
         registryDummies.put(IRecipe.class, DummyRecipe::new);
