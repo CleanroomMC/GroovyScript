@@ -169,8 +169,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
     protected void runScript(Script script) {
         GroovyLog.get().info(" - running {}", script.getClass().getName());
         securityManager.install();
-        super.runScript(script);
-        securityManager.uninstall();
+        try {
+            super.runScript(script);
+        } finally {
+            securityManager.uninstall();
+        }
     }
 
     @ApiStatus.Internal
