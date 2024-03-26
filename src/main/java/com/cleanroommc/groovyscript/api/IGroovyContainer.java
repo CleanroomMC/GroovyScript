@@ -26,27 +26,12 @@ public interface IGroovyContainer {
     String getModId();
 
     /**
-     * Returns the mod name of the compat mod. This will only be used for debugging.
-     *
-     * @return the compat mod name
-     * @deprecated use {@link #getContainerName()} instead.
-     */
-    @ApiStatus.ScheduledForRemoval(inVersion = "0.8.0")
-    @Deprecated
-    @NotNull
-    default String getModName() {
-        return getModId();
-    }
-
-    /**
      * Returns the name of this container. Is only used for logging and debugging.
      *
      * @return the name of the container
      */
     @NotNull
-    default String getContainerName() {
-        return getModName();
-    }
+    String getContainerName();
 
     /**
      * @return true if the compat mod is currently loaded.
