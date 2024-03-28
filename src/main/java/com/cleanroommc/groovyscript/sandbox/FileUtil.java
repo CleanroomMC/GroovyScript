@@ -14,7 +14,15 @@ public class FileUtil {
             longerThanRootPath = longerThanRootPath.replace('/', File.separatorChar);
         }
         int index = longerThanRootPath.indexOf(rootPath);
-        if (index < 0) throw new IllegalArgumentException();
+        if (index < 0) {
+            if (longerThanRootPath.contains("%20")) {
+                longerThanRootPath = longerThanRootPath.replace("%20", " ");
+                index = longerThanRootPath.indexOf(rootPath);
+            }
+            if (index < 0) {
+                throw new IllegalArgumentException("The path '" + longerThanRootPath + "' does not contain the root path '" + rootPath + "'");
+            }
+        }
         return longerThanRootPath.substring(index + rootPath.length() + 1);
     }
 
