@@ -5,7 +5,7 @@
 println 'mod \'draconicevolution\' detected, running script'
 
 // Energy Core:
-// A multiblock which stores energy
+// A multiblock with 8 tiers for storing large amounts of energy.
 
 mods.draconicevolution.energy_core.setInnerBlock(7, blockstate('minecraft:stone', 1))
 mods.draconicevolution.energy_core.setOuterBlock(2, blockstate('minecraft:diamond_block'))

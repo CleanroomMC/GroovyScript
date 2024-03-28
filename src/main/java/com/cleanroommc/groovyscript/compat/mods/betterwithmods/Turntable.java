@@ -24,6 +24,7 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
             @Example(".input(item('minecraft:gold_block')).outputBlock(blockstate('minecraft:clay')).output(item('minecraft:gold_ingot') * 5).rotations(5)"),
             @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot')).rotations(2)")
     })
+        @RecipeBuilderMethodDescription
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -97,36 +98,43 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
         @Property(defaultValue = "1")
         private int rotations = 1;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(BlockIngredient input) {
             this.input = input;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(String input) {
             this.input = new BlockIngredient(input);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(List<ItemStack> input) {
             this.input = new BlockIngredient(input);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(ItemStack... input) {
             this.input = new BlockIngredient(input);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(IIngredient input) {
             this.input = new BlockIngredient(input.toMcIngredient());
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder outputBlock(IBlockState outputBlock) {
             this.outputBlock = outputBlock;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder rotations(int rotations) {
             this.rotations = rotations;
             return this;

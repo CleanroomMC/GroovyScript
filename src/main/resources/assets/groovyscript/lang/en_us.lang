@@ -145,22 +145,31 @@ groovyscript.wiki.advancedmortars.mortar.duration.value=Sets how many interactio
 groovyscript.wiki.advancedmortars.mortar.secondaryOutput.value=Sets the additional output itemstack
 groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the chance of the additional output itemstack being output
 
+
 # Aether Legacy
-groovyscript.wiki.aether_legacy.enchanter.title=Enchanter
-groovyscript.wiki.aether_legacy.enchanter.description=Enchanting is a mechanic used to create new items, as well as repair tools, armor, and weapons, using the Altar block.
-groovyscript.wiki.aether_legacy.enchanter.add=Adds an Enchanting recipe in the format `input`, `output`, `time`.
-groovyscript.wiki.aether_legacy.enchanter_fuel.title=Enchanter Fuel
-groovyscript.wiki.aether_legacy.enchanter_fuel.description=By default, the Enchantar (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
-groovyscript.wiki.aether_legacy.enchanter_fuel.add=Adds an Enchanting fuel in the format `item`, `timeGiven`.
-groovyscript.wiki.aether_legacy.freezer.title=Freezer
-groovyscript.wiki.aether_legacy.freezer.description=The Freezer is used to turn certain items into frozen versions.
-groovyscript.wiki.aether_legacy.freezer.add=Adds a Freezer recipe in the format `input`, `output`, `time`.
-groovyscript.wiki.aether_legacy.freezer_fuel.title=Freezer
-groovyscript.wiki.aether_legacy.freezer_fuel.description= By default, the Freezer takes Icestone as fuel. Using GroovyScript, custom fuels can be added.
-groovyscript.wiki.aether_legacy.freezer_fuel.add=Adds a Freezer fuel in the format `item`, `timeGiven`.
 groovyscript.wiki.aether_legacy.accessory.title=Accessory
 groovyscript.wiki.aether_legacy.accessory.description=The Aether Accessory system.
 groovyscript.wiki.aether_legacy.accessory.add=Adds an Accessory in the format `item`, `type`, where type is one of the following: "Ring", "Pendant", "Cape", "Shield", "Glove", or "Misc".
+groovyscript.wiki.aether_legacy.accessory.accessoryType.value=Sets the type of accessory the item is, which controls what slot it can go into
+
+groovyscript.wiki.aether_legacy.enchanter.title=Enchanter
+groovyscript.wiki.aether_legacy.enchanter.description=Enchanting is a mechanic used to create new items, as well as repair tools, armor, and weapons, using the Altar block.
+groovyscript.wiki.aether_legacy.enchanter.add=Adds an Enchanting recipe in the format `input`, `output`, `time`.
+groovyscript.wiki.aether_legacy.enchanter.time.value=Sets the time the recipe takes to compelte
+
+groovyscript.wiki.aether_legacy.enchanter_fuel.title=Enchanter Fuel
+groovyscript.wiki.aether_legacy.enchanter_fuel.description=By default, the Enchantar (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
+groovyscript.wiki.aether_legacy.enchanter_fuel.add=Adds an Enchanting fuel in the format `item`, `timeGiven`.
+
+groovyscript.wiki.aether_legacy.freezer.title=Freezer
+groovyscript.wiki.aether_legacy.freezer.description=The Freezer is used to turn certain items into frozen versions.
+groovyscript.wiki.aether_legacy.freezer.add=Adds a Freezer recipe in the format `input`, `output`, `time`.
+groovyscript.wiki.aether_legacy.freezer.time.value=Sets the time the recipe takes to compelte
+
+groovyscript.wiki.aether_legacy.freezer_fuel.title=Freezer
+groovyscript.wiki.aether_legacy.freezer_fuel.description= By default, the Freezer takes Icestone as fuel. Using GroovyScript, custom fuels can be added.
+groovyscript.wiki.aether_legacy.freezer_fuel.add=Adds a Freezer fuel in the format `item`, `timeGiven`.
+
 
 # Alchemistry
 groovyscript.wiki.alchemistry.atomizer.title=Atomizer
@@ -615,7 +624,7 @@ groovyscript.wiki.calculator.atomic_calculator.description=Converts three input 
 groovyscript.wiki.calculator.analysing_chamber.title=Analysing Chamber
 groovyscript.wiki.calculator.analysing_chamber.description=Takes a non-analysed Circuit and analyses it, converting it into usable Stable or Analysed Circuit. Will produce power and item outputs based on randomly generated NBT data.
 groovyscript.wiki.calculator.analysing_chamber.note0=When a void upgrade is installed in the Analysing Chamber, slots 1 and 2 will be voided as trash, but 3, 4, 5, and 6 will continue giving outputs.
-groovyscript.wiki.calculator.analysing_chamber.note1=JEI incorrectly represents the chance to obtain an output. 6% is actually 2%, 0.2% is actually 1%, 0.1% is correct, 0.02% is actually 0.05%, 0.001% is correct, and 0% is actually 0.005%.
+groovyscript.wiki.calculator.analysing_chamber.note1=JEI incorrectly represents the chance to obtain an output. 6%% is actually 2%%, 0.2%% is actually 1%%, 0.1%% is correct, 0.02%% is actually 0.05%%, 0.001%% is correct, and 0%% is actually 0.005%%.
 groovyscript.wiki.calculator.analysing_chamber.slot.value=What pool the output is in
 groovyscript.wiki.calculator.analysing_chamber.location.value=Specific number to be rolled to gain the output. Duplicate numbers are *not* validated, and will not be output.
 
@@ -739,7 +748,7 @@ groovyscript.wiki.enderio.sag_mill_grinding.title=Sag Mill Grinding
 groovyscript.wiki.enderio.sag_mill_grinding.description=Add a new Griding Ball for use in a Sag Mill with the given output multiplier, power multiplier, chance multiplier, and duration (in base power used).
 groovyscript.wiki.enderio.sag_mill_grinding.duration.value=Sets the amount of power used in recipes before the grinding ball is consumed
 groovyscript.wiki.enderio.sag_mill_grinding.chance.value=Sets the chance to double all outputs in recipes with an applicable bonusType
-groovyscript.wiki.enderio.sag_mill_grinding.grinding.value=Sets the chance to increase outputs up to 100% with an applicable bonusType
+groovyscript.wiki.enderio.sag_mill_grinding.grinding.value=Sets the chance to increase outputs up to 100%% with an applicable bonusType
 groovyscript.wiki.enderio.sag_mill_grinding.power.value=Sets the power multiplier to recipes processed with the grinding ball
 groovyscript.wiki.enderio.sag_mill_grinding.remove=Removes the Grinding Ball item
 

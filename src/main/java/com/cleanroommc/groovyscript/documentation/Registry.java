@@ -112,7 +112,8 @@ public class Registry {
     }
 
     public String getDescription() {
-        return Documentation.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description());
+        return Documentation.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description())
+                .replace("\"", "\\\"");
     }
 
     public String exampleBlock() {

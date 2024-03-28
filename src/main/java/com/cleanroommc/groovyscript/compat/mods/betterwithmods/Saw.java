@@ -19,6 +19,7 @@ import java.util.List;
 public class Saw extends VirtualizedRegistry<SawRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:gold_ingot') * 16)"))
+        @RecipeBuilderMethodDescription
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -88,26 +89,31 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
         @Property
         private BlockIngredient input;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(BlockIngredient input) {
             this.input = input;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(String input) {
             this.input = new BlockIngredient(input);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(List<ItemStack> input) {
             this.input = new BlockIngredient(input);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(ItemStack... input) {
             this.input = new BlockIngredient(input);
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder input(IIngredient input) {
             this.input = new BlockIngredient(input.toMcIngredient());
             return this;

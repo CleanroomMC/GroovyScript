@@ -22,6 +22,7 @@ public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).heat(2)"),
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot') * 16).ignoreHeat()")
     })
+        @RecipeBuilderMethodDescription
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -98,21 +99,25 @@ public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> {
         @Property(defaultValue = "1")
         private int priority = 1;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder heat(int heat) {
             this.heat = heat;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder ignoreHeat(boolean ignoreHeat) {
             this.ignoreHeat = ignoreHeat;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder ignoreHeat() {
             this.ignoreHeat = !ignoreHeat;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder priority(int priority) {
             this.priority = priority;
             return this;
