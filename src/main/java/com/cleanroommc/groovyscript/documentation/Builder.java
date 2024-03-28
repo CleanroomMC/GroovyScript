@@ -300,7 +300,7 @@ public class Builder {
 
         out.append(reference).append(".").append(builderMethod.getName()).append("()");
 
-        if (!example.value().isEmpty()) out.append("\n");
+        if (!example.value().isEmpty() || !registrationMethods.isEmpty()) out.append("\n");
 
         out.append(String.join("", getOutputs(generateParts(example.value()))));
 
