@@ -32,6 +32,7 @@ import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import com.cleanroommc.groovyscript.compat.mods.pyrotech.PyroTech;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
+import com.cleanroommc.groovyscript.compat.mods.rustic.Rustic;
 import com.cleanroommc.groovyscript.compat.mods.tcomplement.TinkersComplement;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
@@ -85,6 +86,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final GroovyContainer<Mekanism> MEKANISM = new InternalModContainer<>("mekanism", "Mekanism", Mekanism::new);
     public static final GroovyContainer<PyroTech> PYROTECH = new InternalModContainer<>("pyrotech", "Pyrotech", PyroTech::new);
     public static final GroovyContainer<Roots> ROOTS = new InternalModContainer<>("roots", "Roots 3", Roots::new);
+    public static final GroovyContainer<Rustic> RUSTIC = new InternalModContainer<>("rustic", "Rustic", Rustic::new);
     public static final GroovyContainer<Thaumcraft> THAUMCRAFT = new InternalModContainer<>("thaumcraft", "Thaumcraft", Thaumcraft::new, "tc", "thaum");
     public static final GroovyContainer<ThermalExpansion> THERMAL_EXPANSION = new InternalModContainer<>("thermalexpansion", "Thermal Expansion", ThermalExpansion::new, "te", "thermal");
     public static final GroovyContainer<TinkersComplement> TINKERS_COMPLEMENT = new InternalModContainer<>("tcomplement", "Tinkers Complement", TinkersComplement::new, "tcomp", "tinkerscomplement");
