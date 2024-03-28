@@ -21,6 +21,7 @@
     "TileEntityPistonMixin",
     "groovy.AsmDecompilerMixin",
     "groovy.ClassCollectorMixin",
+    "groovy.ClosureMixin",
     "groovy.CompUnitClassGenMixin",
     "groovy.GroovyClassLoaderMixin",
     "groovy.Java8Mixin",

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
@@ -14,10 +15,7 @@ import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import groovy.lang.Binding;
-import groovy.lang.Closure;
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.Script;
+import groovy.lang.*;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
@@ -26,9 +24,11 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.commons.io.FileUtils;
+import org.apache.groovy.internal.util.UncheckedThrow;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
+import org.codehaus.groovy.runtime.InvokerInvocationException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -182,13 +182,14 @@ public class GroovyScriptSandbox extends GroovySandbox {
         throw new UnsupportedOperationException("Use run(Loader loader) instead!");
     }
 
+    @ApiStatus.Internal
     @Override
     public <T> T runClosure(Closure<T> closure, Object... args) {
         startRunning();
-        securityManager.install();
+        //securityManager.install();
         T result = null;
         try {
-            result = closure.call(args);
+            result = runClosureInternal(closure, args);
         } catch (Throwable t) {
             this.storedExceptions.computeIfAbsent(Arrays.asList(t.getStackTrace()), k -> {
                 GroovyLog.get().error("An exception occurred while running a closure!");
@@ -196,10 +197,28 @@ public class GroovyScriptSandbox extends GroovySandbox {
                 return new AtomicInteger();
             }).addAndGet(1);
         } finally {
-            securityManager.uninstall();
+            //securityManager.uninstall();
             stopRunning();
         }
         return result;
+    }
+
+    @GroovyBlacklist
+    private static <T> T runClosureInternal(Closure<T> closure, Object[] args) {
+        // original Closure.call(Object... arguments) code
+        try {
+            //noinspection unchecked
+            return (T) closure.getMetaClass().invokeMethod(closure, "doCall", args);
+        } catch (InvokerInvocationException e) {
+            UncheckedThrow.rethrow(e.getCause());
+            return null; // unreachable statement
+        } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw e;
+            } else {
+                throw new GroovyRuntimeException(e.getMessage(), e);
+            }
+        }
     }
 
     private static String mainClassName(String name) {
