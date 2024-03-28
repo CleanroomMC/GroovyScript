@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox.security;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.GroovyClassLoader;
@@ -11,11 +12,14 @@ import groovy.util.Eval;
 import groovy.util.GroovyScriptEngine;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import mezz.jei.util.FileUtil;
+import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.runtime.FormatHelper;
 import org.codehaus.groovy.runtime.GStringImpl;
 import org.codehaus.groovy.runtime.NullObject;
 import org.codehaus.groovy.runtime.RegexSupport;
 
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -36,12 +40,16 @@ public class GroovySecurityManager {
     public void initDefaults() {
         unBanClasses(GroovyLogImpl.class, LambdaClosure.class);
         unBanClasses(NullObject.class, FormatHelper.class, GStringImpl.class, RegexSupport.class);
+        unBanClass(PrintWriter.class); // for print methods
 
         banPackage("java.lang.reflect");
         banPackage("java.lang.invoke");
         banPackage("java.net");
         banPackage("java.rmi");
         banPackage("java.security");
+        banPackage("java.io");
+        banPackage("java.nio.file");
+        banPackage("java.nio.channels");
         banPackage("groovy.grape");
         banPackage("groovy.beans");
         banPackage("groovy.cli");
@@ -52,9 +60,11 @@ public class GroovySecurityManager {
         banPackage("javax.script");
         banPackage("org.spongepowered");
         banPackage("zone.rong.mixinbooter");
-        banClasses(Runtime.class, ClassLoader.class);
+        banClasses(Runtime.class, ClassLoader.class, Scanner.class);
         banClasses(GroovyScriptEngine.class, Eval.class, GroovyMain.class, GroovySocketServer.class, GroovyShell.class, GroovyClassLoader.class);
-        banMethods(System.class, "exit", "gc");
+        banMethods(System.class, "exit", "gc", "setSecurityManager");
+        banMethods(Class.class, "getResource", "getResourceAsStream");
+        banClasses(FileUtils.class, org.apache.logging.log4j.core.util.FileUtils.class);
 
         // mod specific
         banPackage("com.cleanroommc.groovyscript.command");
