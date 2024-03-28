@@ -5,6 +5,21 @@ import net.minecraftforge.event.entity.living.EnderTeleportEvent
 import net.minecraftforge.event.world.BlockEvent
 import net.minecraft.util.text.TextComponentString
 
+import java.time.LocalDate
+
+/*
+def time = LocalDate.now()
+log.info('{} {}', time.month, time.dayOfMonth)
+
+def f = file('config/groovyscript.cfg')
+log.info(f)
+log.info(f.text)
+f = new File('config/groovyscript.cfg')
+log.info(f)
+log.info(f.text)
+*/
+
+ */
 def ore_iron = ore('ingotIron')
 def item_iron = item('minecraft:iron_ingot')
 log.info(item_iron in ore_iron) // true
