@@ -102,14 +102,14 @@ public class GroovyLogImpl implements GroovyLog {
             // has no sub messages -> log in a single line
             writeLogLine(formatLine(level, main));
             if (msg.shouldLogToMc()) {
-                logger.log(msg.getLevel(), main + " in line " + GroovyScript.getSandbox().getCurrentLine());
+                logger.log(msg.getLevel(), main);
             }
         } else if (messages.size() == 1 && main.length() + messages.get(0).length() < 100) {
             // has one sub message and the main message and the sub message have less than 100 characters ->
             // log in a single line
             writeLogLine(formatLine(level, main + ": - " + messages.get(0)));
             if (msg.shouldLogToMc()) {
-                logger.log(msg.getLevel(), main + ": - " + messages.get(0) + "  in line " + GroovyScript.getSandbox().getCurrentLine());
+                logger.log(msg.getLevel(), main + ": - " + messages.get(0));
             }
         } else {
             // has multiple log lines or the main message and the first sub message are to long ->
@@ -119,7 +119,7 @@ public class GroovyLogImpl implements GroovyLog {
                 writeLogLine(formatLine(level, " - " + message));
             }
             if (msg.shouldLogToMc()) {
-                logger.log(msg.getLevel(), main + " in line " + GroovyScript.getSandbox().getCurrentLine() + " : - ");
+                logger.log(msg.getLevel(), main + ": ");
                 for (String message : messages) {
                     logger.log(msg.getLevel(), " - " + message);
                 }
