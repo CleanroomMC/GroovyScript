@@ -48,8 +48,8 @@ public class TileInvisECoreBlockMixin implements TileInvisECoreBlockState {
     public void revert(CallbackInfo ci) {
         if (GroovyScriptConfig.compat.draconicEvolutionEnergyCore) {
             TileInvisECoreBlockLogic.revert((TileInvisECoreBlock) (Object) this);
+            ci.cancel();
         }
-        ci.cancel();
     }
 
     @Inject(method = "getUpdatePacket()Lnet/minecraft/network/play/server/SPacketUpdateTileEntity;", at = @At("HEAD"), cancellable = true, remap = true)
