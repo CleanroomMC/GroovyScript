@@ -13,6 +13,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Registry {
@@ -262,7 +263,7 @@ public class Registry {
         for (Method method : methods) {
             out.append(methodDescription(method));
             if (method.getAnnotation(MethodDescription.class).example().length > 0 && Arrays.stream(method.getAnnotation(MethodDescription.class).example()).anyMatch(x -> !x.value().isEmpty())) {
-                exampleLines.addAll(Arrays.stream(method.getAnnotation(MethodDescription.class).example()).flatMap(example -> methodExample(method, example.value()).stream()).collect(Collectors.toList()));
+                exampleLines.addAll(Arrays.stream(method.getAnnotation(MethodDescription.class).example()).flatMap(example -> Stream.of(methodExample(method, example.value()))).collect(Collectors.toList()));
             } else if (method.getParameterTypes().length == 0) {
                 exampleLines.add(methodExample(method));
             }
@@ -295,9 +296,9 @@ public class Registry {
                                      .toString());
     }
 
-    private List<String> methodExample(Method method, String example) {
-        if (method.getParameterTypes().length == 0) return Collections.singletonList(methodExample(method));
-        return Collections.singletonList(String.format("%s.%s(%s)", reference, method.getName(), example));
+    private String methodExample(Method method, String example) {
+        if (method.getParameterTypes().length == 0) return methodExample(method);
+        return String.format("%s.%s(%s)", reference, method.getName(), example);
     }
 
     private String methodExample(Method method) {
