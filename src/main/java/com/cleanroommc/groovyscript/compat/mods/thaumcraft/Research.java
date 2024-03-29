@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
+import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -18,27 +19,18 @@ import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.lib.research.ScanEnchantment;
 import thaumcraft.common.lib.research.ScanPotion;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 @RegistryDescription
 public class Research extends VirtualizedRegistry<ResearchCategory> {
 
-    protected Collection<IScanThing> scanBackup;
-    protected Collection<IScanThing> scanScripted;
-
-    public Research() {
-        scanBackup = new ArrayList<>();
-        scanScripted = new ArrayList<>();
-    }
+    protected AbstractReloadableStorage<IScanThing> scanStorage = new AbstractReloadableStorage<>();
 
     @Override
     public void onReload() {
         removeScripted().forEach(x -> ResearchCategories.researchCategories.remove(x.key));
         restoreFromBackup().forEach(x -> ResearchCategories.researchCategories.put(x.key, x));
 
-        scanBackup.clear();
-        scanScripted.clear();
+        scanStorage.removeScripted();
+        scanStorage.restoreFromBackup();
     }
 
     private void addCategory(ResearchCategory category) {
@@ -62,7 +54,7 @@ public class Research extends VirtualizedRegistry<ResearchCategory> {
     }
 
     private void addScannable(IScanThing scanThing) {
-        scanScripted.add(scanThing);
+        scanStorage.addScripted(scanThing);
         ScanningManager.addScannableThing(scanThing);
     }
 

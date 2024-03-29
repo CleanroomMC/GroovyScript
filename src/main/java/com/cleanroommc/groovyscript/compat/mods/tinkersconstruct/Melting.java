@@ -191,11 +191,6 @@ public class Melting extends MeltingRecipeRegistry {
             return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
         }
 
-        @Override
-        protected boolean compareRecipe(EntityMeltingRecipe recipe, EntityMeltingRecipe recipe2) {
-            return recipe.equals(recipe2);
-        }
-
         public class RecipeBuilder implements IRecipeBuilder<EntityMeltingRecipe> {
 
             private FluidStack output;

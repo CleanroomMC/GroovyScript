@@ -66,8 +66,4 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
         return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
     }
 
-    @Override
-    protected boolean compareRecipe(SmelteryFuelRecipe recipe, SmelteryFuelRecipe recipe2) {
-        return recipe.equals(recipe2);
-    }
 }

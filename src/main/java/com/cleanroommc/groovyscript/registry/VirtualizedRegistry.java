@@ -13,7 +13,7 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
 
     protected final String name;
     private final List<String> aliases;
-    private Collection<R> backup, scripted;
+    private final AbstractReloadableStorage<R> recipeStorage = new AbstractReloadableStorage<>();
 
     public VirtualizedRegistry() {
         this(null);
@@ -28,8 +28,6 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
         List<String> aliases1 = aliases.stream().distinct().collect(Collectors.toList());
         this.name = aliases1.get(0).toLowerCase(Locale.ROOT);
         this.aliases = Collections.unmodifiableList(aliases1);
-        initBackup();
-        initScripted();
     }
 
     @GroovyBlacklist
@@ -51,53 +49,32 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
 
     @GroovyBlacklist
     public Collection<R> getBackupRecipes() {
-        return Collections.unmodifiableCollection(backup);
+        return recipeStorage.getBackupRecipes();
     }
 
     @GroovyBlacklist
     public Collection<R> getScriptedRecipes() {
-        return Collections.unmodifiableCollection(scripted);
-    }
-
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    protected void initBackup() {
-        this.backup = new ArrayList<>();
-    }
-
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    protected void initScripted() {
-        this.scripted = new ArrayList<>();
+        return recipeStorage.getScriptedRecipes();
     }
 
     @GroovyBlacklist
     public void addBackup(R recipe) {
-        if (this.scripted.stream().anyMatch(r -> compareRecipe(r, recipe))) return;
-        this.backup.add(recipe);
+        recipeStorage.addBackup(recipe);
     }
 
     @GroovyBlacklist
     public void addScripted(R recipe) {
-        this.scripted.add(recipe);
+        recipeStorage.addScripted(recipe);
     }
 
     @GroovyBlacklist
     protected Collection<R> restoreFromBackup() {
-        Collection<R> backup = this.backup;
-        initBackup();
-        return backup;
+        return recipeStorage.restoreFromBackup();
     }
 
     @GroovyBlacklist
     protected Collection<R> removeScripted() {
-        Collection<R> scripted = this.scripted;
-        initScripted();
-        return scripted;
+        return recipeStorage.removeScripted();
     }
 
-    @GroovyBlacklist
-    protected boolean compareRecipe(R recipe, R recipe2) {
-        return recipe == recipe2;
-    }
 }
