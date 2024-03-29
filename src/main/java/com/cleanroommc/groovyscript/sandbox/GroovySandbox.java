@@ -31,15 +31,7 @@ import java.util.*;
  */
 public abstract class GroovySandbox {
 
-    private static final ThreadLocal<GroovySandbox> currentSandbox = new ThreadLocal<>();
-    // TODO
     private String currentScript = null;
-    private int currentLine = -1;
-
-    @Nullable
-    public static GroovySandbox getCurrentSandbox() {
-        return currentSandbox.get();
-    }
 
     private final URL[] scriptEnvironment;
     private final ThreadLocal<Boolean> running = ThreadLocal.withInitial(() -> false);
@@ -82,13 +74,11 @@ public abstract class GroovySandbox {
     }
 
     protected void startRunning() {
-        currentSandbox.set(this);
         this.running.set(true);
     }
 
     protected void stopRunning() {
         this.running.set(false);
-        currentSandbox.remove();
     }
 
     protected GroovyScriptEngine createScriptEngine() {
@@ -107,7 +97,6 @@ public abstract class GroovySandbox {
     }
 
     public void load() throws Exception {
-        currentSandbox.set(this);
         preRun();
 
         GroovyScriptEngine engine = createScriptEngine();
@@ -120,7 +109,6 @@ public abstract class GroovySandbox {
         } finally {
             running.set(false);
             postRun();
-            currentSandbox.set(null);
             setCurrentScript(null);
         }
     }
@@ -234,13 +222,8 @@ public abstract class GroovySandbox {
         return currentScript;
     }
 
-    public int getCurrentLine() {
-        return currentLine;
-    }
-
     protected void setCurrentScript(String currentScript) {
         this.currentScript = currentScript;
-        this.currentLine = -1;
     }
 
     public static String getRelativePath(String source) {
