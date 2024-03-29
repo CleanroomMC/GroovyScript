@@ -10,7 +10,6 @@ import com.cleanroommc.groovyscript.event.ScriptRunEvent;
 import com.cleanroommc.groovyscript.helper.GroovyHelper;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
-import com.cleanroommc.groovyscript.sandbox.security.SandboxSecurityManager;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -40,8 +39,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GroovyScriptSandbox extends GroovySandbox {
-
-    private static final SandboxSecurityManager securityManager = new SandboxSecurityManager();
 
     private final File cacheRoot;
     private final File scriptRoot;
@@ -168,12 +165,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     protected void runScript(Script script) {
         GroovyLog.get().info(" - running {}", script.getClass().getName());
-        securityManager.install();
-        try {
-            super.runScript(script);
-        } finally {
-            securityManager.uninstall();
-        }
+        super.runScript(script);
     }
 
     @ApiStatus.Internal
@@ -186,7 +178,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Override
     public <T> T runClosure(Closure<T> closure, Object... args) {
         startRunning();
-        //securityManager.install();
         T result = null;
         try {
             result = runClosureInternal(closure, args);
@@ -197,7 +188,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
                 return new AtomicInteger();
             }).addAndGet(1);
         } finally {
-            //securityManager.uninstall();
             stopRunning();
         }
         return result;
