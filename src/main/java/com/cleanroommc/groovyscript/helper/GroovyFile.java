@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public final class GroovyFile implements Comparable<GroovyFile> {
 
-    public boolean isPathAccessible(String path) {
+    public static boolean isPathAccessible(String path) {
         if (path.startsWith(GroovyScript.getMinecraftHome().getPath())) return true;
         // examples folder is not in minecraft home
         return FMLLaunchHandler.isDeobfuscatedEnvironment() && path.startsWith(GroovyScript.getMinecraftHome().getParent());
@@ -521,7 +521,7 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      */
     public void write(String text) throws IOException {
         checkAccessible();
-        ResourceGroovyMethods.write(this.internal, text);
+        ResourceGroovyMethods.write(this.internal, text, "UTF-8");
     }
 
     /**
@@ -533,7 +533,7 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      */
     public void setText(String text) throws IOException {
         checkAccessible();
-        ResourceGroovyMethods.setText(this.internal, text);
+        ResourceGroovyMethods.setText(this.internal, text, "UTF-8");
     }
 
     /**
@@ -615,7 +615,7 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      */
     public void append(Object text) throws IOException {
         checkAccessible();
-        ResourceGroovyMethods.append(this.internal, text);
+        ResourceGroovyMethods.append(this.internal, text, "UTF-8");
     }
 
     /**
@@ -626,7 +626,7 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      */
     public void append(Reader reader) throws IOException {
         checkAccessible();
-        ResourceGroovyMethods.append(this.internal, reader);
+        ResourceGroovyMethods.append(this.internal, reader, "UTF-8");
     }
 
     /**
@@ -637,7 +637,7 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      */
     public void append(Writer writer) throws IOException {
         checkAccessible();
-        ResourceGroovyMethods.append(this.internal, writer);
+        ResourceGroovyMethods.append(this.internal, writer, "UTF-8");
     }
 
     /**
