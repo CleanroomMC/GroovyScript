@@ -73,7 +73,7 @@ public class ReflectionHelper {
             if (Modifier.isStatic(field.getModifiers())) owner = null;
             return getField(field, owner);
         } catch (Throwable e) {
-            GroovyLog.get().errorMC("Error setting field {} in {}!", name, owner);
+            GroovyLog.get().errorMC("Error getting field {} in {}!", name, owner);
             return null;
         }
     }
