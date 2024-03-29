@@ -6,7 +6,32 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BrewerManagerAccessor",
+    "BrewerRecipeAccessor",
+    "CentrifugeManagerAccessor",
+    "CentrifugeRecipeAccessor",
+    "ChargerManagerAccessor",
+    "CompactorManagerAccessor",
+    "CompactorRecipeAccessor",
     "CrucibleManagerAccessor",
-    "PulverizerManagerAccessor"
+    "CrucibleRecipeAccessor",
+    "EnchanterManagerAccessor",
+    "EnchanterRecipeAccessor",
+    "ExtruderManagerAccessor",
+    "ExtruderRecipeAccessor",
+    "FurnaceManagerAccessor",
+    "FurnaceRecipeAccessor",
+    "InsolatorManagerAccessor",
+    "InsolatorRecipeAccessor",
+    "PrecipitatorManagerAccessor",
+    "PrecipitatorRecipeAccessor",
+    "PulverizerManagerAccessor",
+    "PulverizerRecipeAccessor",
+    "RefineryManagerAccessor",
+    "RefineryRecipeAccessor",
+    "SawmillManagerAccessor",
+    "SawmillRecipeAccessor",
+    "SmelterManagerAccessor",
+    "SmelterRecipeAccessor",
+    "TransposerManagerAccessor"
   ]
 }
