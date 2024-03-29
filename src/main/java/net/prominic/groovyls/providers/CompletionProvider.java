@@ -21,6 +21,7 @@ package net.prominic.groovyls.providers;
 
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.server.Completions;
+import groovy.lang.DelegatesTo;
 import io.github.classgraph.*;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
@@ -503,22 +504,56 @@ public class CompletionProvider {
     private void populateItemsFromScope(ASTNode node, String namePrefix, Completions items) {
         Set<String> existingNames = new HashSet<>();
         ASTNode current = node;
+        ASTNode child = null;
+        boolean isInClosure = false;
+        int argIndex = -1;
         while (current != null) {
-            if (current instanceof ClassNode) {
-                ClassNode classNode = (ClassNode) current;
-                populateItemsFromPropertiesAndFields(classNode.getProperties(), classNode.getFields(), namePrefix,
-                                                     existingNames, items);
+            if (current instanceof ClassNode classNode) {
+                populateItemsFromPropertiesAndFields(classNode.getProperties(), classNode.getFields(), namePrefix, existingNames, items);
                 populateItemsFromMethods(classNode.getMethods(), namePrefix, existingNames, items);
-            } else if (current instanceof MethodNode) {
-                MethodNode methodNode = (MethodNode) current;
+            } else if (current instanceof MethodNode methodNode) {
                 populateItemsFromVariableScope(methodNode.getVariableScope(), namePrefix, existingNames, items);
-            } else if (current instanceof BlockStatement) {
-                BlockStatement block = (BlockStatement) current;
+            } else if (current instanceof BlockStatement block) {
                 populateItemsFromVariableScope(block.getVariableScope(), namePrefix, existingNames, items);
-            } else if (current instanceof VariableExpression || current instanceof StaticMethodCallExpression) {
+            } else if (current instanceof ClosureExpression ce) {
+                isInClosure = true;
+            } else if (current instanceof ArgumentListExpression ale) {
+                if (isInClosure && child instanceof ClosureExpression) {
+                    argIndex = ale.getExpressions().indexOf(child);
+                }
+            } else if (current instanceof MethodCall mce) {
+                if (argIndex >= 0) {
+                    MethodNode method = GroovyASTUtils.getMethodFromCallExpression(mce, astContext);
+                    if (method != null && method.getParameters().length > argIndex) {
+                        Parameter parameter = method.getParameters()[argIndex];
+                        for (AnnotationNode ann : parameter.getAnnotations(ClassHelper.makeCached(DelegatesTo.class))) {
+                            Expression valueExpr = ann.getMember("value");
+                            ClassNode classNode = null;
+                            if (valueExpr instanceof ClassExpression classExpr) {
+                                classNode = classExpr.getType();
+                            } else {
+                                valueExpr = ann.getMember("type");
+                                if (valueExpr instanceof ConstantExpression ce) {
+                                    try {
+                                        classNode = ClassHelper.makeCached(Class.forName(ce.getText()));
+                                    } catch (ClassNotFoundException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                            }
+                            if (classNode != null) {
+                                populateItemsFromPropertiesAndFields(classNode.getProperties(), classNode.getFields(), namePrefix, existingNames, items);
+                                populateItemsFromMethods(classNode.getMethods(), namePrefix, existingNames, items);
+                            }
+                        }
+                    }
+                }
+            }
+            if (current instanceof VariableExpression || current instanceof StaticMethodCallExpression) {
                 populateItemsFromGameObjects(namePrefix, existingNames, items);
                 populateItemsFromGlobalScope(namePrefix, existingNames, items);
             }
+            child = current;
             current = astContext.getVisitor().getParent(current);
         }
         populateTypes(node, namePrefix, existingNames, items);
