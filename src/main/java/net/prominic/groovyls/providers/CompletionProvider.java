@@ -526,6 +526,8 @@ public class CompletionProvider {
                     MethodNode method = GroovyASTUtils.getMethodFromCallExpression(mce, astContext);
                     if (method != null && method.getParameters().length > argIndex) {
                         Parameter parameter = method.getParameters()[argIndex];
+                        // we are currently in a method_call(closure) structure
+                        // try to find a DelegatesTo
                         for (AnnotationNode ann : parameter.getAnnotations(ClassHelper.makeCached(DelegatesTo.class))) {
                             Expression valueExpr = ann.getMember("value");
                             ClassNode classNode = null;
@@ -536,8 +538,7 @@ public class CompletionProvider {
                                 if (valueExpr instanceof ConstantExpression ce) {
                                     try {
                                         classNode = ClassHelper.makeCached(Class.forName(ce.getText()));
-                                    } catch (ClassNotFoundException e) {
-                                        throw new RuntimeException(e);
+                                    } catch (ClassNotFoundException ignored) {
                                     }
                                 }
                             }
