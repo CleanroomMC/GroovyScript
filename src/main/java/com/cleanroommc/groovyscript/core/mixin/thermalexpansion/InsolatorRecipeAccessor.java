@@ -12,4 +12,5 @@ public interface InsolatorRecipeAccessor {
     static InsolatorManager.InsolatorRecipe createInsolatorRecipe(ItemStack secondaryInput, ItemStack primaryInput, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance, int energy, int water, InsolatorManager.Type type) {
         throw new UnsupportedOperationException();
     }
+
 }

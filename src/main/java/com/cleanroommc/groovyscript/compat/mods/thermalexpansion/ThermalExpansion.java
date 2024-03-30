@@ -1,17 +1,65 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion;
 
+import cofh.thermalexpansion.util.managers.machine.CompactorManager;
+import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine.*;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 public class ThermalExpansion extends ModPropertyContainer {
 
-    public final Pulverizer pulverizer = new Pulverizer();
     public final Brewer brewer = new Brewer();
+    public final Centrifuge centrifuge = new Centrifuge();
+    public final CentrifugeMobs centrifugeMob = new CentrifugeMobs();
+    public final Charger charger = new Charger();
+    public final Compactor compactor = new Compactor();
     public final Crucible crucible = new Crucible();
+    public final Enchanter enchanter = new Enchanter();
+    public final Extruder extruder = new Extruder();
+    public final Furnace furnace = new Furnace();
+    public final FurnacePyrolysis furnacePyrolysis = new FurnacePyrolysis();
+    public final Insolator insolator = new Insolator();
+    public final Precipitator precipitator = new Precipitator();
+    public final Pulverizer pulverizer = new Pulverizer();
+    public final Refinery refinery = new Refinery();
+    public final RefineryPotion refineryPotion = new RefineryPotion();
+    public final Sawmill sawmill = new Sawmill();
+    public final Smelter smelter = new Smelter();
+    public final TransposerExtract transposerExtract = new TransposerExtract();
+    public final TransposerFill transposerFill = new TransposerFill();
 
     public ThermalExpansion() {
-        addRegistry(pulverizer);
         addRegistry(brewer);
+        addRegistry(centrifuge);
+        addRegistry(centrifugeMob);
+        addRegistry(charger);
+        addRegistry(compactor);
         addRegistry(crucible);
+        addRegistry(enchanter);
+        addRegistry(extruder);
+        addRegistry(furnace);
+        addRegistry(furnacePyrolysis);
+        addRegistry(insolator);
+        addRegistry(precipitator);
+        addRegistry(pulverizer);
+        addRegistry(refinery);
+        addRegistry(refineryPotion);
+        addRegistry(sawmill);
+        addRegistry(smelter);
+        addRegistry(transposerExtract);
+        addRegistry(transposerFill);
+    }
+
+    @Override
+    public void initialize() {
+        GameObjectHandler.builder("mode", CompactorManager.Mode.class)
+                .mod("thermalexpansion")
+                .parser(IGameObjectParser.wrapEnum(CompactorManager.Mode.class, false))
+                .completerOfNamed(() -> Arrays.asList(CompactorManager.Mode.values()), v -> v.name().toUpperCase(Locale.ROOT))
+                .register();
     }
 
 }

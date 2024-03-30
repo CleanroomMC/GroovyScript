@@ -12,4 +12,5 @@ public interface SmelterRecipeAccessor {
     static SmelterManager.SmelterRecipe createSmelterRecipe(ItemStack secondaryInput, ItemStack primaryInput, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance, int energy) {
         throw new UnsupportedOperationException();
     }
+
 }

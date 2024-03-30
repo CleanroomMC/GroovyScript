@@ -13,4 +13,5 @@ public interface RefineryRecipeAccessor {
     static RefineryManager.RefineryRecipe createRefineryRecipe(FluidStack input, FluidStack outputFluid, ItemStack outputItem, int energy, int chance) {
         throw new UnsupportedOperationException();
     }
+
 }

@@ -12,7 +12,7 @@ import java.util.Set;
 @Mixin(value = InsolatorManager.class, remap = false)
 public interface InsolatorManagerAccessor {
 
-    @org.spongepowered.asm.mixin.gen.Accessor
+    @Accessor
     static Map<List<ComparableItemStackValidatedNBT>, InsolatorManager.InsolatorRecipe> getRecipeMap() {
         throw new UnsupportedOperationException();
     }

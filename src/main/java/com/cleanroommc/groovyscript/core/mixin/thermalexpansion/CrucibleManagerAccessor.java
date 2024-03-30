@@ -20,4 +20,5 @@ public interface CrucibleManagerAccessor {
     static Set<ComparableItemStackValidatedNBT> getLavaSet() {
         throw new AssertionError();
     }
+
 }

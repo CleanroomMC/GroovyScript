@@ -12,7 +12,7 @@ import java.util.Set;
 @Mixin(value = SmelterManager.class, remap = false)
 public interface SmelterManagerAccessor {
 
-    @org.spongepowered.asm.mixin.gen.Accessor
+    @Accessor
     static Map<List<ComparableItemStackValidatedNBT>, SmelterManager.SmelterRecipe> getRecipeMap() {
         throw new UnsupportedOperationException();
     }

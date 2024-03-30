@@ -1,0 +1,473 @@
+
+// Auto generated groovyscript example file
+// MODS_LOADED: thermalexpansion
+
+println 'mod \'thermalexpansion\' detected, running script'
+
+// Alchemical Imbuer:
+// Converts an input fluidstack and input itemstack into an output fluidstack, costing power and taking time based on the
+// power cost.
+
+mods.thermalexpansion.brewer.removeByInput(item('minecraft:glowstone_dust'))
+mods.thermalexpansion.brewer.removeByInput(fluid('potion').withNbt(['Potion': 'minecraft:leaping']))
+mods.thermalexpansion.brewer.removeByOutput(fluid('potion_splash').withNbt(['Potion': 'cofhcore:luck2']))
+// mods.thermalexpansion.brewer.removeAll()
+
+mods.thermalexpansion.brewer.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .fluidInput(fluid('water') * 100)
+    .fluidOutput(fluid('lava') * 100)
+    .register()
+
+mods.thermalexpansion.brewer.recipeBuilder()
+    .input(item('minecraft:diamond') * 2)
+    .fluidInput(fluid('water') * 1000)
+    .fluidOutput(fluid('steam') * 100)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.brewer.add()
+
+// Centrifugal Separator:
+// Converts an input itemstack into an optional output fluidstack and up to four output itemstacks with chance, costing
+// power and taking time based on the power cost.
+
+mods.thermalexpansion.centrifuge.removeByInput(item('minecraft:reeds'))
+mods.thermalexpansion.centrifuge.removeByOutput(fluid('redstone'))
+mods.thermalexpansion.centrifuge.removeByOutput(item('minecraft:redstone'))
+// mods.thermalexpansion.centrifuge.removeAll()
+
+mods.thermalexpansion.centrifuge.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .fluidOutput(fluid('water') * 100)
+    .output(item('minecraft:diamond') * 2, item('minecraft:gold_ingot'), item('minecraft:gold_ingot'))
+    .chance(50, 100, 1)
+    .register()
+
+mods.thermalexpansion.centrifuge.recipeBuilder()
+    .input(item('minecraft:diamond') * 3)
+    .output(item('minecraft:clay'))
+    .chance(100)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.centrifuge.add()
+
+// Centrifugal Separator - Enstabulation Apparatus:
+// Converts an input itemstack into an optional output fluidstack and up to four output itemstacks with chance, costing
+// power and taking time based on the power cost.
+
+mods.thermalexpansion.centrifuge_mobs.removeByInput(item('thermalexpansion:morb').withNbt(['id': 'minecraft:slime']))
+mods.thermalexpansion.centrifuge_mobs.removeByOutput(item('minecraft:fish'))
+// mods.thermalexpansion.centrifuge_mobs.removeByOutput(fluid('experience'))
+// mods.thermalexpansion.centrifuge_mobs.removeAll()
+
+/*mods.thermalexpansion.centrifuge_mobs.recipeBuilder()
+    .register()*/
+
+/*mods.thermalexpansion.centrifuge_mobs.recipeBuilder()
+    .register()*/
+
+
+// mods.thermalexpansion.centrifuge_mobs.add()
+
+// Energetic Infuser:
+// Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
+
+mods.thermalexpansion.charger.removeByInput(item('thermalfoundation:bait:1'))
+mods.thermalexpansion.charger.removeByOutput(item('thermalfoundation:fertilizer:2'))
+// mods.thermalexpansion.charger.removeAll()
+
+mods.thermalexpansion.charger.recipeBuilder()
+    .input(item('minecraft:diamond') * 5)
+    .output(item('minecraft:clay'))
+    .register()
+
+mods.thermalexpansion.charger.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .output(item('minecraft:diamond') * 2)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.charger.add()
+
+// Compactor:
+// Converts an input itemstack into an output itemstack, with different modes each requiring a different augment to be
+// installed, costing power and taking time based on the power cost.
+
+mods.thermalexpansion.compactor.removeByInput(mode('coin'), item('thermalfoundation:material:130'))
+mods.thermalexpansion.compactor.removeByInput(item('minecraft:iron_ingot'))
+// mods.thermalexpansion.compactor.removeByMode(mode('plate'))
+mods.thermalexpansion.compactor.removeByOutput(mode('coin'), item('thermalfoundation:coin:102'))
+mods.thermalexpansion.compactor.removeByOutput(item('minecraft:blaze_rod'))
+mods.thermalexpansion.compactor.removeByOutput(item('thermalfoundation:material:24'))
+// mods.thermalexpansion.compactor.removeAll()
+
+mods.thermalexpansion.compactor.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .output(item('minecraft:diamond') * 2)
+    .mode(mode('coin'))
+    .register()
+
+mods.thermalexpansion.compactor.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .output(item('minecraft:diamond'))
+    .mode(mode('all'))
+    .register()
+
+mods.thermalexpansion.compactor.recipeBuilder()
+    .input(item('minecraft:diamond') * 2)
+    .output(item('minecraft:gold_ingot'))
+    .mode(mode('plate'))
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.compactor.add()
+
+// Magma Crucible:
+// Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
+
+mods.thermalexpansion.crucible.removeByInput(item('minecraft:glowstone_dust'))
+mods.thermalexpansion.crucible.removeByOutput(fluid('lava'))
+// mods.thermalexpansion.crucible.removeAll()
+
+mods.thermalexpansion.crucible.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .fluidOutput(fluid('lava') * 25)
+    .register()
+
+mods.thermalexpansion.crucible.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .fluidOutput(fluid('water') * 1000)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.crucible.add()
+
+// Arcane Ensorcellator:
+// Converts two input itemstacks and liquid experience into an output itemstack, costing power and taking time based on the
+// power cost.
+
+mods.thermalexpansion.enchanter.removeByInput(item('minecraft:blaze_rod'))
+// mods.thermalexpansion.enchanter.removeByInput(item('mincraft:book'))
+mods.thermalexpansion.enchanter.removeByOutput(item('minecraft:enchanted_book').withNbt(['StoredEnchantments': [['lvl': 1, 'id': 34]]]))
+// mods.thermalexpansion.enchanter.removeAll()
+
+mods.thermalexpansion.enchanter.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:gold_ingot') * 4)
+    .output(item('minecraft:diamond'))
+    .register()
+
+mods.thermalexpansion.enchanter.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:gold_ingot'))
+    .output(item('minecraft:diamond'))
+    .experience(1000)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.enchanter.add()
+mods.thermalexpansion.enchanter.addArcana(item('minecraft:clay'))
+
+// Igneous Extruder:
+// Converts a variable amount of lava and water into a specific output itemstack.
+
+// mods.thermalexpansion.extruder.removeByInput(false, fluid('lava'))
+// mods.thermalexpansion.extruder.removeByInput(fluid('water'))
+mods.thermalexpansion.extruder.removeByOutput(true, item('minecraft:gravel'))
+mods.thermalexpansion.extruder.removeByOutput(item('minecraft:obsidian'))
+// mods.thermalexpansion.extruder.removeByType(true)
+// mods.thermalexpansion.extruder.removeAll()
+
+mods.thermalexpansion.extruder.recipeBuilder()
+    .fluidHot(100)
+    .fluidCold(1000)
+    .output(item('minecraft:clay'))
+    .register()
+
+mods.thermalexpansion.extruder.recipeBuilder()
+    .fluidHot(100)
+    .fluidCold(1000)
+    .output(item('minecraft:gold_ingot'))
+    .sedimentary()
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.extruder.add()
+
+// Redstone Furnace:
+// Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
+
+mods.thermalexpansion.furnace.removeByInput(item('minecraft:cactus:*'))
+mods.thermalexpansion.furnace.removeByOutput(item('minecraft:cooked_porkchop'))
+mods.thermalexpansion.furnace.removeFood(item('minecraft:rabbit:*'))
+// mods.thermalexpansion.furnace.removeAll()
+// mods.thermalexpansion.furnace.removeAllFood()
+
+mods.thermalexpansion.furnace.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .output(item('minecraft:clay') * 2)
+    .register()
+
+mods.thermalexpansion.furnace.recipeBuilder()
+    .input(item('minecraft:gold_ingot') * 2)
+    .output(item('minecraft:clay'))
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.furnace.add()
+mods.thermalexpansion.furnace.addFood(item('minecraft:emerald_ore'))
+
+// Redstone Furnace - Pyrolytic Conversion:
+// Converts an input itemstack into an output itemstack and creosote amount, costing power and taking time based on the
+// power cost.
+
+mods.thermalexpansion.furnace_pyrolysis.removeByInput(item('minecraft:cactus:*'))
+mods.thermalexpansion.furnace_pyrolysis.removeByOutput(item('thermalfoundation:storage_resource:1'))
+// mods.thermalexpansion.furnace_pyrolysis.removeAll()
+
+mods.thermalexpansion.furnace_pyrolysis.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .output(item('minecraft:diamond') * 2)
+    .creosote(100)
+    .register()
+
+mods.thermalexpansion.furnace_pyrolysis.recipeBuilder()
+    .input(item('minecraft:gold_ingot') * 2)
+    .output(item('minecraft:clay'))
+    .creosote(1000)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.furnace_pyrolysis.add()
+
+// Phytogenic Insolator:
+// Converts two input itemstacks into an output itemstack and optional output itemstack with a chance, costing power and
+// taking time based on the power cost.
+
+mods.thermalexpansion.insolator.removeByInput(item('minecraft:double_plant:4'))
+mods.thermalexpansion.insolator.removeByInput(item('thermalfoundation:fertilizer'))
+mods.thermalexpansion.insolator.removeByOutput(item('minecraft:melon_seeds'))
+mods.thermalexpansion.insolator.removeByOutput(item('minecraft:red_flower:6'))
+// mods.thermalexpansion.insolator.removeAll()
+
+mods.thermalexpansion.insolator.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:diamond'))
+    .output(item('minecraft:diamond') * 4)
+    .register()
+
+mods.thermalexpansion.insolator.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:gold_ingot') * 2)
+    .output(item('minecraft:clay'), item('minecraft:diamond'))
+    .chance(5)
+    .water(100)
+    .tree()
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.insolator.add()
+
+// Glacial Precipitator:
+// Converts an amount of water into a specific output itemstack, costing power and taking time based on the power cost.
+
+// mods.thermalexpansion.precipitator.removeByInput(fluid('water'))
+mods.thermalexpansion.precipitator.removeByOutput(item('minecraft:snowball'))
+// mods.thermalexpansion.precipitator.removeAll()
+
+mods.thermalexpansion.precipitator.recipeBuilder()
+    .output(item('minecraft:clay'))
+    .register()
+
+mods.thermalexpansion.precipitator.recipeBuilder()
+    .water(100)
+    .output(item('minecraft:clay'))
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.precipitator.add()
+
+// Pulverizer:
+// Converts an input itemstack into an output itemstack and optional output itemstack with a chance, costing power and
+// taking time based on the power cost.
+
+mods.thermalexpansion.pulverizer.removeByInput(item('minecraft:emerald_ore'))
+mods.thermalexpansion.pulverizer.removeByOutput(item('minecraft:diamond'))
+mods.thermalexpansion.pulverizer.removeByOutput(item('thermalfoundation:material:772'))
+// mods.thermalexpansion.pulverizer.removeAll()
+
+mods.thermalexpansion.pulverizer.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .output(item('minecraft:clay'), item('minecraft:diamond'))
+    .chance(1)
+    .register()
+
+mods.thermalexpansion.pulverizer.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .output(item('minecraft:gold_ingot'), item('minecraft:gold_ingot'))
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.pulverizer.add()
+
+// Fractionating Still:
+// Converts an input fluidstack into an output fluidstack and optional output itemstack with chance, costing power and
+// taking time based on the power cost.
+
+mods.thermalexpansion.refinery.removeBioFuel(fluid('resin'))
+mods.thermalexpansion.refinery.removeByInput(fluid('resin'))
+mods.thermalexpansion.refinery.removeByOutput(fluid('refined_biofuel'))
+// mods.thermalexpansion.refinery.removeByOutput(item('thermalfoundation:material:771'))
+mods.thermalexpansion.refinery.removeFossilFuel(fluid('coal'))
+// mods.thermalexpansion.refinery.removeAll()
+// mods.thermalexpansion.refinery.removeAllBioFuels()
+// mods.thermalexpansion.refinery.removeAllFossilFuels()
+
+mods.thermalexpansion.refinery.recipeBuilder()
+    .fluidInput(fluid('water') * 100)
+    .fluidOutput(fluid('steam') * 80)
+    .register()
+
+mods.thermalexpansion.refinery.recipeBuilder()
+    .fluidInput(fluid('lava') * 100)
+    .fluidOutput(fluid('steam') * 150)
+    .output(item('minecraft:clay'))
+    .chance(25)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.refinery.add()
+mods.thermalexpansion.refinery.addBioFuel(fluid('coal'))
+mods.thermalexpansion.refinery.addFossilFuel(fluid('crude_oil'))
+
+// Fractionating Still - Alchemical Retort:
+// Converts an input fluidstack into an output fluidstack and optional output itemstack with chance, costing power and
+// taking time based on the power cost.
+
+mods.thermalexpansion.refinery_potion.removeByInput(fluid('potion_lingering').withNbt(['Potion': 'cofhcore:healing3']))
+mods.thermalexpansion.refinery_potion.removeByOutput(fluid('potion_splash').withNbt(['Potion': 'cofhcore:leaping4']))
+// mods.thermalexpansion.refinery_potion.removeAll()
+
+mods.thermalexpansion.refinery_potion.recipeBuilder()
+    .fluidInput(fluid('water') * 100)
+    .fluidOutput(fluid('steam') * 200)
+    .register()
+
+mods.thermalexpansion.refinery_potion.recipeBuilder()
+    .fluidInput(fluid('lava') * 100)
+    .fluidOutput(fluid('steam') * 30)
+    .output(item('minecraft:clay'))
+    .chance(75)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.refinery_potion.add()
+
+// Sawmill:
+// Converts an input itemstack into an output itemstack and optional output itemstack with a chance, costing power and
+// taking time based on the power cost.
+
+mods.thermalexpansion.sawmill.removeByInput(item('minecraft:pumpkin'))
+mods.thermalexpansion.sawmill.removeByOutput(item('minecraft:leather'))
+mods.thermalexpansion.sawmill.removeByOutput(item('thermalfoundation:material:800'))
+// mods.thermalexpansion.sawmill.removeAll()
+
+mods.thermalexpansion.sawmill.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .output(item('minecraft:gold_ingot') * 2)
+    .register()
+
+mods.thermalexpansion.sawmill.recipeBuilder()
+    .input(item('minecraft:clay') * 4)
+    .output(item('minecraft:gold_ingot'), item('minecraft:diamond'))
+    .chance(25)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.sawmill.add()
+
+// Induction Smelter:
+// Converts two input itemstacks into an output itemstack and optional output itemstack with a chance, costing power and
+// taking time based on the power cost.
+
+mods.thermalexpansion.smelter.removeByInput(ore('sand'))
+mods.thermalexpansion.smelter.removeByInput(item('minecraft:iron_ingot'))
+mods.thermalexpansion.smelter.removeByOutput(item('thermalfoundation:material:166'))
+// mods.thermalexpansion.smelter.removeAll()
+
+mods.thermalexpansion.smelter.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:diamond'))
+    .output(item('minecraft:diamond') * 4)
+    .register()
+
+mods.thermalexpansion.smelter.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:gold_ingot') * 2)
+    .output(item('minecraft:clay'), item('minecraft:diamond'))
+    .chance(5)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.smelter.add()
+
+// Fluid Transposer - Empty:
+// Converts an input itemstack into an output fluidstack and optional output itemstack with chance, costing power and
+// taking time based on the power cost.
+
+mods.thermalexpansion.transposer_extract.removeByInput(item('minecraft:sponge:1'))
+mods.thermalexpansion.transposer_extract.removeByOutput(fluid('seed_oil'))
+mods.thermalexpansion.transposer_extract.removeByOutput(item('minecraft:bowl'))
+// mods.thermalexpansion.transposer_extract.removeAll()
+
+mods.thermalexpansion.transposer_extract.recipeBuilder()
+    .input(item('minecraft:diamond') * 2)
+    .fluidOutput(fluid('water') * 100)
+    .register()
+
+mods.thermalexpansion.transposer_extract.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .output(item('minecraft:diamond') * 2)
+    .fluidOutput(fluid('water') * 50)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.transposer_extract.add()
+
+// Fluid Transposer - Fill:
+// Converts an input itemstack and input fluidstack into an output itemstack with chance, costing power and taking time
+// based on the power cost.
+
+mods.thermalexpansion.transposer_fill.removeByInput(fluid('glowstone'))
+mods.thermalexpansion.transposer_fill.removeByInput(item('minecraft:concrete_powder:3'))
+mods.thermalexpansion.transposer_fill.removeByOutput(item('minecraft:ice'))
+// mods.thermalexpansion.transposer_fill.removeAll()
+
+mods.thermalexpansion.transposer_fill.recipeBuilder()
+    .input(item('minecraft:diamond') * 2)
+    .fluidInput(fluid('water') * 100)
+    .register()
+
+mods.thermalexpansion.transposer_fill.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .output(item('minecraft:diamond') * 2)
+    .fluidInput(fluid('water') * 50)
+    .energy(1000)
+    .register()
+
+
+// mods.thermalexpansion.transposer_fill.add()
+
