@@ -1342,6 +1342,10 @@ groovyscript.wiki.thermalexpansion.compactor.removeByOutput=Removes the given II
 groovyscript.wiki.thermalexpansion.compactor.removeByMode=Removes all recipes for the given mode
 groovyscript.wiki.thermalexpansion.compactor.mode.value=Sets the mode of the recipe, controlling what augments are allowed, if any, for the recipe to operate
 
+groovyscript.wiki.thermalexpansion.compression.title=Compression Dynamo
+groovyscript.wiki.thermalexpansion.compression.description=Converts an input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.compression.removeByInput=Removes all recipes with given FluidStack
+
 groovyscript.wiki.thermalexpansion.crucible.title=Magma Crucible
 groovyscript.wiki.thermalexpansion.crucible.description=Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
 #groovyscript.wiki.thermalexpansion.crucible.add=TODO
@@ -1353,6 +1357,10 @@ groovyscript.wiki.thermalexpansion.enchanter.addArcana=Adds an item to the Arcan
 groovyscript.wiki.thermalexpansion.enchanter.removeArcana=Removes an item from the Arcana list, which filters the inputs for one of the Arcane Ensorcellator slots when enabled
 groovyscript.wiki.thermalexpansion.enchanter.type.value=Sets the type of recipe, which by default does nothing
 groovyscript.wiki.thermalexpansion.enchanter.experience.value=Sets the amount of experience the recipe consumes from the tank
+
+groovyscript.wiki.thermalexpansion.enervation.title=Enervation Dynamo
+groovyscript.wiki.thermalexpansion.enervation.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.enervation.removeByInput=Removes all recipes with given IIngredient
 
 groovyscript.wiki.thermalexpansion.extruder.title=Igneous Extruder
 groovyscript.wiki.thermalexpansion.extruder.description=Converts a variable amount of lava and water into a specific output itemstack.
@@ -1385,6 +1393,18 @@ groovyscript.wiki.thermalexpansion.insolator.type.value=Sets the type of the rec
 groovyscript.wiki.thermalexpansion.insolator.water.value=Sets the amount of water consumed by the recipe
 groovyscript.wiki.thermalexpansion.insolator.chance.value=Sets the chance a secondary output is created, typically the input seed or sapling
 
+groovyscript.wiki.thermalexpansion.lapidary.title=Numismatic Dynamo - Lapidary Calibration
+groovyscript.wiki.thermalexpansion.lapidary.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.lapidary.removeByInput=Removes all recipes with given IIngredient
+
+groovyscript.wiki.thermalexpansion.magmatic.title=Magmatic Dynamo
+groovyscript.wiki.thermalexpansion.magmatic.description=Converts an input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.magmatic.removeByInput=Removes all recipes with given FluidStack
+
+groovyscript.wiki.thermalexpansion.numismatic.title=Numismatic Dynamo
+groovyscript.wiki.thermalexpansion.numismatic.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.numismatic.removeByInput=Removes all recipes with given IIngredient
+
 groovyscript.wiki.thermalexpansion.precipitator.title=Glacial Precipitator
 groovyscript.wiki.thermalexpansion.precipitator.description=Converts an amount of water into a specific output itemstack, costing power and taking time based on the power cost.
 #groovyscript.wiki.thermalexpansion.precipitator.add=TODO
@@ -1394,6 +1414,15 @@ groovyscript.wiki.thermalexpansion.pulverizer.title=Pulverizer
 groovyscript.wiki.thermalexpansion.pulverizer.description=Converts an input itemstack into an output itemstack and optional output itemstack with a chance, costing power and taking time based on the power cost.
 #groovyscript.wiki.thermalexpansion.pulverizer.add=TODO
 groovyscript.wiki.thermalexpansion.pulverizer.chance.value=Sets the chance the secondary output itemstack is created
+
+groovyscript.wiki.thermalexpansion.reactant.title=Reactant Dynamo
+groovyscript.wiki.thermalexpansion.reactant.description=Converts an input itemstack and input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.reactant.energy.value=Sets the amount of energy produced by the recipe
+groovyscript.wiki.thermalexpansion.reactant.removeByInput=Removes all recipes with given IIngredient or fluid name
+groovyscript.wiki.thermalexpansion.reactant.addElementalFluid=Adds a fluid to the Element Catalyzer Fluid list, enabling its use with the Elemental Catalyzer augment installed
+groovyscript.wiki.thermalexpansion.reactant.addElementalReactant=Adds an itemstack to the Element Catalyzer Fluid list, enabling its use with the Elemental Catalyzer augment installed
+groovyscript.wiki.thermalexpansion.reactant.removeElementalFluid=Removes a fluid from the Element Catalyzer Fluid list, disabling its use with the Elemental Catalyzer augment installed
+groovyscript.wiki.thermalexpansion.reactant.removeElementalReactant=Removes an itemstack from the Element Catalyzer Fluid list, disabling its use with the Elemental Catalyzer augment installed
 
 groovyscript.wiki.thermalexpansion.refinery.title=Fractionating Still
 groovyscript.wiki.thermalexpansion.refinery.description=Converts an input fluidstack into an output fluidstack and optional output itemstack with chance, costing power and taking time based on the power cost.
@@ -1423,6 +1452,10 @@ groovyscript.wiki.thermalexpansion.smelter.description=Converts two input itemst
 groovyscript.wiki.thermalexpansion.smelter.addFlux=Adds an item to the Metallurgic Flux list, which filters the inputs for one of the Induction Smelter slots when enabled
 groovyscript.wiki.thermalexpansion.smelter.removeFlux=Removes an item from the Metallurgic Flux list, which filters the inputs for one of the Induction Smelter slots when enabled
 groovyscript.wiki.thermalexpansion.smelter.chance.value=Sets the chance the second output itemstack is created
+
+groovyscript.wiki.thermalexpansion.steam.title=Steam Dynamo
+groovyscript.wiki.thermalexpansion.steam.description=Converts an input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.steam.removeByInput=Removes all recipes with given IIngredient
 
 groovyscript.wiki.thermalexpansion.transposer.note0=Does not alter fill/empty container recipes.
 

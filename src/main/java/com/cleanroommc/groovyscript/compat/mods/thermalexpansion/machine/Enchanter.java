@@ -105,7 +105,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = {
             @Example("item('minecraft:blaze_rod')"),
-            @Example(value = "item('mincraft:book')", commented = true)
+            @Example(value = "item('minecraft:book')", commented = true)
     })
     public boolean removeByInput(IIngredient input) {
         return EnchanterManagerAccessor.getRecipeMap().values().removeIf(r -> {

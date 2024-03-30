@@ -128,6 +128,14 @@ mods.thermalexpansion.compactor.recipeBuilder()
 
 // mods.thermalexpansion.compactor.add()
 
+// Compression Dynamo:
+// Converts an input fluidstack into power, taking time based on the power.
+
+mods.thermalexpansion.compression.removeByInput(fluid('seed_oil'))
+// mods.thermalexpansion.compression.removeAll()
+
+mods.thermalexpansion.compression.add(fluid('steam'), 100)
+
 // Magma Crucible:
 // Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
 
@@ -154,7 +162,7 @@ mods.thermalexpansion.crucible.recipeBuilder()
 // power cost.
 
 mods.thermalexpansion.enchanter.removeByInput(item('minecraft:blaze_rod'))
-// mods.thermalexpansion.enchanter.removeByInput(item('mincraft:book'))
+// mods.thermalexpansion.enchanter.removeByInput(item('minecraft:book'))
 mods.thermalexpansion.enchanter.removeByOutput(item('minecraft:enchanted_book').withNbt(['StoredEnchantments': [['lvl': 1, 'id': 34]]]))
 // mods.thermalexpansion.enchanter.removeAll()
 
@@ -173,6 +181,14 @@ mods.thermalexpansion.enchanter.recipeBuilder()
 
 // mods.thermalexpansion.enchanter.add()
 mods.thermalexpansion.enchanter.addArcana(item('minecraft:clay'))
+
+// Enervation Dynamo:
+// Converts an input itemstack into power, taking time based on the power.
+
+mods.thermalexpansion.enervation.removeByInput(item('minecraft:redstone'))
+// mods.thermalexpansion.enervation.removeAll()
+
+mods.thermalexpansion.enervation.add(item('minecraft:clay'), 100)
 
 // Igneous Extruder:
 // Converts a variable amount of lava and water into a specific output itemstack.
@@ -276,6 +292,30 @@ mods.thermalexpansion.insolator.recipeBuilder()
 
 // mods.thermalexpansion.insolator.add()
 
+// Numismatic Dynamo - Lapidary Calibration:
+// Converts an input itemstack into power, taking time based on the power.
+
+mods.thermalexpansion.lapidary.removeByInput(item('minecraft:diamond'))
+// mods.thermalexpansion.lapidary.removeAll()
+
+mods.thermalexpansion.lapidary.add(item('minecraft:clay'), 1000)
+
+// Magmatic Dynamo:
+// Converts an input fluidstack into power, taking time based on the power.
+
+mods.thermalexpansion.magmatic.removeByInput(fluid('lava'))
+// mods.thermalexpansion.magmatic.removeAll()
+
+mods.thermalexpansion.magmatic.add(fluid('steam'), 100)
+
+// Numismatic Dynamo:
+// Converts an input itemstack into power, taking time based on the power.
+
+mods.thermalexpansion.numismatic.removeByInput(item('thermalfoundation:coin:69'))
+// mods.thermalexpansion.numismatic.removeAll()
+
+mods.thermalexpansion.numismatic.add(item('minecraft:clay'), 100)
+
 // Glacial Precipitator:
 // Converts an amount of water into a specific output itemstack, costing power and taking time based on the power cost.
 
@@ -319,6 +359,32 @@ mods.thermalexpansion.pulverizer.recipeBuilder()
 
 
 // mods.thermalexpansion.pulverizer.add()
+
+// Reactant Dynamo:
+// Converts an input itemstack and input fluidstack into power, taking time based on the power.
+
+mods.thermalexpansion.reactant.removeByInput(fluid('redstone'))
+mods.thermalexpansion.reactant.removeByInput(item('minecraft:blaze_powder'))
+mods.thermalexpansion.reactant.removeElementalFluid(fluid('cryotheum'))
+mods.thermalexpansion.reactant.removeElementalReactant(item('thermalfoundation:material:1024'))
+// mods.thermalexpansion.reactant.removeAll()
+
+mods.thermalexpansion.reactant.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .fluidInput(fluid('steam'))
+    .register()
+
+mods.thermalexpansion.reactant.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .fluidInput(fluid('glowstone'))
+    .energy(100)
+    .register()
+
+
+mods.thermalexpansion.reactant.add(item('minecraft:clay'), fluid('steam'), 100)
+mods.thermalexpansion.reactant.addElementalFluid(fluid('glowstone'))
+mods.thermalexpansion.reactant.addElementalReactant(item('minecraft:clay'))
+mods.thermalexpansion.reactant.addElementalReactant(item('minecraft:gunpowder'))
 
 // Fractionating Still:
 // Converts an input fluidstack into an output fluidstack and optional output itemstack with chance, costing power and
@@ -422,6 +488,14 @@ mods.thermalexpansion.smelter.recipeBuilder()
 
 
 // mods.thermalexpansion.smelter.add()
+
+// Steam Dynamo:
+// Converts an input fluidstack into power, taking time based on the power.
+
+mods.thermalexpansion.steam.removeByInput(item('minecraft:coal:1'))
+// mods.thermalexpansion.steam.removeAll()
+
+mods.thermalexpansion.steam.add(item('minecraft:clay'), 100)
 
 // Fluid Transposer - Empty:
 // Converts an input itemstack into an output fluidstack and optional output itemstack with chance, costing power and
