@@ -558,7 +558,7 @@ mods.thermalexpansion.smelter.recipeBuilder()
 // mods.thermalexpansion.smelter.add(1000, item('minecraft:obsidian'), item('minecraft:gold_ingot') * 2, item('minecraft:clay'), item('minecraft:diamond'), 5)
 
 // Steam Dynamo:
-// Converts an input fluidstack into power, taking time based on the power.
+// Converts an input itemstack into power, taking time based on the power.
 
 mods.thermalexpansion.steam.removeByInput(item('minecraft:coal:1'))
 // mods.thermalexpansion.steam.removeAll()

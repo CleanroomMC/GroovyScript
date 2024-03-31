@@ -1344,6 +1344,7 @@ groovyscript.wiki.thermalexpansion.compactor.mode.value=Sets the mode of the rec
 
 groovyscript.wiki.thermalexpansion.compression.title=Compression Dynamo
 groovyscript.wiki.thermalexpansion.compression.description=Converts an input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.compression.add=Adds recipes in the format `fluidStack`, `energy`
 groovyscript.wiki.thermalexpansion.compression.removeByInput=Removes all recipes with given FluidStack
 
 groovyscript.wiki.thermalexpansion.coolant.title=Thermal Mediator
@@ -1354,7 +1355,7 @@ groovyscript.wiki.thermalexpansion.coolant.remove=Removes the given fluid from t
 
 groovyscript.wiki.thermalexpansion.crucible.title=Magma Crucible
 groovyscript.wiki.thermalexpansion.crucible.description=Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
-groovyscript.wiki.thermalexpansion.crucible.add=
+groovyscript.wiki.thermalexpansion.crucible.add=Adds recipes in the format `energy`, `input`, `fluidOutput`
 
 groovyscript.wiki.thermalexpansion.diffuser.title=Decorative Diffuser
 groovyscript.wiki.thermalexpansion.diffuser.description=Controls what items can be used in to boost the potion time and level in the Decorative Diffuser.
@@ -1371,6 +1372,7 @@ groovyscript.wiki.thermalexpansion.enchanter.experience.value=Sets the amount of
 
 groovyscript.wiki.thermalexpansion.enervation.title=Enervation Dynamo
 groovyscript.wiki.thermalexpansion.enervation.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.enervation.add=Adds recipes in the format `itemStack`, `energy`
 groovyscript.wiki.thermalexpansion.enervation.removeByInput=Removes all recipes with given IIngredient
 
 groovyscript.wiki.thermalexpansion.extruder.title=Igneous Extruder
@@ -1399,6 +1401,7 @@ groovyscript.wiki.thermalexpansion.fisher.remove=Removes the given IIngredient a
 
 groovyscript.wiki.thermalexpansion.fisher_bait.title=Aquatic Entangler Bait
 groovyscript.wiki.thermalexpansion.fisher_bait.description=Controls what items can be used in the bait slot of the Aquatic Entangler and how effective they are.
+groovyscript.wiki.thermalexpansion.fisher_bait.add=Adds recipes in the format `stack`, `multiplier`
 groovyscript.wiki.thermalexpansion.fisher_bait.remove=Removes the given IIngredient as a valid bait item
 
 groovyscript.wiki.thermalexpansion.furnace.title=Redstone Furnace
@@ -1424,14 +1427,17 @@ groovyscript.wiki.thermalexpansion.insolator.chance.value=Sets the chance a seco
 
 groovyscript.wiki.thermalexpansion.lapidary.title=Numismatic Dynamo - Lapidary Calibration
 groovyscript.wiki.thermalexpansion.lapidary.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.lapidary.add=Adds recipes in the format `itemStack`, `energy`
 groovyscript.wiki.thermalexpansion.lapidary.removeByInput=Removes all recipes with given IIngredient
 
 groovyscript.wiki.thermalexpansion.magmatic.title=Magmatic Dynamo
 groovyscript.wiki.thermalexpansion.magmatic.description=Converts an input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.magmatic.add=Adds recipes in the format `fluidStack`, `energy`
 groovyscript.wiki.thermalexpansion.magmatic.removeByInput=Removes all recipes with given FluidStack
 
 groovyscript.wiki.thermalexpansion.numismatic.title=Numismatic Dynamo
 groovyscript.wiki.thermalexpansion.numismatic.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.numismatic.add=Adds recipes in the format `itemStack`, `energy`
 groovyscript.wiki.thermalexpansion.numismatic.removeByInput=Removes all recipes with given IIngredient
 
 groovyscript.wiki.thermalexpansion.precipitator.title=Glacial Precipitator
@@ -1446,6 +1452,7 @@ groovyscript.wiki.thermalexpansion.pulverizer.chance.value=Sets the chance the s
 
 groovyscript.wiki.thermalexpansion.reactant.title=Reactant Dynamo
 groovyscript.wiki.thermalexpansion.reactant.description=Converts an input itemstack and input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.reactant.add=Adds recipes in the format `ingredient`, `fluidStack`, `energy`
 groovyscript.wiki.thermalexpansion.reactant.energy.value=Sets the amount of energy produced by the recipe
 groovyscript.wiki.thermalexpansion.reactant.removeByInput=Removes all recipes with given IIngredient or fluid name
 groovyscript.wiki.thermalexpansion.reactant.addElementalFluid=Adds a fluid to the Element Catalyzer Fluid list, enabling its use with the Elemental Catalyzer augment installed
@@ -1484,14 +1491,15 @@ groovyscript.wiki.thermalexpansion.smelter.removeFlux=Removes an item from the M
 groovyscript.wiki.thermalexpansion.smelter.chance.value=Sets the chance the second output itemstack is created
 
 groovyscript.wiki.thermalexpansion.steam.title=Steam Dynamo
-groovyscript.wiki.thermalexpansion.steam.description=Converts an input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.steam.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.steam.add=Adds recipes in the format `itemStack`, `energy`
 groovyscript.wiki.thermalexpansion.steam.removeByInput=Removes all recipes with given IIngredient
 
 groovyscript.wiki.thermalexpansion.tapper.title=Arboreal Extractor
 groovyscript.wiki.thermalexpansion.tapper.description=Controls what items and blocks can be turned into what fluids. Output can be boosted via Fertilizer items.
 groovyscript.wiki.thermalexpansion.tapper.note0=The Item map also controls the Resin Funnel augment for the Sawmill.
-groovyscript.wiki.thermalexpansion.tapper.addItem=
-groovyscript.wiki.thermalexpansion.tapper.addBlock=
+groovyscript.wiki.thermalexpansion.tapper.addItem=Adds recipes to the item map in the format `itemStack`, `fluidStack`
+groovyscript.wiki.thermalexpansion.tapper.addBlock=Adds recipes to the block map in the format `itemStack`, `fluidStack`, but only if `itemStack` is an `ItemBlock`
 groovyscript.wiki.thermalexpansion.tapper.removeItemByInput=Removes all entries with the IIngredient input from the item map
 groovyscript.wiki.thermalexpansion.tapper.removeBlockByInput=Removes all entries with the IIngredient input from block map
 groovyscript.wiki.thermalexpansion.tapper.removeAllBlocks=Removes all entries in the block map
@@ -1499,10 +1507,12 @@ groovyscript.wiki.thermalexpansion.tapper.removeAllItems=Removes all entries in 
 
 groovyscript.wiki.thermalexpansion.tapper_fertilizer.title=Arboreal Extractor Fertilizer
 groovyscript.wiki.thermalexpansion.tapper_fertilizer.description=Controls what items can be used in the fertilizer slot of the Arboreal Extractor Fertilizer and how effective they are.
+groovyscript.wiki.thermalexpansion.tapper_fertilizer.add=Adds recipes in the format `stack`, `multiplier`
 groovyscript.wiki.thermalexpansion.tapper_fertilizer.remove=Removes the given IIngredient as a valid fertilizer item
 
 groovyscript.wiki.thermalexpansion.tapper_tree.title=Arboreal Extractor Tree Structures
 groovyscript.wiki.thermalexpansion.tapper_tree.description=Controls what valid log blocks and leaf blocks are to define a tree structure which the Arboreal Extractor can function on. The "tree" must contain some number of leaves adjacent to the log blocks to be valid.
+groovyscript.wiki.thermalexpansion.tapper_tree.add=Adds recipes in the format `log`, `leaf`
 groovyscript.wiki.thermalexpansion.tapper_tree.removeByLeaf=Removes all entries with the given IBlockState as a leaf
 groovyscript.wiki.thermalexpansion.tapper_tree.removeByLog=Removes all entries with the given IBlockState as a log
 
