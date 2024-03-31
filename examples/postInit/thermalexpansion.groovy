@@ -64,11 +64,19 @@ mods.thermalexpansion.centrifuge_mobs.removeByOutput(item('minecraft:fish'))
 // mods.thermalexpansion.centrifuge_mobs.removeByOutput(fluid('experience'))
 // mods.thermalexpansion.centrifuge_mobs.removeAll()
 
-/*mods.thermalexpansion.centrifuge_mobs.recipeBuilder()
-    .register()*/
+mods.thermalexpansion.centrifuge_mobs.recipeBuilder()
+    .input(item('thermalexpansion:morb').withNbt(['id': 'minecraft:slime']))
+    .fluidOutput(fluid('water') * 100)
+    .output(item('minecraft:diamond') * 2, item('minecraft:gold_ingot'), item('minecraft:gold_ingot'))
+    .chance(50, 100, 1)
+    .register()
 
-/*mods.thermalexpansion.centrifuge_mobs.recipeBuilder()
-    .register()*/
+mods.thermalexpansion.centrifuge_mobs.recipeBuilder()
+    .input(item('minecraft:diamond') * 3)
+    .output(item('minecraft:clay'))
+    .chance(100)
+    .energy(1000)
+    .register()
 
 
 // mods.thermalexpansion.centrifuge_mobs.add()
@@ -561,8 +569,8 @@ mods.thermalexpansion.steam.add(item('minecraft:clay'), 100)
 mods.thermalexpansion.tapper.removeBlockByInput(item('minecraft:log'))
 mods.thermalexpansion.tapper.removeItemByInput(item('minecraft:log:1'))
 // mods.thermalexpansion.tapper.removeAll()
-// mods.thermalexpansion.tapper.removeBlocks()
-// mods.thermalexpansion.tapper.removeItems()
+// mods.thermalexpansion.tapper.removeAllBlocks()
+// mods.thermalexpansion.tapper.removeAllItems()
 
 mods.thermalexpansion.tapper.addBlock(item('minecraft:clay'), fluid('lava') * 150)
 mods.thermalexpansion.tapper.addItem(item('minecraft:clay'), fluid('lava') * 300)

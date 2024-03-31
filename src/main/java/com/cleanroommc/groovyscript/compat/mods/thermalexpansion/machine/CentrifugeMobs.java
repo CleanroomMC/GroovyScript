@@ -25,8 +25,8 @@ import java.util.List;
 public class CentrifugeMobs extends VirtualizedRegistry<CentrifugeRecipe> {
 
     @RecipeBuilderDescription(example = {
-            @Example(value = "", commented = true),
-            @Example(value = "", commented = true)
+            @Example(".input(item('thermalexpansion:morb').withNbt(['id': 'minecraft:slime'])).fluidOutput(fluid('water') * 100).output(item('minecraft:diamond') * 2, item('minecraft:gold_ingot'), item('minecraft:gold_ingot')).chance(50, 100, 1)"),
+            @Example(".input(item('minecraft:diamond') * 3).output(item('minecraft:clay')).chance(100).energy(1000)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

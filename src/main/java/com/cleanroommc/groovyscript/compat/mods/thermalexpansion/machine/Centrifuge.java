@@ -32,10 +32,6 @@ public class Centrifuge extends VirtualizedRegistry<CentrifugeRecipe> {
         return new RecipeBuilder();
     }
 
-    /**
-     * TODO:
-     *  {@link CentrifugeManagerAccessor#getRecipeMapMobs()}
-     */
     @Override
     @GroovyBlacklist
     @ApiStatus.Internal
