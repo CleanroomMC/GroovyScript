@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.registry.NamedRegistry;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.Closure;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class Rarity {
+public class Rarity extends NamedRegistry {
 
     private final List<Pair<Closure<Boolean>, IRarity>> rarities = new ArrayList<>();
 

@@ -1,5 +1,9 @@
 package com.cleanroommc.groovyscript.helper;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,5 +61,57 @@ public class ArrayUtils {
             newArray[i] = function.apply(list.get(i));
         }
         return newArray;
+    }
+
+    public static <T> T[][][][][][] deepCopy6d(@NotNull T[][][][][][] src, @Nullable T[][][][][][] dest) {
+        if (dest == null || src.length > dest.length) dest = newArrayInstance(src);
+        for (int i = 0; i < src.length; i++) {
+            dest[i] = deepCopy5d(src[i], dest[i]);
+        }
+        return dest;
+    }
+
+    public static <T> T[][][][][] deepCopy5d(@NotNull T[][][][][] src, @Nullable T[][][][][] dest) {
+        if (dest == null || src.length > dest.length) dest = newArrayInstance(src);
+        for (int i = 0; i < src.length; i++) {
+            dest[i] = deepCopy4d(src[i], dest[i]);
+        }
+        return dest;
+    }
+
+    public static <T> T[][][][] deepCopy4d(@NotNull T[][][][] src, @Nullable T[][][][] dest) {
+        if (dest == null || src.length > dest.length) dest = newArrayInstance(src);
+        for (int i = 0; i < src.length; i++) {
+            dest[i] = deepCopy3d(src[i], dest[i]);
+        }
+        return dest;
+    }
+
+    public static <T> T[][][] deepCopy3d(@NotNull T[][][] src, @Nullable T[][][] dest) {
+        if (dest == null || src.length > dest.length) dest = newArrayInstance(src);
+        for (int i = 0; i < src.length; i++) {
+            dest[i] = deepCopy2d(src[i], dest[i]);
+        }
+        return dest;
+    }
+
+    public static <T> T[][] deepCopy2d(@NotNull T[][] src, @Nullable T[][] dest) {
+        if (dest == null || src.length > dest.length) dest = newArrayInstance(src);
+        for (int i = 0; i < src.length; i++) {
+            dest[i] = copy1d(src[i], dest[i]);
+        }
+        return dest;
+    }
+
+    public static <T> T[] copy1d(@NotNull T[] src, @Nullable T[] dest) {
+        if (dest == null || dest.length < src.length) {
+            return Arrays.copyOf(src, src.length);
+        }
+        System.arraycopy(src, 0, dest, 0, src.length);
+        return dest;
+    }
+
+    private static <T> T[] newArrayInstance(T[] src) {
+        return (T[]) Array.newInstance(src.getClass().getComponentType(), src.length);
     }
 }

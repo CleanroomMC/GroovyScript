@@ -104,21 +104,25 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
         @Property(defaultValue = "1")
         private int priority = 1;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder ticks(int ticks) {
             this.ticks = ticks;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int ticks) {
             this.ticks = ticks;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder soundEvent(SoundEvent soundEvent) {
             this.soundEvent = soundEvent;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder priority(int priority) {
             this.priority = priority;
             return this;

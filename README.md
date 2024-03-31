@@ -1,7 +1,7 @@
 ## GroovyScript
 A comprehensive scripting sandbox for Minecraft 1.12.2.
 
-For syntax and usage, visit the [official wiki](https://groovyscript-docs.readthedocs.io/en/latest/)
+For syntax and usage, visit the [official wiki](https://cleanroommc.com/groovy-script/)
 
 #### Features:
 

@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public enum GroovyEventManager {
 
@@ -27,28 +28,6 @@ public enum GroovyEventManager {
             listener.unregister();
         }
         this.listeners.clear();
-    }
-
-    public void listen(EventPriority eventPriority, EventBusType eventBusType, Closure<?> eventListener) {
-        if (eventListener.getMaximumNumberOfParameters() > 1) {
-            GroovyLog.get().error("Event listeners should only have one parameter.");
-            return;
-        }
-        Class<?> eventClass = eventListener.getParameterTypes()[0];
-        if (!Event.class.isAssignableFrom(eventClass)) {
-            GroovyLog.get().error("Event listeners' only parameter should be the Event class you are trying to listen to.");
-            return;
-        }
-        listen(eventPriority, eventBusType, (Class<? extends Event>) eventClass, eventListener);
-    }
-
-    @GroovyBlacklist
-    public void listen(EventPriority priority, EventBusType eventBusType, Class<? extends Event> eventClass, Closure<?> eventListener) {
-        EventListener listener = new EventListener(eventBusType, priority, eventClass, eventListener);
-        LoadStage loadStage = GroovyScript.getSandbox().getCurrentLoader();
-        if (loadStage != null && loadStage.isReloadable()) {
-            this.listeners.add(listener);
-        }
     }
 
     public void listen(EventBusType eventBusType, EventPriority eventPriority, Closure<?> eventListener) {
@@ -67,18 +46,57 @@ public enum GroovyEventManager {
         listen(EventPriority.NORMAL, EventBusType.MAIN, eventListener);
     }
 
+    public void listen(EventPriority eventPriority, EventBusType eventBusType, Closure<?> eventListener) {
+        if (eventListener.getMaximumNumberOfParameters() > 1) {
+            GroovyLog.get().error("Event listeners should only have one parameter.");
+            return;
+        }
+        Class<?> eventClass = eventListener.getParameterTypes()[0];
+        if (!Event.class.isAssignableFrom(eventClass)) {
+            GroovyLog.get().error("Event listeners' only parameter should be the Event class you are trying to listen to.");
+            return;
+        }
+        listen(eventPriority, eventBusType, (Class<? extends Event>) eventClass, eventListener);
+    }
+
+    public void listen(Class<? extends Event> eventClass, Closure<?> eventListener) {
+        listen(EventPriority.NORMAL, EventBusType.MAIN, eventClass, eventListener);
+    }
+
+
+    public void listen(EventPriority priority, Class<? extends Event> eventClass, Closure<?> eventListener) {
+        listen(priority, EventBusType.MAIN, eventClass, eventListener);
+    }
+
+    public void listen(EventBusType eventBusType, Class<? extends Event> eventClass, Closure<?> eventListener) {
+        listen(EventPriority.NORMAL, eventBusType, eventClass, eventListener);
+    }
+
+    public void listen(EventPriority priority, EventBusType eventBusType, Class<? extends Event> eventClass, Closure<?> eventListener) {
+        listen(priority, eventBusType, eventClass, event -> ClosureHelper.call(eventListener, event));
+    }
+
+    @GroovyBlacklist
+    public <T extends Event> void listen(EventPriority priority, EventBusType eventBusType, Class<T> eventClass, Consumer<T> eventListener) {
+        EventListener listener = new EventListener(eventBusType, priority, eventClass, eventListener);
+        LoadStage loadStage = GroovyScript.getSandbox().getCurrentLoader();
+        if (loadStage != null && loadStage.isReloadable()) {
+            this.listeners.add(listener);
+        }
+    }
+
     private static class EventListener implements IEventListener {
 
         private final EventBus eventBus;
-        private final Closure<?> listener;
+        private final Consumer<Object> listener;
 
         private IEventListener wrappedListener = this;
 
-        private EventListener(EventBusType busType, EventPriority priority, Closure<?> listener) {
-            this(busType, priority, listener.getParameterTypes()[0], listener);
+        private EventListener(EventBusType busType, EventPriority priority, Class<?> eventClass, Closure<?> listener) {
+            this(busType, priority, eventClass, event -> ClosureHelper.call(listener, event));
         }
 
-        private EventListener(EventBusType busType, EventPriority priority, Class<?> eventClass, Closure<?> listener) {
+        private EventListener(EventBusType busType, EventPriority priority, Class<?> eventClass, Consumer<?> listener) {
             switch (busType) {
                 case ORE_GENERATION:
                     this.eventBus = MinecraftForge.ORE_GEN_BUS;
@@ -90,7 +108,7 @@ public enum GroovyEventManager {
                     this.eventBus = MinecraftForge.EVENT_BUS;
                     break;
             }
-            this.listener = listener;
+            this.listener = (Consumer<Object>) listener;
             this.register(priority, eventClass);
         }
 
@@ -115,16 +133,9 @@ public enum GroovyEventManager {
 
         @Override
         public void invoke(Event event) {
-            if (!event.isCancelable() || !event.isCanceled()/* || subInfo.receiveCanceled()*/) {
-                /*
-                if (filter == null || filter == ((IGenericEvent) event).getGenericType()) {
-                    handler.invoke(event);
-                }
-                 */
-                ClosureHelper.call(this.listener, event);
+            if (!event.isCancelable() || !event.isCanceled()) {
+                this.listener.accept(event);
             }
         }
-
     }
-
 }

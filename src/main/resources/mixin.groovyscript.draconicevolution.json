@@ -5,6 +5,11 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "FusionRegistryAccessor"
+    "EnergyCoreStructureMixin",
+    "FusionRegistryAccessor",
+    "InvisECoreBlockMixin",
+    "TileEnergyCoreStabilizerMixin",
+    "TileEnergyStorageCoreMixin",
+    "TileInvisECoreBlockMixin"
   ]
 }

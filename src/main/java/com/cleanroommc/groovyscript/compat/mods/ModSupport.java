@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.compat.mods.advancedmortars.AdvancedMortars;
 import com.cleanroommc.groovyscript.compat.mods.aetherlegacy.Aether;
 import com.cleanroommc.groovyscript.compat.mods.alchemistry.Alchemistry;
 import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnergistics2;
+import com.cleanroommc.groovyscript.compat.mods.arcanearchives.ArcaneArchives;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
 import com.cleanroommc.groovyscript.compat.mods.betterwithmods.BetterWithMods;
@@ -21,6 +22,7 @@ import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolut
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
 import com.cleanroommc.groovyscript.compat.mods.evilcraft.EvilCraft;
 import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCrafting;
+import com.cleanroommc.groovyscript.compat.mods.extrautils2.ExtraUtils2;
 import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
@@ -57,9 +59,10 @@ public class ModSupport implements IDynamicGroovyProperty {
 
     public static final GroovyContainer<ActuallyAdditions> ACTUALLY_ADDITIONS = new InternalModContainer<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
     public static final GroovyContainer<AdvancedMortars> ADVANCED_MORTARS = new InternalModContainer<>("advancedmortars", "Advanced Mortars", AdvancedMortars::new);
-    public static final GroovyContainer<Aether> AETHER = new InternalModContainer<>("aether_legacy", "The Aether", Aether::new, "aether");
+    public static final GroovyContainer<Aether> AETHER = new InternalModContainer<>("aether_legacy", "Aether Legacy", Aether::new, "aether");
     public static final GroovyContainer<Alchemistry> ALCHEMISTRY = new InternalModContainer<>("alchemistry", "Alchemistry", Alchemistry::new);
     public static final GroovyContainer<AppliedEnergistics2> APPLIED_ENERGISTICS_2 = new InternalModContainer<>("appliedenergistics2", "Applied Energistics 2", AppliedEnergistics2::new, "ae2");
+    public static final GroovyContainer<ArcaneArchives> ARCANE_ARCHIVES = new InternalModContainer<>("arcanearchives", "Arcane Archives", ArcaneArchives::new);
     public static final GroovyContainer<AstralSorcery> ASTRAL_SORCERY = new InternalModContainer<>("astralsorcery", "Astral Sorcery", AstralSorcery::new, "astral");
     public static final GroovyContainer<Avaritia> AVARITIA = new InternalModContainer<>("avaritia", "Avaritia", Avaritia::new);
     public static final GroovyContainer<BetterWithMods> BETTER_WITH_MODS = new InternalModContainer<>("betterwithmods", "Better With Mods", BetterWithMods::new);
@@ -72,6 +75,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final GroovyContainer<EnderIO> ENDER_IO = new InternalModContainer<>("enderio", "Ender IO", EnderIO::new, "eio");
     public static final GroovyContainer<EvilCraft> EVILCRAFT = new InternalModContainer<>("evilcraft", "EvilCraft", EvilCraft::new);
     public static final GroovyContainer<ExtendedCrafting> EXTENDED_CRAFTING = new InternalModContainer<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
+    public static final GroovyContainer<ExtraUtils2> EXTRA_UTILITIES_2 = new InternalModContainer<>("extrautils2", "Extra Utilities 2", ExtraUtils2::new, "extrautilities2");
     public static final GroovyContainer<Forestry> FORESTRY = new InternalModContainer<>("forestry", "Forestry", Forestry::new);
     public static final GroovyContainer<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new InternalModContainer<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
     public static final GroovyContainer<IC2> INDUSTRIALCRAFT = new InternalModContainer<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");

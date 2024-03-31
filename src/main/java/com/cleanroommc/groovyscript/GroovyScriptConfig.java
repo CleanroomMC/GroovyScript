@@ -12,4 +12,12 @@ public class GroovyScriptConfig {
 
     @Config.Comment("Port for the VSC connection. Default: 25564")
     public static int languageServerPort = 25564;
+
+    public static Compat compat = new Compat();
+
+    public static class Compat {
+
+        @Config.Comment("Enables DE energy core compat. Config is mainly for other mods compat.")
+        public boolean draconicEvolutionEnergyCore = true;
+    }
 }

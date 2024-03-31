@@ -1,19 +1,24 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.helper.GroovyFile;
 import org.codehaus.groovy.ast.ClassCodeExpressionTransformer;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.Parameter;
 import org.codehaus.groovy.ast.expr.*;
 import org.codehaus.groovy.control.SourceUnit;
+import org.codehaus.groovy.syntax.SyntaxException;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
 
     private static final ClassNode bracketHandlerClass = ClassHelper.makeCached(GameObjectHandlerManager.class);
+    private static final ClassNode groovyFile = ClassHelper.makeCached(GroovyFile.class);
     private final SourceUnit source;
     private final ClassNode classNode;
 
@@ -27,8 +32,23 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
         return source;
     }
 
-    private static Expression makeCheckedCall(ClassNode classNode, String name, Expression... arguments) {
+    private static Expression makeCheckedCall(ClassNode classNode, String name, List<Expression> arguments) {
         return new StaticMethodCallExpression(classNode, name, new ArgumentListExpression(arguments));
+    }
+
+    private static Expression makeCheckedCall(ClassNode classNode, String name, Expression arguments) {
+        return makeCheckedCall(classNode, name, getArguments(arguments));
+    }
+
+    private static List<Expression> getArguments(Expression expr) {
+        List<Expression> args;
+        if (expr instanceof TupleExpression te) {
+            args = new ArrayList<>(te.getExpressions());
+        } else {
+            args = new ArrayList<>();
+            args.add(expr);
+        }
+        return args;
     }
 
     @Override
@@ -48,6 +68,15 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
         }
         if (expr instanceof MethodCallExpression) {
             return checkValid((MethodCallExpression) expr);
+        }
+        if (expr instanceof ConstructorCallExpression cce) {
+            if (cce.getType().getName().equals(File.class.getName())) {
+                // redirect to file wrapper
+                cce.setType(groovyFile);
+            } else if (cce.getType().getName().equals(PrintWriter.class.getName())) {
+                // we need to whitelist PrintWriter for print methods, but creating PrintWriter is still disallowed
+                source.addError(new SyntaxException("Not allowed to create PrintWriter!", expr));
+            }
         }
         return expr;
     }
@@ -76,14 +105,9 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
         if (expression.isImplicitThis() && argCount > 0) {
             String name = expression.getMethodAsString();
             if (GameObjectHandlerManager.hasGameObjectHandler(name)) {
-                List<Expression> args;
-                if (expression.getArguments() instanceof TupleExpression) {
-                    args = ((TupleExpression) expression.getArguments()).getExpressions();
-                } else {
-                    args = new ArrayList<>();
-                }
+                List<Expression> args = getArguments(expression.getArguments());
                 args.add(0, new ConstantExpression(name));
-                return makeCheckedCall(bracketHandlerClass, "getGameObject", args.toArray(new Expression[0]));
+                return makeCheckedCall(bracketHandlerClass, "getGameObject", args);
             }
         }
         return expression;

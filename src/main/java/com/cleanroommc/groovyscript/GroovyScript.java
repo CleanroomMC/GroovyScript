@@ -84,6 +84,7 @@ public class GroovyScript {
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
+    private static File minecraftHome;
     private static File scriptPath;
     private static File runConfigFile;
     private static File resourcesFile;
@@ -139,6 +140,7 @@ public class GroovyScript {
 
     @ApiStatus.Internal
     public static void initializeRunConfig(File minecraftHome) {
+        GroovyScript.minecraftHome = minecraftHome;
         // If we are launching with the environment variable set to use the examples folder, use the examples folder for easy and consistent testing.
         if (Boolean.parseBoolean(System.getProperty("groovyscript.use_examples_folder"))) {
             scriptPath = new File(minecraftHome.getParentFile(), "examples");
@@ -205,6 +207,14 @@ public class GroovyScript {
     @NotNull
     public static String getScriptPath() {
         return getScriptFile().getPath();
+    }
+
+    @NotNull
+    public static File getMinecraftHome() {
+        if (minecraftHome == null) {
+            throw new IllegalStateException("GroovyScript is not yet loaded!");
+        }
+        return minecraftHome;
     }
 
     @NotNull

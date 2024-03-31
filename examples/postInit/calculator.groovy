@@ -142,7 +142,7 @@ mods.calculator.glowstone_extractor.recipeBuilder()
 
 
 // Health Processor:
-// Converts an input itemstack into "Health Points", which charge a Health or Nutrition module and are converted into
+// Converts an input itemstack into \"Health Points\", which charge a Health or Nutrition module and are converted into
 // rapidly regenerating health.
 
 mods.calculator.health_processor.removeByInput(item('minecraft:blaze_rod'))
