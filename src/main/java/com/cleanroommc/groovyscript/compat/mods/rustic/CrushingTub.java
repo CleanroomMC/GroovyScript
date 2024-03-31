@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -102,8 +101,12 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable ICrushingTubRecipe register() {
             if (!validate()) return null;
-            ICrushingTubRecipe recipe = new CrushingTubRecipe(fluidOutput.get(0), IngredientHelper.toItemStack(input.get(0)), byproduct);
-            ModSupport.RUSTIC.get().crushingTub.add(recipe);
+            ICrushingTubRecipe recipe = null;
+            for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
+                ICrushingTubRecipe recipe1 = new CrushingTubRecipe(fluidOutput.get(0), itemStack, byproduct);
+                ModSupport.RUSTIC.get().crushingTub.add(recipe1);
+                if (recipe == null) recipe = recipe1;
+            }
             return recipe;
         }
     }
