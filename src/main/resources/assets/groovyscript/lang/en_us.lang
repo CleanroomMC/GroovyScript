@@ -1472,6 +1472,7 @@ groovyscript.wiki.thermalexpansion.refinery_potion.chance.value=Sets the chance 
 
 groovyscript.wiki.thermalexpansion.sawmill.title=Sawmill
 groovyscript.wiki.thermalexpansion.sawmill.description=Converts an input itemstack into an output itemstack and optional output itemstack with a chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.sawmill.note0=The valid items and fluid output while the Resin Funnel Augment is installed is controlled by the Arboreal Extractor device.
 #groovyscript.wiki.thermalexpansion.sawmill.add=TODO
 groovyscript.wiki.thermalexpansion.sawmill.chance.value=Sets the chance the second output itemstack is created
 
@@ -1488,7 +1489,7 @@ groovyscript.wiki.thermalexpansion.steam.removeByInput=Removes all recipes with 
 
 groovyscript.wiki.thermalexpansion.tapper.title=Arboreal Extractor
 groovyscript.wiki.thermalexpansion.tapper.description=Controls what items and blocks can be turned into what fluids. Output can be boosted via Fertilizer items.
-groovyscript.wiki.thermalexpansion.tapper.note0=Also controls the Resin Funnel augment for the Sawmill
+groovyscript.wiki.thermalexpansion.tapper.note0=The Item map also controls the Resin Funnel augment for the Sawmill.
 #groovyscript.wiki.thermalexpansion.tapper.addItem=TODO
 #groovyscript.wiki.thermalexpansion.tapper.addBlock=TODO
 groovyscript.wiki.thermalexpansion.tapper.removeItemByInput=Removes all entries with the IIngredient input from the item map

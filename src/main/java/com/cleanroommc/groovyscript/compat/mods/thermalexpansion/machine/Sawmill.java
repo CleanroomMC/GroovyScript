@@ -17,7 +17,9 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription
+@RegistryDescription(
+        admonition = @Admonition("groovyscript.wiki.thermalexpansion.sawmill.note0")
+)
 public class Sawmill extends VirtualizedRegistry<SawmillRecipe> {
 
     @RecipeBuilderDescription(example = {
