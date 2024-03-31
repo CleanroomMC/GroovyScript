@@ -13,7 +13,6 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,14 +42,13 @@ public class Sawmill extends VirtualizedRegistry<SawmillRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
-    public SawmillRecipe add(int energy, FluidStack fluidInput, FluidStack outputFluid, ItemStack outputItem, int chance) {
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("1000, item('minecraft:obsidian') * 4, item('minecraft:gold_ingot'), item('minecraft:diamond'), 25"))
+    public SawmillRecipe add(int energy, IIngredient input, ItemStack outputItem, ItemStack secondayOutput, int chance) {
         return recipeBuilder()
                 .energy(energy)
                 .chance(chance)
-                .fluidInput(fluidInput)
-                .fluidOutput(outputFluid)
-                .output(outputItem)
+                .input(input)
+                .output(outputItem, secondayOutput)
                 .register();
     }
 

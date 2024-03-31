@@ -68,13 +68,13 @@ public class TransposerFill extends VirtualizedRegistry<TransposerRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
-    public TransposerRecipe add(int energy, FluidStack fluidInput, FluidStack outputFluid, ItemStack outputItem, int chance) {
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("1000, item('minecraft:obsidian'), fluid('water') * 50, item('minecraft:diamond') * 2, 100"))
+    public TransposerRecipe add(int energy, IIngredient input, FluidStack fluidInput, ItemStack outputItem, int chance) {
         return recipeBuilder()
                 .energy(energy)
                 .chance(chance)
+                .input(input)
                 .fluidInput(fluidInput)
-                .fluidOutput(outputFluid)
                 .output(outputItem)
                 .register();
     }

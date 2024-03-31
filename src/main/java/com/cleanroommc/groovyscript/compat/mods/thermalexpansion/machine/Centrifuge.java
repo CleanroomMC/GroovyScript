@@ -45,7 +45,7 @@ public class Centrifuge extends VirtualizedRegistry<CentrifugeRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "1000, item('minecraft:obsidian') * 3, [item('minecraft:clay')], [100], null", commented = true))
     public CentrifugeRecipe add(int energy, IIngredient input, List<ItemStack> output, List<Integer> chance, FluidStack fluidOutput) {
         return recipeBuilder()
                 .energy(energy)

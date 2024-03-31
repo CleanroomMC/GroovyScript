@@ -55,11 +55,11 @@ public class Precipitator extends VirtualizedRegistry<PrecipitatorRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
-    public PrecipitatorRecipe add(int energy, ItemStack output, FluidStack fluidInput) {
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("1000, item('minecraft:obsidian'), 100"))
+    public PrecipitatorRecipe add(int energy, ItemStack output, int water) {
         return recipeBuilder()
                 .energy(energy)
-                .fluidInput(fluidInput)
+                .water(water)
                 .output(output)
                 .register();
     }

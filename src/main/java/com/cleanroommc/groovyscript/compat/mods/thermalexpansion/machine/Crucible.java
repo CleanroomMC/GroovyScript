@@ -57,7 +57,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("1000, item('minecraft:obsidian'), fluid('water') * 1000"))
     public CrucibleRecipe add(int energy, IIngredient input, FluidStack fluidOutput) {
         return recipeBuilder()
                 .energy(energy)

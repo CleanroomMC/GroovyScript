@@ -73,7 +73,7 @@ public class Brewer extends VirtualizedRegistry<BrewerRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "1000, item('minecraft:obsidian') * 2, fluid('water') * 1000, fluid('steam') * 100", commented = true))
     public BrewerRecipe add(int energy, IIngredient input, FluidStack fluidInput, FluidStack fluidOutput) {
         return recipeBuilder()
                 .energy(energy)

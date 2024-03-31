@@ -2,6 +2,8 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: thermalexpansion
 
+import cofh.thermalexpansion.util.managers.machine.InsolatorManager
+
 println 'mod \'thermalexpansion\' detected, running script'
 
 // Alchemical Imbuer:
@@ -27,7 +29,7 @@ mods.thermalexpansion.brewer.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.brewer.add()
+// mods.thermalexpansion.brewer.add(1000, item('minecraft:obsidian') * 2, fluid('water') * 1000, fluid('steam') * 100)
 
 // Centrifugal Separator:
 // Converts an input itemstack into an optional output fluidstack and up to four output itemstacks with chance, costing
@@ -53,7 +55,7 @@ mods.thermalexpansion.centrifuge.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.centrifuge.add()
+// mods.thermalexpansion.centrifuge.add(1000, item('minecraft:obsidian') * 3, [item('minecraft:clay')], [100], null)
 
 // Centrifugal Separator - Enstabulation Apparatus:
 // Converts an input itemstack into an optional output fluidstack and up to four output itemstacks with chance, costing
@@ -79,7 +81,7 @@ mods.thermalexpansion.centrifuge_mobs.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.centrifuge_mobs.add()
+// mods.thermalexpansion.centrifuge_mobs.add(1000, item('minecraft:obsidian') * 3, item('minecraft:clay'), 100)
 
 // Energetic Infuser:
 // Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
@@ -100,7 +102,7 @@ mods.thermalexpansion.charger.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.charger.add()
+// mods.thermalexpansion.charger.add(1000, item('minecraft:obsidian'), item('minecraft:diamond') * 2)
 
 // Compactor:
 // Converts an input itemstack into an output itemstack, with different modes each requiring a different augment to be
@@ -134,7 +136,7 @@ mods.thermalexpansion.compactor.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.compactor.add()
+// mods.thermalexpansion.compactor.add(1000, mode('plate'), item('minecraft:obsidian') * 2, item('minecraft:gold_ingot'))
 
 // Compression Dynamo:
 // Converts an input fluidstack into power, taking time based on the power.
@@ -171,7 +173,7 @@ mods.thermalexpansion.crucible.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.crucible.add()
+mods.thermalexpansion.crucible.add(1000, item('minecraft:obsidian'), fluid('water') * 1000)
 
 // Decorative Diffuser:
 // Controls what items can be used in to boost the potion time and level in the Decorative Diffuser.
@@ -203,7 +205,7 @@ mods.thermalexpansion.enchanter.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.enchanter.add()
+mods.thermalexpansion.enchanter.add(1000, item('minecraft:obsidian'), item('minecraft:gold_ingot'), item('minecraft:diamond'), 1000)
 mods.thermalexpansion.enchanter.addArcana(item('minecraft:clay'))
 
 // Enervation Dynamo:
@@ -239,7 +241,7 @@ mods.thermalexpansion.extruder.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.extruder.add()
+mods.thermalexpansion.extruder.add(1000, item('minecraft:gold_block'), 100, 1000, false)
 
 // Factorizer:
 // Converts an input itemstack into an output itemstack, with the ability to undo the the recipe. Mainly used for
@@ -304,7 +306,7 @@ mods.thermalexpansion.furnace.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.furnace.add()
+mods.thermalexpansion.furnace.add(1000, item('minecraft:obsidian') * 2, item('minecraft:clay'))
 mods.thermalexpansion.furnace.addFood(item('minecraft:emerald_ore'))
 
 // Redstone Furnace - Pyrolytic Conversion:
@@ -329,7 +331,7 @@ mods.thermalexpansion.furnace_pyrolysis.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.furnace_pyrolysis.add()
+mods.thermalexpansion.furnace_pyrolysis.add(1000, item('minecraft:obsidian') * 2, item('minecraft:clay'), 1000)
 
 // Phytogenic Insolator:
 // Converts two input itemstacks into an output itemstack and optional output itemstack with a chance, costing power and
@@ -356,7 +358,7 @@ mods.thermalexpansion.insolator.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.insolator.add()
+mods.thermalexpansion.insolator.add(1000, 100, item('minecraft:obsidian'), item('minecraft:gold_ingot') * 2, item('minecraft:clay'), item('minecraft:diamond'), 5, InsolatorManager.Type.TREE)
 
 // Numismatic Dynamo - Lapidary Calibration:
 // Converts an input itemstack into power, taking time based on the power.
@@ -400,7 +402,7 @@ mods.thermalexpansion.precipitator.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.precipitator.add()
+mods.thermalexpansion.precipitator.add(1000, item('minecraft:obsidian'), 100)
 
 // Pulverizer:
 // Converts an input itemstack into an output itemstack and optional output itemstack with a chance, costing power and
@@ -424,7 +426,7 @@ mods.thermalexpansion.pulverizer.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.pulverizer.add()
+mods.thermalexpansion.pulverizer.add(1000, item('minecraft:obsidian'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), 100)
 
 // Reactant Dynamo:
 // Converts an input itemstack and input fluidstack into power, taking time based on the power.
@@ -479,7 +481,7 @@ mods.thermalexpansion.refinery.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.refinery.add()
+mods.thermalexpansion.refinery.add(1000, fluid('ender') * 100, fluid('steam') * 150, item('minecraft:clay'), 25)
 mods.thermalexpansion.refinery.addBioFuel(fluid('coal'))
 mods.thermalexpansion.refinery.addFossilFuel(fluid('crude_oil'))
 
@@ -505,7 +507,7 @@ mods.thermalexpansion.refinery_potion.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.refinery_potion.add()
+mods.thermalexpansion.refinery_potion.add(1000, fluid('ender') * 100, fluid('steam') * 30, item('minecraft:clay'), 75)
 
 // Sawmill:
 // Converts an input itemstack into an output itemstack and optional output itemstack with a chance, costing power and
@@ -529,7 +531,7 @@ mods.thermalexpansion.sawmill.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.sawmill.add()
+mods.thermalexpansion.sawmill.add(1000, item('minecraft:obsidian') * 4, item('minecraft:gold_ingot'), item('minecraft:diamond'), 25)
 
 // Induction Smelter:
 // Converts two input itemstacks into an output itemstack and optional output itemstack with a chance, costing power and
@@ -553,7 +555,7 @@ mods.thermalexpansion.smelter.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.smelter.add()
+// mods.thermalexpansion.smelter.add(1000, item('minecraft:obsidian'), item('minecraft:gold_ingot') * 2, item('minecraft:clay'), item('minecraft:diamond'), 5)
 
 // Steam Dynamo:
 // Converts an input fluidstack into power, taking time based on the power.
@@ -615,7 +617,7 @@ mods.thermalexpansion.transposer_extract.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.transposer_extract.add()
+mods.thermalexpansion.transposer_extract.add(1000, item('minecraft:obsidian'), fluid('water') * 50, item('minecraft:diamond') * 2, 100)
 
 // Fluid Transposer - Fill:
 // Converts an input itemstack and input fluidstack into an output itemstack with chance, costing power and taking time
@@ -639,7 +641,7 @@ mods.thermalexpansion.transposer_fill.recipeBuilder()
     .register()
 
 
-// mods.thermalexpansion.transposer_fill.add()
+mods.thermalexpansion.transposer_fill.add(1000, item('minecraft:obsidian'), fluid('water') * 50, item('minecraft:diamond') * 2, 100)
 
 // Insightful Condenser:
 // Collects experience orbs nearby, with the ability to increase the XP gained via catalyst itemstacks.

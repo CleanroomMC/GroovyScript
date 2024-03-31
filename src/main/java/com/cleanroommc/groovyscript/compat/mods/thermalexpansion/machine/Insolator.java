@@ -81,7 +81,7 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "1000, 100, item('minecraft:obsidian'), item('minecraft:gold_ingot') * 2, item('minecraft:clay'), item('minecraft:diamond'), 5, InsolatorManager.Type.TREE", imports = "cofh.thermalexpansion.util.managers.machine.InsolatorManager"))
     public InsolatorRecipe add(int energy, int water, IIngredient primaryInput, IIngredient secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance, InsolatorManager.Type type) {
         return recipeBuilder()
                 .energy(energy)

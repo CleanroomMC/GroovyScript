@@ -113,7 +113,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("1000, fluid('ender') * 100, fluid('steam') * 150, item('minecraft:clay'), 25"))
     public RefineryRecipe add(int energy, FluidStack fluidInput, FluidStack outputFluid, ItemStack outputItem, int chance) {
         return recipeBuilder()
                 .energy(energy)

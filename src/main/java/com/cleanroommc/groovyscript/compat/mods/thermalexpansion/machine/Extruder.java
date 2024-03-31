@@ -14,6 +14,7 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.primitives.Booleans;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -66,14 +67,14 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
         addScripted(Pair.of(sedimentary, recipe));
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
-    public ExtruderRecipe add(int energy, IIngredient input, int fluidHot, int fluidCold, boolean sedimentary) {
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("1000, item('minecraft:gold_block'), 100, 1000, false"))
+    public ExtruderRecipe add(int energy, ItemStack output, int fluidHot, int fluidCold, boolean sedimentary) {
         return recipeBuilder()
                 .energy(energy)
                 .fluidCold(fluidCold)
                 .fluidHot(fluidHot)
                 .sedimentary(sedimentary)
-                .input(input)
+                .output(output)
                 .register();
     }
 

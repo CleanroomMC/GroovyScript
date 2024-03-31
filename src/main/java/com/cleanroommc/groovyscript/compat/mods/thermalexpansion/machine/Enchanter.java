@@ -82,12 +82,11 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
-    public EnchanterRecipe add(int energy, IIngredient primaryInput, IIngredient secondaryInput, ItemStack output, int experience, EnchanterManager.Type type) {
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("1000, item('minecraft:obsidian'), item('minecraft:gold_ingot'), item('minecraft:diamond'), 1000"))
+    public EnchanterRecipe add(int energy, IIngredient primaryInput, IIngredient secondaryInput, ItemStack output, int experience) {
         return recipeBuilder()
                 .energy(energy)
                 .experience(experience)
-                .type(type)
                 .input(primaryInput, secondaryInput)
                 .output(output)
                 .register();

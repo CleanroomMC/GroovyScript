@@ -40,7 +40,7 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("1000, item('minecraft:obsidian'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), 100"))
     public PulverizerRecipe add(int energy, IIngredient input, ItemStack primaryOutput, ItemStack secondaryOutput, int chance) {
         return recipeBuilder()
                 .energy(energy)

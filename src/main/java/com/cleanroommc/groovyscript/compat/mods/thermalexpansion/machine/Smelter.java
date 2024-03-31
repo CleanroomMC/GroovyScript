@@ -15,7 +15,6 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,14 +67,13 @@ public class Smelter extends VirtualizedRegistry<SmelterRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
-    public SmelterRecipe add(int energy, FluidStack fluidInput, FluidStack outputFluid, ItemStack outputItem, int chance) {
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "1000, item('minecraft:obsidian'), item('minecraft:gold_ingot') * 2, item('minecraft:clay'), item('minecraft:diamond'), 5", commented = true))
+    public SmelterRecipe add(int energy, IIngredient input0, IIngredient input1, ItemStack output0, ItemStack output1, int chance) {
         return recipeBuilder()
                 .energy(energy)
                 .chance(chance)
-                .fluidInput(fluidInput)
-                .fluidOutput(outputFluid)
-                .output(outputItem)
+                .input(input0, input1)
+                .output(output0, output1)
                 .register();
     }
 

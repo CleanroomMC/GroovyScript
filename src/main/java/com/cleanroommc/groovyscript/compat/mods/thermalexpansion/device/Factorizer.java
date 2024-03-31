@@ -51,7 +51,7 @@ public class Factorizer extends VirtualizedRegistry<Pair<Boolean, FactorizerMana
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public FactorizerManager.@Nullable FactorizerRecipe add(boolean combine, boolean split, IIngredient input, ItemStack output) {
+    public FactorizerManager.FactorizerRecipe add(boolean combine, boolean split, IIngredient input, ItemStack output) {
         return recipeBuilder()
                 .combine(combine)
                 .split(split)

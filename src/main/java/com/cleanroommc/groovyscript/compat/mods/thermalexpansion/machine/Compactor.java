@@ -57,7 +57,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         addScripted(Pair.of(mode, recipe));
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "1000, mode('plate'), item('minecraft:obsidian') * 2, item('minecraft:gold_ingot')", commented = true))
     public CompactorRecipe add(int energy, CompactorManager.Mode mode, IIngredient input, ItemStack output) {
         return recipeBuilder()
                 .energy(energy)

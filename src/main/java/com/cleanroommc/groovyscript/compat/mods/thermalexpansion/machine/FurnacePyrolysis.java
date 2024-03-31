@@ -40,7 +40,7 @@ public class FurnacePyrolysis extends VirtualizedRegistry<FurnaceRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("1000, item('minecraft:obsidian') * 2, item('minecraft:clay'), 1000"))
     public FurnaceRecipe add(int energy, IIngredient input, ItemStack output, int creosote) {
         return recipeBuilder()
                 .energy(energy)

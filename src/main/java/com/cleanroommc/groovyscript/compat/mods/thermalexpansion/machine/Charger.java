@@ -40,7 +40,7 @@ public class Charger extends VirtualizedRegistry<ChargerRecipe> {
         addScripted(recipe);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "1000, item('minecraft:obsidian'), item('minecraft:diamond') * 2", commented = true))
     public ChargerRecipe add(int energy, IIngredient input, ItemStack output) {
         return recipeBuilder()
                 .energy(energy)
