@@ -11,13 +11,12 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 @RegistryDescription(admonition = @Admonition("groovyscript.wiki.naturesaura.offering.note0"))
-public class Offering extends VirtualizedRegistry<Pair<ResourceLocation, OfferingRecipe>> {
+public class Offering extends VirtualizedRegistry<OfferingRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('demo').input(item('minecraft:diamond')).catalyst(item('minecraft:clay')).output(item('minecraft:gold_ingot') * 8)"),
@@ -30,19 +29,19 @@ public class Offering extends VirtualizedRegistry<Pair<ResourceLocation, Offerin
 
     @Override
     public void onReload() {
-        removeScripted().forEach(x -> NaturesAuraAPI.OFFERING_RECIPES.remove(x.getKey()));
-        restoreFromBackup().forEach(x -> NaturesAuraAPI.OFFERING_RECIPES.put(x.getKey(), x.getValue()));
+        removeScripted().forEach(x -> NaturesAuraAPI.OFFERING_RECIPES.remove(x.name));
+        restoreFromBackup().forEach(x -> NaturesAuraAPI.OFFERING_RECIPES.put(x.name, x));
     }
 
     public void add(OfferingRecipe recipe) {
         if (recipe == null) return;
-        addScripted(Pair.of(recipe.name, recipe));
+        addScripted(recipe);
         NaturesAuraAPI.OFFERING_RECIPES.put(recipe.name, recipe);
     }
 
     public boolean remove(OfferingRecipe recipe) {
         if (recipe == null) return false;
-        addBackup(Pair.of(recipe.name, recipe));
+        addBackup(recipe);
         return NaturesAuraAPI.OFFERING_RECIPES.remove(recipe.name) != null;
     }
 
@@ -51,7 +50,7 @@ public class Offering extends VirtualizedRegistry<Pair<ResourceLocation, Offerin
         if (name == null) return false;
         var recipe = NaturesAuraAPI.OFFERING_RECIPES.remove(name);
         if (recipe == null) return false;
-        addBackup(Pair.of(recipe.name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -60,7 +59,7 @@ public class Offering extends VirtualizedRegistry<Pair<ResourceLocation, Offerin
         return NaturesAuraAPI.OFFERING_RECIPES.entrySet().removeIf(r -> {
             for (var item : r.getValue().input.getMatchingStacks()) {
                 if (input.test(item)) {
-                    addBackup(Pair.of(r.getValue().name, r.getValue()));
+                    addBackup(r.getValue());
                     return true;
                 }
             }
@@ -73,7 +72,7 @@ public class Offering extends VirtualizedRegistry<Pair<ResourceLocation, Offerin
         return NaturesAuraAPI.OFFERING_RECIPES.entrySet().removeIf(r -> {
             for (var x : r.getValue().startItem.getMatchingStacks()) {
                 if (catalyst.test(x)) {
-                    addBackup(Pair.of(r.getValue().name, r.getValue()));
+                    addBackup(r.getValue());
                     return true;
                 }
             }
@@ -85,7 +84,7 @@ public class Offering extends VirtualizedRegistry<Pair<ResourceLocation, Offerin
     public boolean removeByOutput(IIngredient output) {
         return NaturesAuraAPI.OFFERING_RECIPES.entrySet().removeIf(r -> {
             if (output.test(r.getValue().output)) {
-                addBackup(Pair.of(r.getValue().name, r.getValue()));
+                addBackup(r.getValue());
                 return true;
             }
             return false;
@@ -94,7 +93,7 @@ public class Offering extends VirtualizedRegistry<Pair<ResourceLocation, Offerin
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        NaturesAuraAPI.OFFERING_RECIPES.forEach((key, value) -> addBackup(Pair.of(key, value)));
+        NaturesAuraAPI.OFFERING_RECIPES.values().forEach(this::addBackup);
         NaturesAuraAPI.OFFERING_RECIPES.entrySet().clear();
     }
 

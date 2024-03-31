@@ -12,13 +12,12 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.naturesaura.ritual.note0", type = Admonition.Type.WARNING))
-public class Ritual extends VirtualizedRegistry<Pair<ResourceLocation, TreeRitualRecipe>> {
+public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('demo').input(item('minecraft:clay')).output(item('minecraft:diamond')).time(100).sapling(item('minecraft:sapling:1'))"),
@@ -31,19 +30,19 @@ public class Ritual extends VirtualizedRegistry<Pair<ResourceLocation, TreeRitua
 
     @Override
     public void onReload() {
-        removeScripted().forEach(x -> NaturesAuraAPI.TREE_RITUAL_RECIPES.remove(x.getKey()));
-        restoreFromBackup().forEach(x -> NaturesAuraAPI.TREE_RITUAL_RECIPES.put(x.getKey(), x.getValue()));
+        removeScripted().forEach(x -> NaturesAuraAPI.TREE_RITUAL_RECIPES.remove(x.name));
+        restoreFromBackup().forEach(x -> NaturesAuraAPI.TREE_RITUAL_RECIPES.put(x.name, x));
     }
 
     public void add(TreeRitualRecipe recipe) {
         if (recipe == null) return;
-        addScripted(Pair.of(recipe.name, recipe));
+        addScripted(recipe);
         NaturesAuraAPI.TREE_RITUAL_RECIPES.put(recipe.name, recipe);
     }
 
     public boolean remove(TreeRitualRecipe recipe) {
         if (recipe == null) return false;
-        addBackup(Pair.of(recipe.name, recipe));
+        addBackup(recipe);
         return NaturesAuraAPI.TREE_RITUAL_RECIPES.remove(recipe.name) != null;
     }
 
@@ -52,7 +51,7 @@ public class Ritual extends VirtualizedRegistry<Pair<ResourceLocation, TreeRitua
         if (name == null) return false;
         var recipe = NaturesAuraAPI.TREE_RITUAL_RECIPES.remove(name);
         if (recipe == null) return false;
-        addBackup(Pair.of(recipe.name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -62,7 +61,7 @@ public class Ritual extends VirtualizedRegistry<Pair<ResourceLocation, TreeRitua
             for (var ingredient : r.getValue().ingredients) {
                 for (var item : ingredient.getMatchingStacks()) {
                     if (input.test(item)) {
-                        addBackup(Pair.of(r.getValue().name, r.getValue()));
+                        addBackup(r.getValue());
                         return true;
                     }
                 }
@@ -76,7 +75,7 @@ public class Ritual extends VirtualizedRegistry<Pair<ResourceLocation, TreeRitua
         return NaturesAuraAPI.TREE_RITUAL_RECIPES.entrySet().removeIf(r -> {
             for (var x : r.getValue().saplingType.getMatchingStacks()) {
                 if (catalyst.test(x)) {
-                    addBackup(Pair.of(r.getValue().name, r.getValue()));
+                    addBackup(r.getValue());
                     return true;
                 }
             }
@@ -88,7 +87,7 @@ public class Ritual extends VirtualizedRegistry<Pair<ResourceLocation, TreeRitua
     public boolean removeByOutput(IIngredient output) {
         return NaturesAuraAPI.TREE_RITUAL_RECIPES.entrySet().removeIf(r -> {
             if (output.test(r.getValue().result)) {
-                addBackup(Pair.of(r.getValue().name, r.getValue()));
+                addBackup(r.getValue());
                 return true;
             }
             return false;
@@ -97,7 +96,7 @@ public class Ritual extends VirtualizedRegistry<Pair<ResourceLocation, TreeRitua
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        NaturesAuraAPI.TREE_RITUAL_RECIPES.forEach((key, value) -> addBackup(Pair.of(key, value)));
+        NaturesAuraAPI.TREE_RITUAL_RECIPES.values().forEach(this::addBackup);
         NaturesAuraAPI.TREE_RITUAL_RECIPES.entrySet().clear();
     }
 

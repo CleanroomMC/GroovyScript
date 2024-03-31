@@ -11,13 +11,12 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 @RegistryDescription
-public class Altar extends VirtualizedRegistry<Pair<ResourceLocation, AltarRecipe>> {
+public class Altar extends VirtualizedRegistry<AltarRecipe> {
 
     public Altar() {
         super(Alias.generateOfClass(Altar.class).andGenerate("Infusion"));
@@ -34,19 +33,19 @@ public class Altar extends VirtualizedRegistry<Pair<ResourceLocation, AltarRecip
 
     @Override
     public void onReload() {
-        removeScripted().forEach(x -> NaturesAuraAPI.ALTAR_RECIPES.remove(x.getKey()));
-        restoreFromBackup().forEach(x -> NaturesAuraAPI.ALTAR_RECIPES.put(x.getKey(), x.getValue()));
+        removeScripted().forEach(x -> NaturesAuraAPI.ALTAR_RECIPES.remove(x.name));
+        restoreFromBackup().forEach(x -> NaturesAuraAPI.ALTAR_RECIPES.put(x.name, x));
     }
 
     public void add(AltarRecipe recipe) {
         if (recipe == null) return;
-        addScripted(Pair.of(recipe.name, recipe));
+        addScripted(recipe);
         NaturesAuraAPI.ALTAR_RECIPES.put(recipe.name, recipe);
     }
 
     public boolean remove(AltarRecipe recipe) {
         if (recipe == null) return false;
-        addBackup(Pair.of(recipe.name, recipe));
+        addBackup(recipe);
         return NaturesAuraAPI.ALTAR_RECIPES.remove(recipe.name) != null;
     }
 
@@ -55,7 +54,7 @@ public class Altar extends VirtualizedRegistry<Pair<ResourceLocation, AltarRecip
         if (name == null) return false;
         var recipe = NaturesAuraAPI.ALTAR_RECIPES.remove(name);
         if (recipe == null) return false;
-        addBackup(Pair.of(recipe.name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -64,7 +63,7 @@ public class Altar extends VirtualizedRegistry<Pair<ResourceLocation, AltarRecip
         return NaturesAuraAPI.ALTAR_RECIPES.entrySet().removeIf(r -> {
             for (var item : r.getValue().input.getMatchingStacks()) {
                 if (input.test(item)) {
-                    addBackup(Pair.of(r.getValue().name, r.getValue()));
+                    addBackup(r.getValue());
                     return true;
                 }
             }
@@ -77,7 +76,7 @@ public class Altar extends VirtualizedRegistry<Pair<ResourceLocation, AltarRecip
         return NaturesAuraAPI.ALTAR_RECIPES.entrySet().removeIf(r -> {
             for (var item : r.getValue().catalyst.getMatchingStacks()) {
                 if (catalyst.test(item)) {
-                    addBackup(Pair.of(r.getValue().name, r.getValue()));
+                    addBackup(r.getValue());
                     return true;
                 }
             }
@@ -89,7 +88,7 @@ public class Altar extends VirtualizedRegistry<Pair<ResourceLocation, AltarRecip
     public boolean removeByOutput(IIngredient output) {
         return NaturesAuraAPI.ALTAR_RECIPES.entrySet().removeIf(r -> {
             if (output.test(r.getValue().output)) {
-                addBackup(Pair.of(r.getValue().name, r.getValue()));
+                addBackup(r.getValue());
                 return true;
             }
             return false;
@@ -98,7 +97,7 @@ public class Altar extends VirtualizedRegistry<Pair<ResourceLocation, AltarRecip
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        NaturesAuraAPI.ALTAR_RECIPES.forEach((key, value) -> addBackup(Pair.of(key, value)));
+        NaturesAuraAPI.ALTAR_RECIPES.values().forEach(this::addBackup);
         NaturesAuraAPI.ALTAR_RECIPES.entrySet().clear();
     }
 

@@ -4,7 +4,6 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -13,13 +12,12 @@ import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.naturesaura.spawning.note0", type = Admonition.Type.WARNING))
-public class Spawning extends VirtualizedRegistry<Pair<ResourceLocation, AnimalSpawnerRecipe>> {
+public class Spawning extends VirtualizedRegistry<AnimalSpawnerRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('demo').input(item('minecraft:clay')).entity(entity('minecraft:bat')).aura(100).time(100)"),
@@ -32,19 +30,19 @@ public class Spawning extends VirtualizedRegistry<Pair<ResourceLocation, AnimalS
 
     @Override
     public void onReload() {
-        removeScripted().forEach(x -> NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.remove(x.getKey()));
-        restoreFromBackup().forEach(x -> NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.put(x.getKey(), x.getValue()));
+        removeScripted().forEach(x -> NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.remove(x.name));
+        restoreFromBackup().forEach(x -> NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.put(x.name, x));
     }
 
     public void add(AnimalSpawnerRecipe recipe) {
         if (recipe == null) return;
-        addScripted(Pair.of(recipe.name, recipe));
+        addScripted(recipe);
         NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.put(recipe.name, recipe);
     }
 
     public boolean remove(AnimalSpawnerRecipe recipe) {
         if (recipe == null) return false;
-        addBackup(Pair.of(recipe.name, recipe));
+        addBackup(recipe);
         return NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.remove(recipe.name) != null;
     }
 
@@ -53,7 +51,7 @@ public class Spawning extends VirtualizedRegistry<Pair<ResourceLocation, AnimalS
         if (name == null) return false;
         var recipe = NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.remove(name);
         if (recipe == null) return false;
-        addBackup(Pair.of(recipe.name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -63,7 +61,7 @@ public class Spawning extends VirtualizedRegistry<Pair<ResourceLocation, AnimalS
             for (var ingredient : r.getValue().ingredients) {
                 for (var item : ingredient.getMatchingStacks()) {
                     if (input.test(item)) {
-                        addBackup(Pair.of(r.getValue().name, r.getValue()));
+                        addBackup(r.getValue());
                         return true;
                     }
                 }
@@ -76,7 +74,7 @@ public class Spawning extends VirtualizedRegistry<Pair<ResourceLocation, AnimalS
     public boolean removeByEntity(ResourceLocation resourceLocation) {
         return NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.entrySet().removeIf(r -> {
             if (r.getValue().entity.equals(resourceLocation)) {
-                addBackup(Pair.of(r.getValue().name, r.getValue()));
+                addBackup(r.getValue());
                 return true;
             }
             return false;
@@ -87,7 +85,7 @@ public class Spawning extends VirtualizedRegistry<Pair<ResourceLocation, AnimalS
     public boolean removeByEntity(EntityEntry entity) {
         return NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.entrySet().removeIf(r -> {
             if (r.getValue().entity.equals(entity.getRegistryName())) {
-                addBackup(Pair.of(r.getValue().name, r.getValue()));
+                addBackup(r.getValue());
                 return true;
             }
             return false;
@@ -96,7 +94,7 @@ public class Spawning extends VirtualizedRegistry<Pair<ResourceLocation, AnimalS
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.forEach((key, value) -> addBackup(Pair.of(key, value)));
+        NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.values().forEach(this::addBackup);
         NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.entrySet().clear();
     }
 
