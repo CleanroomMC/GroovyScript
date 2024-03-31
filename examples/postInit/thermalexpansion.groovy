@@ -587,7 +587,7 @@ mods.thermalexpansion.tapper_fertilizer.add(item('minecraft:clay'), 1000)
 
 // Arboreal Extractor Tree Structures:
 // Controls what valid log blocks and leaf blocks are to define a tree structure which the Arboreal Extractor can function
-// on. The "tree" must contain some number of leaves adjacent to the log blocks to be valid.
+// on. The \"tree\" must contain some number of leaves adjacent to the log blocks to be valid.
 
 mods.thermalexpansion.tapper_tree.removeByLeaf(blockstate('minecraft:leaves', 'variant=birch'))
 mods.thermalexpansion.tapper_tree.removeByLog(blockstate('minecraft:log', 'variant=spruce'))
