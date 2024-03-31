@@ -136,6 +136,14 @@ mods.thermalexpansion.compression.removeByInput(fluid('seed_oil'))
 
 mods.thermalexpansion.compression.add(fluid('steam'), 100)
 
+// Thermal Mediator:
+// Consumes fluid to speed up the tick rate of adjacent machines and devices and generate power in the Compression Dynamo.
+
+mods.thermalexpansion.coolant.remove(fluid('cryotheum'))
+// mods.thermalexpansion.coolant.removeAll()
+
+mods.thermalexpansion.coolant.add(fluid('lava'), 4000, 30)
+
 // Magma Crucible:
 // Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
 
@@ -156,6 +164,14 @@ mods.thermalexpansion.crucible.recipeBuilder()
 
 
 // mods.thermalexpansion.crucible.add()
+
+// Decorative Diffuser:
+// Controls what items can be used in to boost the potion time and level in the Decorative Diffuser.
+
+mods.thermalexpansion.diffuser.remove(item('minecraft:redstone'))
+// mods.thermalexpansion.diffuser.removeAll()
+
+mods.thermalexpansion.diffuser.add(item('minecraft:clay'), 2, 30)
 
 // Arcane Ensorcellator:
 // Converts two input itemstacks and liquid experience into an output itemstack, costing power and taking time based on the
@@ -216,6 +232,48 @@ mods.thermalexpansion.extruder.recipeBuilder()
 
 
 // mods.thermalexpansion.extruder.add()
+
+// Factorizer:
+// Converts an input itemstack into an output itemstack, with the ability to undo the the recipe. Mainly used for
+// compressing ingots into blocks and splitting blocks into ingots.
+
+mods.thermalexpansion.factorizer.removeByInput(false, item('minecraft:diamond'))
+mods.thermalexpansion.factorizer.removeByInput(item('minecraft:coal:1'))
+// mods.thermalexpansion.factorizer.removeByOutput(false, item('minecraft:coal:1'))
+mods.thermalexpansion.factorizer.removeByOutput(item('minecraft:emerald_block'))
+// mods.thermalexpansion.factorizer.removeByType(true)
+// mods.thermalexpansion.factorizer.removeAll()
+
+mods.thermalexpansion.factorizer.recipeBuilder()
+    .input(item('minecraft:clay') * 7)
+    .output(item('minecraft:book') * 2)
+    .combine()
+    .split()
+    .register()
+
+mods.thermalexpansion.factorizer.recipeBuilder()
+    .input(item('minecraft:planks:*') * 4)
+    .output(item('minecraft:crafting_table'))
+    .combine()
+    .register()
+
+
+
+// Aquatic Entangler:
+// Controls what itemstacks can be gained and how likely each is to be obtained.
+
+mods.thermalexpansion.fisher.remove(item('minecraft:fish:0'))
+// mods.thermalexpansion.fisher.removeAll()
+
+mods.thermalexpansion.fisher.add(item('minecraft:clay'), 100)
+
+// Aquatic Entangler Bait:
+// Controls what items can be used in the bait slot of the Aquatic Entangler and how effective they are.
+
+mods.thermalexpansion.fisher_bait.remove(item('thermalfoundation:bait:2'))
+// mods.thermalexpansion.fisher_bait.removeAll()
+
+mods.thermalexpansion.fisher_bait.add(item('minecraft:clay'), 100)
 
 // Redstone Furnace:
 // Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
@@ -497,6 +555,36 @@ mods.thermalexpansion.steam.removeByInput(item('minecraft:coal:1'))
 
 mods.thermalexpansion.steam.add(item('minecraft:clay'), 100)
 
+// Arboreal Extractor:
+// Controls what items and blocks can be turned into what fluids. Output can be boosted via Fertilizer items.
+
+mods.thermalexpansion.tapper.removeBlockByInput(item('minecraft:log'))
+mods.thermalexpansion.tapper.removeItemByInput(item('minecraft:log:1'))
+// mods.thermalexpansion.tapper.removeAll()
+// mods.thermalexpansion.tapper.removeBlocks()
+// mods.thermalexpansion.tapper.removeItems()
+
+mods.thermalexpansion.tapper.addBlock(item('minecraft:clay'), fluid('lava') * 150)
+mods.thermalexpansion.tapper.addItem(item('minecraft:clay'), fluid('lava') * 300)
+
+// Arboreal Extractor Fertilizer:
+// Controls what items can be used in the fertilizer slot of the Arboreal Extractor Fertilizer and how effective they are.
+
+mods.thermalexpansion.tapper_fertilizer.remove(item('thermalfoundation:fertilizer:2'))
+// mods.thermalexpansion.tapper_fertilizer.removeAll()
+
+mods.thermalexpansion.tapper_fertilizer.add(item('minecraft:clay'), 1000)
+
+// Arboreal Extractor Tree Structures:
+// Controls what valid log blocks and leaf blocks are to define a tree structure which the Arboreal Extractor can function
+// on. The "tree" must contain some number of leaves adjacent to the log blocks to be valid.
+
+mods.thermalexpansion.tapper_tree.removeByLeaf(blockstate('minecraft:leaves', 'variant=birch'))
+mods.thermalexpansion.tapper_tree.removeByLog(blockstate('minecraft:log', 'variant=spruce'))
+// mods.thermalexpansion.tapper_tree.removeAll()
+
+mods.thermalexpansion.tapper_tree.add(blockstate('minecraft:clay'), blockstate('minecraft:gold_block'))
+
 // Fluid Transposer - Empty:
 // Converts an input itemstack into an output fluidstack and optional output itemstack with chance, costing power and
 // taking time based on the power cost.
@@ -544,4 +632,12 @@ mods.thermalexpansion.transposer_fill.recipeBuilder()
 
 
 // mods.thermalexpansion.transposer_fill.add()
+
+// Insightful Condenser:
+// Collects experience orbs nearby, with the ability to increase the XP gained via catalyst itemstacks.
+
+mods.thermalexpansion.xp_collector.remove(item('minecraft:soul_sand'))
+// mods.thermalexpansion.xp_collector.removeAll()
+
+mods.thermalexpansion.xp_collector.add(item('minecraft:clay'), 100, 30)
 

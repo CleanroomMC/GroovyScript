@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thermalexpansion;
 import cofh.thermalexpansion.util.managers.machine.CompactorManager;
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.device.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.dynamo.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine.*;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
@@ -18,10 +19,15 @@ public class ThermalExpansion extends ModPropertyContainer {
     public final Charger charger = new Charger();
     public final Compactor compactor = new Compactor();
     public final Compression compression = new Compression();
+    public final Coolant coolant = new Coolant();
     public final Crucible crucible = new Crucible();
+    public final Diffuser diffuser = new Diffuser();
     public final Enchanter enchanter = new Enchanter();
     public final Enervation enervation = new Enervation();
     public final Extruder extruder = new Extruder();
+    public final Factorizer factorizer = new Factorizer();
+    public final Fisher fisher = new Fisher();
+    public final FisherBait fisherBait = new FisherBait();
     public final Furnace furnace = new Furnace();
     public final FurnacePyrolysis furnacePyrolysis = new FurnacePyrolysis();
     public final Insolator insolator = new Insolator();
@@ -36,8 +42,13 @@ public class ThermalExpansion extends ModPropertyContainer {
     public final Sawmill sawmill = new Sawmill();
     public final Smelter smelter = new Smelter();
     public final Steam steam = new Steam();
+    public final Tapper tapper = new Tapper();
+    public final TapperFertilizer tapperFertilizer = new TapperFertilizer();
+    public final TapperTree tapperTree = new TapperTree();
     public final TransposerExtract transposerExtract = new TransposerExtract();
     public final TransposerFill transposerFill = new TransposerFill();
+    public final XpCollector xpCollector = new XpCollector();
+
 
     public ThermalExpansion() {
         addRegistry(brewer);
@@ -46,10 +57,15 @@ public class ThermalExpansion extends ModPropertyContainer {
         addRegistry(charger);
         addRegistry(compactor);
         addRegistry(compression);
+        addRegistry(coolant);
         addRegistry(crucible);
+        addRegistry(diffuser);
         addRegistry(enchanter);
         addRegistry(enervation);
         addRegistry(extruder);
+        addRegistry(factorizer);
+        addRegistry(fisher);
+        addRegistry(fisherBait);
         addRegistry(furnace);
         addRegistry(furnacePyrolysis);
         addRegistry(insolator);
@@ -64,8 +80,12 @@ public class ThermalExpansion extends ModPropertyContainer {
         addRegistry(sawmill);
         addRegistry(smelter);
         addRegistry(steam);
+        addRegistry(tapper);
+        addRegistry(tapperFertilizer);
+        addRegistry(tapperTree);
         addRegistry(transposerExtract);
         addRegistry(transposerFill);
+        addRegistry(xpCollector);
     }
 
     @Override

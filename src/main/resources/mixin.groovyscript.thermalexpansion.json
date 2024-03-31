@@ -13,13 +13,18 @@
     "CompactorManagerAccessor",
     "CompactorRecipeAccessor",
     "CompressionManagerAccessor",
+    "CoolantManagerAccessor",
     "CrucibleManagerAccessor",
     "CrucibleRecipeAccessor",
+    "DiffuserManagerAccessor",
     "EnchanterManagerAccessor",
     "EnchanterRecipeAccessor",
     "EnervationManagerAccessor",
     "ExtruderManagerAccessor",
     "ExtruderRecipeAccessor",
+    "FactorizerManagerAccessor",
+    "FactorizerRecipeAccessor",
+    "FisherManagerAccessor",
     "FurnaceManagerAccessor",
     "FurnaceRecipeAccessor",
     "InsolatorManagerAccessor",
@@ -39,6 +44,8 @@
     "SmelterManagerAccessor",
     "SmelterRecipeAccessor",
     "SteamManagerAccessor",
-    "TransposerManagerAccessor"
+    "TapperManagerAccessor",
+    "TransposerManagerAccessor",
+    "XpCollectorManagerAccessor"
   ]
 }
