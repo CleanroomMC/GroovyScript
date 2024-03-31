@@ -98,6 +98,11 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
     }
 
+    compileOnly rfg.deobf('curse.maven:extra-utilities-2-225561:2678374')
+    if (project.debug_extra_utilities_2.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:extra-utilities-2-225561:2678374')
+    }
+
     compileOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
     if (project.debug_thermal.toBoolean() || project.debug_draconic_evolution.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
@@ -206,15 +211,26 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
     }
 
-    compileOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
     compileOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
+    if (project.debug_roots.toBoolean() || project.debug_arcane_archives.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
+    }
+
+    compileOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
     compileOnly rfg.deobf('curse.maven:mystical_world-282940:3460961')
     compileOnly rfg.deobf('curse.maven:roots-246183:3905074')
     if (project.debug_roots.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
-        runtimeOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
         runtimeOnly rfg.deobf('curse.maven:mystical_world-282940:3460961')
         runtimeOnly rfg.deobf('curse.maven:roots-246183:3905074')
+    }
+
+    // gigaherz.lirelent.guidebook:Guidebook-1.12.2:2.9.1.s5
+    compileOnly rfg.deobf('curse.maven:guidebook-253874:2989594')
+    compileOnly rfg.deobf('curse.maven:arcane-archives-311357:3057332')
+    if (project.debug_arcane_archives.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:guidebook-253874:2989594')
+        runtimeOnly rfg.deobf('curse.maven:arcane-archives-311357:3057332')
     }
 
     compileOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')

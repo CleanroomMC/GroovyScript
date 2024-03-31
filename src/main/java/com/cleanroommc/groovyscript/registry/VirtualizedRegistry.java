@@ -9,10 +9,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
+public abstract class VirtualizedRegistry<R> extends NamedRegistry implements IScriptReloadable {
 
-    protected final String name;
-    private final List<String> aliases;
     private Collection<R> backup, scripted;
 
     public VirtualizedRegistry() {
@@ -20,14 +18,7 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
     }
 
     public VirtualizedRegistry(@Nullable Collection<String> aliases) {
-        if (aliases == null) {
-            aliases = Alias.generateOfClass(this);
-        } else if (aliases.isEmpty()) {
-            throw new IllegalArgumentException("VirtualRegistry must have at least one name!");
-        }
-        List<String> aliases1 = aliases.stream().distinct().collect(Collectors.toList());
-        this.name = aliases1.get(0).toLowerCase(Locale.ROOT);
-        this.aliases = Collections.unmodifiableList(aliases1);
+        super(aliases);
         initBackup();
         initScripted();
     }
@@ -39,14 +30,6 @@ public abstract class VirtualizedRegistry<R> implements IScriptReloadable {
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     public void afterScriptLoad() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<String> getAliases() {
-        return aliases;
     }
 
     @GroovyBlacklist

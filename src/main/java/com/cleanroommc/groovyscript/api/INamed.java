@@ -13,4 +13,10 @@ public interface INamed {
         }
         return aliases.iterator().next();
     }
+
+    @GroovyBlacklist
+    default boolean isEnabled() {
+        return true;
+    }
+
 }

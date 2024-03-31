@@ -92,34 +92,34 @@ public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
         @Property(defaultValue = "1", valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int rolls = 1;
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "probabilityGroup")
         public RecipeBuilder probabilityOutput(double probability, ItemStack... probabilityOutputs) {
             probabilityGroup.add(new ProbabilityGroup(Arrays.asList(probabilityOutputs), probability));
             return this;
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "probabilityGroup")
         public RecipeBuilder probabilityOutput(ItemStack... probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "probabilityGroup")
         public RecipeBuilder probabilityOutput(double probability, Collection<ItemStack> probabilityOutputs) {
             probabilityGroup.add(new ProbabilityGroup((List<ItemStack>) probabilityOutputs, probability));
             return this;
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "probabilityGroup")
         public RecipeBuilder probabilityOutput(Collection<ItemStack> probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "probabilityGroup")
         public RecipeBuilder output(ItemStack... probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "probabilityGroup")
         public RecipeBuilder output(Collection<ItemStack> probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }

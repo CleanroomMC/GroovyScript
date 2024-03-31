@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
@@ -13,9 +14,7 @@ import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import groovy.lang.Binding;
-import groovy.lang.Closure;
-import groovy.lang.GroovyClassLoader;
+import groovy.lang.*;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
@@ -24,9 +23,11 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.commons.io.FileUtils;
+import org.apache.groovy.internal.util.UncheckedThrow;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
+import org.codehaus.groovy.runtime.InvokerInvocationException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +65,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
         this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
         registerStaticImports(GroovyHelper.class, MathHelper.class);
-
         this.importCustomizer.addImports("net.minecraft.world.World",
                                          "net.minecraft.block.state.IBlockState",
                                          "net.minecraft.block.Block",
@@ -162,18 +162,25 @@ public class GroovyScriptSandbox extends GroovySandbox {
         }
     }
 
+    @Override
+    protected void runScript(Script script) {
+        GroovyLog.get().info(" - running {}", script.getClass().getName());
+        super.runScript(script);
+    }
+
     @ApiStatus.Internal
     @Override
     public void load() throws Exception {
         throw new UnsupportedOperationException("Use run(Loader loader) instead!");
     }
 
+    @ApiStatus.Internal
     @Override
     public <T> T runClosure(Closure<T> closure, Object... args) {
         startRunning();
         T result = null;
         try {
-            result = closure.call(args);
+            result = runClosureInternal(closure, args);
         } catch (Throwable t) {
             this.storedExceptions.computeIfAbsent(Arrays.asList(t.getStackTrace()), k -> {
                 GroovyLog.get().error("An exception occurred while running a closure!");
@@ -184,6 +191,24 @@ public class GroovyScriptSandbox extends GroovySandbox {
             stopRunning();
         }
         return result;
+    }
+
+    @GroovyBlacklist
+    private static <T> T runClosureInternal(Closure<T> closure, Object[] args) {
+        // original Closure.call(Object... arguments) code
+        try {
+            //noinspection unchecked
+            return (T) closure.getMetaClass().invokeMethod(closure, "doCall", args);
+        } catch (InvokerInvocationException e) {
+            UncheckedThrow.rethrow(e.getCause());
+            return null; // unreachable statement
+        } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw e;
+            } else {
+                throw new GroovyRuntimeException(e.getMessage(), e);
+            }
+        }
     }
 
     private static String mainClassName(String name) {
@@ -241,14 +266,12 @@ public class GroovyScriptSandbox extends GroovySandbox {
         if (comp != null && lastModified <= comp.lastEdited && comp.clazz == null && comp.readData(this.cacheRoot.getPath())) {
             // class is not loaded, but the cached class bytes are still valid
             if (!comp.checkPreprocessors(this.scriptRoot)) {
-                return GroovyLog.class;
+                return GroovyLog.class; // failed preprocessor check
             }
-            GroovyLog.get().debugMC(" script {} is already compiled", relativeFile);
             comp.ensureLoaded(engine.getGroovyClassLoader(), this.cacheRoot.getPath());
 
         } else if (comp == null || comp.clazz == null || lastModified > comp.lastEdited) {
             // class is not loaded and class bytes don't exist yet or script has been edited
-            GroovyLog.get().debugMC(" compiling script {}", relativeFile);
             if (comp == null) {
                 comp = new CompiledScript(relativeFile.toString(), 0);
                 this.index.put(relativeFile.toString(), comp);
@@ -263,20 +286,19 @@ public class GroovyScriptSandbox extends GroovySandbox {
                 comp.deleteCache(this.cacheRoot.getPath());
                 comp.clazz = null;
                 comp.data = null;
-                return GroovyLog.class;
+                return GroovyLog.class; // failed preprocessor check
             }
             Class<?> clazz = super.loadScriptClass(engine, relativeFile);
             if (comp.clazz == null) {
                 // should not happen
-                GroovyLog.get().debugMC("Class for {} was loaded, but didnt receive class created callback! Index: {}", relativeFile, this.index);
+                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback! Index: {}", relativeFile, this.index);
                 comp.clazz = clazz;
             }
         } else {
             // class is loaded and script wasn't edited
             if (!comp.checkPreprocessors(this.scriptRoot)) {
-                return GroovyLog.class;
+                return GroovyLog.class; // failed preprocessor check
             }
-            GroovyLog.get().debugMC(" script {} is already compiled and loaded", relativeFile);
             comp.ensureLoaded(engine.getGroovyClassLoader(), this.cacheRoot.getPath());
         }
         return comp.clazz;

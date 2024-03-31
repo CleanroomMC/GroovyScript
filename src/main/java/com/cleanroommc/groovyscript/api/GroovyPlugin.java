@@ -31,12 +31,6 @@ public interface GroovyPlugin extends IGroovyContainer {
         return true;
     }
 
-    @Override
-    @NotNull
-    default String getContainerName() {
-        return "PLACEHOLDERNAME-" + getModName();
-    }
-
     /**
      * Returns the override priority. Defines how this plugin should behave when another container with the same mod id exists.
      * The return value should be as low as possible. Internal container always return {@link Priority#NONE}.

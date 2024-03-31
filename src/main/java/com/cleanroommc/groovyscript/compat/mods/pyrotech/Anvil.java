@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -19,7 +18,7 @@ import java.util.Arrays;
 public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
 
     public Anvil() {
-        super(ModuleTechBasic.Registries.ANVIL_RECIPE, Alias.generateOfClass(Anvil.class));
+        super(ModuleTechBasic.Registries.ANVIL_RECIPE);
     }
 
     @RecipeBuilderDescription(example = {
@@ -31,7 +30,7 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9, 'granite', 'hammer'"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9, 'granite', 'hammer'"))
     public AnvilRecipe add(String name, IIngredient input, ItemStack output, int hits, String tier, String type) {
         AnvilRecipe.EnumTier enumTier = EnumHelper.valueOfNullable(AnvilRecipe.EnumTier.class, tier, false);
         AnvilRecipe.EnumType enumType = EnumHelper.valueOfNullable(AnvilRecipe.EnumType.class, type, false);
@@ -66,7 +65,6 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
                 remove(recipe);
             }
         }
-        ;
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -4,8 +4,8 @@
 
 println 'mod \'alchemistry\' detected, running script'
 
-// groovyscript.wiki.alchemistry.atomizer.title:
-// groovyscript.wiki.alchemistry.atomizer.description
+// Atomizer:
+// Converts a non-element into its component elements.
 
 mods.alchemistry.atomizer.removeByInput(fluid('water'))
 // mods.alchemistry.atomizer.removeByOutput(item('alchemistry:compound:7'))
@@ -23,8 +23,9 @@ mods.alchemistry.atomizer.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.alchemistry.combiner.title:
-// groovyscript.wiki.alchemistry.combiner.description
+
+// Chemical Combiner:
+// Converts up to 9 input itemstacks into an output itemstack.
 
 mods.alchemistry.combiner.removeByInput(element('carbon'))
 mods.alchemistry.combiner.removeByOutput(item('minecraft:glowstone'))
@@ -41,8 +42,9 @@ mods.alchemistry.combiner.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.alchemistry.dissolver.title:
-// groovyscript.wiki.alchemistry.dissolver.description
+// Chemical Dissolver:
+// Converts an input itemstack into any number of output itemstacks, divided in any manner between different chances, with
+// the ability to run multiple rolls to produce additional outputs.
 
 mods.alchemistry.dissolver.removeByInput(item('alchemistry:compound:1'))
 // mods.alchemistry.dissolver.removeAll()
@@ -63,8 +65,9 @@ mods.alchemistry.dissolver.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.alchemistry.electrolyzer.title:
-// groovyscript.wiki.alchemistry.electrolyzer.description
+// Electrolyzer:
+// Converts an input fluidstack into up to 4 output itemstacks, with the 3rd and 4th output itemstacks being able to have
+// chances applied to them. May require a catalyst input itemstack, which may also have a chance to be consumed.
 
 // mods.alchemistry.electrolyzer.removeByInput(fluid('water'))
 mods.alchemistry.electrolyzer.removeByInput(element('calcium_carbonate'))
@@ -89,8 +92,8 @@ mods.alchemistry.electrolyzer.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.alchemistry.evaporator.title:
-// groovyscript.wiki.alchemistry.evaporator.description
+// Evaporator:
+// Converts an input fluidstack into an output fluidstack, taking a set amount of time.
 
 mods.alchemistry.evaporator.removeByInput(fluid('lava'))
 mods.alchemistry.evaporator.removeByOutput(item('alchemistry:mineral_salt'))
@@ -107,8 +110,9 @@ mods.alchemistry.evaporator.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.alchemistry.liquifier.title:
-// groovyscript.wiki.alchemistry.liquifier.description
+
+// Liquifier:
+// Converts an input itemstack into an output fluidstack, consuming a set amount of power.
 
 mods.alchemistry.liquifier.removeByInput(element('water'))
 // mods.alchemistry.liquifier.removeByOutput(fluid('water'))
@@ -123,5 +127,6 @@ mods.alchemistry.liquifier.recipeBuilder()
     .input(item('minecraft:magma'))
     .fluidOutput(fluid('lava') * 750)
     .register()
+
 
 

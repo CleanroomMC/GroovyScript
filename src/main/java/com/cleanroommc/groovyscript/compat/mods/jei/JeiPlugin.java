@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.BurningRecipeCate
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.ExplosionRecipeCategory;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.FluidRecipeCategory;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.PistonPushRecipeCategory;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapedCraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapelessCraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
@@ -18,9 +19,7 @@ import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientRegistry;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.VanillaTypes;
-import mezz.jei.api.recipe.IRecipeCategory;
-import mezz.jei.api.recipe.IRecipeCategoryRegistration;
-import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import mezz.jei.api.recipe.*;
 import mezz.jei.ingredients.IngredientRegistry;
 import mezz.jei.plugins.vanilla.crafting.ShapelessRecipeWrapper;
 import net.minecraft.init.Blocks;
@@ -30,9 +29,10 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+
+@SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
 @GroovyBlacklist
 @JEIPlugin
 public class JeiPlugin implements IModPlugin {
@@ -46,21 +46,9 @@ public class JeiPlugin implements IModPlugin {
 
     public static IIngredientRenderer<FluidStack> fluidRenderer;
 
-    public static final List<ItemStack> HIDDEN = new ArrayList<>();
-    public static final List<FluidStack> HIDDEN_FLUIDS = new ArrayList<>();
-    public static final List<String> HIDDEN_CATEGORY = new ArrayList<>();
 
     public static boolean isLoaded() {
         return jeiRuntime != null;
-    }
-
-    public static void reload() {
-        HIDDEN.clear();
-        HIDDEN_CATEGORY.clear();
-    }
-
-    public static void hideItem(ItemStack... stack) {
-        Collections.addAll(HIDDEN, stack);
     }
 
     @Override
@@ -101,6 +89,9 @@ public class JeiPlugin implements IModPlugin {
         registry.addRecipes(VanillaModule.inWorldCrafting.explosion.getRecipeWrappers(), ExplosionRecipeCategory.UID);
         registry.addRecipes(VanillaModule.inWorldCrafting.burning.getRecipeWrappers(), BurningRecipeCategory.UID);
         registry.addRecipes(VanillaModule.inWorldCrafting.pistonPush.getRecipeWrappers(), PistonPushRecipeCategory.UID);
+
+        ModSupport.JEI.get().description.applyAdditions(modRegistry);
+        ModSupport.JEI.get().catalyst.applyChanges(registry);
     }
 
     @Override
@@ -108,15 +99,9 @@ public class JeiPlugin implements IModPlugin {
         recipeRegistry = iJeiRuntime.getRecipeRegistry();
         jeiRuntime = iJeiRuntime;
 
-        if (!HIDDEN.isEmpty()) {
-            itemRegistry.removeIngredientsAtRuntime(VanillaTypes.ITEM, ingredientHelper.expandSubtypes(HIDDEN));
-        }
-        if (!HIDDEN_FLUIDS.isEmpty()) {
-            itemRegistry.removeIngredientsAtRuntime(VanillaTypes.FLUID, HIDDEN_FLUIDS);
-        }
-        for (String category : HIDDEN_CATEGORY) {
-            recipeRegistry.hideRecipeCategory(category);
-        }
+        ModSupport.JEI.get().ingredient.applyChanges(itemRegistry);
+        ModSupport.JEI.get().category.applyChanges(recipeRegistry);
+        ModSupport.JEI.get().description.applyRemovals(recipeRegistry);
     }
 
     public static SimpleCommand getJeiCategoriesCommand() {

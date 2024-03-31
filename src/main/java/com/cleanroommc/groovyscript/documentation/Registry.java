@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 public class Registry {
 
     private final GroovyContainer<? extends ModPropertyContainer> mod;
-    private final IScriptReloadable registry;
+    private final INamed registry;
     private final String baseTranslationKey;
     private final String reference;
     private final Class<?> registryClass;
@@ -27,7 +28,7 @@ public class Registry {
     private final EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
     private final List<String> imports;
 
-    public Registry(GroovyContainer<? extends ModPropertyContainer> mod, IScriptReloadable registry) {
+    public Registry(GroovyContainer<? extends ModPropertyContainer> mod, INamed registry) {
         this.mod = mod;
         this.registry = registry;
         this.baseTranslationKey = String.format("groovyscript.wiki.%s.%s", mod.getModId(), registry.getName());
@@ -111,7 +112,8 @@ public class Registry {
     }
 
     public String getDescription() {
-        return Documentation.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description());
+        return Documentation.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description())
+                .replace("\"", "\\\"");
     }
 
     public String exampleBlock() {

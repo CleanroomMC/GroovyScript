@@ -145,22 +145,31 @@ groovyscript.wiki.advancedmortars.mortar.duration.value=Sets how many interactio
 groovyscript.wiki.advancedmortars.mortar.secondaryOutput.value=Sets the additional output itemstack
 groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the chance of the additional output itemstack being output
 
+
 # Aether Legacy
-groovyscript.wiki.aether_legacy.enchanter.title=Enchanter
-groovyscript.wiki.aether_legacy.enchanter.description=Enchanting is a mechanic used to create new items, as well as repair tools, armor, and weapons, using the Altar block.
-groovyscript.wiki.aether_legacy.enchanter.add=Adds an Enchanting recipe in the format `input`, `output`, `time`.
-groovyscript.wiki.aether_legacy.enchanter_fuel.title=Enchanter Fuel
-groovyscript.wiki.aether_legacy.enchanter_fuel.description=By default, the Enchantar (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
-groovyscript.wiki.aether_legacy.enchanter_fuel.add=Adds an Enchanting fuel in the format `item`, `timeGiven`.
-groovyscript.wiki.aether_legacy.freezer.title=Freezer
-groovyscript.wiki.aether_legacy.freezer.description=The Freezer is used to turn certain items into frozen versions.
-groovyscript.wiki.aether_legacy.freezer.add=Adds a Freezer recipe in the format `input`, `output`, `time`.
-groovyscript.wiki.aether_legacy.freezer_fuel.title=Freezer
-groovyscript.wiki.aether_legacy.freezer_fuel.description= By default, the Freezer takes Icestone as fuel. Using GroovyScript, custom fuels can be added.
-groovyscript.wiki.aether_legacy.freezer_fuel.add=Adds a Freezer fuel in the format `item`, `timeGiven`.
 groovyscript.wiki.aether_legacy.accessory.title=Accessory
 groovyscript.wiki.aether_legacy.accessory.description=The Aether Accessory system.
 groovyscript.wiki.aether_legacy.accessory.add=Adds an Accessory in the format `item`, `type`, where type is one of the following: "Ring", "Pendant", "Cape", "Shield", "Glove", or "Misc".
+groovyscript.wiki.aether_legacy.accessory.accessoryType.value=Sets the type of accessory the item is, which controls what slot it can go into
+
+groovyscript.wiki.aether_legacy.enchanter.title=Enchanter
+groovyscript.wiki.aether_legacy.enchanter.description=Enchanting is a mechanic used to create new items, as well as repair tools, armor, and weapons, using the Altar block.
+groovyscript.wiki.aether_legacy.enchanter.add=Adds an Enchanting recipe in the format `input`, `output`, `time`.
+groovyscript.wiki.aether_legacy.enchanter.time.value=Sets the time the recipe takes to compelte
+
+groovyscript.wiki.aether_legacy.enchanter_fuel.title=Enchanter Fuel
+groovyscript.wiki.aether_legacy.enchanter_fuel.description=By default, the Enchantar (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
+groovyscript.wiki.aether_legacy.enchanter_fuel.add=Adds an Enchanting fuel in the format `item`, `timeGiven`.
+
+groovyscript.wiki.aether_legacy.freezer.title=Freezer
+groovyscript.wiki.aether_legacy.freezer.description=The Freezer is used to turn certain items into frozen versions.
+groovyscript.wiki.aether_legacy.freezer.add=Adds a Freezer recipe in the format `input`, `output`, `time`.
+groovyscript.wiki.aether_legacy.freezer.time.value=Sets the time the recipe takes to compelte
+
+groovyscript.wiki.aether_legacy.freezer_fuel.title=Freezer
+groovyscript.wiki.aether_legacy.freezer_fuel.description= By default, the Freezer takes Icestone as fuel. Using GroovyScript, custom fuels can be added.
+groovyscript.wiki.aether_legacy.freezer_fuel.add=Adds a Freezer fuel in the format `item`, `timeGiven`.
+
 
 # Alchemistry
 groovyscript.wiki.alchemistry.atomizer.title=Atomizer
@@ -228,6 +237,13 @@ groovyscript.wiki.appliedenergistics2.spatial.title=Spatial Storage Allowed Tile
 groovyscript.wiki.appliedenergistics2.spatial.description=Either the class itself or its String name to add or remove from the Tile Entities allowed in Spatial Storage.
 groovyscript.wiki.appliedenergistics2.spatial.add=Adds the given class to the list of allowed TileEntities to be moved by Spatial Storage
 groovyscript.wiki.appliedenergistics2.spatial.remove=Removes the given class from the list of allowed TileEntities to be moved by Spatial Storage
+
+
+# Arcane Archives
+groovyscript.wiki.arcanearchives.gem_cutting_table.title=Gem Cutting Table
+groovyscript.wiki.arcanearchives.gem_cutting_table.description=Converts any number of itemstacks into a single output itemstack via selecting the desired output itemstack in the GUI.
+groovyscript.wiki.arcanearchives.gem_cutting_table.note0=While more than 8 items can function as the input of a Stygian Iron Anvil recipe, only the first 8 are shown in JEI.
+
 
 # Astral Sorcery
 groovyscript.wiki.astralsorcery.aevitas_perk_registry.title=Aevitas Perk Registry
@@ -615,7 +631,7 @@ groovyscript.wiki.calculator.atomic_calculator.description=Converts three input 
 groovyscript.wiki.calculator.analysing_chamber.title=Analysing Chamber
 groovyscript.wiki.calculator.analysing_chamber.description=Takes a non-analysed Circuit and analyses it, converting it into usable Stable or Analysed Circuit. Will produce power and item outputs based on randomly generated NBT data.
 groovyscript.wiki.calculator.analysing_chamber.note0=When a void upgrade is installed in the Analysing Chamber, slots 1 and 2 will be voided as trash, but 3, 4, 5, and 6 will continue giving outputs.
-groovyscript.wiki.calculator.analysing_chamber.note1=JEI incorrectly represents the chance to obtain an output. 6% is actually 2%, 0.2% is actually 1%, 0.1% is correct, 0.02% is actually 0.05%, 0.001% is correct, and 0% is actually 0.005%.
+groovyscript.wiki.calculator.analysing_chamber.note1=JEI incorrectly represents the chance to obtain an output. 6%% is actually 2%%, 0.2%% is actually 1%%, 0.1%% is correct, 0.02%% is actually 0.05%%, 0.001%% is correct, and 0%% is actually 0.005%%.
 groovyscript.wiki.calculator.analysing_chamber.slot.value=What pool the output is in
 groovyscript.wiki.calculator.analysing_chamber.location.value=Specific number to be rolled to gain the output. Duplicate numbers are *not* validated, and will not be output.
 
@@ -691,6 +707,10 @@ groovyscript.wiki.compactmachines3.miniaturization.keyMap.value=Sets the IBlockS
 groovyscript.wiki.compactmachines3.miniaturization.symmetrical.value=Sets if the recipe does not have to test all 4 rotations to determine if the multiblock is valid
 
 # Draconic Evolution
+groovyscript.wiki.draconicevolution.energy_core.title=Energy Core
+groovyscript.wiki.draconicevolution.energy_core.description=A multiblock with 8 tiers for storing large amounts of energy.
+groovyscript.wiki.draconicevolution.outer_block=Sets the inner block for the multiblock in the format `tier`, `block`
+groovyscript.wiki.draconicevolution.inner_block=Sets the outer block for the multiblock in the format `tier`, `block`
 groovyscript.wiki.draconicevolution.fusion.title=Fusion
 groovyscript.wiki.draconicevolution.fusion.description=Consumes items and power from up to 54 pedestals of at least a given tier pointing towards a Fusion Crafting Core containing a catalyst to produce an output item.
 groovyscript.wiki.draconicevolution.fusion.catalyst.value=Sets the item used in the center Fusion Crafting Controller block
@@ -735,7 +755,7 @@ groovyscript.wiki.enderio.sag_mill_grinding.title=Sag Mill Grinding
 groovyscript.wiki.enderio.sag_mill_grinding.description=Add a new Griding Ball for use in a Sag Mill with the given output multiplier, power multiplier, chance multiplier, and duration (in base power used).
 groovyscript.wiki.enderio.sag_mill_grinding.duration.value=Sets the amount of power used in recipes before the grinding ball is consumed
 groovyscript.wiki.enderio.sag_mill_grinding.chance.value=Sets the chance to double all outputs in recipes with an applicable bonusType
-groovyscript.wiki.enderio.sag_mill_grinding.grinding.value=Sets the chance to increase outputs up to 100% with an applicable bonusType
+groovyscript.wiki.enderio.sag_mill_grinding.grinding.value=Sets the chance to increase outputs up to 100%% with an applicable bonusType
 groovyscript.wiki.enderio.sag_mill_grinding.power.value=Sets the power multiplier to recipes processed with the grinding ball
 groovyscript.wiki.enderio.sag_mill_grinding.remove=Removes the Grinding Ball item
 
@@ -826,6 +846,47 @@ groovyscript.wiki.extendedcrafting.table_crafting.addShaped1=Adds a shaped craft
 groovyscript.wiki.extendedcrafting.table_crafting.addShapeless0=Adds a shapeless crafting recipe in the format `output`, `input`
 groovyscript.wiki.extendedcrafting.table_crafting.addShapeless1=Adds a shapeless crafting recipe in the format `tier`, `output`, `input`
 groovyscript.wiki.extendedcrafting.table_crafting.tier.value=Sets the tier of table required, with 0 indicating any table size that can fit the recipe
+
+# Extra Utilities 2
+groovyscript.wiki.extrautils2.crusher.title=Crusher
+groovyscript.wiki.extrautils2.crusher.description=Converts an input itemstack into an output itemstack with a chance of an additional itemstack output, consuming energy.
+groovyscript.wiki.extrautils2.crusher.chance.value=Sets the chance of the second itemstack being output
+groovyscript.wiki.extrautils2.crusher.energy.value=Sets the energy cost of the recipe
+groovyscript.wiki.extrautils2.crusher.time.value=Sets the time in ticks the recipe takes
+
+groovyscript.wiki.extrautils2.enchanter.title=Enchanter
+groovyscript.wiki.extrautils2.enchanter.description=Converts two input itemstacks into an output itemstack, consuming energy and require nearby enchantment power providers.
+groovyscript.wiki.extrautils2.enchanter.energy.value=Sets the energy cost of the recipe
+groovyscript.wiki.extrautils2.enchanter.time.value=Sets the time in ticks the recipe takes
+
+groovyscript.wiki.extrautils2.furnace.title=Furnace
+groovyscript.wiki.extrautils2.furnace.description=Converts an input itemstack into an output itemstack, consuming energy.
+groovyscript.wiki.extrautils2.furnace.removeWarning=When removing items, keep in mind that the default registry mostly contains INPUT items allowing any metadata. This means you cannot do `item('minecraft:emerald_ore')` and instead must do `item('minecraft:emerald_ore:*')`
+groovyscript.wiki.extrautils2.furnace.energy.value=Sets the energy cost of the recipe
+groovyscript.wiki.extrautils2.furnace.time.value=Sets the time in ticks the recipe takes
+
+groovyscript.wiki.extrautils2.generator.title=Generators
+groovyscript.wiki.extrautils2.generator.description=Converts up to two input itemstacks and an input fluidstack into energy over time.
+groovyscript.wiki.extrautils2.generator.remove0=Removes a Generator recipe in the format `generator`, `itemstack`
+groovyscript.wiki.extrautils2.generator.remove1=Removes a Generator recipe in the format `generator`, `fluidstack`
+groovyscript.wiki.extrautils2.generator.removeByGenerator=Removes all recipes with given generator
+groovyscript.wiki.extrautils2.generator.energy.value=Sets the total energy produced by the recipe
+groovyscript.wiki.extrautils2.generator.energyPerTick.value=Sets the energy produced per tick by the recipe
+groovyscript.wiki.extrautils2.generator.generator.value=Sets the generator the recipe is added to. Some generators require different numbers of input itemstacks or fluidstacks
+
+groovyscript.wiki.extrautils2.grid_power_passive_generator.title=Grid Power Generators
+groovyscript.wiki.extrautils2.grid_power_passive_generator.description=Passively produces Grid Power into the Owner's GP network
+groovyscript.wiki.extrautils2.grid_power_passive_generator.setBasePower=Sets the base power produced by the given generator in the format `generator`, `basePower`. Typically only impacts the tooltip, and setPowerLevel is required to make effective changes
+groovyscript.wiki.extrautils2.grid_power_passive_generator.setPowerLevel=Sets the function used to determine what the Grid Power produced by the given generator given its position in the world in the format `generator` and the Closure taking 2 parameters, `TilePassiveGenerator generator` and `World world` and returning a `float`
+groovyscript.wiki.extrautils2.grid_power_passive_generator.setPowerMultiplier=Sets an additional multiplier applied to the generator after base power and power level are calculated, but before scaling is applied
+groovyscript.wiki.extrautils2.grid_power_passive_generator.setScaling=Sets the function used to determine what the Grid Power produced by the given generator is reduced by in the format `generator`, `scaling`. Scaling consists of floats controlling first how much GP the effect will activate at followed by the multiplier.
+
+groovyscript.wiki.extrautils2.resonator.title=Resonator
+groovyscript.wiki.extrautils2.resonator.description=Converts and input itemstack into an output itemstack, consuming Grid Power from the Owner's GP network. Can also require an active Rainbow Generator.
+groovyscript.wiki.extrautils2.resonator.energy.value=Sets the total Grid Power required for the recipe in 1/100ths of a single GP (int 1000 = 10 GP)
+groovyscript.wiki.extrautils2.resonator.ownerTag.value=Sets if the output itemstack should gain an NBT tag attaching the player who placed the Resonator to the itemstack. Notably used for Red Coal, to determine the bonus burn time from Grid Power
+groovyscript.wiki.extrautils2.resonator.requirementText.value=Sets the text in JEI displaying an additional requirement for the recipe to run
+groovyscript.wiki.extrautils2.resonator.shouldProgress.value=Sets the function used to determine if the recipe should run, with the Closure taking 3 paramenters, `TileEntity resonator`, `int frequency`, `ItemStack input` and returning a `boolean`
 
 # Immersive Engineering
 groovyscript.wiki.immersiveengineering.alloy_kiln.title=Alloy Kiln
@@ -965,6 +1026,35 @@ groovyscript.wiki.integrateddynamics.squeezer.basic.value=Sets if the recipe is 
 groovyscript.wiki.integrateddynamics.squeezer.output.value=Sets the possible item outputs and chance of those outputs being dropped
 groovyscript.wiki.integrateddynamics.squeezer.duration.value=Sets the time in ticks the recipe takes to process in the Mechanical Squeezer, has no effect on the Squeezer
 groovyscript.wiki.integrateddynamics.squeezer.mechanical.value=Sets if the recipe is added to the mechanical (Mechanical Squeezer) machine
+
+# Just Enough Items
+groovyscript.wiki.jei.catalyst.title=Category Catalysts
+groovyscript.wiki.jei.catalyst.description=Modify the items shown on the left of JEI Categories which indicate where the recipe takes place
+groovyscript.wiki.jei.catalyst.add=Adds the given catalyst items to the given category
+groovyscript.wiki.jei.catalyst.remove=Removes the given catalyst items from the given category
+groovyscript.wiki.jei.catalyst.removeByType=Removes all catalyst items from the given category
+
+groovyscript.wiki.jei.category.title=Categories
+groovyscript.wiki.jei.category.description=Modify the Categories visible in JEI, each of which contain recipes and are associated with specific blocks, typically machines.
+groovyscript.wiki.jei.category.note0=Hidden Categories will still take up load time, and recipes contained within can still be processed. This only prevents seeing Categories.
+groovyscript.wiki.jei.category.hideCategory=Hides the given category from JEI
+groovyscript.wiki.jei.category.hideAll=Hides all categories from JEI
+
+groovyscript.wiki.jei.description.title=Description Category
+groovyscript.wiki.jei.description.description=Modify the description of the input items, where the description is a unique JEI tab containing text.
+groovyscript.wiki.jei.description.add=Adds the given description to the given ingredients, translating the description lines as needed
+groovyscript.wiki.jei.description.remove=Removes any description from the given ingredients
+
+groovyscript.wiki.jei.ingredient.title=Ingredient Sidebar
+groovyscript.wiki.jei.ingredient.description=Modify what ingredients show up in the search menu sidebar.
+groovyscript.wiki.jei.ingredient.note0=Hidden ingredients will still take up load time, and recipes to create them can still be done. This only prevents seeing the ingredients in JEI.
+groovyscript.wiki.jei.ingredient.add=Adds the given ingredient with its given NBT data to JEI
+groovyscript.wiki.jei.ingredient.hide=Hides the ingredient from JEI
+groovyscript.wiki.jei.ingredient.hideByType=Hides all ingredients of the given type
+groovyscript.wiki.jei.ingredient.removeAndHide=Removes the vanilla crafting recipe for the given ItemStack and hides the item from JEI
+groovyscript.wiki.jei.ingredient.yeet=Alias for `removeAndHide`
+groovyscript.wiki.jei.ingredient.hideAll=Hides all ingredients of all types from the sidebar. Functionally disables JEI
+
 
 # Mekanism
 groovyscript.wiki.mekanism.gasInput.value=Sets the gas inputs of the recipe

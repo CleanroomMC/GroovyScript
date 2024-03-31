@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox.expand;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.*;
 import groovy.transform.Internal;
 import org.codehaus.groovy.reflection.*;
@@ -11,6 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.function.Function;
 
 public class ExpansionHelper {
 
@@ -116,9 +118,9 @@ public class ExpansionHelper {
         }
     }
 
-    public static void mixinMethod(Class<?> self, String name, LambdaClosure.AnyFunction<?> function) {
+    public static void mixinMethod(Class<?> self, String name, Function<Object[], ?> function) {
         ExpandoMetaClass emc = getExpandoClass(self);
-        emc.registerInstanceMethod(name, new LambdaClosure<>(function));
+        emc.registerInstanceMethod(name, ClosureHelper.of(function));
     }
 
     private static void mixinMethod(ExpandoMetaClass self, CachedMethod method, MixinInMetaClass mixin) {
