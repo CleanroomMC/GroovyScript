@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
 
     public SoakingPot() {
-        super(ModuleTechBasic.Registries.SOAKING_POT_RECIPE, Alias.generateOfClass(SoakingPot.class));
+        super(ModuleTechBasic.Registries.SOAKING_POT_RECIPE);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).fluidInput(fluid('amongium') * 125).output(item('minecraft:emerald')).time(400).campfireRequired(true).name('diamond_to_emerald_with_amongium_soaking_pot')"))
@@ -25,7 +24,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'dirt_to_apple', item('minecraft:dirt'), fluid('water'), item('minecraft:apple'), 1200"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'dirt_to_apple', item('minecraft:dirt'), fluid('water'), item('minecraft:apple'), 1200"))
     public SoakingPotRecipe add(String name, IIngredient input, FluidStack fluidInput, ItemStack output, int time) {
         return recipeBuilder()
                 .time(time)

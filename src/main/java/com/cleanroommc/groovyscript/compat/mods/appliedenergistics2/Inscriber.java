@@ -13,9 +13,7 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
@@ -56,7 +54,8 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        for (IInscriberRecipe recipe : AEApi.instance().registries().inscriber().getRecipes()) {
+        Collection<IInscriberRecipe> recipes = new ArrayList<>(AEApi.instance().registries().inscriber().getRecipes());
+        for (IInscriberRecipe recipe : recipes) {
             AEApi.instance().registries().inscriber().removeRecipe(recipe);
             addBackup(recipe);
         }

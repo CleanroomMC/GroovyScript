@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.NamedRegistry;
 import epicsquid.roots.recipe.transmutation.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockStateContainer;
@@ -16,17 +16,13 @@ import java.util.stream.Collectors;
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES
 )
-public class Predicates extends VirtualizedRegistry<MatchingStates> {
+public class Predicates extends NamedRegistry {
 
     public WorldBlockStatePredicate ANY = WorldBlockStatePredicate.TRUE;
     public WorldBlockStatePredicate TRUE = WorldBlockStatePredicate.TRUE;
     public BlocksPredicate LAVA = new LavaPredicate();
     public BlocksPredicate WATER = new WaterPredicate();
     public LeavesPredicate LEAVES = new LeavesPredicate();
-
-    @Override
-    public void onReload() {
-    }
 
     @RecipeBuilderDescription(example = {
             @Example(".blockstate(blockstate('minecraft:red_flower'))"),

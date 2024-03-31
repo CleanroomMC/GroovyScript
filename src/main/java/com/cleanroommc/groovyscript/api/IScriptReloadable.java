@@ -12,9 +12,4 @@ public interface IScriptReloadable extends INamed {
     @ApiStatus.OverrideOnly
     void afterScriptLoad();
 
-    @GroovyBlacklist
-    default boolean isEnabled() {
-        return true;
-    }
-
 }

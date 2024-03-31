@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -17,7 +16,7 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
 
 
     public CompactingBin() {
-        super(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE, Alias.generateOfClass(CompactingBin.class));
+        super(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).toolUses(5).name('diamond_to_emerald_compacting_bin')"))
@@ -25,7 +24,7 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9"))
     public CompactingBinRecipe add(String name, IIngredient input, ItemStack output, int hits) {
         return recipeBuilder()
                 .toolUses(hits)

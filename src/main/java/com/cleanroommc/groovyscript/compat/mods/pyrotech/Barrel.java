@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
 
     public Barrel() {
-        super(ModuleTechBasic.Registries.BARREL_RECIPE, Alias.generateOfClass(Barrel.class));
+        super(ModuleTechBasic.Registries.BARREL_RECIPE);
     }
 
     @RecipeBuilderDescription(example = @Example(
@@ -27,7 +26,7 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'iron_dirt_water_to_lava', ore('ingotIron'), ore('ingotIron'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_dirt_water_to_lava', ore('ingotIron'), ore('ingotIron'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000"))
     public BarrelRecipe add(String name, IIngredient input1, IIngredient input2, IIngredient input3, IIngredient input4, FluidStack fInput, FluidStack fOutput, int duration) {
         return recipeBuilder()
                 .duration(duration)

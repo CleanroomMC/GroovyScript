@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -17,7 +16,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
 
 
     public DryingRack() {
-        super(ModuleTechBasic.Registries.DRYING_RACK_RECIPE, Alias.generateOfClass(DryingRack.class));
+        super(ModuleTechBasic.Registries.DRYING_RACK_RECIPE);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).dryTime(260).name('iron_to_gold_drying_rack')"))
@@ -25,7 +24,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200"))
     public DryingRackRecipe add(String name, IIngredient input, ItemStack output, int dryTime) {
         return recipeBuilder()
                 .dryTime(dryTime)

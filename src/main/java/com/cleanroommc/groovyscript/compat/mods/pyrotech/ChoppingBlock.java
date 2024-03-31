@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
 
     public ChoppingBlock() {
-        super(ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE, Alias.generateOfClass(ChoppingBlock.class));
+        super(ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE);
     }
 
 
@@ -55,7 +54,6 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
                 remove(recipe);
             }
         }
-        ;
     }
 
     @Property(property = "input", valid = @Comp("1"))
@@ -67,7 +65,7 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         private final IntList chops = new IntArrayList();
         private final IntList quantities = new IntArrayList();
 
-        @RecipeBuilderMethodDescription(field = {"chops, quantities"})
+        @RecipeBuilderMethodDescription(field = "chops, quantities")
         public RecipeBuilder chops(int chops, int quantities) {
             this.chops.add(chops);
             this.quantities.add(quantities);
