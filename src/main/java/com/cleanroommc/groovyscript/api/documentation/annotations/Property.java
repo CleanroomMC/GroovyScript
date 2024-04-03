@@ -123,7 +123,7 @@ public @interface Property {
 
     /**
      * Controls if the property needs an overriding property to enable it. Used in wrapper classes, such as {@link com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder AbstractRecipeBuilderr}, where some or all of the fields
-     * may not be needed in subclasses. At least one property must have this element be {@code true} for the property to be documented.
+     * may not be needed in subclasses. At least one property must have this element be {@code false} for the property to be documented.
      *
      * @return if the property needs an overriding annotation to enable it, defaults to {@code false}
      */
