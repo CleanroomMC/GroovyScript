@@ -17,7 +17,7 @@ public abstract class VirtualizedRegistry<R> extends NamedRegistry implements IS
 
     public VirtualizedRegistry(@Nullable Collection<String> aliases) {
         super(aliases);
-        this.recipeStorage = new AbstractReloadableStorage<>();
+        this.recipeStorage = createRecipeStorage();
     }
 
     @GroovyBlacklist
@@ -27,6 +27,11 @@ public abstract class VirtualizedRegistry<R> extends NamedRegistry implements IS
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     public void afterScriptLoad() {
+    }
+
+    @GroovyBlacklist
+    protected AbstractReloadableStorage<R> createRecipeStorage() {
+        return new AbstractReloadableStorage<>();
     }
 
     @GroovyBlacklist
