@@ -234,7 +234,7 @@ mods.astralsorcery.starlight_altar.discoveryRecipeBuilder()
     .row(' B ')
     .row('   ')
     .key('B', item('minecraft:bucket'))
-    .starlight(1)
+    .starlight(500)
     .craftTime(10)
     .register()
 
