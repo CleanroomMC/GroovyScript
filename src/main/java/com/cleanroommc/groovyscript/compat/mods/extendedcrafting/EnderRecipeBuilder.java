@@ -3,137 +3,48 @@ package com.cleanroommc.groovyscript.compat.mods.extendedcrafting;
 import com.blakebr0.extendedcrafting.config.ModConfig;
 import com.blakebr0.extendedcrafting.crafting.table.TableRecipeBase;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipeBuilder;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import com.cleanroommc.groovyscript.registry.AbstractCraftingRecipeBuilder;
 import net.minecraft.item.crafting.IRecipe;
-import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-public class EnderRecipeBuilder extends CraftingRecipeBuilder {
-
-    @Property(defaultValue = "ModConfig.confEnderTimeRequired", valid = @Comp(value = "0", type = Comp.Type.GTE))
-    protected int time = ModConfig.confEnderTimeRequired;
-
-    public EnderRecipeBuilder() {
-        super(3, 3);
-    }
+public interface EnderRecipeBuilder {
 
     @RecipeBuilderMethodDescription
-    public EnderRecipeBuilder time(int time) {
-        this.time = time;
-        return this;
+    EnderRecipeBuilder time(int time);
+
+    @RecipeBuilderMethodDescription(field = "time")
+    default EnderRecipeBuilder seconds(int seconds) {
+        return this.time(seconds);
     }
 
     @RecipeBuilderMethodDescription(field = "time")
-    public EnderRecipeBuilder seconds(int seconds) {
-        this.time = seconds;
-        return this;
+    default EnderRecipeBuilder ticks(int ticks) {
+        return this.time(ticks * 20);
     }
 
-    @RecipeBuilderMethodDescription(field = "time")
-    public EnderRecipeBuilder ticks(int ticks) {
-        this.time = ticks * 20;
-        return this;
-    }
+    class Shaped extends AbstractCraftingRecipeBuilder.AbstractShaped<IRecipe> implements EnderRecipeBuilder {
 
-    @Override
-    public IRecipe register() {
-        return null;
-    }
-
-    public static class Shaped extends EnderRecipeBuilder {
-
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value", defaultValue = "' ' = IIngredient.EMPTY", priority = 200)
-        private final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
-        private final List<String> errors = new ArrayList<>();
-        @Property("groovyscript.wiki.craftingrecipe.mirrored.value")
-        protected boolean mirrored = false;
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", priority = 210)
-        private String[] keyBasedMatrix;
-        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}, priority = 250)
-        private List<List<IIngredient>> ingredientMatrix;
+        @Property(defaultValue = "ModConfig.confEnderTimeRequired", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        protected int time = ModConfig.confEnderTimeRequired;
 
         public Shaped() {
-            keyMap.put(' ', IIngredient.EMPTY);
+            super(3, 3);
         }
 
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_ender_shaped_";
+        }
+
+        @Override
         @RecipeBuilderMethodDescription
-        public EnderRecipeBuilder.Shaped mirrored(boolean mirrored) {
-            this.mirrored = mirrored;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public EnderRecipeBuilder.Shaped mirrored() {
-            return mirrored(true);
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
-        public EnderRecipeBuilder.Shaped matrix(String... matrix) {
-            this.keyBasedMatrix = matrix;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
-        public EnderRecipeBuilder.Shaped shape(String... matrix) {
-            this.keyBasedMatrix = matrix;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
-        public EnderRecipeBuilder.Shaped row(String row) {
-            if (this.keyBasedMatrix == null) {
-                this.keyBasedMatrix = new String[]{row};
-            } else {
-                this.keyBasedMatrix = ArrayUtils.add(this.keyBasedMatrix, row);
-            }
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyMap")
-        public EnderRecipeBuilder.Shaped key(char c, IIngredient ingredient) {
-            this.keyMap.put(c, ingredient);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyMap")
-        public EnderRecipeBuilder.Shaped key(String c, IIngredient ingredient) {
-            if (c == null || c.length() != 1) {
-                errors.add("key must be a single char, but found '" + c + "'");
-                return this;
-            }
-            this.keyMap.put(c.charAt(0), ingredient);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyMap")
-        public EnderRecipeBuilder.Shaped key(Map<String, IIngredient> map) {
-            for (Map.Entry<String, IIngredient> x : map.entrySet()) {
-                key(x.getKey(), x.getValue());
-            }
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "ingredientMatrix")
-        public EnderRecipeBuilder.Shaped matrix(List<List<IIngredient>> matrix) {
-            this.ingredientMatrix = matrix;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "ingredientMatrix")
-        public EnderRecipeBuilder.Shaped shape(List<List<IIngredient>> matrix) {
-            this.ingredientMatrix = matrix;
+        public Shaped time(int time) {
+            this.time = time;
             return this;
         }
 
@@ -170,34 +81,24 @@ public class EnderRecipeBuilder extends CraftingRecipeBuilder {
         }
     }
 
-    public static class Shapeless extends EnderRecipeBuilder {
+    class Shapeless extends AbstractCraftingRecipeBuilder.AbstractShapeless<IRecipe> implements EnderRecipeBuilder {
 
-        @Property(value = "groovyscript.wiki.craftingrecipe.ingredients.value", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}, priority = 250)
-        private final List<IIngredient> ingredients = new ArrayList<>();
+        @Property(defaultValue = "ModConfig.confEnderTimeRequired", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        protected int time = ModConfig.confEnderTimeRequired;
 
-        @RecipeBuilderMethodDescription(field = "ingredients")
-        public EnderRecipeBuilder.Shapeless input(IIngredient ingredient) {
-            ingredients.add(ingredient);
-            return this;
+        public Shapeless() {
+            super(3, 3);
         }
 
-        @RecipeBuilderMethodDescription(field = "ingredients")
-        public EnderRecipeBuilder.Shapeless input(IIngredient... ingredients) {
-            if (ingredients != null) {
-                for (IIngredient ingredient : ingredients) {
-                    input(ingredient);
-                }
-            }
-            return this;
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_ender_shapeless_";
         }
 
-        @RecipeBuilderMethodDescription(field = "ingredients")
-        public EnderRecipeBuilder.Shapeless input(Collection<IIngredient> ingredients) {
-            if (ingredients != null && !ingredients.isEmpty()) {
-                for (IIngredient ingredient : ingredients) {
-                    input(ingredient);
-                }
-            }
+        @Override
+        @RecipeBuilderMethodDescription
+        public Shapeless time(int time) {
+            this.time = time;
             return this;
         }
 
