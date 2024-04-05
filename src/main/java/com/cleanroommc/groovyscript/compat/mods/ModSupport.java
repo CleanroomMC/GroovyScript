@@ -37,6 +37,7 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.mods.woot.Woot;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fml.common.Loader;
@@ -48,7 +49,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
 
-public class ModSupport implements IDynamicGroovyProperty {
+public class ModSupport {
 
     private static final Map<String, GroovyContainer<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
     private static final Map<String, GroovyContainer<? extends ModPropertyContainer>> containersView = Collections.unmodifiableMap(containers);
@@ -158,14 +159,15 @@ public class ModSupport implements IDynamicGroovyProperty {
         }
     }
 
-    @Override
+    @Deprecated
     @Nullable
     public Object getProperty(String name) {
         GroovyContainer<?> container = containers.get(name);
         return container != null ? container.get() : null;
     }
 
-    @Override
+
+    @Deprecated
     public @UnmodifiableView Map<String, ? extends GroovyContainer<?>> getProperties() {
         return containersView;
     }
@@ -178,6 +180,9 @@ public class ModSupport implements IDynamicGroovyProperty {
             if (container.isLoaded()) {
                 container.onCompatLoaded(container);
                 container.get().initialize(container);
+                for (String s : container.getAliases()) {
+                    ExpansionHelper.mixinConstProperty(ModSupport.class, s, container.get());
+                }
             }
         }
     }

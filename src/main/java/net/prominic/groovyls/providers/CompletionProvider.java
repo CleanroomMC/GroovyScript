@@ -22,6 +22,7 @@ package net.prominic.groovyls.providers;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.server.Completions;
+import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.classgraph.*;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -435,12 +436,22 @@ public class CompletionProvider {
                 return;
             }
             existingNames.add(variableName);
-
-            var item = CompletionItemFactory.createCompletion(CompletionItemKind.Variable, variableName);
-
-            item.setDetail("(global scope)");
-
-            items.add(item);
+            if (value instanceof GameObjectHandler<?> goh) {
+                for (MethodNode method : goh.getMethodNodes()) {
+                    var item = CompletionItemFactory.createCompletion(method, goh.getName(), astContext);
+                    item.setLabelDetails(getMethodNodeDetails(method));
+                    items.add(item);
+                }
+            } else if (value instanceof Closure<?> closure) {
+                MethodNode method = GroovyASTUtils.methodNodeOfClosure(variableName, closure);
+                var item = CompletionItemFactory.createCompletion(method, variableName, astContext);
+                item.setLabelDetails(getMethodNodeDetails(method));
+                items.add(item);
+            } else {
+                var item = CompletionItemFactory.createCompletion(CompletionItemKind.Variable, variableName);
+                item.setDetail("(global scope)");
+                items.add(item);
+            }
         });
 
         List<CompletionItem> staticMethodItems = astContext.getLanguageServerContext().getSandbox().getStaticImports().stream()
@@ -468,7 +479,7 @@ public class CompletionProvider {
 
     private void populateItemsFromVariableScope(VariableScope variableScope, String memberNamePrefix,
                                                 Set<String> existingNames, Completions items) {
-        populateItemsFromGameObjects(memberNamePrefix, existingNames, items);
+        //populateItemsFromGameObjects(memberNamePrefix, existingNames, items);
         populateItemsFromGlobalScope(memberNamePrefix, existingNames, items);
 
         List<CompletionItem> variableItems = variableScope.getDeclaredVariables().values().stream().filter(variable -> {
@@ -541,7 +552,7 @@ public class CompletionProvider {
                 }
             }
             if (current instanceof VariableExpression || current instanceof StaticMethodCallExpression) {
-                populateItemsFromGameObjects(namePrefix, existingNames, items);
+                //populateItemsFromGameObjects(namePrefix, existingNames, items);
                 populateItemsFromGlobalScope(namePrefix, existingNames, items);
             }
             child = current;

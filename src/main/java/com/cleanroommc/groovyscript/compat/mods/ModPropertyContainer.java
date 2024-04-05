@@ -3,8 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.api.INamed;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-public class ModPropertyContainer implements IDynamicGroovyProperty {
+public class ModPropertyContainer {
 
     private final Map<String, INamed> properties = new Object2ObjectOpenHashMap<>();
     private final Map<String, INamed> view = Collections.unmodifiableMap(properties);
@@ -28,6 +28,7 @@ public class ModPropertyContainer implements IDynamicGroovyProperty {
                 // old property is replaced, sometimes this is intended
                 GroovyLog.get().warn("Property {} was replaced with property {} in class {}!", old.getName(), property.getName(), getClass());
             }
+            ExpansionHelper.mixinConstProperty(getClass(), alias, property);
         }
     }
 
@@ -45,7 +46,8 @@ public class ModPropertyContainer implements IDynamicGroovyProperty {
         return this.view.values();
     }
 
-    @Override
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
+    @Deprecated
     public @Nullable Object getProperty(String name) {
         INamed property = this.properties.get(name);
         if (property == null) {
@@ -59,7 +61,6 @@ public class ModPropertyContainer implements IDynamicGroovyProperty {
         return property;
     }
 
-    @Override
     @UnmodifiableView
     public Map<String, ?> getProperties() {
         return view;

@@ -51,10 +51,12 @@ public class GameObjectHandlerManager {
                 .parser(GameObjectHandlers::parseResourceLocation)
                 .addSignature(String.class)
                 .addSignature(String.class, String.class)
+                .docOfType("resource location")
                 .register();
         GameObjectHandler.builder("ore", IIngredient.class)
                 .parser((s, args) -> s.contains(WILDCARD) ? Result.some(OreDictWildcardIngredient.of(s)) : Result.some(new OreDictIngredient(s)))
                 .completerOfNames(OreDictionaryAccessor::getIdToName)
+                .docOfType("ore dict entry")
                 .register();
         GameObjectHandler.builder("item", ItemStack.class)
                 .parser(GameObjectHandlers::parseItemStack)
@@ -62,10 +64,12 @@ public class GameObjectHandlerManager {
                 .addSignature(String.class, int.class)
                 .defaultValue(() -> ItemStack.EMPTY)
                 .completer(ForgeRegistries.ITEMS)
+                .docOfType("item stack")
                 .register();
         GameObjectHandler.builder("liquid", FluidStack.class)
                 .parser(GameObjectHandlers::parseFluidStack)
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
+                .docOfType("fluid stack")
                 .register();
         GameObjectHandler.builder("fluid", FluidStack.class)
                 .parser(GameObjectHandlers::parseFluidStack)
@@ -74,6 +78,7 @@ public class GameObjectHandlerManager {
         GameObjectHandler.builder("block", Block.class)
                 .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.BLOCKS))
                 .completer(ForgeRegistries.BLOCKS)
+                .docOfType("fluid stack")
                 .register();
         GameObjectHandler.builder("blockstate", IBlockState.class)
                 .parser(GameObjectHandlers::parseBlockState)
@@ -81,45 +86,56 @@ public class GameObjectHandlerManager {
                 .addSignature(String.class, int.class)
                 .addSignature(String.class, String[].class)
                 .completer(ForgeRegistries.BLOCKS)
+                .docOfType("block state")
                 .register();
         GameObjectHandler.builder("enchantment", Enchantment.class)
                 .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS))
                 .completer(ForgeRegistries.ENCHANTMENTS)
+                .docOfType("enchantment")
                 .register();
         GameObjectHandler.builder("potion", Potion.class)
                 .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.POTIONS))
                 .completer(ForgeRegistries.POTIONS)
+                .docOfType("potion")
                 .register();
         GameObjectHandler.builder("potionType", PotionType.class)
                 .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.POTION_TYPES))
                 .completer(ForgeRegistries.POTION_TYPES)
+                .docOfType("potion type")
                 .register();
         GameObjectHandler.builder("sound", SoundEvent.class)
                 .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS))
                 .completer(ForgeRegistries.SOUND_EVENTS)
+                .docOfType("sound")
                 .register();
         GameObjectHandler.builder("entity", EntityEntry.class)
                 .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.ENTITIES))
                 .completer(ForgeRegistries.ENTITIES)
+                .docOfType("entity entry")
                 .register();
         GameObjectHandler.builder("biome", Biome.class)
                 .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.BIOMES))
                 .completer(ForgeRegistries.BIOMES)
+                .docOfType("biome")
                 .register();
         GameObjectHandler.builder("profession", VillagerRegistry.VillagerProfession.class)
                 .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS))
                 .completer(ForgeRegistries.VILLAGER_PROFESSIONS)
+                .docOfType("villager profession")
                 .register();
         GameObjectHandler.builder("creativeTab", CreativeTabs.class)
                 .parser(GameObjectHandlers::parseCreativeTab)
                 .completerOfNamed(() -> Arrays.asList(CreativeTabs.CREATIVE_TAB_ARRAY), CreativeTabs::getTabLabel)
+                .docOfType("creative tab")
                 .register();
         GameObjectHandler.builder("textformat", TextFormatting.class)
                 .parser(GameObjectHandlers::parseTextFormatting)
                 .completerOfNamed(() -> Arrays.asList(TextFormatting.values()), format -> format.name().toLowerCase(Locale.ROOT).replaceAll("[^a-z]", ""))
+                .docOfType("text format")
                 .register();
         GameObjectHandler.builder("nbt", NBTTagCompound.class)
                 .parser(GameObjectHandlers::parseNBT)
+                .docOfType("nbt tag")
                 .register();
     }
 

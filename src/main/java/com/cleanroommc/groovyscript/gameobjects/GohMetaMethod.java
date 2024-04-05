@@ -13,12 +13,12 @@ public class GohMetaMethod extends MetaMethod implements IDocumented {
     private final Class<?> owner;
     private final String documentation;
 
-    public GohMetaMethod(GameObjectHandler<?> closure, Class<?>[] nativeParamTypes, Class<?> owner, String documentation) {
+    GohMetaMethod(GameObjectHandler<?> closure, Class<?>[] nativeParamTypes, Class<?> owner, String documentation) {
         super(nativeParamTypes);
         this.closure = closure;
         this.nativeParamTypes = nativeParamTypes;
         this.owner = owner;
-        this.documentation = IDocumented.toJavaDoc(documentation);
+        this.documentation = documentation;
     }
 
     @Override

@@ -37,6 +37,7 @@ import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.objectweb.asm.Opcodes;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -163,27 +164,16 @@ public class GroovyASTUtils {
 
     public static PropertyNode getPropertyFromExpression(PropertyExpression node, ASTContext context) {
         ClassNode classNode = getTypeOfNode(node.getObjectExpression(), context);
-        if (classNode != null && classNode.implementsInterface(new ClassNode(IDynamicGroovyProperty.class))) {
-            var value = resolveDynamicValue(node, context);
+        if (classNode == null) return null;
+        fillClassNode(classNode);
+        var prop = classNode.getProperty(node.getProperty().getText());
+        var field = classNode.getField(node.getProperty().getText());
 
-            if (value != null) {
-                return new PropertyNode(node.getProperty().getText(), Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL,
-                                        new ClassNode(value.getClass()),
-                                        classNode,
-                                        null, null, null);
-            }
+        if (prop == null && field != null) {
+            prop = new PropertyNode(field, Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL, null, null);
         }
-        if (classNode != null) {
-            var prop = classNode.getProperty(node.getProperty().getText());
-            var field = classNode.getField(node.getProperty().getText());
 
-            if (prop == null && field != null) {
-                prop = new PropertyNode(field, Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL, null, null);
-            }
-
-            return prop;
-        }
-        return null;
+        return prop;
     }
 
     public static Object resolveDynamicValue(ASTNode node, ASTContext context) {
@@ -325,15 +315,23 @@ public class GroovyASTUtils {
     }
 
     public static List<MethodNode> getMethodOverloadsFromCallExpression(MethodCall node, ASTContext context) {
-        if (node instanceof MethodCallExpression) {
-            MethodCallExpression methodCallExpr = (MethodCallExpression) node;
+        if (node instanceof MethodCallExpression methodCallExpr) {
+            List<MethodNode> mn = new ArrayList<>();
+            if (methodCallExpr.isImplicitThis()) {
+                Object o = context.getLanguageServerContext().getSandbox().getBindings().get(node.getMethodAsString());
+                if (o instanceof GameObjectHandler<?> goh) {
+                    mn.addAll(goh.getMethodNodes());
+                } else if (o instanceof Closure<?> closure) {
+                    mn.add(methodNodeOfClosure(node.getMethodAsString(), closure));
+                }
+            }
             ClassNode leftType = getTypeOfNode(methodCallExpr.getObjectExpression(), context);
             if (leftType != null) {
                 fillClassNode(leftType);
-                return leftType.getMethods(methodCallExpr.getMethod().getText());
+                mn.addAll(leftType.getMethods(methodCallExpr.getMethod().getText()));
             }
-        } else if (node instanceof ConstructorCallExpression) {
-            ConstructorCallExpression constructorCallExpr = (ConstructorCallExpression) node;
+            return mn;
+        } else if (node instanceof ConstructorCallExpression constructorCallExpr) {
             ClassNode constructorType = constructorCallExpr.getType();
             if (constructorType != null) {
                 fillClassNode(constructorType);
@@ -438,6 +436,19 @@ public class GroovyASTUtils {
         return new Range(position, position);
     }
 
+    public static MethodNode methodNodeOfClosure(String name, Closure<?> closure) {
+        Class<?> declarer = closure.getThisObject() == null ?
+                            (closure.getOwner() == null ? Object.class : closure.getOwner().getClass()) :
+                            closure.getThisObject().getClass();
+        MethodNode method = new MethodNode(name, Modifier.PUBLIC, ClassHelper.OBJECT_TYPE,
+                                           ArrayUtils.map(closure.getParameterTypes(),
+                                                          c -> new Parameter(ClassHelper.makeCached(c), ""),
+                                                          new Parameter[closure.getParameterTypes().length]),
+                                           null, null);
+        method.setDeclaringClass(ClassHelper.makeCached(declarer));
+        return method;
+    }
+
     public static GameObjectHandler<?> getGohOfNode(MethodCallExpression expr, ASTContext context) {
         if (expr.isImplicitThis()) {
             return GameObjectHandlerManager.getGameObjectHandler(expr.getMethodAsString());
@@ -460,6 +471,7 @@ public class GroovyASTUtils {
         MetaClass mc = GroovySystem.getMetaClassRegistry().getMetaClass(clazz);
         if (mc instanceof ExpandoMetaClass emc) {
             for (MetaMethod mm : emc.getExpandoMethods()) {
+                if (mm.isPrivate()) continue;
                 Parameter[] params = ArrayUtils.map(mm.getNativeParameterTypes(),
                                                     c -> new Parameter(ClassHelper.makeCached(c), ""),
                                                     new Parameter[mm.getNativeParameterTypes().length]);
@@ -469,6 +481,9 @@ public class GroovyASTUtils {
                     node.setNodeMetaData(GroovydocHolder.DOC_COMMENT, new Groovydoc(documented.getDocumentation(), node));
                 }
                 classNode.addMethod(node);
+            }
+            for (MetaProperty mp : emc.getExpandoProperties()) {
+                classNode.addProperty(mp.getName(), mp.getModifiers(), ClassHelper.makeCached(mp.getType()), null, null, null);
             }
         }
     }

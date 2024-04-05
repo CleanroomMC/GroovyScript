@@ -4,15 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.*;
 import groovy.transform.Internal;
+import org.apache.groovy.util.BeanUtils;
 import org.codehaus.groovy.reflection.*;
 import org.codehaus.groovy.runtime.HandleMetaClass;
 import org.codehaus.groovy.runtime.metaclass.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ExpansionHelper {
 
@@ -156,6 +162,35 @@ public class ExpansionHelper {
             return;
         }
         self.registerInstanceMethod(metaMethod);
+    }
+
+    public static <T, S> void mixinConstProperty(Class<S> self, String name, T obj) {
+        Objects.requireNonNull(obj, "Can't add null property to class!");
+        Class<T> type = (Class<T>) obj.getClass();
+        mixinProperty(self, name, type, s -> obj, null);
+    }
+
+    public static <T, S> void mixinProperty(Class<S> self, String name, Class<T> type,
+                                            @Nullable Supplier<T> getter, @Nullable Consumer<T> setter) {
+        mixinProperty(self, name, type, getter != null ? s -> getter.get() : null, setter != null ? (s, t) -> setter.accept(t) : null);
+    }
+
+    public static <T, S> void mixinProperty(Class<S> self, String name, Class<T> type,
+                                            @Nullable Function<S, T> getter, @Nullable BiConsumer<S, T> setter) {
+        if (getter == null && setter == null) return;
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name for property must not be empty!");
+        }
+        String upperName = name;
+        if (!Character.isDigit(name.charAt(0))) upperName = BeanUtils.capitalize(name);
+        if (getter == null) getter = so -> {throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is writable, but not readable!");};
+        if (setter == null) setter = (so, t) -> {throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is readable, but not writable!");};
+
+        MetaMethod g = new Getter<>("get" + upperName, type, self, getter);
+        MetaMethod s = new Setter<>("set" + upperName, type, self, setter);
+
+        ExpandoMetaClass emc = getExpandoClass(self);
+        emc.registerBeanProperty(name, new MetaBeanProperty(name, type, g, s));
     }
 
     private static boolean isValid(CachedMethod method) {

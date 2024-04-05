@@ -3,9 +3,13 @@ package com.cleanroommc.groovyscript.gameobjects;
 import com.cleanroommc.groovyscript.api.*;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
+import com.cleanroommc.groovyscript.sandbox.expand.IDocumented;
 import groovy.lang.Closure;
 import groovy.lang.ExpandoMetaClass;
+import groovy.lang.groovydoc.Groovydoc;
+import groovy.lang.groovydoc.GroovydocHolder;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -22,7 +26,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class GameObjectHandler<T> extends Closure<T> implements INamed {
+public class GameObjectHandler<T> extends Closure<T> implements INamed, IDocumented {
 
     public static <T> Builder<T> builder(String name, Class<T> returnTpe) {
         return new Builder<>(name, returnTpe);
@@ -35,9 +39,10 @@ public class GameObjectHandler<T> extends Closure<T> implements INamed {
     private final Class<T> returnType;
     private final List<Class<?>[]> paramTypes;
     private final Completer completer;
+    private final String documentation;
     private List<MethodNode> methodNodes;
 
-    private GameObjectHandler(String name, GroovyContainer<?> mod, IGameObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer) {
+    private GameObjectHandler(String name, GroovyContainer<?> mod, IGameObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation) {
         super(null);
         this.name = name;
         this.mod = mod;
@@ -46,6 +51,7 @@ public class GameObjectHandler<T> extends Closure<T> implements INamed {
         this.returnType = returnType;
         this.paramTypes = paramTypes;
         this.completer = completer;
+        this.documentation = documentation;
     }
 
     T invoke(String s, Object... args) {
@@ -95,17 +101,23 @@ public class GameObjectHandler<T> extends Closure<T> implements INamed {
         return invoke(s, args);
     }
 
+    @Override
+    public String getDocumentation() {
+        return documentation;
+    }
+
     public List<MethodNode> getMethodNodes() {
         if (methodNodes == null) {
             this.methodNodes = new ArrayList<>();
             for (Class<?>[] paramType : this.paramTypes) {
-                Parameter[] params = new Parameter[paramType.length];
-                for (int i = 0; i < params.length; i++) {
-                    params[i] = new Parameter(ClassHelper.makeCached(paramType[i]), "arg" + i);
-                }
-                MethodNode node = new MethodNode(this.name, Modifier.PUBLIC | Modifier.FINAL, ClassHelper.makeCached(this.returnType), params, null, null);
-                node.setDeclaringClass(
-                        this.mod != null ? ClassHelper.makeCached(this.mod.get().getClass()) : ClassHelper.makeCached(GameObjectHandlerManager.class));
+                Parameter[] params = ArrayUtils.map(paramType, c -> new Parameter(ClassHelper.makeCached(c), ""),
+                                                    new Parameter[paramType.length]);
+                MethodNode node = new MethodNode(this.name, Modifier.PUBLIC | Modifier.FINAL,
+                                                 ClassHelper.makeCached(this.returnType), params, null, null);
+                node.setDeclaringClass(this.mod != null ?
+                                       ClassHelper.makeCached(this.mod.get().getClass()) :
+                                       ClassHelper.makeCached(GameObjectHandlerManager.class));
+                node.setNodeMetaData(GroovydocHolder.DOC_COMMENT, new Groovydoc(this.documentation, node));
                 this.methodNodes.add(node);
             }
         }
@@ -212,14 +224,15 @@ public class GameObjectHandler<T> extends Closure<T> implements INamed {
             Objects.requireNonNull(this.returnType, () -> "The GameObjectHandler return type must not be null");
             if (this.paramTypes.isEmpty()) this.paramTypes.add(new Class[]{String.class});
             if (this.defaultValue == null) this.defaultValue = () -> null;
+            this.documentation = IDocumented.toJavaDoc(this.documentation);
             GameObjectHandler<T> goh = new GameObjectHandler<>(this.name, this.mod, this.handler, this.defaultValue,
-                                                               this.returnType, this.paramTypes, this.completer);
+                                                               this.returnType, this.paramTypes, this.completer, this.documentation);
             GameObjectHandlerManager.registerGameObjectHandler(this.mod == null ? null : this.mod.get(), goh);
             if (this.mod != null) {
                 Class<?> clazz = this.mod.get().getClass();
                 for (Class<?>[] paramTypes : goh.paramTypes) {
                     ExpandoMetaClass emc = ExpansionHelper.getExpandoClass(clazz);
-                    emc.registerInstanceMethod(new GohMetaMethod(goh, paramTypes, clazz, this.documentation != null ? this.documentation : StringUtils.EMPTY));
+                    emc.registerInstanceMethod(new GohMetaMethod(goh, paramTypes, clazz, this.documentation));
                 }
             }
         }

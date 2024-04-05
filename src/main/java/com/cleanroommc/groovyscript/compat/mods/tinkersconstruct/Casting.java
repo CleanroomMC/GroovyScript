@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
@@ -10,7 +9,7 @@ import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -18,28 +17,14 @@ import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 
-import java.util.Map;
-
-public class Casting implements IDynamicGroovyProperty {
-
-    private final Map<String, Object> properties = new Object2ObjectOpenHashMap<>();
+public class Casting {
 
     public final Table table = new Table();
     public final Basin basin = new Basin();
 
     public Casting() {
-        for (String s : Alias.generateOf("Table")) this.properties.put(s, this.table);
-        for (String s : Alias.generateOf("Basin")) this.properties.put(s, this.basin);
-    }
-
-    @Override
-    public @Nullable Object getProperty(String name) {
-        return properties.get(name);
-    }
-
-    @Override
-    public Map<String, ?> getProperties() {
-        return properties;
+        for (String s : Alias.generateOf("Table")) ExpansionHelper.mixinConstProperty(getClass(), s, this.table);
+        for (String s : Alias.generateOf("Basin")) ExpansionHelper.mixinConstProperty(getClass(), s, this.basin);
     }
 
     public static class Table extends VirtualizedRegistry<ICastingRecipe> {
