@@ -23,8 +23,10 @@ public class Casting {
     public final Basin basin = new Basin();
 
     public Casting() {
-        for (String s : Alias.generateOf("Table")) ExpansionHelper.mixinConstProperty(getClass(), s, this.table);
-        for (String s : Alias.generateOf("Basin")) ExpansionHelper.mixinConstProperty(getClass(), s, this.basin);
+        int i = 0;
+        for (String s : Alias.generateOf("Table")) ExpansionHelper.mixinConstProperty(getClass(), s, this.table, i++ > 0);
+        i = 0;
+        for (String s : Alias.generateOf("Basin")) ExpansionHelper.mixinConstProperty(getClass(), s, this.basin, i++ > 0);
     }
 
     public static class Table extends VirtualizedRegistry<ICastingRecipe> {

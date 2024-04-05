@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox.expand;
 
+import com.cleanroommc.groovyscript.api.Hidden;
 import groovy.lang.MetaMethod;
 import org.codehaus.groovy.reflection.CachedClass;
 import org.codehaus.groovy.reflection.ReflectionCache;
@@ -7,7 +8,7 @@ import org.codehaus.groovy.reflection.ReflectionCache;
 import java.lang.reflect.Modifier;
 import java.util.function.BiConsumer;
 
-public class Setter<T, S> extends MetaMethod {
+public class Setter<T, S> extends MetaMethod implements Hidden {
 
     private final String name;
     private final Class<S> owner;
@@ -23,7 +24,7 @@ public class Setter<T, S> extends MetaMethod {
 
     @Override
     public int getModifiers() {
-        return Modifier.PRIVATE;
+        return Modifier.PUBLIC;
     }
 
     @Override
@@ -47,5 +48,10 @@ public class Setter<T, S> extends MetaMethod {
         T arg = (T) arguments[0];
         this.setter.accept(self, arg);
         return null;
+    }
+
+    @Override
+    public boolean isHidden() {
+        return true;
     }
 }

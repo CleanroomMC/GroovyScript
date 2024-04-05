@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.compiler.util;
 
+import com.cleanroommc.groovyscript.api.Hidden;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
@@ -31,9 +32,9 @@ import net.prominic.groovyls.util.GroovyLanguageServerUtils;
 import org.codehaus.groovy.ast.*;
 import org.codehaus.groovy.ast.expr.*;
 import org.codehaus.groovy.ast.stmt.ExpressionStatement;
-import org.codehaus.groovy.ast.stmt.Statement;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
+import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
 
 import java.lang.reflect.Modifier;
@@ -45,7 +46,8 @@ import java.util.stream.Collectors;
 
 public class GroovyASTUtils {
 
-    public static final Statement EXPANSION_MARKER = new Statement();
+    public static final int EXPANSION_MARKER = 0x01000000;
+    public static final int HIDDEN_MARKER = 0x02000000;
 
     public static ASTNode getEnclosingNodeOfType(ASTNode offsetNode, Class<? extends ASTNode> nodeType,
                                                  ASTContext context) {
@@ -208,19 +210,23 @@ public class GroovyASTUtils {
 
     public static List<FieldNode> getFieldsForLeftSideOfPropertyExpression(ClassNode classNode, Expression node, ASTContext context) {
         boolean statics = node instanceof ClassExpression;
-        return classNode.getFields().stream().filter(fieldNode -> statics == fieldNode.isStatic()).collect(Collectors.toList());
+        return classNode.getFields().stream()
+                .filter(fieldNode -> statics == fieldNode.isStatic() && (fieldNode.getModifiers() & HIDDEN_MARKER) == 0)
+                .collect(Collectors.toList());
     }
 
     public static List<PropertyNode> getPropertiesForLeftSideOfPropertyExpression(ClassNode classNode, Expression node, ASTContext context) {
         boolean statics = node instanceof ClassExpression;
-        List<PropertyNode> properties = new ArrayList<>();
-        classNode.getProperties().stream().filter(propNode -> statics == propNode.isStatic()).forEach(properties::add);
-        return properties;
+        return classNode.getProperties().stream()
+                .filter(propNode -> statics == propNode.isStatic() && (propNode.getModifiers() & HIDDEN_MARKER) == 0)
+                .collect(Collectors.toList());
     }
 
     public static List<MethodNode> getMethodsForLeftSideOfPropertyExpression(ClassNode classNode, Expression node, ASTContext context) {
         boolean statics = node instanceof ClassExpression;
-        return classNode.getMethods().stream().filter(methodNode -> statics == methodNode.isStatic()).collect(Collectors.toList());
+        return classNode.getMethods().stream()
+                .filter(methodNode -> statics == methodNode.isStatic() && (methodNode.getModifiers() & HIDDEN_MARKER) == 0)
+                .collect(Collectors.toList());
     }
 
     public static ClassNode getTypeOfNode(ASTNode node, ASTContext context) {
@@ -455,10 +461,12 @@ public class GroovyASTUtils {
         if (mc instanceof ExpandoMetaClass emc) {
             for (MetaMethod mm : emc.getExpandoMethods()) {
                 if (mm.isPrivate()) continue;
+                int m = mm.getModifiers();
+                if (mm instanceof Hidden hidden && hidden.isHidden()) m |= HIDDEN_MARKER;
                 Parameter[] params = ArrayUtils.map(mm.getNativeParameterTypes(),
                                                     c -> new Parameter(ClassHelper.makeCached(c), ""),
                                                     new Parameter[mm.getNativeParameterTypes().length]);
-                MethodNode node = new MethodNode(mm.getName(), mm.getModifiers(), ClassHelper.makeCached(mm.getReturnType()), params, null, EXPANSION_MARKER);
+                MethodNode node = new MethodNode(mm.getName(), m, ClassHelper.makeCached(mm.getReturnType()), params, null, null);
                 node.setDeclaringClass(classNode);
                 if (mm instanceof IDocumented documented && documented.getDocumentation() != null) {
                     node.setNodeMetaData(GroovydocHolder.DOC_COMMENT, new Groovydoc(documented.getDocumentation(), node));
@@ -466,8 +474,34 @@ public class GroovyASTUtils {
                 classNode.addMethod(node);
             }
             for (MetaProperty mp : emc.getExpandoProperties()) {
-                classNode.addProperty(mp.getName(), mp.getModifiers(), ClassHelper.makeCached(mp.getType()), null, null, null);
+                int m = mp.getModifiers();
+                if (mp instanceof Hidden hidden && hidden.isHidden()) m |= HIDDEN_MARKER;
+                FieldNode field = new FieldNode(mp.getName(), m, ClassHelper.makeCached(mp.getType()), classNode.redirect(), null);
+                PropertyNode property = makeProperty(classNode, field, m);
+                classNode.addProperty(property);
             }
         }
+    }
+
+    @NotNull
+    private static PropertyNode makeProperty(ClassNode classNode, FieldNode field, int m) {
+        PropertyNode property = new PropertyNode(field, m, null, null);
+        property.setDeclaringClass(classNode);
+        // remove any previous set fields and properties with the same name
+        List<PropertyNode> properties = classNode.getProperties();
+        for (int i = 0; i < properties.size(); i++) {
+            PropertyNode node = properties.get(i);
+            if (node.getName().equals(property.getName())) {
+                properties.remove(i--);
+            }
+        }
+        List<FieldNode> fields = classNode.getFields();
+        for (int i = 0; i < fields.size(); i++) {
+            FieldNode node = fields.get(i);
+            if (node.getName().equals(property.getName())) {
+                fields.remove(i--);
+            }
+        }
+        return property;
     }
 }

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox.expand;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.Hidden;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.*;
 import groovy.transform.Internal;
@@ -164,33 +165,35 @@ public class ExpansionHelper {
         self.registerInstanceMethod(metaMethod);
     }
 
-    public static <T, S> void mixinConstProperty(Class<S> self, String name, T obj) {
+    public static <T, S> void mixinConstProperty(Class<S> self, String name, T obj, boolean hidden) {
         Objects.requireNonNull(obj, "Can't add null property to class!");
         Class<T> type = (Class<T>) obj.getClass();
-        mixinProperty(self, name, type, s -> obj, null);
+        mixinProperty(self, name, type, s -> obj, null, hidden);
     }
 
     public static <T, S> void mixinProperty(Class<S> self, String name, Class<T> type,
-                                            @Nullable Supplier<T> getter, @Nullable Consumer<T> setter) {
-        mixinProperty(self, name, type, getter != null ? s -> getter.get() : null, setter != null ? (s, t) -> setter.accept(t) : null);
+                                            @Nullable Supplier<T> getter, @Nullable Consumer<T> setter, boolean hidden) {
+        mixinProperty(self, name, type, getter != null ? s -> getter.get() : null, setter != null ? (s, t) -> setter.accept(t) : null, hidden);
     }
 
     public static <T, S> void mixinProperty(Class<S> self, String name, Class<T> type,
-                                            @Nullable Function<S, T> getter, @Nullable BiConsumer<S, T> setter) {
+                                            @Nullable Function<S, T> getter, @Nullable BiConsumer<S, T> setter, boolean hidden) {
         if (getter == null && setter == null) return;
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name for property must not be empty!");
         }
         String upperName = name;
         if (!Character.isDigit(name.charAt(0))) upperName = BeanUtils.capitalize(name);
-        if (getter == null) getter = so -> {throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is writable, but not readable!");};
-        if (setter == null) setter = (so, t) -> {throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is readable, but not writable!");};
+        if (getter == null)
+            getter = so -> {throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is writable, but not readable!");};
+        if (setter == null)
+            setter = (so, t) -> {throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is readable, but not writable!");};
 
         MetaMethod g = new Getter<>("get" + upperName, type, self, getter);
         MetaMethod s = new Setter<>("set" + upperName, type, self, setter);
 
         ExpandoMetaClass emc = getExpandoClass(self);
-        emc.registerBeanProperty(name, new MetaBeanProperty(name, type, g, s));
+        emc.registerBeanProperty(name, new Property(name, type, g, s, hidden));
     }
 
     private static boolean isValid(CachedMethod method) {
@@ -239,6 +242,21 @@ public class ExpansionHelper {
         @Override
         public CachedClass getOwnerClass() {
             return owner;
+        }
+    }
+
+    private static class Property extends MetaBeanProperty implements Hidden {
+
+        private final boolean hidden;
+
+        public Property(String name, Class type, MetaMethod getter, MetaMethod setter, boolean hidden) {
+            super(name, type, getter, setter);
+            this.hidden = hidden;
+        }
+
+        @Override
+        public boolean isHidden() {
+            return hidden;
         }
     }
 }

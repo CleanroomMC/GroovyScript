@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox.expand;
 
+import com.cleanroommc.groovyscript.api.Hidden;
 import groovy.lang.MetaMethod;
 import org.codehaus.groovy.reflection.CachedClass;
 import org.codehaus.groovy.reflection.ReflectionCache;
@@ -7,7 +8,7 @@ import org.codehaus.groovy.reflection.ReflectionCache;
 import java.lang.reflect.Modifier;
 import java.util.function.Function;
 
-public class Getter<T, S> extends MetaMethod {
+public class Getter<T, S> extends MetaMethod implements Hidden {
 
     public static final Class<?>[] PARAMS = {};
     public static final CachedClass[] PARAM_CACHED = {};
@@ -28,7 +29,7 @@ public class Getter<T, S> extends MetaMethod {
 
     @Override
     public int getModifiers() {
-        return Modifier.PRIVATE;
+        return Modifier.PUBLIC;
     }
 
     @Override
@@ -50,5 +51,10 @@ public class Getter<T, S> extends MetaMethod {
     public Object invoke(Object object, Object[] arguments) {
         S self = object == null ? null : (S) object;
         return this.getter.apply(self);
+    }
+
+    @Override
+    public boolean isHidden() {
+        return true;
     }
 }

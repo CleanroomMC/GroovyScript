@@ -22,13 +22,14 @@ public class ModPropertyContainer {
     private final Map<String, INamed> view = Collections.unmodifiableMap(properties);
 
     protected void addProperty(INamed property) {
+        int i = 0;
         for (String alias : property.getAliases()) {
             INamed old = this.properties.put(alias, property);
-            if (old != null && GroovyScript.getRunConfig().isDebug()) {
+            if (old != null && old != property && GroovyScript.getRunConfig().isDebug()) {
                 // old property is replaced, sometimes this is intended
-                GroovyLog.get().warn("Property {} was replaced with property {} in class {}!", old.getName(), property.getName(), getClass());
+                GroovyLog.get().warn("Property {} was replaced with property {} in class {}!", old.getName(), alias, getClass());
             }
-            ExpansionHelper.mixinConstProperty(getClass(), alias, property);
+            ExpansionHelper.mixinConstProperty(getClass(), alias, property, i++ > 0);
         }
     }
 

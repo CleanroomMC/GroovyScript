@@ -179,8 +179,9 @@ public class ModSupport {
             if (container.isLoaded()) {
                 container.onCompatLoaded(container);
                 container.get().initialize(container);
+                int i = 0;
                 for (String s : container.getAliases()) {
-                    ExpansionHelper.mixinConstProperty(ModSupport.class, s, container.get());
+                    ExpansionHelper.mixinConstProperty(ModSupport.class, s, container.get(), i++ > 0);
                 }
             }
         }
