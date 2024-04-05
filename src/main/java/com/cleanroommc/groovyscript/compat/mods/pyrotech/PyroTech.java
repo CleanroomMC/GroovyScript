@@ -16,17 +16,4 @@ public class PyroTech extends ModPropertyContainer {
     public static final SoakingPot soakingPot = new SoakingPot();
     public static final TanningRack tanningRack = new TanningRack();
 
-    public PyroTech() {
-        addRegistry(barrel);
-        addRegistry(campfire);
-        addRegistry(choppingBlock);
-        addRegistry(compactingBin);
-        addRegistry(compostBin);
-        addRegistry(crudeDryingRack);
-        addRegistry(dryingRack);
-        addRegistry(kiln);
-        addRegistry(anvil);
-        addRegistry(soakingPot);
-        addRegistry(tanningRack);
-    }
 }

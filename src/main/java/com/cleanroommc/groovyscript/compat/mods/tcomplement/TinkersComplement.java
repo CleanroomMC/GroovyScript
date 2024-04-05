@@ -7,8 +7,4 @@ public class TinkersComplement extends ModPropertyContainer {
     public final Melter melter = new Melter();
     public final HighOven highOven = new HighOven();
 
-    public TinkersComplement() {
-        addRegistry(melter);
-        addRegistry(highOven);
-    }
 }

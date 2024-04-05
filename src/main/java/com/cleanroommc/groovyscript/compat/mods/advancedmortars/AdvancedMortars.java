@@ -6,8 +6,4 @@ public class AdvancedMortars extends ModPropertyContainer {
 
     public final Mortar mortar = new Mortar();
 
-    public AdvancedMortars() {
-        addRegistry(mortar);
-    }
-
 }

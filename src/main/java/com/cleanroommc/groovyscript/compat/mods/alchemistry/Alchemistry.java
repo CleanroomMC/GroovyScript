@@ -5,6 +5,7 @@ import al132.alchemistry.chemistry.ChemicalElement;
 import al132.alchemistry.chemistry.CompoundRegistry;
 import al132.alchemistry.chemistry.ElementRegistry;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import net.minecraft.item.ItemStack;
@@ -17,22 +18,12 @@ public class Alchemistry extends ModPropertyContainer {
     public final Electrolyzer electrolyzer = new Electrolyzer();
     public final Evaporator evaporator = new Evaporator();
     public final Liquifier liquifier = new Liquifier();
-
-    public Alchemistry() {
-        addRegistry(atomizer);
-        addRegistry(combiner);
-        addRegistry(dissolver);
-        addRegistry(electrolyzer);
-        addRegistry(evaporator);
-        addRegistry(liquifier);
-        // TODO:
-        //  Compound Creation and Element Creation
-    }
+    // TODO:
+    //  Compound Creation and Element Creation
 
     @Override
-    public void initialize() {
-        GameObjectHandler.builder("element", ItemStack.class)
-                .mod("alchemistry")
+    public void initialize(GroovyContainer<?> container) {
+        container.gameObjectHandlerBuilder("element", ItemStack.class)
                 .parser((s, args) -> {
                     String parsedName = s.trim().toLowerCase().replace(" ", "_");
                     ChemicalCompound compound = CompoundRegistry.INSTANCE.get(parsedName);
@@ -48,6 +39,7 @@ public class Alchemistry extends ModPropertyContainer {
                 .defaultValue(() -> ItemStack.EMPTY)
                 .completerOfNamed(CompoundRegistry.INSTANCE::compounds, ChemicalCompound::getName)
                 .completerOfNamed(ElementRegistry.INSTANCE::getAllElements, ChemicalElement::getName)
+                .docOfType("chemical element or compound as item stack")
                 .register();
     }
 }

@@ -28,6 +28,7 @@ import java.util.function.Supplier;
 
 public class GameObjectHandler<T> extends Closure<T> implements INamed, IDocumented {
 
+    @ApiStatus.Internal
     public static <T> Builder<T> builder(String name, Class<T> returnTpe) {
         return new Builder<>(name, returnTpe);
     }

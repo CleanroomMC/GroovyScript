@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane.ArcaneWorkbench;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.Aspect;
@@ -10,7 +11,6 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStac
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.Warp;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApiHelper;
@@ -32,31 +32,18 @@ public class Thaumcraft extends ModPropertyContainer {
 
     public final AspectHelper aspectHelper = new AspectHelper();
 
-    public Thaumcraft() {
-        addRegistry(crucible);
-        addRegistry(infusionCrafting);
-        addRegistry(lootBag);
-        addRegistry(dustTrigger);
-        addRegistry(smeltingBonus);
-        addRegistry(warp);
-        addRegistry(aspectHelper);
-        addRegistry(arcaneWorkbench);
-        addRegistry(aspect);
-        addRegistry(research);
-    }
-
     @Override
-    public void initialize() {
-        GameObjectHandler.builder("aspect", AspectStack.class)
-                .mod("thaumcraft")
+    public void initialize(GroovyContainer<?> container) {
+        container.gameObjectHandlerBuilder("aspect", AspectStack.class)
                 .parser(IGameObjectParser.wrapStringGetter(Thaumcraft::getAspect, AspectStack::new))
                 .completerOfNames(thaumcraft.api.aspects.Aspect.aspects::keySet)
+                .docOfType("aspect stack")
                 .register();
-        GameObjectHandler.builder("crystal", ItemStack.class)
-                .mod("thaumcraft")
+        container.gameObjectHandlerBuilder("crystal", ItemStack.class)
                 .parser(IGameObjectParser.wrapStringGetter(Thaumcraft::getAspect, ThaumcraftApiHelper::makeCrystal))
                 .completerOfNames(thaumcraft.api.aspects.Aspect.aspects::keySet)
                 .defaultValue(() -> ItemStack.EMPTY)
+                .docOfType("aspect crystal as item stack")
                 .register();
         ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
         ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);

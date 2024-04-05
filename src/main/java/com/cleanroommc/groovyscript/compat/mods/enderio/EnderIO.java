@@ -15,17 +15,4 @@ public class EnderIO extends ModPropertyContainer {
     public final Tank tank = new Tank();
     public final Vat vat = new Vat();
 
-    public EnderIO() {
-        addRegistry(alloySmelter);
-        addRegistry(fluidFuel);
-        addRegistry(fluidCoolant);
-        addRegistry(enchanter);
-        addRegistry(sagMill);
-        addRegistry(sagMillGrinding);
-        addRegistry(sliceNSplice);
-        addRegistry(soulBinder);
-        addRegistry(tank);
-        addRegistry(vat);
-    }
-
 }

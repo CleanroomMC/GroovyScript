@@ -359,7 +359,7 @@ public class CompletionProvider {
                     if (methodName.startsWith(memberNamePrefix) && !existingNames.contains(methodName)) {
                         existingNames.add(methodName);
                         return !method.getDeclaringClass().isResolved() ||
-                               method.getCode() == GroovyASTUtils.EXPANSION_MARKER ||
+                               (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) != 0 ||
                                GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext).isPresent();
                     }
                     return false;

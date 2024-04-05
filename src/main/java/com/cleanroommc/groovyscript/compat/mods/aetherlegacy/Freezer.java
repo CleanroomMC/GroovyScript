@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.gildedgames.the_aether.api.freezables.AetherFreezable;
@@ -67,7 +68,7 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
         public @Nullable AetherFreezable register() {
             if (!validate()) return null;
             AetherFreezable freezable = new AetherFreezable(input.get(0).getMatchingStacks()[0], output.get(0), time);
-            Aether.freezer.add(freezable);
+            ModSupport.AETHER.get().freezer.add(freezable);
             return freezable;
         }
     }

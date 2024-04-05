@@ -10,7 +10,5 @@ public class DraconicEvolution extends ModPropertyContainer {
 
     public DraconicEvolution() {
         this.energyCore = GroovyScriptConfig.compat.draconicEvolutionEnergyCore ? new EnergyCore() : null;
-        addRegistry(fusion);
-        if (this.energyCore != null) addRegistry(energyCore);
     }
 }

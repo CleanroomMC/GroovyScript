@@ -2,8 +2,8 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlers;
 import epicsquid.roots.api.Herb;
 import epicsquid.roots.init.HerbRegistry;
@@ -39,55 +39,33 @@ public class Roots extends ModPropertyContainer {
     public final SummonCreature summonCreature = new SummonCreature();
     public final Transmutation transmutation = new Transmutation();
 
-    public Roots() {
-        addRegistry(animalHarvest);
-        addRegistry(animalHarvestFish);
-        addRegistry(barkCarving);
-        addRegistry(chrysopoeia);
-        addRegistry(feyCrafter);
-        addRegistry(flowerGeneration);
-        addRegistry(lifeEssence);
-        addRegistry(modifiers);
-        addRegistry(moss);
-        addRegistry(mortar);
-        addRegistry(pacifist);
-        addRegistry(pyre);
-        addRegistry(predicates);
-        addRegistry(rituals);
-        addRegistry(runicShearBlock);
-        addRegistry(runicShearEntity);
-        addRegistry(spells);
-        addRegistry(summonCreature);
-        addRegistry(transmutation);
-    }
-
     @Override
-    public void initialize() {
-        GameObjectHandler.builder("ritual", RitualBase.class)
-                .mod("roots")
+    public void initialize(GroovyContainer<?> container) {
+        container.gameObjectHandlerBuilder("ritual", RitualBase.class)
                 .parser(IGameObjectParser.wrapStringGetter(RitualRegistry::getRitual))
                 .completerOfNames(() -> RitualRegistry.ritualRegistry.keySet())
+                .docOfType("ritual")
                 .register();
-        GameObjectHandler.builder("herb", Herb.class)
-                .mod("roots")
+        container.gameObjectHandlerBuilder("herb", Herb.class)
                 .parser(IGameObjectParser.wrapStringGetter(HerbRegistry::getHerbByName))
                 .completerOfNames(HerbRegistry.registry::keySet)
+                .docOfType("herb")
                 .register();
-        GameObjectHandler.builder("cost", CostType.class)
-                .mod("roots")
+        container.gameObjectHandlerBuilder("cost", CostType.class)
                 .parser(IGameObjectParser.wrapEnum(CostType.class, false))
                 .completerOfEnum(CostType.class, false)
+                .docOfType("cost")
                 .register();
-        GameObjectHandler.builder("spell", SpellBase.class)
-                .mod("roots")
+        container.gameObjectHandlerBuilder("spell", SpellBase.class)
                 .parser(Roots::getSpell)
                 .completer(SpellRegistry.spellRegistry::keySet)
                 .defaultValueSup(() -> Result.some(FakeSpell.INSTANCE))  // crashes otherwise
+                .docOfType("spell")
                 .register();
-        GameObjectHandler.builder("modifier", Modifier.class)
-                .mod("roots")
+        container.gameObjectHandlerBuilder("modifier", Modifier.class)
                 .parser(Roots::getModifier)
                 .completerOfNamed(ModifierRegistry::getModifiers, v -> v.getRegistryName().toString())
+                .docOfType("modifier")
                 .register();
     }
 

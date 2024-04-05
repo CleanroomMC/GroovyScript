@@ -10,11 +10,4 @@ public class Woot extends ModPropertyContainer {
     public final Policy policy = new Policy();
     public final MobConfig mobConfig = new MobConfig();
 
-    public Woot() {
-        addRegistry(stygianIronAnvil);
-        addRegistry(drops);
-        addRegistry(spawning);
-        addRegistry(policy);
-        addRegistry(mobConfig);
-    }
 }

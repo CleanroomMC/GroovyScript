@@ -27,23 +27,6 @@ public class ImmersiveEngineering extends ModPropertyContainer {
     public final Refinery refinery = new Refinery();
     public final Squeezer squeezer = new Squeezer();
 
-    public ImmersiveEngineering() {
-        addRegistry(alloyKiln);
-        addRegistry(arcFurnace);
-        addRegistry(blastFurnace);
-        addRegistry(blastFurnaceFuel);
-        addRegistry(blueprint);
-        addRegistry(bottlingMachine);
-        addRegistry(cokeOven);
-        addRegistry(crusher);
-        addRegistry(excavator);
-        addRegistry(fermenter);
-        addRegistry(metalPress);
-        addRegistry(mixer);
-        addRegistry(refinery);
-        addRegistry(squeezer);
-    }
-
     public static IngredientStack toIngredientStack(IIngredient ingredient) {
         if (IngredientHelper.isItem(ingredient)) {
             return new IngredientStack(IngredientHelper.toItemStack(ingredient).copy());

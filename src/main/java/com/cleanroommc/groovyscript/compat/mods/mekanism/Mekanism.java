@@ -3,8 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
@@ -38,43 +38,20 @@ public class Mekanism extends ModPropertyContainer {
     public final ThermalEvaporationPlant thermalEvaporationPlant = new ThermalEvaporationPlant();
     public final Washer washer = new Washer();
 
-    public Mekanism() {
-        addRegistry(infusion);
-
-        addRegistry(chemicalInfuser);
-        addRegistry(combiner);
-        addRegistry(crusher);
-        addRegistry(crystallizer);
-        addRegistry(dissolutionChamber);
-        addRegistry(electrolyticSeparator);
-        addRegistry(enrichmentChamber);
-        addRegistry(injectionChamber);
-        addRegistry(metallurgicInfuser);
-        addRegistry(osmiumCompressor);
-        addRegistry(chemicalOxidizer);
-        addRegistry(pressurizedReactionChamber);
-        addRegistry(purificationChamber);
-        addRegistry(sawmill);
-        addRegistry(smelting);
-        addRegistry(solarNeutronActivator);
-        addRegistry(thermalEvaporationPlant);
-        addRegistry(washer);
-    }
-
     @Override
-    public void initialize() {
-        GameObjectHandler.builder("gas", GasStack.class)
-                .mod("mekanism")
+    public void initialize(GroovyContainer<?> container) {
+        container.gameObjectHandlerBuilder("gas", GasStack.class)
                 .parser((s, args) -> {
                     Gas gas = GasRegistry.getGas(s);
                     return gas == null ? Result.error() : Result.some(new GasStack(gas, 1));
                 })
                 .completerOfNamed(GasRegistry::getRegisteredGasses, Gas::getName)
+                .docOfType("gas stack")
                 .register();
-        GameObjectHandler.builder("infusion", InfuseType.class)
-                .mod("mekanism")
+        container.gameObjectHandlerBuilder("infusionType", InfuseType.class) // infusion clashes with infusion field
                 .parser(IGameObjectParser.wrapStringGetter(InfuseRegistry::get, true))
                 .completerOfNames(InfuseRegistry.getInfuseMap()::keySet)
+                .docOfType("infusion type")
                 .register();
     }
 

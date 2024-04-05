@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import vazkii.botania.api.BotaniaAPI;
@@ -23,23 +24,6 @@ public class Botania extends ModPropertyContainer {
     public final Magnet magnet = new Magnet();
     public final Flowers flowers = new Flowers();
 
-    public Botania() {
-        addRegistry(elvenTrade);
-        addRegistry(manaInfusion);
-        addRegistry(pureDaisy);
-        addRegistry(apothecary);
-        addRegistry(orechid);
-        addRegistry(orechidIgnem);
-        addRegistry(runeAltar);
-        addRegistry(brew);
-        addRegistry(brewRecipe);
-        addRegistry(lexicon.category);
-        addRegistry(lexicon.entry);
-        addRegistry(lexicon.page);
-        addRegistry(knowledge);
-        addRegistry(magnet);
-    }
-
     public static LexiconCategory getCategory(String name) {
         for (LexiconCategory category : BotaniaAPI.getAllCategories())
             if (category.getUnlocalizedName().equals(name)) return category;
@@ -55,12 +39,12 @@ public class Botania extends ModPropertyContainer {
     // using BotaniaAPI.brewMap::get crashes
     @SuppressWarnings("Convert2MethodRef")
     @Override
-    public void initialize() {
-        GameObjectHandler.builder("brew", vazkii.botania.api.brew.Brew.class)
-                .mod("botania")
+    public void initialize(GroovyContainer<?> container) {
+        container.gameObjectHandlerBuilder("brew", vazkii.botania.api.brew.Brew.class)
                 .parser(IGameObjectParser.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false))
                 .completerOfNames(() -> BotaniaAPI.brewMap.keySet())
                 .defaultValue(() -> BotaniaAPI.fallbackBrew)
+                .docOfType("brew")
                 .register();
     }
 }

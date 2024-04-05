@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -26,7 +27,7 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
         AccessoryType accessoryType = EnumHelper.valueOfNullable(AccessoryType.class, type, false);
         if (accessoryType == null) {
             GroovyLog.msg("Error adding Aether accessory")
-                    .add(accessoryType == null, "type with name {} does not exist. Valid values are {}.", type, Arrays.toString(AccessoryType.values()))
+                    .add("type with name {} does not exist. Valid values are {}.", type, Arrays.toString(AccessoryType.values()))
                     .error()
                     .post();
             return;
@@ -85,7 +86,7 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
             if (!validate()) return null;
 
             AetherAccessory accessory = new AetherAccessory(input.get(0).getMatchingStacks()[0], accessoryType);
-            Aether.accessory.add(accessory);
+            ModSupport.AETHER.get().accessory.add(accessory);
             return accessory;
         }
     }

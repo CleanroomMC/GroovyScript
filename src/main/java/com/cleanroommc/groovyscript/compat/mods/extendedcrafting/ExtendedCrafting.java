@@ -9,10 +9,4 @@ public class ExtendedCrafting extends ModPropertyContainer {
     public final CombinationCrafting combinationCrafting = new CombinationCrafting();
     public final CompressionCrafting compressionCrafting = new CompressionCrafting();
 
-    public ExtendedCrafting() {
-        addRegistry(tableCrafting);
-        addRegistry(enderCrafting);
-        addRegistry(combinationCrafting);
-        addRegistry(compressionCrafting);
-    }
 }

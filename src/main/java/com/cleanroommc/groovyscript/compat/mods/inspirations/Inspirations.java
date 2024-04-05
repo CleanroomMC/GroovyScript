@@ -7,8 +7,4 @@ public class Inspirations extends ModPropertyContainer {
     public final Cauldron cauldron = new Cauldron();
     public final AnvilSmashing anvilSmashing = new AnvilSmashing();
 
-    public Inspirations() {
-        addRegistry(cauldron);
-        addRegistry(anvilSmashing);
-    }
 }

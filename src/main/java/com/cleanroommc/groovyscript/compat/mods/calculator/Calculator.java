@@ -36,28 +36,6 @@ public class Calculator extends ModPropertyContainer {
     public final StarchExtractor starchExtractor = new StarchExtractor();
     public final StoneSeparator stoneSeparator = new StoneSeparator();
 
-    public Calculator() {
-        addRegistry(algorithmSeparator);
-        addRegistry(analysingChamber);
-        addRegistry(atomicCalculator);
-        addRegistry(basicCalculator);
-        addRegistry(conductorMast);
-        addRegistry(extractionChamber);
-        addRegistry(fabricationChamber);
-        addRegistry(flawlessCalculator);
-        addRegistry(glowstoneExtractor);
-        addRegistry(healthProcessor);
-        addRegistry(precisionChamber);
-        addRegistry(processingChamber);
-        addRegistry(reassemblyChamber);
-        addRegistry(redstoneExtractor);
-        addRegistry(restorationChamber);
-        addRegistry(scientificCalculator);
-        addRegistry(starchExtractor);
-        addRegistry(stoneSeparator);
-    }
-
-
     public static List<ISonarRecipeObject> toSonarRecipeObjectList(IngredientList<IIngredient> list) {
         List<ISonarRecipeObject> output = new ArrayList<>();
         for (IIngredient ingredient : list) {
