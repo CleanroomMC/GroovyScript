@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.compiler.util;
 
-import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
@@ -181,11 +180,8 @@ public class GroovyASTUtils {
             var value = resolveDynamicValue(propertyExpression.getObjectExpression(), context);
 
             Object result = null;
-            if (value instanceof IDynamicGroovyProperty dynamicValue) {
-                result = dynamicValue.getProperty(propertyExpression.getProperty().getText());
-            }
 
-            if (value != null && result == null) {
+            if (value != null) {
                 try {
                     result = value.getClass().getDeclaredField(propertyExpression.getProperty().getText()).get(value);
                 } catch (IllegalAccessException e) {
@@ -211,19 +207,6 @@ public class GroovyASTUtils {
     }
 
     public static List<FieldNode> getFieldsForLeftSideOfPropertyExpression(ClassNode classNode, Expression node, ASTContext context) {
-        if (IDynamicGroovyProperty.class.isAssignableFrom(classNode.getTypeClass())) {
-            Object o = resolveDynamicValue(node, context);
-            if (o instanceof IDynamicGroovyProperty prop) {
-                return prop.getProperties().entrySet().stream()
-                        .filter(entry -> entry.getValue() != null && !(entry.getValue() instanceof Closure<?>))
-                        .map(entry -> new FieldNode(entry.getKey(), Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL,
-                                                    ClassHelper.makeCached(entry.getValue().getClass()),
-                                                    classNode,
-                                                    new ConstantExpression(entry.getValue())))
-                        .collect(Collectors.toList());
-            }
-        }
-
         boolean statics = node instanceof ClassExpression;
         return classNode.getFields().stream().filter(fieldNode -> statics == fieldNode.isStatic()).collect(Collectors.toList());
     }
