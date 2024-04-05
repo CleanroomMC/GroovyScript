@@ -14,16 +14,4 @@ public class ActuallyAdditions extends ModPropertyContainer {
     public final NetherMiningLens netherMiningLens = new NetherMiningLens();
     public final StoneMiningLens stoneMiningLens = new StoneMiningLens();
 
-    public ActuallyAdditions() {
-        addRegistry(crusher);
-        addRegistry(oilGen);
-        addRegistry(compost);
-        addRegistry(ballOfFur);
-        addRegistry(treasureChest);
-        addRegistry(empowerer);
-        addRegistry(atomicReconstructor);
-        addRegistry(netherMiningLens);
-        addRegistry(stoneMiningLens);
-    }
-
 }

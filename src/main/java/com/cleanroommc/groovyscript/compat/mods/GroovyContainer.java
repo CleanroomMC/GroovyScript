@@ -1,19 +1,14 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.cleanroommc.groovyscript.api.IGroovyContainer;
+import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.IRegistrar;
+import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.NonExtendable
 public abstract class GroovyContainer<T extends ModPropertyContainer> implements IGroovyContainer {
-
-    private final GroovyPlugin.Priority overridePriority;
-
-    protected GroovyContainer(GroovyPlugin.Priority overridePriority) {
-        this.overridePriority = overridePriority;
-    }
 
     public abstract T get();
 
@@ -23,20 +18,34 @@ public abstract class GroovyContainer<T extends ModPropertyContainer> implements
     }
 
     @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.1.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
     @GroovyBlacklist
     public IRegistrar getVirtualizedRegistrar() {
         return getRegistrar();
     }
 
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
     @GroovyBlacklist
     public IRegistrar getRegistrar() {
         if (!isLoaded()) return null;
         T t = get();
-        return t::addRegistry;
+        return t::addProperty;
     }
 
-    public GroovyPlugin.Priority getOverridePriority() {
-        return overridePriority;
+    public void addProperty(INamed property) {
+        if (isLoaded()) {
+            get().addProperty(property);
+        }
+    }
+
+    public void addPropertiesOfFields(Object o, boolean privateToo) {
+        if (isLoaded()) {
+            get().addPropertyFieldsOf(o, privateToo);
+        }
+    }
+
+    public <V> GameObjectHandler.Builder<V> gameObjectHandlerBuilder(String name, Class<V> returnType) {
+        return new GameObjectHandler.Builder<>(name, returnType).mod(this);
     }
 }

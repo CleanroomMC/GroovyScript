@@ -66,9 +66,6 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
         if (expr instanceof ClosureExpression) {
             return transformClosure((ClosureExpression) expr);
         }
-        if (expr instanceof MethodCallExpression) {
-            return checkValid((MethodCallExpression) expr);
-        }
         if (expr instanceof ConstructorCallExpression cce) {
             if (cce.getType().getName().equals(File.class.getName())) {
                 // redirect to file wrapper
@@ -95,21 +92,5 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
         }
         closure.getCode().visit(this);
         return closure;
-    }
-
-    private Expression checkValid(MethodCallExpression expression) {
-        int argCount = 0;
-        if (expression.getArguments() instanceof TupleExpression) {
-            argCount = ((TupleExpression) expression.getArguments()).getExpressions().size();
-        }
-        if (expression.isImplicitThis() && argCount > 0) {
-            String name = expression.getMethodAsString();
-            if (GameObjectHandlerManager.hasGameObjectHandler(name)) {
-                List<Expression> args = getArguments(expression.getArguments());
-                args.add(0, new ConstantExpression(name));
-                return makeCheckedCall(bracketHandlerClass, "getGameObject", args);
-            }
-        }
-        return expression;
     }
 }

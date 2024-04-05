@@ -7,6 +7,7 @@ import java.util.Map;
 /**
  * When this is implemented on a class, {@link #getProperty(String)} will be called when groovy tries to get a field from this class
  */
+@Deprecated
 public interface IDynamicGroovyProperty {
 
     /**
@@ -34,5 +35,5 @@ public interface IDynamicGroovyProperty {
      *
      * @return all properties
      */
-    Map<String, Object> getProperties();
+    Map<String, ?> getProperties();
 }

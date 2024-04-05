@@ -44,13 +44,14 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ModSupport implements IDynamicGroovyProperty {
 
     private static final Map<String, GroovyContainer<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, GroovyContainer<? extends ModPropertyContainer>> containersView = Collections.unmodifiableMap(containers);
     private static final List<GroovyContainer<? extends ModPropertyContainer>> containerList = new ArrayList<>();
     private static final Set<Class<?>> externalPluginClasses = new ObjectOpenHashSet<>();
     private static boolean frozen = false;
@@ -90,6 +91,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final GroovyContainer<TinkersComplement> TINKERS_COMPLEMENT = new InternalModContainer<>("tcomplement", "Tinkers Complement", TinkersComplement::new, "tcomp", "tinkerscomplement");
     public static final GroovyContainer<TinkersConstruct> TINKERS_CONSTRUCT = new InternalModContainer<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new, "ticon", "tinkersconstruct");
     public static final GroovyContainer<Woot> WOOT = new InternalModContainer<>("woot", "Woot", Woot::new);
+
     public static Collection<GroovyContainer<? extends ModPropertyContainer>> getAllContainers() {
         return Collections.unmodifiableList(containerList);
     }
@@ -164,12 +166,8 @@ public class ModSupport implements IDynamicGroovyProperty {
     }
 
     @Override
-    public Map<String, Object> getProperties() {
-        Map<String, Object> properties = new HashMap<>();
-        for (var entry : containers.entrySet()) {
-            properties.put(entry.getKey(), entry.getValue().get());
-        }
-        return properties;
+    public @UnmodifiableView Map<String, ? extends GroovyContainer<?>> getProperties() {
+        return containersView;
     }
 
     @GroovyBlacklist
@@ -179,7 +177,7 @@ public class ModSupport implements IDynamicGroovyProperty {
         for (GroovyContainer<?> container : containerList) {
             if (container.isLoaded()) {
                 container.onCompatLoaded(container);
-                container.get().initialize();
+                container.get().initialize(container);
             }
         }
     }

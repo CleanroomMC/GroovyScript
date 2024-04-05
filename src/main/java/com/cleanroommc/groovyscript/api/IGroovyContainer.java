@@ -58,4 +58,34 @@ public interface IGroovyContainer {
      */
     @ApiStatus.OverrideOnly
     void onCompatLoaded(GroovyContainer<?> container);
+
+    /**
+     * Returns the override priority. Defines how this plugin should behave when another container with the same mod id exists.
+     * The return value should be as low as possible. Internal container always return {@link GroovyPlugin.Priority#NONE}.
+     * @return the override priority
+     * @see GroovyPlugin.Priority
+     */
+    @NotNull
+    default GroovyPlugin.Priority getOverridePriority() {
+        return GroovyPlugin.Priority.NONE;
+    }
+
+    enum Priority {
+        /**
+         * Default. Can be overridden by anything and can't override anything.
+         */
+        NONE,
+        /**
+         * Can override containers with priority NONE.
+         */
+        OVERRIDE,
+        /**
+         * Can override containers with priority NONE, OVERRIDE.
+         */
+        OVERRIDE_HIGH,
+        /**
+         * Can override containers with priority NONE, OVERRIDE, OVERRIDE_HIGH.
+         */
+        OVERRIDE_HIGHEST
+    }
 }

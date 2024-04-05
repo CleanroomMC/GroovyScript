@@ -1,8 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
-import com.cleanroommc.groovyscript.api.IGroovyContainer;
-
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,16 +9,20 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * This is used for external mod compat. Don't use this directly. Instead, implement {@link GroovyPlugin} on any class.
+ * This class will then be automatically instanced.
+ */
 public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> {
 
-    private final IGroovyContainer groovyContainer;
+    private final GroovyPlugin groovyContainer;
     private final ModPropertyContainer container;
     private final String modId;
     private final String containerName;
     private final Collection<String> aliases;
+    private final Priority priority;
 
     ExternalModContainer(@NotNull GroovyPlugin groovyContainer, @NotNull ModPropertyContainer container) {
-        super(groovyContainer.getOverridePriority());
         this.groovyContainer = Objects.requireNonNull(groovyContainer);
         this.container = Objects.requireNonNull(container);
         this.modId = groovyContainer.getModId();
@@ -28,6 +30,7 @@ public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> 
         Set<String> aliasSet = new ObjectOpenHashSet<>(groovyContainer.getAliases());
         aliasSet.add(modId);
         this.aliases = Collections.unmodifiableSet(aliasSet);
+        this.priority = groovyContainer.getOverridePriority();
     }
 
     @Override
@@ -59,5 +62,10 @@ public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> 
     @Override
     public ModPropertyContainer get() {
         return container;
+    }
+
+    @Override
+    public @NotNull GroovyPlugin.Priority getOverridePriority() {
+        return priority;
     }
 }

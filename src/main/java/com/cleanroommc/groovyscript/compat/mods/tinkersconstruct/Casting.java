@@ -38,7 +38,7 @@ public class Casting implements IDynamicGroovyProperty {
     }
 
     @Override
-    public Map<String, Object> getProperties() {
+    public Map<String, ?> getProperties() {
         return properties;
     }
 

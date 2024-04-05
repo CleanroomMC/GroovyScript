@@ -9,8 +9,10 @@ import java.lang.reflect.Modifier;
 /**
  * A helper interface to register {@link INamed registries} without having direct access to the
  * {@link com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer ModPropertyContainer}.
- * An instance can be obtained from {@link GroovyContainer#getVirtualizedRegistrar()}.
+ * An instance can be obtained from {@link GroovyContainer#getRegistrar()}.
  */
+@ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
+@Deprecated
 @ApiStatus.NonExtendable
 public interface IRegistrar {
 

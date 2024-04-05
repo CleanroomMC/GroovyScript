@@ -21,13 +21,13 @@ public class ExpansionHelper {
     }
 
     public static ExpandoMetaClass getExpandoClass(MetaClass clazz) {
-        if (clazz instanceof HandleMetaClass) {
-            clazz = (MetaClass) ((HandleMetaClass) clazz).replaceDelegate();
+        if (clazz instanceof HandleMetaClass handleMetaClass) {
+            clazz = (MetaClass) handleMetaClass.replaceDelegate();
         }
 
         if (!(clazz instanceof ExpandoMetaClass)) {
-            if (clazz instanceof DelegatingMetaClass && ((DelegatingMetaClass) clazz).getAdaptee() instanceof ExpandoMetaClass) {
-                clazz = ((DelegatingMetaClass) clazz).getAdaptee();
+            if (clazz instanceof DelegatingMetaClass delegatingMetaClass && delegatingMetaClass.getAdaptee() instanceof ExpandoMetaClass emc) {
+                clazz = emc;
             } else {
                 ExpandoMetaClass emc = new ExpandoMetaClass(clazz.getTheClass(), true, true);
                 emc.initialize();
@@ -100,6 +100,11 @@ public class ExpansionHelper {
                 mixinMethod(emc, (CachedMethod) method, mixin);
             }
         }
+    }
+
+    public static void mixinClosure(Class<?> self, String name, Closure<?> closure) {
+        ExpandoMetaClass emc = getExpandoClass(self);
+        emc.registerInstanceMethod(name, closure);
     }
 
     public static void mixinMethod(Class<?> self, Method method) {

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.gameobjects;
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
@@ -35,10 +36,14 @@ import java.util.Map;
 public class GameObjectHandlerManager {
 
     private static final Map<String, GameObjectHandler<?>> handlers = new Object2ObjectOpenHashMap<>();
+    private static final Map<Class<? extends ModPropertyContainer>, Map<String, GameObjectHandler<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
     public static final String EMPTY = "empty", WILDCARD = "*", SPLITTER = ":";
 
-    static void registerGameObjectHandler(GameObjectHandler<?> goh) {
+    static void registerGameObjectHandler(ModPropertyContainer container, GameObjectHandler<?> goh) {
         handlers.put(goh.getName(), goh);
+        if(container != null) {
+            modHandlers.computeIfAbsent(container.getClass(), k -> new Object2ObjectOpenHashMap<>()).put(goh.getName(), goh);
+        }
     }
 
     public static void init() {
@@ -137,6 +142,16 @@ public class GameObjectHandlerManager {
 
     public static boolean hasGameObjectHandler(String key) {
         return handlers.containsKey(key);
+    }
+
+    public static GameObjectHandler<?> getGameObjectHandler(String key) {
+        return handlers.get(key);
+    }
+
+    public static GameObjectHandler<?> getGameObjectHandler(Class<?> containerClass, String key) {
+        if (!ModPropertyContainer.class.isAssignableFrom(containerClass)) return null;
+        var map = modHandlers.get(containerClass);
+        return map != null ? map.get(key) : null;
     }
 
     public static Collection<GameObjectHandler<?>> getGameObjectHandlers() {

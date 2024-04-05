@@ -1,34 +1,44 @@
 package com.cleanroommc.groovyscript.gameobjects;
 
-import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
-import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.api.*;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
+import groovy.lang.Closure;
+import groovy.lang.ExpandoMetaClass;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.groovy.ast.ClassHelper;
+import org.codehaus.groovy.ast.MethodNode;
+import org.codehaus.groovy.ast.Parameter;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
+import org.jetbrains.annotations.ApiStatus;
 
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class GameObjectHandler<T> {
+public class GameObjectHandler<T> extends Closure<T> implements INamed {
 
     public static <T> Builder<T> builder(String name, Class<T> returnTpe) {
         return new Builder<>(name, returnTpe);
     }
 
     private final String name;
-    private final String mod;
+    private final GroovyContainer<?> mod;
     private final IGameObjectParser<T> handler;
     private final Supplier<Result<T>> defaultValue;
     private final Class<T> returnType;
     private final List<Class<?>[]> paramTypes;
     private final Completer completer;
+    private List<MethodNode> methodNodes;
 
-    private GameObjectHandler(String name, String mod, IGameObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer) {
+    private GameObjectHandler(String name, GroovyContainer<?> mod, IGameObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer) {
+        super(null);
         this.name = name;
         this.mod = mod;
         this.handler = handler;
@@ -55,8 +65,13 @@ public class GameObjectHandler<T> {
         return Objects.requireNonNull(t.getValue(), "Bracket handler result must contain a non-null value!");
     }
 
-    public String getMod() {
+    public GroovyContainer<?> getMod() {
         return mod;
+    }
+
+    @Override
+    public Collection<String> getAliases() {
+        return Collections.singleton(this.name);
     }
 
     public String getName() {
@@ -71,27 +86,57 @@ public class GameObjectHandler<T> {
         return returnType;
     }
 
+    @GroovyBlacklist
     public Completer getCompleter() {
         return completer;
+    }
+
+    public T doCall(String s, Object... args) {
+        return invoke(s, args);
+    }
+
+    public List<MethodNode> getMethodNodes() {
+        if (methodNodes == null) {
+            this.methodNodes = new ArrayList<>();
+            for (Class<?>[] paramType : this.paramTypes) {
+                Parameter[] params = new Parameter[paramType.length];
+                for (int i = 0; i < params.length; i++) {
+                    params[i] = new Parameter(ClassHelper.makeCached(paramType[i]), "arg" + i);
+                }
+                MethodNode node = new MethodNode(this.name, Modifier.PUBLIC | Modifier.FINAL, ClassHelper.makeCached(this.returnType), params, null, null);
+                node.setDeclaringClass(
+                        this.mod != null ? ClassHelper.makeCached(this.mod.get().getClass()) : ClassHelper.makeCached(GameObjectHandlerManager.class));
+                this.methodNodes.add(node);
+            }
+        }
+        return methodNodes;
     }
 
     public static class Builder<T> {
 
         private final String name;
-        private String mod;
+        private GroovyContainer<?> mod;
         private IGameObjectParser<T> handler;
         private Supplier<Result<T>> defaultValue;
         private final Class<T> returnType;
         private final List<Class<?>[]> paramTypes = new ArrayList<>();
         private Completer completer;
+        private String documentation;
 
+        @ApiStatus.Internal
         public Builder(String name, Class<T> returnType) {
             this.name = name;
             this.returnType = returnType;
         }
 
         public Builder<T> mod(String mod) {
-            this.mod = mod;
+            return mod(ModSupport.INSTANCE.getContainer(mod));
+        }
+
+        public Builder<T> mod(GroovyContainer<?> mod) {
+            if (this.mod == null) {
+                this.mod = mod;
+            }
             return this;
         }
 
@@ -147,18 +192,36 @@ public class GameObjectHandler<T> {
             return this;
         }
 
+        public Builder<T> documentation(String doc) {
+            this.documentation = doc;
+            return this;
+        }
+
+        public Builder<T> docOfType(String type) {
+            String mod = this.mod == null ? StringUtils.EMPTY : this.mod.getContainerName();
+            return documentation("returns a " + mod + " " + type);
+        }
+
         public void register() {
             if (this.name == null || this.name.isEmpty()) throw new IllegalArgumentException("Name must not be empty");
             if (GameObjectHandlerManager.hasGameObjectHandler(this.name))
                 throw new IllegalArgumentException("GameObjectHandler with name " + this.name + " already exists");
-            if (this.mod != null && !Loader.isModLoaded(this.mod))
+            if (this.mod != null && !this.mod.isLoaded())
                 throw new IllegalArgumentException("Tried to register GameObjectHandler for mod " + this.mod + ", but it's not loaded");
             Objects.requireNonNull(this.handler, () -> "The GameObjectHandler function must no be null");
             Objects.requireNonNull(this.returnType, () -> "The GameObjectHandler return type must not be null");
             if (this.paramTypes.isEmpty()) this.paramTypes.add(new Class[]{String.class});
             if (this.defaultValue == null) this.defaultValue = () -> null;
-            GameObjectHandlerManager.registerGameObjectHandler(new GameObjectHandler<>(this.name, this.mod, this.handler, this.defaultValue,
-                                                                                       this.returnType, this.paramTypes, this.completer));
+            GameObjectHandler<T> goh = new GameObjectHandler<>(this.name, this.mod, this.handler, this.defaultValue,
+                                                               this.returnType, this.paramTypes, this.completer);
+            GameObjectHandlerManager.registerGameObjectHandler(this.mod == null ? null : this.mod.get(), goh);
+            if (this.mod != null) {
+                Class<?> clazz = this.mod.get().getClass();
+                for (Class<?>[] paramTypes : goh.paramTypes) {
+                    ExpandoMetaClass emc = ExpansionHelper.getExpandoClass(clazz);
+                    emc.registerInstanceMethod(new GohMetaMethod(goh, paramTypes, clazz, this.documentation != null ? this.documentation : StringUtils.EMPTY));
+                }
+            }
         }
     }
 }
