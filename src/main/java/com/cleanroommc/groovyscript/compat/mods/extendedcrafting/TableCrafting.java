@@ -45,9 +45,9 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.table_crafting.addShaped1", type = MethodDescription.Type.ADDITION)
     public ITieredRecipe addShaped(int tier, ItemStack output, List<List<IIngredient>> input) {
-        return (ITieredRecipe) shapedBuilder()
-                .matrix(input)
+        return shapedBuilder()
                 .tier(tier)
+                .matrix(input)
                 .output(output)
                 .register();
     }
@@ -59,9 +59,9 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.table_crafting.addShapeless1", type = MethodDescription.Type.ADDITION)
     public ITieredRecipe addShapeless(int tier, ItemStack output, List<IIngredient> input) {
-        return (ITieredRecipe) shapelessBuilder()
-                .input(input)
+        return shapelessBuilder()
                 .tier(tier)
+                .input(input)
                 .output(output)
                 .register();
     }

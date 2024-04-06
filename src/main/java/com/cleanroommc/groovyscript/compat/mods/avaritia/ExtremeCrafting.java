@@ -37,7 +37,7 @@ public class ExtremeCrafting extends VirtualizedRegistry<IExtremeRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public IExtremeRecipe addShaped(ItemStack output, List<List<IIngredient>> input) {
-        return (IExtremeRecipe) shapedBuilder()
+        return shapedBuilder()
                 .matrix(input)
                 .output(output)
                 .register();
@@ -45,7 +45,7 @@ public class ExtremeCrafting extends VirtualizedRegistry<IExtremeRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public IExtremeRecipe addShapeless(ItemStack output, List<IIngredient> input) {
-        return (IExtremeRecipe) shapelessBuilder()
+        return shapelessBuilder()
                 .input(input)
                 .output(output)
                 .register();
