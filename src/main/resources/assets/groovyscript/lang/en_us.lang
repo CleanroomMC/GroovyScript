@@ -1303,6 +1303,28 @@ groovyscript.wiki.roots.transmutation.removeByName=Removes the Transmutation rec
 groovyscript.wiki.roots.transmutation.removeByOutput0=Removes the Transmutation recipe for the given output itemstack
 groovyscript.wiki.roots.transmutation.removeByOutput1=Removes the Transmutation recipe for the given output IBlockState
 
+
+# Rustic
+groovyscript.wiki.rustic.alchemy.title=Alchemy Condenser
+groovyscript.wiki.rustic.alchemy.description=Converts some number of input itemstacks and a fluidstack into a single output stack after a time in a small multiblock structure, with a basic and advanced tier.
+groovyscript.wiki.rustic.alchemy.advanced.value=Sets if the recipe occurs in the normal Condenser or the Advanced Condenser
+groovyscript.wiki.rustic.alchemy.bottle.value=Sets the itemstack used in the bottle slot
+groovyscript.wiki.rustic.alchemy.effect.value=Sets the potion effect the output potion contains, if output is not set
+groovyscript.wiki.rustic.alchemy.modifier.value=Sets the additional item input modifier, used exclusively in the Advanced Condenser
+groovyscript.wiki.rustic.alchemy.time.value=Sets the time in ticks the recipe will take
+
+groovyscript.wiki.rustic.brewing_barrel.title=Brewing Barrel
+groovyscript.wiki.rustic.brewing_barrel.description=Converts a fluid into another fluid after a long period of time. If the fluid is an instanceof FluidBooze, has a variable Quality that can be refined through further cycles of conversion.
+
+groovyscript.wiki.rustic.crushing_tub.title=Crushing Tub
+groovyscript.wiki.rustic.crushing_tub.description=Convert items into a fluidstacks and optionally itemstacks when any entity, typically a player, lands atop it.
+groovyscript.wiki.rustic.crushing_tub.byproduct.value=Sets the itemstack output in addition to the fluid
+
+groovyscript.wiki.rustic.evaporating_basin.title=Drying Basin
+groovyscript.wiki.rustic.evaporating_basin.description=Converts fluids into itemstacks over time.
+groovyscript.wiki.rustic.evaporating_basin.time.value=Sets the time in ticks the recipe will take
+
+
 # Thaumcraft
 groovyscript.wiki.thaumcraft.arcane_workbench.title=Arcane Workbench
 groovyscript.wiki.thaumcraft.arcane_workbench.description=A special crafting table, allowing additional requirements in the form of Vis Crystals, Vis, and having a specific research.
