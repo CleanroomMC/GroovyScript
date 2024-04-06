@@ -67,7 +67,7 @@ public class GameObjectHandler<T> extends Closure<T> implements INamed, IDocumen
                 GroovyLog.get().error(" - reason: {}", t.getError());
             }
             t = this.defaultValue.get();
-            return t.hasError() ? null : t.getValue();
+            return t == null || t.hasError() ? null : t.getValue();
         }
         return Objects.requireNonNull(t.getValue(), "Bracket handler result must contain a non-null value!");
     }
