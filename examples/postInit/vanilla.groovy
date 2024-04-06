@@ -15,6 +15,10 @@ log.info((item_iron * 3) << ore_iron) // false
 log.info(ore_iron >> item_iron) // true
 log.info(ore_iron >> (item_iron * 3)) // false
 
+/*file('config/').eachFile { file ->
+    println file.path
+}*/
+
 // Crafting recipes are typically created via recipe builder, but also have shorthand versions for some common uses.
 // Here are a series of examples, with the shorthand and corresponding recipe builder:
 
