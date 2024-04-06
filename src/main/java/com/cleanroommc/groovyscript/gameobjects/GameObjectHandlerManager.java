@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.gameobjects;
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -28,21 +29,33 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class GameObjectHandlerManager {
 
     private static final Map<String, GameObjectHandler<?>> handlers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, List<GameObjectHandler<?>>> handlerConflicts = new Object2ObjectOpenHashMap<>();
     private static final Map<Class<? extends ModPropertyContainer>, Map<String, GameObjectHandler<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
     public static final String EMPTY = "empty", WILDCARD = "*", SPLITTER = ":";
 
-    static void registerGameObjectHandler(ModPropertyContainer container, GameObjectHandler<?> goh) {
-        handlers.put(goh.getName(), goh);
-        if(container != null) {
-            modHandlers.computeIfAbsent(container.getClass(), k -> new Object2ObjectOpenHashMap<>()).put(goh.getName(), goh);
+    static void registerGameObjectHandler(GroovyContainer<?> container, GameObjectHandler<?> goh) {
+        String key = goh.getName();
+        if (handlerConflicts.containsKey(key)) {
+            handlerConflicts.get(key).add(goh);
+        } else if (handlers.containsKey(key)) {
+            List<GameObjectHandler<?>> conflicts = handlerConflicts.computeIfAbsent(key, k -> new ArrayList<>());
+            conflicts.add(handlers.remove(key));
+            conflicts.add(goh);
+        } else {
+            handlers.put(key, goh);
+        }
+        if (container != null) {
+            ModPropertyContainer propertyContainer = container.get();
+            var map = modHandlers.computeIfAbsent(propertyContainer.getClass(), k -> new Object2ObjectOpenHashMap<>());
+            if (map.containsKey(key)) {
+                throw new IllegalStateException("There already is a GOH with name '" + key + "' in mod " + container.getContainerName());
+            }
+            map.put(key, goh);
         }
     }
 
@@ -162,6 +175,10 @@ public class GameObjectHandlerManager {
 
     public static GameObjectHandler<?> getGameObjectHandler(String key) {
         return handlers.get(key);
+    }
+
+    public static List<GameObjectHandler<?>> getConflicts(String key) {
+        return handlerConflicts.get(key);
     }
 
     public static GameObjectHandler<?> getGameObjectHandler(Class<?> containerClass, String key) {

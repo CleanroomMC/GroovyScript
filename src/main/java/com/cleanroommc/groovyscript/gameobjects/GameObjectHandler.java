@@ -217,8 +217,6 @@ public class GameObjectHandler<T> extends Closure<T> implements INamed, IDocumen
 
         public void register() {
             if (this.name == null || this.name.isEmpty()) throw new IllegalArgumentException("Name must not be empty");
-            if (GameObjectHandlerManager.hasGameObjectHandler(this.name))
-                throw new IllegalArgumentException("GameObjectHandler with name " + this.name + " already exists");
             if (this.mod != null && !this.mod.isLoaded())
                 throw new IllegalArgumentException("Tried to register GameObjectHandler for mod " + this.mod + ", but it's not loaded");
             Objects.requireNonNull(this.handler, () -> "The GameObjectHandler function must no be null");
@@ -228,7 +226,7 @@ public class GameObjectHandler<T> extends Closure<T> implements INamed, IDocumen
             this.documentation = IDocumented.toJavaDoc(this.documentation);
             GameObjectHandler<T> goh = new GameObjectHandler<>(this.name, this.mod, this.handler, this.defaultValue,
                                                                this.returnType, this.paramTypes, this.completer, this.documentation);
-            GameObjectHandlerManager.registerGameObjectHandler(this.mod == null ? null : this.mod.get(), goh);
+            GameObjectHandlerManager.registerGameObjectHandler(this.mod, goh);
             if (this.mod != null) {
                 Class<?> clazz = this.mod.get().getClass();
                 for (Class<?>[] paramTypes : goh.paramTypes) {
