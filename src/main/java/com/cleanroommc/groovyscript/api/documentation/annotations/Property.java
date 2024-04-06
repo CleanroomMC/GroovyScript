@@ -6,9 +6,18 @@ import java.lang.reflect.Field;
 /**
  * Functions in one of three ways depending on what the annotation is attached to:
  * <ul>
- *     <li>{@link ElementType#FIELD}: Marks the target field with this {@link Property}. {@link #property()} must be either set to the field name or unset.</li>
- *     <li>{@link ElementType#TYPE}: Marks the field targeted by {@link #property()} within the attached class with this {@link Property}.</li>
- *     <li>{@link ElementType#METHOD}: Marks the field targeted by {@link #property()} within the class the attached method returns with this {@link Property}.</li>
+ *     <li>
+ *         {@link ElementType#FIELD}: Marks the target field with this {@link Property}. {@link #property()} must be either set to the field name or unset.
+ *         Can only allow one annotation per field.
+ *     </li>
+ *     <li>
+ *         {@link ElementType#TYPE}: Marks the field targeted by {@link #property()} within the attached class with this {@link Property}.
+ *         Multiple will be wrapped in {@link Properties}.
+ *     </li>
+ *     <li>
+ *         {@link ElementType#METHOD}: Marks the field targeted by {@link #property()} within the class the attached method returns with this {@link Property}.
+ *         Can only be attached via being inside {@link RecipeBuilderDescription#requirement()}.
+ *     </li>
  * </ul>
  * <p>
  * Elements:
@@ -38,7 +47,7 @@ import java.lang.reflect.Field;
  */
 @Repeatable(Property.Properties.class)
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.FIELD, ElementType.TYPE})
 public @interface Property {
 
     /**
@@ -123,7 +132,9 @@ public @interface Property {
 
     /**
      * Controls if the property needs an overriding property to enable it. Used in wrapper classes, such as {@link com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder AbstractRecipeBuilderr}, where some or all of the fields
-     * may not be needed in subclasses. At least one property must have this element be {@code true} for the property to be documented.
+     * may not be needed in subclasses.
+     * This can also be used to effectively disable properties from being documented by attaching it to the lowest hierarchy.
+     * The annotation for the given property field with the lowest {@link #hierarchy} score must have this be {@code false} for the property to be documented.
      *
      * @return if the property needs an overriding annotation to enable it, defaults to {@code false}
      */
@@ -147,11 +158,14 @@ public @interface Property {
 
     /**
      * Wrapper to allow repeatable instances of {@link Property}.
+     * If more than one {@link Property} is applied to anywhere other than a class, it will generate an error.
+     * For a given Field. only a single {@link Property} should be attached,
+     * and for a given Method, all {@link Property} annotations should be placed inside {@link RecipeBuilderDescription#requirement()}
      *
      * @see Property
      */
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD})
+    @Target(ElementType.TYPE)
     @interface Properties {
 
         Property[] value();

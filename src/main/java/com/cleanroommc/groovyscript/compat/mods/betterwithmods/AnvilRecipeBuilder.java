@@ -3,113 +3,21 @@ package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 import betterwithmods.common.registry.anvil.ShapedAnvilRecipe;
 import betterwithmods.common.registry.anvil.ShapelessAnvilRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.vanilla.CraftingRecipeBuilder;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import com.cleanroommc.groovyscript.registry.AbstractCraftingRecipeBuilder;
 import net.minecraft.item.crafting.IRecipe;
-import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+public interface AnvilRecipeBuilder {
 
-public abstract class AnvilRecipeBuilder extends CraftingRecipeBuilder {
-
-    public AnvilRecipeBuilder() {
-        super(4, 4);
-    }
-
-    public static class Shaped extends AnvilRecipeBuilder {
-
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value", defaultValue = "' ' = IIngredient.EMPTY", priority = 200)
-        private final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
-        private final List<String> errors = new ArrayList<>();
-        @Property("groovyscript.wiki.craftingrecipe.mirrored.value")
-        protected boolean mirrored = false;
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", priority = 210)
-        private String[] keyBasedMatrix;
-        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", valid = {
-                @Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "81", type = Comp.Type.LTE)}, priority = 250)
-        private List<List<IIngredient>> ingredientMatrix;
+    @Property(property = "ingredientMatrix", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "16", type = Comp.Type.LTE)})
+    class Shaped extends AbstractCraftingRecipeBuilder.AbstractShaped<IRecipe> {
 
         public Shaped() {
-            keyMap.put(' ', IIngredient.EMPTY);
-        }
-
-        @RecipeBuilderMethodDescription
-        public AnvilRecipeBuilder.Shaped mirrored(boolean mirrored) {
-            this.mirrored = mirrored;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public AnvilRecipeBuilder.Shaped mirrored() {
-            return mirrored(true);
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
-        public AnvilRecipeBuilder.Shaped matrix(String... matrix) {
-            this.keyBasedMatrix = matrix;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
-        public AnvilRecipeBuilder.Shaped shape(String... matrix) {
-            this.keyBasedMatrix = matrix;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
-        public AnvilRecipeBuilder.Shaped row(String row) {
-            if (this.keyBasedMatrix == null) {
-                this.keyBasedMatrix = new String[]{row};
-            } else {
-                this.keyBasedMatrix = ArrayUtils.add(this.keyBasedMatrix, row);
-            }
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyMap")
-        public AnvilRecipeBuilder.Shaped key(char c, IIngredient ingredient) {
-            this.keyMap.put(c, ingredient);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyMap")
-        public AnvilRecipeBuilder.Shaped key(String c, IIngredient ingredient) {
-            if (c == null || c.length() != 1) {
-                errors.add("key must be a single char, but found '" + c + "'");
-                return this;
-            }
-            this.keyMap.put(c.charAt(0), ingredient);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "keyMap")
-        public AnvilRecipeBuilder.Shaped key(Map<String, IIngredient> map) {
-            for (Map.Entry<String, IIngredient> x : map.entrySet()) {
-                key(x.getKey(), x.getValue());
-            }
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "ingredientMatrix")
-        public AnvilRecipeBuilder.Shaped matrix(List<List<IIngredient>> matrix) {
-            this.ingredientMatrix = matrix;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "ingredientMatrix")
-        public AnvilRecipeBuilder.Shaped shape(List<List<IIngredient>> matrix) {
-            this.ingredientMatrix = matrix;
-            return this;
+            super(4, 4);
         }
 
         @Override
@@ -128,42 +36,18 @@ public abstract class AnvilRecipeBuilder extends CraftingRecipeBuilder {
             }
             if (msg.postIfNotEmpty()) return null;
             if (recipe != null) {
+                handleReplace();
                 ModSupport.BETTER_WITH_MODS.get().anvilCrafting.add(recipe);
             }
             return recipe;
         }
     }
 
-    public static class Shapeless extends AnvilRecipeBuilder {
+    @Property(property = "ingredients", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "16", type = Comp.Type.LTE)})
+    class Shapeless extends AbstractCraftingRecipeBuilder.AbstractShapeless<IRecipe> {
 
-        @Property(value = "groovyscript.wiki.craftingrecipe.ingredients.value", valid = {@Comp(value = "1", type = Comp.Type.GTE),
-                                                                                         @Comp(value = "81", type = Comp.Type.LTE)}, priority = 250)
-        private final List<IIngredient> ingredients = new ArrayList<>();
-
-        @RecipeBuilderMethodDescription(field = "ingredients")
-        public AnvilRecipeBuilder.Shapeless input(IIngredient ingredient) {
-            ingredients.add(ingredient);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "ingredients")
-        public AnvilRecipeBuilder.Shapeless input(IIngredient... ingredients) {
-            if (ingredients != null) {
-                for (IIngredient ingredient : ingredients) {
-                    input(ingredient);
-                }
-            }
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "ingredients")
-        public AnvilRecipeBuilder.Shapeless input(Collection<IIngredient> ingredients) {
-            if (ingredients != null && !ingredients.isEmpty()) {
-                for (IIngredient ingredient : ingredients) {
-                    input(ingredient);
-                }
-            }
-            return this;
+        public Shapeless() {
+            super(4, 4);
         }
 
         public boolean validate() {

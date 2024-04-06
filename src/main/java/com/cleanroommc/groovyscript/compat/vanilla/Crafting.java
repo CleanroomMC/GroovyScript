@@ -207,10 +207,10 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> {
     }
 
     public CraftingRecipeBuilder.Shaped shapedBuilder() {
-        return new CraftingRecipeBuilder.Shaped(3, 3);
+        return new CraftingRecipeBuilder.Shaped();
     }
 
     public CraftingRecipeBuilder.Shapeless shapelessBuilder() {
-        return new CraftingRecipeBuilder.Shapeless(3, 3);
+        return new CraftingRecipeBuilder.Shapeless();
     }
 }
