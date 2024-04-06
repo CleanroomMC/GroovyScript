@@ -210,19 +210,26 @@ dependencies {
     if (project.debug_immersive_engineering.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
     }
+    compileOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
+    if (project.debug_roots.toBoolean() || project.debug_natures_aura.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
+    }
 
     compileOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
     if (project.debug_roots.toBoolean() || project.debug_arcane_archives.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
     }
 
-    compileOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
     compileOnly rfg.deobf('curse.maven:mystical_world-282940:3460961')
     compileOnly rfg.deobf('curse.maven:roots-246183:3905074')
     if (project.debug_roots.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
         runtimeOnly rfg.deobf('curse.maven:mystical_world-282940:3460961')
         runtimeOnly rfg.deobf('curse.maven:roots-246183:3905074')
+    }
+
+    compileOnly rfg.deobf('curse.maven:natures-aura-306626:2882138')
+    if (project.debug_natures_aura.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:natures-aura-306626:2882138')
     }
 
     // gigaherz.lirelent.guidebook:Guidebook-1.12.2:2.9.1.s5

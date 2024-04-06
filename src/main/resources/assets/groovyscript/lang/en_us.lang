@@ -1156,6 +1156,39 @@ groovyscript.wiki.mekanism.washer.title=Washer
 groovyscript.wiki.mekanism.washer.description=Converts an input gasstack into an output gasstack at the cost of 5mb of water.
 groovyscript.wiki.mekanism.washer.add=Adds recipes in the format `input`, `output`
 
+
+# Nature's Aura
+groovyscript.wiki.naturesaura.altar.title=Natural Altar Infusion
+groovyscript.wiki.naturesaura.altar.description=Converts an input itemstack into an itemstack in a multiblock structure, with an optional catalyst block, costing aura and taking a configurable duration.
+groovyscript.wiki.naturesaura.altar.aura.value=Sets how much aura the recipe drains from the environment
+groovyscript.wiki.naturesaura.altar.time.value=Sets the time the recipe takes to complete
+groovyscript.wiki.naturesaura.altar.catalyst.value=Sets the catalyst item
+groovyscript.wiki.naturesaura.altar.removeByName=Removes the Natural Altar Infusion recipe with the given name
+
+groovyscript.wiki.naturesaura.offering.title=Offering to the Gods
+groovyscript.wiki.naturesaura.offering.description=Converts up to 16 times the input itemstack into output itemstacks by consuming a catalyst item from the ground in a multiblock structure.
+groovyscript.wiki.naturesaura.offering.note0=The Offering Table can hold up to 16 items, and will try to run the recipe as many times as possible for a single catalyst item.
+groovyscript.wiki.naturesaura.offering.catalyst.value=Sets the catalyst item
+groovyscript.wiki.naturesaura.offering.removeByName=Removes the Offering to the Gods recipe with the given name
+
+groovyscript.wiki.naturesaura.ritual.title=Ritual of the Forest
+groovyscript.wiki.naturesaura.ritual.description=Converts multiple input items into an output itemstack after a duration when a sapling grows in the middle of a multiblock structure.
+groovyscript.wiki.naturesaura.ritual.note0=The sapling used must extended `BlockSapling` for the recipe to function properly.
+groovyscript.wiki.naturesaura.ritual.time.value=Sets the time the recipe takes to complete
+groovyscript.wiki.naturesaura.ritual.sapling.value=Sets the sapling used
+groovyscript.wiki.naturesaura.ritual.removeByName=Removes the Ritual of the Forest recipe with the given name
+groovyscript.wiki.naturesaura.ritual.removeBySapling=Removes all Rituals of the Forest using the given sapling
+
+groovyscript.wiki.naturesaura.spawning.title=Altar of Birthing
+groovyscript.wiki.naturesaura.spawning.description=Converts multiple input itemstacks into a summoned entity, costing aura and taking time.
+groovyscript.wiki.naturesaura.spawning.note0=While more than 4 items can function as the input of a Altar of Birthing recipe, only the first 4 are shown in JEI.
+groovyscript.wiki.naturesaura.spawning.aura.value=Sets how much aura the recipe drains from the environment
+groovyscript.wiki.naturesaura.spawning.time.value=Sets the time the recipe takes to complete
+groovyscript.wiki.naturesaura.spawning.entity.value=Sets the entity spawned
+groovyscript.wiki.naturesaura.spawning.removeByEntity=Removes all Altar of Birthing recipes that summon the given entity
+groovyscript.wiki.naturesaura.spawning.removeByName=Removes the Altar of Birthing recipe with the given name
+
+
 # Roots
 groovyscript.wiki.roots.animal_harvest.title=Animal Harvest
 groovyscript.wiki.roots.animal_harvest.description=Animal Harvest is a ritual that drops items from nearby mob's based on that mobs loottable without harming the mob. Only applies to allowed mobs.
