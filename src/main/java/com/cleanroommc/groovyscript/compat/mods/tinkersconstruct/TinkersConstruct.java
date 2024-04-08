@@ -24,6 +24,7 @@ public class TinkersConstruct extends ModPropertyContainer {
     public TinkersConstruct() {
         addRegistry(drying);
         addRegistry(melting);
+        addRegistry(melting.entityMelting);
         addRegistry(smelteryFuel);
         addRegistry(alloying);
         addRegistry(casting.table);

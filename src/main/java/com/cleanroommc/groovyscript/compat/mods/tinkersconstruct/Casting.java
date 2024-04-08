@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
@@ -42,8 +43,10 @@ public class Casting implements IDynamicGroovyProperty {
         return properties;
     }
 
+    @RegistryDescription
     public static class Table extends VirtualizedRegistry<ICastingRecipe> {
 
+        @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('lava') * 50).output(item('minecraft:diamond')).castingTime(750).consumesCast(true).cast(ore('gemEmerald'))"))
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }
@@ -68,6 +71,7 @@ public class Casting implements IDynamicGroovyProperty {
             return true;
         }
 
+        @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:iron_ingot')"))
         public boolean removeByOutput(ItemStack output) {
             if (TinkerRegistryAccessor.getTableCastRegistry().removeIf(recipe -> {
                 boolean found = recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER).isItemEqual(output);
@@ -82,6 +86,7 @@ public class Casting implements IDynamicGroovyProperty {
             return false;
         }
 
+        @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('iron')"))
         public boolean removeByInput(FluidStack input) {
             if (TinkerRegistryAccessor.getTableCastRegistry().removeIf(recipe -> {
                 boolean found = recipe.getFluid(ItemStack.EMPTY, input.getFluid()).isFluidEqual(input);
@@ -96,6 +101,7 @@ public class Casting implements IDynamicGroovyProperty {
             return false;
         }
 
+        @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:bucket')"))
         public boolean removeByCast(IIngredient cast) {
             if (TinkerRegistryAccessor.getTableCastRegistry().removeIf(recipe -> {
                 boolean found = recipe.matches(cast.getMatchingStacks()[0], recipe.getFluid(cast.getMatchingStacks()[0], FluidRegistry.WATER).getFluid());
@@ -110,35 +116,44 @@ public class Casting implements IDynamicGroovyProperty {
             return false;
         }
 
+        @MethodDescription(description = "groovyscript.wiki.removeAll")
         public void removeAll() {
             TinkerRegistryAccessor.getTableCastRegistry().forEach(this::addBackup);
             TinkerRegistryAccessor.getTableCastRegistry().forEach(TinkerRegistryAccessor.getTableCastRegistry()::remove);
         }
 
+        @MethodDescription(description = "groovyscript.wiki.streamRecipes")
         public SimpleObjectStream<ICastingRecipe> streamRecipes() {
             return new SimpleObjectStream<>(TinkerRegistryAccessor.getTableCastRegistry()).setRemover(this::remove);
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<ICastingRecipe> {
 
+            @Property
             private IIngredient cast;
+            @Property(defaultValue = "200", valid = @Comp(value = "1", type = Comp.Type.GTE))
             private int time = 200;
+            @Property(defaultValue = "false")
             private boolean consumesCast = false;
 
+            @RecipeBuilderMethodDescription(field = "time")
             public RecipeBuilder coolingTime(int time) {
                 this.time = Math.max(time, 1);
                 return this;
             }
 
+            @RecipeBuilderMethodDescription(field = "consumesCast")
             public RecipeBuilder consumesCast(boolean consumesCast) {
                 this.consumesCast = consumesCast;
                 return this;
             }
 
+            @RecipeBuilderMethodDescription(field = "consumesCast")
             public RecipeBuilder consumesCast() {
                 return consumesCast(!consumesCast);
             }
 
+            @RecipeBuilderMethodDescription(field = "cast")
             public RecipeBuilder cast(IIngredient ingredient) {
                 this.cast = ingredient;
                 return this;
@@ -166,8 +181,10 @@ public class Casting implements IDynamicGroovyProperty {
         }
     }
 
+    @RegistryDescription
     public static class Basin extends VirtualizedRegistry<ICastingRecipe> {
 
+        @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).output(item('minecraft:dirt')).cast(item('minecraft:cobblestone')).coolingTime(40))"))
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }
@@ -192,6 +209,7 @@ public class Casting implements IDynamicGroovyProperty {
             return true;
         }
 
+        @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:iron_block')"))
         public boolean removeByOutput(ItemStack output) {
             if (TinkerRegistryAccessor.getBasinCastRegistry().removeIf(recipe -> {
                 boolean found = ItemStack.areItemStacksEqual(recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER), output);
@@ -206,6 +224,7 @@ public class Casting implements IDynamicGroovyProperty {
             return false;
         }
 
+        @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('lava')"))
         public boolean removeByInput(FluidStack input) {
             if (TinkerRegistryAccessor.getBasinCastRegistry().removeIf(recipe -> {
                 boolean found = recipe.getFluid(ItemStack.EMPTY, input.getFluid()).isFluidEqual(input);
@@ -220,6 +239,7 @@ public class Casting implements IDynamicGroovyProperty {
             return false;
         }
 
+        @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:oak_planks')"))
         public boolean removeByCast(IIngredient cast) {
             ItemStack castStack = cast.getMatchingStacks()[0];
             if (TinkerRegistryAccessor.getBasinCastRegistry().removeIf(recipe -> {
@@ -235,35 +255,44 @@ public class Casting implements IDynamicGroovyProperty {
             return false;
         }
 
+        @MethodDescription(description = "groovyscript.wiki.removeAll")
         public void removeAll() {
             TinkerRegistryAccessor.getBasinCastRegistry().forEach(this::addBackup);
             TinkerRegistryAccessor.getBasinCastRegistry().forEach(TinkerRegistryAccessor.getBasinCastRegistry()::remove);
         }
 
+        @MethodDescription(description = "groovyscript.wiki.streamRecipes")
         public SimpleObjectStream<ICastingRecipe> streamRecipes() {
             return new SimpleObjectStream<>(TinkerRegistryAccessor.getBasinCastRegistry()).setRemover(this::remove);
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<ICastingRecipe> {
 
+            @Property
             private IIngredient cast;
+            @Property(defaultValue = "200", valid = @Comp(value = "1", type = Comp.Type.GTE))
             private int time = 200;
+            @Property(defaultValue = "false")
             private boolean consumesCast = false;
 
+            @RecipeBuilderMethodDescription(field = "time")
             public RecipeBuilder coolingTime(int time) {
                 this.time = Math.max(time, 1);
                 return this;
             }
 
+            @RecipeBuilderMethodDescription(field = "consumesCast")
             public RecipeBuilder consumesCast(boolean consumesCast) {
                 this.consumesCast = consumesCast;
                 return this;
             }
 
+            @RecipeBuilderMethodDescription(field = "consumesCast")
             public RecipeBuilder consumesCast() {
                 return consumesCast(!consumesCast);
             }
 
+            @RecipeBuilderMethodDescription(field = "cast")
             public RecipeBuilder cast(IIngredient ingredient) {
                 this.cast = ingredient;
                 return this;

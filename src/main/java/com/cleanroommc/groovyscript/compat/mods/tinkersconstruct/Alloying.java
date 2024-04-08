@@ -2,6 +2,10 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -13,8 +17,10 @@ import slimeknights.tconstruct.library.smeltery.AlloyRecipe;
 import java.util.Arrays;
 import java.util.List;
 
+@RegistryDescription
 public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
 
+    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 3).fluidInputs(fluid('clay') * 1,fluid('lava') * 2)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -26,6 +32,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         restoreFromBackup().forEach(TinkerRegistryAccessor.getAlloyRegistry()::add);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("fluid('lava') * 144, fluid('water') * 500, fluid('iron') * 5, fluid('clay') * 60"))
     public AlloyRecipe add(FluidStack output, FluidStack... inputs) {
         AlloyRecipe recipe = new AlloyRecipe(output, inputs);
         add(recipe);
@@ -45,6 +52,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return true;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
     public boolean removeByOutput(FluidStack output) {
         if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
             boolean found = recipe.getResult().isFluidEqual(output);
@@ -59,6 +67,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInputs(FluidStack... inputs) {
         List<FluidStack> list = Arrays.asList(inputs);
         if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
@@ -74,6 +83,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return false;
     }
 
+    @MethodDescription(type = MethodDescription.Type.REMOVAL)
     public boolean removeByInputsAndOutput(FluidStack output, FluidStack... inputs) {
         List<FluidStack> list = Arrays.asList(inputs);
         if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
@@ -89,11 +99,13 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return false;
     }
 
+    @MethodDescription(description = "groovyscript.wiki.removeAll")
     public void removeAll() {
         TinkerRegistryAccessor.getAlloyRegistry().forEach(this::addBackup);
         TinkerRegistryAccessor.getAlloyRegistry().forEach(TinkerRegistryAccessor.getAlloyRegistry()::remove);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes")
     public SimpleObjectStream<AlloyRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getAlloyRegistry()).setRemover(this::remove);
     }

@@ -6,6 +6,8 @@ import c4.conarm.lib.materials.PlatesMaterialStats;
 import c4.conarm.lib.materials.TrimMaterialStats;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
@@ -26,23 +28,36 @@ public class ToolMaterialBuilder {
     public static final List<GroovyMaterial> addedMaterials = new ArrayList<>();
 
     public final String name;
+    @Property
     public int color = 0xFFFFFF;
+    @Property
     public boolean hidden = false;
+    @Property
     public boolean craftable = false;
+    @Property(defaultValue = "true")
     public boolean castable = true;
+    @Property
     public String displayName;
+    @Property
     public FluidStack fluid;
+    @Property
     public IIngredient representativeItem;
+    @Property
     public IIngredient shard;
+    @Property
     public BiFunction<Material, String, String> localizer;
+    @Property
     protected Map<String, List<String>> traits = new HashMap<>();
+    @Property
     protected List<MaterialRepairIngredient> repairIngredients = new ArrayList<>();
+    @Property
     protected final Map<String, IMaterialStats> stats = new HashMap<>(8);
 
     public ToolMaterialBuilder(String name) {
         this.name = name;
     }
 
+    @RecipeBuilderMethodDescription(field = "traits")
     public ToolMaterialBuilder addTrait(String trait, @Nullable String dependency) {
         String key = dependency != null ? dependency : "all";
         this.traits.computeIfAbsent(key, k -> new ArrayList<>());
@@ -50,18 +65,22 @@ public class ToolMaterialBuilder {
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "traits")
     public ToolMaterialBuilder addTrait(String trait) {
         return addTrait(trait, null);
     }
 
+    @RecipeBuilderMethodDescription(field = "traits")
     public ToolMaterialBuilder addTrait(ITrait trait, @Nullable String dependency) {
         return addTrait(trait.getIdentifier(), dependency);
     }
 
+    @RecipeBuilderMethodDescription(field = "traits")
     public ToolMaterialBuilder addTrait(ITrait trait) {
         return addTrait(trait, null);
     }
 
+    @RecipeBuilderMethodDescription(field = "traits")
     public ToolMaterialBuilder addArmorTrait(String trait) {
         String name = trait.endsWith("_armor") ? trait : trait + "_armor";
         addTrait(name, "core");
@@ -70,80 +89,97 @@ public class ToolMaterialBuilder {
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "traits")
     public ToolMaterialBuilder addArmorTrait(ITrait trait) {
         return addArmorTrait(trait.getIdentifier());
     }
 
+    @RecipeBuilderMethodDescription(field = "shard")
     public ToolMaterialBuilder setShardItem(IIngredient shard) {
         this.shard = shard;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "repairIngredients")
     public ToolMaterialBuilder addRepairItem(IIngredient repair, int amountNeeded, int amountMatched) {
         this.repairIngredients.add(new MaterialRepairIngredient(repair, amountNeeded, amountMatched));
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "representativeItem")
     public ToolMaterialBuilder setRepresentativeItem(IIngredient item) {
         this.representativeItem = item;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "fluid")
     public ToolMaterialBuilder setFluid(FluidStack fluid) {
         this.fluid = fluid;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "displayName")
     public ToolMaterialBuilder setDisplayName(String name) {
         this.displayName = name;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "displayName")
     public ToolMaterialBuilder setLocalizedName(String name) {
         return setDisplayName(name);
     }
 
+    @RecipeBuilderMethodDescription(field = "color")
     public ToolMaterialBuilder setColor(int color) {
         this.color = color;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "color")
     public ToolMaterialBuilder setColor(Color color) {
         return setColor(color.getRGB());
     }
 
+    @RecipeBuilderMethodDescription(field = "color")
     public ToolMaterialBuilder setColor(int r, int g, int b) {
         return setColor(new Color(r, g, b));
     }
 
+    @RecipeBuilderMethodDescription(field = "localizer")
     public ToolMaterialBuilder setLocalizer(BiFunction<Material, String, String> localizer) {
         this.localizer = localizer;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "isHidden")
     public ToolMaterialBuilder isHidden(boolean hidden) {
         this.hidden = hidden;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "isCraftable")
     public ToolMaterialBuilder isCraftable(boolean craftable) {
         this.craftable = craftable;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "isCastable")
     public ToolMaterialBuilder isCastable(boolean castable) {
         this.castable = castable;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "isHidden")
     public ToolMaterialBuilder isHidden() {
         return isHidden(!hidden);
     }
 
+    @RecipeBuilderMethodDescription(field = "isCraftable")
     public ToolMaterialBuilder isCraftable() {
         return isCraftable(!craftable);
     }
 
+    @RecipeBuilderMethodDescription(field = "isCastable")
     public ToolMaterialBuilder isCastable() {
         return isCastable(!castable);
     }

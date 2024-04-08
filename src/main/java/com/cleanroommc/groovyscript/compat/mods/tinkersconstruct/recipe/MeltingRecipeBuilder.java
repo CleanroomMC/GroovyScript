@@ -2,6 +2,9 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.MeltingRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -11,6 +14,7 @@ import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
 public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
 
+    @Property(defaultValue = "300", valid = @Comp(value = "1", type = Comp.Type.GTE))
     private int temp = 300;
     private final MeltingRecipeRegistry registry;
     private final String recipeName;
@@ -29,11 +33,13 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
         this.recipeName = recipeName;
     }
 
+    @RecipeBuilderMethodDescription(field = "temp")
     public MeltingRecipeBuilder temperature(int temp) {
         this.temp = temp + 300;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "temp")
     public MeltingRecipeBuilder time(int time) {
         int t = fluidOutput.get(0) != null ? fluidOutput.get(0).getFluid().getTemperature() : 300;
         this.temp = MeltingRecipeAccessor.invokeCalcTemperature(t, time);
