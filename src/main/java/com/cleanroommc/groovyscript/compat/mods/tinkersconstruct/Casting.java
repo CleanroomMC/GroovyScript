@@ -184,7 +184,7 @@ public class Casting implements IDynamicGroovyProperty {
     @RegistryDescription
     public static class Basin extends VirtualizedRegistry<ICastingRecipe> {
 
-        @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).output(item('minecraft:dirt')).cast(item('minecraft:cobblestone')).coolingTime(40))"))
+        @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).output(item('minecraft:dirt')).cast(item('minecraft:cobblestone')).coolingTime(40)"))
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }
