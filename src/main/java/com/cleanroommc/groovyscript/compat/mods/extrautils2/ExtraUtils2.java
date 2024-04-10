@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class ExtraUtils2 extends ModPropertyContainer {
+public class ExtraUtils2 extends GroovyPropertyContainer {
 
     public final Resonator resonator = new Resonator();
     public final Crusher crusher = new Crusher();

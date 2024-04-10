@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlers;
 import epicsquid.roots.api.Herb;
 import epicsquid.roots.init.HerbRegistry;
@@ -17,7 +17,7 @@ import epicsquid.roots.spell.SpellBase;
 import epicsquid.roots.spell.SpellRegistry;
 import net.minecraft.util.ResourceLocation;
 
-public class Roots extends ModPropertyContainer {
+public class Roots extends GroovyPropertyContainer {
 
     public final AnimalHarvest animalHarvest = new AnimalHarvest();
     public final AnimalHarvestFish animalHarvestFish = new AnimalHarvestFish();

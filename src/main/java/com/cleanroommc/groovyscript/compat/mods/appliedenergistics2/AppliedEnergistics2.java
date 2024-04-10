@@ -3,12 +3,12 @@ package com.cleanroommc.groovyscript.compat.mods.appliedenergistics2;
 import appeng.api.config.TunnelType;
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
 import java.util.Arrays;
 import java.util.Locale;
 
-public class AppliedEnergistics2 extends ModPropertyContainer {
+public class AppliedEnergistics2 extends GroovyPropertyContainer {
 
     public final Inscriber inscriber = new Inscriber();
     public final Grinder grinder = new Grinder();

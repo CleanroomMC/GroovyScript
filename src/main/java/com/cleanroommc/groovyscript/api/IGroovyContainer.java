@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.api;
 
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ public interface IGroovyContainer {
 
     /**
      * Returns the mod id of the compat mod. This will be used to check if the mod is loaded.
-     * Scripts will be able to refer to the mods {@link com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer ModPropertyContainer}
+     * Scripts will be able to refer to the mods {@link com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer GroovyPropertyContainer}
      * with this id.
      *
      * @return the compat mod id
@@ -50,7 +50,7 @@ public interface IGroovyContainer {
     }
 
     /**
-     * Called before scripts are executed for the first time. Called right before {@link ModPropertyContainer#initialize()}.
+     * Called before scripts are executed for the first time. Called right before {@link GroovyPropertyContainer#initialize(GroovyContainer)}.
      * Used to initialize things like expansions with {@link com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper ExpansionHelper} and
      * game object handlers with {@link com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager GameObjectHandlerManager}.
      *

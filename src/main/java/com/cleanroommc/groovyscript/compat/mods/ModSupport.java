@@ -50,9 +50,9 @@ import java.util.*;
 
 public class ModSupport {
 
-    private static final Map<String, GroovyContainer<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
-    private static final Map<String, GroovyContainer<? extends ModPropertyContainer>> containersView = Collections.unmodifiableMap(containers);
-    private static final List<GroovyContainer<? extends ModPropertyContainer>> containerList = new ArrayList<>();
+    private static final Map<String, GroovyContainer<? extends GroovyPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, GroovyContainer<? extends GroovyPropertyContainer>> containersView = Collections.unmodifiableMap(containers);
+    private static final List<GroovyContainer<? extends GroovyPropertyContainer>> containerList = new ArrayList<>();
     private static final Set<Class<?>> externalPluginClasses = new ObjectOpenHashSet<>();
     private static boolean frozen = false;
 
@@ -92,7 +92,7 @@ public class ModSupport {
     public static final GroovyContainer<TinkersConstruct> TINKERS_CONSTRUCT = new InternalModContainer<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new, "ticon", "tinkersconstruct");
     public static final GroovyContainer<Woot> WOOT = new InternalModContainer<>("woot", "Woot", Woot::new);
 
-    public static Collection<GroovyContainer<? extends ModPropertyContainer>> getAllContainers() {
+    public static Collection<GroovyContainer<? extends GroovyPropertyContainer>> getAllContainers() {
         return Collections.unmodifiableList(containerList);
     }
 
@@ -137,11 +137,11 @@ public class ModSupport {
             containerList.removeIf(c -> c == current);
         }
 
-        ModPropertyContainer modPropertyContainer = container.createModPropertyContainer();
-        if (modPropertyContainer == null) {
-            modPropertyContainer = new ModPropertyContainer();
+        GroovyPropertyContainer groovyPropertyContainer = container.createGroovyPropertyContainer();
+        if (groovyPropertyContainer == null) {
+            groovyPropertyContainer = new GroovyPropertyContainer();
         }
-        registerContainer(new ExternalModContainer(container, modPropertyContainer));
+        registerContainer(new ExternalModContainer(container, groovyPropertyContainer));
         externalPluginClasses.add(container.getClass());
     }
 

@@ -2,7 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.GroovyMaterial;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.MaterialRegistryEvent;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.ToolMaterialBuilder;
@@ -12,7 +12,7 @@ import net.minecraftforge.common.MinecraftForge;
 import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.traits.ITrait;
 
-public class TinkersConstruct extends ModPropertyContainer {
+public class TinkersConstruct extends GroovyPropertyContainer {
 
     public final Drying drying = new Drying();
     public final Melting melting = new Melting();

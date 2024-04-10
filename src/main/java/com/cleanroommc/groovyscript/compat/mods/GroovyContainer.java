@@ -8,7 +8,7 @@ import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.NonExtendable
-public abstract class GroovyContainer<T extends ModPropertyContainer> implements IGroovyContainer {
+public abstract class GroovyContainer<T extends GroovyPropertyContainer> implements IGroovyContainer {
 
     public abstract T get();
 

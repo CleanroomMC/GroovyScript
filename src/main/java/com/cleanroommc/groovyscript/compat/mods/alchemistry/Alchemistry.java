@@ -6,11 +6,11 @@ import al132.alchemistry.chemistry.CompoundRegistry;
 import al132.alchemistry.chemistry.ElementRegistry;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import net.minecraft.item.ItemStack;
 
-public class Alchemistry extends ModPropertyContainer {
+public class Alchemistry extends GroovyPropertyContainer {
 
     public final Atomizer atomizer = new Atomizer();
     public final Combiner combiner = new Combiner();

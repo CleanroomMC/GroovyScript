@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class EnderIO extends ModPropertyContainer {
+public class EnderIO extends GroovyPropertyContainer {
 
     public final AlloySmelter alloySmelter = new AlloySmelter();
     public final FluidFuel fluidFuel = new FluidFuel();

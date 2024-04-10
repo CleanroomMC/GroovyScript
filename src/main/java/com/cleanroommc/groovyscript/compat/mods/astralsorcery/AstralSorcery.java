@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.GroovyPerkTree;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.PerkTreeConfig;
@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-public class AstralSorcery extends ModPropertyContainer {
+public class AstralSorcery extends GroovyPropertyContainer {
 
     public final StarlightAltar altar = new StarlightAltar();
     public final Lightwell lightwell = new Lightwell();

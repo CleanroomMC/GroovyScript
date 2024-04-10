@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class ActuallyAdditions extends ModPropertyContainer {
+public class ActuallyAdditions extends GroovyPropertyContainer {
 
     public final Crusher crusher = new Crusher();
     public final OilGen oilGen = new OilGen();

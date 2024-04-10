@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.jei;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class JustEnoughItems extends ModPropertyContainer {
+public class JustEnoughItems extends GroovyPropertyContainer {
 
     public final Ingredient ingredient = new Ingredient();
     public final Category category = new Category();

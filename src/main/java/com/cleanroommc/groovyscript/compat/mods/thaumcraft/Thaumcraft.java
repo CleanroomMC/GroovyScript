@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane.ArcaneWorkbench;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.Aspect;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectHelper;
@@ -18,7 +18,7 @@ import thaumcraft.api.aspects.AspectList;
 
 import java.util.Collection;
 
-public class Thaumcraft extends ModPropertyContainer {
+public class Thaumcraft extends GroovyPropertyContainer {
 
     public final Crucible crucible = new Crucible();
     public final InfusionCrafting infusionCrafting = new InfusionCrafting();

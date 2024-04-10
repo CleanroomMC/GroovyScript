@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ic2.classic.*;
 import com.cleanroommc.groovyscript.compat.mods.ic2.exp.*;
 import net.minecraft.item.ItemStack;
@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.ModContainer;
 
 import java.util.List;
 
-public class IC2 extends ModPropertyContainer {
+public class IC2 extends GroovyPropertyContainer {
 
     public final boolean isExp;
 

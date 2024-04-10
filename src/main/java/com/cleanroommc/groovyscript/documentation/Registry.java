@@ -5,7 +5,7 @@ import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class Registry {
 
-    private final GroovyContainer<? extends ModPropertyContainer> mod;
+    private final GroovyContainer<? extends GroovyPropertyContainer> mod;
     private final INamed registry;
     private final String baseTranslationKey;
     private final String reference;
@@ -28,7 +28,7 @@ public class Registry {
     private final EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
     private final List<String> imports;
 
-    public Registry(GroovyContainer<? extends ModPropertyContainer> mod, INamed registry) {
+    public Registry(GroovyContainer<? extends GroovyPropertyContainer> mod, INamed registry) {
         this.mod = mod;
         this.registry = registry;
         this.baseTranslationKey = String.format("groovyscript.wiki.%s.%s", mod.getModId(), registry.getName());

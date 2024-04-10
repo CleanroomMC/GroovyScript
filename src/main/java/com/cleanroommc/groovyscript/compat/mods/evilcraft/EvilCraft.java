@@ -2,14 +2,14 @@ package com.cleanroommc.groovyscript.compat.mods.evilcraft;
 
 import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import org.cyclops.evilcraft.core.weather.WeatherType;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class EvilCraft extends ModPropertyContainer {
+public class EvilCraft extends GroovyPropertyContainer {
 
     public final BloodInfuser bloodInfuser = new BloodInfuser();
     public final EnvironmentalAccumulator environmentalAccumulator = new EnvironmentalAccumulator();

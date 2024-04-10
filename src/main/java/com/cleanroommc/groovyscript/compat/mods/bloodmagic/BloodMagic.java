@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class BloodMagic extends ModPropertyContainer {
+public class BloodMagic extends GroovyPropertyContainer {
 
     public final BloodAltar bloodAltar = new BloodAltar();
     public final AlchemyArray alchemyArray = new AlchemyArray();
