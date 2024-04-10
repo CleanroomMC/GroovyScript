@@ -621,6 +621,7 @@ groovyscript.wiki.botania.rune_altar.add=Adds recipes in the format `output`, `m
 groovyscript.wiki.botania.rune_altar.input.required=that `input` IIngredients cannot contain Botania's Livingrock Item
 groovyscript.wiki.botania.rune_altar.mana.value=Sets the mana cost of processing the recipe
 
+
 # Tinkers
 groovyscript.wiki.tconstruct.smeltery_fuel.title=Smeltery Fuel
 groovyscript.wiki.tconstruct.smeltery_fuel.description=Add or remove smeltery fuel types
@@ -660,6 +661,7 @@ groovyscript.wiki.tconstruct.alloying.title=Alloying
 groovyscript.wiki.tconstruct.alloying.description=Add or remove smeltery alloying recipes
 groovyscript.wiki.tconstruct.alloying.add=Adds a new recipe with the given inputs and output
 groovyscript.wiki.tconstruct.alloying.removeByInputsAndOutput=Removes all recipes that match the given output and the given inputs
+
 
 # Calculator
 groovyscript.wiki.calculator.algorithm_separator.title=Algorithm Separator
