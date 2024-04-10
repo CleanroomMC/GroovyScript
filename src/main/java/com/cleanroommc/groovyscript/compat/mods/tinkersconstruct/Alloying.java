@@ -20,7 +20,7 @@ import java.util.List;
 @RegistryDescription
 public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 3).fluidInputs(fluid('clay') * 1,fluid('lava') * 2)"))
+    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 3).fluidInputs(fluid('clay') * 1,fluid('lava') * 2).register()"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

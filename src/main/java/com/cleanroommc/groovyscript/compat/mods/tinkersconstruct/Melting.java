@@ -48,7 +48,7 @@ public class Melting extends MeltingRecipeRegistry implements IDynamicGroovyProp
         return properties;
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gravel')).fluidOutput(fluid('lava') * 25).time(80)"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gravel')).fluidOutput(fluid('lava') * 25).time(80).register()"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder(this);
     }
@@ -149,7 +149,7 @@ public class Melting extends MeltingRecipeRegistry implements IDynamicGroovyProp
     @RegistryDescription
     public static class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
 
-        @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 500).input('minecraft','pig')"))
+        @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 500).input('minecraft','pig').register()"))
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }

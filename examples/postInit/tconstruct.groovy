@@ -11,6 +11,7 @@ println 'mod \'tconstruct\' detected, running script'
 mods.tconstruct.alloying.recipeBuilder()
     .fluidOutput(fluid('iron') * 3)
     .fluidInputs(fluid('clay') * 1,fluid('lava') * 2)
+    .register()
 
 
 mods.tconstruct.alloying.add(fluid('lava') * 144, fluid('water') * 500, fluid('iron') * 5, fluid('clay') * 60)
@@ -27,6 +28,7 @@ mods.tconstruct.basin.recipeBuilder()
     .output(item('minecraft:dirt'))
     .cast(item('minecraft:cobblestone'))
     .coolingTime(40)
+    .register()
 
 
 // Drying Rack:
@@ -37,6 +39,7 @@ mods.tconstruct.drying.recipeBuilder()
     .input(item('minecraft:clay'))
     .output(item('minecraft:dirt'))
     .time(45)
+    .register()
 
 
 
@@ -48,6 +51,7 @@ mods.tconstruct.entity_melting.recipeBuilder()
     .fluidOutput(fluid('iron') * 500)
     .input('minecraft',
            'pig')
+    .register()
 
 
 // Melting:
@@ -58,6 +62,7 @@ mods.tconstruct.melting.recipeBuilder()
     .input(item('minecraft:gravel'))
     .fluidOutput(fluid('lava') * 25)
     .time(80)
+    .register()
 
 
 
@@ -80,5 +85,6 @@ mods.tconstruct.table.recipeBuilder()
     .castingTime(750)
     .consumesCast(true)
     .cast(ore('gemEmerald'))
+    .register()
 
 

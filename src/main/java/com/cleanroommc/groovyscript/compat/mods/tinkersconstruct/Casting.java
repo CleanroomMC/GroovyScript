@@ -46,7 +46,7 @@ public class Casting implements IDynamicGroovyProperty {
     @RegistryDescription
     public static class Table extends VirtualizedRegistry<ICastingRecipe> {
 
-        @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('lava') * 50).output(item('minecraft:diamond')).castingTime(750).consumesCast(true).cast(ore('gemEmerald'))"))
+        @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('lava') * 50).output(item('minecraft:diamond')).castingTime(750).consumesCast(true).cast(ore('gemEmerald')).register()"))
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }
@@ -184,7 +184,7 @@ public class Casting implements IDynamicGroovyProperty {
     @RegistryDescription
     public static class Basin extends VirtualizedRegistry<ICastingRecipe> {
 
-        @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).output(item('minecraft:dirt')).cast(item('minecraft:cobblestone')).coolingTime(40)"))
+        @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).output(item('minecraft:dirt')).cast(item('minecraft:cobblestone')).coolingTime(40).register()"))
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }
