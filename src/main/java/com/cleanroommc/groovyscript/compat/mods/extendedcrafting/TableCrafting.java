@@ -74,7 +74,7 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('extendedcrafting:singularity_ultimate')"))
+    @MethodDescription(example = @Example("item('extendedcrafting:singularity_ultimate')"))
     public boolean removeByOutput(ItemStack stack) {
         return TableRecipeManager.getInstance().getRecipes().removeIf(recipe -> {
             if (recipe != null && recipe.getRecipeOutput().isItemEqual(stack)) {
@@ -93,12 +93,12 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ITieredRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TableRecipeManager.getInstance().getRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TableRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         TableRecipeManager.getInstance().getRecipes().clear();

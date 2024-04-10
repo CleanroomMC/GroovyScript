@@ -38,7 +38,7 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('water')"))
+    @MethodDescription(example = @Example("fluid('water')"))
     public boolean removeByInput(FluidStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Solar Neutron Activator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");

@@ -69,7 +69,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         return getRegistry().removeIf(rec -> rec.equals(recipe));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("blockstate('minecraft:sandstone')"))
+    @MethodDescription(example = @Example("blockstate('minecraft:sandstone')"))
     public void removeByInput(IBlockState block) {
         getRegistry().removeIf(rec -> {
             if (rec.matchesInput(block)) {
@@ -80,12 +80,12 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("block('minecraft:netherrack')"))
+    @MethodDescription(example = @Example("block('minecraft:netherrack')"))
     public void removeByInput(Block block) {
         removeByInput(block.getDefaultState());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("blockstate('minecraft:cake')"))
+    @MethodDescription(example = @Example("blockstate('minecraft:cake')"))
     public void removeByOutput(IBlockState block) {
         getRegistry().removeIf(rec -> {
             if (rec.matchesOutput(block)) {
@@ -96,18 +96,18 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("block('minecraft:lapis_block')"))
+    @MethodDescription(example = @Example("block('minecraft:lapis_block')"))
     public void removeByOutput(Block block) {
         removeByOutput(block.getDefaultState());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<LightOreTransmutations.Transmutation> streamRecipes() {
         return new SimpleObjectStream<>(getRegistry())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getRegistry().forEach(this::addBackup);
         getRegistry().clear();

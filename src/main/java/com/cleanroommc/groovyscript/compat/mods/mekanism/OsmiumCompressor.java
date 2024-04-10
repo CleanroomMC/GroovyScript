@@ -47,7 +47,7 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
         return recipe1;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('dustRefinedObsidian'), gas('liquidosmium')"))
+    @MethodDescription(example = @Example("ore('dustRefinedObsidian'), gas('liquidosmium')"))
     public boolean removeByInput(IIngredient ingredient, GasStack gasInput) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Osmium Compressor recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

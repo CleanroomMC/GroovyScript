@@ -80,7 +80,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("[item('enderio:item_alloy_ingot:7'), item('enderio:block_enderman_skull'), item('enderio:item_alloy_ingot:7'), item('minecraft:potion').withNbt(['Potion': 'minecraft:water']), item('enderio:item_basic_capacitor'), item('minecraft:potion').withNbt(['Potion': 'minecraft:water'])]"))
+    @MethodDescription(example = @Example("[item('enderio:item_alloy_ingot:7'), item('enderio:block_enderman_skull'), item('enderio:item_alloy_ingot:7'), item('minecraft:potion').withNbt(['Potion': 'minecraft:water']), item('enderio:item_basic_capacitor'), item('minecraft:potion').withNbt(['Potion': 'minecraft:water'])]"))
     public void removeByInput(List<ItemStack> input) {
         IRecipe recipe = SliceAndSpliceRecipeManager.getInstance().getRecipeForInputs(RecipeLevel.IGNORE, RecipeUtils.getMachineInputs(input));
         if (recipe instanceof IManyToOneRecipe) {
@@ -97,13 +97,13 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         restoreFromBackup().forEach(SliceAndSpliceRecipeManager.getInstance().getRecipes()::add);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IManyToOneRecipe> streamRecipes() {
         return new SimpleObjectStream<>(SliceAndSpliceRecipeManager.getInstance().getRecipes())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         SliceAndSpliceRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         SliceAndSpliceRecipeManager.getInstance().getRecipes().clear();

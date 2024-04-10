@@ -54,17 +54,17 @@ public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('canolaoil')"))
+    @MethodDescription(example = @Example("fluid('canolaoil')"))
     public boolean removeByInput(FluidStack fluid) {
         return this.removeByInput(fluid.getFluid());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('canolaoil').getFluid()"))
+    @MethodDescription(example = @Example("fluid('canolaoil').getFluid()"))
     public boolean removeByInput(Fluid fluid) {
         return this.removeByInput(fluid.getName());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("'refinedcanolaoil'"))
+    @MethodDescription(example = @Example("'refinedcanolaoil'"))
     public boolean removeByInput(String fluid) {
         return ActuallyAdditionsAPI.OIL_GENERATOR_RECIPES.removeIf(recipe -> {
             boolean found = fluid.equals(recipe.fluidName);
@@ -75,13 +75,13 @@ public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.OIL_GENERATOR_RECIPES.forEach(this::addBackup);
         ActuallyAdditionsAPI.OIL_GENERATOR_RECIPES.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<OilGenRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.OIL_GENERATOR_RECIPES)
                 .setRemover(this::remove);

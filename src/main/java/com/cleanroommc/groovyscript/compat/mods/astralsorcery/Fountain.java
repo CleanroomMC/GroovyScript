@@ -79,13 +79,13 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<FluidRarityRegistry.FluidRarityEntry> streamRecipes() {
         return new SimpleObjectStream<>(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().forEach(this::addBackup);
         ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().clear();

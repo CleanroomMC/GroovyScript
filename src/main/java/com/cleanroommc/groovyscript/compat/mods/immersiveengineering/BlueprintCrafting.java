@@ -84,7 +84,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("'components', item('immersiveengineering:material:8')"))
+    @MethodDescription(example = @Example("'components', item('immersiveengineering:material:8')"))
     public void removeByOutput(String blueprintCategory, ItemStack output) {
         if (GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
                 .add(!BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory), () -> "category " + blueprintCategory + " does not exist")
@@ -107,7 +107,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("'components', item('immersiveengineering:metal:38'), item('immersiveengineering:metal:38'), item('immersiveengineering:metal')"))
+    @MethodDescription(example = @Example("'components', item('immersiveengineering:metal:38'), item('immersiveengineering:metal:38'), item('immersiveengineering:metal')"))
     public void removeByInput(String blueprintCategory, ItemStack... inputs) {
         if (GroovyLog.msg("Error removing Immersive Engineering Blueprint Crafting recipe")
                 .add(!BlueprintCraftingRecipe.recipeList.containsKey(blueprintCategory), () -> "category " + blueprintCategory + " does not exist")
@@ -152,12 +152,12 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BlueprintCraftingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BlueprintCraftingRecipe.recipeList.values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BlueprintCraftingRecipe.recipeList.values().forEach(this::addBackup);
         BlueprintCraftingRecipe.recipeList.clear();

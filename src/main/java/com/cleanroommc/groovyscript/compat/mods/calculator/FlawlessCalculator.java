@@ -42,7 +42,7 @@ public class FlawlessCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:obsidian')"))
+    @MethodDescription(example = @Example("item('minecraft:obsidian')"))
     public boolean removeByInput(IIngredient input) {
         return FlawlessCalculatorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -57,7 +57,7 @@ public class FlawlessCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:ender_pearl')"))
+    @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public boolean removeByOutput(IIngredient output) {
         return FlawlessCalculatorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
@@ -72,13 +72,13 @@ public class FlawlessCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         FlawlessCalculatorRecipes.instance().getRecipes().forEach(this::addBackup);
         FlawlessCalculatorRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(FlawlessCalculatorRecipes.instance().getRecipes())
                 .setRemover(this::remove);

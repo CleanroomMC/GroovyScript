@@ -115,7 +115,7 @@ public class Modifiers extends VirtualizedRegistry<ResourceLocation> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ResourceLocation> streamRecipes() {
         return new SimpleObjectStream<>(ModifierRegistryAccessor.getDisabledModifiers()).setRemover(this::disable);
     }

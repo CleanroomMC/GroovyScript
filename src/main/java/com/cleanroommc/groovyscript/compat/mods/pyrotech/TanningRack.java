@@ -35,7 +35,7 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
                 .register();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat')"))
+    @MethodDescription(example = @Example("item('minecraft:wheat')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing tanning rack recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -50,7 +50,7 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
+    @MethodDescription
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing tanning rack recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")

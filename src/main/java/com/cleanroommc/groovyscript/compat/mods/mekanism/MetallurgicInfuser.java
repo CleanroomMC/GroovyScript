@@ -52,7 +52,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         return add(ingredient, InfuseRegistry.get(infuseType), infuseAmount, output);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('dustObsidian'), 'DIAMOND'"))
+    @MethodDescription(example = @Example("ore('dustObsidian'), 'DIAMOND'"))
     public boolean removeByInput(IIngredient ingredient, InfuseType infuseType) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Metallurgic Infuser recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

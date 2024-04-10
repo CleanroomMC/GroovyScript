@@ -60,7 +60,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:metal:7')"))
+    @MethodDescription(example = @Example("item('immersiveengineering:metal:7')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
@@ -81,7 +81,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('immersiveengineering:metal:18'), item('immersiveengineering:material:17')"))
+    @MethodDescription(example = @Example("item('immersiveengineering:metal:18'), item('immersiveengineering:material:17')"))
     public void removeByInput(IIngredient main, List<IIngredient> inputAndAdditives) {
         if (main == null || main.isEmpty() || inputAndAdditives == null || inputAndAdditives.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
@@ -106,7 +106,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     }
 
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public void removeByInput(List<IIngredient> inputAndAdditives) {
         if (inputAndAdditives == null || inputAndAdditives.isEmpty()) {
             GroovyLog.msg("Error removing Immersive Engineering Arc Furnace recipe")
@@ -118,17 +118,17 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         removeByInput(inputAndAdditives.remove(0), inputAndAdditives);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public void removeByInput(IIngredient... inputAndAdditives) {
         removeByInput(new ArrayList<>(Arrays.asList(inputAndAdditives)));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ArcFurnaceRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ArcFurnaceRecipe.recipeList).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ArcFurnaceRecipe.recipeList.forEach(this::addBackup);
         ArcFurnaceRecipe.recipeList.clear();

@@ -53,7 +53,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:material:2')"))
+    @MethodDescription(example = @Example("item('immersiveengineering:material:2')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Metal Press recipe")
@@ -129,7 +129,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:iron_ingot')"))
+    @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
@@ -168,13 +168,13 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         if (!list.isEmpty()) list.forEach(this::addBackup);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MetalPressRecipe.recipeList.values().forEach(this::addBackup);
         MetalPressRecipe.recipeList.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MetalPressRecipe> streamRecipes() {
         List<MetalPressRecipe> recipes = new ArrayList<>(MetalPressRecipe.recipeList.values());
         return new SimpleObjectStream<>(recipes).setRemover(this::remove);

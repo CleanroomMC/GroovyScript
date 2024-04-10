@@ -61,7 +61,7 @@ public class Meteor extends VirtualizedRegistry<WayofTime.bloodmagic.meteor.Mete
         return remove(MeteorRegistry.getMeteorForItem(input));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:gold_block')"))
+    @MethodDescription(example = @Example("item('minecraft:gold_block')"))
     public boolean removeByInput(ItemStack input) {
         return remove(MeteorRegistry.getMeteorForItem(input));
     }
@@ -71,13 +71,13 @@ public class Meteor extends VirtualizedRegistry<WayofTime.bloodmagic.meteor.Mete
         return removeByInput(catalyst);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MeteorRegistry.meteorMap.forEach((i, x) -> addBackup(x));
         MeteorRegistry.meteorMap.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ItemStack, WayofTime.bloodmagic.meteor.Meteor>> streamRecipes() {
         return new SimpleObjectStream<>(MeteorRegistry.meteorMap.entrySet())
                 .setRemover(x -> this.remove(x.getKey()));

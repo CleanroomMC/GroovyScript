@@ -202,7 +202,7 @@ public class Policy extends VirtualizedRegistry<Pair<Policy.PolicyType, Object>>
         ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalGenerateOnlyList().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         removeAllFromEntityModBlacklist();
         removeAllFromEntityBlacklist();

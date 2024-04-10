@@ -65,7 +65,7 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('actuallyadditions:block_crystal')"))
+    @MethodDescription(example = @Example("item('actuallyadditions:block_crystal')"))
     public boolean removeByOutput(ItemStack output) {
         return ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
@@ -76,13 +76,13 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.forEach(this::addBackup);
         ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<LensConversionRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES)
                 .setRemover(this::remove);
