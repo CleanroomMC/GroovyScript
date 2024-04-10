@@ -29,10 +29,16 @@ import java.lang.reflect.Method;
 public @interface MethodDescription {
 
     /**
-     * The localization key for a description of the compat, will default to generating
-     * <code>
-     * groovyscript.wiki.{@link com.cleanroommc.groovyscript.compat.mods.GroovyContainer#getModId() GroovyContainer#getModId()}.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() VirtualizedRegistry#getName()}.{@link Method#getName()}
-     * </code>
+     * The localization key for a description of the compat.
+     * <br>
+     * Generates a description via minecraft's localization files via
+     * <code>{@link net.minecraft.client.resources.I18n#format(String, Object...) I18n.format(description())}</code>
+     * <br>
+     * If this is empty, will fall back to generating a description based on
+     * <code>groovyscript.wiki.{@link com.cleanroommc.groovyscript.compat.mods.GroovyContainer#getModId() GroovyContainer#getModId()}.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() VirtualizedRegistry#getName()}.{@link Method#getName()}</code>.
+     * Then, if that does not have a lang key defined, it will attempt to use a global lang key based on the method name
+     * <code>groovyscript.wiki.{@link Method#getName()}</code>
+     * if that also does not have a lang key defined, will log a missing key in the {@code groovy.log} file.
      *
      * @return localization key for method description
      */
