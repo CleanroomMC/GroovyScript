@@ -53,7 +53,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         return false;
     }
 
-    @MethodDescription(example = @Example("item('immersiveengineering:material:2')"))
+    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:material:2')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Metal Press recipe")
@@ -129,7 +129,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         }
     }
 
-    @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
+    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:iron_ingot')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
