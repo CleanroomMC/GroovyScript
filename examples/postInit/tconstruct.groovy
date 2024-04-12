@@ -72,7 +72,7 @@ mods.tconstruct.melting.recipeBuilder()
 
 
 // Smeltery Fuel:
-// Add or remove smeltery fuel types
+// Modifies what fluids are accepted as fuels for the Smeltery and how long each fuels the Smeltery.
 
 // mods.tconstruct.smeltery_fuel.removeAll()
 
