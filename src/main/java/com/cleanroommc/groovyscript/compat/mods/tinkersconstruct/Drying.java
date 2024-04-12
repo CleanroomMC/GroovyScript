@@ -96,13 +96,13 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll")
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getDryingRegistry().forEach(this::addBackup);
         TinkerRegistryAccessor.getDryingRegistry().forEach(TinkerRegistryAccessor.getDryingRegistry()::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes")
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DryingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getDryingRegistry()).setRemover(this::remove);
     }
@@ -112,7 +112,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         @Property(defaultValue = "20", valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int time = 20;
 
-        @RecipeBuilderMethodDescription(field = "time")
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;

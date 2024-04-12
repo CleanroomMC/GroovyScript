@@ -83,7 +83,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return false;
     }
 
-    @MethodDescription(type = MethodDescription.Type.REMOVAL)
+    @MethodDescription()
     public boolean removeByInputsAndOutput(FluidStack output, FluidStack... inputs) {
         List<FluidStack> list = Arrays.asList(inputs);
         if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
@@ -99,13 +99,13 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll")
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getAlloyRegistry().forEach(this::addBackup);
         TinkerRegistryAccessor.getAlloyRegistry().forEach(TinkerRegistryAccessor.getAlloyRegistry()::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes")
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<AlloyRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getAlloyRegistry()).setRemover(this::remove);
     }

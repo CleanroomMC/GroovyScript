@@ -95,13 +95,13 @@ public class Melting extends MeltingRecipeRegistry {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll")
+    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getMeltingRegistry().forEach(this::addBackup);
         TinkerRegistryAccessor.getMeltingRegistry().forEach(TinkerRegistryAccessor.getMeltingRegistry()::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes")
+    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MeltingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getMeltingRegistry()).setRemover(this::remove);
     }

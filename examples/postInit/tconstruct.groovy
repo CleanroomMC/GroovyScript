@@ -7,6 +7,7 @@ println 'mod \'tconstruct\' detected, running script'
 // Alloying:
 // Add or remove smeltery alloying recipes
 
+// mods.tconstruct.alloying.removeAll()
 
 mods.tconstruct.alloying.recipeBuilder()
     .fluidOutput(fluid('iron') * 3)
@@ -22,6 +23,7 @@ mods.tconstruct.alloying.add(fluid('lava') * 144, fluid('water') * 500, fluid('i
 mods.tconstruct.basin.removeByCast(item('minecraft:oak_planks'))
 mods.tconstruct.basin.removeByInput(fluid('lava'))
 mods.tconstruct.basin.removeByOutput(item('minecraft:iron_block'))
+// mods.tconstruct.basin.removeAll()
 
 mods.tconstruct.basin.recipeBuilder()
     .fluidInput(fluid('water'))
@@ -34,6 +36,7 @@ mods.tconstruct.basin.recipeBuilder()
 // Drying Rack:
 // Add or remove drying rack recipes
 
+// mods.tconstruct.drying.removeAll()
 
 mods.tconstruct.drying.recipeBuilder()
     .input(item('minecraft:clay'))
@@ -46,6 +49,7 @@ mods.tconstruct.drying.recipeBuilder()
 // Entity Melting:
 // Add or remove entity melting recipes
 
+// mods.tconstruct.entity_melting.removeAll()
 
 mods.tconstruct.entity_melting.recipeBuilder()
     .fluidOutput(fluid('iron') * 500)
@@ -57,6 +61,7 @@ mods.tconstruct.entity_melting.recipeBuilder()
 // Melting:
 // Add or remove smeltery melting recipes
 
+// mods.tconstruct.melting.removeAll()
 
 mods.tconstruct.melting.recipeBuilder()
     .input(item('minecraft:gravel'))
@@ -69,6 +74,7 @@ mods.tconstruct.melting.recipeBuilder()
 // Smeltery Fuel:
 // Add or remove smeltery fuel types
 
+// mods.tconstruct.smeltery_fuel.removeAll()
 
 mods.tconstruct.smeltery_fuel.addFuel(fluid('water'), 250)
 
@@ -78,6 +84,7 @@ mods.tconstruct.smeltery_fuel.addFuel(fluid('water'), 250)
 mods.tconstruct.table.removeByCast(item('minecraft:bucket'))
 mods.tconstruct.table.removeByInput(fluid('iron'))
 mods.tconstruct.table.removeByOutput(item('minecraft:iron_ingot'))
+// mods.tconstruct.table.removeAll()
 
 mods.tconstruct.table.recipeBuilder()
     .fluidInput(fluid('lava') * 50)
