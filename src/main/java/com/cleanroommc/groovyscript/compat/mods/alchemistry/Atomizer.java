@@ -52,7 +52,7 @@ public class Atomizer extends VirtualizedRegistry<AtomizerRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example(value = "item('alchemistry:compound:7')", commented = true))
+    @MethodDescription(example = @Example(value = "item('alchemistry:compound:7')", commented = true))
     public boolean removeByOutput(IIngredient output) {
         return ModRecipes.INSTANCE.getAtomizerRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
@@ -63,7 +63,7 @@ public class Atomizer extends VirtualizedRegistry<AtomizerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('water')"))
+    @MethodDescription(example = @Example("fluid('water')"))
     public boolean removeByInput(FluidStack input) {
         return ModRecipes.INSTANCE.getAtomizerRecipes().removeIf(r -> {
             if (r.getInput().isFluidEqual(input)) {
@@ -74,12 +74,12 @@ public class Atomizer extends VirtualizedRegistry<AtomizerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<AtomizerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.INSTANCE.getAtomizerRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipes.INSTANCE.getAtomizerRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getAtomizerRecipes().clear();

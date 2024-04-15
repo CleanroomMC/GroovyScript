@@ -44,7 +44,7 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
         return recipe1;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:diamond')"))
+    @MethodDescription(example = @Example("item('minecraft:diamond')"))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");

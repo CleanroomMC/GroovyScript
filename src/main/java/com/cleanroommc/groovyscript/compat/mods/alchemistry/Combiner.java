@@ -54,7 +54,7 @@ public class Combiner extends VirtualizedRegistry<CombinerRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:glowstone')"))
+    @MethodDescription(example = @Example("item('minecraft:glowstone')"))
     public boolean removeByOutput(IIngredient output) {
         return ModRecipes.INSTANCE.getCombinerRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
@@ -65,7 +65,7 @@ public class Combiner extends VirtualizedRegistry<CombinerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("element('carbon')"))
+    @MethodDescription(example = @Example("element('carbon')"))
     public boolean removeByInput(IIngredient input) {
         return ModRecipes.INSTANCE.getCombinerRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInputs()) {
@@ -78,12 +78,12 @@ public class Combiner extends VirtualizedRegistry<CombinerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CombinerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.INSTANCE.getCombinerRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipes.INSTANCE.getCombinerRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getCombinerRecipes().clear();

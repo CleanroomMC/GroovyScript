@@ -55,7 +55,7 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
         return GrindstoneRecipeRegistry.recipes.remove(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:redstone_ore')"))
+    @MethodDescription(example = @Example("item('minecraft:redstone_ore')"))
     public void removeByInput(ItemStack item) {
         GrindstoneRecipeRegistry.recipes.removeIf(recipe -> {
             if (recipe.isValid() && recipe.matches(item)) {
@@ -66,13 +66,13 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("ore('dustIron')"))
+    @MethodDescription(example = @Example("ore('dustIron')"))
     public void removeByOutput(OreDictIngredient ore) {
         for (ItemStack item : ore.getMatchingStacks())
             this.removeByOutput(item);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
+    @MethodDescription
     public void removeByOutput(ItemStack item) {
         GrindstoneRecipeRegistry.recipes.removeIf(recipe -> {
             if (recipe.isValid() && recipe.getOutputForMatching().isItemEqual(item)) {
@@ -83,13 +83,13 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<GrindstoneRecipe> streamRecipes() {
         return new SimpleObjectStream<>(GrindstoneRecipeRegistry.recipes)
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         GrindstoneRecipeRegistry.recipes.forEach(this::addBackup);
         GrindstoneRecipeRegistry.recipes.clear();

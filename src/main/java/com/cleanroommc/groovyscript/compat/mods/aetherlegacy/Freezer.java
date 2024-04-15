@@ -28,7 +28,7 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
         add(freezable);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:obsidian')"))
+    @MethodDescription(example = @Example("item('minecraft:obsidian')"))
     public void removeByOutput(IIngredient output) {
         this.getRegistry().getValuesCollection().forEach(freezable -> {
             if (output.test(freezable.getOutput())) {

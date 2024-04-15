@@ -59,7 +59,7 @@ public class ExtremeCrafting extends VirtualizedRegistry<IExtremeRecipe> {
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('avaritia:resource', 6)"))
+    @MethodDescription(example = @Example("item('avaritia:resource', 6)"))
     public boolean removeByOutput(ItemStack stack) {
         return AvaritiaRecipeManager.EXTREME_RECIPES.values().removeIf(recipe -> {
             if (recipe != null && recipe.getRecipeOutput().isItemEqual(stack)) {
@@ -78,12 +78,12 @@ public class ExtremeCrafting extends VirtualizedRegistry<IExtremeRecipe> {
         return recipe != null;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IExtremeRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AvaritiaRecipeManager.EXTREME_RECIPES.values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         AvaritiaRecipeManager.EXTREME_RECIPES.values().forEach(this::addBackup);
         AvaritiaRecipeManager.EXTREME_RECIPES.values().clear();

@@ -51,7 +51,7 @@ public class Crucible extends VirtualizedRegistry<CookingPotRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:gunpowder')"))
+    @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByOutput(ItemStack output) {
         return BWRegistry.CRUCIBLE.getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
@@ -64,7 +64,7 @@ public class Crucible extends VirtualizedRegistry<CookingPotRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:gunpowder')"))
+    @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByInput(ItemStack input) {
         return BWRegistry.CRUCIBLE.getRecipes().removeIf(r -> {
             for (Ingredient ingredient : r.getInputs()) {
@@ -77,17 +77,17 @@ public class Crucible extends VirtualizedRegistry<CookingPotRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public boolean removeByInput(IIngredient input) {
         return removeByInput(IngredientHelper.toItemStack(input));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CookingPotRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BWRegistry.CRUCIBLE.getRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BWRegistry.CRUCIBLE.getRecipes().forEach(this::addBackup);
         BWRegistry.CRUCIBLE.getRecipes().clear();

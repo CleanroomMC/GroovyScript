@@ -45,7 +45,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
         return recipe1;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:flint'), item('minecraft:cobblestone')"))
+    @MethodDescription(example = @Example("item('minecraft:flint'), item('minecraft:cobblestone')"))
     public boolean removeByInput(IIngredient ingredient, ItemStack extra) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Combiner recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

@@ -70,13 +70,13 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
         restoreFromBackup().forEach(MachineRecipeRegistry.instance::registerRecipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ISoulBinderRecipe> streamRecipes() {
         return new SimpleObjectStream<>((Collection<ISoulBinderRecipe>) MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.SOULBINDER).values())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.SOULBINDER).forEach((r, l) -> addBackup((ISoulBinderRecipe) l));
         ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.SOULBINDER)).getRecipes().clear();

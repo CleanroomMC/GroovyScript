@@ -36,7 +36,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
                 .register();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing pit kiln recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -51,7 +51,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('pyrotech:bucket_clay')"))
+    @MethodDescription(example = @Example("item('pyrotech:bucket_clay')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing pit kiln recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")

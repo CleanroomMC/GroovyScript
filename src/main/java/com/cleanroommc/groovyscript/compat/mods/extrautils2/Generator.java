@@ -143,7 +143,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
     }
 
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Pair<Machine, IMachineRecipe>> streamRecipes() {
         List<Pair<Machine, IMachineRecipe>> list = new ArrayList<>();
         for (Generators name : Generators.values()) {
@@ -184,7 +184,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         return removeByGenerator(name.toString());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         for (Generators name : Generators.values()) {
             Machine machine = MachineRegistry.getMachine(name.toString());

@@ -45,7 +45,7 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
         return MultiblockRecipes.getRecipes().removeIf(r -> r == recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:ender_pearl')"))
+    @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public void removeByInput(ItemStack input) {
         for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : MultiblockRecipes.getRecipes().stream().filter(r -> r.getCatalystStack().isItemEqual(input)).collect(Collectors.toList())) {
             addBackup(recipe);
@@ -58,7 +58,7 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
         removeByInput(catalyst);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('compactmachines3:machine:3')"))
+    @MethodDescription(example = @Example("item('compactmachines3:machine:3')"))
     public void removeByOutput(ItemStack output) {
         for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : MultiblockRecipes.getRecipes().stream().filter(r -> r.getTargetStack().isItemEqual(output)).collect(Collectors.toList())) {
             addBackup(recipe);
@@ -66,13 +66,13 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MultiblockRecipes.getRecipes().forEach(this::addBackup);
         MultiblockRecipes.getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<org.dave.compactmachines3.miniaturization.MultiblockRecipe> streamRecipes() {
         return new SimpleObjectStream<>(MultiblockRecipes.getRecipes()).setRemover(this::remove);
     }

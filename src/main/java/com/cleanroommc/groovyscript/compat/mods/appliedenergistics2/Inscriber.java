@@ -43,7 +43,7 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
         addBackup(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('appliedenergistics2:material:59')"))
+    @MethodDescription(example = @Example("item('appliedenergistics2:material:59')"))
     public void removeByOutput(ItemStack output) {
         List<IInscriberRecipe> recipes = AEApi.instance().registries().inscriber().getRecipes().stream().filter(x -> ItemStack.areItemStacksEqual(x.getOutput(), output)).collect(Collectors.toList());
         for (IInscriberRecipe recipe : recipes) {
@@ -52,7 +52,7 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         Collection<IInscriberRecipe> recipes = new ArrayList<>(AEApi.instance().registries().inscriber().getRecipes());
         for (IInscriberRecipe recipe : recipes) {

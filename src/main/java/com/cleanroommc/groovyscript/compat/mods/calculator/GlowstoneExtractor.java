@@ -42,7 +42,7 @@ public class GlowstoneExtractor extends VirtualizedRegistry<DefaultSonarRecipe.V
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:glowstone')"))
+    @MethodDescription(example = @Example("item('minecraft:glowstone')"))
     public boolean removeByInput(IIngredient input) {
         return GlowstoneExtractorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -57,13 +57,13 @@ public class GlowstoneExtractor extends VirtualizedRegistry<DefaultSonarRecipe.V
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         GlowstoneExtractorRecipes.instance().getRecipes().forEach(this::addBackup);
         GlowstoneExtractorRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DefaultSonarRecipe.Value> streamRecipes() {
         return new SimpleObjectStream<>(GlowstoneExtractorRecipes.instance().getRecipes())
                 .setRemover(this::remove);

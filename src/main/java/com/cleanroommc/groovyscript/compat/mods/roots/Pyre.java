@@ -77,13 +77,13 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getPyreCraftingRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getPyreCraftingRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, PyreCraftingRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(getPyreCraftingRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));

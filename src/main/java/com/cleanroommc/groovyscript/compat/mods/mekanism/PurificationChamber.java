@@ -46,7 +46,7 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
         return recipe1;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('mekanism:oreblock:0'), gas('oxygen')"))
+    @MethodDescription(example = @Example("item('mekanism:oreblock:0'), gas('oxygen')"))
     public boolean removeByInput(IIngredient ingredient, GasStack gasInput) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Purification Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

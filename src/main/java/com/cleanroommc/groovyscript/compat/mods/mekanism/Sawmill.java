@@ -62,7 +62,7 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         return recipe1;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:ladder')"))
+    @MethodDescription(example = @Example("item('minecraft:ladder')"))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");

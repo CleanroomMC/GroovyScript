@@ -51,7 +51,7 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         return BotaniaAPI.manaInfusionRecipes.remove(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('botania:managlass')"))
+    @MethodDescription(example = @Example("item('botania:managlass')"))
     public boolean removeByOutput(ItemStack output) {
         if (BotaniaAPI.manaInfusionRecipes.removeIf(recipe -> {
             boolean found = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
@@ -66,7 +66,7 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:ender_pearl')"))
+    @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public boolean removeByInput(IIngredient input) {
         if (BotaniaAPI.manaInfusionRecipes.removeIf(recipe -> {
             boolean found = recipe.getInput() instanceof ItemStack ? input.test((ItemStack) recipe.getInput())
@@ -98,13 +98,13 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BotaniaAPI.manaInfusionRecipes.forEach(this::addBackup);
         BotaniaAPI.manaInfusionRecipes.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipeManaInfusion> streamRecipes() {
         return new SimpleObjectStream<>(BotaniaAPI.manaInfusionRecipes).setRemover(this::remove);
     }

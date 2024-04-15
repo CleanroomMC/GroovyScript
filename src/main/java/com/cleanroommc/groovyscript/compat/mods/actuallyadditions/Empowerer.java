@@ -56,7 +56,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('actuallyadditions:item_crystal')"))
+    @MethodDescription(example = @Example("item('actuallyadditions:item_crystal')"))
     public boolean removeByInput(IIngredient input) {
         return ActuallyAdditionsAPI.EMPOWERER_RECIPES.removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
@@ -67,7 +67,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('actuallyadditions:item_misc:24')"))
+    @MethodDescription(example = @Example("item('actuallyadditions:item_misc:24')"))
     public boolean removeByOutput(ItemStack output) {
         return ActuallyAdditionsAPI.EMPOWERER_RECIPES.removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
@@ -78,13 +78,13 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.EMPOWERER_RECIPES.forEach(this::addBackup);
         ActuallyAdditionsAPI.EMPOWERER_RECIPES.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<EmpowererRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.EMPOWERER_RECIPES)
                 .setRemover(this::remove);

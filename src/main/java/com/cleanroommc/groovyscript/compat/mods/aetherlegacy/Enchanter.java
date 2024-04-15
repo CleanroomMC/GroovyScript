@@ -28,7 +28,7 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
         add(enchantment);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('aether_legacy:enchanted_gravitite')"))
+    @MethodDescription(example = @Example("item('aether_legacy:enchanted_gravitite')"))
     public void removeByOutput(IIngredient output) {
         this.getRegistry().getValuesCollection().forEach(enchantment -> {
             if (output.test(enchantment.getOutput())) {

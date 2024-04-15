@@ -135,7 +135,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         InspirationsRegistryAccessor.getAnvilSmashing().forEach((a, b) -> addBackup(Pair.of(a, b)));
         InspirationsRegistryAccessor.getAnvilSmashing().clear();
@@ -145,7 +145,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         InspirationsRegistryAccessor.getAnvilBreaking().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<IBlockState, IBlockState>> streamRecipes() {
         return new SimpleObjectStream<>(InspirationsRegistryAccessor.getAnvilSmashing().entrySet())
                 .setRemover(r -> remove(r.getKey(), r.getValue()));

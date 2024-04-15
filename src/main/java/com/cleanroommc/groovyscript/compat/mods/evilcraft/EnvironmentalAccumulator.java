@@ -57,7 +57,7 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('evilcraft:exalted_crafter:1')"))
+    @MethodDescription(example = @Example("item('evilcraft:exalted_crafter:1')"))
     public boolean removeByInput(ItemStack input) {
         return org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
@@ -68,7 +68,7 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('evilcraft:exalted_crafter:2')"))
+    @MethodDescription(example = @Example("item('evilcraft:exalted_crafter:2')"))
     public boolean removeByOutput(ItemStack input) {
         return org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getOutput().getIngredient().test(input)) {
@@ -79,13 +79,13 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
         org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> streamRecipes() {
         return new SimpleObjectStream<>(org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);

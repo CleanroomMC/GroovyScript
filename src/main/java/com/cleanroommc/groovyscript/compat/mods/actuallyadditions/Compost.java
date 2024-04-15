@@ -55,7 +55,7 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('actuallyadditions:item_canola_seed')"))
+    @MethodDescription(example = @Example("item('actuallyadditions:item_canola_seed')"))
     public boolean removeByInput(IIngredient input) {
         return ActuallyAdditionsAPI.COMPOST_RECIPES.removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
@@ -66,7 +66,7 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('actuallyadditions:item_fertilizer')"))
+    @MethodDescription(example = @Example("item('actuallyadditions:item_fertilizer')"))
     public boolean removeByOutput(ItemStack output) {
         return ActuallyAdditionsAPI.COMPOST_RECIPES.removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
@@ -77,13 +77,13 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.COMPOST_RECIPES.forEach(this::addBackup);
         ActuallyAdditionsAPI.COMPOST_RECIPES.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CompostRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.COMPOST_RECIPES)
                 .setRemover(this::remove);

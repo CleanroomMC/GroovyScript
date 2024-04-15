@@ -35,7 +35,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
                 .register();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing soaking pot recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -50,7 +50,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('pyrotech:material', 54)"))
+    @MethodDescription(example = @Example("item('pyrotech:material', 54)"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing soaking pot recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")

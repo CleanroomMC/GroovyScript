@@ -75,7 +75,7 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('woot:stygianironplate')"))
+    @MethodDescription(example = @Example("item('woot:stygianironplate')"))
     public boolean removeByOutput(ItemStack output) {
         return Woot.anvilManager.getRecipes().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getCopyOutput(), output)) {
@@ -86,14 +86,14 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         Woot.anvilManager.getRecipes().forEach(this::addBackup);
         Woot.anvilManager.getRecipes().clear();
     }
 
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IAnvilRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Woot.anvilManager.getRecipes())
                 .setRemover(this::remove);
