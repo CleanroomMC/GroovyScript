@@ -81,13 +81,13 @@ public class TapperTree extends VirtualizedRegistry<TapperTree.TapperTreeEntry> 
         return removeByLeaf(new BlockWrapper(output));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<BlockWrapper, BlockWrapper>> streamRecipes() {
         return new SimpleObjectStream<>(TapperManagerAccessor.getLeafMap().entries())
                 .setRemover(x -> remove(x.getKey(), x.getValue()));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TapperManagerAccessor.getLeafMap().entries().forEach(x -> addBackup(new TapperTreeEntry(x.getKey(), x.getValue())));
         TapperManagerAccessor.getLeafMap().clear();

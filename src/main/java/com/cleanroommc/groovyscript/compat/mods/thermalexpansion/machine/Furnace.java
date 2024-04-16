@@ -74,7 +74,7 @@ public class Furnace extends VirtualizedRegistry<FurnaceRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:cactus:*')"))
+    @MethodDescription(example = @Example("item('minecraft:cactus:*')"))
     public boolean removeByInput(IIngredient input) {
         return FurnaceManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -85,7 +85,7 @@ public class Furnace extends VirtualizedRegistry<FurnaceRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:cooked_porkchop')"))
+    @MethodDescription(example = @Example("item('minecraft:cooked_porkchop')"))
     public boolean removeByOutput(IIngredient output) {
         return FurnaceManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (output.test(r.getOutput())) {
@@ -96,7 +96,7 @@ public class Furnace extends VirtualizedRegistry<FurnaceRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<FurnaceRecipe> streamRecipes() {
         return new SimpleObjectStream<>(FurnaceManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
@@ -107,7 +107,7 @@ public class Furnace extends VirtualizedRegistry<FurnaceRecipe> {
         FurnaceManagerAccessor.getFoodSet().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         FurnaceManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         FurnaceManagerAccessor.getRecipeMap().clear();

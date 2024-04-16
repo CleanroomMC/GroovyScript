@@ -103,7 +103,7 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = {
+    @MethodDescription(example = {
             @Example("item('thermalfoundation:fertilizer')"), @Example("item('minecraft:double_plant:4')")
     })
     public boolean removeByInput(IIngredient input) {
@@ -116,7 +116,7 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = {
+    @MethodDescription(example = {
             @Example("item('minecraft:red_flower:6')"), @Example("item('minecraft:melon_seeds')")
     })
     public boolean removeByOutput(IIngredient output) {
@@ -129,12 +129,12 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<InsolatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(InsolatorManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         InsolatorManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         InsolatorManagerAccessor.getRecipeMap().clear();

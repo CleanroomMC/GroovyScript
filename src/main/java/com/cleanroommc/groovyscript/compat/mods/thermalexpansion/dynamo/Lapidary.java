@@ -65,12 +65,12 @@ public class Lapidary extends VirtualizedRegistry<Lapidary.LapidaryRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ComparableItemStack> streamRecipes() {
         return new SimpleObjectStream<>(NumismaticManagerAccessor.getGemFuelMap().keySet()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         NumismaticManagerAccessor.getGemFuelMap().keySet().forEach(x -> addBackup(new LapidaryRecipe(x, NumismaticManagerAccessor.getGemFuelMap().get(x))));
         NumismaticManagerAccessor.getGemFuelMap().clear();

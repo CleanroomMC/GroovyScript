@@ -63,7 +63,7 @@ public class RefineryPotion extends VirtualizedRegistry<RefineryRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('potion_lingering').withNbt(['Potion': 'cofhcore:healing3'])"))
+    @MethodDescription(example = @Example("fluid('potion_lingering').withNbt(['Potion': 'cofhcore:healing3'])"))
     public boolean removeByInput(IIngredient input) {
         return RefineryManagerAccessor.getRecipeMapPotion().values().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -74,7 +74,7 @@ public class RefineryPotion extends VirtualizedRegistry<RefineryRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('potion_splash').withNbt(['Potion': 'cofhcore:leaping4'])"))
+    @MethodDescription(example = @Example("fluid('potion_splash').withNbt(['Potion': 'cofhcore:leaping4'])"))
     public boolean removeByOutput(IIngredient output) {
         return RefineryManagerAccessor.getRecipeMapPotion().values().removeIf(r -> {
             if (output.test(r.getOutputFluid()) || output.test(r.getOutputItem())) {
@@ -85,12 +85,12 @@ public class RefineryPotion extends VirtualizedRegistry<RefineryRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RefineryRecipe> streamRecipes() {
         return new SimpleObjectStream<>(RefineryManagerAccessor.getRecipeMapPotion().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         RefineryManagerAccessor.getRecipeMapPotion().values().forEach(this::addBackup);
         RefineryManagerAccessor.getRecipeMapPotion().clear();

@@ -68,13 +68,13 @@ public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorReci
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ComparableItemStack> streamRecipes() {
         return new SimpleObjectStream<>(XpCollectorManagerAccessor.getCatalystMap().keySet())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         XpCollectorManagerAccessor.getCatalystMap().keySet().stream().filter(XpCollectorManagerAccessor.getCatalystFactorMap()::containsKey)
                 .forEach(x -> addBackup(new XpCollectorRecipe(new ItemStack(x.item, x.metadata), XpCollectorManagerAccessor.getCatalystMap().get(x), XpCollectorManagerAccessor.getCatalystFactorMap().get(x))));

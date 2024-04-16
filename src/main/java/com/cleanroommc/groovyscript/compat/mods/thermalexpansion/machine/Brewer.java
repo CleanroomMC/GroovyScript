@@ -93,7 +93,7 @@ public class Brewer extends VirtualizedRegistry<BrewerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = {
+    @MethodDescription(example = {
             @Example("fluid('potion').withNbt(['Potion': 'minecraft:leaping'])"),
             @Example("item('minecraft:glowstone_dust')")
     })
@@ -107,7 +107,7 @@ public class Brewer extends VirtualizedRegistry<BrewerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('potion_splash').withNbt(['Potion': 'cofhcore:luck2'])"))
+    @MethodDescription(example = @Example("fluid('potion_splash').withNbt(['Potion': 'cofhcore:luck2'])"))
     public boolean removeByOutput(IIngredient output) {
         return BrewerManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (output.test(r.getOutputFluid())) {
@@ -118,12 +118,12 @@ public class Brewer extends VirtualizedRegistry<BrewerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BrewerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BrewerManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BrewerManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         BrewerManagerAccessor.getRecipeMap().clear();

@@ -65,12 +65,12 @@ public class Enervation extends VirtualizedRegistry<Enervation.EnervationRecipe>
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ComparableItemStack> streamRecipes() {
         return new SimpleObjectStream<>(EnervationManagerAccessor.getFuelMap().keySet()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         EnervationManagerAccessor.getFuelMap().keySet().forEach(x -> addBackup(new EnervationRecipe(x, EnervationManagerAccessor.getFuelMap().get(x))));
         EnervationManagerAccessor.getFuelMap().clear();

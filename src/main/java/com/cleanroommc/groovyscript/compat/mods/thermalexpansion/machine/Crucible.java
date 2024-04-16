@@ -76,7 +76,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:glowstone_dust')"))
+    @MethodDescription(example = @Example("item('minecraft:glowstone_dust')"))
     public boolean removeByInput(IIngredient input) {
         return CrucibleManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -87,7 +87,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('lava')"))
+    @MethodDescription(example = @Example("fluid('lava')"))
     public boolean removeByOutput(IIngredient output) {
         return CrucibleManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (output.test(r.getOutput())) {
@@ -98,12 +98,12 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CrucibleRecipe> streamRecipes() {
         return new SimpleObjectStream<>(CrucibleManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CrucibleManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         CrucibleManagerAccessor.getRecipeMap().clear();

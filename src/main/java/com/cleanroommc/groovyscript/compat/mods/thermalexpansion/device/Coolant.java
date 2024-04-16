@@ -72,12 +72,12 @@ public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
         return remove(input.getFluid().getName());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<String> streamRecipes() {
         return new SimpleObjectStream<>(CoolantManagerAccessor.getCoolantMap().keySet()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CoolantManagerAccessor.getCoolantMap().keySet().stream().filter(CoolantManagerAccessor.getCoolantFactorMap()::containsKey)
                 .forEach(x -> addBackup(new CoolantRecipe(x, CoolantManagerAccessor.getCoolantMap().getInt(x), CoolantManagerAccessor.getCoolantFactorMap().getInt(x))));

@@ -89,7 +89,7 @@ public class TransposerFill extends VirtualizedRegistry<TransposerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = {
+    @MethodDescription(example = {
             @Example("fluid('glowstone')"), @Example("item('minecraft:concrete_powder:3')")
     })
     public boolean removeByInput(IIngredient input) {
@@ -102,7 +102,7 @@ public class TransposerFill extends VirtualizedRegistry<TransposerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:ice')"))
+    @MethodDescription(example = @Example("item('minecraft:ice')"))
     public boolean removeByOutput(IIngredient output) {
         return TransposerManagerAccessor.getRecipeMapFill().values().removeIf(r -> {
             if (output.test(r.getOutput())) {
@@ -113,12 +113,12 @@ public class TransposerFill extends VirtualizedRegistry<TransposerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<TransposerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TransposerManagerAccessor.getRecipeMapFill().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TransposerManagerAccessor.getRecipeMapFill().values().forEach(this::addBackup);
         TransposerManagerAccessor.getRecipeMapFill().clear();

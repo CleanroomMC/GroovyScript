@@ -65,12 +65,12 @@ public class Numismatic extends VirtualizedRegistry<Numismatic.NumismaticRecipe>
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ComparableItemStack> streamRecipes() {
         return new SimpleObjectStream<>(NumismaticManagerAccessor.getFuelMap().keySet()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         NumismaticManagerAccessor.getFuelMap().keySet().forEach(x -> addBackup(new NumismaticRecipe(x, NumismaticManagerAccessor.getFuelMap().get(x))));
         NumismaticManagerAccessor.getFuelMap().clear();

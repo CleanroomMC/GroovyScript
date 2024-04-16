@@ -59,7 +59,7 @@ public class Charger extends VirtualizedRegistry<ChargerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('thermalfoundation:bait:1')"))
+    @MethodDescription(example = @Example("item('thermalfoundation:bait:1')"))
     public boolean removeByInput(IIngredient input) {
         return ChargerManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -70,7 +70,7 @@ public class Charger extends VirtualizedRegistry<ChargerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('thermalfoundation:fertilizer:2')"))
+    @MethodDescription(example = @Example("item('thermalfoundation:fertilizer:2')"))
     public boolean removeByOutput(IIngredient output) {
         return ChargerManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (output.test(r.getOutput())) {
@@ -81,12 +81,12 @@ public class Charger extends VirtualizedRegistry<ChargerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ChargerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ChargerManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ChargerManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         ChargerManagerAccessor.getRecipeMap().clear();

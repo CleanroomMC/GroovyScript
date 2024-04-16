@@ -123,7 +123,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<TapperItemRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TapperManagerAccessor.getItemMap().entrySet().stream().map(x -> new TapperItemRecipe(x.getKey(), x.getValue())).collect(Collectors.toList()))
                 .setRemover(this::removeItem);
@@ -147,7 +147,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
         TapperManagerAccessor.getBlockMap().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TapperManagerAccessor.getItemMap().forEach((key, value) -> addBackup(new TapperItemRecipe(key, value)));
         TapperManagerAccessor.getItemMap().clear();

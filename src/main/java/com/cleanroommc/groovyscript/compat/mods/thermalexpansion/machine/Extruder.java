@@ -106,7 +106,7 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example(value = "fluid('water')", commented = true))
+    @MethodDescription(example = @Example(value = "fluid('water')", commented = true))
     public boolean removeByInput(IIngredient input) {
         // done this way so both remove operations are called
         boolean hasRemoved = removeByInput(false, input);
@@ -125,7 +125,7 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:obsidian')"))
+    @MethodDescription(example = @Example("item('minecraft:obsidian')"))
     public boolean removeByOutput(IIngredient output) {
         // done this way so both remove operations are called
         boolean hasRemoved = removeByOutput(false, output);
@@ -133,7 +133,7 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
         return hasRemoved;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ExtruderRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Booleans.asList(true, false).stream().map(this::map).map(Map::values).flatMap(Collection::stream).collect(Collectors.toList()))
                 .setRemover(this::remove);
@@ -145,7 +145,7 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
         map(sedimentary).clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         removeByType(true);
         removeByType(false);

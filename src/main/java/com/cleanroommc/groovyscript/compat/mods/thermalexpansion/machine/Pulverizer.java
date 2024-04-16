@@ -60,7 +60,7 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:emerald_ore')"))
+    @MethodDescription(example = @Example("item('minecraft:emerald_ore')"))
     public boolean removeByInput(IIngredient input) {
         return PulverizerManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -71,7 +71,7 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = {
+    @MethodDescription(example = {
             @Example("item('thermalfoundation:material:772')"), @Example("item('minecraft:diamond')")
     })
     public boolean removeByOutput(IIngredient output) {
@@ -84,12 +84,12 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<PulverizerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(PulverizerManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         PulverizerManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         PulverizerManagerAccessor.getRecipeMap().clear();

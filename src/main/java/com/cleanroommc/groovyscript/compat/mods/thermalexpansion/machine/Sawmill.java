@@ -62,7 +62,7 @@ public class Sawmill extends VirtualizedRegistry<SawmillRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:pumpkin')"))
+    @MethodDescription(example = @Example("item('minecraft:pumpkin')"))
     public boolean removeByInput(IIngredient input) {
         return SawmillManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -73,7 +73,7 @@ public class Sawmill extends VirtualizedRegistry<SawmillRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = {
+    @MethodDescription(example = {
             @Example("item('thermalfoundation:material:800')"), @Example("item('minecraft:leather')")
     })
     public boolean removeByOutput(IIngredient output) {
@@ -86,12 +86,12 @@ public class Sawmill extends VirtualizedRegistry<SawmillRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<SawmillRecipe> streamRecipes() {
         return new SimpleObjectStream<>(SawmillManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         SawmillManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         SawmillManagerAccessor.getRecipeMap().clear();

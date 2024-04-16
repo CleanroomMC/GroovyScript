@@ -77,13 +77,13 @@ public class Fisher extends VirtualizedRegistry<Fisher.FisherRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ItemStack> streamRecipes() {
         return new SimpleObjectStream<>(FisherManagerAccessor.getFishList())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         FisherManagerAccessor.getFishList().forEach(x -> addBackup(new FisherRecipe(x, FisherManagerAccessor.getWeightList().remove(FisherManagerAccessor.getFishList().indexOf(x)))));
         FisherManagerAccessor.getFishList().clear();

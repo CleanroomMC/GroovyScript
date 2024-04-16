@@ -68,7 +68,7 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
         return remove(new ComparableItemStack(input));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DiffuserRecipe> streamRecipes() {
         List<DiffuserRecipe> list = DiffuserManagerAccessor.getReagentAmpMap().keySet().stream()
                 .filter(DiffuserManagerAccessor.getReagentDurMap()::containsKey)
@@ -77,7 +77,7 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
         return new SimpleObjectStream<>(list).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         DiffuserManagerAccessor.getReagentAmpMap().keySet().stream()
                 .filter(DiffuserManagerAccessor.getReagentDurMap()::containsKey)

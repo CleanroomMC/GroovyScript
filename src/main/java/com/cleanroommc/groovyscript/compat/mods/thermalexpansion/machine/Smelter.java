@@ -87,7 +87,7 @@ public class Smelter extends VirtualizedRegistry<SmelterRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = {
+    @MethodDescription(example = {
             @Example("ore('sand')"), @Example("item('minecraft:iron_ingot')")
     })
     public boolean removeByInput(IIngredient input) {
@@ -100,7 +100,7 @@ public class Smelter extends VirtualizedRegistry<SmelterRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('thermalfoundation:material:166')"))
+    @MethodDescription(example = @Example("item('thermalfoundation:material:166')"))
     public boolean removeByOutput(IIngredient output) {
         return SmelterManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (output.test(r.getPrimaryOutput()) || output.test(r.getSecondaryOutput())) {
@@ -111,12 +111,12 @@ public class Smelter extends VirtualizedRegistry<SmelterRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<SmelterRecipe> streamRecipes() {
         return new SimpleObjectStream<>(SmelterManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         SmelterManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         SmelterManagerAccessor.getRecipeMap().clear();

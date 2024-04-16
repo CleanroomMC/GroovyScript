@@ -65,12 +65,12 @@ public class Steam extends VirtualizedRegistry<Steam.SteamRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ComparableItemStack> streamRecipes() {
         return new SimpleObjectStream<>(SteamManagerAccessor.getFuelMap().keySet()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         SteamManagerAccessor.getFuelMap().keySet().forEach(x -> addBackup(new SteamRecipe(x, SteamManagerAccessor.getFuelMap().get(x))));
         SteamManagerAccessor.getFuelMap().clear();

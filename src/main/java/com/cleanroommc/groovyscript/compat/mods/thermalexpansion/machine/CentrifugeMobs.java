@@ -66,7 +66,7 @@ public class CentrifugeMobs extends VirtualizedRegistry<CentrifugeRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('thermalexpansion:morb').withNbt(['id': 'minecraft:slime'])"))
+    @MethodDescription(example = @Example("item('thermalexpansion:morb').withNbt(['id': 'minecraft:slime'])"))
     public boolean removeByInput(IIngredient input) {
         return CentrifugeManagerAccessor.getRecipeMapMobs().values().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -77,7 +77,7 @@ public class CentrifugeMobs extends VirtualizedRegistry<CentrifugeRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = {
+    @MethodDescription(example = {
             @Example("item('minecraft:fish')"), @Example(value = "fluid('experience')", commented = true)
     })
     public boolean removeByOutput(IIngredient output) {
@@ -90,12 +90,12 @@ public class CentrifugeMobs extends VirtualizedRegistry<CentrifugeRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CentrifugeRecipe> streamRecipes() {
         return new SimpleObjectStream<>(CentrifugeManagerAccessor.getRecipeMapMobs().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CentrifugeManagerAccessor.getRecipeMapMobs().values().forEach(this::addBackup);
         CentrifugeManagerAccessor.getRecipeMapMobs().clear();

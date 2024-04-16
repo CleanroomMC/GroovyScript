@@ -102,7 +102,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = {
+    @MethodDescription(example = {
             @Example("item('minecraft:blaze_rod')"),
             @Example(value = "item('minecraft:book')", commented = true)
     })
@@ -116,7 +116,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:enchanted_book').withNbt(['StoredEnchantments': [['lvl': 1, 'id': 34]]])"))
+    @MethodDescription(example = @Example("item('minecraft:enchanted_book').withNbt(['StoredEnchantments': [['lvl': 1, 'id': 34]]])"))
     public boolean removeByOutput(IIngredient output) {
         return EnchanterManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (output.test(r.getOutput())) {
@@ -127,12 +127,12 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<EnchanterRecipe> streamRecipes() {
         return new SimpleObjectStream<>(EnchanterManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         EnchanterManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         EnchanterManagerAccessor.getRecipeMap().clear();

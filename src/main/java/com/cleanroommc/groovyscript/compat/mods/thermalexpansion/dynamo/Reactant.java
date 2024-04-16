@@ -135,12 +135,12 @@ public class Reactant extends VirtualizedRegistry<ReactantManager.Reaction> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ReactantManager.Reaction> streamRecipes() {
         return new SimpleObjectStream<>(ReactantManagerAccessor.getReactionMap().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ReactantManagerAccessor.getReactionMap().values().forEach(this::addBackup);
         ReactantManagerAccessor.getReactionMap().clear();

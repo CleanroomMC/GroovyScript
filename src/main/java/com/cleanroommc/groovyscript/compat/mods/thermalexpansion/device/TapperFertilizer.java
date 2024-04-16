@@ -55,13 +55,13 @@ public class TapperFertilizer extends VirtualizedRegistry<TapperFertilizer.Tappe
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ComparableItemStack> streamRecipes() {
         return new SimpleObjectStream<>(TapperManagerAccessor.getFertilizerMap().keySet())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TapperManagerAccessor.getFertilizerMap().keySet().forEach(x -> addBackup(new TapperRecipe(x, TapperManagerAccessor.getFertilizerMap().get(x))));
         TapperManagerAccessor.getFertilizerMap().clear();

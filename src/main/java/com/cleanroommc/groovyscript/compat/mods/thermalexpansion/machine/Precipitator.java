@@ -74,7 +74,7 @@ public class Precipitator extends VirtualizedRegistry<PrecipitatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example(value = "fluid('water')", commented = true))
+    @MethodDescription(example = @Example(value = "fluid('water')", commented = true))
     public boolean removeByInput(IIngredient input) {
         return PrecipitatorManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -85,7 +85,7 @@ public class Precipitator extends VirtualizedRegistry<PrecipitatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:snowball')"))
+    @MethodDescription(example = @Example("item('minecraft:snowball')"))
     public boolean removeByOutput(IIngredient output) {
         return PrecipitatorManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (output.test(r.getOutput())) {
@@ -96,12 +96,12 @@ public class Precipitator extends VirtualizedRegistry<PrecipitatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<PrecipitatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(PrecipitatorManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         PrecipitatorManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         PrecipitatorManagerAccessor.getRecipeMap().clear();

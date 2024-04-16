@@ -134,7 +134,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('resin')"))
+    @MethodDescription(example = @Example("fluid('resin')"))
     public boolean removeByInput(IIngredient input) {
         return RefineryManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -145,7 +145,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = {
+    @MethodDescription(example = {
             @Example(value = "item('thermalfoundation:material:771')", commented = true), @Example("fluid('refined_biofuel')")
     })
     public boolean removeByOutput(IIngredient output) {
@@ -158,7 +158,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RefineryRecipe> streamRecipes() {
         return new SimpleObjectStream<>(RefineryManagerAccessor.getRecipeMap().values()).setRemover(this::remove);
     }
@@ -175,7 +175,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         RefineryManagerAccessor.getBioFluids().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         RefineryManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         RefineryManagerAccessor.getRecipeMap().clear();

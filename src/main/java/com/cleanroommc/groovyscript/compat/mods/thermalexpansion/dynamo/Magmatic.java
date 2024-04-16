@@ -70,12 +70,12 @@ public class Magmatic extends VirtualizedRegistry<Magmatic.MagmaticRecipe> {
         return removeByInput(input.getFluid().getName());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<String> streamRecipes() {
         return new SimpleObjectStream<>(MagmaticManagerAccessor.getFuelMap().keySet()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MagmaticManagerAccessor.getFuelMap().keySet().forEach(x -> addBackup(new MagmaticRecipe(x, MagmaticManagerAccessor.getFuelMap().getInt(x))));
         MagmaticManagerAccessor.getFuelMap().clear();

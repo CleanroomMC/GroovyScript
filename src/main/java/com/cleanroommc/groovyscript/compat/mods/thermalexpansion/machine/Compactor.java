@@ -96,7 +96,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:iron_ingot')"))
+    @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
     public boolean removeByInput(IIngredient input) {
         boolean hasRemoved = false;
         for (CompactorManager.Mode mode : CompactorManager.Mode.values()) {
@@ -116,7 +116,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = {
+    @MethodDescription(example = {
             @Example("item('thermalfoundation:material:24')"), @Example("item('minecraft:blaze_rod')")
     })
     public boolean removeByOutput(IIngredient output) {
@@ -127,7 +127,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         return hasRemoved;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CompactorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Arrays.stream(CompactorManager.Mode.values()).map(this::map).map(Map::values).flatMap(Collection::stream).collect(Collectors.toList()))
                 .setRemover(this::remove);
@@ -139,7 +139,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         map(mode).clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         Arrays.stream(CompactorManager.Mode.values()).forEach(this::removeByMode);
     }

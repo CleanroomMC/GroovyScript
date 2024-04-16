@@ -92,7 +92,7 @@ public class Factorizer extends VirtualizedRegistry<Pair<Boolean, FactorizerMana
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:coal:1')"))
+    @MethodDescription(example = @Example("item('minecraft:coal:1')"))
     public boolean removeByInput(IIngredient input) {
         // done this way so both remove operations are called
         boolean hasRemoved = removeByInput(false, input);
@@ -119,7 +119,7 @@ public class Factorizer extends VirtualizedRegistry<Pair<Boolean, FactorizerMana
         return hasRemoved;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<FactorizerManager.FactorizerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Booleans.asList(true, false).stream().map(this::map).map(Map::values).flatMap(Collection::stream).collect(Collectors.toList()))
                 .setRemover(this::remove);
@@ -131,7 +131,7 @@ public class Factorizer extends VirtualizedRegistry<Pair<Boolean, FactorizerMana
         map(isSplit).clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         removeByType(true);
         removeByType(false);
