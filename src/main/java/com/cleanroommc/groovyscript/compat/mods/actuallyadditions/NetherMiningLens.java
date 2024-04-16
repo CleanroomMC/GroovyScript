@@ -49,12 +49,12 @@ public class NetherMiningLens extends VirtualizedRegistry<WeightedOre> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOre", example = @Example("ore('oreQuartz')"))
+    @MethodDescription(example = @Example("ore('oreQuartz')"))
     public boolean removeByOre(OreDictIngredient ore) {
         return this.removeByOre(ore.getOreDict());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOre", example = @Example("'oreQuartz'"))
+    @MethodDescription(example = @Example("'oreQuartz'"))
     public boolean removeByOre(String oreName) {
         return ActuallyAdditionsAPI.NETHERRACK_ORES.removeIf(recipe -> {
             boolean found = oreName.equals(recipe.name);
@@ -65,13 +65,13 @@ public class NetherMiningLens extends VirtualizedRegistry<WeightedOre> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.NETHERRACK_ORES.forEach(this::addBackup);
         ActuallyAdditionsAPI.NETHERRACK_ORES.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<WeightedOre> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.NETHERRACK_ORES)
                 .setRemover(this::remove);

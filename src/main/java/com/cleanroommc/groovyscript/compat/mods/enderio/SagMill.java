@@ -50,7 +50,7 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat')"))
+    @MethodDescription(example = @Example("item('minecraft:wheat')"))
     public void removeByInput(ItemStack input) {
         Recipe recipe = (Recipe) SagMillRecipeManager.getInstance().getRecipeForInput(RecipeLevel.IGNORE, input);
         if (recipe == null) {
@@ -67,13 +67,13 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         restoreFromBackup().forEach(SagMillRecipeManager.getInstance().getRecipes()::add);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Recipe> streamRecipes() {
         return new SimpleObjectStream<>(SagMillRecipeManager.getInstance().getRecipes())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         SagMillRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         SagMillRecipeManager.getInstance().getRecipes().clear();

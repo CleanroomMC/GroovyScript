@@ -38,7 +38,7 @@ public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("gas('cleanGold')"))
+    @MethodDescription(example = @Example("gas('cleanGold')"))
     public boolean removeByInput(GasStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Crystallizer recipe").error();
         msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");

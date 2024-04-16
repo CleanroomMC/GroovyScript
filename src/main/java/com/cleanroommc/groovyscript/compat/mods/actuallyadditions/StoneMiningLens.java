@@ -49,12 +49,12 @@ public class StoneMiningLens extends VirtualizedRegistry<WeightedOre> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOre", example = @Example("ore('oreCoal')"))
+    @MethodDescription(example = @Example("ore('oreCoal')"))
     public boolean removeByOre(OreDictIngredient ore) {
         return this.removeByOre(ore.getOreDict());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOre", example = @Example("'oreLapis'"))
+    @MethodDescription(example = @Example("'oreLapis'"))
     public boolean removeByOre(String oreName) {
         return ActuallyAdditionsAPI.STONE_ORES.removeIf(recipe -> {
             boolean found = oreName.equals(recipe.name);
@@ -65,13 +65,13 @@ public class StoneMiningLens extends VirtualizedRegistry<WeightedOre> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.STONE_ORES.forEach(this::addBackup);
         ActuallyAdditionsAPI.STONE_ORES.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<WeightedOre> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.STONE_ORES)
                 .setRemover(this::remove);

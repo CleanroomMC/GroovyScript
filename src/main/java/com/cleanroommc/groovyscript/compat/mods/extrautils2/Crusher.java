@@ -40,7 +40,7 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:blaze_rod')"))
+    @MethodDescription(example = @Example("item('minecraft:blaze_rod')"))
     public boolean removeByInput(IIngredient input) {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineCrusher.INSTANCE.recipes_registry) {
@@ -55,7 +55,7 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
         return !agony.isEmpty();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IMachineRecipe> streamRecipes() {
         List<IMachineRecipe> list = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineCrusher.INSTANCE.recipes_registry) {
@@ -64,7 +64,7 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
         return new SimpleObjectStream<>(list).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         List<IMachineRecipe> agony = new ArrayList<>();
         for (IMachineRecipe recipe : XUMachineCrusher.INSTANCE.recipes_registry) {

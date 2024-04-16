@@ -34,7 +34,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
                 .register();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat')"))
+    @MethodDescription(example = @Example("item('minecraft:wheat')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing drying rack recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -49,7 +49,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
+    @MethodDescription
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing drying rack recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")

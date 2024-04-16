@@ -42,7 +42,7 @@ public class ConductorMast extends VirtualizedRegistry<DefaultSonarRecipe.Value>
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('calculator:firediamond')"))
+    @MethodDescription(example = @Example("item('calculator:firediamond')"))
     public boolean removeByInput(IIngredient input) {
         return ConductorMastRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -57,7 +57,7 @@ public class ConductorMast extends VirtualizedRegistry<DefaultSonarRecipe.Value>
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('calculator:material:7')"))
+    @MethodDescription(example = @Example("item('calculator:material:7')"))
     public boolean removeByOutput(IIngredient output) {
         return ConductorMastRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
@@ -72,13 +72,13 @@ public class ConductorMast extends VirtualizedRegistry<DefaultSonarRecipe.Value>
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ConductorMastRecipes.instance().getRecipes().forEach(this::addBackup);
         ConductorMastRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DefaultSonarRecipe.Value> streamRecipes() {
         return new SimpleObjectStream<>(ConductorMastRecipes.instance().getRecipes())
                 .setRemover(this::remove);

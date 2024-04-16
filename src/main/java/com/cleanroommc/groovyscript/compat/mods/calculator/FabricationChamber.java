@@ -51,7 +51,7 @@ public class FabricationChamber extends VirtualizedRegistry<FabricationSonarReci
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1])"))
+    @MethodDescription(example = @Example("item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1])"))
     public boolean removeByInput(IIngredient input) {
         return FabricationChamberRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -66,7 +66,7 @@ public class FabricationChamber extends VirtualizedRegistry<FabricationSonarReci
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('calculator:calculatorassembly')"))
+    @MethodDescription(example = @Example("item('calculator:calculatorassembly')"))
     public boolean removeByOutput(IIngredient output) {
         return FabricationChamberRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
@@ -81,13 +81,13 @@ public class FabricationChamber extends VirtualizedRegistry<FabricationSonarReci
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         FabricationChamberRecipes.instance().getRecipes().forEach(this::addBackup);
         FabricationChamberRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<FabricationSonarRecipe> streamRecipes() {
         return new SimpleObjectStream<>(FabricationChamberRecipes.instance().getRecipes())
                 .setRemover(this::remove);

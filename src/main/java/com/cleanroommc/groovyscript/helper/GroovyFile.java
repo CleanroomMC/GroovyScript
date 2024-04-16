@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
+import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.io.FileType;
 import groovy.lang.Closure;
 import groovy.transform.NamedParam;
@@ -36,6 +37,11 @@ public final class GroovyFile implements Comparable<GroovyFile> {
     @GroovyBlacklist
     private final File internal;
     private final boolean accessible;
+
+    public GroovyFile(GroovyFile file) {
+        this.internal = file.internal;
+        this.accessible = file.accessible;
+    }
 
     public GroovyFile(File internal) {
         File file;
@@ -716,7 +722,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
     public void eachFile(final FileType fileType, @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
             throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.eachFile(this.internal, fileType, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.eachFile(this.internal, fileType, wrapped);
     }
 
     /**
@@ -732,7 +740,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
     public void eachFile(@ClosureParams(value = SimpleType.class, options = "java.io.File")
                          final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.eachFile(this.internal, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.eachFile(this.internal, wrapped);
     }
 
     /**
@@ -748,7 +758,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
     public void eachDir(
             @ClosureParams(value = SimpleType.class, options = "java.io.File") Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.eachDir(this.internal, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.eachDir(this.internal, wrapped);
     }
 
     /**
@@ -766,7 +778,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
     public void eachFileRecurse(final FileType fileType, @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
             throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.eachFileRecurse(this.internal, fileType, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.eachFileRecurse(this.internal, fileType, wrapped);
     }
 
     /**
@@ -841,7 +855,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
                          @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
             throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.traverse(this.internal, options, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.traverse(this.internal, options, wrapped);
     }
 
     /**
@@ -858,7 +874,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
     public void traverse(@ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
             throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.traverse(this.internal, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.traverse(this.internal, wrapped);
     }
 
     /**
@@ -903,7 +921,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
     public void eachFileRecurse(
             @ClosureParams(value = SimpleType.class, options = "java.io.File") Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.eachFileRecurse(this.internal, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.eachFileRecurse(this.internal, wrapped);
     }
 
     /**
@@ -921,7 +941,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
             @ClosureParams(value = SimpleType.class, options = "java.io.File")
             final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.eachDirRecurse(this.internal, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.eachDirRecurse(this.internal, wrapped);
     }
 
     /**
@@ -954,7 +976,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
                               @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
             throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.eachFileMatch(this.internal, fileType, nameFilter, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.eachFileMatch(this.internal, fileType, nameFilter, wrapped);
     }
 
     /**
@@ -972,7 +996,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
     public void eachFileMatch(final Object nameFilter, @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
             throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.eachFileMatch(this.internal, nameFilter, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.eachFileMatch(this.internal, nameFilter, wrapped);
     }
 
     /**
@@ -990,7 +1016,9 @@ public final class GroovyFile implements Comparable<GroovyFile> {
     public void eachDirMatch(final Object nameFilter, @ClosureParams(value = SimpleType.class, options = "java.io.File")
     final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        ResourceGroovyMethods.eachDirMatch(this.internal, nameFilter, closure);
+        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
+                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        ResourceGroovyMethods.eachDirMatch(this.internal, nameFilter, wrapped);
     }
 
     /**

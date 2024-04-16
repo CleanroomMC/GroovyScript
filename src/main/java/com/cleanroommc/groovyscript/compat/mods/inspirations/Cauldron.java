@@ -202,13 +202,13 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         removeByFluidOutput(output.getFluid());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         InspirationsRegistryAccessor.getCauldronRecipes().forEach(this::addBackup);
         InspirationsRegistryAccessor.getCauldronRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ICauldronRecipe> streamRecipes() {
         return new SimpleObjectStream<>(InspirationsRegistryAccessor.getCauldronRecipes())
                 .setRemover(this::remove);

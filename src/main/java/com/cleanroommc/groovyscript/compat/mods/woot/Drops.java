@@ -97,13 +97,13 @@ public class Drops extends VirtualizedRegistry<Object> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops().forEach(this::addBackup);
         ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Object> streamRecipes() {
         return new SimpleObjectStream<>(((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops())
                 .setRemover(this::remove);

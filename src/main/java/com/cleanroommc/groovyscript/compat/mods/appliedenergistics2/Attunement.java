@@ -133,7 +133,7 @@ public class Attunement extends VirtualizedRegistry<Pair<Object, TunnelType>> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getTunnels().forEach((item, value) -> addBackup(Pair.of(item, value)));
         ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getTunnels().clear();

@@ -45,7 +45,7 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
         return recipe1;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('mekanism:oreblock:0')"))
+    @MethodDescription(example = @Example("item('mekanism:oreblock:0')"))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");

@@ -41,7 +41,7 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('extrautils2:ingredients:4')"))
+    @MethodDescription(example = @Example("item('extrautils2:ingredients:4')"))
     public boolean removeByOutput(ItemStack output) {
         return TileResonator.resonatorRecipes.removeIf(r -> {
             if (ItemHandlerHelper.canItemStacksStack(r.getOutput(), output)) {
@@ -52,7 +52,7 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:quartz_block')"))
+    @MethodDescription(example = @Example("item('minecraft:quartz_block')"))
     public boolean removeByInput(IIngredient input) {
         return TileResonator.resonatorRecipes.removeIf(r -> {
             if (input.test(r.getInputs().get(0))) {
@@ -71,12 +71,12 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IResonatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TileResonator.resonatorRecipes).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TileResonator.resonatorRecipes.forEach(this::addBackup);
         TileResonator.resonatorRecipes.clear();

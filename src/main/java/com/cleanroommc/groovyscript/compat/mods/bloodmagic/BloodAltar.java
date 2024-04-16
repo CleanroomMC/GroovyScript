@@ -63,7 +63,7 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:ender_pearl')"))
+    @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public boolean removeByInput(IIngredient input) {
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().removeIf(recipe -> {
             boolean removeRecipe = recipe.getInput().test(IngredientHelper.toItemStack(input));
@@ -82,7 +82,7 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('bloodmagic:slate:4')"))
+    @MethodDescription(example = @Example("item('bloodmagic:slate:4')"))
     public boolean removeByOutput(ItemStack output) {
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
@@ -101,13 +101,13 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().forEach(this::addBackup);
         ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipeBloodAltar> streamRecipes() {
         return new SimpleObjectStream<>(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes())
                 .setRemover(this::remove);

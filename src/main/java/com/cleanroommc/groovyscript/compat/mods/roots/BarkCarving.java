@@ -114,13 +114,13 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getBarkRecipeMap().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getBarkRecipeMap().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BarkRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getBarkRecipes())
                 .setRemover(r -> this.removeByName(r.getName()));

@@ -114,7 +114,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ConstellationRegistryAccessor.getConstellationList().forEach(this::addBackup);
         ConstellationRegistryAccessor.getConstellationList().clear();

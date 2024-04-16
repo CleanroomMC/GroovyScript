@@ -35,13 +35,13 @@ public class Aspect extends VirtualizedRegistry<thaumcraft.api.aspects.Aspect> {
         return thaumcraft.api.aspects.Aspect.aspects.remove(aspect.getTag(), aspect);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<String, thaumcraft.api.aspects.Aspect>> streamRecipes() {
         return new SimpleObjectStream<>(thaumcraft.api.aspects.Aspect.aspects.entrySet())
                 .setRemover(x -> remove(x.getValue()));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         thaumcraft.api.aspects.Aspect.aspects.forEach((k, v) -> addBackup(v));
         thaumcraft.api.aspects.Aspect.aspects.clear();

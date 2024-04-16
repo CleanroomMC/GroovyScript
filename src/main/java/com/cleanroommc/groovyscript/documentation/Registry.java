@@ -288,7 +288,13 @@ public class Registry {
 
     private String methodDescription(Method method) {
         String desc = method.getAnnotation(MethodDescription.class).description();
-        String lang = desc.isEmpty() ? String.format("%s.%s", baseTranslationKey, method.getName()) : desc;
+        String registryDefault = String.format("%s.%s", baseTranslationKey, method.getName());
+        String globalDefault = String.format("groovyscript.wiki.%s", method.getName());
+        // If `desc` isn't defined, check the `registryDefault` key. If it exists, use it.
+        // Then, check the `globalDefault` key. If it exists use it. Otherwise, we want to still use the `registryDefault` for logging a missing key.
+        String lang = desc.isEmpty()
+                      ? I18n.hasKey(registryDefault) || !I18n.hasKey(globalDefault) ? registryDefault : globalDefault
+                      : desc;
 
         return String.format("- %s:\n\n%s",
                              Documentation.translate(lang),

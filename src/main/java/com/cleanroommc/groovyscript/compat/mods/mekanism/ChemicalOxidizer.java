@@ -45,7 +45,7 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
         return recipe1;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('dustSulfur')"))
+    @MethodDescription(example = @Example("ore('dustSulfur')"))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");

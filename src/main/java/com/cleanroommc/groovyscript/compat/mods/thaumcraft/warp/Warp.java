@@ -37,7 +37,7 @@ public class Warp extends VirtualizedRegistry<Warp.InternalWarp> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CommonInternals.warpMap.forEach((key, value) -> addBackup(new InternalWarp(key, value)));
         CommonInternals.warpMap.clear();

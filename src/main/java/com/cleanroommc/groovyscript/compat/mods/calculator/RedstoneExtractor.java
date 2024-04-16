@@ -42,7 +42,7 @@ public class RedstoneExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Va
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:redstone_block')"))
+    @MethodDescription(example = @Example("item('minecraft:redstone_block')"))
     public boolean removeByInput(IIngredient input) {
         return RedstoneExtractorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -57,13 +57,13 @@ public class RedstoneExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Va
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         RedstoneExtractorRecipes.instance().getRecipes().forEach(this::addBackup);
         RedstoneExtractorRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DefaultSonarRecipe.Value> streamRecipes() {
         return new SimpleObjectStream<>(RedstoneExtractorRecipes.instance().getRecipes())
                 .setRemover(this::remove);

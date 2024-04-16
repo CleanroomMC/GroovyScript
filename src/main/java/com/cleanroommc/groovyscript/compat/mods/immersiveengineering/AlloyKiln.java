@@ -54,7 +54,7 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:metal:6')"))
+    @MethodDescription(example = @Example("item('immersiveengineering:metal:6')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Alloy Kiln recipe")
@@ -73,7 +73,7 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         recipes.forEach(this::addBackup);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:gold_ingot'), item('immersiveengineering:metal:3')"))
+    @MethodDescription(example = @Example("item('minecraft:gold_ingot'), item('immersiveengineering:metal:3')"))
     public void removeByInput(ItemStack input, ItemStack input1) {
         if (GroovyLog.msg("Error removing Immersive Engineering Alloy Kiln recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "input 1 must not be empty")
@@ -93,12 +93,12 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<AlloyRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AlloyRecipe.recipeList).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         AlloyRecipe.recipeList.forEach(this::addBackup);
         AlloyRecipe.recipeList.clear();

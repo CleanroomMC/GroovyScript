@@ -52,7 +52,7 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
                 .register();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:stone_slab', 3)"))
+    @MethodDescription(example = @Example("item('minecraft:stone_slab', 3)"))
     public void removeByOutput(ItemStack output) {
         if (GroovyLog.msg("Error removing pyrotech anvil recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")

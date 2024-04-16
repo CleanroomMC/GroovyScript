@@ -34,7 +34,7 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
                 .register();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:snowball')"))
+    @MethodDescription(example = @Example("item('minecraft:snowball')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing compacting bin recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -49,7 +49,7 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:bone_block')"))
+    @MethodDescription(example = @Example("item('minecraft:bone_block')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing compacting bin recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")

@@ -97,13 +97,13 @@ public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
         restoreFromBackup().forEach(c -> accessor.getCoolants().put(c.getFluid().getName(), c));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<String, IFluidCoolant>> streamRecipes() {
         return new SimpleObjectStream<>(((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getCoolants().entrySet())
                 .setRemover(r -> remove(r.getValue()));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getCoolants().forEach((r, l) -> {
             if (l == null) return;

@@ -98,7 +98,7 @@ public class MobConfig extends VirtualizedRegistry<Pair<String, Integer>> {
         remove(new WootMobName(name));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMobMap().forEach((key, value) -> addBackup(Pair.of(key, value)));
         ((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMobMap().clear();

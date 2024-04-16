@@ -125,12 +125,12 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ExcavatorHandler.MineralMix, Integer>> streamRecipes() {
         return new SimpleObjectStream<>(ExcavatorHandler.mineralList.entrySet()).setRemover(r -> this.remove(r.getKey()));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ExcavatorHandler.mineralList.forEach((r, l) -> addBackup(Pair.of(r, l)));
         ExcavatorHandler.mineralList.clear();

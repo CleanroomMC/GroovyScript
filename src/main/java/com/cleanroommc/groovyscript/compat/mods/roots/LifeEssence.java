@@ -54,13 +54,13 @@ public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivin
         return remove((Class<? extends EntityLivingBase>) entity.getEntityClass());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getLifeEssenceList().forEach(this::addBackup);
         getLifeEssenceList().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Class<? extends EntityLivingBase>> streamRecipes() {
         return new SimpleObjectStream<>(getLifeEssenceList()).setRemover(this::remove);
     }

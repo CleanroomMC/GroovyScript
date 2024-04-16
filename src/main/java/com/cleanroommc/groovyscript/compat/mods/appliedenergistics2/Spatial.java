@@ -46,7 +46,7 @@ public class Spatial extends VirtualizedRegistry<Class<? extends TileEntity>> {
         ((MovableTileRegistryAccessor) AEApi.instance().registries().movable()).getTest().remove(clazz);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((MovableTileRegistryAccessor) AEApi.instance().registries().movable()).getTest().forEach(this::addBackup);
         ((MovableTileRegistryAccessor) AEApi.instance().registries().movable()).getTest().clear();

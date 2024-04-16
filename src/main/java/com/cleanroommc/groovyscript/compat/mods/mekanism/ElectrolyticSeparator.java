@@ -40,7 +40,7 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('water')"))
+    @MethodDescription(example = @Example("fluid('water')"))
     public boolean removeByInput(FluidStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Electrolytic Separator recipe").error();
         msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
