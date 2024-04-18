@@ -32,7 +32,7 @@ final def mod_dependencies = [
         'aether-255308:3280119'                               : [project.debug_aether],
         'alchemistry-293425:3186612'                          : [project.debug_alchemistry],
         'alchemylib-293426:2761706'                           : [project.debug_alchemistry],
-        'shadowfacts-forgelin-248453:2785465'                 : [project.debug_alchemistry],
+        'shadowfacts-forgelin-248453:2785465'                 : [project.debug_alchemistry, project.debug_industrial_foregoing],
         'ae2-extended-life-570458:4553942'                    : [project.debug_applied_energistics_2],
         'arcane-archives-311357:3057332'                      : [project.debug_arcane_archives],
         'guidebook-253874:2989594'                            : [project.debug_arcane_archives],
@@ -63,6 +63,8 @@ final def mod_dependencies = [
         // WARNING: experimental must be placed before classic, otherwise you will crash when debugging either. Check FluidGenerator compat to confirm
         'industrialcraft_experimental-242638:3838713'         : [project.debug_industrial_craft_2_experimental],
         'industrialcraft_classic-242942:3093607'              : [project.debug_industrial_craft_2_classic],
+        'tesla-core-lib-254602:3438487'                       : [project.debug_industrial_foregoing],
+        'industrialforegoing-266515:2745321'                  : [project.debug_industrial_foregoing],
         'inspirations-284007:2843007'                         : [project.debug_inspirations],
         'mantle-74924:2713386'                                : [project.debug_inspirations, project.debug_tinkers],
         'common-capabilities-247007:3053017'                  : [project.debug_integrated_dynamics],
