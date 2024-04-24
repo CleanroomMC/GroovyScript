@@ -364,7 +364,8 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             }
             Map<Point, StarLocation> addedStars = new Object2ObjectOpenHashMap<>();
             this.connections.forEach(connection -> {
-                StarLocation s1, s2;
+                StarLocation s1;
+                StarLocation s2;
                 if (addedStars.containsKey(connection.p1)) {
                     s1 = addedStars.get(connection.p1);
                 } else {

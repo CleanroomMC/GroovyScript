@@ -126,7 +126,8 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
 
             float scale = 0.6f;
             float yOff = 9 * scale;
-            int y = inputY + 18, x = 7 - 18;
+            int y = inputY + 18;
+            int x = 7 - 18;
             for (int i = 0, n = this.recipe.getItemInputs().length; i < n; i++) {
                 x += 18;
                 float chance = this.recipe.getItemConsumeChance()[i];

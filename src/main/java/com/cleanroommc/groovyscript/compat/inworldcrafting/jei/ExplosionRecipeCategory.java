@@ -82,7 +82,8 @@ public class ExplosionRecipeCategory extends BaseCategory<ExplosionRecipeCategor
             if (chance < 1) {
                 String chanceS = FluidRecipeCategory.numberFormat.format(chance);
                 int w = minecraft.fontRenderer.getStringWidth(chanceS);
-                int x = 88 - w / 2, y = 44;
+                int x = 88 - w / 2;
+                int y = 44;
                 minecraft.fontRenderer.drawString(chanceS, x, y, 0x404040);
             }
         }

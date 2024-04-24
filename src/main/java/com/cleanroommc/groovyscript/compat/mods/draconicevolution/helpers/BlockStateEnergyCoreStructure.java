@@ -287,7 +287,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
     private BlockStateMultiblockStorage buildTier1() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(1, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
         storage.addRow(X);
 
         return storage;
@@ -296,7 +300,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier2() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(3, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(e, e, e);
         storage.addRow(e, D, e);
@@ -315,7 +323,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier3() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(3, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(D, D, D);
         storage.addRow(D, D, D);
@@ -334,7 +346,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier4() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(5, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(e, e, e, e, e);
         storage.addRow(e, D, D, D, e);
@@ -364,7 +380,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier5() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(7, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(e, e, e, e, e, e, e);
         storage.addRow(e, e, e, e, e, e, e);
@@ -409,7 +429,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier6() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(9, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(e, e, e, e, e, e, e, e, e);
         storage.addRow(e, e, e, e, e, e, e, e, e);
@@ -473,7 +497,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier7() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(11, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(e, e, e, e, e, e, e, e, e, e, e);
         storage.addRow(e, e, e, e, e, e, e, e, e, e, e);
@@ -559,7 +587,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
     private BlockStateMultiblockStorage buildTierOMG() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(13, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         //region Hard
         if (DEConfig.hardMode) {

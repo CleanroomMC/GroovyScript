@@ -80,7 +80,8 @@ public class BurningRecipeCategory extends BaseCategory<BurningRecipeCategory.Re
             int ticks = this.burningRecipe.getTicks();
             String ticksS = ticks + " ticks";
             int w = minecraft.fontRenderer.getStringWidth(ticksS);
-            int x = 88 - w / 2, y = 44;
+            int x = 88 - w / 2;
+            int y = 44;
             minecraft.fontRenderer.drawString(ticksS, x, y, 0x404040);
         }
     }

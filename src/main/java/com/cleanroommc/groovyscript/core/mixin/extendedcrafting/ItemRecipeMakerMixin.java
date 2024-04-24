@@ -72,7 +72,8 @@ public abstract class ItemRecipeMakerMixin {
         List<List<String>> matrix = new ArrayList<>();
         int row = 0;
         int column = 0;
-        boolean rowEmpty = true, allEmpty = true;
+        boolean rowEmpty = true;
+        boolean allEmpty = true;
         matrix.add(new ArrayList<>());
         for (ItemStack stack : table.getMatrix()) {
             String s = stack.isEmpty() ? null : groovyscript$makeItem(stack);
