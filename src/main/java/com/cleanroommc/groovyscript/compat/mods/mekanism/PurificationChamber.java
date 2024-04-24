@@ -35,10 +35,9 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         PurificationRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            PurificationRecipe recipe = new PurificationRecipe(new AdvancedMachineInput(itemStack.copy(), gasInput.getGas()), new ItemStackOutput(output));
+            PurificationRecipe recipe = new PurificationRecipe(new AdvancedMachineInput(itemStack.copy(), gasInput.getGas()), new ItemStackOutput(output.copy()));
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);

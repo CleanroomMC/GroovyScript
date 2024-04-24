@@ -34,10 +34,9 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
         msg.add(Mekanism.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         DissolutionRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            DissolutionRecipe recipe = new DissolutionRecipe(itemStack.copy(), output);
+            DissolutionRecipe recipe = new DissolutionRecipe(itemStack.copy(), output.copy());
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);

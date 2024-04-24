@@ -32,10 +32,9 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         CrusherRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            CrusherRecipe recipe = new CrusherRecipe(itemStack.copy(), output);
+            CrusherRecipe recipe = new CrusherRecipe(itemStack.copy(), output.copy());
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);

@@ -46,14 +46,12 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         boolean withSecondary = !IngredientHelper.isEmpty(secondary);
         if (withSecondary) {
             if (chance <= 0) chance = 1;
-            secondary = secondary.copy();
         }
 
-        output = output.copy();
         SawmillRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
             SawmillRecipe recipe;
-            ChanceOutput chanceOutput = withSecondary ? new ChanceOutput(output, secondary, chance) : new ChanceOutput(output);
+            ChanceOutput chanceOutput = withSecondary ? new ChanceOutput(output.copy(), secondary.copy(), chance) : new ChanceOutput(output.copy());
             recipe = new SawmillRecipe(new ItemStackInput(itemStack.copy()), chanceOutput);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);

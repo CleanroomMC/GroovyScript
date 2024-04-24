@@ -33,10 +33,9 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         EnrichmentRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            EnrichmentRecipe recipe = new EnrichmentRecipe(itemStack.copy(), output);
+            EnrichmentRecipe recipe = new EnrichmentRecipe(itemStack.copy(), output.copy());
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);

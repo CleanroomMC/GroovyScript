@@ -122,14 +122,14 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     }
 
     private void forTier(int tier, int flag) {
+        int checkTier = tier - 1;
         checkVersion();
-        tier -= 1;
-        if (tier < 0) {
+        if (checkTier < 0) {
             GroovyScript.LOGGER.error("[EnergyCoreStructure] Tier value to small. As far as TileEnergyStorageCore is concerned the tiers now start at 1 not 0. This class automatically handles the conversion now");
-        } else if (tier >= structureTiers.length) {
-            GroovyScript.LOGGER.error("[EnergyCoreStructure#placeTier] There are only 8 tiers, but tried to use tier {}", tier);
+        } else if (checkTier >= structureTiers.length) {
+            GroovyScript.LOGGER.error("[EnergyCoreStructure#placeTier] There are only 8 tiers, but tried to use tier {}", checkTier);
         } else {
-            structureTiers[tier].forEachInStructure(core.getWorld(), core.getPos().add(getCoreOffset(tier + 1)), flag);
+            structureTiers[checkTier].forEachInStructure(core.getWorld(), core.getPos().add(getCoreOffset(checkTier + 1)), flag);
         }
     }
 

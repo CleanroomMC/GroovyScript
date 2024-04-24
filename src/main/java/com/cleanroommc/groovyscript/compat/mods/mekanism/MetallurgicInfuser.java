@@ -36,10 +36,9 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         if (infuseAmount <= 0) infuseAmount = 40;
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         MetallurgicInfuserRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            MetallurgicInfuserRecipe recipe = new MetallurgicInfuserRecipe(new InfusionInput(infuseType, infuseAmount, itemStack.copy()), output);
+            MetallurgicInfuserRecipe recipe = new MetallurgicInfuserRecipe(new InfusionInput(infuseType, infuseAmount, itemStack.copy()), output.copy());
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);

@@ -38,10 +38,9 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         SmeltingRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            SmeltingRecipe recipe = new SmeltingRecipe(new ItemStackInput(itemStack.copy()), new ItemStackOutput(output));
+            SmeltingRecipe recipe = new SmeltingRecipe(new ItemStackInput(itemStack.copy()), new ItemStackOutput(output.copy()));
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
