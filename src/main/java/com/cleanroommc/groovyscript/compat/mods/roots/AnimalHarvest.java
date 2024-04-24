@@ -11,13 +11,12 @@ import epicsquid.roots.recipe.AnimalHarvestRecipe;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 @RegistryDescription
-public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, AnimalHarvestRecipe>> {
+public class AnimalHarvest extends VirtualizedRegistry<AnimalHarvestRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('wither_skeleton_harvest').entity(entity('minecraft:wither_skeleton'))"),
@@ -29,8 +28,8 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ModRecipes.removeAnimalHarvestRecipe(pair.getKey()));
-        restoreFromBackup().forEach(pair -> ModRecipes.getAnimalHarvestRecipes().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.removeAnimalHarvestRecipe(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipes.getAnimalHarvestRecipes().put(recipe.getRegistryName(), recipe));
     }
 
     public void add(AnimalHarvestRecipe recipe) {
@@ -39,7 +38,7 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
 
     public void add(ResourceLocation name, AnimalHarvestRecipe recipe) {
         ModRecipes.getAnimalHarvestRecipes().put(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(AnimalHarvestRecipe recipe) {
@@ -54,7 +53,7 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
         AnimalHarvestRecipe recipe = ModRecipes.getAnimalHarvestRecipes().get(name);
         if (recipe == null) return false;
         ModRecipes.removeAnimalHarvestRecipe(name);
-        addBackup(Pair.of(name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -63,7 +62,7 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
         for (Map.Entry<ResourceLocation, AnimalHarvestRecipe> x : ModRecipes.getAnimalHarvestRecipes().entrySet()) {
             if (x.getValue().matches(entity.getEntityClass())) {
                 ModRecipes.getAnimalHarvestRecipes().remove(x.getKey());
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
         }
@@ -72,7 +71,7 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipes.getAnimalHarvestRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getAnimalHarvestRecipes().values().forEach(this::addBackup);
         ModRecipes.getAnimalHarvestRecipes().clear();
     }
 

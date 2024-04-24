@@ -14,7 +14,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.Map;
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES
 )
-public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation, FlowerRecipe>> {
+public class FlowerGeneration extends VirtualizedRegistry<FlowerRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".name('clay_flower').flower(blockstate('minecraft:clay'))"))
     public static RecipeBuilder recipeBuilder() {
@@ -33,8 +32,8 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ModRecipes.getFlowerRecipes().remove(pair.getKey()));
-        restoreFromBackup().forEach(pair -> ModRecipes.getFlowerRecipes().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.getFlowerRecipes().remove(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipes.getFlowerRecipes().put(recipe.getRegistryName(), recipe));
     }
 
     public void add(FlowerRecipe recipe) {
@@ -43,7 +42,7 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
 
     public void add(ResourceLocation name, FlowerRecipe recipe) {
         ModRecipes.getFlowerRecipes().put(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(FlowerRecipe recipe) {
@@ -58,7 +57,7 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         FlowerRecipe recipe = ModRecipes.getFlowerRecipes().get(name);
         if (recipe == null) return false;
         ModRecipes.getFlowerRecipes().remove(name);
-        addBackup(Pair.of(name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -67,7 +66,7 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         for (Map.Entry<ResourceLocation, FlowerRecipe> x : ModRecipes.getFlowerRecipes().entrySet()) {
             if (x.getValue().getFlower() == flower) {
                 ModRecipes.getFlowerRecipes().remove(x.getKey());
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
         }
@@ -95,7 +94,7 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipes.getFlowerRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getFlowerRecipes().values().forEach(this::addBackup);
         ModRecipes.getFlowerRecipes().clear();
     }
 

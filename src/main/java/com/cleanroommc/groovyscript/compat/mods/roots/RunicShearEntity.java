@@ -13,7 +13,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -21,7 +20,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @RegistryDescription
-public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation, RunicShearEntityRecipe>> {
+public class RunicShearEntity extends VirtualizedRegistry<RunicShearEntityRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_from_wither_skeletons').entity(entity('minecraft:wither_skeleton')).output(item('minecraft:clay')).cooldown(1000)"),
@@ -35,8 +34,8 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
     @Override
     public void onReload() {
         // FIXME Not currently reloadable due to being controlled by the Capability RunicShearsCapabilityProvider
-        removeScripted().forEach(pair -> ModRecipes.getRunicShearEntityRecipes().remove(pair.getKey()));
-        restoreFromBackup().forEach(pair -> ModRecipes.getRunicShearEntityRecipes().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.getRunicShearEntityRecipes().remove(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipes.getRunicShearEntityRecipes().put(recipe.getRegistryName(), recipe));
     }
 
     public void add(RunicShearEntityRecipe recipe) {
@@ -45,7 +44,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
 
     public void add(ResourceLocation name, RunicShearEntityRecipe recipe) {
         ModRecipes.getRunicShearEntityRecipes().put(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(RunicShearEntityRecipe recipe) {
@@ -60,7 +59,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         RunicShearEntityRecipe recipe = ModRecipes.getRunicShearEntityRecipes().get(name);
         if (recipe == null) return false;
         ModRecipes.getRunicShearEntityRecipes().remove(name);
-        addBackup(Pair.of(name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -68,7 +67,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
     public boolean removeByOutput(ItemStack output) {
         return ModRecipes.getRunicShearEntityRecipes().entrySet().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getValue().getDrop(), output)) {
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
             return false;
@@ -85,7 +84,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         for (Map.Entry<ResourceLocation, RunicShearEntityRecipe> x : ModRecipes.getRunicShearEntityRecipes().entrySet()) {
             if (x.getValue().getClazz() == clazz) {
                 ModRecipes.getRunicShearEntityRecipes().remove(x.getKey());
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
         }
@@ -94,7 +93,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipes.getRunicShearEntityRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getRunicShearEntityRecipes().values().forEach(this::addBackup);
         ModRecipes.getRunicShearEntityRecipes().clear();
     }
 

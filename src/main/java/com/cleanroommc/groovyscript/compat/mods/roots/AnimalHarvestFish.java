@@ -10,13 +10,12 @@ import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.AnimalHarvestFishRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 @RegistryDescription
-public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation, AnimalHarvestFishRecipe>> {
+public class AnimalHarvestFish extends VirtualizedRegistry<AnimalHarvestFishRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_fish').weight(50).output(item('minecraft:clay'))"),
@@ -28,8 +27,8 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ModRecipes.removeAnimalHarvestFishRecipe(pair.getKey()));
-        restoreFromBackup().forEach(pair -> ModRecipes.getAnimalHarvestFishRecipes().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.removeAnimalHarvestFishRecipe(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipes.getAnimalHarvestFishRecipes().put(recipe.getRegistryName(), recipe));
     }
 
     public void add(AnimalHarvestFishRecipe recipe) {
@@ -38,7 +37,7 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
 
     public void add(ResourceLocation name, AnimalHarvestFishRecipe recipe) {
         ModRecipes.getAnimalHarvestFishRecipes().put(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipeByOutput(ItemStack output) {
@@ -53,7 +52,7 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
         AnimalHarvestFishRecipe recipe = ModRecipes.getAnimalHarvestFishRecipes().get(name);
         if (recipe == null) return false;
         ModRecipes.removeAnimalHarvestFishRecipe(name);
-        addBackup(Pair.of(name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -62,7 +61,7 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
         for (Map.Entry<ResourceLocation, AnimalHarvestFishRecipe> x : ModRecipes.getAnimalHarvestFishRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getItemStack(), output)) {
                 ModRecipes.getAnimalHarvestFishRecipes().remove(x.getKey());
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
         }
@@ -76,7 +75,7 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipes.getAnimalHarvestFishRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getAnimalHarvestFishRecipes().values().forEach(this::addBackup);
         ModRecipes.getAnimalHarvestFishRecipes().clear();
     }
 

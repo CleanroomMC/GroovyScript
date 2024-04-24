@@ -14,14 +14,13 @@ import epicsquid.roots.recipe.MortarRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RegistryDescription
-public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRecipe>> {
+public class Mortar extends VirtualizedRegistry<MortarRecipe> {
 
     public Mortar() {
         super(Alias.generateOfClassAnd(Mortar.class, "MortarAndPestle"));
@@ -38,8 +37,8 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ModRecipesAccessor.getMortarRecipes().remove(pair.getKey()));
-        restoreFromBackup().forEach(pair -> ModRecipes.addMortarRecipe(pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipesAccessor.getMortarRecipes().remove(recipe.getRegistryName()));
+        restoreFromBackup().forEach(ModRecipes::addMortarRecipe);
     }
 
     public void add(MortarRecipe recipe) {
@@ -48,7 +47,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
 
     public void add(ResourceLocation name, MortarRecipe recipe) {
         ModRecipes.addMortarRecipe(recipe);
-        addScripted(Pair.of(name, recipe));
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(MortarRecipe recipe) {
@@ -70,7 +69,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
         return ModRecipesAccessor.getMortarRecipes().entrySet().removeIf(x -> {
             // Some Mortar recipe names are generated via [base]_x. If we are removing eg "wheat_flour" we should detect and remove all 5 variants
             if (x.getKey().equals(name) || x.getKey().toString().startsWith(name.toString())) {
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
             return false;
@@ -81,7 +80,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
     public boolean removeByOutput(ItemStack output) {
         return ModRecipesAccessor.getMortarRecipes().entrySet().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getValue().getResult(), output)) {
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
             return false;
@@ -90,7 +89,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipesAccessor.getMortarRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipesAccessor.getMortarRecipes().values().forEach(this::addBackup);
         ModRecipesAccessor.getMortarRecipes().clear();
     }
 

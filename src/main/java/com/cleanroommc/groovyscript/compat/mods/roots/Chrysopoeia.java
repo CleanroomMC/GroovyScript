@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 @RegistryDescription
-public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, ChrysopoeiaRecipe>> {
+public class Chrysopoeia extends VirtualizedRegistry<ChrysopoeiaRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_transmute').input(item('minecraft:gold_ingot')).output(item('minecraft:clay'))"),
@@ -30,8 +30,8 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ModRecipesAccessor.getChrysopoeiaRecipes().remove(pair.getKey()));
-        restoreFromBackup().forEach(pair -> ModRecipesAccessor.getChrysopoeiaRecipes().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipesAccessor.getChrysopoeiaRecipes().remove(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipesAccessor.getChrysopoeiaRecipes().put(recipe.getRegistryName(), recipe));
     }
 
     public void add(ChrysopoeiaRecipe recipe) {
@@ -40,7 +40,7 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
 
     public void add(ResourceLocation name, ChrysopoeiaRecipe recipe) {
         ModRecipesAccessor.getChrysopoeiaRecipes().put(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(ChrysopoeiaRecipe recipe) {
@@ -62,7 +62,7 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
         ChrysopoeiaRecipe recipe = ModRecipesAccessor.getChrysopoeiaRecipes().get(name);
         if (recipe == null) return false;
         ModRecipesAccessor.getChrysopoeiaRecipes().remove(name);
-        addBackup(Pair.of(name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -71,7 +71,7 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
         for (Map.Entry<ResourceLocation, ChrysopoeiaRecipe> entry : ModRecipesAccessor.getChrysopoeiaRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(entry.getValue().getOutput(), output)) {
                 ModRecipesAccessor.getChrysopoeiaRecipes().remove(entry.getKey());
-                addBackup(Pair.of(entry.getKey(), entry.getValue()));
+                addBackup(entry.getValue());
                 return true;
             }
         }
@@ -83,7 +83,7 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
         for (Map.Entry<ResourceLocation, ChrysopoeiaRecipe> entry : ModRecipesAccessor.getChrysopoeiaRecipes().entrySet()) {
             if (entry.getValue().getIngredient().getIngredient().test(output)) {
                 ModRecipesAccessor.getChrysopoeiaRecipes().remove(entry.getKey());
-                addBackup(Pair.of(entry.getKey(), entry.getValue()));
+                addBackup(entry.getValue());
                 return true;
             }
         }
@@ -92,7 +92,7 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipesAccessor.getChrysopoeiaRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipesAccessor.getChrysopoeiaRecipes().values().forEach(this::addBackup);
         ModRecipesAccessor.getChrysopoeiaRecipes().clear();
     }
 

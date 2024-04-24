@@ -14,7 +14,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, SummonCreatureRecipe>> {
+public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".name('wither_skeleton_from_clay').input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).entity(entity('minecraft:wither_skeleton'))"))
     public static RecipeBuilder recipeBuilder() {
@@ -31,8 +30,8 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ModRecipes.removeSummonCreatureEntry(pair.getKey()));
-        restoreFromBackup().forEach(pair -> ModRecipes.addSummonCreatureEntry(pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.removeSummonCreatureEntry(recipe.getRegistryName()));
+        restoreFromBackup().forEach(ModRecipes::addSummonCreatureEntry);
     }
 
     public void add(SummonCreatureRecipe recipe) {
@@ -41,7 +40,7 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
 
     public void add(ResourceLocation name, SummonCreatureRecipe recipe) {
         ModRecipes.addSummonCreatureEntry(recipe);
-        addScripted(Pair.of(name, recipe));
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(SummonCreatureRecipe recipe) {
@@ -56,7 +55,7 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
         SummonCreatureRecipe recipe = ModRecipes.getSummonCreatureEntry(name);
         if (recipe == null) return false;
         ModRecipes.removeSummonCreatureEntry(name);
-        addBackup(Pair.of(name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -70,7 +69,7 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
         for (Map.Entry<ResourceLocation, SummonCreatureRecipe> x : ModRecipesAccessor.getSummonCreatureEntries().entrySet()) {
             if (x.getValue().getClazz() == clazz) {
                 ModRecipes.removeSummonCreatureEntry(x.getKey());
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
         }
@@ -79,7 +78,7 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipesAccessor.getSummonCreatureEntries().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipesAccessor.getSummonCreatureEntries().values().forEach(this::addBackup);
         ModRecipesAccessor.getSummonCreatureEntries().clear();
         ModRecipesAccessor.getSummonCreatureClasses().clear();
     }

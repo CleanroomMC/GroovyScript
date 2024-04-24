@@ -10,13 +10,12 @@ import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.PyreCraftingRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 @RegistryDescription
-public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftingRecipe>> {
+public class Pyre extends VirtualizedRegistry<PyreCraftingRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_from_fire').input(item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone')).output(item('minecraft:clay')).xp(5).time(1)"),
@@ -28,8 +27,8 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ModRecipes.removePyreCraftingRecipe(pair.getKey()));
-        restoreFromBackup().forEach(pair -> ModRecipes.addPyreCraftingRecipe(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.removePyreCraftingRecipe(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipes.addPyreCraftingRecipe(recipe.getRegistryName(), recipe));
     }
 
     public void add(PyreCraftingRecipe recipe) {
@@ -38,7 +37,7 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
 
     public void add(ResourceLocation name, PyreCraftingRecipe recipe) {
         ModRecipes.addPyreCraftingRecipe(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(PyreCraftingRecipe recipe) {
@@ -60,7 +59,7 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
         PyreCraftingRecipe recipe = ModRecipes.getCraftingRecipe(name);
         if (recipe == null) return false;
         ModRecipes.removePyreCraftingRecipe(name);
-        addBackup(Pair.of(name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -69,7 +68,7 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
         for (Map.Entry<ResourceLocation, PyreCraftingRecipe> x : ModRecipes.getPyreCraftingRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getResult(), output)) {
                 ModRecipes.getPyreCraftingRecipes().remove(x.getKey());
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
         }
@@ -78,7 +77,7 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipes.getPyreCraftingRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getPyreCraftingRecipes().values().forEach(this::addBackup);
         ModRecipes.getPyreCraftingRecipes().clear();
     }
 

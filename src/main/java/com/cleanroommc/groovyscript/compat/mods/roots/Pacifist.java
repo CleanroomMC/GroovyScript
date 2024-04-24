@@ -12,7 +12,6 @@ import epicsquid.roots.recipe.PacifistEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -20,7 +19,7 @@ import java.util.Map;
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES
 )
-public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, PacifistEntry>> {
+public class Pacifist extends VirtualizedRegistry<PacifistEntry> {
 
     @RecipeBuilderDescription(example = @Example(".name('wither_skeleton_pacifist').entity(entity('minecraft:wither_skeleton'))"))
     public static RecipeBuilder recipeBuilder() {
@@ -29,8 +28,8 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ModRecipes.getPacifistEntities().remove(pair.getKey()));
-        restoreFromBackup().forEach(pair -> ModRecipes.getPacifistEntities().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.getPacifistEntities().remove(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipes.getPacifistEntities().put(recipe.getRegistryName(), recipe));
     }
 
     public void add(PacifistEntry recipe) {
@@ -39,7 +38,7 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
 
     public void add(ResourceLocation name, PacifistEntry recipe) {
         ModRecipes.getPacifistEntities().put(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(PacifistEntry recipe) {
@@ -54,7 +53,7 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
         PacifistEntry recipe = ModRecipes.getPacifistEntities().get(name);
         if (recipe == null) return false;
         ModRecipes.getPacifistEntities().remove(name);
-        addBackup(Pair.of(name, recipe));
+        addBackup(recipe);
         return true;
     }
 
@@ -67,7 +66,7 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
     public boolean removeByClass(Class<? extends Entity> clazz) {
         return ModRecipes.getPacifistEntities().entrySet().removeIf(x -> {
             if (x.getValue().getEntityClass().equals(clazz)) {
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
             return false;
@@ -76,7 +75,7 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipes.getPacifistEntities().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getPacifistEntities().values().forEach(this::addBackup);
         ModRecipes.getPacifistEntities().clear();
     }
 
