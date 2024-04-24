@@ -127,8 +127,8 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
         public @Nullable SummonCreatureRecipe register() {
             if (!validate()) return null;
             List<Ingredient> ingredients = input.stream().map(IIngredient::toMcIngredient).collect(Collectors.toList());
-            SummonCreatureRecipe recipe = new SummonCreatureRecipe(name, entity, ingredients);
-            ModSupport.ROOTS.get().summonCreature.add(name, recipe);
+            SummonCreatureRecipe recipe = new SummonCreatureRecipe(super.name, entity, ingredients);
+            ModSupport.ROOTS.get().summonCreature.add(super.name, recipe);
             return recipe;
         }
     }

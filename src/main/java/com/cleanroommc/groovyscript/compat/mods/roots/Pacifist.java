@@ -121,8 +121,8 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
         @RecipeBuilderRegistrationMethod
         public @Nullable PacifistEntry register() {
             if (!validate()) return null;
-            PacifistEntry recipe = new PacifistEntry(entity, name.toString());
-            ((PacifistEntryAccessor) recipe).setName(name);
+            PacifistEntry recipe = new PacifistEntry(entity, super.name.toString());
+            ((PacifistEntryAccessor) recipe).setName(super.name);
             ModSupport.ROOTS.get().pacifist.add(recipe.getRegistryName(), recipe);
             return recipe;
         }

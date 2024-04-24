@@ -149,7 +149,7 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable TreeRitualRecipe register() {
             if (!validate()) return null;
-            TreeRitualRecipe recipe = new TreeRitualRecipe(name, sapling.toMcIngredient(), output.get(0), time, input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new));
+            TreeRitualRecipe recipe = new TreeRitualRecipe(super.name, sapling.toMcIngredient(), output.get(0), time, input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new));
             ModSupport.NATURES_AURA.get().ritual.add(recipe);
             return recipe;
         }

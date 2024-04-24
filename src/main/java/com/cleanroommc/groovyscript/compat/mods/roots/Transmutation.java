@@ -187,11 +187,11 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         public @Nullable TransmutationRecipe register() {
             if (!validate()) return null;
             TransmutationRecipe recipe = new TransmutationRecipe(start);
-            recipe.setRegistryName(name);
+            recipe.setRegistryName(super.name);
             if (state == null) recipe.item(output.get(0));
             else recipe.state(state);
             recipe.condition(condition);
-            ModSupport.ROOTS.get().transmutation.add(name, recipe);
+            ModSupport.ROOTS.get().transmutation.add(super.name, recipe);
             return recipe;
         }
     }

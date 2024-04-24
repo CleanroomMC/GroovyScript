@@ -158,8 +158,8 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
         @RecipeBuilderRegistrationMethod
         public @Nullable RunicShearRecipe register() {
             if (!validate()) return null;
-            RunicShearRecipe recipe = new RunicShearRecipe(name, state, replacementState, output.get(0), displayItem);
-            ModSupport.ROOTS.get().runicShearBlock.add(name, recipe);
+            RunicShearRecipe recipe = new RunicShearRecipe(super.name, state, replacementState, output.get(0), displayItem);
+            ModSupport.ROOTS.get().runicShearBlock.add(super.name, recipe);
             return recipe;
         }
     }

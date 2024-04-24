@@ -164,8 +164,8 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
         public @Nullable BarkRecipe register() {
             if (!validate()) return null;
             BarkRecipe recipe;
-            recipe = new BarkRecipe(name, output.get(0), input.get(0).toMcIngredient().getMatchingStacks()[0]);
-            ModSupport.ROOTS.get().barkCarving.add(name, recipe);
+            recipe = new BarkRecipe(super.name, output.get(0), input.get(0).toMcIngredient().getMatchingStacks()[0]);
+            ModSupport.ROOTS.get().barkCarving.add(super.name, recipe);
             return recipe;
         }
     }

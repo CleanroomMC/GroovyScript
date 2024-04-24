@@ -136,8 +136,8 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
             msg.add(hits < 0, "duration must be a non negative integer, yet it was {}", hits);
             msg.add(type == null, "type cannot be null. ");
             msg.add(tier == null, "tier cannot be null.");
-            msg.add(name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.ANVIL_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(super.name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.ANVIL_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @Override
@@ -145,7 +145,7 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         public @Nullable AnvilRecipe register() {
             if (!validate()) return null;
 
-            AnvilRecipe recipe = new AnvilRecipe(output.get(0), input.get(0).toMcIngredient(), hits, type, tier).setRegistryName(name);
+            AnvilRecipe recipe = new AnvilRecipe(output.get(0), input.get(0).toMcIngredient(), hits, type, tier).setRegistryName(super.name);
             PyroTech.anvil.add(recipe);
             return recipe;
         }

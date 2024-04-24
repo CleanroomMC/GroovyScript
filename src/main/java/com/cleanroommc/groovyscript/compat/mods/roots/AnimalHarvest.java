@@ -118,8 +118,8 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
         @RecipeBuilderRegistrationMethod
         public @Nullable AnimalHarvestRecipe register() {
             if (!validate()) return null;
-            AnimalHarvestRecipe recipe = new AnimalHarvestRecipe(name, entity);
-            ModSupport.ROOTS.get().animalHarvest.add(name, recipe);
+            AnimalHarvestRecipe recipe = new AnimalHarvestRecipe(super.name, entity);
+            ModSupport.ROOTS.get().animalHarvest.add(super.name, recipe);
             return recipe;
         }
     }

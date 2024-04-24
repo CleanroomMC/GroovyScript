@@ -87,15 +87,15 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(dryTime < 0, "dryTime must be a non negative integer, yet it was {}", dryTime);
-            msg.add(name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(super.name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable CrudeDryingRackRecipe register() {
             if (!validate()) return null;
-            CrudeDryingRackRecipe recipe = new CrudeDryingRackRecipe(output.get(0), input.get(0).toMcIngredient(), dryTime).setRegistryName(name);
+            CrudeDryingRackRecipe recipe = new CrudeDryingRackRecipe(output.get(0), input.get(0).toMcIngredient(), dryTime).setRegistryName(super.name);
             PyroTech.crudeDryingRack.add(recipe);
             return recipe;
         }

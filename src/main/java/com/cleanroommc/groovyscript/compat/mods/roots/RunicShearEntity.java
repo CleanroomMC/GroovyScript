@@ -158,9 +158,9 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         public @Nullable RunicShearEntityRecipe register() {
             if (!validate()) return null;
             RunicShearEntityRecipe recipe;
-            if (functionMap == null) recipe = new RunicShearEntityRecipe(name, output.get(0), entity, cooldown);
-            else recipe = new RunicShearConditionalEntityRecipe(name, functionMap, new HashSet<>(output), entity, cooldown);
-            ModSupport.ROOTS.get().runicShearEntity.add(name, recipe);
+            if (functionMap == null) recipe = new RunicShearEntityRecipe(super.name, output.get(0), entity, cooldown);
+            else recipe = new RunicShearConditionalEntityRecipe(super.name, functionMap, new HashSet<>(output), entity, cooldown);
+            ModSupport.ROOTS.get().runicShearEntity.add(super.name, recipe);
             return recipe;
         }
     }

@@ -137,7 +137,7 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable OfferingRecipe register() {
             if (!validate()) return null;
-            OfferingRecipe recipe = new OfferingRecipe(name, input.get(0).toMcIngredient(), catalyst.toMcIngredient(), output.get(0));
+            OfferingRecipe recipe = new OfferingRecipe(super.name, input.get(0).toMcIngredient(), catalyst.toMcIngredient(), output.get(0));
             ModSupport.NATURES_AURA.get().offering.add(recipe);
             return recipe;
         }

@@ -126,7 +126,7 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
             if (!validate()) return null;
             FeyCraftingRecipe recipe = new FeyCraftingRecipe(output.get(0), xp);
             input.forEach(i -> recipe.addIngredient(i.toMcIngredient()));
-            ModSupport.ROOTS.get().feyCrafter.add(name, recipe);
+            ModSupport.ROOTS.get().feyCrafter.add(super.name, recipe);
             return recipe;
         }
     }

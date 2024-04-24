@@ -159,7 +159,7 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable AltarRecipe register() {
             if (!validate()) return null;
-            AltarRecipe recipe = new AltarRecipe(name, input.get(0).toMcIngredient(), output.get(0), catalyst.toMcIngredient(), aura, time);
+            AltarRecipe recipe = new AltarRecipe(super.name, input.get(0).toMcIngredient(), output.get(0), catalyst.toMcIngredient(), aura, time);
             ModSupport.NATURES_AURA.get().altar.add(recipe);
             return recipe;
         }

@@ -151,8 +151,8 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
         public @Nullable ChrysopoeiaRecipe register() {
             if (!validate()) return null;
             ChrysopoeiaRecipe recipe = new ChrysopoeiaRecipe(new IngredientWithStack(IngredientHelper.toItemStack(input.get(0))), output.get(0)/*, byproduct, overload, byproductChance*/);
-            recipe.setRegistryName(name);
-            ModSupport.ROOTS.get().chrysopoeia.add(name, recipe);
+            recipe.setRegistryName(super.name);
+            ModSupport.ROOTS.get().chrysopoeia.add(super.name, recipe);
             return recipe;
         }
     }

@@ -147,8 +147,8 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
             PyreCraftingRecipe recipe = new PyreCraftingRecipe(output.get(0), xp);
             input.forEach(i -> recipe.addIngredient(i.toMcIngredient()));
             recipe.setBurnTime(this.burnTime);
-            recipe.setName(name.toString());
-            ModSupport.ROOTS.get().pyre.add(name, recipe);
+            recipe.setName(super.name.toString());
+            ModSupport.ROOTS.get().pyre.add(super.name, recipe);
             return recipe;
         }
     }

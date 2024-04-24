@@ -272,15 +272,15 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
                     ItemStack copy = output.get(0).copy();
                     copy.setCount(i * count);
                     MortarRecipe recipe = new MortarRecipe(copy, ingredients.toArray(new Ingredient[0]), red1, green1, blue1, red2, green2, blue2);
-                    recipe.setRegistryName(new ResourceLocation(name.toString() + "_" + i));
+                    recipe.setRegistryName(new ResourceLocation(super.name.toString() + "_" + i));
                     ModSupport.ROOTS.get().mortar.add(recipe.getRegistryName(), recipe);
                 }
                 return null;
             }
 
             MortarRecipe recipe = new MortarRecipe(output.get(0), input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new), red1, red2, green1, green2, blue1, blue2);
-            recipe.setRegistryName(name);
-            ModSupport.ROOTS.get().mortar.add(name, recipe);
+            recipe.setRegistryName(super.name);
+            ModSupport.ROOTS.get().mortar.add(super.name, recipe);
             return recipe;
 
         }

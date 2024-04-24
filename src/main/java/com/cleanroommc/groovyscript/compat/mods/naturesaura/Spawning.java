@@ -160,7 +160,7 @@ public class Spawning extends VirtualizedRegistry<AnimalSpawnerRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable AnimalSpawnerRecipe register() {
             if (!validate()) return null;
-            AnimalSpawnerRecipe recipe = new AnimalSpawnerRecipe(name, entity, aura, time, input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new));
+            AnimalSpawnerRecipe recipe = new AnimalSpawnerRecipe(super.name, entity, aura, time, input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new));
             ModSupport.NATURES_AURA.get().spawning.add(recipe);
             return recipe;
         }

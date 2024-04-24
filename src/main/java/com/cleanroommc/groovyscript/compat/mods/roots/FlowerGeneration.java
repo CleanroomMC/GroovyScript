@@ -168,8 +168,8 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         @RecipeBuilderRegistrationMethod
         public @Nullable FlowerRecipe register() {
             if (!validate()) return null;
-            FlowerRecipe recipe = new FlowerRecipe(name, flower, allowedSoils);
-            ModSupport.ROOTS.get().flowerGeneration.add(name, recipe);
+            FlowerRecipe recipe = new FlowerRecipe(super.name, flower, allowedSoils);
+            ModSupport.ROOTS.get().flowerGeneration.add(super.name, recipe);
             return recipe;
         }
     }
