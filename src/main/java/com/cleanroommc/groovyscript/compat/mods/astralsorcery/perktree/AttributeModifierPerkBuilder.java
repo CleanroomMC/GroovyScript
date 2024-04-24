@@ -10,12 +10,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AttributeModifierPerkBuilder {
 
     ResourceLocation name;
     Point point = new Point();
-    ArrayList<PerkModifierBuilder> modifiers = new ArrayList<>();
+    List<PerkModifierBuilder> modifiers = new ArrayList<>();
     ArrayList<ResourceLocation> connections = new ArrayList<>();
 
 

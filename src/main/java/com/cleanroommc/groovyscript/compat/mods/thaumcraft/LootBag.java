@@ -67,7 +67,7 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
 
     @MethodDescription(example = @Example("item('minecraft:ender_pearl'), 0"))
     public void remove(ItemStack item, int rarity) {
-        ArrayList<WeightedRandomLoot> list = getLootbag(rarity);
+        List<WeightedRandomLoot> list = getLootbag(rarity);
         List<WeightedRandomLoot> remove = new ArrayList<>();
         for (WeightedRandomLoot loot : list) {
             if (item.isItemEqual(loot.item)) {
@@ -80,7 +80,7 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
 
     @MethodDescription(example = @Example("2"))
     public void removeAll(int rarity) {
-        ArrayList<WeightedRandomLoot> list = getLootbag(rarity);
+        List<WeightedRandomLoot> list = getLootbag(rarity);
         List<WeightedRandomLoot> remove = new ArrayList<>();
         for (WeightedRandomLoot loot : list) {
             remove.add(loot);

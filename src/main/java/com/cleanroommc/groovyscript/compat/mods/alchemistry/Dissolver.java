@@ -84,7 +84,7 @@ public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<DissolverRecipe> {
 
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
-        private final ArrayList<ProbabilityGroup> probabilityGroup = new ArrayList<>();
+        private final List<ProbabilityGroup> probabilityGroup = new ArrayList<>();
         @Property
         private boolean reversible;
         @Property

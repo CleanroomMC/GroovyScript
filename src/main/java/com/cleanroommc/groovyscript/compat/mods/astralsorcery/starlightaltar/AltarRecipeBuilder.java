@@ -224,7 +224,7 @@ public class AltarRecipeBuilder {
 
         private final TileAltar.AltarLevel altarLevel;
         @Property(needsOverride = true)
-        private final ArrayList<IIngredient> outerIngredients = new ArrayList<>();
+        private final List<IIngredient> outerIngredients = new ArrayList<>();
         @Property(ignoresInheritedMethods = true)
         protected String name;
         @Property(defaultValue = "1")

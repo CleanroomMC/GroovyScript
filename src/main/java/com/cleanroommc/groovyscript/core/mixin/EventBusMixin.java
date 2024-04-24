@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 @Mixin(value = EventBus.class, remap = false)
 public class EventBusMixin implements EventBusExtended {
@@ -21,7 +21,7 @@ public class EventBusMixin implements EventBusExtended {
     private int busID;
 
     @Shadow
-    private ConcurrentHashMap<Object, ArrayList<IEventListener>> listeners;
+    private Map<Object, ArrayList<IEventListener>> listeners;
 
     @Override
     public void register(Class<?> eventClass, EventPriority priority, IEventListener listener) {

@@ -44,10 +44,10 @@ import java.util.*;
 )
 public class Constellation extends VirtualizedRegistry<IConstellation> {
 
-    private final HashMap<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsAdded = new HashMap<>();
-    private final HashMap<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsRemoved = new HashMap<>();
-    private final HashMap<IConstellation, List<ItemHandle>> signatureItemsAdded = new HashMap<>();
-    private final HashMap<IConstellation, List<ItemHandle>> signatureItemsRemoved = new HashMap<>();
+    private final Map<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsAdded = new HashMap<>();
+    private final Map<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsRemoved = new HashMap<>();
+    private final Map<IConstellation, List<ItemHandle>> signatureItemsAdded = new HashMap<>();
+    private final Map<IConstellation, List<ItemHandle>> signatureItemsRemoved = new HashMap<>();
 
     @Override
     @GroovyBlacklist
@@ -245,9 +245,9 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
     public static class ConstellationBuilder {
 
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private final ArrayList<Point2PointConnection> connections = new ArrayList<>();
+        private final List<Point2PointConnection> connections = new ArrayList<>();
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE)) // TODO note that this is only if type is MINOR
-        private final ArrayList<MoonPhase> phases = new ArrayList<>();
+        private final List<MoonPhase> phases = new ArrayList<>();
         @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private String name;
         @Property(defaultValue = "Major: #2843CC, Weak: #432CB0, Minor: #5D197F")
@@ -437,7 +437,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
     public static class SignatureItemsHelper {
 
         @Property
-        private final ArrayList<IIngredient> items = new ArrayList<>();
+        private final List<IIngredient> items = new ArrayList<>();
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IConstellation constellation = null;
         @Property

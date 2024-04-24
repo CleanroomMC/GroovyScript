@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.INamed;
-import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
@@ -38,7 +37,7 @@ public class Registry {
         this.description = registryClass.getAnnotation(RegistryDescription.class);
 
         List<Method> recipeBuilderMethods = new ArrayList<>();
-        EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
+        Map<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
         for (MethodDescription.Type value : MethodDescription.Type.values()) methods.put(value, new ArrayList<>());
         List<String> imports = new ArrayList<>();
 
