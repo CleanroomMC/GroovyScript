@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
 
 @RegistryDescription
