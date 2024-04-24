@@ -178,7 +178,8 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         @RecipeBuilderRegistrationMethod
         public @Nullable RecipeTartaricForge register() {
             if (!validate()) return null;
-            RecipeTartaricForge recipe = ModSupport.BLOOD_MAGIC.get().tartaricForge.add(IngredientHelper.toIngredientNonNullList(input), output.get(0), minimumSouls, soulDrain);
+            RecipeTartaricForge recipe = new RecipeTartaricForge(IngredientHelper.toIngredientNonNullList(input), output.get(0), minimumSouls, soulDrain);
+            ModSupport.BLOOD_MAGIC.get().tartaricForge.add(recipe);
             return recipe;
         }
     }
