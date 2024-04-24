@@ -56,7 +56,7 @@ public class ModSupport {
     private static final Map<String, GroovyContainer<? extends GroovyPropertyContainer>> containersView = Collections.unmodifiableMap(containers);
     private static final List<GroovyContainer<? extends GroovyPropertyContainer>> containerList = new ArrayList<>();
     private static final Set<Class<?>> externalPluginClasses = new ObjectOpenHashSet<>();
-    private static boolean frozen = false;
+    private static boolean frozen;
 
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
 

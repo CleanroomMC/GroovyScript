@@ -150,7 +150,7 @@ public class Research extends VirtualizedRegistry<ResearchCategory> {
         @Property
         private ResourceLocation background;
         @Property
-        private ResourceLocation background2 = null;
+        private ResourceLocation background2;
 
         @RecipeBuilderMethodDescription
         public ResearchCategoryBuilder key(String key) {

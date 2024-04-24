@@ -30,7 +30,7 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
 
     private Field simpleTriggerResult;
     private Field oreTriggerResult;
-    private boolean didReflection = false;
+    private boolean didReflection;
 
     private void doDirtyReflection() {
         if (!didReflection) {

@@ -253,7 +253,7 @@ public abstract class FluidRecipe {
 
         private final EntityItem entityItem;
         private final ItemStack item;
-        private int amountToKill = 0;
+        private int amountToKill;
 
         private ItemContainer(EntityItem entityItem) {
             this.entityItem = entityItem;

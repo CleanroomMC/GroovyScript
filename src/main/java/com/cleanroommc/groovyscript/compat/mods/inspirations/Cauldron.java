@@ -229,7 +229,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
         private EnumDyeColor dye;
         @Property(needsOverride = true)
-        private Boolean boiling = null;
+        private Boolean boiling;
         @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE),
                            @Comp(value = "`InspirationsRegistry.getCauldronMax()`", type = Comp.Type.LTE)}, needsOverride = true)
         private int levels;

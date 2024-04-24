@@ -37,7 +37,7 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     private final TileEnergyStorageCore core;
     private final BlockStateMultiblockHelper helper;
     private final BlockStateMultiblockStorage[] structureTiers;
-    private int version = 0;
+    private int version;
 
     private static BlockStates coreBlock;
 

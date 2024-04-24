@@ -347,7 +347,7 @@ public class Lexicon {
             @Property(defaultValue = "ItemStack.EMPTY")
             protected ItemStack icon = ItemStack.EMPTY;
             @Property
-            protected boolean priority = false;
+            protected boolean priority;
 
             @RecipeBuilderMethodDescription(field = "priority")
             public EntryBuilder isPriority() {

@@ -102,7 +102,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         @Property(ignoresInheritedMethods = true, valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private IIngredient input;
         @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
-        private int amount = 0;
+        private int amount;
         @Property(defaultValue = "1")
         private double costMultiplier = 1;
         @Property(defaultValue = "ore('gemLapis')", valid = @Comp(type = Comp.Type.NOT, value = "null"))

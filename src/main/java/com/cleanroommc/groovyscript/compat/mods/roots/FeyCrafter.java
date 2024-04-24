@@ -94,7 +94,7 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
     public static class RecipeBuilder extends AbstractRecipeBuilder<FeyCraftingRecipe> {
 
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private int xp = 0;
+        private int xp;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder xp(int xp) {

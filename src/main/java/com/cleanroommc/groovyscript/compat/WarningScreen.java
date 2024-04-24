@@ -15,12 +15,12 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class WarningScreen extends GuiScreen {
 
-    public static boolean wasOpened = false;
+    public static boolean wasOpened;
 
     public final String title = TextFormatting.BOLD + "! Warning from GroovyScript !";
     public final List<String> messages;
     private List<String> lines;
-    private int lastWidth = 0;
+    private int lastWidth;
 
     public WarningScreen(List<String> messages) {
         this.messages = messages;

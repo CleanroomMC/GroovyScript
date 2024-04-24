@@ -27,8 +27,8 @@ public class ToolMaterialBuilder {
 
     public final String name;
     public int color = 0xFFFFFF;
-    public boolean hidden = false;
-    public boolean craftable = false;
+    public boolean hidden;
+    public boolean craftable;
     public boolean castable = true;
     public String displayName;
     public FluidStack fluid;

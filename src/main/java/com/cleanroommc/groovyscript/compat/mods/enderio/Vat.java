@@ -104,7 +104,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         @Property(defaultValue = "1", valid = @Comp(type = Comp.Type.GT, value = "0"))
         private float baseMultiplier = 1;
         @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
-        private int energy = 0;
+        private int energy;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder input(FluidStack input) {

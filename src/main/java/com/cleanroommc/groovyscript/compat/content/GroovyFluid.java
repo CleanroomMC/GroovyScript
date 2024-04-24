@@ -101,7 +101,7 @@ public class GroovyFluid extends Fluid {
         private SoundEvent fillSound;
         private SoundEvent emptySound;
 
-        private int luminosity = 0;
+        private int luminosity;
         private int density = 1000;
         private int temperature = 300;
         private int viscosity = 1000;
@@ -110,7 +110,7 @@ public class GroovyFluid extends Fluid {
 
         private Material material = Material.WATER;
         private boolean createBlock = true;
-        private boolean finiteFluidBlock = false;
+        private boolean finiteFluidBlock;
 
         public Builder(String name) {
             this.name = name;

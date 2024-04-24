@@ -105,7 +105,7 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
         @Property
         private boolean chalice = true;
         @Property
-        private boolean consumeMultiple = false;
+        private boolean consumeMultiple;
         @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private int time = 200;
 

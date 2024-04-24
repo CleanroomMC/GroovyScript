@@ -34,7 +34,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     @Unique
     protected Closure<Object> transformer;
     @Unique
-    protected Closure<Object> nbtMatcher = null;
+    protected Closure<Object> nbtMatcher;
     @Unique
     protected String mark;
 

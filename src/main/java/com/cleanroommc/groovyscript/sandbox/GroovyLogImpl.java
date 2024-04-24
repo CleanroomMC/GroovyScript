@@ -315,7 +315,7 @@ public class GroovyLogImpl implements GroovyLog {
         private final String mainMsg;
         private final List<String> messages = new ArrayList<>();
         private Level level = Level.INFO;
-        private boolean logToMcLog = false;
+        private boolean logToMcLog;
         @Nullable
         private Throwable throwable;
 

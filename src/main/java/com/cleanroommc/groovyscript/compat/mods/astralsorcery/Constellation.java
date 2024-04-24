@@ -251,7 +251,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private String name;
         @Property(defaultValue = "Major: #2843CC, Weak: #432CB0, Minor: #5D197F")
-        private Color color = null;
+        private Color color;
         @Property
         private ConstellationBuilder.Type type;
 
@@ -398,7 +398,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE)) // TODO note that this is only if other is empty
         private final List<ConstellationMapEffectRegistry.PotionMapEffect> potionEffect = new ArrayList<>();
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
-        private IConstellation constellation = null;
+        private IConstellation constellation;
 
         @RecipeBuilderMethodDescription
         public ConstellationMapEffectBuilder constellation(IConstellation constellation) {
@@ -440,9 +440,9 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         @Property
         private final List<IIngredient> items = new ArrayList<>();
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
-        private IConstellation constellation = null;
+        private IConstellation constellation;
         @Property
-        private boolean doStrip = false;
+        private boolean doStrip;
 
         @RecipeBuilderMethodDescription
         public SignatureItemsHelper constellation(IConstellation constellation) {

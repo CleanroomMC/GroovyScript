@@ -163,7 +163,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         @Property
         private IIngredient catalyst;
         @Property
-        private ResourceLocation texture = null;
+        private ResourceLocation texture;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder catalyst(IIngredient catalyst) {

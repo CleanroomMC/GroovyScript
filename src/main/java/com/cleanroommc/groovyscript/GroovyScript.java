@@ -95,7 +95,7 @@ public class GroovyScript {
     private static Thread languageServerThread;
 
     private static KeyBinding reloadKey;
-    private static long timeSinceLastUse = 0;
+    private static long timeSinceLastUse;
 
     public static final Random RND = new Random();
 

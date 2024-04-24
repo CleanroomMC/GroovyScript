@@ -95,7 +95,7 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
     public static class RecipeBuilder extends AbstractRecipeBuilder<PyreCraftingRecipe> {
 
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private int xp = 0;
+        private int xp;
         @Property(defaultValue = "200")
         private int burnTime = 200;
 

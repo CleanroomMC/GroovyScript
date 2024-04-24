@@ -21,7 +21,7 @@ public class TileInvisECoreBlockMixin implements TileInvisECoreBlockState {
     @Unique
     boolean isDefault = true;
     @Unique
-    int metadata = 0;
+    int metadata;
 
     @Override
     public boolean getDefault() {
