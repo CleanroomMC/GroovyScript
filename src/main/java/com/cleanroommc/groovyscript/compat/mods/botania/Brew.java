@@ -85,6 +85,7 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
             return this;
         }
 
+        @Override
         @RecipeBuilderMethodDescription
         public BrewBuilder name(String name) {
             this.name = name;

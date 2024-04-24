@@ -168,6 +168,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
             return "Error adding Roots Transmutation recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_transmutation_";
         }

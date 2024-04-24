@@ -240,6 +240,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
             return "Error adding Roots Mortar recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_mortar_recipe_";
         }

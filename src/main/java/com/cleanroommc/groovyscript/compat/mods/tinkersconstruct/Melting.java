@@ -38,6 +38,7 @@ public class Melting extends MeltingRecipeRegistry {
         return recipe;
     }
 
+    @Override
     public void add(MeltingRecipe recipe) {
         if (recipe == null) return;
         addScripted(recipe);

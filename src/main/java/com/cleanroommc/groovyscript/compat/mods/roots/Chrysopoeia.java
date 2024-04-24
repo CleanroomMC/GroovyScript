@@ -132,6 +132,7 @@ public class Chrysopoeia extends VirtualizedRegistry<Pair<ResourceLocation, Chry
             return "Error adding Roots Chrysopoeia conversion recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_chrysopoeia_";
         }

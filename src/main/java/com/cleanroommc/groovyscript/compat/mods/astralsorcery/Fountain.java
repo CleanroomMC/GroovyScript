@@ -31,6 +31,7 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
         restoreFromBackup().forEach(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList()::add);
     }
 
+    @Override
     public void afterScriptLoad() {
         // If the rarity list is empty, generating new chunks will cause a NPE. To prevent this, we add a "water" entry that will always have 0mb inside,
         // which causes it to be marked as empty, and thus not be interactable.
@@ -154,6 +155,7 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
             return out.getLevel() != Level.ERROR;
         }
 
+        @Override
         @RecipeBuilderRegistrationMethod
         public FluidRarityRegistry.FluidRarityEntry register() {
             if (!validate()) return null;

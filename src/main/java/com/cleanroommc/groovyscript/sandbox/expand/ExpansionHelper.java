@@ -149,6 +149,7 @@ public class ExpansionHelper {
                     metaMethod = new NewInstanceMetaMethod(method);
                 else
                     metaMethod = new NewInstanceMetaMethod(method) {
+                        @Override
                         public CachedClass getDeclaringClass() {
                             return ReflectionCache.getCachedClass(self.getTheClass());
                         }

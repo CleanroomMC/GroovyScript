@@ -90,6 +90,7 @@ public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
         return ((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getCoolants().get(fluid.getName());
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         FluidFuelRegisterAccessor accessor = (FluidFuelRegisterAccessor) FluidFuelRegister.instance;

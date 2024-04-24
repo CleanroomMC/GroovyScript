@@ -122,6 +122,7 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         @Property(defaultValue = "ModConfig.confCompressorRFRate", valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int powerRate = ModConfig.confCompressorRFRate;
 
+        @Override
         @RecipeBuilderMethodDescription
         public RecipeBuilder input(IIngredient input) {
             if (input == null) return this;

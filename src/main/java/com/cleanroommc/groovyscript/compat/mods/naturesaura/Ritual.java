@@ -131,6 +131,7 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
             return "Error adding Nature's Aura Ritual Recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_ritual_";
         }

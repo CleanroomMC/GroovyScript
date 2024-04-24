@@ -36,6 +36,7 @@ public class CustomEnchanterRecipe extends EnchanterRecipe {
         return book;
     }
 
+    @Override
     public boolean isRecipe(@Nonnull RecipeLevel machineLevel, @Nonnull NNList<MachineRecipeInput> inputs) {
         ItemStack slot0 = MachineRecipeInput.getInputForSlot(0, inputs);
         ItemStack slot1 = MachineRecipeInput.getInputForSlot(1, inputs);
@@ -57,6 +58,7 @@ public class CustomEnchanterRecipe extends EnchanterRecipe {
         return Math.min(size / this.getItemsPerLevel(), this.getEnchantment().getMaxLevel());
     }
 
+    @Override
     public boolean isValidInput(@Nonnull RecipeLevel machineLevel, @Nonnull MachineRecipeInput inputs) {
         ItemStack slot0 = MachineRecipeInput.getInputForSlot(0, inputs);
         ItemStack slot1 = MachineRecipeInput.getInputForSlot(1, inputs);

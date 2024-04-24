@@ -177,6 +177,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(MachineRecipeRegistry.instance::removeRecipe);
@@ -225,6 +226,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
             return "Error adding EnderIO Tank recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_enderio_tank_";
         }

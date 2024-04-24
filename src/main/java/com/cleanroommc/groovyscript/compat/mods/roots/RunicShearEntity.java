@@ -139,6 +139,7 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
             return "Error adding Roots Runic Shear Entity recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_runic_shear_entity_";
         }

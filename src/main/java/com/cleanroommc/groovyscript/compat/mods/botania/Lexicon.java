@@ -361,6 +361,7 @@ public class Lexicon {
                 return this;
             }
 
+            @Override
             @RecipeBuilderMethodDescription
             public EntryBuilder name(String name) {
                 this.name = name;

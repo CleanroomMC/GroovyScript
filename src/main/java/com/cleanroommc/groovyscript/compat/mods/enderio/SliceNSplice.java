@@ -91,6 +91,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         }
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(SliceAndSpliceRecipeManager.getInstance().getRecipes()::remove);

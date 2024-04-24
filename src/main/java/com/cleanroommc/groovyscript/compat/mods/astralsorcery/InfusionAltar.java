@@ -35,6 +35,7 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
         restoreFromBackup().forEach(InfusionRecipeRegistry::registerInfusionRecipe);
     }
 
+    @Override
     public void afterScriptLoad() {
         InfusionRecipeRegistry.compileRecipes();
     }
@@ -163,6 +164,7 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
         public @Nullable BasicInfusionRecipe register() {
             if (!validate()) return null;
             BasicInfusionRecipe recipe = new BasicInfusionRecipe(output.get(0), AstralSorcery.toItemHandle(input.get(0))) {
+                @Override
                 public int craftingTickTime() {
                     return time;
                 }

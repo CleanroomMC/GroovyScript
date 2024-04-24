@@ -133,6 +133,7 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
         }
     }
 
+    @Override
     public BlockStateMultiblockStorage getStorageForTier(int tier) {
         return structureTiers[tier - 1];
     }
@@ -268,6 +269,7 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
         return states.matches(state, false);
     }
 
+    @Override
     public BlockPos getCoreOffset(int tier) {
         int offset = tier == 1 ? 0 : tier == 2 || tier == 3 ? -1 : -(tier - 2);
         return new BlockPos(offset, offset, offset);

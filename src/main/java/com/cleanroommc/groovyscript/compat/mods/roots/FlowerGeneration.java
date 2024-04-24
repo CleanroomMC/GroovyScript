@@ -151,6 +151,7 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
             return "Error adding Roots Flower Generation recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_flower_generation_recipe_";
         }

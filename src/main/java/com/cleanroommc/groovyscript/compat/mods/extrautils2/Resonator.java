@@ -200,10 +200,12 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         public IResonatorRecipe register() {
             if (!validate()) return null;
             IResonatorRecipe recipe = new ResonatorRecipe(input.get(0).getMatchingStacks()[0], output.get(0), energy, ownerTag) {
+                @Override
                 public String getRequirementText() {
                     return requirementText == null ? "" : requirementText;
                 }
 
+                @Override
                 public boolean shouldProgress(TileEntity resonator, int frequency, ItemStack input) {
                     return shouldProgress == null || ClosureHelper.call(true, shouldProgress, resonator, frequency, input);
                 }

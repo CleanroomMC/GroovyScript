@@ -128,6 +128,7 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
             msg.add(secondaryChance < 0 || secondaryChance > 1, () -> "Secondary chance must be between [0,1]. Instead found " + secondaryChance + ".");
         }
 
+        @Override
         @RecipeBuilderRegistrationMethod
         public GrindstoneRecipe register() {
             if (!validate()) return null;

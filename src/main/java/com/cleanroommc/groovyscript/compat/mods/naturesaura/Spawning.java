@@ -143,6 +143,7 @@ public class Spawning extends VirtualizedRegistry<AnimalSpawnerRecipe> {
             return "Error adding Nature's Aura Spawning Recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_spawning_";
         }

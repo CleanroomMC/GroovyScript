@@ -107,6 +107,7 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
             return "Error adding Roots Fey Crafter recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_fey_crafter_";
         }

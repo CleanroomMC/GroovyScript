@@ -104,6 +104,7 @@ public class Pacifist extends VirtualizedRegistry<Pair<ResourceLocation, Pacifis
             return "Error adding Roots Runic Shear Entity recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_pacifist_";
         }

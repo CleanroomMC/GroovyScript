@@ -109,6 +109,7 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
             return "Error adding Roots Summon Creature recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_summon_creature_";
         }

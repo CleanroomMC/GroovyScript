@@ -137,6 +137,7 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
             return "Error adding Roots Runic Shear Block recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_runic_shear_block_";
         }

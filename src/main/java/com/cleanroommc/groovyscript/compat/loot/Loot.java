@@ -19,6 +19,7 @@ public class Loot extends NamedRegistry implements IScriptReloadable {
 
     // TODO add event shortcut here
 
+    @Override
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
@@ -31,6 +32,7 @@ public class Loot extends NamedRegistry implements IScriptReloadable {
         }
     }
 
+    @Override
     @GroovyBlacklist
     @ApiStatus.Internal
     public void afterScriptLoad() {

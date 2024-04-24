@@ -134,6 +134,7 @@ public class Spawning extends VirtualizedRegistry<Pair<WootMobName, SpawnRecipe>
             return this;
         }
 
+        @Override
         @RecipeBuilderMethodDescription
         public RecipeBuilder name(String name) {
             this.name = new WootMobName(name);

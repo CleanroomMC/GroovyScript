@@ -193,6 +193,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
             if (outStack == null && output != null) outStack = new ItemStack(output.getBlock());
         }
 
+        @Override
         @RecipeBuilderRegistrationMethod
         public LightOreTransmutations.Transmutation register() {
             if (!validate()) return null;

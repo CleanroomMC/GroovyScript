@@ -181,6 +181,7 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
             return out.getLevel() != Level.ERROR;
         }
 
+        @Override
         @RecipeBuilderRegistrationMethod
         public WellLiquefaction.LiquefactionEntry register() {
             if (!validate()) return null;

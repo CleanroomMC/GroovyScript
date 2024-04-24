@@ -114,11 +114,13 @@ public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
             return this.probabilityOutput(100, probabilityOutputs);
         }
 
+        @Override
         @RecipeBuilderMethodDescription(field = "probabilityGroup")
         public RecipeBuilder output(ItemStack... probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }
 
+        @Override
         @RecipeBuilderMethodDescription(field = "probabilityGroup")
         public RecipeBuilder output(Collection<ItemStack> probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);

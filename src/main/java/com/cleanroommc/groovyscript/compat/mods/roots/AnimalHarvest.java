@@ -101,6 +101,7 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
             return "Error adding Roots Animal Harvest recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_animal_harvest_";
         }

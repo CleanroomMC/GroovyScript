@@ -81,6 +81,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         this.signatureItemsRemoved.clear();
     }
 
+    @Override
     public void afterScriptLoad() {
         ConstellationRegistryAccessor.getConstellationList().forEach(constellation -> {
             if (!(constellation instanceof IMinorConstellation)) updateDefaultCapeRecipe(constellation);

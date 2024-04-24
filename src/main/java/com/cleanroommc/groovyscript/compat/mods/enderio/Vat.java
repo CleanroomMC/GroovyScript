@@ -66,6 +66,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         }
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         NNList<IRecipe> recipes = VatRecipeManager.getInstance().getRecipes();

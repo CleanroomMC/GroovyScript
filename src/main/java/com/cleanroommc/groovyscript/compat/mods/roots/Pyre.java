@@ -127,6 +127,7 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
             return "Error adding Roots Pyre recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_pyre_recipe_";
         }

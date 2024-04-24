@@ -140,6 +140,7 @@ public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
             return this.result(item, weight);
         }
 
+        @Override
         @RecipeBuilderMethodDescription(field = {"output", "probabilities"})
         public RecipeBuilder output(ItemStack item) {
             return this.result(item, 1);
@@ -162,6 +163,7 @@ public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
             return this.component(fluid, chance);
         }
 
+        @Override
         @RecipeBuilderMethodDescription(field = {"fluidInput", "chances"})
         public RecipeBuilder fluidInput(FluidStack fluid) {
             return this.component(fluid, 1.0F);

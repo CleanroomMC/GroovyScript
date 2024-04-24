@@ -35,6 +35,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         return new RecipeBuilder();
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(MachineRecipeRegistry.instance::removeRecipe);

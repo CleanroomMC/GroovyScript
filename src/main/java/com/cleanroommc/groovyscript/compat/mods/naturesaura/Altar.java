@@ -140,6 +140,7 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
             return "Error adding Nature's Aura Altar Recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_altar_";
         }

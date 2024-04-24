@@ -120,6 +120,7 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
             return "Error adding Nature's Aura Offering Recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_offering_";
         }

@@ -113,6 +113,7 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
             return this;
         }
 
+        @Override
         @RecipeBuilderMethodDescription
         public RecipeBuilder input(IIngredient input) {
             this.input = new BlockIngredient(input.toMcIngredient());

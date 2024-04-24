@@ -34,6 +34,7 @@ public class TileInvisECoreBlockMixin implements TileInvisECoreBlockState {
         this.metadata = 0;
     }
 
+    @Override
     public int getMetadata() {
         return metadata;
     }

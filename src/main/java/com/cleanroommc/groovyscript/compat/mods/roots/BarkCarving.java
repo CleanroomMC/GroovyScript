@@ -147,6 +147,7 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
             return "Error adding Roots Bark Carving recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_bark_carving_";
         }

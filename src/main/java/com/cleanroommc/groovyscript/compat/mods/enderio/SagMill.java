@@ -61,6 +61,7 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         }
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(SagMillRecipeManager.getInstance().getRecipes()::remove);
