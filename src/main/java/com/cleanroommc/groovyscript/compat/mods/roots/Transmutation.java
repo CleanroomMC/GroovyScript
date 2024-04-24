@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.TransmutationRecipe;
 import epicsquid.roots.recipe.transmutation.BlockStatePredicate;
 import epicsquid.roots.recipe.transmutation.StatePredicate;
@@ -22,8 +23,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
-import static epicsquid.roots.init.ModRecipes.removeTransmutationRecipe;
-
 @RegistryDescription
 public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, TransmutationRecipe>> {
 
@@ -38,7 +37,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> removeTransmutationRecipe(pair.getKey()));
+        removeScripted().forEach(pair -> ModRecipes.removeTransmutationRecipe(pair.getKey()));
         restoreFromBackup().forEach(pair -> ModRecipesAccessor.getTransmutationRecipes().put(pair.getKey(), pair.getValue()));
     }
 
@@ -62,7 +61,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
     public boolean removeByName(ResourceLocation name) {
         TransmutationRecipe recipe = ModRecipesAccessor.getTransmutationRecipes().get(name);
         if (recipe == null) return false;
-        removeTransmutationRecipe(name);
+        ModRecipes.removeTransmutationRecipe(name);
         addBackup(Pair.of(name, recipe));
         return true;
     }

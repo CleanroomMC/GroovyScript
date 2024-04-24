@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.BarkRecipe;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
@@ -17,8 +18,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-
-import static epicsquid.roots.init.ModRecipes.*;
 
 @RegistryDescription
 public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, BarkRecipe>> {
@@ -38,8 +37,8 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> getBarkRecipeMap().remove(pair.getKey()));
-        restoreFromBackup().forEach(pair -> getBarkRecipeMap().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(pair -> ModRecipes.getBarkRecipeMap().remove(pair.getKey()));
+        restoreFromBackup().forEach(pair -> ModRecipes.getBarkRecipeMap().put(pair.getKey(), pair.getValue()));
     }
 
     public void add(BarkRecipe recipe) {
@@ -47,30 +46,30 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
     }
 
     public void add(ResourceLocation name, BarkRecipe recipe) {
-        getBarkRecipeMap().put(name, recipe);
+        ModRecipes.getBarkRecipeMap().put(name, recipe);
         addScripted(Pair.of(name, recipe));
     }
 
     public ResourceLocation findRecipe(BarkRecipe recipe) {
-        return getBarkRecipeByName(recipe.getName()) == null ? null : recipe.getName();
+        return ModRecipes.getBarkRecipeByName(recipe.getName()) == null ? null : recipe.getName();
     }
 
     public ResourceLocation findRecipeByInput(BlockPlanks.EnumType input) {
-        for (BarkRecipe entry : getBarkRecipes()) {
+        for (BarkRecipe entry : ModRecipes.getBarkRecipes()) {
             if (entry.getType() == input) return entry.getName();
         }
         return null;
     }
 
     public ResourceLocation findRecipeByInput(ItemStack input) {
-        for (BarkRecipe entry : getBarkRecipes()) {
+        for (BarkRecipe entry : ModRecipes.getBarkRecipes()) {
             if (ItemStack.areItemsEqual(entry.getBlockStack(), input)) return entry.getName();
         }
         return null;
     }
 
     public ResourceLocation findRecipeByOutput(ItemStack output) {
-        for (BarkRecipe entry : getBarkRecipes()) {
+        for (BarkRecipe entry : ModRecipes.getBarkRecipes()) {
             if (ItemStack.areItemsEqual(entry.getItem(), output)) return entry.getName();
         }
         return null;
@@ -78,18 +77,18 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
 
     @MethodDescription(example = @Example("resource('roots:wildwood')"))
     public boolean removeByName(ResourceLocation name) {
-        BarkRecipe recipe = getBarkRecipeByName(name);
+        BarkRecipe recipe = ModRecipes.getBarkRecipeByName(name);
         if (recipe == null) return false;
-        removeBarkRecipe(recipe.getBlockStack());
+        ModRecipes.removeBarkRecipe(recipe.getBlockStack());
         addBackup(Pair.of(name, recipe));
         return true;
     }
 
     @MethodDescription(example = @Example("item('minecraft:log')"))
     public boolean removeByInput(ItemStack input) {
-        for (Map.Entry<ResourceLocation, BarkRecipe> x : getBarkRecipeMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, BarkRecipe> x : ModRecipes.getBarkRecipeMap().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getBlockStack(), input)) {
-                getBarkRecipeMap().remove(x.getKey());
+                ModRecipes.getBarkRecipeMap().remove(x.getKey());
                 addBackup(Pair.of(x.getKey(), x.getValue()));
                 return true;
             }
@@ -104,9 +103,9 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
 
     @MethodDescription(example = @Example("item('roots:bark_dark_oak')"))
     public boolean removeByOutput(ItemStack output) {
-        for (Map.Entry<ResourceLocation, BarkRecipe> x : getBarkRecipeMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, BarkRecipe> x : ModRecipes.getBarkRecipeMap().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getItem(), output)) {
-                getBarkRecipeMap().remove(x.getKey());
+                ModRecipes.getBarkRecipeMap().remove(x.getKey());
                 addBackup(Pair.of(x.getKey(), x.getValue()));
                 return true;
             }
@@ -116,13 +115,13 @@ public class BarkCarving extends VirtualizedRegistry<Pair<ResourceLocation, Bark
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        getBarkRecipeMap().forEach((key, value) -> addBackup(Pair.of(key, value)));
-        getBarkRecipeMap().clear();
+        ModRecipes.getBarkRecipeMap().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getBarkRecipeMap().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BarkRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(getBarkRecipes())
+        return new SimpleObjectStream<>(ModRecipes.getBarkRecipes())
                 .setRemover(r -> this.removeByName(r.getName()));
     }
 

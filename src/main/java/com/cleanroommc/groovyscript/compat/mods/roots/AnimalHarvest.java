@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.AnimalHarvestRecipe;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
@@ -14,9 +15,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-
-import static epicsquid.roots.init.ModRecipes.getAnimalHarvestRecipes;
-import static epicsquid.roots.init.ModRecipes.removeAnimalHarvestRecipe;
 
 @RegistryDescription
 public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, AnimalHarvestRecipe>> {
@@ -31,8 +29,8 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> removeAnimalHarvestRecipe(pair.getKey()));
-        restoreFromBackup().forEach(pair -> getAnimalHarvestRecipes().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(pair -> ModRecipes.removeAnimalHarvestRecipe(pair.getKey()));
+        restoreFromBackup().forEach(pair -> ModRecipes.getAnimalHarvestRecipes().put(pair.getKey(), pair.getValue()));
     }
 
     public void add(AnimalHarvestRecipe recipe) {
@@ -40,12 +38,12 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
     }
 
     public void add(ResourceLocation name, AnimalHarvestRecipe recipe) {
-        getAnimalHarvestRecipes().put(name, recipe);
+        ModRecipes.getAnimalHarvestRecipes().put(name, recipe);
         addScripted(Pair.of(name, recipe));
     }
 
     public ResourceLocation findRecipe(AnimalHarvestRecipe recipe) {
-        for (Map.Entry<ResourceLocation, AnimalHarvestRecipe> entry : getAnimalHarvestRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, AnimalHarvestRecipe> entry : ModRecipes.getAnimalHarvestRecipes().entrySet()) {
             if (entry.getValue().matches(recipe.getHarvestClass())) return entry.getKey();
         }
         return null;
@@ -53,18 +51,18 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
 
     @MethodDescription(example = @Example("resource('roots:chicken')"))
     public boolean removeByName(ResourceLocation name) {
-        AnimalHarvestRecipe recipe = getAnimalHarvestRecipes().get(name);
+        AnimalHarvestRecipe recipe = ModRecipes.getAnimalHarvestRecipes().get(name);
         if (recipe == null) return false;
-        removeAnimalHarvestRecipe(name);
+        ModRecipes.removeAnimalHarvestRecipe(name);
         addBackup(Pair.of(name, recipe));
         return true;
     }
 
     @MethodDescription(example = @Example("entity('minecraft:pig')"))
     public boolean removeByEntity(EntityEntry entity) {
-        for (Map.Entry<ResourceLocation, AnimalHarvestRecipe> x : getAnimalHarvestRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, AnimalHarvestRecipe> x : ModRecipes.getAnimalHarvestRecipes().entrySet()) {
             if (x.getValue().matches(entity.getEntityClass())) {
-                getAnimalHarvestRecipes().remove(x.getKey());
+                ModRecipes.getAnimalHarvestRecipes().remove(x.getKey());
                 addBackup(Pair.of(x.getKey(), x.getValue()));
                 return true;
             }
@@ -74,13 +72,13 @@ public class AnimalHarvest extends VirtualizedRegistry<Pair<ResourceLocation, An
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        getAnimalHarvestRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
-        getAnimalHarvestRecipes().clear();
+        ModRecipes.getAnimalHarvestRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getAnimalHarvestRecipes().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, AnimalHarvestRecipe>> streamRecipes() {
-        return new SimpleObjectStream<>(getAnimalHarvestRecipes().entrySet())
+        return new SimpleObjectStream<>(ModRecipes.getAnimalHarvestRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 

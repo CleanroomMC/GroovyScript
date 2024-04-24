@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.PyreCraftingRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -13,8 +14,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-
-import static epicsquid.roots.init.ModRecipes.*;
 
 @RegistryDescription
 public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftingRecipe>> {
@@ -29,8 +28,8 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> removePyreCraftingRecipe(pair.getKey()));
-        restoreFromBackup().forEach(pair -> addPyreCraftingRecipe(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(pair -> ModRecipes.removePyreCraftingRecipe(pair.getKey()));
+        restoreFromBackup().forEach(pair -> ModRecipes.addPyreCraftingRecipe(pair.getKey(), pair.getValue()));
     }
 
     public void add(PyreCraftingRecipe recipe) {
@@ -38,19 +37,19 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
     }
 
     public void add(ResourceLocation name, PyreCraftingRecipe recipe) {
-        addPyreCraftingRecipe(name, recipe);
+        ModRecipes.addPyreCraftingRecipe(name, recipe);
         addScripted(Pair.of(name, recipe));
     }
 
     public ResourceLocation findRecipe(PyreCraftingRecipe recipe) {
-        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> entry : getPyreCraftingRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> entry : ModRecipes.getPyreCraftingRecipes().entrySet()) {
             if (entry.getValue().matches(recipe.getRecipe())) return entry.getKey();
         }
         return null;
     }
 
     public ResourceLocation findRecipeByOutput(ItemStack output) {
-        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> entry : getPyreCraftingRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> entry : ModRecipes.getPyreCraftingRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(entry.getValue().getResult(), output)) return entry.getKey();
         }
         return null;
@@ -58,18 +57,18 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
 
     @MethodDescription(example = @Example("resource('roots:infernal_bulb')"))
     public boolean removeByName(ResourceLocation name) {
-        PyreCraftingRecipe recipe = getCraftingRecipe(name);
+        PyreCraftingRecipe recipe = ModRecipes.getCraftingRecipe(name);
         if (recipe == null) return false;
-        removePyreCraftingRecipe(name);
+        ModRecipes.removePyreCraftingRecipe(name);
         addBackup(Pair.of(name, recipe));
         return true;
     }
 
     @MethodDescription(example = @Example("item('minecraft:gravel')"))
     public boolean removeByOutput(ItemStack output) {
-        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> x : getPyreCraftingRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> x : ModRecipes.getPyreCraftingRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getResult(), output)) {
-                getPyreCraftingRecipes().remove(x.getKey());
+                ModRecipes.getPyreCraftingRecipes().remove(x.getKey());
                 addBackup(Pair.of(x.getKey(), x.getValue()));
                 return true;
             }
@@ -79,13 +78,13 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        getPyreCraftingRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
-        getPyreCraftingRecipes().clear();
+        ModRecipes.getPyreCraftingRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getPyreCraftingRecipes().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, PyreCraftingRecipe>> streamRecipes() {
-        return new SimpleObjectStream<>(getPyreCraftingRecipes().entrySet())
+        return new SimpleObjectStream<>(ModRecipes.getPyreCraftingRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 

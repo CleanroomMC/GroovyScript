@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.FeyCraftingRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -13,8 +14,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-
-import static epicsquid.roots.init.ModRecipes.*;
 
 @RegistryDescription(
         admonition = @Admonition(value = "groovyscript.wiki.roots.fey_crafter.note", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD)
@@ -28,8 +27,8 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> removeFeyCraftingRecipe(pair.getKey()));
-        restoreFromBackup().forEach(pair -> addFeyCraftingRecipe(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(pair -> ModRecipes.removeFeyCraftingRecipe(pair.getKey()));
+        restoreFromBackup().forEach(pair -> ModRecipes.addFeyCraftingRecipe(pair.getKey(), pair.getValue()));
     }
 
     public void add(FeyCraftingRecipe recipe) {
@@ -37,19 +36,19 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
     }
 
     public void add(ResourceLocation name, FeyCraftingRecipe recipe) {
-        addFeyCraftingRecipe(name, recipe);
+        ModRecipes.addFeyCraftingRecipe(name, recipe);
         addScripted(Pair.of(name, recipe));
     }
 
     public ResourceLocation findRecipe(FeyCraftingRecipe recipe) {
-        for (Map.Entry<ResourceLocation, FeyCraftingRecipe> entry : getFeyCraftingRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, FeyCraftingRecipe> entry : ModRecipes.getFeyCraftingRecipes().entrySet()) {
             if (entry.getValue().matches(recipe.getRecipe())) return entry.getKey();
         }
         return null;
     }
 
     public ResourceLocation findRecipeByOutput(ItemStack output) {
-        for (Map.Entry<ResourceLocation, FeyCraftingRecipe> entry : getFeyCraftingRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, FeyCraftingRecipe> entry : ModRecipes.getFeyCraftingRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(entry.getValue().getResult(), output)) return entry.getKey();
         }
         return null;
@@ -57,18 +56,18 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
 
     @MethodDescription(example = @Example("resource('roots:unending_bowl')"))
     public boolean removeByName(ResourceLocation name) {
-        FeyCraftingRecipe recipe = getFeyCraftingRecipe(name);
+        FeyCraftingRecipe recipe = ModRecipes.getFeyCraftingRecipe(name);
         if (recipe == null) return false;
-        removeFeyCraftingRecipe(name);
+        ModRecipes.removeFeyCraftingRecipe(name);
         addBackup(Pair.of(name, recipe));
         return true;
     }
 
     @MethodDescription(example = @Example("item('minecraft:gravel')"))
     public boolean removeByOutput(ItemStack output) {
-        for (Map.Entry<ResourceLocation, FeyCraftingRecipe> x : getFeyCraftingRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, FeyCraftingRecipe> x : ModRecipes.getFeyCraftingRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getResult(), output)) {
-                getFeyCraftingRecipes().remove(x.getKey());
+                ModRecipes.getFeyCraftingRecipes().remove(x.getKey());
                 addBackup(Pair.of(x.getKey(), x.getValue()));
                 return true;
             }
@@ -78,13 +77,13 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        getFeyCraftingRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
-        getFeyCraftingRecipes().clear();
+        ModRecipes.getFeyCraftingRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getFeyCraftingRecipes().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, FeyCraftingRecipe>> streamRecipes() {
-        return new SimpleObjectStream<>(getFeyCraftingRecipes().entrySet())
+        return new SimpleObjectStream<>(ModRecipes.getFeyCraftingRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 

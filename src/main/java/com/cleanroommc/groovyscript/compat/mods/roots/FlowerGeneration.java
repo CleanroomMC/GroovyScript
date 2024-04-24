@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.FlowerRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -20,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static epicsquid.roots.init.ModRecipes.getFlowerRecipes;
-
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES
 )
@@ -34,8 +33,8 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> getFlowerRecipes().remove(pair.getKey()));
-        restoreFromBackup().forEach(pair -> getFlowerRecipes().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(pair -> ModRecipes.getFlowerRecipes().remove(pair.getKey()));
+        restoreFromBackup().forEach(pair -> ModRecipes.getFlowerRecipes().put(pair.getKey(), pair.getValue()));
     }
 
     public void add(FlowerRecipe recipe) {
@@ -43,12 +42,12 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
     }
 
     public void add(ResourceLocation name, FlowerRecipe recipe) {
-        getFlowerRecipes().put(name, recipe);
+        ModRecipes.getFlowerRecipes().put(name, recipe);
         addScripted(Pair.of(name, recipe));
     }
 
     public ResourceLocation findRecipe(FlowerRecipe recipe) {
-        for (Map.Entry<ResourceLocation, FlowerRecipe> entry : getFlowerRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, FlowerRecipe> entry : ModRecipes.getFlowerRecipes().entrySet()) {
             if (entry.getValue().equals(recipe)) return entry.getKey();
         }
         return null;
@@ -56,18 +55,18 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
 
     @MethodDescription(example = @Example("resource('roots:dandelion')"))
     public boolean removeByName(ResourceLocation name) {
-        FlowerRecipe recipe = getFlowerRecipes().get(name);
+        FlowerRecipe recipe = ModRecipes.getFlowerRecipes().get(name);
         if (recipe == null) return false;
-        getFlowerRecipes().remove(name);
+        ModRecipes.getFlowerRecipes().remove(name);
         addBackup(Pair.of(name, recipe));
         return true;
     }
 
     @MethodDescription(description = "groovyscript.wiki.roots.flower_generation.removeByFlower0", example = @Example("blockstate('minecraft:red_flower:2')"))
     public boolean removeByFlower(IBlockState flower) {
-        for (Map.Entry<ResourceLocation, FlowerRecipe> x : getFlowerRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, FlowerRecipe> x : ModRecipes.getFlowerRecipes().entrySet()) {
             if (x.getValue().getFlower() == flower) {
-                getFlowerRecipes().remove(x.getKey());
+                ModRecipes.getFlowerRecipes().remove(x.getKey());
                 addBackup(Pair.of(x.getKey(), x.getValue()));
                 return true;
             }
@@ -96,13 +95,13 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        getFlowerRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
-        getFlowerRecipes().clear();
+        ModRecipes.getFlowerRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipes.getFlowerRecipes().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, FlowerRecipe>> streamRecipes() {
-        return new SimpleObjectStream<>(getFlowerRecipes().entrySet())
+        return new SimpleObjectStream<>(ModRecipes.getFlowerRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 

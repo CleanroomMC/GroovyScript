@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.MortarRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -18,9 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static epicsquid.roots.init.ModRecipes.addMortarRecipe;
-import static epicsquid.roots.init.ModRecipes.getMortarRecipes;
 
 @RegistryDescription
 public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRecipe>> {
@@ -41,7 +39,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
     @Override
     public void onReload() {
         removeScripted().forEach(pair -> ModRecipesAccessor.getMortarRecipes().remove(pair.getKey()));
-        restoreFromBackup().forEach(pair -> addMortarRecipe(pair.getValue()));
+        restoreFromBackup().forEach(pair -> ModRecipes.addMortarRecipe(pair.getValue()));
     }
 
     public void add(MortarRecipe recipe) {
@@ -49,19 +47,19 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
     }
 
     public void add(ResourceLocation name, MortarRecipe recipe) {
-        addMortarRecipe(recipe);
+        ModRecipes.addMortarRecipe(recipe);
         addScripted(Pair.of(name, recipe));
     }
 
     public ResourceLocation findRecipe(MortarRecipe recipe) {
-        for (MortarRecipe entry : getMortarRecipes()) {
+        for (MortarRecipe entry : ModRecipes.getMortarRecipes()) {
             if (entry.matches(recipe.getRecipe())) return entry.getRegistryName();
         }
         return null;
     }
 
     public ResourceLocation findRecipeByOutput(ItemStack output) {
-        for (MortarRecipe entry : getMortarRecipes()) {
+        for (MortarRecipe entry : ModRecipes.getMortarRecipes()) {
             if (ItemStack.areItemsEqual(entry.getResult(), output)) return entry.getRegistryName();
         }
         return null;
@@ -99,7 +97,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MortarRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(getMortarRecipes())
+        return new SimpleObjectStream<>(ModRecipes.getMortarRecipes())
                 .setRemover(r -> this.removeByName(r.getRegistryName()));
     }
 
