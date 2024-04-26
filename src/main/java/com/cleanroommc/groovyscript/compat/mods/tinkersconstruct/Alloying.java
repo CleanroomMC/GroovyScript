@@ -20,7 +20,7 @@ import java.util.List;
 @RegistryDescription
 public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 3).fluidInputs(fluid('clay') * 1,fluid('lava') * 2).register()"))
+    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 3).fluidInput(fluid('clay') * 1,fluid('lava') * 2).register()"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -83,7 +83,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return false;
     }
 
-    @MethodDescription()
+    @MethodDescription
     public boolean removeByInputsAndOutput(FluidStack output, FluidStack... inputs) {
         List<FluidStack> list = Arrays.asList(inputs);
         if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {

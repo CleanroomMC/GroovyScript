@@ -11,7 +11,7 @@ println 'mod \'tconstruct\' detected, running script'
 
 mods.tconstruct.alloying.recipeBuilder()
     .fluidOutput(fluid('iron') * 3)
-    .fluidInputs(fluid('clay') * 1,fluid('lava') * 2)
+    .fluidInput(fluid('clay') * 1,fluid('lava') * 2)
     .register()
 
 
@@ -20,8 +20,8 @@ mods.tconstruct.alloying.add(fluid('lava') * 144, fluid('water') * 500, fluid('i
 // Casting Basin:
 // Add or remove casting basin recipes
 
-mods.tconstruct.basin.removeByCast(item('minecraft:oak_planks'))
-mods.tconstruct.basin.removeByInput(fluid('lava'))
+mods.tconstruct.basin.removeByCast(item('minecraft:planks:0'))
+mods.tconstruct.basin.removeByInput(fluid('clay'))
 mods.tconstruct.basin.removeByOutput(item('minecraft:iron_block'))
 // mods.tconstruct.basin.removeAll()
 
@@ -83,13 +83,13 @@ mods.tconstruct.smeltery_fuel.addFuel(fluid('water'), 250)
 
 mods.tconstruct.table.removeByCast(item('minecraft:bucket'))
 mods.tconstruct.table.removeByInput(fluid('iron'))
-mods.tconstruct.table.removeByOutput(item('minecraft:iron_ingot'))
+mods.tconstruct.table.removeByOutput(item('minecraft:gold_ingot'))
 // mods.tconstruct.table.removeAll()
 
 mods.tconstruct.table.recipeBuilder()
     .fluidInput(fluid('lava') * 50)
     .output(item('minecraft:diamond'))
-    .castingTime(750)
+    .coolingTime(750)
     .consumesCast(true)
     .cast(ore('gemEmerald'))
     .register()
