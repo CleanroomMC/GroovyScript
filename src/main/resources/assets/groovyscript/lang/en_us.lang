@@ -1366,36 +1366,36 @@ groovyscript.wiki.tconstruct.smeltery_fuel.addFuel=Adds the given fluid as a sme
 groovyscript.wiki.tconstruct.smeltery_fuel.removeFuel=Removes the given fluid from being a smeltery fuel
 
 groovyscript.wiki.tconstruct.drying.title=Drying Rack
-groovyscript.wiki.tconstruct.drying.description=Add or remove drying rack recipes
+groovyscript.wiki.tconstruct.drying.description=Convert an item into a different item by hanging it out to dry.
 groovyscript.wiki.tconstruct.drying.add=Adds a new drying rack recipe with the given input, output, and time
 groovyscript.wiki.tconstruct.drying.time.value=The time in ticks it takes for the item to dry
 
 groovyscript.wiki.tconstruct.casting_table.title=Casting Table
-groovyscript.wiki.tconstruct.casting_table.description=Add or remove casting table recipes
+groovyscript.wiki.tconstruct.casting_table.description=Pours out fluid onto a table to solidify it into a solid, optionally with a cast itemstack.
 groovyscript.wiki.tconstruct.casting_table.removeByCast=Removes all recipes that use the given item as a cast
 groovyscript.wiki.tconstruct.casting_table.cast.value=The item to use as a cast. null for no cast
 groovyscript.wiki.tconstruct.casting_table.time.value=The time in ticks it takes for the recipe to complete
 groovyscript.wiki.tconstruct.casting_table.consumesCast.value=Whether the cast item is destroyed
 
 groovyscript.wiki.tconstruct.casting_basin.title=Casting Basin
-groovyscript.wiki.tconstruct.casting_basin.description=Add or remove casting basin recipes
+groovyscript.wiki.tconstruct.casting_basin.description=Pours out fluid into a basin to solidify it into a solid, optionally with a cast itemstack.
 groovyscript.wiki.tconstruct.casting_basin.removeByCast=Removes all recipes that use the given item as a cast
 groovyscript.wiki.tconstruct.casting_basin.cast.value=The item to use as a cast. null for no cast
 groovyscript.wiki.tconstruct.casting_basin.time.value=The time in ticks it takes for the recipe to complete
 groovyscript.wiki.tconstruct.casting_basin.consumesCast.value=Whether the cast item is destroyed
 
 groovyscript.wiki.tconstruct.melting.title=Melting
-groovyscript.wiki.tconstruct.melting.description=Add or remove smeltery melting recipes
+groovyscript.wiki.tconstruct.melting.description=Modifies what items can be melted down in the Smeltery.
 groovyscript.wiki.tconstruct.melting.add=Adds a new recipe with the given input, output, and time
 groovyscript.wiki.tconstruct.melting.temp.value=Required temperature for melting. Also determines the speed of the melt
 
 groovyscript.wiki.tconstruct.entity_melting.title=Entity Melting
-groovyscript.wiki.tconstruct.entity_melting.description=Add or remove entity melting recipes
+groovyscript.wiki.tconstruct.entity_melting.description=Allows mobs to create a bit of fluid when hurt by the Smeltery.
 groovyscript.wiki.tconstruct.entity_melting.input.value=The entity to melt
 groovyscript.wiki.tconstruct.entity_melting.output.value=The fluid created each damage tick
 
 groovyscript.wiki.tconstruct.alloying.title=Alloying
-groovyscript.wiki.tconstruct.alloying.description=Add or remove smeltery alloying recipes
+groovyscript.wiki.tconstruct.alloying.description=Modifies what fluids can be mixed together in the Smeltery.
 groovyscript.wiki.tconstruct.alloying.add=Adds a new recipe with the given inputs and output
 groovyscript.wiki.tconstruct.alloying.removeByInputsAndOutput=Removes all recipes that match the given output and the given inputs
 
