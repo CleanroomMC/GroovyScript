@@ -1370,19 +1370,19 @@ groovyscript.wiki.tconstruct.drying.description=Add or remove drying rack recipe
 groovyscript.wiki.tconstruct.drying.add=Adds a new drying rack recipe with the given input, output, and time
 groovyscript.wiki.tconstruct.drying.time.value=The time in ticks it takes for the item to dry
 
-groovyscript.wiki.tconstruct.table.title=Casting Table
-groovyscript.wiki.tconstruct.table.description=Add or remove casting table recipes
-groovyscript.wiki.tconstruct.table.removeByCast=Removes all recipes that use the given item as a cast
-groovyscript.wiki.tconstruct.table.cast.value=The item to use as a cast. null for no cast
-groovyscript.wiki.tconstruct.table.time.value=The time in ticks it takes for the recipe to complete
-groovyscript.wiki.tconstruct.table.consumesCast.value=Whether the cast item is destroyed
+groovyscript.wiki.tconstruct.casting_table.title=Casting Table
+groovyscript.wiki.tconstruct.casting_table.description=Add or remove casting table recipes
+groovyscript.wiki.tconstruct.casting_table.removeByCast=Removes all recipes that use the given item as a cast
+groovyscript.wiki.tconstruct.casting_table.cast.value=The item to use as a cast. null for no cast
+groovyscript.wiki.tconstruct.casting_table.time.value=The time in ticks it takes for the recipe to complete
+groovyscript.wiki.tconstruct.casting_table.consumesCast.value=Whether the cast item is destroyed
 
-groovyscript.wiki.tconstruct.basin.title=Casting Basin
-groovyscript.wiki.tconstruct.basin.description=Add or remove casting basin recipes
-groovyscript.wiki.tconstruct.basin.removeByCast=Removes all recipes that use the given item as a cast
-groovyscript.wiki.tconstruct.basin.cast.value=The item to use as a cast. null for no cast
-groovyscript.wiki.tconstruct.basin.time.value=The time in ticks it takes for the recipe to complete
-groovyscript.wiki.tconstruct.basin.consumesCast.value=Whether the cast item is destroyed
+groovyscript.wiki.tconstruct.casting_basin.title=Casting Basin
+groovyscript.wiki.tconstruct.casting_basin.description=Add or remove casting basin recipes
+groovyscript.wiki.tconstruct.casting_basin.removeByCast=Removes all recipes that use the given item as a cast
+groovyscript.wiki.tconstruct.casting_basin.cast.value=The item to use as a cast. null for no cast
+groovyscript.wiki.tconstruct.casting_basin.time.value=The time in ticks it takes for the recipe to complete
+groovyscript.wiki.tconstruct.casting_basin.consumesCast.value=Whether the cast item is destroyed
 
 groovyscript.wiki.tconstruct.melting.title=Melting
 groovyscript.wiki.tconstruct.melting.description=Add or remove smeltery melting recipes
