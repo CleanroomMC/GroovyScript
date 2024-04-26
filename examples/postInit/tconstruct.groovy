@@ -5,7 +5,7 @@
 println 'mod \'tconstruct\' detected, running script'
 
 // Alloying:
-// Add or remove smeltery alloying recipes
+// Modifies what fluids can be mixed together in the Smeltery.
 
 // mods.tconstruct.alloying.removeAll()
 
@@ -18,7 +18,7 @@ mods.tconstruct.alloying.recipeBuilder()
 mods.tconstruct.alloying.add(fluid('lava') * 144, fluid('water') * 500, fluid('iron') * 5, fluid('clay') * 60)
 
 // Casting Basin:
-// Add or remove casting basin recipes
+// Pours out fluid into a basin to solidify it into a solid, optionally with a cast itemstack.
 
 mods.tconstruct.casting_basin.removeByCast(item('minecraft:planks:0'))
 mods.tconstruct.casting_basin.removeByInput(fluid('clay'))
@@ -34,7 +34,7 @@ mods.tconstruct.casting_basin.recipeBuilder()
 
 
 // Casting Table:
-// Add or remove casting table recipes
+// Pours out fluid onto a table to solidify it into a solid, optionally with a cast itemstack.
 
 mods.tconstruct.casting_table.removeByCast(item('minecraft:bucket'))
 mods.tconstruct.casting_table.removeByInput(fluid('iron'))
@@ -51,7 +51,7 @@ mods.tconstruct.casting_table.recipeBuilder()
 
 
 // Drying Rack:
-// Add or remove drying rack recipes
+// Convert an item into a different item by hanging it out to dry.
 
 // mods.tconstruct.drying.removeAll()
 
@@ -64,7 +64,7 @@ mods.tconstruct.drying.recipeBuilder()
 
 
 // Entity Melting:
-// Add or remove entity melting recipes
+// Allows mobs to create a bit of fluid when hurt by the Smeltery.
 
 // mods.tconstruct.entity_melting.removeAll()
 
@@ -76,7 +76,7 @@ mods.tconstruct.entity_melting.recipeBuilder()
 
 
 // Melting:
-// Add or remove smeltery melting recipes
+// Modifies what items can be melted down in the Smeltery.
 
 // mods.tconstruct.melting.removeAll()
 
