@@ -65,7 +65,7 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         return getRegistry().remove(recipe.catalyst) != null;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByCatalyst", example = @Example("item('minecraft:ice')"))
+    @MethodDescription(example = @Example("item('minecraft:ice')"))
     public void removeByCatalyst(ItemStack catalyst) {
         WellLiquefaction.getRegisteredLiquefactions().forEach(le -> {
             if (le.catalyst.isItemEqual(catalyst)) {
@@ -79,7 +79,7 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         removeByCatalyst(input);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('lava')"))
+    @MethodDescription(example = @Example("fluid('lava')"))
     public void removeByOutput(FluidStack fluid) {
         getRegistry().entrySet().removeIf(entry -> {
             if (entry.getValue().producing.equals(fluid.getFluid())) {
@@ -90,13 +90,13 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<WellLiquefaction.LiquefactionEntry> streamRecipes() {
         return new SimpleObjectStream<>(WellLiquefaction.getRegisteredLiquefactions())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getRegistry().values().forEach(this::addBackup);
         getRegistry().clear();

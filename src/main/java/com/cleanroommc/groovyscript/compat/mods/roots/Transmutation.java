@@ -110,13 +110,13 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipesAccessor.getTransmutationRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         ModRecipesAccessor.getTransmutationRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, TransmutationRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipesAccessor.getTransmutationRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));

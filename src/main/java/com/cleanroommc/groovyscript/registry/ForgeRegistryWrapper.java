@@ -63,14 +63,14 @@ public class ForgeRegistryWrapper<T extends IForgeRegistryEntry<T>> extends Name
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         for (T recipe : this.registry) {
             ReloadableRegistryManager.removeRegistryEntry(this.registry, recipe.getRegistryName());
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<T> streamRecipes() {
         return new SimpleObjectStream<>(this.registry.getValuesCollection()).setRemover(recipe -> {
             ResourceLocation key = this.registry.getKey(recipe);

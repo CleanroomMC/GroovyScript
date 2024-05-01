@@ -21,6 +21,72 @@
  *
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
+
+// A hash map of curse maven mods to debug options that will enable it in runtime.
+// Anything that should be handled differently than always being "compileOnly" and also being "runtimeOnly" when debug enabled
+// should be handled in the main dependencies function.
+// Sorted by alphabetical name of the `project.debug_[this]` value
+final def mod_dependencies = [
+        'actually-additions-228404:3117927'                   : [project.debug_actually_additions],
+        'advancedmortars-283777:2780626'                      : [project.debug_adv_mortars],
+        'aether-255308:3280119'                               : [project.debug_aether],
+        'alchemistry-293425:3186612'                          : [project.debug_alchemistry],
+        'alchemylib-293426:2761706'                           : [project.debug_alchemistry],
+        'shadowfacts-forgelin-248453:2785465'                 : [project.debug_alchemistry],
+        'ae2-extended-life-570458:4553942'                    : [project.debug_applied_energistics_2],
+        'arcane-archives-311357:3057332'                      : [project.debug_arcane_archives],
+        'guidebook-253874:2989594'                            : [project.debug_arcane_archives],
+        'mystical_lib-277064:3483816'                         : [project.debug_arcane_archives, project.debug_roots],
+        'astralsorcery-sorcery-241721:3044416'                : [project.debug_astral],
+        'baubles-227083:2518667'                              : [project.debug_astral, project.debug_botania, project.debug_thaum],
+        'avaritia_1_10-261348:3143349'                        : [project.debug_avaritia],
+        'bwm-core-294335:2624990'                             : [project.debug_better_with_mods],
+        'bwm-suite-246760:3289033'                            : [project.debug_better_with_mods],
+        'blood-magic-224791:2822288'                          : [project.debug_blood_magic],
+        'guide-api-228832:2645992'                            : [project.debug_blood_magic, project.debug_woot],
+        'botania-225643:3330934'                              : [project.debug_botania],
+        'calculator-225104:2847174'                           : [project.debug_calculator],
+        'sonar-core-239418:2645156'                           : [project.debug_calculator],
+        'chisel-235279:2915375'                               : [project.debug_chisel],
+        'ctm-267602:2915363'                                  : [project.debug_chisel],
+        'compact-machines-224218:2707509'                     : [project.debug_compact_machines],
+        'brandons_core-231382:3408276'                        : [project.debug_draconic_evolution],
+        'draconic_evolution-223565:3431261'                   : [project.debug_draconic_evolution],
+        'redstone_flux-270789:2920436'                        : [project.debug_draconic_evolution, project.debug_thermal],
+        'cyclops-core-232758:3159497'                         : [project.debug_evilcraft, project.debug_integrated_dynamics],
+        'evilcraft-74610:2811267'                             : [project.debug_evilcraft],
+        'cucumber-272335:2645867'                             : [project.debug_extended_crafting],
+        'extended-crafting-nomifactory-edition-398267:3613140': [project.debug_extended_crafting],
+        'extra-utilities-2-225561:2678374'                    : [project.debug_extra_utilities_2],
+        'forestry-59751:2918418'                              : [project.debug_forestry],
+        'immersive_engineering-231951:2974106'                : [project.debug_immersive_engineering],
+        // WARNING: experimental must be placed before classic, otherwise you will crash when debugging either. Check FluidGenerator compat to confirm
+        'industrialcraft_experimental-242638:3838713'         : [project.debug_industrial_craft_2_experimental],
+        'industrialcraft_classic-242942:3093607'              : [project.debug_industrial_craft_2_classic],
+        'inspirations-284007:2843007'                         : [project.debug_inspirations],
+        'mantle-74924:2713386'                                : [project.debug_inspirations, project.debug_tinkers],
+        'common-capabilities-247007:3053017'                  : [project.debug_integrated_dynamics],
+        'integrated-dynamics-236307:3159505'                  : [project.debug_integrated_dynamics],
+        'mekanism-268560:2835175'                             : [project.debug_mekanism],
+        'natures-aura-306626:2882138'                         : [project.debug_natures_aura],
+        'packmode-278398:2567799'                             : [project.debug_packmode],
+        'athenaeum-284350:4633750'                            : [project.debug_pyrotech],
+        'pyrotech-306676:4956838'                             : [project.debug_pyrotech],
+        'mystical_world-282940:3460961'                       : [project.debug_roots],
+        'patchouli-306770:3162874'                            : [project.debug_roots, project.debug_natures_aura],
+        'roots-246183:3905074'                                : [project.debug_roots],
+        'rustic-256141:3107974'                               : [project.debug_rustic],
+        'thaumcraft-223628:2629023'                           : [project.debug_thaum],
+        'cofh_core-69162:2920433'                             : [project.debug_thermal],
+        'cofh_world-271384:2920434'                           : [project.debug_thermal],
+        'thermal_expansion-69163:2926431'                     : [project.debug_thermal],
+        'thermal_foundation-222880:2926428'                   : [project.debug_thermal],
+        'constructs-armory-287683:3174535'                    : [project.debug_tinkers],
+        'tinkers-complement-272671:2843439'                   : [project.debug_tinkers],
+        'tinkers_construct-74072:2902483'                     : [project.debug_tinkers],
+        'woot-244049:2712670'                                 : [project.debug_woot],
+]
+
 dependencies {
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 
@@ -36,232 +102,19 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
 
-    compileOnly rfg.deobf('curse.maven:packmode-278398:2567799')
-    if (project.debug_packmode.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:packmode-278398:2567799')
-    }
-
     api "codechicken:codechickenlib:3.2.3.358"
 
-    compileOnly rfg.deobf('curse.maven:avaritia_1_10-261348:3143349')
-    if (project.debug_avaritia.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:avaritia_1_10-261348:3143349')
+    // compiles all mods, and selectively enables mods being debugged
+    mod_dependencies.entrySet().forEach {
+        def mod = rfg.deobf('curse.maven:' + it.key)
+        compileOnly mod
+        if (it.value.any { it.toBoolean() }) {
+            runtimeOnly mod
+        }
     }
 
-    compileOnly rfg.deobf("curse.maven:sonar-core-239418:2645156")
-    compileOnly rfg.deobf("curse.maven:calculator-225104:2847174")
-    if (project.debug_calculator.toBoolean()) {
-        runtimeOnly rfg.deobf("curse.maven:sonar-core-239418:2645156")
-        runtimeOnly rfg.deobf("curse.maven:calculator-225104:2847174")
-    }
-
-    compileOnly rfg.deobf("curse.maven:shadowfacts-forgelin-248453:2785465")
-    compileOnly rfg.deobf("curse.maven:alchemylib-293426:2761706")
-    compileOnly rfg.deobf("curse.maven:alchemistry-293425:3186612")
-    if (project.debug_alchemistry.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:shadowfacts-forgelin-248453:2785465')
-        runtimeOnly rfg.deobf('curse.maven:alchemylib-293426:2761706')
-        runtimeOnly rfg.deobf('curse.maven:alchemistry-293425:3186612')
-    }
-
-    compileOnly rfg.deobf("curse.maven:ctm-267602:2915363")
-    compileOnly rfg.deobf("curse.maven:chisel-235279:2915375")
-    if (project.debug_chisel.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:ctm-267602:2915363')
-        runtimeOnly rfg.deobf('curse.maven:chisel-235279:2915375')
-    }
-
-    compileOnly rfg.deobf('curse.maven:bwm-suite-246760:3289033')
-    compileOnly rfg.deobf('curse.maven:bwm-core-294335:2624990')
-    if (project.debug_better_with_mods.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:bwm-suite-246760:3289033')
-        runtimeOnly rfg.deobf('curse.maven:bwm-core-294335:2624990')
-    }
-
-    compileOnly rfg.deobf('curse.maven:mantle-74924:2713386')
-    if (project.debug_inspirations.toBoolean() || project.debug_tinkers.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:mantle-74924:2713386')
-    }
-
-    compileOnly rfg.deobf('curse.maven:mekanism-268560:2835175')
-    if (project.debug_mekanism.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:mekanism-268560:2835175')
-    }
-
-    compileOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
-    if (project.debug_applied_energistics_2.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
-    }
-
-    compileOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
-    if (project.debug_applied_energistics_2.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:ae2-extended-life-570458:4553942')
-    }
-
-    compileOnly rfg.deobf('curse.maven:extra-utilities-2-225561:2678374')
-    if (project.debug_extra_utilities_2.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:extra-utilities-2-225561:2678374')
-    }
-
-    compileOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
-    if (project.debug_thermal.toBoolean() || project.debug_draconic_evolution.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:redstone_flux-270789:2920436')
-    }
-
-    compileOnly rfg.deobf('curse.maven:guide-api-228832:2645992')
-    if (project.debug_blood_magic.toBoolean() || project.debug_woot.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:guide-api-228832:2645992')
-    }
-
-    compileOnly rfg.deobf('curse.maven:blood-magic-224791:2822288')
-    if (project.debug_blood_magic.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:blood-magic-224791:2822288')
-    }
-
-    compileOnly rfg.deobf('curse.maven:cyclops-core-232758:3159497')
-    if (project.debug_evilcraft.toBoolean() || project.debug_integrated_dynamics.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:cyclops-core-232758:3159497')
-    }
-
-    compileOnly rfg.deobf('curse.maven:evilcraft-74610:2811267')
-    if (project.debug_evilcraft.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:evilcraft-74610:2811267')
-    }
-
-    compileOnly rfg.deobf('curse.maven:common-capabilities-247007:3053017')
-    compileOnly rfg.deobf('curse.maven:integrated-dynamics-236307:3159505')
-    if (project.debug_integrated_dynamics.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:common-capabilities-247007:3053017')
-        runtimeOnly rfg.deobf('curse.maven:integrated-dynamics-236307:3159505')
-    }
-
-    compileOnly rfg.deobf('curse.maven:compact-machines-224218:2707509')
-    if (project.debug_compact_machines.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:compact-machines-224218:2707509')
-    }
-
-    compileOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
-    if (project.debug_actually_additions.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
-    }
-
-    compileOnly rfg.deobf('curse.maven:inspirations-284007:2843007')
-    if (project.debug_inspirations.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:inspirations-284007:2843007')
-    }
-
-    compileOnly rfg.deobf('curse.maven:cucumber-272335:2645867')
-    compileOnly rfg.deobf('curse.maven:extended-crafting-nomifactory-edition-398267:3613140')
-    if (project.debug_extended_crafting.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:cucumber-272335:2645867')
-        runtimeOnly rfg.deobf('curse.maven:extended-crafting-nomifactory-edition-398267:3613140')
-    }
-
-    compileOnly rfg.deobf('curse.maven:cofh_core-69162:2920433')
-    compileOnly rfg.deobf('curse.maven:cofh_world-271384:2920434')
-    compileOnly rfg.deobf('curse.maven:thermal_expansion-69163:2926431')
-    compileOnly rfg.deobf('curse.maven:thermal_foundation-222880:2926428')
-    if (project.debug_thermal.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:cofh_core-69162:2920433')
-        runtimeOnly rfg.deobf('curse.maven:cofh_world-271384:2920434')
-        runtimeOnly rfg.deobf('curse.maven:thermal_expansion-69163:2926431')
-        runtimeOnly rfg.deobf('curse.maven:thermal_foundation-222880:2926428')
-    }
-
-    compileOnly rfg.deobf('curse.maven:draconic_evolution-223565:3431261')
-    compileOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
-
-    if (project.debug_draconic_evolution.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:draconic_evolution-223565:3431261')
-        runtimeOnly rfg.deobf('curse.maven:brandons_core-231382:3408276')
-    }
-
-    // WARNING: experimental must be placed before classic, otherwise you will crash when debugging either.
-    compileOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
-    compileOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
-    if (project.debug_industrial_craft_2_experimental.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
-    } else if (project.debug_industrial_craft_2_classic.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
-    }
-
-    compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
-    if (project.debug_astral.toBoolean() || project.debug_thaum.toBoolean() || project.debug_botania.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:baubles-227083:2518667')
-    }
-
-    compileOnly rfg.deobf('curse.maven:botania-225643:3330934')
-    if (project.debug_botania.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:botania-225643:3330934')
-    }
-
-    compileOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
     if (project.debug_thaum.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
         runtimeOnly 'curse.maven:thaumic_jei-285492:2705304'
-    }
-
-    compileOnly rfg.deobf('curse.maven:astralsorcery-sorcery-241721:3044416')
-    if (project.debug_astral.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:astralsorcery-sorcery-241721:3044416')
-    }
-
-    compileOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
-    if (project.debug_immersive_engineering.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
-    }
-
-    compileOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
-    if (project.debug_roots.toBoolean() || project.debug_arcane_archives.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:mystical_lib-277064:3483816')
-    }
-
-    compileOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
-    compileOnly rfg.deobf('curse.maven:mystical_world-282940:3460961')
-    compileOnly rfg.deobf('curse.maven:roots-246183:3905074')
-    if (project.debug_roots.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:patchouli-306770:3162874')
-        runtimeOnly rfg.deobf('curse.maven:mystical_world-282940:3460961')
-        runtimeOnly rfg.deobf('curse.maven:roots-246183:3905074')
-    }
-
-    // gigaherz.lirelent.guidebook:Guidebook-1.12.2:2.9.1.s5
-    compileOnly rfg.deobf('curse.maven:guidebook-253874:2989594')
-    compileOnly rfg.deobf('curse.maven:arcane-archives-311357:3057332')
-    if (project.debug_arcane_archives.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:guidebook-253874:2989594')
-        runtimeOnly rfg.deobf('curse.maven:arcane-archives-311357:3057332')
-    }
-
-    compileOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
-    if (project.debug_thaum.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:baubles-227083:2518667')
-        runtimeOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
-        runtimeOnly 'curse.maven:thaumic_jei-285492:2705304'
-    }
-
-    compileOnly rfg.deobf('curse.maven:astralsorcery-sorcery-241721:3044416')
-    if (project.debug_astral.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:astralsorcery-sorcery-241721:3044416')
-    }
-
-    compileOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
-    if (project.debug_immersive_engineering.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:immersive_engineering-231951:2974106')
-    }
-
-    compileOnly rfg.deobf("curse.maven:woot-244049:2712670")
-    if (project.debug_woot.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:woot-244049:2712670')
-    }
-
-    compileOnly rfg.deobf('curse.maven:tinkers_construct-74072:2902483')
-    compileOnly rfg.deobf('curse.maven:constructs-armory-287683:3174535')
-    compileOnly rfg.deobf('curse.maven:tinkers-complement-272671:2843439')
-    if (project.debug_tinkers.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:tinkers_construct-74072:2902483')
-        runtimeOnly rfg.deobf('curse.maven:constructs-armory-287683:3174535')
-        runtimeOnly rfg.deobf('curse.maven:tinkers-complement-272671:2843439')
     }
 
     compileOnly 'com.enderio:endercore:0.5.78'
@@ -271,30 +124,14 @@ dependencies {
         runtimeOnly 'crazypants:enderio:5.3.72'
     }
 
-    compileOnly rfg.deobf('curse.maven:forestry-59751:2918418')
     if (project.debug_forestry.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:forestry-59751:2918418')
         runtimeOnly rfg.deobf('curse.maven:jei-bees-248370:2490058')
     }
 
-    compileOnly rfg.deobf('curse.maven:advancedmortars-283777:2780626')
-    if (project.debug_adv_mortars.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:advancedmortars-283777:2780626')
-    }
-
-    compileOnly rfg.deobf('curse.maven:aether-255308:3280119')
-    if (project.debug_aether.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:aether-255308:3280119')
-    }
-
-    compileOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
-    compileOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
-
     if (project.debug_pyrotech.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
-        runtimeOnly rfg.deobf('curse.maven:pyrotech-306676:4956838')
         runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
     }
+
 }
 
 minecraft {

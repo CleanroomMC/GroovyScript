@@ -37,7 +37,7 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("gas('iron')"))
+    @MethodDescription(example = @Example("gas('iron')"))
     public boolean removeByInput(GasStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Washer recipe").error();
         msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");

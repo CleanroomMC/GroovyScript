@@ -62,15 +62,14 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public boolean removeByInput(IIngredient... input) {
         NonNullList<IIngredient> inputs = NonNullList.create();
         Collections.addAll(inputs, input);
         return removeByInput(inputs);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput",
-                       example = @Example("item('minecraft:nether_wart'), item('minecraft:gunpowder')"))
+    @MethodDescription(example = @Example("item('minecraft:nether_wart'), item('minecraft:gunpowder')"))
     public boolean removeByInput(NonNullList<IIngredient> input) {
         // Filters down to only recipes which have inputs that match all the input IIngredients (NOTE: a recipe with ABCD would match an input of AB)
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().removeIf(recipe -> {
@@ -97,7 +96,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:sand')"))
+    @MethodDescription(example = @Example("item('minecraft:sand')"))
     public boolean removeByOutput(ItemStack output) {
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
@@ -115,13 +114,13 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().forEach(this::addBackup);
         ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipeAlchemyTable> streamRecipes() {
         return new SimpleObjectStream<>(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes())
                 .setRemover(this::remove);

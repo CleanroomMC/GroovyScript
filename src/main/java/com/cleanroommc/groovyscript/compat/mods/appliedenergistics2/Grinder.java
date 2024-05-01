@@ -44,7 +44,7 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         addBackup(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:gold_ingot')"))
+    @MethodDescription(example = @Example("item('minecraft:gold_ingot')"))
     public void removeByInput(ItemStack input) {
         List<IGrinderRecipe> recipes = AEApi.instance().registries().grinder().getRecipes().stream().filter(x -> ItemStack.areItemStacksEqual(x.getInput(), input)).collect(Collectors.toList());
         for (IGrinderRecipe recipe : recipes) {
@@ -53,7 +53,7 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:quartz')"))
+    @MethodDescription(example = @Example("item('minecraft:quartz')"))
     public void removeByOutput(ItemStack output) {
         List<IGrinderRecipe> recipes = AEApi.instance().registries().grinder().getRecipes().stream().filter(x -> ItemStack.areItemStacksEqual(x.getOutput(), output)).collect(Collectors.toList());
         for (IGrinderRecipe recipe : recipes) {
@@ -62,7 +62,7 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         Collection<IGrinderRecipe> recipes = new ArrayList<>(AEApi.instance().registries().grinder().getRecipes());
         for (IGrinderRecipe recipe : recipes) {

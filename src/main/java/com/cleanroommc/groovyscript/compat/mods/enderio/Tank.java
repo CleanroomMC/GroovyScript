@@ -183,7 +183,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         restoreFromBackup().forEach(MachineRecipeRegistry.instance::registerRecipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<TankMachineRecipe> streamRecipes() {
         List<TankMachineRecipe> list = new ArrayList<>();
         list.addAll((Collection<? extends TankMachineRecipe>) MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.TANK_FILLING).values());
@@ -191,7 +191,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         return new SimpleObjectStream<>(list).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.TANK_FILLING).forEach((r, l) -> addBackup((TankMachineRecipe) l));
         ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_FILLING)).getRecipes().clear();

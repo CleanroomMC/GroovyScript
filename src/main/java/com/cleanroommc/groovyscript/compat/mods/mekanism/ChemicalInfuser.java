@@ -37,7 +37,7 @@ public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuser
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("gas('hydrogen'), gas('chlorine')"))
+    @MethodDescription(example = @Example("gas('hydrogen'), gas('chlorine')"))
     public boolean removeByInput(GasStack leftInput, GasStack rightInput) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Chemical Infuser recipe").error();
         msg.add(Mekanism.isEmpty(leftInput), () -> "left gas input must not be empty");

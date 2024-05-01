@@ -73,13 +73,13 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         recipes.addAll(restoreFromBackup());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<VatRecipe> streamRecipes() {
         return new SimpleObjectStream<>(VatRecipeManager.getInstance().getRecipes().stream().map(r -> (VatRecipe) r).collect(Collectors.toList()))
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         VatRecipeManager.getInstance().getRecipes().forEach(r -> addBackup((VatRecipe) r));
         VatRecipeManager.getInstance().getRecipes().clear();

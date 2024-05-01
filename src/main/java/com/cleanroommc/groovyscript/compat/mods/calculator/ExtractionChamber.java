@@ -46,7 +46,7 @@ public class ExtractionChamber extends VirtualizedRegistry<CalculatorRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:dirt')"))
+    @MethodDescription(example = @Example("item('minecraft:dirt')"))
     public boolean removeByInput(IIngredient input) {
         return ExtractionChamberRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -61,7 +61,7 @@ public class ExtractionChamber extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('calculator:smallstone')"))
+    @MethodDescription(example = @Example("item('calculator:smallstone')"))
     public boolean removeByOutput(IIngredient output) {
         return ExtractionChamberRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
@@ -76,13 +76,13 @@ public class ExtractionChamber extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ExtractionChamberRecipes.instance().getRecipes().forEach(this::addBackup);
         ExtractionChamberRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ExtractionChamberRecipes.instance().getRecipes())
                 .setRemover(this::remove);

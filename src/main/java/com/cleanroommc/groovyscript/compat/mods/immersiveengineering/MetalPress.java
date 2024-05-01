@@ -168,13 +168,13 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         if (!list.isEmpty()) list.forEach(this::addBackup);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MetalPressRecipe.recipeList.values().forEach(this::addBackup);
         MetalPressRecipe.recipeList.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MetalPressRecipe> streamRecipes() {
         List<MetalPressRecipe> recipes = new ArrayList<>(MetalPressRecipe.recipeList.values());
         return new SimpleObjectStream<>(recipes).setRemover(this::remove);

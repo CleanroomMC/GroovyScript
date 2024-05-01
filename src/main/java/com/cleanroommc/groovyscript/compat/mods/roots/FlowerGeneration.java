@@ -94,13 +94,13 @@ public class FlowerGeneration extends VirtualizedRegistry<Pair<ResourceLocation,
         return removeByFlower(((ItemBlock) output.getItem()).getBlock().getStateFromMeta(output.getMetadata()));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getFlowerRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getFlowerRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, FlowerRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(getFlowerRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));

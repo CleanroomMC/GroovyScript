@@ -92,13 +92,13 @@ public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
         restoreFromBackup().forEach(c -> accessor.getFuels().put(c.getFluid().getName(), c));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<String, IFluidFuel>> streamRecipes() {
         return new SimpleObjectStream<>(((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getFuels().entrySet())
                 .setRemover(r -> remove(r.getValue()));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getFuels().forEach((r, l) -> {
             if (l == null) return;

@@ -55,13 +55,13 @@ public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
         restoreFromBackup().forEach(SagMillRecipeManager.getInstance().getBalls()::add);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<GrindingBall> streamRecipes() {
         return new SimpleObjectStream<>(SagMillRecipeManager.getInstance().getBalls())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         SagMillRecipeManager.getInstance().getBalls().forEach(this::addBackup);
         SagMillRecipeManager.getInstance().getBalls().clear();

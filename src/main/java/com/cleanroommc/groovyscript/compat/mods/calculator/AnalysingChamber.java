@@ -74,7 +74,7 @@ public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('sonarcore:reinforceddirtblock')"))
+    @MethodDescription(example = @Example("item('sonarcore:reinforceddirtblock')"))
     public boolean removeByInput(IIngredient input) {
         return AnalysingChamberRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -89,13 +89,13 @@ public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         AnalysingChamberRecipes.instance().getRecipes().forEach(this::addBackup);
         AnalysingChamberRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AnalysingChamberRecipes.instance().getRecipes())
                 .setRemover(this::remove);

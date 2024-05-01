@@ -44,7 +44,7 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
         return BotaniaAPI.brewRecipes.remove(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("'speed'"))
+    @MethodDescription(example = @Example("'speed'"))
     public boolean removeByOutput(String brew) {
         if (BotaniaAPI.brewRecipes.removeIf(recipe -> {
             boolean found = recipe.getBrew().getKey().equals(brew);
@@ -59,12 +59,12 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("brew('allure')"))
+    @MethodDescription(example = @Example("brew('allure')"))
     public boolean removeByOutput(vazkii.botania.api.brew.Brew brew) {
         return removeByOutput(brew.getKey());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:iron_ingot')"))
+    @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
     public boolean removeByInput(IIngredient... inputs) {
         List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
                                                                                                : i.getMatchingStacks()[0]).collect(Collectors.toList());
@@ -88,13 +88,13 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
         return removeByInput(inputs);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BotaniaAPI.brewRecipes.forEach(this::addBackup);
         BotaniaAPI.brewRecipes.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipeBrew> streamRecipes() {
         return new SimpleObjectStream<>(BotaniaAPI.brewRecipes).setRemover(this::remove);
     }

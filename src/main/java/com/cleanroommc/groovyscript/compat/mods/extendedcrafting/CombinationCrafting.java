@@ -52,7 +52,7 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
         return add(new CombinationRecipe(output, cost, perTick, input, pedestals));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example(value = "item('minecraft:gold_ingot')", commented = true))
+    @MethodDescription(example = @Example(value = "item('minecraft:gold_ingot')", commented = true))
     public boolean removeByOutput(ItemStack output) {
         return CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> {
             if (r.getOutput().equals(output)) {
@@ -63,7 +63,7 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example(value = "item('minecraft:pumpkin')", commented = true))
+    @MethodDescription(example = @Example(value = "item('minecraft:pumpkin')", commented = true))
     public boolean removeByInput(ItemStack input) {
         return CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> {
             if (r.getInput().equals(input)) {
@@ -74,7 +74,7 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public boolean removeByInput(IIngredient input) {
         return removeByInput(IngredientHelper.toItemStack(input));
     }
@@ -88,12 +88,12 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
     }
 
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CombinationRecipe> streamRecipes() {
         return new SimpleObjectStream<>(CombinationRecipeManager.getInstance().getRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CombinationRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         CombinationRecipeManager.getInstance().getRecipes().clear();

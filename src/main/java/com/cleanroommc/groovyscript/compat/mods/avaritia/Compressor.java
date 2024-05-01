@@ -33,7 +33,7 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('avaritia:singularity', 0)"))
+    @MethodDescription(example = @Example("item('avaritia:singularity', 0)"))
     public boolean removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing avaritia compressor recipe")
@@ -51,13 +51,13 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         AvaritiaRecipeManager.COMPRESSOR_RECIPES.values().forEach(this::addBackup);
         AvaritiaRecipeManager.COMPRESSOR_RECIPES.values().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ICompressorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AvaritiaRecipeManager.COMPRESSOR_RECIPES.values()).setRemover(this::remove);
     }

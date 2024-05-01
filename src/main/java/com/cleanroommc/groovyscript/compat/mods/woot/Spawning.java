@@ -87,13 +87,13 @@ public class Spawning extends VirtualizedRegistry<Pair<WootMobName, SpawnRecipe>
         return remove(new WootMobName(name, tag));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((SpawnRecipeRepositoryAccessor) Woot.spawnRecipeRepository).getRecipes().forEach((l, r) -> addBackup(Pair.of(l, r)));
         ((SpawnRecipeRepositoryAccessor) Woot.spawnRecipeRepository).getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<WootMobName, SpawnRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(((SpawnRecipeRepositoryAccessor) Woot.spawnRecipeRepository).getRecipes().entrySet())
                 .setRemover(x -> remove(x.getKey()));

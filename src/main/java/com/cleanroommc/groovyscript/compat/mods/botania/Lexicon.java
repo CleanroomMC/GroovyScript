@@ -91,7 +91,7 @@ public class Lexicon {
             return new SimpleObjectStream<>(BotaniaAPI.getAllCategories()).setRemover(this::remove);
         }
 
-        @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+        @MethodDescription(priority = 2000, example = @Example(commented = true))
         public void removeAll() {
             BotaniaAPI.getAllCategories().forEach(this::addBackup);
             BotaniaAPI.getAllCategories().clear();
@@ -159,7 +159,7 @@ public class Lexicon {
         }
 
 
-        @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+        @MethodDescription(priority = 2000, example = @Example(commented = true))
         public void removeAll() {
             for (LexiconEntry entry : BotaniaAPI.getAllEntries()) {
                 entry.pages.forEach(x -> addBackup(new PageChange(x, entry, entry.pages.indexOf(x))));
@@ -321,7 +321,7 @@ public class Lexicon {
             removeByCategory(category);
         }
 
-        @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+        @MethodDescription(priority = 2000, example = @Example(commented = true))
         public void removeAll() {
             BotaniaAPI.getAllEntries().forEach(this::addBackup);
             BotaniaAPI.getAllEntries().clear();

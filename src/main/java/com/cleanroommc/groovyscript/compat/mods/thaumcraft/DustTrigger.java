@@ -74,7 +74,7 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         return found;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('thaumcraft:arcane_workbench')"))
+    @MethodDescription(example = @Example("item('thaumcraft:arcane_workbench')"))
     public void removeByOutput(ItemStack output) {
         doDirtyReflection();
         Iterator<IDustTrigger> it = IDustTrigger.triggers.iterator();
@@ -96,7 +96,7 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IDustTrigger> streamRecipes() {
         return new SimpleObjectStream<>(IDustTrigger.triggers)
                 .setRemover(this::remove);

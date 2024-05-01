@@ -43,7 +43,7 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
         return recipe1;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('ingotTin')"))
+    @MethodDescription(example = @Example("ore('ingotTin')"))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");

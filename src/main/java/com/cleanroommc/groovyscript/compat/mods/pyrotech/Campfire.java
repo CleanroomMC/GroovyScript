@@ -33,7 +33,7 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
                 .register();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:porkchop')"))
+    @MethodDescription(example = @Example("item('minecraft:porkchop')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing campfire recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -48,7 +48,7 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:cooked_porkchop')"))
+    @MethodDescription(example = @Example("item('minecraft:cooked_porkchop')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing campfire recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")

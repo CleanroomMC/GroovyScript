@@ -61,7 +61,7 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public boolean removeByInput(ItemStack input) {
         return BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
@@ -72,13 +72,13 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
         BlockSqueezer.getInstance().getRecipeRegistry().allRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> streamRecipes() {
         return new SimpleObjectStream<>(BlockSqueezer.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);

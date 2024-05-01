@@ -56,7 +56,7 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public boolean removeByInput(ItemStack input) {
         return BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
@@ -67,7 +67,7 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
+    @MethodDescription
     public boolean removeByOutput(ItemStack input) {
         return BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getOutput().getIngredient().test(input)) {
@@ -78,13 +78,13 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
         BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> streamRecipes() {
         return new SimpleObjectStream<>(BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);

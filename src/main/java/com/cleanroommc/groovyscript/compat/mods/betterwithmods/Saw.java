@@ -46,7 +46,7 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:pumpkin')"))
+    @MethodDescription(example = @Example("item('minecraft:pumpkin')"))
     public boolean removeByOutput(IIngredient output) {
         return BWRegistry.WOOD_SAW.getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
@@ -59,7 +59,7 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:vine')"))
+    @MethodDescription(example = @Example("item('minecraft:vine')"))
     public boolean removeByInput(IIngredient input) {
         return BWRegistry.WOOD_SAW.getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInput().getMatchingStacks()) {
@@ -72,12 +72,12 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<SawRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BWRegistry.WOOD_SAW.getRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BWRegistry.WOOD_SAW.getRecipes().forEach(this::addBackup);
         BWRegistry.WOOD_SAW.getRecipes().clear();

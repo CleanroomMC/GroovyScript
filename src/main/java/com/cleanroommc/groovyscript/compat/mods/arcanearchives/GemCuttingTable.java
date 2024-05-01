@@ -52,7 +52,7 @@ public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:gold_nugget')"))
+    @MethodDescription(example = @Example("item('minecraft:gold_nugget')"))
     public boolean removeByInput(IIngredient input) {
         return GCTRecipeList.instance.getRecipes().values().removeIf(recipe -> {
             boolean found = recipe.getIngredients().stream()
@@ -67,7 +67,7 @@ public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('arcanearchives:shaped_quartz')"))
+    @MethodDescription(example = @Example("item('arcanearchives:shaped_quartz')"))
     public boolean removeByOutput(IIngredient output) {
         return GCTRecipeList.instance.getRecipes().values().removeIf(recipe -> {
             boolean matches = output.test(recipe.getRecipeOutput());
@@ -78,13 +78,13 @@ public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IGCTRecipe> streamRecipes() {
         return new SimpleObjectStream<>(GCTRecipeList.instance.getRecipeList())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         for (IGCTRecipe recipe : GCTRecipeList.instance.getRecipeList()) {
             addBackup(recipe);

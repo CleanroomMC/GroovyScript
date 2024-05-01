@@ -46,9 +46,9 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.ender_crafting.addShaped1", type = MethodDescription.Type.ADDITION)
     public IRecipe addShaped(int time, ItemStack output, List<List<IIngredient>> input) {
-        return (IRecipe) shapedBuilder()
-                .matrix(input)
+        return shapedBuilder()
                 .time(time)
+                .matrix(input)
                 .output(output)
                 .register();
     }
@@ -60,9 +60,9 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.ender_crafting.addShapeless1", type = MethodDescription.Type.ADDITION)
     public IRecipe addShapeless(int time, ItemStack output, List<IIngredient> input) {
-        return (IRecipe) shapelessBuilder()
-                .input(input)
+        return shapelessBuilder()
                 .time(time)
+                .input(input)
                 .output(output)
                 .register();
     }
@@ -75,7 +75,7 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('extendedcrafting:material:40')"))
+    @MethodDescription(example = @Example("item('extendedcrafting:material:40')"))
     public boolean removeByOutput(ItemStack stack) {
         return EnderCrafterRecipeManager.getInstance().getRecipes().removeIf(recipe -> {
             if (recipe != null && recipe.getRecipeOutput().isItemEqual(stack)) {
@@ -94,12 +94,12 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe> streamRecipes() {
         return new SimpleObjectStream<>(EnderCrafterRecipeManager.getInstance().getRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         EnderCrafterRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         EnderCrafterRecipeManager.getInstance().getRecipes().clear();

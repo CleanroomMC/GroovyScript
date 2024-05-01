@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingR
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
+import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
@@ -119,6 +120,18 @@ public class Melting extends MeltingRecipeRegistry {
 
     public static class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
 
+        @Override
+        @GroovyBlacklist
+        protected AbstractReloadableStorage<EntityMeltingRecipe> createRecipeStorage() {
+            return new AbstractReloadableStorage<>() {
+                @Override
+                @GroovyBlacklist
+                protected boolean compareRecipe(EntityMeltingRecipe recipe, EntityMeltingRecipe recipe2) {
+                    return recipe.equals(recipe2);
+                }
+            };
+        }
+
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }
@@ -189,11 +202,6 @@ public class Melting extends MeltingRecipeRegistry {
 
         public SimpleObjectStream<EntityMeltingRecipe> streamRecipes() {
             return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
-        }
-
-        @Override
-        protected boolean compareRecipe(EntityMeltingRecipe recipe, EntityMeltingRecipe recipe2) {
-            return recipe.equals(recipe2);
         }
 
         public class RecipeBuilder implements IRecipeBuilder<EntityMeltingRecipe> {

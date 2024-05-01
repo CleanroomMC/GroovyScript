@@ -63,7 +63,7 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
         return InfusionRecipeRegistry.recipes.removeIf(rec -> rec.getUniqueRecipeId() == recipe.getUniqueRecipeId());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:diamond_ore')"))
+    @MethodDescription(example = @Example("item('minecraft:diamond_ore')"))
     public void removeByInput(ItemStack input) {
         InfusionRecipeRegistry.recipes.removeIf(r -> {
             if (r instanceof BasicInfusionRecipe && r.getInput().matchCrafting(input)) {
@@ -74,18 +74,18 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:iron_ingot')"))
+    @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
     public void removeByOutput(ItemStack output) {
         addBackup((BasicInfusionRecipe) InfusionRecipeRegistry.removeFindRecipeByOutput(output));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<AbstractInfusionRecipe> streamRecipes() {
         return new SimpleObjectStream<>(InfusionRecipeRegistry.recipes)
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         InfusionRecipeRegistry.recipes.removeIf(r -> {
             if (r instanceof BasicInfusionRecipe) {
