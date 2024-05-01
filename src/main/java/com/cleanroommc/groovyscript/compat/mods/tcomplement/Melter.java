@@ -8,63 +8,29 @@ import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingR
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeRegistry;
 import com.cleanroommc.groovyscript.core.mixin.tcomplement.TCompRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import knightminer.tcomplement.library.IBlacklist;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class Melter extends MeltingRecipeRegistry {
 
     @GroovyBlacklist
-    protected Collection<IBlacklist> backupBlacklist = new ArrayList<>();
-    @GroovyBlacklist
-    protected Collection<IBlacklist> scriptedBlacklist = new ArrayList<>();
+    protected AbstractReloadableStorage<IBlacklist> backupStorage = new AbstractReloadableStorage<>();
 
     public MeltingRecipeBuilder recipeBuilder() {
         return new MeltingRecipeBuilder(this, "Tinkers Complement Melter override");
-    }
-
-    @GroovyBlacklist
-    public void addBackupBlacklist(IBlacklist blacklist) {
-        if (this.scriptedBlacklist.stream().anyMatch(r -> compareBlacklist(r, blacklist))) return;
-        this.backupBlacklist.add(blacklist);
-    }
-
-    @GroovyBlacklist
-    public void addScriptedBlacklist(IBlacklist blacklist) {
-        this.scriptedBlacklist.add(blacklist);
-    }
-
-    @GroovyBlacklist
-    public boolean compareBlacklist(IBlacklist list, IBlacklist list1) {
-        return list == list1;
-    }
-
-    @GroovyBlacklist
-    protected Collection<IBlacklist> restoreFromBackupBlacklist() {
-        Collection<IBlacklist> backup = this.backupBlacklist;
-        this.backupBlacklist = new ArrayList<>();
-        return backupBlacklist;
-    }
-
-    @GroovyBlacklist
-    protected Collection<IBlacklist> removeScriptedBlacklist() {
-        Collection<IBlacklist> scripted = this.scriptedBlacklist;
-        this.scriptedBlacklist = new ArrayList<>();
-        return scripted;
     }
 
     @Override
     @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(TCompRegistryAccessor.getMeltingOverrides()::remove);
-        removeScriptedBlacklist().forEach(TCompRegistryAccessor.getMeltingBlacklist()::remove);
+        backupStorage.removeScripted().forEach(TCompRegistryAccessor.getMeltingBlacklist()::remove);
         restoreFromBackup().forEach(TCompRegistryAccessor.getMeltingOverrides()::add);
-        restoreFromBackupBlacklist().forEach(TCompRegistryAccessor.getMeltingBlacklist()::add);
+        backupStorage.restoreFromBackup().forEach(TCompRegistryAccessor.getMeltingBlacklist()::add);
     }
 
     public IBlacklist addBlacklist(IIngredient ingredient) {
@@ -87,7 +53,7 @@ public class Melter extends MeltingRecipeRegistry {
 
     public void addBlacklist(IBlacklist blacklist) {
         if (blacklist == null) return;
-        addScriptedBlacklist(blacklist);
+        backupStorage.addScripted(blacklist);
         TCompRegistryAccessor.getMeltingBlacklist().add(blacklist);
     }
 
@@ -100,7 +66,7 @@ public class Melter extends MeltingRecipeRegistry {
 
     public boolean removeBlacklist(IBlacklist blacklist) {
         if (blacklist == null) return false;
-        addBackupBlacklist(blacklist);
+        backupStorage.addBackup(blacklist);
         TCompRegistryAccessor.getMeltingBlacklist().remove(blacklist);
         return true;
     }
@@ -108,7 +74,7 @@ public class Melter extends MeltingRecipeRegistry {
     public boolean removeFromBlacklist(ItemStack item) {
         if (TCompRegistryAccessor.getMeltingBlacklist().removeIf(b -> {
             boolean found = b.matches(item);
-            if (found) addBackupBlacklist(b);
+            if (found) backupStorage.addBackup(b);
             return found;
         })) return true;
 
@@ -173,7 +139,7 @@ public class Melter extends MeltingRecipeRegistry {
     }
 
     public void removeAllBlacklists() {
-        TCompRegistryAccessor.getMeltingBlacklist().forEach(this::addBackupBlacklist);
+        TCompRegistryAccessor.getMeltingBlacklist().forEach(backupStorage::addBackup);
         TCompRegistryAccessor.getMeltingBlacklist().forEach(TCompRegistryAccessor.getMeltingBlacklist()::remove);
     }
 

@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
@@ -15,9 +16,7 @@ import team.chisel.api.carving.CarvingUtils;
 import team.chisel.api.carving.ICarvingGroup;
 import team.chisel.api.carving.ICarvingRegistry;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES,
@@ -26,16 +25,8 @@ import java.util.List;
 )
 public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
 
-    private List<Pair<String, SoundEvent>> sounds;
-    private List<String> groupBackup;
-    private List<String> groupScripted;
-
-    public Carving() {
-        super();
-        this.sounds = new ArrayList<>();
-        this.groupBackup = new ArrayList<>();
-        this.groupScripted = new ArrayList<>();
-    }
+    private final AbstractReloadableStorage<String> groupStorage = new AbstractReloadableStorage<>();
+    private final AbstractReloadableStorage<Pair<String, SoundEvent>> soundStorage = new AbstractReloadableStorage<>();
 
     private static ICarvingRegistry getRegistry() {
         if (CarvingUtils.getChiselRegistry() == null) {
@@ -53,13 +44,10 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         removeScripted().forEach(pair -> getRegistry().removeVariation(pair.getValue(), pair.getKey()));
         restoreFromBackup().forEach(pair -> getRegistry().addVariation(pair.getKey(), CarvingUtils.variationFor(pair.getValue(), 0)));
 
-        this.sounds.forEach(pair -> getRegistry().setVariationSound(pair.getKey(), pair.getValue()));
-        this.groupBackup.forEach(group -> getRegistry().addGroup(CarvingUtils.getDefaultGroupFor(group)));
-        this.groupScripted.forEach(getRegistry()::removeGroup);
+        groupStorage.restoreFromBackup().forEach(group -> getRegistry().addGroup(CarvingUtils.getDefaultGroupFor(group)));
+        groupStorage.removeScripted().forEach(getRegistry()::removeGroup);
 
-        this.sounds = new ArrayList<>();
-        this.groupBackup = new ArrayList<>();
-        this.groupScripted = new ArrayList<>();
+        soundStorage.restoreFromBackup().forEach(pair -> getRegistry().setVariationSound(pair.getKey(), pair.getValue()));
     }
 
     @MethodDescription(example = {@Example("'demo', item('minecraft:diamond_block')"),
@@ -108,7 +96,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
     @MethodDescription(type = MethodDescription.Type.VALUE)
     public void setSound(ICarvingGroup group, SoundEvent sound) {
         getRegistry().setVariationSound(group.getName(), sound);
-        this.sounds.add(Pair.of(group.getName(), group.getSound()));
+        soundStorage.addBackup(Pair.of(group.getName(), group.getSound()));
     }
 
     @MethodDescription(example = @Example("'demo'"), type = MethodDescription.Type.ADDITION)
@@ -121,7 +109,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
             return;
         }
         getRegistry().addGroup(CarvingUtils.getDefaultGroupFor(groupName));
-        this.groupScripted.add(groupName);
+        groupStorage.addScripted(groupName);
     }
 
     @MethodDescription(example = @Example("'blockDiamond'"))
@@ -134,14 +122,14 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
             return;
         }
         getRegistry().removeGroup(groupName);
-        this.groupBackup.add(groupName);
+        groupStorage.addBackup(groupName);
     }
 
     @MethodDescription(example = @Example(commented = true))
     public void removeAll() {
         getRegistry().getSortedGroupNames().forEach(name -> {
             getRegistry().removeGroup(name);
-            this.groupBackup.add(name);
+            groupStorage.addBackup(name);
         });
     }
 

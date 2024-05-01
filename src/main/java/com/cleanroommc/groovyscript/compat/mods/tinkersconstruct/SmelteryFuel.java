@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.SmelteryFuelRecipe;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -12,6 +13,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
+
+    @Override
+    @GroovyBlacklist
+    protected AbstractReloadableStorage<SmelteryFuelRecipe> createRecipeStorage() {
+        return new AbstractReloadableStorage<>() {
+            @Override
+            @GroovyBlacklist
+            protected boolean compareRecipe(SmelteryFuelRecipe recipe, SmelteryFuelRecipe recipe2) {
+                return recipe.equals(recipe2);
+            }
+        };
+    }
 
     @Override
     @GroovyBlacklist
@@ -66,8 +79,4 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
         return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
     }
 
-    @Override
-    protected boolean compareRecipe(SmelteryFuelRecipe recipe, SmelteryFuelRecipe recipe2) {
-        return recipe.equals(recipe2);
-    }
 }

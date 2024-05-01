@@ -106,7 +106,7 @@ public class NbtHelper {
             for (String key : nbt.getKeySet()) {
                 newLine(builder, indent, pretty);
                 if (colored) builder.append(TextFormatting.GREEN);
-                builder.append('"').append(key).append('"');
+                builder.append('\'').append(key).append('\'');
                 if (colored) builder.append(TextFormatting.GRAY);
                 builder.append(": ");
                 builder.append(toGroovyCode(nbt.getTag(key), indent, pretty, colored));
@@ -143,9 +143,57 @@ public class NbtHelper {
         return builder.toString();
     }
 
+    public static String toGroovyCode(NBTTagByteArray nbt, int indent, boolean pretty, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append('[');
+        if (!nbt.isEmpty()) {
+            newLine(builder, indent, pretty);
+            for (byte value : nbt.getByteArray()) {
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append("(byte) ");
+                if (colored) builder.append(TextFormatting.GOLD);
+                builder.append(value);
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append(", ");
+            }
+            builder.delete(builder.length() - 2, builder.length());
+            newLine(builder, indent, pretty);
+            if (colored) builder.append(TextFormatting.GRAY);
+        }
+        builder.append(']');
+        return builder.toString();
+    }
+
+    public static String toGroovyCode(NBTTagIntArray nbt, int indent, boolean pretty, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append('[');
+        if (!nbt.isEmpty()) {
+            newLine(builder, indent, pretty);
+            for (int value : nbt.getIntArray()) {
+                if (colored) builder.append(TextFormatting.GOLD);
+                builder.append(value);
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append(", ");
+            }
+            builder.delete(builder.length() - 2, builder.length());
+            newLine(builder, indent, pretty);
+            if (colored) builder.append(TextFormatting.GRAY);
+        }
+        builder.append(']');
+        return builder.toString();
+    }
+
     public static String toGroovyCode(NBTBase nbt, int indent, boolean pretty, boolean colored) {
         StringBuilder builder = new StringBuilder();
         switch (nbt.getId()) {
+            //TAG_LONG_ARRAY
+            case Constants.NBT.TAG_INT_ARRAY: {
+                if (colored) builder.append(TextFormatting.GREEN);
+                builder.append(toGroovyCode((NBTTagIntArray) nbt, indent, pretty, colored));
+                break;
+            }
             case Constants.NBT.TAG_COMPOUND: {
                 builder.append(toGroovyCode((NBTTagCompound) nbt, indent, pretty, colored));
                 break;
@@ -154,15 +202,39 @@ public class NbtHelper {
                 builder.append(toGroovyCode((NBTTagList) nbt, indent, pretty, colored));
                 break;
             }
-            case Constants.NBT.TAG_INT: {
+            case Constants.NBT.TAG_STRING: {
+                if (colored) builder.append(TextFormatting.GREEN);
+                builder.append('\'')
+                        .append(((NBTTagString) nbt).getString())
+                        .append('\'');
+                break;
+            }
+            case Constants.NBT.TAG_BYTE_ARRAY: {
+                if (colored) builder.append(TextFormatting.GREEN);
+                builder.append(toGroovyCode((NBTTagByteArray) nbt, indent, pretty, colored));
+                break;
+            }
+            case Constants.NBT.TAG_DOUBLE: {
                 if (colored) builder.append(TextFormatting.GOLD);
-                builder.append(((NBTTagInt) nbt).getInt());
+                builder.append(((NBTTagDouble) nbt).getDouble())
+                        .append("D");
+                break;
+            }
+            case Constants.NBT.TAG_FLOAT: {
+                if (colored) builder.append(TextFormatting.GOLD);
+                builder.append(((NBTTagFloat) nbt).getFloat())
+                        .append("F");
                 break;
             }
             case Constants.NBT.TAG_LONG: {
                 if (colored) builder.append(TextFormatting.GOLD);
                 builder.append(((NBTTagLong) nbt).getLong())
                         .append("L");
+                break;
+            }
+            case Constants.NBT.TAG_INT: {
+                if (colored) builder.append(TextFormatting.GOLD);
+                builder.append(((NBTTagInt) nbt).getInt());
                 break;
             }
             case Constants.NBT.TAG_SHORT: {
@@ -177,25 +249,6 @@ public class NbtHelper {
                 builder.append("(byte) ");
                 if (colored) builder.append(TextFormatting.GOLD);
                 builder.append(((NBTTagByte) nbt).getByte());
-                break;
-            }
-            case Constants.NBT.TAG_FLOAT: {
-                if (colored) builder.append(TextFormatting.GOLD);
-                builder.append(((NBTTagFloat) nbt).getFloat())
-                        .append("F");
-                break;
-            }
-            case Constants.NBT.TAG_DOUBLE: {
-                if (colored) builder.append(TextFormatting.GOLD);
-                builder.append(((NBTTagDouble) nbt).getDouble())
-                        .append("D");
-                break;
-            }
-            case Constants.NBT.TAG_STRING: {
-                if (colored) builder.append(TextFormatting.GREEN);
-                builder.append('"')
-                        .append(((NBTTagString) nbt).getString())
-                        .append('"');
                 break;
             }
             default:

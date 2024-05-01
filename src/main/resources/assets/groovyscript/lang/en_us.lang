@@ -1458,6 +1458,227 @@ groovyscript.wiki.thaumcraft.warp.description=Determines if holding an item or e
 groovyscript.wiki.thaumcraft.warp.addWarp=Adds Warp to the given item in the format `item`, `amount`
 groovyscript.wiki.thaumcraft.warp.removeWarp=Removes Warp from the given item
 
+# Thermal Expansion
+groovyscript.wiki.thermalexpansion.energy.value=Sets the energy cost of the recipe
+
+groovyscript.wiki.thermalexpansion.brewer.title=Alchemical Imbuer
+groovyscript.wiki.thermalexpansion.brewer.description=Converts an input fluidstack and input itemstack into an output fluidstack, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.brewer.add=Adds recipes in the format `energy`, `input`, `fluidInput`, `fluidOutput`
+
+groovyscript.wiki.thermalexpansion.centrifuge.title=Centrifugal Separator
+groovyscript.wiki.thermalexpansion.centrifuge.description=Converts an input itemstack into an optional output fluidstack and up to four output itemstacks with chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.centrifuge.add=Adds recipes in the format `energy`, `input`, `output`, `chance`, `fluidOutput`
+groovyscript.wiki.thermalexpansion.centrifuge.chance.value=Sets the chance of each output
+
+groovyscript.wiki.thermalexpansion.centrifuge_mobs.title=Centrifugal Separator - Enstabulation Apparatus
+groovyscript.wiki.thermalexpansion.centrifuge_mobs.description=Converts an input itemstack into an optional output fluidstack and up to four output itemstacks with chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.centrifuge_mobs.add=Adds recipes in the format `energy`, `input`, `output`, `chance`, `fluidOutput`
+groovyscript.wiki.thermalexpansion.centrifuge_mobs.chance.value=Sets the chance of each output
+
+groovyscript.wiki.thermalexpansion.charger.title=Energetic Infuser
+groovyscript.wiki.thermalexpansion.charger.description=Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.charger.add=Adds recipes in the format `energy`, `input`, `output`
+
+groovyscript.wiki.thermalexpansion.compactor.title=Compactor
+groovyscript.wiki.thermalexpansion.compactor.description=Converts an input itemstack into an output itemstack, with different modes each requiring a different augment to be installed, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.compactor.add=Adds recipes in the format `energy`, `mode`, `input`, `output`
+groovyscript.wiki.thermalexpansion.compactor.removeByInput=Removes the given IIngredient input from the given Compactor mode
+groovyscript.wiki.thermalexpansion.compactor.removeByOutput=Removes the given IIngredient output from the given Compactor mode
+groovyscript.wiki.thermalexpansion.compactor.removeByMode=Removes all recipes for the given mode
+groovyscript.wiki.thermalexpansion.compactor.mode.value=Sets the mode of the recipe, controlling what augments are allowed, if any, for the recipe to operate
+
+groovyscript.wiki.thermalexpansion.compression.title=Compression Dynamo
+groovyscript.wiki.thermalexpansion.compression.description=Converts an input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.compression.add=Adds recipes in the format `fluidStack`, `energy`
+groovyscript.wiki.thermalexpansion.compression.removeByInput=Removes all recipes with given FluidStack
+
+groovyscript.wiki.thermalexpansion.coolant.title=Thermal Mediator
+groovyscript.wiki.thermalexpansion.coolant.description=Consumes fluid to speed up the tick rate of adjacent machines and devices and generate power in the Compression Dynamo.
+groovyscript.wiki.thermalexpansion.coolant.note0=Due to a limitation involving displaying the entry in JEI, entries must output at least 4000 rf.
+groovyscript.wiki.thermalexpansion.coolant.add=Adds recipes in the format `energy`, `input`, `fluidOutput`
+groovyscript.wiki.thermalexpansion.coolant.remove=Removes the given fluid from the Thermal Mediator
+
+groovyscript.wiki.thermalexpansion.crucible.title=Magma Crucible
+groovyscript.wiki.thermalexpansion.crucible.description=Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.crucible.add=Adds recipes in the format `energy`, `input`, `fluidOutput`
+
+groovyscript.wiki.thermalexpansion.diffuser.title=Decorative Diffuser
+groovyscript.wiki.thermalexpansion.diffuser.description=Controls what items can be used in to boost the potion time and level in the Decorative Diffuser.
+groovyscript.wiki.thermalexpansion.diffuser.add=Adds recipes in the format `energy`, `input`, `fluidOutput`
+groovyscript.wiki.thermalexpansion.diffuser.remove=Removes the given ItemStack as a catalyst item in the Decorative Diffuser
+
+groovyscript.wiki.thermalexpansion.enchanter.title=Arcane Ensorcellator
+groovyscript.wiki.thermalexpansion.enchanter.description=Converts two input itemstacks and liquid experience into an output itemstack, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.enchanter.add=Adds recipes in the format `energy`, `primaryInput`, `secondaryInput`, `output`, `experience`
+groovyscript.wiki.thermalexpansion.enchanter.addArcana=Adds an item to the Arcana list, which filters the inputs for one of the Arcane Ensorcellator slots when enabled
+groovyscript.wiki.thermalexpansion.enchanter.removeArcana=Removes an item from the Arcana list, which filters the inputs for one of the Arcane Ensorcellator slots when enabled
+groovyscript.wiki.thermalexpansion.enchanter.type.value=Sets the type of recipe, which by default does nothing
+groovyscript.wiki.thermalexpansion.enchanter.experience.value=Sets the amount of experience the recipe consumes from the tank
+
+groovyscript.wiki.thermalexpansion.enervation.title=Enervation Dynamo
+groovyscript.wiki.thermalexpansion.enervation.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.enervation.add=Adds recipes in the format `itemStack`, `energy`
+groovyscript.wiki.thermalexpansion.enervation.removeByInput=Removes all recipes with given IIngredient
+
+groovyscript.wiki.thermalexpansion.extruder.title=Igneous Extruder
+groovyscript.wiki.thermalexpansion.extruder.description=Converts a variable amount of lava and water into a specific output itemstack.
+groovyscript.wiki.thermalexpansion.extruder.add=Adds recipes in the format `energy`, `input`, `fluidHot`, `fluidCold`, `sedimentary`
+groovyscript.wiki.thermalexpansion.extruder.removeByType=Removes all recipes for the given type, with `true` indicating sedimentary, and `false` indicating the normal recipe map
+groovyscript.wiki.thermalexpansion.extruder.removeByInput=Removes the given IIngredient input from the given Igneous Extruder mode, with `true` indicating sedimentary, and `false` indicating the normal recipe map
+groovyscript.wiki.thermalexpansion.extruder.removeByOutput=Removes the given IIngredient output from the given Igneous Extruder mode, with `true` indicating sedimentary, and `false` indicating the normal recipe map
+groovyscript.wiki.thermalexpansion.extruder.fluidHot.value=Sets the amount of lava consumed by the recipe
+groovyscript.wiki.thermalexpansion.extruder.fluidCold.value=Sets the amount of water consumed by the recipe
+groovyscript.wiki.thermalexpansion.extruder.sedimentary.value=Sets if the recipe requires the Clastic Deposition augment installed
+
+groovyscript.wiki.thermalexpansion.factorizer.title=Factorizer
+groovyscript.wiki.thermalexpansion.factorizer.description=Converts an input itemstack into an output itemstack, with the ability to undo the the recipe. Mainly used for compressing ingots into blocks and splitting blocks into ingots.
+groovyscript.wiki.thermalexpansion.factorizer.add=Adds recipes in the format `combine`, `split`, `input`, `output`
+groovyscript.wiki.thermalexpansion.factorizer.removeByInput=Removes all recipes with the given IIngredient input for the given mode, with `true` indicating split recipes and `false` indicating combine recipes
+groovyscript.wiki.thermalexpansion.factorizer.removeByOutput=Removes all recipes with the given IIngredient output for the given mode, with `true` indicating split recipes and `false` indicating combine recipes
+groovyscript.wiki.thermalexpansion.factorizer.removeByType=Removes all recipes in the given mode, with `true` indicating split recipes, and `false` indicating combine recipes
+groovyscript.wiki.thermalexpansion.factorizer.split.value=Sets the recipe to have an inverted version (input is output, output is input) in the split mode
+groovyscript.wiki.thermalexpansion.factorizer.combine.value=Sets the recipe to have a version in the combine mode
+
+groovyscript.wiki.thermalexpansion.fisher.title=Aquatic Entangler
+groovyscript.wiki.thermalexpansion.fisher.description=Controls what itemstacks can be gained and how likely each is to be obtained.
+groovyscript.wiki.thermalexpansion.fisher.add=Adds recipes in the format `fish`, `weight`
+groovyscript.wiki.thermalexpansion.fisher.remove=Removes the given IIngredient as a valid output
+
+groovyscript.wiki.thermalexpansion.fisher_bait.title=Aquatic Entangler Bait
+groovyscript.wiki.thermalexpansion.fisher_bait.description=Controls what items can be used in the bait slot of the Aquatic Entangler and how effective they are.
+groovyscript.wiki.thermalexpansion.fisher_bait.add=Adds recipes in the format `stack`, `multiplier`
+groovyscript.wiki.thermalexpansion.fisher_bait.remove=Removes the given IIngredient as a valid bait item
+
+groovyscript.wiki.thermalexpansion.furnace.title=Redstone Furnace
+groovyscript.wiki.thermalexpansion.furnace.description=Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.furnace.add=Adds recipes in the format `energy`, `input`, `output`
+groovyscript.wiki.thermalexpansion.furnace.addFood=Adds the given ItemStack to the food list, which allows it to have doubled output if the Trivection Chamber augment is installed
+groovyscript.wiki.thermalexpansion.furnace.removeFood=Removes the given ItemStack from the food list, which allows it to have doubled output if the Trivection Chamber augment is installed
+groovyscript.wiki.thermalexpansion.furnace.removeAllFood=Removes all entries from the food list
+
+groovyscript.wiki.thermalexpansion.furnace_pyrolysis.title=Redstone Furnace - Pyrolytic Conversion
+groovyscript.wiki.thermalexpansion.furnace_pyrolysis.description=Converts an input itemstack into an output itemstack and creosote amount, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.furnace_pyrolysis.add=Adds recipes in the format `energy`, `input`, `output`, `creosote`
+groovyscript.wiki.thermalexpansion.furnace_pyrolysis.creosote.value=Sets the amount of creosote fluid output by the recipe
+
+groovyscript.wiki.thermalexpansion.insolator.title=Phytogenic Insolator
+groovyscript.wiki.thermalexpansion.insolator.description=Converts two input itemstacks into an output itemstack and optional output itemstack with a chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.insolator.add=Adds recipes in the format `energy`, `water`, `primaryInput`, `secondaryInput`, `primaryOutput`, `secondaryOutput`, `secondaryChance`, `type`
+groovyscript.wiki.thermalexpansion.insolator.addFertilizer=Adds an item to the Fertilizer list, which filters the inputs for one of the Phytogenic Insolator slots when enabled
+groovyscript.wiki.thermalexpansion.insolator.removeFertilizer=Removes an item from the Fertilizer list, which filters the inputs for one of the Phytogenic Insolator slots when enabled
+groovyscript.wiki.thermalexpansion.insolator.type.value=Sets the type of the recipe, which controls if the recipe requires the Sapling Infuser augment installed
+groovyscript.wiki.thermalexpansion.insolator.water.value=Sets the amount of water consumed by the recipe
+groovyscript.wiki.thermalexpansion.insolator.chance.value=Sets the chance a secondary output is created, typically the input seed or sapling
+
+groovyscript.wiki.thermalexpansion.lapidary.title=Numismatic Dynamo - Lapidary Calibration
+groovyscript.wiki.thermalexpansion.lapidary.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.lapidary.add=Adds recipes in the format `itemStack`, `energy`
+groovyscript.wiki.thermalexpansion.lapidary.removeByInput=Removes all recipes with given IIngredient
+
+groovyscript.wiki.thermalexpansion.magmatic.title=Magmatic Dynamo
+groovyscript.wiki.thermalexpansion.magmatic.description=Converts an input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.magmatic.add=Adds recipes in the format `fluidStack`, `energy`
+groovyscript.wiki.thermalexpansion.magmatic.removeByInput=Removes all recipes with given FluidStack
+
+groovyscript.wiki.thermalexpansion.numismatic.title=Numismatic Dynamo
+groovyscript.wiki.thermalexpansion.numismatic.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.numismatic.add=Adds recipes in the format `itemStack`, `energy`
+groovyscript.wiki.thermalexpansion.numismatic.removeByInput=Removes all recipes with given IIngredient
+
+groovyscript.wiki.thermalexpansion.precipitator.title=Glacial Precipitator
+groovyscript.wiki.thermalexpansion.precipitator.description=Converts an amount of water into a specific output itemstack, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.precipitator.add=Adds recipes in the format `energy`, `output`, `water`
+groovyscript.wiki.thermalexpansion.precipitator.water.value=Sets the amount of water consumed by the recipe
+
+groovyscript.wiki.thermalexpansion.pulverizer.title=Pulverizer
+groovyscript.wiki.thermalexpansion.pulverizer.description=Converts an input itemstack into an output itemstack and optional output itemstack with a chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.pulverizer.add=Adds recipes in the format `energy`, `input`, `primaryOutput`, `secondaryOutput`, `chance`
+groovyscript.wiki.thermalexpansion.pulverizer.chance.value=Sets the chance the secondary output itemstack is created
+
+groovyscript.wiki.thermalexpansion.reactant.title=Reactant Dynamo
+groovyscript.wiki.thermalexpansion.reactant.description=Converts an input itemstack and input fluidstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.reactant.add=Adds recipes in the format `ingredient`, `fluidStack`, `energy`
+groovyscript.wiki.thermalexpansion.reactant.energy.value=Sets the amount of energy produced by the recipe
+groovyscript.wiki.thermalexpansion.reactant.removeByInput=Removes all recipes with given IIngredient or fluid name
+groovyscript.wiki.thermalexpansion.reactant.addElementalFluid=Adds a fluid to the Element Catalyzer Fluid list, enabling its use with the Elemental Catalyzer augment installed
+groovyscript.wiki.thermalexpansion.reactant.addElementalReactant=Adds an itemstack to the Element Catalyzer Fluid list, enabling its use with the Elemental Catalyzer augment installed
+groovyscript.wiki.thermalexpansion.reactant.removeElementalFluid=Removes a fluid from the Element Catalyzer Fluid list, disabling its use with the Elemental Catalyzer augment installed
+groovyscript.wiki.thermalexpansion.reactant.removeElementalReactant=Removes an itemstack from the Element Catalyzer Fluid list, disabling its use with the Elemental Catalyzer augment installed
+
+groovyscript.wiki.thermalexpansion.refinery.title=Fractionating Still
+groovyscript.wiki.thermalexpansion.refinery.description=Converts an input fluidstack into an output fluidstack and optional output itemstack with chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.refinery.note0=The Bio Fuel registry has no function in default Thermal Expansion.
+groovyscript.wiki.thermalexpansion.refinery.add=Adds recipes in the format `energy`, `fluidInput`, `outputFluid`, `outputItem`, `chance`
+groovyscript.wiki.thermalexpansion.refinery.addBioFuel=Adds a fluid to the Bio Fuel list, which currently does nothing
+groovyscript.wiki.thermalexpansion.refinery.removeBioFuel=Removes a fluid to the Bio Fuel list, which currently does nothing
+groovyscript.wiki.thermalexpansion.refinery.addFossilFuel=Adds a fluid to the Fossil Fuel list, which causes it to have increased output when processed with the Reflux Column augment installed
+groovyscript.wiki.thermalexpansion.refinery.removeFossilFuel=Removes a fluid to the Fossil Fuel list, which causes it to have increased output when processed with the Reflux Column augment installed
+groovyscript.wiki.thermalexpansion.refinery.removeAllBioFuels=Removes all Bio Fuel entries
+groovyscript.wiki.thermalexpansion.refinery.removeAllFossilFuels=Removes all Fossil Fuel entries
+groovyscript.wiki.thermalexpansion.refinery.chance.value=Sets the chance the output itemstack is created
+
+groovyscript.wiki.thermalexpansion.refinery_potion.title=Fractionating Still - Alchemical Retort
+groovyscript.wiki.thermalexpansion.refinery_potion.description=Converts an input fluidstack into an output fluidstack and optional output itemstack with chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.refinery_potion.add=Adds recipes in the format `energy`, `fluidInput`, `outputFluid`, `outputItem`, `chance`
+groovyscript.wiki.thermalexpansion.refinery_potion.chance.value=Sets the chance the output itemstack is created
+
+groovyscript.wiki.thermalexpansion.sawmill.title=Sawmill
+groovyscript.wiki.thermalexpansion.sawmill.description=Converts an input itemstack into an output itemstack and optional output itemstack with a chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.sawmill.note0=The valid items and fluid output while the Resin Funnel Augment is installed is controlled by the Arboreal Extractor device.
+groovyscript.wiki.thermalexpansion.sawmill.add=Adds recipes in the format `energy`, `input`, `outputItem`, `secondayOutput`, `chance`
+groovyscript.wiki.thermalexpansion.sawmill.chance.value=Sets the chance the second output itemstack is created
+
+groovyscript.wiki.thermalexpansion.smelter.title=Induction Smelter
+groovyscript.wiki.thermalexpansion.smelter.description=Converts two input itemstacks into an output itemstack and optional output itemstack with a chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.smelter.add=Adds recipes in the format `energy`, `input0`, `input1`, `output0`, `output1`, `chance`
+groovyscript.wiki.thermalexpansion.smelter.addFlux=Adds an item to the Metallurgic Flux list, which filters the inputs for one of the Induction Smelter slots when enabled
+groovyscript.wiki.thermalexpansion.smelter.removeFlux=Removes an item from the Metallurgic Flux list, which filters the inputs for one of the Induction Smelter slots when enabled
+groovyscript.wiki.thermalexpansion.smelter.chance.value=Sets the chance the second output itemstack is created
+
+groovyscript.wiki.thermalexpansion.steam.title=Steam Dynamo
+groovyscript.wiki.thermalexpansion.steam.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.steam.add=Adds recipes in the format `itemStack`, `energy`
+groovyscript.wiki.thermalexpansion.steam.removeByInput=Removes all recipes with given IIngredient
+
+groovyscript.wiki.thermalexpansion.tapper.title=Arboreal Extractor
+groovyscript.wiki.thermalexpansion.tapper.description=Controls what items and blocks can be turned into what fluids. Output can be boosted via Fertilizer items.
+groovyscript.wiki.thermalexpansion.tapper.note0=The Item map also controls the Resin Funnel augment for the Sawmill.
+groovyscript.wiki.thermalexpansion.tapper.addItem=Adds recipes to the item map in the format `itemStack`, `fluidStack`
+groovyscript.wiki.thermalexpansion.tapper.addBlock=Adds recipes to the block map in the format `itemStack`, `fluidStack`, but only if `itemStack` is an `ItemBlock`
+groovyscript.wiki.thermalexpansion.tapper.removeItemByInput=Removes all entries with the IIngredient input from the item map
+groovyscript.wiki.thermalexpansion.tapper.removeBlockByInput=Removes all entries with the IIngredient input from block map
+groovyscript.wiki.thermalexpansion.tapper.removeAllBlocks=Removes all entries in the block map
+groovyscript.wiki.thermalexpansion.tapper.removeAllItems=Removes all entries in the item map
+
+groovyscript.wiki.thermalexpansion.tapper_fertilizer.title=Arboreal Extractor Fertilizer
+groovyscript.wiki.thermalexpansion.tapper_fertilizer.description=Controls what items can be used in the fertilizer slot of the Arboreal Extractor Fertilizer and how effective they are.
+groovyscript.wiki.thermalexpansion.tapper_fertilizer.add=Adds recipes in the format `stack`, `multiplier`
+groovyscript.wiki.thermalexpansion.tapper_fertilizer.remove=Removes the given IIngredient as a valid fertilizer item
+
+groovyscript.wiki.thermalexpansion.tapper_tree.title=Arboreal Extractor Tree Structures
+groovyscript.wiki.thermalexpansion.tapper_tree.description=Controls what valid log blocks and leaf blocks are to define a tree structure which the Arboreal Extractor can function on. The "tree" must contain some number of leaves adjacent to the log blocks to be valid.
+groovyscript.wiki.thermalexpansion.tapper_tree.add=Adds recipes in the format `log`, `leaf`
+groovyscript.wiki.thermalexpansion.tapper_tree.removeByLeaf=Removes all entries with the given IBlockState as a leaf
+groovyscript.wiki.thermalexpansion.tapper_tree.removeByLog=Removes all entries with the given IBlockState as a log
+
+groovyscript.wiki.thermalexpansion.transposer.note0=Does not alter fill/empty container recipes.
+
+groovyscript.wiki.thermalexpansion.transposer_extract.title=Fluid Transposer - Empty
+groovyscript.wiki.thermalexpansion.transposer_extract.description=Converts an input itemstack into an output fluidstack and optional output itemstack with chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.transposer_extract.add=Adds recipes in the format `energy`, `input`, `outputFluid`, `outputItem`, `chance`
+groovyscript.wiki.thermalexpansion.transposer_extract.chance.value=Sets the chance the output itemstack is created
+
+groovyscript.wiki.thermalexpansion.transposer_fill.title=Fluid Transposer - Fill
+groovyscript.wiki.thermalexpansion.transposer_fill.description=Converts an input itemstack and input fluidstack into an output itemstack with chance, costing power and taking time based on the power cost.
+groovyscript.wiki.thermalexpansion.transposer_fill.add=Adds recipes in the format `energy`, `input`, `fluidInput`, `outputItem`, `chance`
+groovyscript.wiki.thermalexpansion.transposer_fill.chance.value=Sets the chance the output itemstack is created
+
+groovyscript.wiki.thermalexpansion.xp_collector.title=Insightful Condenser
+groovyscript.wiki.thermalexpansion.xp_collector.description=Collects experience orbs nearby, with the ability to increase the XP gained via catalyst itemstacks.
+groovyscript.wiki.thermalexpansion.xp_collector.add=Adds recipes in the format `catalyst`, `xp`, `factor`
+groovyscript.wiki.thermalexpansion.xp_collector.remove=Removes the given ItemStack as a valid catalyst item
+
+
 # Woot
 groovyscript.wiki.woot.drops.title=Drops
 groovyscript.wiki.woot.drops.description=Controls extra drops given by mobs. Chance and Size are both arrays 4 long, containing the values for levels 0/1/2/3 levels of Looting.
