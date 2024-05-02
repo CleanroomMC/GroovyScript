@@ -1,5 +1,6 @@
 
 import com.cleanroommc.groovyscript.event.LootTablesLoadedEvent
+import net.minecraft.world.storage.loot.LootContext
 
 event_manager.listen { LootTablesLoadedEvent event ->
     patchStrongholdLibraryLT(event)
@@ -30,7 +31,7 @@ def patchChickenLT(event) {
             .entry(
                 event.loot.entryBuilder()
                     .item(item('minecraft:diamond'))
-                    .function{ stack, random, context ->
+                    .function{ ItemStack stack, Random random, LootContext context ->
                         stack.setCount(10)
                         return stack
                     }
@@ -38,7 +39,7 @@ def patchChickenLT(event) {
                     .quality(1)
                     .build()
             )
-            .condition{ random, context -> random.nextFloat() < 0.05f }
+            .condition{ Random random, LootContext context -> random.nextFloat() < 0.05f }
             .rollsRange(1.0f, 3.0f)
             .bonusRollsRange(0.0f, 0.0f)
             .build()
