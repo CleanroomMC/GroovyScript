@@ -19,7 +19,7 @@ def patchStrongholdLibraryLT(event) {
             .quality(1)
             .build()
     )
-    event.loot.printEntries('minecraft:chests/stronghold_library', 'main')
+//    event.loot.printEntries('minecraft:chests/stronghold_library', 'main')
 }
 
 def patchChickenLT(event) {
