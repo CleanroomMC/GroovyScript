@@ -8,8 +8,10 @@ println 'mod \'pneumaticcraft\' detected, running script'
 // Uses an Amadron Tablet and linked inventories in world to trade via drones.
 
 mods.pneumaticcraft.amadron.removeByInput(item('minecraft:rotten_flesh'))
-mods.pneumaticcraft.amadron.removeByOutput(item('minecraft:shears'))
+mods.pneumaticcraft.amadron.removeByOutput(item('minecraft:emerald'))
 // mods.pneumaticcraft.amadron.removeAll()
+// mods.pneumaticcraft.amadron.removeAllPeriodic()
+// mods.pneumaticcraft.amadron.removeAllStatic()
 
 mods.pneumaticcraft.amadron.recipeBuilder()
     .input(item('minecraft:clay') * 3)
@@ -24,6 +26,7 @@ mods.pneumaticcraft.amadron.recipeBuilder()
 mods.pneumaticcraft.amadron.recipeBuilder()
     .fluidInput(fluid('water') * 50)
     .fluidOutput(fluid('lava') * 10)
+    .periodic()
     .register()
 
 

@@ -1192,6 +1192,9 @@ groovyscript.wiki.naturesaura.spawning.removeByName=Removes the Altar of Birthin
 # PneumaticCraft
 groovyscript.wiki.pneumaticcraft.amadron.title=Amadron
 groovyscript.wiki.pneumaticcraft.amadron.description=Uses an Amadron Tablet and linked inventories in world to trade via drones.
+groovyscript.wiki.pneumaticcraft.amadron.periodic.value=Sets if the Amadron recipe is periodic
+groovyscript.wiki.pneumaticcraft.amadron.removeAllPeriodic=Removes all periodic recipes
+groovyscript.wiki.pneumaticcraft.amadron.removeAllStatic=Removes all static recipes
 
 groovyscript.wiki.pneumaticcraft.assembly_controller.title=Assembly Controller
 groovyscript.wiki.pneumaticcraft.assembly_controller.description=Uses a given Program to convert an input itemstack into an output itemstack. Drill recipes that output an itemstack used for the input itemstack of a Laser recipe can be chained via the Drill & Laser Program.
