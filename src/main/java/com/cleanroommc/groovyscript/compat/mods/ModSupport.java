@@ -31,7 +31,7 @@ import com.cleanroommc.groovyscript.compat.mods.integrateddynamics.IntegratedDyn
 import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import com.cleanroommc.groovyscript.compat.mods.naturesaura.NaturesAura;
-import com.cleanroommc.groovyscript.compat.mods.pneumaticraft.PneumaticCraft;
+import com.cleanroommc.groovyscript.compat.mods.pneumaticcraft.PneumaticCraft;
 import com.cleanroommc.groovyscript.compat.mods.pyrotech.PyroTech;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
 import com.cleanroommc.groovyscript.compat.mods.rustic.Rustic;
