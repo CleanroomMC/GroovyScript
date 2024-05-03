@@ -18,7 +18,7 @@ import java.util.Map;
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class XpFluid extends VirtualizedRegistry<Pair<Fluid, Integer>> {
 
-    @RecipeBuilderDescription(example = @Example(value = ".fluidInput(fluid('lava')).ratio(5)", commented = true))
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('lava')).ratio(5)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
