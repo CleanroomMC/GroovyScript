@@ -87,7 +87,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final GroovyContainer<JustEnoughItems> JEI = new InternalModContainer<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
     public static final GroovyContainer<Mekanism> MEKANISM = new InternalModContainer<>("mekanism", "Mekanism", Mekanism::new);
     public static final GroovyContainer<NaturesAura> NATURES_AURA = new InternalModContainer<>("naturesaura", "Nature's Aura", NaturesAura::new);
-    public static final GroovyContainer<PneumaticCraft> PNEUMATICRAFT = new InternalModContainer<>("pneumaticcraft", "PneumaticCraft: Repressurized", PneumaticCraft::new);
+    public static final GroovyContainer<PneumaticCraft> PNEUMATIC_CRAFT = new InternalModContainer<>("pneumaticcraft", "PneumaticCraft: Repressurized", PneumaticCraft::new);
     public static final GroovyContainer<PyroTech> PYROTECH = new InternalModContainer<>("pyrotech", "Pyrotech", PyroTech::new);
     public static final GroovyContainer<Roots> ROOTS = new InternalModContainer<>("roots", "Roots 3", Roots::new);
     public static final GroovyContainer<Rustic> RUSTIC = new InternalModContainer<>("rustic", "Rustic", Rustic::new);

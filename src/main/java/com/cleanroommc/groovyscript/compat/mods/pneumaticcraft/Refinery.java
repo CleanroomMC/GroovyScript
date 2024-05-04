@@ -102,7 +102,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         public @Nullable RefineryRecipe register() {
             if (!validate()) return null;
             RefineryRecipe recipe = new RefineryRecipe(requiredTemperature, fluidInput.get(0), fluidOutput.toArray(new FluidStack[0]));
-            ModSupport.PNEUMATICRAFT.get().refinery.add(recipe);
+            ModSupport.PNEUMATIC_CRAFT.get().refinery.add(recipe);
             return recipe;
         }
     }

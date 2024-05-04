@@ -112,11 +112,11 @@ public class ThermopneumaticProcessingPlant extends VirtualizedRegistry<IThermop
             IThermopneumaticProcessingPlantRecipe recipe = null;
             if (input.isEmpty()) {
                 recipe = new BasicThermopneumaticProcessingPlantRecipe(fluidInput.get(0), ItemStack.EMPTY, fluidOutput.get(0), requiredTemperature, pressure);
-                ModSupport.PNEUMATICRAFT.get().thermopneumaticProcessingPlant.add(recipe);
+                ModSupport.PNEUMATIC_CRAFT.get().thermopneumaticProcessingPlant.add(recipe);
             } else {
                 for (ItemStack stack : input.get(0).getMatchingStacks()) {
                     IThermopneumaticProcessingPlantRecipe recipe1 = new BasicThermopneumaticProcessingPlantRecipe(fluidInput.get(0), stack, fluidOutput.get(0), requiredTemperature, pressure);
-                    ModSupport.PNEUMATICRAFT.get().thermopneumaticProcessingPlant.add(recipe1);
+                    ModSupport.PNEUMATIC_CRAFT.get().thermopneumaticProcessingPlant.add(recipe1);
                     if (recipe == null) recipe = recipe1;
                 }
             }

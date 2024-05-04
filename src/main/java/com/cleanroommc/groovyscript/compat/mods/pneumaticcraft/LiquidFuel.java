@@ -91,7 +91,7 @@ public class LiquidFuel extends VirtualizedRegistry<Pair<String, Integer>> {
         @RecipeBuilderRegistrationMethod
         public @Nullable Pair<FluidStack, Integer> register() {
             if (!validate()) return null;
-            ModSupport.PNEUMATICRAFT.get().liquidFuel.add(fluidInput.get(0), pressure);
+            ModSupport.PNEUMATIC_CRAFT.get().liquidFuel.add(fluidInput.get(0), pressure);
             return Pair.of(fluidInput.get(0), pressure);
         }
     }

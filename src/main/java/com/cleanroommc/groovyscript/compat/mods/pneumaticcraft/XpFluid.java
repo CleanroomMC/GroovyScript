@@ -101,7 +101,7 @@ public class XpFluid extends VirtualizedRegistry<Pair<Fluid, Integer>> {
         @RecipeBuilderRegistrationMethod
         public @Nullable Pair<FluidStack, Integer> register() {
             if (!validate()) return null;
-            ModSupport.PNEUMATICRAFT.get().xpFluid.add(fluidInput.get(0), ratio);
+            ModSupport.PNEUMATIC_CRAFT.get().xpFluid.add(fluidInput.get(0), ratio);
             return Pair.of(fluidInput.get(0), ratio);
         }
     }

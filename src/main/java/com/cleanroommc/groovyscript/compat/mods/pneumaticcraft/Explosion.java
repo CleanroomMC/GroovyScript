@@ -106,7 +106,7 @@ public class Explosion extends VirtualizedRegistry<ExplosionCraftingRecipe> {
             ExplosionCraftingRecipe recipe = null;
             for (ItemStack stack : input.get(0).getMatchingStacks()) {
                 ExplosionCraftingRecipe recipe1 = new ExplosionCraftingRecipe(stack, output.get(0), lossRate);
-                ModSupport.PNEUMATICRAFT.get().explosion.add(recipe1);
+                ModSupport.PNEUMATIC_CRAFT.get().explosion.add(recipe1);
                 if (recipe == null) recipe = recipe1;
             }
             return recipe;

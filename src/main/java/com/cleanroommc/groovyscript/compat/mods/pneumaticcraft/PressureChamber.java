@@ -104,7 +104,7 @@ public class PressureChamber extends VirtualizedRegistry<IPressureChamberRecipe>
         public @Nullable IPressureChamberRecipe register() {
             if (!validate()) return null;
             IPressureChamberRecipe recipe = new PressureChamberRecipe.SimpleRecipe(input.stream().map(PneumaticCraft::toItemIngredient).toArray(ItemIngredient[]::new), pressure, output.toArray(new ItemStack[0]));
-            ModSupport.PNEUMATICRAFT.get().pressureChamber.add(recipe);
+            ModSupport.PNEUMATIC_CRAFT.get().pressureChamber.add(recipe);
             return recipe;
         }
     }

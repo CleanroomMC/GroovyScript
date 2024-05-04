@@ -179,7 +179,7 @@ public class AssemblyController extends VirtualizedRegistry<AssemblyRecipe> {
             AssemblyRecipe recipe = null;
             for (ItemStack stack : input.get(0).getMatchingStacks()) {
                 AssemblyRecipe recipe1 = new AssemblyRecipe(stack, output.get(0), programStack);
-                ModSupport.PNEUMATICRAFT.get().assemblyController.add(recipe1);
+                ModSupport.PNEUMATIC_CRAFT.get().assemblyController.add(recipe1);
                 if (recipe == null) recipe = recipe1;
             }
             return recipe;

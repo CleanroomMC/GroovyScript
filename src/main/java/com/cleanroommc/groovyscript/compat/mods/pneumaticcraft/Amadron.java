@@ -177,8 +177,8 @@ public class Amadron extends VirtualizedRegistry<AmadronOffer> {
             Object i = input.isEmpty() ? fluidInput.getOrEmpty(0) : input.get(0);
             Object o = output.isEmpty() ? fluidOutput.getOrEmpty(0) : output.get(0);
             AmadronOffer recipe = new AmadronOffer(i, o);
-            if (periodic) ModSupport.PNEUMATICRAFT.get().amadron.addPeriodic(recipe);
-            else ModSupport.PNEUMATICRAFT.get().amadron.addStatic(recipe);
+            if (periodic) ModSupport.PNEUMATIC_CRAFT.get().amadron.addPeriodic(recipe);
+            else ModSupport.PNEUMATIC_CRAFT.get().amadron.addStatic(recipe);
             return recipe;
         }
     }

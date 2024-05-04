@@ -171,7 +171,7 @@ public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.Plast
         public @Nullable PlasticMixerRegistry.PlasticMixerRecipe register() {
             if (!validate()) return null;
             PlasticMixerRegistry.PlasticMixerRecipe recipe = PlasticMixerRecipeAccessor.createPlasticMixerRecipe(fluidInput.get(0), output.get(0), requiredTemperature, allowMelting, allowSolidifying, useDye, meta);
-            ModSupport.PNEUMATICRAFT.get().plasticMixer.add(recipe);
+            ModSupport.PNEUMATIC_CRAFT.get().plasticMixer.add(recipe);
             return recipe;
         }
     }

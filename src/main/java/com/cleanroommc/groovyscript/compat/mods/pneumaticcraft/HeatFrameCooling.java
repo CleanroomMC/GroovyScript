@@ -90,7 +90,7 @@ public class HeatFrameCooling extends VirtualizedRegistry<HeatFrameCoolingRecipe
         public @Nullable HeatFrameCoolingRecipe register() {
             if (!validate()) return null;
             HeatFrameCoolingRecipe recipe = new HeatFrameCoolingRecipe(PneumaticCraft.toItemIngredient(input.get(0)), output.get(0));
-            ModSupport.PNEUMATICRAFT.get().heatFrameCooling.add(recipe);
+            ModSupport.PNEUMATIC_CRAFT.get().heatFrameCooling.add(recipe);
             return recipe;
         }
     }
