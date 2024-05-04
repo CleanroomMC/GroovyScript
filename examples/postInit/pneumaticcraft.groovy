@@ -59,6 +59,25 @@ mods.pneumaticcraft.assembly_controller.recipeBuilder()
     .register()
 
 
+// Explosion:
+// Converts an input item into an output item, with a chance to fail and destroy the item.
+
+// mods.pneumaticcraft.explosion.removeByInput(item('minecraft:iron_block'))
+mods.pneumaticcraft.explosion.removeByOutput(item('pneumaticcraft:compressed_iron_block'))
+// mods.pneumaticcraft.explosion.removeAll()
+
+mods.pneumaticcraft.explosion.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .output(item('minecraft:gold_ingot'))
+    .lossRate(40)
+    .register()
+
+mods.pneumaticcraft.explosion.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .output(item('minecraft:obsidian'))
+    .register()
+
+
 // Heat Frame Cooling:
 // Converts an input itemstack into an output itemstack when inside an inventory placed within a Heat Frame which is
 // cooled.

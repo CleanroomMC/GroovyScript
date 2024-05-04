@@ -1202,6 +1202,11 @@ groovyscript.wiki.pneumaticcraft.assembly_controller.programStack.value=Sets the
 groovyscript.wiki.pneumaticcraft.assembly_controller.removeAllDrill=Removes all Drill program recipes
 groovyscript.wiki.pneumaticcraft.assembly_controller.removeAllLaser=Removes all Laser program recipes
 
+groovyscript.wiki.pneumaticcraft.explosion.title=Explosion
+groovyscript.wiki.pneumaticcraft.explosion.description=Converts an input item into an output item, with a chance to fail and destroy the item.
+groovyscript.wiki.pneumaticcraft.explosion.note0=Consider using the inWorldCrafting Explosion compat instead!
+groovyscript.wiki.pneumaticcraft.explosion.lossRate.value=Sets the failure rate of the recipe, where the item is simply destroyed instead of being converted
+
 groovyscript.wiki.pneumaticcraft.heat_frame_cooling.title=Heat Frame Cooling
 groovyscript.wiki.pneumaticcraft.heat_frame_cooling.description=Converts an input itemstack into an output itemstack when inside an inventory placed within a Heat Frame which is cooled.
 

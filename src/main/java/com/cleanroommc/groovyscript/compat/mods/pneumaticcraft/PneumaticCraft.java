@@ -11,6 +11,7 @@ public class PneumaticCraft extends ModPropertyContainer {
 
     public final Amadron amadron = new Amadron();
     public final AssemblyController assemblyController = new AssemblyController();
+    public final Explosion explosion = new Explosion();
     public final HeatFrameCooling heatFrameCooling = new HeatFrameCooling();
     public final LiquidFuel liquidFuel = new LiquidFuel();
     public final PlasticMixer plasticMixer = new PlasticMixer();
@@ -22,6 +23,7 @@ public class PneumaticCraft extends ModPropertyContainer {
     public PneumaticCraft() {
         addRegistry(amadron);
         addRegistry(assemblyController);
+        addRegistry(explosion);
         addRegistry(heatFrameCooling);
         addRegistry(liquidFuel);
         addRegistry(plasticMixer);
