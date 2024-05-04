@@ -1192,6 +1192,7 @@ groovyscript.wiki.naturesaura.spawning.removeByName=Removes the Altar of Birthin
 # PneumaticCraft
 groovyscript.wiki.pneumaticcraft.amadron.title=Amadron
 groovyscript.wiki.pneumaticcraft.amadron.description=Uses an Amadron Tablet and linked inventories in world to trade via drones.
+groovyscript.wiki.pneumaticcraft.amadron.note0=Amadron recipes added or removed via GroovyScript will be saved to a config file in `config/pneumaticcraft/`, meaning changes made may persist unexpectedly through restarts.
 groovyscript.wiki.pneumaticcraft.amadron.periodic.value=Sets if the Amadron recipe is periodic
 groovyscript.wiki.pneumaticcraft.amadron.removeAllPeriodic=Removes all periodic recipes
 groovyscript.wiki.pneumaticcraft.amadron.removeAllStatic=Removes all static recipes

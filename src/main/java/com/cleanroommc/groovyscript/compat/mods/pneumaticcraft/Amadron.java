@@ -17,7 +17,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-@RegistryDescription
+@RegistryDescription(
+        admonition = @Admonition(value = "groovyscript.wiki.pneumaticcraft.amadron.note0", type = Admonition.Type.WARNING)
+)
 public class Amadron extends VirtualizedRegistry<AmadronOffer> {
 
     private final AbstractReloadableStorage<AmadronOffer> periodicStorage = new AbstractReloadableStorage<>();
@@ -51,6 +53,9 @@ public class Amadron extends VirtualizedRegistry<AmadronOffer> {
     }
 
     public void addPeriodic(AmadronOffer recipe) {
+        // PeriodicOffers is a List, but it really ought to be a HashSet to properly work with AmadronOfferManager#shufflePeriodicOffers(),
+        // especially since AmadronOffer overrides the hashCode.
+        if (AmadronOfferManager.getInstance().getPeriodicOffers().contains(recipe)) return;
         AmadronOfferManager.getInstance().getPeriodicOffers().add(recipe);
         periodicStorage.addScripted(recipe);
     }
@@ -81,7 +86,7 @@ public class Amadron extends VirtualizedRegistry<AmadronOffer> {
             return false;
         }) | AmadronOfferManager.getInstance().getPeriodicOffers().removeIf(entry -> {
             if (entry.getOutput() instanceof FluidStack fluid && output.test(fluid) || entry.getOutput() instanceof ItemStack item && output.test(item)) {
-                addBackup(entry);
+                periodicStorage.addBackup(entry);
                 return true;
             }
             return false;
@@ -98,7 +103,7 @@ public class Amadron extends VirtualizedRegistry<AmadronOffer> {
             return false;
         }) | AmadronOfferManager.getInstance().getPeriodicOffers().removeIf(entry -> {
             if (entry.getInput() instanceof FluidStack fluid && input.test(fluid) || entry.getInput() instanceof ItemStack item && input.test(item)) {
-                addBackup(entry);
+                periodicStorage.addBackup(entry);
                 return true;
             }
             return false;
@@ -113,7 +118,7 @@ public class Amadron extends VirtualizedRegistry<AmadronOffer> {
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAllPeriodic() {
-        AmadronOfferManager.getInstance().getPeriodicOffers().forEach(this::addBackup);
+        AmadronOfferManager.getInstance().getPeriodicOffers().forEach(periodicStorage::addBackup);
         AmadronOfferManager.getInstance().getPeriodicOffers().clear();
     }
 
