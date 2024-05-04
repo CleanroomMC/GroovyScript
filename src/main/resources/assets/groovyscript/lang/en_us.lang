@@ -1189,6 +1189,24 @@ groovyscript.wiki.naturesaura.spawning.removeByEntity=Removes all Altar of Birth
 groovyscript.wiki.naturesaura.spawning.removeByName=Removes the Altar of Birthing recipe with the given name
 
 
+# Project E
+groovyscript.wiki.projecte.entity_randomizer_mob.title=Mob Entity Randomizer
+groovyscript.wiki.projecte.entity_randomizer_mob.description=Converts an entity on the list into a random other entity on the list when a projectile fired from the Philosopher's Stone hits it. This list contains hostile mob entities by default.
+groovyscript.wiki.projecte.entity_randomizer_mob.add=Adds the given `entity` that extends `EntityLiving` to the list
+groovyscript.wiki.projecte.entity_randomizer_mob.remove=Removes the given `entity` that extends `EntityLiving` from the list
+
+groovyscript.wiki.projecte.entity_randomizer_peaceful.title=Peaceful Entity Randomizer
+groovyscript.wiki.projecte.entity_randomizer_peaceful.description=Converts an entity on the list into a random other entity on the list when a projectile fired from the Philosopher's Stone hits it. This list contains peaceful entities by default.
+groovyscript.wiki.projecte.entity_randomizer_peaceful.add=Adds the given `entity` that extends `EntityLiving` to the list
+groovyscript.wiki.projecte.entity_randomizer_peaceful.remove=Removes the given `entity` that extends `EntityLiving` from the list
+
+groovyscript.wiki.projecte.transmutation.title=World Transmutation
+groovyscript.wiki.projecte.transmutation.description=Converts an input blockstate into an output blockstate when right-clicked with by a Philosopher's Stone, with the abity to be converted into a different output blockstate when holding shift.
+groovyscript.wiki.projecte.transmutation.input.value=Sets the input blockstate
+groovyscript.wiki.projecte.transmutation.output.value=Sets the normal output blockstate
+groovyscript.wiki.projecte.transmutation.altOutput.value=Sets the shift output blockstate
+
+
 # Roots
 groovyscript.wiki.roots.animal_harvest.title=Animal Harvest
 groovyscript.wiki.roots.animal_harvest.description=Animal Harvest is a ritual that drops items from nearby mob's based on that mobs loottable without harming the mob. Only applies to allowed mobs.

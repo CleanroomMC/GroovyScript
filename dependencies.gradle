@@ -70,6 +70,7 @@ final def mod_dependencies = [
         'mekanism-268560:2835175'                             : [project.debug_mekanism],
         'natures-aura-306626:2882138'                         : [project.debug_natures_aura],
         'packmode-278398:2567799'                             : [project.debug_packmode],
+        'projecte-226410:2702991'                             : [project.debug_projecte],
         'athenaeum-284350:4633750'                            : [project.debug_pyrotech],
         'pyrotech-306676:4956838'                             : [project.debug_pyrotech],
         'mystical_world-282940:3460961'                       : [project.debug_roots],
