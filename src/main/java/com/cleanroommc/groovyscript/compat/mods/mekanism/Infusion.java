@@ -62,7 +62,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
         objectStorage.removeScripted().forEach(pair -> InfuseRegistry.getObjectMap().remove(pair.getKey()));
     }
 
-    @MethodDescription(example = @Example("'groovy_example', resource('placeholdername:blocks/example')"), type = MethodDescription.Type.ADDITION, priority = 500)
+    @MethodDescription(example = @Example("'groovy_example', resource('placeholdername:blocks/mekanism_infusion_texture')"), type = MethodDescription.Type.ADDITION, priority = 500)
     public void addType(String name, ResourceLocation resource) {
         InfuseType infuse = new InfuseType(name.toUpperCase(Locale.ROOT), resource);
         infuse.unlocalizedName = name.toLowerCase(Locale.ROOT);

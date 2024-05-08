@@ -12,7 +12,7 @@ mods.mekanism.infusion.removeByType(infusion('carbon'))
 // mods.mekanism.infusion.removeByType(infusion('diamond'))
 // mods.mekanism.infusion.removeAll()
 
-mods.mekanism.infusion.addType('groovy_example', resource('placeholdername:blocks/example'))
+mods.mekanism.infusion.addType('groovy_example', resource('placeholdername:blocks/mekanism_infusion_texture'))
 mods.mekanism.infusion.add(infusion('diamond'), 100, item('minecraft:clay'))
 mods.mekanism.infusion.add(infusion('carbon'), 100, item('minecraft:gold_ingot'))
 mods.mekanism.infusion.add('groovy_example', 10, item('minecraft:ice'))
