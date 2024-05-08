@@ -8,7 +8,9 @@ import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.server.Completions;
+import groovy.lang.ExpandoMetaClass;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -40,6 +42,13 @@ public class GameObjectHandlerManager {
 
     static void registerGameObjectHandler(GroovyContainer<?> container, GameObjectHandler<?> goh) {
         String key = goh.getName();
+        if (goh.getMod() != null) {
+            Class<?> clazz = goh.getMod().get().getClass();
+            for (Class<?>[] paramTypes : goh.getParamTypes()) {
+                ExpandoMetaClass emc = ExpansionHelper.getExpandoClass(clazz);
+                emc.registerInstanceMethod(new GohMetaMethod(goh, paramTypes, clazz));
+            }
+        }
         if (handlerConflicts.containsKey(key)) {
             handlerConflicts.get(key).add(goh);
         } else if (handlers.containsKey(key)) {
@@ -91,7 +100,7 @@ public class GameObjectHandlerManager {
         GameObjectHandler.builder("block", Block.class)
                 .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.BLOCKS))
                 .completer(ForgeRegistries.BLOCKS)
-                .docOfType("fluid stack")
+                .docOfType("block")
                 .register();
         GameObjectHandler.builder("blockstate", IBlockState.class)
                 .parser(GameObjectHandlers::parseBlockState)

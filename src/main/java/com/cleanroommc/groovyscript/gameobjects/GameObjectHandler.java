@@ -211,8 +211,8 @@ public class GameObjectHandler<T> extends Closure<T> implements INamed, IDocumen
         }
 
         public Builder<T> docOfType(String type) {
-            String mod = this.mod == null ? StringUtils.EMPTY : this.mod.getContainerName();
-            return documentation("returns a " + mod + " " + type);
+            String mod = this.mod == null ? StringUtils.EMPTY : this.mod.getContainerName() + ' ';
+            return documentation("returns a " + mod + type);
         }
 
         public void register() {
@@ -227,13 +227,6 @@ public class GameObjectHandler<T> extends Closure<T> implements INamed, IDocumen
             GameObjectHandler<T> goh = new GameObjectHandler<>(this.name, this.mod, this.handler, this.defaultValue,
                                                                this.returnType, this.paramTypes, this.completer, this.documentation);
             GameObjectHandlerManager.registerGameObjectHandler(this.mod, goh);
-            if (this.mod != null) {
-                Class<?> clazz = this.mod.get().getClass();
-                for (Class<?>[] paramTypes : goh.paramTypes) {
-                    ExpandoMetaClass emc = ExpansionHelper.getExpandoClass(clazz);
-                    emc.registerInstanceMethod(new GohMetaMethod(goh, paramTypes, clazz, this.documentation));
-                }
-            }
         }
     }
 }

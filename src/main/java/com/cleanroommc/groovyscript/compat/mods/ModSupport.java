@@ -183,9 +183,11 @@ public class ModSupport {
             if (container.isLoaded()) {
                 container.onCompatLoaded(container);
                 container.get().initialize(container);
-                int i = 0;
+                ExpansionHelper.mixinConstProperty(ModSupport.class, container.getModId(), container.get(), false);
                 for (String s : container.getAliases()) {
-                    ExpansionHelper.mixinConstProperty(ModSupport.class, s, container.get(), i++ > 0);
+                    if (!container.getModId().equals(s)) {
+                        ExpansionHelper.mixinConstProperty(ModSupport.class, s, container.get(), true);
+                    }
                 }
             }
         }

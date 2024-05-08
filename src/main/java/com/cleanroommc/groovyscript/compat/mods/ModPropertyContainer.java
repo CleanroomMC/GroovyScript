@@ -63,7 +63,7 @@ public class ModPropertyContainer {
     }
 
     @UnmodifiableView
-    public Map<String, ?> getProperties() {
+    public Map<String, INamed> getProperties() {
         return view;
     }
 

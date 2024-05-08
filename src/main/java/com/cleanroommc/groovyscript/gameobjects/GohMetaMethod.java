@@ -11,14 +11,12 @@ public class GohMetaMethod extends MetaMethod implements IDocumented {
 
     private final GameObjectHandler<?> closure;
     private final Class<?> owner;
-    private final String documentation;
 
-    GohMetaMethod(GameObjectHandler<?> closure, Class<?>[] nativeParamTypes, Class<?> owner, String documentation) {
+    GohMetaMethod(GameObjectHandler<?> closure, Class<?>[] nativeParamTypes, Class<?> owner) {
         super(nativeParamTypes);
         this.closure = closure;
         this.nativeParamTypes = nativeParamTypes;
         this.owner = owner;
-        this.documentation = documentation;
     }
 
     @Override
@@ -49,6 +47,6 @@ public class GohMetaMethod extends MetaMethod implements IDocumented {
 
     @Override
     public String getDocumentation() {
-        return documentation;
+        return this.closure.getDocumentation();
     }
 }
