@@ -51,7 +51,7 @@ public class ThermalExpansion extends ModPropertyContainer {
 
     @Override
     public void initialize() {
-        GameObjectHandler.builder("mode", CompactorManager.Mode.class)
+        GameObjectHandler.builder("compactorMode", CompactorManager.Mode.class)
                 .mod("thermalexpansion")
                 .parser(IGameObjectParser.wrapEnum(CompactorManager.Mode.class, false))
                 .completerOfNamed(() -> Arrays.asList(CompactorManager.Mode.values()), v -> v.name().toUpperCase(Locale.ROOT))

@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
@@ -147,7 +148,7 @@ public class GameObjectHandlerManager {
                 .register();
         GameObjectHandler.builder("creativeTab", CreativeTabs.class)
                 .parser(GameObjectHandlers::parseCreativeTab)
-                .completerOfNamed(() -> Arrays.asList(CreativeTabs.CREATIVE_TAB_ARRAY), CreativeTabs::getTabLabel)
+                .completerOfNamed(() -> Arrays.asList(CreativeTabs.CREATIVE_TAB_ARRAY), v -> ((CreativeTabsAccessor) v).getTabLabel2())
                 .docOfType("creative tab")
                 .register();
         GameObjectHandler.builder("textformat", TextFormatting.class)
