@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.draconicevolution;
 
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
@@ -38,6 +39,11 @@ public class EnergyCore implements IScriptReloadable {
         this.inner = new BlockStates[this.original.length];
         this.outer = new BlockStates[this.original.length];
         onReload(); // increases version to 1
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return GroovyScriptConfig.compat.draconicEvolutionEnergyCore;
     }
 
     @Override
