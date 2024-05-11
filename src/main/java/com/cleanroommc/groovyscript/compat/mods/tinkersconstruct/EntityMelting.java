@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 500).input('minecraft','pig').register()"))
+    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 500).input(resource('minecraft:pig')).register()"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
