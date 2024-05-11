@@ -90,7 +90,7 @@ public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
     @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getEntityMeltingRegistry().forEach((name, result) -> addBackup(new EntityMeltingRecipe(name, result)));
-        TinkerRegistryAccessor.getEntityMeltingRegistry().forEach(TinkerRegistryAccessor.getEntityMeltingRegistry()::remove);
+        TinkerRegistryAccessor.getEntityMeltingRegistry().clear();
     }
 
     @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
