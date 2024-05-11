@@ -2,10 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -20,7 +17,7 @@ import java.util.List;
 @RegistryDescription
 public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 3).fluidInput(fluid('clay') * 1,fluid('lava') * 2).register()"))
+    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 3).fluidInput(fluid('clay') * 1,fluid('lava') * 2)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -123,6 +120,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable AlloyRecipe register() {
             if (!validate()) return null;
             AlloyRecipe recipe = new AlloyRecipe(fluidOutput.get(0), fluidInput.toArray(new FluidStack[0]));

@@ -70,8 +70,7 @@ mods.tconstruct.drying.recipeBuilder()
 
 mods.tconstruct.entity_melting.recipeBuilder()
     .fluidOutput(fluid('iron') * 500)
-    .input('minecraft',
-           'pig')
+    .input(resource('minecraft:pig'))
     .register()
 
 
