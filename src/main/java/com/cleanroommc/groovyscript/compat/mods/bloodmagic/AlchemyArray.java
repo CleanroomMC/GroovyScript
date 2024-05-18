@@ -67,7 +67,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('bloodmagic:component:13')"))
+    @MethodDescription(example = @Example("item('bloodmagic:component:13')"))
     public boolean removeByInput(IIngredient input) {
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
@@ -86,7 +86,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByCatalyst", example = @Example("item('bloodmagic:slate:2')"))
+    @MethodDescription(example = @Example("item('bloodmagic:slate:2')"))
     public boolean removeByCatalyst(IIngredient catalyst) {
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().removeIf(recipe -> {
             boolean found = recipe.getCatalyst().test(IngredientHelper.toItemStack(catalyst));
@@ -105,7 +105,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInputAndCatalyst", example = @Example("item('bloodmagic:component:7'), item('bloodmagic:slate:1')"))
+    @MethodDescription(example = @Example("item('bloodmagic:component:7'), item('bloodmagic:slate:1')"))
     public boolean removeByInputAndCatalyst(IIngredient input, IIngredient catalyst) {
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().removeIf(recipe -> {
             boolean removeRecipe = recipe.getInput().test(IngredientHelper.toItemStack(input)) && recipe.getCatalyst().test(IngredientHelper.toItemStack(catalyst));
@@ -124,7 +124,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('bloodmagic:sigil_void')"))
+    @MethodDescription(example = @Example("item('bloodmagic:sigil_void')"))
     public boolean removeByOutput(ItemStack output) {
         if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().removeIf(recipe -> {
             boolean matches = recipe.getOutput().isItemEqual(output);
@@ -143,13 +143,13 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().forEach(this::addBackup);
         ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipeAlchemyArray> streamRecipes() {
         return new SimpleObjectStream<>(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes())
                 .setRemover(this::remove);

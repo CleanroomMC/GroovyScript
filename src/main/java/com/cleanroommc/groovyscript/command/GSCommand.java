@@ -124,7 +124,7 @@ public class GSCommand extends CommandTreeBase {
                         GSHandCommand.fluidInformation(messages, Arrays.stream(handler.getTankProperties())
                                 .map(IFluidTankProperties::getContents)
                                 .filter(Objects::nonNull)
-                                .collect(Collectors.toList()));
+                                .collect(Collectors.toList()), prettyNbt);
                     }
                 }
 
@@ -132,7 +132,7 @@ public class GSCommand extends CommandTreeBase {
                     // if the block is a fluid, add the fluid's info
                     Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
                     if (fluid != null) {
-                        GSHandCommand.fluidInformation(messages, new FluidStack(fluid, 1000));
+                        GSHandCommand.fluidInformation(messages, new FluidStack(fluid, 1000), prettyNbt);
                     }
 
                     GSHandCommand.blockStateInformation(messages, blockState);

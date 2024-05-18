@@ -57,7 +57,7 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
         return BotaniaAPI.petalRecipes.remove(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('botania:specialflower').withNbt(['type': 'puredaisy'])"))
+    @MethodDescription(example = @Example("item('botania:specialflower').withNbt(['type': 'puredaisy'])"))
     public boolean removeByOutput(IIngredient output) {
         if (BotaniaAPI.petalRecipes.removeIf(recipe -> {
             boolean found = output.test(recipe.getOutput());
@@ -72,7 +72,7 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('runeFireB')"))
+    @MethodDescription(example = @Example("ore('runeFireB')"))
     public boolean removeByInput(IIngredient... inputs) {
         List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
                                                                                                : i.getMatchingStacks()[0]).collect(Collectors.toList());
@@ -95,13 +95,13 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
         return removeByInput(inputs);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BotaniaAPI.petalRecipes.forEach(this::addBackup);
         BotaniaAPI.petalRecipes.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipePetals> streamRecipes() {
         return new SimpleObjectStream<>(BotaniaAPI.petalRecipes).setRemover(this::remove);
     }

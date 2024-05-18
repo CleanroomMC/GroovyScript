@@ -46,7 +46,7 @@ public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecip
         return recipe1;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:hardened_clay'), gas('water')"))
+    @MethodDescription(example = @Example("item('minecraft:hardened_clay'), gas('water')"))
     public boolean removeByInput(IIngredient ingredient, GasStack gasInput) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Injection Chamber recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

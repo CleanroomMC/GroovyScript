@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.api.infuse.InfuseObject;
 import mekanism.api.infuse.InfuseRegistry;
@@ -16,7 +17,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RegistryDescription(
@@ -30,14 +34,7 @@ import java.util.stream.Collectors;
 )
 public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
 
-    private List<Pair<ItemStack, InfuseObject>> objectBackup;
-    private List<Pair<ItemStack, InfuseObject>> objectScripted;
-
-    public Infusion() {
-        super();
-        this.objectBackup = new ArrayList<>();
-        this.objectScripted = new ArrayList<>();
-    }
+    private AbstractReloadableStorage<Pair<ItemStack, InfuseObject>> objectStorage = new AbstractReloadableStorage<>();
 
     public static InfusionItems infusion(InfuseType type) {
         return new InfusionItems(type);
@@ -61,14 +58,11 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
         removeScripted().forEach(pair -> InfuseRegistry.getInfuseMap().put(pair.getKey(), pair.getValue()));
         restoreFromBackup().forEach(pair -> InfuseRegistry.getInfuseMap().remove(pair.getKey()));
 
-        this.objectBackup.forEach(pair -> InfuseRegistry.getObjectMap().put(pair.getKey(), pair.getValue()));
-        this.objectScripted.forEach(pair -> InfuseRegistry.getObjectMap().remove(pair.getKey()));
-
-        this.objectBackup = new ArrayList<>();
-        this.objectScripted = new ArrayList<>();
+        objectStorage.restoreFromBackup().forEach(pair -> InfuseRegistry.getObjectMap().put(pair.getKey(), pair.getValue()));
+        objectStorage.removeScripted().forEach(pair -> InfuseRegistry.getObjectMap().remove(pair.getKey()));
     }
 
-    @MethodDescription(example = @Example("'groovy_example', resource('placeholdername:blocks/example')"), type = MethodDescription.Type.ADDITION, priority = 500)
+    @MethodDescription(example = @Example("'groovy_example', resource('placeholdername:blocks/mekanism_infusion_texture')"), type = MethodDescription.Type.ADDITION, priority = 500)
     public void addType(String name, ResourceLocation resource) {
         InfuseType infuse = new InfuseType(name.toUpperCase(Locale.ROOT), resource);
         infuse.unlocalizedName = name.toLowerCase(Locale.ROOT);
@@ -95,7 +89,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
     }, type = MethodDescription.Type.ADDITION)
     public void add(InfuseType type, int amount, ItemStack item) {
         InfuseObject object = new InfuseObject(type, amount);
-        this.objectScripted.add(Pair.of(item, object));
+        objectStorage.addScripted(Pair.of(item, object));
         InfuseRegistry.registerInfuseObject(item, object);
     }
 
@@ -129,7 +123,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
     @MethodDescription(example = @Example("ore('dustDiamond')"))
     public void remove(IIngredient item) {
         for (Map.Entry<ItemStack, InfuseObject> entry : InfuseRegistry.getObjectMap().entrySet().stream().filter(x -> item.test(x.getKey())).collect(Collectors.toList())) {
-            objectBackup.add(Pair.of(entry.getKey(), entry.getValue()));
+            objectStorage.addBackup(Pair.of(entry.getKey(), entry.getValue()));
             InfuseRegistry.getObjectMap().remove(entry.getKey());
         }
     }
@@ -154,7 +148,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
     })
     public void removeByType(InfuseType type) {
         for (Map.Entry<ItemStack, InfuseObject> entry : InfuseRegistry.getObjectMap().entrySet().stream().filter(x -> x.getValue().type == type).collect(Collectors.toList())) {
-            objectBackup.add(Pair.of(entry.getKey(), entry.getValue()));
+            objectStorage.addBackup(Pair.of(entry.getKey(), entry.getValue()));
             InfuseRegistry.getObjectMap().remove(entry.getKey());
         }
     }
@@ -168,7 +162,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
     public void removeAll() {
         InfuseRegistry.getInfuseMap().forEach((l, r) -> addBackup(Pair.of(l, r)));
         InfuseRegistry.getInfuseMap().clear();
-        InfuseRegistry.getObjectMap().forEach((l, r) -> objectBackup.add(Pair.of(l, r)));
+        InfuseRegistry.getObjectMap().forEach((l, r) -> objectStorage.addBackup(Pair.of(l, r)));
         InfuseRegistry.getObjectMap().clear();
     }
 

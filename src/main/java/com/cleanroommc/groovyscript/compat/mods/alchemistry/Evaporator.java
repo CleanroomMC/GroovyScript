@@ -51,7 +51,7 @@ public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('alchemistry:mineral_salt')"))
+    @MethodDescription(example = @Example("item('alchemistry:mineral_salt')"))
     public boolean removeByOutput(IIngredient output) {
         return ModRecipes.INSTANCE.getEvaporatorRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
@@ -62,7 +62,7 @@ public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('lava')"))
+    @MethodDescription(example = @Example("fluid('lava')"))
     public boolean removeByInput(FluidStack input) {
         return ModRecipes.INSTANCE.getEvaporatorRecipes().removeIf(r -> {
             if (r.getInput().isFluidEqual(input)) {
@@ -73,12 +73,12 @@ public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<EvaporatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.INSTANCE.getEvaporatorRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipes.INSTANCE.getEvaporatorRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getEvaporatorRecipes().clear();

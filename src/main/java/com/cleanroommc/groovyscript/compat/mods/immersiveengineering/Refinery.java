@@ -50,7 +50,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example(value = "fluid('biodiesel')", commented = true))
+    @MethodDescription(example = @Example(value = "fluid('biodiesel')", commented = true))
     public void removeByOutput(FluidStack fluidOutput) {
         if (IngredientHelper.isEmpty(fluidOutput)) {
             GroovyLog.msg("Error removing Immersive Engineering Refinery recipe")
@@ -73,7 +73,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('plantoil'), fluid('ethanol')"))
+    @MethodDescription(example = @Example("fluid('plantoil'), fluid('ethanol')"))
     public void removeByInput(FluidStack input0, FluidStack input1) {
         if (GroovyLog.msg("Error removing Immersive Engineering Refinery recipe")
                 .add(IngredientHelper.isEmpty(input0), () -> "fluid input 1 must not be empty")
@@ -94,12 +94,12 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RefineryRecipe> streamRecipes() {
         return new SimpleObjectStream<>(RefineryRecipe.recipeList).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         RefineryRecipe.recipeList.forEach(this::addBackup);
         RefineryRecipe.recipeList.clear();

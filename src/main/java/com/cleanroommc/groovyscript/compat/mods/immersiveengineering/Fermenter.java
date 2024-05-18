@@ -51,7 +51,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('ethanol')"))
+    @MethodDescription(example = @Example("fluid('ethanol')"))
     public void removeByOutput(FluidStack fluidOutput) {
         if (IngredientHelper.isEmpty(fluidOutput)) {
             GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
@@ -73,7 +73,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:reeds')"))
+    @MethodDescription(example = @Example("item('minecraft:reeds')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
@@ -93,12 +93,12 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<FermenterRecipe> streamRecipes() {
         return new SimpleObjectStream<>(FermenterRecipe.recipeList).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         FermenterRecipe.recipeList.forEach(this::addBackup);
         FermenterRecipe.recipeList.clear();

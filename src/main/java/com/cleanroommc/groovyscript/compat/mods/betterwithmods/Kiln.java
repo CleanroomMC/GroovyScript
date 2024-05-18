@@ -48,7 +48,7 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:brick')"))
+    @MethodDescription(example = @Example("item('minecraft:brick')"))
     public boolean removeByOutput(IIngredient output) {
         return BWRegistry.KILN.getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
@@ -61,7 +61,7 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:end_stone')"))
+    @MethodDescription(example = @Example("item('minecraft:end_stone')"))
     public boolean removeByInput(IIngredient input) {
         return BWRegistry.KILN.getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInput().getMatchingStacks()) {
@@ -74,12 +74,12 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<KilnRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BWRegistry.KILN.getRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BWRegistry.KILN.getRecipes().forEach(this::addBackup);
         BWRegistry.KILN.getRecipes().clear();

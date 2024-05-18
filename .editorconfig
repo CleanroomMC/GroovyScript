@@ -319,6 +319,7 @@ ij_shell_switch_cases_indented = false
 ij_shell_use_unix_line_separator = true
 
 [{*.gant,*.groovy,*.gy}]
+ij_continuation_indent_size = 4
 ij_groovy_align_group_field_declarations = false
 ij_groovy_align_multiline_array_initializer_expression = false
 ij_groovy_align_multiline_assignment = false
@@ -593,7 +594,7 @@ ij_kotlin_wrap_elvis_expressions = 1
 ij_kotlin_wrap_expression_body_functions = 0
 ij_kotlin_wrap_first_method_in_call_chain = false
 
-[{*.har,*.json,c:ingot_aluminium,mcmod.info,pack.mcmeta}]
+[{*.har,*.json,mcmod.info,pack.mcmeta}]
 indent_size = 2
 ij_json_array_wrapping = split_into_lines
 ij_json_keep_blank_lines_in_code = 0

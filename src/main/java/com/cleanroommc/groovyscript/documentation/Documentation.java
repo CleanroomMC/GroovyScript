@@ -84,7 +84,7 @@ public class Documentation {
 
     public static void logAnyMissingKeys() {
         if (!missingLangKeys.isEmpty()) {
-            GroovyLog.Msg log = GroovyLog.msg("Missing the following localization keys:");
+            GroovyLog.Msg log = GroovyLog.msg("Missing the following localization keys");
             missingLangKeys.stream().sorted().forEach(log::add);
             log.debug().post();
             missingLangKeys.clear();

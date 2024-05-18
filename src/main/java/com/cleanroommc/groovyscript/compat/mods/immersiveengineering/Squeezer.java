@@ -57,7 +57,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('plantoil')"))
+    @MethodDescription(example = @Example("fluid('plantoil')"))
     public void removeByOutput(FluidStack fluidOutput) {
         if (IngredientHelper.isEmpty(fluidOutput)) {
             GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
@@ -80,7 +80,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
+    @MethodDescription
     public void removeByOutput(FluidStack fluidOutput, ItemStack itemOutput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
                 .add(IngredientHelper.isEmpty(fluidOutput), () -> "fluid output must not be empty")
@@ -101,7 +101,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:material:18')"))
+    @MethodDescription(example = @Example("item('immersiveengineering:material:18')"))
     public void removeByOutput(ItemStack itemOutput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
                 .add(IngredientHelper.isEmpty(itemOutput), () -> "item input must not be empty")
@@ -123,7 +123,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:wheat_seeds')"))
+    @MethodDescription(example = @Example("item('minecraft:wheat_seeds')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Squeezer recipe")
@@ -141,12 +141,12 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<SqueezerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(SqueezerRecipe.recipeList).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         SqueezerRecipe.recipeList.forEach(this::addBackup);
         SqueezerRecipe.recipeList.clear();

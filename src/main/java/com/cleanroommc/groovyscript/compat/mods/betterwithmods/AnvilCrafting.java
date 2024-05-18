@@ -56,7 +56,7 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('betterwithmods:steel_block')"))
+    @MethodDescription(example = @Example("item('betterwithmods:steel_block')"))
     public boolean removeByOutput(IIngredient output) {
         return AnvilCraftingManager.ANVIL_CRAFTING.removeIf(r -> {
             if (output.test(r.getRecipeOutput())) {
@@ -67,7 +67,7 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:redstone')"))
+    @MethodDescription(example = @Example("item('minecraft:redstone')"))
     public boolean removeByInput(IIngredient input) {
         return AnvilCraftingManager.ANVIL_CRAFTING.removeIf(r -> {
             for (Ingredient ingredient : r.getIngredients()) {
@@ -82,12 +82,12 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AnvilCraftingManager.ANVIL_CRAFTING).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         AnvilCraftingManager.ANVIL_CRAFTING.forEach(this::addBackup);
         AnvilCraftingManager.ANVIL_CRAFTING.clear();

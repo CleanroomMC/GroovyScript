@@ -55,7 +55,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         return BotaniaAPI.runeAltarRecipes.remove(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('botania:rune:1')"))
+    @MethodDescription(example = @Example("item('botania:rune:1')"))
     public boolean removeByOutput(IIngredient output) {
         if (BotaniaAPI.runeAltarRecipes.removeIf(recipe -> {
             boolean found = output.test(recipe.getOutput());
@@ -70,7 +70,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('runeEarthB')"))
+    @MethodDescription(example = @Example("ore('runeEarthB')"))
     public boolean removeByInput(IIngredient... inputs) {
         List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
                                                                                                : i.getMatchingStacks()[0]).collect(Collectors.toList());
@@ -94,13 +94,13 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         return removeByInput(inputs);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BotaniaAPI.runeAltarRecipes.forEach(this::addBackup);
         BotaniaAPI.runeAltarRecipes.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipeRuneAltar> streamRecipes() {
         return new SimpleObjectStream<>(BotaniaAPI.runeAltarRecipes).setRemover(this::remove);
     }

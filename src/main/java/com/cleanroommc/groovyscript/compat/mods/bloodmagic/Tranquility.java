@@ -117,13 +117,13 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().forEach((l, r) -> this.addBackup(Pair.of(l, r)));
         ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<IBlockState, TranquilityStack>> streamRecipes() {
         return new SimpleObjectStream<>(((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getTranquility().entrySet())
                 .setRemover(r -> this.remove(r.getKey(), r.getValue().type));

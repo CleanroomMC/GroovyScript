@@ -46,7 +46,7 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:iron_ingot')"))
+    @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
     public boolean removeByOutput(ItemStack output) {
         return ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.returnItem, output);
@@ -57,13 +57,13 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.forEach(this::addBackup);
         ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<TreasureChestLoot> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.TREASURE_CHEST_LOOT)
                 .setRemover(this::remove);

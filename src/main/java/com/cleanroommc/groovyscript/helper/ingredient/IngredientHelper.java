@@ -286,6 +286,17 @@ public class IngredientHelper {
         return builder.toString();
     }
 
+    public static String asGroovyCode(FluidStack fluidStack, boolean colored, boolean prettyNbt) {
+        StringBuilder builder = new StringBuilder().append(asGroovyCode(fluidStack, colored));
+        if (fluidStack.tag != null) {
+            builder.append(".withNbt(");
+            builder.append(NbtHelper.toGroovyCode(fluidStack.tag, prettyNbt, colored));
+            if (colored) builder.append(TextFormatting.GRAY);
+            builder.append(")");
+        }
+        return builder.toString();
+    }
+
     public static String asGroovyCode(String oreDict, boolean colored) {
         StringBuilder builder = new StringBuilder();
         if (colored) builder.append(TextFormatting.DARK_GREEN);

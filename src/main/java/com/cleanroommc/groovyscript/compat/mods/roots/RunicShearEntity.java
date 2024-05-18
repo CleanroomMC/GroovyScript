@@ -93,13 +93,13 @@ public class RunicShearEntity extends VirtualizedRegistry<Pair<ResourceLocation,
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getRunicShearEntityRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getRunicShearEntityRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, RunicShearEntityRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(getRunicShearEntityRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));

@@ -50,7 +50,7 @@ public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("element('chlorine')"))
+    @MethodDescription(example = @Example("element('chlorine')"))
     public boolean removeByOutput(IIngredient output) {
         return ModRecipes.INSTANCE.getElectrolyzerRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
@@ -63,7 +63,7 @@ public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example(value = "fluid('water')", commented = true))
+    @MethodDescription(example = @Example(value = "fluid('water')", commented = true))
     public boolean removeByInput(FluidStack input) {
         return ModRecipes.INSTANCE.getElectrolyzerRecipes().removeIf(r -> {
             if (r.getInput().isFluidEqual(input)) {
@@ -74,7 +74,7 @@ public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("element('calcium_carbonate')"))
+    @MethodDescription(example = @Example("element('calcium_carbonate')"))
     public boolean removeByInput(IIngredient input) {
         return ModRecipes.INSTANCE.getElectrolyzerRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getElectrolytes()) {
@@ -87,12 +87,12 @@ public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ElectrolyzerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.INSTANCE.getElectrolyzerRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipes.INSTANCE.getElectrolyzerRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getElectrolyzerRecipes().clear();

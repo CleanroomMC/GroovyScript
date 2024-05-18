@@ -47,7 +47,7 @@ public class BasicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:cobblestone')"))
+    @MethodDescription(example = @Example("item('minecraft:cobblestone')"))
     public boolean removeByInput(IIngredient input) {
         return CalculatorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -62,7 +62,7 @@ public class BasicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('calculator:reinforcedironingot')"))
+    @MethodDescription(example = @Example("item('calculator:reinforcedironingot')"))
     public boolean removeByOutput(IIngredient output) {
         return CalculatorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
@@ -77,13 +77,13 @@ public class BasicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CalculatorRecipes.instance().getRecipes().forEach(this::addBackup);
         CalculatorRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(CalculatorRecipes.instance().getRecipes())
                 .setRemover(this::remove);

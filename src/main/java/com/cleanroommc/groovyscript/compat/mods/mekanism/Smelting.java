@@ -49,7 +49,7 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
         return recipe1;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example(value = "item('minecraft:clay')", commented = true))
+    @MethodDescription(example = @Example(value = "item('minecraft:clay')", commented = true))
     public boolean removeByInput(IIngredient ingredient) {
         if (IngredientHelper.isEmpty(ingredient)) {
             removeError("input must not be empty");

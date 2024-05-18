@@ -51,7 +51,7 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:clay_ball')"))
+    @MethodDescription(example = @Example("item('minecraft:clay_ball')"))
     public boolean removeByOutput(IIngredient output) {
         return BWRegistry.TURNTABLE.getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
@@ -64,7 +64,7 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('betterwithmods:unfired_pottery')"))
+    @MethodDescription(example = @Example("item('betterwithmods:unfired_pottery')"))
     public boolean removeByInput(IIngredient input) {
         return BWRegistry.TURNTABLE.getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInput().getMatchingStacks()) {
@@ -77,12 +77,12 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<TurntableRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BWRegistry.TURNTABLE.getRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BWRegistry.TURNTABLE.getRecipes().forEach(this::addBackup);
         BWRegistry.TURNTABLE.getRecipes().clear();

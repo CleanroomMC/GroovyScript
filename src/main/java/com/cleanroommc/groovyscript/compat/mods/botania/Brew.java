@@ -51,7 +51,7 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
         return BotaniaAPI.brewMap.remove(brew) != null;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BotaniaAPI.brewMap.forEach((l, r) -> this.addBackup(r));
         BotaniaAPI.brewMap.clear();

@@ -14,6 +14,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Registry {
@@ -264,7 +265,7 @@ public class Registry {
         for (Method method : methods) {
             out.append(methodDescription(method));
             if (method.getAnnotation(MethodDescription.class).example().length > 0 && Arrays.stream(method.getAnnotation(MethodDescription.class).example()).anyMatch(x -> !x.value().isEmpty())) {
-                exampleLines.addAll(Arrays.stream(method.getAnnotation(MethodDescription.class).example()).flatMap(example -> methodExample(method, example.value()).stream()).collect(Collectors.toList()));
+                exampleLines.addAll(Arrays.stream(method.getAnnotation(MethodDescription.class).example()).flatMap(example -> Stream.of(methodExample(method, example.value()))).collect(Collectors.toList()));
             } else if (method.getParameterTypes().length == 0) {
                 exampleLines.add(methodExample(method));
             }
@@ -287,7 +288,13 @@ public class Registry {
 
     private String methodDescription(Method method) {
         String desc = method.getAnnotation(MethodDescription.class).description();
-        String lang = desc.isEmpty() ? String.format("%s.%s", baseTranslationKey, method.getName()) : desc;
+        String registryDefault = String.format("%s.%s", baseTranslationKey, method.getName());
+        String globalDefault = String.format("groovyscript.wiki.%s", method.getName());
+        // If `desc` isn't defined, check the `registryDefault` key. If it exists, use it.
+        // Then, check the `globalDefault` key. If it exists use it. Otherwise, we want to still use the `registryDefault` for logging a missing key.
+        String lang = desc.isEmpty()
+                      ? I18n.hasKey(registryDefault) || !I18n.hasKey(globalDefault) ? registryDefault : globalDefault
+                      : desc;
 
         return String.format("- %s:\n\n%s",
                              Documentation.translate(lang),
@@ -297,9 +304,9 @@ public class Registry {
                                      .toString());
     }
 
-    private List<String> methodExample(Method method, String example) {
-        if (method.getParameterTypes().length == 0) return Collections.singletonList(methodExample(method));
-        return Collections.singletonList(String.format("%s.%s(%s)", reference, method.getName(), example));
+    private String methodExample(Method method, String example) {
+        if (method.getParameterTypes().length == 0) return methodExample(method);
+        return String.format("%s.%s(%s)", reference, method.getName(), example);
     }
 
     private String methodExample(Method method) {

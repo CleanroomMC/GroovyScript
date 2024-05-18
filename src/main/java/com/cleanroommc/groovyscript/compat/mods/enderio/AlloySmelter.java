@@ -145,7 +145,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IManyToOneRecipe> streamRecipes() {
         List<IManyToOneRecipe> list = MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ALLOYSMELTER).values().stream()
                 .filter(r -> r instanceof IManyToOneRecipe)
@@ -154,7 +154,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         AlloyRecipeManagerAccessor accessor = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
         @SuppressWarnings("unchecked")

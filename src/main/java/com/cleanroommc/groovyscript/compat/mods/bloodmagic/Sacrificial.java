@@ -76,13 +76,13 @@ public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Inte
         return remove(entity.getName());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getSacrificial().forEach((l, r) -> this.addBackup(Pair.of(l, r)));
         ((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getSacrificial().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, Integer>> streamRecipes() {
         return new SimpleObjectStream<>(((BloodMagicValueManagerAccessor) BloodMagicAPI.INSTANCE.getValueManager()).getSacrificial().entrySet())
                 .setRemover(r -> this.remove(r.getKey()));

@@ -54,7 +54,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('potion').withNbt([Potion:'minecraft:night_vision'])"))
+    @MethodDescription(example = @Example("fluid('potion').withNbt([Potion:'minecraft:night_vision'])"))
     public void removeByOutput(FluidStack fluidOutput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
                 .add(IngredientHelper.isEmpty(fluidOutput), () -> "fluid output must not be empty")
@@ -76,7 +76,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:sand'), item('minecraft:sand'), item('minecraft:clay_ball'), item('minecraft:gravel')"))
+    @MethodDescription(example = @Example("item('minecraft:sand'), item('minecraft:sand'), item('minecraft:clay_ball'), item('minecraft:gravel')"))
     public void removeByInput(IIngredient... itemInputs) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
                 .add(itemInputs == null || itemInputs.length == 0, () -> "item input must not be empty")
@@ -98,7 +98,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('water'), item('minecraft:speckled_melon')"))
+    @MethodDescription(example = @Example("fluid('water'), item('minecraft:speckled_melon')"))
     public void removeByInput(FluidStack fluidInput, IIngredient... itemInput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
                 .add(IngredientHelper.isEmpty(fluidInput), () -> "fluid input must not be empty")
@@ -122,12 +122,12 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MixerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(MixerRecipe.recipeList).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MixerRecipe.recipeList.forEach(this::addBackup);
         MixerRecipe.recipeList.clear();

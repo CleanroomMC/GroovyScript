@@ -51,7 +51,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:material:6')"))
+    @MethodDescription(example = @Example("item('immersiveengineering:material:6')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Coke Oven recipe")
@@ -71,7 +71,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         list.forEach(this::addBackup);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:log')"))
+    @MethodDescription(example = @Example("item('minecraft:log')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Coke Oven recipe")
@@ -94,12 +94,12 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CokeOvenRecipe> streamRecipes() {
         return new SimpleObjectStream<>(CokeOvenRecipe.recipeList).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CokeOvenRecipe.recipeList.forEach(this::addBackup);
         CokeOvenRecipe.recipeList.clear();

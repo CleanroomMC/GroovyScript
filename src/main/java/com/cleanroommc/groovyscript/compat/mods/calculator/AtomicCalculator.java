@@ -42,7 +42,7 @@ public class AtomicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:end_stone')"))
+    @MethodDescription(example = @Example("item('minecraft:end_stone')"))
     public boolean removeByInput(IIngredient input) {
         return AtomicCalculatorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -57,7 +57,7 @@ public class AtomicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('calculator:firediamond')"))
+    @MethodDescription(example = @Example("item('calculator:firediamond')"))
     public boolean removeByOutput(IIngredient output) {
         return AtomicCalculatorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
@@ -72,13 +72,13 @@ public class AtomicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         AtomicCalculatorRecipes.instance().getRecipes().forEach(this::addBackup);
         AtomicCalculatorRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AtomicCalculatorRecipes.instance().getRecipes())
                 .setRemover(this::remove);

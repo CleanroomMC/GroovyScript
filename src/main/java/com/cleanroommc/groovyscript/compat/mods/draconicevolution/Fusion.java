@@ -46,20 +46,20 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByCatalyst", example = @Example("item('draconicevolution:chaos_shard')"))
+    @MethodDescription(example = @Example("item('draconicevolution:chaos_shard')"))
     public void removeByCatalyst(ItemStack item) {
         for (IFusionRecipe recipe : RecipeManager.FUSION_REGISTRY.getRecipes().stream().filter(x -> x.getRecipeCatalyst().isItemEqual(item)).collect(Collectors.toList())) {
             remove(recipe);
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((FusionRegistryAccessor) RecipeManager.FUSION_REGISTRY).getREGISTRY().forEach(this::addBackup);
         ((FusionRegistryAccessor) RecipeManager.FUSION_REGISTRY).getREGISTRY().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IFusionRecipe> streamRecipes() {
         return new SimpleObjectStream<>(((FusionRegistryAccessor) RecipeManager.FUSION_REGISTRY).getREGISTRY())
                 .setRemover(this::remove);

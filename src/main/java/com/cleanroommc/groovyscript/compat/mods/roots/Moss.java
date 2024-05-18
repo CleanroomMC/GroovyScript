@@ -86,14 +86,14 @@ public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MossConfigAccessor.getMossyCobblestones().forEach((in, out) -> addBackup(Pair.of(in, out)));
         MossConfigAccessor.getMossyCobblestones().clear();
         Moss.reload();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ItemStack, ItemStack>> streamRecipes() {
         return new SimpleObjectStream<>(MossConfigAccessor.getMossyCobblestones().entrySet()).setRemover(r -> this.remove(r.getKey()));
     }

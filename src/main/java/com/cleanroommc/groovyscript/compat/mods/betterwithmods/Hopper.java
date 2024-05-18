@@ -47,7 +47,7 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:gunpowder')"))
+    @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByOutput(IIngredient output) {
         return HopperInteractions.RECIPES.removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
@@ -60,7 +60,7 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:gunpowder')"))
+    @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByInput(IIngredient input) {
         return HopperInteractions.RECIPES.removeIf(r -> {
             for (ItemStack item : r.getInputs().getMatchingStacks()) {
@@ -73,12 +73,12 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<HopperInteractions.HopperRecipe> streamRecipes() {
         return new SimpleObjectStream<>(HopperInteractions.RECIPES).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         HopperInteractions.RECIPES.forEach(this::addBackup);
         HopperInteractions.RECIPES.clear();

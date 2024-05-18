@@ -42,7 +42,7 @@ public class HealthProcessor extends VirtualizedRegistry<DefaultSonarRecipe.Valu
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:blaze_rod')"))
+    @MethodDescription(example = @Example("item('minecraft:blaze_rod')"))
     public boolean removeByInput(IIngredient input) {
         return HealthProcessorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -57,13 +57,13 @@ public class HealthProcessor extends VirtualizedRegistry<DefaultSonarRecipe.Valu
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         HealthProcessorRecipes.instance().getRecipes().forEach(this::addBackup);
         HealthProcessorRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DefaultSonarRecipe.Value> streamRecipes() {
         return new SimpleObjectStream<>(HealthProcessorRecipes.instance().getRecipes())
                 .setRemover(this::remove);

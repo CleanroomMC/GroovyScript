@@ -51,7 +51,7 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('immersiveengineering:material:6')"))
+    @MethodDescription(example = @Example("item('immersiveengineering:material:6')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
@@ -72,12 +72,12 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BlastFurnaceRecipe.BlastFurnaceFuel> streamRecipes() {
         return new SimpleObjectStream<>(BlastFurnaceRecipe.blastFuels).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BlastFurnaceRecipe.blastFuels.forEach(this::addBackup);
         BlastFurnaceRecipe.blastFuels.clear();

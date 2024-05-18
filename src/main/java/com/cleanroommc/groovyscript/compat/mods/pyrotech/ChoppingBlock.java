@@ -26,7 +26,7 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:log2')"))
+    @MethodDescription(example = @Example("item('minecraft:log2')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing chopping block recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -41,7 +41,7 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:planks', 4)"))
+    @MethodDescription(example = @Example("item('minecraft:planks', 4)"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing chopping block recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")

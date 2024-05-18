@@ -42,7 +42,7 @@ public class StarchExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Valu
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:apple')"))
+    @MethodDescription(example = @Example("item('minecraft:apple')"))
     public boolean removeByInput(IIngredient input) {
         return StarchExtractorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -57,13 +57,13 @@ public class StarchExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Valu
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         StarchExtractorRecipes.instance().getRecipes().forEach(this::addBackup);
         StarchExtractorRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DefaultSonarRecipe.Value> streamRecipes() {
         return new SimpleObjectStream<>(StarchExtractorRecipes.instance().getRecipes())
                 .setRemover(this::remove);

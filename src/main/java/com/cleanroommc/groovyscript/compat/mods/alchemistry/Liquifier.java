@@ -51,7 +51,7 @@ public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example(value = "fluid('water')", commented = true))
+    @MethodDescription(example = @Example(value = "fluid('water')", commented = true))
     public boolean removeByOutput(FluidStack output) {
         return ModRecipes.INSTANCE.getLiquifierRecipes().removeIf(r -> {
             if (r.getOutput().isFluidEqual(output)) {
@@ -62,7 +62,7 @@ public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("element('water')"))
+    @MethodDescription(example = @Example("element('water')"))
     public boolean removeByInput(IIngredient input) {
         return ModRecipes.INSTANCE.getLiquifierRecipes().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -73,12 +73,12 @@ public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<LiquifierRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.INSTANCE.getLiquifierRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipes.INSTANCE.getLiquifierRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getLiquifierRecipes().clear();

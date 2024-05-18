@@ -55,7 +55,7 @@ public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('alchemistry:compound:1')"))
+    @MethodDescription(example = @Example("item('alchemistry:compound:1')"))
     public boolean removeByInput(IIngredient input) {
         return ModRecipes.INSTANCE.getDissolverRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInputs()) {
@@ -68,12 +68,12 @@ public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DissolverRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.INSTANCE.getDissolverRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipes.INSTANCE.getDissolverRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getDissolverRecipes().clear();

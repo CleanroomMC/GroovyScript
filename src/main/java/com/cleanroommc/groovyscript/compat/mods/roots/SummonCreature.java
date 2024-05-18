@@ -78,14 +78,14 @@ public class SummonCreature extends VirtualizedRegistry<Pair<ResourceLocation, S
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ModRecipesAccessor.getSummonCreatureEntries().forEach((key, value) -> addBackup(Pair.of(key, value)));
         ModRecipesAccessor.getSummonCreatureEntries().clear();
         ModRecipesAccessor.getSummonCreatureClasses().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, SummonCreatureRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipesAccessor.getSummonCreatureEntries().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));

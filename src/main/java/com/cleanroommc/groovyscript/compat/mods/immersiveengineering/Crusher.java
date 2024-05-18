@@ -50,7 +50,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:sand')"))
+    @MethodDescription(example = @Example("item('minecraft:sand')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
@@ -69,7 +69,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         list.forEach(this::addBackup);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('immersiveengineering:material:7')"))
+    @MethodDescription(example = @Example("item('immersiveengineering:material:7')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Crusher recipe")
@@ -88,12 +88,12 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         list.forEach(this::addBackup);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CrusherRecipe> streamRecipes() {
         return new SimpleObjectStream<>(CrusherRecipe.recipeList).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CrusherRecipe.recipeList.forEach(this::addBackup);
         CrusherRecipe.recipeList.clear();

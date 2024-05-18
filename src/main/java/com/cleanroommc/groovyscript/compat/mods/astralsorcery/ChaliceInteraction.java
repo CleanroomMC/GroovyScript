@@ -58,7 +58,7 @@ public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
         return getRegistry().removeIf(rec -> rec.equals(recipe));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public void removeByInput(Fluid fluid1, Fluid fluid2) {
         getRegistry().removeIf(rec -> {
             if ((rec.getComponent1().getFluid().equals(fluid1) && rec.getComponent2().getFluid().equals(fluid2)) ||
@@ -70,12 +70,12 @@ public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('water'), fluid('lava')"))
+    @MethodDescription(example = @Example("fluid('water'), fluid('lava')"))
     public void removeByInput(FluidStack fluid1, FluidStack fluid2) {
         this.removeByInput(fluid1.getFluid(), fluid2.getFluid());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public void removeByInput(Fluid fluid) {
         getRegistry().removeIf(rec -> {
             if ((rec.getComponent1().getFluid().equals(fluid) || rec.getComponent2().getFluid().equals(fluid))) {
@@ -86,12 +86,12 @@ public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example(value = "fluid('astralsorcery.liquidstarlight')", commented = true))
+    @MethodDescription(example = @Example(value = "fluid('astralsorcery.liquidstarlight')", commented = true))
     public void removeByInput(FluidStack fluid) {
         this.removeByInput(fluid.getFluid());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:ice')"))
+    @MethodDescription(example = @Example("item('minecraft:ice')"))
     public void removeByOutput(ItemStack output) {
         getRegistry().removeIf(rec -> {
             if (((LiquidInteractionAccessor) rec).getFluidInteractionAction().getOutputForMatching().isItemEqual(output)) {
@@ -102,13 +102,13 @@ public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<LiquidInteraction> streamRecipes() {
         return new SimpleObjectStream<>(getRegistry())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getRegistry().forEach(this::addBackup);
         getRegistry().clear();
