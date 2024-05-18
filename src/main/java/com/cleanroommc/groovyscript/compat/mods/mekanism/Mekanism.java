@@ -40,7 +40,7 @@ public class Mekanism extends ModPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.gameObjectHandlerBuilder("gas", GasStack.class)
+        container.objectMapper("gas", GasStack.class)
                 .parser((s, args) -> {
                     Gas gas = GasRegistry.getGas(s);
                     return gas == null ? Result.error() : Result.some(new GasStack(gas, 1));
@@ -48,7 +48,7 @@ public class Mekanism extends ModPropertyContainer {
                 .completerOfNamed(GasRegistry::getRegisteredGasses, Gas::getName)
                 .docOfType("gas stack")
                 .register();
-        container.gameObjectHandlerBuilder("infusionType", InfuseType.class) // infusion clashes with infusion field
+        container.objectMapper("infusionType", InfuseType.class) // infusion clashes with infusion field
                 .parser(IGameObjectParser.wrapStringGetter(InfuseRegistry::get, true))
                 .completerOfNames(InfuseRegistry.getInfuseMap()::keySet)
                 .docOfType("infusion type")

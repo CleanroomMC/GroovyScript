@@ -52,7 +52,7 @@ public interface IGroovyContainer {
     /**
      * Called before scripts are executed for the first time. Called right before {@link ModPropertyContainer#initialize()}.
      * Used to initialize things like expansions with {@link com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper ExpansionHelper} and
-     * game object handlers with {@link com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager GameObjectHandlerManager}.
+     * object mappers with {@link com.cleanroommc.groovyscript.mapper.ObjectMapperManager ObjectMapperManager}.
      *
      * @param container the created container for the compat mod
      */
@@ -62,6 +62,7 @@ public interface IGroovyContainer {
     /**
      * Returns the override priority. Defines how this plugin should behave when another container with the same mod id exists.
      * The return value should be as low as possible. Internal container always return {@link GroovyPlugin.Priority#NONE}.
+     *
      * @return the override priority
      * @see GroovyPlugin.Priority
      */

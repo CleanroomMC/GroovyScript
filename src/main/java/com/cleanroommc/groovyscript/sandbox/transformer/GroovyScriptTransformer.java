@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.GroovyFile;
+import com.cleanroommc.groovyscript.mapper.ObjectMapper;
+import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import org.codehaus.groovy.ast.ClassCodeExpressionTransformer;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
@@ -101,7 +101,7 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
 
     private Expression transformMethodCall(MethodCallExpression mce) {
         if (mce.isImplicitThis()) {
-            List<GameObjectHandler<?>> conflicts = GameObjectHandlerManager.getConflicts(mce.getMethodAsString());
+            List<ObjectMapper<?>> conflicts = ObjectMapperManager.getConflicts(mce.getMethodAsString());
             if (conflicts != null) {
                 List<String> suggestions = conflicts.stream()
                         .map(goh -> goh.getMod() == null ? goh.getName() : "mods." + goh.getMod().getModId() + "." + goh.getName())

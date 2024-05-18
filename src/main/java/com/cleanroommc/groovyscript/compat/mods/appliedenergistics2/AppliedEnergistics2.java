@@ -18,7 +18,7 @@ public class AppliedEnergistics2 extends ModPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.gameObjectHandlerBuilder("tunnel", TunnelType.class)
+        container.objectMapper("tunnel", TunnelType.class)
                 .parser(IGameObjectParser.wrapEnum(TunnelType.class, false))
                 .completerOfNamed(() -> Arrays.asList(TunnelType.values()), v -> v.name().toUpperCase(Locale.ROOT))
                 .docOfType("P2P tunnel type")

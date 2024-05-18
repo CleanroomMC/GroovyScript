@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.api;
 
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlers;
+import com.cleanroommc.groovyscript.mapper.ObjectMappers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -35,7 +35,7 @@ public interface IGameObjectParser<T> {
 
     static <T extends IForgeRegistryEntry<T>> IGameObjectParser<T> wrapForgeRegistry(IForgeRegistry<T> forgeRegistry) {
         return (s, args) -> {
-            Result<ResourceLocation> rl = GameObjectHandlers.parseResourceLocation(s, args);
+            Result<ResourceLocation> rl = ObjectMappers.parseResourceLocation(s, args);
             if (rl.hasError()) return Result.error(rl.getError());
             T value = forgeRegistry.getValue(rl.getValue());
             return value == null ? Result.error() : Result.some(value);

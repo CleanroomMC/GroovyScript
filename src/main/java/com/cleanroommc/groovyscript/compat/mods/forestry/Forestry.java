@@ -50,7 +50,7 @@ public class Forestry extends ModPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.gameObjectHandlerBuilder("species", AlleleBeeSpecies.class)
+        container.objectMapper("species", AlleleBeeSpecies.class)
                 .parser(Forestry::parseSpecies)
                 .completerOfNamed(() -> AlleleManager.alleleRegistry.getRegisteredAlleles().keySet(), s -> s.replace('.', ':')) // elements don't have names
                 .docOfType("allele bee species")

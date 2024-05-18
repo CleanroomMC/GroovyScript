@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlers;
+import com.cleanroommc.groovyscript.mapper.ObjectMappers;
 import epicsquid.roots.api.Herb;
 import epicsquid.roots.init.HerbRegistry;
 import epicsquid.roots.modifiers.CostType;
@@ -41,28 +42,28 @@ public class Roots extends ModPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.gameObjectHandlerBuilder("ritual", RitualBase.class)
+        container.objectMapper("ritual", RitualBase.class)
                 .parser(IGameObjectParser.wrapStringGetter(RitualRegistry::getRitual))
                 .completerOfNames(() -> RitualRegistry.ritualRegistry.keySet())
                 .docOfType("ritual")
                 .register();
-        container.gameObjectHandlerBuilder("herb", Herb.class)
+        container.objectMapper("herb", Herb.class)
                 .parser(IGameObjectParser.wrapStringGetter(HerbRegistry::getHerbByName))
                 .completerOfNames(HerbRegistry.registry::keySet)
                 .docOfType("herb")
                 .register();
-        container.gameObjectHandlerBuilder("cost", CostType.class)
+        container.objectMapper("cost", CostType.class)
                 .parser(IGameObjectParser.wrapEnum(CostType.class, false))
                 .completerOfEnum(CostType.class, false)
                 .docOfType("cost")
                 .register();
-        container.gameObjectHandlerBuilder("spell", SpellBase.class)
+        container.objectMapper("spell", SpellBase.class)
                 .parser(Roots::getSpell)
                 .completer(SpellRegistry.spellRegistry::keySet)
                 .defaultValueSup(() -> Result.some(FakeSpell.INSTANCE))  // crashes otherwise
                 .docOfType("spell")
                 .register();
-        container.gameObjectHandlerBuilder("modifier", Modifier.class)
+        container.objectMapper("modifier", Modifier.class)
                 .parser(Roots::getModifier)
                 .completerOfNamed(ModifierRegistry::getModifiers, v -> v.getRegistryName().toString())
                 .docOfType("modifier")
@@ -71,7 +72,7 @@ public class Roots extends ModPropertyContainer {
 
     private static Result<SpellBase> getSpell(String s, Object... args) {
         if (s.contains(":")) {
-            Result<ResourceLocation> rl = GameObjectHandlers.parseResourceLocation(s, args);
+            Result<ResourceLocation> rl = ObjectMappers.parseResourceLocation(s, args);
             if (rl.hasError()) return Result.error(rl.getError());
             SpellBase spell = SpellRegistry.getSpell(rl.getValue());
             return spell == null ? Result.error() : Result.some(spell);
@@ -84,7 +85,7 @@ public class Roots extends ModPropertyContainer {
     }
 
     private static Result<Modifier> getModifier(String s, Object... args) {
-        Result<ResourceLocation> rl = GameObjectHandlers.parseResourceLocation(s, args);
+        Result<ResourceLocation> rl = ObjectMappers.parseResourceLocation(s, args);
         if (rl.hasError()) return Result.error(rl.getError());
         Modifier modifier = ModifierRegistry.get(rl.getValue());
         return modifier == null ? Result.error() : Result.some(modifier);

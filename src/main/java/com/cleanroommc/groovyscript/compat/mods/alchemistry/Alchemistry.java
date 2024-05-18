@@ -7,7 +7,6 @@ import al132.alchemistry.chemistry.ElementRegistry;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import net.minecraft.item.ItemStack;
 
 public class Alchemistry extends ModPropertyContainer {
@@ -23,7 +22,7 @@ public class Alchemistry extends ModPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.gameObjectHandlerBuilder("element", ItemStack.class)
+        container.objectMapper("element", ItemStack.class)
                 .parser((s, args) -> {
                     String parsedName = s.trim().toLowerCase().replace(" ", "_");
                     ChemicalCompound compound = CompoundRegistry.INSTANCE.get(parsedName);

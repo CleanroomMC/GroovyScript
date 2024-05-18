@@ -19,8 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.mapper.ObjectMapper;
+import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
@@ -119,7 +119,7 @@ public class CompletionProvider {
         if (node.getType().getTypeClass() == String.class) {
             ASTNode parentParent = astContext.getVisitor().getParent(parent);
             if (parentParent instanceof MethodCallExpression expr && expr.getArguments() instanceof ArgumentListExpression args && !args.getExpressions().isEmpty()) {
-                GameObjectHandler<?> goh = GroovyASTUtils.getGohOfNode(expr, astContext);
+                ObjectMapper<?> goh = GroovyASTUtils.getGohOfNode(expr, astContext);
                 if (goh != null && goh.getCompleter() != null) {
                     int index = -1;
                     for (int i = 0; i < args.getExpressions().size(); i++) {
@@ -143,7 +143,7 @@ public class CompletionProvider {
 
     private static void populateItemsFromGameObjects(String memberNamePrefix,
                                                      Set<String> existingNames, Completions items) {
-        GameObjectHandlerManager.getGameObjectHandlers().stream()
+        ObjectMapperManager.getObjectMappers().stream()
                 .filter(handler -> {
                     if (handler.getName().startsWith(memberNamePrefix) && !existingNames.contains(handler.getName())) {
                         existingNames.add(handler.getName());
@@ -436,7 +436,7 @@ public class CompletionProvider {
                 return;
             }
             existingNames.add(variableName);
-            if (value instanceof GameObjectHandler<?> goh) {
+            if (value instanceof ObjectMapper<?> goh) {
                 for (MethodNode method : goh.getMethodNodes()) {
                     var item = CompletionItemFactory.createCompletion(method, goh.getName(), astContext);
                     item.setLabelDetails(getMethodNodeDetails(method));

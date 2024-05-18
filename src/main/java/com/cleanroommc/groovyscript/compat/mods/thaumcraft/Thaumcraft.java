@@ -34,12 +34,12 @@ public class Thaumcraft extends ModPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.gameObjectHandlerBuilder("aspect", AspectStack.class)
+        container.objectMapper("aspect", AspectStack.class)
                 .parser(IGameObjectParser.wrapStringGetter(Thaumcraft::getAspect, AspectStack::new))
                 .completerOfNames(thaumcraft.api.aspects.Aspect.aspects::keySet)
                 .docOfType("aspect stack")
                 .register();
-        container.gameObjectHandlerBuilder("crystal", ItemStack.class)
+        container.objectMapper("crystal", ItemStack.class)
                 .parser(IGameObjectParser.wrapStringGetter(Thaumcraft::getAspect, ThaumcraftApiHelper::makeCrystal))
                 .completerOfNames(thaumcraft.api.aspects.Aspect.aspects::keySet)
                 .defaultValue(() -> ItemStack.EMPTY)

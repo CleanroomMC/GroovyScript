@@ -1,22 +1,18 @@
-package com.cleanroommc.groovyscript.gameobjects;
+package com.cleanroommc.groovyscript.mapper;
 
-import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.sandbox.expand.IDocumented;
 import groovy.lang.MetaMethod;
 import org.codehaus.groovy.reflection.CachedClass;
 import org.codehaus.groovy.reflection.ReflectionCache;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.reflect.Modifier;
 
-@Deprecated
-@ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
-public class GohMetaMethod extends MetaMethod implements IDocumented {
+public class ObjectMapperMetaMethod extends MetaMethod implements IDocumented {
 
     private final ObjectMapper<?> closure;
     private final Class<?> owner;
 
-    GohMetaMethod(ObjectMapper<?> closure, Class<?>[] nativeParamTypes, Class<?> owner) {
+    ObjectMapperMetaMethod(ObjectMapper<?> closure, Class<?>[] nativeParamTypes, Class<?> owner) {
         super(nativeParamTypes);
         this.closure = closure;
         this.nativeParamTypes = nativeParamTypes;

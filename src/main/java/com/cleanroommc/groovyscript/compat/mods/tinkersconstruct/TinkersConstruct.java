@@ -23,17 +23,17 @@ public class TinkersConstruct extends ModPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.gameObjectHandlerBuilder("toolMaterial", Material.class)
+        container.objectMapper("toolMaterial", Material.class)
                 .parser(IGameObjectParser.wrapStringGetter(TinkerRegistryAccessor.getMaterials()::get))
                 .completerOfNames(TinkerRegistryAccessor.getMaterials()::keySet)
                 .docOfType("tool material")
                 .register();
-        container.gameObjectHandlerBuilder("toolTrait", ITrait.class)
+        container.objectMapper("toolTrait", ITrait.class)
                 .parser(IGameObjectParser.wrapStringGetter(TinkerRegistryAccessor.getTraits()::get))
                 .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet, v -> v.endsWith("_armor") ? null : v) // only suggest non armor traits
                 .docOfType("tool trait")
                 .register();
-        container.gameObjectHandlerBuilder("armorTrait", ITrait.class)
+        container.objectMapper("armorTrait", ITrait.class)
                 .parser(IGameObjectParser.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")))
                 .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet,
                                   v -> v.endsWith("_armor") ? v.substring(0, v.length() - 6) : null) // only suggest armor traits

@@ -4,7 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IGroovyContainer;
 import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.IRegistrar;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
+import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.NonExtendable
@@ -45,7 +45,7 @@ public abstract class GroovyContainer<T extends ModPropertyContainer> implements
         }
     }
 
-    public <V> GameObjectHandler.Builder<V> gameObjectHandlerBuilder(String name, Class<V> returnType) {
-        return new GameObjectHandler.Builder<>(name, returnType).mod(this);
+    public <V> ObjectMapper.Builder<V> objectMapper(String name, Class<V> returnType) {
+        return new ObjectMapper.Builder<>(name, returnType).mod(this);
     }
 }

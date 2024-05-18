@@ -36,7 +36,7 @@ public class AstralSorcery extends ModPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.gameObjectHandlerBuilder("constellation", IConstellation.class)
+        container.objectMapper("constellation", IConstellation.class)
                 .parser((s, args) -> {
                     for (IConstellation constellation : ConstellationRegistryAccessor.getConstellationList()) {
                         if (constellation.getSimpleName().equalsIgnoreCase(s)) {

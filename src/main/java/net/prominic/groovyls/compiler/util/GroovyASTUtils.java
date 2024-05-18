@@ -20,9 +20,9 @@
 package net.prominic.groovyls.compiler.util;
 
 import com.cleanroommc.groovyscript.api.Hidden;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
+import com.cleanroommc.groovyscript.mapper.ObjectMapper;
+import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.sandbox.expand.IDocumented;
 import groovy.lang.*;
 import groovy.lang.groovydoc.Groovydoc;
@@ -245,7 +245,7 @@ public class GroovyASTUtils {
             return expression.getType();
         } else if (node instanceof MethodCallExpression) {
             MethodCallExpression expression = (MethodCallExpression) node;
-            GameObjectHandler<?> goh = getGohOfNode(expression, context);
+            ObjectMapper<?> goh = getGohOfNode(expression, context);
             if (goh != null) {
                 return ClassHelper.makeCached(goh.getReturnType());
             }
@@ -308,7 +308,7 @@ public class GroovyASTUtils {
             List<MethodNode> mn = new ArrayList<>();
             if (methodCallExpr.isImplicitThis()) {
                 Object o = context.getLanguageServerContext().getSandbox().getBindings().get(node.getMethodAsString());
-                if (o instanceof GameObjectHandler<?> goh) {
+                if (o instanceof ObjectMapper<?> goh) {
                     mn.addAll(goh.getMethodNodes());
                 } else if (o instanceof Closure<?> closure) {
                     mn.add(methodNodeOfClosure(node.getMethodAsString(), closure));
@@ -438,13 +438,13 @@ public class GroovyASTUtils {
         return method;
     }
 
-    public static GameObjectHandler<?> getGohOfNode(MethodCallExpression expr, ASTContext context) {
+    public static ObjectMapper<?> getGohOfNode(MethodCallExpression expr, ASTContext context) {
         if (expr.isImplicitThis()) {
-            return GameObjectHandlerManager.getGameObjectHandler(expr.getMethodAsString());
+            return ObjectMapperManager.getObjectMapper(expr.getMethodAsString());
         }
         ClassNode type = getTypeOfNode(expr.getObjectExpression(), context);
         if (type != null) {
-            return GameObjectHandlerManager.getGameObjectHandler(type.getTypeClass(), expr.getMethodAsString());
+            return ObjectMapperManager.getObjectMapper(type.getTypeClass(), expr.getMethodAsString());
         }
         return null;
     }
