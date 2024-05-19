@@ -79,7 +79,7 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getSmelteryFuels().forEach((fluid, duration) -> addBackup(new SmelteryFuelRecipe(fluid, duration)));
-        TinkerRegistryAccessor.getSmelteryFuels().forEach(TinkerRegistryAccessor.getSmelteryFuels()::remove);
+        TinkerRegistryAccessor.getSmelteryFuels().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)

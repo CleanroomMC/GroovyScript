@@ -99,7 +99,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getDryingRegistry().forEach(this::addBackup);
-        TinkerRegistryAccessor.getDryingRegistry().forEach(TinkerRegistryAccessor.getDryingRegistry()::remove);
+        TinkerRegistryAccessor.getDryingRegistry().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)

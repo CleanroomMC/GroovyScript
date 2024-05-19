@@ -97,7 +97,7 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getTableCastRegistry().forEach(this::addBackup);
-        TinkerRegistryAccessor.getTableCastRegistry().forEach(TinkerRegistryAccessor.getTableCastRegistry()::remove);
+        TinkerRegistryAccessor.getTableCastRegistry().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)

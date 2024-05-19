@@ -98,7 +98,7 @@ public class CastingBasin extends VirtualizedRegistry<ICastingRecipe> {
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getBasinCastRegistry().forEach(this::addBackup);
-        TinkerRegistryAccessor.getBasinCastRegistry().forEach(TinkerRegistryAccessor.getBasinCastRegistry()::remove);
+        TinkerRegistryAccessor.getBasinCastRegistry().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)

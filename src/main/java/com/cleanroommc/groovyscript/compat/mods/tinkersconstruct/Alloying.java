@@ -99,7 +99,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getAlloyRegistry().forEach(this::addBackup);
-        TinkerRegistryAccessor.getAlloyRegistry().forEach(TinkerRegistryAccessor.getAlloyRegistry()::remove);
+        TinkerRegistryAccessor.getAlloyRegistry().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
