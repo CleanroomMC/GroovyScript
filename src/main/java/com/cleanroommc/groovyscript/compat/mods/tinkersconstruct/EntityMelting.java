@@ -56,7 +56,7 @@ public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public boolean removeByInput(EntityEntry entity) {
         ResourceLocation name = entity.getRegistryName();
         if (TinkerRegistryAccessor.getEntityMeltingRegistry().entrySet().removeIf(entry -> {
@@ -72,7 +72,7 @@ public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
+    @MethodDescription
     public boolean removeByOutput(FluidStack output) {
         if (TinkerRegistryAccessor.getEntityMeltingRegistry().entrySet().removeIf(entry -> {
             boolean found = entry.getValue().isFluidEqual(output);
@@ -87,7 +87,7 @@ public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getEntityMeltingRegistry().forEach((name, result) -> addBackup(new EntityMeltingRecipe(name, result)));
         TinkerRegistryAccessor.getEntityMeltingRegistry().clear();

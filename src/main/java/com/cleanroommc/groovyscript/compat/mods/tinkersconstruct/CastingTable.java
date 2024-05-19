@@ -49,7 +49,7 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:gold_ingot')"))
+    @MethodDescription(example = @Example("item('minecraft:gold_ingot')"))
     public boolean removeByOutput(ItemStack output) {
         if (TinkerRegistryAccessor.getTableCastRegistry().removeIf(recipe -> {
             boolean found = recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER).isItemEqual(output);
@@ -64,7 +64,7 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('iron')"))
+    @MethodDescription(example = @Example("fluid('iron')"))
     public boolean removeByInput(FluidStack input) {
         if (TinkerRegistryAccessor.getTableCastRegistry().removeIf(recipe -> {
             boolean found = recipe.getFluid(ItemStack.EMPTY, input.getFluid()).isFluidEqual(input);
@@ -94,13 +94,13 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getTableCastRegistry().forEach(this::addBackup);
         TinkerRegistryAccessor.getTableCastRegistry().forEach(TinkerRegistryAccessor.getTableCastRegistry()::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ICastingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getTableCastRegistry()).setRemover(this::remove);
     }

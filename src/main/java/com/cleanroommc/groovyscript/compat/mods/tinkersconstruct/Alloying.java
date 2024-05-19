@@ -49,7 +49,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('pigiron')"))
+    @MethodDescription(example = @Example("fluid('pigiron')"))
     public boolean removeByOutput(FluidStack output) {
         if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
             boolean found = recipe.getResult().isFluidEqual(output);
@@ -64,7 +64,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('cobalt')*2,fluid('ardite')*2"))
+    @MethodDescription(example = @Example("fluid('cobalt')*2,fluid('ardite')*2"))
     public boolean removeByInputs(FluidStack... inputs) {
         List<FluidStack> list = Arrays.asList(inputs);
         if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
@@ -96,13 +96,13 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getAlloyRegistry().forEach(this::addBackup);
         TinkerRegistryAccessor.getAlloyRegistry().forEach(TinkerRegistryAccessor.getAlloyRegistry()::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<AlloyRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getAlloyRegistry()).setRemover(this::remove);
     }

@@ -48,7 +48,7 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
         return recipe;
     }
 
-    @MethodDescription()
+    @MethodDescription
     public boolean removeFuel(FluidStack fluid) {
         if (TinkerRegistryAccessor.getSmelteryFuels().entrySet().removeIf(entry -> {
             boolean found = entry.getKey().isFluidEqual(fluid);
@@ -76,13 +76,13 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getSmelteryFuels().forEach((fluid, duration) -> addBackup(new SmelteryFuelRecipe(fluid, duration)));
         TinkerRegistryAccessor.getSmelteryFuels().forEach(TinkerRegistryAccessor.getSmelteryFuels()::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<SmelteryFuelRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
     }

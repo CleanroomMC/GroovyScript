@@ -49,7 +49,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public boolean removeByInput(IIngredient input) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
         if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
@@ -65,7 +65,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
+    @MethodDescription
     public boolean removeByOutput(ItemStack output) {
         if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
             boolean found = ItemStack.areItemStacksEqual(recipe.output, output);
@@ -80,7 +80,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInputAndOutput")
+    @MethodDescription
     public boolean removeByInputAndOutput(IIngredient input, ItemStack output) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
         if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
@@ -96,13 +96,13 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getDryingRegistry().forEach(this::addBackup);
         TinkerRegistryAccessor.getDryingRegistry().forEach(TinkerRegistryAccessor.getDryingRegistry()::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DryingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getDryingRegistry()).setRemover(this::remove);
     }
