@@ -42,7 +42,7 @@ public class ProcessingChamber extends VirtualizedRegistry<CalculatorRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('calculator:circuitdamaged:4')"))
+    @MethodDescription(example = @Example("item('calculator:circuitdamaged:4')"))
     public boolean removeByInput(IIngredient input) {
         return ProcessingChamberRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
@@ -57,7 +57,7 @@ public class ProcessingChamber extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('calculator:circuitboard:1')"))
+    @MethodDescription(example = @Example("item('calculator:circuitboard:1')"))
     public boolean removeByOutput(IIngredient output) {
         return ProcessingChamberRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
@@ -72,13 +72,13 @@ public class ProcessingChamber extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ProcessingChamberRecipes.instance().getRecipes().forEach(this::addBackup);
         ProcessingChamberRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ProcessingChamberRecipes.instance().getRecipes())
                 .setRemover(this::remove);

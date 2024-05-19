@@ -85,13 +85,13 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IHopperFilter> streamRecipes() {
         return new SimpleObjectStream<>(((HopperFiltersAccessor) BWRegistry.HOPPER_FILTERS).getFILTERS().values())
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((HopperFiltersAccessor) BWRegistry.HOPPER_FILTERS).getFILTERS().values().forEach(this::addBackup);
         ((HopperFiltersAccessor) BWRegistry.HOPPER_FILTERS).getFILTERS().values().clear();

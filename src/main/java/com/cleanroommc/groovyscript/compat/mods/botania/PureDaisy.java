@@ -52,7 +52,7 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         return BotaniaAPI.pureDaisyRecipes.remove(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("blockstate('botania:livingrock')"))
+    @MethodDescription(example = @Example("blockstate('botania:livingrock')"))
     public boolean removeByOutput(IBlockState output) {
         if (BotaniaAPI.pureDaisyRecipes.removeIf(recipe -> {
             boolean found = recipe.getOutputState().equals(output);
@@ -67,7 +67,7 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public boolean removeByInput(String input) {
         if (BotaniaAPI.pureDaisyRecipes.removeIf(recipe -> {
             boolean found = recipe.getInput() instanceof String && recipe.getInput().equals(input);
@@ -82,12 +82,12 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('logWood')"))
+    @MethodDescription(example = @Example("ore('logWood')"))
     public boolean removeByInput(OreDictIngredient input) {
         return removeByInput(input.getOreDict());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("blockstate('minecraft:water')"))
+    @MethodDescription(example = @Example("blockstate('minecraft:water')"))
     public boolean removeByInput(IBlockState input) {
         if (BotaniaAPI.pureDaisyRecipes.removeIf(recipe -> {
             boolean found = (recipe.getInput() instanceof IBlockState && recipe.getInput().equals(input)) || (recipe.getInput() instanceof Block && recipe.getInput() == input.getBlock());
@@ -102,18 +102,18 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public boolean removeByInput(Block input) {
         return removeByInput(input.getDefaultState());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BotaniaAPI.pureDaisyRecipes.forEach(this::addBackup);
         BotaniaAPI.pureDaisyRecipes.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipePureDaisy> streamRecipes() {
         return new SimpleObjectStream<>(BotaniaAPI.pureDaisyRecipes).setRemover(this::remove);
     }

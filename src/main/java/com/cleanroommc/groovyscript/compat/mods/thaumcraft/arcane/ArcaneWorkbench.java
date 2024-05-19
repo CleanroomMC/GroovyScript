@@ -32,7 +32,7 @@ public class ArcaneWorkbench extends NamedRegistry {
         ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('thaumcraft:mechanism_simple')"))
+    @MethodDescription(example = @Example("item('thaumcraft:mechanism_simple')"))
     public void removeByOutput(IIngredient output) {
         VanillaModule.crafting.removeByOutput(output, true);
     }
@@ -50,7 +50,7 @@ public class ArcaneWorkbench extends NamedRegistry {
         return new ArcaneRecipeBuilder.Shapeless();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         List<IArcaneRecipe> recipes = ForgeRegistries.RECIPES.getValuesCollection().stream()
                 .filter(recipe -> recipe instanceof IArcaneRecipe)

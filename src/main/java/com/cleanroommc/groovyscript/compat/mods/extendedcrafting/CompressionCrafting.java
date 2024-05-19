@@ -47,7 +47,7 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         return add(new CompressorRecipe(output, input.toMcIngredient(), inputCount, catalyst.toMcIngredient(), consumeCatalyst, powerCost, powerRate));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('extendedcrafting:singularity:6')"))
+    @MethodDescription(example = @Example("item('extendedcrafting:singularity:6')"))
     public boolean removeByOutput(ItemStack output) {
         return CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> {
             if (r.getOutput().equals(output)) {
@@ -58,7 +58,7 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByCatalyst", example = @Example("item('extendedcrafting:material:11')"))
+    @MethodDescription(example = @Example("item('extendedcrafting:material:11')"))
     public boolean removeByCatalyst(IIngredient catalyst) {
         return CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> {
             if (r.getCatalyst().equals(catalyst.toMcIngredient())) {
@@ -69,7 +69,7 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:gold_ingot')"))
+    @MethodDescription(example = @Example("item('minecraft:gold_ingot')"))
     public boolean removeByInput(IIngredient input) {
         return CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> {
             if (r.getInput().equals(input.toMcIngredient())) {
@@ -88,12 +88,12 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CompressorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(CompressorRecipeManager.getInstance().getRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CompressorRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         CompressorRecipeManager.getInstance().getRecipes().clear();

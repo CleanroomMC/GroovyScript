@@ -37,7 +37,7 @@ public class CannonAmmo extends VirtualizedRegistry<Pair<ItemStack, Double>> {
         ((MatterCannonAmmoRegistryAccessor) AEApi.instance().registries().matterCannon()).getDamageModifiers().entrySet().removeIf(x -> ItemStack.areItemStacksEqual(x.getKey(), item));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ((MatterCannonAmmoRegistryAccessor) AEApi.instance().registries().matterCannon()).getDamageModifiers().forEach((item, value) -> addBackup(Pair.of(item, value)));
         ((MatterCannonAmmoRegistryAccessor) AEApi.instance().registries().matterCannon()).getDamageModifiers().clear();

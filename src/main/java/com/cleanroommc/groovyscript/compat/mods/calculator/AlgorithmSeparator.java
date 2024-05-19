@@ -42,7 +42,7 @@ public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('calculator:tanzaniteleaves')"))
+    @MethodDescription(example = @Example("item('calculator:tanzaniteleaves')"))
     public boolean removeByInput(IIngredient input) {
         return AlgorithmSeparatorRecipes.instance().getRecipes().removeIf(recipe -> {
             for (ISonarRecipeObject recipeInput : recipe.inputs()) {
@@ -57,7 +57,7 @@ public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('calculator:weakeneddiamond')"))
+    @MethodDescription(example = @Example("item('calculator:weakeneddiamond')"))
     public boolean removeByOutput(IIngredient output) {
         return AlgorithmSeparatorRecipes.instance().getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
@@ -72,13 +72,13 @@ public class AlgorithmSeparator extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         AlgorithmSeparatorRecipes.instance().getRecipes().forEach(this::addBackup);
         AlgorithmSeparatorRecipes.instance().getRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AlgorithmSeparatorRecipes.instance().getRecipes())
                 .setRemover(this::remove);

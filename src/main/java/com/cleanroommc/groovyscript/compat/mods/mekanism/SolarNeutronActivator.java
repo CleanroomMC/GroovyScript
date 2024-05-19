@@ -37,7 +37,7 @@ public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeut
         return recipe;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("gas('lithium')"))
+    @MethodDescription(example = @Example("gas('lithium')"))
     public boolean removeByInput(GasStack input) {
         GroovyLog.Msg msg = GroovyLog.msg("Error removing Mekanism Solar Neutron Activator recipe").error();
         msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");

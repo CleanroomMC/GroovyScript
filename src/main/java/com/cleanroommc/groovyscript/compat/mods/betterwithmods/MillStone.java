@@ -54,7 +54,7 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:blaze_powder')"))
+    @MethodDescription(example = @Example("item('minecraft:blaze_powder')"))
     public boolean removeByOutput(IIngredient output) {
         return BWRegistry.MILLSTONE.getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
@@ -67,7 +67,7 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:netherrack')"))
+    @MethodDescription(example = @Example("item('minecraft:netherrack')"))
     public boolean removeByInput(IIngredient input) {
         return BWRegistry.MILLSTONE.getRecipes().removeIf(r -> {
             for (Ingredient ingredient : r.getInputs()) {
@@ -82,12 +82,12 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MillRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BWRegistry.MILLSTONE.getRecipes()).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BWRegistry.MILLSTONE.getRecipes().forEach(this::addBackup);
         BWRegistry.MILLSTONE.getRecipes().clear();

@@ -35,7 +35,7 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
         add(accessory);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('aether_legacy:iron_pendant')"))
+    @MethodDescription(example = @Example("item('aether_legacy:iron_pendant')"))
     public void removeByInput(IIngredient input) {
         this.getRegistry().getValuesCollection().forEach(accessory -> {
             if (input.test(accessory.getAccessoryStack())) {

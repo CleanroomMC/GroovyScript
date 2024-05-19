@@ -62,7 +62,7 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
         return removed;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:gold_nugget')"))
+    @MethodDescription(example = @Example("item('minecraft:gold_nugget')"))
     public void removeByOutput(ItemStack output) {
         List<ThaumcraftApi.SmeltBonus> remove = new ArrayList<>();
         for (ThaumcraftApi.SmeltBonus bonus : CommonInternals.smeltingBonus) {
@@ -74,12 +74,12 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
         CommonInternals.smeltingBonus.removeAll(remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ThaumcraftApi.SmeltBonus> streamRecipes() {
         return new SimpleObjectStream<>(CommonInternals.smeltingBonus).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         CommonInternals.smeltingBonus.forEach(this::addBackup);
         CommonInternals.smeltingBonus.clear();

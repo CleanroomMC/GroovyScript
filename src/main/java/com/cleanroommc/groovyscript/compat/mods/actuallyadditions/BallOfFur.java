@@ -46,7 +46,7 @@ public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:feather')"))
+    @MethodDescription(example = @Example("item('minecraft:feather')"))
     public boolean removeByOutput(ItemStack output) {
         return ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.removeIf(recipe -> {
             boolean found = ItemStack.areItemStacksEqual(recipe.returnItem, output);
@@ -57,13 +57,13 @@ public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.forEach(this::addBackup);
         ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BallOfFurReturn> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS)
                 .setRemover(this::remove);

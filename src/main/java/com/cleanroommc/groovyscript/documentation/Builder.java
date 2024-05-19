@@ -263,14 +263,20 @@ public class Builder {
 
                     out.append("\n\n");
 
-                    out.append(new CodeBlockBuilder()
-                                       .line(methods.getOrDefault(fieldDocumentation.getField().getName(), new ArrayList<>()).stream()
-                                                     .sorted()
-                                                     .map(RecipeBuilderMethod::shortMethodSignature)
-                                                     .distinct()
-                                                     .collect(Collectors.toList()))
-                                       .indentation(1)
-                                       .toString());
+                    List<RecipeBuilderMethod> recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
+
+                    if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
+                        GroovyLog.get().debug("Couldn't find any recipe builder methods for {} in {}", fieldDocumentation.getField().getName(), reference);
+                    } else {
+                        out.append(new CodeBlockBuilder()
+                                           .line(recipeBuilderMethods.stream()
+                                                         .sorted()
+                                                         .map(RecipeBuilderMethod::shortMethodSignature)
+                                                         .distinct()
+                                                         .collect(Collectors.toList()))
+                                           .indentation(1)
+                                           .toString());
+                    }
                 });
 
         for (Method registerMethod : registrationMethods) {
@@ -288,13 +294,22 @@ public class Builder {
     private String createBuilder(Example example) {
         StringBuilder out = new StringBuilder();
 
+        if (example.commented()) out.append("/*");
+
         if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
 
-        out.append(reference).append(".").append(builderMethod.getName()).append("()").append("\n");
+        out.append(reference).append(".").append(builderMethod.getName()).append("()");
+
+        if (!example.value().isEmpty() || !registrationMethods.isEmpty()) out.append("\n");
 
         out.append(String.join("", getOutputs(generateParts(example.value()))));
 
-        if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName())).append("\n");
+        if (registrationMethods.isEmpty()) GroovyLog.get().debug("Couldn't find any registration methods for {}", builderMethod.getName());
+        else out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName()));
+
+        if (example.commented()) out.append("*/");
+
+        out.append("\n");
 
         return out.toString();
     }

@@ -58,7 +58,7 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('evilcraft:dark_gem')"))
+    @MethodDescription(example = @Example("item('evilcraft:dark_gem')"))
     public boolean removeByInput(ItemStack input) {
         return org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
@@ -69,7 +69,7 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:leather')"))
+    @MethodDescription(example = @Example("item('minecraft:leather')"))
     public boolean removeByOutput(ItemStack input) {
         return org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
             if (r.getOutput().getIngredient().test(input)) {
@@ -80,13 +80,13 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
         org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> streamRecipes() {
         return new SimpleObjectStream<>(org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);

@@ -51,7 +51,7 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('immersiveengineering:metal:8')"))
+    @MethodDescription(example = @Example("item('immersiveengineering:metal:8')"))
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
@@ -71,7 +71,7 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         list.forEach(this::addBackup);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:iron_block')"))
+    @MethodDescription(example = @Example("item('minecraft:iron_block')"))
     public void removeByInput(ItemStack input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Immersive Engineering Blast Furnace recipe")
@@ -91,12 +91,12 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<BlastFurnaceRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BlastFurnaceRecipe.recipeList).setRemover(this::remove);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         BlastFurnaceRecipe.recipeList.forEach(this::addBackup);
         BlastFurnaceRecipe.recipeList.clear();

@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.inspirations.InspirationsRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import knightminer.inspirations.library.InspirationsRegistry;
 import net.minecraft.block.Block;
@@ -14,34 +15,14 @@ import net.minecraft.block.state.IBlockState;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RegistryDescription
 public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockState>> {
 
-    private Collection<Pair<Block, IBlockState>> blockBackup;
-    private Collection<Pair<Block, IBlockState>> blockScripted;
-    private Collection<Material> materialBackup;
-
-    private void addBlockBackup(Pair<Block, IBlockState> recipe) {
-        if (blockScripted.stream().anyMatch(r -> r == recipe)) return;
-        blockBackup.add(recipe);
-    }
-
-    public void addBlockScripted(Pair<Block, IBlockState> recipe) {
-        blockScripted.add(recipe);
-    }
-
-    public AnvilSmashing() {
-        super();
-        blockBackup = new ArrayList<>();
-        blockScripted = new ArrayList<>();
-        materialBackup = new ArrayList<>();
-    }
-
+    private final AbstractReloadableStorage<Pair<Block, IBlockState>> blockStorage = new AbstractReloadableStorage<>();
+    private final AbstractReloadableStorage<Material> materialStorage = new AbstractReloadableStorage<>();
 
     @RecipeBuilderDescription(example = {
             @Example(".input(blockstate('minecraft:diamond_block')).output(blockstate('minecraft:clay'))"),
@@ -55,12 +36,9 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
     public void onReload() {
         removeScripted().forEach(pair -> InspirationsRegistryAccessor.getAnvilSmashing().remove(pair.getKey(), pair.getValue()));
         restoreFromBackup().forEach(pair -> InspirationsRegistryAccessor.getAnvilSmashing().put(pair.getKey(), pair.getValue()));
-        blockBackup.forEach(pair -> InspirationsRegistryAccessor.getAnvilSmashingBlocks().remove(pair.getKey(), pair.getValue()));
-        blockScripted.forEach(pair -> InspirationsRegistryAccessor.getAnvilSmashingBlocks().put(pair.getKey(), pair.getValue()));
-        materialBackup.forEach(mat -> InspirationsRegistryAccessor.getAnvilBreaking().add(mat));
-        blockBackup = new ArrayList<>();
-        blockScripted = new ArrayList<>();
-        materialBackup = new ArrayList<>();
+        blockStorage.removeScripted().forEach(pair -> InspirationsRegistryAccessor.getAnvilSmashingBlocks().remove(pair.getKey(), pair.getValue()));
+        blockStorage.restoreFromBackup().forEach(pair -> InspirationsRegistryAccessor.getAnvilSmashingBlocks().put(pair.getKey(), pair.getValue()));
+        materialStorage.restoreFromBackup().forEach(mat -> InspirationsRegistryAccessor.getAnvilBreaking().add(mat));
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -71,7 +49,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(Block input, IBlockState output) {
-        addBlockScripted(Pair.of(input, output));
+        blockStorage.addScripted(Pair.of(input, output));
         InspirationsRegistry.registerAnvilSmashing(input, output);
     }
 
@@ -86,7 +64,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
     @MethodDescription
     public boolean remove(Block input, IBlockState output) {
         if (!InspirationsRegistryAccessor.getAnvilSmashingBlocks().get(input).equals(output)) return false;
-        addBlockBackup(Pair.of(input, output));
+        blockStorage.addBackup(Pair.of(input, output));
         InspirationsRegistryAccessor.getAnvilSmashingBlocks().remove(input, output);
         return true;
     }
@@ -94,7 +72,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
     @MethodDescription(description = "groovyscript.wiki.inspirations.anvil_smashing.remove_material")
     public boolean remove(Material material) {
         if (!InspirationsRegistryAccessor.getAnvilBreaking().contains(material)) return false;
-        materialBackup.add(material);
+        materialStorage.addBackup(material);
         InspirationsRegistryAccessor.getAnvilBreaking().remove(material);
         return true;
     }
@@ -114,7 +92,7 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         for (Map.Entry<Block, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashingBlocks().entrySet().stream()
                 .filter(r -> r.getKey().equals(input))
                 .collect(Collectors.toList())) {
-            addBlockBackup(Pair.of(recipe.getKey(), recipe.getValue()));
+            blockStorage.addBackup(Pair.of(recipe.getKey(), recipe.getValue()));
             InspirationsRegistryAccessor.getAnvilSmashingBlocks().remove(recipe.getKey(), recipe.getValue());
         }
     }
@@ -130,22 +108,22 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         for (Map.Entry<Block, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashingBlocks().entrySet().stream()
                 .filter(r -> r.getValue().equals(output))
                 .collect(Collectors.toList())) {
-            addBlockBackup(Pair.of(recipe.getKey(), recipe.getValue()));
+            blockStorage.addBackup(Pair.of(recipe.getKey(), recipe.getValue()));
             InspirationsRegistryAccessor.getAnvilSmashingBlocks().remove(recipe.getKey(), recipe.getValue());
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         InspirationsRegistryAccessor.getAnvilSmashing().forEach((a, b) -> addBackup(Pair.of(a, b)));
         InspirationsRegistryAccessor.getAnvilSmashing().clear();
-        InspirationsRegistryAccessor.getAnvilSmashingBlocks().forEach((a, b) -> addBlockBackup(Pair.of(a, b)));
+        InspirationsRegistryAccessor.getAnvilSmashingBlocks().forEach((a, b) -> blockStorage.addBackup(Pair.of(a, b)));
         InspirationsRegistryAccessor.getAnvilSmashingBlocks().clear();
-        materialBackup.addAll(InspirationsRegistryAccessor.getAnvilBreaking());
+        InspirationsRegistryAccessor.getAnvilBreaking().forEach(materialStorage::addBackup);
         InspirationsRegistryAccessor.getAnvilBreaking().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<IBlockState, IBlockState>> streamRecipes() {
         return new SimpleObjectStream<>(InspirationsRegistryAccessor.getAnvilSmashing().entrySet())
                 .setRemover(r -> remove(r.getKey(), r.getValue()));

@@ -56,7 +56,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:bone')"))
+    @MethodDescription(example = @Example("item('minecraft:bone')"))
     public boolean removeByInput(IIngredient input) {
         return ActuallyAdditionsAPI.CRUSHER_RECIPES.removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
@@ -67,7 +67,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:sugar')"))
+    @MethodDescription(example = @Example("item('minecraft:sugar')"))
     public boolean removeByOutput(ItemStack output) {
         return ActuallyAdditionsAPI.CRUSHER_RECIPES.removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutputOne(), output);
@@ -78,13 +78,13 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ActuallyAdditionsAPI.CRUSHER_RECIPES.forEach(this::addBackup);
         ActuallyAdditionsAPI.CRUSHER_RECIPES.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CrusherRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.CRUSHER_RECIPES)
                 .setRemover(this::remove);

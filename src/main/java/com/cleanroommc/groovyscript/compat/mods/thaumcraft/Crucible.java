@@ -81,7 +81,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:gunpowder')"))
+    @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public void removeByOutput(IIngredient output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Thaumcraft Crucible recipe")
@@ -110,14 +110,14 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, IThaumcraftRecipe>> streamRecipes() {
         List<Map.Entry<ResourceLocation, IThaumcraftRecipe>> recipes = ThaumcraftApi.getCraftingRecipes().entrySet().stream().filter(x -> x.getValue() instanceof CrucibleRecipe).collect(Collectors.toList());
         return new SimpleObjectStream<>(recipes)
                 .setRemover(x -> remove((CrucibleRecipe) x));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         List<Map.Entry<ResourceLocation, IThaumcraftRecipe>> recipes = ThaumcraftApi.getCraftingRecipes().entrySet().stream().filter(x -> x.getValue() instanceof CrucibleRecipe).collect(Collectors.toList());
         for (Map.Entry<ResourceLocation, IThaumcraftRecipe> recipe : recipes) {

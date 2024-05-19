@@ -76,13 +76,13 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         getFeyCraftingRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
         getFeyCraftingRecipes().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, FeyCraftingRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(getFeyCraftingRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
