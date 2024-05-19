@@ -17,7 +17,7 @@ import slimeknights.tconstruct.library.DryingRecipe;
 @RegistryDescription
 public class Drying extends VirtualizedRegistry<DryingRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:dirt')).time(45).register()"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:dirt')).time(45)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -130,6 +130,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable DryingRecipe register() {
             if (!validate()) return null;
             DryingRecipe recipe = new DryingRecipe(MeltingRecipeBuilder.recipeMatchFromIngredient(input.get(0)), output.get(0), time);

@@ -20,7 +20,7 @@ import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 @RegistryDescription
 public class CastingBasin extends VirtualizedRegistry<ICastingRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).output(item('minecraft:dirt')).cast(item('minecraft:cobblestone')).coolingTime(40).register()"))
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).output(item('minecraft:dirt')).cast(item('minecraft:cobblestone')).coolingTime(40)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -150,6 +150,7 @@ public class CastingBasin extends VirtualizedRegistry<ICastingRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable ICastingRecipe register() {
             if (!validate()) return null;
             CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast)

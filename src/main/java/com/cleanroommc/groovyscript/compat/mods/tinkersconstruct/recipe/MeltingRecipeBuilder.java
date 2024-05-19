@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.MeltingRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -59,6 +60,7 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
     }
 
     @Override
+    @RecipeBuilderRegistrationMethod
     public @Nullable MeltingRecipe register() {
         if (!validate()) return null;
         int amount = fluidOutput.get(0).amount;

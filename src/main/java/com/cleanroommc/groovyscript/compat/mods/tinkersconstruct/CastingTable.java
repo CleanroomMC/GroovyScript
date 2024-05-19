@@ -20,7 +20,7 @@ import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 @RegistryDescription
 public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('lava') * 50).output(item('minecraft:diamond')).coolingTime(750).consumesCast(true).cast(ore('gemEmerald')).register()"))
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('lava') * 50).output(item('minecraft:diamond')).coolingTime(750).consumesCast(true).cast(ore('gemEmerald'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -149,6 +149,7 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable ICastingRecipe register() {
             if (!validate()) return null;
             CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast)

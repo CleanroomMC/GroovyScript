@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 500).input(resource('minecraft:pig')).register()"))
+    @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 500).input(resource('minecraft:pig'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -98,11 +98,6 @@ public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
         return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
     }
 
-    @Override
-    protected boolean compareRecipe(EntityMeltingRecipe recipe, EntityMeltingRecipe recipe2) {
-        return recipe.equals(recipe2);
-    }
-
     public class RecipeBuilder implements IRecipeBuilder<EntityMeltingRecipe> {
 
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
@@ -154,6 +149,7 @@ public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable EntityMeltingRecipe register() {
             if (!validate()) return null;
             EntityMeltingRecipe recipe = new EntityMeltingRecipe(input, output);
