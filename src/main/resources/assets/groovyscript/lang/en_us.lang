@@ -1367,7 +1367,7 @@ groovyscript.wiki.tconstruct.smeltery_fuel.removeFuel=Removes the given fluid fr
 
 groovyscript.wiki.tconstruct.drying.title=Drying Rack
 groovyscript.wiki.tconstruct.drying.description=Convert an item into a different item by hanging it out to dry.
-groovyscript.wiki.tconstruct.drying.add=Adds a new drying rack recipe with the given input, output, and time
+groovyscript.wiki.tconstruct.drying.add=Adds a new recipe in the format `input`, `output`, `time`
 groovyscript.wiki.tconstruct.drying.time.value=The time in ticks it takes for the item to dry
 
 groovyscript.wiki.tconstruct.casting_table.title=Casting Table
@@ -1386,7 +1386,7 @@ groovyscript.wiki.tconstruct.casting_basin.consumesCast.value=Whether the cast i
 
 groovyscript.wiki.tconstruct.melting.title=Melting
 groovyscript.wiki.tconstruct.melting.description=Modifies what items can be melted down in the Smeltery.
-groovyscript.wiki.tconstruct.melting.add=Adds a new recipe with the given input, output, and time
+groovyscript.wiki.tconstruct.melting.add=Adds a new recipe in the format `input`, `output`, `time`
 groovyscript.wiki.tconstruct.melting.temp.value=Required temperature for melting. Also determines the speed of the melt
 
 groovyscript.wiki.tconstruct.entity_melting.title=Entity Melting
