@@ -250,7 +250,7 @@ public class Builder {
         }
 
         if (registrationMethods.isEmpty()) {
-            GroovyLog.get().warn("Couldn't find any registration methods for '{}'", reference);
+            GroovyLog.get().warn("Couldn't find any registration methods for recipe builder '{}'", reference);
         } else {
             for (Method registerMethod : registrationMethods) {
                 out.append("- ");
@@ -291,7 +291,7 @@ public class Builder {
                     List<RecipeBuilderMethod> recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
 
                     if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
-                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in build '{}'", fieldDocumentation.getField().getName(), reference);
+                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), reference);
                     } else {
                         out.append(new CodeBlockBuilder()
                                            .line(recipeBuilderMethods.stream()
