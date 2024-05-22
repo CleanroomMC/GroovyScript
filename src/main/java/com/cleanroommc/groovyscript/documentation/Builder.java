@@ -2,8 +2,6 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.google.common.collect.ComparisonChain;
 import it.unimi.dsi.fastutil.chars.Char2CharArrayMap;
 import it.unimi.dsi.fastutil.chars.Char2CharMap;
@@ -29,7 +27,6 @@ public class Builder {
         defaultReturnValue(Character.MIN_VALUE);
     }};
 
-    private final GroovyContainer<? extends GroovyPropertyContainer> mod;
     private final String reference;
     private final Method builderMethod;
     private final RecipeBuilderDescription annotation;
@@ -37,8 +34,7 @@ public class Builder {
     private final Map<String, List<RecipeBuilderMethod>> methods;
     private final List<Method> registrationMethods;
 
-    public Builder(GroovyContainer<? extends GroovyPropertyContainer> mod, Method builderMethod, String reference, String baseTranslationKey) {
-        this.mod = mod;
+    public Builder(Method builderMethod, String reference, String baseTranslationKey) {
         this.builderMethod = builderMethod;
         this.reference = reference;
         this.annotation = builderMethod.getAnnotation(RecipeBuilderDescription.class);
