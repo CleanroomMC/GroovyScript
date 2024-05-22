@@ -100,7 +100,7 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
         @Property
         private boolean advanced;
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "output")
         public RecipeBuilder effect(PotionEffect effect) {
             var output = new ItemStack(ModItems.ELIXIR);
             ElixirUtils.addEffect(effect, output);

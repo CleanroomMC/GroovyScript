@@ -73,6 +73,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
         @Property(defaultValue = "new ItemStack(Blocks.COBBLESTONE)")
         private ItemStack extra;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder extra(ItemStack extra) {
             this.extra = extra;
             return this;

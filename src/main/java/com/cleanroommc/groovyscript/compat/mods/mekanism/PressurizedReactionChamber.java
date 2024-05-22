@@ -77,11 +77,13 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
         @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private double energy;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder duration(int duration) {
             this.duration = duration;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(double energy) {
             this.energy = energy;
             return this;

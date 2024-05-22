@@ -88,15 +88,18 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int amount;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder infuse(InfuseType infuse) {
             this.infuse = infuse;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder infuse(String infuse) {
             return infuse(InfuseRegistry.get(infuse));
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder amount(int amount) {
             this.amount = amount;
             return this;
