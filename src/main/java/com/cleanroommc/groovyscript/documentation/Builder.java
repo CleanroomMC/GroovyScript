@@ -238,6 +238,35 @@ public class Builder {
     public String documentMethods() {
         StringBuilder out = new StringBuilder();
 
+        methods.keySet().forEach(target -> {
+            if (fields.containsKey(target)) return;
+            GroovyLog.get().warn("Couldn't find field '{}' referenced in a method used for recipe builder '{}'", target, reference);
+        });
+
+        if (fields.values().stream().anyMatch(FieldDocumentation::isUsed)) {
+            out.append(documentFields());
+        } else {
+            GroovyLog.get().warn("Couldn't find any fields being used for recipe builder '{}'", reference);
+        }
+
+        if (registrationMethods.isEmpty()) {
+            GroovyLog.get().warn("Couldn't find any registration methods for '{}'", reference);
+        } else {
+            for (Method registerMethod : registrationMethods) {
+                out.append("- ");
+                String returnType = registerMethod.getAnnotatedReturnType().getType().getTypeName();
+                if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.register"));
+                else out.append(I18n.format("groovyscript.wiki.register_return", returnType));
+                out.append("\n\n");
+                out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.getName())).indentation(1).toString());
+            }
+        }
+
+        return out.toString();
+    }
+
+    public StringBuilder documentFields() {
+        StringBuilder out = new StringBuilder();
         fields.values().stream()
                 .sorted()
                 .filter(FieldDocumentation::isUsed)
@@ -262,7 +291,7 @@ public class Builder {
                     List<RecipeBuilderMethod> recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
 
                     if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
-                        GroovyLog.get().debug("Couldn't find any recipe builder methods for {} in {}", fieldDocumentation.getField().getName(), reference);
+                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in build '{}'", fieldDocumentation.getField().getName(), reference);
                     } else {
                         out.append(new CodeBlockBuilder()
                                            .line(recipeBuilderMethods.stream()
@@ -274,17 +303,7 @@ public class Builder {
                                            .toString());
                     }
                 });
-
-        for (Method registerMethod : registrationMethods) {
-            out.append("- ");
-            String returnType = registerMethod.getAnnotatedReturnType().getType().getTypeName();
-            if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.register"));
-            else out.append(I18n.format("groovyscript.wiki.register_return", returnType));
-            out.append("\n\n");
-            out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.getName())).indentation(1).toString());
-        }
-
-        return out.toString();
+        return out;
     }
 
     private String createBuilder(Example example) {
@@ -300,8 +319,7 @@ public class Builder {
 
         out.append(String.join("", getOutputs(generateParts(example.value()))));
 
-        if (registrationMethods.isEmpty()) GroovyLog.get().debug("Couldn't find any registration methods for {}", builderMethod.getName());
-        else out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName()));
+        if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName()));
 
         if (example.commented()) out.append("*/");
 
