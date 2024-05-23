@@ -51,7 +51,7 @@ public class Melting extends MeltingRecipeRegistry {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput")
+    @MethodDescription
     public boolean removeByInput(IIngredient input) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
         if (TinkerRegistryAccessor.getMeltingRegistry().removeIf(recipe -> {
@@ -67,7 +67,7 @@ public class Melting extends MeltingRecipeRegistry {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput")
+    @MethodDescription
     public boolean removeByOutput(FluidStack output) {
         if (TinkerRegistryAccessor.getMeltingRegistry().removeIf(recipe -> {
             boolean found = recipe.getResult().isFluidEqual(output);
@@ -82,7 +82,7 @@ public class Melting extends MeltingRecipeRegistry {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInputAndOutput")
+    @MethodDescription
     public boolean removeByInputAndOutput(IIngredient input, FluidStack output) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
         if (TinkerRegistryAccessor.getMeltingRegistry().removeIf(recipe -> {
@@ -98,13 +98,13 @@ public class Melting extends MeltingRecipeRegistry {
         return false;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getMeltingRegistry().forEach(this::addBackup);
-        TinkerRegistryAccessor.getMeltingRegistry().forEach(TinkerRegistryAccessor.getMeltingRegistry()::remove);
+        TinkerRegistryAccessor.getMeltingRegistry().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MeltingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getMeltingRegistry()).setRemover(this::remove);
     }
