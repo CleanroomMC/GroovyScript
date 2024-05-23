@@ -106,6 +106,8 @@ public class CastingBasin extends VirtualizedRegistry<ICastingRecipe> {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getBasinCastRegistry()).setRemover(this::remove);
     }
 
+    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public class RecipeBuilder extends AbstractRecipeBuilder<ICastingRecipe> {
 
         @Property

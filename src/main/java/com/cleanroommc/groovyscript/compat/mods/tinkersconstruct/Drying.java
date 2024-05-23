@@ -107,6 +107,8 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getDryingRegistry()).setRemover(this::remove);
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public class RecipeBuilder extends AbstractRecipeBuilder<DryingRecipe> {
 
         @Property(defaultValue = "20", valid = @Comp(value = "1", type = Comp.Type.GTE))

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
+@Property(property = "input", valid = @Comp("1"))
 public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
 
     @Property(defaultValue = "300", valid = @Comp(value = "1", type = Comp.Type.GTE))
