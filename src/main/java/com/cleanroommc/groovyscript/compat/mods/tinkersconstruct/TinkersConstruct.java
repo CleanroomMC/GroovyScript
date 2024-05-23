@@ -16,18 +16,21 @@ public class TinkersConstruct extends ModPropertyContainer {
 
     public final Drying drying = new Drying();
     public final Melting melting = new Melting();
+    public final EntityMelting entityMelting = new EntityMelting();
     public final SmelteryFuel smelteryFuel = new SmelteryFuel();
     public final Alloying alloying = new Alloying();
-    public final Casting casting = new Casting();
+    public final CastingTable castingTable = new CastingTable();
+    public final CastingBasin castingBasin = new CastingBasin();
     public final Materials materials = new Materials();
 
     public TinkersConstruct() {
         addRegistry(drying);
         addRegistry(melting);
+        addRegistry(entityMelting);
         addRegistry(smelteryFuel);
         addRegistry(alloying);
-        addRegistry(casting.table);
-        addRegistry(casting.basin);
+        addRegistry(castingTable);
+        addRegistry(castingBasin);
         addRegistry(materials);
     }
 
