@@ -64,7 +64,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return false;
     }
 
-    @MethodDescription(example = @Example("fluid('cobalt')*2,fluid('ardite')*2"))
+    @MethodDescription(description = "groovyscript.wiki.tconstruct.alloying.removeByInputs", example = @Example("fluid('cobalt')*2,fluid('ardite')*2"))
     public boolean removeByInputs(FluidStack... inputs) {
         List<FluidStack> list = Arrays.asList(inputs);
         if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {

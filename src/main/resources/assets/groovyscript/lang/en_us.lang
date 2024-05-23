@@ -1398,6 +1398,7 @@ groovyscript.wiki.tconstruct.alloying.title=Alloying
 groovyscript.wiki.tconstruct.alloying.description=Modifies what fluids can be mixed together in the Smeltery.
 groovyscript.wiki.tconstruct.alloying.add=Adds a new recipe in the format `output`, `inputs`
 groovyscript.wiki.tconstruct.alloying.removeByInputsAndOutput=Removes all recipes that match the given output and the given inputs
+groovyscript.wiki.tconstruct.alloying.removeByInputs=Removes all recipes that match the given inputs
 
 
 # Thaumcraft
