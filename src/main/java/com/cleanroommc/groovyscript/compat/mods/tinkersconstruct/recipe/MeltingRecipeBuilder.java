@@ -2,6 +2,10 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.MeltingRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -9,8 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
+@Property(property = "input", valid = @Comp("1"))
 public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
 
+    @Property(defaultValue = "300", valid = @Comp(value = "1", type = Comp.Type.GTE))
     private int temp = 300;
     private final MeltingRecipeRegistry registry;
     private final String recipeName;
@@ -29,11 +35,13 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
         this.recipeName = recipeName;
     }
 
+    @RecipeBuilderMethodDescription(field = "temp")
     public MeltingRecipeBuilder temperature(int temp) {
         this.temp = temp + 300;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "temp")
     public MeltingRecipeBuilder time(int time) {
         int t = fluidOutput.get(0) != null ? fluidOutput.get(0).getFluid().getTemperature() : 300;
         this.temp = MeltingRecipeAccessor.invokeCalcTemperature(t, time);
@@ -53,6 +61,7 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
     }
 
     @Override
+    @RecipeBuilderRegistrationMethod
     public @Nullable MeltingRecipe register() {
         if (!validate()) return null;
         int amount = fluidOutput.get(0).amount;
