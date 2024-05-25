@@ -54,7 +54,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
     }
 
     T invoke(String s, Object... args) {
-        Result<T> t = Objects.requireNonNull(handler.parse(s, args), "Bracket handlers must return a non null result!");
+        Result<T> t = Objects.requireNonNull(handler.parse(s, args), "Object mapper must return a non null result!");
         if (t.hasError()) {
             if (this.mod == null) {
                 GroovyLog.get().error("Can't find {} for name {}!", name, s);
@@ -67,7 +67,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             t = this.defaultValue.get();
             return t == null || t.hasError() ? null : t.getValue();
         }
-        return Objects.requireNonNull(t.getValue(), "Bracket handler result must contain a non-null value!");
+        return Objects.requireNonNull(t.getValue(), "Object napper result must contain a non-null value!");
     }
 
     public GroovyContainer<?> getMod() {
@@ -216,9 +216,9 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         public void register() {
             if (this.name == null || this.name.isEmpty()) throw new IllegalArgumentException("Name must not be empty");
             if (this.mod != null && !this.mod.isLoaded())
-                throw new IllegalArgumentException("Tried to register GameObjectHandler for mod " + this.mod + ", but it's not loaded");
-            Objects.requireNonNull(this.handler, () -> "The GameObjectHandler function must no be null");
-            Objects.requireNonNull(this.returnType, () -> "The GameObjectHandler return type must not be null");
+                throw new IllegalArgumentException("Tried to register ObjectMapper for mod " + this.mod + ", but it's not loaded");
+            Objects.requireNonNull(this.handler, () -> "The ObjectMapper function must no be null");
+            Objects.requireNonNull(this.returnType, () -> "The ObjectMapper return type must not be null");
             if (this.paramTypes.isEmpty()) this.paramTypes.add(new Class[]{String.class});
             if (this.defaultValue == null) this.defaultValue = () -> null;
             this.documentation = IDocumented.toJavaDoc(this.documentation);

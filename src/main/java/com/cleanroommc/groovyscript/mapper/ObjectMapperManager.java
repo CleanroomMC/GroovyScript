@@ -39,7 +39,9 @@ public class ObjectMapperManager {
     private static final Map<String, ObjectMapper<?>> handlers = new Object2ObjectOpenHashMap<>();
     private static final Map<String, List<ObjectMapper<?>>> handlerConflicts = new Object2ObjectOpenHashMap<>();
     private static final Map<Class<? extends ModPropertyContainer>, Map<String, ObjectMapper<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
-    public static final String EMPTY = "empty", WILDCARD = "*", SPLITTER = ":";
+    public static final String EMPTY = "empty";
+    public static final String WILDCARD = "*";
+    public static final String SPLITTER = ":";
 
     static void registerGameObjectHandler(GroovyContainer<?> container, ObjectMapper<?> goh) {
         String key = goh.getName();
@@ -63,7 +65,7 @@ public class ObjectMapperManager {
             ModPropertyContainer propertyContainer = container.get();
             var map = modHandlers.computeIfAbsent(propertyContainer.getClass(), k -> new Object2ObjectOpenHashMap<>());
             if (map.containsKey(key)) {
-                throw new IllegalStateException("There already is a GOH with name '" + key + "' in mod " + container.getContainerName());
+                throw new IllegalStateException("There already is a ObjectMapper with name '" + key + "' in mod " + container.getContainerName());
             }
             map.put(key, goh);
         }

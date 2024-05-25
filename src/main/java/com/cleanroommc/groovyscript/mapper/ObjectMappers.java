@@ -36,7 +36,8 @@ import static com.cleanroommc.groovyscript.mapper.ObjectMapperManager.WILDCARD;
 
 public class ObjectMappers {
 
-    private static final String COMMA = ",", EQUALS = "=";
+    private static final String COMMA = ",";
+    private static final String EQUALS = "=";
 
     public static @NotNull Result<ResourceLocation> parseResourceLocation(String mainArg, Object... args) {
         String[] parts = mainArg.split(SPLITTER);
@@ -52,7 +53,7 @@ public class ObjectMappers {
 
         if (args.length > 0) {
             if (args.length > 1 || !(args[0] instanceof String)) {
-                return Result.error("Arguments not valid for bracket handler. Use 'resource(String)' or 'resource(String mod, String path)'");
+                return Result.error("Arguments not valid for object mapper. Use 'resource(String)' or 'resource(String mod, String path)'");
             }
             return Result.some(new ResourceLocation(mainArg, (String) args[0]));
         }
@@ -84,7 +85,7 @@ public class ObjectMappers {
         }
         if (args.length == 1) {
             if (meta != 0) {
-                return Result.error("Defined meta value twice for item bracket handler");
+                return Result.error("Defined meta value twice for item mapper");
             }
             meta = (int) args[0];
         }
