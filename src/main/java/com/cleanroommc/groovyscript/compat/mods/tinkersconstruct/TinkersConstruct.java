@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
+import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material.GroovyMaterial;
@@ -26,17 +26,17 @@ public class TinkersConstruct extends ModPropertyContainer {
     @Override
     public void initialize(GroovyContainer<?> container) {
         container.objectMapper("toolMaterial", Material.class)
-                .parser(IGameObjectParser.wrapStringGetter(TinkerRegistryAccessor.getMaterials()::get))
+                .parser(IObjectParser.wrapStringGetter(TinkerRegistryAccessor.getMaterials()::get))
                 .completerOfNames(TinkerRegistryAccessor.getMaterials()::keySet)
                 .docOfType("tool material")
                 .register();
         container.objectMapper("toolTrait", ITrait.class)
-                .parser(IGameObjectParser.wrapStringGetter(TinkerRegistryAccessor.getTraits()::get))
+                .parser(IObjectParser.wrapStringGetter(TinkerRegistryAccessor.getTraits()::get))
                 .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet, v -> v.endsWith("_armor") ? null : v) // only suggest non armor traits
                 .docOfType("tool trait")
                 .register();
         container.objectMapper("armorTrait", ITrait.class)
-                .parser(IGameObjectParser.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")))
+                .parser(IObjectParser.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")))
                 .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet,
                                   v -> v.endsWith("_armor") ? v.substring(0, v.length() - 6) : null) // only suggest armor traits
                 .docOfType("armor trait")

@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion;
 
 import cofh.thermalexpansion.util.managers.machine.CompactorManager;
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
+import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.device.*;
@@ -54,7 +54,7 @@ public class ThermalExpansion extends ModPropertyContainer {
     public void initialize(GroovyContainer<?> owner) {
         ObjectMapper.builder("compactorMode", CompactorManager.Mode.class)
                 .mod("thermalexpansion")
-                .parser(IGameObjectParser.wrapEnum(CompactorManager.Mode.class, false))
+                .parser(IObjectParser.wrapEnum(CompactorManager.Mode.class, false))
                 .completerOfNamed(() -> Arrays.asList(CompactorManager.Mode.values()), v -> v.name().toUpperCase(Locale.ROOT))
                 .register();
     }

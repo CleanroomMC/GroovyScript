@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
+import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import vazkii.botania.api.BotaniaAPI;
@@ -40,7 +40,7 @@ public class Botania extends ModPropertyContainer {
     @Override
     public void initialize(GroovyContainer<?> container) {
         container.objectMapper("brew", vazkii.botania.api.brew.Brew.class)
-                .parser(IGameObjectParser.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false))
+                .parser(IObjectParser.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false))
                 .completerOfNames(() -> BotaniaAPI.brewMap.keySet())
                 .defaultValue(() -> BotaniaAPI.fallbackBrew)
                 .docOfType("brew")

@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
@@ -49,7 +49,7 @@ public class Mekanism extends ModPropertyContainer {
                 .docOfType("gas stack")
                 .register();
         container.objectMapper("infusionType", InfuseType.class) // infusion clashes with infusion field
-                .parser(IGameObjectParser.wrapStringGetter(InfuseRegistry::get, true))
+                .parser(IObjectParser.wrapStringGetter(InfuseRegistry::get, true))
                 .completerOfNames(InfuseRegistry.getInfuseMap()::keySet)
                 .docOfType("infusion type")
                 .register();

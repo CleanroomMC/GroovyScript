@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.evilcraft;
 
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
+import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import org.cyclops.evilcraft.core.weather.WeatherType;
@@ -17,7 +17,7 @@ public class EvilCraft extends ModPropertyContainer {
     public void initialize(GroovyContainer<?> container) {
         final List<String> weatherTypes = Arrays.asList("any", "clear", "rain", "lightning");
         container.objectMapper("weather", WeatherType.class)
-                .parser(IGameObjectParser.wrapStringGetter(WeatherType::valueOf, true))
+                .parser(IObjectParser.wrapStringGetter(WeatherType::valueOf, true))
                 .completerOfNames(() -> weatherTypes) // elements don't have names
                 .defaultValue(() -> WeatherType.ANY)
                 .docOfType("weather type")

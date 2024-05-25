@@ -33,7 +33,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
 
     private final String name;
     private final GroovyContainer<?> mod;
-    private final IGameObjectParser<T> handler;
+    private final IObjectParser<T> handler;
     private final Supplier<Result<T>> defaultValue;
     private final Class<T> returnType;
     private final List<Class<?>[]> paramTypes;
@@ -41,7 +41,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
     private final String documentation;
     private List<MethodNode> methodNodes;
 
-    private ObjectMapper(String name, GroovyContainer<?> mod, IGameObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation) {
+    private ObjectMapper(String name, GroovyContainer<?> mod, IObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation) {
         super(null);
         this.name = name;
         this.mod = mod;
@@ -127,7 +127,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
 
         private final String name;
         private GroovyContainer<?> mod;
-        private IGameObjectParser<T> handler;
+        private IObjectParser<T> handler;
         private Supplier<Result<T>> defaultValue;
         private final Class<T> returnType;
         private final List<Class<?>[]> paramTypes = new ArrayList<>();
@@ -151,7 +151,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             return this;
         }
 
-        public Builder<T> parser(IGameObjectParser<T> handler) {
+        public Builder<T> parser(IObjectParser<T> handler) {
             this.handler = handler;
             return this;
         }
@@ -224,7 +224,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             this.documentation = IDocumented.toJavaDoc(this.documentation);
             ObjectMapper<T> goh = new ObjectMapper<>(this.name, this.mod, this.handler, this.defaultValue,
                                                      this.returnType, this.paramTypes, this.completer, this.documentation);
-            ObjectMapperManager.registerGameObjectHandler(this.mod, goh);
+            ObjectMapperManager.registerObjectMapper(this.mod, goh);
         }
     }
 }

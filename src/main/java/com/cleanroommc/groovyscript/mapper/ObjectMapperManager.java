@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.mapper;
 
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
@@ -43,7 +43,7 @@ public class ObjectMapperManager {
     public static final String WILDCARD = "*";
     public static final String SPLITTER = ":";
 
-    static void registerGameObjectHandler(GroovyContainer<?> container, ObjectMapper<?> goh) {
+    static void registerObjectMapper(GroovyContainer<?> container, ObjectMapper<?> goh) {
         String key = goh.getName();
         if (goh.getMod() != null) {
             Class<?> clazz = goh.getMod().get().getClass();
@@ -101,7 +101,7 @@ public class ObjectMapperManager {
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
                 .register();
         ObjectMapper.builder("block", Block.class)
-                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.BLOCKS))
+                .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.BLOCKS))
                 .completer(ForgeRegistries.BLOCKS)
                 .docOfType("block")
                 .register();
@@ -114,37 +114,37 @@ public class ObjectMapperManager {
                 .docOfType("block state")
                 .register();
         ObjectMapper.builder("enchantment", Enchantment.class)
-                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS))
+                .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS))
                 .completer(ForgeRegistries.ENCHANTMENTS)
                 .docOfType("enchantment")
                 .register();
         ObjectMapper.builder("potion", Potion.class)
-                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.POTIONS))
+                .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.POTIONS))
                 .completer(ForgeRegistries.POTIONS)
                 .docOfType("potion")
                 .register();
         ObjectMapper.builder("potionType", PotionType.class)
-                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.POTION_TYPES))
+                .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.POTION_TYPES))
                 .completer(ForgeRegistries.POTION_TYPES)
                 .docOfType("potion type")
                 .register();
         ObjectMapper.builder("sound", SoundEvent.class)
-                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS))
+                .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS))
                 .completer(ForgeRegistries.SOUND_EVENTS)
                 .docOfType("sound")
                 .register();
         ObjectMapper.builder("entity", EntityEntry.class)
-                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.ENTITIES))
+                .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.ENTITIES))
                 .completer(ForgeRegistries.ENTITIES)
                 .docOfType("entity entry")
                 .register();
         ObjectMapper.builder("biome", Biome.class)
-                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.BIOMES))
+                .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.BIOMES))
                 .completer(ForgeRegistries.BIOMES)
                 .docOfType("biome")
                 .register();
         ObjectMapper.builder("profession", VillagerRegistry.VillagerProfession.class)
-                .parser(IGameObjectParser.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS))
+                .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS))
                 .completer(ForgeRegistries.VILLAGER_PROFESSIONS)
                 .docOfType("villager profession")
                 .register();

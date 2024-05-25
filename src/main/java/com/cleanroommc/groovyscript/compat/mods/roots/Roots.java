@@ -1,10 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
+import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlers;
 import com.cleanroommc.groovyscript.mapper.ObjectMappers;
 import epicsquid.roots.api.Herb;
 import epicsquid.roots.init.HerbRegistry;
@@ -43,17 +42,17 @@ public class Roots extends ModPropertyContainer {
     @Override
     public void initialize(GroovyContainer<?> container) {
         container.objectMapper("ritual", RitualBase.class)
-                .parser(IGameObjectParser.wrapStringGetter(RitualRegistry::getRitual))
+                .parser(IObjectParser.wrapStringGetter(RitualRegistry::getRitual))
                 .completerOfNames(() -> RitualRegistry.ritualRegistry.keySet())
                 .docOfType("ritual")
                 .register();
         container.objectMapper("herb", Herb.class)
-                .parser(IGameObjectParser.wrapStringGetter(HerbRegistry::getHerbByName))
+                .parser(IObjectParser.wrapStringGetter(HerbRegistry::getHerbByName))
                 .completerOfNames(HerbRegistry.registry::keySet)
                 .docOfType("herb")
                 .register();
         container.objectMapper("cost", CostType.class)
-                .parser(IGameObjectParser.wrapEnum(CostType.class, false))
+                .parser(IObjectParser.wrapEnum(CostType.class, false))
                 .completerOfEnum(CostType.class, false)
                 .docOfType("cost")
                 .register();

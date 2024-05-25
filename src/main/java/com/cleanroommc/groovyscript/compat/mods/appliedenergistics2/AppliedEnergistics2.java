@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.appliedenergistics2;
 
 import appeng.api.config.TunnelType;
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
+import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 
@@ -19,7 +19,7 @@ public class AppliedEnergistics2 extends ModPropertyContainer {
     @Override
     public void initialize(GroovyContainer<?> container) {
         container.objectMapper("tunnel", TunnelType.class)
-                .parser(IGameObjectParser.wrapEnum(TunnelType.class, false))
+                .parser(IObjectParser.wrapEnum(TunnelType.class, false))
                 .completerOfNamed(() -> Arrays.asList(TunnelType.values()), v -> v.name().toUpperCase(Locale.ROOT))
                 .docOfType("P2P tunnel type")
                 .register();

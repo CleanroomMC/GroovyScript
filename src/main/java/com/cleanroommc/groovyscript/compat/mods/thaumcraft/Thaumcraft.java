@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
+import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane.ArcaneWorkbench;
@@ -35,12 +35,12 @@ public class Thaumcraft extends ModPropertyContainer {
     @Override
     public void initialize(GroovyContainer<?> container) {
         container.objectMapper("aspect", AspectStack.class)
-                .parser(IGameObjectParser.wrapStringGetter(Thaumcraft::getAspect, AspectStack::new))
+                .parser(IObjectParser.wrapStringGetter(Thaumcraft::getAspect, AspectStack::new))
                 .completerOfNames(thaumcraft.api.aspects.Aspect.aspects::keySet)
                 .docOfType("aspect stack")
                 .register();
         container.objectMapper("crystal", ItemStack.class)
-                .parser(IGameObjectParser.wrapStringGetter(Thaumcraft::getAspect, ThaumcraftApiHelper::makeCrystal))
+                .parser(IObjectParser.wrapStringGetter(Thaumcraft::getAspect, ThaumcraftApiHelper::makeCrystal))
                 .completerOfNames(thaumcraft.api.aspects.Aspect.aspects::keySet)
                 .defaultValue(() -> ItemStack.EMPTY)
                 .docOfType("aspect crystal as item stack")
