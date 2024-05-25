@@ -27,6 +27,7 @@ public interface IGroovyContainer {
 
     /**
      * Returns the name of this container. Is only used for logging and debugging.
+     * It usually returns a mod name, but it doesn't have to.
      *
      * @return the name of the container
      */
@@ -61,14 +62,14 @@ public interface IGroovyContainer {
 
     /**
      * Returns the override priority. Defines how this plugin should behave when another container with the same mod id exists.
-     * The return value should be as low as possible. Internal container always return {@link GroovyPlugin.Priority#NONE}.
+     * The return value should be as low as possible. Internal container always return {@link Priority#NONE}.
      *
      * @return the override priority
-     * @see GroovyPlugin.Priority
+     * @see Priority
      */
     @NotNull
-    default GroovyPlugin.Priority getOverridePriority() {
-        return GroovyPlugin.Priority.NONE;
+    default Priority getOverridePriority() {
+        return Priority.NONE;
     }
 
     enum Priority {
