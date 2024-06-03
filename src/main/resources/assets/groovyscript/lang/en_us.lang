@@ -1056,6 +1056,23 @@ groovyscript.wiki.jei.ingredient.yeet=Alias for `removeAndHide`
 groovyscript.wiki.jei.ingredient.hideAll=Hides all ingredients of all types from the sidebar. Functionally disables JEI
 
 
+# Lazy AE2
+groovyscript.wiki.threng.aggregator.title=Fluix Aggregation
+groovyscript.wiki.threng.aggregator.description=Converts up to 3 input itemstacks into an output itemstack.
+
+groovyscript.wiki.threng.centrifuge.title=Pulse Centrifuge
+groovyscript.wiki.threng.centrifuge.description=Converts 1 input itemstack into an output itemstack.
+
+groovyscript.wiki.threng.energizer.title=Crystal Energization
+groovyscript.wiki.threng.energizer.description=Converts 1 input itemstack into an output itemstack, consuming a set amount of energy.
+groovyscript.wiki.threng.energizer.energy.value=Sets the amount of energy consumed by the recipe
+
+groovyscript.wiki.threng.etching.title=ME Circuit Etching
+groovyscript.wiki.threng.etching.description=Converts up to 3 input itemstacks from specific slots into an output itemstack.
+groovyscript.wiki.threng.etching.top.value=Sets the top slot of the recipe
+groovyscript.wiki.threng.etching.bottom.value=Sets the bottom slot of the recipe
+
+
 # Mekanism
 groovyscript.wiki.mekanism.gasInput.value=Sets the gas inputs of the recipe
 groovyscript.wiki.mekanism.gasOutput.value=Sets the gas outputs of the recipe
