@@ -9,8 +9,8 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import net.minecraft.item.ItemStack;
-import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -111,7 +111,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         @Property(valid = @Comp("secondaryOutputChances"))
         private final List<ItemStack> secondaryOutputItems = new ArrayList<>();
         @Property(valid = @Comp("secondaryOutputItems"))
-        private final List<Float> secondaryOutputChances = new ArrayList<>();
+        private final FloatArrayList secondaryOutputChances = new FloatArrayList();
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int energy;
 
@@ -142,6 +142,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
+            secondaryOutputChances.trim();
             msg.add(secondaryOutputItems.size() != secondaryOutputChances.size(), "secondaryOutputItems and secondaryOutputChances must be of equal length, yet secondaryOutputItems was {} and secondaryOutputChances was {}", secondaryOutputItems.size(), secondaryOutputChances.size());
             if (energy < 0) energy = 200;
         }
@@ -153,7 +154,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
             CrusherRecipe recipe = new CrusherRecipe(output.get(0), input.get(0), energy);
             if (!secondaryOutputItems.isEmpty()) {
                 recipe.secondaryOutput = secondaryOutputItems.toArray(new ItemStack[0]);
-                recipe.secondaryChance = ArrayUtils.toPrimitive(secondaryOutputChances.toArray(new Float[0]));
+                recipe.secondaryChance = secondaryOutputChances.elements();
                 recipe.getItemOutputs().addAll(secondaryOutputItems);
             }
             ModSupport.IMMERSIVE_ENGINEERING.get().crusher.add(recipe);

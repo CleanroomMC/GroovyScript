@@ -9,7 +9,7 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import org.apache.commons.lang3.ArrayUtils;
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
@@ -143,7 +143,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         @Property(valid = @Comp("chances"))
         private final List<String> ores = new ArrayList<>();
         @Property(valid = @Comp("ores"))
-        private final List<Float> chances = new ArrayList<>();
+        private final FloatArrayList chances = new FloatArrayList();
         @Property
         private final List<Integer> dimensions = new ArrayList<>();
         @Property(ignoresInheritedMethods = true)
@@ -231,6 +231,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
             validateItems(msg);
             validateFluids(msg);
             msg.add(fail < 0 || fail > 1, "fail must be a float between 0 and 1, yet it was {}", fail);
+            chances.trim();
             msg.add(ores.size() != chances.size(), "ores and chances must be of equal length, yet ores was {} and chances was {}", ores.size(), chances.size());
         }
 
@@ -238,7 +239,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         @RecipeBuilderRegistrationMethod
         public @Nullable ExcavatorHandler.MineralMix register() {
             if (!validate()) return null;
-            ExcavatorHandler.MineralMix recipe = new ExcavatorHandler.MineralMix(name, fail, ores.toArray(new String[0]), ArrayUtils.toPrimitive(chances.toArray(new Float[0])));
+            ExcavatorHandler.MineralMix recipe = new ExcavatorHandler.MineralMix(name, fail, ores.toArray(new String[0]), chances.elements());
 
             int[] dims = dimensions.stream().mapToInt(Integer::intValue).toArray();
             if (dims != null) {
