@@ -116,7 +116,7 @@ mods.immersiveengineering.coke_oven.recipeBuilder()
 
 
 // Crusher:
-// Converts an input itemstack into an output itemstack, consuming energy.
+// Converts an input itemstack into an output itemstack with optional additional chanced item outputs, consuming energy.
 
 mods.immersiveengineering.crusher.removeByInput(item('immersiveengineering:material:7'))
 mods.immersiveengineering.crusher.removeByOutput(item('minecraft:sand'))
@@ -125,6 +125,14 @@ mods.immersiveengineering.crusher.removeByOutput(item('minecraft:sand'))
 mods.immersiveengineering.crusher.recipeBuilder()
     .input(item('minecraft:diamond'))
     .output(item('minecraft:clay'))
+    .energy(100)
+    .register()
+
+mods.immersiveengineering.crusher.recipeBuilder()
+    .input(item('minecraft:diamond_block'))
+    .output(item('minecraft:diamond'))
+    .secondaryOutput(item('minecraft:gold_ingot'))
+    .secondaryOutput(item('minecraft:gold_ingot'), 0.3)
     .energy(100)
     .register()
 

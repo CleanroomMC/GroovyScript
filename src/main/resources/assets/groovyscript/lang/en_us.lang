@@ -932,9 +932,11 @@ groovyscript.wiki.immersiveengineering.coke_oven.creosote.value=Sets the amount 
 groovyscript.wiki.immersiveengineering.coke_oven.time.value=Sets the time in ticks the recipe takes to process
 
 groovyscript.wiki.immersiveengineering.crusher.title=Crusher
-groovyscript.wiki.immersiveengineering.crusher.description=Converts an input itemstack into an output itemstack, consuming energy.
+groovyscript.wiki.immersiveengineering.crusher.description=Converts an input itemstack into an output itemstack with optional additional chanced item outputs, consuming energy.
 groovyscript.wiki.immersiveengineering.crusher.add=Adds recipes in the format `output`, `input`, `energy`
 groovyscript.wiki.immersiveengineering.crusher.energy.value=Sets the amount of power consumed to complete the recipe
+groovyscript.wiki.immersiveengineering.crusher.secondaryOutputItems.value=Sets the additional items output by the recipe, if any
+groovyscript.wiki.immersiveengineering.crusher.secondaryOutputChances.value=Sets the chance of the respective additional items output by the recipe
 
 groovyscript.wiki.immersiveengineering.excavator.title=Excavator
 groovyscript.wiki.immersiveengineering.excavator.description=Adds a Mineral Mix with the given name, weight, fail chance, ores, and allowed dimensions. A Mineral Mix can be mined by an Excavator Multiblock and scanned via a Core Sample Drill.
