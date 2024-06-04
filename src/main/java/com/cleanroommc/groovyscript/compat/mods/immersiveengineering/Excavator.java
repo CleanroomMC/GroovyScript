@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
@@ -237,11 +238,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         @RecipeBuilderRegistrationMethod
         public @Nullable ExcavatorHandler.MineralMix register() {
             if (!validate()) return null;
-            float[] chanceArray = new float[chances.size()];
-            for (int i = 0; i < chances.size(); i++) {
-                chanceArray[i] = chances.get(i);
-            }
-            ExcavatorHandler.MineralMix recipe = new ExcavatorHandler.MineralMix(name, fail, ores.toArray(new String[0]), chanceArray);
+            ExcavatorHandler.MineralMix recipe = new ExcavatorHandler.MineralMix(name, fail, ores.toArray(new String[0]), ArrayUtils.toPrimitive(chances.toArray(new Float[0])));
 
             int[] dims = dimensions.stream().mapToInt(Integer::intValue).toArray();
             if (dims != null) {
