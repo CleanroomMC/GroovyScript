@@ -2,18 +2,22 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: prodigytech
 
+import lykrast.prodigytech.common.item.IZorrasteelEquipment
+import lykrast.prodigytech.common.recipe.ZorraAltarManager
+
 if (!isLoaded('prodigytech')) return
 println 'mod \'prodigytech\' detected, running script'
 
-// groovyscript.wiki.prodigytech.zorra_altar_item.title:
-// groovyscript.wiki.prodigytech.zorra_altar_item.description
-
 // Create an item at the location 'placeholdername:prodigy_stick' enchantable in the Zorra Altar
-// Note: due to the PT's implementation it is impossible to make other mod's items enchantable
+// Note: due to the PT's implementation it is difficult to make other mod's items enchantable
 // This merely registers the item, the pre-init script adds the specific enchantments
-mods.prodigytech.zorra_altar_item.item('prodigy_stick', 'stick')
-    .setMaxStackSize(5)
-    .setRarity(EnumRarity.RARE)
-    .setCreativeTab(creativeTab('misc'))
-    .register()
+class ProdigyStick extends Item implements IZorrasteelEquipment {
+    static registry = mods.prodigytech.zorra_altar.createRegistry('stick')
+
+    ZorraAltarManager getManager() {
+        return registry
+    }
+}
+
+content.registerItem('prodigy_stick', new ProdigyStick())
 

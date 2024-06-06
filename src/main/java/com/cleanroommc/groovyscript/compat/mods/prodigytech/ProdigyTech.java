@@ -15,7 +15,6 @@ public class ProdigyTech extends ModPropertyContainer {
     public final SimpleRecipeHandlerSecondaryOutput sawmill = new HeatSawmill();
     public final Solderer solderer = new Solderer();
     public final ZorraAltar zorraAltar = new ZorraAltar();
-    public final ZorraAltarItem zorraAltarItem = new ZorraAltarItem();
 
     public ProdigyTech() {
         addRegistry(atomicReshaper);
@@ -26,7 +25,6 @@ public class ProdigyTech extends ModPropertyContainer {
         addRegistry(sawmill);
         addRegistry(solderer);
         addRegistry(zorraAltar);
-        addRegistry(zorraAltarItem);
     }
 
 }

@@ -29,11 +29,21 @@ class ZorraRecipeData {
 @RegistryDescription
 public class ZorraAltar extends VirtualizedRegistry<ZorraRecipeData> {
     @GroovyBlacklist
-    public static final Map<String, ZorraAltarManager> managers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, ZorraAltarManager> managers = new Object2ObjectOpenHashMap<>();
 
     ZorraAltar() {
         managers.put("sword", ZorraAltarManager.SWORD);
         managers.put("bow", ZorraAltarManager.BOW);
+    }
+
+    public ZorraAltarManager createRegistry(String key) {
+        ZorraAltarManager manager = new ZorraAltarManager();
+        managers.put(key, manager);
+        return manager;
+    }
+
+    public ZorraAltarManager getRegistry(String key) {
+        return managers.get(key);
     }
 
     @GroovyBlacklist
