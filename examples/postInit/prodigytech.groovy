@@ -82,6 +82,12 @@ mods.prodigytech.ore_refinery.recipeBuilder()
     .register()
 
 
+// groovyscript.wiki.prodigytech.primordialis_reactor.title:
+// groovyscript.wiki.prodigytech.primordialis_reactor.description
+
+mods.prodigytech.primordialis_reactor.addRecipe(item('minecraft:diamond'))
+mods.prodigytech.primordialis_reactor.removeRecipe(ore('sugarcane'))
+
 // groovyscript.wiki.prodigytech.rotary_grinder.title:
 // groovyscript.wiki.prodigytech.rotary_grinder.description
 
