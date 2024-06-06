@@ -12,12 +12,15 @@ public class ProdigyTech extends ModPropertyContainer {
     public final OreRefinery oreRefinery = new OreRefinery();
     public final PrimordialisReactor primordialisReactor = new PrimordialisReactor();
     public final RotaryGrinder rotaryGrinder = new RotaryGrinder();
-    public final ZorraAltar zorraAltar = new ZorraAltar();
      */
     public final Solderer solderer = new Solderer();
+    public final ZorraAltar zorraAltar = new ZorraAltar();
+    public final ZorraAltarItem zorraAltarItem = new ZorraAltarItem();
 
     public ProdigyTech() {
         addRegistry(solderer);
+        addRegistry(zorraAltar);
+        addRegistry(zorraAltarItem);
     }
 
 }

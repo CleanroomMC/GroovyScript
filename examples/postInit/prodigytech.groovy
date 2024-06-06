@@ -28,3 +28,10 @@ mods.prodigytech.solderer.recipeBuilder()
     .register()
 
 
+// groovyscript.wiki.prodigytech.zorra_altar.title:
+// groovyscript.wiki.prodigytech.zorra_altar.description
+
+mods.prodigytech.zorra_altar.addEnchantment('sword', enchantment('minecraft:power'), 10)
+mods.prodigytech.zorra_altar.addEnchantment('stick', enchantment('minecraft:knockback'), 20)
+mods.prodigytech.zorra_altar.removeEnchantment('sword', enchantment('minecraft:sharpness'))
+
