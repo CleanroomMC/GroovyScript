@@ -4,6 +4,27 @@
 
 println 'mod \'prodigytech\' detected, running script'
 
+// groovyscript.wiki.prodigytech.atomic_reshaper.title:
+// groovyscript.wiki.prodigytech.atomic_reshaper.description
+
+mods.prodigytech.atomic_reshaper.removeByInput(ore('paper'))
+// mods.prodigytech.atomic_reshaper.removeAll()
+
+mods.prodigytech.atomic_reshaper.recipeBuilder()
+    .input(item('minecraft:gold_ingot'))
+    .output(item('minecraft:emerald_block'))
+    .primordium(10)
+    .time(50)
+    .register()
+
+mods.prodigytech.atomic_reshaper.recipeBuilder()
+    .input(item('minecraft:gold_block'))
+    .addOutput(item('minecraft:diamond_block'), 10)
+    .addOutput(item('minecraft:carrot'), 3)
+    .primordium(7)
+    .register()
+
+
 // groovyscript.wiki.prodigytech.heat_sawmill.title:
 // groovyscript.wiki.prodigytech.heat_sawmill.description
 

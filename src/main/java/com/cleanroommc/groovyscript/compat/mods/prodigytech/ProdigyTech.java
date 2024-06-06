@@ -7,6 +7,7 @@ public class ProdigyTech extends ModPropertyContainer {
     public final AtomicReshaper atomicReshaper = new AtomicReshaper();
     public final ExplosionFurnace explosionFurnace = new ExplosionFurnace();
      */
+    public final AtomicReshaper atomicReshaper = new AtomicReshaper();
     public final SimpleRecipeHandler magneticReassembler = new MagneticReassembler();
     public final SimpleRecipeHandlerSecondaryOutput oreRefinery = new OreRefinery();
     public final SimpleRecipeHandler grinder = new RotaryGrinder();
@@ -17,6 +18,7 @@ public class ProdigyTech extends ModPropertyContainer {
     public final ZorraAltarItem zorraAltarItem = new ZorraAltarItem();
 
     public ProdigyTech() {
+        addRegistry(atomicReshaper);
         addRegistry(magneticReassembler);
         addRegistry(oreRefinery);
         addRegistry(grinder);
