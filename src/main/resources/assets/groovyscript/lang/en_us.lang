@@ -1779,6 +1779,27 @@ groovyscript.wiki.woot.stygian_iron_anvil.base.value=Sets the itemstack used for
 groovyscript.wiki.woot.stygian_iron_anvil.preserveBase.value=Sets if the base is used as a catalyst and not consumed
 groovyscript.wiki.woot.stygian_iron_anvil.removeByBase=Removes all recipes that match the given base item
 
+# ProdigyTech
+groovyscript.wiki.prodigytech.atomic_reshaper.title=Atomic Reshaper
+groovyscript.wiki.prodigytech.atomic_reshaper.description=Uses hot air and Primordium to convert items, can have a weighted random based output
+groovyscript.wiki.prodigytech.explosion_furnace.title=Explosion Furnace
+groovyscript.wiki.prodigytech.explosion_furnace.description=Uses an explosive, a dampener, and an optional reagent to convert items, the power values of the recipe, explosive, and dampener should be close to avoid an efficiency loss
+groovyscript.wiki.prodigytech.explosion_furnace_additives.title=Explosion Furnace Additives
+groovyscript.wiki.prodigytech.explosion_furnace_additives.description=Turn an item into an explosive or into a dampener when inserted into the Explosion Furnace
+groovyscript.wiki.prodigytech.heat_sawmill.title=Heat Sawmill
+groovyscript.wiki.prodigytech.heat_sawmill.description=Wood processing machine with 1 input, 2 outputs and an optional chance for the 2nd output
+groovyscript.wiki.prodigytech.magnetic_reassembler.title=Magnetic Reassembler
+groovyscript.wiki.prodigytech.magnetic_reassembler.description=A simple 1 to 1 processing machine for dusts
+groovyscript.wiki.prodigytech.ore_refinery.title=Ore Refinery
+groovyscript.wiki.prodigytech.heat_sawmill.description=Ore processing machine with 1 input, 2 outputs and an optional chance for the 2nd output
+groovyscript.wiki.prodigytech.primordialis_reactor.title=Primordialis Reactor
+groovyscript.wiki.prodigytech.primordialis_reactor.description=Turns organic matter into Primordium
+groovyscript.wiki.prodigytech.rotary_grinder.title=Rotary Grinder
+groovyscript.wiki.prodigytech.rotary_grinder.description=A simple 1 to 1 processing machine making dusts
+groovyscript.wiki.prodigytech.solderer.title=Solderer
+groovyscript.wiki.prodigytech.solderer.description=Performs recipes using Gold Dust, has a recipe catalyst, and uses up Circuit Boards and an optional extra input for each recipe
+groovyscript.wiki.prodigytech.zorra_altar.title=Zorra Altar
+groovyscript.wiki.prodigytech.zorra_altar.description=Allows over-enchanting Zorrasteel equipment
 
 # Pyrotech
 groovyscript.wiki.pyrotech.anvil.title=Anvil

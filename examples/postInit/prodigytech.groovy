@@ -4,8 +4,8 @@
 
 println 'mod \'prodigytech\' detected, running script'
 
-// groovyscript.wiki.prodigytech.atomic_reshaper.title:
-// groovyscript.wiki.prodigytech.atomic_reshaper.description
+// Atomic Reshaper:
+// Uses hot air and Primordium to convert items, can have a weighted random based output
 
 mods.prodigytech.atomic_reshaper.removeByInput(ore('paper'))
 // mods.prodigytech.atomic_reshaper.removeAll()
@@ -25,8 +25,9 @@ mods.prodigytech.atomic_reshaper.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.prodigytech.explosion_furnace.title:
-// groovyscript.wiki.prodigytech.explosion_furnace.description
+// Explosion Furnace:
+// Uses an explosive, a dampener, and an optional reagent to convert items, the power values of the recipe, explosive, and
+// dampener should be close to avoid an efficiency loss
 
 mods.prodigytech.explosion_furnace.removeByOutput(item('prodigytech:ferramic_ingot'))
 
@@ -44,16 +45,16 @@ mods.prodigytech.explosion_furnace.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.prodigytech.explosion_furnace_additives.title:
-// groovyscript.wiki.prodigytech.explosion_furnace_additives.description
+// Explosion Furnace Additives:
+// Turn an item into an explosive or into a dampener when inserted into the Explosion Furnace
 
 mods.prodigytech.explosion_furnace_additives.addDampener(item('minecraft:stone'), 50)
 mods.prodigytech.explosion_furnace_additives.addExplosive(item('minecraft:cobblestone'), 50)
 mods.prodigytech.explosion_furnace_additives.removeDampener(ore('dustAsh'))
 mods.prodigytech.explosion_furnace_additives.removeExplosive(ore('gunpowder'))
 
-// groovyscript.wiki.prodigytech.heat_sawmill.title:
-// groovyscript.wiki.prodigytech.heat_sawmill.description
+// Heat Sawmill:
+// Ore processing machine with 1 input, 2 outputs and an optional chance for the 2nd output
 
 mods.prodigytech.heat_sawmill.removeByInput(ore('plankWood'))
 // mods.prodigytech.heat_sawmill.removeAll()
@@ -82,8 +83,8 @@ mods.prodigytech.heat_sawmill.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.prodigytech.magnetic_reassembler.title:
-// groovyscript.wiki.prodigytech.magnetic_reassembler.description
+// Magnetic Reassembler:
+// A simple 1 to 1 processing machine for dusts
 
 mods.prodigytech.magnetic_reassembler.removeByInput(item('minecraft:gravel'))
 // mods.prodigytech.magnetic_reassembler.removeAll()
@@ -100,7 +101,7 @@ mods.prodigytech.magnetic_reassembler.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.prodigytech.ore_refinery.title:
+// Ore Refinery:
 // groovyscript.wiki.prodigytech.ore_refinery.description
 
 mods.prodigytech.ore_refinery.removeByInput(ore('oreLapis'))
@@ -130,14 +131,14 @@ mods.prodigytech.ore_refinery.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.prodigytech.primordialis_reactor.title:
-// groovyscript.wiki.prodigytech.primordialis_reactor.description
+// Primordialis Reactor:
+// Turns organic matter into Primordium
 
 mods.prodigytech.primordialis_reactor.addRecipe(item('minecraft:diamond'))
 mods.prodigytech.primordialis_reactor.removeRecipe(ore('sugarcane'))
 
-// groovyscript.wiki.prodigytech.rotary_grinder.title:
-// groovyscript.wiki.prodigytech.rotary_grinder.description
+// Rotary Grinder:
+// A simple 1 to 1 processing machine making dusts
 
 mods.prodigytech.rotary_grinder.removeByInput(item('minecraft:gravel'))
 // mods.prodigytech.rotary_grinder.removeAll()
@@ -154,8 +155,9 @@ mods.prodigytech.rotary_grinder.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.prodigytech.solderer.title:
-// groovyscript.wiki.prodigytech.solderer.description
+// Solderer:
+// Performs recipes using Gold Dust, has a recipe catalyst, and uses up Circuit Boards and an optional extra input for each
+// recipe
 
 mods.prodigytech.solderer.removeByAdditive(item('minecraft:iron_ingot'))
 mods.prodigytech.solderer.removeByOutput(item('prodigytech:circuit_refined'))
@@ -178,8 +180,8 @@ mods.prodigytech.solderer.recipeBuilder()
     .register()
 
 
-// groovyscript.wiki.prodigytech.zorra_altar.title:
-// groovyscript.wiki.prodigytech.zorra_altar.description
+// Zorra Altar:
+// Allows over-enchanting Zorrasteel equipment
 
 mods.prodigytech.zorra_altar.addEnchantment('sword', enchantment('minecraft:power'), 10)
 mods.prodigytech.zorra_altar.addEnchantment('stick', enchantment('minecraft:knockback'), 20)
