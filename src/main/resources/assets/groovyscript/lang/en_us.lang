@@ -979,6 +979,29 @@ groovyscript.wiki.immersiveengineering.squeezer.description=Converts an input it
 groovyscript.wiki.immersiveengineering.squeezer.add=Adds recipes in the format `fluidOutput`, `itemOutput`, `input`, `energy`
 groovyscript.wiki.immersiveengineering.squeezer.energy.value=Sets the amount of power consumed to complete the recipe
 
+
+# Immersive Petroleum
+groovyscript.wiki.immersivepetroleum.distillation.title=Distillation Tower
+groovyscript.wiki.immersivepetroleum.distillation.description=Converts an input fluidstack into any number of output fluidstacks and any number of output itemstacks, with each itemstack having the ability to have a custom chance, using energy and taking time.
+groovyscript.wiki.immersivepetroleum.distillation.time.value=Sets the duration in ticks the recipe takes
+groovyscript.wiki.immersivepetroleum.distillation.chance.value=Sets the chance the corresponding entry in `output` will be output
+groovyscript.wiki.immersivepetroleum.distillation.energy.value=Sets the energy cost of the recipe
+
+groovyscript.wiki.immersivepetroleum.reservoir.title=Reservoir
+groovyscript.wiki.immersivepetroleum.reservoir.description=Adds a Reservoir Type with the given name, weight, minimum size, maximum size, replenishment rate, allowed dimensions, and allowed biomes. A Reservoir Type can be extracted by an Pumpjack Multiblock and scanned via a Core Sample Drill.
+groovyscript.wiki.immersivepetroleum.reservoir.note0=Reloading will not change chunks already 'discovered'
+groovyscript.wiki.immersivepetroleum.reservoir.name.value=Sets the name of the reservoir
+groovyscript.wiki.immersivepetroleum.reservoir.biomes.value=Sets the list of biome names the vein can generate in (if `biomeBlacklist` is false) or are prevented from generating in (if `biomeBlacklist` is true)
+groovyscript.wiki.immersivepetroleum.reservoir.weight.value=Sets the weight the reservoir has to spawn in its allowed dimensions
+groovyscript.wiki.immersivepetroleum.reservoir.maxSize.value=Sets the maximum size the reservoir can be, in mb
+groovyscript.wiki.immersivepetroleum.reservoir.minSize.value=Sets the minimum size the reservoir can be, in mb
+groovyscript.wiki.immersivepetroleum.reservoir.dimensions.value=Sets the list of dimension ids the vein can generate in (if `dimensionBlacklist` is false) or are prevented from generating in (if `dimensionBlacklist` is true)
+groovyscript.wiki.immersivepetroleum.reservoir.replenishRate.value=Sets the rate at which the reservoir is refilled, in
+groovyscript.wiki.immersivepetroleum.reservoir.biomeBlacklist.value=Sets if the `biomes` property indicates allowed biomes (false) or blocked biomes (true)
+groovyscript.wiki.immersivepetroleum.reservoir.dimensionBlacklist.value=Sets if the `dimensions` property indicates allowed dimensions (false) or blocked dimensions (true)
+groovyscript.wiki.immersivepetroleum.reservoir.removeByName=Removes the Reservoir entry with the given name
+
+
 # Inspirations
 groovyscript.wiki.inspirations.anvil_smashing.title=Anvil Smashing
 groovyscript.wiki.inspirations.anvil_smashing.description=Converts a Block or IBlockState into an IBlockState when an anvil falls on top of it (from any height).
