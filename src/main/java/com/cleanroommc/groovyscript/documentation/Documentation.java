@@ -31,7 +31,7 @@ public class Documentation {
 
     public static final IFormat DEFAULT_FORMAT = OutputFormat.VITEPRESS;
 
-    private static final boolean GENERATE_EXAMPLES = false;
+    private static final boolean GENERATE_EXAMPLES = true;
     private static final boolean GENERATE_WIKI = false;
     // Kills the game as soon as the wiki or examples are generated.
     private static final boolean TEST_AND_CRASH = false;

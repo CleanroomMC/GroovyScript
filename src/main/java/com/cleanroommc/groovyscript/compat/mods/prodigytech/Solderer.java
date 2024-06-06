@@ -16,8 +16,8 @@ import org.jetbrains.annotations.Nullable;
 public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe> {
 
     @RecipeBuilderDescription(example = {
-        @Example(".input(item('minecraft:clay'), item('minecraft:gold_ingot')).output(item('minecraft:diamond')).gold(5).time(100)"),
-        @Example(".input(item('minecraft:coal_block')).output(item('minecraft:nether_star')).gold(75)"),
+        @Example(".pattern(item('minecraft:clay')).input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).gold(5).time(100)"),
+        @Example(".pattern(item('minecraft:coal_block')).output(item('minecraft:nether_star')).gold(75)"),
     })
     public Solderer.RecipeBuilder recipeBuilder() {
         return new Solderer.RecipeBuilder();
@@ -96,6 +96,9 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int gold;
 
+        @Property(valid = @Comp("1"))
+        private IIngredient pattern;
+
         @RecipeBuilderMethodDescription
         public Solderer.RecipeBuilder time(int time) {
             this.time = time;
@@ -108,6 +111,12 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
             return this;
         }
 
+        @RecipeBuilderMethodDescription
+        public Solderer.RecipeBuilder pattern(IIngredient pattern) {
+            this.pattern = pattern;
+            return this;
+        }
+
         @Override
         public String getErrorMsg() {
             return "Error adding ProdigyTech Solderer Recipe";
@@ -115,9 +124,10 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 2, 1, 1);
+            validateItems(msg, 0, 1, 1, 1);
             validateFluids(msg);
             msg.add(gold <= 0, "gold must be greater than or equal to 1, yet it was {}", gold);
+            msg.add(pattern == null, "pattern cannot be empty");
             int capacity = Config.soldererMaxGold;
             msg.add(gold > capacity, "gold must be less than or equal to the Solderer's capacity {}, yet it was {}", capacity, gold);
             if (time <= 0) {
@@ -130,14 +140,14 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
         public @Nullable SoldererManager.SoldererRecipe register() {
             if (!validate()) return null;
             SoldererManager.SoldererRecipe recipe = null;
-            for (ItemStack pattern : input.get(0).getMatchingStacks()) {
-                if (input.size() == 1) {
-                    SoldererManager.SoldererRecipe theRecipe = new SoldererManager.SoldererRecipe(pattern, ItemStack.EMPTY, output.get(0), gold, time);
+            for (ItemStack pat : pattern.getMatchingStacks()) {
+                if (input.isEmpty()) {
+                    SoldererManager.SoldererRecipe theRecipe = new SoldererManager.SoldererRecipe(pat, ItemStack.EMPTY, output.get(0), gold, time);
                     ModSupport.PRODIGY_TECH.get().solderer.add(theRecipe);
                     if (recipe == null) recipe = theRecipe;
                 } else {
-                    for (ItemStack additive : input.get(1).getMatchingStacks()) {
-                        SoldererManager.SoldererRecipe theRecipe = new SoldererManager.SoldererRecipe(pattern, additive, output.get(0), gold, time);
+                    for (ItemStack additive : input.get(0).getMatchingStacks()) {
+                        SoldererManager.SoldererRecipe theRecipe = new SoldererManager.SoldererRecipe(pat, additive, output.get(0), gold, time);
                         ModSupport.PRODIGY_TECH.get().solderer.add(theRecipe);
                         if (recipe == null) recipe = theRecipe;
                     }

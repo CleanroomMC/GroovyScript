@@ -14,14 +14,15 @@ mods.prodigytech.solderer.removeByPattern(item('prodigytech:pattern_circuit_refi
 // mods.prodigytech.solderer.removeWithoutAdditive()
 
 mods.prodigytech.solderer.recipeBuilder()
-    .input(item('minecraft:clay'), item('minecraft:gold_ingot') * 4)
+    .pattern(item('minecraft:clay'))
+    .input(item('minecraft:gold_ingot'))
     .output(item('minecraft:diamond'))
     .gold(5)
     .time(100)
     .register()
 
 mods.prodigytech.solderer.recipeBuilder()
-    .input(item('minecraft:coal_block'))
+    .pattern(item('minecraft:coal_block'))
     .output(item('minecraft:nether_star'))
     .gold(75)
     .register()
