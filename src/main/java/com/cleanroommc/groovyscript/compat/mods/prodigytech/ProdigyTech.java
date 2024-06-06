@@ -3,11 +3,9 @@ package com.cleanroommc.groovyscript.compat.mods.prodigytech;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 
 public class ProdigyTech extends ModPropertyContainer {
-    /*
     public final AtomicReshaper atomicReshaper = new AtomicReshaper();
     public final ExplosionFurnace explosionFurnace = new ExplosionFurnace();
-     */
-    public final AtomicReshaper atomicReshaper = new AtomicReshaper();
+    public final ExplosionFurnaceAdditives explosionAdditives = new ExplosionFurnaceAdditives();
     public final SimpleRecipeHandler magneticReassembler = new MagneticReassembler();
     public final SimpleRecipeHandlerSecondaryOutput oreRefinery = new OreRefinery();
     public final SimpleRecipeHandler grinder = new RotaryGrinder();
@@ -18,6 +16,8 @@ public class ProdigyTech extends ModPropertyContainer {
 
     public ProdigyTech() {
         addRegistry(atomicReshaper);
+        addRegistry(explosionFurnace);
+        addRegistry(explosionAdditives);
         addRegistry(magneticReassembler);
         addRegistry(oreRefinery);
         addRegistry(grinder);

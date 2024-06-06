@@ -25,6 +25,33 @@ mods.prodigytech.atomic_reshaper.recipeBuilder()
     .register()
 
 
+// groovyscript.wiki.prodigytech.explosion_furnace.title:
+// groovyscript.wiki.prodigytech.explosion_furnace.description
+
+mods.prodigytech.explosion_furnace.removeByOutput(item('prodigytech:ferramic_ingot'))
+
+mods.prodigytech.explosion_furnace.recipeBuilder()
+    .input(ore('ingotGold'), item('minecraft:diamond'))
+    .craftPerReagent(8)
+    .power(160)
+    .output(item('minecraft:emerald_block'))
+    .register()
+
+mods.prodigytech.explosion_furnace.recipeBuilder()
+    .input(item('minecraft:stone'))
+    .power(160)
+    .output(item('minecraft:glowstone'))
+    .register()
+
+
+// groovyscript.wiki.prodigytech.explosion_furnace_additives.title:
+// groovyscript.wiki.prodigytech.explosion_furnace_additives.description
+
+mods.prodigytech.explosion_furnace_additives.addDampener(item('minecraft:stone'), 50)
+mods.prodigytech.explosion_furnace_additives.addExplosive(item('minecraft:cobblestone'), 50)
+mods.prodigytech.explosion_furnace_additives.removeDampener(ore('dustAsh'))
+mods.prodigytech.explosion_furnace_additives.removeExplosive(ore('gunpowder'))
+
 // groovyscript.wiki.prodigytech.heat_sawmill.title:
 // groovyscript.wiki.prodigytech.heat_sawmill.description
 
