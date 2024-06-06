@@ -1,0 +1,29 @@
+
+// Auto generated groovyscript example file
+// MODS_LOADED: prodigytech
+
+println 'mod \'prodigytech\' detected, running script'
+
+// groovyscript.wiki.prodigytech.solderer.title:
+// groovyscript.wiki.prodigytech.solderer.description
+
+mods.prodigytech.solderer.removeByAdditive(item('minecraft:iron_ingot'))
+mods.prodigytech.solderer.removeByOutput(item('prodigytech:circuit_refined'))
+mods.prodigytech.solderer.removeByPattern(item('prodigytech:pattern_circuit_refined'))
+// mods.prodigytech.solderer.removeAll()
+// mods.prodigytech.solderer.removeWithoutAdditive()
+
+mods.prodigytech.solderer.recipeBuilder()
+    .input(item('minecraft:clay'), item('minecraft:gold_ingot') * 4)
+    .output(item('minecraft:diamond'))
+    .gold(5)
+    .time(100)
+    .register()
+
+mods.prodigytech.solderer.recipeBuilder()
+    .input(item('minecraft:coal_block'))
+    .output(item('minecraft:nether_star'))
+    .gold(75)
+    .register()
+
+
