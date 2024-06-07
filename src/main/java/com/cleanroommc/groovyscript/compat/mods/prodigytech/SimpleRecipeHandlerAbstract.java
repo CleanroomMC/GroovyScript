@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import lykrast.prodigytech.common.recipe.AtomicReshaperManager;
 import lykrast.prodigytech.common.recipe.SimpleRecipe;
 import lykrast.prodigytech.common.recipe.SimpleRecipeManagerAbstract;
 import net.minecraft.item.ItemStack;
@@ -84,7 +83,7 @@ public abstract class SimpleRecipeHandlerAbstract<T extends SimpleRecipe> extend
             removed = instance.removeOreRecipe(recipe.getOreInput());
         } else {
             removed = instance.removeRecipe(recipe.getInput());
-        };
+        }
         if (removed == null) {
             return false;
         }

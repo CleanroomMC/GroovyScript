@@ -77,9 +77,9 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     }
 
     public static class EFAdditiveRecipe {
-        boolean isExplosive;
-        IIngredient input;
-        int value;
+        final boolean isExplosive;
+        final IIngredient input;
+        final int value;
 
         EFAdditiveRecipe(boolean isExplosive, IIngredient input, int value) {
             this.isExplosive = isExplosive;

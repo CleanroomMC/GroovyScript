@@ -65,7 +65,7 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
             removed = AtomicReshaperManager.INSTANCE.removeOreRecipe(recipe.getOreInput());
         } else {
             removed = AtomicReshaperManager.INSTANCE.removeRecipe(recipe.getInput());
-        };
+        }
         if (removed == null) {
             return false;
         }
