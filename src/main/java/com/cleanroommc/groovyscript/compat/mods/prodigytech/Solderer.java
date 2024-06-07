@@ -86,7 +86,7 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SoldererManager.SoldererRecipe> {
 
@@ -127,7 +127,7 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
             validateItems(msg, 0, 1, 1, 1);
             validateFluids(msg);
             msg.add(gold <= 0, "gold must be greater than or equal to 1, yet it was {}", gold);
-            msg.add(pattern == null, "pattern cannot be empty");
+            msg.add(pattern.isEmpty(), "pattern cannot be empty");
             int capacity = Config.soldererMaxGold;
             msg.add(gold > capacity, "gold must be less than or equal to the Solderer's capacity {}, yet it was {}", capacity, gold);
             if (time <= 0) {

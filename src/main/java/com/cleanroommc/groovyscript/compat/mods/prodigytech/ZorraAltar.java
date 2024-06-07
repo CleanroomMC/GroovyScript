@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.github.bsideup.jabel.Desugar;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import lykrast.prodigytech.common.recipe.ZorraAltarManager;
@@ -13,21 +14,8 @@ import net.minecraft.enchantment.Enchantment;
 import java.util.Map;
 
 
-class ZorraRecipeData {
-    public String registry;
-    public Enchantment enchantment;
-    public int maxLevel;
-
-    ZorraRecipeData(String registry, Enchantment enchant, int maxLevel) {
-        this.registry = registry;
-        this.enchantment = enchant;
-        this.maxLevel = maxLevel;
-    }
-}
-
-
 @RegistryDescription
-public class ZorraAltar extends VirtualizedRegistry<ZorraRecipeData> {
+public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> {
     @GroovyBlacklist
     private static final Map<String, ZorraAltarManager> managers = new Object2ObjectOpenHashMap<>();
 
@@ -81,4 +69,7 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraRecipeData> {
         addBackup(new ZorraRecipeData(registry, enchantment, maxLevel));
         return managers.get(registry).removeEnchant(enchantment);
     }
+
+    @Desugar
+    public record ZorraRecipeData(String registry, Enchantment enchantment, int maxLevel) {}
 }

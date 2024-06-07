@@ -24,7 +24,11 @@ public abstract class SimpleRecipeHandlerAbstract<T extends SimpleRecipe> extend
     @Override
     public void onReload() {
         removeScripted().forEach(x -> instance.removeRecipe(x.getInput()));
-        restoreFromBackup().forEach(instance::addRecipe);
+        restoreFromBackup().forEach(r -> {
+            System.out.println("reloading recipe: " + name);
+            System.out.println(r);
+            instance.addRecipe(r);
+        });
     }
 
     public void addRecipe(T recipe) {
@@ -72,7 +76,7 @@ public abstract class SimpleRecipeHandlerAbstract<T extends SimpleRecipe> extend
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        // NOTE: can't be rolled back due to ItemMap<T> being protected
+        instance.getAllRecipes().forEach(this::addBackup);
         instance.removeAll();
     }
 }

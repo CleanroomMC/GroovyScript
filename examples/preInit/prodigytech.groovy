@@ -1,5 +1,3 @@
-
-// Auto generated groovyscript example file
 // MODS_LOADED: prodigytech
 
 import lykrast.prodigytech.common.item.IZorrasteelEquipment

@@ -19,8 +19,8 @@ mods.prodigytech.atomic_reshaper.recipeBuilder()
 
 mods.prodigytech.atomic_reshaper.recipeBuilder()
     .input(item('minecraft:gold_block'))
-    .addOutput(item('minecraft:diamond_block'), 10)
-    .addOutput(item('minecraft:carrot'), 3)
+    .output(item('minecraft:diamond_block'), 10)
+    .output(item('minecraft:carrot'), 3)
     .primordium(7)
     .register()
 

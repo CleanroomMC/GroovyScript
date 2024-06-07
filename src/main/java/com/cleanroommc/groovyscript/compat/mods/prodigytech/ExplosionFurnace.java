@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import lykrast.prodigytech.common.recipe.ExplosionFurnaceManager;
@@ -26,8 +27,8 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
         restoreFromBackup().forEach(ExplosionFurnaceManager::addRecipe);
     }
 
-    private void remove(ExplosionFurnaceManager.ExplosionFurnaceRecipe recipe) {
-        ExplosionFurnaceManager.RECIPES.removeIf(r -> r.getOutput().isItemEqual(recipe.getOutput()));
+    private boolean remove(ExplosionFurnaceManager.ExplosionFurnaceRecipe recipe) {
+        return ExplosionFurnaceManager.RECIPES.removeIf(r -> r.getOutput().isItemEqual(recipe.getOutput()));
     }
 
     public void addRecipe(ExplosionFurnaceManager.ExplosionFurnaceRecipe x) {
@@ -42,6 +43,18 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
             addBackup(r);
             return true;
         });
+    }
+
+    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    public void removeAll() {
+        ExplosionFurnaceManager.RECIPES.forEach(this::addBackup);
+        ExplosionFurnaceManager.removeAllRecipes();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.QUERY)
+    public SimpleObjectStream<ExplosionFurnaceManager.ExplosionFurnaceRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(ExplosionFurnaceManager.RECIPES)
+                .setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("1"))

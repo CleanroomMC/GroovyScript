@@ -13,13 +13,14 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
 public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.AtomicReshaperRecipe> {
     @RecipeBuilderDescription(example = {
         @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:emerald_block')).primordium(10).time(50)"),
-        @Example(".input(item('minecraft:gold_block')).addOutput(item('minecraft:diamond_block'), 10).addOutput(item('minecraft:carrot'), 3).primordium(7)")
+        @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block'), 10).output(item('minecraft:carrot'), 3).primordium(7)")
     })
     public AtomicReshaper.RecipeBuilder recipeBuilder() {
         return new AtomicReshaper.RecipeBuilder();
@@ -28,10 +29,11 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
     @Override
     public void onReload() {
         removeScripted().forEach(recipe -> {
-            if (recipe.isOreRecipe())
+            if (recipe.isOreRecipe()) {
                 AtomicReshaperManager.INSTANCE.removeOreRecipe(recipe.getOreInput());
-            else
+            } else {
                 AtomicReshaperManager.INSTANCE.removeRecipe(recipe.getInput());
+            }
         });
         restoreFromBackup().forEach(AtomicReshaperManager.INSTANCE::addRecipe);
     }
@@ -40,8 +42,7 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
     public boolean removeByInput(IIngredient input) {
         if (input instanceof OreDictIngredient) {
             AtomicReshaperManager.AtomicReshaperRecipe recipe = AtomicReshaperManager.INSTANCE.removeOreRecipe(((OreDictIngredient) input).getOreDict());
-            if (recipe == null)
-                return false;
+            if (recipe == null) return false;
             addBackup(recipe);
             return true;
         } else {
@@ -64,7 +65,7 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        // NOTE: can't be rolled back due to ItemMap<T> being protected
+        AtomicReshaperManager.INSTANCE.getAllRecipes().forEach(this::addBackup);
         AtomicReshaperManager.INSTANCE.removeAll();
     }
 
@@ -72,19 +73,13 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AtomicReshaperManager.AtomicReshaperRecipe> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE), defaultValue = "-1")
         private int time = -1;
 
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int primordium;
 
-        @Property(valid = @Comp("1"))
-        private List<Object> weightedOutputs;
-
-        RecipeBuilder() {
-            weightedOutputs = new ArrayList<>();
-        }
-
+        private final List<Integer> outputWeights = new ArrayList<>();
         private String errorMessage = "";
 
         @RecipeBuilderMethodDescription
@@ -99,13 +94,32 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
             return this;
         }
 
+        public AtomicReshaper.RecipeBuilder output(ItemStack output) {
+            output(output, 1);
+            return this;
+        }
+
+        public AtomicReshaper.RecipeBuilder output(ItemStack... outputs) {
+            for (ItemStack output : outputs) {
+                output(output, 1);
+            }
+            return this;
+        }
+
+        public AtomicReshaper.RecipeBuilder output(Collection<ItemStack> outputs) {
+            for (ItemStack output : outputs) {
+                output(output, 1);
+            }
+            return this;
+        }
+
         @RecipeBuilderMethodDescription
-        public AtomicReshaper.RecipeBuilder addOutput(ItemStack output, int weight) {
+        public AtomicReshaper.RecipeBuilder output(ItemStack output, int weight) {
             if (weight <= 0 && errorMessage.isEmpty()) {
                 errorMessage = String.format("ItemStack %s has invalid weight %d, expected >= 1", output, weight);
             } else {
-                weightedOutputs.add(output);
-                weightedOutputs.add(weight);
+                this.output.add(output);
+                outputWeights.add(weight);
             }
             return this;
         }
@@ -117,13 +131,11 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 1, 0, 1);
+            validateItems(msg, 1, 1, 1, Integer.MAX_VALUE);
             validateFluids(msg);
 
-            boolean hasNormalOutputs = !output.isEmpty();
-            boolean hasWeightedOutputs = !weightedOutputs.isEmpty();
-            msg.add(hasNormalOutputs && hasWeightedOutputs, "Both normal and weighted outputs were provided!");
-            msg.add(!hasNormalOutputs && !hasWeightedOutputs, "Neither of normal and weighted outputs were provided!");
+            // I think this check is not possible to fail at all but still, adding it for consistency
+            msg.add(output.size() != outputWeights.size(), "Outputs and output weights must be the same size!");
 
             msg.add(!errorMessage.isEmpty(), "Weighted outputs error: {}", errorMessage);
             msg.add(primordium <= 0, "primordium must be greater than or equal to 1, yet it was {}", primordium);
@@ -136,11 +148,12 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
         }
 
         private Object[] getRecipeOutput() {
-            if (!output.isEmpty()) {
-                return new ItemStack[]{output.get(0)};
-            } else {
-                return weightedOutputs.toArray();
+            List<Object> target = new ArrayList<>();
+            for (int i = 0; i < output.size(); i++) {
+                target.add(output.get(i));
+                target.add(outputWeights.get(i));
             }
+            return target.toArray();
         }
 
         @Override
