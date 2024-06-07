@@ -70,7 +70,7 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
     }
 
     @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp(value = "1", type = Comp.Type.GTE))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AtomicReshaperManager.AtomicReshaperRecipe> {
 
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE), defaultValue = "-1")

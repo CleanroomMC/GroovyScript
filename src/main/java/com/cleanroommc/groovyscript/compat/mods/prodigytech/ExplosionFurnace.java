@@ -57,7 +57,7 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExplosionFurnaceManager.ExplosionFurnaceRecipe> {
 

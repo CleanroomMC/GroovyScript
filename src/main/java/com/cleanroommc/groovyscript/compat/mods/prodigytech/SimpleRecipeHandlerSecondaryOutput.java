@@ -26,7 +26,7 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
     }
 
     @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
     public class RecipeBuilder extends AbstractRecipeBuilder<SimpleRecipe> {
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int time = -1;
