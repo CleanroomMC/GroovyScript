@@ -29,8 +29,8 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = @Comp("1"))
     public class RecipeBuilder extends AbstractRecipeBuilder<SimpleRecipe> {
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
-        private int time = -1;
+        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE), defaultValue = "(default time for this machine in the mod's config)")
+        private int time = getDefaultTime();
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
@@ -42,14 +42,12 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            if (time == -1) {
-                time = getDefaultTime();
-            }
+            msg.add(time <= 0, "time must be positive, got {}", time);
         }
 
         @Override
         public String getErrorMsg() {
-            return String.format("Error adding ProdigyTech %s Recipe", name);
+            return String.format("Error adding ProdigyTech %s Recipe", SimpleRecipeHandler.this.name);
         }
 
         @Override
@@ -70,40 +68,40 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
             return recipe;
         }
     }
-}
 
-@RegistryDescription
-class RotaryGrinder extends SimpleRecipeHandler {
-    RotaryGrinder() {
-        super("Rotary Grinder", RotaryGrinderManager.INSTANCE);
+    @RegistryDescription
+    static class RotaryGrinder extends SimpleRecipeHandler {
+        RotaryGrinder() {
+            super("Rotary Grinder", RotaryGrinderManager.INSTANCE);
+        }
+
+        @Override
+        protected int getDefaultTime() {
+            return Config.rotaryGrinderProcessTime;
+        }
+
+        @Override
+        @MethodDescription(example = @Example("item('minecraft:gravel')"))
+        public boolean removeByInput(IIngredient input) {
+            return super.removeByInput(input);
+        }
     }
 
-    @Override
-    protected int getDefaultTime() {
-        return Config.rotaryGrinderProcessTime;
-    }
+    @RegistryDescription
+    static class MagneticReassembler extends SimpleRecipeHandler {
+        MagneticReassembler() {
+            super("Magnetic Reassembler", MagneticReassemblerManager.INSTANCE);
+        }
 
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:gravel')"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
-    }
-}
+        @Override
+        protected int getDefaultTime() {
+            return Config.magneticReassemblerProcessTime;
+        }
 
-@RegistryDescription
-class MagneticReassembler extends SimpleRecipeHandler {
-    MagneticReassembler() {
-        super("Magnetic Reassembler", MagneticReassemblerManager.INSTANCE);
-    }
-
-    @Override
-    protected int getDefaultTime() {
-        return Config.magneticReassemblerProcessTime;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:gravel')"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
+        @Override
+        @MethodDescription(example = @Example("item('minecraft:gravel')"))
+        public boolean removeByInput(IIngredient input) {
+            return super.removeByInput(input);
+        }
     }
 }

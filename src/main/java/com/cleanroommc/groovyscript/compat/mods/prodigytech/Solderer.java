@@ -43,26 +43,35 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
 
     @MethodDescription(example = @Example("item('prodigytech:pattern_circuit_refined')"))
     public boolean removeByPattern(IIngredient pattern) {
-        SoldererManager.SoldererRecipe recipe = SoldererManager.RECIPES.stream()
-                .filter(r -> pattern.test(r.getPattern()))
-                .findFirst().orElse(null);
-        return remove(recipe);
+        return SoldererManager.RECIPES.removeIf(r -> {
+            if (pattern.test(r.getPattern())) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
     }
 
     @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
     public boolean removeByAdditive(IIngredient additive) {
-        SoldererManager.SoldererRecipe recipe = SoldererManager.RECIPES.stream()
-                .filter(r -> r.requiresAdditive() && additive.test(r.getAdditive()))
-                .findFirst().orElse(null);
-        return remove(recipe);
+        return SoldererManager.RECIPES.removeIf(r -> {
+            if (r.requiresAdditive() && additive.test(r.getPattern())) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
     }
 
     @MethodDescription(example = @Example("item('prodigytech:circuit_refined')"))
     public boolean removeByOutput(IIngredient output) {
-        SoldererManager.SoldererRecipe recipe = SoldererManager.RECIPES.stream()
-                .filter(r -> output.test(r.getOutput()))
-                .findFirst().orElse(null);
-        return remove(recipe);
+        return SoldererManager.RECIPES.removeIf(r -> {
+            if (output.test(r.getPattern())) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
     }
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
@@ -91,7 +100,7 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
     public static class RecipeBuilder extends AbstractRecipeBuilder<SoldererManager.SoldererRecipe> {
 
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
-        private int time = -1;
+        private int time = Config.soldererProcessTime;
 
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int gold;
@@ -130,9 +139,7 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
             msg.add(pattern.isEmpty(), "pattern cannot be empty");
             int capacity = Config.soldererMaxGold;
             msg.add(gold > capacity, "gold must be less than or equal to the Solderer's capacity {}, yet it was {}", capacity, gold);
-            if (time <= 0) {
-                time = Config.soldererProcessTime;
-            }
+            msg.add(time <= 0, "time must be positive, got {}", time);
         }
 
         @Override

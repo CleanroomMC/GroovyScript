@@ -8,7 +8,7 @@ println 'mod \'prodigytech\' detected, running script'
 
 // Create an item at the location 'placeholdername:prodigy_stick' enchantable in the Zorra Altar
 // Note: due to the PT's implementation it is difficult to make other mod's items enchantable
-// This merely registers the item, the pre-init script adds the specific enchantments
+// This merely registers the item, the post-init script adds the specific enchantments
 class ProdigyStick extends Item implements IZorrasteelEquipment {
     static registry = mods.prodigytech.zorra_altar.createRegistry('stick')
 

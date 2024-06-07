@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -58,6 +59,20 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
         }
     }
 
+    private boolean backupAndRemove(AtomicReshaperManager.AtomicReshaperRecipe recipe) {
+        AtomicReshaperManager.AtomicReshaperRecipe removed;
+        if (recipe.isOreRecipe()) {
+            removed = AtomicReshaperManager.INSTANCE.removeOreRecipe(recipe.getOreInput());
+        } else {
+            removed = AtomicReshaperManager.INSTANCE.removeRecipe(recipe.getInput());
+        };
+        if (removed == null) {
+            return false;
+        }
+        addBackup(removed);
+        return true;
+    }
+
     public void add(AtomicReshaperManager.AtomicReshaperRecipe recipe) {
         AtomicReshaperManager.INSTANCE.addRecipe(recipe);
         addScripted(recipe);
@@ -69,18 +84,23 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
         AtomicReshaperManager.INSTANCE.removeAll();
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
+    public SimpleObjectStream<AtomicReshaperManager.AtomicReshaperRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(AtomicReshaperManager.INSTANCE.getAllRecipes())
+                .setRemover(this::backupAndRemove);
+    }
+
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = @Comp(value = "1", type = Comp.Type.GTE))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AtomicReshaperManager.AtomicReshaperRecipe> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE), defaultValue = "-1")
-        private int time = -1;
+        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE), defaultValue = "Config.atomicReshaperProcessTime")
+        private int time = Config.atomicReshaperProcessTime;
 
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int primordium;
 
         private final List<Integer> outputWeights = new ArrayList<>();
-        private String errorMessage = "";
 
         @RecipeBuilderMethodDescription
         public AtomicReshaper.RecipeBuilder time(int time) {
@@ -115,12 +135,8 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
 
         @RecipeBuilderMethodDescription
         public AtomicReshaper.RecipeBuilder output(ItemStack output, int weight) {
-            if (weight <= 0 && errorMessage.isEmpty()) {
-                errorMessage = String.format("ItemStack %s has invalid weight %d, expected >= 1", output, weight);
-            } else {
-                this.output.add(output);
-                outputWeights.add(weight);
-            }
+            this.output.add(output);
+            outputWeights.add(weight);
             return this;
         }
 
@@ -137,14 +153,12 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
             // I think this check is not possible to fail at all but still, adding it for consistency
             msg.add(output.size() != outputWeights.size(), "Outputs and output weights must be the same size!");
 
-            msg.add(!errorMessage.isEmpty(), "Weighted outputs error: {}", errorMessage);
+            msg.add(outputWeights.stream().anyMatch(x -> x <= 0), "all weighted outputs must be greater than 0, yet they were {}", outputWeights);
             msg.add(primordium <= 0, "primordium must be greater than or equal to 1, yet it was {}", primordium);
             // 100 is hardcoded in the source
             int capacity = Config.atomicReshaperMaxPrimordium * 100;
             msg.add(primordium > capacity, "primordium must be less than or equal to the Reshaper's capacity {}, yet it was {}", capacity, primordium);
-            if (time <= 0) {
-                time = Config.atomicReshaperProcessTime;
-            }
+            msg.add(time <= 0, "time must be positive, got {}", time);
         }
 
         private Object[] getRecipeOutput() {

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RegistryDescription
+@RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
     @Override
     public void onReload() {
@@ -46,13 +46,13 @@ public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
     }
 
     @MethodDescription(example = @Example("item('minecraft:diamond')"), type = MethodDescription.Type.ADDITION)
-    public void addRecipe(IIngredient x) {
+    public void add(IIngredient x) {
         addScripted(x);
         addRecipeBase(x);
     }
 
     @MethodDescription(example = @Example("ore('sugarcane')"))
-    public boolean removeRecipe(IIngredient x) {
+    public boolean remove(IIngredient x) {
         addBackup(x);
         return removeRecipeBase(x);
     }
@@ -71,6 +71,6 @@ public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
         Stream<IIngredient> oreDictRecipes = PrimordialisReactorManager.getAllOreEntries().stream()
                 .map(OreDictIngredient::new);
         List<IIngredient> items = Stream.concat(normalRecipes, oreDictRecipes).collect(Collectors.toList());
-        return new SimpleObjectStream<>(items).setRemover(this::removeRecipe);
+        return new SimpleObjectStream<>(items).setRemover(this::remove);
     }
 }

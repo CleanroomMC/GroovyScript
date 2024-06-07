@@ -3,8 +3,10 @@ package com.cleanroommc.groovyscript.compat.mods.prodigytech;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import lykrast.prodigytech.common.recipe.AtomicReshaperManager;
 import lykrast.prodigytech.common.recipe.SimpleRecipe;
 import lykrast.prodigytech.common.recipe.SimpleRecipeManagerAbstract;
 import net.minecraft.item.ItemStack;
@@ -24,11 +26,7 @@ public abstract class SimpleRecipeHandlerAbstract<T extends SimpleRecipe> extend
     @Override
     public void onReload() {
         removeScripted().forEach(x -> instance.removeRecipe(x.getInput()));
-        restoreFromBackup().forEach(r -> {
-            System.out.println("reloading recipe: " + name);
-            System.out.println(r);
-            instance.addRecipe(r);
-        });
+        restoreFromBackup().forEach(instance::addRecipe);
     }
 
     public void addRecipe(T recipe) {
@@ -78,5 +76,25 @@ public abstract class SimpleRecipeHandlerAbstract<T extends SimpleRecipe> extend
     public void removeAll() {
         instance.getAllRecipes().forEach(this::addBackup);
         instance.removeAll();
+    }
+
+    private boolean backupAndRemove(T recipe) {
+        T removed;
+        if (recipe.isOreRecipe()) {
+            removed = instance.removeOreRecipe(recipe.getOreInput());
+        } else {
+            removed = instance.removeRecipe(recipe.getInput());
+        };
+        if (removed == null) {
+            return false;
+        }
+        addBackup(removed);
+        return true;
+    }
+
+    @MethodDescription(type = MethodDescription.Type.QUERY)
+    public SimpleObjectStream<T> streamRecipes() {
+        return new SimpleObjectStream<>(instance.getAllRecipes())
+                .setRemover(this::backupAndRemove);
     }
 }

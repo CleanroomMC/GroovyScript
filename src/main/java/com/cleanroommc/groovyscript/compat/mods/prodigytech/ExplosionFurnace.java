@@ -31,6 +31,14 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
         return ExplosionFurnaceManager.RECIPES.removeIf(r -> r.getOutput().isItemEqual(recipe.getOutput()));
     }
 
+    private boolean backupAndRemove(ExplosionFurnaceManager.ExplosionFurnaceRecipe recipe) {
+        if (remove(recipe)) {
+            addBackup(recipe);
+            return true;
+        }
+        return false;
+    }
+
     public void addRecipe(ExplosionFurnaceManager.ExplosionFurnaceRecipe x) {
         addScripted(x);
         ExplosionFurnaceManager.addRecipe(x);
@@ -54,15 +62,15 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ExplosionFurnaceManager.ExplosionFurnaceRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ExplosionFurnaceManager.RECIPES)
-                .setRemover(this::remove);
+                .setRemover(this::backupAndRemove);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExplosionFurnaceManager.ExplosionFurnaceRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private int craftPerReagent = 0;
+        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        private int craftPerReagent = 1;
 
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int power;
@@ -88,10 +96,7 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 2, 1, 1);
             validateFluids(msg);
-            msg.add(craftPerReagent > 0 && input.size() == 1, "craftPerReagent is only allowed with 2 inputs!");
-            if (input.size() == 2 && craftPerReagent <= 0) {
-                craftPerReagent = 1;
-            }
+            msg.add(craftPerReagent <= 0, "craftPerReagent should be positive!");
         }
 
         @Override
@@ -101,7 +106,7 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
             ExplosionFurnaceManager.ExplosionFurnaceRecipe recipe = null;
             IIngredient inputItem = input.get(0);
             // We do not do the OreDict check like in other places as it adds far too much code bloat
-            if (craftPerReagent == 0) {
+            if (input.size() == 1) {
                 for (ItemStack it : inputItem.getMatchingStacks()) {
                     recipe = new ExplosionFurnaceManager.ExplosionFurnaceRecipe(it, output.get(0), power);
                     ModSupport.PRODIGY_TECH.get().explosionFurnace.addRecipe(recipe);

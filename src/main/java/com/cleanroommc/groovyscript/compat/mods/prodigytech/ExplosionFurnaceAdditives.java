@@ -10,7 +10,7 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import lykrast.prodigytech.common.recipe.ExplosionFurnaceManager;
 import net.minecraft.item.ItemStack;
 
-@RegistryDescription
+@RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurnaceAdditives.EFAdditiveRecipe> {
     @Override
     public void onReload() {
@@ -72,7 +72,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @MethodDescription(example = @Example(priority = 2000, commented = true))
     public void removeAllDampeners() {
         ExplosionFurnaceManager.DAMPENERS.getAllContent().forEach(r ->
-            addBackup(new EFAdditiveRecipe(true, new ItemsIngredient(r.getMatchingStacks()), r.getDampening())));
+            addBackup(new EFAdditiveRecipe(false, new ItemsIngredient(r.getMatchingStacks()), r.getDampening())));
         ExplosionFurnaceManager.removeAllDampeners();
     }
 

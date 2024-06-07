@@ -1,4 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.prodigytech;
+
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;

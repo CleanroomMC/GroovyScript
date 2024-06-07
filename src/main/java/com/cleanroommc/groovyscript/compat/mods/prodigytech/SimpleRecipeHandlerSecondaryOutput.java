@@ -29,9 +29,9 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
     @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
     public class RecipeBuilder extends AbstractRecipeBuilder<SimpleRecipe> {
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
-        private int time = -1;
+        private int time = getDefaultTime();
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.LTE))
+        @Property(valid = @Comp(value = "1", type = Comp.Type.LTE), defaultValue = "1.0f")
         private float secondaryChance = 1.0f;
 
         @RecipeBuilderMethodDescription
@@ -50,15 +50,13 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 2);
             validateFluids(msg);
-            if (time == -1) {
-                time = getDefaultTime();
-            }
+            msg.add(time <= 0, "time must be positive, got {}", time);
             msg.add(secondaryChance > 1.0f || secondaryChance < 0.0f, "secondary output has to be between 0 and 1, got {}", secondaryChance);
         }
 
         @Override
         public String getErrorMsg() {
-            return String.format("Error adding ProdigyTech %s Recipe", name);
+            return String.format("Error adding ProdigyTech %s Recipe", SimpleRecipeHandlerSecondaryOutput.this.name);
         }
 
         @Override
@@ -80,40 +78,40 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
             return recipe;
         }
     }
-}
 
-@RegistryDescription
-class HeatSawmill extends SimpleRecipeHandlerSecondaryOutput {
-    HeatSawmill() {
-        super("Heat Sawmill", HeatSawmillManager.INSTANCE);
+    @RegistryDescription
+    static class HeatSawmill extends SimpleRecipeHandlerSecondaryOutput {
+        HeatSawmill() {
+            super("Heat Sawmill", HeatSawmillManager.INSTANCE);
+        }
+
+        @Override
+        protected int getDefaultTime() {
+            return Config.heatSawmillProcessTime;
+        }
+
+        @Override
+        @MethodDescription(example = @Example("ore('plankWood')"))
+        public boolean removeByInput(IIngredient input) {
+            return super.removeByInput(input);
+        }
     }
 
-    @Override
-    protected int getDefaultTime() {
-        return Config.heatSawmillProcessTime;
-    }
+    @RegistryDescription
+    static class OreRefinery extends SimpleRecipeHandlerSecondaryOutput {
+        OreRefinery() {
+            super("Ore Refinery", OreRefineryManager.INSTANCE);
+        }
 
-    @Override
-    @MethodDescription(example = @Example("ore('plankWood')"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
-    }
-}
+        @Override
+        protected int getDefaultTime() {
+            return Config.oreRefineryProcessTime;
+        }
 
-@RegistryDescription
-class OreRefinery extends SimpleRecipeHandlerSecondaryOutput {
-    OreRefinery() {
-        super("Ore Refinery", OreRefineryManager.INSTANCE);
-    }
-
-    @Override
-    protected int getDefaultTime() {
-        return Config.oreRefineryProcessTime;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("ore('oreLapis')"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
+        @Override
+        @MethodDescription(example = @Example("ore('oreLapis')"))
+        public boolean removeByInput(IIngredient input) {
+            return super.removeByInput(input);
+        }
     }
 }
