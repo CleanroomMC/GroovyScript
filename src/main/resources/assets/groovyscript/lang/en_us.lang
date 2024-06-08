@@ -1225,8 +1225,8 @@ groovyscript.wiki.prodigytech.ore_refinery.secondaryChance.value=Sets the chance
 
 groovyscript.wiki.prodigytech.primordialis_reactor.title=Primordialis Reactor
 groovyscript.wiki.prodigytech.primordialis_reactor.description=Turns organic matter into Primordium.
-groovyscript.wiki.prodigytech.primordialis_reactor.addRecipe=Adds an item that can be converted.
-groovyscript.wiki.prodigytech.primordialis_reactor.removeRecipe=Removes an item that can be converted.
+groovyscript.wiki.prodigytech.primordialis_reactor.add=Adds an item that can be converted.
+groovyscript.wiki.prodigytech.primordialis_reactor.remove=Removes an item that can be converted.
 
 groovyscript.wiki.prodigytech.rotary_grinder.title=Rotary Grinder
 groovyscript.wiki.prodigytech.rotary_grinder.description=A simple 1 to 1 processing machine making dusts.

@@ -38,6 +38,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     public boolean removeExplosive(IIngredient explosive) {
         for (ItemStack it : explosive.getMatchingStacks()) {
             ExplosionFurnaceManager.Explosive externalExplosive = ExplosionFurnaceManager.findExplosive(it);
+            if (externalExplosive == null) continue;
             EFAdditiveRecipe recipe = new EFAdditiveRecipe(true, explosive, externalExplosive.getPower());
             remove(recipe);
             return true;
@@ -62,6 +63,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     public boolean removeDampener(IIngredient dampener) {
         for (ItemStack it : dampener.getMatchingStacks()) {
             ExplosionFurnaceManager.Dampener externalDampener = ExplosionFurnaceManager.findDampener(it);
+            if (externalDampener == null) continue;
             EFAdditiveRecipe recipe = new EFAdditiveRecipe(false, dampener, externalDampener.getDampening());
             remove(recipe);
             return true;
