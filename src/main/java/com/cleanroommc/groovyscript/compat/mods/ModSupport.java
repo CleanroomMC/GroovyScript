@@ -20,6 +20,7 @@ import com.cleanroommc.groovyscript.compat.mods.chisel.Chisel;
 import com.cleanroommc.groovyscript.compat.mods.compactmachines.CompactMachines;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolution;
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
+import com.cleanroommc.groovyscript.compat.mods.essentialcraft.EssentialCraft;
 import com.cleanroommc.groovyscript.compat.mods.evilcraft.EvilCraft;
 import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCrafting;
 import com.cleanroommc.groovyscript.compat.mods.extrautils2.ExtraUtils2;
@@ -75,6 +76,7 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final GroovyContainer<CompactMachines> COMPACT_MACHINES = new InternalModContainer<>("compactmachines3", "Compact Machines 3", CompactMachines::new, "compactmachines");
     public static final GroovyContainer<DraconicEvolution> DRACONIC_EVOLUTION = new InternalModContainer<>("draconicevolution", "Draconic Evolution", DraconicEvolution::new, "de");
     public static final GroovyContainer<EnderIO> ENDER_IO = new InternalModContainer<>("enderio", "Ender IO", EnderIO::new, "eio");
+    public static final GroovyContainer<EssentialCraft> ESSENTIALCRAFT = new InternalModContainer<>("essentialcraft", "EssentialCraft 4", EssentialCraft::new, "ec4");
     public static final GroovyContainer<EvilCraft> EVILCRAFT = new InternalModContainer<>("evilcraft", "EvilCraft", EvilCraft::new);
     public static final GroovyContainer<ExtendedCrafting> EXTENDED_CRAFTING = new InternalModContainer<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
     public static final GroovyContainer<ExtraUtils2> EXTRA_UTILITIES_2 = new InternalModContainer<>("extrautils2", "Extra Utilities 2", ExtraUtils2::new, "extrautilities2");
