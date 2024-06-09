@@ -7,7 +7,6 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderD
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import mezz.jei.api.IJeiHelpers;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -17,19 +16,6 @@ import techreborn.api.RollingMachineRecipe;
 import java.util.List;
 import java.util.Map;
 
-/**
- * TODO:
- *  {@link techreborn.compat.jei.rollingMachine.RollingMachineRecipeWrapper#create(IJeiHelpers, IRecipe)}
- *  specifies what recipe wrappers can be used
- *  and our custom recipe wrapper isnt on that
- *  list :(
- *  <br>
- *  i think the only viable solutions are
- *  <br>
- *  1. don't use a custom recipe wrapper :(
- *  <br>
- *  2. mixin and fix it
- */
 @RegistryDescription
 public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, IRecipe>> {
 

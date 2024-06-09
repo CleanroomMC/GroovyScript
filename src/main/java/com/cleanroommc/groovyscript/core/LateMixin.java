@@ -27,6 +27,7 @@ public class LateMixin implements ILateMixinLoader {
             "ic2_exp",
             "inspirations",
             "jei",
+            "techreborn",
             "mekanism",
             "pyrotech",
             "roots",
