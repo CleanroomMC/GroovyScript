@@ -2,6 +2,7 @@
 
 repositories {
     maven {
+        // used for EnderIO
         url 'http://maven.tterrag.com/'
         allowInsecureProtocol = true
     }
