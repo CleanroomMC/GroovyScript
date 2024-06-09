@@ -95,6 +95,8 @@ final def mod_dependencies = [
         'prodigytech-297414:2769520'                          : [project.debug_prodigytech],
         'roots-246183:3905074'                                : [project.debug_roots],
         'rustic-256141:3107974'                               : [project.debug_rustic],
+        'reborncore-237903:3330308'                           : [project.debug_tech_reborn],
+        'techreborn-233564:2966851'                           : [project.debug_tech_reborn],
         'thaumcraft-223628:2629023'                           : [project.debug_thaum],
         'cofh_core-69162:2920433'                             : [project.debug_thermal],
         'cofh_world-271384:2920434'                           : [project.debug_thermal],
@@ -155,6 +157,11 @@ dependencies {
 
     if (project.debug_pyrotech.toBoolean()) {
         runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
+    }
+
+    compileOnly rfg.deobf('TechReborn:TechReborn-ModCompatibility-1.12.2:1.4.0.76:universal')
+    if (project.debug_tech_reborn.toBoolean()) {
+        runtimeOnly rfg.deobf('TechReborn:TechReborn-ModCompatibility-1.12.2:1.4.0.76:universal')
     }
 
     runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
