@@ -111,6 +111,8 @@ dependencies {
 
     // TODO: check if there is anything to exclude
     specialEmbed "io.github.classgraph:classgraph:4.8.165"
+    // have to include compileOnly for if any mods we're adding compat for shade an older version of classgraph, such as Reborn Core.
+    compileOnly "io.github.classgraph:classgraph:4.8.165"
 
     specialEmbed("org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1") {
         exclude group: 'com.google.guava', module: 'guava'
