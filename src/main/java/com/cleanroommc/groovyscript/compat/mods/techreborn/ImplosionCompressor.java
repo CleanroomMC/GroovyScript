@@ -75,7 +75,7 @@ public class ImplosionCompressor extends AbstractGenericTechRebornRegistry {
         public @Nullable ImplosionCompressorRecipe register() {
             if (!validate()) return null;
             ItemStack output2 = output.size() >= 2 ? output.get(1) : null;
-            ImplosionCompressorRecipe recipe = new ImplosionCompressorRecipe(TechReborn.getStackFromIIngredient(input.get(0)), input.size() >= 2 ? TechReborn.getStackFromIIngredient(input.get(1)) : null, output.get(0), output2, time, perTick);
+            ImplosionCompressorRecipe recipe = new ImplosionCompressorRecipe(Helper.getStackFromIIngredient(input.get(0)), input.size() >= 2 ? Helper.getStackFromIIngredient(input.get(1)) : null, output.get(0), output2, time, perTick);
             ModSupport.TECH_REBORN.get().implosionCompressor.add(recipe);
             return recipe;
         }

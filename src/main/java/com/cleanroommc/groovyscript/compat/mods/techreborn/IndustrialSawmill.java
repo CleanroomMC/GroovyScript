@@ -98,7 +98,7 @@ public class IndustrialSawmill extends AbstractGenericTechRebornRegistry {
             if (!validate()) return null;
             ItemStack output2 = output.size() >= 2 ? output.get(1) : null;
             ItemStack output3 = output.size() >= 3 ? output.get(2) : null;
-            IndustrialSawmillRecipe recipe = new IndustrialSawmillRecipe(TechReborn.getStackFromIIngredient(input.get(0)), fluidInput.get(0), output.get(0), output2, output3, time, perTick, oreDict);
+            IndustrialSawmillRecipe recipe = new IndustrialSawmillRecipe(Helper.getStackFromIIngredient(input.get(0)), fluidInput.get(0), output.get(0), output2, output3, time, perTick, oreDict);
             ModSupport.TECH_REBORN.get().industrialSawmill.add(recipe);
             return recipe;
         }
