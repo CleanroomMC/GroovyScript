@@ -80,7 +80,7 @@ public class Extractor extends AbstractPraescriptumRegistry {
             if (!validate()) return null;
 
             Recipe recipe = Recipes.extractor.createRecipe();
-            recipe.withInput(input.stream().map(TechReborn::toInputIngredient).collect(Collectors.toList()));
+            recipe.withInput(input.stream().map(Helper::toInputIngredient).collect(Collectors.toList()));
             output.forEach(recipe::withOutput);
             recipe.withEnergyCostPerTick(perTick);
             recipe.withOperationDuration(time);
