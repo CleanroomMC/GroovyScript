@@ -85,7 +85,7 @@ public class IndustrialElectrolyzer extends AbstractGenericTechRebornRegistry {
             ItemStack output2 = output.size() >= 2 ? output.get(1) : null;
             ItemStack output3 = output.size() >= 3 ? output.get(2) : null;
             ItemStack output4 = output.size() >= 4 ? output.get(3) : null;
-            IndustrialElectrolyzerRecipe recipe = new IndustrialElectrolyzerRecipe(TechReborn.getStackFromIIngredient(input.get(0)), TechReborn.getStackFromIIngredient(input.get(1)), output.get(0), output2, output3, output4, time, perTick, oreDict);
+            IndustrialElectrolyzerRecipe recipe = new IndustrialElectrolyzerRecipe(Helper.getStackFromIIngredient(input.get(0)), Helper.getStackFromIIngredient(input.get(1)), output.get(0), output2, output3, output4, time, perTick, oreDict);
             ModSupport.TECH_REBORN.get().industrialElectrolyzer.add(recipe);
             return recipe;
         }

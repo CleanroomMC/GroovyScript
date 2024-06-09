@@ -83,7 +83,7 @@ public class BlastFurnace extends AbstractGenericTechRebornRegistry {
         public @Nullable BlastFurnaceRecipe register() {
             if (!validate()) return null;
             ItemStack output2 = output.size() >= 2 ? output.get(1) : null;
-            BlastFurnaceRecipe recipe = new BlastFurnaceRecipe(TechReborn.getStackFromIIngredient(input.get(0)), input.size() == 2 ? TechReborn.getStackFromIIngredient(input.get(1)) : null, output.get(0), output2, time, perTick, neededHeat);
+            BlastFurnaceRecipe recipe = new BlastFurnaceRecipe(Helper.getStackFromIIngredient(input.get(0)), input.size() == 2 ? Helper.getStackFromIIngredient(input.get(1)) : null, output.get(0), output2, time, perTick, neededHeat);
             ModSupport.TECH_REBORN.get().blastFurnace.add(recipe);
             return recipe;
         }

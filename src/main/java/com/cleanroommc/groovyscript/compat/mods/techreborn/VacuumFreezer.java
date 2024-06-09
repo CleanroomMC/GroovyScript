@@ -73,7 +73,7 @@ public class VacuumFreezer extends AbstractGenericTechRebornRegistry {
         @RecipeBuilderRegistrationMethod
         public @Nullable VacuumFreezerRecipe register() {
             if (!validate()) return null;
-            VacuumFreezerRecipe recipe = new VacuumFreezerRecipe(TechReborn.getStackFromIIngredient(input.get(0)), output.get(0), time, perTick);
+            VacuumFreezerRecipe recipe = new VacuumFreezerRecipe(Helper.getStackFromIIngredient(input.get(0)), output.get(0), time, perTick);
             ModSupport.TECH_REBORN.get().vacuumFreezer.add(recipe);
             return recipe;
         }
