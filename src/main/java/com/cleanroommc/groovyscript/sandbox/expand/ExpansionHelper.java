@@ -184,10 +184,12 @@ public class ExpansionHelper {
         }
         String upperName = name;
         if (!Character.isDigit(name.charAt(0))) upperName = BeanUtils.capitalize(name);
-        if (getter == null)
+        if (getter == null) {
             getter = so -> {throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is writable, but not readable!");};
-        if (setter == null)
+        }
+        if (setter == null) {
             setter = (so, t) -> {throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is readable, but not writable!");};
+        }
 
         MetaMethod g = new Getter<>("get" + upperName, type, self, getter);
         MetaMethod s = new Setter<>("set" + upperName, type, self, setter);

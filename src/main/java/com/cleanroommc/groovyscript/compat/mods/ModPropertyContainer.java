@@ -6,6 +6,9 @@ import com.cleanroommc.groovyscript.api.INamed;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @deprecated this class has been replaced by {@link GroovyPropertyContainer}
+ */
 @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
 @Deprecated
 public class ModPropertyContainer extends GroovyPropertyContainer {
@@ -34,7 +37,7 @@ public class ModPropertyContainer extends GroovyPropertyContainer {
         return property;
     }
 
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.1.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
     @Deprecated
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
