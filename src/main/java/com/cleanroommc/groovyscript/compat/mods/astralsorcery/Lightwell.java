@@ -163,6 +163,7 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
             return this;
         }
 
+        @Override
         public boolean validate() {
             GroovyLog.Msg out = GroovyLog.msg("Error adding recipe to Astral Sorcery Lightwell");
 

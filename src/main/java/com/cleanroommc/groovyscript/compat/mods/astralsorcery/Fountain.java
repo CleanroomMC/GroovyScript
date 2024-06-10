@@ -132,6 +132,7 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
             return this;
         }
 
+        @Override
         public boolean validate() {
             GroovyLog.Msg out = GroovyLog.msg("Error adding fluid to Astral Sorcery Fountain").warn();
 
