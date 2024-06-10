@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class PyroTech extends ModPropertyContainer {
+public class PyroTech extends GroovyPropertyContainer {
 
     public static final Barrel barrel = new Barrel();
     public static final Campfire campfire = new Campfire();

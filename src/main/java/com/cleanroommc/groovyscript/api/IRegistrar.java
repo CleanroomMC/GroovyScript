@@ -8,7 +8,7 @@ import java.lang.reflect.Modifier;
 
 /**
  * A helper interface to register {@link INamed registries} without having direct access to the
- * {@link com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer ModPropertyContainer}.
+ * {@link com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer GroovyPropertyContainer}.
  * An instance can be obtained from {@link GroovyContainer#getRegistrar()}.
  */
 @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")

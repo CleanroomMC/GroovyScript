@@ -13,16 +13,16 @@ import java.util.Set;
  * This is used for external mod compat. Don't use this directly. Instead, implement {@link GroovyPlugin} on any class.
  * This class will then be automatically instanced.
  */
-public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> {
+public class ExternalModContainer extends GroovyContainer<GroovyPropertyContainer> {
 
     private final GroovyPlugin groovyContainer;
-    private final ModPropertyContainer container;
+    private final GroovyPropertyContainer container;
     private final String modId;
     private final String containerName;
     private final Collection<String> aliases;
     private final Priority priority;
 
-    ExternalModContainer(@NotNull GroovyPlugin groovyContainer, @NotNull ModPropertyContainer container) {
+    ExternalModContainer(@NotNull GroovyPlugin groovyContainer, @NotNull GroovyPropertyContainer container) {
         this.groovyContainer = Objects.requireNonNull(groovyContainer);
         this.container = Objects.requireNonNull(container);
         this.modId = groovyContainer.getModId();
@@ -60,7 +60,7 @@ public class ExternalModContainer extends GroovyContainer<ModPropertyContainer> 
     }
 
     @Override
-    public ModPropertyContainer get() {
+    public GroovyPropertyContainer get() {
         return container;
     }
 

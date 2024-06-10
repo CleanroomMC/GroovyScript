@@ -2,7 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import net.minecraft.item.ItemStack;
@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Arrays;
 
-public class ImmersiveEngineering extends ModPropertyContainer {
+public class ImmersiveEngineering extends GroovyPropertyContainer {
 
     public final AlloyKiln alloyKiln = new AlloyKiln();
     public final ArcFurnace arcFurnace = new ArcFurnace();

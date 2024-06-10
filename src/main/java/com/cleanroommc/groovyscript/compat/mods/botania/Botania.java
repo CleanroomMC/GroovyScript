@@ -2,12 +2,12 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconCategory;
 import vazkii.botania.api.lexicon.LexiconEntry;
 
-public class Botania extends ModPropertyContainer {
+public class Botania extends GroovyPropertyContainer {
 
     public final ElvenTrade elvenTrade = new ElvenTrade();
     public final ManaInfusion manaInfusion = new ManaInfusion();

@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class Aether extends ModPropertyContainer {
+public class Aether extends GroovyPropertyContainer {
 
     public final Enchanter enchanter = new Enchanter();
     public final EnchanterFuel enchanterFuel = new EnchanterFuel();

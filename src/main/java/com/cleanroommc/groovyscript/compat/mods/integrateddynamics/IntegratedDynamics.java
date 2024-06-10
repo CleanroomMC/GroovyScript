@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.integrateddynamics;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class IntegratedDynamics extends ModPropertyContainer {
+public class IntegratedDynamics extends GroovyPropertyContainer {
 
     public final DryingBasin dryingBasin = new DryingBasin();
     public final MechanicalDryingBasin mechanicalDryingBasin = new MechanicalDryingBasin();

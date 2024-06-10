@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class BetterWithMods extends ModPropertyContainer {
+public class BetterWithMods extends GroovyPropertyContainer {
 
     public final AnvilCrafting anvilCrafting = new AnvilCrafting();
     public final Cauldron cauldron = new Cauldron();

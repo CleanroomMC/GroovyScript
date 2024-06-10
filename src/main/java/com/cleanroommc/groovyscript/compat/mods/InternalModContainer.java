@@ -17,7 +17,7 @@ import java.util.Set;
  *
  * @param <T> type of the mod property container.
  */
-public class InternalModContainer<T extends ModPropertyContainer> extends GroovyContainer<T> {
+public class InternalModContainer<T extends GroovyPropertyContainer> extends GroovyContainer<T> {
 
     private final String modId, containerName;
     private final Supplier<T> modProperty;

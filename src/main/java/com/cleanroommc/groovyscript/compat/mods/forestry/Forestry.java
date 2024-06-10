@@ -2,14 +2,14 @@ package com.cleanroommc.groovyscript.compat.mods.forestry;
 
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
 import forestry.modules.ForestryModuleUids;
 
-public class Forestry extends ModPropertyContainer {
+public class Forestry extends GroovyPropertyContainer {
 
     public final CharcoalPile charcoalPile = new CharcoalPile();
     public final Squeezer squeezer = new Squeezer();
