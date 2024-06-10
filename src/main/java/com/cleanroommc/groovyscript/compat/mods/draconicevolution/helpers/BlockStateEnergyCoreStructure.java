@@ -150,7 +150,7 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
         if (flag == FLAG_RENDER) {
             if (world.isRemote) {
-                renderBuildGuide(states, world, pos, startPos, flag);
+                renderBuildGuide(states, world, pos, startPos, FLAG_RENDER);
             }
         }
 
