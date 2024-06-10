@@ -101,7 +101,7 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         @Override
         @RecipeBuilderMethodDescription(field = {"output", "chances"})
         public AbstractRecipeBuilder<Recipe> output(ItemStack output) {
-            return output(output, 1f);
+            return output(output, 1.0f);
         }
 
         @RecipeBuilderMethodDescription(field = "bonusType")

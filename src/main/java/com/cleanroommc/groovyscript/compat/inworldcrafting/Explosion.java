@@ -88,7 +88,7 @@ public class Explosion extends VirtualizedRegistry<Explosion.ExplosionRecipe> {
             if (this.startCondition != null && !ClosureHelper.call(true, this.startCondition, entityItem, itemStack)) return false;
             int count = itemStack.getCount();
             int amountToReplace;
-            if (this.chance >= 1f) {
+            if (this.chance >= 1.0f) {
                 amountToReplace = count;
             } else {
                 // only get 1 random value and approximate a normal distribution (instead of for each item in the stack)
@@ -114,7 +114,7 @@ public class Explosion extends VirtualizedRegistry<Explosion.ExplosionRecipe> {
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExplosionRecipe> {
 
-        private float chance = 1f;
+        private float chance = 1.0f;
         private Closure<Boolean> startCondition;
 
         public RecipeBuilder chance(float chance) {
@@ -138,7 +138,7 @@ public class Explosion extends VirtualizedRegistry<Explosion.ExplosionRecipe> {
             validateFluids(msg);
             if (this.chance < 0 || this.chance > 1) {
                 GroovyLog.get().warn("Explosion recipe chance should be greater than 0 and equal or less than 1.");
-                this.chance = 1f;
+                this.chance = 1.0f;
             }
         }
 

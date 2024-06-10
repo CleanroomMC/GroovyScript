@@ -86,7 +86,7 @@ public abstract class TileEntityPistonMixin {
                 boolean checkRecipes = !thisTile.getWorld().isRemote &&
                                        this.extending &&
                                        this.shouldHeadBeRendered &&
-                                       progress >= 1f &&
+                                       progress >= 1.0f &&
                                        !((pushingAgainst = thisTile.getWorld().getBlockState(thisTile.getPos().offset(enumfacing))).getBlock() instanceof BlockPistonMoving) &&
                                        pushingAgainst.getMaterial() != Material.AIR;
                 // groovyscript end
@@ -142,7 +142,7 @@ public abstract class TileEntityPistonMixin {
         if (d1 > 0.0D) {
             d1 = Math.min(d1, d0) + 0.01D;
             MOVING_ENTITY.set(enumfacing);
-            entity.move(MoverType.PISTON, d1 * (double) enumfacing.getXOffset(), d1 * (double) enumfacing.getYOffset(), d1 * (double) enumfacing.getZOffset());
+            entity.move(MoverType.PISTON, d1 * enumfacing.getXOffset(), d1 * enumfacing.getYOffset(), d1 * enumfacing.getZOffset());
             MOVING_ENTITY.set(null);
 
             if (!this.extending && this.shouldHeadBeRendered) {

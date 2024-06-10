@@ -210,15 +210,15 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
         int alpha = 0xFF000000;
         if (invalid) {
-            alpha = (int) (((Math.sin(ClientEventHandler.elapsedTicks / 20D) + 1D) / 2D) * 255D) << 24;
+            alpha = (int) (((Math.sin(ClientEventHandler.elapsedTicks / 20.0D) + 1.0D) / 2.0D) * 255.0D) << 24;
         }
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(translation.getX(), translation.getY(), translation.getZ());
         if (invalid) {
             GlStateManager.disableDepth();
-            GlStateManager.alphaFunc(GL11.GL_GREATER, 0F);
-            double s = Math.sin(ClientEventHandler.elapsedTicks / 10D) * 0.1D;
+            GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+            double s = Math.sin(ClientEventHandler.elapsedTicks / 10.0D) * 0.1D;
             GlStateManager.scale(0.8 + s, 0.8 + s, 0.8 + s);
             GlStateManager.translate(0.1 - s, 0.1 - s, 0.1 - s);
         } else {
@@ -228,7 +228,7 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
         float brightnessX = OpenGlHelper.lastBrightnessX;
         float brightnessY = OpenGlHelper.lastBrightnessY;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 150f, 150f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 150.0f, 150.0f);
 
         List<BakedQuad> blockQuads = ModelUtils.getModelQuads(states.getDefault());
 

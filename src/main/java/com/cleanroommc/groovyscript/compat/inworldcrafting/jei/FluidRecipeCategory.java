@@ -90,7 +90,7 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
     @Override
     public void drawExtras(@NotNull Minecraft minecraft) {
         drawLine(minecraft, "groovyscript.recipe.fluid_recipe", 4, 4, 0x404040);
-        GlStateManager.color(1f, 1f, 1f, 1f);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         this.downRightArrow.draw(minecraft, 23, outputY - 3);
         rightArrow.draw(minecraft, 76, outputY + 1);
     }
@@ -134,7 +134,7 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
                 if (chance == 1.0f) continue;
                 String chanceS = numberFormat.format(chance);
                 float w = minecraft.fontRenderer.getStringWidth(chanceS) * scale;
-                float xx = 9 - w / 2f;
+                float xx = 9 - w / 2.0f;
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(x + xx, y - 1, 0);
                 GlStateManager.translate(xx, yOff, 0);

@@ -280,13 +280,13 @@ public abstract class FluidRecipe {
 
         public RecipeBuilder<T> input(IIngredient ingredient, float consumeChance) {
             this.input.add(ingredient);
-            this.chances.add(MathHelper.clamp(consumeChance, 0f, 1f));
+            this.chances.add(MathHelper.clamp(consumeChance, 0.0f, 1.0f));
             return this;
         }
 
         @Override
         public AbstractRecipeBuilder<T> input(IIngredient ingredient) {
-            return input(ingredient, 1f);
+            return input(ingredient, 1.0f);
         }
 
         public RecipeBuilder<T> startCondition(Closure<Boolean> startCondition) {
