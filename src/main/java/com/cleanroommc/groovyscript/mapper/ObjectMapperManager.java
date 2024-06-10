@@ -4,7 +4,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -38,7 +38,7 @@ public class ObjectMapperManager {
 
     private static final Map<String, ObjectMapper<?>> handlers = new Object2ObjectOpenHashMap<>();
     private static final Map<String, List<ObjectMapper<?>>> handlerConflicts = new Object2ObjectOpenHashMap<>();
-    private static final Map<Class<? extends ModPropertyContainer>, Map<String, ObjectMapper<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
+    private static final Map<Class<? extends GroovyPropertyContainer>, Map<String, ObjectMapper<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
     public static final String EMPTY = "empty";
     public static final String WILDCARD = "*";
     public static final String SPLITTER = ":";
@@ -62,7 +62,7 @@ public class ObjectMapperManager {
             handlers.put(key, goh);
         }
         if (container != null) {
-            ModPropertyContainer propertyContainer = container.get();
+            GroovyPropertyContainer propertyContainer = container.get();
             var map = modHandlers.computeIfAbsent(propertyContainer.getClass(), k -> new Object2ObjectOpenHashMap<>());
             if (map.containsKey(key)) {
                 throw new IllegalStateException("There already is a ObjectMapper with name '" + key + "' in mod " + container.getContainerName());
@@ -194,7 +194,7 @@ public class ObjectMapperManager {
     }
 
     public static ObjectMapper<?> getObjectMapper(Class<?> containerClass, String key) {
-        if (!ModPropertyContainer.class.isAssignableFrom(containerClass)) return null;
+        if (!GroovyPropertyContainer.class.isAssignableFrom(containerClass)) return null;
         var map = modHandlers.get(containerClass);
         return map != null ? map.get(key) : null;
     }
