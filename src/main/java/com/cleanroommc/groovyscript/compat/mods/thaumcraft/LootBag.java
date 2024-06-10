@@ -43,17 +43,15 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
     }
 
     private static ArrayList<WeightedRandomLoot> getLootbag(int rarity) {
-        switch (rarity) {
-            case 0:
-                return WeightedRandomLoot.lootBagCommon;
-            case 1:
-                return WeightedRandomLoot.lootBagUncommon;
-            case 2:
-                return WeightedRandomLoot.lootBagRare;
-            default:
+        return switch (rarity) {
+            case 0 -> WeightedRandomLoot.lootBagCommon;
+            case 1 -> WeightedRandomLoot.lootBagUncommon;
+            case 2 -> WeightedRandomLoot.lootBagRare;
+            default -> {
                 GroovyLog.msg("Error: Thaumcraft Lootbag type not specified. Please use Lootbag.getCommon(), Lootbag.getUncommon(), or Lootbag.getRare().").error().post();
-                return new ArrayList<>();
-        }
+                yield new ArrayList<>();
+            }
+        };
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = {

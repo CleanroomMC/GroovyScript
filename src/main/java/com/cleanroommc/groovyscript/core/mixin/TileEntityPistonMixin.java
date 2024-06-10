@@ -113,14 +113,9 @@ public abstract class TileEntityPistonMixin {
     private void groovyscript$pushEntity(List<AxisAlignedBB> list, double d0, EnumFacing enumfacing, Entity entity, boolean sticky) {
         if (sticky) {
             switch (enumfacing.getAxis()) {
-                case X:
-                    entity.motionX = enumfacing.getXOffset();
-                    break;
-                case Y:
-                    entity.motionY = enumfacing.getYOffset();
-                    break;
-                case Z:
-                    entity.motionZ = enumfacing.getZOffset();
+                case X -> entity.motionX = enumfacing.getXOffset();
+                case Y -> entity.motionY = enumfacing.getYOffset();
+                case Z -> entity.motionZ = enumfacing.getZOffset();
             }
         }
 

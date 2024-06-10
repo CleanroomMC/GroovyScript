@@ -355,44 +355,44 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
             }
 
             switch (type) {
-                case STANDARD:
+                case STANDARD -> {
                     validateItems(msg, 1, 1, 1, 1);
                     validateFluids(msg, 1, 1, 0, 0);
                     msg.add(levels <= 0 || levels > InspirationsRegistry.getCauldronMax(), "levels must be greater than 0 and less than {}, yet it was {}", InspirationsRegistry.getCauldronMax(), levels);
                     msg.add(sound == null, "sound must be defined");
-                    break;
-                case TRANSFORM:
+                }
+                case TRANSFORM -> {
                     validateItems(msg, 1, 1, 0, 0);
                     validateFluids(msg, 1, 1, 1, 1);
                     msg.add(levels <= 0 || levels > InspirationsRegistry.getCauldronMax(), "levels must be greater than 0 and less than {}, yet it was {}", InspirationsRegistry.getCauldronMax(), levels);
-                    break;
-                case MIX:
+                }
+                case MIX -> {
                     validateItems(msg, 0, 0, 1, 1);
                     validateFluids(msg, 2, 2, 0, 0);
-                    break;
-                case FILL:
+                }
+                case FILL -> {
                     validateItems(msg, 1, 1, 1, 1);
                     validateFluids(msg, 1, 1, 0, 0);
                     msg.add(sound == null, "sound must be defined");
-                    break;
-                case BREWING:
+                }
+                case BREWING -> {
                     validateItems(msg, 1, 1, 0, 0);
                     validateFluids(msg);
                     msg.add(inputPotion == null, "inputPotion must be defined");
                     msg.add(outputPotion == null, "outputPotion must be defined");
-                    break;
-                case POTION:
+                }
+                case POTION -> {
                     validateItems(msg, 1, 1, 1, 1);
                     validateFluids(msg);
                     msg.add(inputPotion == null, "inputPotion must be defined");
                     msg.add(levels <= 0 || levels > InspirationsRegistry.getCauldronMax(), "levels must be greater than 0 and less than {}, yet it was {}", InspirationsRegistry.getCauldronMax(), levels);
-                    break;
-                case DYE:
+                }
+                case DYE -> {
                     validateItems(msg, 1, 1, 1, 1);
                     validateFluids(msg);
                     msg.add(dye == null, "dye must be defined");
                     msg.add(levels <= 0 || levels > InspirationsRegistry.getCauldronMax(), "levels must be greater than 0 and less than {}, yet it was {}", InspirationsRegistry.getCauldronMax(), levels);
-                    break;
+                }
             }
             msg.add(msg.hasSubMessages(), "Note that validation changes based on the type requested");
         }
@@ -402,34 +402,15 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         public @Nullable ICauldronRecipe register() {
             if (!validate()) return null;
 
-            ICauldronRecipe recipe;
-
-            switch (type) {
-                case STANDARD:
-                    recipe = new CauldronFluidRecipe(recipeMatchFromIngredient(input.get(0)), fluidInput.get(0).getFluid(), output.get(0), boiling, levels, sound);
-                    break;
-                case TRANSFORM:
-                    recipe = new CauldronFluidTransformRecipe(recipeMatchFromIngredient(input.get(0)), fluidInput.get(0).getFluid(), fluidOutput.get(0).getFluid(), boiling, levels);
-                    break;
-                case MIX:
-                    recipe = new CauldronMixRecipe(fluidInput.get(0).getFluid(), fluidInput.get(1).getFluid(), output.get(0));
-                    break;
-                case FILL:
-                    recipe = new FillCauldronRecipe(recipeMatchFromIngredient(input.get(0)), fluidInput.get(0).getFluid(), fluidInput.get(0).amount, output.get(0), boiling, sound);
-                    break;
-                case BREWING:
-                    recipe = new CauldronBrewingRecipe(inputPotion, input.get(0).toMcIngredient(), outputPotion);
-                    break;
-                case POTION:
-                    recipe = new CauldronPotionRecipe(recipeMatchFromIngredient(input.get(0)), inputPotion, output.get(0), levels, boiling);
-                    break;
-                case DYE:
-                    recipe = new CauldronDyeRecipe(recipeMatchFromIngredient(input.get(0)), dye, output.get(0), levels);
-                    break;
-                default:
-                    // Since we validate that type must be defined and return early if it isn't, this is impossible, but Intellij likes that it exists
-                    return null;
-            }
+            ICauldronRecipe recipe = switch (type) {
+                case STANDARD -> new CauldronFluidRecipe(recipeMatchFromIngredient(input.get(0)), fluidInput.get(0).getFluid(), output.get(0), boiling, levels, sound);
+                case TRANSFORM -> new CauldronFluidTransformRecipe(recipeMatchFromIngredient(input.get(0)), fluidInput.get(0).getFluid(), fluidOutput.get(0).getFluid(), boiling, levels);
+                case MIX -> new CauldronMixRecipe(fluidInput.get(0).getFluid(), fluidInput.get(1).getFluid(), output.get(0));
+                case FILL -> new FillCauldronRecipe(recipeMatchFromIngredient(input.get(0)), fluidInput.get(0).getFluid(), fluidInput.get(0).amount, output.get(0), boiling, sound);
+                case BREWING -> new CauldronBrewingRecipe(inputPotion, input.get(0).toMcIngredient(), outputPotion);
+                case POTION -> new CauldronPotionRecipe(recipeMatchFromIngredient(input.get(0)), inputPotion, output.get(0), levels, boiling);
+                case DYE -> new CauldronDyeRecipe(recipeMatchFromIngredient(input.get(0)), dye, output.get(0), levels);
+            };
 
             ModSupport.INSPIRATIONS.get().cauldron.add(recipe);
             return recipe;

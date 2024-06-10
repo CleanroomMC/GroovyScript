@@ -331,16 +331,11 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             }
 
             if (this.color == null) {
-                switch (this.type) {
-                    case MAJOR:
-                        this.color = new Color(40, 67, 204);
-                        break;
-                    case WEAK:
-                        this.color = new Color(67, 44, 176);
-                        break;
-                    case MINOR:
-                        this.color = new Color(93, 25, 127);
-                }
+                this.color = switch (this.type) {
+                    case MAJOR -> new Color(40, 67, 204);
+                    case WEAK -> new Color(67, 44, 176);
+                    case MINOR -> new Color(93, 25, 127);
+                };
             }
 
             return true;
@@ -349,20 +344,11 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         @RecipeBuilderRegistrationMethod
         public void register() {
             if (!validate()) return;
-            IConstellation constellation;
-            switch (this.type) {
-                case MAJOR:
-                    constellation = new ConstellationBase.Major(name, color);
-                    break;
-                case WEAK:
-                    constellation = new ConstellationBase.Minor(name, color, phases.toArray(new MoonPhase[0]));
-                    break;
-                case MINOR:
-                    constellation = new ConstellationBase.Weak(name, color);
-                    break;
-                default:
-                    return;
-            }
+            IConstellation constellation = switch (this.type) {
+                case MAJOR -> new ConstellationBase.Major(name, color);
+                case WEAK -> new ConstellationBase.Minor(name, color, phases.toArray(new MoonPhase[0]));
+                case MINOR -> new ConstellationBase.Weak(name, color);
+            };
             Map<Point, StarLocation> addedStars = new Object2ObjectOpenHashMap<>();
             this.connections.forEach(connection -> {
                 StarLocation s1;
