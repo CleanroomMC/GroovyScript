@@ -114,7 +114,7 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
         @Property(defaultValue = "200", valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int time = 200;
         @Property
-        private boolean consumesCast = false;
+        private boolean consumesCast;
 
         @RecipeBuilderMethodDescription(field = "time")
         public RecipeBuilder coolingTime(int time) {
