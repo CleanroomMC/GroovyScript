@@ -32,10 +32,12 @@ import org.eclipse.lsp4j.Range;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GroovyASTUtils {
 
@@ -268,7 +270,7 @@ public class GroovyASTUtils {
 
         if (classNode != null) {
             boolean statics = node instanceof ClassExpression;
-            return classNode.getFields().stream().filter(fieldNode -> {
+            return collectFields(classNode).filter(fieldNode -> {
                 return statics ? fieldNode.isStatic() : !fieldNode.isStatic();
             }).collect(Collectors.toList());
         }
@@ -280,7 +282,7 @@ public class GroovyASTUtils {
         ClassNode classNode = getTypeOfNode(node, context);
         if (classNode != null) {
             boolean statics = node instanceof ClassExpression;
-            return classNode.getProperties().stream().filter(propNode -> {
+            return collectProperties(classNode).filter(propNode -> {
                 return statics ? propNode.isStatic() : !propNode.isStatic();
             }).collect(Collectors.toList());
         }
@@ -292,11 +294,38 @@ public class GroovyASTUtils {
         ClassNode classNode = getTypeOfNode(node, context);
         if (classNode != null) {
             boolean statics = node instanceof ClassExpression;
-            return classNode.getMethods().stream().filter(methodNode -> {
+            return collectMethods(classNode).filter(methodNode -> {
                 return statics ? methodNode.isStatic() : !methodNode.isStatic();
             }).collect(Collectors.toList());
         }
         return Collections.emptyList();
+    }
+
+    public static Stream<MethodNode> collectMethods(ClassNode classNode) {
+        var stream = Stream.concat(classNode.getMethods().stream(),
+                                   Arrays.stream(classNode.getInterfaces()).flatMap(GroovyASTUtils::collectMethods));
+        if (classNode.getSuperClass() == null) {
+            return stream;
+        }
+        return Stream.concat(stream, collectMethods(classNode.getSuperClass()));
+    }
+
+    public static Stream<PropertyNode> collectProperties(ClassNode classNode) {
+        var stream = Stream.concat(classNode.getProperties().stream(),
+                                   Arrays.stream(classNode.getInterfaces()).flatMap(GroovyASTUtils::collectProperties));
+        if (classNode.getSuperClass() == null) {
+            return stream;
+        }
+        return Stream.concat(stream, collectProperties(classNode.getSuperClass()));
+    }
+
+    public static Stream<FieldNode> collectFields(ClassNode classNode) {
+        var stream = Stream.concat(classNode.getFields().stream(),
+                                   Arrays.stream(classNode.getInterfaces()).flatMap(GroovyASTUtils::collectFields));
+        if (classNode.getSuperClass() == null) {
+            return stream;
+        }
+        return Stream.concat(stream, collectFields(classNode.getSuperClass()));
     }
 
     public static ClassNode getTypeOfNode(ASTNode node, ASTContext context) {
