@@ -492,9 +492,8 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
 
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof Point2PointConnection)) return false;
+            if (!(o instanceof Point2PointConnection other)) return false;
             if (o == this) return true;
-            Point2PointConnection other = (Point2PointConnection) o;
             return ((p1.equals(other.p1) && p2.equals(other.p2)) || (p2.equals(other.p1) && p1.equals(other.p2)));
         }
 

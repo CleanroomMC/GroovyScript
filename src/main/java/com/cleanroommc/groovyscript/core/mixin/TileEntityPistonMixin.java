@@ -95,8 +95,7 @@ public abstract class TileEntityPistonMixin {
                     Entity entity = list1.get(i);
                     if (entity.getPushReaction() != EnumPushReaction.IGNORE) {
                         // groovyscript start
-                        if (checkRecipes && i < tryRecipesUntil && entity instanceof EntityItem) {
-                            EntityItem entityItem = (EntityItem) entity;
+                        if (checkRecipes && i < tryRecipesUntil && entity instanceof EntityItem entityItem) {
                             VanillaModule.inWorldCrafting.pistonPush.findAndRunRecipe(entityItem1 -> {
                                 entityItem1.getEntityWorld().spawnEntity(entityItem1);
                                 list1.add(entityItem1);
