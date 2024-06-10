@@ -50,7 +50,7 @@ public class Forestry extends GroovyPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.objectMapper("species", AlleleBeeSpecies.class)
+        container.objectMapperBuilder("species", AlleleBeeSpecies.class)
                 .parser(Forestry::parseSpecies)
                 .completerOfNamed(() -> AlleleManager.alleleRegistry.getRegisteredAlleles().keySet(), s -> s.replace('.', ':')) // elements don't have names
                 .docOfType("allele bee species")

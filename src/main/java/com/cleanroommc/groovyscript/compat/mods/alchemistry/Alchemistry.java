@@ -22,7 +22,7 @@ public class Alchemistry extends GroovyPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.objectMapper("element", ItemStack.class)
+        container.objectMapperBuilder("element", ItemStack.class)
                 .parser((s, args) -> {
                     String parsedName = s.trim().toLowerCase().replace(" ", "_");
                     ChemicalCompound compound = CompoundRegistry.INSTANCE.get(parsedName);

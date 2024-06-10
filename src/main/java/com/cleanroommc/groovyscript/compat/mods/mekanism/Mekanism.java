@@ -40,7 +40,7 @@ public class Mekanism extends GroovyPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.objectMapper("gas", GasStack.class)
+        container.objectMapperBuilder("gas", GasStack.class)
                 .parser((s, args) -> {
                     Gas gas = GasRegistry.getGas(s);
                     return gas == null ? Result.error() : Result.some(new GasStack(gas, 1));
@@ -48,7 +48,7 @@ public class Mekanism extends GroovyPropertyContainer {
                 .completerOfNamed(GasRegistry::getRegisteredGasses, Gas::getName)
                 .docOfType("gas stack")
                 .register();
-        container.objectMapper("infusionType", InfuseType.class) // infusion clashes with infusion field
+        container.objectMapperBuilder("infusionType", InfuseType.class) // infusion clashes with infusion field
                 .parser(IObjectParser.wrapStringGetter(InfuseRegistry::get, true))
                 .completerOfNames(InfuseRegistry.getInfuseMap()::keySet)
                 .docOfType("infusion type")

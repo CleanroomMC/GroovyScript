@@ -18,7 +18,7 @@ public class AppliedEnergistics2 extends GroovyPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.objectMapper("tunnel", TunnelType.class)
+        container.objectMapperBuilder("tunnel", TunnelType.class)
                 .parser(IObjectParser.wrapEnum(TunnelType.class, false))
                 .completerOfNamed(() -> Arrays.asList(TunnelType.values()), v -> v.name().toUpperCase(Locale.ROOT))
                 .docOfType("P2P tunnel type")

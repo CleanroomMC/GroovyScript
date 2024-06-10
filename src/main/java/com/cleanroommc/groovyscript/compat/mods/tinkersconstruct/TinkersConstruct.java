@@ -25,17 +25,17 @@ public class TinkersConstruct extends GroovyPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.objectMapper("toolMaterial", Material.class)
+        container.objectMapperBuilder("toolMaterial", Material.class)
                 .parser(IObjectParser.wrapStringGetter(TinkerRegistryAccessor.getMaterials()::get))
                 .completerOfNames(TinkerRegistryAccessor.getMaterials()::keySet)
                 .docOfType("tool material")
                 .register();
-        container.objectMapper("toolTrait", ITrait.class)
+        container.objectMapperBuilder("toolTrait", ITrait.class)
                 .parser(IObjectParser.wrapStringGetter(TinkerRegistryAccessor.getTraits()::get))
                 .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet, v -> v.endsWith("_armor") ? null : v) // only suggest non armor traits
                 .docOfType("tool trait")
                 .register();
-        container.objectMapper("armorTrait", ITrait.class)
+        container.objectMapperBuilder("armorTrait", ITrait.class)
                 .parser(IObjectParser.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")))
                 .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet,
                                   v -> v.endsWith("_armor") ? v.substring(0, v.length() - 6) : null) // only suggest armor traits

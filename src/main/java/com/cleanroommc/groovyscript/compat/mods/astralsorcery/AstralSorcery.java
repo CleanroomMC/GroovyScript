@@ -36,7 +36,7 @@ public class AstralSorcery extends GroovyPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.objectMapper("constellation", IConstellation.class)
+        container.objectMapperBuilder("constellation", IConstellation.class)
                 .parser((s, args) -> {
                     for (IConstellation constellation : ConstellationRegistryAccessor.getConstellationList()) {
                         if (constellation.getSimpleName().equalsIgnoreCase(s)) {

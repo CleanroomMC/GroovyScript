@@ -45,7 +45,7 @@ public abstract class GroovyContainer<T extends GroovyPropertyContainer> impleme
         }
     }
 
-    public <V> ObjectMapper.Builder<V> objectMapper(String name, Class<V> returnType) {
+    public <V> ObjectMapper.Builder<V> objectMapperBuilder(String name, Class<V> returnType) {
         return new ObjectMapper.Builder<>(name, returnType).mod(this);
     }
 }

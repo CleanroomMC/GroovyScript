@@ -39,7 +39,7 @@ public class Botania extends GroovyPropertyContainer {
     @SuppressWarnings("Convert2MethodRef")
     @Override
     public void initialize(GroovyContainer<?> container) {
-        container.objectMapper("brew", vazkii.botania.api.brew.Brew.class)
+        container.objectMapperBuilder("brew", vazkii.botania.api.brew.Brew.class)
                 .parser(IObjectParser.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false))
                 .completerOfNames(() -> BotaniaAPI.brewMap.keySet())
                 .defaultValue(() -> BotaniaAPI.fallbackBrew)
