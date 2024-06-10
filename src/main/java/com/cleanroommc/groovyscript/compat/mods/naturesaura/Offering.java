@@ -54,7 +54,7 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:nether_star')"))
+    @MethodDescription(example = @Example("item('minecraft:nether_star')"))
     public boolean removeByInput(IIngredient input) {
         return NaturesAuraAPI.OFFERING_RECIPES.entrySet().removeIf(r -> {
             for (var item : r.getValue().input.getMatchingStacks()) {
@@ -67,7 +67,7 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByCatalyst", example = @Example(value = "item('naturesaura:calling_spirit')", commented = true))
+    @MethodDescription(example = @Example(value = "item('naturesaura:calling_spirit')", commented = true))
     public boolean removeByCatalyst(IIngredient catalyst) {
         return NaturesAuraAPI.OFFERING_RECIPES.entrySet().removeIf(r -> {
             for (var x : r.getValue().startItem.getMatchingStacks()) {
@@ -80,7 +80,7 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('naturesaura:sky_ingot')"))
+    @MethodDescription(example = @Example("item('naturesaura:sky_ingot')"))
     public boolean removeByOutput(IIngredient output) {
         return NaturesAuraAPI.OFFERING_RECIPES.entrySet().removeIf(r -> {
             if (output.test(r.getValue().output)) {
@@ -91,13 +91,13 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         NaturesAuraAPI.OFFERING_RECIPES.values().forEach(this::addBackup);
         NaturesAuraAPI.OFFERING_RECIPES.entrySet().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, OfferingRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(NaturesAuraAPI.OFFERING_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
     }

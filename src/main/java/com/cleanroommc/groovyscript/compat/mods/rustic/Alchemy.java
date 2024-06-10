@@ -53,7 +53,7 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
         return Recipes.condenserRecipes.remove(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('rustic:elixir').withNbt(['ElixirEffects': [['Effect': 'minecraft:night_vision', 'Duration': 3600, 'Amplifier': 0]]])"))
+    @MethodDescription(example = @Example("item('rustic:elixir').withNbt(['ElixirEffects': [['Effect': 'minecraft:night_vision', 'Duration': 3600, 'Amplifier': 0]]])"))
     public boolean removeByOutput(IIngredient output) {
         return Recipes.condenserRecipes.removeIf(entry -> {
             if (output.test(entry.getResult())) {
@@ -64,7 +64,7 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:sugar')"))
+    @MethodDescription(example = @Example("item('minecraft:sugar')"))
     public boolean removeByInput(IIngredient input) {
         return Recipes.condenserRecipes.removeIf(entry -> {
             if (entry.getInputs().stream().flatMap(Collection::stream).anyMatch(input)) {
@@ -75,13 +75,13 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         Recipes.condenserRecipes.forEach(this::addBackup);
         Recipes.condenserRecipes.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ICondenserRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Recipes.condenserRecipes).setRemover(this::remove);
     }

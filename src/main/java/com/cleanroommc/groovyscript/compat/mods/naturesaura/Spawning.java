@@ -55,7 +55,7 @@ public class Spawning extends VirtualizedRegistry<AnimalSpawnerRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:bone')"))
+    @MethodDescription(example = @Example("item('minecraft:bone')"))
     public boolean removeByInput(IIngredient input) {
         return NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.entrySet().removeIf(r -> {
             for (var ingredient : r.getValue().ingredients) {
@@ -92,13 +92,13 @@ public class Spawning extends VirtualizedRegistry<AnimalSpawnerRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.values().forEach(this::addBackup);
         NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.entrySet().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, AnimalSpawnerRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
     }
