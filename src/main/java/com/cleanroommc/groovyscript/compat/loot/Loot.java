@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Loot extends NamedRegistry implements IScriptReloadable {
 
-    public Map<ResourceLocation, LootTable> tables = new Object2ObjectOpenHashMap<>();
+    public final Map<ResourceLocation, LootTable> tables = new Object2ObjectOpenHashMap<>();
 
     // TODO add event shortcut here
 

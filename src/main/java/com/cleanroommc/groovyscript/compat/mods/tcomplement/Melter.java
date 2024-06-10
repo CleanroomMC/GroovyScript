@@ -18,7 +18,7 @@ import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 public class Melter extends MeltingRecipeRegistry {
 
     @GroovyBlacklist
-    protected AbstractReloadableStorage<IBlacklist> backupStorage = new AbstractReloadableStorage<>();
+    protected final AbstractReloadableStorage<IBlacklist> backupStorage = new AbstractReloadableStorage<>();
 
     public MeltingRecipeBuilder recipeBuilder() {
         return new MeltingRecipeBuilder(this, "Tinkers Complement Melter override");

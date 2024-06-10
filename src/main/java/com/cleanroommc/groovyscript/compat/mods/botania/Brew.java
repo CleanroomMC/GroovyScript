@@ -77,7 +77,7 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
         @Property(defaultValue = "true", priority = 1200)
         protected boolean canInfuseBloodPendant = true;
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
-        protected List<PotionEffect> effects = new ArrayList<>();
+        protected final List<PotionEffect> effects = new ArrayList<>();
 
         @RecipeBuilderMethodDescription
         public BrewBuilder key(String key) {

@@ -22,7 +22,7 @@ import thaumcraft.common.lib.research.ScanPotion;
 @RegistryDescription
 public class Research extends VirtualizedRegistry<ResearchCategory> {
 
-    protected AbstractReloadableStorage<IScanThing> scanStorage = new AbstractReloadableStorage<>();
+    protected final AbstractReloadableStorage<IScanThing> scanStorage = new AbstractReloadableStorage<>();
 
     @Override
     public void onReload() {
