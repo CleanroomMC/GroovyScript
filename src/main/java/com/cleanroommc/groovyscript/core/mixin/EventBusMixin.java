@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Mixin(value = EventBus.class, remap = false)

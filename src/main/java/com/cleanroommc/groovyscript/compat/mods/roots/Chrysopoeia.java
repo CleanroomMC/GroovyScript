@@ -12,7 +12,6 @@ import epicsquid.roots.recipe.ChrysopoeiaRecipe;
 import epicsquid.roots.util.IngredientWithStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
