@@ -24,11 +24,25 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * This class handles global getter functions like `item(...)` and `fluid(...)`
+ *
+ * @param <T> return type of the function
+ */
 public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
 
+    /**
+     * Creates an object mapper builder.
+     * Use {@link GroovyContainer#objectMapperBuilder(String, Class)} instead!
+     *
+     * @param name       the function name
+     * @param returnType the return type
+     * @param <T>        the return type
+     * @return a new object mapper builder
+     */
     @ApiStatus.Internal
-    public static <T> Builder<T> builder(String name, Class<T> returnTpe) {
-        return new Builder<>(name, returnTpe);
+    public static <T> Builder<T> builder(String name, Class<T> returnType) {
+        return new Builder<>(name, returnType);
     }
 
     private final String name;
@@ -123,6 +137,11 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         return methodNodes;
     }
 
+    /**
+     * A helper class to create {@link ObjectMapper}s.
+     *
+     * @param <T> the return type of the mapper
+     */
     public static class Builder<T> {
 
         private final String name;
@@ -140,10 +159,23 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             this.returnType = returnType;
         }
 
+        /**
+         * Sets the mod who creates this mapper. This is already done when {@link GroovyContainer#objectMapperBuilder(String, Class)} is used.
+         *
+         * @param mod the creator mod
+         * @return this builder
+         * @throws IllegalStateException if GroovyScript doesn't have compat with that mod
+         */
         public Builder<T> mod(String mod) {
             return mod(ModSupport.INSTANCE.getContainer(mod));
         }
 
+        /**
+         * Sets the mod who creates this mapper. This is already done when {@link GroovyContainer#objectMapperBuilder(String, Class)} is used.
+         *
+         * @param mod the creator mod
+         * @return this builder
+         */
         public Builder<T> mod(GroovyContainer<?> mod) {
             if (this.mod == null) {
                 this.mod = mod;
@@ -151,11 +183,24 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             return this;
         }
 
+        /**
+         * Sets the parser function. It receives a String and any amount of other arguments and returns an object of the specified type or an error.
+         *
+         * @param handler parser function
+         * @return this builder
+         */
         public Builder<T> parser(IObjectParser<T> handler) {
             this.handler = handler;
             return this;
         }
 
+        /**
+         * Sets a value completer. This is used by the LSP to provide completion for mappers.
+         * Take a look at {@link Completer}'s static methods for helpers.
+         *
+         * @param completer completer
+         * @return this builder
+         */
         public Builder<T> completer(Completer completer) {
             if (this.completer == null) {
                 this.completer = completer;
@@ -165,14 +210,34 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             return this;
         }
 
+        /**
+         * Sets a value completer. This is used by the LSP to provide completion for mappers.
+         *
+         * @param values a supplier if a list of names
+         * @return this builder
+         */
         public Builder<T> completerOfNames(Supplier<Iterable<String>> values) {
             return completer(Completer.ofNamed(values, Function.identity(), 0));
         }
 
+        /**
+         * Sets a value completer. This is used by the LSP to provide completion for mappers.
+         *
+         * @param values   a supplier if a list of objects which have names
+         * @param toString a function to turn said objects into names
+         * @return this builder
+         */
         public <V> Builder<T> completerOfNamed(Supplier<Iterable<V>> values, Function<V, String> toString) {
             return completer(Completer.ofNamed(values, toString, 0));
         }
 
+        /**
+         * Sets a value completer. This is used by the LSP to provide completion for mappers.
+         *
+         * @param values        an enum class
+         * @param caseSensitive lower case names are used if this is false
+         * @return this builder
+         */
         public <V extends Enum<V>> Builder<T> completerOfEnum(Class<V> values, boolean caseSensitive) {
             return completerOfNamed(() -> Arrays.asList(values.getEnumConstants()), s -> caseSensitive ? s.name() : s.name().toLowerCase(Locale.ROOT));
         }
@@ -185,34 +250,75 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             }, 0));
         }
 
+        /**
+         * Sets a value completer. This is used by the LSP to provide completion for mappers.
+         *
+         * @param values a forge registry
+         * @return this builder
+         */
         public <V extends IForgeRegistryEntry<V>> Builder<T> completer(IForgeRegistry<V> values) {
             return completer(values::getKeys);
         }
 
+        /**
+         * Sets a default value. This is what the mapper returns when no value could be found or an error occurred. Default is null.
+         *
+         * @param defaultValue default value
+         * @return this builder
+         */
         public Builder<T> defaultValue(Supplier<T> defaultValue) {
             return defaultValueSup(() -> Result.some(defaultValue.get()));
         }
 
+        /**
+         * Sets a default value. This is what the mapper returns when no value could be found or an error occurred. Default is null.
+         *
+         * @param defaultValue default value
+         * @return this builder
+         */
         public Builder<T> defaultValueSup(Supplier<Result<T>> defaultValue) {
             this.defaultValue = defaultValue;
             return this;
         }
 
+        /**
+         * Adds a method signature. This is only used by LSP to provide helpful tooltips.
+         *
+         * @param paramTypes parameter types
+         * @return this builder
+         */
         public Builder<T> addSignature(Class<?>... paramTypes) {
             this.paramTypes.add(paramTypes);
             return this;
         }
 
+        /**
+         * Adds a documentation string. This is only used by LSP to provide helpful tooltips.
+         *
+         * @param doc documentation
+         * @return this builder
+         */
         public Builder<T> documentation(String doc) {
             this.documentation = doc;
             return this;
         }
 
+        /**
+         * Adds a documentation string. This is only used by LSP to provide helpful tooltips.
+         *
+         * @param type type of the returned objects
+         * @return this builder
+         */
         public Builder<T> docOfType(String type) {
             String mod = this.mod == null ? StringUtils.EMPTY : this.mod.getContainerName() + ' ';
             return documentation("returns a " + mod + type);
         }
 
+        /**
+         * Registers the mapper.
+         *
+         * @throws IllegalArgumentException if the mapper was misconfigured.
+         */
         public void register() {
             if (this.name == null || this.name.isEmpty()) throw new IllegalArgumentException("Name must not be empty");
             if (this.mod != null && !this.mod.isLoaded())

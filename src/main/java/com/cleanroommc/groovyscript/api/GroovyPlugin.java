@@ -23,6 +23,9 @@ public interface GroovyPlugin extends IGroovyContainer {
         return createModPropertyContainer();
     }
 
+    /**
+     * @deprecated use {@link #createGroovyPropertyContainer()} instead
+     */
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     @Deprecated
