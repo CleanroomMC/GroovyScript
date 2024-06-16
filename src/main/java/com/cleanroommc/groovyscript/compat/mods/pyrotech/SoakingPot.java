@@ -98,15 +98,15 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);
-            msg.add(name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.SOAKING_POT_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(super.name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.SOAKING_POT_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @Override
         @RecipeBuilderRegistrationMethod
         public @Nullable SoakingPotRecipe register() {
             if (!validate()) return null;
-            SoakingPotRecipe recipe = new SoakingPotRecipe(output.get(0), input.get(0).toMcIngredient(), fluidInput.get(0), campfireRequired, time).setRegistryName(name);
+            SoakingPotRecipe recipe = new SoakingPotRecipe(output.get(0), input.get(0).toMcIngredient(), fluidInput.get(0), campfireRequired, time).setRegistryName(super.name);
             PyroTech.soakingPot.add(recipe);
             return recipe;
         }

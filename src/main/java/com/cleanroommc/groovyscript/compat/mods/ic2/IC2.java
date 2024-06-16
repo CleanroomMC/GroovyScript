@@ -29,16 +29,16 @@ public class IC2 extends GroovyPropertyContainer {
     public RareEarthExtractor rareEarthExtractor;
 
     // Experimental
-    public FluidGenerator semiFluidGenerator = null;
-    public Electrolyzer electrolyzer = null;
-    public Fermenter fermenter = null;
-    public BlastFurnace blastFurnace = null;
-    public BlockCutter blockCutter = null;
-    public FluidCanner fluidCanner = null;
-    public SolidCanner solidCanner = null;
-    public Recycler recycler = null;
-    public LiquidHeatExchanger liquidHeatExchanger = null;
-    public FluidHeater liquidFueledFirebox = null;
+    public FluidGenerator semiFluidGenerator;
+    public Electrolyzer electrolyzer;
+    public Fermenter fermenter;
+    public BlastFurnace blastFurnace;
+    public BlockCutter blockCutter;
+    public FluidCanner fluidCanner;
+    public SolidCanner solidCanner;
+    public Recycler recycler;
+    public LiquidHeatExchanger liquidHeatExchanger;
+    public FluidHeater liquidFueledFirebox;
 
     public IC2() {
         isExp = isExp();

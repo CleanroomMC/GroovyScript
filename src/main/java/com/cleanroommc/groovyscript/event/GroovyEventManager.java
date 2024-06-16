@@ -97,17 +97,11 @@ public enum GroovyEventManager {
         }
 
         private EventListener(EventBusType busType, EventPriority priority, Class<?> eventClass, Consumer<?> listener) {
-            switch (busType) {
-                case ORE_GENERATION:
-                    this.eventBus = MinecraftForge.ORE_GEN_BUS;
-                    break;
-                case TERRAIN_GENERATION:
-                    this.eventBus = MinecraftForge.TERRAIN_GEN_BUS;
-                    break;
-                default:
-                    this.eventBus = MinecraftForge.EVENT_BUS;
-                    break;
-            }
+            this.eventBus = switch (busType) {
+                case ORE_GENERATION -> MinecraftForge.ORE_GEN_BUS;
+                case TERRAIN_GENERATION -> MinecraftForge.TERRAIN_GEN_BUS;
+                default -> MinecraftForge.EVENT_BUS;
+            };
             this.listener = (Consumer<Object>) listener;
             this.register(priority, eventClass);
         }

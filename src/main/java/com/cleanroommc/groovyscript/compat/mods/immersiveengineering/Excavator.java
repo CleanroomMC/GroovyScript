@@ -155,6 +155,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         @Property
         private boolean blacklist = true;
 
+        @Override
         @RecipeBuilderMethodDescription
         public RecipeBuilder name(String name) {
             this.name = name;

@@ -26,6 +26,7 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(value = ItemStack.class)
 public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMarkable {
 
+    @Override
     @Shadow
     public abstract boolean isEmpty();
 
@@ -34,7 +35,7 @@ public abstract class ItemStackMixin implements IIngredient, INbtIngredient, IMa
     @Unique
     protected Closure<Object> transformer;
     @Unique
-    protected Closure<Object> nbtMatcher = null;
+    protected Closure<Object> nbtMatcher;
     @Unique
     protected String mark;
 

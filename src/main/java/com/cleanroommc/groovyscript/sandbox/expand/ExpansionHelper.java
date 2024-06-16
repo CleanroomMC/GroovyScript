@@ -70,8 +70,7 @@ public class ExpansionHelper {
     }
 
     private static boolean isValidProperty(MetaProperty prop) {
-        if (prop instanceof MetaBeanProperty) {
-            MetaBeanProperty beanProperty = (MetaBeanProperty) prop;
+        if (prop instanceof MetaBeanProperty beanProperty) {
             if (!isValid(beanProperty.getField())) return false;
             if (!(beanProperty.getGetter() instanceof CachedMethod) || isValid((CachedMethod) beanProperty.getGetter()))
                 return false;
@@ -149,6 +148,7 @@ public class ExpansionHelper {
                     metaMethod = new NewInstanceMetaMethod(method);
                 else
                     metaMethod = new NewInstanceMetaMethod(method) {
+                        @Override
                         public CachedClass getDeclaringClass() {
                             return ReflectionCache.getCachedClass(self.getTheClass());
                         }

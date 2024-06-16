@@ -13,6 +13,7 @@ public class ExtendedEvaporatingBasinRecipe extends EvaporatingBasinRecipe {
         this.time = time;
     }
 
+    @Override
     public int getTime() {
         return time;
     }

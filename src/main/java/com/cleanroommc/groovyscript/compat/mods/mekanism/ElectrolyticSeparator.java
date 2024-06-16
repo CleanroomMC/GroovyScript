@@ -34,7 +34,7 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
         msg.add(Mekanism.isEmpty(rightOutput), () -> "right gas output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        SeparatorRecipe recipe = new SeparatorRecipe(input.copy(), energy, leftOutput.copy(), rightOutput.copy());
+        SeparatorRecipe recipe = new SeparatorRecipe(input, energy, leftOutput, rightOutput);
         addScripted(recipe);
         recipeRegistry.put(recipe);
         return recipe;

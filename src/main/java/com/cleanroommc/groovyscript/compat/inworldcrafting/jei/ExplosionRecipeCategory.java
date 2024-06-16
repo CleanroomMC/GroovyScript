@@ -44,7 +44,7 @@ public class ExplosionRecipeCategory extends BaseCategory<ExplosionRecipeCategor
     @Override
     public void drawExtras(@NotNull Minecraft minecraft) {
         minecraft.fontRenderer.drawSplitString(I18n.format("groovyscript.recipe.explosion"), 4, 4, 168, 0x404040);
-        GlStateManager.color(1f, 1f, 1f, 1f);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         rightArrow.draw(minecraft, 76, 26);
         float tntScale = 0.5f;
         GlStateManager.pushMatrix();
@@ -82,7 +82,8 @@ public class ExplosionRecipeCategory extends BaseCategory<ExplosionRecipeCategor
             if (chance < 1) {
                 String chanceS = FluidRecipeCategory.numberFormat.format(chance);
                 int w = minecraft.fontRenderer.getStringWidth(chanceS);
-                int x = 88 - w / 2, y = 44;
+                int x = 88 - w / 2;
+                int y = 44;
                 minecraft.fontRenderer.drawString(chanceS, x, y, 0x404040);
             }
         }

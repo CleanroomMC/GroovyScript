@@ -122,15 +122,15 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
             validateCustom(msg, failureOutput, 1, 100, "failure output");
             msg.add(burnTime < 0, "burnTime must be a non negative integer, yet it was {}", burnTime);
             msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
-            msg.add(name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(super.name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable KilnPitRecipe register() {
             if (!validate()) return null;
-            KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(name);
+            KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(super.name);
             PyroTech.kiln.add(recipe);
             return recipe;
         }

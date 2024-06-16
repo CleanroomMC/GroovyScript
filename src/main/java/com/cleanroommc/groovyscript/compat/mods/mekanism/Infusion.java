@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 )
 public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
 
-    private AbstractReloadableStorage<Pair<ItemStack, InfuseObject>> objectStorage = new AbstractReloadableStorage<>();
+    private final AbstractReloadableStorage<Pair<ItemStack, InfuseObject>> objectStorage = new AbstractReloadableStorage<>();
 
     public static InfusionItems infusion(InfuseType type) {
         return new InfusionItems(type);
@@ -84,8 +84,8 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
     }
 
     @MethodDescription(example = {
-            @Example("infusion('diamond'), 100, item('minecraft:clay')"),
-            @Example("infusion('carbon'), 100, item('minecraft:gold_ingot')")
+            @Example("infusionType('diamond'), 100, item('minecraft:clay')"),
+            @Example("infusionType('carbon'), 100, item('minecraft:gold_ingot')")
     }, type = MethodDescription.Type.ADDITION)
     public void add(InfuseType type, int amount, ItemStack item) {
         InfuseObject object = new InfuseObject(type, amount);
@@ -143,8 +143,8 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
     }
 
     @MethodDescription(example = {
-            @Example("infusion('carbon')"),
-            @Example(value = "infusion('diamond')", commented = true)
+            @Example("infusionType('carbon')"),
+            @Example(value = "infusionType('diamond')", commented = true)
     })
     public void removeByType(InfuseType type) {
         for (Map.Entry<ItemStack, InfuseObject> entry : InfuseRegistry.getObjectMap().entrySet().stream().filter(x -> x.getValue().type == type).collect(Collectors.toList())) {

@@ -43,8 +43,7 @@ public class GroovyScriptCompiler extends CompilationCustomizer {
         for (AnnotationNode annotatedNode : node.getAnnotations()) {
             if (annotatedNode.getClassNode().getName().equals(SIDE_ONLY_CLASS)) {
                 Expression expr = annotatedNode.getMember("value");
-                if (expr instanceof PropertyExpression) {
-                    PropertyExpression prop = (PropertyExpression) expr;
+                if (expr instanceof PropertyExpression prop) {
                     if (prop.getObjectExpression() instanceof ClassExpression &&
                         prop.getObjectExpression().getType().getName().equals(SIDE_CLASS)) {
                         String elementSide = prop.getPropertyAsString();

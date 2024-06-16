@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 public class Recycler extends VirtualizedRegistry<IRecipeInput> {
 
-    private int type = 0; // 0 = Whitelist | 1 = Blacklist
+    private int type; // 0 = Whitelist | 1 = Blacklist
 
     private static final Object dummy = new Object();
 

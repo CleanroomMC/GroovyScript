@@ -33,10 +33,9 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         EnrichmentRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            EnrichmentRecipe recipe = new EnrichmentRecipe(itemStack.copy(), output);
+            EnrichmentRecipe recipe = new EnrichmentRecipe(itemStack, output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -85,7 +84,7 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
             if (!validate()) return null;
             EnrichmentRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                EnrichmentRecipe r = new EnrichmentRecipe(itemStack.copy(), output.get(0));
+                EnrichmentRecipe r = new EnrichmentRecipe(itemStack, output.get(0));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().enrichmentChamber.add(r);
             }

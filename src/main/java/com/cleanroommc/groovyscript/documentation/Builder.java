@@ -149,7 +149,7 @@ public class Builder {
      * Otherwise, each line starts with a period (`.`) provided that it is not contained within any special zones (comment, string, brackets, etc)
      */
     private static List<String> generateParts(String content) {
-        ArrayList<String> parts = new ArrayList<>();
+        List<String> parts = new ArrayList<>();
 
         ArrayList<Character> req = new ArrayList<>();
         String next = "";

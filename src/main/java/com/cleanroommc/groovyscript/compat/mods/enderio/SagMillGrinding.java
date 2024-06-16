@@ -49,6 +49,7 @@ public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
         return false;
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(SagMillRecipeManager.getInstance().getBalls()::remove);

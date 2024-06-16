@@ -21,7 +21,7 @@ import java.util.Collection;
 @RegistryDescription
 public class EnergyCore implements IScriptReloadable {
 
-    private int version = 0;
+    private int version;
     private BlockStates[][][][] original;
     private BlockStates[][][][] edited;
     private BlockStates[] inner;

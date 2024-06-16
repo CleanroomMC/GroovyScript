@@ -37,7 +37,7 @@ public class Registry {
         this.description = registryClass.getAnnotation(RegistryDescription.class);
 
         List<Method> recipeBuilderMethods = new ArrayList<>();
-        EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
+        Map<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
         for (MethodDescription.Type value : MethodDescription.Type.values()) methods.put(value, new ArrayList<>());
         List<String> imports = new ArrayList<>();
 

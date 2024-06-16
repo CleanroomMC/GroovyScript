@@ -21,9 +21,7 @@ public class SmelteryFuelRecipe {
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
-        if (!(obj instanceof SmelteryFuelRecipe)) return false;
-
-        SmelteryFuelRecipe other = (SmelteryFuelRecipe) obj;
+        if (!(obj instanceof SmelteryFuelRecipe other)) return false;
 
         if (other.duration != duration) return false;
         return !other.fluid.isFluidStackIdentical(fluid);

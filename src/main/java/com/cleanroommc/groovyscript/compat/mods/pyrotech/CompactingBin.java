@@ -87,15 +87,15 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(toolUses < 0, "toolUses must be a non negative integer, yet it was {}", toolUses);
-            msg.add(name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(super.name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable CompactingBinRecipe register() {
             if (!validate()) return null;
-            CompactingBinRecipe recipe = new CompactingBinRecipe(output.get(0), input.get(0).toMcIngredient(), toolUses).setRegistryName(name);
+            CompactingBinRecipe recipe = new CompactingBinRecipe(output.get(0), input.get(0).toMcIngredient(), toolUses).setRegistryName(super.name);
             PyroTech.compactingBin.add(recipe);
             return recipe;
         }

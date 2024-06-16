@@ -33,7 +33,7 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
     public PressurizedRecipe add(IIngredient inputSolid, FluidStack inputFluid, GasStack inputGas, ItemStack outputSolid, GasStack outputGas, double energy, int duration) {
         PressurizedRecipe r = null;
         for (ItemStack item : inputSolid.getMatchingStacks()) {
-            PressurizedRecipe recipe = new PressurizedRecipe(item, inputFluid.copy(), inputGas.copy(), outputSolid.copy(), outputGas.copy(), energy, duration);
+            PressurizedRecipe recipe = new PressurizedRecipe(item, inputFluid, inputGas, outputSolid, outputGas, energy, duration);
             if (r == null) r = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -114,7 +114,7 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
                 ModSupport.MEKANISM.get().pressurizedReactionChamber.add(recipe);
             } else {
                 for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                    PressurizedRecipe r = new PressurizedRecipe(new PressurizedInput(itemStack.copy(), fluidInput.get(0), gasInput.get(0)), pressurizedOutput, energy, duration);
+                    PressurizedRecipe r = new PressurizedRecipe(new PressurizedInput(itemStack, fluidInput.get(0), gasInput.get(0)), pressurizedOutput, energy, duration);
                     if (recipe == null) recipe = r;
                     ModSupport.MEKANISM.get().pressurizedReactionChamber.add(r);
                 }

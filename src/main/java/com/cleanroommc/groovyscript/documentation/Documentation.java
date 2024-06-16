@@ -41,9 +41,26 @@ public class Documentation {
     private static final Set<String> missingLangKeys = new ObjectLinkedOpenHashSet<>();
 
     public static void generate() {
-        if (GENERATE_EXAMPLES) generateExamples();
-        if (GENERATE_WIKI) generateWiki();
-        if (TEST_AND_CRASH) FMLCommonHandler.instance().exitJava(0, false);
+        if (isGenerateExamples()) generateExamples();
+        if (isGenerateWiki()) generateWiki();
+        if (isTestAndCrash()) FMLCommonHandler.instance().exitJava(0, false);
+    }
+
+    private static boolean isGenerateExamples() {
+        return GENERATE_EXAMPLES || Boolean.parseBoolean(System.getProperty("groovyscript.generate_examples"));
+    }
+
+    private static boolean isGenerateWiki() {
+        return GENERATE_WIKI || Boolean.parseBoolean(System.getProperty("groovyscript.generate_wiki"));
+    }
+
+    private static boolean isTestAndCrash() {
+        return TEST_AND_CRASH || Boolean.parseBoolean(System.getProperty("groovyscript.generate_and_crash"));
+    }
+
+    private static boolean isLogMissingKeys() {
+        String property = System.getProperty("groovyscript.log_missing_lang_keys");
+        return property == null ? LOG_MISSING_KEYS : Boolean.parseBoolean(property);
     }
 
     public static void generateExamples() {
@@ -92,7 +109,7 @@ public class Documentation {
     }
 
     public static String translate(String translateKey, Object... parameters) {
-        if (LOG_MISSING_KEYS && !I18n.hasKey(translateKey)) {
+        if (isLogMissingKeys() && !I18n.hasKey(translateKey)) {
             missingLangKeys.add(translateKey);
         }
         return I18n.format(translateKey, parameters);
