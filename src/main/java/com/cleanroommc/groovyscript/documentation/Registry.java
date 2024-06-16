@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.INamed;
-import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
@@ -122,7 +121,7 @@ public class Registry {
         out.append("// ").append(getTitle()).append(":").append("\n");
         out.append("// ").append(WordUtils.wrap(getDescription(), Documentation.MAX_LINE_LENGTH, "\n// ", false)).append("\n\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.REMOVAL));
-        for (Method method : recipeBuilderMethods) out.append(new Builder(mod, method, reference, baseTranslationKey).builderExampleFile()).append("\n");
+        for (Method method : recipeBuilderMethods) out.append(new Builder(method, reference, baseTranslationKey).builderExampleFile()).append("\n");
         if (!recipeBuilderMethods.isEmpty()) out.append("\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.ADDITION));
         out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
@@ -207,7 +206,7 @@ public class Registry {
                 .append(I18n.format("groovyscript.wiki.recipe_builder_note", Documentation.DEFAULT_FORMAT.linkToBuilder())).append("\n\n");
 
         for (int i = 0; i < recipeBuilderMethods.size(); i++) {
-            Builder builder = new Builder(mod, recipeBuilderMethods.get(i), reference, baseTranslationKey);
+            Builder builder = new Builder(recipeBuilderMethods.get(i), reference, baseTranslationKey);
             out.append(new AdmonitionBuilder()
                                .type(Admonition.Type.ABSTRACT)
                                .hasTitle(true)

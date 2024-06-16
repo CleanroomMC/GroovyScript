@@ -1801,6 +1801,7 @@ groovyscript.wiki.pyrotech.campfire.add=Adds recipes in the format `name`, `inpu
 groovyscript.wiki.pyrotech.chopping_block.title=Chopping Block
 groovyscript.wiki.pyrotech.chopping_block.description=When using a axe it can convert items
 groovyscript.wiki.pyrotech.chopping_block.chops.value=Sets how often the item needs to be hit with output amount. Call it 4 times for 4 different tiers (Crude, Stone, Iron, Diamond)
+groovyscript.wiki.pyrotech.chopping_block.quantities.value=Sets the amount of items output for a given tier. Call it 4 times for 4 different tiers (Crude, Stone, Iron, Diamond)
 
 groovyscript.wiki.pyrotech.compacting_bin.title=Compacting Bin
 groovyscript.wiki.pyrotech.compacting_bin.description=When using a shovel it can convert items

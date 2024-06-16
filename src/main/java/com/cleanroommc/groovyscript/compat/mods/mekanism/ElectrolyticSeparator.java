@@ -62,6 +62,7 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
         @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private double energy;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder energy(double energy) {
             this.energy = energy;
             return this;

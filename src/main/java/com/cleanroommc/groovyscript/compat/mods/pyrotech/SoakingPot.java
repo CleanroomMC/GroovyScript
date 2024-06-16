@@ -103,6 +103,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable SoakingPotRecipe register() {
             if (!validate()) return null;
             SoakingPotRecipe recipe = new SoakingPotRecipe(output.get(0), input.get(0).toMcIngredient(), fluidInput.get(0), campfireRequired, time).setRegistryName(name);

@@ -110,7 +110,7 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "ticks")
         public RecipeBuilder time(int ticks) {
             this.ticks = ticks;
             return this;
