@@ -35,7 +35,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
 
         CombinerRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            CombinerRecipe recipe = new CombinerRecipe(itemStack.copy(), extra.copy(), output.copy());
+            CombinerRecipe recipe = new CombinerRecipe(itemStack, extra, output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -93,7 +93,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
             if (!validate()) return null;
             CombinerRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                CombinerRecipe r = new CombinerRecipe(itemStack.copy(), extra, output.get(0));
+                CombinerRecipe r = new CombinerRecipe(itemStack, extra, output.get(0));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().combiner.add(r);
             }

@@ -51,8 +51,8 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         SawmillRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
             SawmillRecipe recipe;
-            ChanceOutput chanceOutput = withSecondary ? new ChanceOutput(output.copy(), secondary.copy(), chance) : new ChanceOutput(output.copy());
-            recipe = new SawmillRecipe(new ItemStackInput(itemStack.copy()), chanceOutput);
+            ChanceOutput chanceOutput = withSecondary ? new ChanceOutput(output, secondary, chance) : new ChanceOutput(output);
+            recipe = new SawmillRecipe(new ItemStackInput(itemStack), chanceOutput);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -120,7 +120,7 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
                                         : new ChanceOutput(output.get(0), extra, chance);
             SawmillRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                SawmillRecipe r = new SawmillRecipe(new ItemStackInput(itemStack.copy()), chanceOutput);
+                SawmillRecipe r = new SawmillRecipe(new ItemStackInput(itemStack), chanceOutput);
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().sawmill.add(r);
             }

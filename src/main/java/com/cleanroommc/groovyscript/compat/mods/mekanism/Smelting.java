@@ -40,7 +40,7 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
 
         SmeltingRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            SmeltingRecipe recipe = new SmeltingRecipe(new ItemStackInput(itemStack.copy()), new ItemStackOutput(output.copy()));
+            SmeltingRecipe recipe = new SmeltingRecipe(new ItemStackInput(itemStack), new ItemStackOutput(output));
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -89,7 +89,7 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
             if (!validate()) return null;
             SmeltingRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                SmeltingRecipe r = new SmeltingRecipe(itemStack.copy(), output.get(0));
+                SmeltingRecipe r = new SmeltingRecipe(itemStack, output.get(0));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().smelting.add(r);
             }

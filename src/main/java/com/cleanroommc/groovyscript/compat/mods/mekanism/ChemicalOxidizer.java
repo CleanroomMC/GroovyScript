@@ -36,7 +36,7 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
 
         OxidationRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            OxidationRecipe recipe = new OxidationRecipe(itemStack.copy(), output.copy());
+            OxidationRecipe recipe = new OxidationRecipe(itemStack, output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -86,7 +86,7 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
             if (!validate()) return null;
             OxidationRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                OxidationRecipe r = new OxidationRecipe(itemStack.copy(), gasOutput.get(0));
+                OxidationRecipe r = new OxidationRecipe(itemStack, gasOutput.get(0));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().chemicalOxidizer.add(r);
             }

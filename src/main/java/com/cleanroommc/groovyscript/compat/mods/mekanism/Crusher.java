@@ -34,7 +34,7 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
 
         CrusherRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            CrusherRecipe recipe = new CrusherRecipe(itemStack.copy(), output.copy());
+            CrusherRecipe recipe = new CrusherRecipe(itemStack, output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -83,7 +83,7 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
             if (!validate()) return null;
             CrusherRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                CrusherRecipe r = new CrusherRecipe(itemStack.copy(), output.get(0));
+                CrusherRecipe r = new CrusherRecipe(itemStack, output.get(0));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().crusher.add(r);
             }

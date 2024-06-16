@@ -38,7 +38,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
 
         MetallurgicInfuserRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            MetallurgicInfuserRecipe recipe = new MetallurgicInfuserRecipe(new InfusionInput(infuseType, infuseAmount, itemStack.copy()), output.copy());
+            MetallurgicInfuserRecipe recipe = new MetallurgicInfuserRecipe(new InfusionInput(infuseType, infuseAmount, itemStack), output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -120,7 +120,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
             if (!validate()) return null;
             MetallurgicInfuserRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                MetallurgicInfuserRecipe r = new MetallurgicInfuserRecipe(new InfusionInput(infuse, amount, itemStack.copy()), output.get(0));
+                MetallurgicInfuserRecipe r = new MetallurgicInfuserRecipe(new InfusionInput(infuse, amount, itemStack), output.get(0));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().metallurgicInfuser.add(r);
             }

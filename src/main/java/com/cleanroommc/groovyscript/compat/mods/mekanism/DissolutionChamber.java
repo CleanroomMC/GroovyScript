@@ -36,7 +36,7 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
 
         DissolutionRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            DissolutionRecipe recipe = new DissolutionRecipe(itemStack.copy(), output.copy());
+            DissolutionRecipe recipe = new DissolutionRecipe(itemStack, output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -86,7 +86,7 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
             if (!validate()) return null;
             DissolutionRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                DissolutionRecipe r = new DissolutionRecipe(itemStack.copy(), gasOutput.get(0));
+                DissolutionRecipe r = new DissolutionRecipe(itemStack, gasOutput.get(0));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().dissolutionChamber.add(r);
             }
