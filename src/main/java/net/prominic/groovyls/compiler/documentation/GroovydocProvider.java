@@ -6,6 +6,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class GroovydocProvider implements IDocumentationProvider {
 
+    public static final String PARAM_TAG = "@param";
+    public static final String RETURN_TAG = "@return";
+    public static final String THROWS_TAG = "@throws";
+
     @Override
     public @Nullable String getDocumentation(AnnotatedNode node, ASTContext context) {
         var groovydoc = node.getGroovydoc();
@@ -29,18 +33,39 @@ public class GroovydocProvider implements IDocumentationProvider {
         int lengthToRemove = Math.min(line.length(), 3);
         line = line.substring(lengthToRemove);
         appendLine(markdownBuilder, line);
+        boolean paramMode = false;
+        boolean throwMode = false;
         for (int i = 1; i < n - 1; i++) {
             line = lines[i];
             int star = line.indexOf("*");
             int at = line.indexOf("@");
-            if (at == -1) {
-                if (star > -1) // line starts with a *
-                {
-                    appendLine(markdownBuilder, line.substring(star + 1));
+            if (at >= 0) {
+                if (at == line.indexOf(PARAM_TAG, at)) {
+                    if (!paramMode) {
+                        paramMode = true;
+                        throwMode = false;
+                        appendLine(markdownBuilder, "Params:");
+                    }
+                    appendLine(markdownBuilder, " - " + line.substring(at + PARAM_TAG.length()).trim());
+                } else if (at == line.indexOf(RETURN_TAG, at)) {
+                    appendLine(markdownBuilder, "Returns " + line.substring(at + RETURN_TAG.length()).trim());
+                } else if (at == line.indexOf(THROWS_TAG)) {
+                    if (!throwMode) {
+                        paramMode = false;
+                        throwMode = true;
+                        appendLine(markdownBuilder, "Throws:");
+                    }
+                    appendLine(markdownBuilder, " - " + line.substring(at + THROWS_TAG.length()).trim());
                 }
+            } else if (star >= 0) {
+                // line starts with a *
+                appendLine(markdownBuilder, line.substring(star + 1));
             }
+
         }
-        return markdownBuilder.toString().trim();
+        return markdownBuilder.toString().
+
+                trim();
     }
 
     private static void appendLine(StringBuilder markdownBuilder, String line) {
@@ -53,20 +78,20 @@ public class GroovydocProvider implements IDocumentationProvider {
     }
 
     private static String reformatLine(String line) {
-        // remove all attributes (including namespaced)
-        line = line.replaceAll("<(\\w+)(?:\\s+\\w+(?::\\w+)?=(\"|\')[^\"\']*\\2)*\\s*(\\/{0,1})>", "<$1$3>");
+        // remove all attributes (including namespace)
+        line = line.replaceAll("<(\\w+)(?:\\s+\\w+(?::\\w+)?=([\"'])[^\"']*\\2)*\\s*(/?)>", "<$1$3>");
         line = line.replaceAll("<pre>", "\n\n```\n");
         line = line.replaceAll("</pre>", "\n```\n");
         line = line.replaceAll("</?(em|i)>", "_");
         line = line.replaceAll("</?(strong|b)>", "**");
         line = line.replaceAll("</?code>", "`");
-        line = line.replaceAll("<hr ?\\/>", "\n\n---\n\n");
+        line = line.replaceAll("<hr ?/>", "\n\n---\n\n");
         line = line.replaceAll("<(p|ul|ol|dl|li|dt|table|tr|div|blockquote)>", "\n\n");
 
         // to add a line break to markdown, there needs to be at least two
         // spaces at the end of the line
         line = line.replaceAll("<br\\s*/?>\\s*", "  \n");
-        line = line.replaceAll("<\\/{0,1}\\w+\\/{0,1}>", "");
+        line = line.replaceAll("</?\\w+/?>", "");
         return line;
     }
 }

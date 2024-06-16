@@ -86,7 +86,7 @@ public abstract class TileEntityPistonMixin {
                 boolean checkRecipes = !thisTile.getWorld().isRemote &&
                                        this.extending &&
                                        this.shouldHeadBeRendered &&
-                                       progress >= 1f &&
+                                       progress >= 1.0f &&
                                        !((pushingAgainst = thisTile.getWorld().getBlockState(thisTile.getPos().offset(enumfacing))).getBlock() instanceof BlockPistonMoving) &&
                                        pushingAgainst.getMaterial() != Material.AIR;
                 // groovyscript end
@@ -95,8 +95,7 @@ public abstract class TileEntityPistonMixin {
                     Entity entity = list1.get(i);
                     if (entity.getPushReaction() != EnumPushReaction.IGNORE) {
                         // groovyscript start
-                        if (checkRecipes && i < tryRecipesUntil && entity instanceof EntityItem) {
-                            EntityItem entityItem = (EntityItem) entity;
+                        if (checkRecipes && i < tryRecipesUntil && entity instanceof EntityItem entityItem) {
                             VanillaModule.inWorldCrafting.pistonPush.findAndRunRecipe(entityItem1 -> {
                                 entityItem1.getEntityWorld().spawnEntity(entityItem1);
                                 list1.add(entityItem1);
@@ -114,14 +113,9 @@ public abstract class TileEntityPistonMixin {
     private void groovyscript$pushEntity(List<AxisAlignedBB> list, double d0, EnumFacing enumfacing, Entity entity, boolean sticky) {
         if (sticky) {
             switch (enumfacing.getAxis()) {
-                case X:
-                    entity.motionX = enumfacing.getXOffset();
-                    break;
-                case Y:
-                    entity.motionY = enumfacing.getYOffset();
-                    break;
-                case Z:
-                    entity.motionZ = enumfacing.getZOffset();
+                case X -> entity.motionX = enumfacing.getXOffset();
+                case Y -> entity.motionY = enumfacing.getYOffset();
+                case Z -> entity.motionZ = enumfacing.getZOffset();
             }
         }
 
@@ -143,7 +137,7 @@ public abstract class TileEntityPistonMixin {
         if (d1 > 0.0D) {
             d1 = Math.min(d1, d0) + 0.01D;
             MOVING_ENTITY.set(enumfacing);
-            entity.move(MoverType.PISTON, d1 * (double) enumfacing.getXOffset(), d1 * (double) enumfacing.getYOffset(), d1 * (double) enumfacing.getZOffset());
+            entity.move(MoverType.PISTON, d1 * enumfacing.getXOffset(), d1 * enumfacing.getYOffset(), d1 * enumfacing.getZOffset());
             MOVING_ENTITY.set(null);
 
             if (!this.extending && this.shouldHeadBeRendered) {

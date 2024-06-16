@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class GroovyItem extends Item {
 
-    private static boolean initialised = false;
+    private static boolean initialised;
     private static final String nullTranslationKey = "item.null";
 
     @GroovyBlacklist
@@ -71,9 +71,9 @@ public class GroovyItem extends Item {
         initialised = true;
     }
 
-    private boolean effect = false;
-    private int enchantability = 0;
-    private IRarity rarity = null;
+    private boolean effect;
+    private int enchantability;
+    private IRarity rarity;
 
     public GroovyItem(String loc) {
         setRegistryName(GroovyScript.getRunConfig().getPackId(), loc);

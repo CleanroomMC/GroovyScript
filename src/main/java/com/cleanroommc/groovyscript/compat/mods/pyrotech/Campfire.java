@@ -86,15 +86,15 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
-            msg.add(name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.CAMPFIRE_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(super.name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.CAMPFIRE_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @RecipeBuilderRegistrationMethod
         @Override
         public @Nullable CampfireRecipe register() {
             if (!validate()) return null;
-            CampfireRecipe recipe = new CampfireRecipe(output.get(0), input.get(0).toMcIngredient(), duration).setRegistryName(name);
+            CampfireRecipe recipe = new CampfireRecipe(output.get(0), input.get(0).toMcIngredient(), duration).setRegistryName(super.name);
             PyroTech.campfire.add(recipe);
             return recipe;
         }

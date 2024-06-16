@@ -44,10 +44,10 @@ import java.util.*;
 )
 public class Constellation extends VirtualizedRegistry<IConstellation> {
 
-    private final HashMap<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsAdded = new HashMap<>();
-    private final HashMap<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsRemoved = new HashMap<>();
-    private final HashMap<IConstellation, List<ItemHandle>> signatureItemsAdded = new HashMap<>();
-    private final HashMap<IConstellation, List<ItemHandle>> signatureItemsRemoved = new HashMap<>();
+    private final Map<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsAdded = new HashMap<>();
+    private final Map<IConstellation, ConstellationMapEffectRegistry.MapEffect> constellationMapEffectsRemoved = new HashMap<>();
+    private final Map<IConstellation, List<ItemHandle>> signatureItemsAdded = new HashMap<>();
+    private final Map<IConstellation, List<ItemHandle>> signatureItemsRemoved = new HashMap<>();
 
     @Override
     @GroovyBlacklist
@@ -81,6 +81,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         this.signatureItemsRemoved.clear();
     }
 
+    @Override
     public void afterScriptLoad() {
         ConstellationRegistryAccessor.getConstellationList().forEach(constellation -> {
             if (!(constellation instanceof IMinorConstellation)) updateDefaultCapeRecipe(constellation);
@@ -245,13 +246,13 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
     public static class ConstellationBuilder {
 
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private final ArrayList<Point2PointConnection> connections = new ArrayList<>();
+        private final List<Point2PointConnection> connections = new ArrayList<>();
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE)) // TODO note that this is only if type is MINOR
-        private final ArrayList<MoonPhase> phases = new ArrayList<>();
+        private final List<MoonPhase> phases = new ArrayList<>();
         @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
         private String name;
         @Property(defaultValue = "Major: #2843CC, Weak: #432CB0, Minor: #5D197F")
-        private Color color = null;
+        private Color color;
         @Property
         private ConstellationBuilder.Type type;
 
@@ -330,16 +331,11 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             }
 
             if (this.color == null) {
-                switch (this.type) {
-                    case MAJOR:
-                        this.color = new Color(40, 67, 204);
-                        break;
-                    case WEAK:
-                        this.color = new Color(67, 44, 176);
-                        break;
-                    case MINOR:
-                        this.color = new Color(93, 25, 127);
-                }
+                this.color = switch (this.type) {
+                    case MAJOR -> new Color(40, 67, 204);
+                    case WEAK -> new Color(67, 44, 176);
+                    case MINOR -> new Color(93, 25, 127);
+                };
             }
 
             return true;
@@ -348,23 +344,15 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         @RecipeBuilderRegistrationMethod
         public void register() {
             if (!validate()) return;
-            IConstellation constellation;
-            switch (this.type) {
-                case MAJOR:
-                    constellation = new ConstellationBase.Major(name, color);
-                    break;
-                case WEAK:
-                    constellation = new ConstellationBase.Minor(name, color, phases.toArray(new MoonPhase[0]));
-                    break;
-                case MINOR:
-                    constellation = new ConstellationBase.Weak(name, color);
-                    break;
-                default:
-                    return;
-            }
+            IConstellation constellation = switch (this.type) {
+                case MAJOR -> new ConstellationBase.Major(name, color);
+                case WEAK -> new ConstellationBase.Minor(name, color, phases.toArray(new MoonPhase[0]));
+                case MINOR -> new ConstellationBase.Weak(name, color);
+            };
             Map<Point, StarLocation> addedStars = new Object2ObjectOpenHashMap<>();
             this.connections.forEach(connection -> {
-                StarLocation s1, s2;
+                StarLocation s1;
+                StarLocation s2;
                 if (addedStars.containsKey(connection.p1)) {
                     s1 = addedStars.get(connection.p1);
                 } else {
@@ -397,7 +385,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE)) // TODO note that this is only if other is empty
         private final List<ConstellationMapEffectRegistry.PotionMapEffect> potionEffect = new ArrayList<>();
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
-        private IConstellation constellation = null;
+        private IConstellation constellation;
 
         @RecipeBuilderMethodDescription
         public ConstellationMapEffectBuilder constellation(IConstellation constellation) {
@@ -437,11 +425,11 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
     public static class SignatureItemsHelper {
 
         @Property
-        private final ArrayList<IIngredient> items = new ArrayList<>();
+        private final List<IIngredient> items = new ArrayList<>();
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
-        private IConstellation constellation = null;
+        private IConstellation constellation;
         @Property
-        private boolean doStrip = false;
+        private boolean doStrip;
 
         @RecipeBuilderMethodDescription
         public SignatureItemsHelper constellation(IConstellation constellation) {
@@ -490,9 +478,8 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
 
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof Point2PointConnection)) return false;
+            if (!(o instanceof Point2PointConnection other)) return false;
             if (o == this) return true;
-            Point2PointConnection other = (Point2PointConnection) o;
             return ((p1.equals(other.p1) && p2.equals(other.p2)) || (p2.equals(other.p1) && p1.equals(other.p2)));
         }
 

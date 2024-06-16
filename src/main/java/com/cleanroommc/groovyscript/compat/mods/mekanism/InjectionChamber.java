@@ -35,10 +35,9 @@ public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecip
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         InjectionRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            InjectionRecipe recipe = new InjectionRecipe(itemStack.copy(), gasInput.getGas(), output);
+            InjectionRecipe recipe = new InjectionRecipe(itemStack, gasInput.getGas(), output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -90,7 +89,7 @@ public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecip
             if (!validate()) return null;
             InjectionRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                InjectionRecipe r = new InjectionRecipe(itemStack.copy(), gasInput.get(0).getGas(), output.get(0));
+                InjectionRecipe r = new InjectionRecipe(itemStack, gasInput.get(0).getGas(), output.get(0));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().injectionChamber.add(r);
             }

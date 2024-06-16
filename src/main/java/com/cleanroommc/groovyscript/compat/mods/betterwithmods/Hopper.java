@@ -121,7 +121,7 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            msg.add(name == null, "name cannot be null");
+            msg.add(super.name == null, "name cannot be null");
             validateItems(msg, 1, 1, 0, 2);
             validateCustom(msg, inWorldItemOutput, 0, 2, "item in world output");
             validateFluids(msg);
@@ -132,7 +132,7 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
         public @Nullable HopperInteractions.HopperRecipe register() {
             if (!validate()) return null;
 
-            HopperInteractions.HopperRecipe recipe = new HopperInteractions.HopperRecipe(name.toString(), input.get(0).toMcIngredient(), output, inWorldItemOutput);
+            HopperInteractions.HopperRecipe recipe = new HopperInteractions.HopperRecipe(super.name.toString(), input.get(0).toMcIngredient(), output, inWorldItemOutput);
             ModSupport.BETTER_WITH_MODS.get().hopper.add(recipe);
             return recipe;
         }

@@ -122,14 +122,11 @@ public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerReci
     }
 
     public IBasicMachineRecipeManager getManager(int type) {
-        switch (type) {
-            default:
-                return Recipes.metalformerCutting;
-            case 1:
-                return Recipes.metalformerExtruding;
-            case 2:
-                return Recipes.metalformerRolling;
-        }
+        return switch (type) {
+            default -> Recipes.metalformerCutting;
+            case 1 -> Recipes.metalformerExtruding;
+            case 2 -> Recipes.metalformerRolling;
+        };
     }
 
     public static class MetalFormerRecipe {

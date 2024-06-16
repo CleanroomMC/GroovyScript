@@ -141,6 +141,7 @@ public class GroovyLogImpl implements GroovyLog {
      * @param msg  message
      * @param args arguments
      */
+    @Override
     public void infoMC(String msg, Object... args) {
         info(msg, args);
         logger.info(msg, args);
@@ -152,6 +153,7 @@ public class GroovyLogImpl implements GroovyLog {
      * @param msg  message
      * @param args arguments
      */
+    @Override
     public void info(String msg, Object... args) {
         writeLogLine(formatLine("INFO", GroovyLog.format(msg, args)));
     }
@@ -162,6 +164,7 @@ public class GroovyLogImpl implements GroovyLog {
      * @param msg  message
      * @param args arguments
      */
+    @Override
     public void debugMC(String msg, Object... args) {
         if (isDebug()) {
             debug(msg, args);
@@ -175,6 +178,7 @@ public class GroovyLogImpl implements GroovyLog {
      * @param msg  message
      * @param args arguments
      */
+    @Override
     public void debug(String msg, Object... args) {
         if (isDebug()) {
             writeLogLine(formatLine("DEBUG", GroovyLog.format(msg, args)));
@@ -187,6 +191,7 @@ public class GroovyLogImpl implements GroovyLog {
      * @param msg  message
      * @param args arguments
      */
+    @Override
     public void warnMC(String msg, Object... args) {
         warn(msg, args);
         logger.warn(msg, args);
@@ -211,6 +216,7 @@ public class GroovyLogImpl implements GroovyLog {
      * @param msg  message
      * @param args arguments
      */
+    @Override
     public void warn(String msg, Object... args) {
         writeLogLine(formatLine("WARN", GroovyLog.format(msg, args)));
     }
@@ -221,6 +227,7 @@ public class GroovyLogImpl implements GroovyLog {
      * @param msg  message
      * @param args arguments
      */
+    @Override
     public void error(String msg, Object... args) {
         msg = GroovyLog.format(msg, args);
         this.errors.add(msg);
@@ -240,6 +247,7 @@ public class GroovyLogImpl implements GroovyLog {
      *
      * @param throwable exception
      */
+    @Override
     public void exception(Throwable throwable) {
         String msg = throwable.toString();
         this.errors.add(msg);
@@ -315,7 +323,7 @@ public class GroovyLogImpl implements GroovyLog {
         private final String mainMsg;
         private final List<String> messages = new ArrayList<>();
         private Level level = Level.INFO;
-        private boolean logToMcLog = false;
+        private boolean logToMcLog;
         @Nullable
         private Throwable throwable;
 
@@ -328,6 +336,7 @@ public class GroovyLogImpl implements GroovyLog {
             return level != null;
         }
 
+        @Override
         public Msg add(String msg, Object... data) {
             this.messages.add(GroovyLog.format(msg, data));
             return this;
@@ -341,6 +350,7 @@ public class GroovyLogImpl implements GroovyLog {
             return this;
         }
 
+        @Override
         public Msg add(boolean condition, Supplier<String> msg) {
             if (condition) {
                 return add(msg.get());
@@ -367,22 +377,27 @@ public class GroovyLogImpl implements GroovyLog {
             return this;
         }
 
+        @Override
         public Msg info() {
             return level(Level.INFO);
         }
 
+        @Override
         public Msg debug() {
             return level(Level.DEBUG);
         }
 
+        @Override
         public Msg warn() {
             return level(Level.WARN);
         }
 
+        @Override
         public Msg fatal() {
             return level(Level.FATAL);
         }
 
+        @Override
         public Msg error() {
             return level(Level.ERROR);
         }

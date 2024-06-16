@@ -96,8 +96,8 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(dryTime < 0, "dryTime must be a non negative integer, yet it was {}", dryTime);
-            msg.add(name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.TANNING_RACK_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(super.name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.TANNING_RACK_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @RecipeBuilderRegistrationMethod
@@ -105,7 +105,7 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         @Override
         public @Nullable TanningRackRecipe register() {
             if (!validate()) return null;
-            TanningRackRecipe recipe = new TanningRackRecipe(output.get(0), input.get(0).toMcIngredient(), failureItem, dryTime).setRegistryName(name);
+            TanningRackRecipe recipe = new TanningRackRecipe(output.get(0), input.get(0).toMcIngredient(), failureItem, dryTime).setRegistryName(super.name);
             PyroTech.tanningRack.add(recipe);
             return recipe;
         }

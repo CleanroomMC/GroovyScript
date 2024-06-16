@@ -57,7 +57,7 @@ public class ClassicCompressor extends Compressor {
                     .add("xp must not be negative, defaulting to zero")
                     .warn()
                     .post();
-            xp = 0F;
+            xp = 0.0F;
         }
         MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = new MachineRecipe<>(new RecipeInput(input), Collections.singleton(output));
         ClassicRecipes.compressor.addRecipe(recipe.getInput(), output, xp, String.valueOf(recipe.hashCode()));

@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class BloodMagic extends ModPropertyContainer {
+public class BloodMagic extends GroovyPropertyContainer {
 
     public final BloodAltar bloodAltar = new BloodAltar();
     public final AlchemyArray alchemyArray = new AlchemyArray();
@@ -11,15 +11,5 @@ public class BloodMagic extends ModPropertyContainer {
     public final Tranquility tranquility = new Tranquility();
     public final Sacrificial sacrificial = new Sacrificial();
     public final Meteor meteor = new Meteor();
-
-    public BloodMagic() {
-        addRegistry(bloodAltar);
-        addRegistry(alchemyArray);
-        addRegistry(tartaricForge);
-        addRegistry(alchemyTable);
-        addRegistry(tranquility);
-        addRegistry(sacrificial);
-        addRegistry(meteor);
-    }
 
 }

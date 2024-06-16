@@ -22,12 +22,12 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         super(RecipeHandler.Recipe.METALLURGIC_INFUSER);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:nether_star')).infuse(infusion('groovy_example')).amount(50).output(item('minecraft:clay'))"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:nether_star')).infuse(infusionType('groovy_example')).amount(50).output(item('minecraft:clay'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.metallurgic_infuser.add0", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:nether_star'), infusion('groovy_example'), 50, item('minecraft:clay')", commented = true))
+    @MethodDescription(description = "groovyscript.wiki.mekanism.metallurgic_infuser.add0", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:nether_star'), infusionType('groovy_example'), 50, item('minecraft:clay')", commented = true))
     public MetallurgicInfuserRecipe add(IIngredient ingredient, InfuseType infuseType, int infuseAmount, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Metallurgic Infuser recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
@@ -36,10 +36,9 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         if (infuseAmount <= 0) infuseAmount = 40;
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         MetallurgicInfuserRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            MetallurgicInfuserRecipe recipe = new MetallurgicInfuserRecipe(new InfusionInput(infuseType, infuseAmount, itemStack.copy()), output);
+            MetallurgicInfuserRecipe recipe = new MetallurgicInfuserRecipe(new InfusionInput(infuseType, infuseAmount, itemStack), output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -88,15 +87,18 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int amount;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder infuse(InfuseType infuse) {
             this.infuse = infuse;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder infuse(String infuse) {
             return infuse(InfuseRegistry.get(infuse));
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder amount(int amount) {
             this.amount = amount;
             return this;
@@ -121,7 +123,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
             if (!validate()) return null;
             MetallurgicInfuserRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                MetallurgicInfuserRecipe r = new MetallurgicInfuserRecipe(new InfusionInput(infuse, amount, itemStack.copy()), output.get(0));
+                MetallurgicInfuserRecipe r = new MetallurgicInfuserRecipe(new InfusionInput(infuse, amount, itemStack), output.get(0));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().metallurgicInfuser.add(r);
             }

@@ -10,12 +10,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AttributeModifierPerkBuilder {
 
     ResourceLocation name;
     Point point = new Point();
-    ArrayList<PerkModifierBuilder> modifiers = new ArrayList<>();
+    List<PerkModifierBuilder> modifiers = new ArrayList<>();
     ArrayList<ResourceLocation> connections = new ArrayList<>();
 
 
@@ -89,17 +90,12 @@ public class AttributeModifierPerkBuilder {
         }
 
         public PerkModifierBuilder mode(int mode) {
-            switch (mode) {
-                case 0:
-                    this.mode = PerkAttributeModifier.Mode.ADDITION;
-                    break;
-                case 1:
-                    this.mode = PerkAttributeModifier.Mode.ADDED_MULTIPLY;
-                    break;
-                case 2:
-                    this.mode = PerkAttributeModifier.Mode.STACKING_MULTIPLY;
-                    break;
-            }
+            this.mode = switch (mode) {
+                case 0 -> PerkAttributeModifier.Mode.ADDITION;
+                case 1 -> PerkAttributeModifier.Mode.ADDED_MULTIPLY;
+                case 2 -> PerkAttributeModifier.Mode.STACKING_MULTIPLY;
+                default -> null;
+            };
             return this;
         }
 

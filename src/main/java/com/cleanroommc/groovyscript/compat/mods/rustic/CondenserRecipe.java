@@ -59,6 +59,7 @@ public class CondenserRecipe implements ICondenserRecipe {
         this.advanced = advanced;
     }
 
+    @Override
     public boolean matches(Fluid fluid, ItemStack modifier, ItemStack bottle, ItemStack[] inputs) {
         if (fluid == this.fluid.getFluid() &&
             (this.modifier == null || this.modifier.test(modifier)) &&
@@ -89,42 +90,52 @@ public class CondenserRecipe implements ICondenserRecipe {
         return false;
     }
 
+    @Override
     public boolean isBasic() {
         return !this.advanced;
     }
 
+    @Override
     public boolean isAdvanced() {
         return this.advanced;
     }
 
+    @Override
     public FluidStack getFluid() {
         return this.fluid;
     }
 
+    @Override
     public List<ItemStack> getModifiers() {
         return modifier == null ? EMPTY_LIST : Arrays.asList(modifier.getMatchingStacks());
     }
 
+    @Override
     public List<ItemStack> getBottles() {
         return bottle == null ? EMPTY_LIST : Arrays.asList(bottle.getMatchingStacks());
     }
 
+    @Override
     public List<List<ItemStack>> getInputs() {
         return this.inputs.stream().map(x -> Arrays.asList(x.getMatchingStacks())).collect(Collectors.toList());
     }
 
+    @Override
     public int getTime() {
         return this.time;
     }
 
+    @Override
     public int getModifierConsumption(ItemStack modifier) {
         return this.modifier != null && this.modifier.test(modifier) ? modifier.getCount() : 0;
     }
 
+    @Override
     public int getBottleConsumption(ItemStack bottle) {
         return this.bottle != null && this.bottle.test(bottle) ? bottle.getCount() : 0;
     }
 
+    @Override
     public int[] getInputConsumption(ItemStack[] inputs) {
         int[] consume = new int[inputs.length];
         for (int i = 0; i < inputs.length; i++) {
@@ -141,6 +152,7 @@ public class CondenserRecipe implements ICondenserRecipe {
         return consume;
     }
 
+    @Override
     public ItemStack getResult() {
         return this.output.copy();
     }

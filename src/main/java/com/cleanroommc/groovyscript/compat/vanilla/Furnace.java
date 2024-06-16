@@ -188,11 +188,13 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         private ItemStack output;
         private float exp = 0.1f;
 
+        @Override
         public RecipeBuilder input(IIngredient input) {
             this.input = input;
             return this;
         }
 
+        @Override
         public RecipeBuilder output(ItemStack output) {
             this.output = output;
             return this;

@@ -188,6 +188,7 @@ mods.pyrotech.soaking_pot.recipeBuilder()
     .time(400)
     .campfireRequired(true)
     .name('diamond_to_emerald_with_amongium_soaking_pot')
+    .register()
 
 
 mods.pyrotech.soaking_pot.add('dirt_to_apple', item('minecraft:dirt'), fluid('water'), item('minecraft:apple'), 1200)

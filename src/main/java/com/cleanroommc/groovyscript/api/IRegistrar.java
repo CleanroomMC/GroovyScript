@@ -7,10 +7,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 /**
- * A helper interface to register {@link INamed registries} without having direct access to the
- * {@link com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer ModPropertyContainer}.
- * An instance can be obtained from {@link GroovyContainer#getVirtualizedRegistrar()}.
+ * @deprecated The methods of this class have been added directly to {@link GroovyContainer}
  */
+@ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
+@Deprecated
 @ApiStatus.NonExtendable
 public interface IRegistrar {
 
@@ -19,6 +19,7 @@ public interface IRegistrar {
      *
      * @param registry registry to add.
      */
+    @Deprecated
     void addRegistry(INamed registry);
 
     /**
@@ -27,6 +28,7 @@ public interface IRegistrar {
      *
      * @param object object to add fields from
      */
+    @Deprecated
     default void addFieldsOf(Object object) {
         boolean staticOnly = false;
         Class<?> clazz;

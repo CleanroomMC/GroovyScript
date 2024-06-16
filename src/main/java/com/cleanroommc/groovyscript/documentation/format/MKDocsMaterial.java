@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 public class MKDocsMaterial implements IFormat {
 
+    @Override
     public String linkToBuilder() {
         return "../../../groovy/builder.md";
     }
@@ -33,22 +34,27 @@ public class MKDocsMaterial implements IFormat {
         return " hl_lines=\"" + String.join(" ", highlight) + "\"";
     }
 
+    @Override
     public String removeTableOfContentsText() {
         return "hide: toc";
     }
 
+    @Override
     public boolean hasTitleTemplate() {
         return false;
     }
 
+    @Override
     public boolean allowsIndentation() {
         return true;
     }
 
+    @Override
     public boolean requiresNavFile() {
         return true;
     }
 
+    @Override
     public boolean usesFocusInCodeBlocks() {
         return false;
     }

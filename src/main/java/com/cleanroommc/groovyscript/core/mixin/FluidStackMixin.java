@@ -46,7 +46,7 @@ public abstract class FluidStackMixin implements IIngredient, INbtIngredient, IN
     @Unique
     protected Closure<Object> transformer;
     @Unique
-    protected Closure<Object> nbtMatcher = null;
+    protected Closure<Object> nbtMatcher;
 
     @Override
     public IIngredient exactCopy() {
