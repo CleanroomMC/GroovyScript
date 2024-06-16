@@ -22,12 +22,12 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         super(RecipeHandler.Recipe.METALLURGIC_INFUSER);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:nether_star')).infuse(infusion('groovy_example')).amount(50).output(item('minecraft:clay'))"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:nether_star')).infuse(infusionType('groovy_example')).amount(50).output(item('minecraft:clay'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.metallurgic_infuser.add0", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:nether_star'), infusion('groovy_example'), 50, item('minecraft:clay')", commented = true))
+    @MethodDescription(description = "groovyscript.wiki.mekanism.metallurgic_infuser.add0", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:nether_star'), infusionType('groovy_example'), 50, item('minecraft:clay')", commented = true))
     public MetallurgicInfuserRecipe add(IIngredient ingredient, InfuseType infuseType, int infuseAmount, ItemStack output) {
         GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Metallurgic Infuser recipe").error();
         msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");

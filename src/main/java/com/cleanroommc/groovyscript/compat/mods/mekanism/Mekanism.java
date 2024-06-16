@@ -48,7 +48,7 @@ public class Mekanism extends GroovyPropertyContainer {
                 .completerOfNamed(GasRegistry::getRegisteredGasses, Gas::getName)
                 .docOfType("gas stack")
                 .register();
-        container.objectMapperBuilder("infusionType", InfuseType.class) // infusion clashes with infusion field
+        container.objectMapperBuilder("infusionType", InfuseType.class)
                 .parser(IObjectParser.wrapStringGetter(InfuseRegistry::get, true))
                 .completerOfNames(InfuseRegistry.getInfuseMap()::keySet)
                 .docOfType("infusion type")
