@@ -94,7 +94,7 @@ public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceReci
         @RecipeBuilderRegistrationMethod
         public @Nullable MithrilineFurnaceRecipe register() {
             if (!validate()) return null;
-            int stackSize = input.get(0).getMatchingStacks()[0].getCount();
+            int stackSize = input.get(0).getAmount();
             Ingredient inputItem = input.get(0).withAmount(1).toMcIngredient();
             MithrilineFurnaceRecipe recipe = new MithrilineFurnaceRecipe(inputItem, output.get(0), (float) espe, stackSize);
             addScripted(recipe);

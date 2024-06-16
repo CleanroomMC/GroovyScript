@@ -11,8 +11,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-@RegistryDescription(admonition = {
-    @Admonition(value = "groovyscript.wiki.essentialcraft.magmatic_smeltery.note0", type = Admonition.Type.WARNING)
+@RegistryDescription(reloadability = RegistryDescription.Reloadability.DISABLED, admonition={
+    @Admonition(value = "groovyscript.wiki.essentialcraft.magmatic_smeltery.note0", type = Admonition.Type.DANGER),
+    @Admonition(value = "groovyscript.wiki.essentialcraft.magmatic_smeltery.note1", type = Admonition.Type.WARNING),
 })
 public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
     static boolean didReload = false;

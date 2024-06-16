@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.essentialcraft;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
@@ -11,7 +12,9 @@ import net.minecraft.item.ItemStack;
 import essentialcraft.api.DemonTrade;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 
-@RegistryDescription(category = RegistryDescription.Category.ENTRIES)
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
+        admonition = @Admonition(value = "groovyscript.wiki.essentialcraft.demon_trade.note0", type = Admonition.Type.DANGER))
 public class DemonTradeManager extends VirtualizedRegistry<DemonTrade> {
     public DemonTradeManager() {
         super(Alias.generateOf("DemonTrade"));

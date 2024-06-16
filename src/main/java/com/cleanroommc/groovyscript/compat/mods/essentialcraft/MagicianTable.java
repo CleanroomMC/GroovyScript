@@ -11,7 +11,7 @@ import essentialcraft.api.MagicianTableRecipes;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription(admonition = @Admonition("groovyscript.wiki.essentialcraft.magician_table.note0"))
+@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.essentialcraft.magician_table.note0", type = Admonition.Type.WARNING))
 public class MagicianTable extends VirtualizedRegistry<MagicianTableRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), ore('ingotGold'), ore('ingotGold'), ore('stickWood'), ore('stickWood')).output(item('minecraft:iron_ingot')).mru(500)"))
