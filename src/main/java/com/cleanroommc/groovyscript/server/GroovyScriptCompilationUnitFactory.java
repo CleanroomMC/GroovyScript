@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.server;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
+import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptEarlyCompiler;
 import groovy.lang.GroovyClassLoader;
 import net.minecraft.launchwrapper.Launch;
 import net.prominic.groovyls.compiler.control.GroovyLSCompilationUnit;
@@ -40,7 +41,8 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
 
         config.setSourceEncoding("UTF-8");
 
-        config.addCompilationCustomizers(GroovyScriptCompiler.transformer());
+        config.addCompilationCustomizers(new GroovyScriptCompiler());
+        config.addCompilationCustomizers(new GroovyScriptEarlyCompiler());
         config.addCompilationCustomizers(languageServerContext.getSandbox().getImportCustomizer());
 
         return config;

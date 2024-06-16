@@ -91,11 +91,13 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         @Property(defaultValue = "1.0", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
         private double chance = 1.0;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder extra(ItemStack extra) {
             this.extra = extra;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder chance(double chance) {
             this.chance = chance;
             return this;

@@ -249,7 +249,6 @@ public class AltarRecipeBuilder {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = "inputs")
         public Shaped input(ItemHandle[] inputs) {
             this.inputs = inputs;
             return this;

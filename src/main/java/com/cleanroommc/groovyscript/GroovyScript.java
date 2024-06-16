@@ -12,8 +12,9 @@ import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.event.EventHandler;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.cleanroommc.groovyscript.mapper.ObjectMapper;
+import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.NetworkUtils;
@@ -147,6 +148,12 @@ public class GroovyScript {
         } else {
             scriptPath = new File(minecraftHome, "groovy");
         }
+        try {
+            scriptPath = scriptPath.getCanonicalFile();
+        } catch (IOException e) {
+            GroovyLog.get().error("Failed to canonicalize groovy script path '" + scriptPath + "'!");
+            GroovyLog.get().exception(e);
+        }
         runConfigFile = new File(scriptPath, "runConfig.json");
         resourcesFile = new File(scriptPath, "assets");
         reloadRunConfig(true);
@@ -155,9 +162,12 @@ public class GroovyScript {
     @ApiStatus.Internal
     public static void initializeGroovyPreInit() {
         // called via mixin in between construction and fml pre init
-        GameObjectHandlerManager.init();
+        ObjectMapperManager.init();
         VanillaModule.initializeBinding();
         ModSupport.init();
+        for (ObjectMapper<?> goh : ObjectMapperManager.getObjectMappers()) {
+            getSandbox().registerBinding(goh);
+        }
         if (FMLLaunchHandler.isDeobfuscatedEnvironment()) Documentation.generate();
         runGroovyScriptsInLoader(LoadStage.PRE_INIT);
     }

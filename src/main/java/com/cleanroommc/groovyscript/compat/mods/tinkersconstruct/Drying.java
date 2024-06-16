@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -13,8 +14,10 @@ import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.DryingRecipe;
 
+@RegistryDescription
 public class Drying extends VirtualizedRegistry<DryingRecipe> {
 
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:dirt')).time(45)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -26,6 +29,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         restoreFromBackup().forEach(TinkerRegistryAccessor.getDryingRegistry()::add);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public DryingRecipe add(IIngredient input, ItemStack output, int time) {
         DryingRecipe recipe = new DryingRecipe(MeltingRecipeBuilder.recipeMatchFromIngredient(input), output, time);
         add(recipe);
@@ -45,6 +49,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return true;
     }
 
+    @MethodDescription
     public boolean removeByInput(IIngredient input) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
         if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
@@ -60,6 +65,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return false;
     }
 
+    @MethodDescription
     public boolean removeByOutput(ItemStack output) {
         if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
             boolean found = ItemStack.areItemStacksEqual(recipe.output, output);
@@ -74,6 +80,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return false;
     }
 
+    @MethodDescription
     public boolean removeByInputAndOutput(IIngredient input, ItemStack output) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
         if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
@@ -89,19 +96,25 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return false;
     }
 
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getDryingRegistry().forEach(this::addBackup);
-        TinkerRegistryAccessor.getDryingRegistry().forEach(TinkerRegistryAccessor.getDryingRegistry()::remove);
+        TinkerRegistryAccessor.getDryingRegistry().clear();
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DryingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getDryingRegistry()).setRemover(this::remove);
     }
 
+    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "output", valid = @Comp("1"))
     public class RecipeBuilder extends AbstractRecipeBuilder<DryingRecipe> {
 
+        @Property(defaultValue = "20", valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int time = 20;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
@@ -119,6 +132,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable DryingRecipe register() {
             if (!validate()) return null;
             DryingRecipe recipe = new DryingRecipe(MeltingRecipeBuilder.recipeMatchFromIngredient(input.get(0)), output.get(0), time);

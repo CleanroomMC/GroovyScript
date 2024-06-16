@@ -19,10 +19,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.mapper.ObjectMapper;
+import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.server.Completions;
+import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.classgraph.*;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
 import net.prominic.groovyls.compiler.util.GroovyReflectionUtils;
@@ -59,10 +62,9 @@ public class CompletionProvider {
         Completions items = new Completions(1000);
 
         ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
-        if (offsetNode != null) {
-            populateItemsFromNode(position, offsetNode, items);
+        if (offsetNode == null || populateItemsFromNode(position, offsetNode, items)) {
+            populateKeywords(items);
         }
-        populateKeywords(items);
 
         return CompletableFuture.completedFuture(items.getResult(this.isIncomplete));
     }
@@ -80,7 +82,7 @@ public class CompletionProvider {
                      });
     }
 
-    private void populateItemsFromNode(Position position, ASTNode offsetNode, Completions items) {
+    private boolean populateItemsFromNode(Position position, ASTNode offsetNode, Completions items) {
         ASTNode parentNode = astContext.getVisitor().getParent(offsetNode);
 
         if (offsetNode instanceof PropertyExpression) {
@@ -108,57 +110,40 @@ public class CompletionProvider {
         } else if (offsetNode instanceof StaticMethodCallExpression) {
             populateItemsFromStaticMethodCallExpression((StaticMethodCallExpression) offsetNode, position, items);
         } else if (offsetNode instanceof ConstantExpression) {
-            populateItemsFromConstantExpression((ConstantExpression) offsetNode, parentNode, items);
+            return populateItemsFromConstantExpression((ConstantExpression) offsetNode, parentNode, items);
         }
+        return true;
     }
 
-    private void populateItemsFromConstantExpression(ConstantExpression node, ASTNode parent, Completions items) {
-        if (node.getType().getName().equals(String.class.getName())) {
+    private boolean populateItemsFromConstantExpression(ConstantExpression node, ASTNode parent, Completions items) {
+        if (node.getType().getTypeClass() == String.class) {
             ASTNode parentParent = astContext.getVisitor().getParent(parent);
-            if (parentParent instanceof StaticMethodCallExpression expr &&
-                expr.getOwnerType().getName().equals(GameObjectHandlerManager.class.getName()) &&
-                expr.getMethod().equals("getGameObject") &&
-                expr.getArguments() instanceof ArgumentListExpression args && !args.getExpressions().isEmpty() &&
-                args.getExpression(0) instanceof ConstantExpression expr1 && expr1.getValue() instanceof String name &&
-                GameObjectHandlerManager.hasGameObjectHandler(name)) {
-                int index = -1;
-                if (args.getExpressions().size() > 1) {
-                    for (int i = 1; i < args.getExpressions().size(); i++) {
+            if (parentParent instanceof MethodCallExpression expr && expr.getArguments() instanceof ArgumentListExpression args && !args.getExpressions().isEmpty()) {
+                ObjectMapper<?> goh = GroovyASTUtils.getGohOfNode(expr, astContext);
+                if (goh != null && goh.getCompleter() != null) {
+                    int index = -1;
+                    for (int i = 0; i < args.getExpressions().size(); i++) {
                         if (args.getExpression(i) == node) {
-                            index = i - 1;
+                            index = i;
                             break;
                         }
                     }
+                    goh.getCompleter().complete(index, items);
                 }
-                GameObjectHandlerManager.provideCompletion(name, index, items);
             }
+            return false; // don't complete keyword in strings
         }
+        return true;
     }
 
     private void populateItemsFromStaticMethodCallExpression(StaticMethodCallExpression methodCallExpr, Position position, Completions items) {
-        Set<String> existingNames = new HashSet<>();
-
-        if (methodCallExpr.getOwnerType().getTypeClass().equals(GameObjectHandlerManager.class) && methodCallExpr.getMethod().equals("getGameObject")) {
-            // expression like item()
-
-            var argumentsExpr = methodCallExpr.getArguments();
-            if (argumentsExpr instanceof ArgumentListExpression) {
-                var firstArgumentExpr = ((ArgumentListExpression) argumentsExpr).getExpression(0);
-
-                if (firstArgumentExpr instanceof ConstantExpression) {
-                    var memberNamePrefix = ((ConstantExpression) firstArgumentExpr).getValue().toString();
-
-                    populateItemsFromGameObjects(memberNamePrefix, existingNames, items);
-                }
-            }
-        }
-
+        Set<String> existingNames = new ObjectOpenHashSet<>();
         populateItemsFromGlobalScope(methodCallExpr.getMethod(), existingNames, items);
     }
 
     private static void populateItemsFromGameObjects(String memberNamePrefix,
                                                      Set<String> existingNames, Completions items) {
-        GameObjectHandlerManager.getGameObjectHandlers().stream()
+        ObjectMapperManager.getObjectMappers().stream()
                 .filter(handler -> {
                     if (handler.getName().startsWith(memberNamePrefix) && !existingNames.contains(handler.getName())) {
                         existingNames.add(handler.getName());
@@ -373,7 +358,9 @@ public class CompletionProvider {
                     // overloads can cause duplicates
                     if (methodName.startsWith(memberNamePrefix) && !existingNames.contains(methodName)) {
                         existingNames.add(methodName);
-                        return !method.getDeclaringClass().isResolved() || GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext).isPresent();
+                        return !method.getDeclaringClass().isResolved() ||
+                               (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) != 0 ||
+                               GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext).isPresent();
                     }
                     return false;
                 }).map(method -> {
@@ -427,14 +414,18 @@ public class CompletionProvider {
         return details;
     }
 
-    private void populateItemsFromExpression(Expression leftSide, String memberNamePrefix, Completions items) {
-        Set<String> existingNames = new HashSet<>();
 
-        List<PropertyNode> properties = GroovyASTUtils.getPropertiesForLeftSideOfPropertyExpression(leftSide, astContext);
-        List<FieldNode> fields = GroovyASTUtils.getFieldsForLeftSideOfPropertyExpression(leftSide, astContext);
+    private void populateItemsFromExpression(Expression leftSide, String memberNamePrefix, Completions items) {
+        Set<String> existingNames = new ObjectOpenHashSet<>();
+
+        ClassNode classNode = GroovyASTUtils.getTypeOfNode(leftSide, astContext);
+        if (classNode == null) return;
+        GroovyASTUtils.fillClassNode(classNode);
+        List<PropertyNode> properties = GroovyASTUtils.getPropertiesForLeftSideOfPropertyExpression(classNode, leftSide, astContext);
+        List<FieldNode> fields = GroovyASTUtils.getFieldsForLeftSideOfPropertyExpression(classNode, leftSide, astContext);
         populateItemsFromPropertiesAndFields(properties, fields, memberNamePrefix, existingNames, items);
 
-        List<MethodNode> methods = GroovyASTUtils.getMethodsForLeftSideOfPropertyExpression(leftSide, astContext);
+        List<MethodNode> methods = GroovyASTUtils.getMethodsForLeftSideOfPropertyExpression(classNode, leftSide, astContext);
         populateItemsFromMethods(methods, memberNamePrefix, existingNames, items);
     }
 
@@ -445,12 +436,22 @@ public class CompletionProvider {
                 return;
             }
             existingNames.add(variableName);
-
-            var item = CompletionItemFactory.createCompletion(CompletionItemKind.Variable, variableName);
-
-            item.setDetail("(global scope)");
-
-            items.add(item);
+            if (value instanceof ObjectMapper<?> goh) {
+                for (MethodNode method : goh.getMethodNodes()) {
+                    var item = CompletionItemFactory.createCompletion(method, goh.getName(), astContext);
+                    item.setLabelDetails(getMethodNodeDetails(method));
+                    items.add(item);
+                }
+            } else if (value instanceof Closure<?> closure) {
+                MethodNode method = GroovyASTUtils.methodNodeOfClosure(variableName, closure);
+                var item = CompletionItemFactory.createCompletion(method, variableName, astContext);
+                item.setLabelDetails(getMethodNodeDetails(method));
+                items.add(item);
+            } else {
+                var item = CompletionItemFactory.createCompletion(CompletionItemKind.Variable, variableName);
+                item.setDetail("(global scope)");
+                items.add(item);
+            }
         });
 
         List<CompletionItem> staticMethodItems = astContext.getLanguageServerContext().getSandbox().getStaticImports().stream()
@@ -478,7 +479,7 @@ public class CompletionProvider {
 
     private void populateItemsFromVariableScope(VariableScope variableScope, String memberNamePrefix,
                                                 Set<String> existingNames, Completions items) {
-        populateItemsFromGameObjects(memberNamePrefix, existingNames, items);
+        //populateItemsFromGameObjects(memberNamePrefix, existingNames, items);
         populateItemsFromGlobalScope(memberNamePrefix, existingNames, items);
 
         List<CompletionItem> variableItems = variableScope.getDeclaredVariables().values().stream().filter(variable -> {
@@ -551,7 +552,7 @@ public class CompletionProvider {
                 }
             }
             if (current instanceof VariableExpression || current instanceof StaticMethodCallExpression) {
-                populateItemsFromGameObjects(namePrefix, existingNames, items);
+                //populateItemsFromGameObjects(namePrefix, existingNames, items);
                 populateItemsFromGlobalScope(namePrefix, existingNames, items);
             }
             child = current;
