@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GroovyASTUtils {
@@ -208,25 +209,58 @@ public class GroovyASTUtils {
         return null;
     }
 
-    public static List<FieldNode> getFieldsForLeftSideOfPropertyExpression(ClassNode classNode, Expression node, ASTContext context) {
-        boolean statics = node instanceof ClassExpression;
-        return classNode.getFields().stream()
-                .filter(fieldNode -> statics == fieldNode.isStatic() && (fieldNode.getModifiers() & HIDDEN_MARKER) == 0)
-                .collect(Collectors.toList());
+    public static List<FieldNode> getFieldsForLeftSideOfPropertyExpression(ClassNode classNode, Expression expr, ASTContext context) {
+        boolean statics = expr instanceof ClassExpression;
+        return collectFields(classNode, new ArrayList<>(), node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
     }
 
-    public static List<PropertyNode> getPropertiesForLeftSideOfPropertyExpression(ClassNode classNode, Expression node, ASTContext context) {
-        boolean statics = node instanceof ClassExpression;
-        return classNode.getProperties().stream()
-                .filter(propNode -> statics == propNode.isStatic() && (propNode.getModifiers() & HIDDEN_MARKER) == 0)
-                .collect(Collectors.toList());
+    public static List<PropertyNode> getPropertiesForLeftSideOfPropertyExpression(ClassNode classNode, Expression expr, ASTContext context) {
+        boolean statics = expr instanceof ClassExpression;
+        return collectProperties(classNode, new ArrayList<>(), node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
     }
 
-    public static List<MethodNode> getMethodsForLeftSideOfPropertyExpression(ClassNode classNode, Expression node, ASTContext context) {
-        boolean statics = node instanceof ClassExpression;
-        return classNode.getMethods().stream()
-                .filter(methodNode -> statics == methodNode.isStatic() && (methodNode.getModifiers() & HIDDEN_MARKER) == 0)
-                .collect(Collectors.toList());
+    public static List<MethodNode> getMethodsForLeftSideOfPropertyExpression(ClassNode classNode, Expression expr, ASTContext context) {
+        boolean statics = expr instanceof ClassExpression;
+        return collectMethods(classNode, new ArrayList<>(), node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
+    }
+
+    public static List<FieldNode> collectFields(ClassNode classNode, List<FieldNode> nodes, Predicate<FieldNode> test) {
+        for (FieldNode node : classNode.getFields()) {
+            if (test.test(node)) nodes.add(node);
+        }
+        for (ClassNode interfaze : classNode.getInterfaces()) {
+            collectFields(interfaze, nodes, test);
+        }
+        if (classNode.getSuperClass() != null) {
+            collectFields(classNode.getSuperClass(), nodes, test);
+        }
+        return nodes;
+    }
+
+    public static List<PropertyNode> collectProperties(ClassNode classNode, List<PropertyNode> nodes, Predicate<PropertyNode> test) {
+        for (PropertyNode node : classNode.getProperties()) {
+            if (test.test(node)) nodes.add(node);
+        }
+        for (ClassNode interfaze : classNode.getInterfaces()) {
+            collectProperties(interfaze, nodes, test);
+        }
+        if (classNode.getSuperClass() != null) {
+            collectProperties(classNode.getSuperClass(), nodes, test);
+        }
+        return nodes;
+    }
+
+    public static List<MethodNode> collectMethods(ClassNode classNode, List<MethodNode> nodes, Predicate<MethodNode> test) {
+        for (MethodNode node : classNode.getMethods()) {
+            if (test.test(node)) nodes.add(node);
+        }
+        for (ClassNode interfaze : classNode.getInterfaces()) {
+            collectMethods(interfaze, nodes, test);
+        }
+        if (classNode.getSuperClass() != null) {
+            collectMethods(classNode.getSuperClass(), nodes, test);
+        }
+        return nodes;
     }
 
     public static ClassNode getTypeOfNode(ASTNode node, ASTContext context) {
