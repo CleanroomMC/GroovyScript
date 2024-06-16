@@ -148,6 +148,12 @@ public class GroovyScript {
         } else {
             scriptPath = new File(minecraftHome, "groovy");
         }
+        try {
+            scriptPath = scriptPath.getCanonicalFile();
+        } catch (IOException e) {
+            GroovyLog.get().error("Failed to canonicalize groovy script path '" + scriptPath + "'!");
+            GroovyLog.get().exception(e);
+        }
         runConfigFile = new File(scriptPath, "runConfig.json");
         resourcesFile = new File(scriptPath, "assets");
         reloadRunConfig(true);

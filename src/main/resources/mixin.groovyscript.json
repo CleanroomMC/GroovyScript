@@ -26,6 +26,7 @@
     "groovy.GroovyClassLoaderMixin",
     "groovy.Java8Mixin",
     "groovy.MetaClassImplMixin",
+    "groovy.ModuleNodeAccessor",
     "loot.LoadTableEventMixin",
     "loot.LootPoolAccessor",
     "loot.LootTableAccessor",

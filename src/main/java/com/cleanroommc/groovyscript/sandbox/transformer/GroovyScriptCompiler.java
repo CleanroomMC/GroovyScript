@@ -16,12 +16,8 @@ public class GroovyScriptCompiler extends CompilationCustomizer {
     private static final String SIDE_ONLY_CLASS = "net.minecraftforge.fml.relauncher.SideOnly";
     private static final String SIDE_CLASS = "net.minecraftforge.fml.relauncher.Side";
 
-    public static GroovyScriptCompiler transformer() {
-        return new GroovyScriptCompiler(CompilePhase.CANONICALIZATION);
-    }
-
-    private GroovyScriptCompiler(CompilePhase phase) {
-        super(phase);
+    public GroovyScriptCompiler() {
+        super(CompilePhase.CANONICALIZATION);
     }
 
     @Override
