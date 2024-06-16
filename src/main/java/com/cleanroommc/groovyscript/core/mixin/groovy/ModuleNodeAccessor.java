@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin(ModuleNode.class)
+@Mixin(value = ModuleNode.class, remap = false)
 public interface ModuleNodeAccessor {
 
     @Accessor("imports")

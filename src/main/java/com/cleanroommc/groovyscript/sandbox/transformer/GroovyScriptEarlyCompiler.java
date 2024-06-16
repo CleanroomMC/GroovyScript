@@ -49,7 +49,6 @@ public class GroovyScriptEarlyCompiler extends CompilationCustomizer {
         BlockStatement scriptStatement = (BlockStatement) module.getClasses().get(0).getMethods("run").get(0).getCode();
         // transform 'import mods.[mod].[registry]' statements into 'def [registry] = mods.[mod].[registry]' expressions
         ((ModuleNodeAccessor) module).getModifiableImports().removeIf(imp -> {
-            GroovyLog.get().info(imp);
             ClassNode type = imp.getType();
             if (type.getName().startsWith("mods.")) {
                 String[] parts = type.getName().split("\\.");
