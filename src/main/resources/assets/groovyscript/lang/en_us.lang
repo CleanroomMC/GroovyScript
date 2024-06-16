@@ -980,6 +980,63 @@ groovyscript.wiki.immersiveengineering.squeezer.description=Converts an input it
 groovyscript.wiki.immersiveengineering.squeezer.add=Adds recipes in the format `fluidOutput`, `itemOutput`, `input`, `energy`
 groovyscript.wiki.immersiveengineering.squeezer.energy.value=Sets the amount of power consumed to complete the recipe
 
+
+# Industrial Foregoing
+groovyscript.wiki.industrialforegoing.bio_reactor.title=Bioreactor
+groovyscript.wiki.industrialforegoing.bio_reactor.description=Converts an input item into Biofuel, with the amount of Biofuel generated being based on the number of concurrent conversion processes inside the Bioreactor.
+groovyscript.wiki.industrialforegoing.bio_reactor.add0=Adds a Bioreactor recipe in the format `input`
+groovyscript.wiki.industrialforegoing.bio_reactor.add1=Adds a Bioreactor recipe in the format `input`, `nbtCheck`
+
+groovyscript.wiki.industrialforegoing.extractor.title=Latex Extractor
+groovyscript.wiki.industrialforegoing.extractor.description=Converts an input block in-world into a fluidstack over time, eventually breaking the block.
+groovyscript.wiki.industrialforegoing.extractor.add0=Adds a Latex Extractor recipe in the format `input`, `output`
+groovyscript.wiki.industrialforegoing.extractor.add1=Adds a Latex Extractor recipe in the format `input`, `output`, `breakChance`
+
+groovyscript.wiki.industrialforegoing.fluid_dictionary.title=Fluid Dictionary Converter
+groovyscript.wiki.industrialforegoing.fluid_dictionary.description=Converts one fluid into another fluid at a given ratio.
+groovyscript.wiki.industrialforegoing.fluid_dictionary.add0=Adds a Fluid Dictionary Converter recipe in the format `input`, `output`
+groovyscript.wiki.industrialforegoing.fluid_dictionary.add1=Adds a Fluid Dictionary Converter recipe in the format `input`, `output`, `ratio`
+
+groovyscript.wiki.industrialforegoing.laser_drill.title=Laser Drill
+groovyscript.wiki.industrialforegoing.laser_drill.description=Converts power into ores, with a given weight, between a minimum and maximum Y value, in any whitelisted biome or not in any blacklisted biome, and with a specific color of laser lens impacting the probability.
+groovyscript.wiki.industrialforegoing.laser_drill.maxY.value=Sets the maximum Y the output can be found at
+groovyscript.wiki.industrialforegoing.laser_drill.minY.value=Sets the minimum Y the output can be found at
+groovyscript.wiki.industrialforegoing.laser_drill.weight.value=Sets the chance the output is generated
+groovyscript.wiki.industrialforegoing.laser_drill.lensMeta.value=Sets the metadata of the lens that impacts the weight probability, which determines the color of the lens
+groovyscript.wiki.industrialforegoing.laser_drill.blacklist.value=Sets the biomes the output cannot be generated in
+groovyscript.wiki.industrialforegoing.laser_drill.whitelist.value=Sets the biomes the output can be generated in
+groovyscript.wiki.industrialforegoing.laser_drill.removeByBlacklist=Removes all ores with the given biome blacklisted
+groovyscript.wiki.industrialforegoing.laser_drill.removeByLens=Removes all ores with the given lens meta
+groovyscript.wiki.industrialforegoing.laser_drill.removeByWhitelist=Removes all ores with the given biome whitelisted
+
+groovyscript.wiki.industrialforegoing.ore_fermenter.title=Fermentation Station
+groovyscript.wiki.industrialforegoing.ore_fermenter.description=Converts an input fluidstack into an output fluidstack.
+groovyscript.wiki.industrialforegoing.ore_fermenter.add=Adds a Fermentation Station recipe in the format `input`, `output`
+
+groovyscript.wiki.industrialforegoing.ore_raw.title=Washing Factory
+groovyscript.wiki.industrialforegoing.ore_raw.description=Converts an input itemstack and input fluidstack into an output fluidstack.
+groovyscript.wiki.industrialforegoing.ore_raw.add=Adds a Washing Factory recipe in the format `ore`, `input`, `output`
+
+groovyscript.wiki.industrialforegoing.ore_sieve.title=Fluid Sieving Machine
+groovyscript.wiki.industrialforegoing.ore_sieve.description=Converts an input itemstack and input fluidstack into an output itemstack.
+groovyscript.wiki.industrialforegoing.ore_sieve.add=Adds a Fluid Sieving Machine recipe in the format `input`, `output`, `sieveItem`
+
+groovyscript.wiki.industrialforegoing.protein_reactor.title=Protein Reactor
+groovyscript.wiki.industrialforegoing.protein_reactor.description=Converts an input item into Protein, with the amount of Protein generated being based on the number of concurrent conversion processes inside the Protein Reactor.
+groovyscript.wiki.industrialforegoing.protein_reactor.add0=Adds a Protein Reactor recipe in the format `input`
+groovyscript.wiki.industrialforegoing.protein_reactor.add1=Adds a Protein Reactor recipe in the format `input`, `nbtCheck`
+
+groovyscript.wiki.industrialforegoing.sludge_refiner.title=Sludge Refiner
+groovyscript.wiki.industrialforegoing.sludge_refiner.description=Converts 1000mb of Sludge into a random itemstack based on the weight of the given itemstack.
+groovyscript.wiki.industrialforegoing.sludge_refiner.add=Adds a Protein Reactor recipe in the format `output`, `weight`
+
+groovyscript.wiki.industrialforegoing.straw.title=Straw
+groovyscript.wiki.industrialforegoing.straw.description=Converts an fluid block in-world into various effects for the player when consumed via a straw.
+groovyscript.wiki.industrialforegoing.straw.add0=Adds a Straw recipe in the format `fluidInput`, `effect`
+groovyscript.wiki.industrialforegoing.straw.add1=Adds a Straw recipe in the format `name`, `fluidInput`, `effect`
+groovyscript.wiki.industrialforegoing.straw.effect.value=Sets what potion effects are given upon consuming the fluid.
+
+
 # Inspirations
 groovyscript.wiki.inspirations.anvil_smashing.title=Anvil Smashing
 groovyscript.wiki.inspirations.anvil_smashing.description=Converts a Block or IBlockState into an IBlockState when an anvil falls on top of it (from any height).
