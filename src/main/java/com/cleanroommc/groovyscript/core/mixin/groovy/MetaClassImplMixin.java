@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
+import groovy.lang.Closure;
 import groovy.lang.MetaClassImpl;
 import groovy.lang.Script;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,6 +30,16 @@ public class MetaClassImplMixin {
     public void invokeStaticMissingMethod(Class<?> sender, String methodName, Object[] arguments, CallbackInfoReturnable<Object> cir) {
         if (sender.getSuperclass() != Script.class && "main".equals(methodName)) {
             cir.setReturnValue(null);
+        }
+    }
+
+    @Inject(method = "invokePropertyOrMissing", at = @At("HEAD"), cancellable = true)
+    public void invokePropertyOrMissing(Object object, String methodName, Object[] originalArguments, boolean fromInsideClass, boolean isCallToSuper, CallbackInfoReturnable<Object> cir) {
+        if (!isCallToSuper && object instanceof IDynamicGroovyProperty dynamicGroovyProperty) {
+            Object o = dynamicGroovyProperty.getProperty(methodName);
+            if (o instanceof Closure<?> closure) {
+                cir.setReturnValue(closure.call(originalArguments));
+            }
         }
     }
 }

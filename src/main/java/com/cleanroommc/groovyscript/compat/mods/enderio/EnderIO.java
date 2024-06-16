@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class EnderIO extends ModPropertyContainer {
+public class EnderIO extends GroovyPropertyContainer {
 
     public final AlloySmelter alloySmelter = new AlloySmelter();
     public final FluidFuel fluidFuel = new FluidFuel();
@@ -14,18 +14,5 @@ public class EnderIO extends ModPropertyContainer {
     public final SoulBinder soulBinder = new SoulBinder();
     public final Tank tank = new Tank();
     public final Vat vat = new Vat();
-
-    public EnderIO() {
-        addRegistry(alloySmelter);
-        addRegistry(fluidFuel);
-        addRegistry(fluidCoolant);
-        addRegistry(enchanter);
-        addRegistry(sagMill);
-        addRegistry(sagMillGrinding);
-        addRegistry(sliceNSplice);
-        addRegistry(soulBinder);
-        addRegistry(tank);
-        addRegistry(vat);
-    }
 
 }

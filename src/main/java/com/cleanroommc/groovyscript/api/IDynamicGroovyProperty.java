@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.api;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -7,6 +8,8 @@ import java.util.Map;
 /**
  * When this is implemented on a class, {@link #getProperty(String)} will be called when groovy tries to get a field from this class
  */
+@ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
+@Deprecated
 public interface IDynamicGroovyProperty {
 
     /**
@@ -34,5 +37,5 @@ public interface IDynamicGroovyProperty {
      *
      * @return all properties
      */
-    Map<String, Object> getProperties();
+    Map<String, ?> getProperties();
 }
