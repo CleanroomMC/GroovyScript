@@ -1067,10 +1067,10 @@ groovyscript.wiki.threng.energizer.title=Crystal Energization
 groovyscript.wiki.threng.energizer.description=Converts 1 input itemstack into an output itemstack, consuming a set amount of energy.
 groovyscript.wiki.threng.energizer.energy.value=Sets the amount of energy consumed by the recipe
 
-groovyscript.wiki.threng.etching.title=ME Circuit Etching
-groovyscript.wiki.threng.etching.description=Converts up to 3 input itemstacks from specific slots into an output itemstack.
-groovyscript.wiki.threng.etching.top.value=Sets the top slot of the recipe
-groovyscript.wiki.threng.etching.bottom.value=Sets the bottom slot of the recipe
+groovyscript.wiki.threng.etcher.title=ME Circuit Etching
+groovyscript.wiki.threng.etcher.description=Converts up to 3 input itemstacks from specific slots into an output itemstack.
+groovyscript.wiki.threng.etcher.top.value=Sets the top slot of the recipe
+groovyscript.wiki.threng.etcher.bottom.value=Sets the bottom slot of the recipe
 
 
 # Mekanism
