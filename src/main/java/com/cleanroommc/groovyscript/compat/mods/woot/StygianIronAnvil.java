@@ -106,7 +106,7 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         @Property(defaultValue = "ItemStack.EMPTY", valid = @Comp(value = "isEmpty", type = Comp.Type.NOT))
         private ItemStack base = ItemStack.EMPTY;
         @Property
-        private boolean preserveBase = false;
+        private boolean preserveBase;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder base(ItemStack base) {

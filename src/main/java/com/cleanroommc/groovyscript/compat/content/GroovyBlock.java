@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class GroovyBlock extends Block {
 
-    private static boolean initialised = false;
+    private static boolean initialised;
     private static final String nullTranslationKey = "tile.null";
 
     private static final Map<String, Pair<Block, ItemBlock>> BLOCKS = new Object2ObjectLinkedOpenHashMap<>();

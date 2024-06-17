@@ -46,15 +46,13 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         boolean withSecondary = !IngredientHelper.isEmpty(secondary);
         if (withSecondary) {
             if (chance <= 0) chance = 1;
-            secondary = secondary.copy();
         }
 
-        output = output.copy();
         SawmillRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
             SawmillRecipe recipe;
             ChanceOutput chanceOutput = withSecondary ? new ChanceOutput(output, secondary, chance) : new ChanceOutput(output);
-            recipe = new SawmillRecipe(new ItemStackInput(itemStack.copy()), chanceOutput);
+            recipe = new SawmillRecipe(new ItemStackInput(itemStack), chanceOutput);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -91,11 +89,13 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         @Property(defaultValue = "1.0", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
         private double chance = 1.0;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder extra(ItemStack extra) {
             this.extra = extra;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder chance(double chance) {
             this.chance = chance;
             return this;
@@ -122,7 +122,7 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
                                         : new ChanceOutput(output.get(0), extra, chance);
             SawmillRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                SawmillRecipe r = new SawmillRecipe(new ItemStackInput(itemStack.copy()), chanceOutput);
+                SawmillRecipe r = new SawmillRecipe(new ItemStackInput(itemStack), chanceOutput);
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().sawmill.add(r);
             }

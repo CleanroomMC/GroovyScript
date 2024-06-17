@@ -163,7 +163,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         @Property
         private IIngredient catalyst;
         @Property
-        private ResourceLocation texture = null;
+        private ResourceLocation texture;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder catalyst(IIngredient catalyst) {
@@ -198,7 +198,8 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         @RecipeBuilderRegistrationMethod
         public @Nullable RecipeAlchemyArray register() {
             if (!validate()) return null;
-            RecipeAlchemyArray recipe = ModSupport.BLOOD_MAGIC.get().alchemyArray.add(input.get(0).toMcIngredient(), catalyst.toMcIngredient(), output.get(0), texture);
+            RecipeAlchemyArray recipe = new RecipeAlchemyArray(input.get(0).toMcIngredient(), catalyst.toMcIngredient(), output.get(0), texture);
+            ModSupport.BLOOD_MAGIC.get().alchemyArray.add(recipe);
             return recipe;
         }
     }

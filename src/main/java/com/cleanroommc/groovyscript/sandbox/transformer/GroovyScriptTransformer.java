@@ -1,7 +1,9 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlerManager;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.GroovyFile;
+import com.cleanroommc.groovyscript.mapper.ObjectMapper;
+import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import org.codehaus.groovy.ast.ClassCodeExpressionTransformer;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
@@ -14,10 +16,10 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
 
-    private static final ClassNode bracketHandlerClass = ClassHelper.makeCached(GameObjectHandlerManager.class);
     private static final ClassNode groovyFile = ClassHelper.makeCached(GroovyFile.class);
     private final SourceUnit source;
     private final ClassNode classNode;
@@ -63,11 +65,11 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
     }
 
     private Expression transformInternal(Expression expr) {
-        if (expr instanceof ClosureExpression) {
-            return transformClosure((ClosureExpression) expr);
+        if (expr instanceof ClosureExpression ce) {
+            return transformClosure(ce);
         }
-        if (expr instanceof MethodCallExpression) {
-            return checkValid((MethodCallExpression) expr);
+        if (expr instanceof MethodCallExpression mce) {
+            return transformMethodCall(mce);
         }
         if (expr instanceof ConstructorCallExpression cce) {
             if (cce.getType().getName().equals(File.class.getName())) {
@@ -97,19 +99,18 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
         return closure;
     }
 
-    private Expression checkValid(MethodCallExpression expression) {
-        int argCount = 0;
-        if (expression.getArguments() instanceof TupleExpression) {
-            argCount = ((TupleExpression) expression.getArguments()).getExpressions().size();
-        }
-        if (expression.isImplicitThis() && argCount > 0) {
-            String name = expression.getMethodAsString();
-            if (GameObjectHandlerManager.hasGameObjectHandler(name)) {
-                List<Expression> args = getArguments(expression.getArguments());
-                args.add(0, new ConstantExpression(name));
-                return makeCheckedCall(bracketHandlerClass, "getGameObject", args);
+    private Expression transformMethodCall(MethodCallExpression mce) {
+        if (mce.isImplicitThis()) {
+            List<ObjectMapper<?>> conflicts = ObjectMapperManager.getConflicts(mce.getMethodAsString());
+            if (conflicts != null) {
+                List<String> suggestions = conflicts.stream()
+                        .map(goh -> goh.getMod() == null ? goh.getName() : "mods." + goh.getMod().getModId() + "." + goh.getName())
+                        .collect(Collectors.toList());
+                String msg = GroovyLog.format("Can't infer ObjectMapper from name {}, since one is added by {} mods. " +
+                                              "Please choose one of the following: {}", mce.getMethodAsString(), conflicts.size(), suggestions);
+                source.addError(new SyntaxException(msg, mce));
             }
         }
-        return expression;
+        return mce;
     }
 }

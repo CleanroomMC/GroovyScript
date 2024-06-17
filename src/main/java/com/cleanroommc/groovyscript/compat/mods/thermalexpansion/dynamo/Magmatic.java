@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.dynamo;
 
-import cofh.core.inventory.ComparableItemStack;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
@@ -9,7 +8,6 @@ import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.MagmaticManagerA
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.github.bsideup.jabel.Desugar;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 

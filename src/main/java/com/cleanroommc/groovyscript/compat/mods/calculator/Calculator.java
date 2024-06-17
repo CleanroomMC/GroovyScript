@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.calculator;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Calculator extends ModPropertyContainer {
+public class Calculator extends GroovyPropertyContainer {
 
     public final AlgorithmSeparator algorithmSeparator = new AlgorithmSeparator();
     public final AnalysingChamber analysingChamber = new AnalysingChamber();
@@ -35,28 +35,6 @@ public class Calculator extends ModPropertyContainer {
     public final ScientificCalculator scientificCalculator = new ScientificCalculator();
     public final StarchExtractor starchExtractor = new StarchExtractor();
     public final StoneSeparator stoneSeparator = new StoneSeparator();
-
-    public Calculator() {
-        addRegistry(algorithmSeparator);
-        addRegistry(analysingChamber);
-        addRegistry(atomicCalculator);
-        addRegistry(basicCalculator);
-        addRegistry(conductorMast);
-        addRegistry(extractionChamber);
-        addRegistry(fabricationChamber);
-        addRegistry(flawlessCalculator);
-        addRegistry(glowstoneExtractor);
-        addRegistry(healthProcessor);
-        addRegistry(precisionChamber);
-        addRegistry(processingChamber);
-        addRegistry(reassemblyChamber);
-        addRegistry(redstoneExtractor);
-        addRegistry(restorationChamber);
-        addRegistry(scientificCalculator);
-        addRegistry(starchExtractor);
-        addRegistry(stoneSeparator);
-    }
-
 
     public static List<ISonarRecipeObject> toSonarRecipeObjectList(IngredientList<IIngredient> list) {
         List<ISonarRecipeObject> output = new ArrayList<>();

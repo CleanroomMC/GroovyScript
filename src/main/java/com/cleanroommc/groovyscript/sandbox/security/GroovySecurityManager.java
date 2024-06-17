@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox.security;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.GroovyClassLoader;
@@ -12,7 +11,6 @@ import groovy.util.Eval;
 import groovy.util.GroovyScriptEngine;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import mezz.jei.util.FileUtil;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.runtime.FormatHelper;
 import org.codehaus.groovy.runtime.GStringImpl;

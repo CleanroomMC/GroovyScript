@@ -141,6 +141,7 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
             return perTick(costPerTick);
         }
 
+        @Override
         @RecipeBuilderMethodDescription
         public RecipeBuilder input(IIngredient ingredient) {
             this.input.add(ingredient.withAmount(1));

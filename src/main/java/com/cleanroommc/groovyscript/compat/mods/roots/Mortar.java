@@ -9,21 +9,18 @@ import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.MortarRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static epicsquid.roots.init.ModRecipes.addMortarRecipe;
-import static epicsquid.roots.init.ModRecipes.getMortarRecipes;
-
 @RegistryDescription
-public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRecipe>> {
+public class Mortar extends VirtualizedRegistry<MortarRecipe> {
 
     public Mortar() {
         super(Alias.generateOfClassAnd(Mortar.class, "MortarAndPestle"));
@@ -40,8 +37,8 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> ModRecipesAccessor.getMortarRecipes().remove(pair.getKey()));
-        restoreFromBackup().forEach(pair -> addMortarRecipe(pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipesAccessor.getMortarRecipes().remove(recipe.getRegistryName()));
+        restoreFromBackup().forEach(ModRecipes::addMortarRecipe);
     }
 
     public void add(MortarRecipe recipe) {
@@ -49,19 +46,19 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
     }
 
     public void add(ResourceLocation name, MortarRecipe recipe) {
-        addMortarRecipe(recipe);
-        addScripted(Pair.of(name, recipe));
+        ModRecipes.addMortarRecipe(recipe);
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(MortarRecipe recipe) {
-        for (MortarRecipe entry : getMortarRecipes()) {
+        for (MortarRecipe entry : ModRecipes.getMortarRecipes()) {
             if (entry.matches(recipe.getRecipe())) return entry.getRegistryName();
         }
         return null;
     }
 
     public ResourceLocation findRecipeByOutput(ItemStack output) {
-        for (MortarRecipe entry : getMortarRecipes()) {
+        for (MortarRecipe entry : ModRecipes.getMortarRecipes()) {
             if (ItemStack.areItemsEqual(entry.getResult(), output)) return entry.getRegistryName();
         }
         return null;
@@ -72,7 +69,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
         return ModRecipesAccessor.getMortarRecipes().entrySet().removeIf(x -> {
             // Some Mortar recipe names are generated via [base]_x. If we are removing eg "wheat_flour" we should detect and remove all 5 variants
             if (x.getKey().equals(name) || x.getKey().toString().startsWith(name.toString())) {
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
             return false;
@@ -83,7 +80,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
     public boolean removeByOutput(ItemStack output) {
         return ModRecipesAccessor.getMortarRecipes().entrySet().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getValue().getResult(), output)) {
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
             return false;
@@ -92,14 +89,14 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipesAccessor.getMortarRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipesAccessor.getMortarRecipes().values().forEach(this::addBackup);
         ModRecipesAccessor.getMortarRecipes().clear();
     }
 
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MortarRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(getMortarRecipes())
+        return new SimpleObjectStream<>(ModRecipes.getMortarRecipes())
                 .setRemover(r -> this.removeByName(r.getRegistryName()));
     }
 
@@ -240,6 +237,7 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
             return "Error adding Roots Mortar recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_mortar_recipe_";
         }
@@ -271,15 +269,15 @@ public class Mortar extends VirtualizedRegistry<Pair<ResourceLocation, MortarRec
                     ItemStack copy = output.get(0).copy();
                     copy.setCount(i * count);
                     MortarRecipe recipe = new MortarRecipe(copy, ingredients.toArray(new Ingredient[0]), red1, green1, blue1, red2, green2, blue2);
-                    recipe.setRegistryName(new ResourceLocation(name.toString() + "_" + i));
+                    recipe.setRegistryName(new ResourceLocation(super.name.toString() + "_" + i));
                     ModSupport.ROOTS.get().mortar.add(recipe.getRegistryName(), recipe);
                 }
                 return null;
             }
 
             MortarRecipe recipe = new MortarRecipe(output.get(0), input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new), red1, red2, green1, green2, blue1, blue2);
-            recipe.setRegistryName(name);
-            ModSupport.ROOTS.get().mortar.add(name, recipe);
+            recipe.setRegistryName(super.name);
+            ModSupport.ROOTS.get().mortar.add(super.name, recipe);
             return recipe;
 
         }

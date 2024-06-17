@@ -54,8 +54,7 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
             MatchList matchList = getMatchingList(inv);
             Object2ObjectOpenHashMap<String, ItemStack> marks = new Object2ObjectOpenHashMap<>();
             for (SlotMatchResult matchResult : matchList) {
-                if (matchResult.getRecipeIngredient() instanceof IMarkable) {
-                    IMarkable markable = (IMarkable) matchResult.getRecipeIngredient();
+                if (matchResult.getRecipeIngredient() instanceof IMarkable markable) {
                     if (!input.isEmpty() && markable.hasMark()) {
                         marks.put(markable.getMark(), matchResult.getGivenInput().copy());
                     }

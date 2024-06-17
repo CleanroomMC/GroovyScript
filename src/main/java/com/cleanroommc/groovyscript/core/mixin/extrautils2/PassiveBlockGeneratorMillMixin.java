@@ -35,7 +35,7 @@ public class PassiveBlockGeneratorMillMixin {
     public void getPowerLevel(TilePassiveGenerator generator, World world, CallbackInfoReturnable<Float> cir) {
         Closure<Float> value = ModSupport.EXTRA_UTILITIES_2.get().gridPowerPassiveGenerator.powerLevelMap.get(((GeneratorTypeAccessor) this).getKey());
         if (value != null) {
-            cir.setReturnValue(ClosureHelper.call(0f, value, generator, world));
+            cir.setReturnValue(ClosureHelper.call(0.0f, value, generator, world));
         }
     }
 

@@ -6,19 +6,16 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.AnimalHarvestFishRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-import static epicsquid.roots.init.ModRecipes.getAnimalHarvestFishRecipes;
-import static epicsquid.roots.init.ModRecipes.removeAnimalHarvestFishRecipe;
-
 @RegistryDescription
-public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation, AnimalHarvestFishRecipe>> {
+public class AnimalHarvestFish extends VirtualizedRegistry<AnimalHarvestFishRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_fish').weight(50).output(item('minecraft:clay'))"),
@@ -30,8 +27,8 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> removeAnimalHarvestFishRecipe(pair.getKey()));
-        restoreFromBackup().forEach(pair -> getAnimalHarvestFishRecipes().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.removeAnimalHarvestFishRecipe(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipes.getAnimalHarvestFishRecipes().put(recipe.getRegistryName(), recipe));
     }
 
     public void add(AnimalHarvestFishRecipe recipe) {
@@ -39,12 +36,12 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
     }
 
     public void add(ResourceLocation name, AnimalHarvestFishRecipe recipe) {
-        getAnimalHarvestFishRecipes().put(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        ModRecipes.getAnimalHarvestFishRecipes().put(name, recipe);
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipeByOutput(ItemStack output) {
-        for (Map.Entry<ResourceLocation, AnimalHarvestFishRecipe> entry : getAnimalHarvestFishRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, AnimalHarvestFishRecipe> entry : ModRecipes.getAnimalHarvestFishRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(entry.getValue().getItemStack(), output)) return entry.getKey();
         }
         return null;
@@ -52,19 +49,19 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
 
     @MethodDescription(example = @Example("resource('roots:cod')"))
     public boolean removeByName(ResourceLocation name) {
-        AnimalHarvestFishRecipe recipe = getAnimalHarvestFishRecipes().get(name);
+        AnimalHarvestFishRecipe recipe = ModRecipes.getAnimalHarvestFishRecipes().get(name);
         if (recipe == null) return false;
-        removeAnimalHarvestFishRecipe(name);
-        addBackup(Pair.of(name, recipe));
+        ModRecipes.removeAnimalHarvestFishRecipe(name);
+        addBackup(recipe);
         return true;
     }
 
     @MethodDescription(example = @Example("item('minecraft:fish:1')"))
     public boolean removeByOutput(ItemStack output) {
-        for (Map.Entry<ResourceLocation, AnimalHarvestFishRecipe> x : getAnimalHarvestFishRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, AnimalHarvestFishRecipe> x : ModRecipes.getAnimalHarvestFishRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getItemStack(), output)) {
-                getAnimalHarvestFishRecipes().remove(x.getKey());
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                ModRecipes.getAnimalHarvestFishRecipes().remove(x.getKey());
+                addBackup(x.getValue());
                 return true;
             }
         }
@@ -78,13 +75,13 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        getAnimalHarvestFishRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
-        getAnimalHarvestFishRecipes().clear();
+        ModRecipes.getAnimalHarvestFishRecipes().values().forEach(this::addBackup);
+        ModRecipes.getAnimalHarvestFishRecipes().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, AnimalHarvestFishRecipe>> streamRecipes() {
-        return new SimpleObjectStream<>(getAnimalHarvestFishRecipes().entrySet())
+        return new SimpleObjectStream<>(ModRecipes.getAnimalHarvestFishRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
@@ -112,6 +109,7 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
             return "Error adding Roots Animal Harvest Fish recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_animal_harvest_fish_";
         }
@@ -128,8 +126,8 @@ public class AnimalHarvestFish extends VirtualizedRegistry<Pair<ResourceLocation
         @RecipeBuilderRegistrationMethod
         public @Nullable AnimalHarvestFishRecipe register() {
             if (!validate()) return null;
-            AnimalHarvestFishRecipe recipe = new AnimalHarvestFishRecipe(name, output.get(0), weight);
-            ModSupport.ROOTS.get().animalHarvestFish.add(name, recipe);
+            AnimalHarvestFishRecipe recipe = new AnimalHarvestFishRecipe(super.name, output.get(0), weight);
+            ModSupport.ROOTS.get().animalHarvestFish.add(super.name, recipe);
             return recipe;
         }
     }

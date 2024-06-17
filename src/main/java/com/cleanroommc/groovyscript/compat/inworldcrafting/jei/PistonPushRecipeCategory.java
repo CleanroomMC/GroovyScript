@@ -43,7 +43,7 @@ public class PistonPushRecipeCategory extends BaseCategory<PistonPushRecipeCateg
     @Override
     public void drawExtras(@NotNull Minecraft minecraft) {
         minecraft.fontRenderer.drawSplitString(I18n.format("groovyscript.recipe.piston_push"), 4, 4, 168, 0x404040);
-        GlStateManager.color(1f, 1f, 1f, 1f);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         rightArrow.draw(minecraft, 76, 26);
         float tntScale = 0.5f;
         GlStateManager.pushMatrix();

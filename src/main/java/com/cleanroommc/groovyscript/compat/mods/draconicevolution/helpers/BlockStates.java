@@ -28,7 +28,9 @@ public class BlockStates {
         }
     };
 
-    private static BlockStates redstone, draconium, draconic;
+    private static BlockStates redstone;
+    private static BlockStates draconium;
+    private static BlockStates draconic;
 
     public static BlockStates redstone() {
         if (redstone == null) redstone = of(Blocks.REDSTONE_BLOCK);

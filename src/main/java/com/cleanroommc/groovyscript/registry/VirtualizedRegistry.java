@@ -20,10 +20,12 @@ public abstract class VirtualizedRegistry<R> extends NamedRegistry implements IS
         this.recipeStorage = createRecipeStorage();
     }
 
+    @Override
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     public abstract void onReload();
 
+    @Override
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     public void afterScriptLoad() {

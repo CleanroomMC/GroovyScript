@@ -31,7 +31,7 @@ public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeut
         msg.add(Mekanism.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        SolarNeutronRecipe recipe = new SolarNeutronRecipe(input.copy(), output.copy());
+        SolarNeutronRecipe recipe = new SolarNeutronRecipe(input, output);
         recipeRegistry.put(recipe);
         addScripted(recipe);
         return recipe;

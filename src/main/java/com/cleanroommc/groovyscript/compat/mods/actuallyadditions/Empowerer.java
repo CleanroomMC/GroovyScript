@@ -154,9 +154,9 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
         public RecipeBuilder particleColor(int hex) {
             Color color = new Color(hex);
-            this.red = color.getRed() / 255f;
-            this.green = color.getGreen() / 255f;
-            this.blue = color.getBlue() / 255f;
+            this.red = color.getRed() / 255.0f;
+            this.green = color.getGreen() / 255.0f;
+            this.blue = color.getBlue() / 255.0f;
             return this;
         }
 

@@ -25,6 +25,7 @@ public class LateMixin implements ILateMixinLoader {
             "forestry",
             "ic2_classic",
             "ic2_exp",
+            "industrialforegoing",
             "inspirations",
             "jei",
             "mekanism",

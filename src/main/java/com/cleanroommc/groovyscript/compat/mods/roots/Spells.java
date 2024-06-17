@@ -265,7 +265,7 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
     public static class CostBuilder extends AbstractRecipeBuilder<Map<CostType, IModifierCost>> {
 
         @com.cleanroommc.groovyscript.api.documentation.annotations.Property
-        List<IModifierCost> list = new ArrayList<>();
+        private final List<IModifierCost> list = new ArrayList<>();
 
         @RecipeBuilderMethodDescription(field = "list")
         public CostBuilder cost(CostType cost, double value, IModifierCore herb) {

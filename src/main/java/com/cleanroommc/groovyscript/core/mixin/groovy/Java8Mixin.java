@@ -4,6 +4,8 @@ import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.codehaus.groovy.ast.Parameter;
 import org.codehaus.groovy.ast.*;
+import org.codehaus.groovy.ast.expr.ConstantExpression;
+import org.codehaus.groovy.ast.stmt.ReturnStatement;
 import org.codehaus.groovy.vmplugin.v8.Java8;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -29,13 +31,6 @@ public abstract class Java8Mixin {
     protected abstract ClassNode[] makeClassNodes(CompileUnit cu, Type[] types, Class<?>[] cls);
 
     @Shadow
-    private static void setMethodDefaultValue(MethodNode mn, Method m) {
-    }
-
-    @Shadow
-    protected abstract GenericsType[] configureTypeVariable(TypeVariable<?>[] tvs);
-
-    @Shadow
     protected abstract Annotation[][] getConstructorParameterAnnotations(Constructor<?> constructor);
 
     @Shadow
@@ -46,6 +41,9 @@ public abstract class Java8Mixin {
 
     @Shadow
     protected abstract void makeRecordComponents(CompileUnit cu, ClassNode classNode, Class<?> clazz);
+
+    @Shadow
+    protected abstract GenericsType[] configureTypeParameters(TypeVariable<?>[] tp);
 
     /**
      * @author brachy84
@@ -72,10 +70,13 @@ public abstract class Java8Mixin {
                 ClassNode[] exceptions = makeClassNodes(compileUnit, m.getGenericExceptionTypes(), m.getExceptionTypes());
                 String name = deobfMethods != null ? deobfMethods.getOrDefault(m.getName(), m.getName()) : m.getName();
                 MethodNode mn = new MethodNode(name, m.getModifiers(), ret, params, exceptions, null);
-                mn.setSynthetic(m.isSynthetic());
-                setMethodDefaultValue(mn, m);
                 setAnnotationMetaData(m.getAnnotations(), mn);
-                mn.setGenericsTypes(configureTypeVariable(m.getTypeParameters()));
+                if (true) { // TODO: GROOVY-10862
+                    mn.setAnnotationDefault(true);
+                    mn.setCode(new ReturnStatement(new ConstantExpression(m.getDefaultValue())));
+                }
+                mn.setGenericsTypes(configureTypeParameters(m.getTypeParameters()));
+                mn.setSynthetic(m.isSynthetic());
                 classNode.addMethod(mn);
             }
             Constructor<?>[] constructors = clazz.getDeclaredConstructors();
