@@ -1267,15 +1267,16 @@ groovyscript.wiki.naturesaura.spawning.removeByName=Removes the Altar of Birthin
 
 
 # Project E
-groovyscript.wiki.projecte.entity_randomizer_mob.title=Mob Entity Randomizer
-groovyscript.wiki.projecte.entity_randomizer_mob.description=Converts an entity on the list into a random other entity on the list when a projectile fired from the Philosopher's Stone hits it. This list contains hostile mob entities by default.
-groovyscript.wiki.projecte.entity_randomizer_mob.add=Adds the given `entity` that extends `EntityLiving` to the list
-groovyscript.wiki.projecte.entity_randomizer_mob.remove=Removes the given `entity` that extends `EntityLiving` from the list
-
-groovyscript.wiki.projecte.entity_randomizer_peaceful.title=Peaceful Entity Randomizer
-groovyscript.wiki.projecte.entity_randomizer_peaceful.description=Converts an entity on the list into a random other entity on the list when a projectile fired from the Philosopher's Stone hits it. This list contains peaceful entities by default.
-groovyscript.wiki.projecte.entity_randomizer_peaceful.add=Adds the given `entity` that extends `EntityLiving` to the list
-groovyscript.wiki.projecte.entity_randomizer_peaceful.remove=Removes the given `entity` that extends `EntityLiving` from the list
+groovyscript.wiki.projecte.entity_randomizer.title=Entity Randomizer
+groovyscript.wiki.projecte.entity_randomizer.description=Converts an entity on the list into a random other entity on the list when a projectile fired from the Philosopher's Stone hits it. There are two lists, one for 'mobs' and the other for 'peacefuls', but any entity can go on either list.
+groovyscript.wiki.projecte.entity_randomizer.addMob=Adds the given `entity` that extends `EntityLiving` to the mob list
+groovyscript.wiki.projecte.entity_randomizer.addPeaceful=Adds the given `entity` that extends `EntityLiving` to the peaceful list
+groovyscript.wiki.projecte.entity_randomizer.removeMob=Removes the given `entity` that extends `EntityLiving` from the mob list
+groovyscript.wiki.projecte.entity_randomizer.removePeaceful=Removes the given `entity` that extends `EntityLiving` from the peaceful list
+groovyscript.wiki.projecte.entity_randomizer.removeAllMobs=Removes all entries from the mob list
+groovyscript.wiki.projecte.entity_randomizer.removeAllPeacefuls=Removes all entries from the peacefuls list
+groovyscript.wiki.projecte.entity_randomizer.streamMobs=Iterates through every entry in the mob list
+groovyscript.wiki.projecte.entity_randomizer.streamPeacefuls=Iterates through every entry in the peacefuls list
 
 groovyscript.wiki.projecte.transmutation.title=World Transmutation
 groovyscript.wiki.projecte.transmutation.description=Converts an input blockstate into an output blockstate when right-clicked with by a Philosopher's Stone, with the abity to be converted into a different output blockstate when holding shift.

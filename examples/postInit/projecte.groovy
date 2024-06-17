@@ -4,23 +4,18 @@
 
 println 'mod \'projecte\' detected, running script'
 
-// Mob Entity Randomizer:
+// Entity Randomizer:
 // Converts an entity on the list into a random other entity on the list when a projectile fired from the Philosopher's
-// Stone hits it. This list contains hostile mob entities by default.
+// Stone hits it. There are two lists, one for 'mobs' and the other for 'peacefuls', but any entity can go on either list.
 
-mods.projecte.entity_randomizer_mob.remove(entity('minecraft:zombie'))
-// mods.projecte.entity_randomizer_mob.removeAll()
+mods.projecte.entity_randomizer.removeMob(entity('minecraft:zombie'))
+mods.projecte.entity_randomizer.removePeaceful(entity('minecraft:pig'))
+// mods.projecte.entity_randomizer.removeAll()
+// mods.projecte.entity_randomizer.removeAllMobs()
+// mods.projecte.entity_randomizer.removeAllPeacefuls()
 
-mods.projecte.entity_randomizer_mob.add(entity('minecraft:pig'))
-
-// Peaceful Entity Randomizer:
-// Converts an entity on the list into a random other entity on the list when a projectile fired from the Philosopher's
-// Stone hits it. This list contains peaceful entities by default.
-
-mods.projecte.entity_randomizer_peaceful.remove(entity('minecraft:pig'))
-// mods.projecte.entity_randomizer_peaceful.removeAll()
-
-mods.projecte.entity_randomizer_peaceful.add(entity('minecraft:zombie'))
+mods.projecte.entity_randomizer.addMob(entity('minecraft:pig'))
+mods.projecte.entity_randomizer.addPeaceful(entity('minecraft:zombie'))
 
 // World Transmutation:
 // Converts an input blockstate into an output blockstate when right-clicked with by a Philosopher's Stone, with the abity
