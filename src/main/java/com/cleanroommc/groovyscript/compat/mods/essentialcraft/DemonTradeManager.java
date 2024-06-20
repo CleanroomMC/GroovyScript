@@ -61,6 +61,7 @@ public class DemonTradeManager extends VirtualizedRegistry<DemonTrade> {
         return DemonTrade.TRADES.removeIf(r -> {
             if (r.desiredItem.isEmpty() && x.equals(r.entityType)) {
                 addBackup(r);
+                DemonTrade.ALL_MOBS.remove(r.entityType);
                 return true;
             }
             return false;

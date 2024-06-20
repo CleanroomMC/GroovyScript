@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.essentialcraft;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -60,7 +61,7 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
         return new SimpleObjectStream<>(OreSmeltingRecipe.RECIPES).setRemover(r -> removeByInput(r.oreName));
     }
 
-    public class RecipeBuilder implements IRecipeBuilder<OreSmeltingRecipe> {
+    public static class RecipeBuilder implements IRecipeBuilder<OreSmeltingRecipe> {
         @Property(valid = @Comp("1"))
         private String input;
 
@@ -121,7 +122,7 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
             if (didReload || !validate()) return null;
             OreSmeltingRecipe recipe = new OreSmeltingRecipe(input, output, color, factor);
             recipe.register();
-            addScripted(recipe);
+            ModSupport.ESSENTIALCRAFT.get().magmaticSmeltery.addScripted(recipe);
             return recipe;
         }
     }

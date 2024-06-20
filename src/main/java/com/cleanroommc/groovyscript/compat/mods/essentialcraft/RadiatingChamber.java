@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.essentialcraft;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -52,7 +53,7 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
     @Property(property = "output", valid = @Comp("1"))
-    public class RecipeBuilder extends AbstractRecipeBuilder<RadiatingChamberRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<RadiatingChamberRecipe> {
         @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int time;
 
@@ -112,7 +113,7 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
             // the attribute names lie to the devs, they're called 'int mruRequired' and 'float costModifier'
             // but actually they're 'int timeInTicks' and 'float mruPerTick'
             RadiatingChamberRecipe recipe = new RadiatingChamberRecipe(inputIngredient, output.get(0), time, upperBalance, lowerBalance, mruPerTick);
-            addScripted(recipe);
+            ModSupport.ESSENTIALCRAFT.get().radiatingChamber.addScripted(recipe);
             RadiatingChamberRecipes.addRecipe(recipe);
             return recipe;
         }

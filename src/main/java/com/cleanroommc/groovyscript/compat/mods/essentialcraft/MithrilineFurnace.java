@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.essentialcraft;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -64,7 +65,7 @@ public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceReci
 
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = @Comp("1"))
-    public class RecipeBuilder extends AbstractRecipeBuilder<MithrilineFurnaceRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<MithrilineFurnaceRecipe> {
         @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int espe;
 
@@ -97,7 +98,7 @@ public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceReci
             int stackSize = input.get(0).getAmount();
             Ingredient inputItem = input.get(0).withAmount(1).toMcIngredient();
             MithrilineFurnaceRecipe recipe = new MithrilineFurnaceRecipe(inputItem, output.get(0), (float) espe, stackSize);
-            addScripted(recipe);
+            ModSupport.ESSENTIALCRAFT.get().mithrilineFurnace.addScripted(recipe);
             MithrilineFurnaceRecipes.addRecipe(recipe);
             return recipe;
         }

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.essentialcraft;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -65,7 +66,7 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
 
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = @Comp("1"))
-    public class RecipeBuilder extends AbstractRecipeBuilder<WindImbueRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<WindImbueRecipe> {
         @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int espe;
 
@@ -93,7 +94,7 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
             if (!validate()) return null;
             Ingredient inputItem = input.get(0).toMcIngredient();
             WindImbueRecipe recipe = new WindImbueRecipe(inputItem, output.get(0), espe);  // also adds the recipe
-            addScripted(recipe);
+            ModSupport.ESSENTIALCRAFT.get().windRune.addScripted(recipe);
             return recipe;
         }
     }
