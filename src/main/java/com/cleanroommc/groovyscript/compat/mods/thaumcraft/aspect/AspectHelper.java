@@ -306,7 +306,7 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         @Property(requirement = "groovyscript.wiki.thaumcraft.aspect_helper.target.required")
         private IIngredient object;
         @Property
-        private final ArrayList<AspectStack> aspects = new ArrayList<>();
+        private final List<AspectStack> aspects = new ArrayList<>();
         @Property
         private boolean stripAspects;
 

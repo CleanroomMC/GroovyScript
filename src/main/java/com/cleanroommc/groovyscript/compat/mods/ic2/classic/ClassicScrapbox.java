@@ -21,6 +21,7 @@ public class ClassicScrapbox extends Scrapbox {
         addScripted(new Drop(drop.getDrop(), drop.getChance()));
     }
 
+    @Override
     public void add(ItemStack stack, float chance) {
         if (GroovyLog.msg("Error adding Industrialcraft 2 Scrapbox recipe")
                 .add(IngredientHelper.isEmpty(stack), () -> "stack must not be emtpy")
@@ -63,6 +64,7 @@ public class ClassicScrapbox extends Scrapbox {
         return false;
     }
 
+    @Override
     public void removeAll() {
         for (IClassicScrapBoxManager.IDrop drop : ClassicRecipes.scrapboxDrops.getEntries()) {
             remove(drop);

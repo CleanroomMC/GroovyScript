@@ -6,21 +6,19 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.RunicShearRecipe;
 import epicsquid.roots.recipe.transmutation.BlockStatePredicate;
 import epicsquid.roots.recipe.transmutation.StatePredicate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-import static epicsquid.roots.init.ModRecipes.getRunicShearRecipes;
-
 @RegistryDescription
-public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, RunicShearRecipe>> {
+public class RunicShearBlock extends VirtualizedRegistry<RunicShearRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_from_runic_diamond').state(blockstate('minecraft:diamond_block')).replacementState(blockstate('minecraft:air')).output(item('minecraft:clay') * 64).displayItem(item('minecraft:diamond') * 9)"),
@@ -32,8 +30,8 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> getRunicShearRecipes().remove(pair.getKey()));
-        restoreFromBackup().forEach(pair -> getRunicShearRecipes().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.getRunicShearRecipes().remove(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipes.getRunicShearRecipes().put(recipe.getRegistryName(), recipe));
     }
 
     public void add(RunicShearRecipe recipe) {
@@ -41,12 +39,12 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
     }
 
     public void add(ResourceLocation name, RunicShearRecipe recipe) {
-        getRunicShearRecipes().put(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        ModRecipes.getRunicShearRecipes().put(name, recipe);
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(RunicShearRecipe recipe) {
-        for (Map.Entry<ResourceLocation, RunicShearRecipe> entry : getRunicShearRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, RunicShearRecipe> entry : ModRecipes.getRunicShearRecipes().entrySet()) {
             if (entry.getValue().equals(recipe)) return entry.getKey();
         }
         return null;
@@ -54,19 +52,19 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
 
     @MethodDescription(example = @Example("resource('roots:wildewheet')"))
     public boolean removeByName(ResourceLocation name) {
-        RunicShearRecipe recipe = getRunicShearRecipes().get(name);
+        RunicShearRecipe recipe = ModRecipes.getRunicShearRecipes().get(name);
         if (recipe == null) return false;
-        getRunicShearRecipes().remove(name);
-        addBackup(Pair.of(name, recipe));
+        ModRecipes.getRunicShearRecipes().remove(name);
+        addBackup(recipe);
         return true;
     }
 
     @MethodDescription(example = @Example("blockstate('minecraft:beetroots:age=3')"))
     public boolean removeByState(IBlockState state) {
-        for (Map.Entry<ResourceLocation, RunicShearRecipe> x : getRunicShearRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, RunicShearRecipe> x : ModRecipes.getRunicShearRecipes().entrySet()) {
             if (x.getValue().matches(state)) {
-                getRunicShearRecipes().remove(x.getKey());
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                ModRecipes.getRunicShearRecipes().remove(x.getKey());
+                addBackup(x.getValue());
                 return true;
             }
         }
@@ -75,10 +73,10 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
 
     @MethodDescription(example = @Example("item('roots:spirit_herb')"))
     public boolean removeByOutput(ItemStack output) {
-        for (Map.Entry<ResourceLocation, RunicShearRecipe> x : getRunicShearRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, RunicShearRecipe> x : ModRecipes.getRunicShearRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getDrop(), output)) {
-                getRunicShearRecipes().remove(x.getKey());
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                ModRecipes.getRunicShearRecipes().remove(x.getKey());
+                addBackup(x.getValue());
                 return true;
             }
         }
@@ -87,13 +85,13 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        getRunicShearRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
-        getRunicShearRecipes().clear();
+        ModRecipes.getRunicShearRecipes().values().forEach(this::addBackup);
+        ModRecipes.getRunicShearRecipes().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, RunicShearRecipe>> streamRecipes() {
-        return new SimpleObjectStream<>(getRunicShearRecipes().entrySet())
+        return new SimpleObjectStream<>(ModRecipes.getRunicShearRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
@@ -137,6 +135,7 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
             return "Error adding Roots Runic Shear Block recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_runic_shear_block_";
         }
@@ -157,8 +156,8 @@ public class RunicShearBlock extends VirtualizedRegistry<Pair<ResourceLocation, 
         @RecipeBuilderRegistrationMethod
         public @Nullable RunicShearRecipe register() {
             if (!validate()) return null;
-            RunicShearRecipe recipe = new RunicShearRecipe(name, state, replacementState, output.get(0), displayItem);
-            ModSupport.ROOTS.get().runicShearBlock.add(name, recipe);
+            RunicShearRecipe recipe = new RunicShearRecipe(super.name, state, replacementState, output.get(0), displayItem);
+            ModSupport.ROOTS.get().runicShearBlock.add(super.name, recipe);
             return recipe;
         }
     }

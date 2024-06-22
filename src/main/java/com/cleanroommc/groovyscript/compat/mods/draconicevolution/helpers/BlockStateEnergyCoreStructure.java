@@ -37,7 +37,7 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     private final TileEnergyStorageCore core;
     private final BlockStateMultiblockHelper helper;
     private final BlockStateMultiblockStorage[] structureTiers;
-    private int version = 0;
+    private int version;
 
     private static BlockStates coreBlock;
 
@@ -122,17 +122,18 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     }
 
     private void forTier(int tier, int flag) {
+        int checkTier = tier - 1;
         checkVersion();
-        tier -= 1;
-        if (tier < 0) {
+        if (checkTier < 0) {
             GroovyScript.LOGGER.error("[EnergyCoreStructure] Tier value to small. As far as TileEnergyStorageCore is concerned the tiers now start at 1 not 0. This class automatically handles the conversion now");
-        } else if (tier >= structureTiers.length) {
-            GroovyScript.LOGGER.error("[EnergyCoreStructure#placeTier] There are only 8 tiers, but tried to use tier {}", tier);
+        } else if (checkTier >= structureTiers.length) {
+            GroovyScript.LOGGER.error("[EnergyCoreStructure#placeTier] There are only 8 tiers, but tried to use tier {}", checkTier);
         } else {
-            structureTiers[tier].forEachInStructure(core.getWorld(), core.getPos().add(getCoreOffset(tier + 1)), flag);
+            structureTiers[checkTier].forEachInStructure(core.getWorld(), core.getPos().add(getCoreOffset(checkTier + 1)), flag);
         }
     }
 
+    @Override
     public BlockStateMultiblockStorage getStorageForTier(int tier) {
         return structureTiers[tier - 1];
     }
@@ -149,7 +150,7 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
         if (flag == FLAG_RENDER) {
             if (world.isRemote) {
-                renderBuildGuide(states, world, pos, startPos, flag);
+                renderBuildGuide(states, world, pos, startPos, FLAG_RENDER);
             }
         }
 
@@ -209,15 +210,15 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
         int alpha = 0xFF000000;
         if (invalid) {
-            alpha = (int) (((Math.sin(ClientEventHandler.elapsedTicks / 20D) + 1D) / 2D) * 255D) << 24;
+            alpha = (int) (((Math.sin(ClientEventHandler.elapsedTicks / 20.0D) + 1.0D) / 2.0D) * 255.0D) << 24;
         }
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(translation.getX(), translation.getY(), translation.getZ());
         if (invalid) {
             GlStateManager.disableDepth();
-            GlStateManager.alphaFunc(GL11.GL_GREATER, 0F);
-            double s = Math.sin(ClientEventHandler.elapsedTicks / 10D) * 0.1D;
+            GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+            double s = Math.sin(ClientEventHandler.elapsedTicks / 10.0D) * 0.1D;
             GlStateManager.scale(0.8 + s, 0.8 + s, 0.8 + s);
             GlStateManager.translate(0.1 - s, 0.1 - s, 0.1 - s);
         } else {
@@ -227,7 +228,7 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
         float brightnessX = OpenGlHelper.lastBrightnessX;
         float brightnessY = OpenGlHelper.lastBrightnessY;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 150f, 150f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 150.0f, 150.0f);
 
         List<BakedQuad> blockQuads = ModelUtils.getModelQuads(states.getDefault());
 
@@ -268,6 +269,7 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
         return states.matches(state, false);
     }
 
+    @Override
     public BlockPos getCoreOffset(int tier) {
         int offset = tier == 1 ? 0 : tier == 2 || tier == 3 ? -1 : -(tier - 2);
         return new BlockPos(offset, offset, offset);
@@ -287,7 +289,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
     private BlockStateMultiblockStorage buildTier1() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(1, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
         storage.addRow(X);
 
         return storage;
@@ -296,7 +302,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier2() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(3, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(e, e, e);
         storage.addRow(e, D, e);
@@ -315,7 +325,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier3() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(3, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(D, D, D);
         storage.addRow(D, D, D);
@@ -334,7 +348,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier4() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(5, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(e, e, e, e, e);
         storage.addRow(e, D, D, D, e);
@@ -364,7 +382,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier5() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(7, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(e, e, e, e, e, e, e);
         storage.addRow(e, e, e, e, e, e, e);
@@ -409,7 +431,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier6() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(9, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(e, e, e, e, e, e, e, e, e);
         storage.addRow(e, e, e, e, e, e, e, e, e);
@@ -473,7 +499,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
     @SuppressWarnings("DuplicatedCode")
     private BlockStateMultiblockStorage buildTier7() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(11, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         storage.addRow(e, e, e, e, e, e, e, e, e, e, e);
         storage.addRow(e, e, e, e, e, e, e, e, e, e, e);
@@ -559,7 +589,11 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
     private BlockStateMultiblockStorage buildTierOMG() {
         BlockStateMultiblockStorage storage = new BlockStateMultiblockStorage(13, helper, this);
-        BlockStates e = BlockStates.ANY, X = coreBlock(), R = BlockStates.redstone(), D = BlockStates.draconium(), A = BlockStates.draconic();
+        BlockStates e = BlockStates.ANY;
+        BlockStates X = coreBlock();
+        BlockStates R = BlockStates.redstone();
+        BlockStates D = BlockStates.draconium();
+        BlockStates A = BlockStates.draconic();
 
         //region Hard
         if (DEConfig.hardMode) {

@@ -58,7 +58,7 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('minecraft:rotten_flesh')"))
+    @MethodDescription(example = @Example("item('minecraft:rotten_flesh')"))
     public boolean removeByInput(IIngredient input) {
         return NaturesAuraAPI.ALTAR_RECIPES.entrySet().removeIf(r -> {
             for (var item : r.getValue().input.getMatchingStacks()) {
@@ -71,7 +71,7 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByCatalyst", example = @Example("item('naturesaura:crushing_catalyst')"))
+    @MethodDescription(example = @Example("item('naturesaura:crushing_catalyst')"))
     public boolean removeByCatalyst(IIngredient catalyst) {
         return NaturesAuraAPI.ALTAR_RECIPES.entrySet().removeIf(r -> {
             for (var item : r.getValue().catalyst.getMatchingStacks()) {
@@ -84,7 +84,7 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('minecraft:soul_sand')"))
+    @MethodDescription(example = @Example("item('minecraft:soul_sand')"))
     public boolean removeByOutput(IIngredient output) {
         return NaturesAuraAPI.ALTAR_RECIPES.entrySet().removeIf(r -> {
             if (output.test(r.getValue().output)) {
@@ -95,13 +95,13 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         NaturesAuraAPI.ALTAR_RECIPES.values().forEach(this::addBackup);
         NaturesAuraAPI.ALTAR_RECIPES.entrySet().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, AltarRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(NaturesAuraAPI.ALTAR_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
     }
@@ -140,6 +140,7 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
             return "Error adding Nature's Aura Altar Recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_altar_";
         }
@@ -158,7 +159,7 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable AltarRecipe register() {
             if (!validate()) return null;
-            AltarRecipe recipe = new AltarRecipe(name, input.get(0).toMcIngredient(), output.get(0), catalyst.toMcIngredient(), aura, time);
+            AltarRecipe recipe = new AltarRecipe(super.name, input.get(0).toMcIngredient(), output.get(0), catalyst.toMcIngredient(), aura, time);
             ModSupport.NATURES_AURA.get().altar.add(recipe);
             return recipe;
         }

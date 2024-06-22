@@ -66,80 +66,62 @@ public class NbtHelper {
             }
             return list;
         }
-        if (o instanceof Integer) {
-            return new NBTTagInt((Integer) o);
-        }
-        if (o instanceof Long) {
-            return new NBTTagLong((Long) o);
-        }
-        if (o instanceof Short) {
-            return new NBTTagShort((Short) o);
-        }
-        if (o instanceof Byte) {
-            return new NBTTagByte((Byte) o);
-        }
-        if (o instanceof Boolean) {
-            return new NBTTagByte((byte) ((boolean) o ? 1 : 0));
-        }
-        if (o instanceof Float) {
-            return new NBTTagFloat((Float) o);
-        }
-        if (o instanceof Double) {
-            return new NBTTagDouble((Double) o);
-        }
-        if (o instanceof String) {
-            return new NBTTagString((String) o);
-        }
+
+        if (o instanceof Integer x) return new NBTTagInt(x);
+        if (o instanceof Long x) return new NBTTagLong(x);
+        if (o instanceof Short x) return new NBTTagShort(x);
+        if (o instanceof Byte x) return new NBTTagByte(x);
+        if (o instanceof Boolean x) return new NBTTagByte((byte) (x ? 1 : 0));
+        if (o instanceof Float x) return new NBTTagFloat(x);
+        if (o instanceof Double x) return new NBTTagDouble(x);
+        if (o instanceof String x) return new NBTTagString(x);
+
         throw new IllegalArgumentException("Error parsing Object to NBT: Invalid type " + o.getClass());
     }
 
-    public static String toGroovyCode(NBTTagCompound nbt, boolean pretty, boolean colored) {
-        return toGroovyCode(nbt, 0, pretty, colored);
-    }
-
-    public static String toGroovyCode(NBTTagCompound nbt, int indent, boolean pretty, boolean colored) {
+    public static String toGroovyCode(NBTTagByte nbt, boolean colored) {
         StringBuilder builder = new StringBuilder();
         if (colored) builder.append(TextFormatting.GRAY);
-        builder.append('[');
-        if (!nbt.isEmpty()) {
-            indent++;
-            for (String key : nbt.getKeySet()) {
-                newLine(builder, indent, pretty);
-                if (colored) builder.append(TextFormatting.GREEN);
-                builder.append('\'').append(key).append('\'');
-                if (colored) builder.append(TextFormatting.GRAY);
-                builder.append(": ");
-                builder.append(toGroovyCode(nbt.getTag(key), indent, pretty, colored));
-                if (colored) builder.append(TextFormatting.GRAY);
-                builder.append(", ");
-            }
-            builder.delete(builder.length() - 2, builder.length());
-            indent--;
-            newLine(builder, indent, pretty);
-            if (colored) builder.append(TextFormatting.GRAY);
-        }
-        builder.append(']');
+        builder.append("(byte) ");
+        if (colored) builder.append(TextFormatting.GOLD);
+        builder.append(nbt.getByte());
         return builder.toString();
     }
 
-    public static String toGroovyCode(NBTTagList nbt, int indent, boolean pretty, boolean colored) {
+    public static String toGroovyCode(NBTTagShort nbt, boolean colored) {
         StringBuilder builder = new StringBuilder();
         if (colored) builder.append(TextFormatting.GRAY);
-        builder.append('[');
-        if (!nbt.isEmpty()) {
-            indent++;
-            for (NBTBase nbtBase : nbt) {
-                newLine(builder, indent, pretty);
-                builder.append(toGroovyCode(nbtBase, indent, pretty, colored));
-                if (colored) builder.append(TextFormatting.GRAY);
-                builder.append(", ");
-            }
-            builder.delete(builder.length() - 2, builder.length());
-            indent--;
-            newLine(builder, indent, pretty);
-            if (colored) builder.append(TextFormatting.GRAY);
-        }
-        builder.append(']');
+        builder.append("(short) ");
+        if (colored) builder.append(TextFormatting.GOLD);
+        builder.append(nbt.getShort());
+        return builder.toString();
+    }
+
+    public static String toGroovyCode(NBTTagInt nbt, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GREEN);
+        builder.append(nbt.getInt());
+        return builder.toString();
+    }
+
+    public static String toGroovyCode(NBTTagLong nbt, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GREEN);
+        builder.append(nbt.getLong()).append("L");
+        return builder.toString();
+    }
+
+    public static String toGroovyCode(NBTTagFloat nbt, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GREEN);
+        builder.append(nbt.getFloat()).append("F");
+        return builder.toString();
+    }
+
+    public static String toGroovyCode(NBTTagDouble nbt, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GREEN);
+        builder.append(nbt.getDouble()).append("D");
         return builder.toString();
     }
 
@@ -154,6 +136,61 @@ public class NbtHelper {
                 builder.append("(byte) ");
                 if (colored) builder.append(TextFormatting.GOLD);
                 builder.append(value);
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append(", ");
+            }
+            builder.delete(builder.length() - 2, builder.length());
+            newLine(builder, indent, pretty);
+            if (colored) builder.append(TextFormatting.GRAY);
+        }
+        builder.append(']');
+        return builder.toString();
+    }
+
+    public static String toGroovyCode(NBTTagString nbt, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GREEN);
+        builder.append('\'').append(nbt.getString()).append('\'');
+        return builder.toString();
+    }
+
+    public static String toGroovyCode(NBTTagList nbt, int indent, boolean pretty, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append('[');
+        if (!nbt.isEmpty()) {
+            int internalIndent = indent + 1;
+            for (NBTBase nbtBase : nbt) {
+                newLine(builder, internalIndent, pretty);
+                builder.append(toGroovyCode(nbtBase, internalIndent, pretty, colored));
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append(", ");
+            }
+            builder.delete(builder.length() - 2, builder.length());
+            newLine(builder, indent, pretty);
+            if (colored) builder.append(TextFormatting.GRAY);
+        }
+        builder.append(']');
+        return builder.toString();
+    }
+
+    public static String toGroovyCode(NBTTagCompound nbt, boolean pretty, boolean colored) {
+        return toGroovyCode(nbt, 0, pretty, colored);
+    }
+
+    public static String toGroovyCode(NBTTagCompound nbt, int indent, boolean pretty, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append('[');
+        if (!nbt.isEmpty()) {
+            int internalIndent = indent + 1;
+            for (String key : nbt.getKeySet()) {
+                newLine(builder, internalIndent, pretty);
+                if (colored) builder.append(TextFormatting.GREEN);
+                builder.append('\'').append(key).append('\'');
+                if (colored) builder.append(TextFormatting.GRAY);
+                builder.append(": ");
+                builder.append(toGroovyCode(nbt.getTag(key), internalIndent, pretty, colored));
                 if (colored) builder.append(TextFormatting.GRAY);
                 builder.append(", ");
             }
@@ -188,71 +225,19 @@ public class NbtHelper {
     public static String toGroovyCode(NBTBase nbt, int indent, boolean pretty, boolean colored) {
         StringBuilder builder = new StringBuilder();
         switch (nbt.getId()) {
+            case Constants.NBT.TAG_BYTE -> builder.append(toGroovyCode((NBTTagByte) nbt, colored));
+            case Constants.NBT.TAG_SHORT -> builder.append(toGroovyCode((NBTTagShort) nbt, colored));
+            case Constants.NBT.TAG_INT -> builder.append(toGroovyCode((NBTTagInt) nbt, colored));
+            case Constants.NBT.TAG_LONG -> builder.append(toGroovyCode((NBTTagLong) nbt, colored));
+            case Constants.NBT.TAG_FLOAT -> builder.append(toGroovyCode((NBTTagFloat) nbt, colored));
+            case Constants.NBT.TAG_DOUBLE -> builder.append(toGroovyCode((NBTTagDouble) nbt, colored));
+            case Constants.NBT.TAG_BYTE_ARRAY -> builder.append(toGroovyCode((NBTTagByteArray) nbt, indent, pretty, colored));
+            case Constants.NBT.TAG_STRING -> builder.append(toGroovyCode((NBTTagString) nbt, colored));
+            case Constants.NBT.TAG_LIST -> builder.append(toGroovyCode((NBTTagList) nbt, indent, pretty, colored));
+            case Constants.NBT.TAG_COMPOUND -> builder.append(toGroovyCode((NBTTagCompound) nbt, indent, pretty, colored));
+            case Constants.NBT.TAG_INT_ARRAY -> builder.append(toGroovyCode((NBTTagIntArray) nbt, indent, pretty, colored));
             //TAG_LONG_ARRAY
-            case Constants.NBT.TAG_INT_ARRAY: {
-                if (colored) builder.append(TextFormatting.GREEN);
-                builder.append(toGroovyCode((NBTTagIntArray) nbt, indent, pretty, colored));
-                break;
-            }
-            case Constants.NBT.TAG_COMPOUND: {
-                builder.append(toGroovyCode((NBTTagCompound) nbt, indent, pretty, colored));
-                break;
-            }
-            case Constants.NBT.TAG_LIST: {
-                builder.append(toGroovyCode((NBTTagList) nbt, indent, pretty, colored));
-                break;
-            }
-            case Constants.NBT.TAG_STRING: {
-                if (colored) builder.append(TextFormatting.GREEN);
-                builder.append('\'')
-                        .append(((NBTTagString) nbt).getString())
-                        .append('\'');
-                break;
-            }
-            case Constants.NBT.TAG_BYTE_ARRAY: {
-                if (colored) builder.append(TextFormatting.GREEN);
-                builder.append(toGroovyCode((NBTTagByteArray) nbt, indent, pretty, colored));
-                break;
-            }
-            case Constants.NBT.TAG_DOUBLE: {
-                if (colored) builder.append(TextFormatting.GOLD);
-                builder.append(((NBTTagDouble) nbt).getDouble())
-                        .append("D");
-                break;
-            }
-            case Constants.NBT.TAG_FLOAT: {
-                if (colored) builder.append(TextFormatting.GOLD);
-                builder.append(((NBTTagFloat) nbt).getFloat())
-                        .append("F");
-                break;
-            }
-            case Constants.NBT.TAG_LONG: {
-                if (colored) builder.append(TextFormatting.GOLD);
-                builder.append(((NBTTagLong) nbt).getLong())
-                        .append("L");
-                break;
-            }
-            case Constants.NBT.TAG_INT: {
-                if (colored) builder.append(TextFormatting.GOLD);
-                builder.append(((NBTTagInt) nbt).getInt());
-                break;
-            }
-            case Constants.NBT.TAG_SHORT: {
-                if (colored) builder.append(TextFormatting.GRAY);
-                builder.append("(short) ");
-                if (colored) builder.append(TextFormatting.GOLD);
-                builder.append(((NBTTagShort) nbt).getShort());
-                break;
-            }
-            case Constants.NBT.TAG_BYTE: {
-                if (colored) builder.append(TextFormatting.GRAY);
-                builder.append("(byte) ");
-                if (colored) builder.append(TextFormatting.GOLD);
-                builder.append(((NBTTagByte) nbt).getByte());
-                break;
-            }
-            default:
-                throw new IllegalArgumentException(nbt.toString());
+            default -> throw new IllegalArgumentException(nbt.toString());
         }
         return builder.toString();
     }

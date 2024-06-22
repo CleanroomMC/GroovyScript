@@ -27,16 +27,16 @@ public class ToolMaterialBuilder {
 
     public final String name;
     public int color = 0xFFFFFF;
-    public boolean hidden = false;
-    public boolean craftable = false;
+    public boolean hidden;
+    public boolean craftable;
     public boolean castable = true;
     public String displayName;
     public FluidStack fluid;
     public IIngredient representativeItem;
     public IIngredient shard;
     public BiFunction<Material, String, String> localizer;
-    protected Map<String, List<String>> traits = new HashMap<>();
-    protected List<MaterialRepairIngredient> repairIngredients = new ArrayList<>();
+    protected final Map<String, List<String>> traits = new HashMap<>();
+    protected final List<MaterialRepairIngredient> repairIngredients = new ArrayList<>();
     protected final Map<String, IMaterialStats> stats = new HashMap<>(8);
 
     public ToolMaterialBuilder(String name) {

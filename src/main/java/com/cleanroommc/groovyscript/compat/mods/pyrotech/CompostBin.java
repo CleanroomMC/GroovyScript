@@ -88,8 +88,8 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(compostValue < 0, "compostValue must be a non negative integer, yet it was {}", compostValue);
-            msg.add(name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(super.name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @RecipeBuilderRegistrationMethod
@@ -100,13 +100,13 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
             if (in.length > 1) {
                 int j = 1;
                 for (ItemStack i : in) {
-                    ResourceLocation rl = new ResourceLocation(name.getNamespace(), name.getPath() + "_" + (j++));
+                    ResourceLocation rl = new ResourceLocation(super.name.getNamespace(), super.name.getPath() + "_" + (j++));
                     CompostBinRecipe recipe = new CompostBinRecipe(output.get(0), i, compostValue).setRegistryName(rl);
                     PyroTech.compostBin.add(recipe);
                 }
                 return null;
             }
-            CompostBinRecipe recipe = new CompostBinRecipe(output.get(0), in[0], compostValue).setRegistryName(name);
+            CompostBinRecipe recipe = new CompostBinRecipe(output.get(0), in[0], compostValue).setRegistryName(super.name);
             PyroTech.compostBin.add(recipe);
             return recipe;
         }

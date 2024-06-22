@@ -168,7 +168,9 @@ public class Meteor extends VirtualizedRegistry<WayofTime.bloodmagic.meteor.Mete
         @RecipeBuilderRegistrationMethod
         public @Nullable WayofTime.bloodmagic.meteor.Meteor register() {
             if (!validate()) return null;
-            WayofTime.bloodmagic.meteor.Meteor recipe = ModSupport.BLOOD_MAGIC.get().meteor.add(catalyst, components, explosionStrength, radius, cost);
+            WayofTime.bloodmagic.meteor.Meteor recipe = new WayofTime.bloodmagic.meteor.Meteor(catalyst, components, explosionStrength, radius);
+            recipe.setCost(cost);
+            ModSupport.BLOOD_MAGIC.get().meteor.add(recipe);
             return recipe;
         }
     }

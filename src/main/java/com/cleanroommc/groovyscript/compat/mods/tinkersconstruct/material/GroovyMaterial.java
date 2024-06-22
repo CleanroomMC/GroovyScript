@@ -19,7 +19,7 @@ import java.util.function.BiFunction;
 
 public class GroovyMaterial extends Material {
 
-    public boolean hidden = false;
+    public boolean hidden;
     public IIngredient representativeItem;
     public IIngredient shard;
     public FluidStack fluidStack;

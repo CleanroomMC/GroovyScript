@@ -93,8 +93,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
         List<InfusionRecipe> recipes = new ArrayList<>();
         for (IThaumcraftRecipe r : ThaumcraftApi.getCraftingRecipes().values()) {
-            if (r instanceof InfusionRecipe && ((InfusionRecipe) r).getRecipeOutput() instanceof ItemStack) {
-                ItemStack ro = (ItemStack) ((InfusionRecipe) r).getRecipeOutput();
+            if (r instanceof InfusionRecipe && ((InfusionRecipe) r).getRecipeOutput() instanceof ItemStack ro) {
                 if (output.test(ro)) {
                     recipes.add((InfusionRecipe) r);
                 }

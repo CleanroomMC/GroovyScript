@@ -119,6 +119,7 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
             return this;
         }
 
+        @Override
         @RecipeBuilderMethodDescription
         public RecipeBuilder input(IIngredient input) {
             this.input = new BlockIngredient(input.toMcIngredient());

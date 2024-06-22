@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
 
 @RegistryDescription
@@ -116,19 +115,19 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightOreTransmutations.Transmutation> {
 
         @Property(valid = {@Comp(value = "null", type = Comp.Type.NOT), @Comp(value = "input", type = Comp.Type.NOT)})
-        private Block inBlock = null;
+        private Block inBlock;
         @Property(ignoresInheritedMethods = true, valid = {@Comp(value = "null", type = Comp.Type.NOT), @Comp(value = "inBlock", type = Comp.Type.NOT)})
-        private IBlockState input = null;
+        private IBlockState input;
         @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
-        private IBlockState output = null;
+        private IBlockState output;
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private double cost = 0;
+        private double cost;
         @Property
-        private ItemStack outStack = null;
+        private ItemStack outStack;
         @Property
-        private ItemStack inStack = null;
+        private ItemStack inStack;
         @Property
-        private IWeakConstellation constellation = null;
+        private IWeakConstellation constellation;
 
         @RecipeBuilderMethodDescription(field = "inStack")
         public RecipeBuilder inputDisplayStack(ItemStack item) {
@@ -193,6 +192,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
             if (outStack == null && output != null) outStack = new ItemStack(output.getBlock());
         }
 
+        @Override
         @RecipeBuilderRegistrationMethod
         public LightOreTransmutations.Transmutation register() {
             if (!validate()) return null;

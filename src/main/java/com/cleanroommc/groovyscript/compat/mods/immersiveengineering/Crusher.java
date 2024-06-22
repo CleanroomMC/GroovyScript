@@ -9,15 +9,20 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RegistryDescription
 public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).energy(100)"))
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).energy(100)"),
+            @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:diamond')).secondaryOutput(item('minecraft:gold_ingot')).secondaryOutput(item('minecraft:gold_ingot'), 0.3).energy(100)")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -103,8 +108,24 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrusherRecipe> {
 
+        @Property(valid = @Comp("secondaryOutputChances"))
+        private final List<ItemStack> secondaryOutputItems = new ArrayList<>();
+        @Property(valid = @Comp("secondaryOutputItems"))
+        private final FloatArrayList secondaryOutputChances = new FloatArrayList();
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int energy;
+
+        @RecipeBuilderMethodDescription(field = {"secondaryOutputItems", "secondaryOutputChances"})
+        public RecipeBuilder secondaryOutput(ItemStack item) {
+            return this.secondaryOutput(item, 1);
+        }
+
+        @RecipeBuilderMethodDescription(field = {"secondaryOutputItems", "secondaryOutputChances"})
+        public RecipeBuilder secondaryOutput(ItemStack item, float chance) {
+            this.secondaryOutputItems.add(item);
+            this.secondaryOutputChances.add(chance);
+            return this;
+        }
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder energy(int energy) {
@@ -121,6 +142,8 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
+            secondaryOutputChances.trim();
+            msg.add(secondaryOutputItems.size() != secondaryOutputChances.size(), "secondaryOutputItems and secondaryOutputChances must be of equal length, yet secondaryOutputItems was {} and secondaryOutputChances was {}", secondaryOutputItems.size(), secondaryOutputChances.size());
             if (energy < 0) energy = 200;
         }
 
@@ -129,6 +152,11 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         public @Nullable CrusherRecipe register() {
             if (!validate()) return null;
             CrusherRecipe recipe = new CrusherRecipe(output.get(0), input.get(0), energy);
+            if (!secondaryOutputItems.isEmpty()) {
+                recipe.secondaryOutput = secondaryOutputItems.toArray(new ItemStack[0]);
+                recipe.secondaryChance = secondaryOutputChances.elements();
+                recipe.getItemOutputs().addAll(secondaryOutputItems);
+            }
             ModSupport.IMMERSIVE_ENGINEERING.get().crusher.add(recipe);
             return recipe;
         }

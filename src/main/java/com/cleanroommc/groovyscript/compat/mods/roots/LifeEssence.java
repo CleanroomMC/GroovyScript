@@ -5,10 +5,9 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-
-import static epicsquid.roots.init.ModRecipes.getLifeEssenceList;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES
@@ -17,13 +16,13 @@ public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivin
 
     @Override
     public void onReload() {
-        removeScripted().forEach(getLifeEssenceList()::remove);
-        restoreFromBackup().forEach(getLifeEssenceList()::add);
+        removeScripted().forEach(ModRecipes.getLifeEssenceList()::remove);
+        restoreFromBackup().forEach(ModRecipes.getLifeEssenceList()::add);
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(Class<? extends EntityLivingBase> clazz) {
-        getLifeEssenceList().add(clazz);
+        ModRecipes.getLifeEssenceList().add(clazz);
         addScripted(clazz);
     }
 
@@ -39,7 +38,7 @@ public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivin
 
     @MethodDescription(example = @Example("entity('minecraft:sheep')"))
     public boolean remove(Class<? extends EntityLivingBase> clazz) {
-        if (!getLifeEssenceList().remove(clazz)) return false;
+        if (!ModRecipes.getLifeEssenceList().remove(clazz)) return false;
         addBackup(clazz);
         return true;
     }
@@ -56,12 +55,12 @@ public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivin
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        getLifeEssenceList().forEach(this::addBackup);
-        getLifeEssenceList().clear();
+        ModRecipes.getLifeEssenceList().forEach(this::addBackup);
+        ModRecipes.getLifeEssenceList().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Class<? extends EntityLivingBase>> streamRecipes() {
-        return new SimpleObjectStream<>(getLifeEssenceList()).setRemover(this::remove);
+        return new SimpleObjectStream<>(ModRecipes.getLifeEssenceList()).setRemover(this::remove);
     }
 }

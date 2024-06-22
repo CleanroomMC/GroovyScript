@@ -18,6 +18,7 @@ public abstract class ForestryRegistry<T> extends VirtualizedRegistry<T> {
         super(aliases);
     }
 
+    @Override
     @GroovyBlacklist
     @ApiStatus.Internal
     public boolean isEnabled() {

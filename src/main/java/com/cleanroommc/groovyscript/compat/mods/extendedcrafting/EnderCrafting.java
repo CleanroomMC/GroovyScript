@@ -54,8 +54,8 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.ender_crafting.addShapeless0", type = MethodDescription.Type.ADDITION)
-    public IRecipe addShapeless(ItemStack output, List<List<IIngredient>> input) {
-        return addShaped(ModConfig.confEnderTimeRequired, output, input);
+    public IRecipe addShapeless(ItemStack output, List<IIngredient> input) {
+        return addShapeless(ModConfig.confEnderTimeRequired, output, input);
     }
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.ender_crafting.addShapeless1", type = MethodDescription.Type.ADDITION)

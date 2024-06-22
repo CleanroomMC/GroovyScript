@@ -31,7 +31,7 @@ import java.util.*;
  */
 public abstract class GroovySandbox {
 
-    private String currentScript = null;
+    private String currentScript;
 
     private final URL[] scriptEnvironment;
     private final ThreadLocal<Boolean> running = ThreadLocal.withInitial(() -> false);

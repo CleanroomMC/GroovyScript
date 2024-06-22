@@ -20,46 +20,22 @@ public class Policy extends VirtualizedRegistry<Pair<Policy.PolicyType, Object>>
     public void onReload() {
         restoreFromBackup().forEach(pair -> {
             switch (pair.getKey()) {
-                case ENTITY_MOD_BLACKLIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalModBlacklist().add((String) pair.getValue());
-                    break;
-                case ENTITY_BLACKLIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalEntityBlacklist().add((WootMobName) pair.getValue());
-                    break;
-                case ITEM_MOD_BLACKLIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalItemModBlacklist().add((String) pair.getValue());
-                    break;
-                case ITEM_BLACKLIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalItemBlacklist().add((ItemStack) pair.getValue());
-                    break;
-                case ENTITY_WHITELIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalEntityWhitelist().add((WootMobName) pair.getValue());
-                    break;
-                case GENERATE_ONLY_LIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalGenerateOnlyList().add((WootMobName) pair.getValue());
-                    break;
+                case ENTITY_MOD_BLACKLIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalModBlacklist().add((String) pair.getValue());
+                case ENTITY_BLACKLIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalEntityBlacklist().add((WootMobName) pair.getValue());
+                case ITEM_MOD_BLACKLIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalItemModBlacklist().add((String) pair.getValue());
+                case ITEM_BLACKLIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalItemBlacklist().add((ItemStack) pair.getValue());
+                case ENTITY_WHITELIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalEntityWhitelist().add((WootMobName) pair.getValue());
+                case GENERATE_ONLY_LIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalGenerateOnlyList().add((WootMobName) pair.getValue());
             }
         });
         removeScripted().forEach(pair -> {
             switch (pair.getKey()) {
-                case ENTITY_MOD_BLACKLIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalModBlacklist().remove((String) pair.getValue());
-                    break;
-                case ENTITY_BLACKLIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalEntityBlacklist().remove((WootMobName) pair.getValue());
-                    break;
-                case ITEM_MOD_BLACKLIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalItemModBlacklist().remove((String) pair.getValue());
-                    break;
-                case ITEM_BLACKLIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalItemBlacklist().remove((ItemStack) pair.getValue());
-                    break;
-                case ENTITY_WHITELIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalEntityWhitelist().remove((WootMobName) pair.getValue());
-                    break;
-                case GENERATE_ONLY_LIST:
-                    ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalGenerateOnlyList().remove((WootMobName) pair.getValue());
-                    break;
+                case ENTITY_MOD_BLACKLIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalModBlacklist().remove((String) pair.getValue());
+                case ENTITY_BLACKLIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalEntityBlacklist().remove((WootMobName) pair.getValue());
+                case ITEM_MOD_BLACKLIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalItemModBlacklist().remove((String) pair.getValue());
+                case ITEM_BLACKLIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalItemBlacklist().remove((ItemStack) pair.getValue());
+                case ENTITY_WHITELIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalEntityWhitelist().remove((WootMobName) pair.getValue());
+                case GENERATE_ONLY_LIST -> ((PolicyRepositoryAccessor) Woot.policyRepository).getExternalGenerateOnlyList().remove((WootMobName) pair.getValue());
             }
         });
     }

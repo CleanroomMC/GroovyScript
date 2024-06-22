@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class NetworkHandler {
 
     public static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(GroovyScript.ID);
-    private static int packetId = 0;
+    private static int packetId;
 
     public static void init() {
         registerS2C(SReloadScripts.class);
