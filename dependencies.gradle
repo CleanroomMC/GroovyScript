@@ -137,9 +137,7 @@ dependencies {
         runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
     }
 
-    if (project.debug_aurorian.toBoolean()) {
-        runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
-    }
+    runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
 
 }
 

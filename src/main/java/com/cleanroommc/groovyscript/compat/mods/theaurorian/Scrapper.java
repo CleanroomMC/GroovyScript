@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.shiroroku.theaurorian.Recipes.ScrapperRecipe;
@@ -56,6 +57,19 @@ public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> {
     public void removeAll() {
         ScrapperRecipeHandler.allRecipes.forEach(this::addBackup);
         ScrapperRecipeHandler.allRecipes.clear();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.QUERY)
+    public SimpleObjectStream<ScrapperRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(ScrapperRecipeHandler.allRecipes).setRemover(r ->
+            ScrapperRecipeHandler.allRecipes.removeIf(u -> {
+                if (u.equals(r)) {
+                    addBackup(r);
+                    return true;
+                }
+                return false;
+            })
+        );
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.shiroroku.theaurorian.Recipes.MoonlightForgeRecipe;
@@ -58,6 +59,18 @@ public class MoonlightForge extends VirtualizedRegistry<MoonlightForgeRecipe> {
         MoonlightForgeRecipeHandler.allRecipes.clear();
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
+    public SimpleObjectStream<MoonlightForgeRecipe> streamRecipes() {
+        return new SimpleObjectStream<>(MoonlightForgeRecipeHandler.allRecipes).setRemover(r ->
+            MoonlightForgeRecipeHandler.allRecipes.removeIf(u -> {
+                if (u.equals(r)) {
+                    addBackup(r);
+                    return true;
+                }
+                return false;
+            })
+        );
+    }
 
     @Property(property = "input", valid = @Comp("2"))
     @Property(property = "output", valid = @Comp("1"))
