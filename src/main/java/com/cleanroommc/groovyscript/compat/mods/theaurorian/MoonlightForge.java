@@ -31,6 +31,16 @@ public class MoonlightForge extends VirtualizedRegistry<MoonlightForgeRecipe> {
         MoonlightForgeRecipeHandler.addRecipe(recipe);
     }
 
+    public boolean remove(MoonlightForgeRecipe recipe) {
+        return MoonlightForgeRecipeHandler.allRecipes.removeIf(r -> {
+            if (r.equals(recipe)) {
+                addBackup(recipe);
+                return true;
+            }
+            return false;
+        });
+    }
+
     @MethodDescription(example = @Example("item('theaurorian:aurorianiteingot')"))
     public boolean removeByInput(IIngredient output) {
         return MoonlightForgeRecipeHandler.allRecipes.removeIf(r -> {
@@ -61,15 +71,7 @@ public class MoonlightForge extends VirtualizedRegistry<MoonlightForgeRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MoonlightForgeRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(MoonlightForgeRecipeHandler.allRecipes).setRemover(r ->
-            MoonlightForgeRecipeHandler.allRecipes.removeIf(u -> {
-                if (u.equals(r)) {
-                    addBackup(r);
-                    return true;
-                }
-                return false;
-            })
-        );
+        return new SimpleObjectStream<>(MoonlightForgeRecipeHandler.allRecipes).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("2"))

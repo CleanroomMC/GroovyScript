@@ -31,6 +31,16 @@ public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> {
         ScrapperRecipeHandler.addRecipe(recipe);
     }
 
+    public boolean remove(ScrapperRecipe recipe) {
+        return ScrapperRecipeHandler.allRecipes.removeIf(r -> {
+            if (r.equals(recipe)) {
+                addBackup(recipe);
+                return true;
+            }
+            return false;
+        });
+    }
+
     @MethodDescription(example = @Example("item('minecraft:iron_sword')"))
     public boolean removeByInput(IIngredient output) {
         return ScrapperRecipeHandler.allRecipes.removeIf(r -> {
@@ -61,15 +71,7 @@ public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ScrapperRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ScrapperRecipeHandler.allRecipes).setRemover(r ->
-            ScrapperRecipeHandler.allRecipes.removeIf(u -> {
-                if (u.equals(r)) {
-                    addBackup(r);
-                    return true;
-                }
-                return false;
-            })
-        );
+        return new SimpleObjectStream<>(ScrapperRecipeHandler.allRecipes).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("1"))
