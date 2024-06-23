@@ -37,7 +37,7 @@ public class MagicianTable extends VirtualizedRegistry<MagicianTableRecipe> {
         });
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MagicianTableRecipes.RECIPES.forEach(this::addBackup);
         MagicianTableRecipes.RECIPES.clear();
@@ -72,7 +72,7 @@ public class MagicianTable extends VirtualizedRegistry<MagicianTableRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 5, 1, 1);
             validateFluids(msg);
-            msg.add(mru <= 0, "mru cost must be positive, got {}", mru);
+            msg.add(mru < 1, "mru cost must be 1 or greater, got {}", mru);
         }
 
         @Override

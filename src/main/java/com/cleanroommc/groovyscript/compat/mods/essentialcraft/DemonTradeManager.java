@@ -56,7 +56,7 @@ public class DemonTradeManager extends VirtualizedRegistry<DemonTrade> {
         });
     }
 
-    @MethodDescription(example = @Example("entity('minecraft:enderman')"))
+    @MethodDescription(description = "groovyscript.wiki.essentialcraft.demon_trade.removeEntity", example = @Example("entity('minecraft:enderman')"))
     public boolean remove(EntityEntry x) {
         return DemonTrade.TRADES.removeIf(r -> {
             if (r.desiredItem.isEmpty() && x.equals(r.entityType)) {
@@ -77,7 +77,7 @@ public class DemonTradeManager extends VirtualizedRegistry<DemonTrade> {
         return false;
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         DemonTrade.TRADES.forEach(this::addBackup);
         DemonTrade.TRADES.clear();

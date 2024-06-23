@@ -41,7 +41,7 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
         return false;
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         OreSmeltingRecipe.RECIPES.forEach(this::addBackup);
         OreSmeltingRecipe.RECIPES.clear();

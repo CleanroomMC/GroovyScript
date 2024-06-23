@@ -37,7 +37,7 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
         });
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         RadiatingChamberRecipes.RECIPES.forEach(this::addBackup);
         RadiatingChamberRecipes.RECIPES.clear();
@@ -99,7 +99,7 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 2, 1, 1);
             validateFluids(msg);
-            msg.add(time <= 0, "time must be positive, got {}", time);
+            msg.add(time < 1, "time must be 1 or greater, got {}", time);
             msg.add(mruPerTick < 1.0f, "mru per tick must be at least 1.0f, got {}", mruPerTick);
             msg.add(lowerBalance < 0.0f || lowerBalance > 2.0f, "lower balance must be between 0.0f and 2.0f, got {}", lowerBalance);
             msg.add(upperBalance < 0.0f || upperBalance > 2.0f, "upper balance must be between 0.0f and 2.0f, got {}", upperBalance);

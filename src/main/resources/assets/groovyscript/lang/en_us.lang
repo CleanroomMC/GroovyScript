@@ -800,7 +800,8 @@ groovyscript.wiki.enderio.vat.energy.value=Sets the energy cost of the recipe
 groovyscript.wiki.essentialcraft.demon_trade.title=Demon Trade
 groovyscript.wiki.essentialcraft.demon_trade.description=Adds an item that can be sold to Demons to obtain Ackronite. Note that each demon that spawns has a random item that it can accept, and will not accept any other item.
 groovyscript.wiki.essentialcraft.demon_trade.add=Adds an item or an entity that can be sold to demons
-groovyscript.wiki.essentialcraft.demon_trade.remove=Removes an item or an entity from the pool of sold items
+groovyscript.wiki.essentialcraft.demon_trade.remove=Removes an item from the pool of sold items
+groovyscript.wiki.essentialcraft.demon_trade.removeEntity=Removes an entity from the pool of sold items
 groovyscript.wiki.essentialcraft.demon_trade.note0=Demon Trade recipes must set the correct NBT on all input items. This is a bug that was fixed in the version 1.12.2-4.9.112.6 of the mod.
 
 groovyscript.wiki.essentialcraft.magician_table.title=Magician Table
@@ -810,8 +811,7 @@ groovyscript.wiki.essentialcraft.magician_table.mru.value=Sets the base MRU cost
 
 groovyscript.wiki.essentialcraft.magmatic_smeltery.title=Magmatic Smeltery
 groovyscript.wiki.essentialcraft.magmatic_smeltery.description=A machine used to quadruple ores using MRU and lava. Also adds the same recipes for Magmatic Furnace, which is used to double ores using MRU.
-groovyscript.wiki.essentialcraft.magmatic_smeltery.note0=Magmatic Smeltery recipes cannot be currently reloaded.
-groovyscript.wiki.essentialcraft.magmatic_smeltery.note1=Magmatic Smeltery does not have a JEI handler. This means its recipes will not be displayed in JEI and have to be tested manually.
+groovyscript.wiki.essentialcraft.magmatic_smeltery.note0=Magmatic Smeltery does not have a JEI handler. This means its recipes will not be displayed in JEI and have to be tested manually.
 groovyscript.wiki.essentialcraft.magmatic_smeltery.color.value=Sets the overlay color for the Magmatic Alloy item of this ore
 groovyscript.wiki.essentialcraft.magmatic_smeltery.input.value=Sets the OreDict name of the input item
 groovyscript.wiki.essentialcraft.magmatic_smeltery.factor.value=Sets the output factor of the recipe. Magmatic Furnace will smelt the input item into this many Magmatic Alloys, Magmatic Smeltery will give double this many Magmatic Alloys, and Alloys will always be smelted into 2x of the output item

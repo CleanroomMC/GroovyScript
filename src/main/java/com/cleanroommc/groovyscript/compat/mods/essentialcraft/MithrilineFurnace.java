@@ -13,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 @RegistryDescription
 public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceRecipe> {
 
@@ -30,7 +32,7 @@ public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceReci
     @MethodDescription(example = @Example("ore('dustGlowstone')"))
     public boolean removeByInput(IIngredient x) {
         return MithrilineFurnaceRecipes.RECIPES.removeIf(r -> {
-            if (x.equals(r.input)) {
+            if (Arrays.stream(x.getMatchingStacks()).anyMatch(r.input)) {
                 addBackup(r);
                 return true;
             }
@@ -49,7 +51,7 @@ public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceReci
         });
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         MithrilineFurnaceRecipes.RECIPES.forEach(this::addBackup);
         MithrilineFurnaceRecipes.RECIPES.clear();
@@ -84,7 +86,7 @@ public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceReci
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            msg.add(espe <= 0, "espe cost must be positive, got {}", espe);
+            msg.add(espe < 1, "espe cost must be 1 or greater, got {}", espe);
             if (!input.isEmpty()) {
                 ItemStack[] options = input.get(0).getMatchingStacks();
                 msg.add(options.length == 0, "must have at least 1 matching stack for the input");

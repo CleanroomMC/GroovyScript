@@ -50,7 +50,7 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
         });
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         WindImbueRecipe.RECIPES.forEach(this::addBackup);
         WindImbueRecipe.RECIPES.clear();
@@ -85,7 +85,7 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            msg.add(espe <= 0, "espe cost must be positive, got {}", espe);
+            msg.add(espe < 1, "espe cost must be 1 or greater, got {}", espe);
         }
 
         @Override
