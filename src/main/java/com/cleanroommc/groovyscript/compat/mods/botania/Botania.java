@@ -23,6 +23,12 @@ public class Botania extends GroovyPropertyContainer {
     public final Magnet magnet = new Magnet();
     public final Flowers flowers = new Flowers();
 
+    public Botania() {
+        addProperty(lexicon.category);
+        addProperty(lexicon.entry);
+        addProperty(lexicon.page);
+    }
+
     public static LexiconCategory getCategory(String name) {
         for (LexiconCategory category : BotaniaAPI.getAllCategories())
             if (category.getUnlocalizedName().equals(name)) return category;
