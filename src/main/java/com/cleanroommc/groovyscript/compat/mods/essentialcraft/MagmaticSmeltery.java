@@ -4,21 +4,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import essentialcraft.api.OreSmeltingRecipe;
-import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-
 @RegistryDescription(reloadability = RegistryDescription.Reloadability.DISABLED, admonition={
-    @Admonition(value = "groovyscript.wiki.essentialcraft.magmatic_smeltery.note0", type = Admonition.Type.DANGER),
-    @Admonition(value = "groovyscript.wiki.essentialcraft.magmatic_smeltery.note1", type = Admonition.Type.WARNING),
+    @Admonition(value = "groovyscript.wiki.essentialcraft.magmatic_smeltery.note0", type = Admonition.Type.WARNING),
 })
 public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
-    static boolean didReload = false;
-
     @RecipeBuilderDescription(example = @Example(".input('blockIron').output('ingotGold').factor(3).color(0x0000ff)"))
     public MagmaticSmeltery.RecipeBuilder recipeBuilder() {
         return new MagmaticSmeltery.RecipeBuilder();
@@ -26,19 +21,17 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
 
     @Override
     public void onReload() {
-        Collection<OreSmeltingRecipe> scripted = removeScripted();
-        Collection<OreSmeltingRecipe> backup = restoreFromBackup();
-        if (!scripted.isEmpty() || backup.isEmpty()) {
-            GroovyLog.msg("Magmatic Smeltery recipes cannot be currently reloaded!")
-                    .warn()
-                    .post();
-        }
-        didReload = true;
+        removeScripted().forEach(OreSmeltingRecipe::removeRecipe);
+        restoreFromBackup().forEach(OreSmeltingRecipe::register);
+    }
+
+    @MethodDescription(example = @Example("ore('oreIron')"))
+    public boolean removeByInput(OreDictIngredient x) {
+        return removeByInput(x.getOreDict());
     }
 
     @MethodDescription(example = @Example("'oreDiamond'"))
     public boolean removeByInput(String x) {
-        if (didReload) return false;
         if (OreSmeltingRecipe.RECIPE_MAP.containsKey(x)) {
             OreSmeltingRecipe recipe = OreSmeltingRecipe.RECIPE_MAP.get(x);
             addBackup(recipe);
@@ -50,7 +43,6 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
 
     @MethodDescription(example = @Example(priority = 2000, commented = true))
     public void removeAll() {
-        if (didReload) return;
         OreSmeltingRecipe.RECIPES.forEach(this::addBackup);
         OreSmeltingRecipe.RECIPES.clear();
         OreSmeltingRecipe.RECIPE_MAP.clear();
@@ -81,8 +73,20 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
         }
 
         @RecipeBuilderMethodDescription
+        public MagmaticSmeltery.RecipeBuilder input(OreDictIngredient input) {
+            this.input = input.getOreDict();
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
         public MagmaticSmeltery.RecipeBuilder output(String output) {
             this.output = output;
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public MagmaticSmeltery.RecipeBuilder output(OreDictIngredient output) {
+            this.output = output.getOreDict();
             return this;
         }
 
@@ -103,8 +107,6 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
         }
 
         public void validate(GroovyLog.Msg msg) {
-            msg.add(!OreDictionary.doesOreNameExist(input), "Unknown input OreDict: {}", input);
-            msg.add(!OreDictionary.doesOreNameExist(output), "Unknown output OreDict: {}", output);
             msg.add(OreSmeltingRecipe.RECIPE_MAP.containsKey(input), "This OreDict can already be processed in Magmatic Smeltery: {}", input);
             msg.add(color < 0 || color >= (1 << 24), "color must be between 0 and 0xffffff, got {}", color);
         }
@@ -119,7 +121,7 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
         @Override
         @RecipeBuilderRegistrationMethod
         public @Nullable OreSmeltingRecipe register() {
-            if (didReload || !validate()) return null;
+            if (!validate()) return null;
             OreSmeltingRecipe recipe = new OreSmeltingRecipe(input, output, color, factor);
             recipe.register();
             ModSupport.ESSENTIALCRAFT.get().magmaticSmeltery.addScripted(recipe);
