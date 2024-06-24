@@ -1301,8 +1301,9 @@ groovyscript.wiki.roots.fey_crafter.removeByName=Removes the Fey Crafter recipe 
 groovyscript.wiki.roots.fey_crafter.removeByOutput=Removes the Fey Crafter recipe with the given output itemstack
 
 groovyscript.wiki.roots.flower_generation.title=Flower Generation
-groovyscript.wiki.roots.flower_generation.description=When running the Flower Growth Ritual, allowed flowers will generate in the area. Additionally, using the spell Growth Infusion's Floral Reproduction modifier will duplicate the flower.
+groovyscript.wiki.roots.flower_generation.description=When running the Flower Growth Ritual, allowed flowers will generate in the area if they can be placed on the given soil block. Additionally, using the spell Growth Infusion's Floral Reproduction modifier will duplicate the flower, regardless of the soil block.
 groovyscript.wiki.roots.flower_generation.flower.value=Sets the flower blockstate
+groovyscript.wiki.roots.flower_generation.allowedSoils.value=Sets the list of allowed blocks beneath the flower, where an empty list allows any block, in the form of an IIngredient that is converted into a IBlockState
 groovyscript.wiki.roots.flower_generation.removeByFlower0=Removes the Flower Generation entry with the given IBlockState
 groovyscript.wiki.roots.flower_generation.removeByFlower1=Removes the Flower Generation entry with the given Block and int metadata
 groovyscript.wiki.roots.flower_generation.removeByFlower2=Removes all Flower Generation entries with the given Block

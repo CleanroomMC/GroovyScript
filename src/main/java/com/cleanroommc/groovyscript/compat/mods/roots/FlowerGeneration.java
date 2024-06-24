@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -17,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +27,10 @@ import java.util.Map;
 )
 public class FlowerGeneration extends VirtualizedRegistry<FlowerRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".name('clay_flower').flower(blockstate('minecraft:clay'))"))
+    @RecipeBuilderDescription(example = {
+            @Example(".name('clay_flower').flower(blockstate('minecraft:clay'))"),
+            @Example(".flower(blockstate('minecraft:gold_block')).allowedSoils(item('minecraft:dirt'), item('minecraft:sandstone'))")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -109,6 +114,7 @@ public class FlowerGeneration extends VirtualizedRegistry<FlowerRecipe> {
 
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IBlockState flower;
+        @Property
         private final List<Ingredient> allowedSoils = new ArrayList<>();
 
         @RecipeBuilderMethodDescription
@@ -123,12 +129,13 @@ public class FlowerGeneration extends VirtualizedRegistry<FlowerRecipe> {
             return this;
         }
 
-        /*
+        @RecipeBuilderMethodDescription
         public RecipeBuilder allowedSoils(IIngredient allowedSoils) {
             this.allowedSoils.add(allowedSoils.toMcIngredient());
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder allowedSoils(IIngredient... allowedSoilss) {
             for (IIngredient allowedSoils : allowedSoilss) {
                 allowedSoils(allowedSoils);
@@ -136,13 +143,13 @@ public class FlowerGeneration extends VirtualizedRegistry<FlowerRecipe> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder allowedSoils(Collection<IIngredient> allowedSoilss) {
             for (IIngredient allowedSoils : allowedSoilss) {
                 allowedSoils(allowedSoils);
             }
             return this;
         }
-        */
 
         @Override
         public String getErrorMsg() {

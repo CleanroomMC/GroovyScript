@@ -122,6 +122,11 @@ mods.roots.flower_generation.recipeBuilder()
     .flower(blockstate('minecraft:clay'))
     .register()
 
+mods.roots.flower_generation.recipeBuilder()
+    .flower(blockstate('minecraft:gold_block'))
+    .allowedSoils(item('minecraft:dirt'), item('minecraft:sandstone'))
+    .register()
+
 
 // Life Essence:
 // When shift right clicking a mob in the Life Essence Pool with Runic Shears, it will drop a Life-Essence, which allows
