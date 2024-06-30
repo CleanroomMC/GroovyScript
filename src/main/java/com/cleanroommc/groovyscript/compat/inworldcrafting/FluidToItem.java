@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.inworldcrafting;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
@@ -11,6 +12,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -88,14 +90,20 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
     public static class Recipe extends FluidRecipe {
 
         private final ItemStack output;
+        private final float fluidConsumptionChance;
 
-        public Recipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> startCondition, Closure<?> afterRecipe, ItemStack output) {
+        public Recipe(Fluid input, IIngredient[] itemInputs, float[] itemConsumeChance, Closure<Boolean> startCondition, Closure<?> afterRecipe, ItemStack output, float fluidConsumptionChance) {
             super(input, itemInputs, itemConsumeChance, startCondition, afterRecipe);
             this.output = output;
+            this.fluidConsumptionChance = fluidConsumptionChance;
         }
 
         public ItemStack getOutput() {
             return output;
+        }
+
+        public float getFluidConsumptionChance() {
+            return fluidConsumptionChance;
         }
 
         @Override
@@ -105,12 +113,26 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
 
         @Override
         public void handleRecipeResult(World world, BlockPos pos) {
-            world.setBlockToAir(pos);
+            if (this.fluidConsumptionChance > 0 && (this.fluidConsumptionChance >= 1 || GroovyScript.RND.nextFloat() <= this.fluidConsumptionChance)) {
+                world.setBlockToAir(pos);
+            }
             InWorldCrafting.spawnItem(world, pos, getOutput().copy());
         }
     }
 
     public static class RecipeBuilder extends FluidRecipe.RecipeBuilder<FluidToItem.Recipe> {
+
+        private float fluidConsumptionChance = 1f;
+
+        public RecipeBuilder fluidInput(FluidStack fluidStack, float fluidConsumptionChance) {
+            fluidInput(fluidStack);
+            return fluidConsumptionChance(fluidConsumptionChance);
+        }
+
+        public RecipeBuilder fluidConsumptionChance(float fluidConsumptionChance) {
+            this.fluidConsumptionChance = fluidConsumptionChance;
+            return this;
+        }
 
         @Override
         public String getErrorMsg() {
@@ -122,12 +144,13 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
             validateItems(msg, 1, Recipe.MAX_ITEM_INPUT, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);
             validateChances(msg);
+            this.fluidConsumptionChance = MathHelper.clamp(this.fluidConsumptionChance, 0f, 1f);
         }
 
         @Override
         public @Nullable FluidToItem.Recipe register() {
             Recipe recipe = new Recipe(this.fluidInput.get(0).getFluid(), this.input.toArray(new IIngredient[0]), this.chances.toFloatArray(),
-                                       this.startCondition, this.afterRecipe, this.output.get(0));
+                                       this.startCondition, this.afterRecipe, this.output.get(0), this.fluidConsumptionChance);
             VanillaModule.inWorldCrafting.fluidToItem.add(recipe);
             return recipe;
         }
