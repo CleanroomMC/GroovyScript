@@ -15,11 +15,6 @@ public class GroovyScriptTransformer implements IClassTransformer {
                 new ClassReader(classBytes).accept(new InvokerHelperVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
-            case MetaClassVisitor.CLASS_NAME: {
-                ClassWriter classWriter = new ClassWriter(0);
-                new ClassReader(classBytes).accept(new MetaClassVisitor(classWriter), 0);
-                return classWriter.toByteArray();
-            }
             case CachedClassMethodsVisitor.CLASS_NAME: {
                 ClassWriter classWriter = new ClassWriter(0);
                 new ClassReader(classBytes).accept(new CachedClassMethodsVisitor(classWriter), 0);
