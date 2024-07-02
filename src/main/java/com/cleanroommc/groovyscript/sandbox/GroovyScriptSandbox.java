@@ -320,13 +320,17 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected void preRun() {
-        GroovyLog.get().infoMC("Running scripts in loader '{}'", this.currentLoadStage);
-        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre());
+        // first clear all added events
+        GroovyEventManager.INSTANCE.reset();
         if (this.currentLoadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
+            // if this is not the first time this load stage is executed, reload all virtual registries
             ReloadableRegistryManager.onReload();
+            // invoke reload event
             MinecraftForge.EVENT_BUS.post(new GroovyReloadEvent());
         }
-        GroovyEventManager.INSTANCE.reset();
+        GroovyLog.get().infoMC("Running scripts in loader '{}'", this.currentLoadStage);
+        // and finally invoke pre script run event
+        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre(this.currentLoadStage));
     }
 
     @Override
@@ -340,7 +344,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
         if (this.currentLoadStage == LoadStage.POST_INIT) {
             ReloadableRegistryManager.afterScriptRun();
         }
-        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post());
+        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post(this.currentLoadStage));
         if (this.currentLoadStage == LoadStage.POST_INIT && ReloadableRegistryManager.isFirstLoad()) {
             ReloadableRegistryManager.setLoaded();
         }
