@@ -15,14 +15,12 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-
 @RegistryDescription
 public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
 
     @RecipeBuilderDescription(example = {
-            @Example(".fluidInput(fluid('water') * 100).fluidOutput(fluid('water') * 50, fluid('lava') * 30).output(item('minecraft:diamond'), item('minecraft:clay'), item('minecraft:diamond'), item('minecraft:clay'), item('minecraft:diamond') * 5).chance(0.5, 0.2, 0.1, 0.5, 0.01).time(5).energy(1000)"),
-            @Example(".fluidInput(fluid('lava') * 5).output(item('minecraft:diamond')).chance(1).time(1)")
+            @Example(".fluidInput(fluid('water') * 100).fluidOutput(fluid('water') * 50, fluid('lava') * 30).output(item('minecraft:diamond'), 0.5).output(item('minecraft:clay'), 0.2).output(item('minecraft:diamond'), 0.1).output(item('minecraft:clay'), 0.5).output(item('minecraft:diamond') * 5, 0.01).time(5).energy(1000)"),
+            @Example(".fluidInput(fluid('lava') * 5).output(item('minecraft:diamond')).time(1)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -109,26 +107,17 @@ public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private int energy;
 
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder chance(float chance) {
+        @RecipeBuilderMethodDescription(field = {"output", "chance"})
+        public RecipeBuilder output(ItemStack output, float chance) {
+            this.output.add(output);
             this.chance.add(chance);
             return this;
         }
 
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder chance(float... chances) {
-            for (float chance : chances) {
-                chance(chance);
-            }
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder chance(Collection<Float> chances) {
-            for (float chance : chances) {
-                chance(chance);
-            }
-            return this;
+        @Override
+        @RecipeBuilderMethodDescription(field = {"output", "chance"})
+        public RecipeBuilder output(ItemStack output) {
+            return this.output(output, 1);
         }
 
         @RecipeBuilderMethodDescription
