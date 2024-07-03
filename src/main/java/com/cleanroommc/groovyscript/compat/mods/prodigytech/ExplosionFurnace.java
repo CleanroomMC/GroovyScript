@@ -28,7 +28,7 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
     }
 
     private boolean remove(ExplosionFurnaceManager.ExplosionFurnaceRecipe recipe) {
-        return ExplosionFurnaceManager.RECIPES.removeIf(r -> r.getOutput().isItemEqual(recipe.getOutput()));
+        return ExplosionFurnaceManager.RECIPES.removeIf(recipe::equals);
     }
 
     private boolean backupAndRemove(ExplosionFurnaceManager.ExplosionFurnaceRecipe recipe) {
@@ -97,6 +97,7 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
             validateItems(msg, 1, 2, 1, 1);
             validateFluids(msg);
             msg.add(craftPerReagent <= 0, "craftPerReagent should be positive!");
+            msg.add(power <= 0, "power should be positive!");
         }
 
         @Override

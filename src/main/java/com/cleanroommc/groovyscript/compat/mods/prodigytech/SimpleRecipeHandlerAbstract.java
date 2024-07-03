@@ -64,8 +64,7 @@ public abstract class SimpleRecipeHandlerAbstract<T extends SimpleRecipe> extend
         } else {
             boolean removed = false;
             for (ItemStack it : input.getMatchingStacks()) {
-                // || in this order to remove all matching recipes if they exist for some reason
-                removed = removeStackRecipe(it) || removed;
+                removed |= removeStackRecipe(it);
             }
             return removed;
         }

@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import lykrast.prodigytech.common.recipe.SoldererManager;
@@ -136,7 +137,7 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
             validateItems(msg, 0, 1, 1, 1);
             validateFluids(msg);
             msg.add(gold <= 0, "gold must be greater than or equal to 1, yet it was {}", gold);
-            msg.add(pattern.isEmpty(), "pattern cannot be empty");
+            msg.add(IngredientHelper.isEmpty(pattern), "pattern cannot be empty");
             int capacity = Config.soldererMaxGold;
             msg.add(gold > capacity, "gold must be less than or equal to the Solderer's capacity {}, yet it was {}", capacity, gold);
             msg.add(time <= 0, "time must be positive, got {}", time);
