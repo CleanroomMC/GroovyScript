@@ -7,7 +7,7 @@ println 'mod \'theaurorian\' detected, running script'
 // Moonlight Forge:
 // Combines two items to get a third item. Only works at night, and works faster the higher it is placed in the world.
 
-mods.theaurorian.moonlight_forge.removeByInput(item('theaurorian:aurorianiteingot'))
+mods.theaurorian.moonlight_forge.removeByInput(item('theaurorian:moonstonesword'), item('theaurorian:aurorianiteingot'))
 mods.theaurorian.moonlight_forge.removeByOutput(item('theaurorian:queenschipper'))
 // mods.theaurorian.moonlight_forge.removeAll()
 

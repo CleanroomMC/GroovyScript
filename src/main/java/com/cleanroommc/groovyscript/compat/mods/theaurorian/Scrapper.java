@@ -42,9 +42,9 @@ public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> {
     }
 
     @MethodDescription(example = @Example("item('minecraft:iron_sword')"))
-    public boolean removeByInput(IIngredient output) {
+    public boolean removeByInput(IIngredient input) {
         return ScrapperRecipeHandler.allRecipes.removeIf(r -> {
-            if (output.test(r.getInput())) {
+            if (input.test(r.getInput())) {
                 addBackup(r);
                 return true;
             }

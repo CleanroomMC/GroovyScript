@@ -41,10 +41,10 @@ public class MoonlightForge extends VirtualizedRegistry<MoonlightForgeRecipe> {
         });
     }
 
-    @MethodDescription(example = @Example("item('theaurorian:aurorianiteingot')"))
-    public boolean removeByInput(IIngredient output) {
+    @MethodDescription(example = @Example("item('theaurorian:moonstonesword'), item('theaurorian:aurorianiteingot')"))
+    public boolean removeByInput(IIngredient input, IIngredient catalyst) {
         return MoonlightForgeRecipeHandler.allRecipes.removeIf(r -> {
-            if (output.test(r.getInput1()) || output.test(r.getInput2())) {
+            if (input.test(r.getInput1()) && catalyst.test(r.getInput2())) {
                 addBackup(r);
                 return true;
             }
