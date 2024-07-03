@@ -1,13 +1,14 @@
 package com.cleanroommc.groovyscript.compat.mods.pneumaticcraft;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import me.desht.pneumaticcraft.api.recipe.ItemIngredient;
 import net.minecraft.item.ItemStack;
 
-public class PneumaticCraft extends ModPropertyContainer {
+public class PneumaticCraft extends GroovyPropertyContainer {
 
     public final Amadron amadron = new Amadron();
     public final AssemblyController assemblyController = new AssemblyController();
