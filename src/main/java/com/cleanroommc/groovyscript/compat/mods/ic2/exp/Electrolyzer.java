@@ -60,7 +60,7 @@ public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzer
                 list.add(new IElectrolyzerRecipeManager.ElectrolyzerOutput(fs.getFluid().getName(), fs.amount, EnumFacing.values()[i]));
         }
 
-        return add(input.getFluid().getName(), new IElectrolyzerRecipeManager.ElectrolyzerRecipe(input.amount, euATick, ticksNeeded, list.toArray(new IElectrolyzerRecipeManager.ElectrolyzerOutput[list.size()])));
+        return add(input.getFluid().getName(), new IElectrolyzerRecipeManager.ElectrolyzerRecipe(input.amount, euATick, ticksNeeded, list.toArray(new IElectrolyzerRecipeManager.ElectrolyzerOutput[0])));
     }
 
     public void removeByOutput(FluidStack... outputs) {

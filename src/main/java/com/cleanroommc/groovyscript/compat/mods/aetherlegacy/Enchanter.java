@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.gildedgames.the_aether.api.enchantments.AetherEnchantment;
@@ -68,7 +69,7 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
             if (!validate()) return null;
 
             AetherEnchantment enchantment = new AetherEnchantment(input.get(0).getMatchingStacks()[0], output.get(0), time);
-            Aether.enchanter.add(enchantment);
+            ModSupport.AETHER.get().enchanter.add(enchantment);
             return enchantment;
         }
     }

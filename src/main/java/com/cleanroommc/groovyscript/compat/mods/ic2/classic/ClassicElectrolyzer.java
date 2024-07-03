@@ -127,44 +127,44 @@ public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer
 
     private void add(ElectrolyzerRecipe recipe) {
         switch (recipe.type) {
-            case CHARGE:
+            case CHARGE -> {
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.addChargeRecipe(stack, recipe.output, recipe.energy, String.valueOf(recipe.hashCode()));
                 }
-                break;
-            case DISCHARGE:
+            }
+            case DISCHARGE -> {
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.addDischargeRecipe(stack, recipe.output, recipe.energy, String.valueOf(recipe.hashCode()));
                 }
-                break;
-            case BOTH:
+            }
+            case BOTH -> {
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.addBothRecipe(stack, recipe.output, recipe.energy, String.valueOf(recipe.hashCode()));
                 }
-                break;
+            }
         }
     }
 
     private void remove(ElectrolyzerRecipe recipe) {
         switch (recipe.type) {
-            case CHARGE:
+            case CHARGE -> {
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.removeRecipe(stack, true, false);
                     removeFromMap(stack);
                 }
-                break;
-            case DISCHARGE:
+            }
+            case DISCHARGE -> {
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.removeRecipe(stack, false, false);
                     removeFromMap(stack);
                 }
-                break;
-            case BOTH:
+            }
+            case BOTH -> {
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.electrolyzer.removeRecipe(stack, true, true);
                     removeFromMap(stack);
                 }
-                break;
+            }
         }
     }
 

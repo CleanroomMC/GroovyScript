@@ -79,6 +79,7 @@ public class ShapelessArcaneCR extends ShapelessArcaneRecipe implements ICraftin
     /**
      * Stolen from {@link thaumcraft.api.crafting.ShapelessArcaneRecipe#matches(InventoryCrafting, World)}
      */
+    @Override
     public boolean matches(@NotNull InventoryCrafting inv, @NotNull World world) {
         if (!(inv instanceof IArcaneWorkbench)) return false;
 

@@ -34,7 +34,7 @@ class CompiledClass {
             GroovyLog.get().errorMC("The class doesnt seem to be compiled yet. (" + name + ")");
             return;
         }
-        if (!GroovyScriptSandbox.WRITE_CACHE) return;
+        if (!GroovyScriptSandbox.ENABLE_CACHE) return;
         try {
             File file = getDataFile(basePath);
             file.getParentFile().mkdirs();
@@ -48,7 +48,7 @@ class CompiledClass {
     }
 
     public boolean readData(String basePath) {
-        if (this.data != null) return true;
+        if (this.data != null && GroovyScriptSandbox.ENABLE_CACHE) return true;
         File file = getDataFile(basePath);
         if (!file.exists()) return false;
         try {

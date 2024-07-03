@@ -2,31 +2,32 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-public class LoadStage {
+public enum LoadStage {
 
-    private static final List<LoadStage> STAGES = new ArrayList<>();
+    PRE_INIT("preInit", false, -1000000),
+    INIT("init", false, -1000),
+    POST_INIT("postInit", true, 0);
+
+    private static List<LoadStage> stages;
 
     public static List<LoadStage> getLoadStages() {
-        return Collections.unmodifiableList(STAGES);
+        if (stages == null) {
+            stages = new ArrayList<>();
+            Collections.addAll(stages, values());
+        }
+        return Collections.unmodifiableList(stages);
     }
-
-    public static final LoadStage PRE_INIT = new LoadStage("preInit", false, -1000000);
-    public static final LoadStage INIT = new LoadStage("init", false, -1000);
-    public static final LoadStage POST_INIT = new LoadStage("postInit", true, 0);
 
     private final String name;
     private final boolean reloadable;
     private final int priority;
 
-    public LoadStage(String name, boolean reloadable, int priority) {
+    LoadStage(String name, boolean reloadable, int priority) {
         this.name = name;
         this.reloadable = reloadable;
         this.priority = priority;
-        STAGES.add(this);
-        STAGES.sort(Comparator.comparingInt(LoadStage::getPriority));
     }
 
     public String getName() {

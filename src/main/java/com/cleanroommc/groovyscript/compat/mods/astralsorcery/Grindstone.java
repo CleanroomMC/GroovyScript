@@ -100,9 +100,9 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<GrindstoneRecipe> {
 
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private int weight = 0;
+        private int weight;
         @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
-        private float secondaryChance = 0.0F;
+        private float secondaryChance;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder weight(int weight) {
@@ -128,6 +128,7 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
             msg.add(secondaryChance < 0 || secondaryChance > 1, () -> "Secondary chance must be between [0,1]. Instead found " + secondaryChance + ".");
         }
 
+        @Override
         @RecipeBuilderRegistrationMethod
         public GrindstoneRecipe register() {
             if (!validate()) return null;

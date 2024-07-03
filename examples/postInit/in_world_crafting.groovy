@@ -6,7 +6,7 @@ inWorldCrafting.fluidToFluid.recipeBuilder()
         .register()
 
 inWorldCrafting.fluidToItem.recipeBuilder()
-        .fluidInput(fluid('water'))
+        .fluidInput(fluid('water'), 0.22f)
         .input(item('minecraft:netherrack'))
         .input(item('minecraft:gold_ingot'), 0.1f)
         .output(item('minecraft:nether_star'))

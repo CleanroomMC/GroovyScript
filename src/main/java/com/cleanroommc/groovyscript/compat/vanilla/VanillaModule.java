@@ -6,13 +6,14 @@ import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.compat.content.Content;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.InWorldCrafting;
 import com.cleanroommc.groovyscript.compat.loot.Loot;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
 import java.util.Collections;
 
-public class VanillaModule implements IScriptReloadable {
+public class VanillaModule extends GroovyPropertyContainer implements IScriptReloadable {
 
     public static final VanillaModule INSTANCE = new VanillaModule();
 

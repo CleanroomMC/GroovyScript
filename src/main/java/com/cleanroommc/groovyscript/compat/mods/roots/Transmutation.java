@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.TransmutationRecipe;
 import epicsquid.roots.recipe.transmutation.BlockStatePredicate;
 import epicsquid.roots.recipe.transmutation.StatePredicate;
@@ -15,17 +16,14 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
-import static epicsquid.roots.init.ModRecipes.removeTransmutationRecipe;
-
 @RegistryDescription
-public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, TransmutationRecipe>> {
+public class Transmutation extends VirtualizedRegistry<TransmutationRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_duping').start(blockstate('minecraft:clay')).output(item('minecraft:clay_ball') * 30).condition(mods.roots.predicates.stateBuilder().blockstate(blockstate('minecraft:gold_block')).below().register())"),
@@ -38,8 +36,8 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> removeTransmutationRecipe(pair.getKey()));
-        restoreFromBackup().forEach(pair -> ModRecipesAccessor.getTransmutationRecipes().put(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.removeTransmutationRecipe(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipesAccessor.getTransmutationRecipes().put(recipe.getRegistryName(), recipe));
     }
 
     public void add(TransmutationRecipe recipe) {
@@ -48,7 +46,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
 
     public void add(ResourceLocation name, TransmutationRecipe recipe) {
         ModRecipesAccessor.getTransmutationRecipes().put(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(TransmutationRecipe recipe) {
@@ -62,8 +60,8 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
     public boolean removeByName(ResourceLocation name) {
         TransmutationRecipe recipe = ModRecipesAccessor.getTransmutationRecipes().get(name);
         if (recipe == null) return false;
-        removeTransmutationRecipe(name);
-        addBackup(Pair.of(name, recipe));
+        ModRecipes.removeTransmutationRecipe(name);
+        addBackup(recipe);
         return true;
     }
 
@@ -71,7 +69,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
     public boolean removeByInput(IBlockState input) {
         return ModRecipesAccessor.getTransmutationRecipes().entrySet().removeIf(x -> {
             if (x.getValue().getStartPredicate().test(input)) {
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
             return false;
@@ -82,7 +80,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
     public boolean removeByOutput(ItemStack output) {
         return ModRecipesAccessor.getTransmutationRecipes().entrySet().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getValue().getStack(), output)) {
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
             return false;
@@ -103,7 +101,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
                                                                    current.contains(prop) &&
                                                                    state.get().getValue(prop).equals(output.getValue(prop)))
             ) {
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                addBackup(x.getValue());
                 return true;
             }
             return false;
@@ -112,7 +110,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        ModRecipesAccessor.getTransmutationRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
+        ModRecipesAccessor.getTransmutationRecipes().values().forEach(this::addBackup);
         ModRecipesAccessor.getTransmutationRecipes().clear();
     }
 
@@ -168,6 +166,7 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
             return "Error adding Roots Transmutation recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_transmutation_";
         }
@@ -186,11 +185,11 @@ public class Transmutation extends VirtualizedRegistry<Pair<ResourceLocation, Tr
         public @Nullable TransmutationRecipe register() {
             if (!validate()) return null;
             TransmutationRecipe recipe = new TransmutationRecipe(start);
-            recipe.setRegistryName(name);
+            recipe.setRegistryName(super.name);
             if (state == null) recipe.item(output.get(0));
             else recipe.state(state);
             recipe.condition(condition);
-            ModSupport.ROOTS.get().transmutation.add(name, recipe);
+            ModSupport.ROOTS.get().transmutation.add(super.name, recipe);
             return recipe;
         }
     }

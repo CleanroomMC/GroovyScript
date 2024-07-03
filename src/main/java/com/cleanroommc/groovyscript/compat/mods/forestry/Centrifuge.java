@@ -88,7 +88,7 @@ public class Centrifuge extends ForestryRegistry<ICentrifugeRecipe> {
     public class RecipeBuilder extends AbstractRecipeBuilder<ICentrifugeRecipe> {
 
         protected int time = 20;
-        protected Map<ItemStack, Float> outputs = new Object2FloatOpenHashMap<>();
+        protected final Map<ItemStack, Float> outputs = new Object2FloatOpenHashMap<>();
 
         public RecipeBuilder time(int time) {
             this.time = Math.max(time, 1);

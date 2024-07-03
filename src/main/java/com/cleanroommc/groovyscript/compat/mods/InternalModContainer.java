@@ -13,10 +13,11 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Will not be removed but made private and renamed to InternalContainer
+ * This class is only used for internal mod compat. Do not use this. Instead, refer to {@link ExternalModContainer} ans {@link GroovyPlugin}.
+ *
+ * @param <T> type of the mod property container.
  */
-@SuppressWarnings("all")
-public class InternalModContainer<T extends ModPropertyContainer> extends GroovyContainer<T> {
+public class InternalModContainer<T extends GroovyPropertyContainer> extends GroovyContainer<T> {
 
     private final String modId, containerName;
     private final Supplier<T> modProperty;
@@ -28,7 +29,6 @@ public class InternalModContainer<T extends ModPropertyContainer> extends Groovy
     }
 
     InternalModContainer(String modId, String containerName, @NotNull Supplier<T> modProperty, String... aliases) {
-        super(GroovyPlugin.Priority.NONE);
         if (ModSupport.isFrozen()) {
             throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + containerName + "' too late.");
         }
@@ -39,7 +39,11 @@ public class InternalModContainer<T extends ModPropertyContainer> extends Groovy
         }
         this.modId = modId;
         this.containerName = containerName;
-        this.modProperty = Suppliers.memoize(modProperty);
+        this.modProperty = Suppliers.memoize(() -> {
+            T t = modProperty.get();
+            t.addPropertyFieldsOf(t, false);
+            return t;
+        });
         this.loaded = Loader.isModLoaded(modId);
         Set<String> aliasSet = new ObjectOpenHashSet<>(aliases);
         aliasSet.add(modId);

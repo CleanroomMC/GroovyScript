@@ -132,7 +132,7 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
         public @Nullable IHopperFilter register() {
             if (!validate()) return null;
 
-            IHopperFilter recipe = new HopperFilter(name.toString(), filter.toMcIngredient(), input.stream().map(IIngredient::toMcIngredient).collect(Collectors.toList()));
+            IHopperFilter recipe = new HopperFilter(super.name.toString(), filter.toMcIngredient(), input.stream().map(IIngredient::toMcIngredient).collect(Collectors.toList()));
             ModSupport.BETTER_WITH_MODS.get().hopperFilters.add(recipe);
             return recipe;
         }

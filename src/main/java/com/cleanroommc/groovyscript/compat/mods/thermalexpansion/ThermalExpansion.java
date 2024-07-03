@@ -1,17 +1,18 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion;
 
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import cofh.thermalexpansion.util.managers.machine.CompactorManager;
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.api.IObjectParser;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.device.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.dynamo.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine.*;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
+import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.Locale;
 
-public class ThermalExpansion extends ModPropertyContainer {
+public class ThermalExpansion extends GroovyPropertyContainer {
 
     public final Brewer brewer = new Brewer();
     public final Centrifuge centrifuge = new Centrifuge();
@@ -49,52 +50,12 @@ public class ThermalExpansion extends ModPropertyContainer {
     public final TransposerFill transposerFill = new TransposerFill();
     public final XpCollector xpCollector = new XpCollector();
 
-
-    public ThermalExpansion() {
-        addRegistry(brewer);
-        addRegistry(centrifuge);
-        addRegistry(centrifugeMob);
-        addRegistry(charger);
-        addRegistry(compactor);
-        addRegistry(compression);
-        addRegistry(coolant);
-        addRegistry(crucible);
-        addRegistry(diffuser);
-        addRegistry(enchanter);
-        addRegistry(enervation);
-        addRegistry(extruder);
-        addRegistry(factorizer);
-        addRegistry(fisher);
-        addRegistry(fisherBait);
-        addRegistry(furnace);
-        addRegistry(furnacePyrolysis);
-        addRegistry(insolator);
-        addRegistry(lapidary);
-        addRegistry(magmatic);
-        addRegistry(numismatic);
-        addRegistry(precipitator);
-        addRegistry(pulverizer);
-        addRegistry(reactant);
-        addRegistry(refinery);
-        addRegistry(refineryPotion);
-        addRegistry(sawmill);
-        addRegistry(smelter);
-        addRegistry(steam);
-        addRegistry(tapper);
-        addRegistry(tapperFertilizer);
-        addRegistry(tapperTree);
-        addRegistry(transposerExtract);
-        addRegistry(transposerFill);
-        addRegistry(xpCollector);
-    }
-
     @Override
-    public void initialize() {
-        GameObjectHandler.builder("mode", CompactorManager.Mode.class)
+    public void initialize(GroovyContainer<?> owner) {
+        ObjectMapper.builder("compactorMode", CompactorManager.Mode.class)
                 .mod("thermalexpansion")
-                .parser(IGameObjectParser.wrapEnum(CompactorManager.Mode.class, false))
+                .parser(IObjectParser.wrapEnum(CompactorManager.Mode.class, false))
                 .completerOfNamed(() -> Arrays.asList(CompactorManager.Mode.values()), v -> v.name().toUpperCase(Locale.ROOT))
                 .register();
     }
-
 }

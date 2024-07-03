@@ -15,8 +15,8 @@ public class Player extends NamedRegistry implements IScriptReloadable {
 
     public static final String GIVEN_ITEMS = "GroovyScript:GivenItems";
 
-    public boolean testingStartingItems = false;
-    public boolean replaceDefaultInventory = false;
+    public boolean testingStartingItems;
+    public boolean replaceDefaultInventory;
 
     private final List<ItemStack> givenItemsAnySlot = new ArrayList<>();
 

@@ -2,10 +2,9 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.INamed;
-import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
@@ -19,7 +18,7 @@ import java.util.stream.Stream;
 
 public class Registry {
 
-    private final GroovyContainer<? extends ModPropertyContainer> mod;
+    private final GroovyContainer<? extends GroovyPropertyContainer> mod;
     private final INamed registry;
     private final String baseTranslationKey;
     private final String reference;
@@ -29,7 +28,7 @@ public class Registry {
     private final EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
     private final List<String> imports;
 
-    public Registry(GroovyContainer<? extends ModPropertyContainer> mod, INamed registry) {
+    public Registry(GroovyContainer<? extends GroovyPropertyContainer> mod, INamed registry) {
         this.mod = mod;
         this.registry = registry;
         this.baseTranslationKey = String.format("groovyscript.wiki.%s.%s", mod.getModId(), registry.getName());
@@ -38,7 +37,7 @@ public class Registry {
         this.description = registryClass.getAnnotation(RegistryDescription.class);
 
         List<Method> recipeBuilderMethods = new ArrayList<>();
-        EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
+        Map<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
         for (MethodDescription.Type value : MethodDescription.Type.values()) methods.put(value, new ArrayList<>());
         List<String> imports = new ArrayList<>();
 
@@ -122,7 +121,7 @@ public class Registry {
         out.append("// ").append(getTitle()).append(":").append("\n");
         out.append("// ").append(WordUtils.wrap(getDescription(), Documentation.MAX_LINE_LENGTH, "\n// ", false)).append("\n\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.REMOVAL));
-        for (Method method : recipeBuilderMethods) out.append(new Builder(mod, method, reference, baseTranslationKey).builderExampleFile()).append("\n");
+        for (Method method : recipeBuilderMethods) out.append(new Builder(method, reference, baseTranslationKey).builderExampleFile()).append("\n");
         if (!recipeBuilderMethods.isEmpty()) out.append("\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.ADDITION));
         out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
@@ -207,7 +206,7 @@ public class Registry {
                 .append(I18n.format("groovyscript.wiki.recipe_builder_note", Documentation.DEFAULT_FORMAT.linkToBuilder())).append("\n\n");
 
         for (int i = 0; i < recipeBuilderMethods.size(); i++) {
-            Builder builder = new Builder(mod, recipeBuilderMethods.get(i), reference, baseTranslationKey);
+            Builder builder = new Builder(recipeBuilderMethods.get(i), reference, baseTranslationKey);
             out.append(new AdmonitionBuilder()
                                .type(Admonition.Type.ABSTRACT)
                                .hasTitle(true)

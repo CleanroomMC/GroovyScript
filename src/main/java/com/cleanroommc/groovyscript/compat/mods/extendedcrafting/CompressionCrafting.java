@@ -116,12 +116,13 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         @Property(defaultValue = "IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack())", valid = @Comp(type = Comp.Type.NOT, value = "null"))
         private IIngredient catalyst = IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack());
         @Property
-        private boolean consumeCatalyst = false;
+        private boolean consumeCatalyst;
         @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int powerCost;
         @Property(defaultValue = "ModConfig.confCompressorRFRate", valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int powerRate = ModConfig.confCompressorRFRate;
 
+        @Override
         @RecipeBuilderMethodDescription
         public RecipeBuilder input(IIngredient input) {
             if (input == null) return this;

@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class BetterWithMods extends ModPropertyContainer {
+public class BetterWithMods extends GroovyPropertyContainer {
 
     public final AnvilCrafting anvilCrafting = new AnvilCrafting();
     public final Cauldron cauldron = new Cauldron();
@@ -14,18 +14,5 @@ public class BetterWithMods extends ModPropertyContainer {
     public final Heat heat = new Heat();
     public final Hopper hopper = new Hopper();
     public final HopperFilters hopperFilters = new HopperFilters();
-
-    public BetterWithMods() {
-        addRegistry(anvilCrafting);
-        addRegistry(cauldron);
-        addRegistry(crucible);
-        addRegistry(kiln);
-        addRegistry(millStone);
-        addRegistry(saw);
-        addRegistry(turntable);
-        addRegistry(heat);
-        addRegistry(hopper);
-        addRegistry(hopperFilters);
-    }
 
 }

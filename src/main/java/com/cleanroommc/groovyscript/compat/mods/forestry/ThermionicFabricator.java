@@ -134,7 +134,7 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
 
         protected String[] pattern;
         protected IIngredient catalyst = IIngredient.EMPTY;
-        protected Char2ObjectOpenHashMap<IIngredient> keys = new Char2ObjectOpenHashMap<>();
+        protected final Char2ObjectOpenHashMap<IIngredient> keys = new Char2ObjectOpenHashMap<>();
 
         public RecipeBuilder catalyst(IIngredient item) {
             this.catalyst = item;

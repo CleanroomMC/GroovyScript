@@ -1,50 +1,47 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
-import com.cleanroommc.groovyscript.api.*;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.INamed;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+/**
+ * @deprecated this class has been replaced by {@link GroovyPropertyContainer}
+ */
+@ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
+@Deprecated
+public class ModPropertyContainer extends GroovyPropertyContainer {
 
-public class ModPropertyContainer implements IDynamicGroovyProperty {
-
-    private final Map<String, INamed> registries;
-
-    public ModPropertyContainer() {
-        this.registries = new Object2ObjectOpenHashMap<>();
-        ((IRegistrar) this::addRegistry).addFieldsOf(this);
+    /**
+     * @deprecated use {@link #addProperty(INamed)}
+     */
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
+    @Deprecated
+    protected void addRegistry(INamed property) {
+        addProperty(property);
     }
 
-    protected void addRegistry(INamed registry) {
-        for (String alias : registry.getAliases()) {
-            this.registries.put(alias, registry);
-        }
-    }
-
-    public Collection<INamed> getRegistries() {
-        return registries.values();
-    }
-
-    @Override
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
+    @Deprecated
     public @Nullable Object getProperty(String name) {
-        INamed registry = registries.get(name);
-        if (registry == null) {
-            GroovyLog.get().error("Attempted to access registry {}, but could not find a registry with that name", name);
+        INamed property = getProperties().get(name);
+        if (property == null) {
+            GroovyLog.get().error("Attempted to access property {}, but could not find a property with that name", name);
             return null;
         }
-        if (!registry.isEnabled()) {
-            GroovyLog.get().error("Attempted to access registry {}, but that registry was disabled", registry.getName());
+        if (!property.isEnabled()) {
+            GroovyLog.get().error("Attempted to access registry {}, but that registry was disabled", property.getName());
             return null;
         }
-        return registry;
+        return property;
     }
 
-    @Override
-    public Map<String, Object> getProperties() {
-        return Collections.unmodifiableMap(this.registries);
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
+    @Deprecated
+    @GroovyBlacklist
+    @ApiStatus.OverrideOnly
+    public void initialize() {
     }
 
     /**
@@ -52,6 +49,10 @@ public class ModPropertyContainer implements IDynamicGroovyProperty {
      */
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
-    public void initialize() {
+    @Override
+    public void initialize(GroovyContainer<?> owner) {
+        initialize();
     }
+
 }
+

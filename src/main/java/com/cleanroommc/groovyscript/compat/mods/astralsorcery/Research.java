@@ -21,6 +21,8 @@ import org.jetbrains.annotations.ApiStatus;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RegistryDescription(
@@ -28,11 +30,11 @@ import java.util.concurrent.atomic.AtomicReference;
 )
 public class Research extends VirtualizedRegistry<ResearchNode> {
 
-    private final HashMap<ResearchNode, ResearchProgression> scriptedCategories = new HashMap<>();
-    private final HashMap<ResearchNode, ResearchProgression> removedCategories = new HashMap<>();
-    private final HashMap<ResearchNode, ArrayList<ResearchNode>> scriptedConnections = new HashMap<>();
-    private final HashMap<ResearchNode, ArrayList<ResearchNode>> removedConnections = new HashMap<>();
-    private final HashMap<ResearchNode, Point> movedNodes = new HashMap<>();
+    private final Map<ResearchNode, ResearchProgression> scriptedCategories = new HashMap<>();
+    private final Map<ResearchNode, ResearchProgression> removedCategories = new HashMap<>();
+    private final Map<ResearchNode, ArrayList<ResearchNode>> scriptedConnections = new HashMap<>();
+    private final Map<ResearchNode, ArrayList<ResearchNode>> removedConnections = new HashMap<>();
+    private final Map<ResearchNode, Point> movedNodes = new HashMap<>();
 
     @Override
     @GroovyBlacklist
@@ -171,9 +173,9 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
     public static class ResearchNodeBuilder {
 
         @Property
-        private final ArrayList<IJournalPage> pages = new ArrayList<>();
+        private final List<IJournalPage> pages = new ArrayList<>();
         @Property
-        private final ArrayList<ResearchNode> connections = new ArrayList<>();
+        private final List<ResearchNode> connections = new ArrayList<>();
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private ResearchProgression category;
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))

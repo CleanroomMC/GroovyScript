@@ -1,10 +1,11 @@
 package com.cleanroommc.groovyscript.api;
 
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlers;
+import com.cleanroommc.groovyscript.mapper.ObjectMappers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -12,30 +13,16 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * A bracket handler returns a object based on its input arguments.
- * A bracket handler can be called from groovy lik this:
- * <p>
- * {@code bracket_handler_name(args)}
- * </p>
- * In the first way there is always only one argument which is a String.
- * In the second method the argument size is at least, but not limited to one.
- * The first argument is always a string. The other can be anything.
+ * @deprecated use {@link IObjectParser}
  */
+@Deprecated
+@ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
 @FunctionalInterface
-public interface IGameObjectParser<T> {
-
-    /**
-     * Parses a object based on input arguments
-     *
-     * @param args arguments. length >= 1 && args[0] instanceof String
-     * @return a parsed Object
-     */
-    @NotNull
-    Result<T> parse(String mainArg, Object[] args);
+public interface IGameObjectParser<T> extends IObjectParser<T> {
 
     static <T extends IForgeRegistryEntry<T>> IGameObjectParser<T> wrapForgeRegistry(IForgeRegistry<T> forgeRegistry) {
         return (s, args) -> {
-            Result<ResourceLocation> rl = GameObjectHandlers.parseResourceLocation(s, args);
+            Result<ResourceLocation> rl = ObjectMappers.parseResourceLocation(s, args);
             if (rl.hasError()) return Result.error(rl.getError());
             T value = forgeRegistry.getValue(rl.getValue());
             return value == null ? Result.error() : Result.some(value);

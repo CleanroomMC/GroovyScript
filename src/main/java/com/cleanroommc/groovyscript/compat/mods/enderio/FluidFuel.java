@@ -85,6 +85,7 @@ public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
         return FluidFuelRegister.instance.getFuel(fluid);
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         FluidFuelRegisterAccessor accessor = (FluidFuelRegisterAccessor) FluidFuelRegister.instance;

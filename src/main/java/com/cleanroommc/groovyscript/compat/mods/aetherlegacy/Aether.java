@@ -1,21 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class Aether extends ModPropertyContainer {
+public class Aether extends GroovyPropertyContainer {
 
-    public static final Enchanter enchanter = new Enchanter();
-    public static final EnchanterFuel enchanterFuel = new EnchanterFuel();
-    public static final Freezer freezer = new Freezer();
-    public static final FreezerFuel freezerFuel = new FreezerFuel();
-    public static final Accessory accessory = new Accessory();
-
-    public Aether() {
-        addRegistry(enchanter);
-        addRegistry(enchanterFuel);
-        addRegistry(freezer);
-        addRegistry(freezerFuel);
-        addRegistry(accessory);
-    }
+    public final Enchanter enchanter = new Enchanter();
+    public final EnchanterFuel enchanterFuel = new EnchanterFuel();
+    public final Freezer freezer = new Freezer();
+    public final FreezerFuel freezerFuel = new FreezerFuel();
+    public final Accessory accessory = new Accessory();
 
 }

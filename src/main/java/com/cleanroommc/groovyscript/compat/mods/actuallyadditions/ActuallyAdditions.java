@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class ActuallyAdditions extends ModPropertyContainer {
+public class ActuallyAdditions extends GroovyPropertyContainer {
 
     public final Crusher crusher = new Crusher();
     public final OilGen oilGen = new OilGen();
@@ -13,17 +13,5 @@ public class ActuallyAdditions extends ModPropertyContainer {
     public final AtomicReconstructor atomicReconstructor = new AtomicReconstructor();
     public final NetherMiningLens netherMiningLens = new NetherMiningLens();
     public final StoneMiningLens stoneMiningLens = new StoneMiningLens();
-
-    public ActuallyAdditions() {
-        addRegistry(crusher);
-        addRegistry(oilGen);
-        addRegistry(compost);
-        addRegistry(ballOfFur);
-        addRegistry(treasureChest);
-        addRegistry(empowerer);
-        addRegistry(atomicReconstructor);
-        addRegistry(netherMiningLens);
-        addRegistry(stoneMiningLens);
-    }
 
 }

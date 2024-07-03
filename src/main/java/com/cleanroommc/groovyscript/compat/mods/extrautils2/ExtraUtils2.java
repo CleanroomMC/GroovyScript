@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class ExtraUtils2 extends ModPropertyContainer {
+public class ExtraUtils2 extends GroovyPropertyContainer {
 
     public final Resonator resonator = new Resonator();
     public final Crusher crusher = new Crusher();
@@ -10,14 +10,5 @@ public class ExtraUtils2 extends ModPropertyContainer {
     public final Furnace furnace = new Furnace();
     public final GridPowerPassiveGenerator gridPowerPassiveGenerator = new GridPowerPassiveGenerator();
     public final Generator generator = new Generator();
-
-    public ExtraUtils2() {
-        addRegistry(resonator);
-        addRegistry(crusher);
-        addRegistry(enchanter);
-        addRegistry(furnace);
-        addRegistry(gridPowerPassiveGenerator);
-        addRegistry(generator);
-    }
 
 }

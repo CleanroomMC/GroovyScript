@@ -130,6 +130,7 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
             return this;
         }
 
+        @Override
         @RecipeBuilderMethodDescription
         public RecipeBuilder output(ItemStack output) {
             this.output.add(new IngredientRecipeComponent(output));

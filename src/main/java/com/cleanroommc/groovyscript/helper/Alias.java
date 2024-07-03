@@ -77,17 +77,15 @@ public class Alias extends ArrayList<String> {
     }
 
     public static <T extends Collection<String>> T generateAliases(T aliases, String name, CaseFormat caseFormat) {
-        if (caseFormat != CaseFormat.UPPER_CAMEL) {
-            name = caseFormat.to(CaseFormat.UPPER_CAMEL, name);
-        }
-        if (name.split("[A-Z]").length > 2) {
-            aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name));
-            aliases.add(name.toLowerCase(Locale.ROOT));
-            aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, name));
-            aliases.add(name);
+        String baseName = caseFormat == CaseFormat.UPPER_CAMEL ? name : caseFormat.to(CaseFormat.UPPER_CAMEL, name);
+        if (baseName.split("[A-Z]").length > 2) {
+            aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, baseName));
+            aliases.add(baseName.toLowerCase(Locale.ROOT));
+            aliases.add(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, baseName));
+            aliases.add(baseName);
         } else {
-            aliases.add(name.toLowerCase(Locale.ROOT));
-            aliases.add(name);
+            aliases.add(baseName.toLowerCase(Locale.ROOT));
+            aliases.add(baseName);
         }
         return aliases;
     }
