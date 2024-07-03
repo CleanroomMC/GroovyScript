@@ -20,19 +20,6 @@ public class PneumaticCraft extends ModPropertyContainer {
     public final ThermopneumaticProcessingPlant thermopneumaticProcessingPlant = new ThermopneumaticProcessingPlant();
     public final XpFluid xpFluid = new XpFluid();
 
-    public PneumaticCraft() {
-        addRegistry(amadron);
-        addRegistry(assemblyController);
-        addRegistry(explosion);
-        addRegistry(heatFrameCooling);
-        addRegistry(liquidFuel);
-        addRegistry(plasticMixer);
-        addRegistry(pressureChamber);
-        addRegistry(refinery);
-        addRegistry(thermopneumaticProcessingPlant);
-        addRegistry(xpFluid);
-    }
-
     public static ItemIngredient toItemIngredient(IIngredient ingredient) {
         if (ingredient instanceof OreDictIngredient oreDictIngredient) return new ItemIngredient(oreDictIngredient.getOreDict(), ingredient.getAmount());
         if (IngredientHelper.isItem(ingredient)) return new ItemIngredient(IngredientHelper.toItemStack(ingredient).copy());
