@@ -1,10 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.roots;
 
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
+import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandlers;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.cleanroommc.groovyscript.mapper.ObjectMappers;
 import epicsquid.roots.api.Herb;
 import epicsquid.roots.init.HerbRegistry;
 import epicsquid.roots.modifiers.CostType;
@@ -17,7 +17,7 @@ import epicsquid.roots.spell.SpellBase;
 import epicsquid.roots.spell.SpellRegistry;
 import net.minecraft.util.ResourceLocation;
 
-public class Roots extends ModPropertyContainer {
+public class Roots extends GroovyPropertyContainer {
 
     public final AnimalHarvest animalHarvest = new AnimalHarvest();
     public final AnimalHarvestFish animalHarvestFish = new AnimalHarvestFish();
@@ -39,61 +39,39 @@ public class Roots extends ModPropertyContainer {
     public final SummonCreature summonCreature = new SummonCreature();
     public final Transmutation transmutation = new Transmutation();
 
-    public Roots() {
-        addRegistry(animalHarvest);
-        addRegistry(animalHarvestFish);
-        addRegistry(barkCarving);
-        addRegistry(chrysopoeia);
-        addRegistry(feyCrafter);
-        addRegistry(flowerGeneration);
-        addRegistry(lifeEssence);
-        addRegistry(modifiers);
-        addRegistry(moss);
-        addRegistry(mortar);
-        addRegistry(pacifist);
-        addRegistry(pyre);
-        addRegistry(predicates);
-        addRegistry(rituals);
-        addRegistry(runicShearBlock);
-        addRegistry(runicShearEntity);
-        addRegistry(spells);
-        addRegistry(summonCreature);
-        addRegistry(transmutation);
-    }
-
     @Override
-    public void initialize() {
-        GameObjectHandler.builder("ritual", RitualBase.class)
-                .mod("roots")
-                .parser(IGameObjectParser.wrapStringGetter(RitualRegistry::getRitual))
+    public void initialize(GroovyContainer<?> container) {
+        container.objectMapperBuilder("ritual", RitualBase.class)
+                .parser(IObjectParser.wrapStringGetter(RitualRegistry::getRitual))
                 .completerOfNames(() -> RitualRegistry.ritualRegistry.keySet())
+                .docOfType("ritual")
                 .register();
-        GameObjectHandler.builder("herb", Herb.class)
-                .mod("roots")
-                .parser(IGameObjectParser.wrapStringGetter(HerbRegistry::getHerbByName))
+        container.objectMapperBuilder("herb", Herb.class)
+                .parser(IObjectParser.wrapStringGetter(HerbRegistry::getHerbByName))
                 .completerOfNames(HerbRegistry.registry::keySet)
+                .docOfType("herb")
                 .register();
-        GameObjectHandler.builder("cost", CostType.class)
-                .mod("roots")
-                .parser(IGameObjectParser.wrapEnum(CostType.class, false))
+        container.objectMapperBuilder("cost", CostType.class)
+                .parser(IObjectParser.wrapEnum(CostType.class, false))
                 .completerOfEnum(CostType.class, false)
+                .docOfType("cost")
                 .register();
-        GameObjectHandler.builder("spell", SpellBase.class)
-                .mod("roots")
+        container.objectMapperBuilder("spell", SpellBase.class)
                 .parser(Roots::getSpell)
                 .completer(SpellRegistry.spellRegistry::keySet)
                 .defaultValueSup(() -> Result.some(FakeSpell.INSTANCE))  // crashes otherwise
+                .docOfType("spell")
                 .register();
-        GameObjectHandler.builder("modifier", Modifier.class)
-                .mod("roots")
+        container.objectMapperBuilder("modifier", Modifier.class)
                 .parser(Roots::getModifier)
                 .completerOfNamed(ModifierRegistry::getModifiers, v -> v.getRegistryName().toString())
+                .docOfType("modifier")
                 .register();
     }
 
     private static Result<SpellBase> getSpell(String s, Object... args) {
         if (s.contains(":")) {
-            Result<ResourceLocation> rl = GameObjectHandlers.parseResourceLocation(s, args);
+            Result<ResourceLocation> rl = ObjectMappers.parseResourceLocation(s, args);
             if (rl.hasError()) return Result.error(rl.getError());
             SpellBase spell = SpellRegistry.getSpell(rl.getValue());
             return spell == null ? Result.error() : Result.some(spell);
@@ -106,7 +84,7 @@ public class Roots extends ModPropertyContainer {
     }
 
     private static Result<Modifier> getModifier(String s, Object... args) {
-        Result<ResourceLocation> rl = GameObjectHandlers.parseResourceLocation(s, args);
+        Result<ResourceLocation> rl = ObjectMappers.parseResourceLocation(s, args);
         if (rl.hasError()) return Result.error(rl.getError());
         Modifier modifier = ModifierRegistry.get(rl.getValue());
         return modifier == null ? Result.error() : Result.some(modifier);

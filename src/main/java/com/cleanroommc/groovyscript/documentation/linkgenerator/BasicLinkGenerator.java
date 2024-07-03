@@ -15,6 +15,7 @@ import com.cleanroommc.groovyscript.documentation.Documentation;
  */
 public class BasicLinkGenerator implements ILinkGenerator {
 
+    @Override
     public String id() {
         return GroovyScript.ID;
     }

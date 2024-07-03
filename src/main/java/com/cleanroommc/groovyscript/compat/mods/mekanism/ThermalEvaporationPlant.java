@@ -32,7 +32,7 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        ThermalEvaporationRecipe recipe = new ThermalEvaporationRecipe(input.copy(), output.copy());
+        ThermalEvaporationRecipe recipe = new ThermalEvaporationRecipe(input, output);
         recipeRegistry.put(recipe);
         addScripted(recipe);
         return recipe;

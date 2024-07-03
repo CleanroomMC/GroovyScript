@@ -55,7 +55,7 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
         return true;
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('naturesaura:infused_stone')"))
+    @MethodDescription( example = @Example("item('naturesaura:infused_stone')"))
     public boolean removeByInput(IIngredient input) {
         return NaturesAuraAPI.TREE_RITUAL_RECIPES.entrySet().removeIf(r -> {
             for (var ingredient : r.getValue().ingredients) {
@@ -83,7 +83,7 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('naturesaura:eye')"))
+    @MethodDescription( example = @Example("item('naturesaura:eye')"))
     public boolean removeByOutput(IIngredient output) {
         return NaturesAuraAPI.TREE_RITUAL_RECIPES.entrySet().removeIf(r -> {
             if (output.test(r.getValue().result)) {
@@ -94,13 +94,13 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         NaturesAuraAPI.TREE_RITUAL_RECIPES.values().forEach(this::addBackup);
         NaturesAuraAPI.TREE_RITUAL_RECIPES.entrySet().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, TreeRitualRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(NaturesAuraAPI.TREE_RITUAL_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
     }
@@ -131,6 +131,7 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
             return "Error adding Nature's Aura Ritual Recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_ritual_";
         }
@@ -148,7 +149,7 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable TreeRitualRecipe register() {
             if (!validate()) return null;
-            TreeRitualRecipe recipe = new TreeRitualRecipe(name, sapling.toMcIngredient(), output.get(0), time, input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new));
+            TreeRitualRecipe recipe = new TreeRitualRecipe(super.name, sapling.toMcIngredient(), output.get(0), time, input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new));
             ModSupport.NATURES_AURA.get().ritual.add(recipe);
             return recipe;
         }

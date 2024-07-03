@@ -6,18 +6,16 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.recipe.PyreCraftingRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-import static epicsquid.roots.init.ModRecipes.*;
-
 @RegistryDescription
-public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftingRecipe>> {
+public class Pyre extends VirtualizedRegistry<PyreCraftingRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_from_fire').input(item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone')).output(item('minecraft:clay')).xp(5).time(1)"),
@@ -29,8 +27,8 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> removePyreCraftingRecipe(pair.getKey()));
-        restoreFromBackup().forEach(pair -> addPyreCraftingRecipe(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(recipe -> ModRecipes.removePyreCraftingRecipe(recipe.getRegistryName()));
+        restoreFromBackup().forEach(recipe -> ModRecipes.addPyreCraftingRecipe(recipe.getRegistryName(), recipe));
     }
 
     public void add(PyreCraftingRecipe recipe) {
@@ -38,19 +36,19 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
     }
 
     public void add(ResourceLocation name, PyreCraftingRecipe recipe) {
-        addPyreCraftingRecipe(name, recipe);
-        addScripted(Pair.of(name, recipe));
+        ModRecipes.addPyreCraftingRecipe(name, recipe);
+        addScripted(recipe);
     }
 
     public ResourceLocation findRecipe(PyreCraftingRecipe recipe) {
-        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> entry : getPyreCraftingRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> entry : ModRecipes.getPyreCraftingRecipes().entrySet()) {
             if (entry.getValue().matches(recipe.getRecipe())) return entry.getKey();
         }
         return null;
     }
 
     public ResourceLocation findRecipeByOutput(ItemStack output) {
-        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> entry : getPyreCraftingRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> entry : ModRecipes.getPyreCraftingRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(entry.getValue().getResult(), output)) return entry.getKey();
         }
         return null;
@@ -58,19 +56,19 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
 
     @MethodDescription(example = @Example("resource('roots:infernal_bulb')"))
     public boolean removeByName(ResourceLocation name) {
-        PyreCraftingRecipe recipe = getCraftingRecipe(name);
+        PyreCraftingRecipe recipe = ModRecipes.getCraftingRecipe(name);
         if (recipe == null) return false;
-        removePyreCraftingRecipe(name);
-        addBackup(Pair.of(name, recipe));
+        ModRecipes.removePyreCraftingRecipe(name);
+        addBackup(recipe);
         return true;
     }
 
     @MethodDescription(example = @Example("item('minecraft:gravel')"))
     public boolean removeByOutput(ItemStack output) {
-        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> x : getPyreCraftingRecipes().entrySet()) {
+        for (Map.Entry<ResourceLocation, PyreCraftingRecipe> x : ModRecipes.getPyreCraftingRecipes().entrySet()) {
             if (ItemStack.areItemsEqual(x.getValue().getResult(), output)) {
-                getPyreCraftingRecipes().remove(x.getKey());
-                addBackup(Pair.of(x.getKey(), x.getValue()));
+                ModRecipes.getPyreCraftingRecipes().remove(x.getKey());
+                addBackup(x.getValue());
                 return true;
             }
         }
@@ -79,13 +77,13 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        getPyreCraftingRecipes().forEach((key, value) -> addBackup(Pair.of(key, value)));
-        getPyreCraftingRecipes().clear();
+        ModRecipes.getPyreCraftingRecipes().values().forEach(this::addBackup);
+        ModRecipes.getPyreCraftingRecipes().clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, PyreCraftingRecipe>> streamRecipes() {
-        return new SimpleObjectStream<>(getPyreCraftingRecipes().entrySet())
+        return new SimpleObjectStream<>(ModRecipes.getPyreCraftingRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
     }
 
@@ -95,7 +93,7 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
     public static class RecipeBuilder extends AbstractRecipeBuilder<PyreCraftingRecipe> {
 
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private int xp = 0;
+        private int xp;
         @Property(defaultValue = "200")
         private int burnTime = 200;
 
@@ -127,6 +125,7 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
             return "Error adding Roots Pyre recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_pyre_recipe_";
         }
@@ -146,8 +145,8 @@ public class Pyre extends VirtualizedRegistry<Pair<ResourceLocation, PyreCraftin
             PyreCraftingRecipe recipe = new PyreCraftingRecipe(output.get(0), xp);
             input.forEach(i -> recipe.addIngredient(i.toMcIngredient()));
             recipe.setBurnTime(this.burnTime);
-            recipe.setName(name.toString());
-            ModSupport.ROOTS.get().pyre.add(name, recipe);
+            recipe.setName(super.name.toString());
+            ModSupport.ROOTS.get().pyre.add(super.name, recipe);
             return recipe;
         }
     }

@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.woot;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class Woot extends ModPropertyContainer {
+public class Woot extends GroovyPropertyContainer {
 
     public final StygianIronAnvil stygianIronAnvil = new StygianIronAnvil();
     public final Drops drops = new Drops();
@@ -10,11 +10,4 @@ public class Woot extends ModPropertyContainer {
     public final Policy policy = new Policy();
     public final MobConfig mobConfig = new MobConfig();
 
-    public Woot() {
-        addRegistry(stygianIronAnvil);
-        addRegistry(drops);
-        addRegistry(spawning);
-        addRegistry(policy);
-        addRegistry(mobConfig);
-    }
 }

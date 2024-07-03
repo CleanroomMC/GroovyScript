@@ -20,6 +20,7 @@ public class Spatial extends VirtualizedRegistry<Class<? extends TileEntity>> {
         restoreFromBackup().forEach(AEApi.instance().registries().movable()::whiteListTileEntity);
     }
 
+    @Override
     public void afterScriptLoad() {
         ((MovableTileRegistryAccessor) AEApi.instance().registries().movable()).getValid().clear();
     }

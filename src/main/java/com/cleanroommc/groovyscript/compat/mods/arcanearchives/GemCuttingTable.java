@@ -117,7 +117,7 @@ public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable IGCTRecipe register() {
             if (!validate()) return null;
-            IGCTRecipe recipe = new GCTRecipe(name, output.get(0), input.stream().map(x -> new IngredientStack(x.toMcIngredient(), x.getAmount())).collect(Collectors.toList()));
+            IGCTRecipe recipe = new GCTRecipe(super.name, output.get(0), input.stream().map(x -> new IngredientStack(x.toMcIngredient(), x.getAmount())).collect(Collectors.toList()));
             ModSupport.ARCANE_ARCHIVES.get().gemCuttingTable.add(recipe);
             return recipe;
         }

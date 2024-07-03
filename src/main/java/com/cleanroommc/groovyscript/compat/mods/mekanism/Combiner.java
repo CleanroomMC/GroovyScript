@@ -33,11 +33,9 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        extra = extra.copy();
-        output = output.copy();
         CombinerRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            CombinerRecipe recipe = new CombinerRecipe(itemStack.copy(), extra, output);
+            CombinerRecipe recipe = new CombinerRecipe(itemStack, extra, output);
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -73,6 +71,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
         @Property(defaultValue = "new ItemStack(Blocks.COBBLESTONE)")
         private ItemStack extra;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder extra(ItemStack extra) {
             this.extra = extra;
             return this;
@@ -95,7 +94,7 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
             if (!validate()) return null;
             CombinerRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                CombinerRecipe r = new CombinerRecipe(itemStack.copy(), extra, output.get(0));
+                CombinerRecipe r = new CombinerRecipe(itemStack, extra, output.get(0));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().combiner.add(r);
             }

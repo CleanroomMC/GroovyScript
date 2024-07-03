@@ -24,7 +24,7 @@ public class CharcoalPile extends ForestryRegistry<ICharcoalPileWall> {
     @Override
     @GroovyBlacklist
     public boolean isEnabled() {
-        return ForestryAPI.moduleManager.isModuleEnabled("forestry", ForestryModuleUids.ARBORICULTURE);
+        return ForestryAPI.moduleManager.isModuleEnabled("forestry", ForestryModuleUids.CHARCOAL);
     }
 
     public ICharcoalPileWall add(IBlockState state, int amount) {

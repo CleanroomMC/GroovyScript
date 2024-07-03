@@ -25,9 +25,9 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
     }
 
     public boolean remove(ICompressorRecipe recipe) {
-        recipe = AvaritiaRecipeManager.COMPRESSOR_RECIPES.remove(recipe.getRegistryName());
-        if (recipe != null) {
-            addBackup(recipe);
+        ICompressorRecipe remove = AvaritiaRecipeManager.COMPRESSOR_RECIPES.remove(recipe.getRegistryName());
+        if (remove != null) {
+            addBackup(remove);
             return true;
         }
         return false;

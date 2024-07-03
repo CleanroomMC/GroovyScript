@@ -2,6 +2,9 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.SmelteryFuelRecipe;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -12,6 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
 
     @Override
@@ -37,12 +41,14 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
         return TinkerRegistryAccessor.getSmelteryFuels().entrySet().stream().map(SmelteryFuelRecipe::fromMapEntry).collect(Collectors.toList());
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("fluid('water'), 250"))
     public SmelteryFuelRecipe addFuel(FluidStack fluid, int duration) {
         SmelteryFuelRecipe recipe = new SmelteryFuelRecipe(fluid, duration);
         add(recipe);
         return recipe;
     }
 
+    @MethodDescription
     public boolean removeFuel(FluidStack fluid) {
         if (TinkerRegistryAccessor.getSmelteryFuels().entrySet().removeIf(entry -> {
             boolean found = entry.getKey().isFluidEqual(fluid);
@@ -70,11 +76,13 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
         return true;
     }
 
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         TinkerRegistryAccessor.getSmelteryFuels().forEach((fluid, duration) -> addBackup(new SmelteryFuelRecipe(fluid, duration)));
-        TinkerRegistryAccessor.getSmelteryFuels().forEach(TinkerRegistryAccessor.getSmelteryFuels()::remove);
+        TinkerRegistryAccessor.getSmelteryFuels().clear();
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<SmelteryFuelRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
     }

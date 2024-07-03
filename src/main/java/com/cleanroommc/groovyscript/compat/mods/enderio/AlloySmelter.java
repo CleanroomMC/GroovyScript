@@ -52,6 +52,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
         return new RecipeBuilder();
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         AlloyRecipeManagerAccessor accessor = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
@@ -71,6 +72,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
         }
     }
 
+    @Override
     @GroovyBlacklist
     @ApiStatus.Internal
     public void afterScriptLoad() {

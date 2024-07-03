@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 @Mixin(value = ForgeRegistry.class, remap = false)
 public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> implements IForgeRegistry<V>, IReloadableForgeRegistry<V> {
 
+    @Override
     @Shadow
     public abstract void register(V value);
 

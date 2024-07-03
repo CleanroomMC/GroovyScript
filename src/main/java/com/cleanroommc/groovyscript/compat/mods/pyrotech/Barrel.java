@@ -77,8 +77,8 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
             validateItems(msg, 4, 4, 0, 0);
             validateFluids(msg, 1, 1, 1, 1);
             msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
-            msg.add(name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.BARREL_RECIPE.getValue(name) != null, "tried to register {}, but it already exists.", name);
+            msg.add(super.name == null, "name cannot be null.");
+            msg.add(ModuleTechBasic.Registries.BARREL_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @RecipeBuilderRegistrationMethod
@@ -89,7 +89,7 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
             // Because you need Ingredient[] to register a recipe
             Ingredient[] inputIngredient = input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new);
 
-            BarrelRecipe recipe = new BarrelRecipe(fluidOutput.get(0), inputIngredient, fluidInput.get(0), duration).setRegistryName(name);
+            BarrelRecipe recipe = new BarrelRecipe(fluidOutput.get(0), inputIngredient, fluidInput.get(0), duration).setRegistryName(super.name);
             PyroTech.barrel.add(recipe);
 
             return recipe;

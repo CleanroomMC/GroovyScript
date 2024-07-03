@@ -16,12 +16,8 @@ public class GroovyScriptCompiler extends CompilationCustomizer {
     private static final String SIDE_ONLY_CLASS = "net.minecraftforge.fml.relauncher.SideOnly";
     private static final String SIDE_CLASS = "net.minecraftforge.fml.relauncher.Side";
 
-    public static GroovyScriptCompiler transformer() {
-        return new GroovyScriptCompiler(CompilePhase.CANONICALIZATION);
-    }
-
-    private GroovyScriptCompiler(CompilePhase phase) {
-        super(phase);
+    public GroovyScriptCompiler() {
+        super(CompilePhase.CANONICALIZATION);
     }
 
     @Override
@@ -47,8 +43,7 @@ public class GroovyScriptCompiler extends CompilationCustomizer {
         for (AnnotationNode annotatedNode : node.getAnnotations()) {
             if (annotatedNode.getClassNode().getName().equals(SIDE_ONLY_CLASS)) {
                 Expression expr = annotatedNode.getMember("value");
-                if (expr instanceof PropertyExpression) {
-                    PropertyExpression prop = (PropertyExpression) expr;
+                if (expr instanceof PropertyExpression prop) {
                     if (prop.getObjectExpression() instanceof ClassExpression &&
                         prop.getObjectExpression().getType().getName().equals(SIDE_CLASS)) {
                         String elementSide = prop.getPropertyAsString();

@@ -15,6 +15,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.PERK_TREE;
 
@@ -24,9 +25,9 @@ import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.
 )
 public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
 
-    private final HashMap<AbstractPerk, ArrayList<ResourceLocation>> scriptedConnections = new HashMap<>();
-    private final HashMap<AbstractPerk, ArrayList<ResourceLocation>> removedConnections = new HashMap<>();
-    private final HashMap<AbstractPerk, Point> movedPerks = new HashMap<>();
+    private final Map<AbstractPerk, ArrayList<ResourceLocation>> scriptedConnections = new HashMap<>();
+    private final Map<AbstractPerk, ArrayList<ResourceLocation>> removedConnections = new HashMap<>();
+    private final Map<AbstractPerk, Point> movedPerks = new HashMap<>();
 
     public GroovyPerkTree() {
         super(Alias.generateOf("PerkTree"));
@@ -64,7 +65,7 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
 
     void remove(AbstractPerk perk, boolean doBackup) {
         if (!PERK_TREE.getConnectedPerks(perk).isEmpty()) {
-            ArrayList<AbstractPerk> connectedPerks = new ArrayList<>(PERK_TREE.getConnectedPerks(perk));
+            Iterable<AbstractPerk> connectedPerks = new ArrayList<>(PERK_TREE.getConnectedPerks(perk));
             connectedPerks.forEach(connectedPerk -> this.removeConnection(perk, connectedPerk, doBackup));
         }
         if (doBackup) this.addBackup(perk);

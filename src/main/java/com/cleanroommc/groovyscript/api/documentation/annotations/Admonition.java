@@ -74,7 +74,7 @@ public @interface Admonition {
         /**
          * A box which can be toggled between only rendering the title and the full text. Defaults to the expanded form (both title and text visible).
          */
-        EXPANDED;
+        EXPANDED
     }
 
 

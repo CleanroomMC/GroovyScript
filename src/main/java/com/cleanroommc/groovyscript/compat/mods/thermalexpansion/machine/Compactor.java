@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, CompactorRecipe>> {
 
     @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond') * 2).mode(mode('coin'))"),
-            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).mode(mode('all'))"),
-            @Example(".input(item('minecraft:diamond') * 2).output(item('minecraft:gold_ingot')).mode(mode('plate')).energy(1000)")
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond') * 2).mode(compactorMode('coin'))"),
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).mode(compactorMode('all'))"),
+            @Example(".input(item('minecraft:diamond') * 2).output(item('minecraft:gold_ingot')).mode(compactorMode('plate')).energy(1000)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -57,7 +57,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         addScripted(Pair.of(mode, recipe));
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "1000, mode('plate'), item('minecraft:obsidian') * 2, item('minecraft:gold_ingot')", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "1000, compactorMode('plate'), item('minecraft:obsidian') * 2, item('minecraft:gold_ingot')", commented = true))
     public CompactorRecipe add(int energy, CompactorManager.Mode mode, IIngredient input, ItemStack output) {
         return recipeBuilder()
                 .energy(energy)
@@ -85,7 +85,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         return hasRemoved;
     }
 
-    @MethodDescription(example = @Example("mode('coin'), item('thermalfoundation:material:130')"))
+    @MethodDescription(example = @Example("compactorMode('coin'), item('thermalfoundation:material:130')"))
     public boolean removeByInput(CompactorManager.Mode mode, IIngredient input) {
         return map(mode).values().removeIf(r -> {
             if (input.test(r.getInput())) {
@@ -105,7 +105,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         return hasRemoved;
     }
 
-    @MethodDescription(example = @Example("mode('coin'), item('thermalfoundation:coin:102')"))
+    @MethodDescription(example = @Example("compactorMode('coin'), item('thermalfoundation:coin:102')"))
     public boolean removeByOutput(CompactorManager.Mode mode, IIngredient output) {
         return map(mode).values().removeIf(r -> {
             if (output.test(r.getOutput())) {
@@ -133,7 +133,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
                 .setRemover(this::remove);
     }
 
-    @MethodDescription(example = @Example(value = "mode('plate')", commented = true))
+    @MethodDescription(example = @Example(value = "compactorMode('plate')", commented = true))
     public void removeByMode(CompactorManager.Mode mode) {
         map(mode).values().forEach(x -> addBackup(Pair.of(mode, x)));
         map(mode).clear();

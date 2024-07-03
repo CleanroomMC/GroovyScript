@@ -49,7 +49,7 @@ public class EvaporatingBasin extends VirtualizedRegistry<IEvaporatingBasinRecip
         return Recipes.evaporatingRecipes.remove(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example(value = "item('rustic:dust_tiny_iron')", commented = true))
+    @MethodDescription(example = @Example(value = "item('rustic:dust_tiny_iron')", commented = true))
     public boolean removeByOutput(IIngredient output) {
         return Recipes.evaporatingRecipes.removeIf(entry -> {
             if (output.test(entry.getOutput())) {
@@ -60,7 +60,7 @@ public class EvaporatingBasin extends VirtualizedRegistry<IEvaporatingBasinRecip
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('ironberryjuice')"))
+    @MethodDescription(example = @Example("fluid('ironberryjuice')"))
     public boolean removeByInput(IIngredient input) {
         return Recipes.evaporatingRecipes.removeIf(entry -> {
             if (input.test(entry.getInput())) {
@@ -71,13 +71,13 @@ public class EvaporatingBasin extends VirtualizedRegistry<IEvaporatingBasinRecip
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         Recipes.evaporatingRecipes.forEach(this::addBackup);
         Recipes.evaporatingRecipes.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IEvaporatingBasinRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Recipes.evaporatingRecipes).setRemover(this::remove);
     }

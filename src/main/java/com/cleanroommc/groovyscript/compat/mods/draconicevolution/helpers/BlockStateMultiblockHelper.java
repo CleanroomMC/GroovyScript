@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 public class BlockStateMultiblockHelper extends MultiBlockHelper {
 
-    public IBlockState expectedBlockState = null;
+    public IBlockState expectedBlockState;
 
     public void setBlock(BlockStates states, World world, BlockPos pos) {
         if (states.isWildcard()) {

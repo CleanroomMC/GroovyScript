@@ -47,7 +47,7 @@ public class Sawmill extends VirtualizedRegistry<IMachineRecipeList.RecipeEntry>
                     .add("xp must not be negative, defaulting to zero")
                     .warn()
                     .post();
-            xp = 0F;
+            xp = 0.0F;
         }
         IMachineRecipeList.RecipeEntry entry = new IMachineRecipeList.RecipeEntry(new RecipeInput(input), new MachineExpOutput(null, xp, output), String.valueOf(output.hashCode()));
         ClassicRecipes.sawMill.addRecipe(entry.getInput(), entry.getOutput(), entry.getRecipeID());

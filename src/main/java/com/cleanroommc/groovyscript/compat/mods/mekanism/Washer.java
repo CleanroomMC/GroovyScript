@@ -31,7 +31,7 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
         msg.add(Mekanism.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        WasherRecipe recipe = new WasherRecipe(input.copy(), output.copy());
+        WasherRecipe recipe = new WasherRecipe(input, output);
         recipeRegistry.put(recipe);
         addScripted(recipe);
         return recipe;

@@ -73,14 +73,14 @@ public class RunConfig {
     private final List<String> packmodeList = new ArrayList<>();
     private final Set<String> packmodeSet = new ObjectOpenHashSet<>();
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
-    private boolean integratePackmodeMod = false;
+    private boolean integratePackmodeMod;
     // TODO asm
     private final String asmClass = null;
     private boolean debug;
 
 
     private final boolean invalidPackId;
-    private boolean warnedAboutInvalidPackId = false;
+    private boolean warnedAboutInvalidPackId;
     private int packmodeConfigState;
 
     public static final String[] GROOVY_SUFFIXES = {".groovy", ".gvy", ".gy", ".gsh"};

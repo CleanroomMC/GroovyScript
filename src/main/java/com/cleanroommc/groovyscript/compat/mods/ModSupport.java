@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
-import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.compat.mods.actuallyadditions.ActuallyAdditions;
 import com.cleanroommc.groovyscript.compat.mods.advancedmortars.AdvancedMortars;
 import com.cleanroommc.groovyscript.compat.mods.aetherlegacy.Aether;
@@ -27,11 +26,14 @@ import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
 import com.cleanroommc.groovyscript.compat.mods.immersivepetroleum.ImmersivePetroleum;
+import com.cleanroommc.groovyscript.compat.mods.industrialforegoing.IndustrialForegoing;
 import com.cleanroommc.groovyscript.compat.mods.inspirations.Inspirations;
 import com.cleanroommc.groovyscript.compat.mods.integrateddynamics.IntegratedDynamics;
 import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
+import com.cleanroommc.groovyscript.compat.mods.lazyae2.LazyAE2;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import com.cleanroommc.groovyscript.compat.mods.naturesaura.NaturesAura;
+import com.cleanroommc.groovyscript.compat.mods.projecte.ProjectE;
 import com.cleanroommc.groovyscript.compat.mods.pyrotech.PyroTech;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
 import com.cleanroommc.groovyscript.compat.mods.rustic.Rustic;
@@ -40,6 +42,7 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.mods.woot.Woot;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fml.common.Loader;
@@ -47,16 +50,17 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class ModSupport implements IDynamicGroovyProperty {
+public class ModSupport {
 
-    private static final Map<String, GroovyContainer<? extends ModPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
-    private static final List<GroovyContainer<? extends ModPropertyContainer>> containerList = new ArrayList<>();
+    private static final Map<String, GroovyContainer<? extends GroovyPropertyContainer>> containers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, GroovyContainer<? extends GroovyPropertyContainer>> containersView = Collections.unmodifiableMap(containers);
+    private static final List<GroovyContainer<? extends GroovyPropertyContainer>> containerList = new ArrayList<>();
     private static final Set<Class<?>> externalPluginClasses = new ObjectOpenHashSet<>();
-    private static boolean frozen = false;
+    private static boolean frozen;
 
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
 
@@ -83,11 +87,14 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final GroovyContainer<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new InternalModContainer<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
     public static final GroovyContainer<ImmersivePetroleum> IMMERSIVE_PETROLEUM = new InternalModContainer<>("immersivepetroleum", "Immersive Petroleum", ImmersivePetroleum::new);
     public static final GroovyContainer<IC2> INDUSTRIALCRAFT = new InternalModContainer<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
+    public static final GroovyContainer<IndustrialForegoing> INDUSTRIAL_FOREGOING = new InternalModContainer<>("industrialforegoing", "Industrial Foregoing", IndustrialForegoing::new);
     public static final GroovyContainer<Inspirations> INSPIRATIONS = new InternalModContainer<>("inspirations", "Inspirations", Inspirations::new);
     public static final GroovyContainer<IntegratedDynamics> INTEGRATED_DYNAMICS = new InternalModContainer<>("integrateddynamics", "Integrated Dynamics", IntegratedDynamics::new, "id");
     public static final GroovyContainer<JustEnoughItems> JEI = new InternalModContainer<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
     public static final GroovyContainer<Mekanism> MEKANISM = new InternalModContainer<>("mekanism", "Mekanism", Mekanism::new);
+    public static final GroovyContainer<LazyAE2> LAZYAE2 = new InternalModContainer<>("threng", "LazyAE2", LazyAE2::new, "lazyae2");
     public static final GroovyContainer<NaturesAura> NATURES_AURA = new InternalModContainer<>("naturesaura", "Nature's Aura", NaturesAura::new);
+    public static final GroovyContainer<ProjectE> PROJECT_E = new InternalModContainer<>("projecte", "ProjectE", ProjectE::new);
     public static final GroovyContainer<PyroTech> PYROTECH = new InternalModContainer<>("pyrotech", "Pyrotech", PyroTech::new);
     public static final GroovyContainer<Roots> ROOTS = new InternalModContainer<>("roots", "Roots 3", Roots::new);
     public static final GroovyContainer<Rustic> RUSTIC = new InternalModContainer<>("rustic", "Rustic", Rustic::new);
@@ -96,7 +103,8 @@ public class ModSupport implements IDynamicGroovyProperty {
     public static final GroovyContainer<TinkersComplement> TINKERS_COMPLEMENT = new InternalModContainer<>("tcomplement", "Tinkers Complement", TinkersComplement::new, "tcomp", "tinkerscomplement");
     public static final GroovyContainer<TinkersConstruct> TINKERS_CONSTRUCT = new InternalModContainer<>("tconstruct", "Tinkers' Construct", TinkersConstruct::new, "ticon", "tinkersconstruct");
     public static final GroovyContainer<Woot> WOOT = new InternalModContainer<>("woot", "Woot", Woot::new);
-    public static Collection<GroovyContainer<? extends ModPropertyContainer>> getAllContainers() {
+
+    public static Collection<GroovyContainer<? extends GroovyPropertyContainer>> getAllContainers() {
         return Collections.unmodifiableList(containerList);
     }
 
@@ -141,11 +149,11 @@ public class ModSupport implements IDynamicGroovyProperty {
             containerList.removeIf(c -> c == current);
         }
 
-        ModPropertyContainer modPropertyContainer = container.createModPropertyContainer();
-        if (modPropertyContainer == null) {
-            modPropertyContainer = new ModPropertyContainer();
+        GroovyPropertyContainer groovyPropertyContainer = container.createGroovyPropertyContainer();
+        if (groovyPropertyContainer == null) {
+            groovyPropertyContainer = new GroovyPropertyContainer();
         }
-        registerContainer(new ExternalModContainer(container, modPropertyContainer));
+        registerContainer(new ExternalModContainer(container, groovyPropertyContainer));
         externalPluginClasses.add(container.getClass());
     }
 
@@ -162,20 +170,17 @@ public class ModSupport implements IDynamicGroovyProperty {
         }
     }
 
-    @Override
+    @Deprecated
     @Nullable
     public Object getProperty(String name) {
         GroovyContainer<?> container = containers.get(name);
         return container != null ? container.get() : null;
     }
 
-    @Override
-    public Map<String, Object> getProperties() {
-        Map<String, Object> properties = new HashMap<>();
-        for (var entry : containers.entrySet()) {
-            properties.put(entry.getKey(), entry.getValue().get());
-        }
-        return properties;
+
+    @Deprecated
+    public @UnmodifiableView Map<String, ? extends GroovyContainer<?>> getProperties() {
+        return containersView;
     }
 
     @GroovyBlacklist
@@ -185,7 +190,13 @@ public class ModSupport implements IDynamicGroovyProperty {
         for (GroovyContainer<?> container : containerList) {
             if (container.isLoaded()) {
                 container.onCompatLoaded(container);
-                container.get().initialize();
+                container.get().initialize(container);
+                ExpansionHelper.mixinConstProperty(ModSupport.class, container.getModId(), container.get(), false);
+                for (String s : container.getAliases()) {
+                    if (!container.getModId().equals(s)) {
+                        ExpansionHelper.mixinConstProperty(ModSupport.class, s, container.get(), true);
+                    }
+                }
             }
         }
     }
