@@ -87,10 +87,7 @@ public class AssemblyController extends VirtualizedRegistry<AssemblyRecipe> {
 
     @MethodDescription(example = @Example("item('pneumaticcraft:pressure_chamber_valve')"))
     public boolean removeByOutput(IIngredient output) {
-        // done this way so both remove operations are called
-        boolean hasRemoved = removeByOutput(AssemblyType.DRILL, output);
-        hasRemoved = removeByOutput(AssemblyType.LASER, output) || hasRemoved;
-        return hasRemoved;
+        return removeByOutput(AssemblyType.DRILL, output) | removeByOutput(AssemblyType.LASER, output);
     }
 
     @MethodDescription
@@ -106,10 +103,7 @@ public class AssemblyController extends VirtualizedRegistry<AssemblyRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:redstone')"))
     public boolean removeByInput(IIngredient input) {
-        // done this way so both remove operations are called
-        boolean hasRemoved = removeByOutput(AssemblyType.DRILL, input);
-        hasRemoved = removeByOutput(AssemblyType.LASER, input) || hasRemoved;
-        return hasRemoved;
+        return removeByOutput(AssemblyType.DRILL, input) | removeByOutput(AssemblyType.LASER, input);
     }
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
