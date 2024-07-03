@@ -170,15 +170,26 @@ public class Amadron extends VirtualizedRegistry<AmadronOffer> {
             msg.add(output.isEmpty() && fluidOutput.isEmpty(), "either output or fluidOutput must contain an entry, but both were empty");
         }
 
+        private static void register(boolean periodic, AmadronOffer recipe) {
+            if (periodic) ModSupport.PNEUMATIC_CRAFT.get().amadron.addPeriodic(recipe);
+            else ModSupport.PNEUMATIC_CRAFT.get().amadron.addStatic(recipe);
+        }
+
         @Override
         @RecipeBuilderRegistrationMethod
         public @Nullable AmadronOffer register() {
             if (!validate()) return null;
-            Object i = input.isEmpty() ? fluidInput.getOrEmpty(0) : input.get(0);
-            Object o = output.isEmpty() ? fluidOutput.getOrEmpty(0) : output.get(0);
-            AmadronOffer recipe = new AmadronOffer(i, o);
-            if (periodic) ModSupport.PNEUMATIC_CRAFT.get().amadron.addPeriodic(recipe);
-            else ModSupport.PNEUMATIC_CRAFT.get().amadron.addStatic(recipe);
+            AmadronOffer recipe = null;
+            Object o = fluidOutput.isEmpty() ? output.getOrEmpty(0) : fluidOutput.get(0);
+            if (input.isEmpty()) {
+                recipe = new AmadronOffer(fluidInput.getOrEmpty(0), o);
+                register(periodic, recipe);
+            } else {
+                for (var stack : input.get(0).getMatchingStacks()) {
+                    recipe = new AmadronOffer(stack, o);
+                    register(periodic, recipe);
+                }
+            }
             return recipe;
         }
     }
