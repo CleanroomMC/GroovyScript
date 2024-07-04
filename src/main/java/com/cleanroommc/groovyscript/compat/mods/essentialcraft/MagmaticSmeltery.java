@@ -108,7 +108,7 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
 
         public void validate(GroovyLog.Msg msg) {
             msg.add(OreSmeltingRecipe.RECIPE_MAP.containsKey(input), "This OreDict can already be processed in Magmatic Smeltery: {}", input);
-            msg.add(color < 0 || color >= (1 << 24), "color must be between 0 and 0xffffff, got {}", color);
+            msg.add(color < 0 || color >= (1 << 24), "color must be between 0 and 0xffffff, got {}", Integer.toHexString(color));
         }
 
         @Override

@@ -9,6 +9,11 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(value = OreSmeltingRecipe.class, remap = false)
 public abstract class OreSmeltingRecipeMixin {
 
+    /**
+     * @reason This mixin fixes a client crash when reloading recipes for Magmatic Smeltery,
+     * which happens when a deleted Magmatic Ore item is being rendered and the mod cannot determine the Alloy's overlay color.
+     */
+
     @WrapOperation(method = "getColorFromItemStack", at = @At(value = "FIELD", target = "Lessentialcraft/api/OreSmeltingRecipe;color:I"))
     private static int getColorFromItemStack(OreSmeltingRecipe recipe, Operation<Integer> original) {
         if (recipe == null) return 16777215;

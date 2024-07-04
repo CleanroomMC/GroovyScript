@@ -87,10 +87,6 @@ public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceReci
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
             msg.add(espe < 1, "espe cost must be 1 or greater, got {}", espe);
-            if (!input.isEmpty()) {
-                ItemStack[] options = input.get(0).getMatchingStacks();
-                msg.add(options.length == 0, "must have at least 1 matching stack for the input");
-            }
         }
 
         @Override

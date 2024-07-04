@@ -17,6 +17,11 @@ public abstract class TileFurnaceMagicMixin extends TileMRUGeneric {
     @Shadow
     public int smeltingLevel;
 
+    /**
+     * @reason This mixin fixes a server crash when an invalid Magmatic Ore is put into the Magmatic Furnace's input slot.
+     * Normally this causes an ArrayOutOfBoundsException when the recipe with index -1 (invalid input) is being read from the registry.
+     * The indices of its slots are as follows: Bound Gem (0), Ore/Magmatic Alloy input (1), Magmatic Alloy/Resource output (2).
+     */
     @Inject(method = "update", at = @At("HEAD"), cancellable = true)
     public void onUpdate(CallbackInfo ci) {
         ItemStack alloy = this.getStackInSlot(1);

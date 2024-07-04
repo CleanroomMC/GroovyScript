@@ -17,6 +17,12 @@ public abstract class TileMagmaticSmelterMixin extends TileMRUGeneric {
     @Shadow
     public int smeltingLevel;
 
+    /**
+     * @reason This mixin fixes a server crash when an invalid Magmatic Ore is put into the Magmatic Smeltery's input slot.
+     * Normally this causes an ArrayOutOfBoundsException when the recipe with index -1 (invalid input) is being read from the registry.
+     * The indices of its slots are as follows: Bound Gem (0), Lava Bucket (1), Empty Bucket output (2),
+     * Ore input (3), Magmatic Alloy output (4), Magmatic Alloy input (5), Resource output (6), Magical Slag (7).
+     */
     @Inject(method = "update", at = @At("HEAD"), cancellable = true)
     public void onUpdate(CallbackInfo ci) {
         ItemStack ore = this.getStackInSlot(3);
