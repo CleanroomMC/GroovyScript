@@ -11,6 +11,7 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectItemStac
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.Warp;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.warp.WarpItemStackExpansion;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApiHelper;
@@ -31,6 +32,14 @@ public class Thaumcraft extends GroovyPropertyContainer {
     public final DustTrigger dustTrigger = new DustTrigger();
 
     public final AspectHelper aspectHelper = new AspectHelper();
+
+    public static String asGroovyCode(thaumcraft.api.aspects.Aspect aspect, boolean colored) {
+        return GroovyScriptCodeConverter.formatGenericHandler("aspect", aspect.getTag(), colored);
+    }
+
+    public static String asGroovyCode(AspectStack aspectStack, boolean colored) {
+        return asGroovyCode(aspectStack.getAspect(), colored) + GroovyScriptCodeConverter.formatMultiple(aspectStack.getAmount(), colored);
+    }
 
     @Override
     public void initialize(GroovyContainer<?> container) {

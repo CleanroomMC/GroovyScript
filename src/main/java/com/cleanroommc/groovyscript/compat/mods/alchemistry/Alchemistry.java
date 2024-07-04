@@ -7,6 +7,7 @@ import al132.alchemistry.chemistry.ElementRegistry;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import net.minecraft.item.ItemStack;
 
 public class Alchemistry extends GroovyPropertyContainer {
@@ -19,6 +20,14 @@ public class Alchemistry extends GroovyPropertyContainer {
     public final Liquifier liquifier = new Liquifier();
     // TODO:
     //  Compound Creation and Element Creation
+
+    public static String asGroovyCode(ChemicalCompound compound, boolean colored) {
+        return GroovyScriptCodeConverter.formatGenericHandler("element", compound.getName(), colored);
+    }
+
+    public static String asGroovyCode(ChemicalElement element, boolean colored) {
+        return GroovyScriptCodeConverter.formatGenericHandler("element", element.getName(), colored);
+    }
 
     @Override
     public void initialize(GroovyContainer<?> container) {
