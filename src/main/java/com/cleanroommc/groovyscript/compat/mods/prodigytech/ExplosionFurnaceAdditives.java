@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.github.bsideup.jabel.Desugar;
 import lykrast.prodigytech.common.recipe.ExplosionFurnaceManager;
 import net.minecraft.item.ItemStack;
 
@@ -78,26 +79,15 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         ExplosionFurnaceManager.removeAllDampeners();
     }
 
-    public abstract static class EFAdditiveRecipe {
-        final IIngredient input;
-        final int value;
-
-        EFAdditiveRecipe(IIngredient input, int value) {
-            this.input = input;
-            this.value = value;
-        }
-
-        abstract void register();
-        abstract void unregister();
+    public interface EFAdditiveRecipe {
+        void register();
+        void unregister();
     }
 
-    public static class EFAdditiveExplosive extends EFAdditiveRecipe {
-        EFAdditiveExplosive(IIngredient input, int value) {
-            super(input, value);
-        }
-
+    @Desugar
+    public record EFAdditiveExplosive(IIngredient input, int value) implements EFAdditiveRecipe {
         @Override
-        void register() {
+        public void register() {
             if (this.input instanceof OreDictIngredient) {
                 ExplosionFurnaceManager.addExplosive(((OreDictIngredient) this.input).getOreDict(), this.value);
             } else {
@@ -108,7 +98,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         }
 
         @Override
-        void unregister() {
+        public void unregister() {
             if (this.input instanceof OreDictIngredient) {
                 ExplosionFurnaceManager.removeExplosive(((OreDictIngredient) this.input).getOreDict());
             } else {
@@ -119,13 +109,10 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         }
     }
 
-    public static class EFAdditiveDampener extends EFAdditiveRecipe {
-        EFAdditiveDampener(IIngredient input, int value) {
-            super(input, value);
-        }
-
+    @Desugar
+    public record EFAdditiveDampener(IIngredient input, int value) implements EFAdditiveRecipe {
         @Override
-        void register() {
+        public void register() {
             if (this.input instanceof OreDictIngredient) {
                 ExplosionFurnaceManager.addDampener(((OreDictIngredient) this.input).getOreDict(), this.value);
             } else {
@@ -136,7 +123,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         }
 
         @Override
-        void unregister() {
+        public void unregister() {
             if (this.input instanceof OreDictIngredient) {
                 ExplosionFurnaceManager.removeDampener(((OreDictIngredient) this.input).getOreDict());
             } else {
