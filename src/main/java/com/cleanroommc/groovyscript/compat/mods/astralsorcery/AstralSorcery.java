@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.GroovyPer
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.PerkTreeConfig;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar.StarlightAltar;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationRegistryAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -33,6 +34,10 @@ public class AstralSorcery extends GroovyPropertyContainer {
     public final OreChance trashPerkOreChance = OreChance.trashPerkRegistry();
     public final OreChance treasureShrineOreChance = OreChance.treasureShrineRegistry();
     public final PerkTreeConfig perkTreeConfig = new PerkTreeConfig();
+
+    public static String asGroovyCode(IConstellation constellation, boolean colored) {
+        return GroovyScriptCodeConverter.formatGenericHandler("constellation", constellation.getSimpleName(), colored);
+    }
 
     @Override
     public void initialize(GroovyContainer<?> container) {
