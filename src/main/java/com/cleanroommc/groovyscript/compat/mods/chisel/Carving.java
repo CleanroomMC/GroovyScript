@@ -6,7 +6,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -60,7 +60,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         } catch (UnsupportedOperationException e) {
             GroovyLog.msg("Error adding a Chisel Carving variation")
                     .add("you cannot add variations to Oredict chisel groups {}", groupName)
-                    .add("instead, edit the oredict via `oredict.add('{}', {})`", groupName, IngredientHelper.asGroovyCode(item, false))
+                    .add("instead, edit the oredict via `oredict.add('{}', {})`", groupName, GroovyScriptCodeConverter.asGroovyCode(item, false, false))
                     .error()
                     .post();
         }
@@ -74,7 +74,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         } catch (UnsupportedOperationException e) {
             GroovyLog.msg("Error removing a Chisel Carving variation")
                     .add("you cannot remove variations to Oredict chisel groups {}", groupName)
-                    .add("instead, edit the oredict via `oredict.remove('{}', {})`", groupName, IngredientHelper.asGroovyCode(item, false))
+                    .add("instead, edit the oredict via `oredict.remove('{}', {})`", groupName, GroovyScriptCodeConverter.asGroovyCode(item, false, false))
                     .error()
                     .post();
         }

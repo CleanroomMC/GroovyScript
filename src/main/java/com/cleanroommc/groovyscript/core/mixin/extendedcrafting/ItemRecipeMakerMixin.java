@@ -4,7 +4,7 @@ import com.blakebr0.extendedcrafting.config.ModConfig;
 import com.blakebr0.extendedcrafting.item.ItemRecipeMaker;
 import com.blakebr0.extendedcrafting.lib.IExtendedTable;
 import com.blakebr0.extendedcrafting.tile.TileEnderCrafter;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.google.common.base.Joiner;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -118,12 +118,12 @@ public abstract class ItemRecipeMakerMixin {
         if (ModConfig.confRMOredict) {
             int[] oreIds = OreDictionary.getOreIDs(stack);
             if (oreIds.length > 0) {
-                return IngredientHelper.asGroovyCode(OreDictionary.getOreName(oreIds[0]), false);
+                return GroovyScriptCodeConverter.asGroovyCode(OreDictionary.getOreName(oreIds[0]), false);
             }
         }
         if (ModConfig.confRMNBT) {
-            return IngredientHelper.asGroovyCode(stack, false, false);
+            return GroovyScriptCodeConverter.asGroovyCode(stack, false, false);
         }
-        return IngredientHelper.asGroovyCode(stack, false);
+        return GroovyScriptCodeConverter.asGroovyCode(stack, false);
     }
 }
