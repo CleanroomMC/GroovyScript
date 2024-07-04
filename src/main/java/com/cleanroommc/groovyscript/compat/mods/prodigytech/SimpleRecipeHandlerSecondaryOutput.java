@@ -80,7 +80,7 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
     }
 
     @RegistryDescription
-    static class HeatSawmill extends SimpleRecipeHandlerSecondaryOutput {
+    public static class HeatSawmill extends SimpleRecipeHandlerSecondaryOutput {
         HeatSawmill() {
             super("Heat Sawmill", HeatSawmillManager.INSTANCE);
         }
@@ -98,7 +98,7 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
     }
 
     @RegistryDescription
-    static class OreRefinery extends SimpleRecipeHandlerSecondaryOutput {
+    public static class OreRefinery extends SimpleRecipeHandlerSecondaryOutput {
         OreRefinery() {
             super("Ore Refinery", OreRefineryManager.INSTANCE);
         }

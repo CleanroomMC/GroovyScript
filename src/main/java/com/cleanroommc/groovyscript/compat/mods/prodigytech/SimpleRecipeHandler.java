@@ -70,7 +70,7 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
     }
 
     @RegistryDescription
-    static class RotaryGrinder extends SimpleRecipeHandler {
+    public static class RotaryGrinder extends SimpleRecipeHandler {
         RotaryGrinder() {
             super("Rotary Grinder", RotaryGrinderManager.INSTANCE);
         }
@@ -88,7 +88,7 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
     }
 
     @RegistryDescription
-    static class MagneticReassembler extends SimpleRecipeHandler {
+    public static class MagneticReassembler extends SimpleRecipeHandler {
         MagneticReassembler() {
             super("Magnetic Reassembler", MagneticReassemblerManager.INSTANCE);
         }
