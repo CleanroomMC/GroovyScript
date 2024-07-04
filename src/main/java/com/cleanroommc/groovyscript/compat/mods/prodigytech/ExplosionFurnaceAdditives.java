@@ -30,7 +30,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
     @MethodDescription(example = @Example("item('minecraft:cobblestone'), 50"), type = MethodDescription.Type.ADDITION)
     public void addExplosive(IIngredient explosive, int power) {
-        EFAdditiveRecipe recipe = new EFAdditiveRecipe(true, explosive, power);
+        EFAdditiveRecipe recipe = new EFAdditiveExplosive(explosive, power);
         add(recipe);
     }
 
@@ -39,7 +39,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         for (ItemStack it : explosive.getMatchingStacks()) {
             ExplosionFurnaceManager.Explosive externalExplosive = ExplosionFurnaceManager.findExplosive(it);
             if (externalExplosive == null) continue;
-            EFAdditiveRecipe recipe = new EFAdditiveRecipe(true, explosive, externalExplosive.getPower());
+            EFAdditiveRecipe recipe = new EFAdditiveExplosive(explosive, externalExplosive.getPower());
             remove(recipe);
             return true;
         }
@@ -49,13 +49,13 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @MethodDescription(example = @Example(priority = 2000, commented = true))
     public void removeAllExplosives() {
         ExplosionFurnaceManager.EXPLOSIVES.getAllContent().forEach(r ->
-            addBackup(new EFAdditiveRecipe(true, new ItemsIngredient(r.getMatchingStacks()), r.getPower())));
+            addBackup(new EFAdditiveExplosive(new ItemsIngredient(r.getMatchingStacks()), r.getPower())));
         ExplosionFurnaceManager.removeAllExplosives();
     }
 
     @MethodDescription(example = @Example("item('minecraft:stone'), 50"), type = MethodDescription.Type.ADDITION)
     public void addDampener(IIngredient dampener, int power) {
-        EFAdditiveRecipe recipe = new EFAdditiveRecipe(false, dampener, power);
+        EFAdditiveRecipe recipe = new EFAdditiveDampener(dampener, power);
         add(recipe);
     }
 
@@ -64,7 +64,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         for (ItemStack it : dampener.getMatchingStacks()) {
             ExplosionFurnaceManager.Dampener externalDampener = ExplosionFurnaceManager.findDampener(it);
             if (externalDampener == null) continue;
-            EFAdditiveRecipe recipe = new EFAdditiveRecipe(false, dampener, externalDampener.getDampening());
+            EFAdditiveRecipe recipe = new EFAdditiveDampener(dampener, externalDampener.getDampening());
             remove(recipe);
             return true;
         }
@@ -74,57 +74,74 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @MethodDescription(example = @Example(priority = 2000, commented = true))
     public void removeAllDampeners() {
         ExplosionFurnaceManager.DAMPENERS.getAllContent().forEach(r ->
-            addBackup(new EFAdditiveRecipe(false, new ItemsIngredient(r.getMatchingStacks()), r.getDampening())));
+            addBackup(new EFAdditiveDampener(new ItemsIngredient(r.getMatchingStacks()), r.getDampening())));
         ExplosionFurnaceManager.removeAllDampeners();
     }
 
-    public static class EFAdditiveRecipe {
-        final boolean isExplosive;
+    public abstract static class EFAdditiveRecipe {
         final IIngredient input;
         final int value;
 
-        EFAdditiveRecipe(boolean isExplosive, IIngredient input, int value) {
-            this.isExplosive = isExplosive;
+        EFAdditiveRecipe(IIngredient input, int value) {
             this.input = input;
             this.value = value;
         }
 
+        abstract void register();
+        abstract void unregister();
+    }
+
+    public static class EFAdditiveExplosive extends EFAdditiveRecipe {
+        EFAdditiveExplosive(IIngredient input, int value) {
+            super(input, value);
+        }
+
+        @Override
         void register() {
-            if (this.isExplosive) {
-                if (this.input instanceof OreDictIngredient) {
-                    ExplosionFurnaceManager.addExplosive(((OreDictIngredient) this.input).getOreDict(), this.value);
-                } else {
-                    for (ItemStack it : this.input.getMatchingStacks()) {
-                        ExplosionFurnaceManager.addExplosive(it, this.value);
-                    }
-                }
+            if (this.input instanceof OreDictIngredient) {
+                ExplosionFurnaceManager.addExplosive(((OreDictIngredient) this.input).getOreDict(), this.value);
             } else {
-                if (this.input instanceof OreDictIngredient) {
-                    ExplosionFurnaceManager.addDampener(((OreDictIngredient) this.input).getOreDict(), this.value);
-                } else {
-                    for (ItemStack it : this.input.getMatchingStacks()) {
-                        ExplosionFurnaceManager.addDampener(it, this.value);
-                    }
+                for (ItemStack it : this.input.getMatchingStacks()) {
+                    ExplosionFurnaceManager.addExplosive(it, this.value);
                 }
             }
         }
 
+        @Override
         void unregister() {
-            if (this.isExplosive) {
-                if (this.input instanceof OreDictIngredient) {
-                    ExplosionFurnaceManager.removeExplosive(((OreDictIngredient) this.input).getOreDict());
-                } else {
-                    for (ItemStack it : this.input.getMatchingStacks()) {
-                        ExplosionFurnaceManager.removeExplosive(it);
-                    }
-                }
+            if (this.input instanceof OreDictIngredient) {
+                ExplosionFurnaceManager.removeExplosive(((OreDictIngredient) this.input).getOreDict());
             } else {
-                if (this.input instanceof OreDictIngredient) {
-                    ExplosionFurnaceManager.removeDampener(((OreDictIngredient) this.input).getOreDict());
-                } else {
-                    for (ItemStack it : this.input.getMatchingStacks()) {
-                        ExplosionFurnaceManager.removeDampener(it);
-                    }
+                for (ItemStack it : this.input.getMatchingStacks()) {
+                    ExplosionFurnaceManager.removeExplosive(it);
+                }
+            }
+        }
+    }
+
+    public static class EFAdditiveDampener extends EFAdditiveRecipe {
+        EFAdditiveDampener(IIngredient input, int value) {
+            super(input, value);
+        }
+
+        @Override
+        void register() {
+            if (this.input instanceof OreDictIngredient) {
+                ExplosionFurnaceManager.addDampener(((OreDictIngredient) this.input).getOreDict(), this.value);
+            } else {
+                for (ItemStack it : this.input.getMatchingStacks()) {
+                    ExplosionFurnaceManager.addDampener(it, this.value);
+                }
+            }
+        }
+
+        @Override
+        void unregister() {
+            if (this.input instanceof OreDictIngredient) {
+                ExplosionFurnaceManager.removeDampener(((OreDictIngredient) this.input).getOreDict());
+            } else {
+                for (ItemStack it : this.input.getMatchingStacks()) {
+                    ExplosionFurnaceManager.removeDampener(it);
                 }
             }
         }
