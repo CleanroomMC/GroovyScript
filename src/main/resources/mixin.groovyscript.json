@@ -19,6 +19,7 @@
     "OreDictionaryAccessor",
     "SlotCraftingAccess",
     "TileEntityPistonMixin",
+    "VillagerProfessionAccessor",
     "groovy.AsmDecompilerMixin",
     "groovy.ClassCollectorMixin",
     "groovy.ClosureMixin",
