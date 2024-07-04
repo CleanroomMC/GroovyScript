@@ -140,7 +140,7 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
             msg.add(IngredientHelper.isEmpty(pattern), "pattern cannot be empty");
             int capacity = Config.soldererMaxGold;
             msg.add(gold > capacity, "gold must be less than or equal to the Solderer's capacity {}, yet it was {}", capacity, gold);
-            msg.add(time <= 0, "time must be positive, got {}", time);
+            msg.add(time <= 0, "time must be greater than 0, got {}", time);
         }
 
         @Override

@@ -158,7 +158,7 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
             // 100 is hardcoded in the source
             int capacity = Config.atomicReshaperMaxPrimordium * 100;
             msg.add(primordium > capacity, "primordium must be less than or equal to the Reshaper's capacity {}, yet it was {}", capacity, primordium);
-            msg.add(time <= 0, "time must be positive, got {}", time);
+            msg.add(time <= 0, "time must be greater than 0, got {}", time);
         }
 
         private Object[] getRecipeOutput() {

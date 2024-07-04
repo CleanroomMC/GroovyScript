@@ -50,7 +50,7 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 2);
             validateFluids(msg);
-            msg.add(time <= 0, "time must be positive, got {}", time);
+            msg.add(time <= 0, "time must be greater than 0, got {}", time);
             msg.add(secondaryChance > 1.0f || secondaryChance < 0.0f, "secondary output has to be between 0 and 1, got {}", secondaryChance);
         }
 

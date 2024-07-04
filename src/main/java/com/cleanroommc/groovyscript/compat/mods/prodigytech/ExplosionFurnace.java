@@ -96,8 +96,8 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 2, 1, 1);
             validateFluids(msg);
-            msg.add(craftPerReagent <= 0, "craftPerReagent should be positive!");
-            msg.add(power <= 0, "power should be positive!");
+            msg.add(craftPerReagent <= 0, "craftPerReagent should be greater than 0!");
+            msg.add(power <= 0, "power should be greater than 0!");
         }
 
         @Override
