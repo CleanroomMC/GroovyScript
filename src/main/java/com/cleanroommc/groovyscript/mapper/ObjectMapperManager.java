@@ -138,6 +138,11 @@ public class ObjectMapperManager {
                 .completer(ForgeRegistries.ENTITIES)
                 .docOfType("entity entry")
                 .register();
+        ObjectMapper.builder("dimension", DimensionType.class)
+                .parser(IObjectParser.wrapStringGetter(DimensionType::byName))
+                .completerOfNamed(() -> Arrays.asList(DimensionType.values()), DimensionType::getName)
+                .docOfType("dimension")
+                .register();
         ObjectMapper.builder("biome", Biome.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.BIOMES))
                 .completer(ForgeRegistries.BIOMES)
