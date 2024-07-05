@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
+import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.google.common.base.Predicates;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -17,6 +18,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -136,6 +138,9 @@ public abstract class BaseInfoCommand extends CommandBase {
 
             // add different data to the info parser depending on the command being used
             gatherInfo(info, player);
+
+            GsHandEvent event = new GsHandEvent(info);
+            MinecraftForge.EVENT_BUS.post(event);
 
             info.parse(enabled);
             print(player, messages, argList);
