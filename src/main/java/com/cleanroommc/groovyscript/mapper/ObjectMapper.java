@@ -84,6 +84,11 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         return Objects.requireNonNull(t.getValue(), "Object napper result must contain a non-null value!");
     }
 
+    T invokeDefault() {
+        Result<T> t = this.defaultValue.get();
+        return t == null || t.hasError() ? null : t.getValue();
+    }
+
     public GroovyContainer<?> getMod() {
         return mod;
     }
@@ -112,6 +117,10 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
 
     public T doCall(String s, Object... args) {
         return invoke(s, args);
+    }
+
+    public T doCall() {
+        return invokeDefault();
     }
 
     @Override
