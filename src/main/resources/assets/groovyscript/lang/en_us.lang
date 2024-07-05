@@ -41,6 +41,21 @@ groovyscript.infoparser.translation=Translation key for the target
 groovyscript.infoparser.villagercareer=The Villager Career of the villager being targeted
 groovyscript.infoparser.villagerprofession=The Villager Profession of the villager being targeted
 
+# Modded Info Parser Descriptions
+groovyscript.infoparser.aspect=Thaumcraft Aspects contained by the held item, targeted entity, or current player
+groovyscript.infoparser.brew=Botania Brews attached to the held item
+groovyscript.infoparser.compound=Alchemistry Compound of the held item
+groovyscript.infoparser.constellation=Astral Sorcery Constellations for the held item or enabled in the current dimension
+groovyscript.infoparser.element=Alchemistry Element of the held item
+groovyscript.infoparser.gas=Mekanism Gases contained within the targeted ItemStack
+groovyscript.infoparser.herb=Roots Herb of the held item
+groovyscript.infoparser.infusion=Mekanism Infusion Types the targeted stack provides
+groovyscript.infoparser.jeitab=Just Enough Items Categories the target ItemStack is a catalyst for
+groovyscript.infoparser.modifier=Roots Spell Modifiers attached to the held item
+groovyscript.infoparser.spell=Roots Spells attached to the held item
+groovyscript.infoparser.tunnel=Applied Energistics 2 Tunnel Attunement types for the held item
+groovyscript.infoparser.weather=EvilCraft Weather state
+
 
 # Wiki
 groovyscript.wiki.categories=Categories

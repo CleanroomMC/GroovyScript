@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.IObjectParser;
+import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
@@ -56,5 +57,7 @@ public class Botania extends GroovyPropertyContainer {
                 .defaultValue(() -> BotaniaAPI.fallbackBrew)
                 .docOfType("brew")
                 .register();
+
+        InfoParserRegistry.addInfoParser(InfoParserBrew.instance);
     }
 }

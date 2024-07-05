@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.evilcraft;
 
 import com.cleanroommc.groovyscript.api.IObjectParser;
+import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
@@ -27,5 +28,7 @@ public class EvilCraft extends GroovyPropertyContainer {
                 .defaultValue(() -> WeatherType.ANY)
                 .docOfType("weather type")
                 .register();
+
+        InfoParserRegistry.addInfoParser(InfoParserWeather.instance);
     }
 }

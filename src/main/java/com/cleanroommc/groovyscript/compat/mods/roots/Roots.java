@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
@@ -80,6 +81,10 @@ public class Roots extends GroovyPropertyContainer {
                 .completerOfNamed(ModifierRegistry::getModifiers, v -> v.getRegistryName().toString())
                 .docOfType("modifier")
                 .register();
+
+        InfoParserRegistry.addInfoParser(InfoParserHerb.instance);
+        InfoParserRegistry.addInfoParser(InfoParserSpell.instance);
+        InfoParserRegistry.addInfoParser(InfoParserModifier.instance);
     }
 
     private static Result<SpellBase> getSpell(String s, Object... args) {

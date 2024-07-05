@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IObjectParser;
+import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane.ArcaneWorkbench;
@@ -56,6 +57,8 @@ public class Thaumcraft extends GroovyPropertyContainer {
                 .register();
         ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
         ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);
+
+        InfoParserRegistry.addInfoParser(InfoParserAspect.instance);
     }
 
     public static AspectList makeAspectList(Collection<AspectStack> aspects) {

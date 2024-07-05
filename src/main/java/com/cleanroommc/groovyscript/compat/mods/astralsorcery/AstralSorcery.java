@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalItemStackExpansion;
@@ -54,6 +55,8 @@ public class AstralSorcery extends GroovyPropertyContainer {
                 .docOfType("constellation")
                 .register();
         ExpansionHelper.mixinClass(ItemStack.class, CrystalItemStackExpansion.class);
+
+        InfoParserRegistry.addInfoParser(InfoParserConstellation.instance);
     }
 
     public static ItemHandle toItemHandle(IIngredient ingredient) {

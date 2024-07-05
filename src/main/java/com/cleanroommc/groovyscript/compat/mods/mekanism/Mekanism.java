@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
@@ -86,6 +87,8 @@ public class Mekanism extends GroovyPropertyContainer {
                 .docOfType("infusion type")
                 .register();
 
+        InfoParserRegistry.addInfoParser(InfoParserGas.instance);
+        InfoParserRegistry.addInfoParser(InfoParserInfusion.instance);
     }
 
 }
