@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.compat.content.GroovyResourcePack;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.compat.vanilla.command.infoparser.StandardInfoParserRegistry;
 import com.cleanroommc.groovyscript.core.mixin.DefaultResourcePackAccessor;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
@@ -163,6 +164,7 @@ public class GroovyScript {
     public static void initializeGroovyPreInit() {
         // called via mixin in between construction and fml pre init
         ObjectMapperManager.init();
+        StandardInfoParserRegistry.init();
         VanillaModule.initializeBinding();
         ModSupport.init();
         for (ObjectMapper<?> goh : ObjectMapperManager.getObjectMappers()) {

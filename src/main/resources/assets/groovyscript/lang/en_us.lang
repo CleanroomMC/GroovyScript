@@ -24,6 +24,23 @@ groovyscript.packmode.normal.description=A normal pack mode. Nothing special.
 groovyscript.packmode.hard.name=Hard
 groovyscript.packmode.hard.description=Hard mode. Everything requires at least 50 diamonds and nether stars.
 
+# Info Parser Descriptions
+groovyscript.infoparser.biome=Biome the block being targeted is in
+groovyscript.infoparser.block=Block being targeted or representing the held item
+groovyscript.infoparser.blockstate=BlockState being looked at or representing the held item
+groovyscript.infoparser.creativetab=Creative Tab the targeted ItemStack is contained by, if any
+groovyscript.infoparser.dimension=Dimension type the player is in
+groovyscript.infoparser.enchantment=Enchantments on the held ItemStack
+groovyscript.infoparser.entity=Entity being looked at
+groovyscript.infoparser.fluid=Fluid being looked at in world or being contained in the item being held
+groovyscript.infoparser.item=ItemStack in the player's main hand, offhand, or representing the block being looked at
+groovyscript.infoparser.oredict=Ore Dicts the held ItemStack is part of
+groovyscript.infoparser.potioneffect=Potion effects for the held item, active potion effects for the entity being looked at, or active potion effects on the player
+groovyscript.infoparser.tileentity=Tile Entity NBT data, trimmed if it gets too long
+groovyscript.infoparser.translation=Translation key for the target
+groovyscript.infoparser.villagercareer=The Villager Career of the villager being targeted
+groovyscript.infoparser.villagerprofession=The Villager Profession of the villager being targeted
+
 
 # Wiki
 groovyscript.wiki.categories=Categories
