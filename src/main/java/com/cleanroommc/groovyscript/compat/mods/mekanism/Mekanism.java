@@ -63,7 +63,7 @@ public class Mekanism extends GroovyPropertyContainer {
 
     @Optional.Method(modid = "mekanism")
     public static String asGroovyCode(InfuseType infuseType, boolean colored) {
-        return GroovyScriptCodeConverter.formatGenericHandler("infusion", infuseType.unlocalizedName, colored);
+        return GroovyScriptCodeConverter.formatGenericHandler("infusionType", infuseType.unlocalizedName, colored);
     }
 
     @Optional.Method(modid = "mekanism")
