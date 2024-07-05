@@ -76,8 +76,7 @@ public class GroovyScriptCodeConverter {
     }
 
     public static String formatForgeRegistryImpl(String handler, IForgeRegistryEntry.Impl<?> impl, boolean colored) {
-        if (impl.getRegistryName() == null) return null;
-        return formatGenericHandler(handler, impl.getRegistryName().toString(), colored);
+        return formatResourceLocation(handler, impl.getRegistryName(), colored);
     }
 
     public static String formatNBTTag(NBTTagCompound tag, boolean colored, boolean prettyNbt) {
