@@ -111,8 +111,7 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
-        if (event.craftMatrix instanceof InventoryCrafting) {
-            InventoryCrafting inventoryCrafting = (InventoryCrafting) event.craftMatrix;
+        if (event.craftMatrix instanceof InventoryCrafting inventoryCrafting) {
             InventoryCraftResult craftResult = null;
             EntityPlayer player = null;
             Container container = ((InventoryCraftingAccess) inventoryCrafting).getEventHandler();

@@ -1,15 +1,15 @@
 package com.cleanroommc.groovyscript.compat.mods.forestry;
 
 import com.cleanroommc.groovyscript.api.Result;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
 import forestry.modules.ForestryModuleUids;
 
-public class Forestry extends ModPropertyContainer {
+public class Forestry extends GroovyPropertyContainer {
 
     public final CharcoalPile charcoalPile = new CharcoalPile();
     public final Squeezer squeezer = new Squeezer();
@@ -22,21 +22,6 @@ public class Forestry extends ModPropertyContainer {
     public final ThermionicFabricator thermionicFabricator = new ThermionicFabricator();
     public final BeeProduce beeProduce = new BeeProduce();
     public final BeeMutations beeMutations = new BeeMutations();
-
-    public Forestry() {
-        addRegistry(charcoalPile);
-        addRegistry(squeezer);
-        addRegistry(still);
-        addRegistry(centrifuge);
-        addRegistry(fermenter);
-        addRegistry(moistener);
-        addRegistry(moistenerFuel);
-        addRegistry(carpenter);
-        addRegistry(thermionicFabricator);
-        addRegistry(thermionicFabricator.smelting);
-        addRegistry(beeProduce);
-        addRegistry(beeMutations);
-    }
 
     public static Result<AlleleBeeSpecies> parseSpecies(String mainArg, Object... args) {
         if (!ForestryAPI.moduleManager.isModuleEnabled("forestry", ForestryModuleUids.APICULTURE)) {
@@ -64,11 +49,11 @@ public class Forestry extends ModPropertyContainer {
     }
 
     @Override
-    public void initialize() {
-        GameObjectHandler.builder("species", AlleleBeeSpecies.class)
-                .mod("forestry")
+    public void initialize(GroovyContainer<?> container) {
+        container.objectMapperBuilder("species", AlleleBeeSpecies.class)
                 .parser(Forestry::parseSpecies)
                 .completerOfNamed(() -> AlleleManager.alleleRegistry.getRegisteredAlleles().keySet(), s -> s.replace('.', ':')) // elements don't have names
+                .docOfType("allele bee species")
                 .register();
     }
 }

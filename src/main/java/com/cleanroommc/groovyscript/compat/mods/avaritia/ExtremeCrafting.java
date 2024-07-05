@@ -71,11 +71,11 @@ public class ExtremeCrafting extends VirtualizedRegistry<IExtremeRecipe> {
     }
 
     public boolean remove(IExtremeRecipe recipe) {
-        recipe = AvaritiaRecipeManager.EXTREME_RECIPES.remove(recipe.getRegistryName());
-        if (recipe != null) {
-            addBackup(recipe);
+        IExtremeRecipe remove = AvaritiaRecipeManager.EXTREME_RECIPES.remove(recipe.getRegistryName());
+        if (remove != null) {
+            addBackup(remove);
         }
-        return recipe != null;
+        return remove != null;
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)

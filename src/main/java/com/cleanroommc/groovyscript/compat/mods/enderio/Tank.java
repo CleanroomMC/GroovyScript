@@ -177,6 +177,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(MachineRecipeRegistry.instance::removeRecipe);
@@ -225,6 +226,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
             return "Error adding EnderIO Tank recipe";
         }
 
+        @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_enderio_tank_";
         }
@@ -245,8 +247,8 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
             if (!validate()) return null;
             Things in = RecipeUtils.toThings(input.get(0));
             Things out = new Things().add(output.getOrEmpty(0));
-            TankMachineRecipe recipe = new TankMachineRecipe(name.toString(), isFilling, in, isFilling ? fluidOutput.get(0)
-                                                                                                       : fluidInput.get(0), out, TankMachineRecipe.Logic.NONE, RecipeLevel.IGNORE);
+            TankMachineRecipe recipe = new TankMachineRecipe(super.name.toString(), isFilling, in, isFilling ? fluidOutput.get(0)
+                                                                                                             : fluidInput.get(0), out, TankMachineRecipe.Logic.NONE, RecipeLevel.IGNORE);
 
             ModSupport.ENDER_IO.get().tank.add(recipe);
             return recipe;

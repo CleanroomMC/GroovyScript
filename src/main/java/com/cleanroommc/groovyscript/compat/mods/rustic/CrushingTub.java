@@ -40,7 +40,7 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
         return Recipes.crushingTubRecipes.remove(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = {@Example("fluid('ironberryjuice')"), @Example("item('minecraft:sugar')")})
+    @MethodDescription(example = {@Example("fluid('ironberryjuice')"), @Example("item('minecraft:sugar')")})
     public boolean removeByOutput(IIngredient output) {
         return Recipes.crushingTubRecipes.removeIf(entry -> {
             if (output.test(entry.getResult()) || output.test(entry.getByproduct())) {
@@ -51,7 +51,7 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("item('rustic:wildberries')"))
+    @MethodDescription(example = @Example("item('rustic:wildberries')"))
     public boolean removeByInput(IIngredient input) {
         return Recipes.crushingTubRecipes.removeIf(entry -> {
             if (input.test(entry.getInput())) {
@@ -62,13 +62,13 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         Recipes.crushingTubRecipes.forEach(this::addBackup);
         Recipes.crushingTubRecipes.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ICrushingTubRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Recipes.crushingTubRecipes).setRemover(this::remove);
     }

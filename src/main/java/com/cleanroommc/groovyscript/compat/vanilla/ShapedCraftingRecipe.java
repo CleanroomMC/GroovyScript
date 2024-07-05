@@ -12,7 +12,8 @@ import java.util.List;
 
 public class ShapedCraftingRecipe extends CraftingRecipe implements IShapedRecipe {
 
-    private final int width, height;
+    private final int width;
+    private final int height;
     private final boolean mirrored;
 
     public ShapedCraftingRecipe(ItemStack output, List<IIngredient> input, int width, int height, boolean mirrored, @Nullable Closure<ItemStack> recipeFunction, @Nullable Closure<Void> recipeAction) {

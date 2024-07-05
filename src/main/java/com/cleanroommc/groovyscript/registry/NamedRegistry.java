@@ -28,10 +28,12 @@ public abstract class NamedRegistry implements INamed {
         this.name = this.aliases.get(0).toLowerCase(Locale.ENGLISH);
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public List<String> getAliases() {
         return aliases;
     }

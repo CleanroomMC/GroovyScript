@@ -93,7 +93,7 @@ public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
         TinkerRegistryAccessor.getEntityMeltingRegistry().clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<EntityMeltingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
     }

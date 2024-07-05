@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 public class VitePress implements IFormat {
 
+    @Override
     public String linkToBuilder() {
         return "../../groovy/builder.md";
     }
@@ -39,22 +40,27 @@ public class VitePress implements IFormat {
         return ":no-line-numbers {" + String.join(",", highlight) + "}";
     }
 
+    @Override
     public String removeTableOfContentsText() {
         return "aside: false";
     }
 
+    @Override
     public boolean hasTitleTemplate() {
         return true;
     }
 
+    @Override
     public boolean allowsIndentation() {
         return false;
     }
 
+    @Override
     public boolean requiresNavFile() {
         return false;
     }
 
+    @Override
     public boolean usesFocusInCodeBlocks() {
         return true;
     }

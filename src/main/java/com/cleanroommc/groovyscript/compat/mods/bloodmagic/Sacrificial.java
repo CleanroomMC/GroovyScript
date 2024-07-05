@@ -137,10 +137,10 @@ public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Inte
         }
 
         @RecipeBuilderRegistrationMethod
-        public @Nullable Object register() {
+        public @Nullable Pair<ResourceLocation, Integer> register() {
             if (!validate()) return null;
             ModSupport.BLOOD_MAGIC.get().sacrificial.add(entity, value);
-            return null;
+            return Pair.of(entity, value);
         }
     }
 }

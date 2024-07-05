@@ -24,7 +24,7 @@ public class PerkTreeConfig extends VirtualizedRegistry<Closure<Long>> {
         this.setLevelCap(30);
     }
 
-    public Closure<Long> xpFunction = null;
+    public Closure<Long> xpFunction;
 
     @MethodDescription(example = @Example(value = "{ int i, long prev -> prev + 1000L + MathHelper.lfloor(Math.pow(2.0, i / 2.0F + 3)) }", imports = "net.minecraft.util.math.MathHelper"), type = MethodDescription.Type.VALUE)
     public void setXpFunction(Closure<Long> func) {

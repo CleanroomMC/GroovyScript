@@ -95,7 +95,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription
+    @RecipeBuilderMethodDescription(field = "replace")
     public AbstractCraftingRecipeBuilder<R> replaceByName() {
         this.replace = 2;
         return this;

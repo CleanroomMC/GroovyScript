@@ -13,8 +13,8 @@ public class BlockStateMultiblockStorage extends MultiBlockStorage {
     private final int size;
     private final BlockStateMultiblockHelper helper;
     private final BlockStateEnergyCoreStructure energyCoreStructure;
-    private int xPos = 0;
-    private int yPos = 0;
+    private int xPos;
+    private int yPos;
 
     public BlockStateMultiblockStorage(int size, BlockStateMultiblockHelper helper, BlockStateEnergyCoreStructure energyCoreStructure) {
         super(size, helper);

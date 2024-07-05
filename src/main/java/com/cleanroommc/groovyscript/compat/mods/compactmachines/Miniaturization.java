@@ -194,7 +194,7 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
             if (!validate()) return null;
 
             org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe = new org.dave.compactmachines3.miniaturization.MultiblockRecipe(
-                    name.toString(),
+                    super.name.toString(),
                     output.get(0),
                     input.get(0).getMatchingStacks()[0].getItem(),
                     input.get(0).getMatchingStacks()[0].getMetadata(),

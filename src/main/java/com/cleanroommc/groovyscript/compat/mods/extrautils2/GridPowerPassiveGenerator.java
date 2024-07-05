@@ -35,6 +35,7 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
         removeScripted().forEach(x -> ((GeneratorTypeAccessor) x.getKey()).setPowerMultiplier(x.getValue()));
     }
 
+    @Override
     public void afterScriptLoad() {
         for (BlockPassiveGenerator.GeneratorType value : BlockPassiveGenerator.GeneratorType.values()) {
             GeneratorTypeAccessor accessor = (GeneratorTypeAccessor) value;

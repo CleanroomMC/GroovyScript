@@ -17,7 +17,7 @@ class CompiledScript extends CompiledClass {
 
     final List<CompiledClass> innerClasses = new ArrayList<>();
     long lastEdited;
-    List<String> preprocessors = null;
+    List<String> preprocessors;
 
     public CompiledScript(String path, long lastEdited) {
         this(path, null, lastEdited);

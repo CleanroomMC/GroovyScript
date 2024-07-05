@@ -2,13 +2,13 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalItemStackExpansion;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.GroovyPerkTree;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.PerkTreeConfig;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar.StarlightAltar;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationRegistryAccessor;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-public class AstralSorcery extends ModPropertyContainer {
+public class AstralSorcery extends GroovyPropertyContainer {
 
     public final StarlightAltar altar = new StarlightAltar();
     public final Lightwell lightwell = new Lightwell();
@@ -34,28 +34,9 @@ public class AstralSorcery extends ModPropertyContainer {
     public final OreChance treasureShrineOreChance = OreChance.treasureShrineRegistry();
     public final PerkTreeConfig perkTreeConfig = new PerkTreeConfig();
 
-    public AstralSorcery() {
-        addRegistry(altar);
-        addRegistry(lightwell);
-        addRegistry(infusionAltar);
-        addRegistry(grindstone);
-        addRegistry(lightTransmutation);
-        addRegistry(chaliceInteraction);
-        addRegistry(perkTree);
-        addRegistry(constellation);
-        addRegistry(research);
-        addRegistry(fountain);
-        addRegistry(mineralisRitualOreChance);
-        addRegistry(aevitasPerkOreChance);
-        addRegistry(trashPerkOreChance);
-        addRegistry(treasureShrineOreChance);
-        addRegistry(perkTreeConfig);
-    }
-
     @Override
-    public void initialize() {
-        GameObjectHandler.builder("constellation", IConstellation.class)
-                .mod("astralsorcery")
+    public void initialize(GroovyContainer<?> container) {
+        container.objectMapperBuilder("constellation", IConstellation.class)
                 .parser((s, args) -> {
                     for (IConstellation constellation : ConstellationRegistryAccessor.getConstellationList()) {
                         if (constellation.getSimpleName().equalsIgnoreCase(s)) {
@@ -65,6 +46,7 @@ public class AstralSorcery extends ModPropertyContainer {
                     return Result.error();
                 })
                 .completerOfNamed(ConstellationRegistryAccessor::getConstellationList, IConstellation::getSimpleName)
+                .docOfType("constellation")
                 .register();
         ExpansionHelper.mixinClass(ItemStack.class, CrystalItemStackExpansion.class);
     }

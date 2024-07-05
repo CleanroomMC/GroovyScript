@@ -1,16 +1,16 @@
 package com.cleanroommc.groovyscript.gameobjects;
 
-import com.cleanroommc.groovyscript.server.Completions;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@Deprecated
+@ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
 @FunctionalInterface
-public interface Completer {
-
-    void complete(int paramIndex, Completions items);
+public interface Completer extends com.cleanroommc.groovyscript.mapper.Completer {
 
     static <V> Completer ofNamed(Supplier<Iterable<V>> values, Function<V, String> toString, int preferredParamIndex) {
         return ofValues(values, v -> {
@@ -32,7 +32,7 @@ public interface Completer {
         };
     }
 
-    default Completer and(Completer other) {
+    default Completer and(com.cleanroommc.groovyscript.mapper.Completer other) {
         return (paramIndex, items) -> {
             complete(paramIndex, items);
             other.complete(paramIndex, items);

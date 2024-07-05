@@ -31,6 +31,7 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
         restoreFromBackup().forEach(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList()::add);
     }
 
+    @Override
     public void afterScriptLoad() {
         // If the rarity list is empty, generating new chunks will cause a NPE. To prevent this, we add a "water" entry that will always have 0mb inside,
         // which causes it to be marked as empty, and thus not be interactable.
@@ -94,13 +95,13 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
     public static class FountainChanceHelper implements IRecipeBuilder<FluidRarityRegistry.FluidRarityEntry> {
 
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
-        private Fluid fluid = null;
+        private Fluid fluid;
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private int rarity = 0;
+        private int rarity;
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private int minimumAmount = 0;
+        private int minimumAmount;
         @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
-        private int variance = 0;
+        private int variance;
 
         @RecipeBuilderMethodDescription
         public FountainChanceHelper fluid(Fluid fluid) {
@@ -131,6 +132,7 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
             return this;
         }
 
+        @Override
         public boolean validate() {
             GroovyLog.Msg out = GroovyLog.msg("Error adding fluid to Astral Sorcery Fountain").warn();
 
@@ -154,6 +156,7 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
             return out.getLevel() != Level.ERROR;
         }
 
+        @Override
         @RecipeBuilderRegistrationMethod
         public FluidRarityRegistry.FluidRarityEntry register() {
             if (!validate()) return null;

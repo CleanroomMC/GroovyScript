@@ -62,9 +62,9 @@ public class Predicates extends NamedRegistry {
         @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
         private IBlockState blockstate;
         @Property(requirement = "groovyscript.wiki.roots.predicates.above_or_below.required")
-        private boolean above = false;
+        private boolean above;
         @Property(requirement = "groovyscript.wiki.roots.predicates.above_or_below.required")
-        private boolean below = false;
+        private boolean below;
 
         @RecipeBuilderMethodDescription
         public StateBuilder blockstate(IBlockState blockstate) {

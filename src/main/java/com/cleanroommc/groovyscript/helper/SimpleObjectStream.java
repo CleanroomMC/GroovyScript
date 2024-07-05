@@ -102,10 +102,12 @@ public class SimpleObjectStream<T> extends AbstractList<T> {
         return this;
     }
 
+    @Override
     public int size() {
         return this.recipes.size();
     }
 
+    @Override
     public boolean isEmpty() {
         return this.recipes.isEmpty();
     }

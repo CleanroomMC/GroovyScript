@@ -1,6 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.ic2;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ic2.classic.*;
 import com.cleanroommc.groovyscript.compat.mods.ic2.exp.*;
 import net.minecraft.item.ItemStack;
@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.ModContainer;
 
 import java.util.List;
 
-public class IC2 extends ModPropertyContainer {
+public class IC2 extends GroovyPropertyContainer {
 
     public final boolean isExp;
 
@@ -29,16 +29,16 @@ public class IC2 extends ModPropertyContainer {
     public RareEarthExtractor rareEarthExtractor;
 
     // Experimental
-    public FluidGenerator semiFluidGenerator = null;
-    public Electrolyzer electrolyzer = null;
-    public Fermenter fermenter = null;
-    public BlastFurnace blastFurnace = null;
-    public BlockCutter blockCutter = null;
-    public FluidCanner fluidCanner = null;
-    public SolidCanner solidCanner = null;
-    public Recycler recycler = null;
-    public LiquidHeatExchanger liquidHeatExchanger = null;
-    public FluidHeater liquidFueledFirebox = null;
+    public FluidGenerator semiFluidGenerator;
+    public Electrolyzer electrolyzer;
+    public Fermenter fermenter;
+    public BlastFurnace blastFurnace;
+    public BlockCutter blockCutter;
+    public FluidCanner fluidCanner;
+    public SolidCanner solidCanner;
+    public Recycler recycler;
+    public LiquidHeatExchanger liquidHeatExchanger;
+    public FluidHeater liquidFueledFirebox;
 
     public IC2() {
         isExp = isExp();
@@ -47,14 +47,6 @@ public class IC2 extends ModPropertyContainer {
         macerator = isExp ? new Macerator() : new ClassicMacerator();
         compressor = isExp ? new Compressor() : new ClassicCompressor();
         scrapbox = isExp ? new Scrapbox() : new ClassicScrapbox();
-
-        addRegistry(macerator);
-        addRegistry(compressor);
-        addRegistry(extractor);
-        addRegistry(centrifuge);
-        addRegistry(metalFormer);
-        addRegistry(oreWasher);
-        addRegistry(scrapbox);
 
         if (isExp) {
             semiFluidGenerator = new FluidGenerator();
@@ -67,30 +59,12 @@ public class IC2 extends ModPropertyContainer {
             recycler = new Recycler();
             liquidHeatExchanger = new LiquidHeatExchanger();
             liquidFueledFirebox = new FluidHeater();
-
-            addRegistry(semiFluidGenerator);
-            addRegistry(electrolyzer);
-            addRegistry(fermenter);
-            addRegistry(blastFurnace);
-            addRegistry(blockCutter);
-            addRegistry(fluidCanner);
-            addRegistry(solidCanner);
-            addRegistry(recycler);
-            addRegistry(liquidHeatExchanger);
-            addRegistry(liquidFueledFirebox);
-            addRegistry(electrolyzer);
         } else {
             canner = new Canner();
             classicElectrolyzer = new ClassicElectrolyzer();
             sawmill = new Sawmill();
             liquidFuelGenerator = new LiquidFuelGenerator();
             rareEarthExtractor = new RareEarthExtractor();
-
-            addRegistry(canner);
-            addRegistry(classicElectrolyzer);
-            addRegistry(sawmill);
-            addRegistry(liquidFuelGenerator);
-            addRegistry(rareEarthExtractor);
         }
     }
 
