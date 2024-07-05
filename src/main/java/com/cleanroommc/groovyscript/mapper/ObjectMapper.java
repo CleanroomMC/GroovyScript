@@ -81,7 +81,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             t = this.defaultValue.get();
             return t == null || t.hasError() ? null : t.getValue();
         }
-        return Objects.requireNonNull(t.getValue(), "Object napper result must contain a non-null value!");
+        return Objects.requireNonNull(t.getValue(), "Object mapper result must contain a non-null value!");
     }
 
     T invokeDefault() {
