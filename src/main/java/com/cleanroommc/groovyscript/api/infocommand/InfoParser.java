@@ -29,16 +29,17 @@ public interface InfoParser {
     String id();
 
     /**
-     * Checks if the parser is enabled or is forced to be enabled, and parse if enabled.
-     * If {@code force} is enabled, it should attempt to parse regardless of other considerations,
-     * such as the valid modes stored in {@link InfoParserPackage#getArgs()}.
-     * Typically, {@code force} will be {@code true} if there are no arguments, the arguments included "{@code all}",
-     * or the arguments had a length of 1 and their only argument was "{@code pretty}".
+     * Checks if the parser is enabled and parses it if it is.
+     * Regardless of if {@code enabled} is {@code true}, the parser should first check
+     * to see if {@link #id()} is disabled via a {@code -} prefix and should run if it was disabled.
+     * Then, it should check if {@link #id()} was enabled, and run if it was or if the method is enabled by default.
+     * Typically, {@code enabled} will be {@code true} if there are no arguments, the arguments included "{@code all}",
+     * or all arguments started with {@code -} to negate a specific parser being enabled.
      *
-     * @param info  the info package, containing all the information of the command
-     * @param force if this should always be parsed
+     * @param info    the info package, containing all the information of the command
+     * @param enabled if this should always be parsed
      * @see InfoParserPackage
      */
-    void parse(InfoParserPackage info, boolean force);
+    void parse(InfoParserPackage info, boolean enabled);
 
 }

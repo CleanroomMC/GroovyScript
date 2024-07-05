@@ -79,7 +79,10 @@ public abstract class BaseInfoCommand extends CommandBase {
 
     @Override
     public @NotNull String getUsage(@NotNull ICommandSender sender) {
-        return String.format("/gs %s [all, pretty, %s]", getName(), String.join(", ", InfoParserRegistry.getIds()));
+        return String.format("/gs %s [all, pretty, %s, %s]",
+                             getName(),
+                             String.join(", ", InfoParserRegistry.getIds()),
+                             InfoParserRegistry.getIds().stream().map(x -> "-" + x).collect(Collectors.joining(", ")));
     }
 
     @Override
@@ -90,9 +93,11 @@ public abstract class BaseInfoCommand extends CommandBase {
     @Override
     public @NotNull List<String> getTabCompletions(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String @NotNull [] args,
                                                    @Nullable BlockPos targetPos) {
-        List<String> enabledModes = new ArrayList<>(InfoParserRegistry.getIds());
+        List<String> enabledModes = new ArrayList<>();
         enabledModes.add("all");
         enabledModes.add("pretty");
+        InfoParserRegistry.getIds().forEach(x -> enabledModes.add("-" + x));
+        enabledModes.addAll(InfoParserRegistry.getIds());
         Arrays.stream(args).map(String::toLowerCase).forEach(enabledModes::remove);
         return getListOfStringsMatchingLastWord(args, enabledModes);
     }
@@ -101,8 +106,12 @@ public abstract class BaseInfoCommand extends CommandBase {
 
     protected void print(EntityPlayer player, List<ITextComponent> messages, List<String> argList) {
         if (messages.isEmpty()) {
-            player.sendMessage(new TextComponentString(String.format("Couldn't find %s!", targetDescription())).setStyle(new Style().setColor(TextFormatting.RED)));
-            if (!argList.isEmpty()) player.sendMessage(new TextComponentString("The following arguments were provided: " + String.join(", ", argList)));
+            if (argList.isEmpty()) {
+                player.sendMessage(new TextComponentString(String.format("Couldn't find %s!", targetDescription())).setStyle(new Style().setColor(TextFormatting.RED)));
+            } else {
+                player.sendMessage(new TextComponentString(String.format("Couldn't find %s matching the given arguments!", targetDescription())).setStyle(new Style().setColor(TextFormatting.RED)));
+                player.sendMessage(new TextComponentString("The following arguments were provided: " + String.join(", ", argList)));
+            }
         } else {
             // have a horizontal bar to improve readability when running multiple consecutive info commands
             player.sendMessage(new TextComponentString("================================").setStyle(new Style().setColor(TextFormatting.GOLD)));
@@ -119,18 +128,16 @@ public abstract class BaseInfoCommand extends CommandBase {
 
             // get all distinct arguments
             List<String> argList = Arrays.stream(args).distinct().collect(Collectors.toList());
-            // remove "pretty" from the list so that it is ignored for determining if force is true
-            boolean prettyNbt = argList.remove("pretty");
 
-            // if there are 0 args or the args contain "all", we want to print every option
-            boolean force = argList.contains("all") || args.length == 0;
+            // if there are 0 args, the args contain "all", or all the args are negative and disabling a specific feature, we want to print every option
+            boolean enabled = args.length == 0 || argList.contains("all") || argList.stream().allMatch(x -> x.startsWith("-") || "pretty".equals(x));
 
-            InfoParserPackage info = new InfoParserPackage(server, player, argList, messages, prettyNbt);
+            InfoParserPackage info = new InfoParserPackage(server, player, argList, messages, argList.contains("pretty"));
 
             // add different data to the info parser depending on the command being used
             gatherInfo(info, player);
 
-            info.parse(force);
+            info.parse(enabled);
             print(player, messages, argList);
         }
     }

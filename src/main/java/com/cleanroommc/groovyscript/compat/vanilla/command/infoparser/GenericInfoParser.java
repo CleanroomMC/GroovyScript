@@ -186,6 +186,17 @@ public abstract class GenericInfoParser<T> implements InfoParser {
     public abstract void parse(InfoParserPackage info);
 
     /**
+     * Determines if the parser will be prevented from running.
+     * Simply checks if {@code -}{@link #id()} is in the args list.
+     *
+     * @param args list of arguments passed into the command
+     * @return if the parser is prevented from being displayed
+     */
+    public boolean blocked(List<String> args) {
+        return args.contains("-" + id());
+    }
+
+    /**
      * Determines if the parser will be run.
      * Simply checks if {@link #id()} is in the args list.
      *
@@ -197,8 +208,9 @@ public abstract class GenericInfoParser<T> implements InfoParser {
     }
 
     @Override
-    public void parse(InfoParserPackage info, boolean force) {
-        if (force || allowed(info.getArgs())) parse(info);
+    public void parse(InfoParserPackage info, boolean enabled) {
+        if (blocked(info.getArgs())) return;
+        if (enabled || allowed(info.getArgs())) parse(info);
     }
 
 }
