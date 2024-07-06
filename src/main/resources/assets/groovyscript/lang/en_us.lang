@@ -796,6 +796,42 @@ groovyscript.wiki.enderio.vat.multipliers2.value=Sets the multiplier applied to 
 groovyscript.wiki.enderio.vat.baseMultiplier.value=Sets the base amount of fluid output
 groovyscript.wiki.enderio.vat.energy.value=Sets the energy cost of the recipe
 
+# EssentialCraft
+groovyscript.wiki.essentialcraft.demon_trade.title=Demon Trade
+groovyscript.wiki.essentialcraft.demon_trade.description=Adds an item that can be sold to Demons to obtain Ackronite. Note that each demon that spawns has a random item that it can accept, and will not accept any other item.
+groovyscript.wiki.essentialcraft.demon_trade.add=Adds an item or an entity that can be sold to demons
+groovyscript.wiki.essentialcraft.demon_trade.remove=Removes an item from the pool of sold items
+groovyscript.wiki.essentialcraft.demon_trade.removeEntity=Removes an entity from the pool of sold items
+groovyscript.wiki.essentialcraft.demon_trade.note0=Demon Trade recipes must set the correct NBT on all input items. This is a bug that was fixed in the version 1.12.2-4.9.112.6 of the mod.
+
+groovyscript.wiki.essentialcraft.magician_table.title=Magician Table
+groovyscript.wiki.essentialcraft.magician_table.description=A 5-slot processing machine using MRU. Can be upgraded with various plates to increase its speed.
+groovyscript.wiki.essentialcraft.magician_table.note0=Certain OreDict entries might give unexpected results when used in the Magician Table as inputs. Known entries include: ingotGold, gemEnderPearl
+groovyscript.wiki.essentialcraft.magician_table.mru.value=Sets the base MRU cost for this recipe. This cost also equals the time needed to execute the recipe in ticks
+
+groovyscript.wiki.essentialcraft.magmatic_smeltery.title=Magmatic Smeltery
+groovyscript.wiki.essentialcraft.magmatic_smeltery.description=A machine used to quadruple ores using MRU and lava. Also adds the same recipes for Magmatic Furnace, which is used to double ores using MRU.
+groovyscript.wiki.essentialcraft.magmatic_smeltery.note0=Magmatic Smeltery does not have a JEI handler. This means its recipes will not be displayed in JEI and have to be tested manually.
+groovyscript.wiki.essentialcraft.magmatic_smeltery.color.value=Sets the overlay color for the Magmatic Alloy item of this ore
+groovyscript.wiki.essentialcraft.magmatic_smeltery.input.value=Sets the OreDict name of the input item
+groovyscript.wiki.essentialcraft.magmatic_smeltery.factor.value=Sets the output factor of the recipe. Magmatic Furnace will smelt the input item into this many Magmatic Alloys, Magmatic Smeltery will give double this many Magmatic Alloys, and Alloys will always be smelted into 2x of the output item
+groovyscript.wiki.essentialcraft.magmatic_smeltery.output.value=Sets the OreDict name of the output item
+
+groovyscript.wiki.essentialcraft.mithriline_furnace.title=Mithriline Furnace
+groovyscript.wiki.essentialcraft.mithriline_furnace.description=Converts various items into other items using ESPE.
+groovyscript.wiki.essentialcraft.mithriline_furnace.espe.value=Sets the ESPE cost for this recipe
+
+groovyscript.wiki.essentialcraft.radiating_chamber.title=Radiating Chamber
+groovyscript.wiki.essentialcraft.radiating_chamber.description=Combines two items together using MRU to obtain a third item. Can optionally require a specific range of MRU balance to execute the recipe.
+groovyscript.wiki.essentialcraft.radiating_chamber.time.value=Sets the time needed to execute this recipe, in ticks
+groovyscript.wiki.essentialcraft.radiating_chamber.mruPerTick.value=Sets the amount of MRU spent by the Chamber each tick. The total MRU can be calculated as `time * mruPerTick`
+groovyscript.wiki.essentialcraft.radiating_chamber.lowerBalance.value=Sets the minimum balance required for this recipe
+groovyscript.wiki.essentialcraft.radiating_chamber.upperBalance.value=Sets the maximum balance required for this recipe
+
+groovyscript.wiki.essentialcraft.wind_rune.title=Wind Rune
+groovyscript.wiki.essentialcraft.wind_rune.description=Transforms various items using ESPE.
+groovyscript.wiki.essentialcraft.wind_rune.espe.value=Sets the ESPE cost for this recipe
+
 # EvilCraft
 groovyscript.wiki.evilcraft.blood_infuser.title=Blood Infuser
 groovyscript.wiki.evilcraft.blood_infuser.description=Consumes an item, some fluid, and requires a given tier of Promise of Tenacity to produce the output and some experience after a duration.
