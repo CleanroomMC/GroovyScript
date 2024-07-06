@@ -1422,6 +1422,66 @@ groovyscript.wiki.pyrotech.tanning_rack.failureItem.value=Sets the output when t
 groovyscript.wiki.pyrotech.tanning_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`, `failureItem`
 
 
+# PneumaticCraft
+groovyscript.wiki.pneumaticcraft.amadron.title=Amadron
+groovyscript.wiki.pneumaticcraft.amadron.description=Uses an Amadron Tablet and linked inventories in world to trade via drones.
+groovyscript.wiki.pneumaticcraft.amadron.note0=Amadron recipes added or removed via GroovyScript will be saved to a config file in `config/pneumaticcraft/`, meaning changes made may persist unexpectedly through restarts.
+groovyscript.wiki.pneumaticcraft.amadron.periodic.value=Sets if the Amadron recipe is periodic
+groovyscript.wiki.pneumaticcraft.amadron.removeAllPeriodic=Removes all periodic recipes
+groovyscript.wiki.pneumaticcraft.amadron.removeAllStatic=Removes all static recipes
+
+groovyscript.wiki.pneumaticcraft.assembly_controller.title=Assembly Controller
+groovyscript.wiki.pneumaticcraft.assembly_controller.description=Uses a given Program to convert an input itemstack into an output itemstack. Drill recipes that output an itemstack used for the input itemstack of a Laser recipe can be chained via the Drill & Laser Program.
+groovyscript.wiki.pneumaticcraft.assembly_controller.programStack.value=Sets the program type used, between Drill and Laser
+groovyscript.wiki.pneumaticcraft.assembly_controller.removeAllDrill=Removes all Drill program recipes
+groovyscript.wiki.pneumaticcraft.assembly_controller.removeAllLaser=Removes all Laser program recipes
+
+groovyscript.wiki.pneumaticcraft.explosion.title=Explosion
+groovyscript.wiki.pneumaticcraft.explosion.description=Converts an input item into an output item, with a chance to fail and destroy the item.
+groovyscript.wiki.pneumaticcraft.explosion.note0=Consider using the inWorldCrafting Explosion compat instead!
+groovyscript.wiki.pneumaticcraft.explosion.lossRate.value=Sets the failure rate of the recipe, where the item is simply destroyed instead of being converted
+
+groovyscript.wiki.pneumaticcraft.heat_frame_cooling.title=Heat Frame Cooling
+groovyscript.wiki.pneumaticcraft.heat_frame_cooling.description=Converts an input itemstack into an output itemstack when inside an inventory placed within a Heat Frame which is cooled.
+
+groovyscript.wiki.pneumaticcraft.liquid_fuel.title=Liquid Fuel
+groovyscript.wiki.pneumaticcraft.liquid_fuel.description=Converts fluid into Pressure in a Liquid Compressor.
+groovyscript.wiki.pneumaticcraft.liquid_fuel.add=Adds entries in the format `fluid`, `pressure`
+groovyscript.wiki.pneumaticcraft.liquid_fuel.pressure.value=Sets the Pressure created by the fluid
+groovyscript.wiki.pneumaticcraft.liquid_fuel.remove=Removes entries with the given `fluid`
+
+groovyscript.wiki.pneumaticcraft.plastic_mixer.title=Plastic Mixer
+groovyscript.wiki.pneumaticcraft.plastic_mixer.description=Converts a fluidstack and an item with a variable damage value into each other, requiring temperature to operate the process, optionally consuming dye, and allowing either only melting or only solidifying.
+groovyscript.wiki.pneumaticcraft.plastic_mixer.note0=Items with metadata 15 will never consume dye, even if the option is enabled.
+groovyscript.wiki.pneumaticcraft.plastic_mixer.note1=Only one meta value can be used for a recipe per fluid, and the meta value will be applied to the item.
+groovyscript.wiki.pneumaticcraft.plastic_mixer.meta.value=Sets the meta value for selecting the recipe, only one meta value can be used for a fluid
+groovyscript.wiki.pneumaticcraft.plastic_mixer.useDye.value=Sets if the recipe consumes a random dye
+groovyscript.wiki.pneumaticcraft.plastic_mixer.allowMelting.value=Sets if the recipe allows melting the output item back into the input fluid
+groovyscript.wiki.pneumaticcraft.plastic_mixer.allowSolidifying.value=Sets if the recipe allows solidifying the input fluid into the output item
+groovyscript.wiki.pneumaticcraft.plastic_mixer.requiredTemperature.value=Sets the required temperature in Kelvin to melt or solidify the recipe
+groovyscript.wiki.pneumaticcraft.plastic_mixer.removeByFluid=Removes all recipes with the given fluid input
+groovyscript.wiki.pneumaticcraft.plastic_mixer.removeByItem=Removes all recipes with the given item output
+
+groovyscript.wiki.pneumaticcraft.pressure_chamber.title=Pressure Chamber
+groovyscript.wiki.pneumaticcraft.pressure_chamber.description=Converts any number of input itemstacks into any number of output itemstacks, either generating Pressure or consuming Pressure from the Pressure Chamber.
+groovyscript.wiki.pneumaticcraft.pressure_chamber.pressure.value=Sets the Pressure consumed to perform the craft, if negative will generate Pressure instead
+
+groovyscript.wiki.pneumaticcraft.refinery.title=Refinery
+groovyscript.wiki.pneumaticcraft.refinery.description=Converts an input fluidstack into between 2 and 4 fluidstacks, consuming Temperature, with the number of fluidstacks output depending on the recipe and the number of Refineries vertically stacked.
+groovyscript.wiki.pneumaticcraft.refinery.requiredTemperature.value=Sets the required temperate in Kelvin required to process the recipe
+
+groovyscript.wiki.pneumaticcraft.thermopneumatic_processing_plant.title=Thermopneumatic Processing Plant
+groovyscript.wiki.pneumaticcraft.thermopneumatic_processing_plant.description=Converts an input fluidstack into an output fluidstack, consuming Pressure and Temperature, with an optional itemstack being consumed.
+groovyscript.wiki.pneumaticcraft.thermopneumatic_processing_plant.pressure.value=Sets the Pressure consumed to perform the craft
+groovyscript.wiki.pneumaticcraft.thermopneumatic_processing_plant.requiredTemperature.value=Sets the required temperate in Kelvin required to process the recipe
+
+groovyscript.wiki.pneumaticcraft.xp_fluid.title=XP Fluid
+groovyscript.wiki.pneumaticcraft.xp_fluid.description=Controls what fluids are considered XP Fluids and how much experience they provide.
+groovyscript.wiki.pneumaticcraft.xp_fluid.add=Adds entries in the format `fluid`, `ratio`
+groovyscript.wiki.pneumaticcraft.xp_fluid.ratio.value=Sets the amount of experience provided by the fluid for the purpose of determining the ratio between xp fluids
+groovyscript.wiki.pneumaticcraft.xp_fluid.remove=Removes entries for the given `fluid`
+
+
 # Project E
 groovyscript.wiki.projecte.entity_randomizer.title=Entity Randomizer
 groovyscript.wiki.projecte.entity_randomizer.description=Converts an entity on the list into a random other entity on the list when a projectile fired from the Philosopher's Stone hits it. There are two lists, one for 'mobs' and the other for 'peacefuls', but any entity can go on either list.
