@@ -113,7 +113,7 @@ public class EventHandler {
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    public static void registerTextures(ClientChatEvent event) {
+    public static void onClientChatEvent(ClientChatEvent event) {
         if (event.getOriginalMessage().startsWith(CustomClickAction.PREFIX) &&
             CustomClickAction.runActionHook(event.getOriginalMessage().substring(CustomClickAction.PREFIX.length()))) {
             event.setCanceled(true);
