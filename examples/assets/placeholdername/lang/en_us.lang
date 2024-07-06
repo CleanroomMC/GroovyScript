@@ -2,8 +2,21 @@ itemGroup.groovyscript.example_creative_tab=GroovyScript Creative Tab
 item.placeholdername.heartofauniverse.name=Heart of the Universe
 item.placeholdername.clay_2.name=If clay is so good...
 item.placeholdername.clay_3.name=Enchanted Clay
+item.placeholdername.prodigy_stick.name=Prodigy Stick
 item.placeholdername.snack.name=Snack
 tile.placeholdername.generic_block.name=Generic Block
 tile.placeholdername.dragon_egg_lamp.name=Dragon Egg Lamp
 
 fluid.placeholdername.amongium=Amongium
+
+# For the prodigy tech example
+enchantment.level.11=XI
+enchantment.level.12=XII
+enchantment.level.13=XIII
+enchantment.level.14=XIV
+enchantment.level.15=XV
+enchantment.level.16=XVI
+enchantment.level.17=XVII
+enchantment.level.18=XVIII
+enchantment.level.19=XIX
+enchantment.level.20=XX
