@@ -58,6 +58,13 @@ public abstract class MetaClassImplMixin {
         }
     }
 
+    @Inject(method = "invokeStaticMissingProperty", at = @At("HEAD"), cancellable = true)
+    public void invokeStaticMissingProperty(Object instance, String propertyName, Object optionalValue, boolean isGetter, CallbackInfoReturnable<Object> cir) {
+        if (!isGetter) return;
+        Object o = GroovyScript.getSandbox().getBindings().get(propertyName);
+        if (o != null) cir.setReturnValue(o);
+    }
+
     /**
      * @author brachy
      * @reason class scripts being unable to use bindings and this method calling closures improperly
