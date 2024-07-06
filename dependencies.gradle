@@ -38,7 +38,7 @@ final def mod_dependencies = [
         'guidebook-253874:2989594'                            : [project.debug_arcane_archives],
         'mystical_lib-277064:3483816'                         : [project.debug_arcane_archives, project.debug_roots],
         'astralsorcery-sorcery-241721:3044416'                : [project.debug_astral],
-        'baubles-227083:2518667'                              : [project.debug_astral, project.debug_botania, project.debug_thaum],
+        'baubles-227083:2518667'                              : [project.debug_astral, project.debug_botania, project.debug_thaum, project.debug_essentialcraft_4],
         'the-aurorian-352137:4981736'                         : [project.debug_aurorian],
         'avaritia_1_10-261348:3143349'                        : [project.debug_avaritia],
         'bwm-core-294335:2624990'                             : [project.debug_better_with_mods],
@@ -54,13 +54,16 @@ final def mod_dependencies = [
         'brandons_core-231382:3408276'                        : [project.debug_draconic_evolution],
         'draconic_evolution-223565:3431261'                   : [project.debug_draconic_evolution],
         'redstone_flux-270789:2920436'                        : [project.debug_draconic_evolution, project.debug_thermal],
+        'essentialcraft-4-unofficial-254817:5416404'          : [project.debug_essentialcraft_4],
+        'dummycore-unofficial-266491:2611426'                 : [project.debug_essentialcraft_4],
         'cyclops-core-232758:3159497'                         : [project.debug_evilcraft, project.debug_integrated_dynamics],
         'evilcraft-74610:2811267'                             : [project.debug_evilcraft],
         'cucumber-272335:2645867'                             : [project.debug_extended_crafting],
         'extended-crafting-nomifactory-edition-398267:3613140': [project.debug_extended_crafting],
         'extra-utilities-2-225561:2678374'                    : [project.debug_extra_utilities_2],
         'forestry-59751:2918418'                              : [project.debug_forestry],
-        'immersive_engineering-231951:2974106'                : [project.debug_immersive_engineering],
+        'immersive_engineering-231951:2974106'                : [project.debug_immersive_engineering, project.debug_immersive_petroleum],
+        'immersive-petroleum-268250:3382321'                  : [project.debug_immersive_petroleum],
         // WARNING: experimental must be placed before classic, otherwise you will crash when debugging either. Check FluidGenerator compat to confirm
         'industrialcraft_experimental-242638:3838713'         : [project.debug_industrial_craft_2_experimental],
         'industrialcraft_classic-242942:3093607'              : [project.debug_industrial_craft_2_classic],
@@ -75,10 +78,13 @@ final def mod_dependencies = [
         'mekanism-268560:2835175'                             : [project.debug_mekanism],
         'natures-aura-306626:2882138'                         : [project.debug_natures_aura],
         'packmode-278398:2567799'                             : [project.debug_packmode],
+        'pneumaticcraft-repressurized-281849:2978408'         : [project.debug_pneumaticcraft],
+        'projecte-226410:2702991'                             : [project.debug_projecte],
         'athenaeum-284350:4633750'                            : [project.debug_pyrotech],
         'pyrotech-306676:4956838'                             : [project.debug_pyrotech],
         'mystical_world-282940:3460961'                       : [project.debug_roots],
-        'patchouli-306770:3162874'                            : [project.debug_roots, project.debug_natures_aura],
+        'patchouli-306770:3162874'                            : [project.debug_roots, project.debug_natures_aura, project.debug_prodigytech],
+        'prodigytech-297414:2769520'                          : [project.debug_prodigytech],
         'roots-246183:3905074'                                : [project.debug_roots],
         'rustic-256141:3107974'                               : [project.debug_rustic],
         'thaumcraft-223628:2629023'                           : [project.debug_thaum],
@@ -131,6 +137,10 @@ dependencies {
 
     if (project.debug_forestry.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:jei-bees-248370:2490058')
+    }
+
+    if (project.debug_immersive_petroleum.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:just-enough-petroleum-291727:2549332')
     }
 
     if (project.debug_pyrotech.toBoolean()) {

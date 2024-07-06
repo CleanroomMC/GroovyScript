@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.FluidRecipe;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.FluidToFluid;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.FluidToItem;
 import com.cleanroommc.groovyscript.compat.mods.jei.BaseCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -39,7 +40,7 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
     public final IDrawable icon;
 
     public FluidRecipeCategory(IGuiHelper guiHelper) {
-        super(guiHelper, UID, 176, 73);
+        super(guiHelper, UID, 176, 79);
 
         downRightArrow = guiHelper.drawableBuilder(new ResourceLocation(GroovyScript.ID, "textures/jei/arrow_down_right.png"), 0, 0, 24, 18)
                 .setTextureSize(24, 18)
@@ -67,8 +68,16 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
         recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (slotIndex < 9) {
                 float chance = recipeWrapper.recipe.getItemConsumeChance()[slotIndex];
-                if (chance < 1) {
-                    tooltip.add(1, I18n.format("groovyscript.recipe.chance_produce", numberFormat.format(chance)));
+                if (chance < 1f) {
+                    tooltip.add(1, I18n.format("groovyscript.recipe.chance_consume", numberFormat.format(chance)));
+                }
+            }
+        });
+        recipeLayout.getFluidStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+            if (slotIndex == 10 && recipeWrapper.recipe instanceof FluidToItem.Recipe fluidToItemRecipe) {
+                float chance = fluidToItemRecipe.getFluidConsumptionChance();
+                if (chance < 1f) {
+                    tooltip.add(1, I18n.format("groovyscript.recipe.chance_consume", numberFormat.format(chance)));
                 }
             }
         });
@@ -131,7 +140,23 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
             for (int i = 0, n = this.recipe.getItemInputs().length; i < n; i++) {
                 x += 18;
                 float chance = this.recipe.getItemConsumeChance()[i];
-                if (chance == 1.0f) continue;
+                if (chance >= 1.0f) continue;
+                String chanceS = numberFormat.format(chance);
+                float w = minecraft.fontRenderer.getStringWidth(chanceS) * scale;
+                float xx = 9 - w / 2.0f;
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(x + xx, y - 1, 0);
+                GlStateManager.translate(xx, yOff, 0);
+                GlStateManager.scale(scale, scale, 1);
+                GlStateManager.translate(-xx, -yOff, 0);
+                minecraft.fontRenderer.drawString(chanceS, 0, 0, 0x404040);
+                GlStateManager.popMatrix();
+            }
+            if (this.recipe instanceof FluidToItem.Recipe fluidToItemRecipe) {
+                y = outputY + 18;
+                x = 53;
+                float chance = fluidToItemRecipe.getFluidConsumptionChance();
+                if (chance >= 1.0f) return;
                 String chanceS = numberFormat.format(chance);
                 float w = minecraft.fontRenderer.getStringWidth(chanceS) * scale;
                 float xx = 9 - w / 2.0f;

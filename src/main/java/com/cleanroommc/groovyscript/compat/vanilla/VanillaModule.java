@@ -36,7 +36,7 @@ public class VanillaModule extends GroovyPropertyContainer implements IScriptRel
         GroovyScript.getSandbox().registerBinding(rarity);
         GroovyScript.getSandbox().registerBinding(inWorldCrafting);
 
-        ExpansionHelper.mixinClass(ItemStack.class, RarityItemStackExpansion.class);
+        ExpansionHelper.mixinClass(ItemStack.class, ItemStackExpansion.class);
     }
 
     @Override

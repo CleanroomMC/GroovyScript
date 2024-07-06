@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.core.mixin.groovy.ModuleNodeAccessor;
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
+import org.codehaus.groovy.ast.MethodNode;
 import org.codehaus.groovy.ast.ModuleNode;
 import org.codehaus.groovy.ast.expr.DeclarationExpression;
 import org.codehaus.groovy.ast.expr.Expression;
@@ -24,6 +25,7 @@ import org.codehaus.groovy.syntax.Token;
 import org.codehaus.groovy.syntax.Types;
 
 import java.io.File;
+import java.util.List;
 
 public class GroovyScriptEarlyCompiler extends CompilationCustomizer {
 
@@ -46,7 +48,9 @@ public class GroovyScriptEarlyCompiler extends CompilationCustomizer {
             }
             module.setPackageName(packageName);
         }
-        BlockStatement scriptStatement = (BlockStatement) module.getClasses().get(0).getMethods("run").get(0).getCode();
+        List<MethodNode> methods = module.getClasses().get(0).getMethods("run");
+        if (methods.isEmpty()) return; // class scripts don't have a run method
+        BlockStatement scriptStatement = (BlockStatement) methods.get(0).getCode();
         // transform 'import mods.[mod].[registry]' statements into 'def [registry] = mods.[mod].[registry]' expressions
         ((ModuleNodeAccessor) module).getModifiableImports().removeIf(imp -> {
             ClassNode type = imp.getType();
