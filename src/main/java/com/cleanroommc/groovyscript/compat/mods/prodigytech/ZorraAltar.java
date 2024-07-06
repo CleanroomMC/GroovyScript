@@ -7,7 +7,6 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.github.bsideup.jabel.Desugar;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-
 import lykrast.prodigytech.common.recipe.ZorraAltarManager;
 import lykrast.prodigytech.common.util.Config;
 import net.minecraft.enchantment.Enchantment;
@@ -17,6 +16,7 @@ import java.util.Map;
 
 @RegistryDescription
 public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> {
+
     @GroovyBlacklist
     private static final Map<String, ZorraAltarManager> managers = new Object2ObjectOpenHashMap<>();
 
@@ -52,8 +52,8 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
     }
 
     @MethodDescription(example = {
-        @Example("'sword', enchantment('minecraft:power'), 10"),
-        @Example("'stick', enchantment('minecraft:knockback'), 20")
+            @Example("'sword', enchantment('minecraft:power'), 10"),
+            @Example("'stick', enchantment('minecraft:knockback'), 20")
     })
     public void addEnchantment(String registry, Enchantment enchantment, int maxLevel) {
         if (!managers.containsKey(registry)) return;

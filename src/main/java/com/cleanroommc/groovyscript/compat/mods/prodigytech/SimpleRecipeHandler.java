@@ -14,9 +14,10 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<SimpleRecipe> {
+
     @RecipeBuilderDescription(example = {
-        @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).time(50)"),
-        @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:coal'))")
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).time(50)"),
+            @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:coal'))")
     })
     public SimpleRecipeHandler.RecipeBuilder recipeBuilder() {
         return new SimpleRecipeHandler.RecipeBuilder();
@@ -29,6 +30,7 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = @Comp("1"))
     public class RecipeBuilder extends AbstractRecipeBuilder<SimpleRecipe> {
+
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE), defaultValue = "(default time for this machine in the mod's config)")
         private int time = getDefaultTime();
 
@@ -71,6 +73,7 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
 
     @RegistryDescription
     public static class RotaryGrinder extends SimpleRecipeHandler {
+
         RotaryGrinder() {
             super("Rotary Grinder", RotaryGrinderManager.INSTANCE);
         }
@@ -89,6 +92,7 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
 
     @RegistryDescription
     public static class MagneticReassembler extends SimpleRecipeHandler {
+
         MagneticReassembler() {
             super("Magnetic Reassembler", MagneticReassemblerManager.INSTANCE);
         }

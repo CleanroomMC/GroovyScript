@@ -54,6 +54,7 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RadiatingChamberRecipe> {
+
         @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
         private int time;
 

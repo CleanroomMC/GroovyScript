@@ -19,9 +19,10 @@ import java.util.List;
 
 @RegistryDescription
 public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.AtomicReshaperRecipe> {
+
     @RecipeBuilderDescription(example = {
-        @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:emerald_block')).primordium(10).time(50)"),
-        @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block'), 10).output(item('minecraft:carrot'), 3).primordium(7)")
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:emerald_block')).primordium(10).time(50)"),
+            @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block'), 10).output(item('minecraft:carrot'), 3).primordium(7)")
     })
     public AtomicReshaper.RecipeBuilder recipeBuilder() {
         return new AtomicReshaper.RecipeBuilder();

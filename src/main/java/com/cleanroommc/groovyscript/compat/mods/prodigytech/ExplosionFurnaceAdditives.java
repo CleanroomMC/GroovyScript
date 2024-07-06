@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurnaceAdditives.EFAdditiveRecipe> {
+
     @Override
     public void onReload() {
         removeScripted().forEach(EFAdditiveRecipe::unregister);
@@ -50,7 +51,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @MethodDescription(example = @Example(priority = 2000, commented = true))
     public void removeAllExplosives() {
         ExplosionFurnaceManager.EXPLOSIVES.getAllContent().forEach(r ->
-            addBackup(new EFAdditiveExplosive(new ItemsIngredient(r.getMatchingStacks()), r.getPower())));
+                                                                           addBackup(new EFAdditiveExplosive(new ItemsIngredient(r.getMatchingStacks()), r.getPower())));
         ExplosionFurnaceManager.removeAllExplosives();
     }
 
@@ -75,17 +76,20 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @MethodDescription(example = @Example(priority = 2000, commented = true))
     public void removeAllDampeners() {
         ExplosionFurnaceManager.DAMPENERS.getAllContent().forEach(r ->
-            addBackup(new EFAdditiveDampener(new ItemsIngredient(r.getMatchingStacks()), r.getDampening())));
+                                                                          addBackup(new EFAdditiveDampener(new ItemsIngredient(r.getMatchingStacks()), r.getDampening())));
         ExplosionFurnaceManager.removeAllDampeners();
     }
 
     public interface EFAdditiveRecipe {
+
         void register();
+
         void unregister();
     }
 
     @Desugar
     public record EFAdditiveExplosive(IIngredient input, int value) implements EFAdditiveRecipe {
+
         @Override
         public void register() {
             if (this.input instanceof OreDictIngredient) {
@@ -111,6 +115,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
     @Desugar
     public record EFAdditiveDampener(IIngredient input, int value) implements EFAdditiveRecipe {
+
         @Override
         public void register() {
             if (this.input instanceof OreDictIngredient) {

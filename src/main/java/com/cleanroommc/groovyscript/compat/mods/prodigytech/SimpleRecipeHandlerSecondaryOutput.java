@@ -11,11 +11,12 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHandlerAbstract<SimpleRecipeSecondaryOutput> {
+
     @RecipeBuilderDescription(example = {
-        @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).time(50)"),
-        @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:coal'))"),
-        @Example(".input(item('minecraft:iron_block')).output(item('minecraft:emerald'), item('minecraft:clay'))"),
-        @Example(".input(item('minecraft:gold_block')).output(item('minecraft:emerald'), item('minecraft:nether_star')).secondaryChance(0.25).time(50)")
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).time(50)"),
+            @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:coal'))"),
+            @Example(".input(item('minecraft:iron_block')).output(item('minecraft:emerald'), item('minecraft:clay'))"),
+            @Example(".input(item('minecraft:gold_block')).output(item('minecraft:emerald'), item('minecraft:nether_star')).secondaryChance(0.25).time(50)")
     })
     public SimpleRecipeHandlerSecondaryOutput.RecipeBuilder recipeBuilder() {
         return new SimpleRecipeHandlerSecondaryOutput.RecipeBuilder();
@@ -28,6 +29,7 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
     public class RecipeBuilder extends AbstractRecipeBuilder<SimpleRecipe> {
+
         @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
         private int time = getDefaultTime();
 
@@ -81,6 +83,7 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
 
     @RegistryDescription
     public static class HeatSawmill extends SimpleRecipeHandlerSecondaryOutput {
+
         HeatSawmill() {
             super("Heat Sawmill", HeatSawmillManager.INSTANCE);
         }
@@ -99,6 +102,7 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
 
     @RegistryDescription
     public static class OreRefinery extends SimpleRecipeHandlerSecondaryOutput {
+
         OreRefinery() {
             super("Ore Refinery", OreRefineryManager.INSTANCE);
         }

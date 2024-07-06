@@ -17,8 +17,8 @@ import org.jetbrains.annotations.Nullable;
 public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe> {
 
     @RecipeBuilderDescription(example = {
-        @Example(".pattern(item('minecraft:clay')).input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).gold(5).time(100)"),
-        @Example(".pattern(item('minecraft:coal_block')).output(item('minecraft:nether_star')).gold(75)"),
+            @Example(".pattern(item('minecraft:clay')).input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).gold(5).time(100)"),
+            @Example(".pattern(item('minecraft:coal_block')).output(item('minecraft:nether_star')).gold(75)"),
     })
     public Solderer.RecipeBuilder recipeBuilder() {
         return new Solderer.RecipeBuilder();

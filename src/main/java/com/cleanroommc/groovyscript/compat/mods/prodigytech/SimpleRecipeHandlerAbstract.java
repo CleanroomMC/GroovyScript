@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class SimpleRecipeHandlerAbstract<T extends SimpleRecipe> extends VirtualizedRegistry<T> {
+
     private final SimpleRecipeManagerAbstract<T> instance;
     protected final String name;
 

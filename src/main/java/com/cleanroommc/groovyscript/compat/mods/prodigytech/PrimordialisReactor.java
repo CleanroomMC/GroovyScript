@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
+
     @Override
     public void onReload() {
         removeScripted().forEach(this::removeRecipeBase);

@@ -10,10 +10,11 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import essentialcraft.api.OreSmeltingRecipe;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription(reloadability = RegistryDescription.Reloadability.DISABLED, admonition={
-    @Admonition(value = "groovyscript.wiki.essentialcraft.magmatic_smeltery.note0", type = Admonition.Type.WARNING),
+@RegistryDescription(reloadability = RegistryDescription.Reloadability.DISABLED, admonition = {
+        @Admonition(value = "groovyscript.wiki.essentialcraft.magmatic_smeltery.note0", type = Admonition.Type.WARNING),
 })
 public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
+
     @RecipeBuilderDescription(example = @Example(".input('blockIron').output('ingotGold').factor(3).color(0x0000ff)"))
     public MagmaticSmeltery.RecipeBuilder recipeBuilder() {
         return new MagmaticSmeltery.RecipeBuilder();
@@ -54,6 +55,7 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
     }
 
     public static class RecipeBuilder implements IRecipeBuilder<OreSmeltingRecipe> {
+
         @Property(valid = @Comp("1"))
         private String input;
 

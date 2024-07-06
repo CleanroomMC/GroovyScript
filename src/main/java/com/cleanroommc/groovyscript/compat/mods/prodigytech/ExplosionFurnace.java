@@ -13,9 +13,10 @@ import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription
 public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManager.ExplosionFurnaceRecipe> {
+
     @RecipeBuilderDescription(example = {
-        @Example(".input(ore('ingotGold'), item('minecraft:diamond')).craftPerReagent(8).power(160).output(item('minecraft:emerald_block'))"),
-        @Example(".input(item('minecraft:stone')).power(160).output(item('minecraft:glowstone'))")
+            @Example(".input(ore('ingotGold'), item('minecraft:diamond')).craftPerReagent(8).power(160).output(item('minecraft:emerald_block'))"),
+            @Example(".input(item('minecraft:stone')).power(160).output(item('minecraft:glowstone'))")
     })
     public ExplosionFurnace.RecipeBuilder recipeBuilder() {
         return new ExplosionFurnace.RecipeBuilder();
