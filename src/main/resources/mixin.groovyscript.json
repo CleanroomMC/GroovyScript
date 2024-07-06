@@ -35,6 +35,5 @@
   "client": [
     "DefaultResourcePackAccessor",
     "GuiCreateWorldMixin",
-    "GuiChatMixin"
   ]
 }
