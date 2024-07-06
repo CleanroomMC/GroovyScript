@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.event;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.command.CustomClickAction;
 import com.cleanroommc.groovyscript.compat.WarningScreen;
 import com.cleanroommc.groovyscript.compat.content.GroovyBlock;
 import com.cleanroommc.groovyscript.compat.content.GroovyFluid;
@@ -28,6 +29,7 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -106,6 +108,15 @@ public class EventHandler {
             VanillaModule.player.addToInventory(event.player.inventory);
             data.setBoolean(Player.GIVEN_ITEMS, true);
             tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
+        }
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void onClientChatEvent(ClientChatEvent event) {
+        if (event.getOriginalMessage().startsWith(CustomClickAction.PREFIX) &&
+            CustomClickAction.runActionHook(event.getOriginalMessage().substring(CustomClickAction.PREFIX.length()))) {
+            event.setCanceled(true);
         }
     }
 
