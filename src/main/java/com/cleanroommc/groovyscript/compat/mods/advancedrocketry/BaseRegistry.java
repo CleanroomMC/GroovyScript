@@ -1,0 +1,189 @@
+package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
+
+import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
+import zmaster587.libVulpes.interfaces.IRecipe;
+import zmaster587.libVulpes.recipe.RecipesMachine;
+import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
+
+import javax.annotation.Nonnull;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
+
+    protected abstract Class<? extends TileMultiblockMachine> getMachineClass();
+
+    private @Nonnull List<IRecipe> getRecipeList() {
+        Class<? extends TileMultiblockMachine> clazz = getMachineClass();
+        RecipesMachine registry = RecipesMachine.getInstance();
+        List<IRecipe> recipes = registry.getRecipes(clazz);
+        if (recipes == null) {
+            recipes = new LinkedList<>();
+            registry.recipeList.put(clazz, recipes);
+        }
+        return recipes;
+    }
+
+    @Override
+    public void onReload() {
+        List<IRecipe> recipes = getRecipeList();
+        recipes.addAll(restoreFromBackup());
+        removeScripted().forEach(r -> recipes.removeIf(r::equals));
+    }
+
+    public void addRecipe(IRecipe r) {
+        getRecipeList().add(r);
+        addScripted(r);
+    }
+
+    public boolean removeByFluidInput(FluidStack fluidStack) {
+        return getRecipeList().removeIf(r -> {
+            List<FluidStack> inputFluid = r.getFluidIngredients();
+            if (inputFluid.stream().anyMatch(fluidIn -> fluidIn.isFluidEqual(fluidStack))) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public boolean removeByInput(IIngredient inputItem) {
+        if (inputItem instanceof FluidStack) {
+            return removeByFluidInput((FluidStack) inputItem);
+        }
+        return getRecipeList().removeIf(r -> {
+            List<List<ItemStack>> input = r.getIngredients();
+            if (input.stream().anyMatch(itemStacks -> itemStacks.stream().anyMatch(inputItem))) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public boolean removeByFluidOutput(FluidStack fluidStack) {
+        return getRecipeList().removeIf(r -> {
+            List<FluidStack> outputFluid = r.getFluidOutputs();
+            if (outputFluid.stream().anyMatch(fluidOut -> fluidOut.isFluidEqual(fluidStack))) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public boolean removeByOutput(IIngredient outputItem) {
+        if (outputItem instanceof FluidStack) {
+            return removeByFluidInput((FluidStack) outputItem);
+        }
+        return getRecipeList().removeIf(r -> {
+            List<ItemStack> output = r.getOutput();
+            if (output.stream().anyMatch(outputItem)) {
+                addBackup(r);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "9")})
+    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "9")})
+    public abstract class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
+        // still have to override the Validate method
+
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        protected int power = 0;
+
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        protected int time = 0;
+
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        protected int outputSize = 0;
+
+        private final List<Float> outputChances = new ArrayList<>();
+
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder time(int time) {
+            this.time = time;
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder power(int power) {
+            this.power = power;
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder outputSize(int outputSize) {
+            this.outputSize = outputSize;
+            return this;
+        }
+
+        // 0.0f is used because that's what AR uses for "100% chance". Copium.
+        @Override
+        public RecipeBuilder output(ItemStack output) {
+            return output(output, 0.0f);
+        }
+
+        public RecipeBuilder output(ItemStack output, float chance) {
+            this.output.add(output);
+            this.outputChances.add(chance);
+            return this;
+        }
+
+        @Override
+        public String getErrorMsg() {
+            return String.format("Error adding %s recipe (Advanced Rocketry)", getName());
+        }
+
+        protected int getHatchesNeeded() {
+            return (int) (Math.ceil(((double) input.size()) / 4) + Math.ceil(((double) output.size()) / 4) + fluidInput.size() + fluidOutput.size());
+        }
+
+        @Override
+        @RecipeBuilderRegistrationMethod
+        public @Nullable IRecipe register() {
+            if (!validate()) return null;
+            List<List<ItemStack>> inputs = new LinkedList<>();
+            Map<Integer, String> oredicts = new HashMap<>();
+            for (int i = 0; i < input.size(); i++) {
+                IIngredient in = input.get(i);
+                inputs.add(Arrays.stream(in.getMatchingStacks()).collect(Collectors.toList()));
+                if (in instanceof OreDictIngredient) {
+                    oredicts.put(i, ((OreDictIngredient) in).getOreDict());
+                }
+            }
+
+            List<RecipesMachine.ChanceItemStack> outputs = new LinkedList<>();
+            for (int i = 0; i < output.size(); i++) {
+                ItemStack out = output.get(i);
+                float chance = outputChances.get(i);
+                outputs.add(new RecipesMachine.ChanceItemStack(out, chance));
+            }
+
+            List<RecipesMachine.ChanceFluidStack> fluidOutputs = new LinkedList<>();
+            for (FluidStack out : fluidOutput) {
+                fluidOutputs.add(new RecipesMachine.ChanceFluidStack(out, 1.0f));
+            }
+
+            RecipesMachine.Recipe r = new RecipesMachine.Recipe(outputs, inputs, fluidOutputs, fluidInput, time, power, oredicts);
+            if (outputSize > 0)
+                r.setMaxOutputSize(outputSize);
+            addRecipe(r);
+            return r;
+        }
+    }
+
+}

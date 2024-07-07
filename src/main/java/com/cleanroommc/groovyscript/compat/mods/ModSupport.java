@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.cleanroommc.groovyscript.compat.mods.actuallyadditions.ActuallyAdditions;
 import com.cleanroommc.groovyscript.compat.mods.advancedmortars.AdvancedMortars;
+import com.cleanroommc.groovyscript.compat.mods.advancedrocketry.AdvancedRocketry;
 import com.cleanroommc.groovyscript.compat.mods.aetherlegacy.Aether;
 import com.cleanroommc.groovyscript.compat.mods.alchemistry.Alchemistry;
 import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnergistics2;
@@ -69,6 +70,7 @@ public class ModSupport {
 
     public static final GroovyContainer<ActuallyAdditions> ACTUALLY_ADDITIONS = new InternalModContainer<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
     public static final GroovyContainer<AdvancedMortars> ADVANCED_MORTARS = new InternalModContainer<>("advancedmortars", "Advanced Mortars", AdvancedMortars::new);
+    public static final GroovyContainer<AdvancedRocketry> ADVANCED_ROCKETRY = new InternalModContainer<>("advancedrocketry", "Advanced Rocketry", AdvancedRocketry::new);
     public static final GroovyContainer<Aether> AETHER = new InternalModContainer<>("aether_legacy", "Aether Legacy", Aether::new, "aether");
     public static final GroovyContainer<Alchemistry> ALCHEMISTRY = new InternalModContainer<>("alchemistry", "Alchemistry", Alchemistry::new);
     public static final GroovyContainer<AppliedEnergistics2> APPLIED_ENERGISTICS_2 = new InternalModContainer<>("appliedenergistics2", "Applied Energistics 2", AppliedEnergistics2::new, "ae2");
