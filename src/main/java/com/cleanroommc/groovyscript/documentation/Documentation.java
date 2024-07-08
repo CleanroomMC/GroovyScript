@@ -115,5 +115,9 @@ public class Documentation {
         return I18n.format(translateKey, parameters);
     }
 
+    public static String ensurePeriod(String string) {
+        return string.charAt(string.length() - 1) == '.' ? string : string + ".";
+    }
+
 }
 

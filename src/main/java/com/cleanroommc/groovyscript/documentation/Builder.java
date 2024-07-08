@@ -418,7 +418,7 @@ public class Builder {
         }
 
         public String getDescription() {
-            return "- " + getFieldTypeInlineCode() + Documentation.translate(getLangKey()) + ".";
+            return "- " + getFieldTypeInlineCode() + Documentation.ensurePeriod(Documentation.translate(getLangKey()));
         }
 
         @Override
