@@ -116,6 +116,7 @@ public class Documentation {
     }
 
     public static String ensurePeriod(String string) {
+        if (string.isEmpty()) return "";
         return string.charAt(string.length() - 1) == '.' ? string : string + ".";
     }
 
