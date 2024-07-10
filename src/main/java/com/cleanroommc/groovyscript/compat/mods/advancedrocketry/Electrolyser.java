@@ -2,14 +2,11 @@ package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileElectrolyser;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
-@RegistryDescription
+@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
 public class Electrolyser extends BaseRegistry {
     @RecipeBuilderDescription(
             example = @Example(".fluidInput(fluid('lava') * 10).fluidOutput(fluid('nitrogen') * 50).power(50).time(100)"))
@@ -32,6 +29,8 @@ public class Electrolyser extends BaseRegistry {
         return super.removeByInput(input);
     }
 
+    @Property(property = "fluidInput", valid = @Comp(type = Comp.Type.EQ, value = "1"))
+    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "2"), @Comp(type = Comp.Type.GTE, value = "1")})
     public class RecipeBuilder extends BaseRegistry.RecipeBuilder {
         @Override
         public void validate(GroovyLog.Msg msg) {

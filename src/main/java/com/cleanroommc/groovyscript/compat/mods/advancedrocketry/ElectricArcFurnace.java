@@ -2,14 +2,16 @@ package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileElectricArcFurnace;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
-@RegistryDescription
+@RegistryDescription(admonition = {
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.input_slots", type = Admonition.Type.WARNING),
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.hatch_count_11", type = Admonition.Type.INFO),
+})
 public class ElectricArcFurnace extends BaseRegistry {
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:blaze_powder') * 4).output(item('minecraft:blaze_rod')).power(50).time(100)"))
@@ -32,6 +34,10 @@ public class ElectricArcFurnace extends BaseRegistry {
         return super.removeByInput(input);
     }
 
+    @Property(property = "input")
+    @Property(property = "fluidInput")
+    @Property(property = "output", value = "groovyscript.wiki.advancedrocketry.output.value")
+    @Property(property = "fluidOutput")
     public class RecipeBuilder extends BaseRegistry.RecipeBuilder {
         @Override
         public void validate(GroovyLog.Msg msg) {

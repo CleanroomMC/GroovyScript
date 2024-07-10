@@ -1,11 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
-import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -97,6 +94,26 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
         });
     }
 
+    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    public void removeAll() {
+        List<IRecipe> recipes = getRecipeList();
+        recipes.forEach(this::addBackup);
+        recipes.clear();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.QUERY)
+    public SimpleObjectStream<IRecipe> streamRecipes() {
+        List<IRecipe> recipes = getRecipeList();
+        return new SimpleObjectStream<>(recipes)
+            .setRemover(r -> {
+                if (recipes.remove(r)) {
+                    addBackup(r);
+                    return true;
+                }
+                return false;
+            });
+    }
+
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "9")})
     @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "9")})
     public abstract class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
@@ -133,10 +150,12 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
 
         // 0.0f is used because that's what AR uses for "100% chance". Copium.
         @Override
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(ItemStack output) {
             return output(output, 0.0f);
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(ItemStack output, float chance) {
             this.output.add(output);
             this.outputChances.add(chance);
@@ -175,6 +194,7 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
 
             List<RecipesMachine.ChanceFluidStack> fluidOutputs = new LinkedList<>();
             for (FluidStack out : fluidOutput) {
+                // Fluid chances don't work properly, at least in the centrifuge.
                 fluidOutputs.add(new RecipesMachine.ChanceFluidStack(out, 1.0f));
             }
 

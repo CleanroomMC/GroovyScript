@@ -2,14 +2,14 @@ package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileChemicalReactor;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
-@RegistryDescription
+@RegistryDescription(admonition = {
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.input_slots", type = Admonition.Type.WARNING),
+})
 public class ChemicalReactor extends BaseRegistry {
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:chorus_fruit_popped')).fluidInput(fluid('lava') * 500)" +
@@ -33,6 +33,10 @@ public class ChemicalReactor extends BaseRegistry {
         return super.removeByInput(input);
     }
 
+    @Property(property = "input", valid = @Comp(type = Comp.Type.LTE, value = "8"))
+    @Property(property = "fluidInput", valid = @Comp(type = Comp.Type.LTE, value = "2"))
+    @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "4")}, value = "groovyscript.wiki.advancedrocketry.output.value")
+    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "1")})
     public class RecipeBuilder extends BaseRegistry.RecipeBuilder {
         @Override
         public void validate(GroovyLog.Msg msg) {

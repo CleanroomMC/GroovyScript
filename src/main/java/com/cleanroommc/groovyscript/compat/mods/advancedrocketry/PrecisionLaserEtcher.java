@@ -2,14 +2,11 @@ package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TilePrecisionLaserEtcher;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
-@RegistryDescription
+@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
 public class PrecisionLaserEtcher extends BaseRegistry {
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:blaze_powder') * 4, item('advancedrocketry:wafer')).output(item('advancedrocketry:itemcircuitplate')).power(50).time(100)"))
@@ -32,6 +29,9 @@ public class PrecisionLaserEtcher extends BaseRegistry {
         return super.removeByInput(input);
     }
 
+    @Property(property = "input", valid = {@Comp(type = Comp.Type.LTE, value = "4"), @Comp(type = Comp.Type.GTE, value = "1")})
+    @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "4"), @Comp(type = Comp.Type.GTE, value = "1")},
+              value = "groovyscript.wiki.advancedrocketry.output.value")
     public class RecipeBuilder extends BaseRegistry.RecipeBuilder {
         @Override
         public void validate(GroovyLog.Msg msg) {

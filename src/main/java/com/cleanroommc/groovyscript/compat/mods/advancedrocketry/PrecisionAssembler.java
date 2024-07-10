@@ -6,7 +6,12 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TilePrecisionAssembler;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
-@RegistryDescription
+@RegistryDescription(admonition = {
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.input_slots", type = Admonition.Type.WARNING),
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.hatch_count_6", type = Admonition.Type.INFO),
+})
 public class PrecisionAssembler extends BaseRegistry {
 
     @RecipeBuilderDescription(
@@ -30,6 +35,10 @@ public class PrecisionAssembler extends BaseRegistry {
         return super.removeByInput(input);
     }
 
+    @Property(property = "input")
+    @Property(property = "fluidInput")
+    @Property(property = "output", value = "groovyscript.wiki.advancedrocketry.output.value")
+    @Property(property = "fluidOutput")
     public class RecipeBuilder extends BaseRegistry.RecipeBuilder {
         @Override
         public void validate(GroovyLog.Msg msg) {

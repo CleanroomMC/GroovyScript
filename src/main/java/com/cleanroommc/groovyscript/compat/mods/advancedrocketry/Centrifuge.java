@@ -2,19 +2,19 @@ package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileCentrifuge;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
-@RegistryDescription
+@RegistryDescription(admonition = {
+    @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
+    @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
+})
 public class Centrifuge extends BaseRegistry {
     @RecipeBuilderDescription(
             example = @Example(".fluidInput(fluid('lava') * 500)" +
                                ".output(item('minecraft:slime_ball'), 0.1f).output(item('minecraft:stone'), 0.9f)" +
-                               ".fluidOutput(fluid('enrichedlava') * 500, 0.5f).power(50).time(100).outputSize(1)"))
+                               ".fluidOutput(fluid('enrichedlava') * 500).power(50).time(100).outputSize(1)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -24,16 +24,14 @@ public class Centrifuge extends BaseRegistry {
         return TileCentrifuge.class;
     }
 
-    @MethodDescription(example = @Example("item('minecraft:gold_nugget')"))
-    public boolean removeByOutput(IIngredient output) {
-        return super.removeByOutput(output);
-    }
-
-    @MethodDescription(example = @Example(value = "fluid('enrichedlava')", commented = true))
+    @MethodDescription(example = @Example(value = "fluid('enrichedlava')"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);
     }
 
+    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "12")}, value = "groovyscript.wiki.advancedrocketry.output.value")
+    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "4")})
     public class RecipeBuilder extends BaseRegistry.RecipeBuilder {
         @Override
         public void validate(GroovyLog.Msg msg) {
