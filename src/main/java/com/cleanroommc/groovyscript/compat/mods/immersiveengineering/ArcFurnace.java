@@ -221,7 +221,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         public @Nullable ArcFurnaceRecipe register() {
             if (!validate()) return null;
             Object[] additives = ArrayUtils.mapToArray(input, ImmersiveEngineering::toIngredientStack);
-            ArcFurnaceRecipe recipe = new ArcFurnaceRecipe(output.get(0), mainInput, slag, time, energyPerTick, additives);
+            ArcFurnaceRecipe recipe = new ArcFurnaceRecipe(output.get(0), ImmersiveEngineering.toIngredientStack(mainInput), slag, time, energyPerTick, additives);
             if (specialRecipeType != null) recipe.setSpecialRecipeType(specialRecipeType);
             ModSupport.IMMERSIVE_ENGINEERING.get().arcFurnace.add(recipe);
             return recipe;
