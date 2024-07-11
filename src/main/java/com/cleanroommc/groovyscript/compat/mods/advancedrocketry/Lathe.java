@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileLathe;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
@@ -32,7 +33,13 @@ public class Lathe extends BaseRegistry {
     @Property(property = "input", valid = {@Comp(type = Comp.Type.LTE, value = "4"), @Comp(type = Comp.Type.GTE, value = "1")})
     @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "4"), @Comp(type = Comp.Type.GTE, value = "1")},
               value = "groovyscript.wiki.advancedrocketry.output.value")
-    public class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+
+        @Override
+        protected BaseRegistry getRegistry() {
+            return ModSupport.ADVANCED_ROCKETRY.get().lathe;
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 4, 1, 4);

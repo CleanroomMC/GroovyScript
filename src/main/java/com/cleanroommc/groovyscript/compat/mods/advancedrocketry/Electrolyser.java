@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileElectrolyser;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
@@ -31,7 +32,13 @@ public class Electrolyser extends BaseRegistry {
 
     @Property(property = "fluidInput", valid = @Comp(type = Comp.Type.EQ, value = "1"))
     @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "2"), @Comp(type = Comp.Type.GTE, value = "1")})
-    public class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+
+        @Override
+        protected BaseRegistry getRegistry() {
+            return ModSupport.ADVANCED_ROCKETRY.get().electrolyser;
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg);

@@ -21,7 +21,8 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
 
     protected abstract Class<? extends TileMultiblockMachine> getMachineClass();
 
-    private @Nonnull List<IRecipe> getRecipeList() {
+    @Nonnull
+    private List<IRecipe> getRecipeList() {
         Class<? extends TileMultiblockMachine> clazz = getMachineClass();
         RecipesMachine registry = RecipesMachine.getInstance();
         List<IRecipe> recipes = registry.getRecipes(clazz);
@@ -36,12 +37,20 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
     public void onReload() {
         List<IRecipe> recipes = getRecipeList();
         recipes.addAll(restoreFromBackup());
-        removeScripted().forEach(r -> recipes.removeIf(r::equals));
+        recipes.removeAll(removeScripted());
     }
 
     public void addRecipe(IRecipe r) {
         getRecipeList().add(r);
         addScripted(r);
+    }
+
+    public boolean removeRecipe(IRecipe r) {
+        if (getRecipeList().remove(r)) {
+            addBackup(r);
+            return true;
+        }
+        return false;
     }
 
     public boolean removeByFluidInput(FluidStack fluidStack) {
@@ -105,27 +114,19 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
     public SimpleObjectStream<IRecipe> streamRecipes() {
         List<IRecipe> recipes = getRecipeList();
         return new SimpleObjectStream<>(recipes)
-            .setRemover(r -> {
-                if (recipes.remove(r)) {
-                    addBackup(r);
-                    return true;
-                }
-                return false;
-            });
+            .setRemover(this::removeRecipe);
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "9")})
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "9")})
-    public abstract class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
-        // still have to override the Validate method
+    public static abstract class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
+        // still have to override the Validate method + add getRegistry method
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.power.value")
         protected int power = 0;
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.time.value")
         protected int time = 0;
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"), value = "groovyscript.wiki.advancedrocketry.outputSize.value")
         protected int outputSize = 0;
 
         private final List<Float> outputChances = new ArrayList<>();
@@ -164,12 +165,14 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
 
         @Override
         public String getErrorMsg() {
-            return String.format("Error adding %s recipe (Advanced Rocketry)", getName());
+            return String.format("Error adding Advanced Rocketry %s recipe", getRegistry().getName());
         }
 
         protected int getHatchesNeeded() {
             return (int) (Math.ceil(((double) input.size()) / 4) + Math.ceil(((double) output.size()) / 4) + fluidInput.size() + fluidOutput.size());
         }
+
+        protected abstract BaseRegistry getRegistry();
 
         @Override
         @RecipeBuilderRegistrationMethod
@@ -199,9 +202,8 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
             }
 
             RecipesMachine.Recipe r = new RecipesMachine.Recipe(outputs, inputs, fluidOutputs, fluidInput, time, power, oredicts);
-            if (outputSize > 0)
-                r.setMaxOutputSize(outputSize);
-            addRecipe(r);
+            if (outputSize > 0) r.setMaxOutputSize(outputSize);
+            getRegistry().addRecipe(r);
             return r;
         }
     }

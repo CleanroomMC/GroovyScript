@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileElectricArcFurnace;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
@@ -38,13 +39,19 @@ public class ElectricArcFurnace extends BaseRegistry {
     @Property(property = "fluidInput")
     @Property(property = "output", value = "groovyscript.wiki.advancedrocketry.output.value")
     @Property(property = "fluidOutput")
-    public class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+
+        @Override
+        protected BaseRegistry getRegistry() {
+            return ModSupport.ADVANCED_ROCKETRY.get().arcFurnace;
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
             int hatchesNeeded = getHatchesNeeded();
-            msg.add(hatchesNeeded > 11, "Arc Furnace only accepts 11 hatches, {} given", hatchesNeeded);
-            msg.add(input.isEmpty() && fluidInput.isEmpty(), "Arc Furnace: No inputs provided!");
-            msg.add(output.isEmpty() && fluidOutput.isEmpty(), "Arc Furnace: No outputs provided!");
+            msg.add(hatchesNeeded > 11, "Arc Furnace only accepts 11 hatches, {} required for the recipe", hatchesNeeded);
+            msg.add(input.isEmpty() && fluidInput.isEmpty(), "No inputs provided!");
+            msg.add(output.isEmpty() && fluidOutput.isEmpty(), "No outputs provided!");
             msg.add(power < 1, "Power must be 1 or greater, got {}", power);
             msg.add(time < 1, "Time must be 1 or greater, got {}", time);
         }

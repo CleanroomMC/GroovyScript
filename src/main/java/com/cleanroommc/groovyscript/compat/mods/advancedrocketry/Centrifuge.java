@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileCentrifuge;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
@@ -32,12 +33,18 @@ public class Centrifuge extends BaseRegistry {
     @Property(property = "fluidInput", valid = @Comp("1"))
     @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "12")}, value = "groovyscript.wiki.advancedrocketry.output.value")
     @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "4")})
-    public class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+
+        @Override
+        protected BaseRegistry getRegistry() {
+            return ModSupport.ADVANCED_ROCKETRY.get().centrifuge;
+        }
+
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 0, 0, 0, 12);
             validateFluids(msg, 1, 1, 0, 4);
-            msg.add(fluidOutput.isEmpty() && output.isEmpty(), "Centrifuge: no outputs provided!");
+            msg.add(fluidOutput.isEmpty() && output.isEmpty(), "No outputs provided!");
             msg.add(power < 1, "Power must be 1 or greater, got {}", power);
             msg.add(time < 1, "Time must be 1 or greater, got {}", time);
         }
