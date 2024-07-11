@@ -32,12 +32,12 @@ public class ImmersiveEngineering extends GroovyPropertyContainer {
             return new IngredientStack(IngredientHelper.toItemStack(ingredient).copy());
         }
         if (ingredient instanceof OreDictIngredient) {
-            return new IngredientStack(((OreDictIngredient) ingredient).getOreDict());
+            return new IngredientStack(((OreDictIngredient) ingredient).getOreDict(), ingredient.getAmount());
         }
         if (ingredient instanceof FluidStack) {
             return new IngredientStack(((FluidStack) ingredient).copy());
         }
-        return new IngredientStack(Arrays.asList(ingredient.getMatchingStacks()));
+        return new IngredientStack(Arrays.asList(ingredient.getMatchingStacks()), ingredient.getAmount());
     }
 
     public static boolean areIngredientsEquals(IngredientStack target, IIngredient other) {
