@@ -1292,6 +1292,13 @@ groovyscript.wiki.mekanism.washer.description=Converts an input gasstack into an
 groovyscript.wiki.mekanism.washer.add=Adds recipes in the format `input`, `output`
 
 
+# Mystical Agriculture
+groovyscript.wiki.mysticalagriculture.reprocessor.title=Seed Reprocessor
+groovyscript.wiki.mysticalagriculture.reprocessor.description=Converts an input itemstack into an output itemstack, taking a set amount of time based on the machine and consuming fuel.
+#groovyscript.wiki.mysticalagriculture.reprocessor.exact.value=Sets an unknown boolean. Doesn't appear to have an effect
+#groovyscript.wiki.mysticalagriculture.reprocessor.amount.value=Sets the amount of items required to complete the recipe in the normal Reprocessor. Doesn't work
+
+
 # Nature's Aura
 groovyscript.wiki.naturesaura.altar.title=Natural Altar Infusion
 groovyscript.wiki.naturesaura.altar.description=Converts an input itemstack into an itemstack in a multiblock structure, with an optional catalyst block, costing aura and taking a configurable duration.
