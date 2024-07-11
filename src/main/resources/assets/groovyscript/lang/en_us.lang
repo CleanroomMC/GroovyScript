@@ -707,6 +707,27 @@ groovyscript.wiki.compactmachines3.miniaturization.ticks.value=Sets the time in 
 groovyscript.wiki.compactmachines3.miniaturization.keyMap.value=Sets the IBlockState, specific NBT, if the metadata is checked, and a representative itemstack for each `char` key
 groovyscript.wiki.compactmachines3.miniaturization.symmetrical.value=Sets if the recipe does not have to test all 4 rotations to determine if the multiblock is valid
 
+
+# Cyclic
+groovyscript.wiki.cyclicmagic.dehydrator.title=DeHydrator
+groovyscript.wiki.cyclicmagic.dehydrator.description=Converts an input itemstack into an output itemstack.
+groovyscript.wiki.cyclicmagic.dehydrator.time.value=Sets the amount of time in ticks the recipe takes to process
+groovyscript.wiki.cyclicmagic.dehydrator.water.value=Sets the amount of water produced by the DeHydrator on completing a recipe
+
+groovyscript.wiki.cyclicmagic.hydrator.title=Hydrator
+groovyscript.wiki.cyclicmagic.hydrator.description=Converts up to 4 input itemstacks and some amount of water into an output itemstack.
+groovyscript.wiki.cyclicmagic.hydrator.water.value=Sets the amount of water consumed by the Hydrator to complete a recipe
+
+groovyscript.wiki.cyclicmagic.melter.title=Melter
+groovyscript.wiki.cyclicmagic.melter.description=Converts up to 4 input itemstacks into an output itemstack, while being placed above lava.
+
+groovyscript.wiki.cyclicmagic.packager.title=Packager
+groovyscript.wiki.cyclicmagic.packager.description=Converts up to 6 input itemstacks into an output itemstack.
+
+groovyscript.wiki.cyclicmagic.solidifier.title=Solidifier
+groovyscript.wiki.cyclicmagic.solidifier.description=Converts up to 4 input itemstacks and an input fluidstack into an output itemstack.
+
+
 # Draconic Evolution
 groovyscript.wiki.draconicevolution.energy_core.title=Energy Core
 groovyscript.wiki.draconicevolution.energy_core.description=A multiblock with 8 tiers for storing large amounts of energy.
