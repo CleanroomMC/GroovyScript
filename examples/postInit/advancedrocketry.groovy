@@ -158,3 +158,16 @@ mods.advancedrocketry.rolling_machine.recipeBuilder()
     .register()
 
 
+// Small Plate Presser:
+// Converts a block right below it into output items when powered by redstone
+
+// mods.advancedrocketry.small_plate_presser.removeAll()
+mods.advancedrocketry.small_plate_presser.removeByInput(item('minecraft:iron_block'))
+mods.advancedrocketry.small_plate_presser.removeByOutput(item('libvulpes:productplate', 2))
+
+mods.advancedrocketry.small_plate_presser.recipeBuilder()
+    .input(item('minecraft:cobblestone'))
+    .output(item('minecraft:diamond'))
+    .register()
+
+

@@ -8,7 +8,7 @@ import zmaster587.advancedRocketry.tile.multiblock.machine.TilePrecisionLaserEtc
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
-public class PrecisionLaserEtcher extends BaseRegistry {
+public class PrecisionLaserEtcher extends BaseMultiblockRegistry {
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:blaze_powder') * 4, item('advancedrocketry:wafer')).output(item('advancedrocketry:itemcircuitplate')).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -33,10 +33,10 @@ public class PrecisionLaserEtcher extends BaseRegistry {
     @Property(property = "input", valid = {@Comp(type = Comp.Type.LTE, value = "4"), @Comp(type = Comp.Type.GTE, value = "1")})
     @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "4"), @Comp(type = Comp.Type.GTE, value = "1")},
               value = "groovyscript.wiki.advancedrocketry.output.value")
-    public static class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {
 
         @Override
-        protected BaseRegistry getRegistry() {
+        protected BaseMultiblockRegistry getRegistry() {
             return ModSupport.ADVANCED_ROCKETRY.get().laserEtcher;
         }
 

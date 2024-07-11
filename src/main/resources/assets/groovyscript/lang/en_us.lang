@@ -187,6 +187,9 @@ groovyscript.wiki.advancedrocketry.precision_laser_etcher.description=Converts u
 groovyscript.wiki.advancedrocketry.rolling_machine.title=Rolling Machine
 groovyscript.wiki.advancedrocketry.rolling_machine.description=Consumes up to 1 input fluid and up to 4 input items into up to 4 output items, consuming RF
 
+groovyscript.wiki.advancedrocketry.small_plate_presser.title=Small Plate Presser
+groovyscript.wiki.advancedrocketry.small_plate_presser.description=Converts a block right below it into output items when powered by redstone
+
 # Aether Legacy
 groovyscript.wiki.aether_legacy.accessory.title=Accessory
 groovyscript.wiki.aether_legacy.accessory.description=The Aether Accessory system.

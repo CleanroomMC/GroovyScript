@@ -19,16 +19,20 @@ import java.util.stream.Collectors;
 
 public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
 
-    protected abstract Class<? extends TileMultiblockMachine> getMachineClass();
+    protected abstract Class<?> getMachineClass();
 
     @Nonnull
-    private List<IRecipe> getRecipeList() {
-        Class<? extends TileMultiblockMachine> clazz = getMachineClass();
+    @SuppressWarnings("unchecked")
+    protected List<IRecipe> getRecipeList() {
+        Class<?> clazz = getMachineClass();
         RecipesMachine registry = RecipesMachine.getInstance();
         List<IRecipe> recipes = registry.getRecipes(clazz);
         if (recipes == null) {
             recipes = new LinkedList<>();
-            registry.recipeList.put(clazz, recipes);
+            // NOTE: this cast is completely invalid but Advanced Rocketry's code is pepega
+            // https://github.com/Advanced-Rocketry/libVulpes/blob/1.12/src/main/java/zmaster587/libVulpes/recipe/RecipesMachine.java#L223
+            // https://github.com/Advanced-Rocketry/AdvancedRocketry/blob/1.12/src/main/java/zmaster587/advancedRocketry/block/BlockSmallPlatePress.java#L139
+            registry.recipeList.put((Class<? extends TileMultiblockMachine>) clazz, recipes);
         }
         return recipes;
     }
@@ -114,40 +118,17 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
     public SimpleObjectStream<IRecipe> streamRecipes() {
         List<IRecipe> recipes = getRecipeList();
         return new SimpleObjectStream<>(recipes)
-            .setRemover(this::removeRecipe);
+                .setRemover(this::removeRecipe);
     }
 
     public static abstract class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
         // still have to override the Validate method + add getRegistry method
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.power.value")
         protected int power = 0;
-
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.time.value")
         protected int time = 0;
-
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"), value = "groovyscript.wiki.advancedrocketry.outputSize.value")
         protected int outputSize = 0;
 
-        private final List<Float> outputChances = new ArrayList<>();
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder time(int time) {
-            this.time = time;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder power(int power) {
-            this.power = power;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder outputSize(int outputSize) {
-            this.outputSize = outputSize;
-            return this;
-        }
+        protected final List<Float> outputChances = new ArrayList<>();
 
         // 0.0f is used because that's what AR uses for "100% chance". Copium.
         @Override
@@ -156,8 +137,7 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
             return output(output, 0.0f);
         }
 
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder output(ItemStack output, float chance) {
+        protected RecipeBuilder output(ItemStack output, float chance) {
             this.output.add(output);
             this.outputChances.add(chance);
             return this;

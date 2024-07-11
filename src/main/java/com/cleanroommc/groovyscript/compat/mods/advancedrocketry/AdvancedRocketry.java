@@ -14,6 +14,6 @@ public class AdvancedRocketry extends GroovyPropertyContainer {
     public final RollingMachine rolling = new RollingMachine();
     public final Centrifuge centrifuge = new Centrifuge();
     public final PrecisionLaserEtcher laserEtcher = new PrecisionLaserEtcher();
-    // No plate presser integration because in-world crafting already handles it. Use JSON recipes to remove those recipes.
+    public final SmallPlatePresser platePress = new SmallPlatePresser();
 
 }

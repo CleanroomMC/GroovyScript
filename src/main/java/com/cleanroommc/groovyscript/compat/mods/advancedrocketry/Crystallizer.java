@@ -8,7 +8,7 @@ import zmaster587.advancedRocketry.tile.multiblock.machine.TileCrystallizer;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
-public class Crystallizer extends BaseRegistry {
+public class Crystallizer extends BaseMultiblockRegistry {
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:blaze_powder') * 4).output(item('minecraft:blaze_rod')).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -34,10 +34,10 @@ public class Crystallizer extends BaseRegistry {
     @Property(property = "fluidInput", valid = @Comp(type = Comp.Type.LTE, value = "1"))
     @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "4")}, value = "groovyscript.wiki.advancedrocketry.output.value")
     @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "1")})
-    public static class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {
 
         @Override
-        protected BaseRegistry getRegistry() {
+        protected BaseMultiblockRegistry getRegistry() {
             return ModSupport.ADVANCED_ROCKETRY.get().crystallizer;
         }
 

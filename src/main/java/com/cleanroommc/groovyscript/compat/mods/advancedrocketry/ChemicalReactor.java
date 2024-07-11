@@ -11,7 +11,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.input_slots", type = Admonition.Type.WARNING),
 })
-public class ChemicalReactor extends BaseRegistry {
+public class ChemicalReactor extends BaseMultiblockRegistry {
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:chorus_fruit_popped')).fluidInput(fluid('lava') * 500)" +
                                ".output(item('minecraft:end_rod') * 4).fluidOutput(fluid('water') * 500).power(50).time(100)"))
@@ -38,10 +38,10 @@ public class ChemicalReactor extends BaseRegistry {
     @Property(property = "fluidInput", valid = @Comp(type = Comp.Type.LTE, value = "2"))
     @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "4")}, value = "groovyscript.wiki.advancedrocketry.output.value")
     @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "1")})
-    public static class RecipeBuilder extends BaseRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {
 
         @Override
-        protected BaseRegistry getRegistry() {
+        protected BaseMultiblockRegistry getRegistry() {
             return ModSupport.ADVANCED_ROCKETRY.get().reactor;
         }
 
