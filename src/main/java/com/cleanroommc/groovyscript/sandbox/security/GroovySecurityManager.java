@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;
+import groovy.lang.MetaMethod;
 import groovy.ui.GroovyMain;
 import groovy.ui.GroovySocketServer;
 import groovy.util.Eval;
@@ -12,10 +13,7 @@ import groovy.util.GroovyScriptEngine;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.apache.commons.io.FileUtils;
-import org.codehaus.groovy.runtime.FormatHelper;
-import org.codehaus.groovy.runtime.GStringImpl;
-import org.codehaus.groovy.runtime.NullObject;
-import org.codehaus.groovy.runtime.RegexSupport;
+import org.codehaus.groovy.runtime.*;
 
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
@@ -62,6 +60,8 @@ public class GroovySecurityManager {
         banClasses(GroovyScriptEngine.class, Eval.class, GroovyMain.class, GroovySocketServer.class, GroovyShell.class, GroovyClassLoader.class);
         banMethods(System.class, "exit", "gc", "setSecurityManager");
         banMethods(Class.class, "getResource", "getResourceAsStream");
+        banMethods(String.class, "execute");
+        banMethods(ProcessGroovyMethods.class, "execute");
         banClasses(FileUtils.class, org.apache.logging.log4j.core.util.FileUtils.class);
 
         // mod specific
@@ -107,6 +107,10 @@ public class GroovySecurityManager {
     public boolean isValid(Method method) {
         return isValidMethod(method.getDeclaringClass(), method.getName()) &&
                !method.isAnnotationPresent(GroovyBlacklist.class);
+    }
+
+    public boolean isValid(MetaMethod method) {
+        return isValidMethod(method.getDeclaringClass().getTheClass(), method.getName());
     }
 
     public boolean isValid(Field field) {
