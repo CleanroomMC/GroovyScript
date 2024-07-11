@@ -391,6 +391,21 @@ groovyscript.wiki.avaritia.extreme_crafting.description=A normal crafting table,
 groovyscript.wiki.avaritia.extreme_crafting.addShaped=Adds a shaped crafting recipe in the format `output`, `input`
 groovyscript.wiki.avaritia.extreme_crafting.addShapeless=Adds a shapeless crafting recipe in the format `output`, `input`
 
+
+# Atum 2
+groovyscript.wiki.atum.kiln.title=Kiln
+groovyscript.wiki.atum.kiln.description=Smelts an input item into an output itemstack and giving experience similar to a Furnace, but can process up to 4 stacks simultaneously. Makes a copy of the vanilla furnace recipes, excluding entries on a blacklist.
+groovyscript.wiki.atum.kiln.experience.value=Sets the experience gained by taking the output item out of the Kiln
+
+groovyscript.wiki.atum.quern.title=Quern
+groovyscript.wiki.atum.quern.description=Converts an input item into an output itemstack after a given number of rotations, which are done via a player right clicking the Quern.
+groovyscript.wiki.atum.quern.rotations.value=Sets the amount of rotation required to convert the input into the output
+
+groovyscript.wiki.atum.spinning_wheel.title=Spinning Wheel
+groovyscript.wiki.atum.spinning_wheel.description=Converts three input items into an output itemstack after a given number of rotations for each input item, items are inserted by interacting with the top, rotations are increased by interacting with the top, and output items are extracted by interacting with the spool side.
+groovyscript.wiki.atum.spinning_wheel.rotations.value=Sets the amount of rotation required to convert the input into the output
+
+
 # Better With Mods
 groovyscript.wiki.betterwithmods.anvil_crafting.title=Anvil Crafting
 groovyscript.wiki.betterwithmods.anvil_crafting.description=Similar to a normal crafting table, but 4x4 instead.
