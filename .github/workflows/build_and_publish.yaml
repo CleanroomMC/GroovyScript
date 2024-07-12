@@ -112,10 +112,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build jars
-        uses: gradle/gradle-build-action@v3.4.2
-        with:
-          arguments: build
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3.4.2
+
+      - name: Build Project
+        run: ./gradlew build
 
       - name: Publish to GitHub
         if: env.publish-gh == 'true'
@@ -141,31 +142,27 @@ jobs:
 
       - name: Publish to Curseforge
         if: ${{ inputs.publish-cf }}
-        uses: gradle/gradle-build-action@v3.4.2
+        run: ./gradlew curseforge
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_TOKEN }}
           CHANGELOG_LOCATION: ${{ env.CHANGELOG_LOCATION }}
           RELEASE_TYPE: ${{ inputs.release-type }}
         with:
-          arguments: 'curseforge'
           generate-job-summary: false
 
       - name: Publish to Modrinth
         if: ${{ inputs.publish-mr }}
-        uses: gradle/gradle-build-action@v3.4.2
+        run: ./gradlew modrinth
         env:
           MODRINTH_API_KEY: ${{ secrets.MODRINTH_TOKEN }}
           CHANGELOG_LOCATION: ${{ env.CHANGELOG_LOCATION }}
           RELEASE_TYPE: ${{ inputs.release-type }}
         with:
-          arguments: 'modrinth'
           generate-job-summary: false
 
       - name: Publish to maven
         if: ${{ inputs.publish-maven }}
-        uses: gradle/gradle-build-action@v3.4.2
-        with:
-          arguments: publish
+        run: ./gradlew publish
         env:
           MAVEN_USER: ${{ secrets.MAVEN_NAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
