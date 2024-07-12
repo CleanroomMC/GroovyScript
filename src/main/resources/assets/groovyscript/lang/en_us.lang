@@ -884,6 +884,13 @@ groovyscript.wiki.extendedcrafting.table_crafting.addShapeless0=Adds a shapeless
 groovyscript.wiki.extendedcrafting.table_crafting.addShapeless1=Adds a shapeless crafting recipe in the format `tier`, `output`, `input`
 groovyscript.wiki.extendedcrafting.table_crafting.tier.value=Sets the tier of table required, with 0 indicating any table size that can fit the recipe
 
+
+# Extra Botany
+groovyscript.wiki.extrabotany.pedestal.title=Livingrock Pedestal
+groovyscript.wiki.extrabotany.pedestal.description=Converts an input item into an output itemstack when placed inside a Livingrock Pedestal and interacted with by an Extra Botany Hammer.
+groovyscript.wiki.extrabotany.pedestal.add=Adds recipes in the format `input`, `output`
+
+
 # Extra Utilities 2
 groovyscript.wiki.extrautils2.crusher.title=Crusher
 groovyscript.wiki.extrautils2.crusher.description=Converts an input itemstack into an output itemstack with a chance of an additional itemstack output, consuming energy.
