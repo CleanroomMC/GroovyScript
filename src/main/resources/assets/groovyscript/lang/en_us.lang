@@ -1323,6 +1323,28 @@ groovyscript.wiki.naturesaura.spawning.entity.value=Sets the entity spawned
 groovyscript.wiki.naturesaura.spawning.removeByEntity=Removes all Altar of Birthing recipes that summon the given entity
 groovyscript.wiki.naturesaura.spawning.removeByName=Removes the Altar of Birthing recipe with the given name
 
+
+# Primal Tech
+groovyscript.wiki.primal_tech.clay_kiln.title=Clay Kiln
+groovyscript.wiki.primal_tech.clay_kiln.description=Converts an input item into an output itemstack after a given amount of time. Requires the block below to be Minecraft Fire or a Primal Tech Flame Grilled Wopper. Takes some time to heat up before beginning to smelt items.
+groovyscript.wiki.primal_tech.clay_kiln.add=Adds recipes in the format `output`, `input`, `cookTime`
+groovyscript.wiki.primal_tech.clay_kiln.cookTime.value=Sets the time in ticks for the recipe to complete after the Clay Kiln is heated up enough
+
+groovyscript.wiki.primal_tech.stone_anvil.title=Stone Anvil
+groovyscript.wiki.primal_tech.stone_anvil.description=Converts an input item into an output itemstack after being interacted with by a player using a Stone Mallet.
+groovyscript.wiki.primal_tech.stone_anvil.add=Adds recipes in the format `output`, `input`
+
+groovyscript.wiki.primal_tech.water_saw.title=Water Saw
+groovyscript.wiki.primal_tech.water_saw.description=Converts an input item into an output itemstack after a given amount of time. Requires the block below it to be a water source block, and the block below and behind it flowing water.
+groovyscript.wiki.primal_tech.water_saw.add=Adds recipes in the format `output`, `input`, `choppingTime`
+groovyscript.wiki.primal_tech.water_saw.choppingTime.value=Sets the time in ticks for the recipe to complete
+
+groovyscript.wiki.primal_tech.wooden_basin.title=Wooden Basin
+groovyscript.wiki.primal_tech.wooden_basin.description=Converts up to 4 items and 1000mb of fluid into an output itemstack.
+groovyscript.wiki.primal_tech.wooden_basin.note0=The recipe requires items to be inserted in a specific order, which is displayed in JEI as top, left, right, bottom. Consider only one type of item to avoid issues.
+groovyscript.wiki.primal_tech.wooden_basin.add=Adds recipes in the format `output`, `fluid`, `inputs`
+
+
 # ProdigyTech
 groovyscript.wiki.prodigytech.atomic_reshaper.title=Atomic Reshaper
 groovyscript.wiki.prodigytech.atomic_reshaper.description=Uses Hot Air and Primordium to convert items. Can have a weighted random based output.
