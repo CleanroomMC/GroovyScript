@@ -133,7 +133,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable FermenterRecipe register() {
             if (!validate()) return null;
-            FermenterRecipe recipe = new FermenterRecipe(fluidOutput.get(0), output.getOrEmpty(0), input.get(0), energy);
+            FermenterRecipe recipe = new FermenterRecipe(fluidOutput.get(0), output.getOrEmpty(0), ImmersiveEngineering.toIngredientStack(input.get(0)), energy);
             ModSupport.IMMERSIVE_ENGINEERING.get().fermenter.add(recipe);
             return recipe;
         }
