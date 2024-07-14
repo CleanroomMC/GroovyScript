@@ -57,6 +57,7 @@ public class JeiPlugin implements IModPlugin {
         fluidRenderer = ingredientRegistry.getIngredientRenderer(VanillaTypes.FLUID);
 
         InWorldCraftingJeiPlugin.registerCategories(registry);
+        ModSupport.JEI.get().category.addCustomRecipeCategories(registry);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class JeiPlugin implements IModPlugin {
         registry.handleRecipes(ShapelessCraftingRecipe.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe), VanillaRecipeCategoryUid.CRAFTING);
 
         InWorldCraftingJeiPlugin.register(registry);
-
+        ModSupport.JEI.get().category.applyCustomRecipeCategoryProperties(registry);
         ModSupport.JEI.get().description.applyAdditions(registry);
     }
 
