@@ -3,13 +3,16 @@ package classes
 /**
  * A simple example of reloadable compat for a single registry, in this case {@code SimpleConversionRecipe}.<br>
  *
- * To use, call {@link GenericRecipeReloading#onReload()} *before* adding or removing any recipes,
- * and manipulate recipes by calling {@link GenericRecipeReloading#add()} or {@link GenericRecipeReloading#remove()}.
- * If you do it *after*, you will immediately undo all manipulations you made, you must do it *before*.<br>
+ * To use, call {@link GenericRecipeReloading#onReload()} in an event listener listening to {@code GroovyReloadEvent},
+ * and manipulate recipes by calling {@link GenericRecipeReloading#add()} or {@link GenericRecipeReloading#remove()}.<br>
  *
  * Note that {@link GenericRecipeReloading#onReload()} should only be called when GroovyScript is reloading,
- * so you will want to write something like this:<br>
- * {@code if (isReloading()) GenericRecipeReloading.instance.onReload()}
+ * so you will want to have it called by listening to {@code GroovyReloadEvent} in something like this:<br>
+ * <pre>
+ * eventManager.listen(com.cleanroommc.groovyscript.event.GroovyReloadEvent) {
+ *     GenericRecipeReloading.instance.onReload()
+ * }
+ * </pre>
  */
 class GenericRecipeReloading {
 

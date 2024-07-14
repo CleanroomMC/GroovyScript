@@ -6,15 +6,17 @@ import classes.GenericRecipeReloading
 import classes.SimpleConversionRecipe
 import net.minecraft.util.text.TextComponentString
 import net.minecraftforge.event.world.BlockEvent
-
-if (isReloading()) {
-    // only reload when we are reloading, and do it before the registry is interacted with
-    GenericRecipeReloading.instance.onReload()
-}
+import com.cleanroommc.groovyscript.event.GroovyReloadEvent
 
 // add the example recipe
 GenericRecipeReloading.instance.add(new SimpleConversionRecipe(item('minecraft:clay'), item('minecraft:gold_ingot')))
 
+// reload via an event
+eventManager.listen(GroovyReloadEvent) {
+    GenericRecipeReloading.instance.onReload()
+}
+
+// use an event to demonstrate the recipe in-game
 eventManager.listen(BlockEvent.BreakEvent) {
     // get the block drop if it was silk touched
     def drop = it.getState().getBlock().getSilkTouchDrop(it.getState())
