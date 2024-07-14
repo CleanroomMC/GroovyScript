@@ -17,7 +17,7 @@ public class Category extends VirtualizedRegistry<String> {
     private boolean hideAllCategories;
 
     /**
-     * Called by {@link JeiPlugin#onRuntimeAvailable}
+     * Called by {@link JeiPlugin#afterRuntimeAvailable()}
      */
     @GroovyBlacklist
     public void applyChanges(IRecipeRegistry recipeRegistry) {

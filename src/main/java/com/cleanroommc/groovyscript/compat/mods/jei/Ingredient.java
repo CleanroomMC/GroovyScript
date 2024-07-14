@@ -35,7 +35,7 @@ public class Ingredient extends VirtualizedRegistry<Void> {
     }
 
     /**
-     * Called by {@link JeiPlugin#onRuntimeAvailable}
+     * Called by {@link JeiPlugin#afterRuntimeAvailable()}
      */
     @GroovyBlacklist
     public void applyChanges(IIngredientRegistry ingredientRegistry) {
