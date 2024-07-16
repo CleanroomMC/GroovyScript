@@ -147,8 +147,6 @@ jobs:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_TOKEN }}
           CHANGELOG_LOCATION: ${{ env.CHANGELOG_LOCATION }}
           RELEASE_TYPE: ${{ inputs.release-type }}
-        with:
-          generate-job-summary: false
 
       - name: Publish to Modrinth
         if: ${{ inputs.publish-mr }}
@@ -157,8 +155,6 @@ jobs:
           MODRINTH_API_KEY: ${{ secrets.MODRINTH_TOKEN }}
           CHANGELOG_LOCATION: ${{ env.CHANGELOG_LOCATION }}
           RELEASE_TYPE: ${{ inputs.release-type }}
-        with:
-          generate-job-summary: false
 
       - name: Publish to maven
         if: ${{ inputs.publish-maven }}

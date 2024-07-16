@@ -7,9 +7,12 @@ name: Build Test Artifact
 on:
   push:
     paths-ignore:
-      - '.github/workflows/build.yml' # Release GHA file, please change this when you change the file name
+      - '.github/**' # Release GHA file, please change this when you change the file name
       - 'LICENSE' 
       - 'README.md'
+      - 'examples/**'
+      - 'editors/**'
+      - '.editorconfig'
   workflow_dispatch:
 
 jobs:
@@ -56,5 +59,5 @@ jobs:
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4.3.4
       with:
-        name: GroovyScript-${{ steps.gradle_properties.outputs.modVersion }}
+        name: GroovyScript-${{ steps.gradle_properties.outputs.modVersion }}-${{ github.run_number }}
         path: build/libs
