@@ -251,14 +251,12 @@ public class Lexicon {
 
         @MethodDescription(type = MethodDescription.Type.ADDITION)
         public LexiconEntry add(String name, LexiconCategory category) {
-            LexiconEntry entry = new LexiconEntry(name, category);
-            add(entry);
-            return entry;
+            return entryBuilder().name(name).category(category).register();
         }
 
         @MethodDescription(type = MethodDescription.Type.ADDITION)
         public LexiconEntry add(String name, String category) {
-            return add(name, Botania.getCategory(category));
+            return entryBuilder().name(name).category(category).register();
         }
 
         public void add(LexiconEntry entry) {

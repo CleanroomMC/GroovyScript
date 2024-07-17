@@ -38,14 +38,12 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeElvenTrade add(ItemStack[] outputs, IIngredient[] inputs) {
-        RecipeElvenTrade recipe = new RecipeElvenTrade(outputs, convertIngredients(inputs));
-        add(recipe);
-        return recipe;
+        return recipeBuilder().input(inputs).output(outputs).register();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeElvenTrade add(ItemStack output, IIngredient[] inputs) {
-        return add(new ItemStack[]{output}, inputs);
+        return recipeBuilder().input(inputs).output(output).register();
     }
 
     public void add(RecipeElvenTrade recipe) {

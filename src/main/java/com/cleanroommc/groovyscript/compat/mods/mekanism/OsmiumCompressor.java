@@ -31,19 +31,7 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond'), gas('hydrogen'), item('minecraft:nether_star')", commented = true))
     public OsmiumCompressorRecipe add(IIngredient ingredient, GasStack gasInput, ItemStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Osmium Compressor recipe").error();
-        msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
-        if (msg.postIfNotEmpty()) return null;
-
-        OsmiumCompressorRecipe recipe1 = null;
-        for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            OsmiumCompressorRecipe recipe = new OsmiumCompressorRecipe(new AdvancedMachineInput(itemStack, gasInput.getGas()), new ItemStackOutput(output));
-            if (recipe1 == null) recipe1 = recipe;
-            recipeRegistry.put(recipe);
-            addScripted(recipe);
-        }
-        return recipe1;
+        return recipeBuilder().gasInput(gasInput).output(output).input(ingredient).register();
     }
 
     @MethodDescription(example = @Example("ore('dustRefinedObsidian'), gas('liquidosmium')"))

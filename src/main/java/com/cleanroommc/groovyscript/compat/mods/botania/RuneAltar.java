@@ -36,11 +36,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeRuneAltar add(ItemStack output, int mana, IIngredient... inputs) {
-        RecipeRuneAltar recipe = new RecipeRuneAltar(output, mana, Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient
-                                                                                                  ? ((OreDictIngredient) i).getOreDict()
-                                                                                                  : i.getMatchingStacks()[0]).toArray());
-        add(recipe);
-        return recipe;
+        return recipeBuilder().mana(mana).output(output).input(inputs).register();
     }
 
     public void add(RecipeRuneAltar recipe) {

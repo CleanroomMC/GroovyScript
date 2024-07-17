@@ -13,7 +13,6 @@ import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.lens.Lens;
 import de.ellpeck.actuallyadditions.api.recipe.LensConversionRecipe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription
@@ -35,10 +34,13 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
         ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.addAll(restoreFromBackup());
     }
 
-    public LensConversionRecipe add(Ingredient input, ItemStack output, int energy, Lens type) {
-        LensConversionRecipe recipe = new LensConversionRecipe(input, output, energy, type);
-        add(recipe);
-        return recipe;
+    public LensConversionRecipe add(IIngredient input, ItemStack output, int energy, Lens type) {
+        return recipeBuilder()
+                .type(type)
+                .energy(energy)
+                .input(input)
+                .output(output)
+                .register();
     }
 
     public void add(LensConversionRecipe recipe) {

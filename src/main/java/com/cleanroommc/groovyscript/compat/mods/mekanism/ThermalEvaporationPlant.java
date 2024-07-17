@@ -27,15 +27,7 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "fluid('water'), fluid('steam')", commented = true))
     public ThermalEvaporationRecipe add(FluidStack input, FluidStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Solar Neutron Activator recipe").error();
-        msg.add(IngredientHelper.isEmpty(input), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
-        if (msg.postIfNotEmpty()) return null;
-
-        ThermalEvaporationRecipe recipe = new ThermalEvaporationRecipe(input, output);
-        recipeRegistry.put(recipe);
-        addScripted(recipe);
-        return recipe;
+        return recipeBuilder().fluidInput(input).fluidOutput(output).register();
     }
 
     @MethodDescription(example = @Example("fluid('water')"))

@@ -30,19 +30,7 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond'), gas('oxygen'), item('minecraft:nether_star')", commented = true))
     public PurificationRecipe add(IIngredient ingredient, GasStack gasInput, ItemStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Purification Chamber recipe").error();
-        msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
-        if (msg.postIfNotEmpty()) return null;
-
-        PurificationRecipe recipe1 = null;
-        for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            PurificationRecipe recipe = new PurificationRecipe(new AdvancedMachineInput(itemStack, gasInput.getGas()), new ItemStackOutput(output));
-            if (recipe1 == null) recipe1 = recipe;
-            recipeRegistry.put(recipe);
-            addScripted(recipe);
-        }
-        return recipe1;
+        return recipeBuilder().gasInput(gasInput).output(output).input(ingredient).register();
     }
 
     @MethodDescription(example = @Example("item('mekanism:oreblock:0'), gas('oxygen')"))

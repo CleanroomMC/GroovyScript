@@ -33,7 +33,7 @@ public class Atomizer extends VirtualizedRegistry<AtomizerRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public AtomizerRecipe add(FluidStack input, ItemStack output) {
-        return new RecipeBuilder().fluidInput(input).output(output).register();
+        return recipeBuilder().fluidInput(input).output(output).register();
     }
 
     public AtomizerRecipe add(AtomizerRecipe recipe) {
