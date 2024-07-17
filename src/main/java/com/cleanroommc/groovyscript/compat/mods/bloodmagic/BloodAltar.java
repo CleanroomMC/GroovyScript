@@ -174,7 +174,8 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
         @RecipeBuilderRegistrationMethod
         public @Nullable RecipeBloodAltar register() {
             if (!validate()) return null;
-            RecipeBloodAltar recipe = ModSupport.BLOOD_MAGIC.get().bloodAltar.add(input.get(0).toMcIngredient(), output.get(0), minimumTier, syphon, consumeRate, drainRate);
+            RecipeBloodAltar recipe = new RecipeBloodAltar(input.get(0).toMcIngredient(), output.get(0), minimumTier, syphon, consumeRate, drainRate);
+            ModSupport.BLOOD_MAGIC.get().bloodAltar.add(recipe);
             return recipe;
         }
     }

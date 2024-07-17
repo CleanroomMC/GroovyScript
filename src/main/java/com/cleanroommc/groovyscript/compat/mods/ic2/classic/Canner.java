@@ -255,41 +255,30 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
 
     private void add(CanningRecipe recipe) {
         switch (recipe.type) {
-            case CANNING_RECIPE:
-                ClassicRecipes.canningMachine.registerCannerItem(recipe.container, new RecipeInput(recipe.input), recipe.output);
-                break;
-            case ITEM_EFFECT:
-                ClassicRecipes.canningMachine.registerItemsForEffect(recipe.intValue, recipe.input.getMatchingStacks());
-                break;
-            case FUEL_VALUE:
+            case CANNING_RECIPE -> ClassicRecipes.canningMachine.registerCannerItem(recipe.container, new RecipeInput(recipe.input), recipe.output);
+            case ITEM_EFFECT -> ClassicRecipes.canningMachine.registerItemsForEffect(recipe.intValue, recipe.input.getMatchingStacks());
+            case FUEL_VALUE -> {
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.canningMachine.registerFuelValue(stack, recipe.intValue);
-                    if (recipe.floatValue > 0)
+                    if (recipe.floatValue > 0) {
                         ClassicRecipes.canningMachine.registerFuelMultiplier(stack, recipe.floatValue);
+                    }
                 }
-                break;
-            case REPAIR:
-                ClassicRecipes.canningMachine.addRepairRecipe(recipe.damageItem, recipe.meta, new RecipeInput(recipe.input), recipe.intValue);
-                break;
+            }
+            case REPAIR -> ClassicRecipes.canningMachine.addRepairRecipe(recipe.damageItem, recipe.meta, new RecipeInput(recipe.input), recipe.intValue);
         }
     }
 
     private void remove(CanningRecipe recipe) {
         switch (recipe.type) {
-            case CANNING_RECIPE:
-                ClassicRecipes.canningMachine.removeCanningRecipe(recipe.container, recipe.input.getMatchingStacks()[0]);
-                break;
-            case ITEM_EFFECT:
-                ClassicRecipes.canningMachine.deleteEffectID(recipe.intValue, true);
-                break;
-            case FUEL_VALUE:
+            case CANNING_RECIPE -> ClassicRecipes.canningMachine.removeCanningRecipe(recipe.container, recipe.input.getMatchingStacks()[0]);
+            case ITEM_EFFECT -> ClassicRecipes.canningMachine.deleteEffectID(recipe.intValue, true);
+            case FUEL_VALUE -> {
                 for (ItemStack stack : recipe.input.getMatchingStacks()) {
                     ClassicRecipes.canningMachine.deleteItemFuel(stack);
                 }
-                break;
-            case REPAIR:
-                ClassicRecipes.canningMachine.removeRepairItem(recipe.damageItem, recipe.meta);
-                break;
+            }
+            case REPAIR -> ClassicRecipes.canningMachine.removeRepairItem(recipe.damageItem, recipe.meta);
         }
     }
 

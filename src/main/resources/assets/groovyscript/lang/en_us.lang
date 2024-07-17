@@ -71,6 +71,7 @@ groovyscript.wiki.craftingrecipe.ingredients.value=Sets the items required for t
 
 groovyscript.wiki.removeByInput=Removes all recipes that match the given input
 groovyscript.wiki.removeByOutput=Removes all recipes that match the given output
+groovyscript.wiki.removeByInputAndOutput=Removes all recipes that match the given input and the given output
 groovyscript.wiki.removeByOre=Removes all recipes that match the given ore
 groovyscript.wiki.removeByCatalyst=Removes all recipes that match the given catalyst
 groovyscript.wiki.removeByInputAndCatalyst=This removes all recipes that match the given input and Catalyst
@@ -795,6 +796,42 @@ groovyscript.wiki.enderio.vat.multipliers2.value=Sets the multiplier applied to 
 groovyscript.wiki.enderio.vat.baseMultiplier.value=Sets the base amount of fluid output
 groovyscript.wiki.enderio.vat.energy.value=Sets the energy cost of the recipe
 
+# EssentialCraft
+groovyscript.wiki.essentialcraft.demon_trade.title=Demon Trade
+groovyscript.wiki.essentialcraft.demon_trade.description=Adds an item that can be sold to Demons to obtain Ackronite. Note that each demon that spawns has a random item that it can accept, and will not accept any other item.
+groovyscript.wiki.essentialcraft.demon_trade.add=Adds an item or an entity that can be sold to demons
+groovyscript.wiki.essentialcraft.demon_trade.remove=Removes an item from the pool of sold items
+groovyscript.wiki.essentialcraft.demon_trade.removeEntity=Removes an entity from the pool of sold items
+groovyscript.wiki.essentialcraft.demon_trade.note0=Demon Trade recipes must set the correct NBT on all input items. This is a bug that was fixed in the version 1.12.2-4.9.112.6 of the mod.
+
+groovyscript.wiki.essentialcraft.magician_table.title=Magician Table
+groovyscript.wiki.essentialcraft.magician_table.description=A 5-slot processing machine using MRU. Can be upgraded with various plates to increase its speed.
+groovyscript.wiki.essentialcraft.magician_table.note0=Certain OreDict entries might give unexpected results when used in the Magician Table as inputs. Known entries include: ingotGold, gemEnderPearl
+groovyscript.wiki.essentialcraft.magician_table.mru.value=Sets the base MRU cost for this recipe. This cost also equals the time needed to execute the recipe in ticks
+
+groovyscript.wiki.essentialcraft.magmatic_smeltery.title=Magmatic Smeltery
+groovyscript.wiki.essentialcraft.magmatic_smeltery.description=A machine used to quadruple ores using MRU and lava. Also adds the same recipes for Magmatic Furnace, which is used to double ores using MRU.
+groovyscript.wiki.essentialcraft.magmatic_smeltery.note0=Magmatic Smeltery does not have a JEI handler. This means its recipes will not be displayed in JEI and have to be tested manually.
+groovyscript.wiki.essentialcraft.magmatic_smeltery.color.value=Sets the overlay color for the Magmatic Alloy item of this ore
+groovyscript.wiki.essentialcraft.magmatic_smeltery.input.value=Sets the OreDict name of the input item
+groovyscript.wiki.essentialcraft.magmatic_smeltery.factor.value=Sets the output factor of the recipe. Magmatic Furnace will smelt the input item into this many Magmatic Alloys, Magmatic Smeltery will give double this many Magmatic Alloys, and Alloys will always be smelted into 2x of the output item
+groovyscript.wiki.essentialcraft.magmatic_smeltery.output.value=Sets the OreDict name of the output item
+
+groovyscript.wiki.essentialcraft.mithriline_furnace.title=Mithriline Furnace
+groovyscript.wiki.essentialcraft.mithriline_furnace.description=Converts various items into other items using ESPE.
+groovyscript.wiki.essentialcraft.mithriline_furnace.espe.value=Sets the ESPE cost for this recipe
+
+groovyscript.wiki.essentialcraft.radiating_chamber.title=Radiating Chamber
+groovyscript.wiki.essentialcraft.radiating_chamber.description=Combines two items together using MRU to obtain a third item. Can optionally require a specific range of MRU balance to execute the recipe.
+groovyscript.wiki.essentialcraft.radiating_chamber.time.value=Sets the time needed to execute this recipe, in ticks
+groovyscript.wiki.essentialcraft.radiating_chamber.mruPerTick.value=Sets the amount of MRU spent by the Chamber each tick. The total MRU can be calculated as `time * mruPerTick`
+groovyscript.wiki.essentialcraft.radiating_chamber.lowerBalance.value=Sets the minimum balance required for this recipe
+groovyscript.wiki.essentialcraft.radiating_chamber.upperBalance.value=Sets the maximum balance required for this recipe
+
+groovyscript.wiki.essentialcraft.wind_rune.title=Wind Rune
+groovyscript.wiki.essentialcraft.wind_rune.description=Transforms various items using ESPE.
+groovyscript.wiki.essentialcraft.wind_rune.espe.value=Sets the ESPE cost for this recipe
+
 # EvilCraft
 groovyscript.wiki.evilcraft.blood_infuser.title=Blood Infuser
 groovyscript.wiki.evilcraft.blood_infuser.description=Consumes an item, some fluid, and requires a given tier of Promise of Tenacity to produce the output and some experience after a duration.
@@ -932,9 +969,11 @@ groovyscript.wiki.immersiveengineering.coke_oven.creosote.value=Sets the amount 
 groovyscript.wiki.immersiveengineering.coke_oven.time.value=Sets the time in ticks the recipe takes to process
 
 groovyscript.wiki.immersiveengineering.crusher.title=Crusher
-groovyscript.wiki.immersiveengineering.crusher.description=Converts an input itemstack into an output itemstack, consuming energy.
+groovyscript.wiki.immersiveengineering.crusher.description=Converts an input itemstack into an output itemstack with optional additional chanced item outputs, consuming energy.
 groovyscript.wiki.immersiveengineering.crusher.add=Adds recipes in the format `output`, `input`, `energy`
 groovyscript.wiki.immersiveengineering.crusher.energy.value=Sets the amount of power consumed to complete the recipe
+groovyscript.wiki.immersiveengineering.crusher.secondaryOutputItems.value=Sets the additional items output by the recipe, if any
+groovyscript.wiki.immersiveengineering.crusher.secondaryOutputChances.value=Sets the chance of the respective additional items output by the recipe
 
 groovyscript.wiki.immersiveengineering.excavator.title=Excavator
 groovyscript.wiki.immersiveengineering.excavator.description=Adds a Mineral Mix with the given name, weight, fail chance, ores, and allowed dimensions. A Mineral Mix can be mined by an Excavator Multiblock and scanned via a Core Sample Drill.
@@ -978,6 +1017,85 @@ groovyscript.wiki.immersiveengineering.squeezer.title=Squeezer
 groovyscript.wiki.immersiveengineering.squeezer.description=Converts an input itemstack into either an output itemstack, fluidstack, or both, using energy.
 groovyscript.wiki.immersiveengineering.squeezer.add=Adds recipes in the format `fluidOutput`, `itemOutput`, `input`, `energy`
 groovyscript.wiki.immersiveengineering.squeezer.energy.value=Sets the amount of power consumed to complete the recipe
+
+
+# Immersive Petroleum
+groovyscript.wiki.immersivepetroleum.distillation.title=Distillation Tower
+groovyscript.wiki.immersivepetroleum.distillation.description=Converts an input fluidstack into any number of output fluidstacks and any number of output itemstacks, with each itemstack having the ability to have a custom chance, using energy and taking time.
+groovyscript.wiki.immersivepetroleum.distillation.time.value=Sets the duration in ticks the recipe takes
+groovyscript.wiki.immersivepetroleum.distillation.chance.value=Sets the chance the corresponding entry in `output` will be output
+groovyscript.wiki.immersivepetroleum.distillation.energy.value=Sets the energy cost of the recipe
+
+groovyscript.wiki.immersivepetroleum.reservoir.title=Reservoir
+groovyscript.wiki.immersivepetroleum.reservoir.description=Adds a Reservoir Type with the given name, weight, minimum size, maximum size, replenishment rate, allowed dimensions, and allowed biomes. A Reservoir Type can be extracted by an Pumpjack Multiblock and scanned via a Core Sample Drill.
+groovyscript.wiki.immersivepetroleum.reservoir.note0=Reloading will not change chunks already 'discovered'
+groovyscript.wiki.immersivepetroleum.reservoir.name.value=Sets the name of the reservoir
+groovyscript.wiki.immersivepetroleum.reservoir.biomes.value=Sets the list of biome names the vein can generate in (if `biomeBlacklist` is false) or are prevented from generating in (if `biomeBlacklist` is true)
+groovyscript.wiki.immersivepetroleum.reservoir.weight.value=Sets the weight the reservoir has to spawn in its allowed dimensions
+groovyscript.wiki.immersivepetroleum.reservoir.maxSize.value=Sets the maximum size the reservoir can be, in mb
+groovyscript.wiki.immersivepetroleum.reservoir.minSize.value=Sets the minimum size the reservoir can be, in mb
+groovyscript.wiki.immersivepetroleum.reservoir.dimensions.value=Sets the list of dimension ids the vein can generate in (if `dimensionBlacklist` is false) or are prevented from generating in (if `dimensionBlacklist` is true)
+groovyscript.wiki.immersivepetroleum.reservoir.replenishRate.value=Sets the rate at which the reservoir is refilled, in
+groovyscript.wiki.immersivepetroleum.reservoir.biomeBlacklist.value=Sets if the `biomes` property indicates allowed biomes (false) or blocked biomes (true)
+groovyscript.wiki.immersivepetroleum.reservoir.dimensionBlacklist.value=Sets if the `dimensions` property indicates allowed dimensions (false) or blocked dimensions (true)
+groovyscript.wiki.immersivepetroleum.reservoir.removeByName=Removes the Reservoir entry with the given name
+
+
+# Industrial Foregoing
+groovyscript.wiki.industrialforegoing.bio_reactor.title=Bioreactor
+groovyscript.wiki.industrialforegoing.bio_reactor.description=Converts an input item into Biofuel, with the amount of Biofuel generated being based on the number of concurrent conversion processes inside the Bioreactor.
+groovyscript.wiki.industrialforegoing.bio_reactor.add0=Adds a Bioreactor recipe in the format `input`
+groovyscript.wiki.industrialforegoing.bio_reactor.add1=Adds a Bioreactor recipe in the format `input`, `nbtCheck`
+
+groovyscript.wiki.industrialforegoing.extractor.title=Latex Extractor
+groovyscript.wiki.industrialforegoing.extractor.description=Converts an input block in-world into a fluidstack over time, eventually breaking the block.
+groovyscript.wiki.industrialforegoing.extractor.add0=Adds a Latex Extractor recipe in the format `input`, `output`
+groovyscript.wiki.industrialforegoing.extractor.add1=Adds a Latex Extractor recipe in the format `input`, `output`, `breakChance`
+
+groovyscript.wiki.industrialforegoing.fluid_dictionary.title=Fluid Dictionary Converter
+groovyscript.wiki.industrialforegoing.fluid_dictionary.description=Converts one fluid into another fluid at a given ratio.
+groovyscript.wiki.industrialforegoing.fluid_dictionary.add0=Adds a Fluid Dictionary Converter recipe in the format `input`, `output`
+groovyscript.wiki.industrialforegoing.fluid_dictionary.add1=Adds a Fluid Dictionary Converter recipe in the format `input`, `output`, `ratio`
+
+groovyscript.wiki.industrialforegoing.laser_drill.title=Laser Drill
+groovyscript.wiki.industrialforegoing.laser_drill.description=Converts power into ores, with a given weight, between a minimum and maximum Y value, in any whitelisted biome or not in any blacklisted biome, and with a specific color of laser lens impacting the probability.
+groovyscript.wiki.industrialforegoing.laser_drill.maxY.value=Sets the maximum Y the output can be found at
+groovyscript.wiki.industrialforegoing.laser_drill.minY.value=Sets the minimum Y the output can be found at
+groovyscript.wiki.industrialforegoing.laser_drill.weight.value=Sets the chance the output is generated
+groovyscript.wiki.industrialforegoing.laser_drill.lensMeta.value=Sets the metadata of the lens that impacts the weight probability, which determines the color of the lens
+groovyscript.wiki.industrialforegoing.laser_drill.blacklist.value=Sets the biomes the output cannot be generated in
+groovyscript.wiki.industrialforegoing.laser_drill.whitelist.value=Sets the biomes the output can be generated in
+groovyscript.wiki.industrialforegoing.laser_drill.removeByBlacklist=Removes all ores with the given biome blacklisted
+groovyscript.wiki.industrialforegoing.laser_drill.removeByLens=Removes all ores with the given lens meta
+groovyscript.wiki.industrialforegoing.laser_drill.removeByWhitelist=Removes all ores with the given biome whitelisted
+
+groovyscript.wiki.industrialforegoing.ore_fermenter.title=Fermentation Station
+groovyscript.wiki.industrialforegoing.ore_fermenter.description=Converts an input fluidstack into an output fluidstack.
+groovyscript.wiki.industrialforegoing.ore_fermenter.add=Adds a Fermentation Station recipe in the format `input`, `output`
+
+groovyscript.wiki.industrialforegoing.ore_raw.title=Washing Factory
+groovyscript.wiki.industrialforegoing.ore_raw.description=Converts an input itemstack and input fluidstack into an output fluidstack.
+groovyscript.wiki.industrialforegoing.ore_raw.add=Adds a Washing Factory recipe in the format `ore`, `input`, `output`
+
+groovyscript.wiki.industrialforegoing.ore_sieve.title=Fluid Sieving Machine
+groovyscript.wiki.industrialforegoing.ore_sieve.description=Converts an input itemstack and input fluidstack into an output itemstack.
+groovyscript.wiki.industrialforegoing.ore_sieve.add=Adds a Fluid Sieving Machine recipe in the format `input`, `output`, `sieveItem`
+
+groovyscript.wiki.industrialforegoing.protein_reactor.title=Protein Reactor
+groovyscript.wiki.industrialforegoing.protein_reactor.description=Converts an input item into Protein, with the amount of Protein generated being based on the number of concurrent conversion processes inside the Protein Reactor.
+groovyscript.wiki.industrialforegoing.protein_reactor.add0=Adds a Protein Reactor recipe in the format `input`
+groovyscript.wiki.industrialforegoing.protein_reactor.add1=Adds a Protein Reactor recipe in the format `input`, `nbtCheck`
+
+groovyscript.wiki.industrialforegoing.sludge_refiner.title=Sludge Refiner
+groovyscript.wiki.industrialforegoing.sludge_refiner.description=Converts 1000mb of Sludge into a random itemstack based on the weight of the given itemstack.
+groovyscript.wiki.industrialforegoing.sludge_refiner.add=Adds a Protein Reactor recipe in the format `output`, `weight`
+
+groovyscript.wiki.industrialforegoing.straw.title=Straw
+groovyscript.wiki.industrialforegoing.straw.description=Converts an fluid block in-world into various effects for the player when consumed via a straw.
+groovyscript.wiki.industrialforegoing.straw.add0=Adds a Straw recipe in the format `fluidInput`, `effect`
+groovyscript.wiki.industrialforegoing.straw.add1=Adds a Straw recipe in the format `name`, `fluidInput`, `effect`
+groovyscript.wiki.industrialforegoing.straw.effect.value=Sets what potion effects are given upon consuming the fluid.
+
 
 # Inspirations
 groovyscript.wiki.inspirations.anvil_smashing.title=Anvil Smashing
@@ -1054,6 +1172,23 @@ groovyscript.wiki.jei.ingredient.hideByType=Hides all ingredients of the given t
 groovyscript.wiki.jei.ingredient.removeAndHide=Removes the vanilla crafting recipe for the given ItemStack and hides the item from JEI
 groovyscript.wiki.jei.ingredient.yeet=Alias for `removeAndHide`
 groovyscript.wiki.jei.ingredient.hideAll=Hides all ingredients of all types from the sidebar. Functionally disables JEI
+
+
+# Lazy AE2
+groovyscript.wiki.threng.aggregator.title=Fluix Aggregation
+groovyscript.wiki.threng.aggregator.description=Converts up to 3 input itemstacks into an output itemstack.
+
+groovyscript.wiki.threng.centrifuge.title=Pulse Centrifuge
+groovyscript.wiki.threng.centrifuge.description=Converts 1 input itemstack into an output itemstack.
+
+groovyscript.wiki.threng.energizer.title=Crystal Energization
+groovyscript.wiki.threng.energizer.description=Converts 1 input itemstack into an output itemstack, consuming a set amount of energy.
+groovyscript.wiki.threng.energizer.energy.value=Sets the amount of energy consumed by the recipe
+
+groovyscript.wiki.threng.etcher.title=ME Circuit Etching
+groovyscript.wiki.threng.etcher.description=Converts up to 3 input itemstacks from specific slots into an output itemstack.
+groovyscript.wiki.threng.etcher.top.value=Sets the top slot of the recipe
+groovyscript.wiki.threng.etcher.bottom.value=Sets the bottom slot of the recipe
 
 
 # Mekanism
@@ -1188,6 +1323,205 @@ groovyscript.wiki.naturesaura.spawning.entity.value=Sets the entity spawned
 groovyscript.wiki.naturesaura.spawning.removeByEntity=Removes all Altar of Birthing recipes that summon the given entity
 groovyscript.wiki.naturesaura.spawning.removeByName=Removes the Altar of Birthing recipe with the given name
 
+# ProdigyTech
+groovyscript.wiki.prodigytech.atomic_reshaper.title=Atomic Reshaper
+groovyscript.wiki.prodigytech.atomic_reshaper.description=Uses Hot Air and Primordium to convert items. Can have a weighted random based output.
+groovyscript.wiki.prodigytech.atomic_reshaper.time.value=The time needed to perform the recipe, in ticks. Will run faster than this number when heated over 250 C.
+groovyscript.wiki.prodigytech.atomic_reshaper.primordium.value=The amount of Primordium units consumed by this recipe. 1 Primordium equals 100 Primordium units.
+
+groovyscript.wiki.prodigytech.explosion_furnace.title=Explosion Furnace
+groovyscript.wiki.prodigytech.explosion_furnace.description=Uses an explosive, a dampener, and an optional reagent to convert items. The power value of all recipes, all explosives, and all dampeners should be close to avoid an efficiency loss.
+groovyscript.wiki.prodigytech.explosion_furnace.power.value=Sets the power used by this recipe.
+groovyscript.wiki.prodigytech.explosion_furnace.craftPerReagent.value=Sets the number of input items that can be converted with 1 reagent.
+
+groovyscript.wiki.prodigytech.explosion_furnace_additives.title=Explosion Furnace Additives
+groovyscript.wiki.prodigytech.explosion_furnace_additives.description=Turn an item into an explosive or into a dampener when inserted into the Explosion Furnace.
+groovyscript.wiki.prodigytech.explosion_furnace_additives.addDampener=Adds a dampener.
+groovyscript.wiki.prodigytech.explosion_furnace_additives.addExplosive=Adds an explosive.
+groovyscript.wiki.prodigytech.explosion_furnace_additives.removeAllDampeners=Removes all registered dampeners.
+groovyscript.wiki.prodigytech.explosion_furnace_additives.removeAllExplosives=Removes all registered explosives.
+groovyscript.wiki.prodigytech.explosion_furnace_additives.removeDampener=Removes a dampener by the input item.
+groovyscript.wiki.prodigytech.explosion_furnace_additives.removeExplosive=Removes an explosive by the input item.
+
+groovyscript.wiki.prodigytech.heat_sawmill.title=Heat Sawmill
+groovyscript.wiki.prodigytech.heat_sawmill.description=Wood processing machine with 1 input, 2 outputs and an optional chance for the 2nd output.
+groovyscript.wiki.prodigytech.heat_sawmill.time.value=The time needed to perform the recipe, in ticks. Will run faster than this number when heated over 80 C.
+groovyscript.wiki.prodigytech.heat_sawmill.secondaryChance.value=Sets the chance to get the 2nd output.
+
+groovyscript.wiki.prodigytech.magnetic_reassembler.title=Magnetic Reassembler
+groovyscript.wiki.prodigytech.magnetic_reassembler.description=A simple 1 to 1 processing machine for dusts.
+groovyscript.wiki.prodigytech.magnetic_reassembler.time.value=The time needed to perform the recipe, in ticks. Will run faster than this number when heated over 125 C.
+
+groovyscript.wiki.prodigytech.ore_refinery.title=Ore Refinery
+groovyscript.wiki.prodigytech.ore_refinery.description=Ore processing machine with 1 input, 2 outputs and an optional chance for the 2nd output.
+groovyscript.wiki.prodigytech.ore_refinery.time.value=The time needed to perform the recipe, in ticks. Will run faster than this number when heated over 125 C.
+groovyscript.wiki.prodigytech.ore_refinery.secondaryChance.value=Sets the chance to get the 2nd output.
+
+groovyscript.wiki.prodigytech.primordialis_reactor.title=Primordialis Reactor
+groovyscript.wiki.prodigytech.primordialis_reactor.description=Turns organic matter into Primordium.
+groovyscript.wiki.prodigytech.primordialis_reactor.add=Adds an item that can be converted.
+groovyscript.wiki.prodigytech.primordialis_reactor.remove=Removes an item that can be converted.
+
+groovyscript.wiki.prodigytech.rotary_grinder.title=Rotary Grinder
+groovyscript.wiki.prodigytech.rotary_grinder.description=A simple 1 to 1 processing machine making dusts.
+groovyscript.wiki.prodigytech.rotary_grinder.time.value=The time needed to perform the recipe, in ticks. Will run faster than this number when heated over 80 C.
+
+groovyscript.wiki.prodigytech.solderer.title=Solderer
+groovyscript.wiki.prodigytech.solderer.description=Performs recipes using Gold Dust, has a recipe catalyst, and uses up Circuit Boards and an optional extra input for each recipe.
+groovyscript.wiki.prodigytech.solderer.gold.value=Sets the number of Tiny Gold Dusts needed for the recipe (9 equals 1 ingot).
+groovyscript.wiki.prodigytech.solderer.time.value=Sets the time needed to perform the recipe, in ticks. Will run faster than this number when heated over 125 C.
+groovyscript.wiki.prodigytech.solderer.pattern.value=The pattern used by the recipe, will not be consumed.
+groovyscript.wiki.prodigytech.solderer.removeByAdditive=Removes the recipes using the given additive.
+groovyscript.wiki.prodigytech.solderer.removeByPattern=Removes the recipes using the given pattern.
+groovyscript.wiki.prodigytech.solderer.removeWithoutAdditive=Removes all recipes not using additives.
+
+groovyscript.wiki.prodigytech.zorra_altar.title=Zorra Altar
+groovyscript.wiki.prodigytech.zorra_altar.description=Allows over-enchanting Zorrasteel equipment.
+groovyscript.wiki.prodigytech.zorra_altar.addEnchantment=Adds an enchantment that can be applied in the Altar.
+groovyscript.wiki.prodigytech.zorra_altar.removeEnchantment=Removes an enchantment that can be applied in the Altar.
+
+# Pyrotech
+groovyscript.wiki.pyrotech.anvil.title=Anvil
+groovyscript.wiki.pyrotech.anvil.description=When using hammer or pickaxe it can convert items
+groovyscript.wiki.pyrotech.anvil.hits.value=Sets how often the item needs to be hit
+groovyscript.wiki.pyrotech.anvil.tier.value=Sets the tier of the required anvil (Granite, Ironclad, Obsidian)
+groovyscript.wiki.pyrotech.anvil.type.value=Sets the type of tool required (Hammer, Pickaxe)
+groovyscript.wiki.pyrotech.anvil.add=Adds recipes in the format `name`, `input`, `output`, `hits`, `tier`, `type`
+
+groovyscript.wiki.pyrotech.barrel.title=Barrel
+groovyscript.wiki.pyrotech.barrel.description=Over time converts a fluid with four items into a new fluid
+groovyscript.wiki.pyrotech.barrel.duration.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.barrel.add=Adds recipes in the format `name`, `input1`, `input2`, `input3`, `input4`, `fluidInput`, `fluidOutput`, `duration`
+
+groovyscript.wiki.pyrotech.campfire.title=Campfire
+groovyscript.wiki.pyrotech.campfire.description=Can cook food
+groovyscript.wiki.pyrotech.campfire.duration.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.campfire.add=Adds recipes in the format `name`, `input`, `output`, `duration`
+
+groovyscript.wiki.pyrotech.chopping_block.title=Chopping Block
+groovyscript.wiki.pyrotech.chopping_block.description=When using a axe it can convert items
+groovyscript.wiki.pyrotech.chopping_block.chops.value=Sets how often the item needs to be hit with output amount. Call it 4 times for 4 different tiers (Crude, Stone, Iron, Diamond)
+groovyscript.wiki.pyrotech.chopping_block.quantities.value=Sets the amount of items output for a given tier. Call it 4 times for 4 different tiers (Crude, Stone, Iron, Diamond)
+
+groovyscript.wiki.pyrotech.compacting_bin.title=Compacting Bin
+groovyscript.wiki.pyrotech.compacting_bin.description=When using a shovel it can convert items
+groovyscript.wiki.pyrotech.compacting_bin.toolUses.value=Sets how often the item needs to be hit
+groovyscript.wiki.pyrotech.compacting_bin.add=Adds recipes in the format `name`, `input`, `output`, `hits`
+
+groovyscript.wiki.pyrotech.compost_bin.title=Compost Bin
+groovyscript.wiki.pyrotech.compost_bin.description=Can convert multiple items into a new one when its full
+groovyscript.wiki.pyrotech.compost_bin.compostValue.value=Sets how much the items fills the bin
+groovyscript.wiki.pyrotech.compost_bin.add=Adds recipes in the format `name`, `input`, `output`, `compostValue`
+
+groovyscript.wiki.pyrotech.crude_drying_rack.title=Crude Drying Rack
+groovyscript.wiki.pyrotech.crude_drying_rack.description=Converts an item over time into a new one
+groovyscript.wiki.pyrotech.crude_drying_rack.dryTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.crude_drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`
+
+groovyscript.wiki.pyrotech.drying_rack.title=Drying Rack
+groovyscript.wiki.pyrotech.drying_rack.description=Converts an item over time into a new one
+groovyscript.wiki.pyrotech.drying_rack.dryTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`
+
+groovyscript.wiki.pyrotech.kiln.title=Kiln
+groovyscript.wiki.pyrotech.kiln.description=Converts an item into a new one by burning it. Has a chance to fail
+groovyscript.wiki.pyrotech.kiln.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.kiln.failureChance.value=Sets the chance to fail the recipe
+groovyscript.wiki.pyrotech.kiln.failureOutputs.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.kiln.failureOutput.value=
+groovyscript.wiki.pyrotech.kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+
+groovyscript.wiki.pyrotech.soaking_pot.title=Soaking Pot
+groovyscript.wiki.pyrotech.soaking_pot.description=Converts an item into a new one by soaking it in a liquid. Can require a campfire
+groovyscript.wiki.pyrotech.soaking_pot.time.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.soaking_pot.campfireRequired.value=Sets if a campfire is required underneath
+groovyscript.wiki.pyrotech.soaking_pot.add=Adds recipes in the format `name`, `input`, `output`, `time`
+
+groovyscript.wiki.pyrotech.tanning_rack.title=Tanning Rack
+groovyscript.wiki.pyrotech.tanning_rack.description=Converts an item over time into a new one
+groovyscript.wiki.pyrotech.tanning_rack.dryTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.tanning_rack.failureItem.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.tanning_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`, `failureItem`
+
+
+# PneumaticCraft
+groovyscript.wiki.pneumaticcraft.amadron.title=Amadron
+groovyscript.wiki.pneumaticcraft.amadron.description=Uses an Amadron Tablet and linked inventories in world to trade via drones.
+groovyscript.wiki.pneumaticcraft.amadron.note0=Amadron recipes added or removed via GroovyScript will be saved to a config file in `config/pneumaticcraft/`, meaning changes made may persist unexpectedly through restarts.
+groovyscript.wiki.pneumaticcraft.amadron.periodic.value=Sets if the Amadron recipe is periodic
+groovyscript.wiki.pneumaticcraft.amadron.removeAllPeriodic=Removes all periodic recipes
+groovyscript.wiki.pneumaticcraft.amadron.removeAllStatic=Removes all static recipes
+
+groovyscript.wiki.pneumaticcraft.assembly_controller.title=Assembly Controller
+groovyscript.wiki.pneumaticcraft.assembly_controller.description=Uses a given Program to convert an input itemstack into an output itemstack. Drill recipes that output an itemstack used for the input itemstack of a Laser recipe can be chained via the Drill & Laser Program.
+groovyscript.wiki.pneumaticcraft.assembly_controller.programStack.value=Sets the program type used, between Drill and Laser
+groovyscript.wiki.pneumaticcraft.assembly_controller.removeAllDrill=Removes all Drill program recipes
+groovyscript.wiki.pneumaticcraft.assembly_controller.removeAllLaser=Removes all Laser program recipes
+
+groovyscript.wiki.pneumaticcraft.explosion.title=Explosion
+groovyscript.wiki.pneumaticcraft.explosion.description=Converts an input item into an output item, with a chance to fail and destroy the item.
+groovyscript.wiki.pneumaticcraft.explosion.note0=Consider using the inWorldCrafting Explosion compat instead!
+groovyscript.wiki.pneumaticcraft.explosion.lossRate.value=Sets the failure rate of the recipe, where the item is simply destroyed instead of being converted
+
+groovyscript.wiki.pneumaticcraft.heat_frame_cooling.title=Heat Frame Cooling
+groovyscript.wiki.pneumaticcraft.heat_frame_cooling.description=Converts an input itemstack into an output itemstack when inside an inventory placed within a Heat Frame which is cooled.
+
+groovyscript.wiki.pneumaticcraft.liquid_fuel.title=Liquid Fuel
+groovyscript.wiki.pneumaticcraft.liquid_fuel.description=Converts fluid into Pressure in a Liquid Compressor.
+groovyscript.wiki.pneumaticcraft.liquid_fuel.add=Adds entries in the format `fluid`, `pressure`
+groovyscript.wiki.pneumaticcraft.liquid_fuel.pressure.value=Sets the Pressure created by the fluid
+groovyscript.wiki.pneumaticcraft.liquid_fuel.remove=Removes entries with the given `fluid`
+
+groovyscript.wiki.pneumaticcraft.plastic_mixer.title=Plastic Mixer
+groovyscript.wiki.pneumaticcraft.plastic_mixer.description=Converts a fluidstack and an item with a variable damage value into each other, requiring temperature to operate the process, optionally consuming dye, and allowing either only melting or only solidifying.
+groovyscript.wiki.pneumaticcraft.plastic_mixer.note0=Items with metadata 15 will never consume dye, even if the option is enabled.
+groovyscript.wiki.pneumaticcraft.plastic_mixer.note1=Only one meta value can be used for a recipe per fluid, and the meta value will be applied to the item.
+groovyscript.wiki.pneumaticcraft.plastic_mixer.meta.value=Sets the meta value for selecting the recipe, only one meta value can be used for a fluid
+groovyscript.wiki.pneumaticcraft.plastic_mixer.useDye.value=Sets if the recipe consumes a random dye
+groovyscript.wiki.pneumaticcraft.plastic_mixer.allowMelting.value=Sets if the recipe allows melting the output item back into the input fluid
+groovyscript.wiki.pneumaticcraft.plastic_mixer.allowSolidifying.value=Sets if the recipe allows solidifying the input fluid into the output item
+groovyscript.wiki.pneumaticcraft.plastic_mixer.requiredTemperature.value=Sets the required temperature in Kelvin to melt or solidify the recipe
+groovyscript.wiki.pneumaticcraft.plastic_mixer.removeByFluid=Removes all recipes with the given fluid input
+groovyscript.wiki.pneumaticcraft.plastic_mixer.removeByItem=Removes all recipes with the given item output
+
+groovyscript.wiki.pneumaticcraft.pressure_chamber.title=Pressure Chamber
+groovyscript.wiki.pneumaticcraft.pressure_chamber.description=Converts any number of input itemstacks into any number of output itemstacks, either generating Pressure or consuming Pressure from the Pressure Chamber.
+groovyscript.wiki.pneumaticcraft.pressure_chamber.pressure.value=Sets the Pressure consumed to perform the craft, if negative will generate Pressure instead
+
+groovyscript.wiki.pneumaticcraft.refinery.title=Refinery
+groovyscript.wiki.pneumaticcraft.refinery.description=Converts an input fluidstack into between 2 and 4 fluidstacks, consuming Temperature, with the number of fluidstacks output depending on the recipe and the number of Refineries vertically stacked.
+groovyscript.wiki.pneumaticcraft.refinery.requiredTemperature.value=Sets the required temperate in Kelvin required to process the recipe
+
+groovyscript.wiki.pneumaticcraft.thermopneumatic_processing_plant.title=Thermopneumatic Processing Plant
+groovyscript.wiki.pneumaticcraft.thermopneumatic_processing_plant.description=Converts an input fluidstack into an output fluidstack, consuming Pressure and Temperature, with an optional itemstack being consumed.
+groovyscript.wiki.pneumaticcraft.thermopneumatic_processing_plant.pressure.value=Sets the Pressure consumed to perform the craft
+groovyscript.wiki.pneumaticcraft.thermopneumatic_processing_plant.requiredTemperature.value=Sets the required temperate in Kelvin required to process the recipe
+
+groovyscript.wiki.pneumaticcraft.xp_fluid.title=XP Fluid
+groovyscript.wiki.pneumaticcraft.xp_fluid.description=Controls what fluids are considered XP Fluids and how much experience they provide.
+groovyscript.wiki.pneumaticcraft.xp_fluid.add=Adds entries in the format `fluid`, `ratio`
+groovyscript.wiki.pneumaticcraft.xp_fluid.ratio.value=Sets the amount of experience provided by the fluid for the purpose of determining the ratio between xp fluids
+groovyscript.wiki.pneumaticcraft.xp_fluid.remove=Removes entries for the given `fluid`
+
+
+# Project E
+groovyscript.wiki.projecte.entity_randomizer.title=Entity Randomizer
+groovyscript.wiki.projecte.entity_randomizer.description=Converts an entity on the list into a random other entity on the list when a projectile fired from the Philosopher's Stone hits it. There are two lists, one for 'mobs' and the other for 'peacefuls', but any entity can go on either list.
+groovyscript.wiki.projecte.entity_randomizer.addMob=Adds the given `entity` that extends `EntityLiving` to the mob list
+groovyscript.wiki.projecte.entity_randomizer.addPeaceful=Adds the given `entity` that extends `EntityLiving` to the peaceful list
+groovyscript.wiki.projecte.entity_randomizer.removeMob=Removes the given `entity` that extends `EntityLiving` from the mob list
+groovyscript.wiki.projecte.entity_randomizer.removePeaceful=Removes the given `entity` that extends `EntityLiving` from the peaceful list
+groovyscript.wiki.projecte.entity_randomizer.removeAllMobs=Removes all entries from the mob list
+groovyscript.wiki.projecte.entity_randomizer.removeAllPeacefuls=Removes all entries from the peacefuls list
+groovyscript.wiki.projecte.entity_randomizer.streamMobs=Iterates through every entry in the mob list
+groovyscript.wiki.projecte.entity_randomizer.streamPeacefuls=Iterates through every entry in the peacefuls list
+
+groovyscript.wiki.projecte.transmutation.title=World Transmutation
+groovyscript.wiki.projecte.transmutation.description=Converts an input blockstate into an output blockstate when right-clicked with by a Philosopher's Stone, with the abity to be converted into a different output blockstate when holding shift.
+groovyscript.wiki.projecte.transmutation.input.value=Sets the input blockstate
+groovyscript.wiki.projecte.transmutation.output.value=Sets the normal output blockstate
+groovyscript.wiki.projecte.transmutation.altOutput.value=Sets the shift output blockstate
+
 
 # Roots
 groovyscript.wiki.roots.animal_harvest.title=Animal Harvest
@@ -1224,8 +1558,9 @@ groovyscript.wiki.roots.fey_crafter.removeByName=Removes the Fey Crafter recipe 
 groovyscript.wiki.roots.fey_crafter.removeByOutput=Removes the Fey Crafter recipe with the given output itemstack
 
 groovyscript.wiki.roots.flower_generation.title=Flower Generation
-groovyscript.wiki.roots.flower_generation.description=When running the Flower Growth Ritual, allowed flowers will generate in the area. Additionally, using the spell Growth Infusion's Floral Reproduction modifier will duplicate the flower.
+groovyscript.wiki.roots.flower_generation.description=When running the Flower Growth Ritual, allowed flowers will generate in the area if they can be placed on the given soil block. Additionally, using the spell Growth Infusion's Floral Reproduction modifier will duplicate the flower, regardless of the soil block.
 groovyscript.wiki.roots.flower_generation.flower.value=Sets the flower blockstate
+groovyscript.wiki.roots.flower_generation.allowedSoils.value=Sets the list of allowed blocks beneath the flower, where an empty list allows any block, in the form of an IIngredient that is converted into a IBlockState
 groovyscript.wiki.roots.flower_generation.removeByFlower0=Removes the Flower Generation entry with the given IBlockState
 groovyscript.wiki.roots.flower_generation.removeByFlower1=Removes the Flower Generation entry with the given Block and int metadata
 groovyscript.wiki.roots.flower_generation.removeByFlower2=Removes all Flower Generation entries with the given Block
@@ -1356,6 +1691,48 @@ groovyscript.wiki.rustic.crushing_tub.byproduct.value=Sets the itemstack output 
 groovyscript.wiki.rustic.evaporating_basin.title=Drying Basin
 groovyscript.wiki.rustic.evaporating_basin.description=Converts fluids into itemstacks over time.
 groovyscript.wiki.rustic.evaporating_basin.time.value=Sets the time in ticks the recipe will take
+
+
+# Tinkers
+groovyscript.wiki.tconstruct.smeltery_fuel.title=Smeltery Fuel
+groovyscript.wiki.tconstruct.smeltery_fuel.description=Modifies what fluids are accepted as fuels for the Smeltery and how long each fuels the Smeltery.
+groovyscript.wiki.tconstruct.smeltery_fuel.addFuel=Adds the given fluid as a smeltery fuel with the given burn time
+groovyscript.wiki.tconstruct.smeltery_fuel.removeFuel=Removes the given fluid from being a smeltery fuel
+
+groovyscript.wiki.tconstruct.drying.title=Drying Rack
+groovyscript.wiki.tconstruct.drying.description=Convert an item into a different item by hanging it out to dry.
+groovyscript.wiki.tconstruct.drying.add=Adds a new recipe in the format `input`, `output`, `time`
+groovyscript.wiki.tconstruct.drying.time.value=The time in ticks it takes for the item to dry
+
+groovyscript.wiki.tconstruct.casting_table.title=Casting Table
+groovyscript.wiki.tconstruct.casting_table.description=Pours out fluid onto a table to solidify it into a solid, optionally with a cast itemstack.
+groovyscript.wiki.tconstruct.casting_table.removeByCast=Removes all recipes that use the given item as a cast
+groovyscript.wiki.tconstruct.casting_table.cast.value=The item to use as a cast. null for no cast
+groovyscript.wiki.tconstruct.casting_table.time.value=The time in ticks it takes for the recipe to complete
+groovyscript.wiki.tconstruct.casting_table.consumesCast.value=Whether the cast item is destroyed
+
+groovyscript.wiki.tconstruct.casting_basin.title=Casting Basin
+groovyscript.wiki.tconstruct.casting_basin.description=Pours out fluid into a basin to solidify it into a solid, optionally with a cast itemstack.
+groovyscript.wiki.tconstruct.casting_basin.removeByCast=Removes all recipes that use the given item as a cast
+groovyscript.wiki.tconstruct.casting_basin.cast.value=The item to use as a cast. null for no cast
+groovyscript.wiki.tconstruct.casting_basin.time.value=The time in ticks it takes for the recipe to complete
+groovyscript.wiki.tconstruct.casting_basin.consumesCast.value=Whether the cast item is destroyed
+
+groovyscript.wiki.tconstruct.melting.title=Melting
+groovyscript.wiki.tconstruct.melting.description=Modifies what items can be melted down in the Smeltery.
+groovyscript.wiki.tconstruct.melting.add=Adds a new recipe in the format `input`, `output`, `time`
+groovyscript.wiki.tconstruct.melting.temp.value=Required temperature for melting. Also determines the speed of the melt
+
+groovyscript.wiki.tconstruct.entity_melting.title=Entity Melting
+groovyscript.wiki.tconstruct.entity_melting.description=Allows mobs to create a bit of fluid when hurt by the Smeltery.
+groovyscript.wiki.tconstruct.entity_melting.input.value=The entity to melt
+groovyscript.wiki.tconstruct.entity_melting.output.value=The fluid created each damage tick
+
+groovyscript.wiki.tconstruct.alloying.title=Alloying
+groovyscript.wiki.tconstruct.alloying.description=Modifies what fluids can be mixed together in the Smeltery.
+groovyscript.wiki.tconstruct.alloying.add=Adds a new recipe in the format `output`, `inputs`
+groovyscript.wiki.tconstruct.alloying.removeByInputsAndOutput=Removes all recipes that match the given output and the given inputs
+groovyscript.wiki.tconstruct.alloying.removeByInputs=Removes all recipes that match the given inputs
 
 
 # Thaumcraft
@@ -1735,66 +2112,3 @@ groovyscript.wiki.woot.stygian_iron_anvil.note1=While more than 6 items can func
 groovyscript.wiki.woot.stygian_iron_anvil.base.value=Sets the itemstack used for the base
 groovyscript.wiki.woot.stygian_iron_anvil.preserveBase.value=Sets if the base is used as a catalyst and not consumed
 groovyscript.wiki.woot.stygian_iron_anvil.removeByBase=Removes all recipes that match the given base item
-
-
-# Pyrotech
-groovyscript.wiki.pyrotech.anvil.title=Anvil
-groovyscript.wiki.pyrotech.anvil.description=When using hammer or pickaxe it can convert items
-groovyscript.wiki.pyrotech.anvil.hits.value=Sets how often the item needs to be hit
-groovyscript.wiki.pyrotech.anvil.tier.value=Sets the tier of the required anvil (Granite, Ironclad, Obsidian)
-groovyscript.wiki.pyrotech.anvil.type.value=Sets the type of tool required (Hammer, Pickaxe)
-groovyscript.wiki.pyrotech.anvil.add=Adds recipes in the format `name`, `input`, `output`, `hits`, `tier`, `type`
-
-groovyscript.wiki.pyrotech.barrel.title=Barrel
-groovyscript.wiki.pyrotech.barrel.description=Over time converts a fluid with four items into a new fluid
-groovyscript.wiki.pyrotech.barrel.duration.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.barrel.add=Adds recipes in the format `name`, `input1`, `input2`, `input3`, `input4`, `fluidInput`, `fluidOutput`, `duration`
-
-groovyscript.wiki.pyrotech.campfire.title=Campfire
-groovyscript.wiki.pyrotech.campfire.description=Can cook food
-groovyscript.wiki.pyrotech.campfire.duration.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.campfire.add=Adds recipes in the format `name`, `input`, `output`, `duration`
-
-groovyscript.wiki.pyrotech.chopping_block.title=Chopping Block
-groovyscript.wiki.pyrotech.chopping_block.description=When using a axe it can convert items
-groovyscript.wiki.pyrotech.chopping_block.chops.value=Sets how often the item needs to be hit with output amount. Call it 4 times for 4 different tiers (Crude, Stone, Iron, Diamond)
-
-groovyscript.wiki.pyrotech.compacting_bin.title=Compacting Bin
-groovyscript.wiki.pyrotech.compacting_bin.description=When using a shovel it can convert items
-groovyscript.wiki.pyrotech.compacting_bin.toolUses.value=Sets how often the item needs to be hit
-groovyscript.wiki.pyrotech.compacting_bin.add=Adds recipes in the format `name`, `input`, `output`, `hits`
-
-groovyscript.wiki.pyrotech.compost_bin.title=Compost Bin
-groovyscript.wiki.pyrotech.compost_bin.description=Can convert multiple items into a new one when its full
-groovyscript.wiki.pyrotech.compost_bin.compostValue.value=Sets how much the items fills the bin
-groovyscript.wiki.pyrotech.compost_bin.add=Adds recipes in the format `name`, `input`, `output`, `compostValue`
-
-groovyscript.wiki.pyrotech.crude_drying_rack.title=Crude Drying Rack
-groovyscript.wiki.pyrotech.crude_drying_rack.description=Converts an item over time into a new one
-groovyscript.wiki.pyrotech.crude_drying_rack.dryTime.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.crude_drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`
-
-groovyscript.wiki.pyrotech.drying_rack.title=Drying Rack
-groovyscript.wiki.pyrotech.drying_rack.description=Converts an item over time into a new one
-groovyscript.wiki.pyrotech.drying_rack.dryTime.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`
-
-groovyscript.wiki.pyrotech.kiln.title=Kiln
-groovyscript.wiki.pyrotech.kiln.description=Converts an item into a new one by burning it. Has a chance to fail
-groovyscript.wiki.pyrotech.kiln.burnTime.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.kiln.failureChance.value=Sets the chance to fail the recipe
-groovyscript.wiki.pyrotech.kiln.failureOutputs.value=Sets the output when the recipe failed
-groovyscript.wiki.pyrotech.kiln.failureOutput.value=
-groovyscript.wiki.pyrotech.kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
-
-groovyscript.wiki.pyrotech.soaking_pot.title=Soaking Pot
-groovyscript.wiki.pyrotech.soaking_pot.description=Converts an item into a new one by soaking it in a liquid. Can require a campfire
-groovyscript.wiki.pyrotech.soaking_pot.time.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.soaking_pot.campfireRequired.value=Sets if a campfire is required underneath
-groovyscript.wiki.pyrotech.soaking_pot.add=Adds recipes in the format `name`, `input`, `output`, `time`
-
-groovyscript.wiki.pyrotech.tanning_rack.title=Tanning Rack
-groovyscript.wiki.pyrotech.tanning_rack.description=Converts an item over time into a new one
-groovyscript.wiki.pyrotech.tanning_rack.dryTime.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.tanning_rack.failureItem.value=Sets the output when the recipe failed
-groovyscript.wiki.pyrotech.tanning_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`, `failureItem`

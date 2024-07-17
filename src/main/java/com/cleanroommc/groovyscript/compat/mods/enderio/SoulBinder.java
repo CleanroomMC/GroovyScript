@@ -64,6 +64,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
         }
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(MachineRecipeRegistry.instance::removeRecipe);
@@ -96,6 +97,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
         private final NNList<ResourceLocation> entities = new NNList<>();
         private final List<String> entityErrors = new ArrayList<>();
 
+        @Override
         @RecipeBuilderMethodDescription
         public RecipeBuilder name(String name) {
             this.name = name;

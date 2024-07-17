@@ -5,23 +5,24 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 
 public class FileUtil {
 
     public static String relativize(String rootPath, String longerThanRootPath) {
+        try {
+            longerThanRootPath = URLDecoder.decode(longerThanRootPath, "UTF-8");
+        } catch (UnsupportedEncodingException ignored) {
+        }
+
         if (File.separatorChar != '/') {
             longerThanRootPath = longerThanRootPath.replace('/', File.separatorChar);
         }
         int index = longerThanRootPath.indexOf(rootPath);
         if (index < 0) {
-            if (longerThanRootPath.contains("%20")) {
-                longerThanRootPath = longerThanRootPath.replace("%20", " ");
-                index = longerThanRootPath.indexOf(rootPath);
-            }
-            if (index < 0) {
-                throw new IllegalArgumentException("The path '" + longerThanRootPath + "' does not contain the root path '" + rootPath + "'");
-            }
+            throw new IllegalArgumentException("The path '" + longerThanRootPath + "' does not contain the root path '" + rootPath + "'");
         }
         return longerThanRootPath.substring(index + rootPath.length() + 1);
     }

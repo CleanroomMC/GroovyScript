@@ -35,10 +35,9 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         PurificationRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            PurificationRecipe recipe = new PurificationRecipe(new AdvancedMachineInput(itemStack.copy(), gasInput.getGas()), new ItemStackOutput(output));
+            PurificationRecipe recipe = new PurificationRecipe(new AdvancedMachineInput(itemStack, gasInput.getGas()), new ItemStackOutput(output));
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -90,7 +89,7 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
             if (!validate()) return null;
             PurificationRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                PurificationRecipe r = new PurificationRecipe(new AdvancedMachineInput(itemStack.copy(), gasInput.get(0).getGas()), new ItemStackOutput(output.get(0)));
+                PurificationRecipe r = new PurificationRecipe(new AdvancedMachineInput(itemStack, gasInput.get(0).getGas()), new ItemStackOutput(output.get(0)));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().purificationChamber.add(r);
             }

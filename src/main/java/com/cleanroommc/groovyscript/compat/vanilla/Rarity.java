@@ -67,17 +67,13 @@ public class Rarity extends NamedRegistry {
     }
 
     private String getAppropriateRarityName(TextFormatting formatting) {
-        switch (formatting) {
-            case WHITE:
-                return EnumRarity.COMMON.rarityName;
-            case YELLOW:
-                return EnumRarity.UNCOMMON.rarityName;
-            case AQUA:
-                return EnumRarity.RARE.rarityName;
-            case LIGHT_PURPLE:
-                return EnumRarity.EPIC.rarityName;
-        }
-        return StringUtils.capitalize(formatting.getFriendlyName());
+        return switch (formatting) {
+            case WHITE -> EnumRarity.COMMON.rarityName;
+            case YELLOW -> EnumRarity.UNCOMMON.rarityName;
+            case AQUA -> EnumRarity.RARE.rarityName;
+            case LIGHT_PURPLE -> EnumRarity.EPIC.rarityName;
+            default -> StringUtils.capitalize(formatting.getFriendlyName());
+        };
     }
 
     private static class RarityImpl implements IRarity {

@@ -43,17 +43,15 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
     }
 
     private static ArrayList<WeightedRandomLoot> getLootbag(int rarity) {
-        switch (rarity) {
-            case 0:
-                return WeightedRandomLoot.lootBagCommon;
-            case 1:
-                return WeightedRandomLoot.lootBagUncommon;
-            case 2:
-                return WeightedRandomLoot.lootBagRare;
-            default:
+        return switch (rarity) {
+            case 0 -> WeightedRandomLoot.lootBagCommon;
+            case 1 -> WeightedRandomLoot.lootBagUncommon;
+            case 2 -> WeightedRandomLoot.lootBagRare;
+            default -> {
                 GroovyLog.msg("Error: Thaumcraft Lootbag type not specified. Please use Lootbag.getCommon(), Lootbag.getUncommon(), or Lootbag.getRare().").error().post();
-                return new ArrayList<>();
-        }
+                yield new ArrayList<>();
+            }
+        };
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = {
@@ -67,7 +65,7 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
 
     @MethodDescription(example = @Example("item('minecraft:ender_pearl'), 0"))
     public void remove(ItemStack item, int rarity) {
-        ArrayList<WeightedRandomLoot> list = getLootbag(rarity);
+        List<WeightedRandomLoot> list = getLootbag(rarity);
         List<WeightedRandomLoot> remove = new ArrayList<>();
         for (WeightedRandomLoot loot : list) {
             if (item.isItemEqual(loot.item)) {
@@ -80,7 +78,7 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
 
     @MethodDescription(example = @Example("2"))
     public void removeAll(int rarity) {
-        ArrayList<WeightedRandomLoot> list = getLootbag(rarity);
+        List<WeightedRandomLoot> list = getLootbag(rarity);
         List<WeightedRandomLoot> remove = new ArrayList<>();
         for (WeightedRandomLoot loot : list) {
             remove.add(loot);

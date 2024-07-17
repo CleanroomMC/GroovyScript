@@ -53,8 +53,8 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.table_crafting.addShapeless0", type = MethodDescription.Type.ADDITION)
-    public ITieredRecipe addShapeless(ItemStack output, List<List<IIngredient>> input) {
-        return addShaped(0, output, input);
+    public ITieredRecipe addShapeless(ItemStack output, List<IIngredient> input) {
+        return addShapeless(0, output, input);
     }
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.table_crafting.addShapeless1", type = MethodDescription.Type.ADDITION)

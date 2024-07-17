@@ -35,35 +35,23 @@ public class AltarInputOrder {
     };
 
     public static int[][] getMap(TileAltar.AltarLevel level) {
-        switch (level) {
-            case DISCOVERY:
-                return AltarInputOrder.DISCOVERY;
-            case ATTUNEMENT:
-                return AltarInputOrder.ATTUNEMENT;
-            case CONSTELLATION_CRAFT:
-                return AltarInputOrder.CONSTELLATION_CRAFT;
-            case TRAIT_CRAFT:
-                return AltarInputOrder.TRAIT_CRAFT;
-            default:
-                return null;
-        }
+        return switch (level) {
+            case DISCOVERY -> AltarInputOrder.DISCOVERY;
+            case ATTUNEMENT -> AltarInputOrder.ATTUNEMENT;
+            case CONSTELLATION_CRAFT -> AltarInputOrder.CONSTELLATION_CRAFT;
+            case TRAIT_CRAFT -> AltarInputOrder.TRAIT_CRAFT;
+            case BRILLIANCE -> null;
+        };
     }
 
     public static ItemHandle[] initInputList(TileAltar.AltarLevel level) {
-        ItemHandle[] rVal = null;
-        switch (level) {
-            case DISCOVERY:
-                rVal = new ItemHandle[9];
-                break;
-            case ATTUNEMENT:
-                rVal = new ItemHandle[13];
-                break;
-            case CONSTELLATION_CRAFT:
-                rVal = new ItemHandle[21];
-                break;
-            case TRAIT_CRAFT:
-                rVal = new ItemHandle[25];
-        }
+        ItemHandle[] rVal = switch (level) {
+            case DISCOVERY -> new ItemHandle[9];
+            case ATTUNEMENT -> new ItemHandle[13];
+            case CONSTELLATION_CRAFT -> new ItemHandle[21];
+            case TRAIT_CRAFT -> new ItemHandle[25];
+            case BRILLIANCE -> null;
+        };
         if (rVal != null) Arrays.fill(rVal, null);
         return rVal;
     }

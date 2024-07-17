@@ -5,6 +5,7 @@ import net.minecraftforge.event.entity.living.EnderTeleportEvent
 import net.minecraftforge.event.world.BlockEvent
 import net.minecraft.util.text.TextComponentString
 
+/*
 def ore_iron = ore('ingotIron')
 def item_iron = item('minecraft:iron_ingot')
 log.info(item_iron in ore_iron) // true
@@ -14,6 +15,7 @@ log.info(item_iron << ore_iron) // true
 log.info((item_iron * 3) << ore_iron) // false
 log.info(ore_iron >> item_iron) // true
 log.info(ore_iron >> (item_iron * 3)) // false
+*/
 
 /*file('config/').eachFile { file ->
     println file.path
@@ -32,7 +34,7 @@ crafting.shapedBuilder()
 crafting.shapedBuilder()
     .name('gold_v_to_clay')
     .output(item('minecraft:clay'))
-    .shape([[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[null,item('minecraft:gold_ingot'),null]])
+    .shape([[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[null,item('minecraft:stone_pickaxe').transformDamage(2).whenAnyDamage(),null]])
     .register()
 
 //crafting.addShaped(resource('example:resource_location'), item('minecraft:clay'), [[item('minecraft:cobblestone')],[item('minecraft:nether_star')],[item('minecraft:cobblestone')]])
@@ -129,7 +131,7 @@ def presetKeys = [
     T: item('minecraft:tnt'),
     D: item('minecraft:diamond'),
     S: ore('netherStar').reuse(),
-    '!': item('minecraft:tnt').transform({ _ -> item('minecraft:diamond') }),
+    '!': item('minecraft:tnt').transform(item('minecraft:diamond')),
     G: ore('ingotGold'),
     W: fluid('water') * 1000, // Any tank that contains >= 1000 mb and can be reduced by 1000.
     '0': item('minecraft:diamond_sword').withNbt([display:[Name:'Sword with Specific NBT data']])

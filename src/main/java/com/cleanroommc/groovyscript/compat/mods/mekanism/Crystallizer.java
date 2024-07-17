@@ -32,7 +32,7 @@ public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        CrystallizerRecipe recipe = new CrystallizerRecipe(input.copy(), output.copy());
+        CrystallizerRecipe recipe = new CrystallizerRecipe(input, output);
         recipeRegistry.put(recipe);
         addScripted(recipe);
         return recipe;

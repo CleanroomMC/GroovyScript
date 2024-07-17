@@ -36,10 +36,9 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
         msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
         if (msg.postIfNotEmpty()) return null;
 
-        output = output.copy();
         OsmiumCompressorRecipe recipe1 = null;
         for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            OsmiumCompressorRecipe recipe = new OsmiumCompressorRecipe(new AdvancedMachineInput(itemStack.copy(), gasInput.getGas()), new ItemStackOutput(output));
+            OsmiumCompressorRecipe recipe = new OsmiumCompressorRecipe(new AdvancedMachineInput(itemStack, gasInput.getGas()), new ItemStackOutput(output));
             if (recipe1 == null) recipe1 = recipe;
             recipeRegistry.put(recipe);
             addScripted(recipe);
@@ -92,7 +91,7 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
             Gas gas = gasInput.isEmpty() ? MekanismFluids.LiquidOsmium : gasInput.get(0).getGas();
             OsmiumCompressorRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
-                OsmiumCompressorRecipe r = new OsmiumCompressorRecipe(new AdvancedMachineInput(itemStack.copy(), gas), new ItemStackOutput(output.get(0)));
+                OsmiumCompressorRecipe r = new OsmiumCompressorRecipe(new AdvancedMachineInput(itemStack, gas), new ItemStackOutput(output.get(0)));
                 if (recipe == null) recipe = r;
                 ModSupport.MEKANISM.get().osmiumCompressor.add(r);
             }

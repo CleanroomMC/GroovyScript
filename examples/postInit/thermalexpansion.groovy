@@ -108,10 +108,10 @@ mods.thermalexpansion.charger.recipeBuilder()
 // Converts an input itemstack into an output itemstack, with different modes each requiring a different augment to be
 // installed, costing power and taking time based on the power cost.
 
-mods.thermalexpansion.compactor.removeByInput(mode('coin'), item('thermalfoundation:material:130'))
+mods.thermalexpansion.compactor.removeByInput(compactorMode('coin'), item('thermalfoundation:material:130'))
 mods.thermalexpansion.compactor.removeByInput(item('minecraft:iron_ingot'))
-// mods.thermalexpansion.compactor.removeByMode(mode('plate'))
-mods.thermalexpansion.compactor.removeByOutput(mode('coin'), item('thermalfoundation:coin:102'))
+// mods.thermalexpansion.compactor.removeByMode(compactorMode('plate'))
+mods.thermalexpansion.compactor.removeByOutput(compactorMode('coin'), item('thermalfoundation:coin:102'))
 mods.thermalexpansion.compactor.removeByOutput(item('minecraft:blaze_rod'))
 mods.thermalexpansion.compactor.removeByOutput(item('thermalfoundation:material:24'))
 // mods.thermalexpansion.compactor.removeAll()
@@ -119,24 +119,24 @@ mods.thermalexpansion.compactor.removeByOutput(item('thermalfoundation:material:
 mods.thermalexpansion.compactor.recipeBuilder()
     .input(item('minecraft:clay'))
     .output(item('minecraft:diamond') * 2)
-    .mode(mode('coin'))
+    .mode(compactorMode('coin'))
     .register()
 
 mods.thermalexpansion.compactor.recipeBuilder()
     .input(item('minecraft:clay'))
     .output(item('minecraft:diamond'))
-    .mode(mode('all'))
+    .mode(compactorMode('all'))
     .register()
 
 mods.thermalexpansion.compactor.recipeBuilder()
     .input(item('minecraft:diamond') * 2)
     .output(item('minecraft:gold_ingot'))
-    .mode(mode('plate'))
+    .mode(compactorMode('plate'))
     .energy(1000)
     .register()
 
 
-// mods.thermalexpansion.compactor.add(1000, mode('plate'), item('minecraft:obsidian') * 2, item('minecraft:gold_ingot'))
+// mods.thermalexpansion.compactor.add(1000, compactorMode('plate'), item('minecraft:obsidian') * 2, item('minecraft:gold_ingot'))
 
 // Compression Dynamo:
 // Converts an input fluidstack into power, taking time based on the power.

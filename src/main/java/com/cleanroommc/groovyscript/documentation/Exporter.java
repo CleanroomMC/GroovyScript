@@ -3,10 +3,9 @@ package com.cleanroommc.groovyscript.documentation;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.INamed;
-import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
 
@@ -41,7 +40,7 @@ public class Exporter {
     }
 
 
-    public static void generateWiki(File folder, GroovyContainer<? extends ModPropertyContainer> mod) {
+    public static void generateWiki(File folder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();
 
         List<INamed> registries = mod.get().getRegistries().stream()
@@ -108,7 +107,7 @@ public class Exporter {
         }
     }
 
-    public static void generateExamples(String target, GroovyContainer<? extends ModPropertyContainer> mod) {
+    public static void generateExamples(String target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         StringBuilder header = new StringBuilder();
         StringBuilder body = new StringBuilder();
 

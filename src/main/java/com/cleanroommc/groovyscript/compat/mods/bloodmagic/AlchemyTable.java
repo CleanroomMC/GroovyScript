@@ -188,7 +188,8 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         @RecipeBuilderRegistrationMethod
         public @Nullable RecipeAlchemyTable register() {
             if (!validate()) return null;
-            RecipeAlchemyTable recipe = ModSupport.BLOOD_MAGIC.get().alchemyTable.add(IngredientHelper.toIngredientNonNullList(input), output.get(0), syphon, ticks, minimumTier);
+            RecipeAlchemyTable recipe = new RecipeAlchemyTable(IngredientHelper.toIngredientNonNullList(input), output.get(0), syphon, ticks, minimumTier);
+            ModSupport.BLOOD_MAGIC.get().alchemyTable.add(recipe);
             return recipe;
         }
     }

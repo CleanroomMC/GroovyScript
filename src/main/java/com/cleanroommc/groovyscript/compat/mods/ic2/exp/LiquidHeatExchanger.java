@@ -143,7 +143,8 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
     public static class HeatExchangerRecipe {
 
         public int type; // 0 = heatup | 1 = cooldown
-        public Fluid hot, cold;
+        public Fluid hot;
+        public Fluid cold;
         public int huPerMB;
 
         public HeatExchangerRecipe(int type, FluidStack in, FluidStack out, int huPerMB) {

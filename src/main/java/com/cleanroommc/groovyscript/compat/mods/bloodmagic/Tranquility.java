@@ -207,11 +207,16 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
         }
 
         @RecipeBuilderRegistrationMethod
-        public @Nullable Object register() {
+        public @Nullable Pair<?, TranquilityStack> register() {
             if (!validate()) return null;
             TranquilityStack stack = new TranquilityStack(tranquility, value);
-            if (block != null) ModSupport.BLOOD_MAGIC.get().tranquility.add(block, stack);
-            else if (blockstate != null) ModSupport.BLOOD_MAGIC.get().tranquility.add(blockstate, stack);
+            if (block != null) {
+                ModSupport.BLOOD_MAGIC.get().tranquility.add(block, stack);
+                return Pair.of(block, stack);
+            } else if (blockstate != null) {
+                ModSupport.BLOOD_MAGIC.get().tranquility.add(blockstate, stack);
+                return Pair.of(blockstate, stack);
+            }
             return null;
         }
     }

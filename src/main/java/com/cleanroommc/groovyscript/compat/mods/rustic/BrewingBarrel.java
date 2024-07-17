@@ -39,7 +39,7 @@ public class BrewingBarrel extends VirtualizedRegistry<IBrewingBarrelRecipe> {
         return Recipes.brewingRecipes.remove(recipe);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("fluid('ale')"))
+    @MethodDescription(example = @Example("fluid('ale')"))
     public boolean removeByOutput(IIngredient output) {
         return Recipes.brewingRecipes.removeIf(entry -> {
             if (output.test(entry.getOuput())) {
@@ -50,7 +50,7 @@ public class BrewingBarrel extends VirtualizedRegistry<IBrewingBarrelRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("fluid('ironberryjuice')"))
+    @MethodDescription(example = @Example("fluid('ironberryjuice')"))
     public boolean removeByInput(IIngredient input) {
         return Recipes.brewingRecipes.removeIf(entry -> {
             if (input.test(entry.getInput())) {
@@ -61,13 +61,13 @@ public class BrewingBarrel extends VirtualizedRegistry<IBrewingBarrelRecipe> {
         });
     }
 
-    @MethodDescription(description = "groovyscript.wiki.removeAll", priority = 2000, example = @Example(commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         Recipes.brewingRecipes.forEach(this::addBackup);
         Recipes.brewingRecipes.clear();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IBrewingBarrelRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Recipes.brewingRecipes).setRemover(this::remove);
     }

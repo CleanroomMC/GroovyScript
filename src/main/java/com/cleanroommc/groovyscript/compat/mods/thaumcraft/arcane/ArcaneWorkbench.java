@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
@@ -9,7 +8,6 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.registry.NamedRegistry;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;

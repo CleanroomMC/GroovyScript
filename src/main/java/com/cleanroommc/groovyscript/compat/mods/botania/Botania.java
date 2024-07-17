@@ -1,13 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
-import com.cleanroommc.groovyscript.api.IGameObjectParser;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
-import com.cleanroommc.groovyscript.gameobjects.GameObjectHandler;
+import com.cleanroommc.groovyscript.api.IObjectParser;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconCategory;
 import vazkii.botania.api.lexicon.LexiconEntry;
 
-public class Botania extends ModPropertyContainer {
+public class Botania extends GroovyPropertyContainer {
 
     public final ElvenTrade elvenTrade = new ElvenTrade();
     public final ManaInfusion manaInfusion = new ManaInfusion();
@@ -24,20 +24,9 @@ public class Botania extends ModPropertyContainer {
     public final Flowers flowers = new Flowers();
 
     public Botania() {
-        addRegistry(elvenTrade);
-        addRegistry(manaInfusion);
-        addRegistry(pureDaisy);
-        addRegistry(apothecary);
-        addRegistry(orechid);
-        addRegistry(orechidIgnem);
-        addRegistry(runeAltar);
-        addRegistry(brew);
-        addRegistry(brewRecipe);
-        addRegistry(lexicon.category);
-        addRegistry(lexicon.entry);
-        addRegistry(lexicon.page);
-        addRegistry(knowledge);
-        addRegistry(magnet);
+        addProperty(lexicon.category);
+        addProperty(lexicon.entry);
+        addProperty(lexicon.page);
     }
 
     public static LexiconCategory getCategory(String name) {
@@ -55,12 +44,12 @@ public class Botania extends ModPropertyContainer {
     // using BotaniaAPI.brewMap::get crashes
     @SuppressWarnings("Convert2MethodRef")
     @Override
-    public void initialize() {
-        GameObjectHandler.builder("brew", vazkii.botania.api.brew.Brew.class)
-                .mod("botania")
-                .parser(IGameObjectParser.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false))
+    public void initialize(GroovyContainer<?> container) {
+        container.objectMapperBuilder("brew", vazkii.botania.api.brew.Brew.class)
+                .parser(IObjectParser.wrapStringGetter(val -> BotaniaAPI.brewMap.get(val), false))
                 .completerOfNames(() -> BotaniaAPI.brewMap.keySet())
                 .defaultValue(() -> BotaniaAPI.fallbackBrew)
+                .docOfType("brew")
                 .register();
     }
 }

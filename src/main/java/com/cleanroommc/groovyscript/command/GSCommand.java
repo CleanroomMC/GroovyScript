@@ -83,8 +83,7 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new PackmodeCommand());
 
         addSubcommand(new SimpleCommand("hand", (server, sender, args) -> {
-            if (sender instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer) sender;
+            if (sender instanceof EntityPlayer player) {
                 ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
                 if (stack.isEmpty()) stack = player.getHeldItem(EnumHand.OFF_HAND);
                 BlockPos pos = null;

@@ -145,6 +145,7 @@ public class Drops extends VirtualizedRegistry<Object> {
             return this;
         }
 
+        @Override
         @RecipeBuilderMethodDescription
         public RecipeBuilder name(String name) {
             this.name = new WootMobName(name);
