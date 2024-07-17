@@ -17,6 +17,7 @@
     "ItemStackMixin",
     "LoaderControllerMixin",
     "OreDictionaryAccessor",
+    "OreIngredientMixin",
     "SlotCraftingAccess",
     "TileEntityPistonMixin",
     "groovy.AsmDecompilerMixin",
