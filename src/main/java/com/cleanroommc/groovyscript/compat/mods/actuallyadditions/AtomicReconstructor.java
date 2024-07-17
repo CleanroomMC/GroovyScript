@@ -94,6 +94,8 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
 
         @Property(defaultValue = "1", valid = @Comp(type = Comp.Type.GT, value = "0"))
         private int energyUse = 1;
+        @Property(defaultValue = "ActuallyAdditionsAPI.lensDefaultConversion", valid = @Comp(value = "null", type = Comp.Type.NOT))
+        private Lens type = ActuallyAdditionsAPI.lensDefaultConversion;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder energyUse(int energyUse) {
@@ -107,6 +109,12 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
             return this;
         }
 
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder type(Lens type) {
+            this.type = type;
+            return this;
+        }
+
         @Override
         public String getErrorMsg() {
             return "Error adding Actually Additions Atomic Reconstructor recipe";
@@ -117,13 +125,14 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
             msg.add(energyUse <= 0, "energyUse must be an integer greater than 0, yet it was {}", energyUse);
+            msg.add(type == null, "type must not be null!");
         }
 
         @Override
         @RecipeBuilderRegistrationMethod
         public @Nullable LensConversionRecipe register() {
             if (!validate()) return null;
-            LensConversionRecipe recipe = new LensConversionRecipe(input.get(0).toMcIngredient(), output.get(0), energyUse, ActuallyAdditionsAPI.lensDefaultConversion);
+            LensConversionRecipe recipe = new LensConversionRecipe(input.get(0).toMcIngredient(), output.get(0), energyUse, type);
             ModSupport.ACTUALLY_ADDITIONS.get().atomicReconstructor.add(recipe);
             return recipe;
         }
