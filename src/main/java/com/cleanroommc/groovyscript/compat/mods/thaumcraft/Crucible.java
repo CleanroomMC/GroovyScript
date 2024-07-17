@@ -21,10 +21,7 @@ import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.IThaumcraftRecipe;
 import thaumcraft.common.config.ConfigRecipes;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
@@ -144,6 +141,28 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         @RecipeBuilderMethodDescription(field = "aspects")
         public RecipeBuilder aspect(AspectStack aspectIn) {
             this.aspects.add(aspectIn.getAspect(), aspectIn.getAmount());
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(AspectStack... aspects) {
+            for (AspectStack aspect : aspects) {
+                aspect(aspect);
+            }
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(Collection<AspectStack> aspects) {
+            for (AspectStack aspect : aspects) {
+                aspect(aspect);
+            }
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(AspectList aspectList) {
+            this.aspects.merge(aspectList);
             return this;
         }
 

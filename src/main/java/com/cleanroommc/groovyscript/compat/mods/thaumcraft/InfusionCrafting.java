@@ -162,6 +162,28 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
 
         @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(AspectStack... aspects) {
+            for (AspectStack aspect : aspects) {
+                aspect(aspect);
+            }
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(Collection<AspectStack> aspects) {
+            for (AspectStack aspect : aspects) {
+                aspect(aspect);
+            }
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(AspectList aspectList) {
+            this.aspects.merge(aspectList);
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
         public RecipeBuilder aspect(String tag, int amount) {
             Aspect a = Thaumcraft.validateAspect(tag);
             if (a != null) this.aspects.add(a, amount);
