@@ -194,7 +194,9 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable CrucibleRecipe register() {
             if (!validate()) return null;
-            return ModSupport.THAUMCRAFT.get().crucible.add(researchKey, this.output.get(0), catalyst, aspects);
+            CrucibleRecipe recipe = new CrucibleRecipe(researchKey, this.output.get(0), catalyst.toMcIngredient(), aspects);
+            ModSupport.THAUMCRAFT.get().crucible.add(recipe);
+            return recipe;
         }
     }
 }
