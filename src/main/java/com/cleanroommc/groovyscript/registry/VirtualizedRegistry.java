@@ -47,13 +47,13 @@ public abstract class VirtualizedRegistry<R> extends NamedRegistry implements IS
     }
 
     @GroovyBlacklist
-    public void addBackup(R recipe) {
-        recipeStorage.addBackup(recipe);
+    public boolean addBackup(R recipe) {
+        return recipeStorage.addBackup(recipe);
     }
 
     @GroovyBlacklist
-    public void addScripted(R recipe) {
-        recipeStorage.addScripted(recipe);
+    public boolean addScripted(R recipe) {
+        return recipeStorage.addScripted(recipe);
     }
 
     @GroovyBlacklist
