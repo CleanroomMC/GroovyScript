@@ -5,20 +5,20 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
+public class Squeezer extends StandardListRegistry<SqueezerRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('lava')).energy(100)"),
@@ -30,16 +30,8 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> SqueezerRecipe.recipeList.removeIf(r -> r == recipe));
-        SqueezerRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(SqueezerRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            SqueezerRecipe.recipeList.add(recipe);
-        }
+    public Collection<SqueezerRecipe> getRegistry() {
+        return SqueezerRecipe.recipeList;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -47,14 +39,6 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         SqueezerRecipe recipe = new SqueezerRecipe(fluidOutput, itemOutput, ImmersiveEngineering.toIngredientStack(input), energy);
         add(recipe);
         return recipe;
-    }
-
-    public boolean remove(SqueezerRecipe recipe) {
-        if (SqueezerRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example("fluid('plantoil')"))
@@ -139,17 +123,6 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
                     .error()
                     .post();
         }
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<SqueezerRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(SqueezerRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        SqueezerRecipe.recipeList.forEach(this::addBackup);
-        SqueezerRecipe.recipeList.clear();
     }
 
     @Property(property = "input", valid = @Comp("1"))

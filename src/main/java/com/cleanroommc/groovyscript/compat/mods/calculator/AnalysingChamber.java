@@ -5,9 +5,8 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.AnalysingChamberRecipes;
@@ -16,6 +15,7 @@ import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 
 /**
@@ -41,10 +41,15 @@ import java.util.Arrays;
                 @Admonition(value = "groovyscript.wiki.calculator.analysing_chamber.note1", type = Admonition.Type.WARNING, format = Admonition.Format.STANDARD)
         }
 )
-public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
+public class AnalysingChamber extends StandardListRegistry<CalculatorRecipe> {
 
     public AnalysingChamber() {
         super(Alias.generateOfClass(AnalysingChamber.class).andGenerate("AnalyzingChamber"));
+    }
+
+    @Override
+    public Collection<CalculatorRecipe> getRegistry() {
+        return AnalysingChamberRecipes.instance().getRecipes();
     }
 
     @RecipeBuilderDescription(example = {
@@ -53,25 +58,6 @@ public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
-    }
-
-    @Override
-    public void onReload() {
-        removeScripted().forEach(AnalysingChamberRecipes.instance().getRecipes()::remove);
-        restoreFromBackup().forEach(AnalysingChamberRecipes.instance().getRecipes()::add);
-    }
-
-    public void add(CalculatorRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        AnalysingChamberRecipes.instance().getRecipes().add(recipe);
-    }
-
-    public boolean remove(CalculatorRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        AnalysingChamberRecipes.instance().getRecipes().remove(recipe);
-        return true;
     }
 
     @MethodDescription(example = @Example("item('sonarcore:reinforceddirtblock')"))
@@ -87,18 +73,6 @@ public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        AnalysingChamberRecipes.instance().getRecipes().forEach(this::addBackup);
-        AnalysingChamberRecipes.instance().getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(AnalysingChamberRecipes.instance().getRecipes())
-                .setRemover(this::remove);
     }
 
     @Property(property = "output", valid = @Comp("1"))

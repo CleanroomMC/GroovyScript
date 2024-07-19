@@ -1,8 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.integrateddynamics;
 
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.cyclops.cyclopscore.recipe.custom.api.IRecipe;
 import org.cyclops.cyclopscore.recipe.custom.component.DurationRecipeProperties;
@@ -12,8 +11,10 @@ import org.cyclops.integrateddynamics.Configs;
 import org.cyclops.integrateddynamics.block.BlockMechanicalSqueezer;
 import org.cyclops.integrateddynamics.block.BlockMechanicalSqueezerConfig;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> {
+public class MechanicalSqueezer extends StandardListRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> {
 
     @Override
     public boolean isEnabled() {
@@ -26,26 +27,8 @@ public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRe
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes()::remove);
-        restoreFromBackup().forEach(BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes()::add);
-    }
-
-    public void add(IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties> recipe) {
-        this.add(recipe, true);
-    }
-
-    public void add(IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties> recipe, boolean add) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        if (add) BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes().add(recipe);
-    }
-
-    public boolean remove(IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties> recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes().remove(recipe);
-        return true;
+    public Collection<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> getRegistry() {
+        return BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes();
     }
 
     @MethodDescription
@@ -57,17 +40,5 @@ public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRe
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
-        BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> streamRecipes() {
-        return new SimpleObjectStream<>(BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes())
-                .setRemover(this::remove);
     }
 }

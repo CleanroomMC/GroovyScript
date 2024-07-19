@@ -4,18 +4,19 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import me.desht.pneumaticcraft.common.recipes.ExplosionCraftingRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription(
         admonition = @Admonition(value = "groovyscript.wiki.pneumaticcraft.explosion.note0", type = Admonition.Type.TIP)
 )
-public class Explosion extends VirtualizedRegistry<ExplosionCraftingRecipe> {
+public class Explosion extends StandardListRegistry<ExplosionCraftingRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot')).lossRate(40)"),
@@ -26,19 +27,8 @@ public class Explosion extends VirtualizedRegistry<ExplosionCraftingRecipe> {
     }
 
     @Override
-    public void onReload() {
-        ExplosionCraftingRecipe.recipes.removeAll(removeScripted());
-        ExplosionCraftingRecipe.recipes.addAll(restoreFromBackup());
-    }
-
-    public void add(ExplosionCraftingRecipe recipe) {
-        ExplosionCraftingRecipe.recipes.add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(ExplosionCraftingRecipe recipe) {
-        addBackup(recipe);
-        return ExplosionCraftingRecipe.recipes.remove(recipe);
+    public Collection<ExplosionCraftingRecipe> getRegistry() {
+        return ExplosionCraftingRecipe.recipes;
     }
 
     @MethodDescription(example = @Example("item('pneumaticcraft:compressed_iron_block')"))
@@ -61,17 +51,6 @@ public class Explosion extends VirtualizedRegistry<ExplosionCraftingRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ExplosionCraftingRecipe.recipes.forEach(this::addBackup);
-        ExplosionCraftingRecipe.recipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ExplosionCraftingRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ExplosionCraftingRecipe.recipes).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -1,21 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.smeltery.AlloyRecipe;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
+public class Alloying extends StandardListRegistry<AlloyRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 3).fluidInput(fluid('clay') * 1,fluid('lava') * 2)"))
     public RecipeBuilder recipeBuilder() {
@@ -23,10 +22,8 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(TinkerRegistryAccessor.getAlloyRegistry()::remove);
-        restoreFromBackup().forEach(TinkerRegistryAccessor.getAlloyRegistry()::add);
+    public Collection<AlloyRecipe> getRegistry() {
+        return TinkerRegistryAccessor.getAlloyRegistry();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("fluid('lava') * 144, fluid('water') * 500, fluid('iron') * 5, fluid('clay') * 60"))
@@ -34,19 +31,6 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         AlloyRecipe recipe = new AlloyRecipe(output, inputs);
         add(recipe);
         return recipe;
-    }
-
-    public void add(AlloyRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        TinkerRegistryAccessor.getAlloyRegistry().add(recipe);
-    }
-
-    public boolean remove(AlloyRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        TinkerRegistryAccessor.getAlloyRegistry().remove(recipe);
-        return true;
     }
 
     @MethodDescription(example = @Example("fluid('pigiron')"))
@@ -94,17 +78,6 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
                 .error()
                 .post();
         return false;
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        TinkerRegistryAccessor.getAlloyRegistry().forEach(this::addBackup);
-        TinkerRegistryAccessor.getAlloyRegistry().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<AlloyRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(TinkerRegistryAccessor.getAlloyRegistry()).setRemover(this::remove);
     }
 
     @Property(property = "fluidInput", valid = {@Comp(value = "2", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})

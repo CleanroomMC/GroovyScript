@@ -7,16 +7,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class Kiln extends VirtualizedRegistry<KilnRecipe> {
+public class Kiln extends StandardListRegistry<KilnRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).heat(2)"),
@@ -27,25 +27,8 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> BWRegistry.KILN.getRecipes().removeIf(r -> r == recipe));
-        BWRegistry.KILN.getRecipes().addAll(restoreFromBackup());
-    }
-
-    public KilnRecipe add(KilnRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            BWRegistry.KILN.getRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(KilnRecipe recipe) {
-        if (BWRegistry.KILN.getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<KilnRecipe> getRegistry() {
+        return BWRegistry.KILN.getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:brick')"))
@@ -72,17 +55,6 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<KilnRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(BWRegistry.KILN.getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BWRegistry.KILN.getRecipes().forEach(this::addBackup);
-        BWRegistry.KILN.getRecipes().clear();
     }
 
     @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "3", type = Comp.Type.LTE)})

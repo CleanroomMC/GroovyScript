@@ -1,29 +1,27 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class OreRaw extends VirtualizedRegistry<OreFluidEntryRaw> {
+public class OreRaw extends StandardListRegistry<OreFluidEntryRaw> {
 
     public OreRaw() {
         super(Alias.generateOfClass(OreRaw.class).andGenerate("Washing"));
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        OreFluidEntryRaw.ORE_RAW_ENTRIES.removeAll(removeScripted());
-        OreFluidEntryRaw.ORE_RAW_ENTRIES.addAll(restoreFromBackup());
+    public Collection<OreFluidEntryRaw> getRegistry() {
+        return OreFluidEntryRaw.ORE_RAW_ENTRIES;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = {
@@ -39,19 +37,6 @@ public class OreRaw extends VirtualizedRegistry<OreFluidEntryRaw> {
         OreFluidEntryRaw recipe = new OreFluidEntryRaw(ore, input, output);
         add(recipe);
         return recipe;
-    }
-
-    public void add(OreFluidEntryRaw recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        OreFluidEntryRaw.ORE_RAW_ENTRIES.add(recipe);
-    }
-
-    public boolean remove(OreFluidEntryRaw recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        OreFluidEntryRaw.ORE_RAW_ENTRIES.remove(recipe);
-        return true;
     }
 
     @MethodDescription(example = @Example(value = "'oreRedstone'", commented = true))
@@ -90,18 +75,6 @@ public class OreRaw extends VirtualizedRegistry<OreFluidEntryRaw> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        OreFluidEntryRaw.ORE_RAW_ENTRIES.forEach(this::addBackup);
-        OreFluidEntryRaw.ORE_RAW_ENTRIES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<OreFluidEntryRaw> streamRecipes() {
-        return new SimpleObjectStream<>(OreFluidEntryRaw.ORE_RAW_ENTRIES)
-                .setRemover(this::remove);
     }
 
 }

@@ -4,9 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.ConductorMastRecipes;
@@ -14,9 +13,10 @@ import sonar.core.recipes.DefaultSonarRecipe;
 import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 @RegistryDescription
-public class ConductorMast extends VirtualizedRegistry<DefaultSonarRecipe.Value> {
+public class ConductorMast extends StandardListRegistry<DefaultSonarRecipe.Value> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).value(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -24,22 +24,8 @@ public class ConductorMast extends VirtualizedRegistry<DefaultSonarRecipe.Value>
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(ConductorMastRecipes.instance().getRecipes()::remove);
-        restoreFromBackup().forEach(ConductorMastRecipes.instance().getRecipes()::add);
-    }
-
-    public void add(DefaultSonarRecipe.Value recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ConductorMastRecipes.instance().getRecipes().add(recipe);
-    }
-
-    public boolean remove(DefaultSonarRecipe.Value recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ConductorMastRecipes.instance().getRecipes().remove(recipe);
-        return true;
+    public Collection<DefaultSonarRecipe.Value> getRegistry() {
+        return ConductorMastRecipes.instance().getRecipes();
     }
 
     @MethodDescription(example = @Example("item('calculator:firediamond')"))
@@ -70,18 +56,6 @@ public class ConductorMast extends VirtualizedRegistry<DefaultSonarRecipe.Value>
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ConductorMastRecipes.instance().getRecipes().forEach(this::addBackup);
-        ConductorMastRecipes.instance().getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<DefaultSonarRecipe.Value> streamRecipes() {
-        return new SimpleObjectStream<>(ConductorMastRecipes.instance().getRecipes())
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("1"))

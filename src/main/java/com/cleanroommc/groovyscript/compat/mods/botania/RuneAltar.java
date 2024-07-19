@@ -1,13 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -16,11 +14,12 @@ import vazkii.botania.api.recipe.RecipeRuneAltar;
 import vazkii.botania.common.block.ModBlocks;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
+public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
 
     @RecipeBuilderDescription(example = @Example(".input(ore('gemEmerald'), item('minecraft:apple')).output(item('minecraft:diamond')).mana(500)"))
     public RecipeBuilder recipeBuilder() {
@@ -28,27 +27,13 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(BotaniaAPI.runeAltarRecipes::remove);
-        BotaniaAPI.runeAltarRecipes.addAll(restoreFromBackup());
+    public Collection<RecipeRuneAltar> getRegistry() {
+        return BotaniaAPI.runeAltarRecipes;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeRuneAltar add(ItemStack output, int mana, IIngredient... inputs) {
         return recipeBuilder().mana(mana).output(output).input(inputs).register();
-    }
-
-    public void add(RecipeRuneAltar recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        BotaniaAPI.runeAltarRecipes.add(recipe);
-    }
-
-    public boolean remove(RecipeRuneAltar recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        return BotaniaAPI.runeAltarRecipes.remove(recipe);
     }
 
     @MethodDescription(example = @Example("item('botania:rune:1')"))
@@ -88,17 +73,6 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('feather'), ore('string')"))
     public boolean removeByInputs(IIngredient... inputs) {
         return removeByInput(inputs);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BotaniaAPI.runeAltarRecipes.forEach(this::addBackup);
-        BotaniaAPI.runeAltarRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeRuneAltar> streamRecipes() {
-        return new SimpleObjectStream<>(BotaniaAPI.runeAltarRecipes).setRemover(this::remove);
     }
 
     @Property(property = "input", requirement = "groovyscript.wiki.botania.rune_altar.input.required", valid = @Comp("1"))

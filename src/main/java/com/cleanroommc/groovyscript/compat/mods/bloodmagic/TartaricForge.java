@@ -2,16 +2,14 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeTartaricForge;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.bloodmagic.BloodMagicRecipeRegistrarAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
@@ -21,7 +19,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @RegistryDescription
-public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
+public class TartaricForge extends StandardListRegistry<RecipeTartaricForge> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).output(item('minecraft:gold_ingot')).soulDrain(5).minimumSouls(10)"),
@@ -32,10 +30,8 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes()::remove);
-        restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes()::add);
+    public Collection<RecipeTartaricForge> getRegistry() {
+        return ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -46,19 +42,6 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
                 .output(output)
                 .input(input)
                 .register();
-    }
-
-    public void add(RecipeTartaricForge recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().add(recipe);
-    }
-
-    public boolean remove(RecipeTartaricForge recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().remove(recipe);
-        return true;
     }
 
     @MethodDescription(example = {
@@ -115,19 +98,6 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
                 .post();
         return false;
     }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().forEach(this::addBackup);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeTartaricForge> streamRecipes() {
-        return new SimpleObjectStream<>(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes())
-                .setRemover(this::remove);
-    }
-
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "4")})
     @Property(property = "output", valid = @Comp("1"))

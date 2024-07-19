@@ -6,7 +6,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.PistonPushRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import net.minecraft.block.state.IBlockState;
@@ -17,11 +17,12 @@ import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class PistonPush extends VirtualizedRegistry<PistonPush.PistonPushRecipe> {
+public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe> {
 
     private final List<PistonPushRecipe> pistonPushRecipes = new ArrayList<>();
 
@@ -32,22 +33,8 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.PistonPushRecipe>
     }
 
     @Override
-    public void onReload() {
-        this.pistonPushRecipes.addAll(getBackupRecipes());
-        getScriptedRecipes().forEach(this.pistonPushRecipes::remove);
-    }
-
-    public void add(PistonPushRecipe pistonPushRecipe) {
-        this.pistonPushRecipes.add(pistonPushRecipe);
-        addScripted(pistonPushRecipe);
-    }
-
-    public boolean remove(PistonPushRecipe pistonPushRecipe) {
-        if (this.pistonPushRecipes.remove(pistonPushRecipe)) {
-            addBackup(pistonPushRecipe);
-            return true;
-        }
-        return false;
+    public Collection<PistonPushRecipe> getRegistry() {
+        return this.pistonPushRecipes;
     }
 
     public RecipeBuilder recipeBuilder() {

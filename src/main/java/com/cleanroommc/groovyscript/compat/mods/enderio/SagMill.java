@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -8,9 +7,8 @@ import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuil
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.SagRecipe;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import crazypants.enderio.base.recipe.Recipe;
 import crazypants.enderio.base.recipe.RecipeBonusType;
 import crazypants.enderio.base.recipe.RecipeLevel;
@@ -21,11 +19,18 @@ import it.unimi.dsi.fastutil.floats.FloatList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class SagMill extends VirtualizedRegistry<Recipe> {
+public class SagMill extends StandardListRegistry<Recipe> {
 
     public SagMill() {
         super(Alias.generateOfClassAnd(SagMill.class, "Sag").and("SAGMill"));
+    }
+
+    @Override
+    public Collection<Recipe> getRegistry() {
+        return SagMillRecipeManager.getInstance().getRecipes();
     }
 
     @RecipeBuilderDescription(example = {
@@ -38,18 +43,6 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         return new RecipeBuilder();
     }
 
-    public void add(Recipe recipe) {
-        SagMillRecipeManager.getInstance().addRecipe(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(Recipe recipe) {
-        if (recipe == null) return false;
-        SagMillRecipeManager.getInstance().getRecipes().remove(recipe);
-        addBackup(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("item('minecraft:wheat')"))
     public void removeByInput(ItemStack input) {
         Recipe recipe = (Recipe) SagMillRecipeManager.getInstance().getRecipeForInput(RecipeLevel.IGNORE, input);
@@ -59,25 +52,6 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
             SagMillRecipeManager.getInstance().getRecipes().remove(recipe);
             addBackup(recipe);
         }
-    }
-
-    @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(SagMillRecipeManager.getInstance().getRecipes()::remove);
-        restoreFromBackup().forEach(SagMillRecipeManager.getInstance().getRecipes()::add);
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<Recipe> streamRecipes() {
-        return new SimpleObjectStream<>(SagMillRecipeManager.getInstance().getRecipes())
-                .setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        SagMillRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
-        SagMillRecipeManager.getInstance().getRecipes().clear();
     }
 
     @Property(property = "input", valid = @Comp("1"))

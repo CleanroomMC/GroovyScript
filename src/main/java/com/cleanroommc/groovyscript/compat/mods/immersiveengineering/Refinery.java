@@ -4,18 +4,18 @@ import blusunrize.immersiveengineering.api.crafting.RefineryRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
+public class Refinery extends StandardListRegistry<RefineryRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water'), fluid('water')).fluidOutput(fluid('lava')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
@@ -23,16 +23,8 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> RefineryRecipe.recipeList.removeIf(r -> r == recipe));
-        RefineryRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(RefineryRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            RefineryRecipe.recipeList.add(recipe);
-        }
+    public Collection<RefineryRecipe> getRegistry() {
+        return RefineryRecipe.recipeList;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -40,14 +32,6 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         RefineryRecipe recipe = new RefineryRecipe(output, input0, input1, energy);
         add(recipe);
         return recipe;
-    }
-
-    public boolean remove(RefineryRecipe recipe) {
-        if (RefineryRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example(value = "fluid('biodiesel')", commented = true))
@@ -92,17 +76,6 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
                     .error()
                     .post();
         }
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RefineryRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(RefineryRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        RefineryRecipe.recipeList.forEach(this::addBackup);
-        RefineryRecipe.recipeList.clear();
     }
 
     @Property(property = "fluidInput", valid = @Comp("2"))

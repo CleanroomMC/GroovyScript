@@ -1,19 +1,19 @@
 package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.recipe.BallOfFurReturn;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
+public class BallOfFur extends StandardListRegistry<BallOfFurReturn> {
 
     @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay') * 32).weight(15)"))
     public RecipeBuilder recipeBuilder() {
@@ -21,29 +21,14 @@ public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS::remove);
-        ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.addAll(restoreFromBackup());
+    public Collection<BallOfFurReturn> getRegistry() {
+        return ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS;
     }
 
     public BallOfFurReturn add(ItemStack drop, int chance) {
         BallOfFurReturn recipe = new BallOfFurReturn(drop, chance);
         add(recipe);
         return recipe;
-    }
-
-    public void add(BallOfFurReturn recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.add(recipe);
-    }
-
-    public boolean remove(BallOfFurReturn recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.remove(recipe);
-        return true;
     }
 
     @MethodDescription(example = @Example("item('minecraft:feather')"))
@@ -55,18 +40,6 @@ public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
             }
             return found;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.forEach(this::addBackup);
-        ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<BallOfFurReturn> streamRecipes() {
-        return new SimpleObjectStream<>(ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS)
-                .setRemover(this::remove);
     }
 
     @Property(property = "output", valid = @Comp("1"))

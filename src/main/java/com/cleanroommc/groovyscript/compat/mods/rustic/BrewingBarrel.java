@@ -4,16 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import org.jetbrains.annotations.Nullable;
 import rustic.common.crafting.BrewingBarrelRecipe;
 import rustic.common.crafting.IBrewingBarrelRecipe;
 import rustic.common.crafting.Recipes;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class BrewingBarrel extends VirtualizedRegistry<IBrewingBarrelRecipe> {
+public class BrewingBarrel extends StandardListRegistry<IBrewingBarrelRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('ironberryjuice')).fluidOutput(fluid('lava'))"),
@@ -24,19 +25,8 @@ public class BrewingBarrel extends VirtualizedRegistry<IBrewingBarrelRecipe> {
     }
 
     @Override
-    public void onReload() {
-        Recipes.brewingRecipes.removeAll(removeScripted());
-        Recipes.brewingRecipes.addAll(restoreFromBackup());
-    }
-
-    public void add(IBrewingBarrelRecipe recipe) {
-        Recipes.brewingRecipes.add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(IBrewingBarrelRecipe recipe) {
-        addBackup(recipe);
-        return Recipes.brewingRecipes.remove(recipe);
+    public Collection<IBrewingBarrelRecipe> getRegistry() {
+        return Recipes.brewingRecipes;
     }
 
     @MethodDescription(example = @Example("fluid('ale')"))
@@ -59,17 +49,6 @@ public class BrewingBarrel extends VirtualizedRegistry<IBrewingBarrelRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        Recipes.brewingRecipes.forEach(this::addBackup);
-        Recipes.brewingRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IBrewingBarrelRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(Recipes.brewingRecipes).setRemover(this::remove);
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))

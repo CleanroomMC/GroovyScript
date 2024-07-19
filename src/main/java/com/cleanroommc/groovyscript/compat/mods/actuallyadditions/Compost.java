@@ -1,14 +1,12 @@
 package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.recipe.CompostRecipe;
 import net.minecraft.block.Block;
@@ -17,8 +15,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Compost extends VirtualizedRegistry<CompostRecipe> {
+public class Compost extends StandardListRegistry<CompostRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).inputDisplay(blockstate('minecraft:clay')).outputDisplay(blockstate('minecraft:diamond_block'))"))
     public RecipeBuilder recipeBuilder() {
@@ -26,10 +26,8 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(ActuallyAdditionsAPI.COMPOST_RECIPES::remove);
-        ActuallyAdditionsAPI.COMPOST_RECIPES.addAll(restoreFromBackup());
+    public Collection<CompostRecipe> getRegistry() {
+        return ActuallyAdditionsAPI.COMPOST_RECIPES;
     }
 
     public CompostRecipe add(Ingredient input, Block inputDisplay, ItemStack output, Block outputDisplay) {
@@ -40,19 +38,6 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
         CompostRecipe recipe = new CompostRecipe(input, inputDisplay, output, outputDisplay);
         add(recipe);
         return recipe;
-    }
-
-    public void add(CompostRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ActuallyAdditionsAPI.COMPOST_RECIPES.add(recipe);
-    }
-
-    public boolean remove(CompostRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ActuallyAdditionsAPI.COMPOST_RECIPES.remove(recipe);
-        return true;
     }
 
     @MethodDescription(example = @Example("item('actuallyadditions:item_canola_seed')"))
@@ -75,18 +60,6 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
             }
             return matches;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ActuallyAdditionsAPI.COMPOST_RECIPES.forEach(this::addBackup);
-        ActuallyAdditionsAPI.COMPOST_RECIPES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CompostRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ActuallyAdditionsAPI.COMPOST_RECIPES)
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("1"))

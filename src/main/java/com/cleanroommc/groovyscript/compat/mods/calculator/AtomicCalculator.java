@@ -4,9 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.AtomicCalculatorRecipes;
@@ -14,9 +13,10 @@ import sonar.calculator.mod.common.recipes.CalculatorRecipe;
 import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 @RegistryDescription
-public class AtomicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
+public class AtomicCalculator extends StandardListRegistry<CalculatorRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).output(item('minecraft:gold_ingot') * 4)"))
     public RecipeBuilder recipeBuilder() {
@@ -24,22 +24,8 @@ public class AtomicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(AtomicCalculatorRecipes.instance().getRecipes()::remove);
-        restoreFromBackup().forEach(AtomicCalculatorRecipes.instance().getRecipes()::add);
-    }
-
-    public void add(CalculatorRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        AtomicCalculatorRecipes.instance().getRecipes().add(recipe);
-    }
-
-    public boolean remove(CalculatorRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        AtomicCalculatorRecipes.instance().getRecipes().remove(recipe);
-        return true;
+    public Collection<CalculatorRecipe> getRegistry() {
+        return AtomicCalculatorRecipes.instance().getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:end_stone')"))
@@ -70,18 +56,6 @@ public class AtomicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        AtomicCalculatorRecipes.instance().getRecipes().forEach(this::addBackup);
-        AtomicCalculatorRecipes.instance().getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(AtomicCalculatorRecipes.instance().getRecipes())
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("3"))

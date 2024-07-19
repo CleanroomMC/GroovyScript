@@ -3,10 +3,9 @@ package com.cleanroommc.groovyscript.compat.mods.integrateddynamics;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.cyclops.cyclopscore.recipe.custom.api.IRecipe;
 import org.cyclops.cyclopscore.recipe.custom.component.DurationRecipeProperties;
@@ -17,8 +16,10 @@ import org.cyclops.integrateddynamics.block.BlockDryingBasinConfig;
 import org.cyclops.integrateddynamics.block.BlockMechanicalDryingBasin;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {
+public class DryingBasin extends StandardListRegistry<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {
 
     @Override
     public boolean isEnabled() {
@@ -34,26 +35,8 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes()::remove);
-        restoreFromBackup().forEach(BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes()::add);
-    }
-
-    public void add(IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties> recipe) {
-        this.add(recipe, true);
-    }
-
-    public void add(IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties> recipe, boolean add) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        if (add) BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().add(recipe);
-    }
-
-    public boolean remove(IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties> recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().remove(recipe);
-        return true;
+    public Collection<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> getRegistry() {
+        return BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes();
     }
 
     @MethodDescription
@@ -76,18 +59,6 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
-        BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> streamRecipes() {
-        return new SimpleObjectStream<>(BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes())
-                .setRemover(this::remove);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {
@@ -154,20 +125,20 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
             ItemStack itemInput = input.isEmpty() ? ItemStack.EMPTY : IngredientHelper.toItemStack(input.get(0));
 
             if (basic) {
-                ModSupport.INTEGRATED_DYNAMICS.get().dryingBasin.add(
+                ModSupport.INTEGRATED_DYNAMICS.get().dryingBasin.addScripted(
                         BlockDryingBasin.getInstance().getRecipeRegistry().registerRecipe(
                                 new IngredientAndFluidStackRecipeComponent(itemInput, true, fluidInput.getOrEmpty(0)),
                                 new IngredientAndFluidStackRecipeComponent(output.get(0), fluidOutput.getOrEmpty(0)),
                                 new DurationRecipeProperties(duration)
-                        ), false);
+                        ));
             }
             if (mechanical) {
-                ModSupport.INTEGRATED_DYNAMICS.get().mechanicalDryingBasin.add(
+                ModSupport.INTEGRATED_DYNAMICS.get().mechanicalDryingBasin.addScripted(
                         BlockMechanicalDryingBasin.getInstance().getRecipeRegistry().registerRecipe(
                                 new IngredientAndFluidStackRecipeComponent(itemInput, true, fluidInput.getOrEmpty(0)),
                                 new IngredientAndFluidStackRecipeComponent(output.getOrEmpty(0), fluidOutput.getOrEmpty(0)),
                                 new DurationRecipeProperties(duration)
-                        ), false);
+                        ));
             }
             return null;
         }

@@ -5,9 +5,8 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -21,10 +20,15 @@ import rustic.common.util.ElixirUtils;
 import java.util.Collection;
 
 @RegistryDescription
-public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
+public class Alchemy extends StandardListRegistry<ICondenserRecipe> {
 
     public Alchemy() {
         super(Alias.generateOfClass(Alchemy.class).andGenerate("Condenser"));
+    }
+
+    @Override
+    public Collection<ICondenserRecipe> getRegistry() {
+        return Recipes.condenserRecipes;
     }
 
     @RecipeBuilderDescription(example = {
@@ -37,21 +41,6 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
         return new RecipeBuilder();
     }
 
-    @Override
-    public void onReload() {
-        Recipes.condenserRecipes.removeAll(removeScripted());
-        Recipes.condenserRecipes.addAll(restoreFromBackup());
-    }
-
-    public void add(ICondenserRecipe recipe) {
-        Recipes.condenserRecipes.add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(ICondenserRecipe recipe) {
-        addBackup(recipe);
-        return Recipes.condenserRecipes.remove(recipe);
-    }
 
     @MethodDescription(example = @Example("item('rustic:elixir').withNbt(['ElixirEffects': [['Effect': 'minecraft:night_vision', 'Duration': 3600, 'Amplifier': 0]]])"))
     public boolean removeByOutput(IIngredient output) {
@@ -73,17 +62,6 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        Recipes.condenserRecipes.forEach(this::addBackup);
-        Recipes.condenserRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ICondenserRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(Recipes.condenserRecipes).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2 or 3", type = Comp.Type.LTE)})

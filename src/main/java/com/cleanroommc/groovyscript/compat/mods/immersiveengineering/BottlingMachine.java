@@ -7,22 +7,27 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> {
+public class BottlingMachine extends StandardListRegistry<BottlingMachineRecipe> {
 
     public BottlingMachine() {
         super(Alias.generateOfClassAnd(BottlingMachine.class, "Bottling"));
+    }
+
+    @Override
+    public Collection<BottlingMachineRecipe> getRegistry() {
+        return BottlingMachineRecipe.recipeList;
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).fluidInput(fluid('water')).output(item('minecraft:clay'))"))
@@ -30,32 +35,11 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         return new RecipeBuilder();
     }
 
-    @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> BottlingMachineRecipe.recipeList.removeIf(r -> r == recipe));
-        BottlingMachineRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(BottlingMachineRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            BottlingMachineRecipe.recipeList.add(recipe);
-        }
-    }
-
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public BottlingMachineRecipe add(ItemStack output, IIngredient input, FluidStack fluidInput) {
         BottlingMachineRecipe recipe = new BottlingMachineRecipe(output.copy(), ImmersiveEngineering.toIngredientStack(input), fluidInput);
         add(recipe);
         return recipe;
-    }
-
-    public boolean remove(BottlingMachineRecipe recipe) {
-        if (BottlingMachineRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example("item('minecraft:potion').withNbt([Potion:'minecraft:mundane'])"))
@@ -100,17 +84,6 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
                     .error()
                     .post();
         }
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<BottlingMachineRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(BottlingMachineRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BottlingMachineRecipe.recipeList.forEach(this::addBackup);
-        BottlingMachineRecipe.recipeList.clear();
     }
 
     @Property(property = "input", valid = @Comp("1"))

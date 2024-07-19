@@ -6,17 +6,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> {
+public class Cauldron extends StandardListRegistry<CookingPotRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).heat(2)"),
@@ -28,25 +28,8 @@ public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> BWRegistry.CAULDRON.getRecipes().removeIf(r -> r == recipe));
-        BWRegistry.CAULDRON.getRecipes().addAll(restoreFromBackup());
-    }
-
-    public CookingPotRecipe add(CookingPotRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            BWRegistry.CAULDRON.getRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(CookingPotRecipe recipe) {
-        if (BWRegistry.CAULDRON.getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<CookingPotRecipe> getRegistry() {
+        return BWRegistry.CAULDRON.getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
@@ -75,17 +58,6 @@ public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CookingPotRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(BWRegistry.CAULDRON.getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BWRegistry.CAULDRON.getRecipes().forEach(this::addBackup);
-        BWRegistry.CAULDRON.getRecipes().clear();
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)})

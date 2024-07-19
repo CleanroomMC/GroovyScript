@@ -6,9 +6,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -18,12 +17,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @RegistryDescription
-public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> {
+public class Electrolyzer extends StandardListRegistry<ElectrolyzerRecipe> {
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> ModRecipes.INSTANCE.getElectrolyzerRecipes().removeIf(r -> r == recipe));
-        ModRecipes.INSTANCE.getElectrolyzerRecipes().addAll(restoreFromBackup());
+    public Collection<ElectrolyzerRecipe> getRegistry() {
+        return ModRecipes.INSTANCE.getElectrolyzerRecipes();
     }
 
     @RecipeBuilderDescription(example = {
@@ -32,22 +30,6 @@ public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> {
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
-    }
-
-    public ElectrolyzerRecipe add(ElectrolyzerRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ModRecipes.INSTANCE.getElectrolyzerRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(ElectrolyzerRecipe recipe) {
-        if (ModRecipes.INSTANCE.getElectrolyzerRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example("element('chlorine')"))
@@ -85,17 +67,6 @@ public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ElectrolyzerRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ModRecipes.INSTANCE.getElectrolyzerRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ModRecipes.INSTANCE.getElectrolyzerRecipes().forEach(this::addBackup);
-        ModRecipes.INSTANCE.getElectrolyzerRecipes().clear();
     }
 
     @Property(property = "input", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})

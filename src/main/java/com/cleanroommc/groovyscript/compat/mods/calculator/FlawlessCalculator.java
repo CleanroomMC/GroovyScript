@@ -4,9 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.CalculatorRecipe;
@@ -14,9 +13,10 @@ import sonar.calculator.mod.common.recipes.FlawlessCalculatorRecipes;
 import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 @RegistryDescription
-public class FlawlessCalculator extends VirtualizedRegistry<CalculatorRecipe> {
+public class FlawlessCalculator extends StandardListRegistry<CalculatorRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).output(item('minecraft:gold_ingot') * 16)"))
     public RecipeBuilder recipeBuilder() {
@@ -24,22 +24,8 @@ public class FlawlessCalculator extends VirtualizedRegistry<CalculatorRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(FlawlessCalculatorRecipes.instance().getRecipes()::remove);
-        restoreFromBackup().forEach(FlawlessCalculatorRecipes.instance().getRecipes()::add);
-    }
-
-    public void add(CalculatorRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        FlawlessCalculatorRecipes.instance().getRecipes().add(recipe);
-    }
-
-    public boolean remove(CalculatorRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        FlawlessCalculatorRecipes.instance().getRecipes().remove(recipe);
-        return true;
+    public Collection<CalculatorRecipe> getRegistry() {
+        return FlawlessCalculatorRecipes.instance().getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:obsidian')"))
@@ -70,18 +56,6 @@ public class FlawlessCalculator extends VirtualizedRegistry<CalculatorRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        FlawlessCalculatorRecipes.instance().getRecipes().forEach(this::addBackup);
-        FlawlessCalculatorRecipes.instance().getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(FlawlessCalculatorRecipes.instance().getRecipes())
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("4"))

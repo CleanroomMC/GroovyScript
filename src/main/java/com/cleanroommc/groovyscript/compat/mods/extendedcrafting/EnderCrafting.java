@@ -7,15 +7,15 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
+public class EnderCrafting extends StandardListRegistry<IRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".output(item('minecraft:stone')).matrix('BXX', 'X B').key('B', item('minecraft:stone')).key('X', item('minecraft:gold_ingot')).time(1).mirrored()"),
@@ -34,9 +34,8 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> EnderCrafterRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe));
-        EnderCrafterRecipeManager.getInstance().getRecipes().addAll(restoreFromBackup());
+    public Collection<IRecipe> getRegistry() {
+        return EnderCrafterRecipeManager.getInstance().getRecipes();
     }
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.ender_crafting.addShaped0", type = MethodDescription.Type.ADDITION)
@@ -67,14 +66,6 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
                 .register();
     }
 
-    public IRecipe add(IRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            EnderCrafterRecipeManager.getInstance().getRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
     @MethodDescription(example = @Example("item('extendedcrafting:material:40')"))
     public boolean removeByOutput(ItemStack stack) {
         return EnderCrafterRecipeManager.getInstance().getRecipes().removeIf(recipe -> {
@@ -86,22 +77,4 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
         });
     }
 
-    public boolean remove(IRecipe recipe) {
-        if (EnderCrafterRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(EnderCrafterRecipeManager.getInstance().getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        EnderCrafterRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
-        EnderCrafterRecipeManager.getInstance().getRecipes().clear();
-    }
 }

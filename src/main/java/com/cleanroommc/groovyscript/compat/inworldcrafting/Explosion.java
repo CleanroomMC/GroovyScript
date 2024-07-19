@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.ExplosionRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
@@ -17,10 +18,11 @@ import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Explosion extends VirtualizedRegistry<Explosion.ExplosionRecipe> {
+public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
 
     private final List<ExplosionRecipe> explosionRecipes = new ArrayList<>();
 
@@ -31,22 +33,8 @@ public class Explosion extends VirtualizedRegistry<Explosion.ExplosionRecipe> {
     }
 
     @Override
-    public void onReload() {
-        this.explosionRecipes.addAll(getBackupRecipes());
-        getScriptedRecipes().forEach(this.explosionRecipes::remove);
-    }
-
-    public void add(ExplosionRecipe explosionRecipe) {
-        this.explosionRecipes.add(explosionRecipe);
-        addScripted(explosionRecipe);
-    }
-
-    public boolean remove(ExplosionRecipe explosionRecipe) {
-        if (this.explosionRecipes.remove(explosionRecipe)) {
-            addBackup(explosionRecipe);
-            return true;
-        }
-        return false;
+    public Collection<ExplosionRecipe> getRegistry() {
+        return this.explosionRecipes;
     }
 
     public RecipeBuilder recipeBuilder() {

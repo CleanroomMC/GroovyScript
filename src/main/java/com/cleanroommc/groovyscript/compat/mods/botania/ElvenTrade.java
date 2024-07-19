@@ -1,13 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
@@ -18,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
+public class ElvenTrade extends StandardListRegistry<RecipeElvenTrade> {
 
     @RecipeBuilderDescription(example = @Example(".input(ore('ingotGold'), ore('ingotIron')).output(item('botania:manaresource:7'))"))
     public RecipeBuilder recipeBuilder() {
@@ -26,10 +24,8 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(BotaniaAPI.elvenTradeRecipes::remove);
-        BotaniaAPI.elvenTradeRecipes.addAll(restoreFromBackup());
+    public Collection<RecipeElvenTrade> getRegistry() {
+        return BotaniaAPI.elvenTradeRecipes;
     }
 
     protected Object[] convertIngredients(IIngredient[] inputs) {
@@ -55,18 +51,6 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeElvenTrade add(ItemStack output, Collection<IIngredient> inputs) {
         return recipeBuilder().input(inputs).output(output).register();
-    }
-
-    public void add(RecipeElvenTrade recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        BotaniaAPI.elvenTradeRecipes.add(recipe);
-    }
-
-    public boolean remove(RecipeElvenTrade recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        return BotaniaAPI.elvenTradeRecipes.remove(recipe);
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('botania:dreamwood')"))
@@ -100,17 +84,6 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
                 .error()
                 .post();
         return false;
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BotaniaAPI.elvenTradeRecipes.forEach(this::addBackup);
-        BotaniaAPI.elvenTradeRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeElvenTrade> streamRecipes() {
-        return new SimpleObjectStream<>(BotaniaAPI.elvenTradeRecipes).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "99")})

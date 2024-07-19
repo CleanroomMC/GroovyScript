@@ -1,22 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.recipe.FluidDictionaryEntry;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class FluidDictionary extends VirtualizedRegistry<FluidDictionaryEntry> {
+public class FluidDictionary extends StandardListRegistry<FluidDictionaryEntry> {
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.removeAll(removeScripted());
-        FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.addAll(restoreFromBackup());
+    public Collection<FluidDictionaryEntry> getRegistry() {
+        return FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES;
     }
 
     @MethodDescription(description = "groovyscript.wiki.industrialforegoing.fluid_dictionary.add0", type = MethodDescription.Type.ADDITION, example = {
@@ -40,19 +38,6 @@ public class FluidDictionary extends VirtualizedRegistry<FluidDictionaryEntry> {
         FluidDictionaryEntry recipe = new FluidDictionaryEntry(input, output, ratio);
         add(recipe);
         return recipe;
-    }
-
-    public void add(FluidDictionaryEntry recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.add(recipe);
-    }
-
-    public boolean remove(FluidDictionaryEntry recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.remove(recipe);
-        return true;
     }
 
     @MethodDescription
@@ -85,18 +70,6 @@ public class FluidDictionary extends VirtualizedRegistry<FluidDictionaryEntry> {
     @MethodDescription(example = @Example(value = "fluid(essence')", commented = true))
     public boolean removeByOutput(FluidStack fluid) {
         return removeByOutput(fluid.getFluid().getName());
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.forEach(this::addBackup);
-        FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<FluidDictionaryEntry> streamRecipes() {
-        return new SimpleObjectStream<>(FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES)
-                .setRemover(this::remove);
     }
 
 }

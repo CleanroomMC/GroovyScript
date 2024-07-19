@@ -5,17 +5,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
 @RegistryDescription
-public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe> {
+public class Hopper extends StandardListRegistry<HopperInteractions.HopperRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('betterwithmods:iron_bar').input(ore('sand')).output(item('minecraft:clay')).inWorldItemOutput(item('minecraft:gold_ingot'))"),
@@ -26,25 +25,8 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> HopperInteractions.RECIPES.removeIf(r -> r == recipe));
-        HopperInteractions.RECIPES.addAll(restoreFromBackup());
-    }
-
-    public HopperInteractions.HopperRecipe add(HopperInteractions.HopperRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            HopperInteractions.RECIPES.add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(HopperInteractions.HopperRecipe recipe) {
-        if (HopperInteractions.RECIPES.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<HopperInteractions.HopperRecipe> getRegistry() {
+        return HopperInteractions.RECIPES;
     }
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
@@ -71,17 +53,6 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<HopperInteractions.HopperRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(HopperInteractions.RECIPES).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        HopperInteractions.RECIPES.forEach(this::addBackup);
-        HopperInteractions.RECIPES.clear();
     }
 
     @Property(property = "name", value = "groovyscript.wiki.betterwithmods.hopper.name.value", valid = @Comp(value = "null", type = Comp.Type.NOT))

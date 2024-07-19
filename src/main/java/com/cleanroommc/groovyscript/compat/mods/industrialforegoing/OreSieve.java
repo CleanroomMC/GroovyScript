@@ -1,29 +1,27 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class OreSieve extends VirtualizedRegistry<OreFluidEntrySieve> {
+public class OreSieve extends StandardListRegistry<OreFluidEntrySieve> {
 
     public OreSieve() {
         super(Alias.generateOfClass(OreSieve.class).andGenerate("FluidSieving"));
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        OreFluidEntrySieve.ORE_FLUID_SIEVE.removeAll(removeScripted());
-        OreFluidEntrySieve.ORE_FLUID_SIEVE.addAll(restoreFromBackup());
+    public Collection<OreFluidEntrySieve> getRegistry() {
+        return OreFluidEntrySieve.ORE_FLUID_SIEVE;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = {
@@ -34,19 +32,6 @@ public class OreSieve extends VirtualizedRegistry<OreFluidEntrySieve> {
         OreFluidEntrySieve recipe = new OreFluidEntrySieve(input, output, sieveItem);
         add(recipe);
         return recipe;
-    }
-
-    public void add(OreFluidEntrySieve recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        OreFluidEntrySieve.ORE_FLUID_SIEVE.add(recipe);
-    }
-
-    public boolean remove(OreFluidEntrySieve recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        OreFluidEntrySieve.ORE_FLUID_SIEVE.remove(recipe);
-        return true;
     }
 
     @MethodDescription(example = {
@@ -72,18 +57,6 @@ public class OreSieve extends VirtualizedRegistry<OreFluidEntrySieve> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        OreFluidEntrySieve.ORE_FLUID_SIEVE.forEach(this::addBackup);
-        OreFluidEntrySieve.ORE_FLUID_SIEVE.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<OreFluidEntrySieve> streamRecipes() {
-        return new SimpleObjectStream<>(OreFluidEntrySieve.ORE_FLUID_SIEVE)
-                .setRemover(this::remove);
     }
 
 }

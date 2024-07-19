@@ -4,17 +4,18 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import rustic.common.crafting.CrushingTubRecipe;
 import rustic.common.crafting.ICrushingTubRecipe;
 import rustic.common.crafting.Recipes;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
+public class CrushingTub extends StandardListRegistry<ICrushingTubRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:stone')).fluidOutput(fluid('lava') * 50)"),
@@ -25,19 +26,8 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
     }
 
     @Override
-    public void onReload() {
-        Recipes.crushingTubRecipes.removeAll(removeScripted());
-        Recipes.crushingTubRecipes.addAll(restoreFromBackup());
-    }
-
-    public void add(ICrushingTubRecipe recipe) {
-        Recipes.crushingTubRecipes.add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(ICrushingTubRecipe recipe) {
-        addBackup(recipe);
-        return Recipes.crushingTubRecipes.remove(recipe);
+    public Collection<ICrushingTubRecipe> getRegistry() {
+        return Recipes.crushingTubRecipes;
     }
 
     @MethodDescription(example = {@Example("fluid('ironberryjuice')"), @Example("item('minecraft:sugar')")})
@@ -60,17 +50,6 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        Recipes.crushingTubRecipes.forEach(this::addBackup);
-        Recipes.crushingTubRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ICrushingTubRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(Recipes.crushingTubRecipes).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("1"))

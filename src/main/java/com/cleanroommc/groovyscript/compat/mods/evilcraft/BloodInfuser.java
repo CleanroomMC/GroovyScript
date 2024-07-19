@@ -3,9 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods.evilcraft;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -18,8 +17,10 @@ import org.cyclops.evilcraft.core.recipe.custom.DurationXpRecipeProperties;
 import org.cyclops.evilcraft.core.recipe.custom.IngredientFluidStackAndTierRecipeComponent;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> {
+public class BloodInfuser extends StandardListRegistry<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> {
 
     @Override
     public boolean isEnabled() {
@@ -36,26 +37,8 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes()::remove);
-        restoreFromBackup().forEach(org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes()::add);
-    }
-
-    public void add(IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties> recipe) {
-        this.add(recipe, true);
-    }
-
-    public void add(IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties> recipe, boolean add) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        if (add) org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes().add(recipe);
-    }
-
-    public boolean remove(IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties> recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes().remove(recipe);
-        return true;
+    public Collection<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> getRegistry() {
+        return org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes();
     }
 
     @MethodDescription(example = @Example("item('evilcraft:dark_gem')"))
@@ -78,18 +61,6 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
-        org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> streamRecipes() {
-        return new SimpleObjectStream<>(org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes())
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("1"))
@@ -160,7 +131,7 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
                             new IngredientRecipeComponent(output.get(0)),
                             new DurationXpRecipeProperties(duration, xp)
                     );
-            ModSupport.EVILCRAFT.get().bloodInfuser.add(recipe, false);
+            ModSupport.EVILCRAFT.get().bloodInfuser.addScripted(recipe);
             return recipe;
         }
     }

@@ -1,40 +1,37 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipePetals;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Apothecary extends VirtualizedRegistry<RecipePetals> {
+public class Apothecary extends StandardListRegistry<RecipePetals> {
 
     public Apothecary() {
         super(Alias.generateOfClassAnd(Apothecary.class, "PetalApothecary"));
     }
 
+    @Override
+    public Collection<RecipePetals> getRegistry() {
+        return BotaniaAPI.petalRecipes;
+    }
+
     @RecipeBuilderDescription(example = @Example(".input(ore('blockGold'), ore('ingotIron'), item('minecraft:apple')).output(item('minecraft:golden_apple'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
-    }
-
-    @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(BotaniaAPI.petalRecipes::remove);
-        BotaniaAPI.petalRecipes.addAll(restoreFromBackup());
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -43,18 +40,6 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
                 .output(output)
                 .input(inputs)
                 .register();
-    }
-
-    public void add(RecipePetals recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        BotaniaAPI.petalRecipes.add(recipe);
-    }
-
-    public boolean remove(RecipePetals recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        return BotaniaAPI.petalRecipes.remove(recipe);
     }
 
     @MethodDescription(example = @Example("item('botania:specialflower').withNbt(['type': 'puredaisy'])"))
@@ -93,17 +78,6 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
     @MethodDescription(description = "groovyscript.wiki.removeByInput", example = @Example("ore('petalYellow'), ore('petalBrown')"))
     public boolean removeByInputs(IIngredient... inputs) {
         return removeByInput(inputs);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BotaniaAPI.petalRecipes.forEach(this::addBackup);
-        BotaniaAPI.petalRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipePetals> streamRecipes() {
-        return new SimpleObjectStream<>(BotaniaAPI.petalRecipes).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "20")})
