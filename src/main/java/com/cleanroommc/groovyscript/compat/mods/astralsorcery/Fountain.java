@@ -1,22 +1,21 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.FluidRarityEntryAccessor;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.FluidRarityRegistryAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Collection;
 
 @RegistryDescription
-public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarityEntry> {
+public class Fountain extends StandardListRegistry<FluidRarityRegistry.FluidRarityEntry> {
 
     @RecipeBuilderDescription(example = @Example(".fluid(fluid('astralsorcery.liquidstarlight')).rarity(10000000).minimumAmount(4000000).variance(1000000)"))
     public FountainChanceHelper chanceHelper() {
@@ -24,11 +23,8 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        removeScripted().forEach(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList()::remove);
-        restoreFromBackup().forEach(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList()::add);
+    public Collection<FluidRarityRegistry.FluidRarityEntry> getRegistry() {
+        return ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList();
     }
 
     @Override
@@ -42,10 +38,10 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
         }
     }
 
+    @Override
     @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add0", type = MethodDescription.Type.ADDITION)
-    public void add(FluidRarityRegistry.FluidRarityEntry entry) {
-        addScripted(entry);
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().add(entry);
+    public boolean add(FluidRarityRegistry.FluidRarityEntry entry) {
+        return super.add(entry);
     }
 
     @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add1", type = MethodDescription.Type.ADDITION)
@@ -58,10 +54,10 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
         this.add(FluidRarityEntryAccessor.createFluidRarityEntry(fluid, rarity, guaranteedAmt, addRand));
     }
 
+    @Override
     @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove0")
     public boolean remove(FluidRarityRegistry.FluidRarityEntry entry) {
-        addBackup(entry);
-        return ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().removeIf(fluidRarityEntry -> fluidRarityEntry == entry);
+        return super.remove(entry);
     }
 
     @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove1",example = @Example("fluid('lava')"))
@@ -78,18 +74,6 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<FluidRarityRegistry.FluidRarityEntry> streamRecipes() {
-        return new SimpleObjectStream<>(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList())
-                .setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().forEach(this::addBackup);
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().clear();
     }
 
     public static class FountainChanceHelper implements IRecipeBuilder<FluidRarityRegistry.FluidRarityEntry> {

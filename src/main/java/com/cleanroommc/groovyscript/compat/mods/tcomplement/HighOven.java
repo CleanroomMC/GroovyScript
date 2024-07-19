@@ -4,12 +4,10 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
-import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeRegistry;
 import com.cleanroommc.groovyscript.core.mixin.tcomplement.TCompRegistryAccessor;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.MeltingRecipeAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.google.common.collect.ImmutableMap;
 import knightminer.tcomplement.library.steelworks.*;
 import net.minecraft.item.ItemStack;
@@ -19,9 +17,10 @@ import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
+import java.util.Collection;
 import java.util.Map;
 
-public class HighOven extends MeltingRecipeRegistry {
+public class HighOven extends StandardListRegistry<MeltingRecipe> {
 
     public final Fuel fuel = new Fuel();
     public final Heating heating = new Heating();
@@ -32,10 +31,14 @@ public class HighOven extends MeltingRecipeRegistry {
     }
 
     @Override
+    public Collection<MeltingRecipe> getRegistry() {
+        return TCompRegistryAccessor.getHighOvenOverrides();
+    }
+
+    @Override
     @GroovyBlacklist
     public void onReload() {
-        removeScripted().forEach(TCompRegistryAccessor.getHighOvenOverrides()::remove);
-        restoreFromBackup().forEach(TCompRegistryAccessor.getHighOvenOverrides()::add);
+        super.onReload();
         fuel.onReload();
         heating.onReload();
         mixing.onReload();
@@ -45,20 +48,6 @@ public class HighOven extends MeltingRecipeRegistry {
         MeltingRecipe recipe = new MeltingRecipe(MeltingRecipeBuilder.recipeMatchFromIngredient(input, output.amount), output, temp);
         add(recipe);
         return recipe;
-    }
-
-    @Override
-    public void add(MeltingRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        TCompRegistryAccessor.getHighOvenOverrides().add(recipe);
-    }
-
-    public boolean remove(MeltingRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        TCompRegistryAccessor.getHighOvenOverrides().remove(recipe);
-        return true;
     }
 
     public boolean removeByOutput(FluidStack output) {
@@ -109,38 +98,15 @@ public class HighOven extends MeltingRecipeRegistry {
         return false;
     }
 
-    public void removeAll() {
-        TCompRegistryAccessor.getHighOvenOverrides().forEach(this::addBackup);
-        TCompRegistryAccessor.getHighOvenOverrides().forEach(TCompRegistryAccessor.getHighOvenOverrides()::remove);
-    }
-
-    public SimpleObjectStream<MeltingRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(TCompRegistryAccessor.getHighOvenOverrides()).setRemover(this::remove);
-    }
-
-    public static class Mixing extends VirtualizedRegistry<IMixRecipe> {
+    public static class Mixing extends StandardListRegistry<IMixRecipe> {
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }
 
         @Override
-        public void onReload() {
-            removeScripted().forEach(TCompRegistryAccessor.getMixRegistry()::remove);
-            restoreFromBackup().forEach(TCompRegistryAccessor.getMixRegistry()::add);
-        }
-
-        public void add(IMixRecipe recipe) {
-            if (recipe == null) return;
-            addScripted(recipe);
-            TCompRegistryAccessor.getMixRegistry().add(recipe);
-        }
-
-        public boolean remove(IMixRecipe recipe) {
-            if (recipe == null) return false;
-            addBackup(recipe);
-            TCompRegistryAccessor.getMixRegistry().remove(recipe);
-            return true;
+        public Collection<IMixRecipe> getRegistry() {
+            return TCompRegistryAccessor.getMixRegistry();
         }
 
         public boolean removeByOutput(FluidStack output) {
@@ -210,15 +176,6 @@ public class HighOven extends MeltingRecipeRegistry {
 
         public boolean removeByAdditive(MixAdditive type, IIngredient item) {
             return removeByAdditives(ImmutableMap.of(type, item));
-        }
-
-        public void removeAll() {
-            TCompRegistryAccessor.getMixRegistry().forEach(this::addBackup);
-            TCompRegistryAccessor.getMixRegistry().forEach(TCompRegistryAccessor.getMixRegistry()::remove);
-        }
-
-        public SimpleObjectStream<IMixRecipe> streamRecipes() {
-            return new SimpleObjectStream<>(TCompRegistryAccessor.getMixRegistry()).setRemover(this::remove);
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<MixRecipe> {
@@ -291,35 +248,21 @@ public class HighOven extends MeltingRecipeRegistry {
         }
     }
 
-    public static class Heating extends VirtualizedRegistry<IHeatRecipe> {
+    public static class Heating extends StandardListRegistry<IHeatRecipe> {
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }
 
         @Override
-        public void onReload() {
-            removeScripted().forEach(TCompRegistryAccessor.getHeatRegistry()::remove);
-            restoreFromBackup().forEach(TCompRegistryAccessor.getHeatRegistry()::add);
+        public Collection<IHeatRecipe> getRegistry() {
+            return TCompRegistryAccessor.getHeatRegistry();
         }
 
         public IHeatRecipe add(FluidStack input, FluidStack output, int temp) {
             HeatRecipe recipe = new HeatRecipe(input, output, temp);
             add(recipe);
             return recipe;
-        }
-
-        public void add(IHeatRecipe recipe) {
-            if (recipe == null) return;
-            addScripted(recipe);
-            TCompRegistryAccessor.getHeatRegistry().add(recipe);
-        }
-
-        public boolean remove(IHeatRecipe recipe) {
-            if (recipe == null) return false;
-            addBackup(recipe);
-            TCompRegistryAccessor.getHeatRegistry().remove(recipe);
-            return true;
         }
 
         public boolean removeByInput(FluidStack input) {
@@ -364,15 +307,6 @@ public class HighOven extends MeltingRecipeRegistry {
             return false;
         }
 
-        public void removeAll() {
-            TCompRegistryAccessor.getHeatRegistry().forEach(this::addBackup);
-            TCompRegistryAccessor.getHeatRegistry().forEach(TCompRegistryAccessor.getHeatRegistry()::remove);
-        }
-
-        public SimpleObjectStream<IHeatRecipe> streamRecipes() {
-            return new SimpleObjectStream<>(TCompRegistryAccessor.getHeatRegistry()).setRemover(this::remove);
-        }
-
         public class RecipeBuilder extends AbstractRecipeBuilder<IHeatRecipe> {
 
             private int temp = 300;
@@ -408,36 +342,21 @@ public class HighOven extends MeltingRecipeRegistry {
         }
     }
 
-    public static class Fuel extends VirtualizedRegistry<HighOvenFuel> {
+    public static class Fuel extends StandardListRegistry<HighOvenFuel> {
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
         }
 
         @Override
-        @GroovyBlacklist
-        public void onReload() {
-            removeScripted().forEach(TCompRegistryAccessor.getHighOvenFuels()::remove);
-            restoreFromBackup().forEach(TCompRegistryAccessor.getHighOvenFuels()::add);
+        public Collection<HighOvenFuel> getRegistry() {
+            return TCompRegistryAccessor.getHighOvenFuels();
         }
 
         public HighOvenFuel add(IIngredient item, int time, int rate) {
             HighOvenFuel fuel = new HighOvenFuel(MeltingRecipeBuilder.recipeMatchFromIngredient(item), time, rate);
             add(fuel);
             return fuel;
-        }
-
-        public void add(HighOvenFuel fuel) {
-            if (fuel == null) return;
-            addScripted(fuel);
-            TCompRegistryAccessor.getHighOvenFuels().add(fuel);
-        }
-
-        public boolean remove(HighOvenFuel fuel) {
-            if (fuel == null) return false;
-            addBackup(fuel);
-            TCompRegistryAccessor.getHighOvenFuels().remove(fuel);
-            return true;
         }
 
         public boolean removeByItem(IIngredient item) {
@@ -452,15 +371,6 @@ public class HighOven extends MeltingRecipeRegistry {
                     .error()
                     .post();
             return false;
-        }
-
-        public void removeAll() {
-            TCompRegistryAccessor.getHighOvenFuels().forEach(this::addBackup);
-            TCompRegistryAccessor.getHighOvenFuels().forEach(TCompRegistryAccessor.getHighOvenFuels()::remove);
-        }
-
-        public SimpleObjectStream<HighOvenFuel> streamFuels() {
-            return new SimpleObjectStream<>(TCompRegistryAccessor.getHighOvenFuels()).setRemover(this::remove);
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<HighOvenFuel> {

@@ -5,17 +5,19 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.tcomplement.recipe.IngredientBlacklist;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
-import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeRegistry;
 import com.cleanroommc.groovyscript.core.mixin.tcomplement.TCompRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import knightminer.tcomplement.library.IBlacklist;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
-public class Melter extends MeltingRecipeRegistry {
+import java.util.Collection;
+
+public class Melter extends StandardListRegistry<MeltingRecipe> {
 
     @GroovyBlacklist
     protected final AbstractReloadableStorage<IBlacklist> backupStorage = new AbstractReloadableStorage<>();
@@ -25,11 +27,15 @@ public class Melter extends MeltingRecipeRegistry {
     }
 
     @Override
+    public Collection<MeltingRecipe> getRegistry() {
+        return TCompRegistryAccessor.getMeltingOverrides();
+    }
+
+    @Override
     @GroovyBlacklist
     public void onReload() {
-        removeScripted().forEach(TCompRegistryAccessor.getMeltingOverrides()::remove);
+        super.onReload();
         backupStorage.removeScripted().forEach(TCompRegistryAccessor.getMeltingBlacklist()::remove);
-        restoreFromBackup().forEach(TCompRegistryAccessor.getMeltingOverrides()::add);
         backupStorage.restoreFromBackup().forEach(TCompRegistryAccessor.getMeltingBlacklist()::add);
     }
 
@@ -45,24 +51,10 @@ public class Melter extends MeltingRecipeRegistry {
         return recipe;
     }
 
-    @Override
-    public void add(MeltingRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        TCompRegistryAccessor.getMeltingOverrides().add(recipe);
-    }
-
     public void addBlacklist(IBlacklist blacklist) {
         if (blacklist == null) return;
         backupStorage.addScripted(blacklist);
         TCompRegistryAccessor.getMeltingBlacklist().add(blacklist);
-    }
-
-    public boolean remove(MeltingRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        TCompRegistryAccessor.getMeltingOverrides().remove(recipe);
-        return true;
     }
 
     public boolean removeBlacklist(IBlacklist blacklist) {
@@ -134,11 +126,6 @@ public class Melter extends MeltingRecipeRegistry {
         return false;
     }
 
-    public void removeAll() {
-        TCompRegistryAccessor.getMeltingOverrides().forEach(this::addBackup);
-        TCompRegistryAccessor.getMeltingOverrides().forEach(TCompRegistryAccessor.getMeltingOverrides()::remove);
-    }
-
     public void removeAllBlacklists() {
         TCompRegistryAccessor.getMeltingBlacklist().forEach(backupStorage::addBackup);
         TCompRegistryAccessor.getMeltingBlacklist().forEach(TCompRegistryAccessor.getMeltingBlacklist()::remove);
@@ -146,9 +133,5 @@ public class Melter extends MeltingRecipeRegistry {
 
     public SimpleObjectStream<IBlacklist> streamBlacklists() {
         return new SimpleObjectStream<>(TCompRegistryAccessor.getMeltingBlacklist()).setRemover(this::removeBlacklist);
-    }
-
-    public SimpleObjectStream<MeltingRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(TCompRegistryAccessor.getMeltingOverrides()).setRemover(this::remove);
     }
 }
