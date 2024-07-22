@@ -10,7 +10,7 @@ public class StandardInfoParserRegistry {
         InfoParserRegistry.addInfoParser(InfoParserBlock.instance);
         InfoParserRegistry.addInfoParser(InfoParserBlockState.instance);
         InfoParserRegistry.addInfoParser(InfoParserOreDict.instance);
-        InfoParserRegistry.addInfoParser(InfoParserTileEntity.instance);
+        InfoParserRegistry.addInfoParser(InfoParserNBT.instance);
         InfoParserRegistry.addInfoParser(InfoParserEntity.instance);
         InfoParserRegistry.addInfoParser(InfoParserVillagerProfession.instance);
         InfoParserRegistry.addInfoParser(InfoParserVillagerCareer.instance);
