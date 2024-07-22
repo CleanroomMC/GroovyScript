@@ -98,13 +98,20 @@ public class GroovyScriptCodeConverter {
         builder.append("('");
         if (colored) builder.append(TextFormatting.AQUA);
         builder.append(itemStack.getItem().getRegistryName());
-        if (itemStack.getMetadata() != 0) {
+        // code is more complex than strictly needed here to allow using the wildcard
+        if (itemStack.getMetadata() == Short.MAX_VALUE) {
             builder.append(":");
-            if (itemStack.getMetadata() == Short.MAX_VALUE) builder.append("*");
-            else builder.append(itemStack.getMetadata());
+            builder.append("*");
+            if (colored) builder.append(TextFormatting.GRAY);
+            builder.append("'");
+        } else if (itemStack.getMetadata() != 0) {
+            if (colored) builder.append(TextFormatting.GRAY);
+            builder.append("'");
+            builder.append(", ");
+            builder.append(formatNumber(itemStack.getMetadata(), colored));
+            if (colored) builder.append(TextFormatting.GRAY);
         }
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("')");
+        builder.append(")");
         return builder.toString();
     }
 
