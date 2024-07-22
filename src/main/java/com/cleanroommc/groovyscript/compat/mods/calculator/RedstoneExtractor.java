@@ -82,6 +82,12 @@ public class RedstoneExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Va
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Calculator Redstone Extractor Recipe";
         }

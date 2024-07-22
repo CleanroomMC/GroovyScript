@@ -89,6 +89,12 @@ public class StoneSeparator extends VirtualizedRegistry<CalculatorRecipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Calculator Stone Separator Recipe";
         }

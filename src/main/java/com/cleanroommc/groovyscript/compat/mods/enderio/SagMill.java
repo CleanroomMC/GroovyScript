@@ -21,7 +21,7 @@ import it.unimi.dsi.fastutil.floats.FloatList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription
+@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.enderio.sag_mill.note", type = Admonition.Type.WARNING))
 public class SagMill extends VirtualizedRegistry<Recipe> {
 
     public SagMill() {
@@ -120,6 +120,12 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         public RecipeBuilder bonusTypeChance() {
             this.bonusType = RecipeBonusType.CHANCE_ONLY;
             return this;
+        }
+
+        @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
         }
 
         @Override

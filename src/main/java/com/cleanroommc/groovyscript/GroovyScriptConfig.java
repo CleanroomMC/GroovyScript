@@ -19,5 +19,9 @@ public class GroovyScriptConfig {
 
         @Config.Comment("Enables DE energy core compat. Config is mainly for other mods compat.")
         public boolean draconicEvolutionEnergyCore = true;
+
+        @Config.Comment("Validate input stack sizes when adding recipes, i.e. disallow adding recipes with input stack size > 1 when the machine's code doesn't check for input count. Disable if you want to write such recipes anyway.")
+        public boolean checkInputStackCounts = true;
+
     }
 }

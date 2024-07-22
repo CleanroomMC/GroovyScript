@@ -1,9 +1,11 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.helper.ingredient.FluidStackList;
@@ -163,11 +165,21 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     }
 
     @GroovyBlacklist
+    protected int getMaxInput() {
+        return Integer.MAX_VALUE;
+    }
+
+    @GroovyBlacklist
     public void validateItems(GroovyLog.Msg msg, int minInput, int maxInput, int minOutput, int maxOutput) {
         input.trim();
         output.trim();
         msg.add(input.size() < minInput || input.size() > maxInput, () -> getRequiredString(minInput, maxInput, "item input") + ", but found " + input.size());
         msg.add(output.size() < minOutput || output.size() > maxOutput, () -> getRequiredString(minOutput, maxOutput, "item output") + ", but found " + output.size());
+        if (GroovyScriptConfig.compat.checkInputStackCounts) {
+            int maxAmountProvided = input.stream().mapToInt(IResourceStack::getAmount).max().orElse(0);
+            int maxAmountAllowed = getMaxInput();
+            msg.add(maxAmountProvided > maxAmountAllowed, "Expected stack sizes of inputs = {} or less, got {}", maxAmountAllowed, maxAmountProvided);
+        }
     }
 
     @GroovyBlacklist

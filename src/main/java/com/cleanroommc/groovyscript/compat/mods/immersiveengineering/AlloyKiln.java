@@ -118,6 +118,12 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Recipes with more than 1 input quantity can begin, but no progress is made
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Immersive Engineering Alloy Kiln recipe";
         }

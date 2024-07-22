@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 
-@RegistryDescription
+@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.bloodmagic.tartaric_forge.note", type = Admonition.Type.WARNING))
 public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
 
     @RecipeBuilderDescription(example = {
@@ -160,6 +160,12 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
         @RecipeBuilderMethodDescription(field = "soulDrain")
         public RecipeBuilder drain(int drain) {
             return soulDrain(drain);
+        }
+
+        @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
         }
 
         @Override

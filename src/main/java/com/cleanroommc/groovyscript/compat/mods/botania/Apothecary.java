@@ -111,6 +111,12 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipePetals> {
 
         @Override
+        protected int getMaxInput() {
+            // Each slot of Apothecary can only contain 1 item
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Botania Apothecary recipe";
         }

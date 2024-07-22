@@ -108,6 +108,12 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Actually Additions Atomic Reconstructor recipe";
         }

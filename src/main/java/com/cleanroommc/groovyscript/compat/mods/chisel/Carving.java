@@ -54,6 +54,13 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
                                   @Example("'demo', item('chisel:antiblock:3')"),
                                   @Example("'demo', item('minecraft:sea_lantern')")}, type = MethodDescription.Type.ADDITION)
     public void addVariation(String groupName, ItemStack item) {
+        // Ignores stack size
+        if (item.getCount() > 1) {
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Chisel Carving").error();
+            msg.add("Expected input stack size of 1, got {}", item.getCount());
+            msg.post();
+            return;
+        }
         try {
             getRegistry().addVariation(groupName, CarvingUtils.variationFor(item, 0));
             addScripted(Pair.of(groupName, item));

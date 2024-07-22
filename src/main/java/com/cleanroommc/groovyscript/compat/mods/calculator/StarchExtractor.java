@@ -82,6 +82,12 @@ public class StarchExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Valu
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Calculator Starch Extractor Recipe";
         }

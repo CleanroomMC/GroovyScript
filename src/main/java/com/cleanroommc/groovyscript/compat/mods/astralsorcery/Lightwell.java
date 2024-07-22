@@ -177,6 +177,7 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
             }
             if (this.output == null) out.add("No output specified.").error();
             if (this.catalyst == null) out.add("No catalyst specified.").error();
+            if (this.catalyst.getCount() > 1) out.add("Must have exactly 1 catalyst.").error();
 
             out.postIfNotEmpty();
             return out.getLevel() != Level.ERROR;

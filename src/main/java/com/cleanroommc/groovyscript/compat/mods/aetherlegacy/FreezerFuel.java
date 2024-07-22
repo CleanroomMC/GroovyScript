@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
@@ -18,6 +19,12 @@ public class FreezerFuel extends ForgeRegistryWrapper<AetherFreezableFuel> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:packed_ice'), 1000"))
     public void add(ItemStack fuel, int timeGiven) {
+        if (fuel.getCount() > 1) {
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Freezer Fuel").error();
+            msg.add("Expected input stack size of 1, got {}", fuel.getCount());
+            msg.post();
+            return;
+        }
         AetherFreezableFuel freezableFuel = new AetherFreezableFuel(fuel, timeGiven);
         add(freezableFuel);
     }

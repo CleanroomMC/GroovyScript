@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.appliedenergistics2;
 
 import appeng.api.AEApi;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
@@ -27,6 +28,12 @@ public class CannonAmmo extends VirtualizedRegistry<Pair<ItemStack, Double>> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:clay'), 10000"))
     public void add(ItemStack item, double value) {
+        if (item.getCount() > 1) {
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Cannon Ammo").error();
+            msg.add("Expected input stack size of 1, got {}", item.getCount());
+            msg.post();
+            return;
+        }
         addScripted(Pair.of(item, value));
         ((MatterCannonAmmoRegistryAccessor) AEApi.instance().registries().matterCannon()).getDamageModifiers().put(item, value);
     }

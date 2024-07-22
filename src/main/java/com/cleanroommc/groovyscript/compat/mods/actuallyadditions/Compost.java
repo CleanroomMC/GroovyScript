@@ -111,6 +111,12 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Actually Additions Compost recipe";
         }

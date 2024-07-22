@@ -172,6 +172,12 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Blood Magic Alchemy Table recipe";
         }

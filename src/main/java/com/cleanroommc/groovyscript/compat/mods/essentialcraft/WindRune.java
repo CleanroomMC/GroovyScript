@@ -78,6 +78,12 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Wind Rune Recipe";
         }

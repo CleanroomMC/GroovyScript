@@ -14,7 +14,7 @@ import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription
+@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.enderio.sag_mill.note", type = Admonition.Type.WARNING))
 public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
 
     public SagMillGrinding() {
@@ -102,6 +102,12 @@ public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
         public RecipeBuilder duration(int duration) {
             this.duration = duration;
             return this;
+        }
+
+        @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
         }
 
         @Override

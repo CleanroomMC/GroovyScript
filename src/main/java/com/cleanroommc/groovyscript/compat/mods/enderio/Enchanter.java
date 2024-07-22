@@ -153,7 +153,8 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
                     .add(enchantment == null, () -> "enchantment must not be null")
                     .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
                     .add(IngredientHelper.isEmpty(book), () -> "custom book must not be empty")
-                    .add(IngredientHelper.isEmpty(lapis), () -> "custom lapis must not be empty");
+                    .add(IngredientHelper.isEmpty(lapis), () -> "custom lapis must not be empty")
+                    .add(book.getAmount() > 1, () -> "custom book quantity must be 1");
             if (amount <= 0 && input != null) amount = input.getAmount();
 
             return !msg.postIfNotEmpty();

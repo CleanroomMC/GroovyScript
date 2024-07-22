@@ -101,6 +101,12 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
         }
 
         @Override
+        protected int getMaxInput() {
+            // The recipe requires X inputs, but only consumes 1 anyway
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg);

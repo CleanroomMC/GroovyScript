@@ -141,6 +141,12 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Botania Mana Infusion recipe";
         }

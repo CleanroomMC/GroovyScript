@@ -172,6 +172,12 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
         }
 
         @Override
+        protected int getMaxInput() {
+            // GS's code throws the quantity away
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateName();
             validateItems(msg, 1, 1, 1, 1);

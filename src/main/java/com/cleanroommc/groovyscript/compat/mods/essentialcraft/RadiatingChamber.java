@@ -92,8 +92,14 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
-            return "Error adding Magician Table Recipe";
+            return "Error adding Radiating Chamber Recipe";
         }
 
         @Override

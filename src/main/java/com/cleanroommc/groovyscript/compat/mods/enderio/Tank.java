@@ -222,6 +222,12 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding EnderIO Tank recipe";
         }

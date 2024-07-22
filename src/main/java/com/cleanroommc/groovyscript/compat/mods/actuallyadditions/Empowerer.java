@@ -185,6 +185,12 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // More than 1 item cannot be placed on the Empowerer or Display Stands
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Actually Additions Empowerer recipe";
         }
