@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.api.infocommand;
 
-import com.cleanroommc.groovyscript.compat.vanilla.command.infoparser.InfoParserItem;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 
@@ -9,12 +8,12 @@ public interface InfoParser {
     /**
      * The style for any parser header - bold and light purple.
      */
-    Style headerStyle = new Style().setColor(TextFormatting.LIGHT_PURPLE).setBold(true);
+    Style headerStyle = new Style().setColor(TextFormatting.WHITE).setBold(true);
 
     /**
      * Priority of the parser for determining the order they are logged in chat,
      * with lowest being first and highest being last.
-     * The is 100, and {@link InfoParserItem#priority()} is set to 1.
+     * The is 100, and {@link com.cleanroommc.groovyscript.compat.vanilla.command.infoparser.InfoParserItem#priority()} is set to 1.
      *
      * @return the priority of the Parser
      */
