@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RegistryDescription
@@ -168,8 +170,10 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding EnderIO Vat recipe").error();
             msg.add(IngredientHelper.isEmpty(input), () -> "fluid input must not be empty");
             msg.add(IngredientHelper.isEmpty(output), () -> "fluid output must not be empty");
-            msg.add(itemInputs1.stream().anyMatch(r -> r.getAmount() > 1), () -> "all item inputs should have amount <= 1");
-            msg.add(itemInputs2.stream().anyMatch(r -> r.getAmount() > 1), () -> "all item inputs should have amount <= 1");
+            if (GroovyScriptConfig.compat.checkInputStackCounts) {
+                msg.add(itemInputs1.stream().filter(Objects::nonNull).anyMatch(r -> r.getAmount() > 1), () -> "all item inputs should have amount <= 1");
+                msg.add(itemInputs2.stream().filter(Objects::nonNull).anyMatch(r -> r.getAmount() > 1), () -> "all item inputs should have amount <= 1");
+            }
 
             if (energy <= 0) energy = 5000;
             if (baseMultiplier <= 0) baseMultiplier = 1;

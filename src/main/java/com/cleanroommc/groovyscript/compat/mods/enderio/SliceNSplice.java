@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.ManyToOneRecipe;
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 @RegistryDescription
 public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
@@ -141,6 +144,10 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
             int inputSize = input.getRealSize();
             output.trim();
             msg.add(inputSize < 1 || inputSize > 6, () -> "Must have 1 - 6 inputs, but found " + input.size());
+            if (GroovyScriptConfig.compat.checkInputStackCounts) {
+                int maxAmountProvided = input.stream().filter(Objects::nonNull).mapToInt(IResourceStack::getAmount).max().orElse(0);
+                msg.add(maxAmountProvided > 1, "Each input must have a stack size of 1, got {}", maxAmountProvided);
+            }
             msg.add(output.size() != 1, () -> "Must have exactly 1 output, but found " + output.size());
             validateFluids(msg);
             if (energy <= 0) energy = 5000;

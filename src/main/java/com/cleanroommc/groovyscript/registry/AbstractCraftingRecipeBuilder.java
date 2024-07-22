@@ -1,9 +1,11 @@
 package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
@@ -168,6 +170,12 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         }
         int finalRowWidth = rowWidth;
         msg.add(rowWidth > width, () -> "At least one row has a row length of " + finalRowWidth + ", but maximum is " + width);
+
+        if (GroovyScriptConfig.compat.checkInputStackCounts) {
+            int maxAmountProvided = ingredients.stream().mapToInt(IResourceStack::getAmount).max().orElse(0);
+            msg.add(maxAmountProvided > 1, "All crafting slot inputs must have a size of 1, got {}", maxAmountProvided);
+        }
+
         if (checkedChars.isEmpty()) {
             msg.add("Matrix must not be empty");
         } else if (checkedChars.size() == 1) {

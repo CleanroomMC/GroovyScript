@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -176,8 +177,11 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
                 this.shatterMultiplier = 0.0F;
             }
             if (this.output == null) out.add("No output specified.").error();
-            if (this.catalyst == null) out.add("No catalyst specified.").error();
-            if (this.catalyst.getCount() > 1) out.add("Must have exactly 1 catalyst.").error();
+            if (this.catalyst == null) {
+                out.add("No catalyst specified.").error();
+            } else if (GroovyScriptConfig.compat.checkInputStackCounts && this.catalyst.getCount() > 1) {
+                out.add("Must have exactly 1 catalyst.").error();
+            }
 
             out.postIfNotEmpty();
             return out.getLevel() != Level.ERROR;
