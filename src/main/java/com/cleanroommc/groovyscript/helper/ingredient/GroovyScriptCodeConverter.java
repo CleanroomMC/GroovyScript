@@ -104,7 +104,10 @@ public class GroovyScriptCodeConverter {
             builder.append("*");
             if (colored) builder.append(TextFormatting.GRAY);
             builder.append("'");
-        } else if (itemStack.getMetadata() != 0) {
+        } else if (itemStack.getMetadata() == 0) {
+            if (colored) builder.append(TextFormatting.GRAY);
+            builder.append("'");
+        } else {
             if (colored) builder.append(TextFormatting.GRAY);
             builder.append("'");
             builder.append(", ");
