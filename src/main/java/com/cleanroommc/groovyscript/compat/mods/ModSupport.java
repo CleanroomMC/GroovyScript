@@ -25,6 +25,7 @@ import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
 import com.cleanroommc.groovyscript.compat.mods.essentialcraft.EssentialCraft;
 import com.cleanroommc.groovyscript.compat.mods.evilcraft.EvilCraft;
 import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCrafting;
+import com.cleanroommc.groovyscript.compat.mods.extrabotany.ExtraBotany;
 import com.cleanroommc.groovyscript.compat.mods.extrautils2.ExtraUtils2;
 import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
@@ -93,6 +94,7 @@ public class ModSupport {
     public static final GroovyContainer<EssentialCraft> ESSENTIALCRAFT = new InternalModContainer<>("essentialcraft", "EssentialCraft 4", EssentialCraft::new, "ec4");
     public static final GroovyContainer<EvilCraft> EVILCRAFT = new InternalModContainer<>("evilcraft", "EvilCraft", EvilCraft::new);
     public static final GroovyContainer<ExtendedCrafting> EXTENDED_CRAFTING = new InternalModContainer<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
+    public static final GroovyContainer<ExtraBotany> EXTRA_BOTANY = new InternalModContainer<>("extrabotany", "Extra Botany", ExtraBotany::new);
     public static final GroovyContainer<ExtraUtils2> EXTRA_UTILITIES_2 = new InternalModContainer<>("extrautils2", "Extra Utilities 2", ExtraUtils2::new, "extrautilities2");
     public static final GroovyContainer<Forestry> FORESTRY = new InternalModContainer<>("forestry", "Forestry", Forestry::new);
     public static final GroovyContainer<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new InternalModContainer<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
