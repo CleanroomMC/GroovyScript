@@ -81,6 +81,7 @@ final def mod_dependencies = [
         'mystical_agriculture-246640:2704562'                 : [project.debug_mystical_agriculture],
         'natures-aura-306626:2882138'                         : [project.debug_natures_aura],
         'packmode-278398:2567799'                             : [project.debug_packmode],
+        'primal-tech-290612:2801696'                          : [project.debug_primal_tech],
         'pneumaticcraft-repressurized-281849:2978408'         : [project.debug_pneumaticcraft],
         'projecte-226410:2702991'                             : [project.debug_projecte],
         'athenaeum-284350:4633750'                            : [project.debug_pyrotech],

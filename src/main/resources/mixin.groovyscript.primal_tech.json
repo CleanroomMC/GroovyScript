@@ -1,0 +1,13 @@
+{
+  "package": "com.cleanroommc.groovyscript.core.mixin.primal_tech",
+  "refmap": "mixins.groovyscript.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ClayKilnRecipesAccessor",
+    "StoneAnvilRecipesAccessor",
+    "WaterSawRecipesAccessor",
+    "WoodenBasinRecipesAccessor"
+  ]
+}

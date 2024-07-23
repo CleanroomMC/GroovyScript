@@ -39,6 +39,7 @@ import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import com.cleanroommc.groovyscript.compat.mods.mysticalagriculture.MysticalAgriculture;
 import com.cleanroommc.groovyscript.compat.mods.naturesaura.NaturesAura;
 import com.cleanroommc.groovyscript.compat.mods.pneumaticcraft.PneumaticCraft;
+import com.cleanroommc.groovyscript.compat.mods.primaltech.PrimalTech;
 import com.cleanroommc.groovyscript.compat.mods.prodigytech.ProdigyTech;
 import com.cleanroommc.groovyscript.compat.mods.projecte.ProjectE;
 import com.cleanroommc.groovyscript.compat.mods.pyrotech.PyroTech;
@@ -106,6 +107,7 @@ public class ModSupport {
     public static final GroovyContainer<LazyAE2> LAZYAE2 = new InternalModContainer<>("threng", "LazyAE2", LazyAE2::new, "lazyae2");
     public static final GroovyContainer<NaturesAura> NATURES_AURA = new InternalModContainer<>("naturesaura", "Nature's Aura", NaturesAura::new);
     public static final GroovyContainer<PneumaticCraft> PNEUMATIC_CRAFT = new InternalModContainer<>("pneumaticcraft", "PneumaticCraft: Repressurized", PneumaticCraft::new);
+    public static final GroovyContainer<PrimalTech> PRIMAL_TECH = new InternalModContainer<>("primal_tech", "Primal Tech", PrimalTech::new, "primaltech");
     public static final GroovyContainer<ProdigyTech> PRODIGY_TECH = new InternalModContainer<>("prodigytech", "Prodigy Tech", ProdigyTech::new);
     public static final GroovyContainer<ProjectE> PROJECT_E = new InternalModContainer<>("projecte", "ProjectE", ProjectE::new);
     public static final GroovyContainer<PyroTech> PYROTECH = new InternalModContainer<>("pyrotech", "Pyrotech", PyroTech::new);
