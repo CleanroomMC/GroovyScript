@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: inspirations
 
-println 'mod \'inspirations\' detected, running script'
+log.info 'mod \'inspirations\' detected, running script'
 
 // Anvil Smashing:
 // Converts a Block or IBlockState into an IBlockState when an anvil falls on top of it (from any height).

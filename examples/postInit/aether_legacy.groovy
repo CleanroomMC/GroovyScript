@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: aether_legacy
 
-println 'mod \'aether_legacy\' detected, running script'
+log.info 'mod \'aether_legacy\' detected, running script'
 
 // Accessory:
 // The Aether Accessory system.

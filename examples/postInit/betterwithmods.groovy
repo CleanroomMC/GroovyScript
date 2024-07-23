@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: betterwithmods
 
-println 'mod \'betterwithmods\' detected, running script'
+log.info 'mod \'betterwithmods\' detected, running script'
 
 // Anvil Crafting:
 // Similar to a normal crafting table, but 4x4 instead.

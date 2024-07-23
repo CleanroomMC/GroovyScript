@@ -112,8 +112,8 @@ public class Registry {
     }
 
     public String getDescription() {
-        return Documentation.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description())
-                .replace("\"", "\\\"");
+        return Documentation.ensurePeriod(Documentation.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description())
+                .replace("\"", "\\\""));
     }
 
     public String exampleBlock() {
@@ -170,7 +170,7 @@ public class Registry {
                                .title(note.title())
                                .hasTitle(note.hasTitle())
                                .format(note.format())
-                               .note(Documentation.translate(note.value()))
+                               .note(Documentation.ensurePeriod(Documentation.translate(note.value())))
                                .generate());
             out.append("\n\n");
         }

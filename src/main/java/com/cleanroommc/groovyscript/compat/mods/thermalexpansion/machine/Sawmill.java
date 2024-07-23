@@ -43,12 +43,12 @@ public class Sawmill extends VirtualizedRegistry<SawmillRecipe> {
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("1000, item('minecraft:obsidian') * 4, item('minecraft:gold_ingot'), item('minecraft:diamond'), 25"))
-    public SawmillRecipe add(int energy, IIngredient input, ItemStack outputItem, ItemStack secondayOutput, int chance) {
+    public SawmillRecipe add(int energy, IIngredient input, ItemStack outputItem, ItemStack secondaryOutput, int chance) {
         return recipeBuilder()
                 .energy(energy)
                 .chance(chance)
                 .input(input)
-                .output(outputItem, secondayOutput)
+                .output(outputItem, secondaryOutput)
                 .register();
     }
 

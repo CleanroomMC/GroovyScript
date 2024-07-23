@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: projecte
 
-println 'mod \'projecte\' detected, running script'
+log.info 'mod \'projecte\' detected, running script'
 
 // Entity Randomizer:
 // Converts an entity on the list into a random other entity on the list when a projectile fired from the Philosopher's

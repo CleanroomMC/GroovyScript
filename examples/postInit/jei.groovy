@@ -4,10 +4,10 @@
 
 import mezz.jei.api.ingredients.VanillaTypes
 
-println 'mod \'jei\' detected, running script'
+log.info 'mod \'jei\' detected, running script'
 
 // Category Catalysts:
-// Modify the items shown on the left of JEI Categories which indicate where the recipe takes place
+// Modify the items shown on the left of JEI Categories which indicate where the recipe takes place.
 
 mods.jei.catalyst.remove('minecraft.smelting', item('minecraft:furnace'))
 // mods.jei.catalyst.removeByType('minecraft.anvil')

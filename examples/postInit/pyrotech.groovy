@@ -2,10 +2,10 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: pyrotech
 
-println 'mod \'pyrotech\' detected, running script'
+log.info 'mod \'pyrotech\' detected, running script'
 
 // Anvil:
-// When using hammer or pickaxe it can convert items
+// When using hammer or pickaxe it can convert items.
 
 mods.pyrotech.anvil.removeByOutput(item('minecraft:stone_slab', 3))
 // mods.pyrotech.anvil.removeAll()
@@ -41,7 +41,7 @@ mods.pyrotech.anvil.recipeBuilder()
 mods.pyrotech.anvil.add('iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9, 'granite', 'hammer')
 
 // Barrel:
-// Over time converts a fluid with four items into a new fluid
+// Over time converts a fluid with four items into a new fluid.
 
 mods.pyrotech.barrel.removeByOutput(fluid('freckleberry_wine') * 1000)
 // mods.pyrotech.barrel.removeAll()
@@ -58,7 +58,7 @@ mods.pyrotech.barrel.recipeBuilder()
 mods.pyrotech.barrel.add('iron_dirt_water_to_lava', ore('ingotIron'), ore('ingotIron'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000)
 
 // Campfire:
-// Can cook food
+// Can cook food.
 
 mods.pyrotech.campfire.removeByInput(item('minecraft:porkchop'))
 mods.pyrotech.campfire.removeByOutput(item('minecraft:cooked_porkchop'))
@@ -75,7 +75,7 @@ mods.pyrotech.campfire.recipeBuilder()
 mods.pyrotech.campfire.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1000)
 
 // Chopping Block:
-// When using a axe it can convert items
+// When using a axe it can convert items.
 
 mods.pyrotech.chopping_block.removeByInput(item('minecraft:log2'))
 mods.pyrotech.chopping_block.removeByOutput(item('minecraft:planks', 4))
@@ -93,7 +93,7 @@ mods.pyrotech.chopping_block.recipeBuilder()
 
 
 // Compacting Bin:
-// When using a shovel it can convert items
+// When using a shovel it can convert items.
 
 mods.pyrotech.compacting_bin.removeByInput(item('minecraft:snowball'))
 mods.pyrotech.compacting_bin.removeByOutput(item('minecraft:bone_block'))
@@ -110,7 +110,7 @@ mods.pyrotech.compacting_bin.recipeBuilder()
 mods.pyrotech.compacting_bin.add('iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9)
 
 // Compost Bin:
-// Can convert multiple items into a new one when its full
+// Can convert multiple items into a new one when its full.
 
 mods.pyrotech.compost_bin.removeByInput(item('minecraft:golden_carrot'))
 // mods.pyrotech.compost_bin.removeAll()
@@ -126,7 +126,7 @@ mods.pyrotech.compost_bin.recipeBuilder()
 mods.pyrotech.compost_bin.add('iron_to_clay2', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 2)
 
 // Crude Drying Rack:
-// Converts an item over time into a new one
+// Converts an item over time into a new one.
 
 mods.pyrotech.crude_drying_rack.removeByInput(item('minecraft:wheat'))
 // mods.pyrotech.crude_drying_rack.removeAll()
@@ -142,7 +142,7 @@ mods.pyrotech.crude_drying_rack.recipeBuilder()
 mods.pyrotech.crude_drying_rack.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200)
 
 // Drying Rack:
-// Converts an item over time into a new one
+// Converts an item over time into a new one.
 
 mods.pyrotech.drying_rack.removeByInput(item('minecraft:wheat'))
 // mods.pyrotech.drying_rack.removeAll()
@@ -158,7 +158,7 @@ mods.pyrotech.drying_rack.recipeBuilder()
 mods.pyrotech.drying_rack.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200)
 
 // Kiln:
-// Converts an item into a new one by burning it. Has a chance to fail
+// Converts an item into a new one by burning it. Has a chance to fail.
 
 mods.pyrotech.kiln.removeByOutput(item('pyrotech:bucket_clay'))
 // mods.pyrotech.kiln.removeAll()
@@ -176,7 +176,7 @@ mods.pyrotech.kiln.recipeBuilder()
 mods.pyrotech.kiln.add('clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')])
 
 // Soaking Pot:
-// Converts an item into a new one by soaking it in a liquid. Can require a campfire
+// Converts an item into a new one by soaking it in a liquid. Can require a campfire.
 
 mods.pyrotech.soaking_pot.removeByOutput(item('pyrotech:material', 54))
 // mods.pyrotech.soaking_pot.removeAll()
@@ -194,7 +194,7 @@ mods.pyrotech.soaking_pot.recipeBuilder()
 mods.pyrotech.soaking_pot.add('dirt_to_apple', item('minecraft:dirt'), fluid('water'), item('minecraft:apple'), 1200)
 
 // Tanning Rack:
-// Converts an item over time into a new one
+// Converts an item over time into a new one.
 
 mods.pyrotech.tanning_rack.removeByInput(item('minecraft:wheat'))
 // mods.pyrotech.tanning_rack.removeAll()

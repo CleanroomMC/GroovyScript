@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: evilcraft
 
-println 'mod \'evilcraft\' detected, running script'
+log.info 'mod \'evilcraft\' detected, running script'
 
 // Blood Infuser:
 // Consumes an item, some fluid, and requires a given tier of Promise of Tenacity to produce the output and some experience

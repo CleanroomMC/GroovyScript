@@ -5,7 +5,7 @@
 import com.rwtema.extrautils2.power.IWorldPowerMultiplier
 import com.rwtema.extrautils2.tile.TilePassiveGenerator
 
-println 'mod \'extrautils2\' detected, running script'
+log.info 'mod \'extrautils2\' detected, running script'
 
 // Crusher:
 // Converts an input itemstack into an output itemstack with a chance of an additional itemstack output, consuming energy.
@@ -98,7 +98,7 @@ mods.extrautils2.generator.recipeBuilder()
 
 
 // Grid Power Generators:
-// Passively produces Grid Power into the Owner's GP network
+// Passively produces Grid Power into the Owner's GP network.
 
 mods.extrautils2.grid_power_passive_generator.setBasePower(resource('generators:creative'), 5f)
 mods.extrautils2.grid_power_passive_generator.setBasePower(resource('generators:player_wind_up'), 100f)

@@ -188,16 +188,16 @@ groovyscript.wiki.aether_legacy.accessory.accessoryType.value=Sets the type of a
 groovyscript.wiki.aether_legacy.enchanter.title=Enchanter
 groovyscript.wiki.aether_legacy.enchanter.description=Enchanting is a mechanic used to create new items, as well as repair tools, armor, and weapons, using the Altar block.
 groovyscript.wiki.aether_legacy.enchanter.add=Adds an Enchanting recipe in the format `input`, `output`, `time`.
-groovyscript.wiki.aether_legacy.enchanter.time.value=Sets the time the recipe takes to compelte
+groovyscript.wiki.aether_legacy.enchanter.time.value=Sets the time the recipe takes to complete
 
 groovyscript.wiki.aether_legacy.enchanter_fuel.title=Enchanter Fuel
-groovyscript.wiki.aether_legacy.enchanter_fuel.description=By default, the Enchantar (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
+groovyscript.wiki.aether_legacy.enchanter_fuel.description=By default, the Enchanter (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
 groovyscript.wiki.aether_legacy.enchanter_fuel.add=Adds an Enchanting fuel in the format `item`, `timeGiven`.
 
 groovyscript.wiki.aether_legacy.freezer.title=Freezer
 groovyscript.wiki.aether_legacy.freezer.description=The Freezer is used to turn certain items into frozen versions.
 groovyscript.wiki.aether_legacy.freezer.add=Adds a Freezer recipe in the format `input`, `output`, `time`.
-groovyscript.wiki.aether_legacy.freezer.time.value=Sets the time the recipe takes to compelte
+groovyscript.wiki.aether_legacy.freezer.time.value=Sets the time the recipe takes to complete
 
 groovyscript.wiki.aether_legacy.freezer_fuel.title=Freezer
 groovyscript.wiki.aether_legacy.freezer_fuel.description= By default, the Freezer takes Icestone as fuel. Using GroovyScript, custom fuels can be added.
@@ -663,7 +663,7 @@ groovyscript.wiki.botania.pure_daisy.input.required=either an IBlockState or Str
 groovyscript.wiki.botania.pure_daisy.time.value=Sets the duration the recipe takes to complete
 
 groovyscript.wiki.botania.rune_altar.title=Rune Altar
-groovyscript.wiki.botania.rune_altar.description=Converts a items inputs into an item ouput at the cost of mana when a Livingrock item is thrown atop the altar and right clicked with a Wand of the Forest.
+groovyscript.wiki.botania.rune_altar.description=Converts a items inputs into an item output at the cost of mana when a Livingrock item is thrown atop the altar and right clicked with a Wand of the Forest.
 groovyscript.wiki.botania.rune_altar.add=Adds recipes in the format `output`, `mana`, `inputs`
 groovyscript.wiki.botania.rune_altar.input.required=that `input` IIngredients cannot contain Botania's Livingrock Item
 groovyscript.wiki.botania.rune_altar.mana.value=Sets the mana cost of processing the recipe
@@ -1004,7 +1004,7 @@ groovyscript.wiki.extrautils2.resonator.description=Converts and input itemstack
 groovyscript.wiki.extrautils2.resonator.energy.value=Sets the total Grid Power required for the recipe in 1/100ths of a single GP (int 1000 = 10 GP)
 groovyscript.wiki.extrautils2.resonator.ownerTag.value=Sets if the output itemstack should gain an NBT tag attaching the player who placed the Resonator to the itemstack. Notably used for Red Coal, to determine the bonus burn time from Grid Power
 groovyscript.wiki.extrautils2.resonator.requirementText.value=Sets the text in JEI displaying an additional requirement for the recipe to run
-groovyscript.wiki.extrautils2.resonator.shouldProgress.value=Sets the function used to determine if the recipe should run, with the Closure taking 3 paramenters, `TileEntity resonator`, `int frequency`, `ItemStack input` and returning a `boolean`
+groovyscript.wiki.extrautils2.resonator.shouldProgress.value=Sets the function used to determine if the recipe should run, with the Closure taking 3 parameters, `TileEntity resonator`, `int frequency`, `ItemStack input` and returning a `boolean`
 
 # Immersive Engineering
 groovyscript.wiki.immersiveengineering.alloy_kiln.title=Alloy Kiln
@@ -1198,7 +1198,7 @@ groovyscript.wiki.inspirations.cauldron.dye.value=Sets the dye color fluid requi
 groovyscript.wiki.inspirations.cauldron.type.value=Sets what type of recipe is being processed
 groovyscript.wiki.inspirations.cauldron.sound.value=Sets the sound played when the recipe is crafted
 groovyscript.wiki.inspirations.cauldron.levels.value=Sets the level of fluid in the cauldron, where each bottle is a single level
-groovyscript.wiki.inspirations.cauldron.boiling.value=Sets if the cauldon must be boiling, requiring fire or another heat source beneath
+groovyscript.wiki.inspirations.cauldron.boiling.value=Sets if the cauldron must be boiling, requiring fire or another heat source beneath
 groovyscript.wiki.inspirations.cauldron.inputPotion.value=Sets the input potion type
 groovyscript.wiki.inspirations.cauldron.outputPotion.value=Sets the output potion type
 groovyscript.wiki.inspirations.cauldron.removeByFluidInput=Removes all recipes with the given fluid input
@@ -1326,7 +1326,7 @@ groovyscript.wiki.mekanism.injection_chamber.annotation=Always uses 200 gas
 groovyscript.wiki.mekanism.injection_chamber.add=Adds recipes in the format `ingredient`, `gasInput`, `output`
 
 groovyscript.wiki.mekanism.metallurgic_infuser.title=Metallurgic Infuser
-groovyscript.wiki.mekanism.metallurgic_infuser.description=Converts and input itemstack and a varible amount of an infusion type into an output itemstack.
+groovyscript.wiki.mekanism.metallurgic_infuser.description=Converts and input itemstack and a variable amount of an infusion type into an output itemstack.
 groovyscript.wiki.mekanism.metallurgic_infuser.add0=Adds recipes in the format `ingredient`, `infuseType`, `infuseAmount`, `output`
 groovyscript.wiki.mekanism.metallurgic_infuser.add1=Adds recipes in the format `ingredient`, `infuseType`, `infuseAmount`, `output`
 groovyscript.wiki.mekanism.metallurgic_infuser.infuse.value=Sets the Infusion type the recipe uses
@@ -1627,7 +1627,7 @@ groovyscript.wiki.projecte.entity_randomizer.streamMobs=Iterates through every e
 groovyscript.wiki.projecte.entity_randomizer.streamPeacefuls=Iterates through every entry in the peacefuls list
 
 groovyscript.wiki.projecte.transmutation.title=World Transmutation
-groovyscript.wiki.projecte.transmutation.description=Converts an input blockstate into an output blockstate when right-clicked with by a Philosopher's Stone, with the abity to be converted into a different output blockstate when holding shift.
+groovyscript.wiki.projecte.transmutation.description=Converts an input blockstate into an output blockstate when right-clicked with by a Philosopher's Stone, with the ability to be converted into a different output blockstate when holding shift.
 groovyscript.wiki.projecte.transmutation.input.value=Sets the input blockstate
 groovyscript.wiki.projecte.transmutation.output.value=Sets the normal output blockstate
 groovyscript.wiki.projecte.transmutation.altOutput.value=Sets the shift output blockstate
@@ -1730,7 +1730,7 @@ groovyscript.wiki.roots.predicates.above_or_below.required=that only at most one
 groovyscript.wiki.roots.predicates.properties.required=that each property must be a valid property of the provided `blockstate`
 
 groovyscript.wiki.roots.pyre.title=Pyre
-groovyscript.wiki.roots.pyre.description=Converts 5 input items into the ouput after a period of time when the Pyre is lit on fire.
+groovyscript.wiki.roots.pyre.description=Converts 5 input items into the output after a period of time when the Pyre is lit on fire.
 groovyscript.wiki.roots.pyre.burnTime.value=Sets the time in ticks for the recipe to process
 groovyscript.wiki.roots.pyre.xp.value=Sets the XP given when the recipe finishes in levels
 groovyscript.wiki.roots.pyre.removeByName=Removes the Pyre recipe with the given name
@@ -2119,7 +2119,7 @@ groovyscript.wiki.thermalexpansion.refinery_potion.chance.value=Sets the chance 
 groovyscript.wiki.thermalexpansion.sawmill.title=Sawmill
 groovyscript.wiki.thermalexpansion.sawmill.description=Converts an input itemstack into an output itemstack and optional output itemstack with a chance, costing power and taking time based on the power cost.
 groovyscript.wiki.thermalexpansion.sawmill.note0=The valid items and fluid output while the Resin Funnel Augment is installed is controlled by the Arboreal Extractor device.
-groovyscript.wiki.thermalexpansion.sawmill.add=Adds recipes in the format `energy`, `input`, `outputItem`, `secondayOutput`, `chance`
+groovyscript.wiki.thermalexpansion.sawmill.add=Adds recipes in the format `energy`, `input`, `outputItem`, `secondaryOutput`, `chance`
 groovyscript.wiki.thermalexpansion.sawmill.chance.value=Sets the chance the second output itemstack is created
 
 groovyscript.wiki.thermalexpansion.smelter.title=Induction Smelter
@@ -2192,7 +2192,7 @@ groovyscript.wiki.woot.mob_config.removeByEntity=Removes all configuration for t
 
 groovyscript.wiki.woot.policy.title=Policy
 groovyscript.wiki.woot.policy.description=Controls what entities can be farmed for what items via an entity blacklist, mod blacklist, item output blacklist, item output mod blacklist, and a mob whitelist.
-groovyscript.wiki.woot.policy.note=If the whitelist contains any entities, any entities not in the whitelist are banned (rendering EntityModBlacklist and EntityBlacklist superflous). GenerateOnlyList contains all entities which cannot be captured via shard, meaning the controller would need to be obtained a different way.
+groovyscript.wiki.woot.policy.note=If the whitelist contains any entities, any entities not in the whitelist are banned (rendering EntityModBlacklist and EntityBlacklist superfluous). GenerateOnlyList contains all entities which cannot be captured via shard, meaning the controller would need to be obtained a different way.
 groovyscript.wiki.woot.policy.addToEntityBlacklist=Prevents the given entity from being captured and spawned
 groovyscript.wiki.woot.policy.addToEntityModBlacklist=Prevents entities from the given mod from being captured and spawned
 groovyscript.wiki.woot.policy.addToEntityWhitelist=Prevents all entities not on the list from being spawned, overriding EntityBlacklist and EntityModBlacklist

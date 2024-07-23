@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: enderio
 
-println 'mod \'enderio\' detected, running script'
+log.info 'mod \'enderio\' detected, running script'
 
 // Alloy Smelter:
 // Convert up to 3 itemstack inputs into an itemstack output, using energy and giving XP. Can be restricted to require a

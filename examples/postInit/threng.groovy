@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: threng
 
-println 'mod \'threng\' detected, running script'
+log.info 'mod \'threng\' detected, running script'
 
 // Fluix Aggregation:
 // Converts up to 3 input itemstacks into an output itemstack.
