@@ -153,9 +153,12 @@ groovyscript.wiki.advancedrocketry.admonition.output_slots=The recipes performed
 groovyscript.wiki.advancedrocketry.admonition.hatch_count_6=The Precision Assembler can support up to 6 input and output hatches. Each hatch can store either 1 type of fluid or up to 4 types of input or output items. Groovyscript will not add the recipe if it requires more than 6 hatches (i.e., has 6 fluid inputs and an output).
 groovyscript.wiki.advancedrocketry.admonition.hatch_count_11=The Electric Arc Furnace can support up to 11 input and output hatches. Each hatch can store either 1 type of fluid or up to 4 types of input or output items. Groovyscript will not add the recipe if it requires more than 11 hatches (i.e., has 11 fluid inputs and an output).
 groovyscript.wiki.advancedrocketry.output.value=Sets the item outputs of the recipe. The version with two arguments can be used to add weighted outputs
-groovyscript.wiki.advancedrocketry.time.value=Sets the time needed to perform the recipe, in ticks
-groovyscript.wiki.advancedrocketry.power.value=Sets the power consumed by the recipe, in RF/t
+groovyscript.wiki.advancedrocketry.time.value=Sets the time needed to perform the recipe in ticks
+groovyscript.wiki.advancedrocketry.power.value=Sets the power consumed by the recipe in RF/t
 groovyscript.wiki.advancedrocketry.outputSize.value=Sets the maximum amount of outputs produced by each recipe
+groovyscript.wiki.advancedrocketry.input.required=either `input` or `fluidInput` to be non-null
+groovyscript.wiki.advancedrocketry.output.required=either `output` or `fluidOutput` to be non-null
+groovyscript.wiki.advancedrocketry.input.block=`input` to be a block
 
 groovyscript.wiki.advancedrocketry.centrifuge.title=Centrifuge
 groovyscript.wiki.advancedrocketry.centrifuge.description=Converts an input fluid into up to 12 output items and up to 4 output fluids, consuming RF

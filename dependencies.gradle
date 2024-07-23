@@ -29,11 +29,11 @@
 final def mod_dependencies = [
         'actually-additions-228404:3117927'                   : [project.debug_actually_additions],
         'advancedmortars-283777:2780626'                      : [project.debug_adv_mortars],
-        'advanced-rocketry-236542:4671856'                    : [project.debug_adv_rocketry],
-        'advanced-rocketry-2-1024225:5486514'                 : [project.debug_adv_rocketry_2],
+        'advanced-rocketry-236542:4671856'                    : [project.debug_advanced_rocketry],
+        'advanced-rocketry-2-1024225:5486514'                 : [project.debug_advanced_rocketry_2],
         // libAR is equivalent to libvulpes
-        'libvulpes-236541:3801015'                            : [project.debug_adv_rocketry],
-        'library-for-ar-reworked-1038780:5446535'             : [project.debug_adv_rocketry_2],
+        'libvulpes-236541:3801015'                            : [project.debug_advanced_rocketry],
+        'library-for-ar-reworked-1038780:5446535'             : [project.debug_advanced_rocketry_2],
         'aether-255308:3280119'                               : [project.debug_aether],
         'alchemistry-293425:3186612'                          : [project.debug_alchemistry],
         'alchemylib-293426:2761706'                           : [project.debug_alchemistry],

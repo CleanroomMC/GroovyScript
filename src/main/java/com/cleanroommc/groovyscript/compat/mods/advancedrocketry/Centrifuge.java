@@ -13,9 +13,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 })
 public class Centrifuge extends BaseMultiblockRegistry {
     @RecipeBuilderDescription(
-            example = @Example(".fluidInput(fluid('lava') * 500)" +
-                               ".output(item('minecraft:slime_ball'), 0.1f).output(item('minecraft:stone'), 0.9f)" +
-                               ".fluidOutput(fluid('enrichedlava') * 500).power(50).time(100).outputSize(1)"))
+            example = @Example(".fluidInput(fluid('lava') * 500).output(item('minecraft:slime_ball'), 0.1f).output(item('minecraft:stone'), 0.9f).fluidOutput(fluid('enrichedlava') * 500).power(50).time(100).outputSize(1)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

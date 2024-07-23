@@ -30,7 +30,7 @@ public class Electrolyser extends BaseMultiblockRegistry {
         return super.removeByInput(input);
     }
 
-    @Property(property = "fluidInput", valid = @Comp(type = Comp.Type.EQ, value = "1"))
+    @Property(property = "fluidInput", valid = @Comp("1"))
     @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "2"), @Comp(type = Comp.Type.GTE, value = "1")})
     public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {
 

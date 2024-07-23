@@ -9,13 +9,6 @@ import java.util.*;
 
 public abstract class BaseMultiblockRegistry extends BaseRegistry {
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
-    public void removeAll() {
-        List<IRecipe> recipes = getRecipeList();
-        recipes.forEach(this::addBackup);
-        recipes.clear();
-    }
-
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IRecipe> streamRecipes() {
         List<IRecipe> recipes = getRecipeList();
@@ -23,17 +16,10 @@ public abstract class BaseMultiblockRegistry extends BaseRegistry {
             .setRemover(this::removeRecipe);
     }
 
+    @Property(property = "power", valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.power.value", hierarchy = 5)
+    @Property(property = "time", valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.time.value", hierarchy = 5)
+    @Property(property = "outputSize", valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.outputSize.value", hierarchy = 5)
     public static abstract class RecipeBuilder extends BaseRegistry.RecipeBuilder {
-
-        // GrS cannot recognize these annotations on the builder class itself, so we have to redefine the fields
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.power.value")
-        protected int power = 0;
-
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.time.value")
-        protected int time = 0;
-
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.outputSize.value")
-        protected int outputSize = 0;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {

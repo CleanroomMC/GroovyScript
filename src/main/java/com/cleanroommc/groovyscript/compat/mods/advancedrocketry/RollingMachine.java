@@ -30,8 +30,8 @@ public class RollingMachine extends BaseMultiblockRegistry {
         return super.removeByInput(input);
     }
 
-    @Property(property = "input", valid = @Comp(type = Comp.Type.LTE, value = "4"))
-    @Property(property = "fluidInput", valid = @Comp(type = Comp.Type.LTE, value = "1"))
+    @Property(property = "input", valid = @Comp(type = Comp.Type.LTE, value = "4"), requirement = "groovyscript.wiki.advancedrocketry.input.required")
+    @Property(property = "fluidInput", valid = @Comp(type = Comp.Type.LTE, value = "1"), requirement = "groovyscript.wiki.advancedrocketry.input.required")
     @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "4"), @Comp(type = Comp.Type.GTE, value = "1")},
               value = "groovyscript.wiki.advancedrocketry.output.value")
     public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {

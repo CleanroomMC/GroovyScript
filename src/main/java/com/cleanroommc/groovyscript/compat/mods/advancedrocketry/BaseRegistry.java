@@ -30,8 +30,8 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
         if (recipes == null) {
             recipes = new LinkedList<>();
             // NOTE: this cast is completely invalid but Advanced Rocketry's code is pepega
-            // https://github.com/Advanced-Rocketry/libVulpes/blob/1.12/src/main/java/zmaster587/libVulpes/recipe/RecipesMachine.java#L223
-            // https://github.com/Advanced-Rocketry/AdvancedRocketry/blob/1.12/src/main/java/zmaster587/advancedRocketry/block/BlockSmallPlatePress.java#L139
+            // @see zmaster587.libVulpes.recipe.RecipesMachine#recipeList
+            // @see zmaster587.advancedRocketry.block.BlockSmallPlatePress#getRecipe
             registry.recipeList.put((Class<? extends TileMultiblockMachine>) clazz, recipes);
         }
         return recipes;
@@ -121,11 +121,14 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
                 .setRemover(this::removeRecipe);
     }
 
-    public static abstract class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
+    public abstract static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
         // still have to override the Validate method + add getRegistry method
 
+        @Property(value = "groovyscript.wiki.advancedrocketry.power.value", needsOverride = true)
         protected int power = 0;
+        @Property(value = "groovyscript.wiki.advancedrocketry.time.value", needsOverride = true)
         protected int time = 0;
+        @Property(value = "groovyscript.wiki.advancedrocketry.outputSize.value", needsOverride = true)
         protected int outputSize = 0;
 
         protected final List<Float> outputChances = new ArrayList<>();
@@ -137,6 +140,7 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
             return output(output, 0.0f);
         }
 
+        @RecipeBuilderMethodDescription(field = {"output", "outputChances"})
         protected RecipeBuilder output(ItemStack output, float chance) {
             this.output.add(output);
             this.outputChances.add(chance);

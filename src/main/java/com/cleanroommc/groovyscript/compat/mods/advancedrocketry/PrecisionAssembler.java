@@ -36,10 +36,10 @@ public class PrecisionAssembler extends BaseMultiblockRegistry {
         return super.removeByInput(input);
     }
 
-    @Property(property = "input")
-    @Property(property = "fluidInput")
-    @Property(property = "output", value = "groovyscript.wiki.advancedrocketry.output.value")
-    @Property(property = "fluidOutput")
+    @Property(property = "input", requirement = "groovyscript.wiki.advancedrocketry.input.required")
+    @Property(property = "fluidInput", requirement = "groovyscript.wiki.advancedrocketry.input.required")
+    @Property(property = "output", value = "groovyscript.wiki.advancedrocketry.output.value", requirement = "groovyscript.wiki.advancedrocketry.output.required")
+    @Property(property = "fluidOutput", requirement = "groovyscript.wiki.advancedrocketry.output.required")
     public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {
 
         @Override
