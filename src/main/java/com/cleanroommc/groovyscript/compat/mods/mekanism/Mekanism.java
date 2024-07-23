@@ -3,14 +3,16 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.gas.GasStack;
+import mekanism.api.infuse.InfuseObject;
 import mekanism.api.infuse.InfuseRegistry;
 import mekanism.api.infuse.InfuseType;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +40,37 @@ public class Mekanism extends GroovyPropertyContainer {
     public final ThermalEvaporationPlant thermalEvaporationPlant = new ThermalEvaporationPlant();
     public final Washer washer = new Washer();
 
+
+    @Optional.Method(modid = "mekanism")
+    public static String asGroovyCode(Gas gasStack, boolean colored) {
+        return GroovyScriptCodeConverter.formatGenericHandler("gas", gasStack.getName(), colored);
+    }
+
+    @Optional.Method(modid = "mekanism")
+    public static boolean isGas(IIngredient ingredient) {
+        return Loader.isModLoaded("mekanism") && ingredient instanceof GasStack;
+    }
+
+    @Optional.Method(modid = "mekanism")
+    public static boolean isEmpty(@Nullable GasStack gasStack) {
+        return gasStack == null || gasStack.getGas() == null || gasStack.amount <= 0;
+    }
+
+    @Optional.Method(modid = "mekanism")
+    public static String asGroovyCode(GasStack gasStack, boolean colored) {
+        return asGroovyCode(gasStack.getGas(), colored) + GroovyScriptCodeConverter.formatMultiple(gasStack.amount, colored);
+    }
+
+    @Optional.Method(modid = "mekanism")
+    public static String asGroovyCode(InfuseType infuseType, boolean colored) {
+        return GroovyScriptCodeConverter.formatGenericHandler("infusionType", infuseType.unlocalizedName, colored);
+    }
+
+    @Optional.Method(modid = "mekanism")
+    public static String asGroovyCode(InfuseObject infuseObject, boolean colored) {
+        return asGroovyCode(infuseObject.type, colored) + GroovyScriptCodeConverter.formatMultiple(infuseObject.stored, colored);
+    }
+
     @Override
     public void initialize(GroovyContainer<?> container) {
         container.objectMapperBuilder("gas", GasStack.class)
@@ -53,29 +86,9 @@ public class Mekanism extends GroovyPropertyContainer {
                 .completerOfNames(InfuseRegistry.getInfuseMap()::keySet)
                 .docOfType("infusion type")
                 .register();
+
+        InfoParserRegistry.addInfoParser(InfoParserGas.instance);
+        InfoParserRegistry.addInfoParser(InfoParserInfusion.instance);
     }
 
-    @Optional.Method(modid = "mekanism")
-    public static boolean isGas(IIngredient ingredient) {
-        return Loader.isModLoaded("mekanism") && ingredient instanceof GasStack;
-    }
-
-    @Optional.Method(modid = "mekanism")
-    public static boolean isEmpty(@Nullable GasStack gasStack) {
-        return gasStack == null || gasStack.getGas() == null || gasStack.amount <= 0;
-    }
-
-    @Optional.Method(modid = "mekanism")
-    public static String asGroovyCode(Gas gasStack, boolean colored) {
-        StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.DARK_GREEN);
-        builder.append("gas");
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("('");
-        if (colored) builder.append(TextFormatting.AQUA);
-        builder.append(gasStack.getName());
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("')");
-        return builder.toString();
-    }
 }

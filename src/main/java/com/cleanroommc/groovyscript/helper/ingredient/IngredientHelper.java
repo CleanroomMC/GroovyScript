@@ -3,13 +3,11 @@ package com.cleanroommc.groovyscript.helper.ingredient;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.Closure;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 
 public class IngredientHelper {
 
@@ -242,101 +239,34 @@ public class IngredientHelper {
         return fluid == null ? null : fluid.copy();
     }
 
+    @Deprecated
     public static String asGroovyCode(ItemStack itemStack, boolean colored) {
-        StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.DARK_GREEN);
-        builder.append("item");
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("('");
-        if (colored) builder.append(TextFormatting.AQUA);
-        builder.append(itemStack.getItem().getRegistryName());
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("'");
-        if (itemStack.getMetadata() != 0) {
-            builder.append(", ");
-            if (colored) builder.append(TextFormatting.GOLD);
-            builder.append(itemStack.getMetadata());
-            if (colored) builder.append(TextFormatting.GRAY);
-        }
-        builder.append(")");
-        return builder.toString();
+        return GroovyScriptCodeConverter.asGroovyCode(itemStack, colored);
     }
 
+    @Deprecated
     public static String asGroovyCode(ItemStack itemStack, boolean colored, boolean prettyNbt) {
-        StringBuilder builder = new StringBuilder().append(asGroovyCode(itemStack, colored));
-        if (itemStack.hasTagCompound()) {
-            builder.append(".withNbt(");
-            builder.append(NbtHelper.toGroovyCode(itemStack.getTagCompound(), prettyNbt, colored));
-            if (colored) builder.append(TextFormatting.GRAY);
-            builder.append(")");
-        }
-        return builder.toString();
+        return GroovyScriptCodeConverter.asGroovyCode(itemStack, colored, prettyNbt);
     }
 
+    @Deprecated
     public static String asGroovyCode(FluidStack fluidStack, boolean colored) {
-        StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.DARK_GREEN);
-        builder.append("fluid");
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("('");
-        if (colored) builder.append(TextFormatting.AQUA);
-        builder.append(fluidStack.getFluid().getName());
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("')");
-        return builder.toString();
+        return GroovyScriptCodeConverter.asGroovyCode(fluidStack, colored);
     }
 
+    @Deprecated
     public static String asGroovyCode(FluidStack fluidStack, boolean colored, boolean prettyNbt) {
-        StringBuilder builder = new StringBuilder().append(asGroovyCode(fluidStack, colored));
-        if (fluidStack.tag != null) {
-            builder.append(".withNbt(");
-            builder.append(NbtHelper.toGroovyCode(fluidStack.tag, prettyNbt, colored));
-            if (colored) builder.append(TextFormatting.GRAY);
-            builder.append(")");
-        }
-        return builder.toString();
+        return GroovyScriptCodeConverter.asGroovyCode(fluidStack, colored, prettyNbt);
     }
 
+    @Deprecated
     public static String asGroovyCode(String oreDict, boolean colored) {
-        StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.DARK_GREEN);
-        builder.append("ore");
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("('");
-        if (colored) builder.append(TextFormatting.AQUA);
-        builder.append(oreDict);
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("')");
-        return builder.toString();
+        return GroovyScriptCodeConverter.asGroovyCode(oreDict, colored);
     }
 
-    @SuppressWarnings("all")
+    @Deprecated
     public static String asGroovyCode(IBlockState state, boolean colored) {
-        StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.DARK_GREEN);
-        builder.append("blockstate");
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("('");
-        if (colored) builder.append(TextFormatting.AQUA);
-        builder.append(state.getBlock().getRegistryName());
-        if (colored) builder.append(TextFormatting.GRAY);
-        builder.append("'");
-        if (!state.getProperties().isEmpty()) {
-            for (Map.Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
-                IProperty property = entry.getKey();
-                if (colored) builder.append(TextFormatting.GRAY);
-                builder.append(", ").append("'");
-                if (colored) builder.append(TextFormatting.YELLOW);
-                builder.append(property.getName());
-                if (colored) builder.append(TextFormatting.GRAY);
-                builder.append("=");
-                if (colored) builder.append(TextFormatting.YELLOW);
-                builder.append(property.getName(entry.getValue()));
-                if (colored) builder.append(TextFormatting.GRAY);
-                builder.append("'");
-            }
-        }
-        builder.append(")");
-        return builder.toString();
+        return GroovyScriptCodeConverter.asGroovyCode(state, colored);
     }
+
 }

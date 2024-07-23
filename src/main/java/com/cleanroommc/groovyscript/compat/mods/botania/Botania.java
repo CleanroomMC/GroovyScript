@@ -1,8 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
 import com.cleanroommc.groovyscript.api.IObjectParser;
+import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconCategory;
 import vazkii.botania.api.lexicon.LexiconEntry;
@@ -22,6 +24,10 @@ public class Botania extends GroovyPropertyContainer {
     public final Knowledge knowledge = new Knowledge();
     public final Magnet magnet = new Magnet();
     public final Flowers flowers = new Flowers();
+
+    public static String asGroovyCode(vazkii.botania.api.brew.Brew entry, boolean colored) {
+        return GroovyScriptCodeConverter.formatGenericHandler("brew", entry.getKey(), colored);
+    }
 
     public Botania() {
         addProperty(lexicon.category);
@@ -51,5 +57,7 @@ public class Botania extends GroovyPropertyContainer {
                 .defaultValue(() -> BotaniaAPI.fallbackBrew)
                 .docOfType("brew")
                 .register();
+
+        InfoParserRegistry.addInfoParser(InfoParserBrew.instance);
     }
 }

@@ -2,8 +2,10 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 
 import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.mapper.ObjectMappers;
 import epicsquid.roots.api.Herb;
 import epicsquid.roots.init.HerbRegistry;
@@ -39,6 +41,18 @@ public class Roots extends GroovyPropertyContainer {
     public final SummonCreature summonCreature = new SummonCreature();
     public final Transmutation transmutation = new Transmutation();
 
+    public static String asGroovyCode(Herb entry, boolean colored) {
+        return GroovyScriptCodeConverter.formatGenericHandler("herb", entry.getName(), colored);
+    }
+
+    public static String asGroovyCode(SpellBase entry, boolean colored) {
+        return GroovyScriptCodeConverter.formatGenericHandler("spell", entry.getName(), colored);
+    }
+
+    public static String asGroovyCode(Modifier entry, boolean colored) {
+        return GroovyScriptCodeConverter.formatResourceLocation("modifier", entry.getRegistryName(), colored);
+    }
+
     @Override
     public void initialize(GroovyContainer<?> container) {
         container.objectMapperBuilder("ritual", RitualBase.class)
@@ -67,6 +81,10 @@ public class Roots extends GroovyPropertyContainer {
                 .completerOfNamed(ModifierRegistry::getModifiers, v -> v.getRegistryName().toString())
                 .docOfType("modifier")
                 .register();
+
+        InfoParserRegistry.addInfoParser(InfoParserHerb.instance);
+        InfoParserRegistry.addInfoParser(InfoParserSpell.instance);
+        InfoParserRegistry.addInfoParser(InfoParserModifier.instance);
     }
 
     private static Result<SpellBase> getSpell(String s, Object... args) {

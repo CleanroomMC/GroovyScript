@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
+import com.cleanroommc.groovyscript.core.mixin.VillagerProfessionAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
@@ -24,6 +25,7 @@ import net.minecraft.potion.PotionType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -138,6 +140,11 @@ public class ObjectMapperManager {
                 .completer(ForgeRegistries.ENTITIES)
                 .docOfType("entity entry")
                 .register();
+        ObjectMapper.builder("dimension", DimensionType.class)
+                .parser(IObjectParser.wrapStringGetter(DimensionType::byName))
+                .completerOfNamed(() -> Arrays.asList(DimensionType.values()), DimensionType::getName)
+                .docOfType("dimension")
+                .register();
         ObjectMapper.builder("biome", Biome.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.BIOMES))
                 .completer(ForgeRegistries.BIOMES)
@@ -147,6 +154,22 @@ public class ObjectMapperManager {
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS))
                 .completer(ForgeRegistries.VILLAGER_PROFESSIONS)
                 .docOfType("villager profession")
+                .register();
+
+        final List<String> careerList = new ArrayList<>();
+        for (var profession : ForgeRegistries.VILLAGER_PROFESSIONS) {
+            if (profession != null) {
+                for (var career : ((VillagerProfessionAccessor) profession).getCareers()) {
+                    if (career != null) {
+                        careerList.add(career.getName());
+                    }
+                }
+            }
+        }
+        ObjectMapper.builder("career", VillagerRegistry.VillagerCareer.class)
+                .parser(ObjectMappers::parseVillagerCareer)
+                .completerOfNames(() -> careerList)
+                .docOfType("villager career")
                 .register();
         ObjectMapper.builder("creativeTab", CreativeTabs.class)
                 .parser(ObjectMappers::parseCreativeTab)
