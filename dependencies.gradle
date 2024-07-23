@@ -46,7 +46,7 @@ final def mod_dependencies = [
         'bwm-suite-246760:3289033'                            : [project.debug_better_with_mods],
         'blood-magic-224791:2822288'                          : [project.debug_blood_magic],
         'guide-api-228832:2645992'                            : [project.debug_blood_magic, project.debug_woot],
-        'botania-225643:3330934'                              : [project.debug_botania, project.debug_botanic_addition, project.debug_extra_botany],
+        'botania-225643:3330934'                              : [project.debug_botania, project.debug_botanic_additions, project.debug_extra_botany],
         'botanic-additions-310637:2939405'                    : [project.debug_botanic_additions],
         'hammer-lib-247401:5259462'                           : [project.debug_botanic_additions],
         'calculator-225104:2847174'                           : [project.debug_calculator],
