@@ -1,16 +1,20 @@
 package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
+import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import groovy.lang.*;
+import org.codehaus.groovy.reflection.CachedClass;
 import org.codehaus.groovy.runtime.metaclass.MetaClassRegistryImpl;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @Mixin(value = MetaClassImpl.class, remap = false)
@@ -27,6 +31,50 @@ public abstract class MetaClassImplMixin {
 
     @Shadow
     protected abstract MetaProperty getMetaProperty(String name, boolean useStatic);
+
+    @Shadow
+    protected abstract MetaMethod[] getNewMetaMethods(CachedClass c);
+
+    @Shadow
+    public abstract CachedClass getTheCachedClass();
+
+    @Mutable
+    @Shadow
+    @Final
+    private MetaMethod[] myNewMetaMethods;
+
+    @Mutable
+    @Shadow
+    @Final
+    private MetaMethod[] additionalMetaMethods;
+
+    @Inject(method = "<init>(Ljava/lang/Class;[Lgroovy/lang/MetaMethod;)V", at = @At("TAIL"))
+    public void removeBlacklistedAdditional(Class<?> theClass, MetaMethod[] add, CallbackInfo ci) {
+        if (additionalMetaMethods.length > 0) {
+            MetaMethod[] mms = new MetaMethod[additionalMetaMethods.length];
+            int i = 0;
+            for (MetaMethod mm : additionalMetaMethods) {
+                if (GroovySecurityManager.INSTANCE.isValid(mm)) {
+                    mms[i++] = mm;
+                }
+            }
+            if (i != additionalMetaMethods.length) {
+                additionalMetaMethods = Arrays.copyOf(mms, i);
+            }
+        }
+        if (myNewMetaMethods.length > 0) {
+            MetaMethod[] mms = new MetaMethod[myNewMetaMethods.length];
+            int i = 0;
+            for (MetaMethod mm : myNewMetaMethods) {
+                if (GroovySecurityManager.INSTANCE.isValid(mm)) {
+                    mms[i++] = mm;
+                }
+            }
+            if (i != myNewMetaMethods.length) {
+                myNewMetaMethods = Arrays.copyOf(mms, i);
+            }
+        }
+    }
 
     @Inject(method = "invokeMethod(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Object;ZZ)Ljava/lang/Object;", at = @At("HEAD"), cancellable = true)
     public void invokeMethod(Class<?> sender, Object object, String methodName, Object[] arguments, boolean isCallToSuper, boolean fromInsideClass, CallbackInfoReturnable<Object> cir) {

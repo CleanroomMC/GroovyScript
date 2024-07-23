@@ -391,6 +391,21 @@ groovyscript.wiki.avaritia.extreme_crafting.description=A normal crafting table,
 groovyscript.wiki.avaritia.extreme_crafting.addShaped=Adds a shaped crafting recipe in the format `output`, `input`
 groovyscript.wiki.avaritia.extreme_crafting.addShapeless=Adds a shapeless crafting recipe in the format `output`, `input`
 
+
+# Atum 2
+groovyscript.wiki.atum.kiln.title=Kiln
+groovyscript.wiki.atum.kiln.description=Smelts an input item into an output itemstack and giving experience similar to a Furnace, but can process up to 4 stacks simultaneously. Makes a copy of the vanilla furnace recipes, excluding entries on a blacklist.
+groovyscript.wiki.atum.kiln.experience.value=Sets the experience gained by taking the output item out of the Kiln
+
+groovyscript.wiki.atum.quern.title=Quern
+groovyscript.wiki.atum.quern.description=Converts an input item into an output itemstack after a given number of rotations, which are done via a player right clicking the Quern.
+groovyscript.wiki.atum.quern.rotations.value=Sets the amount of rotation required to convert the input into the output
+
+groovyscript.wiki.atum.spinning_wheel.title=Spinning Wheel
+groovyscript.wiki.atum.spinning_wheel.description=Converts three input items into an output itemstack after a given number of rotations for each input item, items are inserted by interacting with the top, rotations are increased by interacting with the top, and output items are extracted by interacting with the spool side.
+groovyscript.wiki.atum.spinning_wheel.rotations.value=Sets the amount of rotation required to convert the input into the output
+
+
 # Better With Mods
 groovyscript.wiki.betterwithmods.anvil_crafting.title=Anvil Crafting
 groovyscript.wiki.betterwithmods.anvil_crafting.description=Similar to a normal crafting table, but 4x4 instead.
@@ -706,6 +721,27 @@ groovyscript.wiki.compactmachines3.miniaturization.shape.value=Sets the structur
 groovyscript.wiki.compactmachines3.miniaturization.ticks.value=Sets the time in ticks the recipe takes to process before dropping the output item
 groovyscript.wiki.compactmachines3.miniaturization.keyMap.value=Sets the IBlockState, specific NBT, if the metadata is checked, and a representative itemstack for each `char` key
 groovyscript.wiki.compactmachines3.miniaturization.symmetrical.value=Sets if the recipe does not have to test all 4 rotations to determine if the multiblock is valid
+
+
+# Cyclic
+groovyscript.wiki.cyclicmagic.dehydrator.title=DeHydrator
+groovyscript.wiki.cyclicmagic.dehydrator.description=Converts an input itemstack into an output itemstack.
+groovyscript.wiki.cyclicmagic.dehydrator.time.value=Sets the amount of time in ticks the recipe takes to process
+groovyscript.wiki.cyclicmagic.dehydrator.water.value=Sets the amount of water produced by the DeHydrator on completing a recipe
+
+groovyscript.wiki.cyclicmagic.hydrator.title=Hydrator
+groovyscript.wiki.cyclicmagic.hydrator.description=Converts up to 4 input itemstacks and some amount of water into an output itemstack.
+groovyscript.wiki.cyclicmagic.hydrator.water.value=Sets the amount of water consumed by the Hydrator to complete a recipe
+
+groovyscript.wiki.cyclicmagic.melter.title=Melter
+groovyscript.wiki.cyclicmagic.melter.description=Converts up to 4 input itemstacks into an output itemstack, while being placed above lava.
+
+groovyscript.wiki.cyclicmagic.packager.title=Packager
+groovyscript.wiki.cyclicmagic.packager.description=Converts up to 6 input itemstacks into an output itemstack.
+
+groovyscript.wiki.cyclicmagic.solidifier.title=Solidifier
+groovyscript.wiki.cyclicmagic.solidifier.description=Converts up to 4 input itemstacks and an input fluidstack into an output itemstack.
+
 
 # Draconic Evolution
 groovyscript.wiki.draconicevolution.energy_core.title=Energy Core
@@ -1299,6 +1335,13 @@ groovyscript.wiki.mekanism.washer.description=Converts an input gasstack into an
 groovyscript.wiki.mekanism.washer.add=Adds recipes in the format `input`, `output`
 
 
+# Mystical Agriculture
+groovyscript.wiki.mysticalagriculture.reprocessor.title=Seed Reprocessor
+groovyscript.wiki.mysticalagriculture.reprocessor.description=Converts an input itemstack into an output itemstack, taking a set amount of time based on the machine and consuming fuel.
+#groovyscript.wiki.mysticalagriculture.reprocessor.exact.value=Sets an unknown boolean. Doesn't appear to have an effect
+#groovyscript.wiki.mysticalagriculture.reprocessor.amount.value=Sets the amount of items required to complete the recipe in the normal Reprocessor. Doesn't work
+
+
 # Nature's Aura
 groovyscript.wiki.naturesaura.altar.title=Natural Altar Infusion
 groovyscript.wiki.naturesaura.altar.description=Converts an input itemstack into an itemstack in a multiblock structure, with an optional catalyst block, costing aura and taking a configurable duration.
@@ -1329,6 +1372,28 @@ groovyscript.wiki.naturesaura.spawning.time.value=Sets the time the recipe takes
 groovyscript.wiki.naturesaura.spawning.entity.value=Sets the entity spawned
 groovyscript.wiki.naturesaura.spawning.removeByEntity=Removes all Altar of Birthing recipes that summon the given entity
 groovyscript.wiki.naturesaura.spawning.removeByName=Removes the Altar of Birthing recipe with the given name
+
+
+# Primal Tech
+groovyscript.wiki.primal_tech.clay_kiln.title=Clay Kiln
+groovyscript.wiki.primal_tech.clay_kiln.description=Converts an input item into an output itemstack after a given amount of time. Requires the block below to be Minecraft Fire or a Primal Tech Flame Grilled Wopper. Takes some time to heat up before beginning to smelt items.
+groovyscript.wiki.primal_tech.clay_kiln.add=Adds recipes in the format `output`, `input`, `cookTime`
+groovyscript.wiki.primal_tech.clay_kiln.cookTime.value=Sets the time in ticks for the recipe to complete after the Clay Kiln is heated up enough
+
+groovyscript.wiki.primal_tech.stone_anvil.title=Stone Anvil
+groovyscript.wiki.primal_tech.stone_anvil.description=Converts an input item into an output itemstack after being interacted with by a player using a Stone Mallet.
+groovyscript.wiki.primal_tech.stone_anvil.add=Adds recipes in the format `output`, `input`
+
+groovyscript.wiki.primal_tech.water_saw.title=Water Saw
+groovyscript.wiki.primal_tech.water_saw.description=Converts an input item into an output itemstack after a given amount of time. Requires the block below it to be a water source block, and the block below and behind it flowing water.
+groovyscript.wiki.primal_tech.water_saw.add=Adds recipes in the format `output`, `input`, `choppingTime`
+groovyscript.wiki.primal_tech.water_saw.choppingTime.value=Sets the time in ticks for the recipe to complete
+
+groovyscript.wiki.primal_tech.wooden_basin.title=Wooden Basin
+groovyscript.wiki.primal_tech.wooden_basin.description=Converts up to 4 items and 1000mb of fluid into an output itemstack.
+groovyscript.wiki.primal_tech.wooden_basin.note0=The recipe requires items to be inserted in a specific order, which is displayed in JEI as top, left, right, bottom. Consider only one type of item to avoid issues.
+groovyscript.wiki.primal_tech.wooden_basin.add=Adds recipes in the format `output`, `fluid`, `inputs`
+
 
 # ProdigyTech
 groovyscript.wiki.prodigytech.atomic_reshaper.title=Atomic Reshaper
@@ -1841,6 +1906,13 @@ groovyscript.wiki.thaumcraft.warp.title=Warp
 groovyscript.wiki.thaumcraft.warp.description=Determines if holding an item or equipping a piece of armor or a bauble gives warp, and how much warp it gives
 groovyscript.wiki.thaumcraft.warp.addWarp=Adds Warp to the given item in the format `item`, `amount`
 groovyscript.wiki.thaumcraft.warp.removeWarp=Removes Warp from the given item
+
+# The Aurorian
+groovyscript.wiki.theaurorian.moonlight_forge.title=Moonlight Forge
+groovyscript.wiki.theaurorian.moonlight_forge.description=Combines two items to get a third item. Only works at night, and works faster the higher it is placed in the world.
+groovyscript.wiki.theaurorian.moonlight_forge.removeByInput=Removes a recipe by the input item and the catalyst item
+groovyscript.wiki.theaurorian.scrapper.title=Scrapper
+groovyscript.wiki.theaurorian.scrapper.description=Turns an input item into an output item. Can be sped up by placing a Crystal on top of it. The crystal has a chance to break every time a recipe is executed.
 
 # Thermal Expansion
 groovyscript.wiki.thermalexpansion.energy.value=Sets the energy cost of the recipe
