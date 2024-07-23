@@ -637,6 +637,12 @@ groovyscript.wiki.botania.rune_altar.input.required=that `input` IIngredients ca
 groovyscript.wiki.botania.rune_altar.mana.value=Sets the mana cost of processing the recipe
 
 
+# Botanic Additions
+groovyscript.wiki.botanicadds.gaia_plate.title=Gaia Plate
+groovyscript.wiki.botanicadds.gaia_plate.description=Converts an number of input items into an output itemstack, consuming a given amount of mana when dropped in-world atop a Gaia Agglomeration Plate as part of a multiblock structure.
+groovyscript.wiki.botanicadds.gaia_plate.mana.value=Sets the mana cost of processing the recipe
+
+
 # Calculator
 groovyscript.wiki.calculator.algorithm_separator.title=Algorithm Separator
 groovyscript.wiki.calculator.algorithm_separator.description=Converts an input itemstack into two output itemstacks.
