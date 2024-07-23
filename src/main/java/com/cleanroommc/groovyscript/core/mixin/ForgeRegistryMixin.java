@@ -208,9 +208,9 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
 
     @Override
     public void groovyScript$forceAdd(V entry, int id, Object owner) {
-        names.put(entry.getRegistryName(), entry);
-        ids.put(id, entry);
-        if (owner != null) owners.put(owner, entry);
+        names.forcePut(entry.getRegistryName(), entry);
+        ids.forcePut(id, entry);
+        if (owner != null) owners.forcePut(owner, entry);
         availabilityMap.set(id);
     }
 
