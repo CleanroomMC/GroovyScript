@@ -151,7 +151,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable CrusherRecipe register() {
             if (!validate()) return null;
-            CrusherRecipe recipe = new CrusherRecipe(output.get(0), input.get(0), energy);
+            CrusherRecipe recipe = new CrusherRecipe(output.get(0), ImmersiveEngineering.toIngredientStack(input.get(0)), energy);
             if (!secondaryOutputItems.isEmpty()) {
                 recipe.secondaryOutput = secondaryOutputItems.toArray(new ItemStack[0]);
                 recipe.secondaryChance = secondaryOutputChances.elements();

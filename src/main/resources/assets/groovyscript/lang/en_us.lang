@@ -1850,6 +1850,13 @@ groovyscript.wiki.thaumcraft.warp.description=Determines if holding an item or e
 groovyscript.wiki.thaumcraft.warp.addWarp=Adds Warp to the given item in the format `item`, `amount`
 groovyscript.wiki.thaumcraft.warp.removeWarp=Removes Warp from the given item
 
+# The Aurorian
+groovyscript.wiki.theaurorian.moonlight_forge.title=Moonlight Forge
+groovyscript.wiki.theaurorian.moonlight_forge.description=Combines two items to get a third item. Only works at night, and works faster the higher it is placed in the world.
+groovyscript.wiki.theaurorian.moonlight_forge.removeByInput=Removes a recipe by the input item and the catalyst item
+groovyscript.wiki.theaurorian.scrapper.title=Scrapper
+groovyscript.wiki.theaurorian.scrapper.description=Turns an input item into an output item. Can be sped up by placing a Crystal on top of it. The crystal has a chance to break every time a recipe is executed.
+
 # Thermal Expansion
 groovyscript.wiki.thermalexpansion.energy.value=Sets the energy cost of the recipe
 
