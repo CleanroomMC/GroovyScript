@@ -6,6 +6,8 @@ name: Build Test Artifact
 
 on:
   push:
+    branches:
+      - master
     paths-ignore:
       - '.github/**' # Release GHA file, please change this when you change the file name
       - 'LICENSE' 
