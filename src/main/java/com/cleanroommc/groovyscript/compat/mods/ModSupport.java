@@ -18,6 +18,7 @@ import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
 import com.cleanroommc.groovyscript.compat.mods.calculator.Calculator;
 import com.cleanroommc.groovyscript.compat.mods.chisel.Chisel;
+import com.cleanroommc.groovyscript.compat.mods.cyclic.Cyclic;
 import com.cleanroommc.groovyscript.compat.mods.compactmachines.CompactMachines;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolution;
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
@@ -85,6 +86,7 @@ public class ModSupport {
     public static final GroovyContainer<Calculator> CALCULATOR = new InternalModContainer<>("calculator", "Calculator", Calculator::new);
     public static final GroovyContainer<Chisel> CHISEL = new InternalModContainer<>("chisel", "Chisel", Chisel::new);
     public static final GroovyContainer<CompactMachines> COMPACT_MACHINES = new InternalModContainer<>("compactmachines3", "Compact Machines 3", CompactMachines::new, "compactmachines");
+    public static final GroovyContainer<Cyclic> CYCLIC = new InternalModContainer<>("cyclicmagic", "Cyclic", Cyclic::new, "cyclic");
     public static final GroovyContainer<DraconicEvolution> DRACONIC_EVOLUTION = new InternalModContainer<>("draconicevolution", "Draconic Evolution", DraconicEvolution::new, "de");
     public static final GroovyContainer<EnderIO> ENDER_IO = new InternalModContainer<>("enderio", "Ender IO", EnderIO::new, "eio");
     public static final GroovyContainer<EssentialCraft> ESSENTIALCRAFT = new InternalModContainer<>("essentialcraft", "EssentialCraft 4", EssentialCraft::new, "ec4");

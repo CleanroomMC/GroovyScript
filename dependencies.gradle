@@ -52,6 +52,7 @@ final def mod_dependencies = [
         'chisel-235279:2915375'                               : [project.debug_chisel],
         'ctm-267602:2915363'                                  : [project.debug_chisel],
         'compact-machines-224218:2707509'                     : [project.debug_compact_machines],
+        'cyclic-239286:4075832'                               : [project.debug_cyclic],
         'brandons_core-231382:3408276'                        : [project.debug_draconic_evolution],
         'draconic_evolution-223565:3431261'                   : [project.debug_draconic_evolution],
         'redstone_flux-270789:2920436'                        : [project.debug_draconic_evolution, project.debug_thermal],
