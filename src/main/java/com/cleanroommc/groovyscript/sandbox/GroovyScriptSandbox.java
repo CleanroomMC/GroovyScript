@@ -178,7 +178,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @ApiStatus.Internal
     @Override
     public <T> T runClosure(Closure<T> closure, Object... args) {
-        startRunning();
+        if (!isRunning()) startRunning();
         T result = null;
         try {
             result = runClosureInternal(closure, args);
@@ -189,7 +189,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
                 return new AtomicInteger();
             }).addAndGet(1);
         } finally {
-            stopRunning();
+            if (!isRunning()) stopRunning();
         }
         return result;
     }

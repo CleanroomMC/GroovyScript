@@ -168,7 +168,7 @@ public abstract class GroovySandbox {
     }
 
     public <T> T runClosure(Closure<T> closure, Object... args) {
-        startRunning();
+        if (!isRunning()) startRunning();
         T result = null;
         try {
             result = closure.call(args);
@@ -176,7 +176,7 @@ public abstract class GroovySandbox {
             GroovyScript.LOGGER.error("Caught an exception trying to run a closure:");
             e.printStackTrace();
         } finally {
-            stopRunning();
+            if (!isRunning()) stopRunning();
         }
         return result;
     }
