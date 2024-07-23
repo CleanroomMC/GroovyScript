@@ -6,6 +6,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.relauncher.FMLInjectionData;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,8 +41,8 @@ public class GroovyLogImpl implements GroovyLog {
     private List<String> errors = new ArrayList<>();
 
     private GroovyLogImpl() {
-        File logFile = new File(Loader.instance().getConfigDir().toPath().getParent().toString() +
-                                File.separator + "logs" + File.separator + getLogFileName());
+        File minecraftHome = (File) FMLInjectionData.data()[6];
+        File logFile = new File(minecraftHome, "logs" + File.separator + getLogFileName());
         logFilePath = logFile.toPath();
         PrintWriter tempWriter;
         try {
@@ -63,7 +65,7 @@ public class GroovyLogImpl implements GroovyLog {
     }
 
     private static String getLogFileName() {
-        return FMLCommonHandler.instance().getSide().isServer() ? "groovy_server.log" : "groovy.log";
+        return FMLLaunchHandler.side().isServer() ? "groovy_server.log" : "groovy.log";
     }
 
     @GroovyBlacklist

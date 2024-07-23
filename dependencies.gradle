@@ -109,13 +109,13 @@ dependencies {
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 
     // TODO: check if there is anything to exclude
-    embed "io.github.classgraph:classgraph:4.8.165"
+    specialEmbed "io.github.classgraph:classgraph:4.8.165"
 
-    lsp4j("org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1") {
+    specialEmbed("org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1") {
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    lsp4j("org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.20.1") {
+    specialEmbed("org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.20.1") {
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.google.code.gson', module: 'gson'
     }
@@ -156,27 +156,4 @@ dependencies {
 
     runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
 
-}
-
-minecraft {
-    injectedTags.put 'GROOVY_VERSION', groovy_version
-
-    if (project.debug_use_examples_folder.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.use_examples_folder=true')
-    }
-    if (project.debug_run_ls.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.run_ls=true')
-    }
-    if (project.debug_generate_examples.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.generate_examples=true')
-    }
-    if (project.debug_generate_wiki.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.generate_wiki=true')
-    }
-    if (project.debug_generate_and_crash.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.generate_and_crash=true')
-    }
-    if (project.debug_log_missing_lang_keys.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.log_missing_lang_keys=true')
-    }
 }
