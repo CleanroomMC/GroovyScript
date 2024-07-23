@@ -4,7 +4,7 @@
 
 import ipsis.woot.util.WootMobName
 
-println 'mod \'woot\' detected, running script'
+log.info 'mod \'woot\' detected, running script'
 
 // Drops:
 // Controls extra drops given by mobs. Chance and Size are both arrays 4 long, containing the values for levels 0/1/2/3
@@ -29,7 +29,7 @@ mods.woot.drops.recipeBuilder()
 // Mob Config:
 // Control the default values or mob-specific values for a large number of effects, a full list can be found at
 // `ipsis.woot.configuration.EnumConfigKey`. A full list can be viewed on
-// [Github](https://github.com/Ipsis/Woot/blob/55e88f5a15d66cc987e676d665d20f4afbe008b8/src/main/java/ipsis/woot/configuration/EnumConfigKey.java#L14)
+// [Github](https://github.com/Ipsis/Woot/blob/55e88f5a15d66cc987e676d665d20f4afbe008b8/src/main/java/ipsis/woot/configuration/EnumConfigKey.java#L14).
 
 mods.woot.mob_config.remove('minecraft:wither_skeleton', 'spawn_units')
 mods.woot.mob_config.remove('minecraft:wither')

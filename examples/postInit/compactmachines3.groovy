@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: compactmachines3
 
-println 'mod \'compactmachines3\' detected, running script'
+log.info 'mod \'compactmachines3\' detected, running script'
 
 // Miniaturization:
 // Consumes a 3d structure in-world based on keys when an item is thrown into the field.

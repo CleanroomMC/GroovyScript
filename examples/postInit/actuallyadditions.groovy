@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: actuallyadditions
 
-println 'mod \'actuallyadditions\' detected, running script'
+log.info 'mod \'actuallyadditions\' detected, running script'
 
 // Atomic Reconstructor:
 // The Atomic Reconstructor is a block which uses energy to convert a block or item in front of it into other items.

@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: bloodmagic
 
-println 'mod \'bloodmagic\' detected, running script'
+log.info 'mod \'bloodmagic\' detected, running script'
 
 // Alchemy Array:
 // Converts two items into an output itemstack by using Arcane Ashes in-world. Has a configurable texture for the

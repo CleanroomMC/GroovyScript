@@ -5,7 +5,7 @@
 import net.minecraft.potion.PotionEffect
 import net.minecraft.util.text.TextFormatting
 
-println 'mod \'botania\' detected, running script'
+log.info 'mod \'botania\' detected, running script'
 
 // Petal Apothecary:
 // Converts item inputs into an item output consuming water and a seed.
@@ -68,7 +68,7 @@ mods.botania.elven_trade.recipeBuilder()
 
 
 // Magnet:
-// Add or remove items from the magnet blacklist
+// Add or remove items from the magnet blacklist.
 
 
 mods.botania.magnet.addToBlacklist(item('minecraft:diamond'))

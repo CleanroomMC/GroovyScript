@@ -4,7 +4,7 @@
 
 import net.minecraft.potion.PotionEffect
 
-println 'mod \'industrialforegoing\' detected, running script'
+log.info 'mod \'industrialforegoing\' detected, running script'
 
 // Bioreactor:
 // Converts an input item into Biofuel, with the amount of Biofuel generated being based on the number of concurrent

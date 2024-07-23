@@ -2,10 +2,10 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: chisel
 
-println 'mod \'chisel\' detected, running script'
+log.info 'mod \'chisel\' detected, running script'
 
 // Carving:
-// Sets a group of items any item can be converted between freely, in world and in a GUI
+// Sets a group of items any item can be converted between freely, in world and in a GUI.
 
 // mods.chisel.carving.removeAll()
 mods.chisel.carving.removeGroup('blockDiamond')
