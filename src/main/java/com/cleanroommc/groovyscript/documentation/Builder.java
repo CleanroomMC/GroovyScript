@@ -44,6 +44,14 @@ public class Builder {
         this.registrationMethods = gatherRegistrationMethods(builderClass);
     }
 
+    private static List<Property> getPropertyAnnotationsFromClassRecursive(Class<?> clazz) {
+        List<Property> list = new ArrayList<>();
+        Collections.addAll(list, clazz.getAnnotationsByType(Property.class));
+        Class<?> superclass = clazz.getSuperclass();
+        if (superclass != null) list.addAll(getPropertyAnnotationsFromClassRecursive(superclass));
+        return list;
+    }
+
     private static Map<String, FieldDocumentation> gatherFields(Class<?> builderClass, RecipeBuilderDescription annotation, String langLocation) {
         Map<String, FieldDocumentation> fields = new HashMap<>();
         List<Field> allFields = getAllFields(builderClass);
@@ -52,7 +60,7 @@ public class Builder {
                             // Attached to the builder method's requirements field, an uncommon location for specific overrides
                             Arrays.stream(annotation.requirement()).filter(r -> r.property().equals(field.getName())),
                             // Attached to the class, to create/override requirements set in the parent
-                            Arrays.stream(builderClass.getAnnotationsByType(Property.class)).filter(r -> r.property().equals(field.getName())),
+                            getPropertyAnnotationsFromClassRecursive(builderClass).stream().filter(r -> r.property().equals(field.getName())),
                             // Attached to the field, the typical place for property information to be created
                             Arrays.stream(field.getAnnotationsByType(Property.class)).filter(r -> {
                                 if (r.property().isEmpty() || r.property().equals(field.getName())) return true;
