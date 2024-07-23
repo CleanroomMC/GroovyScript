@@ -14,6 +14,7 @@ import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipeElvenTrade;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
@@ -37,12 +38,22 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public RecipeElvenTrade add(ItemStack[] outputs, IIngredient[] inputs) {
+    public RecipeElvenTrade add(ItemStack[] outputs, IIngredient... inputs) {
         return recipeBuilder().input(inputs).output(outputs).register();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public RecipeElvenTrade add(ItemStack output, IIngredient[] inputs) {
+    public RecipeElvenTrade add(Collection<ItemStack> outputs, Collection<IIngredient> inputs) {
+        return recipeBuilder().input(inputs).output(outputs).register();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
+    public RecipeElvenTrade add(ItemStack output, IIngredient... inputs) {
+        return recipeBuilder().input(inputs).output(output).register();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
+    public RecipeElvenTrade add(ItemStack output, Collection<IIngredient> inputs) {
         return recipeBuilder().input(inputs).output(output).register();
     }
 
