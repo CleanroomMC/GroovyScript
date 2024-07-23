@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.vanilla.command.infoparser;
 
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -67,7 +68,13 @@ public class InfoParserNBT extends GenericInfoParser<NBTTagCompound> {
     @Override
     public void parse(InfoParserPackage info) {
         if (info.getEntity() != null) {
-            instance.add(info.getMessages(), info.getEntity().serializeNBT(), info.isPrettyNbt());
+            if (info.getEntity() instanceof EntityPlayer) {
+                NBTTagCompound nbt = new NBTTagCompound();
+                info.getEntity().writeToNBT(nbt);
+                instance.add(info.getMessages(), nbt, info.isPrettyNbt());
+            } else {
+                instance.add(info.getMessages(), info.getEntity().serializeNBT(), info.isPrettyNbt());
+            }
         } else if (info.getTileEntity() != null) {
             instance.add(info.getMessages(), info.getTileEntity().serializeNBT(), info.isPrettyNbt());
         } else if (!info.getStack().isEmpty()) {
