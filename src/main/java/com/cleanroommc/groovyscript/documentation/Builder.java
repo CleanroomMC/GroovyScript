@@ -59,7 +59,7 @@ public class Builder {
             List<Property> annotations = Stream.of(
                             // Attached to the builder method's requirements field, an uncommon location for specific overrides
                             Arrays.stream(annotation.requirement()).filter(r -> r.property().equals(field.getName())),
-                            // Attached to the class, to create/override requirements set in the parent
+                            // Attached to the class or any parent classes, to create/override requirements set in the parent
                             getPropertyAnnotationsFromClassRecursive(builderClass).stream().filter(r -> r.property().equals(field.getName())),
                             // Attached to the field, the typical place for property information to be created
                             Arrays.stream(field.getAnnotationsByType(Property.class)).filter(r -> {
