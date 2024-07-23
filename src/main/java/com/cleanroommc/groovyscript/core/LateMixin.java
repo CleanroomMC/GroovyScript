@@ -29,6 +29,7 @@ public class LateMixin implements ILateMixinLoader {
             "industrialforegoing",
             "inspirations",
             "jei",
+            "techreborn",
             "mekanism",
             "pneumaticcraft",
             "primal_tech",
