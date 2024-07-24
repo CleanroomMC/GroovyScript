@@ -1543,8 +1543,7 @@ groovyscript.wiki.pyrotech.kiln.title=Kiln
 groovyscript.wiki.pyrotech.kiln.description=Converts an item into a new one by burning it. Has a chance to fail
 groovyscript.wiki.pyrotech.kiln.burnTime.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.kiln.failureChance.value=Sets the chance to fail the recipe
-groovyscript.wiki.pyrotech.kiln.failureOutputs.value=Sets the output when the recipe failed
-groovyscript.wiki.pyrotech.kiln.failureOutput.value=
+groovyscript.wiki.pyrotech.kiln.failureOutput.value=Sets the output when the recipe failed
 groovyscript.wiki.pyrotech.kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
 
 groovyscript.wiki.pyrotech.soaking_pot.title=Soaking Pot
