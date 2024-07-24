@@ -13,7 +13,6 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,22 +35,27 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemy_array.add0", type = MethodDescription.Type.ADDITION)
-    public RecipeAlchemyArray add(Ingredient input, Ingredient catalyst, ItemStack output) {
-        RecipeAlchemyArray recipe = new RecipeAlchemyArray(input, catalyst, output, null);
-        add(recipe);
-        return recipe;
+    public RecipeAlchemyArray add(IIngredient input, IIngredient catalyst, ItemStack output) {
+        return recipeBuilder()
+                .catalyst(catalyst)
+                .input(input)
+                .output(output)
+                .register();
     }
 
     @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemy_array.add1", type = MethodDescription.Type.ADDITION)
-    public RecipeAlchemyArray add(Ingredient input, Ingredient catalyst, ItemStack output, String circleTexture) {
+    public RecipeAlchemyArray add(IIngredient input, IIngredient catalyst, ItemStack output, String circleTexture) {
         return add(input, catalyst, output, new ResourceLocation(circleTexture));
     }
 
     @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemy_array.add1", type = MethodDescription.Type.ADDITION)
-    public RecipeAlchemyArray add(Ingredient input, Ingredient catalyst, ItemStack output, ResourceLocation circleTexture) {
-        RecipeAlchemyArray recipe = new RecipeAlchemyArray(input, catalyst, output, circleTexture);
-        add(recipe);
-        return recipe;
+    public RecipeAlchemyArray add(IIngredient input, IIngredient catalyst, ItemStack output, ResourceLocation circleTexture) {
+        return recipeBuilder()
+                .catalyst(catalyst)
+                .texture(circleTexture)
+                .input(input)
+                .output(output)
+                .register();
     }
 
     public void add(RecipeAlchemyArray recipe) {

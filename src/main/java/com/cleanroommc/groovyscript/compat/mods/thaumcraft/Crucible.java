@@ -21,10 +21,7 @@ import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.IThaumcraftRecipe;
 import thaumcraft.common.config.ConfigRecipes;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
@@ -57,9 +54,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public CrucibleRecipe add(String researchKey, ItemStack result, IIngredient catalyst, AspectList tags) {
-        CrucibleRecipe recipe = new CrucibleRecipe(researchKey, result, catalyst.toMcIngredient(), tags);
-        add(recipe);
-        return recipe;
+        return recipeBuilder().researchKey(researchKey).catalyst(catalyst).aspect(tags).output(result).register();
     }
 
     public boolean remove(CrucibleRecipe recipe) {
@@ -148,6 +143,28 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         }
 
         @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(AspectStack... aspects) {
+            for (AspectStack aspect : aspects) {
+                aspect(aspect);
+            }
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(Collection<AspectStack> aspects) {
+            for (AspectStack aspect : aspects) {
+                aspect(aspect);
+            }
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(AspectList aspectList) {
+            this.aspects.merge(aspectList);
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
         public RecipeBuilder aspect(String tag, int amount) {
             Aspect a = Thaumcraft.validateAspect(tag);
             if (a != null) this.aspects.add(a, amount);
@@ -177,7 +194,9 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable CrucibleRecipe register() {
             if (!validate()) return null;
-            return ModSupport.THAUMCRAFT.get().crucible.add(researchKey, this.output.get(0), catalyst, aspects);
+            CrucibleRecipe recipe = new CrucibleRecipe(researchKey, this.output.get(0), catalyst.toMcIngredient(), aspects);
+            ModSupport.THAUMCRAFT.get().crucible.add(recipe);
+            return recipe;
         }
     }
 }

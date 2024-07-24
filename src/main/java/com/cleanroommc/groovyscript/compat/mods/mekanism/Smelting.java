@@ -11,7 +11,6 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.ItemStackInput;
 import mekanism.common.recipe.machines.SmeltingRecipe;
-import mekanism.common.recipe.outputs.ItemStackOutput;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,19 +32,7 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond_block'), item('minecraft:clay')", commented = true))
     public SmeltingRecipe add(IIngredient ingredient, ItemStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Smelter recipe").error();
-        msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
-        if (msg.postIfNotEmpty()) return null;
-
-        SmeltingRecipe recipe1 = null;
-        for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            SmeltingRecipe recipe = new SmeltingRecipe(new ItemStackInput(itemStack), new ItemStackOutput(output));
-            if (recipe1 == null) recipe1 = recipe;
-            recipeRegistry.put(recipe);
-            addScripted(recipe);
-        }
-        return recipe1;
+        return recipeBuilder().output(output).input(ingredient).register();
     }
 
     @MethodDescription(example = @Example(value = "item('minecraft:clay')", commented = true))

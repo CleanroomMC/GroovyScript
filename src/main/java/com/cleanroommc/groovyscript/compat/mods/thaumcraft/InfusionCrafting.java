@@ -6,14 +6,12 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
-import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
@@ -59,10 +57,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public InfusionRecipe add(String research, ItemStack outputResult, int inst, Collection<AspectStack> aspects, IIngredient centralItem, IIngredient... input) {
-        Object[] inputs = ArrayUtils.map(input, IIngredient::toMcIngredient, new Ingredient[0]);
-        InfusionRecipe infusionRecipe = new InfusionRecipe(research, outputResult, inst, Thaumcraft.makeAspectList(aspects), centralItem.toMcIngredient(), inputs);
-        add(RecipeName.generateRl("infusion_matrix_recipe"), infusionRecipe);
-        return infusionRecipe;
+        return recipeBuilder().researchKey(research).mainInput(centralItem).instability(inst).aspect(aspects).input(input).output(outputResult).register();
     }
 
     public boolean remove(InfusionRecipe recipe) {
@@ -158,6 +153,28 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         @RecipeBuilderMethodDescription(field = "aspects")
         public RecipeBuilder aspect(AspectStack aspect) {
             this.aspects.add(aspect.getAspect(), aspect.getAmount());
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(AspectStack... aspects) {
+            for (AspectStack aspect : aspects) {
+                aspect(aspect);
+            }
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(Collection<AspectStack> aspects) {
+            for (AspectStack aspect : aspects) {
+                aspect(aspect);
+            }
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "aspects")
+        public RecipeBuilder aspect(AspectList aspectList) {
+            this.aspects.merge(aspectList);
             return this;
         }
 

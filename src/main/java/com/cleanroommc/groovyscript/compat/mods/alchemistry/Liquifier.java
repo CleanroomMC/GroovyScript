@@ -32,7 +32,7 @@ public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public LiquifierRecipe add(IIngredient input, FluidStack output) {
-        return new RecipeBuilder().input(input).fluidOutput(output).register();
+        return recipeBuilder().input(input).fluidOutput(output).register();
     }
 
     public LiquifierRecipe add(LiquifierRecipe recipe) {
