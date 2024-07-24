@@ -4,33 +4,24 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.command.GSCommand;
 import com.cleanroommc.groovyscript.command.SimpleCommand;
-import com.cleanroommc.groovyscript.compat.inworldcrafting.FluidRecipe;
-import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.BurningRecipeCategory;
-import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.ExplosionRecipeCategory;
-import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.FluidRecipeCategory;
-import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.PistonPushRecipeCategory;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.InWorldCraftingJeiPlugin;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapedCraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapelessCraftingRecipe;
-import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import mezz.jei.Internal;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientRegistry;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.VanillaTypes;
-import mezz.jei.api.recipe.*;
+import mezz.jei.api.recipe.IRecipeCategory;
+import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.ingredients.IngredientRegistry;
 import mezz.jei.plugins.vanilla.crafting.ShapelessRecipeWrapper;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
 @GroovyBlacklist
@@ -46,6 +37,15 @@ public class JeiPlugin implements IModPlugin {
 
     public static IIngredientRenderer<FluidStack> fluidRenderer;
 
+    public static void afterRegister() {
+        ModSupport.JEI.get().catalyst.applyChanges(modRegistry);
+    }
+
+    public static void afterRuntimeAvailable() {
+        ModSupport.JEI.get().ingredient.applyChanges(modRegistry.getIngredientRegistry());
+        ModSupport.JEI.get().category.applyChanges(jeiRuntime.getRecipeRegistry());
+        ModSupport.JEI.get().description.applyRemovals(jeiRuntime.getRecipeRegistry());
+    }
 
     public static boolean isLoaded() {
         return jeiRuntime != null;
@@ -56,11 +56,8 @@ public class JeiPlugin implements IModPlugin {
         IngredientRegistry ingredientRegistry = Internal.getIngredientRegistry();
         fluidRenderer = ingredientRegistry.getIngredientRenderer(VanillaTypes.FLUID);
 
-        IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
-        registry.addRecipeCategories(new FluidRecipeCategory(guiHelper));
-        registry.addRecipeCategories(new ExplosionRecipeCategory(guiHelper));
-        registry.addRecipeCategories(new BurningRecipeCategory(guiHelper));
-        registry.addRecipeCategories(new PistonPushRecipeCategory(guiHelper));
+        InWorldCraftingJeiPlugin.registerCategories(registry);
+        ModSupport.JEI.get().category.addCustomRecipeCategories(registry);
     }
 
     @Override
@@ -74,34 +71,15 @@ public class JeiPlugin implements IModPlugin {
         registry.handleRecipes(ShapedCraftingRecipe.class, recipe -> new ShapedRecipeWrapper(jeiHelpers, recipe), VanillaRecipeCategoryUid.CRAFTING);
         registry.handleRecipes(ShapelessCraftingRecipe.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe), VanillaRecipeCategoryUid.CRAFTING);
 
-        // register in world crafting recipes
-        registry.addRecipeCatalyst(new ItemStack(Items.WATER_BUCKET), FluidRecipeCategory.UID);
-        registry.addRecipeCatalyst(new ItemStack(Items.LAVA_BUCKET), FluidRecipeCategory.UID);
-        registry.addRecipeCatalyst(new ItemStack(Blocks.TNT), ExplosionRecipeCategory.UID);
-        //registry.addRecipeCatalyst(new ItemStack(Blocks.FIRE), BurningRecipeCategory.UID);
-        registry.addRecipeCatalyst(new ItemStack(Items.FLINT_AND_STEEL), BurningRecipeCategory.UID);
-        registry.addRecipeCatalyst(new ItemStack(Blocks.PISTON), PistonPushRecipeCategory.UID);
-        registry.addRecipeCatalyst(new ItemStack(Blocks.STICKY_PISTON), PistonPushRecipeCategory.UID);
-
-        List<FluidRecipeCategory.RecipeWrapper> recipeWrappers = new ArrayList<>();
-        FluidRecipe.forEach(fluidRecipe -> recipeWrappers.add(new FluidRecipeCategory.RecipeWrapper(fluidRecipe)));
-        registry.addRecipes(recipeWrappers, FluidRecipeCategory.UID);
-        registry.addRecipes(VanillaModule.inWorldCrafting.explosion.getRecipeWrappers(), ExplosionRecipeCategory.UID);
-        registry.addRecipes(VanillaModule.inWorldCrafting.burning.getRecipeWrappers(), BurningRecipeCategory.UID);
-        registry.addRecipes(VanillaModule.inWorldCrafting.pistonPush.getRecipeWrappers(), PistonPushRecipeCategory.UID);
-
-        ModSupport.JEI.get().description.applyAdditions(modRegistry);
-        ModSupport.JEI.get().catalyst.applyChanges(registry);
+        InWorldCraftingJeiPlugin.register(registry);
+        ModSupport.JEI.get().category.applyCustomRecipeCategoryProperties(registry);
+        ModSupport.JEI.get().description.applyAdditions(registry);
     }
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime iJeiRuntime) {
         recipeRegistry = iJeiRuntime.getRecipeRegistry();
         jeiRuntime = iJeiRuntime;
-
-        ModSupport.JEI.get().ingredient.applyChanges(itemRegistry);
-        ModSupport.JEI.get().category.applyChanges(recipeRegistry);
-        ModSupport.JEI.get().description.applyRemovals(recipeRegistry);
     }
 
     public static SimpleCommand getJeiCategoriesCommand() {

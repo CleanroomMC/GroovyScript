@@ -2,6 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: jei
 
+import classes.GenericRecipeCategory
 import mezz.jei.api.ingredients.VanillaTypes
 
 log.info 'mod \'jei\' detected, running script'
@@ -20,6 +21,14 @@ mods.jei.catalyst.add('minecraft.smelting', item('minecraft:clay') * 8, item('mi
 
 mods.jei.category.hideCategory('minecraft.fuel')
 // mods.jei.category.hideAll()
+
+/*mods.jei.category.categoryBuilder()
+    .id(GenericRecipeCategory.UID) // Note that `GenericRecipeCategory` must be defined elsewhere, and this example presumes certain fields and methods exist.
+    .category(guiHelper -> new GenericRecipeCategory(guiHelper))
+    .catalyst(item('minecraft:clay'))
+    .wrapper(GenericRecipeCategory.getRecipeWrappers())
+    .register()*/
+
 
 // Description Category:
 // Modify the description of the input items, where the description is a unique JEI tab containing text.

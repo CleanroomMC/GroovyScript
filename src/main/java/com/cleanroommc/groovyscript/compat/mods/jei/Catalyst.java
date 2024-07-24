@@ -17,7 +17,7 @@ import java.util.Collection;
 public class Catalyst extends VirtualizedRegistry<Pair<String, ItemStack>> {
 
     /**
-     * Called by {@link JeiPlugin#register}
+     * Called by {@link JeiPlugin#afterRegister()}
      */
     @GroovyBlacklist
     public void applyChanges(IModRegistry modRegistry) {

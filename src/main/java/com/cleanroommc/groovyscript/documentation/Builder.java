@@ -209,14 +209,14 @@ public class Builder {
     public String builderAdmonition() {
         if (annotation.example().length == 0) return "";
         return new AdmonitionBuilder()
-                .note(new CodeBlockBuilder().line(builder().split("\n")).annotation(annotations()).generate())
+                .note(new CodeBlockBuilder().line(builder(false).split("\n")).annotation(annotations()).generate())
                 .type(Admonition.Type.EXAMPLE)
                 .indentation(1)
                 .generate();
     }
 
     public String builderExampleFile() {
-        Matcher matcher = Documentation.ANNOTATION_COMMENT_LOCATION.matcher(builder());
+        Matcher matcher = Documentation.ANNOTATION_COMMENT_LOCATION.matcher(builder(true));
         StringBuffer sb = new StringBuffer();
         int i = 0;
         while (matcher.find()) {
@@ -227,8 +227,8 @@ public class Builder {
         return sb.toString();
     }
 
-    public String builder() {
-        return Arrays.stream(annotation.example()).map(this::createBuilder).collect(Collectors.joining("\n"));
+    public String builder(boolean canBeCommented) {
+        return Arrays.stream(annotation.example()).map(x -> createBuilder(x, canBeCommented)).collect(Collectors.joining("\n"));
     }
 
     public List<String> annotations() {
@@ -306,10 +306,10 @@ public class Builder {
         return out;
     }
 
-    private String createBuilder(Example example) {
+    private String createBuilder(Example example, boolean canBeCommented) {
         StringBuilder out = new StringBuilder();
 
-        if (example.commented()) out.append("/*");
+        if (canBeCommented && example.commented()) out.append("/*");
 
         if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
 
@@ -321,7 +321,7 @@ public class Builder {
 
         if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName()));
 
-        if (example.commented()) out.append("*/");
+        if (canBeCommented && example.commented()) out.append("*/");
 
         out.append("\n");
 
