@@ -1,11 +1,8 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
-import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.groovy.ModuleNodeAccessor;
-import com.cleanroommc.groovyscript.sandbox.FileUtil;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.MethodNode;
@@ -24,7 +21,6 @@ import org.codehaus.groovy.control.customizers.CompilationCustomizer;
 import org.codehaus.groovy.syntax.Token;
 import org.codehaus.groovy.syntax.Types;
 
-import java.io.File;
 import java.util.List;
 
 public class GroovyScriptEarlyCompiler extends CompilationCustomizer {
@@ -35,19 +31,7 @@ public class GroovyScriptEarlyCompiler extends CompilationCustomizer {
 
     @Override
     public void call(SourceUnit source, GeneratorContext context, ClassNode classNode) throws CompilationFailedException {
-        String root = GroovyScript.getScriptPath();
-        String script = source.getName();
         ModuleNode module = classNode.getModule();
-        String rel = FileUtil.relativize(root, script);
-        int i = rel.lastIndexOf(File.separatorChar);
-        if (i >= 0) {
-            // inject correct package declaration into script
-            String packageName = rel.substring(0, i).replace(File.separatorChar, '.') + '.';
-            if (module.getPackage() != null && !module.getPackage().getName().equals(packageName)) {
-                GroovyLog.get().error("Expected package {} but got {} in script {}", packageName, module.getPackage().getName(), rel);
-            }
-            module.setPackageName(packageName);
-        }
         List<MethodNode> methods = module.getClasses().get(0).getMethods("run");
         if (methods.isEmpty()) return; // class scripts don't have a run method
         BlockStatement scriptStatement = (BlockStatement) methods.get(0).getCode();
