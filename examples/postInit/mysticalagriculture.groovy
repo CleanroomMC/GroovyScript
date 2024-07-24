@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: mysticalagriculture
 
-println 'mod \'mysticalagriculture\' detected, running script'
+log.info 'mod \'mysticalagriculture\' detected, running script'
 
 // Seed Reprocessor:
 // Converts an input itemstack into an output itemstack, taking a set amount of time based on the machine and consuming

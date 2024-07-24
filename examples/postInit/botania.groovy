@@ -129,8 +129,8 @@ mods.botania.pure_daisy.recipeBuilder()
 
 
 // Rune Altar:
-// Converts a items inputs into an item ouput at the cost of mana when a Livingrock item is thrown atop the altar and right
-// clicked with a Wand of the Forest.
+// Converts a items inputs into an item output at the cost of mana when a Livingrock item is thrown atop the altar and
+// right clicked with a Wand of the Forest.
 
 mods.botania.rune_altar.removeByInput(ore('runeEarthB'))
 mods.botania.rune_altar.removeByInputs(ore('feather'), ore('string'))
