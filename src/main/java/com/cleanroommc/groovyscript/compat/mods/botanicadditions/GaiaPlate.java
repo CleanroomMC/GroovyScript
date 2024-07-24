@@ -4,17 +4,18 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 import tk.zeitheron.botanicadds.api.GaiaPlateRecipes;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class GaiaPlate extends VirtualizedRegistry<GaiaPlateRecipes.RecipeGaiaPlate> {
+public class GaiaPlate extends StandardListRegistry<GaiaPlateRecipes.RecipeGaiaPlate> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot') * 16).mana(1000)"),
@@ -25,24 +26,8 @@ public class GaiaPlate extends VirtualizedRegistry<GaiaPlateRecipes.RecipeGaiaPl
     }
 
     @Override
-    public void onReload() {
-        GaiaPlateRecipes.gaiaRecipes.removeAll(removeScripted());
-        GaiaPlateRecipes.gaiaRecipes.addAll(restoreFromBackup());
-    }
-
-    public void add(GaiaPlateRecipes.RecipeGaiaPlate recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            GaiaPlateRecipes.gaiaRecipes.add(recipe);
-        }
-    }
-
-    public boolean remove(GaiaPlateRecipes.RecipeGaiaPlate recipe) {
-        if (GaiaPlateRecipes.gaiaRecipes.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<GaiaPlateRecipes.RecipeGaiaPlate> getRegistry() {
+        return GaiaPlateRecipes.gaiaRecipes;
     }
 
     @MethodDescription(example = @Example("item('botanicadds:gaiasteel_ingot')"))
@@ -68,17 +53,6 @@ public class GaiaPlate extends VirtualizedRegistry<GaiaPlateRecipes.RecipeGaiaPl
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<GaiaPlateRecipes.RecipeGaiaPlate> streamRecipes() {
-        return new SimpleObjectStream<>(GaiaPlateRecipes.gaiaRecipes).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        GaiaPlateRecipes.gaiaRecipes.forEach(this::addBackup);
-        GaiaPlateRecipes.gaiaRecipes.clear();
     }
 
     @Property(property = "input", valid = @Comp("1"))

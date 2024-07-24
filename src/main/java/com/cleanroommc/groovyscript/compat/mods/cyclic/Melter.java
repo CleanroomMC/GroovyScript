@@ -1,13 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.cyclic;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.google.common.collect.Lists;
 import com.lothrazar.cyclicmagic.CyclicContent;
 import com.lothrazar.cyclicmagic.block.melter.RecipeMelter;
@@ -15,11 +13,12 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Melter extends VirtualizedRegistry<RecipeMelter> {
+public class Melter extends StandardListRegistry<RecipeMelter> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:gold_ingot')).fluidOutput(fluid('water') * 175)"),
@@ -35,23 +34,8 @@ public class Melter extends VirtualizedRegistry<RecipeMelter> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        RecipeMelter.recipes.removeAll(removeScripted());
-        RecipeMelter.recipes.addAll(restoreFromBackup());
-    }
-
-    public void add(RecipeMelter recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        RecipeMelter.recipes.add(recipe);
-    }
-
-    public boolean remove(RecipeMelter recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        RecipeMelter.recipes.remove(recipe);
-        return true;
+    public Collection<RecipeMelter> getRegistry() {
+        return RecipeMelter.recipes;
     }
 
     @MethodDescription(example = @Example("item('minecraft:snow')"))
@@ -74,18 +58,6 @@ public class Melter extends VirtualizedRegistry<RecipeMelter> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        RecipeMelter.recipes.forEach(this::addBackup);
-        RecipeMelter.recipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeMelter> streamRecipes() {
-        return new SimpleObjectStream<>(RecipeMelter.recipes)
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "4")})

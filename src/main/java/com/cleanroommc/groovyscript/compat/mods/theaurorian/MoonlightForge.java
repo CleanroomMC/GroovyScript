@@ -4,16 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.shiroroku.theaurorian.Recipes.MoonlightForgeRecipe;
 import com.shiroroku.theaurorian.Recipes.MoonlightForgeRecipeHandler;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class MoonlightForge extends VirtualizedRegistry<MoonlightForgeRecipe> {
+public class MoonlightForge extends StandardListRegistry<MoonlightForgeRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:stone_sword'), item('minecraft:diamond')).output(item('minecraft:diamond_sword'))"))
     public RecipeBuilder recipeBuilder() {
@@ -21,24 +22,8 @@ public class MoonlightForge extends VirtualizedRegistry<MoonlightForgeRecipe> {
     }
 
     @Override
-    public void onReload() {
-        restoreFromBackup().forEach(MoonlightForgeRecipeHandler::addRecipe);
-        removeScripted().forEach(r -> MoonlightForgeRecipeHandler.allRecipes.removeIf(u -> u.equals(r)));
-    }
-
-    public void add(MoonlightForgeRecipe recipe) {
-        addScripted(recipe);
-        MoonlightForgeRecipeHandler.addRecipe(recipe);
-    }
-
-    public boolean remove(MoonlightForgeRecipe recipe) {
-        return MoonlightForgeRecipeHandler.allRecipes.removeIf(r -> {
-            if (r.equals(recipe)) {
-                addBackup(recipe);
-                return true;
-            }
-            return false;
-        });
+    public Collection<MoonlightForgeRecipe> getRegistry() {
+        return MoonlightForgeRecipeHandler.allRecipes;
     }
 
     @MethodDescription(example = @Example("item('theaurorian:moonstonesword'), item('theaurorian:aurorianiteingot')"))
@@ -61,17 +46,6 @@ public class MoonlightForge extends VirtualizedRegistry<MoonlightForgeRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        MoonlightForgeRecipeHandler.allRecipes.forEach(this::addBackup);
-        MoonlightForgeRecipeHandler.allRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<MoonlightForgeRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(MoonlightForgeRecipeHandler.allRecipes).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("2"))

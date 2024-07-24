@@ -5,10 +5,9 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.primal_tech.WoodenBasinRecipesAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -16,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import primal_tech.recipes.WoodenBasinRecipes;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RegistryDescription(
         admonition = @Admonition(type = Admonition.Type.WARNING, value = "groovyscript.wiki.primal_tech.wooden_basin.note0")
 )
-public class WoodenBasin extends VirtualizedRegistry<WoodenBasinRecipes> {
+public class WoodenBasin extends StandardListRegistry<WoodenBasinRecipes> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).fluidInput(fluid('lava')).output(item('minecraft:clay'))"),
@@ -34,16 +34,8 @@ public class WoodenBasin extends VirtualizedRegistry<WoodenBasinRecipes> {
     }
 
     @Override
-    public void onReload() {
-        WoodenBasinRecipesAccessor.getRecipes().removeAll(removeScripted());
-        WoodenBasinRecipesAccessor.getRecipes().addAll(restoreFromBackup());
-    }
-
-    public void add(WoodenBasinRecipes recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            WoodenBasinRecipesAccessor.getRecipes().add(recipe);
-        }
+    public Collection<WoodenBasinRecipes> getRegistry() {
+        return WoodenBasinRecipesAccessor.getRecipes();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -53,14 +45,6 @@ public class WoodenBasin extends VirtualizedRegistry<WoodenBasinRecipes> {
                 .fluidInput(fluid)
                 .output(output)
                 .register();
-    }
-
-    public boolean remove(WoodenBasinRecipes recipe) {
-        if (WoodenBasinRecipesAccessor.getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = {@Example("fluid('lava')"), @Example(value = "item('minecraft:cobblestone')", commented = true)})
@@ -88,17 +72,6 @@ public class WoodenBasin extends VirtualizedRegistry<WoodenBasinRecipes> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<WoodenBasinRecipes> streamRecipes() {
-        return new SimpleObjectStream<>(WoodenBasinRecipesAccessor.getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        WoodenBasinRecipesAccessor.getRecipes().forEach(this::addBackup);
-        WoodenBasinRecipesAccessor.getRecipes().clear();
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "4", type = Comp.Type.LTE)})

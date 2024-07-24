@@ -4,21 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.meteor.extrabotany.api.ExtraBotanyAPI;
 import com.meteor.extrabotany.common.crafting.recipe.RecipePedestal;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Pedestal extends VirtualizedRegistry<RecipePedestal> {
+public class Pedestal extends StandardListRegistry<RecipePedestal> {
 
     @Override
-    public void onReload() {
-        ExtraBotanyAPI.pedestalRecipes.removeAll(removeScripted());
-        ExtraBotanyAPI.pedestalRecipes.addAll(restoreFromBackup());
+    public Collection<RecipePedestal> getRegistry() {
+        return ExtraBotanyAPI.pedestalRecipes;
     }
 
     @RecipeBuilderDescription(example = {
@@ -32,22 +32,6 @@ public class Pedestal extends VirtualizedRegistry<RecipePedestal> {
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipePedestal add(IIngredient input, ItemStack output) {
         return recipeBuilder().input(input).output(output).register();
-    }
-
-    public RecipePedestal add(RecipePedestal recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ExtraBotanyAPI.pedestalRecipes.add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(RecipePedestal recipe) {
-        if (ExtraBotanyAPI.pedestalRecipes.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example("item('minecraft:cobblestone')"))
@@ -70,17 +54,6 @@ public class Pedestal extends VirtualizedRegistry<RecipePedestal> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipePedestal> streamRecipes() {
-        return new SimpleObjectStream<>(ExtraBotanyAPI.pedestalRecipes).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ExtraBotanyAPI.pedestalRecipes.forEach(this::addBackup);
-        ExtraBotanyAPI.pedestalRecipes.clear();
     }
 
     @Property(property = "input", valid = @Comp("1"))

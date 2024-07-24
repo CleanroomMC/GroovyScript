@@ -4,16 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.shiroroku.theaurorian.Recipes.ScrapperRecipe;
 import com.shiroroku.theaurorian.Recipes.ScrapperRecipeHandler;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> {
+public class Scrapper extends StandardListRegistry<ScrapperRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:stone_sword')).output(item('minecraft:cobblestone'))"))
     public RecipeBuilder recipeBuilder() {
@@ -21,24 +22,8 @@ public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> {
     }
 
     @Override
-    public void onReload() {
-        restoreFromBackup().forEach(ScrapperRecipeHandler::addRecipe);
-        removeScripted().forEach(r -> ScrapperRecipeHandler.allRecipes.removeIf(u -> u.equals(r)));
-    }
-
-    public void add(ScrapperRecipe recipe) {
-        addScripted(recipe);
-        ScrapperRecipeHandler.addRecipe(recipe);
-    }
-
-    public boolean remove(ScrapperRecipe recipe) {
-        return ScrapperRecipeHandler.allRecipes.removeIf(r -> {
-            if (r.equals(recipe)) {
-                addBackup(recipe);
-                return true;
-            }
-            return false;
-        });
+    public Collection<ScrapperRecipe> getRegistry() {
+        return ScrapperRecipeHandler.allRecipes;
     }
 
     @MethodDescription(example = @Example("item('minecraft:iron_sword')"))
@@ -61,17 +46,6 @@ public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ScrapperRecipeHandler.allRecipes.forEach(this::addBackup);
-        ScrapperRecipeHandler.allRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ScrapperRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ScrapperRecipeHandler.allRecipes).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("1"))
