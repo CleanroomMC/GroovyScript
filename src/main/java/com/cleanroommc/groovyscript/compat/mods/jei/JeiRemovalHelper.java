@@ -51,7 +51,7 @@ public class JeiRemovalHelper {
         for (GroovyContainer<? extends GroovyPropertyContainer> groovyContainer : ModSupport.getAllContainers()) {
             if (!groovyContainer.isLoaded()) continue;
             for (INamed registry : groovyContainer.get().getRegistries()) {
-                if (registry.isEnabled() && registry instanceof IJEIRemoval removal && removal.getCategory().equals(uid)) {
+                if (registry.isEnabled() && registry instanceof IJEIRemoval removal && removal.getCategories().contains(uid)) {
                     String operation = removal.getRemoval(output);
                     if (operation.isEmpty()) continue;
                     String message = String.format("mods.%s.%s.%s", groovyContainer.getModId(), registry.getName(), operation);
