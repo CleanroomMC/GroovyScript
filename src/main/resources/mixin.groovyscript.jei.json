@@ -8,6 +8,9 @@
     "IngredientInfoRecipeAccessor",
     "JeiProxyAccessor",
     "JeiStarterMixin",
-    "ModRegistryAccessor"
+    "ModRegistryAccessor",
+    "RecipeGuiLogicAccessor",
+    "RecipeLayoutAccessor",
+    "RecipesGuiAccessor"
   ]
 }
