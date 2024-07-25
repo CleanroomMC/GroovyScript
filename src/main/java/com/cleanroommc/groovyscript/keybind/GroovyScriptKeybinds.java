@@ -32,6 +32,7 @@ public class GroovyScriptKeybinds extends KeyBinding {
 
     public static void initialize() {
         ReloadKey.createKeybind();
+        RemoveRecipeKey.createKeybind();
 
         for (Key key : keys) {
             key.getKey();
