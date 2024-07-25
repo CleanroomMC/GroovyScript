@@ -60,6 +60,7 @@ public class JeiRemovalHelper {
                 }
             }
         }
+        say("Couldn't find a way to remove the targeted recipe");
     }
 
 
