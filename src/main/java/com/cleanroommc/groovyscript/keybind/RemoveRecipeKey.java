@@ -1,12 +1,12 @@
 package com.cleanroommc.groovyscript.keybind;
 
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiRemovalHelper;
 import mezz.jei.api.IRecipesGui;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
-import net.minecraftforge.fml.common.Loader;
 import org.lwjgl.input.Keyboard;
 
 public class RemoveRecipeKey extends GroovyScriptKeybinds.Key {
@@ -16,7 +16,7 @@ public class RemoveRecipeKey extends GroovyScriptKeybinds.Key {
     }
 
     public static void createKeybind() {
-        if (Loader.isModLoaded("jei")) GroovyScriptKeybinds.addKey(new RemoveRecipeKey());
+        if (ModSupport.JEI.isLoaded()) GroovyScriptKeybinds.addKey(new RemoveRecipeKey());
     }
 
     @Override
