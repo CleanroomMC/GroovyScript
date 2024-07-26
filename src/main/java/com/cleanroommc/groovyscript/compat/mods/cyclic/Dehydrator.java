@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.lothrazar.cyclicmagic.CyclicContent;
 import com.lothrazar.cyclicmagic.block.dehydrator.RecipeDeHydrate;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +22,11 @@ public class Dehydrator extends VirtualizedRegistry<RecipeDeHydrate> {
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return CyclicContent.dehydrator.enabled();
     }
 
     @Override
