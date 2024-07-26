@@ -199,7 +199,7 @@ groovyscript.wiki.aether_legacy.freezer.description=The Freezer is used to turn 
 groovyscript.wiki.aether_legacy.freezer.add=Adds a Freezer recipe in the format `input`, `output`, `time`.
 groovyscript.wiki.aether_legacy.freezer.time.value=Sets the time the recipe takes to complete
 
-groovyscript.wiki.aether_legacy.freezer_fuel.title=Freezer
+groovyscript.wiki.aether_legacy.freezer_fuel.title=Freezer Fuel
 groovyscript.wiki.aether_legacy.freezer_fuel.description= By default, the Freezer takes Icestone as fuel. Using GroovyScript, custom fuels can be added.
 groovyscript.wiki.aether_legacy.freezer_fuel.add=Adds a Freezer fuel in the format `item`, `timeGiven`.
 
@@ -1543,8 +1543,7 @@ groovyscript.wiki.pyrotech.kiln.title=Kiln
 groovyscript.wiki.pyrotech.kiln.description=Converts an item into a new one by burning it. Has a chance to fail
 groovyscript.wiki.pyrotech.kiln.burnTime.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.kiln.failureChance.value=Sets the chance to fail the recipe
-groovyscript.wiki.pyrotech.kiln.failureOutputs.value=Sets the output when the recipe failed
-groovyscript.wiki.pyrotech.kiln.failureOutput.value=
+groovyscript.wiki.pyrotech.kiln.failureOutput.value=Sets the output when the recipe failed
 groovyscript.wiki.pyrotech.kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
 
 groovyscript.wiki.pyrotech.soaking_pot.title=Soaking Pot

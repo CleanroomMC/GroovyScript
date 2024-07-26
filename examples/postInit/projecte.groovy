@@ -18,8 +18,8 @@ mods.projecte.entity_randomizer.addMob(entity('minecraft:pig'))
 mods.projecte.entity_randomizer.addPeaceful(entity('minecraft:zombie'))
 
 // World Transmutation:
-// Converts an input blockstate into an output blockstate when right-clicked with by a Philosopher's Stone, with the abity
-// to be converted into a different output blockstate when holding shift.
+// Converts an input blockstate into an output blockstate when right-clicked with by a Philosopher's Stone, with the
+// ability to be converted into a different output blockstate when holding shift.
 
 mods.projecte.transmutation.removeByInput(blockstate('minecraft:wool'))
 mods.projecte.transmutation.removeByOutput(blockstate('minecraft:dirt'))

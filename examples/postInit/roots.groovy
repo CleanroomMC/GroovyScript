@@ -237,7 +237,7 @@ mods.roots.predicates.stateBuilder()
 
 
 // Pyre:
-// Converts 5 input items into the ouput after a period of time when the Pyre is lit on fire.
+// Converts 5 input items into the output after a period of time when the Pyre is lit on fire.
 
 mods.roots.pyre.removeByName(resource('roots:infernal_bulb'))
 mods.roots.pyre.removeByOutput(item('minecraft:gravel'))
