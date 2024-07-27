@@ -90,6 +90,10 @@ public class GroovyScriptCodeConverter {
         return builder.toString();
     }
 
+    public static String asGroovyCode(ResourceLocation resourceLocation, boolean colored) {
+        return formatResourceLocation("resource", resourceLocation, colored);
+    }
+
     private static String getSingleItemStack(ItemStack itemStack, boolean colored) {
         StringBuilder builder = new StringBuilder();
         if (colored) builder.append(TextFormatting.DARK_GREEN);
