@@ -15,4 +15,7 @@ public interface RecipeLayoutAccessor {
     @Accessor("guiIngredientGroups")
     Map<IIngredientType, IGuiIngredientGroup> getGuiIngredientGroups();
 
+    @Accessor("recipeWrapper")
+    IRecipeWrapper getRecipeWrapper();
+
 }
