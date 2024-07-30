@@ -9,6 +9,8 @@ import org.lwjgl.input.Keyboard;
 
 public class ReloadKey extends GroovyScriptKeybinds.Key {
 
+    private static final int INTERVAL = 1000;
+
     private long timeSinceLastUse;
 
     public ReloadKey() {
@@ -27,7 +29,7 @@ public class ReloadKey extends GroovyScriptKeybinds.Key {
     @Override
     public void handleKeybind() {
         long time = Minecraft.getSystemTime();
-        if (Minecraft.getMinecraft().isIntegratedServerRunning() && time - timeSinceLastUse >= 1000 && Minecraft.getMinecraft().player.getPermissionLevel() >= 4) {
+        if (Minecraft.getMinecraft().isIntegratedServerRunning() && time - timeSinceLastUse >= INTERVAL && Minecraft.getMinecraft().player.getPermissionLevel() >= 4) {
             NetworkHandler.sendToServer(new CReload());
             timeSinceLastUse = time;
         }
