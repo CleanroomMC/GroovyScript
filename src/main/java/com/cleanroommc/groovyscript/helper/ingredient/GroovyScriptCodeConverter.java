@@ -94,7 +94,7 @@ public class GroovyScriptCodeConverter {
         return formatResourceLocation("resource", resourceLocation, colored);
     }
 
-    private static String getSingleItemStack(ItemStack itemStack, boolean colored) {
+    public static String getSingleItemStack(ItemStack itemStack, boolean colored) {
         StringBuilder builder = new StringBuilder();
         if (colored) builder.append(TextFormatting.DARK_GREEN);
         builder.append("item");
@@ -130,12 +130,16 @@ public class GroovyScriptCodeConverter {
         return getSingleItemStack(itemStack, colored) + formatNBTTag(itemStack.getTagCompound(), colored, prettyNbt) + formatMultiple(itemStack.getCount(), colored);
     }
 
+    public static String getSingleFluidStack(FluidStack fluidStack, boolean colored) {
+        return formatGenericHandler("fluid", fluidStack.getFluid().getName(), colored);
+    }
+
     public static String asGroovyCode(FluidStack fluidStack, boolean colored) {
-        return formatGenericHandler("fluid", fluidStack.getFluid().getName(), colored) + formatMultiple(fluidStack.amount, colored);
+        return getSingleFluidStack(fluidStack, colored) + formatMultiple(fluidStack.amount, colored);
     }
 
     public static String asGroovyCode(FluidStack fluidStack, boolean colored, boolean prettyNbt) {
-        return formatGenericHandler("fluid", fluidStack.getFluid().getName(), colored) + formatNBTTag(fluidStack.tag, colored, prettyNbt) + formatMultiple(fluidStack.amount, colored);
+        return getSingleFluidStack(fluidStack, colored) + formatNBTTag(fluidStack.tag, colored, prettyNbt) + formatMultiple(fluidStack.amount, colored);
     }
 
     public static String asGroovyCode(String oreDict, boolean colored) {
