@@ -26,6 +26,9 @@ public class RemoveRecipeKey extends GroovyScriptKeybinds.Key {
 
     @Override
     public void handleKeybind() {
-        JeiRemovalHelper.getRemovalMethod();
+        // only actually check if this is the downpress
+        if (Keyboard.getEventKeyState()) {
+            JeiRemovalHelper.getRemovalMethod();
+        }
     }
 }
