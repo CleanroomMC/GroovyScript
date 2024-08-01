@@ -3,6 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods.woot;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.woot.AnvilManagerAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -12,9 +14,14 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import ipsis.Woot;
 import ipsis.woot.crafting.AnvilRecipe;
 import ipsis.woot.crafting.IAnvilRecipe;
+import ipsis.woot.plugins.jei.JEIPlugin;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription(
@@ -23,7 +30,7 @@ import java.util.stream.Collectors;
                 @Admonition(value = "groovyscript.wiki.woot.stygian_iron_anvil.note1", type = Admonition.Type.WARNING)
         }
 )
-public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
+public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> implements IJEIRemoval.Default {
 
     public StygianIronAnvil() {
         super(Alias.generateOfClassAnd(StygianIronAnvil.class, "Anvil"));
@@ -97,6 +104,19 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
     public SimpleObjectStream<IAnvilRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Woot.anvilManager.getRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIPlugin.JEI_ANVIL);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        // JEI doesn't get all inputs, only the first 6. Using a mixin to access the stored recipe field to
+        // get all inputs is a viable solution - however, the only way to obtain so many is to add it deliberately,
+        // so there shouldn't be situations where having more is required.
+        return Default.excludeSlots(2, 3, 4, 5, 6, 7, 8);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "Integer.MAX_VALUE")})
