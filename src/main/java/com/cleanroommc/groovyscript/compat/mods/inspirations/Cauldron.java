@@ -4,12 +4,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.inspirations.InspirationsRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import knightminer.inspirations.library.InspirationsRegistry;
 import knightminer.inspirations.library.recipe.cauldron.*;
+import knightminer.inspirations.plugins.jei.cauldron.CauldronRecipeCategory;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionType;
@@ -18,17 +22,17 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.util.RecipeMatch;
 
-import java.util.Arrays;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription(
         admonition = @Admonition("groovyscript.wiki.inspirations.cauldron.note")
 )
-public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
+public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> implements IJEIRemoval.Default {
 
     private static boolean checkRecipeMatches(ISimpleCauldronRecipe recipe, IIngredient input, ItemStack output, Object inputState, Object outputState) {
         // Check all relevant parts to determine if we need to match them and if they do match.
@@ -212,6 +216,26 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
     public SimpleObjectStream<ICauldronRecipe> streamRecipes() {
         return new SimpleObjectStream<>(InspirationsRegistryAccessor.getCauldronRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(CauldronRecipeCategory.CATEGORY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation(), OperationHandler.ItemOperation.defaultItemOperation());
+//      // add methods to remove by these custom values before uncommenting
+//      new OperationHandler.ClassSlotOperation<>(
+//              DyeIngredient.class, true,
+//              (stack, all) -> {
+//                  var name = stack.getDye().toString();
+//                  return "dye" + name.substring(0, 1).toUpperCase() + name.substring(1);
+//              }),
+//      new OperationHandler.ClassSlotOperation<>(
+//              PotionIngredient.class, true,
+//              (stack, all) -> GroovyScriptCodeConverter.asGroovyCode(stack.getPotion().getEffects().get(0), false))
     }
 
     @Property(property = "input", valid = @Comp("1"), needsOverride = true)
