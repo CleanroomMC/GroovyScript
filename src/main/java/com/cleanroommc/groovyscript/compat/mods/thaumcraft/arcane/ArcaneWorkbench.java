@@ -5,19 +5,34 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.registry.NamedRegistry;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import thaumcraft.api.crafting.IArcaneRecipe;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class ArcaneWorkbench extends NamedRegistry {
+public class ArcaneWorkbench extends NamedRegistry implements IJEIRemoval.Default {
+
+    private static OperationHandler.IOperation registryNameOperation() {
+        return new OperationHandler.WrapperOperation<>(com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory.ArcaneWorkbenchWrapper.class, wrapper ->
+                wrapper.getRecipe().getRegistryName() == null
+                ? Collections.emptyList()
+                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRecipe().getRegistryName(), false))));
+    }
 
     public static final ResourceLocation DEFAULT = new ResourceLocation("");
 
@@ -59,5 +74,25 @@ public class ArcaneWorkbench extends NamedRegistry {
             ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, recipe.getRegistryName());
         }
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory.UUID);
+    }
+
+//    @Override
+//    public @NotNull List<String> getRemoval(IRecipeLayout layout) {
+//        var list = new ArrayList<String>();
+//        if (((RecipeLayoutAccessor) layout).getRecipeWrapper() instanceof com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory.ArcaneWorkbenchWrapper wrapper) {
+//            list.add(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRecipe().getRegistryName(), false)));
+//        }
+//        return list;
+//    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
+    }
+
 }
 

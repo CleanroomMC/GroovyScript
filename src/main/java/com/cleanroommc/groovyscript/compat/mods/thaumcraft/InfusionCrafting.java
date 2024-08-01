@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -22,16 +23,13 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.IThaumcraftRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 
 @RegistryDescription
-public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation, InfusionRecipe>> {
+public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation, InfusionRecipe>> implements IJEIRemovalAspect {
 
     @RecipeBuilderDescription(example = @Example(".researchKey('UNLOCKALCHEMY@3').mainInput(item('minecraft:gunpowder')).output(item('minecraft:gold_ingot')).aspect(aspect('terra') * 20).aspect('ignis', 30).input(crystal('aer')).input(crystal('ignis')).input(crystal('aqua')).input(crystal('terra')).input(crystal('ordo')).instability(10)"))
     public RecipeBuilder recipeBuilder() {
@@ -125,6 +123,11 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
             addBackup(Pair.of(recipe.getKey(), (InfusionRecipe) recipe.getValue()));
             ThaumcraftApi.getCraftingRecipes().remove(recipe.getKey(), recipe.getValue());
         }
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(com.buuz135.thaumicjei.category.InfusionCategory.UUID);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<InfusionRecipe> {

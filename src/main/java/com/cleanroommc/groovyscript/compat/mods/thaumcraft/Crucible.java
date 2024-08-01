@@ -13,6 +13,7 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -25,7 +26,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
+public class Crucible extends VirtualizedRegistry<CrucibleRecipe> implements IJEIRemovalAspect {
 
     @RecipeBuilderDescription(example = @Example(".researchKey('UNLOCKALCHEMY@3').catalyst(item('minecraft:rotten_flesh')).output(item('minecraft:gold_ingot')).aspect(aspect('metallum') * 10)"))
     public RecipeBuilder recipeBuilder() {
@@ -119,6 +120,11 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             addBackup((CrucibleRecipe) recipe.getValue());
             ThaumcraftApi.getCraftingRecipes().remove(recipe.getKey(), recipe.getValue());
         }
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(com.buuz135.thaumicjei.category.CrucibleCategory.UUID);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrucibleRecipe> {
