@@ -4,19 +4,32 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
+import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.IJEIRemovalGas;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.google.common.collect.ImmutableList;
 import mekanism.api.infuse.InfuseRegistry;
 import mekanism.api.infuse.InfuseType;
+import mekanism.client.jei.machine.other.MetallurgicInfuserRecipeWrapper;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.InfusionInput;
 import mekanism.common.recipe.machines.MetallurgicInfuserRecipe;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
 public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicInfuserRecipe> {
+
+    private static OperationHandler.IOperation infuseTypeOperation() {
+        return new OperationHandler.WrapperOperation<>(MetallurgicInfuserRecipeWrapper.class, wrapper -> Collections.singletonList(JeiRemovalHelper.format("removeByInput", Mekanism.asGroovyCode(((MetallurgicInfuserRecipe) wrapper.getRecipe()).getInput().infuse.getType(), false))));
+    }
 
     public MetallurgicInfuser() {
         super(RecipeHandler.Recipe.METALLURGIC_INFUSER);
@@ -57,6 +70,11 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
             removeError("could not find recipe for {}", ingredient);
         }
         return found;
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(infuseTypeOperation(), OperationHandler.ItemOperation.defaultItemOperation().exclude(2), OperationHandler.FluidOperation.defaultFluidOperation(), IJEIRemovalGas.getDefaultGas());
     }
 
     public boolean removeByInput(IIngredient ingredient, String infuseType) {

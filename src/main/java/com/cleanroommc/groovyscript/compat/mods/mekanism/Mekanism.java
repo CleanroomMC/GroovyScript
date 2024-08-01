@@ -40,6 +40,8 @@ public class Mekanism extends GroovyPropertyContainer {
     public final ThermalEvaporationPlant thermalEvaporationPlant = new ThermalEvaporationPlant();
     public final Washer washer = new Washer();
 
+    // TODO The Rotary Condensentrator does not have compat currently. This should be added.
+
 
     @Optional.Method(modid = "mekanism")
     public static String asGroovyCode(Gas gasStack, boolean colored) {
@@ -57,8 +59,13 @@ public class Mekanism extends GroovyPropertyContainer {
     }
 
     @Optional.Method(modid = "mekanism")
+    public static String getSingleGasStack(GasStack gasStack, boolean colored) {
+        return asGroovyCode(gasStack.getGas(), colored);
+    }
+
+    @Optional.Method(modid = "mekanism")
     public static String asGroovyCode(GasStack gasStack, boolean colored) {
-        return asGroovyCode(gasStack.getGas(), colored) + GroovyScriptCodeConverter.formatMultiple(gasStack.amount, colored);
+        return getSingleGasStack(gasStack, colored) + GroovyScriptCodeConverter.formatMultiple(gasStack.amount, colored);
     }
 
     @Optional.Method(modid = "mekanism")

@@ -9,11 +9,13 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.machines.MachineRecipe;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 
-public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, R>> extends VirtualizedRegistry<R> {
+public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, R>> extends VirtualizedRegistry<R> implements IJEIRemovalGas {
 
     protected final RecipeHandler.Recipe<?, ?, R> recipeRegistry;
 
@@ -66,4 +68,10 @@ public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, 
                 .error()
                 .post();
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(recipeRegistry.getJEICategory());
+    }
+
 }

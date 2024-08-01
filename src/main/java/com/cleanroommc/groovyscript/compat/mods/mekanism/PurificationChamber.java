@@ -4,17 +4,23 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
+import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.IJEIRemovalGas;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.google.common.collect.ImmutableList;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.AdvancedMachineInput;
 import mekanism.common.recipe.machines.PurificationRecipe;
 import mekanism.common.recipe.outputs.ItemStackOutput;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 @RegistryDescription
 public class PurificationChamber extends VirtualizedMekanismRegistry<PurificationRecipe> {
@@ -52,6 +58,11 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
             removeError("could not find recipe for {} and {}", ingredient, gasInput);
         }
         return found;
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(2), OperationHandler.FluidOperation.defaultFluidOperation(), IJEIRemovalGas.getDefaultGas());
     }
 
     @Property(property = "input", valid = @Comp("1"))

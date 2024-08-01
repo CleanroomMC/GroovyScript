@@ -3,14 +3,20 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
+import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.IJEIRemovalGas;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
 import com.cleanroommc.groovyscript.helper.Alias;
+import com.google.common.collect.ImmutableList;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.GasInput;
 import mekanism.common.recipe.machines.WasherRecipe;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 @RegistryDescription
 public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
@@ -68,5 +74,10 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
             ModSupport.MEKANISM.get().washer.add(recipe);
             return recipe;
         }
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation().exclude(0), IJEIRemovalGas.getDefaultGas());
     }
 }
