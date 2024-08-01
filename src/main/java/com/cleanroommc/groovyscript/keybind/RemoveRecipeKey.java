@@ -21,8 +21,9 @@ public class RemoveRecipeKey extends GroovyScriptKeybinds.Key {
 
     private static final ITextComponent GOLD_SEPARATOR = new TextComponentString("====================================").setStyle(new Style().setColor(TextFormatting.GOLD));
 
-    private static final int SHORTHAND_TRIM_LENGTH = 50;
+    private static final int SHORTHAND_TRIM_LENGTH = 60;
     private static final int SHORTHAND_TRIM_MARGIN = 5;
+    private static final String SHORTHAND_INDICATOR = TextFormatting.RED + "...";
 
     private static final String ERROR_KEY = "key.groovyscript.remove_recipe_from_jei.unknown_category";
     private static final Style ERROR_STYLE = new Style().setColor(TextFormatting.RED);
@@ -53,7 +54,7 @@ public class RemoveRecipeKey extends GroovyScriptKeybinds.Key {
 
     private static void printMessage(String prefix, String shorthand) {
         var msg = shorthand.length() > SHORTHAND_TRIM_LENGTH + SHORTHAND_TRIM_MARGIN
-                  ? shorthand.substring(0, SHORTHAND_TRIM_LENGTH) + TextFormatting.RED + "..."
+                  ? shorthand.substring(0, SHORTHAND_TRIM_LENGTH) + SHORTHAND_INDICATOR
                   : shorthand;
         printMessage(TextCopyable.string(String.format("%s.%s", prefix, shorthand), msg).build());
     }
