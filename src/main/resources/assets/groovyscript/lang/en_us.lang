@@ -3,7 +3,8 @@ groovyscript.command.copy.copied_start=Copied [
 groovyscript.command.copy.copied_end=] to the clipboard
 
 key.categories.groovyscript=GroovyScript
-key.groovyscript.reload=Reload Scripts
+keybind.groovyscript.reload=Reload Scripts
+keybind.groovyscript.remove_recipe_from_jei=Generate Recipe Removal Method (from JEI)
 
 groovyscript.jei.category.groovyscript:fluid_recipe.name=In world fluid recipes
 groovyscript.jei.category.groovyscript:explosion.name=Explosion recipes
