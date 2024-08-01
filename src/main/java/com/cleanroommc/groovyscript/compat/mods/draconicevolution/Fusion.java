@@ -1,22 +1,63 @@
 package com.cleanroommc.groovyscript.compat.mods.draconicevolution;
 
 import com.brandon3055.draconicevolution.api.fusioncrafting.IFusionRecipe;
+import com.brandon3055.draconicevolution.integration.jei.FusionRecipeWrapper;
+import com.brandon3055.draconicevolution.integration.jei.RecipeCategoryUids;
 import com.brandon3055.draconicevolution.lib.RecipeManager;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.draconicevolution.FusionRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
+public class Fusion extends VirtualizedRegistry<IFusionRecipe> implements IJEIRemoval.Default {
+
+    private static OperationHandler.IOperation wrapperOperation() {
+        return new OperationHandler.WrapperOperation<>(FusionRecipeWrapper.class, wrapper -> {
+            var builder = ImmutableList.<String>builder();
+            if (!wrapper.recipe.getRecipeCatalyst().isEmpty()) {
+                builder.add(JeiRemovalHelper.format("removeByCatalyst", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeCatalyst(), false)));
+            }
+            var output = wrapper.recipe.getRecipeOutput(wrapper.recipe.getRecipeCatalyst());
+            if (!output.isEmpty()) {
+                builder.add(JeiRemovalHelper.format("removeByOutput", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeOutput(wrapper.recipe.getRecipeCatalyst()), false)));
+            }
+            for (var ingredient : wrapper.recipe.getRecipeIngredients()) {
+                if (ingredient instanceof String ore) {
+                    builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.asGroovyCode(ore, false)));
+                } else {
+                    ItemStack stack = null;
+                    if (ingredient instanceof ItemStack is) stack = is;
+                    else if (ingredient instanceof Item i) stack = new ItemStack(i);
+                    else if (ingredient instanceof Block b) stack = new ItemStack(b);
+
+                    if (stack != null) {
+                        builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.getSingleItemStack(stack, false)));
+                    }
+                }
+            }
+            return builder.build();
+        });
+    }
 
     @Override
     public void onReload() {
@@ -63,6 +104,16 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
     public SimpleObjectStream<IFusionRecipe> streamRecipes() {
         return new SimpleObjectStream<>(((FusionRegistryAccessor) RecipeManager.FUSION_REGISTRY).getREGISTRY())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(RecipeCategoryUids.FUSION_CRAFTING);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(wrapperOperation());
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "54")})

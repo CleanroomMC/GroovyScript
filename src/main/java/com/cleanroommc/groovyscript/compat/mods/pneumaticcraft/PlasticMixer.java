@@ -4,13 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.pneumaticcraft.PlasticMixerRecipeAccessor;
 import com.cleanroommc.groovyscript.core.mixin.pneumaticcraft.PlasticMixerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import me.desht.pneumaticcraft.common.recipes.PlasticMixerRegistry;
+import mezz.jei.api.gui.IRecipeLayout;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription(
         admonition = {
@@ -18,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
                 @Admonition(value = "groovyscript.wiki.pneumaticcraft.plastic_mixer.note1", type = Admonition.Type.DANGER)
         }
 )
-public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.PlasticMixerRecipe> {
+public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.PlasticMixerRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('lava') * 100).output(item('minecraft:clay')).allowMelting().allowSolidifying().requiredTemperature(323)"),
@@ -89,6 +97,25 @@ public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.Plast
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<PlasticMixerRegistry.PlasticMixerRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getInstance().getRecipes()).setRemover(this::remove);
+    }
+
+    /**
+     * @see me.desht.pneumaticcraft.common.thirdparty.jei.ModCategoryUid
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("pneumaticcraft.plastic_mixer");
+    }
+
+    @Override
+    public @NotNull List<String> getRemoval(IRecipeLayout layout) {
+        // isn't this absolutely miserable?
+        // we need to this because the RGB dyes are part of the recipe as slots 0, 1, and 2 if the recipe outputs an item
+        // and slot 0 is used for the recipe input if the recipe has an input item.
+        var itemOperation = layout.getItemStacks().getGuiIngredients().size() > 2
+                            ? OperationHandler.ItemOperation.defaultItemOperation().exclude(0, 1, 2)
+                            : OperationHandler.ItemOperation.defaultItemOperation();
+        return OperationHandler.removalOptions(layout, itemOperation, OperationHandler.FluidOperation.defaultFluidOperation());
     }
 
     @Property(property = "output", valid = @Comp("1"))

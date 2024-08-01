@@ -3,16 +3,37 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import epicsquid.roots.init.ModRecipes;
+import epicsquid.roots.integration.jei.JEIRootsPlugin;
+import epicsquid.roots.integration.jei.shears.RunicShearsSummonEntityWrapper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES
 )
-public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivingBase>> {
+public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivingBase>> implements IJEIRemoval.Default {
+
+    private static OperationHandler.IOperation entityOperation() {
+        return new OperationHandler.WrapperOperation<>(RunicShearsSummonEntityWrapper.class, wrapper -> {
+            var tag = wrapper.recipe.getEssenceStack().getTagCompound();
+            if (tag == null) return Collections.emptyList();
+            // only real way to access the entity ID here
+            return Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.formatGenericHandler("entity", tag.getString("id"), false)));
+        });
+    }
 
     @Override
     public void onReload() {
@@ -63,4 +84,15 @@ public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivin
     public SimpleObjectStream<Class<? extends EntityLivingBase>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.getLifeEssenceList()).setRemover(this::remove);
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(JEIRootsPlugin.RUNIC_SHEARS_SUMMON_ENTITY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(entityOperation());
+    }
+
 }

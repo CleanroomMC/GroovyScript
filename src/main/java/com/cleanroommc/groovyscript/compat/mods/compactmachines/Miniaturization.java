@@ -3,23 +3,41 @@ package com.cleanroommc.groovyscript.compat.mods.compactmachines;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import org.dave.compactmachines3.jei.MultiblockRecipeCategory;
+import org.dave.compactmachines3.jei.MultiblockRecipeWrapper;
 import org.dave.compactmachines3.miniaturization.MultiblockRecipes;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachines3.miniaturization.MultiblockRecipe> {
+public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachines3.miniaturization.MultiblockRecipe> implements IJEIRemoval.Default {
+
+    private static OperationHandler.IOperation wrapperOperation() {
+        return new OperationHandler.WrapperOperation<>(MultiblockRecipeWrapper.class, wrapper -> {
+            var builder = ImmutableList.<String>builder();
+            builder.add(JeiRemovalHelper.format("removeByCatalyst", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getCatalystStack(), false)));
+            builder.add(JeiRemovalHelper.format("removeByOutput", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getTargetStack(), false)));
+            for (ItemStack stack : wrapper.recipe.getRequiredItemStacks()) {
+                builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.getSingleItemStack(stack, false)));
+            }
+            return builder.build();
+        });
+    }
 
     @RecipeBuilderDescription(example = {
             @Example(".name('diamond_rectangle').input(item('minecraft:clay')).output(item('minecraft:clay')).symmetrical().ticks(10).shape([['www', 'www']]).key('w', blockstate('minecraft:diamond_block'))"),
@@ -75,6 +93,16 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<org.dave.compactmachines3.miniaturization.MultiblockRecipe> streamRecipes() {
         return new SimpleObjectStream<>(MultiblockRecipes.getRecipes()).setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(MultiblockRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(wrapperOperation());
     }
 
     @Property(property = "input", valid = @Comp("1"))

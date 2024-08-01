@@ -3,19 +3,26 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class Crafting extends ForgeRegistryWrapper<IRecipe> {
+public class Crafting extends ForgeRegistryWrapper<IRecipe> implements IJEIRemoval.Default {
 
     private static final Char2ObjectOpenHashMap<IIngredient> fallbackChars = new Char2ObjectOpenHashMap<>();
 
@@ -26,6 +33,13 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> {
     @GroovyBlacklist
     public static IIngredient getFallback(char c) {
         return fallbackChars.get(c);
+    }
+
+    private static OperationHandler.IOperation registryNameOperation() {
+        return new OperationHandler.WrapperOperation<>(ICraftingRecipeWrapper.class, wrapper ->
+                wrapper.getRegistryName() == null
+                ? Collections.emptyList()
+                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRegistryName(), false))));
     }
 
     public void setFallback(char key, IIngredient ingredient) {
@@ -213,4 +227,15 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> {
     public CraftingRecipeBuilder.Shapeless shapelessBuilder() {
         return new CraftingRecipeBuilder.Shapeless();
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(VanillaRecipeCategoryUid.CRAFTING);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
+    }
+
 }

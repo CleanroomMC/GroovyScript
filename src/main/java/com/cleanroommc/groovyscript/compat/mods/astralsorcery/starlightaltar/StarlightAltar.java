@@ -2,18 +2,52 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarAttunementRecipeWrapper;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarConstellationRecipeWrapper;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarDiscoveryRecipeWrapper;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarTraitRecipeWrapper;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
+public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> implements IJEIRemoval.Default {
+
+    private static List<String> registryNameRemovalMethod(AbstractAltarRecipe recipe) {
+        return Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(recipe.getNativeRecipe().getRegistryName(), false)));
+    }
+
+    private static OperationHandler.IOperation discoveryOperation() {
+        return new OperationHandler.WrapperOperation<>(AltarDiscoveryRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
+    }
+
+    private static OperationHandler.IOperation attunementOperation() {
+        return new OperationHandler.WrapperOperation<>(AltarAttunementRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
+    }
+
+    private static OperationHandler.IOperation constellationOperation() {
+        return new OperationHandler.WrapperOperation<>(AltarConstellationRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
+    }
+
+    private static OperationHandler.IOperation traitOperation() {
+        return new OperationHandler.WrapperOperation<>(AltarTraitRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
+    }
 
     @RecipeBuilderDescription(priority = 100, requirement = {
             @Property(property = "ingredientMatrix", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}),
@@ -105,4 +139,15 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
             recipes.clear();
         });
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(ModIntegrationJEI.idAltarDiscovery, ModIntegrationJEI.idAltarAttunement, ModIntegrationJEI.idAltarConstellation, ModIntegrationJEI.idAltarTrait);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(discoveryOperation(), attunementOperation(), constellationOperation(), traitOperation(), OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
+    }
+
 }
