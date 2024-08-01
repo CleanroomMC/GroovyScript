@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
+import com.buuz135.thaumicjei.category.InfusionCategory;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -13,6 +14,7 @@ import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Optional;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 import static thaumcraft.common.config.ConfigRecipes.compileGroups;
 
 @RegistryDescription
+@Optional.Interface(modid = "thaumicjei", iface = "com.cleanroommc.groovyscript.compat.mods.thaumcraft.IJEIRemovalAspect")
 public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation, InfusionRecipe>> implements IJEIRemovalAspect {
 
     @RecipeBuilderDescription(example = @Example(".researchKey('UNLOCKALCHEMY@3').mainInput(item('minecraft:gunpowder')).output(item('minecraft:gold_ingot')).aspect(aspect('terra') * 20).aspect('ignis', 30).input(crystal('aer')).input(crystal('ignis')).input(crystal('aqua')).input(crystal('terra')).input(crystal('ordo')).instability(10)"))
@@ -126,8 +129,9 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
     }
 
     @Override
+    @Optional.Method(modid = "thaumicjei")
     public @NotNull Collection<String> getCategories() {
-        return Collections.singletonList(com.buuz135.thaumicjei.category.InfusionCategory.UUID);
+        return Collections.singletonList(InfusionCategory.UUID);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<InfusionRecipe> {

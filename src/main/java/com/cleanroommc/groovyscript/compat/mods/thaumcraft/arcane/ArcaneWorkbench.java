@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft.arcane;
 
+import com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
@@ -15,6 +16,7 @@ import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import thaumcraft.api.crafting.IArcaneRecipe;
@@ -25,8 +27,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
+@Optional.Interface(modid = "thaumicjei", iface = "com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval$Default")
 public class ArcaneWorkbench extends NamedRegistry implements IJEIRemoval.Default {
 
+    @Optional.Method(modid = "thaumicjei")
     private static OperationHandler.IOperation registryNameOperation() {
         return new OperationHandler.WrapperOperation<>(com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory.ArcaneWorkbenchWrapper.class, wrapper ->
                 wrapper.getRecipe().getRegistryName() == null
@@ -76,11 +80,13 @@ public class ArcaneWorkbench extends NamedRegistry implements IJEIRemoval.Defaul
     }
 
     @Override
+    @Optional.Method(modid = "thaumicjei")
     public @NotNull Collection<String> getCategories() {
-        return Collections.singletonList(com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory.UUID);
+        return Collections.singletonList(ArcaneWorkbenchCategory.UUID);
     }
 
     @Override
+    @Optional.Method(modid = "thaumicjei")
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
         return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
     }

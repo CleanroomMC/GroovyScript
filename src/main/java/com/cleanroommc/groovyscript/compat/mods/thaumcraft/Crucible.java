@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.thaumcraft;
 
+import com.buuz135.thaumicjei.category.CrucibleCategory;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -12,6 +13,7 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +28,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
+@Optional.Interface(modid = "thaumicjei", iface = "com.cleanroommc.groovyscript.compat.mods.thaumcraft.IJEIRemovalAspect")
 public class Crucible extends VirtualizedRegistry<CrucibleRecipe> implements IJEIRemovalAspect {
 
     @RecipeBuilderDescription(example = @Example(".researchKey('UNLOCKALCHEMY@3').catalyst(item('minecraft:rotten_flesh')).output(item('minecraft:gold_ingot')).aspect(aspect('metallum') * 10)"))
@@ -123,8 +126,9 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> implements IJE
     }
 
     @Override
+    @Optional.Method(modid = "thaumicjei")
     public @NotNull Collection<String> getCategories() {
-        return Collections.singletonList(com.buuz135.thaumicjei.category.CrucibleCategory.UUID);
+        return Collections.singletonList(CrucibleCategory.UUID);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrucibleRecipe> {
