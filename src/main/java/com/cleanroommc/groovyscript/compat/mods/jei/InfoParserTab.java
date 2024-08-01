@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.jei;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import com.cleanroommc.groovyscript.compat.vanilla.command.infoparser.GenericInfoParser;
 import com.cleanroommc.groovyscript.core.mixin.jei.ModRegistryAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -29,7 +30,7 @@ public class InfoParserTab extends GenericInfoParser<IRecipeCategory> {
 
     @Override
     public String text(@NotNull IRecipeCategory entry, boolean colored, boolean prettyNbt) {
-        return colored ? TextFormatting.YELLOW + entry.getUid() : entry.getUid();
+        return colored ? GroovyScriptCodeConverter.STRING + entry.getUid() : entry.getUid();
     }
 
     @Override

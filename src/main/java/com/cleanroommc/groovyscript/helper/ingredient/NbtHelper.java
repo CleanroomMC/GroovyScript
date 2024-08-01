@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.helper.ingredient;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.Closure;
 import net.minecraft.nbt.*;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.List;
@@ -81,67 +80,73 @@ public class NbtHelper {
 
     public static String toGroovyCode(NBTTagByte nbt, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(GroovyScriptCodeConverter.CLASS);
         builder.append("(byte) ");
-        if (colored) builder.append(TextFormatting.GOLD);
+        if (colored) builder.append(GroovyScriptCodeConverter.NUMBER);
         builder.append(nbt.getByte());
         return builder.toString();
     }
 
     public static String toGroovyCode(NBTTagShort nbt, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(GroovyScriptCodeConverter.CLASS);
         builder.append("(short) ");
-        if (colored) builder.append(TextFormatting.GOLD);
+        if (colored) builder.append(GroovyScriptCodeConverter.NUMBER);
         builder.append(nbt.getShort());
         return builder.toString();
     }
 
     public static String toGroovyCode(NBTTagInt nbt, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GREEN);
+        if (colored) builder.append(GroovyScriptCodeConverter.NUMBER);
         builder.append(nbt.getInt());
         return builder.toString();
     }
 
     public static String toGroovyCode(NBTTagLong nbt, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GREEN);
-        builder.append(nbt.getLong()).append("L");
+        if (colored) builder.append(GroovyScriptCodeConverter.NUMBER);
+        builder.append(nbt.getLong());
+        if (colored) builder.append(GroovyScriptCodeConverter.CLASS);
+        builder.append("L");
         return builder.toString();
     }
 
     public static String toGroovyCode(NBTTagFloat nbt, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GREEN);
-        builder.append(nbt.getFloat()).append("F");
+        if (colored) builder.append(GroovyScriptCodeConverter.NUMBER);
+        builder.append(nbt.getFloat());
+        if (colored) builder.append(GroovyScriptCodeConverter.CLASS);
+        builder.append("F");
         return builder.toString();
     }
 
     public static String toGroovyCode(NBTTagDouble nbt, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GREEN);
-        builder.append(nbt.getDouble()).append("D");
+        if (colored) builder.append(GroovyScriptCodeConverter.NUMBER);
+        builder.append(nbt.getDouble());
+        if (colored) builder.append(GroovyScriptCodeConverter.CLASS);
+        builder.append("D");
         return builder.toString();
     }
 
     public static String toGroovyCode(NBTTagByteArray nbt, int indent, boolean pretty, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(GroovyScriptCodeConverter.BASE);
         builder.append('[');
         if (!nbt.isEmpty()) {
             newLine(builder, indent, pretty);
             for (byte value : nbt.getByteArray()) {
-                if (colored) builder.append(TextFormatting.GRAY);
+                if (colored) builder.append(GroovyScriptCodeConverter.CLASS);
                 builder.append("(byte) ");
-                if (colored) builder.append(TextFormatting.GOLD);
+                if (colored) builder.append(GroovyScriptCodeConverter.NUMBER);
                 builder.append(value);
-                if (colored) builder.append(TextFormatting.GRAY);
+                if (colored) builder.append(GroovyScriptCodeConverter.BASE);
                 builder.append(", ");
             }
             builder.delete(builder.length() - 2, builder.length());
             newLine(builder, indent, pretty);
-            if (colored) builder.append(TextFormatting.GRAY);
+            if (colored) builder.append(GroovyScriptCodeConverter.BASE);
         }
         builder.append(']');
         return builder.toString();
@@ -149,26 +154,26 @@ public class NbtHelper {
 
     public static String toGroovyCode(NBTTagString nbt, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GREEN);
+        if (colored) builder.append(GroovyScriptCodeConverter.STRING);
         builder.append('\'').append(nbt.getString()).append('\'');
         return builder.toString();
     }
 
     public static String toGroovyCode(NBTTagList nbt, int indent, boolean pretty, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(GroovyScriptCodeConverter.BASE);
         builder.append('[');
         if (!nbt.isEmpty()) {
             int internalIndent = indent + 1;
             for (NBTBase nbtBase : nbt) {
                 newLine(builder, internalIndent, pretty);
                 builder.append(toGroovyCode(nbtBase, internalIndent, pretty, colored));
-                if (colored) builder.append(TextFormatting.GRAY);
+                if (colored) builder.append(GroovyScriptCodeConverter.BASE);
                 builder.append(", ");
             }
             builder.delete(builder.length() - 2, builder.length());
             newLine(builder, indent, pretty);
-            if (colored) builder.append(TextFormatting.GRAY);
+            if (colored) builder.append(GroovyScriptCodeConverter.BASE);
         }
         builder.append(']');
         return builder.toString();
@@ -180,23 +185,23 @@ public class NbtHelper {
 
     public static String toGroovyCode(NBTTagCompound nbt, int indent, boolean pretty, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(GroovyScriptCodeConverter.BASE);
         builder.append('[');
         if (!nbt.isEmpty()) {
             int internalIndent = indent + 1;
             for (String key : nbt.getKeySet()) {
                 newLine(builder, internalIndent, pretty);
-                if (colored) builder.append(TextFormatting.GREEN);
+                if (colored) builder.append(GroovyScriptCodeConverter.NEW);
                 builder.append('\'').append(key).append('\'');
-                if (colored) builder.append(TextFormatting.GRAY);
+                if (colored) builder.append(GroovyScriptCodeConverter.BASE);
                 builder.append(": ");
                 builder.append(toGroovyCode(nbt.getTag(key), internalIndent, pretty, colored));
-                if (colored) builder.append(TextFormatting.GRAY);
+                if (colored) builder.append(GroovyScriptCodeConverter.BASE);
                 builder.append(", ");
             }
             builder.delete(builder.length() - 2, builder.length());
             newLine(builder, indent, pretty);
-            if (colored) builder.append(TextFormatting.GRAY);
+            if (colored) builder.append(GroovyScriptCodeConverter.BASE);
         }
         builder.append(']');
         return builder.toString();
@@ -204,19 +209,19 @@ public class NbtHelper {
 
     public static String toGroovyCode(NBTTagIntArray nbt, int indent, boolean pretty, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(GroovyScriptCodeConverter.BASE);
         builder.append('[');
         if (!nbt.isEmpty()) {
             newLine(builder, indent, pretty);
             for (int value : nbt.getIntArray()) {
-                if (colored) builder.append(TextFormatting.GOLD);
+                if (colored) builder.append(GroovyScriptCodeConverter.NUMBER);
                 builder.append(value);
-                if (colored) builder.append(TextFormatting.GRAY);
+                if (colored) builder.append(GroovyScriptCodeConverter.BASE);
                 builder.append(", ");
             }
             builder.delete(builder.length() - 2, builder.length());
             newLine(builder, indent, pretty);
-            if (colored) builder.append(TextFormatting.GRAY);
+            if (colored) builder.append(GroovyScriptCodeConverter.BASE);
         }
         builder.append(']');
         return builder.toString();

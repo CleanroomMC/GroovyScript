@@ -26,22 +26,40 @@ import java.util.Map;
 
 public class GroovyScriptCodeConverter {
 
+    public static final TextFormatting BASE = TextFormatting.GRAY;
+    public static final TextFormatting NUMBER = TextFormatting.YELLOW;
+    public static final TextFormatting STRING = TextFormatting.AQUA;
+    public static final TextFormatting HANDLER = TextFormatting.DARK_GREEN;
+    public static final TextFormatting NEW = TextFormatting.LIGHT_PURPLE;
+    public static final TextFormatting CLASS = TextFormatting.GOLD;
+
     public static String formatNumber(int number, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.YELLOW);
+        if (colored) builder.append(NUMBER);
         builder.append(number);
+        return builder.toString();
+    }
+
+    public static String formatString(String target, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(BASE);
+        builder.append("'");
+        if (colored) builder.append(STRING);
+        builder.append(target);
+        if (colored) builder.append(BASE);
+        builder.append("'");
         return builder.toString();
     }
 
     public static String formatGenericHandler(String handler, String target, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.DARK_GREEN);
+        if (colored) builder.append(HANDLER);
         builder.append(handler);
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(BASE);
         builder.append("('");
-        if (colored) builder.append(TextFormatting.AQUA);
+        if (colored) builder.append(STRING);
         builder.append(target);
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(BASE);
         builder.append("')");
         return builder.toString();
     }
@@ -49,7 +67,7 @@ public class GroovyScriptCodeConverter {
     public static String formatMultiple(int amount, boolean colored) {
         StringBuilder builder = new StringBuilder();
         if (amount > 1) {
-            if (colored) builder.append(TextFormatting.GRAY);
+            if (colored) builder.append(BASE);
             builder.append(" * ");
             builder.append(formatNumber(amount, colored));
         }
@@ -58,14 +76,14 @@ public class GroovyScriptCodeConverter {
 
     public static String formatInstantiation(String clazz, List<String> params, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.LIGHT_PURPLE);
+        if (colored) builder.append(NEW);
         builder.append("new ");
-        if (colored) builder.append(TextFormatting.GOLD);
+        if (colored) builder.append(CLASS);
         builder.append(clazz);
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(BASE);
         builder.append("(");
-        builder.append(String.join((colored ? TextFormatting.GRAY.toString() : "") + ", ", params));
-        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append(String.join((colored ? BASE.toString() : "") + ", ", params));
+        if (colored) builder.append(BASE);
         builder.append(")");
         return builder.toString();
     }
@@ -84,7 +102,7 @@ public class GroovyScriptCodeConverter {
         if (tag != null) {
             builder.append(".withNbt(");
             builder.append(NbtHelper.toGroovyCode(tag, prettyNbt, colored));
-            if (colored) builder.append(TextFormatting.GRAY);
+            if (colored) builder.append(BASE);
             builder.append(")");
         }
         return builder.toString();
@@ -92,27 +110,27 @@ public class GroovyScriptCodeConverter {
 
     private static String getSingleItemStack(ItemStack itemStack, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.DARK_GREEN);
+        if (colored) builder.append(HANDLER);
         builder.append("item");
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(BASE);
         builder.append("('");
-        if (colored) builder.append(TextFormatting.AQUA);
+        if (colored) builder.append(STRING);
         builder.append(itemStack.getItem().getRegistryName());
         // code is more complex than strictly needed here to allow using the wildcard
         if (itemStack.getMetadata() == Short.MAX_VALUE) {
             builder.append(":");
             builder.append("*");
-            if (colored) builder.append(TextFormatting.GRAY);
+            if (colored) builder.append(BASE);
             builder.append("'");
         } else if (itemStack.getMetadata() == 0) {
-            if (colored) builder.append(TextFormatting.GRAY);
+            if (colored) builder.append(BASE);
             builder.append("'");
         } else {
-            if (colored) builder.append(TextFormatting.GRAY);
+            if (colored) builder.append(BASE);
             builder.append("'");
             builder.append(", ");
             builder.append(formatNumber(itemStack.getMetadata(), colored));
-            if (colored) builder.append(TextFormatting.GRAY);
+            if (colored) builder.append(BASE);
         }
         builder.append(")");
         return builder.toString();
@@ -186,26 +204,26 @@ public class GroovyScriptCodeConverter {
     @SuppressWarnings("all")
     public static String asGroovyCode(IBlockState state, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(TextFormatting.DARK_GREEN);
+        if (colored) builder.append(HANDLER);
         builder.append("blockstate");
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(BASE);
         builder.append("('");
-        if (colored) builder.append(TextFormatting.AQUA);
+        if (colored) builder.append(STRING);
         builder.append(state.getBlock().getRegistryName());
-        if (colored) builder.append(TextFormatting.GRAY);
+        if (colored) builder.append(BASE);
         builder.append("'");
         if (!state.getProperties().isEmpty()) {
             for (Map.Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
                 IProperty property = entry.getKey();
-                if (colored) builder.append(TextFormatting.GRAY);
+                if (colored) builder.append(BASE);
                 builder.append(", ").append("'");
-                if (colored) builder.append(TextFormatting.YELLOW);
+                if (colored) builder.append(NUMBER);
                 builder.append(property.getName());
-                if (colored) builder.append(TextFormatting.GRAY);
+                if (colored) builder.append(BASE);
                 builder.append("=");
-                if (colored) builder.append(TextFormatting.YELLOW);
+                if (colored) builder.append(NUMBER);
                 builder.append(property.getName(entry.getValue()));
-                if (colored) builder.append(TextFormatting.GRAY);
+                if (colored) builder.append(BASE);
                 builder.append("'");
             }
         }
