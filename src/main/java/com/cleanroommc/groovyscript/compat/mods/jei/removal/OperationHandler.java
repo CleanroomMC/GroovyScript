@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class OperationHandler {
 
     private static final String EXACT_METHOD_NAME = "removeByExactInput";
+    private static final boolean IS_EXACT_METHOD_ENABLED = false;
 
     /**
      * Varargs variant of {@link #removalOptions(IRecipeLayout, List)}.
@@ -51,7 +52,7 @@ public class OperationHandler {
         for (var operation : operations) operation.parse(layout, removing, exactInput);
 
         var builder = ImmutableList.<String>builder();
-        if (exactInput.size() > 1) builder.add(JeiRemovalHelper.format(EXACT_METHOD_NAME, exactInput));
+        if (IS_EXACT_METHOD_ENABLED && exactInput.size() > 1) builder.add(JeiRemovalHelper.format(EXACT_METHOD_NAME, exactInput));
         builder.addAll(removing.stream().distinct().sorted().collect(Collectors.toList()));
         return builder.build();
     }
