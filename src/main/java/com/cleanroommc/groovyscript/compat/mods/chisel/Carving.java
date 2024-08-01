@@ -6,24 +6,32 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
+import com.cleanroommc.groovyscript.core.mixin.chisel.ChiselRecipeWrapperAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import team.chisel.api.carving.CarvingUtils;
 import team.chisel.api.carving.ICarvingGroup;
 import team.chisel.api.carving.ICarvingRegistry;
+import team.chisel.common.integration.jei.ChiselRecipeWrapper;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES,
         admonition = @Admonition(value = "groovyscript.wiki.chisel.carving.note", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD),
-        isFullyDocumented = false // TODO fully document Chisel Carving
-)
-public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
+        isFullyDocumented = false
+) // TODO fully document Chisel Carving
+public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> implements IJEIRemoval.Default {
 
     private final AbstractReloadableStorage<String> groupStorage = new AbstractReloadableStorage<>();
     private final AbstractReloadableStorage<Pair<String, SoundEvent>> soundStorage = new AbstractReloadableStorage<>();
@@ -33,6 +41,10 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
             throw new IllegalStateException("Chisel carving getRegistry() is not yet initialized!");
         }
         return CarvingUtils.getChiselRegistry();
+    }
+
+    private static OperationHandler.IOperation groupNameOperation() {
+        return new OperationHandler.WrapperOperation<>(ChiselRecipeWrapper.class, wrapper -> Collections.singletonList(JeiRemovalHelper.format("removeGroup", GroovyScriptCodeConverter.formatString(((ChiselRecipeWrapperAccessor) wrapper).getGroup().getName(), true))));
     }
 
     public static CarvingGroup carvingGroup(String group) {
@@ -131,6 +143,19 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
             getRegistry().removeGroup(name);
             groupStorage.addBackup(name);
         });
+    }
+
+    /**
+     * @see team.chisel.common.integration.jei.ChiselJEIPlugin
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("chisel.chiseling");
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(groupNameOperation());
     }
 
 
