@@ -6,6 +6,8 @@ key.categories.groovyscript=GroovyScript
 keybind.groovyscript.reload=Reload Scripts
 keybind.groovyscript.remove_recipe_from_jei=Generate Recipe Removal Method (from JEI)
 
+key.groovyscript.remove_recipe_from_jei.unknown_category=Couldn't find a way to remove the targeted recipe in category '%s'
+
 groovyscript.jei.category.groovyscript:fluid_recipe.name=In world fluid recipes
 groovyscript.jei.category.groovyscript:explosion.name=Explosion recipes
 groovyscript.jei.category.groovyscript:burning.name=Burning recipes

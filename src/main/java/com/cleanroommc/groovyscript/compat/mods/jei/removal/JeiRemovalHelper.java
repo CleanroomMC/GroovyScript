@@ -1,8 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.jei.removal;
 
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.INamed;
-import com.cleanroommc.groovyscript.command.TextCopyable;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
@@ -12,53 +10,30 @@ import com.google.common.collect.Lists;
 import mezz.jei.api.gui.IRecipeLayout;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class JeiRemovalHelper {
 
     /**
-     * uses the focused category uid to filter
-     */
-    public static List<String> getRemovalMethod() {
-        return getRemovalMethod(getUid());
-    }
-
-    /**
-     * generates a method to remove the targeted recipe in JEI and prints the via {@link #say(String)}.
+     * Generates one or more methods to remove the targeted recipe in JEI.
      *
-     * @param uid the id of the targeted JEI category
+     * @param uid    the id of the targeted JEI category
+     * @param layout the recipe layout being targeted
+     * @return a pair where the left value is a String representing the category and
+     * the right value is a List of Strings representing any number of methods
      */
-    public static List<String> getRemovalMethod(String uid) {
-        var output = getUnderMouse();
-        if (output == null) return Collections.emptyList();
-        return getRemovalMethod(uid, output);
-    }
-
-    /**
-     * generates a method to remove the targeted recipe in JEI and prints the via {@link #say(String)}.
-     *
-     * @param uid the id of the targeted JEI category
-     */
-    public static List<String> getRemovalMethod(String uid, IRecipeLayout output) {
-        var list = new ArrayList<String>();
-
+    public static Pair<String, List<String>> getRemovalMethod(String uid, IRecipeLayout layout) {
 
         // TODO JEI why does vanilla have to be special cased, can that be changed?
         for (INamed registry : Lists.newArrayList(VanillaModule.crafting, VanillaModule.furnace)) {
             if (registry.isEnabled() && registry instanceof IJEIRemoval removal && removal.getCategories().contains(uid)) {
-                var operation = removal.getRemoval(output);
+                var operation = removal.getRemoval(layout);
                 if (operation.isEmpty()) continue;
-                for (var s : operation) {
-                    var message = String.format("%s.%s", registry.getName(), s);
-                    list.add(message);
-                    say(message);
-                }
-                return list;
+                return Pair.of(registry.getName(), operation);
             }
         }
 
@@ -71,14 +46,9 @@ public class JeiRemovalHelper {
                 VanillaModule.inWorldCrafting.burning,
                 VanillaModule.inWorldCrafting.pistonPush)) {
             if (registry.isEnabled() && registry instanceof IJEIRemoval removal && removal.getCategories().contains(uid)) {
-                var operation = removal.getRemoval(output);
+                var operation = removal.getRemoval(layout);
                 if (operation.isEmpty()) continue;
-                for (var s : operation) {
-                    var message = String.format("%s.%s", registry.getName(), s);
-                    list.add(message);
-                    say(message);
-                }
-                return list;
+                return Pair.of(registry.getName(), operation);
             }
         }
 
@@ -86,23 +56,17 @@ public class JeiRemovalHelper {
             if (!groovyContainer.isLoaded()) continue;
             for (var registry : groovyContainer.get().getRegistries()) {
                 if (registry.isEnabled() && registry instanceof IJEIRemoval removal && removal.getCategories().contains(uid)) {
-                    var operation = removal.getRemoval(output);
+                    var operation = removal.getRemoval(layout);
                     if (operation.isEmpty()) continue;
-                    for (var s : operation) {
-                        var message = String.format("mods.%s.%s.%s", groovyContainer.getModId(), registry.getName(), s);
-                        list.add(message);
-                        say(message);
-                    }
-                    return list;
+                    return Pair.of(String.format("mods.%s.%s", groovyContainer.getModId(), registry.getName()), operation);
                 }
             }
         }
-        say(String.format("Couldn't find a way to remove the targeted recipe in category %s", uid));
-        return list;
+        return null;
     }
 
 
-    public static String getUid() {
+    public static String getFocusedRecipeUid() {
         var state = ((RecipeGuiLogicAccessor) ((RecipesGuiAccessor) JeiPlugin.jeiRuntime.getRecipesGui()).getLogic()).getState();
         if (state == null) return "";
         return state.getRecipeCategories().get(state.getRecipeCategoryIndex()).getUid();
@@ -113,7 +77,7 @@ public class JeiRemovalHelper {
      *
      * @return ingredient groups attached to targeted recipe layout
      */
-    public static IRecipeLayout getUnderMouse() {
+    public static IRecipeLayout getRecipeLayoutUnderMouse() {
         var layouts = ((RecipesGuiAccessor) JeiPlugin.jeiRuntime.getRecipesGui()).getRecipeLayouts();
         if (layouts == null) return null;
         var scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
@@ -126,17 +90,6 @@ public class JeiRemovalHelper {
             }
         }
         return null;
-    }
-
-    /**
-     * Currently prints the message to the log and to chat, but perhaps this should be reworked to support appending to a specific file?
-     * TODO JEI this
-     *
-     * @param message message to get printed to the log
-     */
-    public static void say(String message) {
-        GroovyLog.get().warn(message);
-        Minecraft.getMinecraft().player.sendMessage(TextCopyable.string(message, message).build());
     }
 
     /**
