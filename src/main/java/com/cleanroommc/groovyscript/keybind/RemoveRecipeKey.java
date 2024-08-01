@@ -2,7 +2,7 @@ package com.cleanroommc.groovyscript.keybind;
 
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
-import com.cleanroommc.groovyscript.compat.mods.jei.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
 import mezz.jei.api.IRecipesGui;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.settings.KeyConflictContext;
