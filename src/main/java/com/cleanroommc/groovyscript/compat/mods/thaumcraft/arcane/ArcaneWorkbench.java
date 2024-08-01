@@ -80,15 +80,6 @@ public class ArcaneWorkbench extends NamedRegistry implements IJEIRemoval.Defaul
         return Collections.singletonList(com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory.UUID);
     }
 
-//    @Override
-//    public @NotNull List<String> getRemoval(IRecipeLayout layout) {
-//        var list = new ArrayList<String>();
-//        if (((RecipeLayoutAccessor) layout).getRecipeWrapper() instanceof com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory.ArcaneWorkbenchWrapper wrapper) {
-//            list.add(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRecipe().getRegistryName(), false)));
-//        }
-//        return list;
-//    }
-
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
         return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
