@@ -126,6 +126,10 @@ public class GroovyScriptCodeConverter {
         return getSingleItemStack(itemStack, colored) + formatMultiple(itemStack.getCount(), colored);
     }
 
+    public static String getSingleItemStack(ItemStack itemStack, boolean colored, boolean prettyNbt) {
+        return getSingleItemStack(itemStack, colored) + formatNBTTag(itemStack.getTagCompound(), colored, prettyNbt);
+    }
+
     public static String asGroovyCode(ItemStack itemStack, boolean colored, boolean prettyNbt) {
         return getSingleItemStack(itemStack, colored) + formatNBTTag(itemStack.getTagCompound(), colored, prettyNbt) + formatMultiple(itemStack.getCount(), colored);
     }
@@ -136,6 +140,10 @@ public class GroovyScriptCodeConverter {
 
     public static String asGroovyCode(FluidStack fluidStack, boolean colored) {
         return getSingleFluidStack(fluidStack, colored) + formatMultiple(fluidStack.amount, colored);
+    }
+
+    public static String getSingleFluidStack(FluidStack fluidStack, boolean colored, boolean prettyNbt) {
+        return getSingleFluidStack(fluidStack, colored) + formatNBTTag(fluidStack.tag, colored, prettyNbt);
     }
 
     public static String asGroovyCode(FluidStack fluidStack, boolean colored, boolean prettyNbt) {
