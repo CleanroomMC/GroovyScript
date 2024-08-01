@@ -33,6 +33,17 @@ public class GroovyScriptCodeConverter {
         return builder.toString();
     }
 
+    public static String formatString(String target, boolean colored) {
+        StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("'");
+        if (colored) builder.append(TextFormatting.AQUA);
+        builder.append(target);
+        if (colored) builder.append(TextFormatting.GRAY);
+        builder.append("'");
+        return builder.toString();
+    }
+
     public static String formatGenericHandler(String handler, String target, boolean colored) {
         StringBuilder builder = new StringBuilder();
         if (colored) builder.append(TextFormatting.DARK_GREEN);
