@@ -13,6 +13,7 @@ import flaxbeard.immersivepetroleum.api.crafting.DistillationRecipe;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @RegistryDescription
+@Optional.Interface(modid = "justenoughpetroleum", iface = "com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval$Default")
 public class Distillation extends VirtualizedRegistry<DistillationRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
@@ -107,6 +109,7 @@ public class Distillation extends VirtualizedRegistry<DistillationRecipe> implem
      * {@code justenoughpetroleum.DistillationCategory.UID}
      */
     @Override
+    @Optional.Method(modid = "justenoughpetroleum")
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList("immersivepetroleum.distillation");
     }
