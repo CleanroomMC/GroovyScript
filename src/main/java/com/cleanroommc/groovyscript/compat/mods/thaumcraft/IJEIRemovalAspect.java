@@ -15,7 +15,7 @@ public interface IJEIRemovalAspect extends IJEIRemoval.Default {
     static OperationHandler.SlotOperation<?> getDefaultAspect() {
         return new OperationHandler.IngredientSlotOperation<>(
                 ThaumcraftJEIPlugin.ASPECT_LIST, false,
-                (stack, all) -> stack.size() == 0 ? "" : Thaumcraft.asGroovyCode(stack.getAspects()[0], false));
+                (stack, all) -> stack.size() == 0 ? "" : Thaumcraft.asGroovyCode(stack.getAspects()[0], true));
     }
 
     @Override

@@ -28,7 +28,7 @@ import java.util.List;
 public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicInfuserRecipe> {
 
     private static OperationHandler.IOperation infuseTypeOperation() {
-        return new OperationHandler.WrapperOperation<>(MetallurgicInfuserRecipeWrapper.class, wrapper -> Collections.singletonList(JeiRemovalHelper.format("removeByInput", Mekanism.asGroovyCode(((MetallurgicInfuserRecipe) wrapper.getRecipe()).getInput().infuse.getType(), false))));
+        return new OperationHandler.WrapperOperation<>(MetallurgicInfuserRecipeWrapper.class, wrapper -> Collections.singletonList(JeiRemovalHelper.format("removeByInput", Mekanism.asGroovyCode(((MetallurgicInfuserRecipe) wrapper.getRecipe()).getInput().infuse.getType(), true))));
     }
 
     public MetallurgicInfuser() {

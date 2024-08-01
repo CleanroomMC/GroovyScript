@@ -14,7 +14,7 @@ public interface IJEIRemovalGas extends IJEIRemoval.Default {
     static OperationHandler.SlotOperation<?> getDefaultGas() {
         return new OperationHandler.IngredientSlotOperation<>(
                 MekanismJEI.TYPE_GAS, true,
-                (stack, all) -> Mekanism.getSingleGasStack(stack, false));
+                (stack, all) -> Mekanism.getSingleGasStack(stack, true));
     }
 
     @Override
