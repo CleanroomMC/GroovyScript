@@ -372,7 +372,7 @@ public class OperationHandler {
             super(VanillaTypes.ITEM, true,
                   (stack, all) -> {
                       var oreDict = convertToOreDict(all);
-                      return oreDict.isEmpty() ? GroovyScriptCodeConverter.getSingleItemStack(stack, false, false) : oreDict;
+                      return oreDict.isEmpty() ? GroovyScriptCodeConverter.getSingleItemStack(stack, true, false) : oreDict;
                   });
         }
 
@@ -383,7 +383,7 @@ public class OperationHandler {
         protected static String convertToOreDict(List<ItemStack> ingredients) {
             if (JeiPlugin.jeiHelpers.getStackHelper() instanceof StackHelper stackHelper) {
                 var dict = stackHelper.getOreDictEquivalent(ingredients);
-                return dict == null ? "" : GroovyScriptCodeConverter.asGroovyCode(dict, false);
+                return dict == null ? "" : GroovyScriptCodeConverter.asGroovyCode(dict, true);
             }
             return "";
         }
@@ -412,7 +412,7 @@ public class OperationHandler {
     public static class FluidOperation extends IngredientSlotOperation<FluidStack> {
 
         protected FluidOperation() {
-            super(VanillaTypes.FLUID, true, (stack, all) -> GroovyScriptCodeConverter.getSingleFluidStack(stack, false, false));
+            super(VanillaTypes.FLUID, true, (stack, all) -> GroovyScriptCodeConverter.getSingleFluidStack(stack, true, false));
         }
 
         /**

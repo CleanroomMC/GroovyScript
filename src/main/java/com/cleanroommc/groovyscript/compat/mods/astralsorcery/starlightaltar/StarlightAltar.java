@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> implements IJEIRemoval.Default {
 
     private static List<String> registryNameRemovalMethod(AbstractAltarRecipe recipe) {
-        return Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(recipe.getNativeRecipe().getRegistryName(), false)));
+        return Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(recipe.getNativeRecipe().getRegistryName(), true)));
     }
 
     private static OperationHandler.IOperation discoveryOperation() {

@@ -35,15 +35,15 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> implements IJEIRe
         return new OperationHandler.WrapperOperation<>(FusionRecipeWrapper.class, wrapper -> {
             var builder = ImmutableList.<String>builder();
             if (!wrapper.recipe.getRecipeCatalyst().isEmpty()) {
-                builder.add(JeiRemovalHelper.format("removeByCatalyst", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeCatalyst(), false)));
+                builder.add(JeiRemovalHelper.format("removeByCatalyst", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeCatalyst(), true)));
             }
             var output = wrapper.recipe.getRecipeOutput(wrapper.recipe.getRecipeCatalyst());
             if (!output.isEmpty()) {
-                builder.add(JeiRemovalHelper.format("removeByOutput", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeOutput(wrapper.recipe.getRecipeCatalyst()), false)));
+                builder.add(JeiRemovalHelper.format("removeByOutput", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeOutput(wrapper.recipe.getRecipeCatalyst()), true)));
             }
             for (var ingredient : wrapper.recipe.getRecipeIngredients()) {
                 if (ingredient instanceof String ore) {
-                    builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.asGroovyCode(ore, false)));
+                    builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.asGroovyCode(ore, true)));
                 } else {
                     ItemStack stack = null;
                     if (ingredient instanceof ItemStack is) stack = is;
@@ -51,7 +51,7 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> implements IJEIRe
                     else if (ingredient instanceof Block b) stack = new ItemStack(b);
 
                     if (stack != null) {
-                        builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.getSingleItemStack(stack, false)));
+                        builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.getSingleItemStack(stack, true)));
                     }
                 }
             }

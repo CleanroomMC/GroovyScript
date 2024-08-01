@@ -39,7 +39,7 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> implements IJEIRemov
         return new OperationHandler.WrapperOperation<>(ICraftingRecipeWrapper.class, wrapper ->
                 wrapper.getRegistryName() == null
                 ? Collections.emptyList()
-                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRegistryName(), false))));
+                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRegistryName(), true))));
     }
 
     public void setFallback(char key, IIngredient ingredient) {

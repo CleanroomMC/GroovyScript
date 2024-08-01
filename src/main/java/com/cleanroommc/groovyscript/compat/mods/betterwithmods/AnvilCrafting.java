@@ -36,7 +36,7 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> implements IJEIR
         return new OperationHandler.WrapperOperation<>(ICraftingRecipeWrapper.class, wrapper ->
                 wrapper.getRegistryName() == null
                 ? Collections.emptyList()
-                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRegistryName(), false))));
+                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRegistryName(), true))));
     }
 
     @RecipeBuilderDescription(example = {

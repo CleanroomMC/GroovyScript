@@ -31,7 +31,7 @@ public class ArcaneWorkbench extends NamedRegistry implements IJEIRemoval.Defaul
         return new OperationHandler.WrapperOperation<>(com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory.ArcaneWorkbenchWrapper.class, wrapper ->
                 wrapper.getRecipe().getRegistryName() == null
                 ? Collections.emptyList()
-                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRecipe().getRegistryName(), false))));
+                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRecipe().getRegistryName(), true))));
     }
 
     public static final ResourceLocation DEFAULT = new ResourceLocation("");

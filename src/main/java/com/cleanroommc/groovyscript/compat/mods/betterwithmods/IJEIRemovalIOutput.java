@@ -14,7 +14,7 @@ public interface IJEIRemovalIOutput extends IJEIRemoval.Default {
     static OperationHandler.SlotOperation<IOutput> getDefaultIOutput() {
         return new OperationHandler.ClassSlotOperation<>(
                 IOutput.class, true,
-                (stack, all) -> GroovyScriptCodeConverter.getSingleItemStack(stack.getOutput(), false, false));
+                (stack, all) -> GroovyScriptCodeConverter.getSingleItemStack(stack.getOutput(), true, false));
     }
 
     @Override

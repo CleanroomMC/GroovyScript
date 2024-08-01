@@ -31,7 +31,7 @@ public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivin
             var tag = wrapper.recipe.getEssenceStack().getTagCompound();
             if (tag == null) return Collections.emptyList();
             // only real way to access the entity ID here
-            return Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.formatGenericHandler("entity", tag.getString("id"), false)));
+            return Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.formatGenericHandler("entity", tag.getString("id"), true)));
         });
     }
 

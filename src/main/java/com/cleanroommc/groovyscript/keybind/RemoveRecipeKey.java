@@ -87,7 +87,10 @@ public class RemoveRecipeKey extends GroovyScriptKeybinds.Key {
                 missingUid(newUid);
             } else {
                 Minecraft.getMinecraft().player.sendMessage(GOLD_SEPARATOR);
-                GuiScreen.setClipboardString(String.format("%s.%s", removal.getKey(), removal.getValue().get(combo)));
+
+                var text = TextFormatting.getTextWithoutFormattingCodes(String.format("%s.%s", removal.getKey(), removal.getValue().get(combo)));
+                if (text != null) GuiScreen.setClipboardString(text);
+
                 if (matchesLast) {
                     printMessage(removal.getKey(), removal.getValue().get(combo));
                 } else {
