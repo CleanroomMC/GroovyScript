@@ -128,6 +128,9 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
     }
 
+    /**
+     * Note that this is added by the third-party compat mod thaumicjei, not base Thaumcraft.
+     */
     @Override
     @Optional.Method(modid = "thaumicjei")
     public @NotNull Collection<String> getCategories() {

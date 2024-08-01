@@ -79,6 +79,9 @@ public class ArcaneWorkbench extends NamedRegistry implements IJEIRemoval.Defaul
         }
     }
 
+    /**
+     * Note that this is added by the third-party compat mod thaumicjei, not base Thaumcraft.
+     */
     @Override
     @Optional.Method(modid = "thaumicjei")
     public @NotNull Collection<String> getCategories() {
