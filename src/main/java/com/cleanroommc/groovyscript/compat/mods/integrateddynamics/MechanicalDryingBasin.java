@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.integrateddynamics;
 
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -10,9 +11,14 @@ import org.cyclops.cyclopscore.recipe.custom.component.IngredientAndFluidStackRe
 import org.cyclops.integrateddynamics.Configs;
 import org.cyclops.integrateddynamics.block.BlockMechanicalDryingBasin;
 import org.cyclops.integrateddynamics.block.BlockMechanicalDryingBasinConfig;
+import org.cyclops.integrateddynamicscompat.modcompat.jei.mechanicaldryingbasin.MechanicalDryingBasinRecipeCategory;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class MechanicalDryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {
+public class MechanicalDryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> implements IJEIRemoval.Default {
 
     @Override
     public boolean isEnabled() {
@@ -79,5 +85,10 @@ public class MechanicalDryingBasin extends VirtualizedRegistry<IRecipe<Ingredien
     public SimpleObjectStream<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> streamRecipes() {
         return new SimpleObjectStream<>(BlockMechanicalDryingBasin.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(MechanicalDryingBasinRecipeCategory.NAME);
     }
 }

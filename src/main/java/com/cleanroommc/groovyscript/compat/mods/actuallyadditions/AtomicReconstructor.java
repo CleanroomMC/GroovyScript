@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -12,11 +13,16 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.lens.Lens;
 import de.ellpeck.actuallyadditions.api.recipe.LensConversionRecipe;
+import de.ellpeck.actuallyadditions.mod.jei.reconstructor.ReconstructorRecipeCategory;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecipe> {
+public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).energyUse(1000)"),
@@ -88,6 +94,11 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
     public SimpleObjectStream<LensConversionRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES)
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ReconstructorRecipeCategory.NAME);
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -4,23 +4,28 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.init.ModRecipes;
+import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.MortarRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class Mortar extends VirtualizedRegistry<MortarRecipe> {
+public class Mortar extends VirtualizedRegistry<MortarRecipe> implements IJEIRemoval.Default {
 
     public Mortar() {
         super(Alias.generateOfClassAnd(Mortar.class, "MortarAndPestle"));
@@ -98,6 +103,11 @@ public class Mortar extends VirtualizedRegistry<MortarRecipe> {
     public SimpleObjectStream<MortarRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.getMortarRecipes())
                 .setRemover(r -> this.removeByName(r.getRegistryName()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRootsPlugin.MORTAR_AND_PESTLE);
     }
 
     @Property(property = "name")

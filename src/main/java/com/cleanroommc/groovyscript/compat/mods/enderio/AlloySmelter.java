@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.enderio.AlloyRecipeManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeLeafNodeAccessor;
 import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeNodeAccessor;
@@ -21,19 +22,21 @@ import crazypants.enderio.base.recipe.alloysmelter.AlloyRecipeManager;
 import crazypants.enderio.base.recipe.lookup.ItemRecipeLeafNode;
 import crazypants.enderio.base.recipe.lookup.ItemRecipeNode;
 import crazypants.enderio.base.recipe.lookup.TriItemLookup;
+import crazypants.enderio.machines.integration.jei.AlloyRecipeCategory;
 import crazypants.enderio.util.NNPair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
+public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> implements IJEIRemoval.Default {
 
     @GroovyBlacklist
     private Set<IManyToOneRecipe> removalQueue;
@@ -170,6 +173,11 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
                 listIter.remove();
             }
         }
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(AlloyRecipeCategory.UID);
     }
 
 

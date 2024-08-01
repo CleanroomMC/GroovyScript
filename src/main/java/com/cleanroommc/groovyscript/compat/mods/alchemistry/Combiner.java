@@ -1,24 +1,29 @@
 package com.cleanroommc.groovyscript.compat.mods.alchemistry;
 
+import al132.alchemistry.compat.jei.AlchemistryRecipeUID;
 import al132.alchemistry.recipes.CombinerRecipe;
 import al132.alchemistry.recipes.ModRecipes;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Combiner extends VirtualizedRegistry<CombinerRecipe> {
+public class Combiner extends VirtualizedRegistry<CombinerRecipe> implements IJEIRemoval.Default {
 
     public Combiner() {
         super(Alias.generateOfClass(Combiner.class).andGenerate("ChemicalCombiner"));
@@ -87,6 +92,11 @@ public class Combiner extends VirtualizedRegistry<CombinerRecipe> {
     public void removeAll() {
         ModRecipes.INSTANCE.getCombinerRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getCombinerRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(AlchemistryRecipeUID.INSTANCE.getCOMBINER());
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "9")})

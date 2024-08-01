@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.jei.IngredientInfoRecipeAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mezz.jei.api.IModRegistry;
@@ -14,15 +15,17 @@ import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.plugins.jei.info.IngredientInfoRecipeCategory;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
-public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, List<String>>> {
+public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, List<String>>> implements IJEIRemoval.Default {
 
     /**
      * Called by {@link JeiPlugin#register}
@@ -95,4 +98,8 @@ public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, Lis
         addBackup(Pair.of(Arrays.asList(target), null));
     }
 
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(VanillaRecipeCategoryUid.INFORMATION);
+    }
 }

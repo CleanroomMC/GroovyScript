@@ -3,23 +3,28 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.init.ModRecipes;
+import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.BarkRecipe;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 @RegistryDescription
-public class BarkCarving extends VirtualizedRegistry<BarkRecipe> {
+public class BarkCarving extends VirtualizedRegistry<BarkRecipe> implements IJEIRemoval.Default {
 
     public BarkCarving() {
         super(Alias.generateOfClassAnd(BarkCarving.class, "Bark"));
@@ -122,6 +127,11 @@ public class BarkCarving extends VirtualizedRegistry<BarkRecipe> {
     public SimpleObjectStream<BarkRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.getBarkRecipes())
                 .setRemover(r -> this.removeByName(r.getName()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRootsPlugin.BARK_CARVING);
     }
 
     @Property(property = "name")

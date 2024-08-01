@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
@@ -15,17 +16,21 @@ import com.enderio.core.common.util.NNList;
 import crazypants.enderio.base.recipe.*;
 import crazypants.enderio.base.recipe.vat.VatRecipe;
 import crazypants.enderio.base.recipe.vat.VatRecipeManager;
+import crazypants.enderio.machines.integration.jei.VatRecipeCategory;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.floats.FloatList;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Vat extends VirtualizedRegistry<VatRecipe> {
+public class Vat extends VirtualizedRegistry<VatRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(fluid('lava')).output(fluid('hootch')).baseMultiplier(2).itemInputLeft(item('minecraft:clay'), 2).itemInputLeft(item('minecraft:clay_ball'), 0.5).itemInputRight(item('minecraft:diamond'), 5).itemInputRight(item('minecraft:diamond_block'), 50).itemInputRight(item('minecraft:gold_block'), 10).itemInputRight(item('minecraft:gold_ingot'), 1).itemInputRight(item('minecraft:gold_nugget'), 0.1).energy(1000).tierEnhanced()"),
@@ -84,6 +89,11 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
     public void removeAll() {
         VatRecipeManager.getInstance().getRecipes().forEach(r -> addBackup((VatRecipe) r));
         VatRecipeManager.getInstance().getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(VatRecipeCategory.UID);
     }
 
     public static class RecipeBuilder implements IRecipeBuilder<Recipe> {

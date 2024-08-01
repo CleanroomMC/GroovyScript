@@ -4,14 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rustic.common.crafting.ICondenserRecipe;
 import rustic.common.crafting.Recipes;
@@ -21,7 +24,7 @@ import rustic.common.util.ElixirUtils;
 import java.util.Collection;
 
 @RegistryDescription
-public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
+public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> implements IJEIRemoval.Default {
 
     public Alchemy() {
         super(Alias.generateOfClass(Alchemy.class).andGenerate("Condenser"));
@@ -84,6 +87,14 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ICondenserRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Recipes.condenserRecipes).setRemover(this::remove);
+    }
+
+    /**
+     * @see rustic.compat.jei.RusticJEIPlugin
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of("rustic.alchemy_simple", "rustic.alchemy_advanced");
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2 or 3", type = Comp.Type.LTE)})

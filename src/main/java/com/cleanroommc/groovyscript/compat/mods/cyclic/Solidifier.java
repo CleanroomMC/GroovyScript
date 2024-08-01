@@ -5,20 +5,25 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.collect.Lists;
+import com.lothrazar.cyclicmagic.CyclicContent;
 import com.lothrazar.cyclicmagic.block.solidifier.RecipeSolidifier;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Solidifier extends VirtualizedRegistry<RecipeSolidifier> {
+public class Solidifier extends VirtualizedRegistry<RecipeSolidifier> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).fluidInput(fluid('water') * 175).output(item('minecraft:gold_ingot') * 3)"),
@@ -80,6 +85,11 @@ public class Solidifier extends VirtualizedRegistry<RecipeSolidifier> {
     public SimpleObjectStream<RecipeSolidifier> streamRecipes() {
         return new SimpleObjectStream<>(RecipeSolidifier.recipes)
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(CyclicContent.solidifier.getContentName());
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "4")})

@@ -4,11 +4,13 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.AnalysingChamberRecipes;
 import sonar.calculator.mod.common.recipes.CalculatorRecipe;
@@ -16,6 +18,8 @@ import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 
 /**
@@ -41,7 +45,7 @@ import java.util.Arrays;
                 @Admonition(value = "groovyscript.wiki.calculator.analysing_chamber.note1", type = Admonition.Type.WARNING, format = Admonition.Format.STANDARD)
         }
 )
-public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
+public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> implements IJEIRemoval.Default {
 
     public AnalysingChamber() {
         super(Alias.generateOfClass(AnalysingChamber.class).andGenerate("AnalyzingChamber"));
@@ -74,6 +78,7 @@ public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
         return true;
     }
 
+    // if this method gets changed the JEI compat also needs to be adjusted.
     @MethodDescription(example = @Example("item('sonarcore:reinforceddirtblock')"))
     public boolean removeByInput(IIngredient input) {
         return AnalysingChamberRecipes.instance().getRecipes().removeIf(r -> {
@@ -99,6 +104,12 @@ public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
     public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AnalysingChamberRecipes.instance().getRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        // change this if removeByInput gets changed (since the recipe is, properly, an output)
+        return Collections.singletonList(AnalysingChamberRecipes.instance().getRecipeID());
     }
 
     @Property(property = "output", valid = @Comp("1"))

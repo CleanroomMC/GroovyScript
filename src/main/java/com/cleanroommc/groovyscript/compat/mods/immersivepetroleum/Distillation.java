@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -13,10 +14,14 @@ import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
+public class Distillation extends VirtualizedRegistry<DistillationRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('water') * 100).fluidOutput(fluid('water') * 50, fluid('lava') * 30).output(item('minecraft:diamond'), 0.5).output(item('minecraft:clay'), 0.2).output(item('minecraft:diamond'), 0.1).output(item('minecraft:clay'), 0.5).output(item('minecraft:diamond') * 5, 0.01).time(5).energy(1000)"),
@@ -93,6 +98,17 @@ public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
     public void removeAll() {
         DistillationRecipe.recipeList.forEach(this::addBackup);
         DistillationRecipe.recipeList.clear();
+    }
+
+    /**
+     * Note that this is added by a third-party compat mod, not base Immersive Petroleum.
+     * <a href="https://github.com/DaedalusGame/JustEnoughPetroleum/blob/master/src/main/java/justenoughpetroleum/DistillationCategory.java">DistillationCategory</a>
+     * <p>
+     * {@code justenoughpetroleum.DistillationCategory.UID}
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("immersivepetroleum.distillation");
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))

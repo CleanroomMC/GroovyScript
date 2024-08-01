@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.mysticalagriculture;
 
+import com.blakebr0.mysticalagriculture.compat.jei.reprocessor.ReprocessorCategory;
 import com.blakebr0.mysticalagriculture.crafting.ReprocessorManager;
 import com.blakebr0.mysticalagriculture.crafting.ReprocessorRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -7,14 +8,19 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class Reprocessor extends VirtualizedRegistry<ReprocessorRecipe> {
+public class Reprocessor extends VirtualizedRegistry<ReprocessorRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond') * 3)"),
@@ -89,6 +95,11 @@ public class Reprocessor extends VirtualizedRegistry<ReprocessorRecipe> {
     public SimpleObjectStream<ReprocessorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ReprocessorManager.getRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ReprocessorCategory.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

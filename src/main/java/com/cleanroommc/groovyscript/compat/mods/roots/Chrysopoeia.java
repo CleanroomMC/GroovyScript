@@ -3,21 +3,26 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.ChrysopoeiaRecipe;
 import epicsquid.roots.util.IngredientWithStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 @RegistryDescription
-public class Chrysopoeia extends VirtualizedRegistry<ChrysopoeiaRecipe> {
+public class Chrysopoeia extends VirtualizedRegistry<ChrysopoeiaRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_transmute').input(item('minecraft:gold_ingot')).output(item('minecraft:clay'))"),
@@ -99,6 +104,11 @@ public class Chrysopoeia extends VirtualizedRegistry<ChrysopoeiaRecipe> {
     public SimpleObjectStream<Map.Entry<ResourceLocation, ChrysopoeiaRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipesAccessor.getChrysopoeiaRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRootsPlugin.CHRYSOPOEIA);
     }
 
     @Property(property = "name")

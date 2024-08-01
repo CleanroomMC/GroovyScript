@@ -4,18 +4,22 @@ import blusunrize.immersiveengineering.api.crafting.RefineryRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
+public class Refinery extends VirtualizedRegistry<RefineryRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water'), fluid('water')).fluidOutput(fluid('lava')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
@@ -103,6 +107,14 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
     public void removeAll() {
         RefineryRecipe.recipeList.forEach(this::addBackup);
         RefineryRecipe.recipeList.clear();
+    }
+
+    /**
+     * @see blusunrize.immersiveengineering.common.util.compat.jei.JEIHelper
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ie.refinery");
     }
 
     @Property(property = "fluidInput", valid = @Comp("2"))

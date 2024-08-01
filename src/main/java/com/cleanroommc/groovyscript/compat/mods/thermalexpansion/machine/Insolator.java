@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
 import cofh.core.inventory.ComparableItemStackValidatedNBT;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.InsolatorManager;
 import cofh.thermalexpansion.util.managers.machine.InsolatorManager.InsolatorRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -8,22 +9,28 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.InsolatorManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.InsolatorRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
+public class Insolator extends VirtualizedRegistry<InsolatorRecipe> implements IJEIRemoval.Default {
 
     private final AbstractReloadableStorage<ItemStack> fertilizerStorage = new AbstractReloadableStorage<>();
 
@@ -138,6 +145,16 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
     public void removeAll() {
         InsolatorManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         InsolatorManagerAccessor.getRecipeMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(RecipeUidsTE.INSOLATOR, RecipeUidsTE.INSOLATOR_TREE);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation());
     }
 
     @Property(property = "input", valid = @Comp("2"))

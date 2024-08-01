@@ -4,15 +4,22 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.github.bsideup.jabel.Desugar;
+import com.google.common.collect.ImmutableList;
+import lykrast.prodigytech.common.compat.jei.ExplosionFurnaceDampenerCategory;
+import lykrast.prodigytech.common.compat.jei.ExplosionFurnaceExplosiveCategory;
 import lykrast.prodigytech.common.recipe.ExplosionFurnaceManager;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
-public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurnaceAdditives.EFAdditiveRecipe> {
+public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurnaceAdditives.EFAdditiveRecipe> implements IJEIRemoval.Default {
 
     @Override
     public void onReload() {
@@ -78,6 +85,11 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         ExplosionFurnaceManager.DAMPENERS.getAllContent().forEach(r ->
                                                                           addBackup(new EFAdditiveDampener(new ItemsIngredient(r.getMatchingStacks()), r.getDampening())));
         ExplosionFurnaceManager.removeAllDampeners();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(ExplosionFurnaceDampenerCategory.UID, ExplosionFurnaceExplosiveCategory.UID);
     }
 
     public interface EFAdditiveRecipe {

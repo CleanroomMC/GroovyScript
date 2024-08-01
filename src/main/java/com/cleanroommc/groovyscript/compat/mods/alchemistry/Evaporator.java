@@ -1,20 +1,26 @@
 package com.cleanroommc.groovyscript.compat.mods.alchemistry;
 
+import al132.alchemistry.compat.jei.AlchemistryRecipeUID;
 import al132.alchemistry.recipes.EvaporatorRecipe;
 import al132.alchemistry.recipes.ModRecipes;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
+public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> implements IJEIRemoval.Default {
 
     @Override
     public void onReload() {
@@ -82,6 +88,11 @@ public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
     public void removeAll() {
         ModRecipes.INSTANCE.getEvaporatorRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getEvaporatorRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(AlchemistryRecipeUID.INSTANCE.getEVAPORATOR());
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))

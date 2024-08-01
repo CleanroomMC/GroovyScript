@@ -3,18 +3,24 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.plugin.jei.category.JEIRecipeCategoryChoppingBlock;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.ChoppingBlockRecipe;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
+public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> implements IJEIRemoval.Default {
 
     public ChoppingBlock() {
         super(ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE);
@@ -54,6 +60,11 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
                 remove(recipe);
             }
         }
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRecipeCategoryChoppingBlock.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

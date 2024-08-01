@@ -5,20 +5,24 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Mixer extends VirtualizedRegistry<MixerRecipe> {
+public class Mixer extends VirtualizedRegistry<MixerRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), ore('ingotGold'), ore('ingotGold'), ore('ingotGold')).fluidInput(fluid('water')).fluidOutput(fluid('lava')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
@@ -131,6 +135,14 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
     public void removeAll() {
         MixerRecipe.recipeList.forEach(this::addBackup);
         MixerRecipe.recipeList.clear();
+    }
+
+    /**
+     * @see blusunrize.immersiveengineering.common.util.compat.jei.JEIHelper
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ie.mixer");
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})

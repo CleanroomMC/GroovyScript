@@ -4,17 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import io.github.phantamanta44.libnine.LibNine;
+import io.github.phantamanta44.threng.integration.jei.ThrEngJei;
 import io.github.phantamanta44.threng.recipe.EtchRecipe;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class Etcher extends VirtualizedRegistry<EtchRecipe> {
+public class Etcher extends VirtualizedRegistry<EtchRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockGlass')).top(item('minecraft:diamond')).bottom(item('minecraft:clay')).output(item('minecraft:diamond') * 5)"),
@@ -70,6 +74,11 @@ public class Etcher extends VirtualizedRegistry<EtchRecipe> {
     public void removeAll() {
         recipes().forEach(this::addBackup);
         recipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ThrEngJei.CAT_ETCH);
     }
 
     @Property(property = "input", valid = @Comp("1"))

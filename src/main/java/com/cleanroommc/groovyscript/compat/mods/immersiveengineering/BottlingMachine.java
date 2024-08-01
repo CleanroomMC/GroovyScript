@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -13,13 +14,16 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> {
+public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> implements IJEIRemoval.Default {
 
     public BottlingMachine() {
         super(Alias.generateOfClassAnd(BottlingMachine.class, "Bottling"));
@@ -111,6 +115,14 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
     public void removeAll() {
         BottlingMachineRecipe.recipeList.forEach(this::addBackup);
         BottlingMachineRecipe.recipeList.clear();
+    }
+
+    /**
+     * @see blusunrize.immersiveengineering.common.util.compat.jei.JEIHelper
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ie.bottlingMachine");
     }
 
     @Property(property = "input", valid = @Comp("1"))

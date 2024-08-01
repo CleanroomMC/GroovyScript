@@ -4,15 +4,15 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.rwtema.extrautils2.api.machine.IMachineRecipe;
 import com.rwtema.extrautils2.api.machine.XUMachineFurnace;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @RegistryDescription(
         admonition = @Admonition(type = Admonition.Type.WARNING,
@@ -20,7 +20,7 @@ import java.util.List;
                                  hasTitle = true,
                                  value = "groovyscript.wiki.extrautils2.furnace.removeWarning")
 )
-public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
+public class Furnace extends VirtualizedRegistry<IMachineRecipe> implements IJEIRemoval.Default {
 
     @Override
     public void onReload() {
@@ -83,6 +83,14 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).energy(1000).time(5)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    /**
+     * @see com.rwtema.extrautils2.crafting.jei.JEIMachine#getUid()
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("xu2_machine_" + XUMachineFurnace.INSTANCE.name);
     }
 
     @Property(property = "input", valid = @Comp("1"))

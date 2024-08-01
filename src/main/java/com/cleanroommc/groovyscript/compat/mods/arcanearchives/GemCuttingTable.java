@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.arcanearchives;
 
 import com.aranaira.arcanearchives.api.IGCTRecipe;
+import com.aranaira.arcanearchives.integration.jei.JEIPlugin;
 import com.aranaira.arcanearchives.recipe.IngredientStack;
 import com.aranaira.arcanearchives.recipe.gct.GCTRecipe;
 import com.aranaira.arcanearchives.recipe.gct.GCTRecipeList;
@@ -8,18 +9,22 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.arcanearchives.gem_cutting_table.note0", type = Admonition.Type.WARNING))
-public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> {
+public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> implements IJEIRemoval.Default {
 
     public GemCuttingTable() {
         super(Alias.generateOfClass(GemCuttingTable.class).and("GCT", "gct"));
@@ -90,6 +95,11 @@ public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> {
             addBackup(recipe);
             GCTRecipeList.instance.removeRecipe(recipe);
         }
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIPlugin.GEM_CUTTERS_TABLE);
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})

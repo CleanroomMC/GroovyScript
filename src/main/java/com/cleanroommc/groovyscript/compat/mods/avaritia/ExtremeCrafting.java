@@ -5,16 +5,23 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
+import morph.avaritia.compat.jei.AvaritiaJEIPlugin;
 import morph.avaritia.recipe.AvaritiaRecipeManager;
 import morph.avaritia.recipe.extreme.IExtremeRecipe;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class ExtremeCrafting extends VirtualizedRegistry<IExtremeRecipe> {
+public class ExtremeCrafting extends VirtualizedRegistry<IExtremeRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".matrix([[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')], [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')], [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')], [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')], [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')], [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')], [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]]).output(item('minecraft:gold_block'))"),
@@ -88,4 +95,15 @@ public class ExtremeCrafting extends VirtualizedRegistry<IExtremeRecipe> {
         AvaritiaRecipeManager.EXTREME_RECIPES.values().forEach(this::addBackup);
         AvaritiaRecipeManager.EXTREME_RECIPES.values().clear();
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(AvaritiaJEIPlugin.EXTREME_CRAFTING);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
+    }
+
 }

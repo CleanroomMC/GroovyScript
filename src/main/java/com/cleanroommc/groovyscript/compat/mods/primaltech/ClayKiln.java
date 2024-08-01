@@ -4,16 +4,24 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.primal_tech.ClayKilnRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import primal_tech.jei.clay_kiln.KilnCategory;
 import primal_tech.recipes.ClayKilnRecipes;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RegistryDescription
-public class ClayKiln extends VirtualizedRegistry<ClayKilnRecipes> {
+public class ClayKiln extends VirtualizedRegistry<ClayKilnRecipes> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).cookTime(50)"),
@@ -84,6 +92,16 @@ public class ClayKiln extends VirtualizedRegistry<ClayKilnRecipes> {
     public void removeAll() {
         ClayKilnRecipesAccessor.getRecipes().forEach(this::addBackup);
         ClayKilnRecipesAccessor.getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(KilnCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(2);
     }
 
     @Property(property = "input", valid = @Comp("1"))

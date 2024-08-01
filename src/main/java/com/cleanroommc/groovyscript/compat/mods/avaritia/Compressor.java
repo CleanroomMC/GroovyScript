@@ -3,20 +3,24 @@ package com.cleanroommc.groovyscript.compat.mods.avaritia;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import morph.avaritia.compat.jei.AvaritiaJEIPlugin;
 import morph.avaritia.recipe.AvaritiaRecipeManager;
 import morph.avaritia.recipe.compressor.CompressorRecipe;
 import morph.avaritia.recipe.compressor.ICompressorRecipe;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 
 @RegistryDescription
-public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
+public class Compressor extends VirtualizedRegistry<ICompressorRecipe> implements IJEIRemoval.Default {
 
     @Override
     public void onReload() {
@@ -79,6 +83,11 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
                 .input(input)
                 .output(output)
                 .register();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(AvaritiaJEIPlugin.NEUTRONIUM_COMPRESSOR);
     }
 
     @Property(property = "input", valid = @Comp("1"))

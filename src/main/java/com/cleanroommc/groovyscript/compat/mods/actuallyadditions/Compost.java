@@ -5,20 +5,26 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.recipe.CompostRecipe;
+import de.ellpeck.actuallyadditions.mod.jei.compost.CompostRecipeCategory;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class Compost extends VirtualizedRegistry<CompostRecipe> {
+public class Compost extends VirtualizedRegistry<CompostRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).inputDisplay(blockstate('minecraft:clay')).outputDisplay(blockstate('minecraft:diamond_block'))"))
     public RecipeBuilder recipeBuilder() {
@@ -87,6 +93,11 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
     public SimpleObjectStream<CompostRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.COMPOST_RECIPES)
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(CompostRecipeCategory.NAME);
     }
 
     @Property(property = "input", valid = @Comp("1"))

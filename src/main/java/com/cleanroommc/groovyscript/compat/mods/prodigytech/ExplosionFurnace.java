@@ -4,15 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import lykrast.prodigytech.common.compat.jei.ExplosionFurnaceCategory;
 import lykrast.prodigytech.common.recipe.ExplosionFurnaceManager;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManager.ExplosionFurnaceRecipe> {
+public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManager.ExplosionFurnaceRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('ingotGold'), item('minecraft:diamond')).craftPerReagent(8).power(160).output(item('minecraft:emerald_block'))"),
@@ -64,6 +70,11 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
     public SimpleObjectStream<ExplosionFurnaceManager.ExplosionFurnaceRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ExplosionFurnaceManager.RECIPES)
                 .setRemover(this::backupAndRemove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ExplosionFurnaceCategory.UID);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})

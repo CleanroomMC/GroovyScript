@@ -5,18 +5,22 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
+public class Fermenter extends VirtualizedRegistry<FermenterRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('water')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
@@ -102,6 +106,14 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
     public void removeAll() {
         FermenterRecipe.recipeList.forEach(this::addBackup);
         FermenterRecipe.recipeList.clear();
+    }
+
+    /**
+     * @see blusunrize.immersiveengineering.common.util.compat.jei.JEIHelper
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ie.fermenter");
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -5,17 +5,24 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import essentialcraft.api.DemonTrade;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES,
         admonition = @Admonition(value = "groovyscript.wiki.essentialcraft.demon_trade.note0", type = Admonition.Type.DANGER))
-public class DemonTradeManager extends VirtualizedRegistry<DemonTrade> {
+public class DemonTradeManager extends VirtualizedRegistry<DemonTrade> implements IJEIRemoval.Default {
 
     public DemonTradeManager() {
         super(Alias.generateOf("DemonTrade"));
@@ -89,4 +96,15 @@ public class DemonTradeManager extends VirtualizedRegistry<DemonTrade> {
     public SimpleObjectStream<DemonTrade> streamRecipes() {
         return new SimpleObjectStream<>(DemonTrade.TRADES).setRemover(this::remove);
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(essentialcraft.integration.jei.DemonTrading.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(2);
+    }
+
 }

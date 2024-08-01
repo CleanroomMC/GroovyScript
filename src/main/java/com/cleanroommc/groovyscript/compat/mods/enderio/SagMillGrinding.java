@@ -5,17 +5,23 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import crazypants.enderio.base.recipe.sagmill.GrindingBall;
 import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
+import crazypants.enderio.machines.integration.jei.SagMillGrindingBallCategory;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
+public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> implements IJEIRemoval.Default {
 
     public SagMillGrinding() {
         super(Alias.generateOfClassAnd(SagMillGrinding.class, "Grinding"));
@@ -66,6 +72,11 @@ public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
     public void removeAll() {
         SagMillRecipeManager.getInstance().getBalls().forEach(this::addBackup);
         SagMillRecipeManager.getInstance().getBalls().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(SagMillGrindingBallCategory.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

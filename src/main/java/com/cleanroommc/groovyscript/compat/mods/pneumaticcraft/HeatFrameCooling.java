@@ -4,14 +4,19 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import me.desht.pneumaticcraft.common.recipes.HeatFrameCoolingRecipe;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class HeatFrameCooling extends VirtualizedRegistry<HeatFrameCoolingRecipe> {
+public class HeatFrameCooling extends VirtualizedRegistry<HeatFrameCoolingRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot'))"),
@@ -68,6 +73,14 @@ public class HeatFrameCooling extends VirtualizedRegistry<HeatFrameCoolingRecipe
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<HeatFrameCoolingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(HeatFrameCoolingRecipe.recipes).setRemover(this::remove);
+    }
+
+    /**
+     * @see me.desht.pneumaticcraft.common.thirdparty.jei.ModCategoryUid
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(".heat_frame_cooling");
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -1,20 +1,29 @@
 package com.cleanroommc.groovyscript.compat.mods.alchemistry;
 
+import al132.alchemistry.compat.jei.AlchemistryRecipeUID;
 import al132.alchemistry.recipes.LiquifierRecipe;
 import al132.alchemistry.recipes.ModRecipes;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RegistryDescription
-public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> {
+public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> implements IJEIRemoval.Default {
 
     @Override
     public void onReload() {
@@ -82,6 +91,16 @@ public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> {
     public void removeAll() {
         ModRecipes.INSTANCE.getLiquifierRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getLiquifierRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(AlchemistryRecipeUID.INSTANCE.getLIQUIFIER());
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation().output(1));
     }
 
     @Property(property = "input", valid = @Comp("1"))

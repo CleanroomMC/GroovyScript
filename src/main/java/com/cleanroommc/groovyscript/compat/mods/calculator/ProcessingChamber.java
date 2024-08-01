@@ -4,19 +4,23 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.CalculatorRecipe;
 import sonar.calculator.mod.common.recipes.ProcessingChamberRecipes;
 import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class ProcessingChamber extends VirtualizedRegistry<CalculatorRecipe> {
+public class ProcessingChamber extends VirtualizedRegistry<CalculatorRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'))"))
     public RecipeBuilder recipeBuilder() {
@@ -82,6 +86,11 @@ public class ProcessingChamber extends VirtualizedRegistry<CalculatorRecipe> {
     public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ProcessingChamberRecipes.instance().getRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ProcessingChamberRecipes.instance().getRecipeID());
     }
 
     @Property(property = "input", valid = @Comp("1"))

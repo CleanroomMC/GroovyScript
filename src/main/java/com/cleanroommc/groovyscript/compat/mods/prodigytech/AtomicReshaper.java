@@ -4,21 +4,25 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import lykrast.prodigytech.common.compat.jei.AtomicReshaperCategory;
 import lykrast.prodigytech.common.recipe.AtomicReshaperManager;
 import lykrast.prodigytech.common.util.Config;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.AtomicReshaperRecipe> {
+public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.AtomicReshaperRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:emerald_block')).primordium(10).time(50)"),
@@ -89,6 +93,11 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
     public SimpleObjectStream<AtomicReshaperManager.AtomicReshaperRecipe> streamRecipes() {
         return new SimpleObjectStream<>(AtomicReshaperManager.INSTANCE.getAllRecipes())
                 .setRemover(this::backupAndRemove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(AtomicReshaperCategory.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

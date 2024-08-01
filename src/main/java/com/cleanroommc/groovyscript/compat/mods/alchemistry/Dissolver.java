@@ -1,25 +1,25 @@
 package com.cleanroommc.groovyscript.compat.mods.alchemistry;
 
+import al132.alchemistry.compat.jei.AlchemistryRecipeUID;
 import al132.alchemistry.recipes.*;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
+public class Dissolver extends VirtualizedRegistry<DissolverRecipe> implements IJEIRemoval.Default {
 
     public Dissolver() {
         super(Alias.generateOfClass(Dissolver.class).andGenerate("ChemicalDissolver"));
@@ -77,6 +77,11 @@ public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
     public void removeAll() {
         ModRecipes.INSTANCE.getDissolverRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getDissolverRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(AlchemistryRecipeUID.INSTANCE.getDISSOLVER());
     }
 
     @Property(property = "input", valid = @Comp("1"))

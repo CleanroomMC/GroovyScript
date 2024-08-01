@@ -4,23 +4,28 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.WellLiquefactionAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 @RegistryDescription
-public class Lightwell extends VirtualizedRegistry<WellLiquefaction.LiquefactionEntry> {
+public class Lightwell extends VirtualizedRegistry<WellLiquefaction.LiquefactionEntry> implements IJEIRemoval.Default {
 
     private static Map<ItemStack, WellLiquefaction.LiquefactionEntry> getRegistry() {
         if (WellLiquefactionAccessor.getRegisteredLiquefactions() == null) {
@@ -100,6 +105,11 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
     public void removeAll() {
         getRegistry().values().forEach(this::addBackup);
         getRegistry().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ModIntegrationJEI.idWell);
     }
 
     public static class RecipeBuilder implements IRecipeBuilder<WellLiquefaction.LiquefactionEntry> {

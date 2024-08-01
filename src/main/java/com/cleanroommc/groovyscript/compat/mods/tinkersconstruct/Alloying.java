@@ -3,19 +3,24 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.smeltery.AlloyRecipe;
+import slimeknights.tconstruct.plugin.jei.alloy.AlloyRecipeCategory;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
+public class Alloying extends VirtualizedRegistry<AlloyRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".fluidOutput(fluid('iron') * 3).fluidInput(fluid('clay') * 1,fluid('lava') * 2)"))
     public RecipeBuilder recipeBuilder() {
@@ -105,6 +110,11 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<AlloyRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getAlloyRegistry()).setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(AlloyRecipeCategory.CATEGORY);
     }
 
     @Property(property = "fluidInput", valid = {@Comp(value = "2", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})

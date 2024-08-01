@@ -4,18 +4,23 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import me.desht.pneumaticcraft.common.recipes.ExplosionCraftingRecipe;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription(
         admonition = @Admonition(value = "groovyscript.wiki.pneumaticcraft.explosion.note0", type = Admonition.Type.TIP)
 )
-public class Explosion extends VirtualizedRegistry<ExplosionCraftingRecipe> {
+public class Explosion extends VirtualizedRegistry<ExplosionCraftingRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot')).lossRate(40)"),
@@ -72,6 +77,14 @@ public class Explosion extends VirtualizedRegistry<ExplosionCraftingRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ExplosionCraftingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ExplosionCraftingRecipe.recipes).setRemover(this::remove);
+    }
+
+    /**
+     * @see me.desht.pneumaticcraft.common.thirdparty.jei.ModCategoryUid
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("pneumaticcraft.compressed_iron_explosion");
     }
 
     @Property(property = "input", valid = @Comp("1"))

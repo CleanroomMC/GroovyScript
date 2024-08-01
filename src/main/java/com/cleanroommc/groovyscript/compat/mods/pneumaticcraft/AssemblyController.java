@@ -5,22 +5,22 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import me.desht.pneumaticcraft.common.item.ItemAssemblyProgram;
 import me.desht.pneumaticcraft.common.recipes.AssemblyRecipe;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class AssemblyController extends VirtualizedRegistry<AssemblyRecipe> {
+public class AssemblyController extends VirtualizedRegistry<AssemblyRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay') * 3).output(item('minecraft:gold_ingot') * 6).drill()"),
@@ -128,6 +128,19 @@ public class AssemblyController extends VirtualizedRegistry<AssemblyRecipe> {
     public SimpleObjectStream<AssemblyRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Arrays.stream(AssemblyType.values()).map(this::map).flatMap(Collection::stream).collect(Collectors.toList()))
                 .setRemover(this::remove);
+    }
+
+    /**
+     * @see me.desht.pneumaticcraft.common.thirdparty.jei.ModCategoryUid
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("pneumaticcraft.assembly_controller");
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(1, 2, 3, 4, 5);
     }
 
     public enum AssemblyType {

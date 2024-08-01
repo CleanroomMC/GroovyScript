@@ -5,20 +5,24 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
+public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('lava')).energy(100)"),
@@ -150,6 +154,14 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
     public void removeAll() {
         SqueezerRecipe.recipeList.forEach(this::addBackup);
         SqueezerRecipe.recipeList.clear();
+    }
+
+    /**
+     * @see blusunrize.immersiveengineering.common.util.compat.jei.JEIHelper
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ie.squeezer");
     }
 
     @Property(property = "input", valid = @Comp("1"))

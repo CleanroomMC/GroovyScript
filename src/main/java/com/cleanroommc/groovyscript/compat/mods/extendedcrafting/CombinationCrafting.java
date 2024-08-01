@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.extendedcrafting;
 
+import com.blakebr0.extendedcrafting.compat.jei.combinationcrafting.CombinationCraftingCategory;
 import com.blakebr0.extendedcrafting.config.ModConfig;
 import com.blakebr0.extendedcrafting.crafting.CombinationRecipe;
 import com.blakebr0.extendedcrafting.crafting.CombinationRecipeManager;
@@ -7,6 +8,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -15,14 +17,16 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription(
         admonition = @Admonition(value = "groovyscript.wiki.extendedcrafting.combination_crafting.note0", type = Admonition.Type.INFO, format = Admonition.Format.STANDARD)
 )
-public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> {
+public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> implements IJEIRemoval.Default {
 
     public CombinationCrafting() {
         super(Alias.generateOfClassAnd(CombinationCrafting.class, "Combination"));
@@ -106,6 +110,11 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(CombinationCraftingCategory.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

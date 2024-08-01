@@ -1,21 +1,25 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.device;
 
 import cofh.core.inventory.ComparableItemStackValidated;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.device.FactorizerManager;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.FactorizerManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.FactorizerRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Booleans;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -23,7 +27,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Factorizer extends VirtualizedRegistry<Pair<Boolean, FactorizerManager.FactorizerRecipe>> {
+public class Factorizer extends VirtualizedRegistry<Pair<Boolean, FactorizerManager.FactorizerRecipe>> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay') * 7).output(item('minecraft:book') * 2).combine().split()"),
@@ -135,6 +139,11 @@ public class Factorizer extends VirtualizedRegistry<Pair<Boolean, FactorizerMana
     public void removeAll() {
         removeByType(true);
         removeByType(false);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(RecipeUidsTE.FACTORIZER, RecipeUidsTE.FACTORIZER_COMBINE, RecipeUidsTE.FACTORIZER_SPLIT);
     }
 
     @Property(property = "input", valid = @Comp("1"))

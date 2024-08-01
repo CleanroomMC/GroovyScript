@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -11,11 +12,16 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.DryingRecipe;
+import slimeknights.tconstruct.plugin.jei.drying.DryingRecipeCategory;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class Drying extends VirtualizedRegistry<DryingRecipe> {
+public class Drying extends VirtualizedRegistry<DryingRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:dirt')).time(45)"))
     public RecipeBuilder recipeBuilder() {
@@ -105,6 +111,11 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DryingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getDryingRegistry()).setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(DryingRecipeCategory.CATEGORY);
     }
 
     @Property(property = "input", valid = @Comp("1"))

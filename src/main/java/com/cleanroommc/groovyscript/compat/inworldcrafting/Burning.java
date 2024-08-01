@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.BurningRecipeCategory;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -13,15 +14,13 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class Burning extends VirtualizedRegistry<Burning.BurningRecipe> {
+public class Burning extends VirtualizedRegistry<Burning.BurningRecipe> implements IJEIRemoval.Default {
 
     private static final Map<EntityItem, BurningRecipe> runningRecipes = new Object2ObjectOpenHashMap<>();
 
@@ -60,6 +59,11 @@ public class Burning extends VirtualizedRegistry<Burning.BurningRecipe> {
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(BurningRecipeCategory.UID);
     }
 
     public static class BurningRecipe {

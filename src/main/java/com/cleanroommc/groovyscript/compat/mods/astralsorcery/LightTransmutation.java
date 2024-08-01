@@ -4,22 +4,27 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.LightOreTransmutationsAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutations.Transmutation> {
+public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutations.Transmutation> implements IJEIRemoval.Default {
 
     private static List<LightOreTransmutations.Transmutation> getRegistry() {
         if (LightOreTransmutationsAccessor.getRegisteredTransmutations() == null) {
@@ -110,6 +115,11 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
     public void removeAll() {
         getRegistry().forEach(this::addBackup);
         getRegistry().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ModIntegrationJEI.idTransmutation);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightOreTransmutations.Transmutation> {

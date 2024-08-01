@@ -6,20 +6,23 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class LaserDrill extends VirtualizedRegistry<Pair<LaserDrillEntry.LaserDrillEntryExtended, LaserDrillEntry.OreRarity>> {
+public class LaserDrill extends VirtualizedRegistry<Pair<LaserDrillEntry.LaserDrillEntryExtended, LaserDrillEntry.OreRarity>> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay')).lensMeta(5).weight(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -145,6 +148,14 @@ public class LaserDrill extends VirtualizedRegistry<Pair<LaserDrillEntry.LaserDr
     public SimpleObjectStream<LaserDrillEntry.LaserDrillEntryExtended> streamRecipes() {
         return new SimpleObjectStream<>(LaserDrillEntry.LASER_DRILL_UNIQUE_VALUES)
                 .setRemover(this::remove);
+    }
+
+    /**
+     * @see com.buuz135.industrial.jei.laser.LaserRecipeCategory#getUid()
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("laser_category");
     }
 
     @Property(property = "output", valid = @Comp("1"))

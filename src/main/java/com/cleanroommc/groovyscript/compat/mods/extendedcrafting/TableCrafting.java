@@ -1,5 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.extendedcrafting;
 
+import com.blakebr0.extendedcrafting.compat.jei.tablecrafting.AdvancedTableCategory;
+import com.blakebr0.extendedcrafting.compat.jei.tablecrafting.BasicTableCategory;
+import com.blakebr0.extendedcrafting.compat.jei.tablecrafting.EliteTableCategory;
+import com.blakebr0.extendedcrafting.compat.jei.tablecrafting.UltimateTableCategory;
 import com.blakebr0.extendedcrafting.crafting.table.ITieredRecipe;
 import com.blakebr0.extendedcrafting.crafting.table.TableRecipeManager;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -7,14 +11,19 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
+public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".output(item('minecraft:stone') * 64).matrix('DLLLLLDDD', '  DNIGIND', 'DDDNIGIND', '  DLLLLLD').key('D', item('minecraft:diamond')).key('L', item('minecraft:redstone')).key('N', item('minecraft:stone')).key('I', item('minecraft:iron_ingot')).key('G', item('minecraft:gold_ingot')).tierUltimate()"),
@@ -103,4 +112,15 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
         TableRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         TableRecipeManager.getInstance().getRecipes().clear();
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(BasicTableCategory.UID, AdvancedTableCategory.UID, EliteTableCategory.UID, UltimateTableCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.outputItemOperation());
+    }
+
 }

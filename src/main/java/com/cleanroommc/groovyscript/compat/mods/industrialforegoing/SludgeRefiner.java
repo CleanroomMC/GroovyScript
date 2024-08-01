@@ -6,13 +6,20 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.industrialforegoing.SludgeRefinerBlockAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
-public class SludgeRefiner extends VirtualizedRegistry<SludgeEntry> {
+public class SludgeRefiner extends VirtualizedRegistry<SludgeEntry> implements IJEIRemoval.Default {
 
     @Override
     @GroovyBlacklist
@@ -69,6 +76,19 @@ public class SludgeRefiner extends VirtualizedRegistry<SludgeEntry> {
     public SimpleObjectStream<SludgeEntry> streamRecipes() {
         return new SimpleObjectStream<>(SludgeEntry.SLUDGE_RECIPES)
                 .setRemover(this::remove);
+    }
+
+    /**
+     * @see com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory#getUid()
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("sludge_refiner_category");
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation());
     }
 
 }

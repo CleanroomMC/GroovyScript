@@ -6,17 +6,23 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
+public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).time(100).creosote(50)"))
     public static RecipeBuilder recipeBuilder() {
@@ -103,6 +109,19 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
     public void removeAll() {
         CokeOvenRecipe.recipeList.forEach(this::addBackup);
         CokeOvenRecipe.recipeList.clear();
+    }
+
+    /**
+     * @see blusunrize.immersiveengineering.common.util.compat.jei.JEIHelper
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ie.cokeoven");
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.FluidOperation.defaultFluidOperation().exclude(0), OperationHandler.ItemOperation.defaultItemOperation());
     }
 
     @Property(property = "input", valid = @Comp("1"))

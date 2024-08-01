@@ -3,21 +3,28 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.roots.MossConfigAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.config.MossConfig;
+import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RegistryDescription
-public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> {
+public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> implements IJEIRemoval.Default {
 
     public Moss() {
         super();
@@ -96,6 +103,16 @@ public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ItemStack, ItemStack>> streamRecipes() {
         return new SimpleObjectStream<>(MossConfigAccessor.getMossyCobblestones().entrySet()).setRemover(r -> this.remove(r.getKey()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRootsPlugin.TERRA_MOSS);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(2);
     }
 
     @Property(property = "input", valid = @Comp("1"))

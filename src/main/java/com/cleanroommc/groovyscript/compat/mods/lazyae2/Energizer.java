@@ -4,17 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import io.github.phantamanta44.libnine.LibNine;
+import io.github.phantamanta44.threng.integration.jei.ThrEngJei;
 import io.github.phantamanta44.threng.recipe.EnergizeRecipe;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class Energizer extends VirtualizedRegistry<EnergizeRecipe> {
+public class Energizer extends VirtualizedRegistry<EnergizeRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockGlass')).energy(50).output(item('minecraft:diamond'))"),
@@ -70,6 +74,11 @@ public class Energizer extends VirtualizedRegistry<EnergizeRecipe> {
     public void removeAll() {
         recipes().forEach(this::addBackup);
         recipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ThrEngJei.CAT_ENERGIZE);
     }
 
     @Property(property = "input", valid = @Comp("1"))

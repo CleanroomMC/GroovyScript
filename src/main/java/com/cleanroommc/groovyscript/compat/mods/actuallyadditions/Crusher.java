@@ -5,18 +5,24 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.recipe.CrusherRecipe;
+import de.ellpeck.actuallyadditions.mod.jei.crusher.CrusherRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
+public class Crusher extends VirtualizedRegistry<CrusherRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'), item('minecraft:diamond')).chance(100)"),
@@ -88,6 +94,11 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
     public SimpleObjectStream<CrusherRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ActuallyAdditionsAPI.CRUSHER_RECIPES)
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(CrusherRecipeCategory.NAME);
     }
 
     @Property(property = "input", valid = @Comp("1"))

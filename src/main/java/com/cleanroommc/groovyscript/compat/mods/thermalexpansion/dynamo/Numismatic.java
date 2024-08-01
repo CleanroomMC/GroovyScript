@@ -1,20 +1,26 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.dynamo;
 
 import cofh.core.inventory.ComparableItemStack;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.NumismaticManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.github.bsideup.jabel.Desugar;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class Numismatic extends VirtualizedRegistry<Numismatic.NumismaticRecipe> {
+public class Numismatic extends VirtualizedRegistry<Numismatic.NumismaticRecipe> implements IJEIRemoval.Default {
 
     @Override
     @GroovyBlacklist
@@ -74,6 +80,11 @@ public class Numismatic extends VirtualizedRegistry<Numismatic.NumismaticRecipe>
     public void removeAll() {
         NumismaticManagerAccessor.getFuelMap().keySet().forEach(x -> addBackup(new NumismaticRecipe(x, NumismaticManagerAccessor.getFuelMap().get(x))));
         NumismaticManagerAccessor.getFuelMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(RecipeUidsTE.DYNAMO_NUMISMATIC);
     }
 
     @Desugar

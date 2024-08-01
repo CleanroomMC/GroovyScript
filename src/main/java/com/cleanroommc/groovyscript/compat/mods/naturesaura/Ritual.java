@@ -4,20 +4,25 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.naturesaura.ritual.note0", type = Admonition.Type.WARNING))
-public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
+public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('demo').input(item('minecraft:clay')).output(item('minecraft:diamond')).time(100).sapling(item('minecraft:sapling:1'))"),
@@ -103,6 +108,11 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, TreeRitualRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(NaturesAuraAPI.TREE_RITUAL_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEINaturesAuraPlugin.TREE_RITUAL);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "8")})

@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.CustomEnchanterRecipe;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.enderio.SimpleRecipeGroupHolderAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -15,17 +16,20 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import crazypants.enderio.base.recipe.IMachineRecipe;
 import crazypants.enderio.base.recipe.MachineRecipeRegistry;
 import crazypants.enderio.base.recipe.enchanter.EnchanterRecipe;
+import crazypants.enderio.machines.integration.jei.EnchanterRecipeCategory;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
+public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".enchantment(enchantment('minecraft:unbreaking')).input(item('minecraft:diamond'))"),
@@ -94,6 +98,11 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
     public void removeAll() {
         MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ENCHANTER).forEach((r, l) -> addBackup((EnchanterRecipe) l));
         ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.ENCHANTER)).getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(EnchanterRecipeCategory.UID);
     }
 
     public static class RecipeBuilder implements IRecipeBuilder<EnchanterRecipe> {

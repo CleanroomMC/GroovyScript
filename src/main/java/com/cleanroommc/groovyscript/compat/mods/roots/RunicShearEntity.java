@@ -3,24 +3,27 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.init.ModRecipes;
+import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.RunicShearConditionalEntityRecipe;
 import epicsquid.roots.recipe.RunicShearEntityRecipe;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @RegistryDescription
-public class RunicShearEntity extends VirtualizedRegistry<RunicShearEntityRecipe> {
+public class RunicShearEntity extends VirtualizedRegistry<RunicShearEntityRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_from_wither_skeletons').entity(entity('minecraft:wither_skeleton')).output(item('minecraft:clay')).cooldown(1000)"),
@@ -101,6 +104,16 @@ public class RunicShearEntity extends VirtualizedRegistry<RunicShearEntityRecipe
     public SimpleObjectStream<Map.Entry<ResourceLocation, RunicShearEntityRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.getRunicShearEntityRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRootsPlugin.RUNIC_SHEARS_ENTITY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().output(0));
     }
 
     @Property(property = "name")

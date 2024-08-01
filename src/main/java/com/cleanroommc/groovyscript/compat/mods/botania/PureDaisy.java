@@ -3,18 +3,26 @@ package com.cleanroommc.groovyscript.compat.mods.botania;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipePureDaisy;
+import vazkii.botania.client.integration.jei.puredaisy.PureDaisyRecipeCategory;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
-public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
+public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(ore('plankWood')).output(blockstate('minecraft:clay')).time(5)"))
     public RecipeBuilder recipeBuilder() {
@@ -114,6 +122,16 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipePureDaisy> streamRecipes() {
         return new SimpleObjectStream<>(BotaniaAPI.pureDaisyRecipes).setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(PureDaisyRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(1);
     }
 
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipePureDaisy> {

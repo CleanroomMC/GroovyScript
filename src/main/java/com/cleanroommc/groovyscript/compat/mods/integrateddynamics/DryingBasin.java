@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.integrateddynamics;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -15,10 +16,15 @@ import org.cyclops.integrateddynamics.Configs;
 import org.cyclops.integrateddynamics.block.BlockDryingBasin;
 import org.cyclops.integrateddynamics.block.BlockDryingBasinConfig;
 import org.cyclops.integrateddynamics.block.BlockMechanicalDryingBasin;
+import org.cyclops.integrateddynamicscompat.modcompat.jei.dryingbasin.DryingBasinRecipeCategory;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {
+public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> implements IJEIRemoval.Default {
 
     @Override
     public boolean isEnabled() {
@@ -88,6 +94,11 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
     public SimpleObjectStream<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> streamRecipes() {
         return new SimpleObjectStream<>(BlockDryingBasin.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(DryingBasinRecipeCategory.NAME);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> {

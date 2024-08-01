@@ -6,9 +6,13 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.botania.recipe.OrechidRecipe;
+import org.jetbrains.annotations.NotNull;
 import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.client.integration.jei.orechid.OrechidIgnemRecipeCategory;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
@@ -68,4 +72,10 @@ public class OrechidIgnem extends Orechid {
         getAllRecipes().forEach(this::addBackup);
         BotaniaAPI.oreWeightsNether.clear();
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(OrechidIgnemRecipeCategory.UID);
+    }
+
 }

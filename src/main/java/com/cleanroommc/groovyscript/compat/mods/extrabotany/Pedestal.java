@@ -4,16 +4,24 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.meteor.extrabotany.api.ExtraBotanyAPI;
+import com.meteor.extrabotany.client.integration.jei.pedestal.HammerRecipeCategory;
 import com.meteor.extrabotany.common.crafting.recipe.RecipePedestal;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RegistryDescription
-public class Pedestal extends VirtualizedRegistry<RecipePedestal> {
+public class Pedestal extends VirtualizedRegistry<RecipePedestal> implements IJEIRemoval.Default {
 
     @Override
     public void onReload() {
@@ -81,6 +89,16 @@ public class Pedestal extends VirtualizedRegistry<RecipePedestal> {
     public void removeAll() {
         ExtraBotanyAPI.pedestalRecipes.forEach(this::addBackup);
         ExtraBotanyAPI.pedestalRecipes.clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(HammerRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(1);
     }
 
     @Property(property = "input", valid = @Comp("1"))

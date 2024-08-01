@@ -6,14 +6,19 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class OreSieve extends VirtualizedRegistry<OreFluidEntrySieve> {
+public class OreSieve extends VirtualizedRegistry<OreFluidEntrySieve> implements IJEIRemoval.Default {
 
     public OreSieve() {
         super(Alias.generateOfClass(OreSieve.class).andGenerate("FluidSieving"));
@@ -86,4 +91,8 @@ public class OreSieve extends VirtualizedRegistry<OreFluidEntrySieve> {
                 .setRemover(this::remove);
     }
 
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ORE_SIEVE");
+    }
 }

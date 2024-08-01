@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.extendedcrafting;
 
+import com.blakebr0.extendedcrafting.compat.jei.compressor.CompressorCraftingCategory;
 import com.blakebr0.extendedcrafting.config.ModConfig;
 import com.blakebr0.extendedcrafting.crafting.CompressorRecipe;
 import com.blakebr0.extendedcrafting.crafting.CompressorRecipeManager;
@@ -8,16 +9,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
+public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> implements IJEIRemoval.Default {
 
     public CompressionCrafting() {
         super(Alias.generateOfClassAnd(CompressionCrafting.class, "Compression"));
@@ -105,6 +111,11 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(CompressorCraftingCategory.UID);
     }
 
     @Property(property = "output", valid = @Comp("1"))

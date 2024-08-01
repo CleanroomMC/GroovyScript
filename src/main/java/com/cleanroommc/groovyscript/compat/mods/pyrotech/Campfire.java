@@ -3,16 +3,22 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.plugin.jei.category.JEIRecipeCategoryCampfire;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CampfireRecipe;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
+public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> implements IJEIRemoval.Default {
 
     public Campfire() {
         super(ModuleTechBasic.Registries.CAMPFIRE_RECIPE);
@@ -61,6 +67,11 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
                 remove(recipe);
             }
         }
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRecipeCategoryCampfire.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

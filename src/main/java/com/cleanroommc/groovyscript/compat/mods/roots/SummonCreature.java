@@ -4,24 +4,29 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.init.ModRecipes;
+import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.SummonCreatureRecipe;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> {
+public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".name('wither_skeleton_from_clay').input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).entity(entity('minecraft:wither_skeleton'))"))
     public static RecipeBuilder recipeBuilder() {
@@ -87,6 +92,11 @@ public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> {
     public SimpleObjectStream<Map.Entry<ResourceLocation, SummonCreatureRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipesAccessor.getSummonCreatureEntries().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRootsPlugin.SUMMON_CREATURES);
     }
 
     @Property(property = "name")

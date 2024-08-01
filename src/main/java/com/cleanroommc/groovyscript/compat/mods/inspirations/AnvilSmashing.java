@@ -3,23 +3,28 @@ package com.cleanroommc.groovyscript.compat.mods.inspirations;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.inspirations.InspirationsRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import knightminer.inspirations.library.InspirationsRegistry;
+import knightminer.inspirations.plugins.jei.smashing.SmashingRecipeCategory;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockState>> {
+public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockState>> implements IJEIRemoval.Default {
 
     private final AbstractReloadableStorage<Pair<Block, IBlockState>> blockStorage = new AbstractReloadableStorage<>();
     private final AbstractReloadableStorage<Material> materialStorage = new AbstractReloadableStorage<>();
@@ -127,6 +132,11 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
     public SimpleObjectStream<Map.Entry<IBlockState, IBlockState>> streamRecipes() {
         return new SimpleObjectStream<>(InspirationsRegistryAccessor.getAnvilSmashing().entrySet())
                 .setRemover(r -> remove(r.getKey(), r.getValue()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(SmashingRecipeCategory.CATEGORY);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<Object> {

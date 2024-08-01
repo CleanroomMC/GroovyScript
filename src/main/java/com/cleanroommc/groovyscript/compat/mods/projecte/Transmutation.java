@@ -4,17 +4,23 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import moze_intel.projecte.integration.jei.world_transmute.WorldTransmuteRecipeCategory;
 import moze_intel.projecte.utils.WorldTransmutations;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class Transmutation extends VirtualizedRegistry<WorldTransmutations.Entry> {
+public class Transmutation extends VirtualizedRegistry<WorldTransmutations.Entry> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(blockstate('minecraft:end_stone')).output(blockstate('minecraft:diamond_block'), blockstate('minecraft:gold_block'))"),
@@ -76,6 +82,11 @@ public class Transmutation extends VirtualizedRegistry<WorldTransmutations.Entry
     public void removeAll() {
         WorldTransmutations.getWorldTransmutations().forEach(this::addBackup);
         WorldTransmutations.getWorldTransmutations().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(WorldTransmuteRecipeCategory.UID);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<WorldTransmutations.Entry> {

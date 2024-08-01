@@ -3,11 +3,13 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.init.ModRecipes;
+import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.TransmutationRecipe;
 import epicsquid.roots.recipe.transmutation.BlockStatePredicate;
 import epicsquid.roots.recipe.transmutation.StatePredicate;
@@ -16,14 +18,16 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
 @RegistryDescription
-public class Transmutation extends VirtualizedRegistry<TransmutationRecipe> {
+public class Transmutation extends VirtualizedRegistry<TransmutationRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_duping').start(blockstate('minecraft:clay')).output(item('minecraft:clay_ball') * 30).condition(mods.roots.predicates.stateBuilder().blockstate(blockstate('minecraft:gold_block')).below().register())"),
@@ -118,6 +122,11 @@ public class Transmutation extends VirtualizedRegistry<TransmutationRecipe> {
     public SimpleObjectStream<Map.Entry<ResourceLocation, TransmutationRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipesAccessor.getTransmutationRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRootsPlugin.TRANSMUTATION);
     }
 
     @Property(property = "name")

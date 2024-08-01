@@ -4,18 +4,24 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.teammetallurgy.atum.api.recipe.RecipeHandlers;
 import com.teammetallurgy.atum.api.recipe.spinningwheel.ISpinningWheelRecipe;
 import com.teammetallurgy.atum.api.recipe.spinningwheel.SpinningWheelRecipe;
+import com.teammetallurgy.atum.integration.jei.JEIIntegration;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class SpinningWheel extends ForgeRegistryWrapper<ISpinningWheelRecipe> {
+public class SpinningWheel extends ForgeRegistryWrapper<ISpinningWheelRecipe> implements IJEIRemoval.Default {
 
     public SpinningWheel() {
         super(RecipeHandlers.spinningWheelRecipes);
@@ -57,6 +63,11 @@ public class SpinningWheel extends ForgeRegistryWrapper<ISpinningWheelRecipe> {
                 remove(recipe);
             }
         }
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIIntegration.SPINNING_WHEEL);
     }
 
     @Property(property = "name")

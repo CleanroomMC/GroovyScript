@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
 import cofh.core.inventory.ComparableItemStackValidatedNBT;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.CompactorManager;
 import cofh.thermalexpansion.util.managers.machine.CompactorManager.CompactorRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -8,14 +9,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CompactorManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CompactorRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -24,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, CompactorRecipe>> {
+public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, CompactorRecipe>> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond') * 2).mode(compactorMode('coin'))"),
@@ -142,6 +146,11 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         Arrays.stream(CompactorManager.Mode.values()).forEach(this::removeByMode);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(RecipeUidsTE.COMPACTOR, RecipeUidsTE.COMPACTOR_COIN, RecipeUidsTE.COMPACTOR_GEAR);
     }
 
     @Property(property = "input", valid = @Comp("1"))

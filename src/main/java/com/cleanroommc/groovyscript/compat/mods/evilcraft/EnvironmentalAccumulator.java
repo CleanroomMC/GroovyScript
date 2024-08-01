@@ -3,9 +3,11 @@ package com.cleanroommc.groovyscript.compat.mods.evilcraft;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import org.cyclops.cyclopscore.recipe.custom.api.IRecipe;
 import org.cyclops.evilcraft.Configs;
@@ -13,12 +15,16 @@ import org.cyclops.evilcraft.block.EnvironmentalAccumulatorConfig;
 import org.cyclops.evilcraft.core.recipe.custom.EnvironmentalAccumulatorRecipeComponent;
 import org.cyclops.evilcraft.core.recipe.custom.EnvironmentalAccumulatorRecipeProperties;
 import org.cyclops.evilcraft.core.weather.WeatherType;
+import org.cyclops.evilcraftcompat.modcompat.jei.environmentalaccumulator.EnvironmentalAccumulatorRecipeJEI;
+import org.cyclops.evilcraftcompat.modcompat.jei.sanguinaryenvironmentalaccumulator.SanguinaryEnvironmentalAccumulatorRecipeJEI;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Locale;
 
 @RegistryDescription
-public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> {
+public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> implements IJEIRemoval.Default {
 
     @Override
     public boolean isEnabled() {
@@ -89,6 +95,11 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
     public SimpleObjectStream<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> streamRecipes() {
         return new SimpleObjectStream<>(org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(EnvironmentalAccumulatorRecipeJEI.CATEGORY, SanguinaryEnvironmentalAccumulatorRecipeJEI.CATEGORY);
     }
 
     @Property(property = "input", valid = @Comp("1"))

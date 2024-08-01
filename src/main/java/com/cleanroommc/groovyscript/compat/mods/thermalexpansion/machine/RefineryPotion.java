@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
 import cofh.core.util.helpers.FluidHelper;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.RefineryManager;
 import cofh.thermalexpansion.util.managers.machine.RefineryManager.RefineryRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -8,6 +9,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.RefineryManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.RefineryRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -16,10 +18,14 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class RefineryPotion extends VirtualizedRegistry<RefineryRecipe> {
+public class RefineryPotion extends VirtualizedRegistry<RefineryRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('water') * 100).fluidOutput(fluid('steam') * 200)"),
@@ -94,6 +100,11 @@ public class RefineryPotion extends VirtualizedRegistry<RefineryRecipe> {
     public void removeAll() {
         RefineryManagerAccessor.getRecipeMapPotion().values().forEach(this::addBackup);
         RefineryManagerAccessor.getRecipeMapPotion().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(RecipeUidsTE.REFINERY_POTION);
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))

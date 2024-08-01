@@ -4,16 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import essentialcraft.api.WindImbueRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
+public class WindRune extends VirtualizedRegistry<WindImbueRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).espe(500)"))
     public WindRune.RecipeBuilder recipeBuilder() {
@@ -62,6 +67,11 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
             addBackup(r);
             return WindImbueRecipe.RECIPES.remove(r);
         });
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(essentialcraft.integration.jei.WindImbue.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

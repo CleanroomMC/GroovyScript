@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -11,12 +12,14 @@ import me.desht.pneumaticcraft.api.recipe.IPressureChamberRecipe;
 import me.desht.pneumaticcraft.api.recipe.ItemIngredient;
 import me.desht.pneumaticcraft.common.recipes.PressureChamberRecipe;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class PressureChamber extends VirtualizedRegistry<IPressureChamberRecipe> {
+public class PressureChamber extends VirtualizedRegistry<IPressureChamberRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay') * 3).output(item('minecraft:gold_ingot')).pressure(4)"),
@@ -73,6 +76,14 @@ public class PressureChamber extends VirtualizedRegistry<IPressureChamberRecipe>
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IPressureChamberRecipe> streamRecipes() {
         return new SimpleObjectStream<>(PressureChamberRecipe.recipes).setRemover(this::remove);
+    }
+
+    /**
+     * @see me.desht.pneumaticcraft.common.thirdparty.jei.ModCategoryUid
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("pneumaticcraft.pressure_chamber");
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "Integer.MAX_VALUE")})

@@ -1,19 +1,25 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.extractor.ExtractorEntry;
+import com.buuz135.industrial.jei.extractor.ExtractorRecipeCategory;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class Extractor extends VirtualizedRegistry<ExtractorEntry> {
+public class Extractor extends VirtualizedRegistry<ExtractorEntry> implements IJEIRemoval.Default {
 
     public Extractor() {
         super(Alias.generateOfClass(Extractor.class).andGenerate("TreeFluidExtractor"));
@@ -85,4 +91,8 @@ public class Extractor extends VirtualizedRegistry<ExtractorEntry> {
                 .setRemover(this::remove);
     }
 
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ExtractorRecipeCategory.UID);
+    }
 }

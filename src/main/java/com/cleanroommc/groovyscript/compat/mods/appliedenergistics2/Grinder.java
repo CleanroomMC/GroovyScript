@@ -6,19 +6,22 @@ import appeng.api.features.IGrinderRecipeBuilder;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
+public class Grinder extends VirtualizedRegistry<IGrinderRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'), item('minecraft:gold_ingot'), item('minecraft:diamond')).turns(1).chance1(0.5).chance2(0.3)"),
@@ -69,6 +72,14 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
             AEApi.instance().registries().grinder().removeRecipe(recipe);
             addBackup(recipe);
         }
+    }
+
+    /**
+     * @see appeng.integration.modules.jei.GrinderRecipeCategory
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("appliedenergistics2.grinder");
     }
 
     @Property(property = "input", valid = @Comp("1"))

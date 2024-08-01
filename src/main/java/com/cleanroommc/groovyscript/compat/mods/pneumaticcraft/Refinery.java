@@ -4,17 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import me.desht.pneumaticcraft.common.recipes.RefineryRecipe;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
+public class Refinery extends VirtualizedRegistry<RefineryRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('water') * 1000).fluidOutput(fluid('lava') * 750, fluid('lava') * 250, fluid('lava') * 100, fluid('lava') * 50)"),
@@ -71,6 +75,14 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RefineryRecipe> streamRecipes() {
         return new SimpleObjectStream<>(RefineryRecipe.recipes).setRemover(this::remove);
+    }
+
+    /**
+     * @see me.desht.pneumaticcraft.common.thirdparty.jei.ModCategoryUid
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("pneumaticcraft.refinery");
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))

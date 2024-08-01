@@ -6,13 +6,18 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class OreFermenter extends VirtualizedRegistry<OreFluidEntryFermenter> {
+public class OreFermenter extends VirtualizedRegistry<OreFluidEntryFermenter> implements IJEIRemoval.Default {
 
     public OreFermenter() {
         super(Alias.generateOfClass(OreFermenter.class).andGenerate("Fermentation"));
@@ -79,4 +84,8 @@ public class OreFermenter extends VirtualizedRegistry<OreFluidEntryFermenter> {
                 .setRemover(this::remove);
     }
 
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ORE_FERMENTER");
+    }
 }

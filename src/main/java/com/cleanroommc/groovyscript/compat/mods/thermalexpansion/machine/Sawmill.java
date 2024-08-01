@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.SawmillManager;
 import cofh.thermalexpansion.util.managers.machine.SawmillManager.SawmillRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -7,19 +8,24 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.SawmillManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.SawmillRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 @RegistryDescription(
         admonition = @Admonition("groovyscript.wiki.thermalexpansion.sawmill.note0")
 )
-public class Sawmill extends VirtualizedRegistry<SawmillRecipe> {
+public class Sawmill extends VirtualizedRegistry<SawmillRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot') * 2)"),
@@ -95,6 +101,11 @@ public class Sawmill extends VirtualizedRegistry<SawmillRecipe> {
     public void removeAll() {
         SawmillManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         SawmillManagerAccessor.getRecipeMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(RecipeUidsTE.SAWMILL, RecipeUidsTE.SAWMILL_TAPPER);
     }
 
     @Property(property = "input", valid = @Comp("1"))

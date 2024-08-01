@@ -3,6 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods.tcomplement;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeRegistry;
 import com.cleanroommc.groovyscript.core.mixin.tcomplement.TCompRegistryAccessor;
@@ -10,18 +12,27 @@ import com.cleanroommc.groovyscript.core.mixin.tconstruct.MeltingRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import knightminer.tcomplement.library.steelworks.*;
+import knightminer.tcomplement.plugin.jei.highoven.fuel.HighOvenFuelCategory;
+import knightminer.tcomplement.plugin.jei.highoven.heat.HighOvenHeatCategory;
+import knightminer.tcomplement.plugin.jei.highoven.melting.HighOvenMeltingCategory;
+import knightminer.tcomplement.plugin.jei.highoven.mix.HighOvenMixCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
-public class HighOven extends MeltingRecipeRegistry {
+public class HighOven extends MeltingRecipeRegistry implements IJEIRemoval.Default {
 
     public final Fuel fuel = new Fuel();
     public final Heating heating = new Heating();
@@ -118,7 +129,17 @@ public class HighOven extends MeltingRecipeRegistry {
         return new SimpleObjectStream<>(TCompRegistryAccessor.getHighOvenOverrides()).setRemover(this::remove);
     }
 
-    public static class Mixing extends VirtualizedRegistry<IMixRecipe> {
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(HighOvenMeltingCategory.CATEGORY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(1), OperationHandler.FluidOperation.defaultFluidOperation());
+    }
+
+    public static class Mixing extends VirtualizedRegistry<IMixRecipe> implements IJEIRemoval.Default {
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
@@ -221,6 +242,16 @@ public class HighOven extends MeltingRecipeRegistry {
             return new SimpleObjectStream<>(TCompRegistryAccessor.getMixRegistry()).setRemover(this::remove);
         }
 
+        @Override
+        public @NotNull Collection<String> getCategories() {
+            return Collections.singletonList(HighOvenMixCategory.CATEGORY);
+        }
+
+        @Override
+        public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+            return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(3, 4), OperationHandler.FluidOperation.defaultFluidOperation());
+        }
+
         public class RecipeBuilder extends AbstractRecipeBuilder<MixRecipe> {
 
             private int temp = 300;
@@ -291,7 +322,7 @@ public class HighOven extends MeltingRecipeRegistry {
         }
     }
 
-    public static class Heating extends VirtualizedRegistry<IHeatRecipe> {
+    public static class Heating extends VirtualizedRegistry<IHeatRecipe> implements IJEIRemoval.Default {
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
@@ -373,6 +404,11 @@ public class HighOven extends MeltingRecipeRegistry {
             return new SimpleObjectStream<>(TCompRegistryAccessor.getHeatRegistry()).setRemover(this::remove);
         }
 
+        @Override
+        public @NotNull Collection<String> getCategories() {
+            return Collections.singletonList(HighOvenHeatCategory.CATEGORY);
+        }
+
         public class RecipeBuilder extends AbstractRecipeBuilder<IHeatRecipe> {
 
             private int temp = 300;
@@ -408,7 +444,7 @@ public class HighOven extends MeltingRecipeRegistry {
         }
     }
 
-    public static class Fuel extends VirtualizedRegistry<HighOvenFuel> {
+    public static class Fuel extends VirtualizedRegistry<HighOvenFuel> implements IJEIRemoval.Default {
 
         public RecipeBuilder recipeBuilder() {
             return new RecipeBuilder();
@@ -461,6 +497,11 @@ public class HighOven extends MeltingRecipeRegistry {
 
         public SimpleObjectStream<HighOvenFuel> streamFuels() {
             return new SimpleObjectStream<>(TCompRegistryAccessor.getHighOvenFuels()).setRemover(this::remove);
+        }
+
+        @Override
+        public @NotNull Collection<String> getCategories() {
+            return Collections.singletonList(HighOvenFuelCategory.CATEGORY);
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<HighOvenFuel> {

@@ -5,20 +5,28 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.recipe.EmpowererRecipe;
+import de.ellpeck.actuallyadditions.mod.jei.empowerer.EmpowererRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
-public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
+public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".mainInput(item('minecraft:clay')).input(item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay')).output(item('minecraft:diamond')).time(50).energy(1000).red(0.5).green(0.3).blue(0.2)"),
@@ -90,6 +98,15 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
                 .setRemover(this::remove);
     }
 
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(EmpowererRecipeCategory.NAME);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(1, 2, 3, 4));
+    }
 
     @Property(property = "input", valid = {@Comp(value = "4", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})
     @Property(property = "output", valid = @Comp("1"))

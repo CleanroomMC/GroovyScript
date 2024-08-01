@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.extendedcrafting;
 
+import com.blakebr0.extendedcrafting.compat.jei.endercrafter.EnderCrafterCategory;
 import com.blakebr0.extendedcrafting.config.ModConfig;
 import com.blakebr0.extendedcrafting.crafting.endercrafter.EnderCrafterRecipeManager;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -7,15 +8,21 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
+public class EnderCrafting extends VirtualizedRegistry<IRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".output(item('minecraft:stone')).matrix('BXX', 'X B').key('B', item('minecraft:stone')).key('X', item('minecraft:gold_ingot')).time(1).mirrored()"),
@@ -104,4 +111,15 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> {
         EnderCrafterRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         EnderCrafterRecipeManager.getInstance().getRecipes().clear();
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(EnderCrafterCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.outputItemOperation());
+    }
+
 }

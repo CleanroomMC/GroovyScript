@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
 import cofh.core.inventory.ComparableItemStackValidatedNBT;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.CrucibleManager;
 import cofh.thermalexpansion.util.managers.machine.CrucibleManager.CrucibleRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -8,21 +9,25 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CrucibleManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CrucibleRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
+public class Crucible extends VirtualizedRegistry<CrucibleRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).fluidOutput(fluid('lava') * 25)"),
@@ -107,6 +112,11 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
     public void removeAll() {
         CrucibleManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         CrucibleManagerAccessor.getRecipeMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(RecipeUidsTE.CRUCIBLE, RecipeUidsTE.CRUCIBLE_LAVA);
     }
 
     @Property(property = "input", valid = @Comp("1"))

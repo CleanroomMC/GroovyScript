@@ -3,17 +3,23 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.plugin.jei.category.JEIRecipeCategoryCompostBin;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CompostBinRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
+public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> implements IJEIRemoval.Default {
 
 
     public CompostBin() {
@@ -63,6 +69,11 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
                 remove(recipe);
             }
         }
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRecipeCategoryCompostBin.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -3,17 +3,26 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.plugin.jei.category.JEIRecipeCategorySoakingPot;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.SoakingPotRecipe;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RegistryDescription
-public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
+public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> implements IJEIRemoval.Default {
 
     public SoakingPot() {
         super(ModuleTechBasic.Registries.SOAKING_POT_RECIPE);
@@ -63,6 +72,16 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
                 remove(recipe);
             }
         }
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRecipeCategorySoakingPot.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(1), OperationHandler.FluidOperation.defaultFluidOperation());
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -4,20 +4,29 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import mezz.jei.api.gui.IRecipeLayout;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipeManaInfusion;
+import vazkii.botania.client.integration.jei.manapool.ManaPoolRecipeCategory;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription(
         admonition = @Admonition(value = "groovyscript.wiki.botania.mana_infusion.note", type = Admonition.Type.WARNING)
 )
-public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
+public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(ore('ingotGold')).output(item('botania:manaresource', 1)).mana(500).catalyst(blockstate('minecraft:stone'))"))
     public RecipeBuilder recipeBuilder() {
@@ -104,6 +113,17 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<RecipeManaInfusion> streamRecipes() {
         return new SimpleObjectStream<>(BotaniaAPI.manaInfusionRecipes).setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ManaPoolRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<String> getRemoval(IRecipeLayout layout) {
+        // is this ugly? yes! but we need to target this specific slot and the slot number is dynamic
+        return OperationHandler.removalOptions(layout, Default.excludeSlots(layout.getItemStacks().getGuiIngredients().values().size() - 2));
     }
 
     @Property(property = "input", valid = @Comp("1"))

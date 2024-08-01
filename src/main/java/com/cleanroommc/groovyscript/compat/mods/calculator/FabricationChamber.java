@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -11,18 +12,17 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.FabricationChamberRecipes;
 import sonar.calculator.mod.common.recipes.FabricationSonarRecipe;
 import sonar.core.recipes.ISonarRecipeObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class FabricationChamber extends VirtualizedRegistry<FabricationSonarRecipe> {
+public class FabricationChamber extends VirtualizedRegistry<FabricationSonarRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1])).output(item('minecraft:diamond'))"),
@@ -91,6 +91,11 @@ public class FabricationChamber extends VirtualizedRegistry<FabricationSonarReci
     public SimpleObjectStream<FabricationSonarRecipe> streamRecipes() {
         return new SimpleObjectStream<>(FabricationChamberRecipes.instance().getRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(FabricationChamberRecipes.instance().getRecipeID());
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})

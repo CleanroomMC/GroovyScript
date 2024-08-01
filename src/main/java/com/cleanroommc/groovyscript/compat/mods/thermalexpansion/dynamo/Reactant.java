@@ -1,12 +1,14 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.dynamo;
 
 import cofh.core.inventory.ComparableItemStack;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.dynamo.ReactantManager;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.ReactantManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.ReactionAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -14,18 +16,21 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Reactant extends VirtualizedRegistry<ReactantManager.Reaction> {
+public class Reactant extends VirtualizedRegistry<ReactantManager.Reaction> implements IJEIRemoval.Default {
 
     private final AbstractReloadableStorage<ItemStack> elementalReactantStorage = new AbstractReloadableStorage<>();
     private final AbstractReloadableStorage<String> elementalFluidStorage = new AbstractReloadableStorage<>();
@@ -144,6 +149,11 @@ public class Reactant extends VirtualizedRegistry<ReactantManager.Reaction> {
     public void removeAll() {
         ReactantManagerAccessor.getReactionMap().values().forEach(this::addBackup);
         ReactantManagerAccessor.getReactionMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(RecipeUidsTE.DYNAMO_REACTANT, RecipeUidsTE.DYNAMO_REACTANT_ELEMENTAL);
     }
 
     @Property(property = "input", valid = @Comp("1"))

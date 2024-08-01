@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.PulverizerManager;
 import cofh.thermalexpansion.util.managers.machine.PulverizerManager.PulverizerRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -7,6 +8,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.PulverizerManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.PulverizerRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -14,10 +16,14 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
+public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay'), item('minecraft:diamond')).chance(1)"),
@@ -93,6 +99,11 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
     public void removeAll() {
         PulverizerManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         PulverizerManagerAccessor.getRecipeMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(RecipeUidsTE.PULVERIZER);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})

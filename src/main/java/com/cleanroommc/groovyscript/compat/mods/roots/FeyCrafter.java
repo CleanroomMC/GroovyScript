@@ -3,22 +3,27 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.init.ModRecipes;
+import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.FeyCraftingRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 @RegistryDescription(
         admonition = @Admonition(value = "groovyscript.wiki.roots.fey_crafter.note", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD)
 )
-public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCraftingRecipe>> {
+public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCraftingRecipe>> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".name('clay_craft').input(item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone'),item('minecraft:stone')) // Must be exactly 5.output(item('minecraft:clay')).xp(100)"))
     public static RecipeBuilder recipeBuilder() {
@@ -85,6 +90,11 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
     public SimpleObjectStream<Map.Entry<ResourceLocation, FeyCraftingRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.getFeyCraftingRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRootsPlugin.FEY_CRAFTING);
     }
 
     @Property(property = "name")

@@ -1,11 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.device;
 
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CoolantManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -13,10 +15,14 @@ import com.github.bsideup.jabel.Desugar;
 import mezz.jei.api.IGuiHelper;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES,
                      admonition = @Admonition(value = "groovyscript.wiki.thermalexpansion.coolant.note0", type = Admonition.Type.WARNING))
-public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
+public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> implements IJEIRemoval.Default {
 
     @Override
     @GroovyBlacklist
@@ -83,6 +89,11 @@ public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
                 .forEach(x -> addBackup(new CoolantRecipe(x, CoolantManagerAccessor.getCoolantMap().getInt(x), CoolantManagerAccessor.getCoolantFactorMap().getInt(x))));
         CoolantManagerAccessor.getCoolantMap().clear();
         CoolantManagerAccessor.getCoolantFactorMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(RecipeUidsTE.COOLANT);
     }
 
     @Desugar

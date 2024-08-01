@@ -5,18 +5,22 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
+public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).time(100).slag(item('minecraft:gold_nugget'))"))
     public static RecipeBuilder recipeBuilder() {
@@ -100,6 +104,14 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
     public void removeAll() {
         BlastFurnaceRecipe.recipeList.forEach(this::addBackup);
         BlastFurnaceRecipe.recipeList.clear();
+    }
+
+    /**
+     * @see blusunrize.immersiveengineering.common.util.compat.jei.JEIHelper
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ie.blastfurnace");
     }
 
     @Property(property = "input", valid = @Comp("1"))

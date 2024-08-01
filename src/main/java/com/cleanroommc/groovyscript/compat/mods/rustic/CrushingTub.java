@@ -4,17 +4,22 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rustic.common.crafting.CrushingTubRecipe;
 import rustic.common.crafting.ICrushingTubRecipe;
 import rustic.common.crafting.Recipes;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
+public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:stone')).fluidOutput(fluid('lava') * 50)"),
@@ -71,6 +76,14 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ICrushingTubRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Recipes.crushingTubRecipes).setRemover(this::remove);
+    }
+
+    /**
+     * @see rustic.compat.jei.RusticJEIPlugin
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("rustic.crushing_tub");
     }
 
     @Property(property = "input", valid = @Comp("1"))

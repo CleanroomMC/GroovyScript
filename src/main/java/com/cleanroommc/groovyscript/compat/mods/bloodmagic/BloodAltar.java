@@ -3,18 +3,24 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 import WayofTime.bloodmagic.altar.AltarTier;
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeBloodAltar;
+import WayofTime.bloodmagic.util.Constants;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.bloodmagic.BloodMagicRecipeRegistrarAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription(
         admonition = {
@@ -25,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
                             hasTitle = true)
         }
 )
-public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
+public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot')).minimumTier(0).drainRate(5).syphon(10).consumeRate(5)"),
@@ -114,6 +120,11 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
     public SimpleObjectStream<RecipeBloodAltar> streamRecipes() {
         return new SimpleObjectStream<>(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(Constants.Compat.JEI_CATEGORY_ALTAR);
     }
 
     @Property(property = "input", valid = @Comp("1"))

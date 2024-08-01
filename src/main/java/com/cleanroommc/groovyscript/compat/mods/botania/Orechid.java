@@ -6,16 +6,22 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.botania.recipe.OrechidRecipe;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import org.jetbrains.annotations.NotNull;
 import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.client.integration.jei.orechid.OrechidRecipeCategory;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
+public class Orechid extends VirtualizedRegistry<OrechidRecipe> implements IJEIRemoval.Default {
 
     @Override
     @GroovyBlacklist
@@ -88,4 +94,15 @@ public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
     public SimpleObjectStream<OrechidRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getAllRecipes(), false).setRemover(this::remove);
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(OrechidRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().exclude(0, 1).input("removeByOutput"));
+    }
+
 }

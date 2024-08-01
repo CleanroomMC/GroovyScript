@@ -4,12 +4,14 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import com.rwtema.extrautils2.api.resonator.IResonatorRecipe;
 import com.rwtema.extrautils2.crafting.ResonatorRecipe;
+import com.rwtema.extrautils2.crafting.jei.JEIResonatorHandler;
 import com.rwtema.extrautils2.power.PowerManager;
 import com.rwtema.extrautils2.tile.TileRainbowGenerator;
 import com.rwtema.extrautils2.tile.TileResonator;
@@ -19,13 +21,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.codehaus.groovy.runtime.MethodClosure;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
+public class Resonator extends VirtualizedRegistry<IResonatorRecipe> implements IJEIRemoval.Default {
 
     @Override
     public void onReload() {
@@ -89,6 +93,11 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIResonatorHandler.uid);
     }
 
     public interface ShouldProgress {

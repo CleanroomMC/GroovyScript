@@ -4,16 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import me.desht.pneumaticcraft.api.recipe.IThermopneumaticProcessingPlantRecipe;
 import me.desht.pneumaticcraft.common.recipes.BasicThermopneumaticProcessingPlantRecipe;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class ThermopneumaticProcessingPlant extends VirtualizedRegistry<IThermopneumaticProcessingPlantRecipe> {
+public class ThermopneumaticProcessingPlant extends VirtualizedRegistry<IThermopneumaticProcessingPlantRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay') * 3).fluidInput(fluid('water') * 100).fluidOutput(fluid('kerosene') * 100).pressure(4).requiredTemperature(323)"),
@@ -70,6 +75,14 @@ public class ThermopneumaticProcessingPlant extends VirtualizedRegistry<IThermop
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IThermopneumaticProcessingPlantRecipe> streamRecipes() {
         return new SimpleObjectStream<>(BasicThermopneumaticProcessingPlantRecipe.recipes).setRemover(this::remove);
+    }
+
+    /**
+     * @see me.desht.pneumaticcraft.common.thirdparty.jei.ModCategoryUid
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("pneumaticcraft.thermo_pneumatic");
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})

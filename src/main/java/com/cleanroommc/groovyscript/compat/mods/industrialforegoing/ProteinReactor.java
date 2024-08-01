@@ -7,15 +7,22 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RegistryDescription
-public class ProteinReactor extends VirtualizedRegistry<IReactorEntry> {
+public class ProteinReactor extends VirtualizedRegistry<IReactorEntry> implements IJEIRemoval.Default {
 
     @Override
     @GroovyBlacklist
@@ -72,4 +79,17 @@ public class ProteinReactor extends VirtualizedRegistry<IReactorEntry> {
                 .setRemover(this::remove);
     }
 
+    /**
+     * @see com.buuz135.industrial.jei.JEICustomPlugin
+     * @see com.buuz135.industrial.jei.reactor.ReactorRecipeCategory#getUid()
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("protein_reactor_accepted_items");
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation());
+    }
 }

@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.CentrifugeManager;
 import cofh.thermalexpansion.util.managers.machine.CentrifugeManager.CentrifugeRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -7,6 +8,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CentrifugeManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CentrifugeRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -15,14 +17,13 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @RegistryDescription
-public class Centrifuge extends VirtualizedRegistry<CentrifugeRecipe> {
+public class Centrifuge extends VirtualizedRegistry<CentrifugeRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).fluidOutput(fluid('water') * 100).output(item('minecraft:diamond') * 2, item('minecraft:gold_ingot'), item('minecraft:gold_ingot')).chance(50, 100, 1)"),
@@ -97,6 +98,11 @@ public class Centrifuge extends VirtualizedRegistry<CentrifugeRecipe> {
     public void removeAll() {
         CentrifugeManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         CentrifugeManagerAccessor.getRecipeMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(RecipeUidsTE.CENTRIFUGE);
     }
 
     @Property(property = "input", valid = @Comp("1"))

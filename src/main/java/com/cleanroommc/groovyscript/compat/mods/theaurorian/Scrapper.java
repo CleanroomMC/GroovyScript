@@ -4,16 +4,22 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.shiroroku.theaurorian.Compat.JEI.JEICompat;
 import com.shiroroku.theaurorian.Recipes.ScrapperRecipe;
 import com.shiroroku.theaurorian.Recipes.ScrapperRecipeHandler;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> {
+public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:stone_sword')).output(item('minecraft:cobblestone'))"))
     public RecipeBuilder recipeBuilder() {
@@ -72,6 +78,11 @@ public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ScrapperRecipe> streamRecipes() {
         return new SimpleObjectStream<>(ScrapperRecipeHandler.allRecipes).setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEICompat.UID_SCRAPPER);
     }
 
     @Property(property = "input", valid = @Comp("1"))

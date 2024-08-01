@@ -3,6 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods.evilcraft;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -16,10 +18,16 @@ import org.cyclops.evilcraft.Configs;
 import org.cyclops.evilcraft.block.BloodInfuserConfig;
 import org.cyclops.evilcraft.core.recipe.custom.DurationXpRecipeProperties;
 import org.cyclops.evilcraft.core.recipe.custom.IngredientFluidStackAndTierRecipeComponent;
+import org.cyclops.evilcraftcompat.modcompat.jei.bloodinfuser.BloodInfuserRecipeJEI;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RegistryDescription
-public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> {
+public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> implements IJEIRemoval.Default {
 
     @Override
     public boolean isEnabled() {
@@ -90,6 +98,16 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
     public SimpleObjectStream<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> streamRecipes() {
         return new SimpleObjectStream<>(org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(BloodInfuserRecipeJEI.CATEGORY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(1);
     }
 
     @Property(property = "input", valid = @Comp("1"))

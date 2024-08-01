@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -14,14 +15,16 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingRecipe> {
+public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingRecipe> implements IJEIRemoval.Default {
 
     public BlueprintCrafting() {
         super(Alias.generateOfClassAnd(BlueprintCrafting.class, "Blueprint"));
@@ -161,6 +164,14 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
     public void removeAll() {
         BlueprintCraftingRecipe.recipeList.values().forEach(this::addBackup);
         BlueprintCraftingRecipe.recipeList.clear();
+    }
+
+    /**
+     * @see blusunrize.immersiveengineering.common.util.compat.jei.JEIHelper
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ie.workbench");
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})

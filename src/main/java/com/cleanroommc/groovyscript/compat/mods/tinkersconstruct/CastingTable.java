@@ -4,21 +4,30 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
+import slimeknights.tconstruct.plugin.jei.casting.CastingRecipeCategory;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
-public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
+public class CastingTable extends VirtualizedRegistry<ICastingRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('lava') * 50).output(item('minecraft:diamond')).coolingTime(750).consumesCast(true).cast(ore('gemEmerald'))"))
     public RecipeBuilder recipeBuilder() {
@@ -103,6 +112,16 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ICastingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getTableCastRegistry()).setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(CastingRecipeCategory.CATEGORY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation().exclude(1));
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))

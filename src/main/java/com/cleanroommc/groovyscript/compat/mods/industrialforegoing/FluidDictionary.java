@@ -5,12 +5,17 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class FluidDictionary extends VirtualizedRegistry<FluidDictionaryEntry> {
+public class FluidDictionary extends VirtualizedRegistry<FluidDictionaryEntry> implements IJEIRemoval.Default {
 
     @Override
     @GroovyBlacklist
@@ -99,4 +104,11 @@ public class FluidDictionary extends VirtualizedRegistry<FluidDictionaryEntry> {
                 .setRemover(this::remove);
     }
 
+    /**
+     * @see com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryCategory#getUid()
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("fluid_dictionary");
+    }
 }

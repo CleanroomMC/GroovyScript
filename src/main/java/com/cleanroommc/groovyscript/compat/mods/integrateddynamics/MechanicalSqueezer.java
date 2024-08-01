@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.integrateddynamics;
 
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -11,9 +12,14 @@ import org.cyclops.cyclopscore.recipe.custom.component.IngredientsAndFluidStackR
 import org.cyclops.integrateddynamics.Configs;
 import org.cyclops.integrateddynamics.block.BlockMechanicalSqueezer;
 import org.cyclops.integrateddynamics.block.BlockMechanicalSqueezerConfig;
+import org.cyclops.integrateddynamicscompat.modcompat.jei.mechanicalsqueezer.MechanicalSqueezerRecipeCategory;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> {
+public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> implements IJEIRemoval.Default {
 
     @Override
     public boolean isEnabled() {
@@ -69,5 +75,10 @@ public class MechanicalSqueezer extends VirtualizedRegistry<IRecipe<IngredientRe
     public SimpleObjectStream<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> streamRecipes() {
         return new SimpleObjectStream<>(BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(MechanicalSqueezerRecipeCategory.NAME);
     }
 }

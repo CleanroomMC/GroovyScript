@@ -2,11 +2,13 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeAlchemyArray;
+import WayofTime.bloodmagic.util.Constants;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.bloodmagic.BloodMagicRecipeRegistrarAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -14,10 +16,14 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
+public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).catalyst(item('bloodmagic:slate:1')).output(item('minecraft:gold_ingot')).texture('bloodmagic:textures/models/AlchemyArrays/LightSigil.png')"),
@@ -157,6 +163,11 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
     public SimpleObjectStream<RecipeAlchemyArray> streamRecipes() {
         return new SimpleObjectStream<>(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(Constants.Compat.JEI_CATEGORY_ALCHEMYARRAY);
     }
 
 

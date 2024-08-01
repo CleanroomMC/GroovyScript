@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.integrateddynamics;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -16,13 +17,17 @@ import org.cyclops.integrateddynamics.Configs;
 import org.cyclops.integrateddynamics.block.BlockMechanicalSqueezer;
 import org.cyclops.integrateddynamics.block.BlockSqueezer;
 import org.cyclops.integrateddynamics.block.BlockSqueezerConfig;
+import org.cyclops.integrateddynamicscompat.modcompat.jei.squeezer.SqueezerRecipeCategory;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> {
+public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> implements IJEIRemoval.Default {
 
     @Override
     public boolean isEnabled() {
@@ -82,6 +87,11 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
     public SimpleObjectStream<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> streamRecipes() {
         return new SimpleObjectStream<>(BlockSqueezer.getInstance().getRecipeRegistry().allRecipes())
                 .setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(SqueezerRecipeCategory.NAME);
     }
 
     @Property(property = "input", valid = @Comp("1"))

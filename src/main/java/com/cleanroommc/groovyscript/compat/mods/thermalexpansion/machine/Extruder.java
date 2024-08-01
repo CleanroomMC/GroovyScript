@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
 import cofh.core.util.ItemWrapper;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.ExtruderManager;
 import cofh.thermalexpansion.util.managers.machine.ExtruderManager.ExtruderRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -8,25 +9,30 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.ExtruderManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.ExtruderRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Booleans;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>> {
+public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidHot(100).fluidCold(1000).output(item('minecraft:clay'))"),
@@ -149,6 +155,16 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
     public void removeAll() {
         removeByType(true);
         removeByType(false);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(RecipeUidsTE.EXTRUDER, RecipeUidsTE.EXTRUDER_SEDIMENTARY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation());
     }
 
     @Property(property = "output", valid = @Comp("1"))

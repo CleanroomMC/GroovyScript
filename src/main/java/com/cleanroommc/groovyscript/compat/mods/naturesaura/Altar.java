@@ -4,19 +4,27 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RegistryDescription
-public class Altar extends VirtualizedRegistry<AltarRecipe> {
+public class Altar extends VirtualizedRegistry<AltarRecipe> implements IJEIRemoval.Default {
 
     public Altar() {
         super(Alias.generateOfClass(Altar.class).andGenerate("Infusion"));
@@ -104,6 +112,16 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, AltarRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(NaturesAuraAPI.ALTAR_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEINaturesAuraPlugin.ALTAR);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(0), OperationHandler.ItemOperation.defaultItemOperation().exclude(2).input("removeByCatalyst"));
     }
 
     @Property(property = "input", valid = @Comp("1"))

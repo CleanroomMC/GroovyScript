@@ -7,17 +7,26 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeRegistry;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
+import slimeknights.tconstruct.plugin.jei.smelting.SmeltingRecipeCategory;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
-public class Melting extends MeltingRecipeRegistry {
+public class Melting extends MeltingRecipeRegistry implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gravel')).fluidOutput(fluid('lava') * 25).time(80)"))
     public RecipeBuilder recipeBuilder() {
@@ -108,6 +117,16 @@ public class Melting extends MeltingRecipeRegistry {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MeltingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getMeltingRegistry()).setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(SmeltingRecipeCategory.CATEGORY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation().exclude(1));
     }
 
     public static class RecipeBuilder extends MeltingRecipeBuilder {

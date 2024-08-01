@@ -4,16 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import essentialcraft.api.RadiatingChamberRecipe;
 import essentialcraft.api.RadiatingChamberRecipes;
 import net.minecraft.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe> {
+public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:nether_star'), item('minecraft:stone')).output(item('minecraft:beacon')).time(100).mruPerTick(10.0f).upperBalance(1.5f).lowerBalance(0.25f)"))
     public RadiatingChamber.RecipeBuilder recipeBuilder() {
@@ -49,6 +54,11 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
             addBackup(r);
             return RadiatingChamberRecipes.RECIPES.remove(r);
         });
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(essentialcraft.integration.jei.RadiatingChamber.UID);
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})

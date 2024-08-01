@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -12,12 +13,17 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.BasicInfusionRecipe;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
+public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).consumption(1f).chalice(false).consumeMultiple(true).time(10)"),
@@ -95,6 +101,11 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
             }
             return false;
         });
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ModIntegrationJEI.idInfuser);
     }
 
     @Property(property = "input", valid = @Comp("1"))

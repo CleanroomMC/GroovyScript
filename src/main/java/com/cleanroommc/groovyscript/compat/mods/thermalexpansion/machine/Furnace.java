@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.FurnaceManager;
 import cofh.thermalexpansion.util.managers.machine.FurnaceManager.FurnaceRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -7,18 +8,23 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.FurnaceManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.FurnaceRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Furnace extends VirtualizedRegistry<FurnaceRecipe> {
+public class Furnace extends VirtualizedRegistry<FurnaceRecipe> implements IJEIRemoval.Default {
 
     private final AbstractReloadableStorage<ItemStack> foodStorage = new AbstractReloadableStorage<>();
 
@@ -111,6 +117,11 @@ public class Furnace extends VirtualizedRegistry<FurnaceRecipe> {
     public void removeAll() {
         FurnaceManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         FurnaceManagerAccessor.getRecipeMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return ImmutableList.of(RecipeUidsTE.FURNACE, RecipeUidsTE.FURNACE_FOOD);
     }
 
     @Property(property = "input", valid = @Comp("1"))

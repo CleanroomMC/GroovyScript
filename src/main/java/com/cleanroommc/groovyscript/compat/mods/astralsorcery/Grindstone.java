@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -11,11 +12,16 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
+public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockDiamond')).output(item('minecraft:clay')).weight(1).secondaryChance(1.0F)"),
@@ -93,6 +99,11 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
     public void removeAll() {
         GrindstoneRecipeRegistry.recipes.forEach(this::addBackup);
         GrindstoneRecipeRegistry.recipes.clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ModIntegrationJEI.idGrindstone);
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -4,6 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.advancedmortars.RegistryRecipeMortarAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -11,17 +13,16 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.codetaylor.mc.advancedmortars.modules.mortar.api.MortarAPI;
 import com.codetaylor.mc.advancedmortars.modules.mortar.recipe.RecipeMortar;
 import com.codetaylor.mc.advancedmortars.modules.mortar.reference.EnumMortarType;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Mortar extends VirtualizedRegistry<RecipeMortar> {
+public class Mortar extends VirtualizedRegistry<RecipeMortar> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".type('stone').duration(2).output(item('minecraft:grass')).input(item('minecraft:dirt'))"),
@@ -85,6 +86,18 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
                 .filter(x -> x.getValue().contains(recipe))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * @see com.codetaylor.mc.advancedmortars.modules.mortar.integration.jei.PluginJEI#createUID
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Arrays.stream(EnumMortarType.values()).map(Enum::name).map(x -> "advancedmortars_" + x).collect(Collectors.toList());
+    }
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(); // TODO add removal methods to this compat
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "8")})

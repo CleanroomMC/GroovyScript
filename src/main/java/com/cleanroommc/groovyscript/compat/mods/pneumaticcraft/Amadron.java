@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
@@ -12,15 +13,18 @@ import me.desht.pneumaticcraft.common.recipes.AmadronOffer;
 import me.desht.pneumaticcraft.common.recipes.AmadronOfferManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription(
         admonition = @Admonition(value = "groovyscript.wiki.pneumaticcraft.amadron.note0", type = Admonition.Type.WARNING)
 )
-public class Amadron extends VirtualizedRegistry<AmadronOffer> {
+public class Amadron extends VirtualizedRegistry<AmadronOffer> implements IJEIRemoval.Default {
 
     private final AbstractReloadableStorage<AmadronOffer> periodicStorage = new AbstractReloadableStorage<>();
 
@@ -134,6 +138,14 @@ public class Amadron extends VirtualizedRegistry<AmadronOffer> {
         list.addAll(AmadronOfferManager.getInstance().getStaticOffers());
         list.addAll(AmadronOfferManager.getInstance().getPeriodicOffers());
         return new SimpleObjectStream<>(list).setRemover(this::removeStatic);
+    }
+
+    /**
+     * @see me.desht.pneumaticcraft.common.thirdparty.jei.ModCategoryUid
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("pneumaticcraft.amadron_trade");
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})

@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -13,16 +14,15 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
+public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".mainInput(item('minecraft:diamond')).input(item('minecraft:diamond'), ore('ingotGold')).output(item('minecraft:clay')).time(100).energyPerTick(100).slag(item('minecraft:gold_nugget'))"))
     public RecipeBuilder recipeBuilder() {
@@ -132,6 +132,14 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     public void removeAll() {
         ArcFurnaceRecipe.recipeList.forEach(this::addBackup);
         ArcFurnaceRecipe.recipeList.clear();
+    }
+
+    /**
+     * @see blusunrize.immersiveengineering.common.util.compat.jei.JEIHelper
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("ie.arcFurnace");
     }
 
     @Property(property = "input", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})

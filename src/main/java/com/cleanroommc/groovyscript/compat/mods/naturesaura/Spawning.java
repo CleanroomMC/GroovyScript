@@ -4,20 +4,25 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
+import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.naturesaura.spawning.note0", type = Admonition.Type.WARNING))
-public class Spawning extends VirtualizedRegistry<AnimalSpawnerRecipe> {
+public class Spawning extends VirtualizedRegistry<AnimalSpawnerRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('demo').input(item('minecraft:clay')).entity(entity('minecraft:bat')).aura(100).time(100)"),
@@ -101,6 +106,11 @@ public class Spawning extends VirtualizedRegistry<AnimalSpawnerRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, AnimalSpawnerRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEINaturesAuraPlugin.SPAWNER);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "Integer.MAX_VALUE")})

@@ -2,11 +2,14 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeTartaricForge;
+import WayofTime.bloodmagic.util.Constants;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.bloodmagic.BloodMagicRecipeRegistrarAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -15,13 +18,15 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
-public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
+public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).output(item('minecraft:gold_ingot')).soulDrain(5).minimumSouls(10)"),
@@ -128,6 +133,15 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
                 .setRemover(this::remove);
     }
 
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(Constants.Compat.JEI_CATEGORY_SOULFORGE);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(1);
+    }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "4")})
     @Property(property = "output", valid = @Comp("1"))

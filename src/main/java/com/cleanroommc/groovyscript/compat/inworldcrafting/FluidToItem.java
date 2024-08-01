@@ -3,6 +3,8 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.FluidRecipeCategory;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -16,9 +18,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
+import java.util.Collection;
+import java.util.Collections;
+
+public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> implements IJEIRemoval.Default {
 
     @Override
     public void onReload() {
@@ -85,6 +91,12 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
 
     public SimpleObjectStream<Recipe> streamRecipes() {
         return new SimpleObjectStream<>(FluidRecipe.findRecipesOfType(Recipe.class)).setRemover(this::remove);
+    }
+
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(FluidRecipeCategory.UID);
     }
 
     public static class Recipe extends FluidRecipe {

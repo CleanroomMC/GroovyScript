@@ -4,19 +4,24 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
+import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 @RegistryDescription(admonition = @Admonition("groovyscript.wiki.naturesaura.offering.note0"))
-public class Offering extends VirtualizedRegistry<OfferingRecipe> {
+public class Offering extends VirtualizedRegistry<OfferingRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('demo').input(item('minecraft:diamond')).catalyst(item('minecraft:clay')).output(item('minecraft:gold_ingot') * 8)"),
@@ -100,6 +105,11 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, OfferingRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(NaturesAuraAPI.OFFERING_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEINaturesAuraPlugin.OFFERING);
     }
 
     @Property(property = "input", valid = @Comp("1"))

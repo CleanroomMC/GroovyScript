@@ -3,19 +3,28 @@ package com.cleanroommc.groovyscript.compat.mods.tcomplement;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.mods.tcomplement.recipe.IngredientBlacklist;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeRegistry;
 import com.cleanroommc.groovyscript.core.mixin.tcomplement.TCompRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
+import com.google.common.collect.ImmutableList;
 import knightminer.tcomplement.library.IBlacklist;
+import knightminer.tcomplement.plugin.jei.melter.MeltingRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 
-public class Melter extends MeltingRecipeRegistry {
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+public class Melter extends MeltingRecipeRegistry implements IJEIRemoval.Default {
 
     @GroovyBlacklist
     protected final AbstractReloadableStorage<IBlacklist> backupStorage = new AbstractReloadableStorage<>();
@@ -151,4 +160,15 @@ public class Melter extends MeltingRecipeRegistry {
     public SimpleObjectStream<MeltingRecipe> streamRecipes() {
         return new SimpleObjectStream<>(TCompRegistryAccessor.getMeltingOverrides()).setRemover(this::remove);
     }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(MeltingRecipeCategory.CATEGORY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(1), OperationHandler.FluidOperation.defaultFluidOperation().exclude(1));
+    }
+
 }

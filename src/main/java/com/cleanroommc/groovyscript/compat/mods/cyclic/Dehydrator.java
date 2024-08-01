@@ -5,15 +5,23 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import com.lothrazar.cyclicmagic.block.dehydrator.RecipeDeHydrate;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RegistryDescription
-public class Dehydrator extends VirtualizedRegistry<RecipeDeHydrate> {
+public class Dehydrator extends VirtualizedRegistry<RecipeDeHydrate> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay'))"),
@@ -75,6 +83,19 @@ public class Dehydrator extends VirtualizedRegistry<RecipeDeHydrate> {
     public SimpleObjectStream<RecipeDeHydrate> streamRecipes() {
         return new SimpleObjectStream<>(RecipeDeHydrate.recipes)
                 .setRemover(this::remove);
+    }
+
+    /**
+     * @see com.lothrazar.cyclicmagic.compat.jei.JEIPlugin
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("dehydrator");
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation().exclude(0));
     }
 
     @Property(property = "input", valid = @Comp("1"))

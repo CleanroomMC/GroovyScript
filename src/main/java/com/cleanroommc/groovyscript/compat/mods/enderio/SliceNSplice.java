@@ -8,6 +8,8 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.ManyToOneRecipe;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeUtils;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -16,16 +18,16 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import crazypants.enderio.base.recipe.*;
 import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
 import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
+import crazypants.enderio.machines.integration.jei.SliceAndSpliceRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @RegistryDescription
-public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
+public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> implements IJEIRemoval.Default {
 
     public SliceNSplice() {
         super(Alias.generateOfClassAnd(SliceNSplice.class, "SliceAndSplice"));
@@ -110,13 +112,23 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         SliceAndSpliceRecipeManager.getInstance().getRecipes().clear();
     }
 
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(SliceAndSpliceRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(0, 1);
+    }
+
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})
     @Property(property = "output", valid = @Comp("1"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
 
-        @Property(valid = @Comp(value = "0",type = Comp.Type.GTE))
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
         private float xp;
-        @Property(valid = @Comp(value = "0",type = Comp.Type.GT))
+        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
         private int energy;
 
         @RecipeBuilderMethodDescription

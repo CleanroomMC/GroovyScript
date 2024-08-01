@@ -5,20 +5,26 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.lothrazar.cyclicmagic.block.hydrator.RecipeHydrate;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Hydrator extends VirtualizedRegistry<RecipeHydrate> {
+public class Hydrator extends VirtualizedRegistry<RecipeHydrate> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay'))"),
@@ -80,6 +86,19 @@ public class Hydrator extends VirtualizedRegistry<RecipeHydrate> {
     public SimpleObjectStream<RecipeHydrate> streamRecipes() {
         return new SimpleObjectStream<>(RecipeHydrate.recipes)
                 .setRemover(this::remove);
+    }
+
+    /**
+     * @see com.lothrazar.cyclicmagic.compat.jei.JEIPlugin
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("hydrator");
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation().exclude(0));
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})

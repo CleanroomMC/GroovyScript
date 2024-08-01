@@ -7,6 +7,8 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.SagRecipe;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -16,13 +18,19 @@ import crazypants.enderio.base.recipe.RecipeBonusType;
 import crazypants.enderio.base.recipe.RecipeLevel;
 import crazypants.enderio.base.recipe.RecipeOutput;
 import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
+import crazypants.enderio.machines.integration.jei.sagmill.SagMillRecipeCategory;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.floats.FloatList;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RegistryDescription
-public class SagMill extends VirtualizedRegistry<Recipe> {
+public class SagMill extends VirtualizedRegistry<Recipe> implements IJEIRemoval.Default {
 
     public SagMill() {
         super(Alias.generateOfClassAnd(SagMill.class, "Sag").and("SAGMill"));
@@ -78,6 +86,16 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
     public void removeAll() {
         SagMillRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
         SagMillRecipeManager.getInstance().getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(SagMillRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(5);
     }
 
     @Property(property = "input", valid = @Comp("1"))

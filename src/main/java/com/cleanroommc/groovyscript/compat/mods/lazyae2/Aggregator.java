@@ -4,18 +4,22 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import io.github.phantamanta44.libnine.LibNine;
+import io.github.phantamanta44.threng.integration.jei.ThrEngJei;
 import io.github.phantamanta44.threng.recipe.AggRecipe;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Aggregator extends VirtualizedRegistry<AggRecipe> {
+public class Aggregator extends VirtualizedRegistry<AggRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockGlass'), item('minecraft:diamond')).output(item('minecraft:diamond') * 4)"),
@@ -71,6 +75,11 @@ public class Aggregator extends VirtualizedRegistry<AggRecipe> {
     public void removeAll() {
         recipes().forEach(this::addBackup);
         recipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(ThrEngJei.CAT_AGG);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "3")})

@@ -1,11 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.alchemistry;
 
+import al132.alchemistry.compat.jei.AlchemistryRecipeUID;
 import al132.alchemistry.recipes.ElectrolyzerRecipe;
 import al132.alchemistry.recipes.ModRecipes;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -13,12 +15,14 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> {
+public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> implements IJEIRemoval.Default {
 
     @Override
     public void onReload() {
@@ -96,6 +100,11 @@ public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> {
     public void removeAll() {
         ModRecipes.INSTANCE.getElectrolyzerRecipes().forEach(this::addBackup);
         ModRecipes.INSTANCE.getElectrolyzerRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(AlchemistryRecipeUID.INSTANCE.getELECTROLYZER());
     }
 
     @Property(property = "input", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})

@@ -4,15 +4,20 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.gildedgames.the_aether.api.freezables.AetherFreezable;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
+public class Freezer extends ForgeRegistryWrapper<AetherFreezable> implements IJEIRemoval.Default {
 
     public Freezer() {
         super(GameRegistry.findRegistry(AetherFreezable.class));
@@ -36,6 +41,14 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
                 remove(freezable);
             }
         });
+    }
+
+    /**
+     * @see com.gildedgames.the_aether.universal.jei.AetherJEIPlugin
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("aether_legacy.freezable");
     }
 
     @Property(property = "input", valid = @Comp("1"))

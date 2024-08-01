@@ -7,17 +7,19 @@ import appeng.api.features.InscriberProcessType;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
+public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockGlass')).output(item('minecraft:diamond')).top(item('minecraft:diamond')).bottom(item('minecraft:diamond')).inscribe()"),
@@ -61,6 +63,13 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
         }
     }
 
+    /**
+     * @see appeng.integration.modules.jei.InscriberRecipeCategory
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("appliedenergistics2.inscriber");
+    }
 
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = @Comp("1"))

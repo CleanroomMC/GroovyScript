@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
 import cofh.core.inventory.ComparableItemStackValidatedNBT;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.EnchanterManager;
 import cofh.thermalexpansion.util.managers.machine.EnchanterManager.EnchanterRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -8,6 +9,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.EnchanterManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.EnchanterRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -16,14 +19,17 @@ import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
+public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> implements IJEIRemoval.Default {
 
     private final AbstractReloadableStorage<ItemStack> arcanaStorage = new AbstractReloadableStorage<>();
 
@@ -136,6 +142,16 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
     public void removeAll() {
         EnchanterManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         EnchanterManagerAccessor.getRecipeMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(RecipeUidsTE.ENCHANTER);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation());
     }
 
     @Property(property = "input", valid = @Comp("2"))

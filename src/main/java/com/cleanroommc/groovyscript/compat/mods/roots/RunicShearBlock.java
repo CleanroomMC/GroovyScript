@@ -3,22 +3,27 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import epicsquid.roots.init.ModRecipes;
+import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.RunicShearRecipe;
 import epicsquid.roots.recipe.transmutation.BlockStatePredicate;
 import epicsquid.roots.recipe.transmutation.StatePredicate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 @RegistryDescription
-public class RunicShearBlock extends VirtualizedRegistry<RunicShearRecipe> {
+public class RunicShearBlock extends VirtualizedRegistry<RunicShearRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('clay_from_runic_diamond').state(blockstate('minecraft:diamond_block')).replacementState(blockstate('minecraft:air')).output(item('minecraft:clay') * 64).displayItem(item('minecraft:diamond') * 9)"),
@@ -93,6 +98,11 @@ public class RunicShearBlock extends VirtualizedRegistry<RunicShearRecipe> {
     public SimpleObjectStream<Map.Entry<ResourceLocation, RunicShearRecipe>> streamRecipes() {
         return new SimpleObjectStream<>(ModRecipes.getRunicShearRecipes().entrySet())
                 .setRemover(r -> this.removeByName(r.getKey()));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(JEIRootsPlugin.RUNIC_SHEARS);
     }
 
     @Property(property = "name")

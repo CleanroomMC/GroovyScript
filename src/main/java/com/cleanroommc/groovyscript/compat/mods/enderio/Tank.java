@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeUtils;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.enderio.SimpleRecipeGroupHolderAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -18,16 +19,19 @@ import crazypants.enderio.base.recipe.IMachineRecipe;
 import crazypants.enderio.base.recipe.MachineRecipeRegistry;
 import crazypants.enderio.base.recipe.RecipeLevel;
 import crazypants.enderio.base.recipe.tank.TankMachineRecipe;
+import crazypants.enderio.machines.integration.jei.TankRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
+public class Tank extends VirtualizedRegistry<TankMachineRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".drain().input(item('minecraft:clay')).output(item('minecraft:diamond')).fluidInput(fluid('water') * 500)"),
@@ -198,6 +202,11 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_FILLING)).getRecipes().clear();
         MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.TANK_EMPTYING).forEach((r, l) -> addBackup((TankMachineRecipe) l));
         ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.TANK_EMPTYING)).getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(TankRecipeCategory.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

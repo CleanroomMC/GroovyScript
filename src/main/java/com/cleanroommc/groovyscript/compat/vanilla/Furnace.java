@@ -3,19 +3,20 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
+public class Furnace extends VirtualizedRegistry<Furnace.Recipe> implements IJEIRemoval.Default {
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -180,6 +181,11 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
     public void onReload() {
         getScriptedRecipes().forEach(recipe -> remove(recipe, false));
         getBackupRecipes().forEach(recipe -> FurnaceRecipes.instance().addSmeltingRecipe(recipe.input, recipe.output, recipe.exp));
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(VanillaRecipeCategoryUid.SMELTING);
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<Recipe> {

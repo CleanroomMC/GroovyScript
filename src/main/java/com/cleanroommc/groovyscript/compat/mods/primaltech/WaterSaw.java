@@ -4,16 +4,24 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.primal_tech.WaterSawRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import primal_tech.jei.water_saw.WaterSawCategory;
 import primal_tech.recipes.WaterSawRecipes;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RegistryDescription
-public class WaterSaw extends VirtualizedRegistry<WaterSawRecipes> {
+public class WaterSaw extends VirtualizedRegistry<WaterSawRecipes> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).choppingTime(50)"),
@@ -84,6 +92,16 @@ public class WaterSaw extends VirtualizedRegistry<WaterSawRecipes> {
     public void removeAll() {
         WaterSawRecipesAccessor.getRecipes().forEach(this::addBackup);
         WaterSawRecipesAccessor.getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(WaterSawCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(2);
     }
 
     @Property(property = "input", valid = @Comp("1"))

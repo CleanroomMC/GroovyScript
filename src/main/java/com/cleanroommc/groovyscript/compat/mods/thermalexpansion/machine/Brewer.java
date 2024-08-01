@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine;
 
 import cofh.core.util.helpers.FluidHelper;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import cofh.thermalexpansion.util.managers.machine.BrewerManager;
 import cofh.thermalexpansion.util.managers.machine.BrewerManager.BrewerRecipe;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -8,6 +9,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.BrewerManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.BrewerRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
@@ -18,14 +20,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Brewer extends VirtualizedRegistry<BrewerRecipe> {
+public class Brewer extends VirtualizedRegistry<BrewerRecipe> implements IJEIRemoval.Default {
 
     public Brewer() {
         super(Alias.generateOfClass(Brewer.class).andGenerate("Imbuer"));
@@ -127,6 +132,11 @@ public class Brewer extends VirtualizedRegistry<BrewerRecipe> {
     public void removeAll() {
         BrewerManagerAccessor.getRecipeMap().values().forEach(this::addBackup);
         BrewerManagerAccessor.getRecipeMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(RecipeUidsTE.BREWER);
     }
 
     @Property(property = "input", valid = @Comp("1"))

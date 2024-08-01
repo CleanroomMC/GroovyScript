@@ -4,6 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.primal_tech.WoodenBasinRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -12,10 +14,13 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import primal_tech.jei.wooden_basin.WoodenBasinCategory;
 import primal_tech.recipes.WoodenBasinRecipes;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +28,7 @@ import java.util.stream.Collectors;
 @RegistryDescription(
         admonition = @Admonition(type = Admonition.Type.WARNING, value = "groovyscript.wiki.primal_tech.wooden_basin.note0")
 )
-public class WoodenBasin extends VirtualizedRegistry<WoodenBasinRecipes> {
+public class WoodenBasin extends VirtualizedRegistry<WoodenBasinRecipes> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).fluidInput(fluid('lava')).output(item('minecraft:clay'))"),
@@ -99,6 +104,16 @@ public class WoodenBasin extends VirtualizedRegistry<WoodenBasinRecipes> {
     public void removeAll() {
         WoodenBasinRecipesAccessor.getRecipes().forEach(this::addBackup);
         WoodenBasinRecipesAccessor.getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(WoodenBasinCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Default.excludeSlots(6);
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "4", type = Comp.Type.LTE)})

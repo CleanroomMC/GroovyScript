@@ -4,18 +4,22 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import essentialcraft.api.MithrilineFurnaceRecipe;
 import essentialcraft.api.MithrilineFurnaceRecipes;
 import net.minecraft.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceRecipe> {
+public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:coal_block') * 3).output(item('minecraft:diamond_block')).espe(500)"))
     public MithrilineFurnace.RecipeBuilder recipeBuilder() {
@@ -62,6 +66,11 @@ public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceReci
             addBackup(r);
             return MithrilineFurnaceRecipes.RECIPES.remove(r);
         });
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(essentialcraft.integration.jei.MithrilineFurnace.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.extrautils2;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.extrautils2.MachineInitAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -15,14 +16,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>> {
+public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".generator('extrautils2:generator_pink').input(item('minecraft:clay')).energy(1000).energyPerTick(100)"),
@@ -191,6 +191,14 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
             if (machine == null) continue;
             removeByGenerator(machine);
         }
+    }
+
+    /**
+     * @see com.rwtema.extrautils2.crafting.jei.JEIMachine#getUid()
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Arrays.stream(Generators.values()).map(Generators::toString).map(MachineRegistry::getMachine).filter(Objects::nonNull).map(machine -> "xu2_machine_" + machine.name).collect(Collectors.toList());
     }
 
     public enum Generators {

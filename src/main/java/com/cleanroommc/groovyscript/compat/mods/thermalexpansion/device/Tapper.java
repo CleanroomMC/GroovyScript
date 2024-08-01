@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.device;
 
 import cofh.core.util.BlockWrapper;
 import cofh.core.util.ItemWrapper;
+import cofh.thermalexpansion.plugins.jei.RecipeUidsTE;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -9,6 +10,8 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.TapperManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
@@ -19,13 +22,17 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription(
         admonition = @Admonition("groovyscript.wiki.thermalexpansion.tapper.note0")
 )
-public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
+public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> implements IJEIRemoval.Default {
 
     private final AbstractReloadableStorage<TapperBlockRecipe> blockStorage = new AbstractReloadableStorage<>();
 
@@ -153,6 +160,16 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
         TapperManagerAccessor.getItemMap().clear();
         TapperManagerAccessor.getBlockMap().forEach((key, value) -> blockStorage.addBackup(new TapperBlockRecipe(key, value)));
         TapperManagerAccessor.getBlockMap().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(RecipeUidsTE.SAWMILL_TAPPER);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.FluidOperation.defaultFluidOperation());
     }
 
     @Desugar

@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.enderio.SimpleRecipeGroupHolderAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -15,19 +16,22 @@ import crazypants.enderio.base.recipe.MachineRecipeRegistry;
 import crazypants.enderio.base.recipe.RecipeLevel;
 import crazypants.enderio.base.recipe.soul.BasicSoulBinderRecipe;
 import crazypants.enderio.base.recipe.soul.ISoulBinderRecipe;
+import crazypants.enderio.machines.integration.jei.SoulBinderRecipeCategory;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
+public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).entity(entity('minecraft:zombie'), entity('minecraft:enderman')).name('groovy_example').energy(1000).xp(5)"))
     public RecipeBuilder recipeBuilder() {
@@ -81,6 +85,11 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
     public void removeAll() {
         MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.SOULBINDER).forEach((r, l) -> addBackup((ISoulBinderRecipe) l));
         ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.SOULBINDER)).getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(SoulBinderRecipeCategory.UID);
     }
 
     @Property(property = "input", valid = @Comp("1"))

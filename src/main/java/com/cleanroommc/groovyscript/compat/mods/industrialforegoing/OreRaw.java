@@ -1,19 +1,25 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
+import com.buuz135.industrial.jei.ore.OreWasherCategory;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @RegistryDescription
-public class OreRaw extends VirtualizedRegistry<OreFluidEntryRaw> {
+public class OreRaw extends VirtualizedRegistry<OreFluidEntryRaw> implements IJEIRemoval.Default {
 
     public OreRaw() {
         super(Alias.generateOfClass(OreRaw.class).andGenerate("Washing"));
@@ -104,4 +110,9 @@ public class OreRaw extends VirtualizedRegistry<OreFluidEntryRaw> {
                 .setRemover(this::remove);
     }
 
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        // why does this one has a public static ID string when none of the others have one?
+        return Collections.singletonList(OreWasherCategory.ID);
+    }
 }

@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.PistonPushRecipeCategory;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -14,14 +15,17 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class PistonPush extends VirtualizedRegistry<PistonPush.PistonPushRecipe> {
+public class PistonPush extends VirtualizedRegistry<PistonPush.PistonPushRecipe> implements IJEIRemoval.Default {
 
     private final List<PistonPushRecipe> pistonPushRecipes = new ArrayList<>();
 
@@ -52,6 +56,11 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.PistonPushRecipe>
 
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(PistonPushRecipeCategory.UID);
     }
 
     public static class PistonPushRecipe {

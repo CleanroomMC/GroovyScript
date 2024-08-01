@@ -4,16 +4,21 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rustic.common.crafting.BrewingBarrelRecipe;
 import rustic.common.crafting.IBrewingBarrelRecipe;
 import rustic.common.crafting.Recipes;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @RegistryDescription
-public class BrewingBarrel extends VirtualizedRegistry<IBrewingBarrelRecipe> {
+public class BrewingBarrel extends VirtualizedRegistry<IBrewingBarrelRecipe> implements IJEIRemoval.Default {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('ironberryjuice')).fluidOutput(fluid('lava'))"),
@@ -70,6 +75,14 @@ public class BrewingBarrel extends VirtualizedRegistry<IBrewingBarrelRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IBrewingBarrelRecipe> streamRecipes() {
         return new SimpleObjectStream<>(Recipes.brewingRecipes).setRemover(this::remove);
+    }
+
+    /**
+     * @see rustic.compat.jei.RusticJEIPlugin
+     */
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList("rustic.brewing");
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))

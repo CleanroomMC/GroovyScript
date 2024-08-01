@@ -4,19 +4,24 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import lykrast.prodigytech.common.compat.jei.PrimordialisReactorCategory;
 import lykrast.prodigytech.common.recipe.PrimordialisReactorManager;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
-public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
+public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> implements IJEIRemoval.Default {
 
     @Override
     public void onReload() {
@@ -73,5 +78,10 @@ public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
                 .map(OreDictIngredient::new);
         List<IIngredient> items = Stream.concat(normalRecipes, oreDictRecipes).collect(Collectors.toList());
         return new SimpleObjectStream<>(items).setRemover(this::remove);
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(PrimordialisReactorCategory.UID);
     }
 }
