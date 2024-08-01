@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 import betterwithmods.common.BWRegistry;
 import betterwithmods.common.registry.block.recipe.BlockIngredient;
 import betterwithmods.common.registry.block.recipe.SawRecipe;
+import betterwithmods.module.compat.jei.category.SawRecipeCategory;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -11,15 +12,18 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RegistryDescription
-public class Saw extends VirtualizedRegistry<SawRecipe> {
+public class Saw extends VirtualizedRegistry<SawRecipe> implements IJEIRemovalIOutput {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:gold_ingot') * 16)"))
-        @RecipeBuilderMethodDescription
+    @RecipeBuilderMethodDescription
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -81,6 +85,11 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
     public void removeAll() {
         BWRegistry.WOOD_SAW.getRecipes().forEach(this::addBackup);
         BWRegistry.WOOD_SAW.getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(SawRecipeCategory.UID);
     }
 
     @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)})

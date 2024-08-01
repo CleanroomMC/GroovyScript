@@ -15,4 +15,16 @@ public class BetterWithMods extends GroovyPropertyContainer {
     public final Hopper hopper = new Hopper();
     public final HopperFilters hopperFilters = new HopperFilters();
 
+
+    /**
+     * Used to obtain the JEI category UIDs for categories with multiple levels of heat.
+     *
+     * @see betterwithmods.module.compat.jei.JEI#getHeatUID(String, int)
+     */
+    public static String getHeatUID(String base, int heat) {
+        if (heat == 1) return base;
+        if (heat == 2) return String.format("%s.%s", base, "stoked");
+        return String.format("%s.%s", base, heat);
+    }
+
 }

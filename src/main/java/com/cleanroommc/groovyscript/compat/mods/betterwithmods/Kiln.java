@@ -3,6 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 import betterwithmods.common.BWRegistry;
 import betterwithmods.common.registry.block.recipe.BlockIngredient;
 import betterwithmods.common.registry.block.recipe.KilnRecipe;
+import betterwithmods.common.registry.heat.BWMHeatRegistry;
+import betterwithmods.module.compat.jei.category.KilnRecipeCategory;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -11,12 +13,16 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Kiln extends VirtualizedRegistry<KilnRecipe> {
+public class Kiln extends VirtualizedRegistry<KilnRecipe> implements IJEIRemovalIOutput {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).heat(2)"),
@@ -83,6 +89,11 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
     public void removeAll() {
         BWRegistry.KILN.getRecipes().forEach(this::addBackup);
         BWRegistry.KILN.getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Arrays.stream(BWMHeatRegistry.allHeatLevels()).mapToObj(i -> BetterWithMods.getHeatUID(KilnRecipeCategory.UID, i)).collect(Collectors.toList());
     }
 
     @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "3", type = Comp.Type.LTE)})

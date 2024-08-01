@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 
 import betterwithmods.common.BWRegistry;
 import betterwithmods.common.registry.bulk.recipes.MillRecipe;
+import betterwithmods.module.compat.jei.category.MillRecipeCategory;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -13,12 +14,15 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class MillStone extends VirtualizedRegistry<MillRecipe> {
+public class MillStone extends VirtualizedRegistry<MillRecipe> implements IJEIRemovalIOutput {
 
     public MillStone() {
         super(Alias.generateOfClass(MillStone.class).andGenerate("Mill"));
@@ -91,6 +95,11 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
     public void removeAll() {
         BWRegistry.MILLSTONE.getRecipes().forEach(this::addBackup);
         BWRegistry.MILLSTONE.getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(MillRecipeCategory.UID);
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "3", type = Comp.Type.LTE)})

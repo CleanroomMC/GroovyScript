@@ -1,21 +1,27 @@
 package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 
 import betterwithmods.common.registry.HopperInteractions;
+import betterwithmods.module.compat.jei.category.HopperRecipeCategory;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
-public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe> {
+public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe> implements IJEIRemovalIOutput {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('betterwithmods:iron_bar').input(ore('sand')).output(item('minecraft:clay')).inWorldItemOutput(item('minecraft:gold_ingot'))"),
@@ -82,6 +88,16 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
     public void removeAll() {
         HopperInteractions.RECIPES.forEach(this::addBackup);
         HopperInteractions.RECIPES.clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(HopperRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(IJEIRemovalIOutput.getDefaultIOutput(), OperationHandler.ItemOperation.defaultItemOperation().exclude(7));
     }
 
     @Property(property = "name", value = "groovyscript.wiki.betterwithmods.hopper.name.value", valid = @Comp(value = "null", type = Comp.Type.NOT))

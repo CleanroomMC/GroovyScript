@@ -1,23 +1,42 @@
 package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 
 import betterwithmods.common.registry.anvil.AnvilCraftingManager;
+import betterwithmods.module.compat.jei.category.SteelAnvilRecipeCategory;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
+import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
-public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
+public class AnvilCrafting extends VirtualizedRegistry<IRecipe> implements IJEIRemoval.Default {
 
     public AnvilCrafting() {
         super(Alias.generateOfClass(AnvilCrafting.class).andGenerate("SoulforgedSteelAnvil"));
+    }
+
+    private static OperationHandler.IOperation registryNameOperation() {
+        return new OperationHandler.WrapperOperation<>(ICraftingRecipeWrapper.class, wrapper ->
+                wrapper.getRegistryName() == null
+                ? Collections.emptyList()
+                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRegistryName(), false))));
     }
 
     @RecipeBuilderDescription(example = {
@@ -92,4 +111,13 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
         AnvilCraftingManager.ANVIL_CRAFTING.clear();
     }
 
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Collections.singletonList(SteelAnvilRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
+    }
 }

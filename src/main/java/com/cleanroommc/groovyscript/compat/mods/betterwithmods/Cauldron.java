@@ -2,6 +2,8 @@ package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 
 import betterwithmods.common.BWRegistry;
 import betterwithmods.common.registry.bulk.recipes.CookingPotRecipe;
+import betterwithmods.common.registry.heat.BWMHeatRegistry;
+import betterwithmods.module.compat.jei.category.CookingPotRecipeCategory;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -11,18 +13,21 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> {
+public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> implements IJEIRemovalIOutput {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).heat(2)"),
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot') * 16).ignoreHeat()")
     })
-        @RecipeBuilderMethodDescription
+    @RecipeBuilderMethodDescription
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -86,6 +91,11 @@ public class Cauldron extends VirtualizedRegistry<CookingPotRecipe> {
     public void removeAll() {
         BWRegistry.CAULDRON.getRecipes().forEach(this::addBackup);
         BWRegistry.CAULDRON.getRecipes().clear();
+    }
+
+    @Override
+    public @NotNull Collection<String> getCategories() {
+        return Arrays.stream(BWMHeatRegistry.allHeatLevels()).mapToObj(i -> BetterWithMods.getHeatUID(CookingPotRecipeCategory.CAULDRON_UID, i)).collect(Collectors.toList());
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)})
