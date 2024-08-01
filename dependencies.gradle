@@ -95,6 +95,7 @@ final def mod_dependencies = [
         'roots-246183:3905074'                                : [project.debug_roots],
         'rustic-256141:3107974'                               : [project.debug_rustic],
         'thaumcraft-223628:2629023'                           : [project.debug_thaum],
+        'thaumic_jei-285492:2705304'                          : [project.debug_thaum],
         'cofh_core-69162:2920433'                             : [project.debug_thermal],
         'cofh_world-271384:2920434'                           : [project.debug_thermal],
         'thermal_expansion-69163:2926431'                     : [project.debug_thermal],
@@ -129,10 +130,6 @@ dependencies {
         if (it.value.any { it.toBoolean() }) {
             runtimeOnly mod
         }
-    }
-
-    if (project.debug_thaum.toBoolean()) {
-        runtimeOnly 'curse.maven:thaumic_jei-285492:2705304'
     }
 
     compileOnly 'com.enderio:endercore:0.5.78'
