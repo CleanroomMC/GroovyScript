@@ -6,6 +6,8 @@ import mezz.jei.api.gui.IRecipeLayout;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.text.*;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -23,6 +25,15 @@ public class RemoveJEIRecipe {
     private static final String ERROR_KEY = "groovyscript.jei.remove_recipe.unknown_category";
     private static final Style ERROR_STYLE = new Style().setColor(TextFormatting.RED);
     private static final Style ERROR_COPY_STYLE = new Style().setColor(TextFormatting.GOLD);
+
+    private static final String ISSUES_LINK = "https://github.com/CleanroomMC/GroovyScript/issues";
+    private static final String GITHUB_NAME = "GitHub";
+    private static final Style COPY_STYLE = new Style()
+            .setColor(TextFormatting.LIGHT_PURPLE)
+            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentTranslation("groovyscript.jei.remove_recipe.view_on_github")))
+            .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, ISSUES_LINK));
+
+    private boolean hasSeenFirstExecutionNotice;
 
     private String lastUid = "";
     private IRecipeLayout lastLayout;
@@ -46,6 +57,8 @@ public class RemoveJEIRecipe {
     }
 
     public boolean checkRemoval(IRecipeLayout layout, String uid, boolean inverseComboOrder) {
+        if (!hasSeenFirstExecutionNotice) handleFirstExecution();
+
         var matchesLast = lastUid.equals(uid) && lastLayout == layout;
 
         if (matchesLast && removal != null && !removal.getValue().isEmpty()) {
@@ -86,6 +99,11 @@ public class RemoveJEIRecipe {
         else combo++;
         if (combo > removal.getValue().size() - 1) combo = 0;
         if (combo < 0) combo = removal.getValue().size() - 1;
+    }
+
+    private void handleFirstExecution() {
+        Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.jei.remove_recipe.first_time", new TextComponentString(GITHUB_NAME).setStyle(COPY_STYLE)));
+        hasSeenFirstExecutionNotice = true;
     }
 
 }

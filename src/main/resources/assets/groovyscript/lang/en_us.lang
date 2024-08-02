@@ -6,7 +6,10 @@ key.categories.groovyscript=GroovyScript
 keybind.groovyscript.reload=Reload Scripts
 keybind.groovyscript.remove_recipe_from_jei=Generate Recipe Removal Method (from JEI)
 
-key.groovyscript.remove_recipe_from_jei.unknown_category=Couldn't find a way to remove the targeted recipe in category '%s'
+# Remove Recipes from JEI
+groovyscript.jei.remove_recipe.unknown_category=Couldn't find a way to remove the targeted recipe in category '%s'
+groovyscript.jei.remove_recipe.first_time=GroovyScript offers the ability to generate removal methods for recipes. In many cases the methods provided would remove multiple recipes, so use the one that's right for your situation. If the methods generated do not exist, do not function in the implied way, or you encounter any crashes, please submit an issue to our %s!
+groovyscript.jei.remove_recipe.view_on_github=Open GroovyScript's GitHub Issues page
 
 groovyscript.jei.category.groovyscript:fluid_recipe.name=In world fluid recipes
 groovyscript.jei.category.groovyscript:explosion.name=Explosion recipes
