@@ -59,6 +59,24 @@ public interface IJEIRemoval {
 
         /**
          * A shorthand method that modifies the default operations so each
+         * of the default operations includes the provided slots.
+         * <p>
+         * Should be used inside {@link #getJEIOperations()} to provide the return value.
+         *
+         * @param included all slots to be included
+         * @return a list if operations with the given slots included
+         * @see OperationHandler#defaultOperations()
+         */
+        static List<OperationHandler.IOperation> includeSlots(int... included) {
+            var operations = OperationHandler.defaultOperations();
+            for (var operation : operations) {
+                if (operation instanceof OperationHandler.ISlotOperation<?> op) op.include(included);
+            }
+            return operations;
+        }
+
+        /**
+         * A shorthand method that modifies the default operations so each
          * of the default operations excludes the provided slots.
          * <p>
          * Should be used inside {@link #getJEIOperations()} to provide the return value.

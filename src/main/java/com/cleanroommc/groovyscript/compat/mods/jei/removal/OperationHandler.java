@@ -90,6 +90,13 @@ public class OperationHandler {
     public interface ISlotOperation<R> extends IOperation {
 
         /**
+         * Include all provided slot numbers to be evaluated. If this is called, {@link #exclude(int...)} should be ignored.
+         *
+         * @param ints all slots to be included
+         */
+        ISlotOperation<R> include(int... ints);
+
+        /**
          * Excludes all provided slot numbers from being evaluated.
          * Some slots cannot be parsed properly, are superfluous, contain helper items unrelated to the recipe,
          * or otherwise should be ignored when generating methods to remove the recipe.
@@ -177,11 +184,18 @@ public class OperationHandler {
         private static final String DEFAULT_INPUT_METHOD_NAME = "removeByInput";
         private static final String DEFAULT_OUTPUT_METHOD_NAME = "removeByOutput";
 
+        protected final List<Integer> included = new ArrayList<>();
         protected final List<Integer> excluded = new ArrayList<>();
         protected final List<Integer> reallyInputs = new ArrayList<>();
         protected final List<Integer> reallyOutputs = new ArrayList<>();
         protected String inputMethodName = DEFAULT_INPUT_METHOD_NAME;
         protected String outputMethodName = DEFAULT_OUTPUT_METHOD_NAME;
+
+        @Override
+        public BaseSlotOperation<T> include(int... ints) {
+            for (var i : ints) this.included.add(i);
+            return this;
+        }
 
         @Override
         public BaseSlotOperation<T> exclude(int... ints) {
@@ -215,13 +229,16 @@ public class OperationHandler {
 
         /**
          * Checks if the slot should be skipped.
-         * By default, checks the {@link #excluded} list and if the slot contains no ingredients.
+         * If the slot has no ingredients it is automatically skipped.
+         * If {@link #included} is empty, checks the {@link #excluded} list and if the slot contains no ingredients.
+         * Otherwise, if the slot is a member of the {@link #included} list the provided slot will be included.
          *
          * @param slot the entry slot being parsed
          * @return if the slot should be ignored
          */
         protected boolean isIgnored(Map.Entry<Integer, ? extends IGuiIngredient<T>> slot) {
-            return this.excluded.contains(slot.getKey()) || slot.getValue().getAllIngredients().isEmpty();
+            if (slot.getValue().getAllIngredients().isEmpty()) return true;
+            return this.included.isEmpty() ? this.excluded.contains(slot.getKey()) : !this.included.contains(slot.getKey());
         }
 
         /**
@@ -232,8 +249,7 @@ public class OperationHandler {
          * @return if the slot is an input
          */
         protected boolean isInput(Map.Entry<Integer, ? extends IGuiIngredient<T>> slot) {
-            if (this.reallyInputs.contains(slot.getKey())) return true;
-            return slot.getValue().isInput();
+            return this.reallyInputs.contains(slot.getKey()) || slot.getValue().isInput();
         }
 
 
@@ -245,8 +261,7 @@ public class OperationHandler {
          * @return if the slot is an output
          */
         protected boolean isOutput(Map.Entry<Integer, ? extends IGuiIngredient<T>> slot) {
-            if (this.reallyOutputs.contains(slot.getKey())) return true;
-            return !isInput(slot);
+            return this.reallyOutputs.contains(slot.getKey()) || !isInput(slot);
         }
 
         /**
