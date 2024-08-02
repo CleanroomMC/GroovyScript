@@ -423,30 +423,6 @@ public class OperationHandler {
             return new ItemOperation();
         }
 
-        /**
-         * @return an {@link ItemOperation} that ignores all output slots.
-         */
-        public static IOperation inputItemOperation() {
-            return new ItemOperation() {
-                @Override
-                public boolean isIgnored(Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> slot) {
-                    return isOutput(slot);
-                }
-            };
-        }
-
-        /**
-         * @return an {@link ItemOperation} that ignores all input slots.
-         */
-        public static IOperation outputItemOperation() {
-            return new ItemOperation() {
-                @Override
-                public boolean isIgnored(Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> slot) {
-                    return !isOutput(slot);
-                }
-            };
-        }
-
     }
 
     public static class FluidOperation extends IngredientSlotOperation<FluidStack> {
