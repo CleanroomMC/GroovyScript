@@ -81,7 +81,7 @@ public class Category extends VirtualizedRegistry<String> {
         }
     }
 
-    @RecipeBuilderDescription(example = @Example(value = ".id(GenericRecipeCategory.UID)/*()!*/.category(guiHelper -> new GenericRecipeCategory(guiHelper)).catalyst(item('minecraft:clay')).wrapper(GenericRecipeCategory.getRecipeWrappers())", imports = "classes.GenericRecipeCategory", commented = true, annotations = "groovyscript.wiki.jei.category.annotation"))
+    @RecipeBuilderDescription(example = @Example(value = ".id(classes.GenericRecipeCategory.UID)/*()!*/.category(guiHelper -> new classes.GenericRecipeCategory(guiHelper)).catalyst(item('minecraft:clay')).wrapper(classes.GenericRecipeCategory.getRecipeWrappers())", commented = true, annotations = "groovyscript.wiki.jei.category.annotation"))
     public CategoryBuilder categoryBuilder() {
         return new CategoryBuilder();
     }
