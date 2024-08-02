@@ -4,10 +4,12 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.extrautils2.MachineInitAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import com.rwtema.extrautils2.api.machine.IMachineRecipe;
 import com.rwtema.extrautils2.api.machine.Machine;
 import com.rwtema.extrautils2.api.machine.MachineRegistry;
@@ -199,6 +201,11 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
     @Override
     public @NotNull Collection<String> getCategories() {
         return Arrays.stream(Generators.values()).map(Generators::toString).map(MachineRegistry::getMachine).filter(Objects::nonNull).map(machine -> "xu2_machine_" + machine.name).collect(Collectors.toList());
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(); // TODO JEI
     }
 
     public enum Generators {

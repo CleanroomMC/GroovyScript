@@ -97,7 +97,7 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> implements IJEIRem
     }
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(); // TODO add removal methods to this compat
+        return ImmutableList.of(); // TODO jei
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "8")})

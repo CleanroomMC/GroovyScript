@@ -5,10 +5,12 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.PistonPushRecipeCategory;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import com.google.common.collect.ImmutableList;
 import groovy.lang.Closure;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -61,6 +63,11 @@ public class PistonPush extends VirtualizedRegistry<PistonPush.PistonPushRecipe>
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(PistonPushRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(); // TODO jei this
     }
 
     public static class PistonPushRecipe {

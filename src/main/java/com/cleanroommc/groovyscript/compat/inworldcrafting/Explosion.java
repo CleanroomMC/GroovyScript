@@ -6,10 +6,12 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.ExplosionRecipeCategory;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import com.google.common.collect.ImmutableList;
 import groovy.lang.Closure;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -60,6 +62,11 @@ public class Explosion extends VirtualizedRegistry<Explosion.ExplosionRecipe> im
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(ExplosionRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(); // TODO jei this
     }
 
     public static class ExplosionRecipe {

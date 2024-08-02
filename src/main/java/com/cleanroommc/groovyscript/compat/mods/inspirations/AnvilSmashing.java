@@ -4,11 +4,13 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.inspirations.InspirationsRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import knightminer.inspirations.library.InspirationsRegistry;
 import knightminer.inspirations.plugins.jei.smashing.SmashingRecipeCategory;
 import net.minecraft.block.Block;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -137,6 +140,11 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(SmashingRecipeCategory.CATEGORY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(); // TODO jei
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<Object> {

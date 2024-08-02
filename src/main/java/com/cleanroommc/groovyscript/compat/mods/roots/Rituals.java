@@ -3,26 +3,22 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
 import com.cleanroommc.groovyscript.core.mixin.roots.RitualBaseAccessor;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.properties.Property;
 import epicsquid.roots.properties.PropertyTable;
 import epicsquid.roots.ritual.RitualBase;
 import epicsquid.roots.ritual.RitualRegistry;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
 
 @RegistryDescription(
         reloadability = RegistryDescription.Reloadability.FLAWED,
         isFullyDocumented = false // TODO fully document Roots Rituals
 )
-public class Rituals extends VirtualizedRegistry<RitualBase> implements IJEIRemoval.Default {
+public class Rituals extends VirtualizedRegistry<RitualBase> {
 
     public static RitualWrapper ritual(String ritual) {
         return ritual(RitualRegistry.getRitual(ritual));
@@ -47,11 +43,6 @@ public class Rituals extends VirtualizedRegistry<RitualBase> implements IJEIRemo
             ((RitualBaseAccessor) r).setDisabled(true);
             r.setRecipe(RitualBase.RitualRecipe.EMPTY);
         });
-    }
-
-    @Override
-    public @NotNull Collection<String> getCategories() {
-        return Collections.singletonList(JEIRootsPlugin.RITUAL);
     }
 
     public static class RitualWrapper {

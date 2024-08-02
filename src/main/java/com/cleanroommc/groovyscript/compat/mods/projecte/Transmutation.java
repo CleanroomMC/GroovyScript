@@ -5,9 +5,11 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import moze_intel.projecte.integration.jei.world_transmute.WorldTransmuteRecipeCategory;
 import moze_intel.projecte.utils.WorldTransmutations;
 import net.minecraft.block.Block;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
 public class Transmutation extends VirtualizedRegistry<WorldTransmutations.Entry> implements IJEIRemoval.Default {
@@ -87,6 +90,11 @@ public class Transmutation extends VirtualizedRegistry<WorldTransmutations.Entry
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(WorldTransmuteRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(); // TODO jei
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<WorldTransmutations.Entry> {
