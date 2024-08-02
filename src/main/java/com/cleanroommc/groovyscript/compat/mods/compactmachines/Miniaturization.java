@@ -32,9 +32,10 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
             var builder = ImmutableList.<String>builder();
             builder.add(JeiRemovalHelper.format("removeByCatalyst", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getCatalystStack(), true)));
             builder.add(JeiRemovalHelper.format("removeByOutput", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getTargetStack(), true)));
-            for (ItemStack stack : wrapper.recipe.getRequiredItemStacks()) {
-                builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.getSingleItemStack(stack, true)));
-            }
+            // these methods are not actually implemented
+            //for (ItemStack stack : wrapper.recipe.getRequiredItemStacks()) {
+            //    builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.getSingleItemStack(stack, true)));
+            //}
             return builder.build();
         });
     }

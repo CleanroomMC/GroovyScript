@@ -17,8 +17,6 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,24 +35,25 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> implements IJEIRe
             if (!wrapper.recipe.getRecipeCatalyst().isEmpty()) {
                 builder.add(JeiRemovalHelper.format("removeByCatalyst", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeCatalyst(), true)));
             }
-            var output = wrapper.recipe.getRecipeOutput(wrapper.recipe.getRecipeCatalyst());
-            if (!output.isEmpty()) {
-                builder.add(JeiRemovalHelper.format("removeByOutput", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeOutput(wrapper.recipe.getRecipeCatalyst()), true)));
-            }
-            for (var ingredient : wrapper.recipe.getRecipeIngredients()) {
-                if (ingredient instanceof String ore) {
-                    builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.asGroovyCode(ore, true)));
-                } else {
-                    ItemStack stack = null;
-                    if (ingredient instanceof ItemStack is) stack = is;
-                    else if (ingredient instanceof Item i) stack = new ItemStack(i);
-                    else if (ingredient instanceof Block b) stack = new ItemStack(b);
-
-                    if (stack != null) {
-                        builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.getSingleItemStack(stack, true)));
-                    }
-                }
-            }
+            // these methods are not actually implemented
+            //var output = wrapper.recipe.getRecipeOutput(wrapper.recipe.getRecipeCatalyst());
+            //if (!output.isEmpty()) {
+            //    builder.add(JeiRemovalHelper.format("removeByOutput", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeOutput(wrapper.recipe.getRecipeCatalyst()), true)));
+            //}
+            //for (var ingredient : wrapper.recipe.getRecipeIngredients()) {
+            //    if (ingredient instanceof String ore) {
+            //        builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.asGroovyCode(ore, true)));
+            //    } else {
+            //        ItemStack stack = null;
+            //        if (ingredient instanceof ItemStack is) stack = is;
+            //        else if (ingredient instanceof Item i) stack = new ItemStack(i);
+            //        else if (ingredient instanceof Block b) stack = new ItemStack(b);
+            //
+            //        if (stack != null) {
+            //            builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.getSingleItemStack(stack, true)));
+            //        }
+            //    }
+            //}
             return builder.build();
         });
     }
