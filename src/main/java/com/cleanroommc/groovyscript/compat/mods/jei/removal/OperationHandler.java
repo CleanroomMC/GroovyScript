@@ -11,7 +11,6 @@ import mezz.jei.api.recipe.IIngredientType;
 import mezz.jei.startup.StackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -397,13 +396,25 @@ public class OperationHandler {
         }
 
         /**
+         * @return an {@link ItemOperation} that ignores all output slots.
+         */
+        public static IOperation inputItemOperation() {
+            return new ItemOperation() {
+                @Override
+                public boolean isIgnored(Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> slot) {
+                    return isOutput(slot);
+                }
+            };
+        }
+
+        /**
          * @return an {@link ItemOperation} that ignores all input slots.
          */
         public static IOperation outputItemOperation() {
             return new ItemOperation() {
                 @Override
-                public boolean isIgnored(@NotNull Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> slot) {
-                    return slot.getValue().isInput();
+                public boolean isIgnored(Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> slot) {
+                    return !isOutput(slot);
                 }
             };
         }
