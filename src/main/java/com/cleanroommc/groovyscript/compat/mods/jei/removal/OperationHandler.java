@@ -12,6 +12,7 @@ import mezz.jei.startup.StackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +64,22 @@ public class OperationHandler {
      */
     public static List<IOperation> defaultOperations() {
         return ImmutableList.of(ItemOperation.defaultItemOperation(), FluidOperation.defaultFluidOperation());
+    }
+
+    /**
+     * Check the displayed ingredient first, otherwise try to use the first of all ingredients.
+     * If getAllIngredients is empty, return null.
+     * Use of this should contain null checks.
+     *
+     * @param slot the gui ingredient slot the ingredient should be gotten from
+     * @param <T>  the type of the gui ingredient
+     * @return the displayed ingredient, if there are multiple then the first of the list, otherwise null.
+     */
+    @Nullable
+    public static <T> T getIngredientFromSlot(IGuiIngredient<T> slot) {
+        var stack = slot.getDisplayedIngredient();
+        if (stack == null && !slot.getAllIngredients().isEmpty()) stack = slot.getAllIngredients().get(0);
+        return stack;
     }
 
     /**
@@ -308,12 +325,8 @@ public class OperationHandler {
             for (var slot : getGuiIngredients(layout).entrySet()) {
                 if (isIgnored(slot)) continue;
 
-                // check the displayed ingredient first, otherwise try to use the first of all ingredients.
-                var stack = slot.getValue().getDisplayedIngredient();
-                if (stack == null) {
-                    stack = slot.getValue().getAllIngredients().get(0);
-                    if (stack == null) continue;
-                }
+                var stack = getIngredientFromSlot(slot.getValue());
+                if (stack == null) continue;
 
                 var identity = function(stack, slot.getValue().getAllIngredients());
                 if (this.hasExactInput && !isOutput(slot)) exactInput.add(identity);
