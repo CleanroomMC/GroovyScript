@@ -74,6 +74,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        // TODO jei methods don't exist to use properly
         return ImmutableList.of(infuseTypeOperation(), OperationHandler.ItemOperation.defaultItemOperation().exclude(2), OperationHandler.FluidOperation.defaultFluidOperation(), IJEIRemovalGas.getDefaultGas());
     }
 

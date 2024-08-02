@@ -19,6 +19,7 @@ public interface IJEIRemovalGas extends IJEIRemoval.Default {
 
     @Override
     default @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        // TODO jei most mekanism classes can't do anything except "removeByInput", but with multiple parameters.
         return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation(), getDefaultGas());
     }
 
