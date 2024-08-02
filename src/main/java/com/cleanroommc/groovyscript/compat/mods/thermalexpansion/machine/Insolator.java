@@ -8,9 +8,10 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.InsolatorManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.InsolatorRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -153,8 +154,8 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> implements I
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation());
+    public @NotNull List<IOperation> getJEIOperations() {
+        return Collections.singletonList(ItemOperation.defaultOperation());
     }
 
     @Property(property = "input", valid = @Comp("2"))

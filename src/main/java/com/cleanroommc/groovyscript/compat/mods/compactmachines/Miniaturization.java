@@ -2,9 +2,10 @@ package com.cleanroommc.groovyscript.compat.mods.compactmachines;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.WrapperOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
@@ -27,11 +28,11 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachines3.miniaturization.MultiblockRecipe> implements IJEIRemoval.Default {
 
-    private static OperationHandler.IOperation wrapperOperation() {
-        return new OperationHandler.WrapperOperation<>(MultiblockRecipeWrapper.class, wrapper -> {
+    private static IOperation wrapperOperation() {
+        return new WrapperOperation<>(MultiblockRecipeWrapper.class, wrapper -> {
             var builder = ImmutableList.<String>builder();
-            builder.add(JeiRemovalHelper.format("removeByCatalyst", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getCatalystStack(), true)));
-            builder.add(JeiRemovalHelper.format("removeByOutput", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getTargetStack(), true)));
+            builder.add(OperationHandler.format("removeByCatalyst", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getCatalystStack(), true)));
+            builder.add(OperationHandler.format("removeByOutput", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getTargetStack(), true)));
             // these methods are not actually implemented
             //for (ItemStack stack : wrapper.recipe.getRequiredItemStacks()) {
             //    builder.add(JeiRemovalHelper.format("removeByInput", GroovyScriptCodeConverter.getSingleItemStack(stack, true)));
@@ -102,7 +103,7 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+    public @NotNull List<IOperation> getJEIOperations() {
         return ImmutableList.of(wrapperOperation());
     }
 

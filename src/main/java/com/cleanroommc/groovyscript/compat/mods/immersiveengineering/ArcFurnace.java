@@ -5,9 +5,9 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -31,7 +31,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> implements
     /**
      * Since the size of Arc Furnace recipes is variable, we can't refer to a specific slot.
      */
-    private static OperationHandler.IOperation primaryOutputOperation() {
+    private static IOperation primaryOutputOperation() {
         return (layout, removing, exactInput) -> {
             var maxSize = layout.getItemStacks().getGuiIngredients().size();
 
@@ -40,7 +40,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> implements
             if (stack == null) return;
 
             var identity = GroovyScriptCodeConverter.getSingleItemStack(stack, true, false);
-            removing.add(JeiRemovalHelper.format("removeByOutput", identity));
+            removing.add(OperationHandler.format("removeByOutput", identity));
         };
     }
 
@@ -163,7 +163,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> implements
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+    public @NotNull List<IOperation> getJEIOperations() {
         return ImmutableList.of(primaryOutputOperation());
     }
 

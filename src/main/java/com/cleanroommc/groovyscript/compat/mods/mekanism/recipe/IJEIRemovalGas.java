@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.mekanism.recipe;
 
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.*;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import com.google.common.collect.ImmutableList;
 import mekanism.client.jei.MekanismJEI;
@@ -11,16 +11,16 @@ import java.util.List;
 
 public interface IJEIRemovalGas extends IJEIRemoval.Default {
 
-    static OperationHandler.SlotOperation<?> getDefaultGas() {
-        return new OperationHandler.IngredientSlotOperation<>(
+    static SlotOperation<?> getDefaultGas() {
+        return new IngredientSlotOperation<>(
                 MekanismJEI.TYPE_GAS, true,
                 (stack, all) -> Mekanism.getSingleGasStack(stack, true));
     }
 
     @Override
-    default @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+    default @NotNull List<IOperation> getJEIOperations() {
         // TODO jei most mekanism classes can't do anything except "removeByInput", but with multiple parameters.
-        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation(), getDefaultGas());
+        return ImmutableList.of(ItemOperation.defaultOperation(), FluidOperation.defaultOperation(), getDefaultGas());
     }
 
 }

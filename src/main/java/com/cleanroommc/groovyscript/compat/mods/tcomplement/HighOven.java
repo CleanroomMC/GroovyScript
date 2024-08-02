@@ -3,8 +3,10 @@ package com.cleanroommc.groovyscript.compat.mods.tcomplement;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.FluidOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeRegistry;
 import com.cleanroommc.groovyscript.core.mixin.tcomplement.TCompRegistryAccessor;
@@ -135,8 +137,8 @@ public class HighOven extends MeltingRecipeRegistry implements IJEIRemoval.Defau
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(1), OperationHandler.FluidOperation.defaultFluidOperation());
+    public @NotNull List<IOperation> getJEIOperations() {
+        return ImmutableList.of(ItemOperation.defaultOperation().exclude(1), FluidOperation.defaultOperation());
     }
 
     public static class Mixing extends VirtualizedRegistry<IMixRecipe> implements IJEIRemoval.Default {
@@ -248,8 +250,8 @@ public class HighOven extends MeltingRecipeRegistry implements IJEIRemoval.Defau
         }
 
         @Override
-        public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-            return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(3, 4), OperationHandler.FluidOperation.defaultFluidOperation());
+        public @NotNull List<IOperation> getJEIOperations() {
+            return ImmutableList.of(ItemOperation.defaultOperation().exclude(3, 4), FluidOperation.defaultOperation());
         }
 
         public class RecipeBuilder extends AbstractRecipeBuilder<MixRecipe> {

@@ -3,8 +3,9 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -81,8 +82,8 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> implements IJEIRem
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(2));
+    public @NotNull List<IOperation> getJEIOperations() {
+        return ImmutableList.of(ItemOperation.defaultOperation().exclude(2));
     }
 
     @Property(property = "input", valid = @Comp("1"))

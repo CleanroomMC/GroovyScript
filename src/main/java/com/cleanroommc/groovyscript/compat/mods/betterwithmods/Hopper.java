@@ -5,8 +5,9 @@ import betterwithmods.module.compat.jei.category.HopperRecipeCategory;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -96,8 +97,8 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(IJEIRemovalIOutput.getDefaultIOutput(), OperationHandler.ItemOperation.defaultItemOperation().exclude(7));
+    public @NotNull List<IOperation> getJEIOperations() {
+        return ImmutableList.of(IJEIRemovalIOutput.getDefaultIOutput(), ItemOperation.defaultOperation().exclude(7));
     }
 
     @Property(property = "name", value = "groovyscript.wiki.betterwithmods.hopper.name.value", valid = @Comp(value = "null", type = Comp.Type.NOT))

@@ -6,8 +6,11 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.FluidOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.WrapperOperation;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
@@ -27,15 +30,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-@Optional.Interface(modid = "thaumicjei", iface = "com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval$Default")
+@Optional.Interface(modid = "thaumicjei", iface = "com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval$Default")
 public class ArcaneWorkbench extends NamedRegistry implements IJEIRemoval.Default {
 
     @Optional.Method(modid = "thaumicjei")
-    private static OperationHandler.IOperation registryNameOperation() {
-        return new OperationHandler.WrapperOperation<>(com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory.ArcaneWorkbenchWrapper.class, wrapper ->
+    private static IOperation registryNameOperation() {
+        return new WrapperOperation<>(com.buuz135.thaumicjei.category.ArcaneWorkbenchCategory.ArcaneWorkbenchWrapper.class, wrapper ->
                 wrapper.getRecipe().getRegistryName() == null
                 ? Collections.emptyList()
-                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRecipe().getRegistryName(), true))));
+                : Collections.singletonList(OperationHandler.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRecipe().getRegistryName(), true))));
     }
 
     public static final ResourceLocation DEFAULT = new ResourceLocation("");
@@ -90,8 +93,8 @@ public class ArcaneWorkbench extends NamedRegistry implements IJEIRemoval.Defaul
 
     @Override
     @Optional.Method(modid = "thaumicjei")
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.defaultItemOperation().include(0), OperationHandler.FluidOperation.defaultFluidOperation());
+    public @NotNull List<IOperation> getJEIOperations() {
+        return ImmutableList.of(registryNameOperation(), ItemOperation.defaultOperation().include(0), FluidOperation.defaultOperation());
     }
 
 }

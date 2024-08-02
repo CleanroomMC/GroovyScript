@@ -6,9 +6,10 @@ import com.brandon3055.draconicevolution.integration.jei.RecipeCategoryUids;
 import com.brandon3055.draconicevolution.lib.RecipeManager;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.WrapperOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.draconicevolution.FusionRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -29,11 +30,11 @@ import java.util.stream.Collectors;
 @RegistryDescription
 public class Fusion extends VirtualizedRegistry<IFusionRecipe> implements IJEIRemoval.Default {
 
-    private static OperationHandler.IOperation wrapperOperation() {
-        return new OperationHandler.WrapperOperation<>(FusionRecipeWrapper.class, wrapper -> {
+    private static IOperation wrapperOperation() {
+        return new WrapperOperation<>(FusionRecipeWrapper.class, wrapper -> {
             var builder = ImmutableList.<String>builder();
             if (!wrapper.recipe.getRecipeCatalyst().isEmpty()) {
-                builder.add(JeiRemovalHelper.format("removeByCatalyst", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeCatalyst(), true)));
+                builder.add(OperationHandler.format("removeByCatalyst", GroovyScriptCodeConverter.getSingleItemStack(wrapper.recipe.getRecipeCatalyst(), true)));
             }
             // these methods are not actually implemented
             //var output = wrapper.recipe.getRecipeOutput(wrapper.recipe.getRecipeCatalyst());
@@ -111,7 +112,7 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> implements IJEIRe
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+    public @NotNull List<IOperation> getJEIOperations() {
         return ImmutableList.of(wrapperOperation());
     }
 

@@ -3,9 +3,10 @@ package com.cleanroommc.groovyscript.compat.mods.naturesaura;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -116,9 +117,9 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> implements IJE
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(2),
-                                OperationHandler.ItemOperation.defaultItemOperation().include(2).input("removeByCatalyst"));
+    public @NotNull List<IOperation> getJEIOperations() {
+        return ImmutableList.of(ItemOperation.defaultOperation().exclude(2),
+                                ItemOperation.defaultOperation().include(2).input("removeByCatalyst"));
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -6,9 +6,10 @@ import appeng.api.features.IInscriberRecipeBuilder;
 import appeng.api.features.InscriberProcessType;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -73,8 +74,8 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> implements 
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().include(3));
+    public @NotNull List<IOperation> getJEIOperations() {
+        return Collections.singletonList(ItemOperation.defaultOperation().include(3));
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -7,8 +7,11 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.FluidOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.WrapperOperation;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -32,11 +35,11 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> implements IJEIR
         super(Alias.generateOfClass(AnvilCrafting.class).andGenerate("SoulforgedSteelAnvil"));
     }
 
-    private static OperationHandler.IOperation registryNameOperation() {
-        return new OperationHandler.WrapperOperation<>(ICraftingRecipeWrapper.class, wrapper ->
+    private static IOperation registryNameOperation() {
+        return new WrapperOperation<>(ICraftingRecipeWrapper.class, wrapper ->
                 wrapper.getRegistryName() == null
                 ? Collections.emptyList()
-                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRegistryName(), true))));
+                : Collections.singletonList(OperationHandler.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRegistryName(), true))));
     }
 
     @RecipeBuilderDescription(example = {
@@ -117,9 +120,9 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> implements IJEIR
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+    public @NotNull List<IOperation> getJEIOperations() {
         // while this class *does* work for removing via removeByInput, having all of those be printed would cause a significant amount of clutter.
-        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.defaultItemOperation().include(16), OperationHandler.FluidOperation.defaultFluidOperation());
+        return ImmutableList.of(registryNameOperation(), ItemOperation.defaultOperation().include(16), FluidOperation.defaultOperation());
     }
 
 }

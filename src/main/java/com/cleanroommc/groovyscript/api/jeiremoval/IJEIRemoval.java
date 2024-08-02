@@ -1,5 +1,8 @@
-package com.cleanroommc.groovyscript.compat.mods.jei.removal;
+package com.cleanroommc.groovyscript.api.jeiremoval;
 
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ISlotOperation;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import mezz.jei.api.gui.IRecipeLayout;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +15,7 @@ import java.util.List;
  * and contains methods indicating what JEI Categories the given registry represents
  * and how to remove those recipes.
  * <p>
- * Primarily interacted with by {@link JeiRemovalHelper#getRemovalMethod(String, IRecipeLayout)}.
+ * Primarily interacted with by {@link com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper#getRemovalMethod(String, IRecipeLayout)}.
  * <p>
  * In most cases, classes should implement {@link Default} instead of directly implementing {@link IJEIRemoval}.
  *
@@ -67,10 +70,10 @@ public interface IJEIRemoval {
          * @return a list if operations with the given slots included
          * @see OperationHandler#defaultOperations()
          */
-        static List<OperationHandler.IOperation> includeSlots(int... included) {
+        static List<IOperation> includeSlots(int... included) {
             var operations = OperationHandler.defaultOperations();
             for (var operation : operations) {
-                if (operation instanceof OperationHandler.ISlotOperation<?> op) op.include(included);
+                if (operation instanceof ISlotOperation<?> op) op.include(included);
             }
             return operations;
         }
@@ -85,10 +88,10 @@ public interface IJEIRemoval {
          * @return a list if operations with the given slots excluded
          * @see OperationHandler#defaultOperations()
          */
-        static List<OperationHandler.IOperation> excludeSlots(int... excluded) {
+        static List<IOperation> excludeSlots(int... excluded) {
             var operations = OperationHandler.defaultOperations();
             for (var operation : operations) {
-                if (operation instanceof OperationHandler.ISlotOperation<?> op) op.exclude(excluded);
+                if (operation instanceof ISlotOperation<?> op) op.exclude(excluded);
             }
             return operations;
         }
@@ -116,7 +119,7 @@ public interface IJEIRemoval {
          * @see OperationHandler#defaultOperations()
          * @see OperationHandler#removalOptions(IRecipeLayout, List)
          */
-        default @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        default @NotNull List<IOperation> getJEIOperations() {
             return OperationHandler.defaultOperations();
         }
 

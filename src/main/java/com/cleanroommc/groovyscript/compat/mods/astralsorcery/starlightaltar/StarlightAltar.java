@@ -2,8 +2,11 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.FluidOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.WrapperOperation;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
@@ -30,23 +33,23 @@ import java.util.stream.Collectors;
 public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> implements IJEIRemoval.Default {
 
     private static List<String> registryNameRemovalMethod(AbstractAltarRecipe recipe) {
-        return Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(recipe.getNativeRecipe().getRegistryName(), true)));
+        return Collections.singletonList(OperationHandler.format("remove", GroovyScriptCodeConverter.asGroovyCode(recipe.getNativeRecipe().getRegistryName(), true)));
     }
 
-    private static OperationHandler.IOperation discoveryOperation() {
-        return new OperationHandler.WrapperOperation<>(AltarDiscoveryRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
+    private static IOperation discoveryOperation() {
+        return new WrapperOperation<>(AltarDiscoveryRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
     }
 
-    private static OperationHandler.IOperation attunementOperation() {
-        return new OperationHandler.WrapperOperation<>(AltarAttunementRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
+    private static IOperation attunementOperation() {
+        return new WrapperOperation<>(AltarAttunementRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
     }
 
-    private static OperationHandler.IOperation constellationOperation() {
-        return new OperationHandler.WrapperOperation<>(AltarConstellationRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
+    private static IOperation constellationOperation() {
+        return new WrapperOperation<>(AltarConstellationRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
     }
 
-    private static OperationHandler.IOperation traitOperation() {
-        return new OperationHandler.WrapperOperation<>(AltarTraitRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
+    private static IOperation traitOperation() {
+        return new WrapperOperation<>(AltarTraitRecipeWrapper.class, wrapper -> registryNameRemovalMethod(wrapper.getRecipe()));
     }
 
     @RecipeBuilderDescription(priority = 100, requirement = {
@@ -146,8 +149,8 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> imp
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(discoveryOperation(), attunementOperation(), constellationOperation(), traitOperation(), OperationHandler.ItemOperation.defaultItemOperation().include(0), OperationHandler.FluidOperation.defaultFluidOperation());
+    public @NotNull List<IOperation> getJEIOperations() {
+        return ImmutableList.of(discoveryOperation(), attunementOperation(), constellationOperation(), traitOperation(), ItemOperation.defaultOperation().include(0), FluidOperation.defaultOperation());
     }
 
 }

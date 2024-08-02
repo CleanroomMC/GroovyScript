@@ -5,9 +5,11 @@ import blusunrize.immersiveengineering.api.crafting.CokeOvenRecipe;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.FluidOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -120,8 +122,8 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> implements IJE
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(OperationHandler.FluidOperation.defaultFluidOperation().exclude(0), OperationHandler.ItemOperation.defaultItemOperation());
+    public @NotNull List<IOperation> getJEIOperations() {
+        return ImmutableList.of(FluidOperation.defaultOperation().exclude(0), ItemOperation.defaultOperation());
     }
 
     @Property(property = "input", valid = @Comp("1"))

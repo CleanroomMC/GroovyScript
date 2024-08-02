@@ -3,8 +3,9 @@ package com.cleanroommc.groovyscript.compat.mods.roots;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.WrapperOperation;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
@@ -26,12 +27,12 @@ import java.util.List;
 )
 public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivingBase>> implements IJEIRemoval.Default {
 
-    private static OperationHandler.IOperation entityOperation() {
-        return new OperationHandler.WrapperOperation<>(RunicShearsSummonEntityWrapper.class, wrapper -> {
+    private static IOperation entityOperation() {
+        return new WrapperOperation<>(RunicShearsSummonEntityWrapper.class, wrapper -> {
             var tag = wrapper.recipe.getEssenceStack().getTagCompound();
             if (tag == null) return Collections.emptyList();
             // only real way to access the entity ID here
-            return Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.formatGenericHandler("entity", tag.getString("id"), true)));
+            return Collections.singletonList(OperationHandler.format("remove", GroovyScriptCodeConverter.formatGenericHandler("entity", tag.getString("id"), true)));
         });
     }
 
@@ -91,7 +92,7 @@ public class LifeEssence extends VirtualizedRegistry<Class<? extends EntityLivin
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+    public @NotNull List<IOperation> getJEIOperations() {
         return ImmutableList.of(entityOperation());
     }
 

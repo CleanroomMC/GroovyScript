@@ -4,7 +4,9 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -124,9 +126,9 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> implem
     @Override
     public @NotNull List<String> getRemoval(IRecipeLayout layout) {
         // is this ugly? yes! but we need to target these specific slots and the slot number is dynamic
-        ImmutableList<OperationHandler.IOperation> list = layout.getItemStacks().getGuiIngredients().values().size() > 3
-                                                          ? ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(0, 3), OperationHandler.ItemOperation.defaultItemOperation().include(1).input("removeByCatalyst"))
-                                                          : ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(0, 2));
+        ImmutableList<IOperation> list = layout.getItemStacks().getGuiIngredients().values().size() > 3
+                                                          ? ImmutableList.of(ItemOperation.defaultOperation().include(0, 3), ItemOperation.defaultOperation().include(1).input("removeByCatalyst"))
+                                                          : ImmutableList.of(ItemOperation.defaultOperation().include(0, 2));
         return OperationHandler.removalOptions(layout, list);
     }
 

@@ -3,9 +3,10 @@ package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.gildedgames.the_aether.api.freezables.AetherFreezable;
@@ -54,8 +55,8 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> implements IJ
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().include(2).output(2));
+    public @NotNull List<IOperation> getJEIOperations() {
+        return Collections.singletonList(ItemOperation.defaultOperation().include(2).output(2));
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -7,8 +7,9 @@ import betterwithmods.module.compat.jei.category.TurntableRecipeCategory;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -100,8 +101,8 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> implements I
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(IJEIRemovalIOutput.getDefaultIOutput(), OperationHandler.ItemOperation.defaultItemOperation().exclude(4));
+    public @NotNull List<IOperation> getJEIOperations() {
+        return ImmutableList.of(IJEIRemovalIOutput.getDefaultIOutput(), ItemOperation.defaultOperation().exclude(4));
     }
 
     @Property(property = "output", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})

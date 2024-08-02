@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.jei.removal;
 
 import com.cleanroommc.groovyscript.api.INamed;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
@@ -11,7 +12,6 @@ import mezz.jei.api.gui.IRecipeLayout;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
 
 import java.util.List;
@@ -90,25 +90,6 @@ public class JeiRemovalHelper {
             }
         }
         return null;
-    }
-
-    /**
-     * @param method name of the method to call
-     * @param params one or more parameters of the method
-     * @return a string representing a GrS method
-     * @see #format(String, List)
-     */
-    public static @NotNull String format(String method, String... params) {
-        return String.format("%s(%s)", method, String.join(", ", params));
-    }
-
-    /**
-     * @param method name of the method to call
-     * @param params one or more parameters of the method
-     * @return a string representing a GrS method
-     */
-    public static @NotNull String format(String method, List<String> params) {
-        return String.format("%s(%s)", method, String.join(", ", params));
     }
 
 }

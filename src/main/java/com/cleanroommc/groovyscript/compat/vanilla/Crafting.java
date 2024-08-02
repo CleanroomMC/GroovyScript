@@ -3,8 +3,11 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.FluidOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.WrapperOperation;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -38,11 +41,11 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> implements IJEIRemov
         return fallbackChars.get(c);
     }
 
-    private static OperationHandler.IOperation registryNameOperation() {
-        return new OperationHandler.WrapperOperation<>(ICraftingRecipeWrapper.class, wrapper ->
+    private static IOperation registryNameOperation() {
+        return new WrapperOperation<>(ICraftingRecipeWrapper.class, wrapper ->
                 wrapper.getRegistryName() == null
                 ? Collections.emptyList()
-                : Collections.singletonList(JeiRemovalHelper.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRegistryName(), true))));
+                : Collections.singletonList(OperationHandler.format("remove", GroovyScriptCodeConverter.asGroovyCode(wrapper.getRegistryName(), true))));
     }
 
     public void setFallback(char key, IIngredient ingredient) {
@@ -237,8 +240,8 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> implements IJEIRemov
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.defaultItemOperation().include(0), OperationHandler.FluidOperation.defaultFluidOperation());
+    public @NotNull List<IOperation> getJEIOperations() {
+        return ImmutableList.of(registryNameOperation(), ItemOperation.defaultOperation().include(0), FluidOperation.defaultOperation());
     }
 
 }

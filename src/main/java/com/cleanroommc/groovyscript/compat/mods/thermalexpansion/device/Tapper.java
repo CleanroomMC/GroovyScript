@@ -10,8 +10,9 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.FluidOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.TapperManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
@@ -168,8 +169,8 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> impleme
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Collections.singletonList(OperationHandler.FluidOperation.defaultFluidOperation());
+    public @NotNull List<IOperation> getJEIOperations() {
+        return Collections.singletonList(FluidOperation.defaultOperation());
     }
 
     @Desugar

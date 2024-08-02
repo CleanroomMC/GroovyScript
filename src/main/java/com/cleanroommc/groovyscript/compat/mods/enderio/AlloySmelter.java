@@ -3,11 +3,12 @@ package com.cleanroommc.groovyscript.compat.mods.enderio;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.ItemOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.EnderIORecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.enderio.AlloyRecipeManagerAccessor;
 import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeLeafNodeAccessor;
 import com.cleanroommc.groovyscript.core.mixin.enderio.ItemRecipeNodeAccessor;
@@ -182,8 +183,8 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> implemen
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().include(3).input("remove"));
+    public @NotNull List<IOperation> getJEIOperations() {
+        return Collections.singletonList(ItemOperation.defaultOperation().include(3).input("remove"));
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "3")})

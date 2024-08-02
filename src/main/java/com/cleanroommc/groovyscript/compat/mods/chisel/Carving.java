@@ -5,9 +5,10 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.api.jeiremoval.IJEIRemoval;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.IOperation;
+import com.cleanroommc.groovyscript.api.jeiremoval.operations.WrapperOperation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.chisel.ChiselRecipeWrapperAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
@@ -43,8 +44,8 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> implem
         return CarvingUtils.getChiselRegistry();
     }
 
-    private static OperationHandler.IOperation groupNameOperation() {
-        return new OperationHandler.WrapperOperation<>(ChiselRecipeWrapper.class, wrapper -> Collections.singletonList(JeiRemovalHelper.format("removeGroup", GroovyScriptCodeConverter.formatString(((ChiselRecipeWrapperAccessor) wrapper).getGroup().getName(), true))));
+    private static IOperation groupNameOperation() {
+        return new WrapperOperation<>(ChiselRecipeWrapper.class, wrapper -> Collections.singletonList(OperationHandler.format("removeGroup", GroovyScriptCodeConverter.formatString(((ChiselRecipeWrapperAccessor) wrapper).getGroup().getName(), true))));
     }
 
     public static CarvingGroup carvingGroup(String group) {
@@ -154,7 +155,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> implem
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+    public @NotNull List<IOperation> getJEIOperations() {
         return Collections.singletonList(groupNameOperation());
     }
 
