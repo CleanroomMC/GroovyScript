@@ -118,6 +118,8 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> implements IJEIR
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
+        // while this class *does* work for removing via removeByInput, having all of those be printed would cause a significant amount of clutter.
+        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.defaultItemOperation().include(16), OperationHandler.FluidOperation.defaultFluidOperation());
     }
+
 }

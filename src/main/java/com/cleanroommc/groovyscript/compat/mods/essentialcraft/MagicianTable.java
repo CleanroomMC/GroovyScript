@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.essentialcraft.magician_table.note0", type = Admonition.Type.WARNING))
 public class MagicianTable extends VirtualizedRegistry<MagicianTableRecipe> implements IJEIRemoval.Default {
@@ -59,6 +61,11 @@ public class MagicianTable extends VirtualizedRegistry<MagicianTableRecipe> impl
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(essentialcraft.integration.jei.MagicianTable.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().include(5));
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})

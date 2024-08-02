@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -11,12 +12,14 @@ import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.plugin.jei.category.JEIRecipeCategoryKilnPit;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
 public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> implements IJEIRemoval.Default {
@@ -75,6 +78,11 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> implements IJEIRem
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(JEIRecipeCategoryKilnPit.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(2));
     }
 
     @Property(property = "input", valid = @Comp("1"))

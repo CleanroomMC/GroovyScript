@@ -120,7 +120,7 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> implements IJEIR
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().input(1), OperationHandler.FluidOperation.defaultFluidOperation());
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(2));
     }
 
     @Property(property = "input", valid = @Comp("2"))

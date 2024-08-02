@@ -7,11 +7,15 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +27,22 @@ import java.util.stream.Collectors;
 
 @RegistryDescription
 public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> implements IJEIRemoval.Default {
+
+    /**
+     * Since the size of Arc Furnace recipes is variable, we can't refer to a specific slot.
+     */
+    private static OperationHandler.IOperation primaryOutputOperation() {
+        return (layout, removing, exactInput) -> {
+            var maxSize = layout.getItemStacks().getGuiIngredients().size();
+
+            var slot = layout.getItemStacks().getGuiIngredients().get(maxSize - 2);
+            var stack = OperationHandler.getIngredientFromSlot(slot);
+            if (stack == null) return;
+
+            var identity = GroovyScriptCodeConverter.getSingleItemStack(stack, true, false);
+            removing.add(JeiRemovalHelper.format("removeByOutput", identity));
+        };
+    }
 
     @RecipeBuilderDescription(example = @Example(".mainInput(item('minecraft:diamond')).input(item('minecraft:diamond'), ore('ingotGold')).output(item('minecraft:clay')).time(100).energyPerTick(100).slag(item('minecraft:gold_nugget'))"))
     public RecipeBuilder recipeBuilder() {
@@ -140,6 +160,11 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> implements
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList("ie.arcFurnace");
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(primaryOutputOperation());
     }
 
     @Property(property = "input", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})

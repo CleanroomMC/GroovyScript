@@ -4,9 +4,11 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.RunicShearRecipe;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RegistryDescription
@@ -103,6 +106,11 @@ public class RunicShearBlock extends VirtualizedRegistry<RunicShearRecipe> imple
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(JEIRootsPlugin.RUNIC_SHEARS);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(1));
     }
 
     @Property(property = "name")

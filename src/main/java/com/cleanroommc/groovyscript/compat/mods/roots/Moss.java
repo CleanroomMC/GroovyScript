@@ -112,7 +112,7 @@ public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> implem
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Default.excludeSlots(2);
+        return Default.includeSlots(0);
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -17,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurnaceAdditives.EFAdditiveRecipe> implements IJEIRemoval.Default {
@@ -90,6 +92,11 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @Override
     public @NotNull Collection<String> getCategories() {
         return ImmutableList.of(ExplosionFurnaceDampenerCategory.UID, ExplosionFurnaceExplosiveCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().input("removeDampener"));
     }
 
     public interface EFAdditiveRecipe {

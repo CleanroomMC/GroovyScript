@@ -147,7 +147,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> imp
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(discoveryOperation(), attunementOperation(), constellationOperation(), traitOperation(), OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
+        return ImmutableList.of(discoveryOperation(), attunementOperation(), constellationOperation(), traitOperation(), OperationHandler.ItemOperation.defaultItemOperation().include(0), OperationHandler.FluidOperation.defaultFluidOperation());
     }
 
 }

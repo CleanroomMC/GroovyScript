@@ -91,7 +91,7 @@ public class ArcaneWorkbench extends NamedRegistry implements IJEIRemoval.Defaul
     @Override
     @Optional.Method(modid = "thaumicjei")
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
+        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.defaultItemOperation().include(0), OperationHandler.FluidOperation.defaultFluidOperation());
     }
 
 }

@@ -113,9 +113,10 @@ public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.Plast
         // we need to this because the RGB dyes are part of the recipe as slots 0, 1, and 2 if the recipe outputs an item
         // and slot 0 is used for the recipe input if the recipe has an input item.
         var itemOperation = layout.getItemStacks().getGuiIngredients().size() > 2
-                            ? OperationHandler.ItemOperation.defaultItemOperation().exclude(0, 1, 2)
+                            ? OperationHandler.ItemOperation.defaultItemOperation().include(3)
                             : OperationHandler.ItemOperation.defaultItemOperation();
-        return OperationHandler.removalOptions(layout, itemOperation, OperationHandler.FluidOperation.defaultFluidOperation());
+        return OperationHandler.removalOptions(layout, itemOperation.input("removeByItem").output("removeByItem"),
+                                               OperationHandler.FluidOperation.defaultFluidOperation().input("removeByFluid").output("removeByFluid"));
     }
 
     @Property(property = "output", valid = @Comp("1"))

@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.FluidRecipeCategory;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> implements IJEIRemoval.Default {
 
@@ -94,6 +96,11 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> imple
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(FluidRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.FluidOperation.defaultFluidOperation());
     }
 
     public static class Recipe extends FluidRecipe {

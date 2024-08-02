@@ -11,6 +11,7 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import ipsis.Woot;
 import ipsis.woot.crafting.AnvilRecipe;
 import ipsis.woot.crafting.IAnvilRecipe;
@@ -113,10 +114,7 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> implemen
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        // JEI doesn't get all inputs, only the first 6. Using a mixin to access the stored recipe field to
-        // get all inputs is a viable solution - however, the only way to obtain so many is to add it deliberately,
-        // so there shouldn't be situations where having more is required.
-        return Default.excludeSlots(2, 3, 4, 5, 6, 7, 8);
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(0, 1).input("removeByBase"));
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "Integer.MAX_VALUE")})

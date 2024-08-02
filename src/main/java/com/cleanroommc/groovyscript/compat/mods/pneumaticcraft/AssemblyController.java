@@ -12,6 +12,7 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import me.desht.pneumaticcraft.common.item.ItemAssemblyProgram;
 import me.desht.pneumaticcraft.common.recipes.AssemblyRecipe;
+import mezz.jei.api.gui.IRecipeLayout;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -139,8 +140,9 @@ public class AssemblyController extends VirtualizedRegistry<AssemblyRecipe> impl
     }
 
     @Override
-    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Default.excludeSlots(1, 2, 3, 4, 5);
+    public @NotNull List<String> getRemoval(IRecipeLayout layout) {
+        // is this ugly? yes! but we need to target the input and output slots and the output slot number is dynamic
+        return OperationHandler.removalOptions(layout, Default.includeSlots(0, layout.getItemStacks().getGuiIngredients().values().size() - 1));
     }
 
     public enum AssemblyType {

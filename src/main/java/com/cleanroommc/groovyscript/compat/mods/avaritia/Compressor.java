@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
 public class Compressor extends VirtualizedRegistry<ICompressorRecipe> implements IJEIRemoval.Default {
@@ -88,6 +90,11 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> implement
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(AvaritiaJEIPlugin.NEUTRONIUM_COMPRESSOR);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().include(1));
     }
 
     @Property(property = "input", valid = @Comp("1"))

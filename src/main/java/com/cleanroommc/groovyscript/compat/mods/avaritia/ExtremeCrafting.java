@@ -103,7 +103,7 @@ public class ExtremeCrafting extends VirtualizedRegistry<IExtremeRecipe> impleme
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(0));
     }
 
 }

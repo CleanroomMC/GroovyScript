@@ -102,7 +102,7 @@ public class Orechid extends VirtualizedRegistry<OrechidRecipe> implements IJEIR
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().exclude(0, 1).input("removeByOutput"));
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().exclude(0, 1).output(2));
     }
 
 }

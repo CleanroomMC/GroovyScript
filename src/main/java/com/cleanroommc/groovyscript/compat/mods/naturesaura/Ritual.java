@@ -5,10 +5,12 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
@@ -19,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.naturesaura.ritual.note0", type = Admonition.Type.WARNING))
@@ -113,6 +116,12 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> implements IJE
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(JEINaturesAuraPlugin.TREE_RITUAL);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(0),
+                                OperationHandler.ItemOperation.defaultItemOperation().include(0).input("removeBySapling"));
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "8")})

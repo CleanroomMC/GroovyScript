@@ -5,10 +5,12 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import lykrast.prodigytech.common.compat.jei.PrimordialisReactorCategory;
 import lykrast.prodigytech.common.recipe.PrimordialisReactorManager;
 import net.minecraft.item.ItemStack;
@@ -84,4 +86,10 @@ public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> implem
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(PrimordialisReactorCategory.UID);
     }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(0).input("remove"));
+    }
+
 }

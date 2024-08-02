@@ -104,7 +104,7 @@ public class DemonTradeManager extends VirtualizedRegistry<DemonTrade> implement
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Default.excludeSlots(2);
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().include(0).output("remove"));
     }
 
 }

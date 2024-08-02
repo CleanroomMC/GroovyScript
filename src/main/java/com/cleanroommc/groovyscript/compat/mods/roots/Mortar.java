@@ -5,11 +5,13 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.MortarRecipe;
@@ -108,6 +110,11 @@ public class Mortar extends VirtualizedRegistry<MortarRecipe> implements IJEIRem
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(JEIRootsPlugin.MORTAR_AND_PESTLE);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(5));
     }
 
     @Property(property = "name")

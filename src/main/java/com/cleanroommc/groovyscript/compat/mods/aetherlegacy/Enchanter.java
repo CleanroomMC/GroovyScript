@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.gildedgames.the_aether.api.enchantments.AetherEnchantment;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
 public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> implements IJEIRemoval.Default {
@@ -49,6 +51,11 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> implement
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList("aether_legacy.enchantment");
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().include(2).output(2));
     }
 
     @Property(property = "input", valid = @Comp("1"))

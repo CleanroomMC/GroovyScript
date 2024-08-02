@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @RegistryDescription
 public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> implements IJEIRemoval.Default {
@@ -77,6 +79,11 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> implements IJEIRemo
     @Override
     public @NotNull Collection<String> getCategories() {
         return ImmutableList.of(JEIRecipeCategoryAnvilGranite.UID, JEIRecipeCategoryAnvilIronclad.UID, JEIRecipeCategoryAnvilObsidian.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(1));
     }
 
     @Property(property = "input", valid = @Comp("1"))

@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -21,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 @RegistryDescription
@@ -100,6 +103,11 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
     @Override
     public @NotNull Collection<String> getCategories() {
         return ImmutableList.of(EnvironmentalAccumulatorRecipeJEI.CATEGORY, SanguinaryEnvironmentalAccumulatorRecipeJEI.CATEGORY);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation());
     }
 
     @Property(property = "input", valid = @Comp("1"))

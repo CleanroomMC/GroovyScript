@@ -5,10 +5,12 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.core.mixin.roots.ModRecipesAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.integration.jei.JEIRootsPlugin;
 import epicsquid.roots.recipe.SummonCreatureRecipe;
@@ -97,6 +99,11 @@ public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> im
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(JEIRootsPlugin.SUMMON_CREATURES);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(); // TODO jei this
     }
 
     @Property(property = "name")

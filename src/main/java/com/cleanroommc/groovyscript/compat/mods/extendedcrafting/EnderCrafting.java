@@ -119,7 +119,7 @@ public class EnderCrafting extends VirtualizedRegistry<IRecipe> implements IJEIR
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(OperationHandler.ItemOperation.outputItemOperation());
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(0));
     }
 
 }

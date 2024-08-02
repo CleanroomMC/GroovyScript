@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import mezz.jei.api.gui.IRecipeLayout;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -122,8 +123,11 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> implem
 
     @Override
     public @NotNull List<String> getRemoval(IRecipeLayout layout) {
-        // is this ugly? yes! but we need to target this specific slot and the slot number is dynamic
-        return OperationHandler.removalOptions(layout, Default.excludeSlots(layout.getItemStacks().getGuiIngredients().values().size() - 2));
+        // is this ugly? yes! but we need to target these specific slots and the slot number is dynamic
+        ImmutableList<OperationHandler.IOperation> list = layout.getItemStacks().getGuiIngredients().values().size() > 3
+                                                          ? ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(0, 3), OperationHandler.ItemOperation.defaultItemOperation().include(1).input("removeByCatalyst"))
+                                                          : ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(0, 2));
+        return OperationHandler.removalOptions(layout, list);
     }
 
     @Property(property = "input", valid = @Comp("1"))

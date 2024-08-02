@@ -119,7 +119,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> implemen
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Default.excludeSlots(0, 1);
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().output("remove").exclude(0, 1));
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})

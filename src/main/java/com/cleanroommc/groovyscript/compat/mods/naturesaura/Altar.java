@@ -121,7 +121,8 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> implements IJEIRemov
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(0), OperationHandler.ItemOperation.defaultItemOperation().exclude(2).input("removeByCatalyst"));
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(2),
+                                OperationHandler.ItemOperation.defaultItemOperation().include(2).input("removeByCatalyst"));
     }
 
     @Property(property = "input", valid = @Comp("1"))

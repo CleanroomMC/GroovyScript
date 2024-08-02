@@ -95,7 +95,7 @@ public class SagMill extends VirtualizedRegistry<Recipe> implements IJEIRemoval.
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Default.excludeSlots(5);
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().include(0));
     }
 
     @Property(property = "input", valid = @Comp("1"))

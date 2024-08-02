@@ -5,10 +5,12 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RegistryDescription(admonition = @Admonition("groovyscript.wiki.naturesaura.offering.note0"))
@@ -110,6 +113,12 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> implements IJE
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(JEINaturesAuraPlugin.OFFERING);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().exclude(2),
+                                OperationHandler.ItemOperation.defaultItemOperation().include(2).input("removeByCatalyst"));
     }
 
     @Property(property = "input", valid = @Comp("1"))

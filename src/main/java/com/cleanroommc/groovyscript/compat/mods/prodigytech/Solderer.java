@@ -5,10 +5,12 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.collect.ImmutableList;
 import lykrast.prodigytech.common.compat.jei.SoldererCategory;
 import lykrast.prodigytech.common.recipe.SoldererManager;
 import lykrast.prodigytech.common.util.Config;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RegistryDescription
 public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe> implements IJEIRemoval.Default {
@@ -105,6 +108,13 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(SoldererCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(1).input("removeByPattern"),
+                                OperationHandler.ItemOperation.defaultItemOperation().include(2).input("removeByAdditive"),
+                                OperationHandler.ItemOperation.defaultItemOperation().include(4));
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})

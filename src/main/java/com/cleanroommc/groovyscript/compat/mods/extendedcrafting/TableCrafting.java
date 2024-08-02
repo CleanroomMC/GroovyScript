@@ -120,7 +120,7 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> implements
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(OperationHandler.ItemOperation.outputItemOperation());
+        return ImmutableList.of(OperationHandler.ItemOperation.defaultItemOperation().include(0));
     }
 
 }

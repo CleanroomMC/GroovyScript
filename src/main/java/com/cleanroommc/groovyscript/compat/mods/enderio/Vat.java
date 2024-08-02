@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
@@ -94,6 +95,11 @@ public class Vat extends VirtualizedRegistry<VatRecipe> implements IJEIRemoval.D
     @Override
     public @NotNull Collection<String> getCategories() {
         return Collections.singletonList(VatRecipeCategory.UID);
+    }
+
+    @Override
+    public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
+        return Collections.singletonList(OperationHandler.FluidOperation.defaultFluidOperation().output("remove"));
     }
 
     public static class RecipeBuilder implements IRecipeBuilder<Recipe> {

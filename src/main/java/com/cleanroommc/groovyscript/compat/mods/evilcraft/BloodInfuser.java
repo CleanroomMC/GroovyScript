@@ -107,7 +107,7 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return Default.excludeSlots(1);
+        return Collections.singletonList(OperationHandler.ItemOperation.defaultItemOperation().exclude(1));
     }
 
     @Property(property = "input", valid = @Comp("1"))

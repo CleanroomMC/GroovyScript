@@ -4,8 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.IJEIRemoval;
-import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.compat.mods.jei.removal.JeiRemovalHelper;
+import com.cleanroommc.groovyscript.compat.mods.jei.removal.OperationHandler;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -20,7 +20,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class Crafting extends ForgeRegistryWrapper<IRecipe> implements IJEIRemoval.Default {
 
@@ -235,7 +238,7 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> implements IJEIRemov
 
     @Override
     public @NotNull List<OperationHandler.IOperation> getJEIOperations() {
-        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.outputItemOperation(), OperationHandler.FluidOperation.defaultFluidOperation());
+        return ImmutableList.of(registryNameOperation(), OperationHandler.ItemOperation.defaultItemOperation().include(0), OperationHandler.FluidOperation.defaultFluidOperation());
     }
 
 }
