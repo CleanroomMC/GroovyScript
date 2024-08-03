@@ -2,7 +2,6 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: jei
 
-import classes.GenericRecipeCategory
 import mezz.jei.api.ingredients.VanillaTypes
 
 log.info 'mod \'jei\' detected, running script'
@@ -23,10 +22,10 @@ mods.jei.category.hideCategory('minecraft.fuel')
 // mods.jei.category.hideAll()
 
 /*mods.jei.category.categoryBuilder()
-    .id(GenericRecipeCategory.UID) // Note that `GenericRecipeCategory` must be defined elsewhere, and this example presumes certain fields and methods exist.
-    .category(guiHelper -> new GenericRecipeCategory(guiHelper))
+    .id(classes.GenericRecipeCategory.UID) // Note that `classes.GenericRecipeCategory` must be defined elsewhere, and this example presumes certain fields and methods exist.
+    .category(guiHelper -> new classes.GenericRecipeCategory(guiHelper))
     .catalyst(item('minecraft:clay'))
-    .wrapper(GenericRecipeCategory.getRecipeWrappers())
+    .wrapper(classes.GenericRecipeCategory.getRecipeWrappers())
     .register()*/
 
 
