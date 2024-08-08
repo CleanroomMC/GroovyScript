@@ -98,7 +98,7 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable SawmillRecipe register() {
             if (!validate()) return null;
-            ChanceOutput chanceOutput = extra.isEmpty()
+            ChanceOutput chanceOutput = IngredientHelper.isEmpty(extra)
                                         ? new ChanceOutput(output.get(0))
                                         : new ChanceOutput(output.get(0), extra, chance);
             SawmillRecipe recipe = null;
