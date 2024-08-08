@@ -35,7 +35,7 @@ public class FileUtil {
     public static String fixDriveCase(String path) {
         if (path == null || path.length() < 2) return path;
         if (Character.isLowerCase(path.charAt(0)) && path.charAt(1) == ':') {
-            return Character.toUpperCase(path.charAt(0)) + ':' + path.substring(2);
+            return Character.toUpperCase(path.charAt(0)) + ":" + path.substring(2);
         }
         return path;
     }
