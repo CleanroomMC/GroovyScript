@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
  *         Can only allow one annotation per field.
  *     </li>
  *     <li>
- *         {@link ElementType#TYPE}: Marks the field targeted by {@link #property()} within the attached class with this {@link Property}.
+ *         {@link ElementType#TYPE}: Marks the field targeted by {@link #property()} within the attached class and any subclasses with this {@link Property}.
  *         Multiple will be wrapped in {@link Properties}.
  *     </li>
  *     <li>
