@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import groovy.lang.*;
@@ -132,7 +131,7 @@ public abstract class MetaClassImplMixin {
         } else if (!isCallToSuper && object instanceof IDynamicGroovyProperty dynamicGroovyProperty) {
             // TODO remove in 1.2.0
             value = dynamicGroovyProperty.getProperty(methodName);
-        } else if (object.getClass().getClassLoader() instanceof GroovyClassLoader) {
+        } else if (object instanceof GroovyObject) {
             value = GroovyScript.getSandbox().getBindings().get(methodName);
         }
 
