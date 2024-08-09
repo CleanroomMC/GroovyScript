@@ -21,6 +21,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -319,7 +320,7 @@ public class RunConfig {
                 continue;
             }
             int pathSize = path.split(separator).length;
-            try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
+            try (Stream<Path> stream = Files.walk(rootFile.toPath(), FileVisitOption.FOLLOW_LINKS)) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile)
                         //.filter(Preprocessor::validatePreprocessors)
