@@ -114,10 +114,12 @@ crafting.shapedBuilder()
 
 crafting.shapelessBuilder()
     .output(item('minecraft:wooden_shovel'))
-    .input(ore('logWood').reuse(),item('minecraft:wooden_shovel:*').mark('tool'))
+    .input(ore('logWood').reuse(),item('minecraft:wooden_shovel:*').mark('tool')) // We mark shovel with 'tool'
     .recipeFunction { output, inputs, info ->
-        def item = inputs["tool"]
-        output.withDamage(item.getItemDamage() - 1) // Decrease damage
+        def item = inputs['tool'] // Using the getAt operator
+        // inputs.findMarked('tool') can also be used
+
+        output.withDamage(item.getItemDamage() - 1) // Decrease damage by 1
     }
     .register()
 
