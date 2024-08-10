@@ -53,9 +53,11 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
 
         if (recipeFunction == null || input.isEmpty()) return output;
 
-        InputList inputs = getMatchingList(inv).stream()
-                .map(SlotMatchResult::getGivenInput)
-                .collect(toCollection(InputList::new));
+        InputList inputs = new InputList();
+        for (SlotMatchResult slotMatchResult : getMatchingList(inv)) {
+            ItemStack givenInput = slotMatchResult.getGivenInput();
+            inputs.add(givenInput);
+        }
 
         // Call recipe function
         ItemStack recipeFunctionResult = ClosureHelper.call(recipeFunction, output, inputs, new CraftingInfo(inv, getPlayerFromInventory(inv)));
@@ -150,10 +152,10 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
 
         public ItemStack getGivenInput() {
             // Copy mark from recipeIngredient to givenInput
-            ItemStackMixinExpansion copy = ItemStackMixinExpansion.of(givenInput);
+            ItemStackMixinExpansion itemStack = ItemStackMixinExpansion.of(givenInput);
             String mark = recipeIngredient.getMark();
-            if (mark != null) copy.setMark(mark);
-            return copy.grs$getItemStack();
+            if (mark != null) itemStack.setMark(mark);
+            return itemStack.grs$getItemStack();
         }
 
         public int getSlotIndex() {
@@ -164,6 +166,7 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     public static class InputList extends ArrayList<ItemStack> {
 
         // groovy [] operator
+        @Nullable
         public ItemStack getAt(String mark) {
             return findMarked(mark);
         }
