@@ -38,7 +38,7 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
     @MethodDescription
     public void removeByInput(ItemStack input) {
-        if (GroovyLog.msg("Error removing pit kiln recipe")
+        if (GroovyLog.msg("Error removing oven recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
                 .error()
                 .postIfNotEmpty()) {
@@ -53,7 +53,7 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
     @MethodDescription(example = @Example("item('pyrotech:bucket_clay')"))
     public void removeByOutput(IIngredient output) {
-        if (GroovyLog.msg("Error removing pit kiln recipe")
+        if (GroovyLog.msg("Error removing oven recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
                 .error()
                 .postIfNotEmpty()) {
@@ -112,7 +112,7 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
         @Override
         public String getErrorMsg() {
-            return "Error adding Pyrotech Pit Kiln Recipe";
+            return "Error adding Pyrotech Kiln Recipe";
         }
 
         @Override
