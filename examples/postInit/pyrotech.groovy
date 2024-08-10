@@ -175,6 +175,11 @@ mods.pyrotech.kiln.recipeBuilder()
 
 mods.pyrotech.kiln.add('clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')])
 
+// Stone & RefactoredKiln
+// Work like a pit kiln
+mods.pyrotech.stone_kiln.removeByOutput(item('pyrotech:bucket_clay'))
+mods.pyrotech.brick_kiln.removeByOutput(item('pyrotech:bucket_clay'))
+
 // Soaking Pot:
 // Converts an item into a new one by soaking it in a liquid. Can require a campfire.
 

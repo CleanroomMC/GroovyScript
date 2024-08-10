@@ -7,16 +7,16 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneKilnRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription
-public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
+public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
 
-    public Kiln() {
-        super(ModuleTechBasic.Registries.KILN_PIT_RECIPE);
+    public StoneKiln() {
+        super(ModuleTechMachine.Registries.STONE_KILN_RECIPES);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items')"))
@@ -25,7 +25,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')]"))
-    public KilnPitRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, Iterable<ItemStack> failureOutput) {
+    public StoneKilnRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, Iterable<ItemStack> failureOutput) {
         return recipeBuilder()
                 .burnTime(burnTime)
                 .failureChance(failureChance)
@@ -44,7 +44,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        for (KilnPitRecipe recipe : getRegistry()) {
+        for (StoneKilnRecipe recipe : getRegistry()) {
             if (recipe.getInput().test(input)) {
                 remove(recipe);
             }
@@ -59,7 +59,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        for (KilnPitRecipe recipe : getRegistry()) {
+        for (StoneKilnRecipe recipe : getRegistry()) {
             if (output.test(recipe.getOutput())) {
                 remove(recipe);
             }
@@ -69,7 +69,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = @Comp("1"))
     @Property(property = "name")
-    public static class RecipeBuilder extends AbstractRecipeBuilder<KilnPitRecipe> {
+    public static class RecipeBuilder extends AbstractRecipeBuilder<StoneKilnRecipe> {
 
         @Property
         private final ItemStackList failureOutput = new ItemStackList();
@@ -123,15 +123,15 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
             msg.add(burnTime < 0, "burnTime must be a non negative integer, yet it was {}", burnTime);
             msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
             msg.add(super.name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
+            msg.add(ModuleTechMachine.Registries.STONE_KILN_RECIPES.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @RecipeBuilderRegistrationMethod
         @Override
-        public @Nullable KilnPitRecipe register() {
+        public @Nullable StoneKilnRecipe register() {
             if (!validate()) return null;
-            KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(super.name);
-            PyroTech.kiln.add(recipe);
+            StoneKilnRecipe recipe = new StoneKilnRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(super.name);
+            PyroTech.stoneKiln.add(recipe);
             return recipe;
         }
     }
