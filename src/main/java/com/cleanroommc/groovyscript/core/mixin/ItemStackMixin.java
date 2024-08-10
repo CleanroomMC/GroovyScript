@@ -65,12 +65,12 @@ public abstract class ItemStackMixin implements ItemStackMixinExpansion {
 
     @Nullable
     @Override
-    public String getMark() {
+    public String grs$getMark() {
         return groovyScript$mark;
     }
 
     @Override
-    public void setMark(String mark) {
+    public void grs$setMark(String mark) {
         this.groovyScript$mark = mark;
     }
 }

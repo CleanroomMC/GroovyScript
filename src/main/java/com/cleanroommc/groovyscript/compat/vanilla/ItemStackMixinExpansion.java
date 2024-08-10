@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.IMarkable;
 import com.cleanroommc.groovyscript.api.INBTResourceStack;
 import com.cleanroommc.groovyscript.api.INbtIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient, IMarkable {
+public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
 
     static ItemStackMixinExpansion of(ItemStack stack) {
         return (ItemStackMixinExpansion) (Object) stack;
@@ -39,6 +38,11 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient, IM
     void grs$setNbtMatcher(Predicate<NBTTagCompound> matcher);
 
     void grs$setMatcher(Predicate<ItemStack> matcher);
+
+    @Nullable
+    String grs$getMark();
+
+    void grs$setMark(String mark);
 
     default boolean grs$isEmpty() {
         return grs$getItemStack().isEmpty();
@@ -103,6 +107,7 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient, IM
     }
 
     default ItemStack transformDamage(int amount) {
+        // reliably set itemDamage field of item stack
         return transform(self -> of(self).withDamage(Math.min(32767, Items.DIAMOND.getDamage(self) + amount)));
     }
 
@@ -208,5 +213,16 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient, IM
 
     default ItemStack withDamage(int meta) {
         return withMeta(meta);
+    }
+
+    @Nullable
+    @Override
+    default String getMark() {
+        return grs$getMark();
+    }
+
+    @Override
+    default void setMark(String mark) {
+        grs$setMark(mark);
     }
 }

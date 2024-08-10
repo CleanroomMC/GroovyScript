@@ -110,6 +110,17 @@ crafting.shapedBuilder()
     .replaceByName()
     .register()
 
+// recipeFunction example
+
+crafting.shapelessBuilder()
+    .output(item('minecraft:wooden_shovel'))
+    .input(ore('logWood').reuse(),item('minecraft:wooden_shovel:*').mark('tool'))
+    .recipeFunction { output, inputs, info ->
+        def item = inputs["tool"]
+        output.withDamage(item.getItemDamage() - 1) // Decrease damage
+    }
+    .register()
+
 
 // The recipe builder also has some additional features, including
 // The abilty to input a string and a set of keys, significantly improving readability.
