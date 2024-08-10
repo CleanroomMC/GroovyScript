@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.core.mixin.groovy;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
+import com.cleanroommc.groovyscript.sandbox.RunConfig;
 import org.codehaus.groovy.ast.ModuleNode;
 import org.codehaus.groovy.ast.PackageNode;
 import org.codehaus.groovy.control.SourceUnit;
@@ -25,6 +26,11 @@ public abstract class ModuleNodeMixin {
     public void init(SourceUnit context, CallbackInfo ci) {
         // auto set package name
         String script = context.getName();
+        if (!RunConfig.isGroovyFile(script)) {
+            // probably not a script file
+            // can happen with traits
+            return;
+        }
         String rel = FileUtil.relativize(GroovyScript.getScriptPath(), script);
         int i = rel.lastIndexOf(File.separatorChar);
         if (i >= 0) {
@@ -37,6 +43,11 @@ public abstract class ModuleNodeMixin {
     @Inject(method = "setPackage", at = @At("HEAD"), cancellable = true)
     public void setPackage(PackageNode packageNode, CallbackInfo ci) {
         if (this.packageNode == null || this.context == null) return;
+        if (!RunConfig.isGroovyFile(this.context.getName())) {
+            // probably not a script file
+            // can happen with traits
+            return;
+        }
         // package name was already set -> only copy data of new node
         String cur = this.packageNode.getName();
         String newName = packageNode.getName();
