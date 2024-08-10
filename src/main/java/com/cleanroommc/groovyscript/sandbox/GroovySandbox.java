@@ -11,6 +11,7 @@ import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.minecraft.launchwrapper.Launch;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.runtime.InvokerHelper;
 import org.jetbrains.annotations.ApiStatus;
@@ -82,7 +83,7 @@ public abstract class GroovySandbox {
     }
 
     protected GroovyScriptEngine createScriptEngine() {
-        GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment);
+        GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment, Launch.classLoader);
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
         config.setSourceEncoding("UTF-8");
         engine.setConfig(config);
@@ -103,11 +104,11 @@ public abstract class GroovySandbox {
         Binding binding = createBindings();
         Set<File> executedClasses = new ObjectOpenHashSet<>();
 
-        running.set(true);
+        this.running.set(true);
         try {
             load(engine, binding, executedClasses, true);
         } finally {
-            running.set(false);
+            this.running.set(false);
             postRun();
             setCurrentScript(null);
         }
