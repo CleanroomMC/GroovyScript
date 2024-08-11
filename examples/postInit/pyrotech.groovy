@@ -74,6 +74,11 @@ mods.pyrotech.campfire.recipeBuilder()
 
 mods.pyrotech.campfire.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1000)
 
+// Stone & Refactored Oven
+// Works like a campfire
+mods.pyrotech.stone_oven.removeByOutput(item('pyrotech:material', 2))
+mods.pyrotech.brick_oven.removeByOutput(item('pyrotech:material', 2))
+
 // Chopping Block:
 // When using a axe it can convert items.
 
@@ -175,8 +180,8 @@ mods.pyrotech.kiln.recipeBuilder()
 
 mods.pyrotech.kiln.add('clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')])
 
-// Stone & RefactoredKiln
-// Work like a pit kiln
+// Stone & Refactored Kiln
+// Works like a pit kiln
 mods.pyrotech.stone_kiln.removeByOutput(item('pyrotech:bucket_clay'))
 mods.pyrotech.brick_kiln.removeByOutput(item('pyrotech:bucket_clay'))
 

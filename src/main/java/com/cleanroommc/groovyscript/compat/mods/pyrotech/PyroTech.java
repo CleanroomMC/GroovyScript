@@ -6,6 +6,8 @@ public class PyroTech extends GroovyPropertyContainer {
 
     public static final Barrel barrel = new Barrel();
     public static final Campfire campfire = new Campfire();
+    public static final StoneOven stoneOven = new StoneOven();
+    public static final BrickOven brickOven = new BrickOven();
     public static final ChoppingBlock choppingBlock = new ChoppingBlock();
     public static final CompactingBin compactingBin = new CompactingBin();
     public static final CompostBin compostBin = new CompostBin();
