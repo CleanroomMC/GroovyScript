@@ -24,7 +24,7 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay', ore('dye') * 5, item('minecraft:clay_ball') * 20, 9"))
     public CompactingBinRecipe add(String name, IIngredient input, ItemStack output, int hits) {
         return recipeBuilder()
                 .toolUses(hits)

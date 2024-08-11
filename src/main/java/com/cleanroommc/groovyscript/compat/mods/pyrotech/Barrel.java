@@ -26,7 +26,7 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_dirt_water_to_lava', ore('ingotIron'), ore('ingotIron'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_dirt_water_to_lava', ore('dye'), ore('dye'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000"))
     public BarrelRecipe add(String name, IIngredient input1, IIngredient input2, IIngredient input3, IIngredient input4, FluidStack fInput, FluidStack fOutput, int duration) {
         return recipeBuilder()
                 .duration(duration)
