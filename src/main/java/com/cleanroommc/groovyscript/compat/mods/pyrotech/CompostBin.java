@@ -25,7 +25,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay2', ore('dye') * 5, item('minecraft:clay_ball') * 20, 2"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay2', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 2"))
     public CompostBinRecipe add(String name, IIngredient input, ItemStack output, int compostValue) {
         return recipeBuilder()
                 .compostValue(compostValue)
