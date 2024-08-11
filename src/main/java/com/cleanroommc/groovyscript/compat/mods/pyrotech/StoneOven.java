@@ -13,19 +13,19 @@ import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneOvenRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription(description = "Oven has self recipes, but it automatically uses recipes from furnace that can't be removed")
+@RegistryDescription
 public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
 
     public StoneOven() {
         super(ModuleTechMachine.Registries.STONE_OVEN_RECIPES);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald')"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald_stone')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1000"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'apple_to_dirt_stone', item('minecraft:apple'), item('minecraft:dirt'), 1000"))
     public StoneOvenRecipe add(String name, IIngredient input, ItemStack output, int duration) {
         return recipeBuilder()
                 .duration(duration)
@@ -37,7 +37,7 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:porkchop')"))
     public void removeByInput(ItemStack input) {
-        if (GroovyLog.msg("Error removing oven recipe")
+        if (GroovyLog.msg("Error removing stone oven recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
                 .error()
                 .postIfNotEmpty()) {
@@ -52,7 +52,7 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:cooked_porkchop')"))
     public void removeByOutput(IIngredient output) {
-        if (GroovyLog.msg("Error removing oven recipe")
+        if (GroovyLog.msg("Error removing stone oven recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
                 .error()
                 .postIfNotEmpty()) {
@@ -81,7 +81,7 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
 
         @Override
         public String getErrorMsg() {
-            return "Error adding Pyrotech Oven Recipe";
+            return "Error adding Pyrotech Stone Oven Recipe";
         }
 
         @Override

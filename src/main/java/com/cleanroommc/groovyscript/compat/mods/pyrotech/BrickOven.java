@@ -14,19 +14,19 @@ import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneOvenRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription(description = "Oven has self recipes, but it automatically uses recipes from furnace that can't be removed")
+@RegistryDescription
 public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
 
     public BrickOven() {
         super(ModuleTechMachine.Registries.BRICK_OVEN_RECIPES);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald')"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald_brick')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1000"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'apple_to_dirt_brick', item('minecraft:apple'), item('minecraft:dirt'), 1000"))
     public BrickOvenRecipe add(String name, IIngredient input, ItemStack output, int duration) {
         return recipeBuilder()
                 .duration(duration)

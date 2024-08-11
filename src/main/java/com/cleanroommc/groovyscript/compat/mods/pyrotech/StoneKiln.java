@@ -19,13 +19,13 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
         super(ModuleTechMachine.Registries.STONE_KILN_RECIPES);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items')"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items_stone')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')]"))
-    public StoneKilnRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, Iterable<ItemStack> failureOutput) {
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'clay_to_iron_stone', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone')"))
+    public StoneKilnRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, ItemStack... failureOutput) {
         return recipeBuilder()
                 .burnTime(burnTime)
                 .failureChance(failureChance)
@@ -38,7 +38,7 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
 
     @MethodDescription
     public void removeByInput(ItemStack input) {
-        if (GroovyLog.msg("Error removing kiln recipe")
+        if (GroovyLog.msg("Error removing stone kiln recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
                 .error()
                 .postIfNotEmpty()) {
@@ -53,7 +53,7 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
 
     @MethodDescription(example = @Example("item('pyrotech:bucket_clay')"))
     public void removeByOutput(IIngredient output) {
-        if (GroovyLog.msg("Error removing kiln recipe")
+        if (GroovyLog.msg("Error removing stone iln recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
                 .error()
                 .postIfNotEmpty()) {
@@ -112,7 +112,7 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
 
         @Override
         public String getErrorMsg() {
-            return "Error adding Pyrotech Kiln Recipe";
+            return "Error adding Pyrotech Stone Kiln Recipe";
         }
 
         @Override

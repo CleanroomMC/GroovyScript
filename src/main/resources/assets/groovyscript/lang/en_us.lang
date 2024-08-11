@@ -1509,6 +1509,18 @@ groovyscript.wiki.pyrotech.barrel.description=Over time converts a fluid with fo
 groovyscript.wiki.pyrotech.barrel.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.barrel.add=Adds recipes in the format `name`, `input1`, `input2`, `input3`, `input4`, `fluidInput`, `fluidOutput`, `duration`
 
+groovyscript.wiki.pyrotech.brick_kiln.title=Refractory Kiln
+groovyscript.wiki.pyrotech.brick_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
+groovyscript.wiki.pyrotech.brick_kiln.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.brick_kiln.failureChance.value=Sets the chance to fail the recipe
+groovyscript.wiki.pyrotech.brick_kiln.failureOutput.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.brick_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+
+groovyscript.wiki.pyrotech.brick_oven.title=Refractory Oven
+groovyscript.wiki.pyrotech.brick_oven.description=Can cook food. Includes some recipes from the Furnace Registry that can't be removed here
+groovyscript.wiki.pyrotech.brick_oven.duration.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.brick_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`
+
 groovyscript.wiki.pyrotech.campfire.title=Campfire
 groovyscript.wiki.pyrotech.campfire.description=Can cook food
 groovyscript.wiki.pyrotech.campfire.duration.value=Sets the time required for the recipe to complete
@@ -1545,6 +1557,18 @@ groovyscript.wiki.pyrotech.kiln.burnTime.value=Sets the time required for the re
 groovyscript.wiki.pyrotech.kiln.failureChance.value=Sets the chance to fail the recipe
 groovyscript.wiki.pyrotech.kiln.failureOutput.value=Sets the output when the recipe failed
 groovyscript.wiki.pyrotech.kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+
+groovyscript.wiki.pyrotech.stone_kiln.title=Stone Kiln
+groovyscript.wiki.pyrotech.stone_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
+groovyscript.wiki.pyrotech.stone_kiln.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.stone_kiln.failureChance.value=Sets the chance to fail the recipe
+groovyscript.wiki.pyrotech.stone_kiln.failureOutput.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.stone_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+
+groovyscript.wiki.pyrotech.stone_oven.title=Stone Oven
+groovyscript.wiki.pyrotech.stone_oven.description=Can cook food. Includes some recipes from the Furnace Registry that can't be removed here
+groovyscript.wiki.pyrotech.stone_oven.duration.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.stone_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`
 
 groovyscript.wiki.pyrotech.soaking_pot.title=Soaking Pot
 groovyscript.wiki.pyrotech.soaking_pot.description=Converts an item into a new one by soaking it in a liquid. Can require a campfire
