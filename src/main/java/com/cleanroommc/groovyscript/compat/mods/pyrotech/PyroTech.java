@@ -13,7 +13,7 @@ public class PyroTech extends GroovyPropertyContainer {
     public static final CompostBin compostBin = new CompostBin();
     public static final CrudeDryingRack crudeDryingRack = new CrudeDryingRack();
     public static final DryingRack dryingRack = new DryingRack();
-    public static final PitKiln kiln = new PitKiln();
+    public static final PitKiln pitKiln = new PitKiln();
     public static final StoneKiln stoneKiln = new StoneKiln();
     public static final BrickKiln brickKiln = new BrickKiln();
     public static final Anvil anvil = new Anvil();

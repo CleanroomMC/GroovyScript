@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
 
     public PitKiln() {
-        super(ModuleTechBasic.Registries.KILN_PIT_RECIPE);
+        super(ModuleTechBasic.Registries.KILN_PIT_RECIPE, Alias.generateOfClass(PitKiln.class).andGenerate("Kiln"));
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items')"))
@@ -131,7 +132,7 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         public @Nullable KilnPitRecipe register() {
             if (!validate()) return null;
             KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(super.name);
-            PyroTech.kiln.add(recipe);
+            PyroTech.pitKiln.add(recipe);
             return recipe;
         }
     }
