@@ -13,7 +13,10 @@ import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneOvenRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription
+@RegistryDescription(admonition = {@Admonition(value = "groovyscript.wiki.pyrotech.oven.note0",
+                                               type = Admonition.Type.DANGER,
+                                               format = Admonition.Format.STANDARD,
+                                               hasTitle = true)})
 public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
 
     public StoneOven() {

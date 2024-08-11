@@ -1517,7 +1517,7 @@ groovyscript.wiki.pyrotech.brick_kiln.failureOutput.value=Sets the output when t
 groovyscript.wiki.pyrotech.brick_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
 
 groovyscript.wiki.pyrotech.brick_oven.title=Refractory Oven
-groovyscript.wiki.pyrotech.brick_oven.description=Can cook food. Includes some recipes from the Furnace Registry that can't be removed here
+groovyscript.wiki.pyrotech.brick_oven.description=Can cook food
 groovyscript.wiki.pyrotech.brick_oven.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.brick_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`
 
@@ -1558,6 +1558,8 @@ groovyscript.wiki.pyrotech.kiln.failureChance.value=Sets the chance to fail the 
 groovyscript.wiki.pyrotech.kiln.failureOutput.value=Sets the output when the recipe failed
 groovyscript.wiki.pyrotech.kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
 
+groovyscript.wiki.pyrotech.oven.note0=Stone and Refractory Oven includes some recipes from the Furnace Registry that can't be removed here
+
 groovyscript.wiki.pyrotech.stone_kiln.title=Stone Kiln
 groovyscript.wiki.pyrotech.stone_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
 groovyscript.wiki.pyrotech.stone_kiln.burnTime.value=Sets the time required for the recipe to complete
@@ -1566,7 +1568,7 @@ groovyscript.wiki.pyrotech.stone_kiln.failureOutput.value=Sets the output when t
 groovyscript.wiki.pyrotech.stone_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
 
 groovyscript.wiki.pyrotech.stone_oven.title=Stone Oven
-groovyscript.wiki.pyrotech.stone_oven.description=Can cook food. Includes some recipes from the Furnace Registry that can't be removed here
+groovyscript.wiki.pyrotech.stone_oven.description=Can cook food
 groovyscript.wiki.pyrotech.stone_oven.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.stone_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`
 
