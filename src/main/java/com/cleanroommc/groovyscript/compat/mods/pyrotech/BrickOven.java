@@ -38,7 +38,7 @@ public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:porkchop')"))
     public void removeByInput(ItemStack input) {
-        if (GroovyLog.msg("Error removing oven recipe")
+        if (GroovyLog.msg("Error removing brick oven recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
                 .error()
                 .postIfNotEmpty()) {
@@ -53,7 +53,7 @@ public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:cooked_porkchop')"))
     public void removeByOutput(IIngredient output) {
-        if (GroovyLog.msg("Error removing oven recipe")
+        if (GroovyLog.msg("Error removing brick oven recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
                 .error()
                 .postIfNotEmpty()) {
@@ -82,7 +82,7 @@ public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
 
         @Override
         public String getErrorMsg() {
-            return "Error adding Pyrotech Oven Recipe";
+            return "Error adding Pyrotech Brick Oven Recipe";
         }
 
         @Override
