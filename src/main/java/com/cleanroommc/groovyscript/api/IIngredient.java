@@ -63,8 +63,6 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
      */
     IIngredient EMPTY = new IIngredient() {
 
-        private String mark;
-
         @Override
         public int getAmount() {
             return 0;
@@ -102,12 +100,11 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
         @Nullable
         @Override
         public String getMark() {
-            return mark;
+            return null;
         }
 
         @Override
         public void setMark(String mark) {
-            this.mark = mark;
         }
     };
 
@@ -115,8 +112,6 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
      * An ingredient with stack size 1, that matches any item stack
      */
     IIngredient ANY = new IIngredient() {
-
-        private String mark;
 
         @Override
         public IIngredient exactCopy() {
@@ -160,12 +155,11 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
         @Nullable
         @Override
         public String getMark() {
-            return mark;
+            return null;
         }
 
         @Override
         public void setMark(String mark) {
-            this.mark = mark;
         }
     };
 }
