@@ -23,9 +23,6 @@ public abstract class MetaClassImplMixin {
     protected abstract Object doInvokeMethod(Class sender, Object object, String methodName, Object[] originalArguments, boolean isCallToSuper, boolean fromInsideClass);
 
     @Shadow
-    protected MetaClassRegistry registry;
-
-    @Shadow
     protected abstract Object invokeMissingMethod(Object instance, String methodName, Object[] arguments, RuntimeException original, boolean isCallToSuper);
 
     @Shadow
@@ -46,6 +43,8 @@ public abstract class MetaClassImplMixin {
     @Shadow
     @Final
     private MetaMethod[] additionalMetaMethods;
+
+    @Shadow protected MetaClassRegistry registry;
 
     @Inject(method = "<init>(Ljava/lang/Class;[Lgroovy/lang/MetaMethod;)V", at = @At("TAIL"))
     public void removeBlacklistedAdditional(Class<?> theClass, MetaMethod[] add, CallbackInfo ci) {

@@ -138,7 +138,7 @@ public class GroovyLogImpl implements GroovyLog {
     }
 
     /**
-     * Logs a info msg to the groovy log AND Minecraft's log
+     * Logs an info msg to the groovy log AND Minecraft's log
      *
      * @param msg  message
      * @param args arguments
@@ -347,6 +347,13 @@ public class GroovyLogImpl implements GroovyLog {
         @Override
         public Msg add(boolean condition, String msg, Object... args) {
             if (condition) {
+                if (args != null && args.length > 0) {
+                    for (int i = 0; i < args.length; i++) {
+                        if (args[i] instanceof Supplier<?> s) {
+                            args[i] = s.get();
+                        }
+                    }
+                }
                 return add(msg, args);
             }
             return this;
