@@ -1517,12 +1517,12 @@ groovyscript.wiki.pyrotech.brick_kiln.failureOutput.value=Sets the output when t
 groovyscript.wiki.pyrotech.brick_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
 
 groovyscript.wiki.pyrotech.brick_oven.title=Refractory Oven
-groovyscript.wiki.pyrotech.brick_oven.description=Can cook food
+groovyscript.wiki.pyrotech.brick_oven.description=When powered by burning fuel can convert items
 groovyscript.wiki.pyrotech.brick_oven.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.brick_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`
 
 groovyscript.wiki.pyrotech.campfire.title=Campfire
-groovyscript.wiki.pyrotech.campfire.description=Can cook food
+groovyscript.wiki.pyrotech.campfire.description=When powered by burning logs can convert items
 groovyscript.wiki.pyrotech.campfire.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.campfire.add=Adds recipes in the format `name`, `input`, `output`, `duration`
 
@@ -1568,7 +1568,7 @@ groovyscript.wiki.pyrotech.stone_kiln.failureOutput.value=Sets the output when t
 groovyscript.wiki.pyrotech.stone_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
 
 groovyscript.wiki.pyrotech.stone_oven.title=Stone Oven
-groovyscript.wiki.pyrotech.stone_oven.description=Can cook food
+groovyscript.wiki.pyrotech.stone_oven.description=When powered by burning fuel can convert items
 groovyscript.wiki.pyrotech.stone_oven.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.stone_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`
 

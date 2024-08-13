@@ -38,7 +38,7 @@ mods.pyrotech.anvil.recipeBuilder()
     .register()
 
 
-mods.pyrotech.anvil.add('iron_to_clay', ore('dye'), item('minecraft:clay_ball'), 9, 'granite', 'hammer')
+mods.pyrotech.anvil.add('iron_to_clay', ore('ingotIron'), item('minecraft:clay_ball'), 9, 'granite', 'hammer')
 
 // Barrel:
 // Over time converts a fluid with four items into a new fluid.
@@ -55,7 +55,7 @@ mods.pyrotech.barrel.recipeBuilder()
     .register()
 
 
-mods.pyrotech.barrel.add('iron_dirt_water_to_lava', ore('dye'), ore('dye'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000)
+mods.pyrotech.barrel.add('iron_dirt_water_to_lava', ore('ingotIron'), ore('ingotIron'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000)
 
 // Refractory Kiln:
 // Converts an item into a new one by burning it. Has a chance to fail.
@@ -76,7 +76,7 @@ mods.pyrotech.brick_kiln.recipeBuilder()
 mods.pyrotech.brick_kiln.add('clay_to_iron_brick', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone'))
 
 // Refractory Oven:
-// Can cook food. Includes some recipes from the Furnace Registry that can't be removed here.
+// When powered by burning fuel convert convert items.
 
 mods.pyrotech.brick_oven.removeByInput(item('minecraft:porkchop'))
 mods.pyrotech.brick_oven.removeByOutput(item('minecraft:cooked_porkchop'))
@@ -142,7 +142,7 @@ mods.pyrotech.compacting_bin.recipeBuilder()
     .register()
 
 
-mods.pyrotech.compacting_bin.add('iron_to_clay', ore('dye') * 5, item('minecraft:clay_ball') * 20, 9)
+mods.pyrotech.compacting_bin.add('iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9)
 
 // Compost Bin:
 // Can convert multiple items into a new one when its full.
@@ -158,7 +158,7 @@ mods.pyrotech.compost_bin.recipeBuilder()
     .register()
 
 
-mods.pyrotech.compost_bin.add('iron_to_clay2', ore('dye') * 5, item('minecraft:clay_ball') * 20, 2)
+mods.pyrotech.compost_bin.add('iron_to_clay2', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 2)
 
 // Crude Drying Rack:
 // Converts an item over time into a new one.
@@ -247,7 +247,7 @@ mods.pyrotech.stone_kiln.recipeBuilder()
 mods.pyrotech.stone_kiln.add('clay_to_iron_stone', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone'))
 
 // Stone Oven:
-// Can cook food. Includes some recipes from the Furnace Registry that can't be removed here.
+// Can cook food.
 
 mods.pyrotech.stone_oven.removeByInput(item('minecraft:porkchop'))
 mods.pyrotech.stone_oven.removeByOutput(item('minecraft:cooked_porkchop'))
