@@ -7,9 +7,10 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.github.bsideup.jabel.Desugar;
 import lykrast.prodigytech.common.recipe.ExplosionFurnaceManager;
 import net.minecraft.item.ItemStack;
+
+import java.util.Objects;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurnaceAdditives.EFAdditiveRecipe> {
@@ -87,8 +88,16 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         void unregister();
     }
 
-    @Desugar
-    public record EFAdditiveExplosive(IIngredient input, int value) implements EFAdditiveRecipe {
+    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    public static class EFAdditiveExplosive implements EFAdditiveRecipe {
+
+        private final IIngredient input;
+        private final int value;
+
+        public EFAdditiveExplosive(IIngredient input, int value) {
+            this.input = input;
+            this.value = value;
+        }
 
         @Override
         public void register() {
@@ -111,10 +120,47 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
                 }
             }
         }
+
+        public IIngredient input() {
+            return input;
+        }
+
+        public int value() {
+            return value;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (EFAdditiveExplosive) obj;
+            return Objects.equals(this.input, that.input) &&
+                   this.value == that.value;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(input, value);
+        }
+
+        @Override
+        public String toString() {
+            return "EFAdditiveExplosive[" +
+                   "input=" + input + ", " +
+                   "value=" + value + ']';
+        }
     }
 
-    @Desugar
-    public record EFAdditiveDampener(IIngredient input, int value) implements EFAdditiveRecipe {
+    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    public static class EFAdditiveDampener implements EFAdditiveRecipe {
+
+        private final IIngredient input;
+        private final int value;
+
+        public EFAdditiveDampener(IIngredient input, int value) {
+            this.input = input;
+            this.value = value;
+        }
 
         @Override
         public void register() {
@@ -136,6 +182,35 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
                     ExplosionFurnaceManager.removeDampener(it);
                 }
             }
+        }
+
+        public IIngredient input() {
+            return input;
+        }
+
+        public int value() {
+            return value;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (EFAdditiveDampener) obj;
+            return Objects.equals(this.input, that.input) &&
+                   this.value == that.value;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(input, value);
+        }
+
+        @Override
+        public String toString() {
+            return "EFAdditiveDampener[" +
+                   "input=" + input + ", " +
+                   "value=" + value + ']';
         }
     }
 }

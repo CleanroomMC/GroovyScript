@@ -5,13 +5,13 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.github.bsideup.jabel.Desugar;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lykrast.prodigytech.common.recipe.ZorraAltarManager;
 import lykrast.prodigytech.common.util.Config;
 import net.minecraft.enchantment.Enchantment;
 
 import java.util.Map;
+import java.util.Objects;
 
 
 @RegistryDescription
@@ -71,6 +71,50 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
         return managers.get(registry).removeEnchant(enchantment);
     }
 
-    @Desugar
-    public record ZorraRecipeData(String registry, Enchantment enchantment, int maxLevel) {}
+    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    public static class ZorraRecipeData {
+
+        private final String registry;
+        private final Enchantment enchantment;
+        private final int maxLevel;
+
+        public ZorraRecipeData(String registry, Enchantment enchantment, int maxLevel) {
+            this.registry = registry;
+            this.enchantment = enchantment;
+            this.maxLevel = maxLevel;
+        }
+
+        public String registry() {return registry;}
+
+        public Enchantment enchantment() {
+            return enchantment;
+        }
+
+        public int maxLevel() {
+            return maxLevel;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (ZorraRecipeData) obj;
+            return Objects.equals(this.registry, that.registry) &&
+                   Objects.equals(this.enchantment, that.enchantment) &&
+                   this.maxLevel == that.maxLevel;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(registry, enchantment, maxLevel);
+        }
+
+        @Override
+        public String toString() {
+            return "ZorraRecipeData[" +
+                   "registry=" + registry + ", " +
+                   "enchantment=" + enchantment + ", " +
+                   "maxLevel=" + maxLevel + ']';
+        }
+    }
 }

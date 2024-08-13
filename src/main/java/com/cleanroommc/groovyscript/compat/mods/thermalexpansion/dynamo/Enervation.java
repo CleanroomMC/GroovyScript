@@ -9,9 +9,10 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.EnervationManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.github.bsideup.jabel.Desugar;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Objects;
 
 @RegistryDescription
 public class Enervation extends VirtualizedRegistry<Enervation.EnervationRecipe> {
@@ -76,9 +77,45 @@ public class Enervation extends VirtualizedRegistry<Enervation.EnervationRecipe>
         EnervationManagerAccessor.getFuelMap().clear();
     }
 
-    @Desugar
-    public record EnervationRecipe(ComparableItemStack comparableItemStack, int energy) {
+    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    public static class EnervationRecipe {
 
+        private final ComparableItemStack comparableItemStack;
+        private final int energy;
+
+        public EnervationRecipe(ComparableItemStack comparableItemStack, int energy) {
+            this.comparableItemStack = comparableItemStack;
+            this.energy = energy;
+        }
+
+        public ComparableItemStack comparableItemStack() {
+            return comparableItemStack;
+        }
+
+        public int energy() {
+            return energy;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (EnervationRecipe) obj;
+            return Objects.equals(this.comparableItemStack, that.comparableItemStack) &&
+                   this.energy == that.energy;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(comparableItemStack, energy);
+        }
+
+        @Override
+        public String toString() {
+            return "EnervationRecipe[" +
+                   "comparableItemStack=" + comparableItemStack + ", " +
+                   "energy=" + energy + ']';
+        }
     }
 
 }

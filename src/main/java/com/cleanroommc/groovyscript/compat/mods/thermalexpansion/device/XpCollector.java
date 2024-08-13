@@ -12,6 +12,8 @@ import com.github.bsideup.jabel.Desugar;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Objects;
+
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorRecipe> {
 
@@ -82,13 +84,57 @@ public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorReci
         XpCollectorManagerAccessor.getCatalystFactorMap().clear();
     }
 
-    @Desugar
-    public record XpCollectorRecipe(ItemStack catalyst, int xp, int factor) {
+    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    public static class XpCollectorRecipe {
+
+        private final ItemStack catalyst;
+        private final int xp;
+        private final int factor;
+
+        public XpCollectorRecipe(ItemStack catalyst, int xp, int factor) {
+            this.catalyst = catalyst;
+            this.xp = xp;
+            this.factor = factor;
+        }
 
         public ComparableItemStack getComparableStack() {
             return new ComparableItemStack(catalyst());
         }
 
+        public ItemStack catalyst() {
+            return catalyst;
+        }
+
+        public int xp() {
+            return xp;
+        }
+
+        public int factor() {
+            return factor;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (XpCollectorRecipe) obj;
+            return Objects.equals(this.catalyst, that.catalyst) &&
+                   this.xp == that.xp &&
+                   this.factor == that.factor;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(catalyst, xp, factor);
+        }
+
+        @Override
+        public String toString() {
+            return "XpCollectorRecipe[" +
+                   "catalyst=" + catalyst + ", " +
+                   "xp=" + xp + ", " +
+                   "factor=" + factor + ']';
+        }
     }
 
 }

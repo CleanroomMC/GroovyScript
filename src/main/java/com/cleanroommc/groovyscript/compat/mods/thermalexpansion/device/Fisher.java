@@ -12,6 +12,8 @@ import com.github.bsideup.jabel.Desugar;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Objects;
+
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class Fisher extends VirtualizedRegistry<Fisher.FisherRecipe> {
 
@@ -90,9 +92,45 @@ public class Fisher extends VirtualizedRegistry<Fisher.FisherRecipe> {
         FisherManagerAccessor.setTotalWeight(0);
     }
 
-    @Desugar
-    public record FisherRecipe(ItemStack fish, int weight) {
+    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    public static class FisherRecipe {
 
+        private final ItemStack fish;
+        private final int weight;
+
+        public FisherRecipe(ItemStack fish, int weight) {
+            this.fish = fish;
+            this.weight = weight;
+        }
+
+        public ItemStack fish() {
+            return fish;
+        }
+
+        public int weight() {
+            return weight;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (FisherRecipe) obj;
+            return Objects.equals(this.fish, that.fish) &&
+                   this.weight == that.weight;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(fish, weight);
+        }
+
+        @Override
+        public String toString() {
+            return "FisherRecipe[" +
+                   "fish=" + fish + ", " +
+                   "weight=" + weight + ']';
+        }
     }
 
 }

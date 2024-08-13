@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
@@ -87,13 +88,57 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
         DiffuserManagerAccessor.getReagentDurMap().clear();
     }
 
-    @Desugar
-    public record DiffuserRecipe(ComparableItemStack stack, int amplifier, int duration) {
+    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    public static class DiffuserRecipe {
+
+        private final ComparableItemStack stack;
+        private final int amplifier;
+        private final int duration;
+
+        public DiffuserRecipe(ComparableItemStack stack, int amplifier, int duration) {
+            this.stack = stack;
+            this.amplifier = amplifier;
+            this.duration = duration;
+        }
 
         public DiffuserRecipe(ComparableItemStack stack) {
             this(stack, DiffuserManagerAccessor.getReagentAmpMap().get(stack), DiffuserManagerAccessor.getReagentDurMap().get(stack));
         }
 
+        public ComparableItemStack stack() {
+            return stack;
+        }
+
+        public int amplifier() {
+            return amplifier;
+        }
+
+        public int duration() {
+            return duration;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (DiffuserRecipe) obj;
+            return Objects.equals(this.stack, that.stack) &&
+                   this.amplifier == that.amplifier &&
+                   this.duration == that.duration;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(stack, amplifier, duration);
+        }
+
+        @Override
+        public String toString() {
+            return "DiffuserRecipe[" +
+                   "stack=" + stack + ", " +
+                   "amplifier=" + amplifier + ", " +
+                   "duration=" + duration + ']';
+        }
     }
 
 }

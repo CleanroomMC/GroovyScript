@@ -11,6 +11,8 @@ import com.github.bsideup.jabel.Desugar;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Objects;
+
 @RegistryDescription
 public class Magmatic extends VirtualizedRegistry<Magmatic.MagmaticRecipe> {
 
@@ -79,9 +81,45 @@ public class Magmatic extends VirtualizedRegistry<Magmatic.MagmaticRecipe> {
         MagmaticManagerAccessor.getFuelMap().clear();
     }
 
-    @Desugar
-    public record MagmaticRecipe(String fluid, int energy) {
+    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    public static class MagmaticRecipe {
 
+        private final String fluid;
+        private final int energy;
+
+        public MagmaticRecipe(String fluid, int energy) {
+            this.fluid = fluid;
+            this.energy = energy;
+        }
+
+        public String fluid() {
+            return fluid;
+        }
+
+        public int energy() {
+            return energy;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (MagmaticRecipe) obj;
+            return Objects.equals(this.fluid, that.fluid) &&
+                   this.energy == that.energy;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(fluid, energy);
+        }
+
+        @Override
+        public String toString() {
+            return "MagmaticRecipe[" +
+                   "fluid=" + fluid + ", " +
+                   "energy=" + energy + ']';
+        }
     }
 
 }

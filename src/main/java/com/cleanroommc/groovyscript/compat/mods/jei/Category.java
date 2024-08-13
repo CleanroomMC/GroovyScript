@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES,
@@ -115,11 +116,64 @@ public class Category extends VirtualizedRegistry<String> {
         hideAllCategories = true;
     }
 
-    @Desugar
-    record CustomCategory(String id,
-                          Function<IGuiHelper, ? extends IRecipeCategory<? extends IRecipeWrapper>> category,
-                          List<?> catalysts,
-                          List<? extends IRecipeWrapper> wrappers) {
+    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    public static class CustomCategory {
+        
+        private final String id;
+        private final Function<IGuiHelper, ? extends IRecipeCategory<? extends IRecipeWrapper>> category;
+        private final List<?> catalysts;
+        private final List<? extends IRecipeWrapper> wrappers;
+
+        public CustomCategory(String id,
+                       Function<IGuiHelper, ? extends IRecipeCategory<? extends IRecipeWrapper>> category,
+                       List<?> catalysts,
+                       List<? extends IRecipeWrapper> wrappers) {
+            this.id = id;
+            this.category = category;
+            this.catalysts = catalysts;
+            this.wrappers = wrappers;
+        }
+
+        public String id() {
+            return id;
+        }
+
+        public Function<IGuiHelper, ? extends IRecipeCategory<? extends IRecipeWrapper>> category() {
+            return category;
+        }
+
+        public List<?> catalysts() {
+            return catalysts;
+        }
+
+        public List<? extends IRecipeWrapper> wrappers() {
+            return wrappers;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (CustomCategory) obj;
+            return Objects.equals(this.id, that.id) &&
+                   Objects.equals(this.category, that.category) &&
+                   Objects.equals(this.catalysts, that.catalysts) &&
+                   Objects.equals(this.wrappers, that.wrappers);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, category, catalysts, wrappers);
+        }
+
+        @Override
+        public String toString() {
+            return "CustomCategory[" +
+                   "id=" + id + ", " +
+                   "category=" + category + ", " +
+                   "catalysts=" + catalysts + ", " +
+                   "wrappers=" + wrappers + ']';
+        }
     }
 
     public static class CategoryBuilder implements IRecipeBuilder<CustomCategory> {
