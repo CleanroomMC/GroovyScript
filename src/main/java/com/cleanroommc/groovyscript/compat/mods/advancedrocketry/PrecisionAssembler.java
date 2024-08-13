@@ -26,11 +26,13 @@ public class PrecisionAssembler extends BaseMultiblockRegistry {
         return TilePrecisionAssembler.class;
     }
 
+    @Override
     @MethodDescription(example = @Example("item('advancedrocketry:atmanalyser')"))
     public boolean removeByOutput(IIngredient output) {
         return super.removeByOutput(output);
     }
 
+    @Override
     @MethodDescription(example = @Example("item('minecraft:redstone_block')"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);

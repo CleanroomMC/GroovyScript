@@ -29,9 +29,8 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
         List<IRecipe> recipes = registry.getRecipes(clazz);
         if (recipes == null) {
             recipes = new LinkedList<>();
-            // NOTE: this cast is completely invalid but Advanced Rocketry's code is pepega
-            // @see zmaster587.libVulpes.recipe.RecipesMachine#recipeList
-            // @see zmaster587.advancedRocketry.block.BlockSmallPlatePress#getRecipe
+            // NOTE: this cast is completely invalid but Advanced Rocketry's code is abusing type erasure on Class<?> generic
+            // to perform the same cast when adding recipes to Small Plate Press (which is not a TileMultiblockMachine)
             registry.recipeList.put((Class<? extends TileMultiblockMachine>) clazz, recipes);
         }
         return recipes;
@@ -107,7 +106,7 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
         });
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         List<IRecipe> recipes = getRecipeList();
         recipes.forEach(this::addBackup);

@@ -23,7 +23,8 @@ public class Centrifuge extends BaseMultiblockRegistry {
         return TileCentrifuge.class;
     }
 
-    @MethodDescription(example = @Example(value = "fluid('enrichedlava')"))
+    @Override
+    @MethodDescription(example = @Example("fluid('enrichedlava')"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);
     }

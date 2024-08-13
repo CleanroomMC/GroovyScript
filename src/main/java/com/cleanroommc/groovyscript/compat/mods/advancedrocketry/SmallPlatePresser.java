@@ -23,11 +23,13 @@ public class SmallPlatePresser extends BaseRegistry {
         return BlockSmallPlatePress.class;
     }
 
+    @Override
     @MethodDescription(example = @Example("item('libvulpes:productplate', 2)"))
     public boolean removeByOutput(IIngredient output) {
         return super.removeByOutput(output);
     }
 
+    @Override
     @MethodDescription(example = @Example("item('minecraft:iron_block')"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);

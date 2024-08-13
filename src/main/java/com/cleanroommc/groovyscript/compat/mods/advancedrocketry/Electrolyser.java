@@ -20,11 +20,13 @@ public class Electrolyser extends BaseMultiblockRegistry {
         return TileElectrolyser.class;
     }
 
+    @Override
     @MethodDescription(example = @Example(value = "fluid('oxygen')", commented = true))
     public boolean removeByOutput(IIngredient output) {
         return super.removeByOutput(output);
     }
 
+    @Override
     @MethodDescription(example = @Example("fluid('water')"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);

@@ -20,11 +20,13 @@ public class Lathe extends BaseMultiblockRegistry {
         return TileLathe.class;
     }
 
+    @Override
     @MethodDescription(example = @Example("item('libvulpes:productrod', 4)"))
     public boolean removeByOutput(IIngredient output) {
         return super.removeByOutput(output);
     }
 
+    @Override
     @MethodDescription(example = @Example("item('libvulpes:productingot', 6)"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);

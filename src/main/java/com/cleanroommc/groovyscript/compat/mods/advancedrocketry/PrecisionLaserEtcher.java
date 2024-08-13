@@ -20,11 +20,13 @@ public class PrecisionLaserEtcher extends BaseMultiblockRegistry {
         return TilePrecisionLaserEtcher.class;
     }
 
+    @Override
     @MethodDescription(example = @Example("item('advancedrocketry:itemcircuitplate')"))
     public boolean removeByOutput(IIngredient output) {
         return super.removeByOutput(output);
     }
 
+    @Override
     @MethodDescription(example = @Example("item('minecraft:redstone_block')"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);

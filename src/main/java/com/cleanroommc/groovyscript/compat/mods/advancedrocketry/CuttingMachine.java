@@ -20,11 +20,13 @@ public class CuttingMachine extends BaseMultiblockRegistry {
         return TileCuttingMachine.class;
     }
 
+    @Override
     @MethodDescription(example = @Example("item('minecraft:planks', 1)"))
     public boolean removeByOutput(IIngredient output) {
         return super.removeByOutput(output);
     }
 
+    @Override
     @MethodDescription(example = @Example("item('advancedrocketry:alienwood')"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);

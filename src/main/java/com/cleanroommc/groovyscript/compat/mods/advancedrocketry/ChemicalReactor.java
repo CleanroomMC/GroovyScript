@@ -24,11 +24,13 @@ public class ChemicalReactor extends BaseMultiblockRegistry {
         return TileChemicalReactor.class;
     }
 
+    @Override
     @MethodDescription(example = @Example("item('minecraft:leather_helmet')"))
     public boolean removeByOutput(IIngredient output) {
         return super.removeByOutput(output);
     }
 
+    @Override
     @MethodDescription(example = @Example("item('minecraft:bone')"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);

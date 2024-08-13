@@ -20,11 +20,13 @@ public class Crystallizer extends BaseMultiblockRegistry {
         return TileCrystallizer.class;
     }
 
+    @Override
     @MethodDescription(example = @Example("item('libvulpes:productgem')"))
     public boolean removeByOutput(IIngredient output) {
         return super.removeByOutput(output);
     }
 
+    @Override
     @MethodDescription(example = @Example("item('libvulpes:productingot', 3)"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);

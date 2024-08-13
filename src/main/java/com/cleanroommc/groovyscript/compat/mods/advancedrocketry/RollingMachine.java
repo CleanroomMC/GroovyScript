@@ -20,11 +20,13 @@ public class RollingMachine extends BaseMultiblockRegistry {
         return TileRollingMachine.class;
     }
 
+    @Override
     @MethodDescription(example = @Example("item('libvulpes:productsheet', 1)"))
     public boolean removeByOutput(IIngredient output) {
         return super.removeByOutput(output);
     }
 
+    @Override
     @MethodDescription(example = @Example("item('libvulpes:productplate')"))
     public boolean removeByInput(IIngredient input) {
         return super.removeByInput(input);
