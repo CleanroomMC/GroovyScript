@@ -11,7 +11,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
     @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
     @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
 })
-public class Centrifuge extends BaseMultiblockRegistry {
+public class Centrifuge extends BaseRegistry {
     @RecipeBuilderDescription(
             example = @Example(".fluidInput(fluid('lava') * 500).output(item('minecraft:slime_ball'), 0.1f).output(item('minecraft:stone'), 0.9f).fluidOutput(fluid('enrichedlava') * 500).power(50).time(100).outputSize(1)"))
     public RecipeBuilder recipeBuilder() {
@@ -32,10 +32,10 @@ public class Centrifuge extends BaseMultiblockRegistry {
     @Property(property = "fluidInput", valid = @Comp("1"))
     @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "12")}, value = "groovyscript.wiki.advancedrocketry.output.value")
     @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "4")})
-    public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseRegistry.MultiblockRecipeBuilder {
 
         @Override
-        protected BaseMultiblockRegistry getRegistry() {
+        protected BaseRegistry getRegistry() {
             return ModSupport.ADVANCED_ROCKETRY.get().centrifuge;
         }
 

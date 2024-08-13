@@ -8,7 +8,7 @@ import zmaster587.advancedRocketry.tile.multiblock.machine.TileElectrolyser;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
-public class Electrolyser extends BaseMultiblockRegistry {
+public class Electrolyser extends BaseRegistry {
     @RecipeBuilderDescription(
             example = @Example(".fluidInput(fluid('lava') * 10).fluidOutput(fluid('nitrogen') * 50).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -34,10 +34,10 @@ public class Electrolyser extends BaseMultiblockRegistry {
 
     @Property(property = "fluidInput", valid = @Comp("1"))
     @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "2"), @Comp(type = Comp.Type.GTE, value = "1")})
-    public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseRegistry.MultiblockRecipeBuilder {
 
         @Override
-        protected BaseMultiblockRegistry getRegistry() {
+        protected BaseRegistry getRegistry() {
             return ModSupport.ADVANCED_ROCKETRY.get().electrolyser;
         }
 

@@ -8,7 +8,7 @@ import zmaster587.advancedRocketry.tile.multiblock.machine.TileLathe;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
-public class Lathe extends BaseMultiblockRegistry {
+public class Lathe extends BaseRegistry {
     @RecipeBuilderDescription(
             example = @Example(".input(ore('plankWood')).output(item('minecraft:stick') * 2).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -35,10 +35,10 @@ public class Lathe extends BaseMultiblockRegistry {
     @Property(property = "input", valid = {@Comp(type = Comp.Type.LTE, value = "4"), @Comp(type = Comp.Type.GTE, value = "1")})
     @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "4"), @Comp(type = Comp.Type.GTE, value = "1")},
               value = "groovyscript.wiki.advancedrocketry.output.value")
-    public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseRegistry.MultiblockRecipeBuilder {
 
         @Override
-        protected BaseMultiblockRegistry getRegistry() {
+        protected BaseRegistry getRegistry() {
             return ModSupport.ADVANCED_ROCKETRY.get().lathe;
         }
 

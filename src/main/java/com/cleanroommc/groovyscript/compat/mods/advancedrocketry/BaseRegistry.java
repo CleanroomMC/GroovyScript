@@ -191,4 +191,40 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
         }
     }
 
+    @Property(property = "power", valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.power.value", hierarchy = 5)
+    @Property(property = "time", valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.time.value", hierarchy = 5)
+    @Property(property = "outputSize", valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.outputSize.value", hierarchy = 5)
+    public abstract static class MultiblockRecipeBuilder extends RecipeBuilder {
+
+        @RecipeBuilderMethodDescription
+        public MultiblockRecipeBuilder time(int time) {
+            this.time = time;
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public MultiblockRecipeBuilder power(int power) {
+            this.power = power;
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public MultiblockRecipeBuilder outputSize(int outputSize) {
+            this.outputSize = outputSize;
+            return this;
+        }
+
+        @Override
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder output(ItemStack output) {
+            return output(output, 0.0f);
+        }
+
+        @Override
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder output(ItemStack output, float chance) {
+            return super.output(output, chance);
+        }
+    }
+
 }

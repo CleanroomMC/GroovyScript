@@ -13,7 +13,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.hatch_count_6", type = Admonition.Type.INFO),
 })
-public class PrecisionAssembler extends BaseMultiblockRegistry {
+public class PrecisionAssembler extends BaseRegistry {
 
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:fishing_rod'), item('minecraft:carrot')).output(item('minecraft:carrot_on_a_stick')).power(50).time(100)"))
@@ -42,10 +42,10 @@ public class PrecisionAssembler extends BaseMultiblockRegistry {
     @Property(property = "fluidInput", requirement = "groovyscript.wiki.advancedrocketry.input.required")
     @Property(property = "output", value = "groovyscript.wiki.advancedrocketry.output.value", requirement = "groovyscript.wiki.advancedrocketry.output.required")
     @Property(property = "fluidOutput", requirement = "groovyscript.wiki.advancedrocketry.output.required")
-    public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseRegistry.MultiblockRecipeBuilder {
 
         @Override
-        protected BaseMultiblockRegistry getRegistry() {
+        protected BaseRegistry getRegistry() {
             return ModSupport.ADVANCED_ROCKETRY.get().assembler;
         }
 

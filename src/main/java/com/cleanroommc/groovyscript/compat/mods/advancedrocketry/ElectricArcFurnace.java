@@ -13,7 +13,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.hatch_count_11", type = Admonition.Type.INFO),
 })
-public class ElectricArcFurnace extends BaseMultiblockRegistry {
+public class ElectricArcFurnace extends BaseRegistry {
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:blaze_powder') * 4).output(item('minecraft:blaze_rod')).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -41,10 +41,10 @@ public class ElectricArcFurnace extends BaseMultiblockRegistry {
     @Property(property = "fluidInput", requirement = "groovyscript.wiki.advancedrocketry.input.required")
     @Property(property = "output", value = "groovyscript.wiki.advancedrocketry.output.value", requirement = "groovyscript.wiki.advancedrocketry.output.required")
     @Property(property = "fluidOutput", requirement = "groovyscript.wiki.advancedrocketry.output.required")
-    public static class RecipeBuilder extends BaseMultiblockRegistry.RecipeBuilder {
+    public static class RecipeBuilder extends BaseRegistry.MultiblockRecipeBuilder {
 
         @Override
-        protected BaseMultiblockRegistry getRegistry() {
+        protected BaseRegistry getRegistry() {
             return ModSupport.ADVANCED_ROCKETRY.get().arcFurnace;
         }
 
