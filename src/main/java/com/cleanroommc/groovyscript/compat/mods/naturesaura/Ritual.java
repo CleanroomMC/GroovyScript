@@ -137,6 +137,12 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // More than 1 item cannot be placed
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateName();
             validateItems(msg, 1, 8, 1, 1);

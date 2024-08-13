@@ -126,6 +126,12 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Uses blocks to craft
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 0, 0, 1, 3);
             validateFluids(msg);

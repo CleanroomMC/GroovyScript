@@ -126,6 +126,12 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Offering Table's capacity
+            return 16;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateName();
             validateItems(msg, 1, 1, 1, 1);

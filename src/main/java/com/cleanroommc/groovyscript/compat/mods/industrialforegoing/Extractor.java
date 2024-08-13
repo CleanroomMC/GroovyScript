@@ -1,7 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.extractor.ExtractorEntry;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
@@ -33,6 +35,12 @@ public class Extractor extends VirtualizedRegistry<ExtractorEntry> {
 
     @MethodDescription(description = "groovyscript.wiki.industrialforegoing.extractor.add1", type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:stone'), fluid('water') * 100, 1"))
     public ExtractorEntry add(ItemStack input, FluidStack output, float breakChance) {
+        if (GroovyScriptConfig.compat.checkInputStackCounts && input.getCount() > 1) {
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Fluid Extractor recipe").error();
+            msg.add("Expected input stack size of 1, got {}", input.getCount());
+            msg.post();
+            return null;
+        }
         ExtractorEntry recipe = new ExtractorEntry(input, output, breakChance);
         add(recipe);
         return recipe;

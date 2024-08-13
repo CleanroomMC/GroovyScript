@@ -134,6 +134,12 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 3, 1, 3);
             validateFluids(msg);

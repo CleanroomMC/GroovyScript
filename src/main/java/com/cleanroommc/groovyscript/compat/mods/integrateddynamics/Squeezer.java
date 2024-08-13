@@ -149,6 +149,12 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
         }
 
         @Override
+        protected int getMaxInput() {
+            // More than 1 item cannot be placed (normal), ignores input stack size (mechanical)
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 3);
             validateFluids(msg, 0, 0, 0, 1);

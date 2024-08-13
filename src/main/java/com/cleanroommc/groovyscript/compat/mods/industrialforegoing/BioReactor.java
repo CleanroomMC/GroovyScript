@@ -2,7 +2,9 @@ package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.IReactorEntry;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
@@ -31,6 +33,12 @@ public class BioReactor extends VirtualizedRegistry<IReactorEntry> {
 
     @MethodDescription(description = "groovyscript.wiki.industrialforegoing.bio_reactor.add1", type = MethodDescription.Type.ADDITION)
     public IReactorEntry add(ItemStack input, @Nullable Predicate<NBTTagCompound> nbtCheck) {
+        if (GroovyScriptConfig.compat.checkInputStackCounts && input.getCount() > 1) {
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Bioreactor recipe").error();
+            msg.add("Expected input stack size of 1, got {}", input.getCount());
+            msg.post();
+            return null;
+        }
         IReactorEntry recipe = new BioReactorEntry(input, nbtCheck);
         add(recipe);
         return recipe;

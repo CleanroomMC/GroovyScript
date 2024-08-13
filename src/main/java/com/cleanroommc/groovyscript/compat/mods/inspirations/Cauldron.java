@@ -348,6 +348,12 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             if (type == null) {
                 msg.add("type must be defined");

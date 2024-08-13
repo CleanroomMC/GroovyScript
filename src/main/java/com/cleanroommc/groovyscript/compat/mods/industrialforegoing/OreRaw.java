@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
@@ -31,6 +32,12 @@ public class OreRaw extends VirtualizedRegistry<OreFluidEntryRaw> {
             @Example("ore('stone'), fluid('water') * 1000, fluid('lava') * 50")
     })
     public OreFluidEntryRaw add(OreDictIngredient ore, FluidStack input, FluidStack output) {
+        if (ore.getAmount() > 1) {
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Ore Washer recipe").error();
+            msg.add("Expected input stack size of 1, got {}", ore.getAmount());
+            msg.post();
+            return null;
+        }
         return add(ore.getOreDict(), input, output);
     }
 
