@@ -1551,12 +1551,12 @@ groovyscript.wiki.pyrotech.drying_rack.description=Converts an item over time in
 groovyscript.wiki.pyrotech.drying_rack.dryTime.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`
 
-groovyscript.wiki.pyrotech.kiln.title=Kiln
-groovyscript.wiki.pyrotech.kiln.description=Converts an item into a new one by burning it. Has a chance to fail
-groovyscript.wiki.pyrotech.kiln.burnTime.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.kiln.failureChance.value=Sets the chance to fail the recipe
-groovyscript.wiki.pyrotech.kiln.failureOutput.value=Sets the output when the recipe failed
-groovyscript.wiki.pyrotech.kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+groovyscript.wiki.pyrotech.pit_kiln.title=Kiln
+groovyscript.wiki.pyrotech.pit_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
+groovyscript.wiki.pyrotech.pit_kiln.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.pit_kiln.failureChance.value=Sets the chance to fail the recipe
+groovyscript.wiki.pyrotech.pit_kiln.failureOutput.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.pit_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
 
 groovyscript.wiki.pyrotech.oven.note0=Stone and Refractory Oven includes some recipes from the Furnace Registry that can't be removed here, you have to use `furnace.add` or `furnace.remove` to manipulate those recipes directly
 
