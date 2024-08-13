@@ -156,7 +156,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
         TapperManagerAccessor.getBlockMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class TapperItemRecipe {
 
         private final ItemWrapper itemWrapper;
@@ -197,7 +197,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
         }
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class TapperBlockRecipe {
 
         private final BlockWrapper blockWrapper;

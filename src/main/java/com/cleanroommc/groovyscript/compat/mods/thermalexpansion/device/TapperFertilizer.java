@@ -69,7 +69,7 @@ public class TapperFertilizer extends VirtualizedRegistry<TapperFertilizer.Tappe
         TapperManagerAccessor.getFertilizerMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class TapperRecipe {
 
         private final ComparableItemStack bait;

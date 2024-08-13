@@ -88,7 +88,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         void unregister();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class EFAdditiveExplosive implements EFAdditiveRecipe {
 
         private final IIngredient input;
@@ -151,7 +151,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         }
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class EFAdditiveDampener implements EFAdditiveRecipe {
 
         private final IIngredient input;

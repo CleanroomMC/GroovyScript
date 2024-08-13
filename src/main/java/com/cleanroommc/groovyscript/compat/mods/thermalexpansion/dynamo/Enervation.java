@@ -77,7 +77,7 @@ public class Enervation extends VirtualizedRegistry<Enervation.EnervationRecipe>
         EnervationManagerAccessor.getFuelMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class EnervationRecipe {
 
         private final ComparableItemStack comparableItemStack;

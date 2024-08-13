@@ -81,7 +81,7 @@ public class Compression extends VirtualizedRegistry<Compression.CompressionReci
         CompressionManagerAccessor.getFuelMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class CompressionRecipe {
 
         private final String fluid;

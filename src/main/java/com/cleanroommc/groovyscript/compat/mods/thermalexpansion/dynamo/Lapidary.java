@@ -78,7 +78,7 @@ public class Lapidary extends VirtualizedRegistry<Lapidary.LapidaryRecipe> {
         NumismaticManagerAccessor.getGemFuelMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class LapidaryRecipe {
 
         private final ComparableItemStack comparableItemStack;

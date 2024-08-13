@@ -94,7 +94,7 @@ public class TapperTree extends VirtualizedRegistry<TapperTree.TapperTreeEntry> 
         TapperManagerAccessor.getLeafMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class TapperTreeEntry {
 
         private final BlockWrapper log;

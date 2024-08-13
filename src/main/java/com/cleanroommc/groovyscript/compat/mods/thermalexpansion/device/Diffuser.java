@@ -88,7 +88,7 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
         DiffuserManagerAccessor.getReagentDurMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class DiffuserRecipe {
 
         private final ComparableItemStack stack;

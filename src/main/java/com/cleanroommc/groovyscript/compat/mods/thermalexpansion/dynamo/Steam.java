@@ -78,7 +78,7 @@ public class Steam extends VirtualizedRegistry<Steam.SteamRecipe> {
         SteamManagerAccessor.getFuelMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class SteamRecipe {
 
         private final ComparableItemStack comparableItemStack;

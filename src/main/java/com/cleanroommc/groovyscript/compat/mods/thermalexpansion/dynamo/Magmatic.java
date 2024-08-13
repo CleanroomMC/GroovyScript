@@ -81,7 +81,7 @@ public class Magmatic extends VirtualizedRegistry<Magmatic.MagmaticRecipe> {
         MagmaticManagerAccessor.getFuelMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class MagmaticRecipe {
 
         private final String fluid;

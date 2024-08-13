@@ -69,7 +69,7 @@ public class FisherBait extends VirtualizedRegistry<FisherBait.FisherRecipe> {
         FisherManagerAccessor.getBaitMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class FisherRecipe {
 
         private final ComparableItemStack bait;

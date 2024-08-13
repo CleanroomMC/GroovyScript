@@ -87,7 +87,7 @@ public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
         CoolantManagerAccessor.getCoolantFactorMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class CoolantRecipe {
 
         private final String fluid;

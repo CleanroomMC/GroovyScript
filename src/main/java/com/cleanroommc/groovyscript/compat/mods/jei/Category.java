@@ -116,7 +116,7 @@ public class Category extends VirtualizedRegistry<String> {
         hideAllCategories = true;
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class CustomCategory {
         
         private final String id;

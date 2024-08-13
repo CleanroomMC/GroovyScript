@@ -84,7 +84,7 @@ public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorReci
         XpCollectorManagerAccessor.getCatalystFactorMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class XpCollectorRecipe {
 
         private final ItemStack catalyst;

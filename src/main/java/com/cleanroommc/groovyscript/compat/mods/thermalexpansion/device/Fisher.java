@@ -92,7 +92,7 @@ public class Fisher extends VirtualizedRegistry<Fisher.FisherRecipe> {
         FisherManagerAccessor.setTotalWeight(0);
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class FisherRecipe {
 
         private final ItemStack fish;

@@ -71,7 +71,7 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
         return managers.get(registry).removeEnchant(enchantment);
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class ZorraRecipeData {
 
         private final String registry;

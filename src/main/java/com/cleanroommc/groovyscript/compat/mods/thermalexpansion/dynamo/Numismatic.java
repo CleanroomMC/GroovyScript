@@ -78,7 +78,7 @@ public class Numismatic extends VirtualizedRegistry<Numismatic.NumismaticRecipe>
         NumismaticManagerAccessor.getFuelMap().clear();
     }
 
-    @SuppressWarnings({"unused", "ClassCanBeRecord"})
+    @SuppressWarnings("ClassCanBeRecord")
     public static class NumismaticRecipe {
 
         private final ComparableItemStack comparableItemStack;
