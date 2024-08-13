@@ -93,7 +93,7 @@ public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
             msg.add(super.name == null, "name cannot be null.");
-            msg.add(ModuleTechBasic.Registries.CAMPFIRE_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
+            msg.add(ModuleTechMachine.Registries.BRICK_OVEN_RECIPES.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
         @RecipeBuilderRegistrationMethod
