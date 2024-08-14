@@ -8,7 +8,6 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.TapperManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.github.bsideup.jabel.Desugar;
 import net.minecraft.block.state.IBlockState;
 import org.jetbrains.annotations.ApiStatus;
 
