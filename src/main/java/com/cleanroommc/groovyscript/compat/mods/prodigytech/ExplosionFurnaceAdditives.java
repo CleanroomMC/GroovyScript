@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -34,10 +35,10 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
     @MethodDescription(example = @Example("item('minecraft:cobblestone'), 50"), type = MethodDescription.Type.ADDITION)
     public void addExplosive(IIngredient explosive, int power) {
-        if (GroovyScriptConfig.compat.checkInputStackCounts && explosive.getAmount() > 1) {
+        if (IngredientHelper.overMaxSize(explosive, 1)) {
             // Ignores input stack size
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Explosion Furnace Explosive").error();
-            msg.add("Expected input stack size of 1, got {}", explosive.getAmount());
+            msg.add("Expected input stack size of 1");
             msg.post();
             return;
         }
@@ -67,10 +68,10 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
     @MethodDescription(example = @Example("item('minecraft:stone'), 50"), type = MethodDescription.Type.ADDITION)
     public void addDampener(IIngredient dampener, int power) {
-        if (GroovyScriptConfig.compat.checkInputStackCounts && dampener.getAmount() > 1) {
+        if (IngredientHelper.overMaxSize(dampener, 1)) {
             // Ignores input stack size
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Explosion Furnace Dampener").error();
-            msg.add("Expected input stack size of 1, got {}", dampener.getAmount());
+            msg.add("Expected input stack size of 1");
             msg.post();
             return;
         }

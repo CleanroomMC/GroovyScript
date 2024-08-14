@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.core.mixin.forestry.CarpenterRecipeManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import forestry.api.recipes.ICarpenterRecipe;
@@ -200,6 +201,8 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
             validateItems(msg, 0, 0, 1, 1);
             validatePattern(msg, pattern, keys);
             // ignores input stack size on both box and grid
+            msg.add(IngredientHelper.overMaxSize(keys.values(), 1), "Each grid input must have a stack size of 1");
+            msg.add(IngredientHelper.overMaxSize(box, 1), "Box must have a stack size of 1");
             if (GroovyScriptConfig.compat.checkInputStackCounts) {
                 int maxAmountProvided = keys.values().stream().filter(Objects::nonNull).mapToInt(IResourceStack::getAmount).max().orElse(0);
                 msg.add(maxAmountProvided > 1, "Each grid input must have a stack size of 1, got {}", maxAmountProvided);

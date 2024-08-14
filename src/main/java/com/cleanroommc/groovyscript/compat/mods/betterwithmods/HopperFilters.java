@@ -127,8 +127,8 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
             validateFluids(msg);
             msg.add(IngredientHelper.isEmpty(filter), "filter must be defined");
             // Ignores stack size
-            if (GroovyScriptConfig.compat.checkInputStackCounts && filter.getAmount() > 1) {
-                msg.add("Expected input stack size of 1, got {}", filter.getAmount());
+            if (IngredientHelper.overMaxSize(filter, 1)) {
+                msg.add("Filter must have stack size of 1, got {}", filter.getAmount());
             }
         }
 

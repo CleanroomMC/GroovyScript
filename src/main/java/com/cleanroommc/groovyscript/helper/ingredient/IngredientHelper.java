@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.Closure;
@@ -87,6 +88,18 @@ public class IngredientHelper {
 
     public static boolean isEmpty(@Nullable NBTTagCompound nbt) {
         return nbt == null || nbt.isEmpty();
+    }
+
+    public static boolean overMaxSize(@Nullable IIngredient ingredient, int maxSize) {
+        return GroovyScriptConfig.compat.checkInputStackCounts && ingredient != null && ingredient.getAmount() > maxSize;
+    }
+
+    public static boolean overMaxSize(Collection<IIngredient> ingredient, int maxSize) {
+        return ingredient.stream().anyMatch(a -> overMaxSize(a, maxSize));
+    }
+
+    public static boolean overMaxSize(@Nullable ItemStack ingredient, int maxSize) {
+        return GroovyScriptConfig.compat.checkInputStackCounts && ingredient != null && ingredient.getCount() > maxSize;
     }
 
     /**

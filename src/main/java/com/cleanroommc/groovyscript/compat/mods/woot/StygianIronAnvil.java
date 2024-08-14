@@ -145,7 +145,7 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
             validateFluids(msg);
             msg.add(IngredientHelper.isEmpty(base), "base must be defined");
             // More than 1 base cannot be placed
-            msg.add(base.getCount() > 1, "base must have a stack size of 1");
+            msg.add(IngredientHelper.overMaxSize(base, 1), "base must have a stack size of 1");
         }
 
         @Override

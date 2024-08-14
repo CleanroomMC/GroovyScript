@@ -144,10 +144,7 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
             int inputSize = input.getRealSize();
             output.trim();
             msg.add(inputSize < 1 || inputSize > 6, () -> "Must have 1 - 6 inputs, but found " + input.size());
-            if (GroovyScriptConfig.compat.checkInputStackCounts) {
-                int maxAmountProvided = input.stream().filter(Objects::nonNull).mapToInt(IResourceStack::getAmount).max().orElse(0);
-                msg.add(maxAmountProvided > 1, "Each input must have a stack size of 1, got {}", maxAmountProvided);
-            }
+            msg.add(IngredientHelper.overMaxSize(input, 1), "Each input must have a stack size of 1");
             msg.add(output.size() != 1, () -> "Must have exactly 1 output, but found " + output.size());
             validateFluids(msg);
             if (energy <= 0) energy = 5000;

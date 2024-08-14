@@ -170,7 +170,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             validateItems(msg, 0, 0, 1, 1);
             msg.add(IngredientHelper.isEmpty(catalyst), () -> "Catalyst must not be empty");
             // Ignores input stack size
-            msg.add(catalyst.getAmount() != 1, () -> "Catalyst amount must be 1");
+            msg.add(IngredientHelper.overMaxSize(catalyst, 1), () -> "Catalyst amount must be 1");
             msg.add(aspects.size() == 0, () -> "Aspects must not be empty");
             if (researchKey == null) researchKey = "";
         }

@@ -198,11 +198,8 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
-            if (catalyst == null) {
-                msg.add("Must have a catalyst ItemStack but didn't find any!");
-            } else if (GroovyScriptConfig.compat.checkInputStackCounts && catalyst.getAmount() > 1) {
-                msg.add("Catalyst must have quantity of exactly 1!");
-            }
+            msg.add(catalyst == null, "Must have a catalyst ItemStack but didn't find any!");
+            msg.add(IngredientHelper.overMaxSize(catalyst, 1), "Catalyst must have a stack size of 1!");
         }
 
         @Override

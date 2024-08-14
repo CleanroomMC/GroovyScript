@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.aetherlegacy;
 
-import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.gildedgames.the_aether.api.freezables.AetherFreezableFuel;
 import net.minecraft.item.ItemStack;
@@ -20,9 +20,9 @@ public class FreezerFuel extends ForgeRegistryWrapper<AetherFreezableFuel> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:packed_ice'), 1000"))
     public void add(ItemStack fuel, int timeGiven) {
-        if (GroovyScriptConfig.compat.checkInputStackCounts && fuel.getCount() > 1) {
+        if (IngredientHelper.overMaxSize(fuel, 1)) {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Freezer Fuel").error();
-            msg.add("Expected input stack size of 1, got {}", fuel.getCount());
+            msg.add("Fuel must have stack size of 1, got {}", fuel.getCount());
             msg.post();
             return;
         }

@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -35,9 +36,9 @@ public class Extractor extends VirtualizedRegistry<ExtractorEntry> {
 
     @MethodDescription(description = "groovyscript.wiki.industrialforegoing.extractor.add1", type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:stone'), fluid('water') * 100, 1"))
     public ExtractorEntry add(ItemStack input, FluidStack output, float breakChance) {
-        if (GroovyScriptConfig.compat.checkInputStackCounts && input.getCount() > 1) {
+        if (IngredientHelper.overMaxSize(input, 1)) {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Fluid Extractor recipe").error();
-            msg.add("Expected input stack size of 1, got {}", input.getCount());
+            msg.add("Stack size of input must be 1");
             msg.post();
             return null;
         }

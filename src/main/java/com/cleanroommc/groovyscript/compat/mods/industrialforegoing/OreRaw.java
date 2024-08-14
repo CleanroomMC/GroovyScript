@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -32,9 +33,9 @@ public class OreRaw extends VirtualizedRegistry<OreFluidEntryRaw> {
             @Example("ore('stone'), fluid('water') * 1000, fluid('lava') * 50")
     })
     public OreFluidEntryRaw add(OreDictIngredient ore, FluidStack input, FluidStack output) {
-        if (ore.getAmount() > 1) {
+        if (IngredientHelper.overMaxSize(ore, 1)) {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Ore Washer recipe").error();
-            msg.add("Expected input stack size of 1, got {}", ore.getAmount());
+            msg.add("Stack size of input ore must be 1");
             msg.post();
             return null;
         }

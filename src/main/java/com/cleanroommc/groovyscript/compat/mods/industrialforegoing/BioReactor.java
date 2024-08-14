@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.item.ItemStack;
@@ -33,9 +34,9 @@ public class BioReactor extends VirtualizedRegistry<IReactorEntry> {
 
     @MethodDescription(description = "groovyscript.wiki.industrialforegoing.bio_reactor.add1", type = MethodDescription.Type.ADDITION)
     public IReactorEntry add(ItemStack input, @Nullable Predicate<NBTTagCompound> nbtCheck) {
-        if (GroovyScriptConfig.compat.checkInputStackCounts && input.getCount() > 1) {
+        if (IngredientHelper.overMaxSize(input, 1)) {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Bioreactor recipe").error();
-            msg.add("Expected input stack size of 1, got {}", input.getCount());
+            msg.add("Input stack size must be 1");
             msg.post();
             return null;
         }

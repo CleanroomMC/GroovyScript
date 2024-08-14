@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -33,9 +34,9 @@ public class OreSieve extends VirtualizedRegistry<OreFluidEntrySieve> {
             @Example("fluid('lava') * 5, item('minecraft:gold_ingot'), item('minecraft:clay')")
     })
     public OreFluidEntrySieve add(FluidStack input, ItemStack output, ItemStack sieveItem) {
-        if (GroovyScriptConfig.compat.checkInputStackCounts && sieveItem.getCount() > 1) {
+        if (IngredientHelper.overMaxSize(sieveItem, 1)) {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Fluid Sieving recipe").error();
-            msg.add("Expected input stack size of 1, got {}", sieveItem.getCount());
+            msg.add("Sieve item stack size must be 1");
             msg.post();
             return null;
         }
