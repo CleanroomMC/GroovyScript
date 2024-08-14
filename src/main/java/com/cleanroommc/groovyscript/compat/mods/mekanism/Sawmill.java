@@ -26,12 +26,12 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.sawmill.add0")
+    @MethodDescription(description = "groovyscript.wiki.mekanism.sawmill.add0", type = MethodDescription.Type.ADDITION)
     public SawmillRecipe add(IIngredient ingredient, ItemStack output) {
         return add(ingredient, output, null, 0.0);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.sawmill.add1")
+    @MethodDescription(description = "groovyscript.wiki.mekanism.sawmill.add1", type = MethodDescription.Type.ADDITION)
     public SawmillRecipe add(IIngredient ingredient, ItemStack output, ItemStack secondary) {
         return add(ingredient, output, secondary, 1.0);
     }
