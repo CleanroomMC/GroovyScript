@@ -49,6 +49,12 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         }
 
         @Override
+        protected int getMaxInput() {
+            // PT modifies the recipe to only consume 1 item
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 2);
             validateFluids(msg);

@@ -131,6 +131,12 @@ public class Pyre extends VirtualizedRegistry<PyreCraftingRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // More than 1 item cannot be placed in each slot
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateName();
             validateItems(msg, 5, 5, 1, 1);

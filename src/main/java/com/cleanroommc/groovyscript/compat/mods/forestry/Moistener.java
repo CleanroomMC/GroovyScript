@@ -95,6 +95,12 @@ public class Moistener extends ForestryRegistry<IMoistenerRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateFluids(msg, 0, 0, 0, 0);
             validateItems(msg, 1, 1, 1, 1);

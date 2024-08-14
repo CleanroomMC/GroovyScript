@@ -180,9 +180,17 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
 
         @Override
+        protected int getMaxInput() {
+            // More than 1 item cannot be placed in each pedestal
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 100, 1, 1);
             msg.add(IngredientHelper.isEmpty(mainInput), () -> "Main Input must not be empty");
+            // More than 1 item cannot be placed
+            msg.add(mainInput.getAmount() != 1, () -> "Main input amount must be 1");
             if (researchKey == null) {
                 researchKey = "";
             }

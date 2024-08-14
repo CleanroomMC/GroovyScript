@@ -132,12 +132,20 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             // Note: JEI can only display 6 inputs, but there doesnt appear to be a limit for the actual recipe
             // validateItems(msg, 1, 6, 1, 1);
             validateItems(msg, 1, Integer.MAX_VALUE, 1, 1);
             validateFluids(msg);
             msg.add(IngredientHelper.isEmpty(base), "base must be defined");
+            // More than 1 base cannot be placed
+            msg.add(base.getCount() > 1, "base must have a stack size of 1");
         }
 
         @Override

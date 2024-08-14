@@ -144,6 +144,12 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // Ignores input stack size
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, advanced ? 3 : 2, 1, 1);
             msg.add(msg.hasSubMessages(), "advanced requires a maximum of 3 inputs, while basic requires a maximum of 2 inputs");

@@ -79,6 +79,12 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // More than 1 item cannot be placed
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(quantities.isEmpty(), "cops and quantities must be a non negative integer, yet it was {}", quantities.size());

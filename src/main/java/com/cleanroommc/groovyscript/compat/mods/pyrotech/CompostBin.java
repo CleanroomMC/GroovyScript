@@ -85,6 +85,12 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // The composting bin won't accept any item that has a stack size of more than 1
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(compostValue < 0, "compostValue must be a non negative integer, yet it was {}", compostValue);

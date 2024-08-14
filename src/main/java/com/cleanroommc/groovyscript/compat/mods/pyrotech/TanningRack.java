@@ -93,6 +93,12 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // More than 1 item cannot be placed
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(dryTime < 0, "dryTime must be a non negative integer, yet it was {}", dryTime);

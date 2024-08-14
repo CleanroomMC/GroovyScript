@@ -126,6 +126,12 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         }
 
         @Override
+        protected int getMaxInput() {
+            // More than 1 item cannot be placed
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(time < 1, "Recipe time must be at least 1, got " + time);
