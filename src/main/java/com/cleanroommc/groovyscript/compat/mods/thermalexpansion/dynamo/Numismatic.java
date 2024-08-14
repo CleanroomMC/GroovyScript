@@ -78,7 +78,7 @@ public class Numismatic extends VirtualizedRegistry<Numismatic.NumismaticRecipe>
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class NumismaticRecipe {
+    public static final class NumismaticRecipe {
 
         private final ComparableItemStack comparableItemStack;
         private final int energy;

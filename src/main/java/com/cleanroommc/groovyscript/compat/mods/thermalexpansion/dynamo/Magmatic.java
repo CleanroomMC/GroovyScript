@@ -81,7 +81,7 @@ public class Magmatic extends VirtualizedRegistry<Magmatic.MagmaticRecipe> {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class MagmaticRecipe {
+    public static final class MagmaticRecipe {
 
         private final String fluid;
         private final int energy;

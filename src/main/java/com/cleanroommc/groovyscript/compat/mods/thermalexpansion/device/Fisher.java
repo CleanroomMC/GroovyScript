@@ -92,7 +92,7 @@ public class Fisher extends VirtualizedRegistry<Fisher.FisherRecipe> {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class FisherRecipe {
+    public static final class FisherRecipe {
 
         private final ItemStack fish;
         private final int weight;

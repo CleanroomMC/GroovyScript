@@ -156,7 +156,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class TapperItemRecipe {
+    public static final class TapperItemRecipe {
 
         private final ItemWrapper itemWrapper;
         private final FluidStack fluidStack;
@@ -197,7 +197,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class TapperBlockRecipe {
+    public static final class TapperBlockRecipe {
 
         private final BlockWrapper blockWrapper;
         private final FluidStack fluidStack;

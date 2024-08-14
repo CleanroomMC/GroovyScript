@@ -89,7 +89,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class EFAdditiveExplosive implements EFAdditiveRecipe {
+    public static final class EFAdditiveExplosive implements EFAdditiveRecipe {
 
         private final IIngredient input;
         private final int value;
@@ -152,7 +152,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class EFAdditiveDampener implements EFAdditiveRecipe {
+    public static final class EFAdditiveDampener implements EFAdditiveRecipe {
 
         private final IIngredient input;
         private final int value;

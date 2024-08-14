@@ -78,7 +78,7 @@ public class Enervation extends VirtualizedRegistry<Enervation.EnervationRecipe>
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class EnervationRecipe {
+    public static final class EnervationRecipe {
 
         private final ComparableItemStack comparableItemStack;
         private final int energy;

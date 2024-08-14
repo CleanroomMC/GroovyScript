@@ -81,7 +81,7 @@ public class Compression extends VirtualizedRegistry<Compression.CompressionReci
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class CompressionRecipe {
+    public static final class CompressionRecipe {
 
         private final String fluid;
         private final int energy;

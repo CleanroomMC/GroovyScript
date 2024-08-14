@@ -69,7 +69,7 @@ public class TapperFertilizer extends VirtualizedRegistry<TapperFertilizer.Tappe
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class TapperRecipe {
+    public static final class TapperRecipe {
 
         private final ComparableItemStack bait;
         private final int multiplier;

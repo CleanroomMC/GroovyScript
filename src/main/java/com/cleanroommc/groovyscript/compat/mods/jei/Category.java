@@ -116,7 +116,7 @@ public class Category extends VirtualizedRegistry<String> {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class CustomCategory {
+    public static final class CustomCategory {
         
         private final String id;
         private final Function<IGuiHelper, ? extends IRecipeCategory<? extends IRecipeWrapper>> category;

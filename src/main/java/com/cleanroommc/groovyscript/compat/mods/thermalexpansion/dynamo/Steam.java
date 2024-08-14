@@ -78,7 +78,7 @@ public class Steam extends VirtualizedRegistry<Steam.SteamRecipe> {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class SteamRecipe {
+    public static final class SteamRecipe {
 
         private final ComparableItemStack comparableItemStack;
         private final int energy;

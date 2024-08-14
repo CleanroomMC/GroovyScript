@@ -88,7 +88,7 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class DiffuserRecipe {
+    public static final class DiffuserRecipe {
 
         private final ComparableItemStack stack;
         private final int amplifier;

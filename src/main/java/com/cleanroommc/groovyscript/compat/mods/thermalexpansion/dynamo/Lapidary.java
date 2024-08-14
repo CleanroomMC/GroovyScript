@@ -78,7 +78,7 @@ public class Lapidary extends VirtualizedRegistry<Lapidary.LapidaryRecipe> {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class LapidaryRecipe {
+    public static final class LapidaryRecipe {
 
         private final ComparableItemStack comparableItemStack;
         private final int energy;

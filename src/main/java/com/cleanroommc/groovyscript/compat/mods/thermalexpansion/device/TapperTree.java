@@ -94,7 +94,7 @@ public class TapperTree extends VirtualizedRegistry<TapperTree.TapperTreeEntry> 
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class TapperTreeEntry {
+    public static final class TapperTreeEntry {
 
         private final BlockWrapper log;
         private final BlockWrapper leaf;

@@ -84,7 +84,7 @@ public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorReci
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class XpCollectorRecipe {
+    public static final class XpCollectorRecipe {
 
         private final ItemStack catalyst;
         private final int xp;

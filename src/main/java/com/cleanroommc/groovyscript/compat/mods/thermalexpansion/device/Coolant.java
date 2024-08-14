@@ -87,7 +87,7 @@ public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class CoolantRecipe {
+    public static final class CoolantRecipe {
 
         private final String fluid;
         private final int rf;

@@ -72,7 +72,7 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    public static class ZorraRecipeData {
+    public static final class ZorraRecipeData {
 
         private final String registry;
         private final Enchantment enchantment;
