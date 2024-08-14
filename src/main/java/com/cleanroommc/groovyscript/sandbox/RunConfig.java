@@ -320,7 +320,7 @@ public class RunConfig {
                 continue;
             }
             int pathSize = path.split(separator).length;
-            try (Stream<Path> stream = Files.walk(rootFile.toPath(), FileVisitOption.FOLLOW_LINKS)) {
+            try (Stream<Path> stream = Files.walk(rootFile.toPath(), isDebug() ? new FileVisitOption[] { FileVisitOption.FOLLOW_LINKS } : new FileVisitOption[0])) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile)
                         //.filter(Preprocessor::validatePreprocessors)
