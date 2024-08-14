@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: aether_legacy
 
-println 'mod \'aether_legacy\' detected, running script'
+log.info 'mod \'aether_legacy\' detected, running script'
 
 // Accessory:
 // The Aether Accessory system.
@@ -32,7 +32,7 @@ mods.aether_legacy.enchanter.recipeBuilder()
 
 
 // Enchanter Fuel:
-// By default, the Enchantar (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
+// By default, the Enchanter (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
 
 mods.aether_legacy.enchanter_fuel.removeByItem(item('aether_legacy:ambrosium_shard'))
 // mods.aether_legacy.enchanter_fuel.removeAll()
@@ -53,7 +53,7 @@ mods.aether_legacy.freezer.recipeBuilder()
 
 
 
-// Freezer:
+// Freezer Fuel:
 // By default, the Freezer takes Icestone as fuel. Using GroovyScript, custom fuels can be added.
 
 mods.aether_legacy.freezer_fuel.removeByItem(item('aether_legacy:icestone'))

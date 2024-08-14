@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import com.cleanroommc.groovyscript.documentation.format.OutputFormat;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
+import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -39,6 +40,7 @@ public class Documentation {
     private static final boolean LOG_MISSING_KEYS = true;
 
     private static final Set<String> missingLangKeys = new ObjectLinkedOpenHashSet<>();
+    private static final Set<Character> PUNCTUATION_CHARACTERS = ImmutableSet.of('.', '!', '?');
 
     public static void generate() {
         if (isGenerateExamples()) generateExamples();
@@ -113,6 +115,11 @@ public class Documentation {
             missingLangKeys.add(translateKey);
         }
         return I18n.format(translateKey, parameters);
+    }
+
+    public static String ensurePeriod(String string) {
+        if (string.isEmpty()) return "";
+        return PUNCTUATION_CHARACTERS.contains(string.charAt(string.length() - 1)) ? string : string + ".";
     }
 
 }

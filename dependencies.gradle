@@ -37,18 +37,23 @@ final def mod_dependencies = [
         'arcane-archives-311357:3057332'                      : [project.debug_arcane_archives],
         'mystical_lib-277064:3483816'                         : [project.debug_arcane_archives, project.debug_roots],
         'astralsorcery-sorcery-241721:3044416'                : [project.debug_astral],
-        'baubles-227083:2518667'                              : [project.debug_astral, project.debug_botania, project.debug_thaum, project.debug_essentialcraft_4],
+        'baubles-227083:2518667'                              : [project.debug_astral, project.debug_botania, project.debug_botanic_additions, project.debug_essentialcraft_4, project.debug_extra_botany, project.debug_thaum],
+        'the-aurorian-352137:4981736'                         : [project.debug_aurorian],
         'avaritia_1_10-261348:3143349'                        : [project.debug_avaritia],
+        'atum-2-59621:3116599'                                : [project.debug_atum],
         'bwm-core-294335:2624990'                             : [project.debug_better_with_mods],
         'bwm-suite-246760:3289033'                            : [project.debug_better_with_mods],
         'blood-magic-224791:2822288'                          : [project.debug_blood_magic],
         'guide-api-228832:2645992'                            : [project.debug_blood_magic, project.debug_woot],
-        'botania-225643:3330934'                              : [project.debug_botania],
+        'botania-225643:3330934'                              : [project.debug_botania, project.debug_botanic_additions, project.debug_extra_botany],
+        'botanic-additions-310637:2939405'                    : [project.debug_botanic_additions],
+        'hammer-lib-247401:5259462'                           : [project.debug_botanic_additions],
         'calculator-225104:2847174'                           : [project.debug_calculator],
         'sonar-core-239418:2645156'                           : [project.debug_calculator],
         'chisel-235279:2915375'                               : [project.debug_chisel],
         'ctm-267602:2915363'                                  : [project.debug_chisel],
         'compact-machines-224218:2707509'                     : [project.debug_compact_machines],
+        'cyclic-239286:4075832'                               : [project.debug_cyclic],
         'brandons_core-231382:3408276'                        : [project.debug_draconic_evolution],
         'draconic_evolution-223565:3431261'                   : [project.debug_draconic_evolution],
         'redstone_flux-270789:2920436'                        : [project.debug_draconic_evolution, project.debug_thermal],
@@ -56,8 +61,9 @@ final def mod_dependencies = [
         'dummycore-unofficial-266491:2611426'                 : [project.debug_essentialcraft_4],
         'cyclops-core-232758:3159497'                         : [project.debug_evilcraft, project.debug_integrated_dynamics],
         'evilcraft-74610:2811267'                             : [project.debug_evilcraft],
-        'cucumber-272335:2645867'                             : [project.debug_extended_crafting],
+        'cucumber-272335:2645867'                             : [project.debug_extended_crafting, project.debug_mystical_agriculture],
         'extended-crafting-nomifactory-edition-398267:3613140': [project.debug_extended_crafting],
+        'extrabotany-299086:3112313'                          : [project.debug_extra_botany],
         'extra-utilities-2-225561:2678374'                    : [project.debug_extra_utilities_2],
         'forestry-59751:2918418'                              : [project.debug_forestry],
         'immersive_engineering-231951:2974106'                : [project.debug_immersive_engineering, project.debug_immersive_petroleum],
@@ -74,8 +80,10 @@ final def mod_dependencies = [
         'lazy-ae2-322347:3254160'                             : [project.debug_lazy_ae2],
         'libnine-322344:3509087'                              : [project.debug_lazy_ae2],
         'mekanism-268560:2835175'                             : [project.debug_mekanism],
+        'mystical_agriculture-246640:2704562'                 : [project.debug_mystical_agriculture],
         'natures-aura-306626:2882138'                         : [project.debug_natures_aura],
         'packmode-278398:2567799'                             : [project.debug_packmode],
+        'primal-tech-290612:2801696'                          : [project.debug_primal_tech],
         'pneumaticcraft-repressurized-281849:2978408'         : [project.debug_pneumaticcraft],
         'projecte-226410:2702991'                             : [project.debug_projecte],
         'athenaeum-284350:4633750'                            : [project.debug_pyrotech],
@@ -100,13 +108,13 @@ dependencies {
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 
     // TODO: check if there is anything to exclude
-    embed "io.github.classgraph:classgraph:4.8.165"
+    specialEmbed "io.github.classgraph:classgraph:4.8.165"
 
-    lsp4j("org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1") {
+    specialEmbed("org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1") {
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    lsp4j("org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.20.1") {
+    specialEmbed("org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.20.1") {
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.google.code.gson', module: 'gson'
     }
@@ -145,27 +153,6 @@ dependencies {
         runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
     }
 
-}
+    runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
 
-minecraft {
-    injectedTags.put 'GROOVY_VERSION', groovy_version
-
-    if (project.debug_use_examples_folder.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.use_examples_folder=true')
-    }
-    if (project.debug_run_ls.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.run_ls=true')
-    }
-    if (project.debug_generate_examples.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.generate_examples=true')
-    }
-    if (project.debug_generate_wiki.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.generate_wiki=true')
-    }
-    if (project.debug_generate_and_crash.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.generate_and_crash=true')
-    }
-    if (project.debug_log_missing_lang_keys.toBoolean()) {
-        extraRunJvmArguments.add('-Dgroovyscript.log_missing_lang_keys=true')
-    }
 }

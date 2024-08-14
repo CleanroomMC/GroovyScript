@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: essentialcraft
 
-println 'mod \'essentialcraft\' detected, running script'
+log.info 'mod \'essentialcraft\' detected, running script'
 
 // Demon Trade:
 // Adds an item that can be sold to Demons to obtain Ackronite. Note that each demon that spawns has a random item that it

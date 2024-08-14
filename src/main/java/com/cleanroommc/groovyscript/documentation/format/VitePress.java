@@ -12,7 +12,7 @@ public class VitePress implements IFormat {
 
     @Override
     public String linkToBuilder() {
-        return "../../groovy/builder.md";
+        return "../../getting_started/builder.md";
     }
 
     @Override

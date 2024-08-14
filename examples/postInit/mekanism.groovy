@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: mekanism
 
-println 'mod \'mekanism\' detected, running script'
+log.info 'mod \'mekanism\' detected, running script'
 
 // Infusion:
 // Add new infusion types and itemstacks to those types.
@@ -148,7 +148,7 @@ mods.mekanism.injection_chamber.recipeBuilder()
 // mods.mekanism.injection_chamber.add(item('minecraft:diamond'), gas('water'), item('minecraft:nether_star'))
 
 // Metallurgic Infuser:
-// Converts and input itemstack and a varible amount of an infusion type into an output itemstack.
+// Converts and input itemstack and a variable amount of an infusion type into an output itemstack.
 
 mods.mekanism.metallurgic_infuser.removeByInput(ore('dustObsidian'), 'DIAMOND')
 // mods.mekanism.metallurgic_infuser.removeAll()

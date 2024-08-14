@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
+import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.crystal.CrystalItemStackExpansion;
@@ -9,6 +10,7 @@ import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.GroovyPer
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.perktree.PerkTreeConfig;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.starlightaltar.StarlightAltar;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.ConstellationRegistryAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -34,6 +36,10 @@ public class AstralSorcery extends GroovyPropertyContainer {
     public final OreChance treasureShrineOreChance = OreChance.treasureShrineRegistry();
     public final PerkTreeConfig perkTreeConfig = new PerkTreeConfig();
 
+    public static String asGroovyCode(IConstellation constellation, boolean colored) {
+        return GroovyScriptCodeConverter.formatGenericHandler("constellation", constellation.getSimpleName(), colored);
+    }
+
     @Override
     public void initialize(GroovyContainer<?> container) {
         container.objectMapperBuilder("constellation", IConstellation.class)
@@ -49,6 +55,8 @@ public class AstralSorcery extends GroovyPropertyContainer {
                 .docOfType("constellation")
                 .register();
         ExpansionHelper.mixinClass(ItemStack.class, CrystalItemStackExpansion.class);
+
+        InfoParserRegistry.addInfoParser(InfoParserConstellation.instance);
     }
 
     public static ItemHandle toItemHandle(IIngredient ingredient) {

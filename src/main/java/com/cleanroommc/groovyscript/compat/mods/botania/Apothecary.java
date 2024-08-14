@@ -39,10 +39,10 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipePetals add(ItemStack output, IIngredient... inputs) {
-        RecipePetals recipe = new RecipePetals(output, Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
-                                                                                                                     : i.getMatchingStacks()[0]).toArray());
-        add(recipe);
-        return recipe;
+        return recipeBuilder()
+                .output(output)
+                .input(inputs)
+                .register();
     }
 
     public void add(RecipePetals recipe) {

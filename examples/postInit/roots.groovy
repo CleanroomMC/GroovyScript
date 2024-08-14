@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: roots
 
-println 'mod \'roots\' detected, running script'
+log.info 'mod \'roots\' detected, running script'
 
 // Animal Harvest:
 // Animal Harvest is a ritual that drops items from nearby mob's based on that mobs loottable without harming the mob. Only
@@ -107,8 +107,9 @@ mods.roots.fey_crafter.recipeBuilder()
 
 
 // Flower Generation:
-// When running the Flower Growth Ritual, allowed flowers will generate in the area. Additionally, using the spell Growth
-// Infusion's Floral Reproduction modifier will duplicate the flower.
+// When running the Flower Growth Ritual, allowed flowers will generate in the area if they can be placed on the given soil
+// block. Additionally, using the spell Growth Infusion's Floral Reproduction modifier will duplicate the flower,
+// regardless of the soil block.
 
 mods.roots.flower_generation.removeByFlower(block('minecraft:red_flower'))
 mods.roots.flower_generation.removeByFlower(block('minecraft:red_flower'), 1)
@@ -236,7 +237,7 @@ mods.roots.predicates.stateBuilder()
 
 
 // Pyre:
-// Converts 5 input items into the ouput after a period of time when the Pyre is lit on fire.
+// Converts 5 input items into the output after a period of time when the Pyre is lit on fire.
 
 mods.roots.pyre.removeByName(resource('roots:infernal_bulb'))
 mods.roots.pyre.removeByOutput(item('minecraft:gravel'))

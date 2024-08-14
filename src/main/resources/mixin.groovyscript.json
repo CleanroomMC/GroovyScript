@@ -17,8 +17,10 @@
     "ItemStackMixin",
     "LoaderControllerMixin",
     "OreDictionaryAccessor",
+    "OreIngredientMixin",
     "SlotCraftingAccess",
     "TileEntityPistonMixin",
+    "VillagerProfessionAccessor",
     "groovy.AsmDecompilerMixin",
     "groovy.ClassCollectorMixin",
     "groovy.ClosureMixin",
@@ -27,6 +29,7 @@
     "groovy.Java8Mixin",
     "groovy.MetaClassImplMixin",
     "groovy.ModuleNodeAccessor",
+    "groovy.ModuleNodeMixin",
     "loot.LoadTableEventMixin",
     "loot.LootPoolAccessor",
     "loot.LootTableAccessor",
@@ -34,6 +37,6 @@
   ],
   "client": [
     "DefaultResourcePackAccessor",
-    "GuiCreateWorldMixin",
+    "GuiCreateWorldMixin"
   ]
 }

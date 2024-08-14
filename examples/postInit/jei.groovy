@@ -4,10 +4,10 @@
 
 import mezz.jei.api.ingredients.VanillaTypes
 
-println 'mod \'jei\' detected, running script'
+log.info 'mod \'jei\' detected, running script'
 
 // Category Catalysts:
-// Modify the items shown on the left of JEI Categories which indicate where the recipe takes place
+// Modify the items shown on the left of JEI Categories which indicate where the recipe takes place.
 
 mods.jei.catalyst.remove('minecraft.smelting', item('minecraft:furnace'))
 // mods.jei.catalyst.removeByType('minecraft.anvil')
@@ -20,6 +20,14 @@ mods.jei.catalyst.add('minecraft.smelting', item('minecraft:clay') * 8, item('mi
 
 mods.jei.category.hideCategory('minecraft.fuel')
 // mods.jei.category.hideAll()
+
+/*mods.jei.category.categoryBuilder()
+    .id(classes.GenericRecipeCategory.UID) // Note that `classes.GenericRecipeCategory` must be defined elsewhere, and this example presumes certain fields and methods exist.
+    .category(guiHelper -> new classes.GenericRecipeCategory(guiHelper))
+    .catalyst(item('minecraft:clay'))
+    .wrapper(classes.GenericRecipeCategory.getRecipeWrappers())
+    .register()*/
+
 
 // Description Category:
 // Modify the description of the input items, where the description is a unique JEI tab containing text.

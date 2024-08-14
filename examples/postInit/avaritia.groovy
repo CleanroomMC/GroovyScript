@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: avaritia
 
-println 'mod \'avaritia\' detected, running script'
+log.info 'mod \'avaritia\' detected, running script'
 
 // Compressor:
 // Converts any number of a single item into an output itemstack.

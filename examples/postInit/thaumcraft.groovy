@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: thaumcraft
 
-println 'mod \'thaumcraft\' detected, running script'
+log.info 'mod \'thaumcraft\' detected, running script'
 
 // Arcane Workbench:
 // A special crafting table, allowing additional requirements in the form of Vis Crystals, Vis, and having a specific
@@ -195,7 +195,7 @@ mods.thaumcraft.smelting_bonus.recipeBuilder()
 
 
 // Warp:
-// Determines if holding an item or equipping a piece of armor or a bauble gives warp, and how much warp it gives
+// Determines if holding an item or equipping a piece of armor or a bauble gives warp, and how much warp it gives.
 
 mods.thaumcraft.warp.removeWarp(item('thaumcraft:void_hoe'))
 // mods.thaumcraft.warp.removeAll()

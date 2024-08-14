@@ -33,10 +33,7 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public RecipeManaInfusion add(ItemStack output, IIngredient input, int mana) {
-        RecipeManaInfusion recipe = new RecipeManaInfusion(output, input instanceof OreDictIngredient ? ((OreDictIngredient) input).getOreDict()
-                                                                                                      : input.getMatchingStacks()[0], mana);
-        add(recipe);
-        return recipe;
+        return recipeBuilder().mana(mana).output(output).input(input).register();
     }
 
     public void add(RecipeManaInfusion recipe) {

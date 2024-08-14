@@ -30,14 +30,12 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
 
     @MethodDescription(description = "groovyscript.wiki.botania.pure_daisy.add0", type = MethodDescription.Type.ADDITION)
     public RecipePureDaisy add(IBlockState output, IBlockState input, int time) {
-        RecipePureDaisy recipe = new RecipePureDaisy(input, output, time);
-        add(recipe);
-        return recipe;
+        return recipeBuilder().time(time).output(output).input(input).register();
     }
 
     @MethodDescription(description = "groovyscript.wiki.botania.pure_daisy.add1", type = MethodDescription.Type.ADDITION)
     public RecipePureDaisy add(IBlockState output, IBlockState input) {
-        return add(output, input, RecipePureDaisy.DEFAULT_TIME);
+        return recipeBuilder().output(output).input(input).register();
     }
 
     public void add(RecipePureDaisy recipe) {

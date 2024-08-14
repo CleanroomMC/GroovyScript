@@ -32,7 +32,7 @@ public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public EvaporatorRecipe add(FluidStack input, ItemStack output) {
-        return new RecipeBuilder().fluidInput(input).output(output).register();
+        return recipeBuilder().fluidInput(input).output(output).register();
     }
 
     public EvaporatorRecipe add(EvaporatorRecipe recipe) {

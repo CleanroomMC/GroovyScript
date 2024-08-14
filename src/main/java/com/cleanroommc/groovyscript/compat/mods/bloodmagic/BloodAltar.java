@@ -14,7 +14,6 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription(
@@ -44,10 +43,14 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public RecipeBloodAltar add(Ingredient input, ItemStack output, int minimumTier, int syphon, int consumeRate, int drainRate) {
-        RecipeBloodAltar recipe = new RecipeBloodAltar(input, output, minimumTier, syphon, consumeRate, drainRate);
-        add(recipe);
-        return recipe;
+    public RecipeBloodAltar add(IIngredient input, ItemStack output, int minimumTier, int syphon, int consumeRate, int drainRate) {
+        return recipeBuilder()
+                .minimumTier(minimumTier)
+                .consumeRate(consumeRate)
+                .drainRate(drainRate)
+                .input(input)
+                .output(output)
+                .register();
     }
 
     public void add(RecipeBloodAltar recipe) {

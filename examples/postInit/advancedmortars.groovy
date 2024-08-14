@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: advancedmortars
 
-println 'mod \'advancedmortars\' detected, running script'
+log.info 'mod \'advancedmortars\' detected, running script'
 
 // Mortar:
 // Uses any number of specific types of Mortars to convert multiple items into a single output with a possible chance

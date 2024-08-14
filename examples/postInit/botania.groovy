@@ -5,7 +5,7 @@
 import net.minecraft.potion.PotionEffect
 import net.minecraft.util.text.TextFormatting
 
-println 'mod \'botania\' detected, running script'
+log.info 'mod \'botania\' detected, running script'
 
 // Petal Apothecary:
 // Converts item inputs into an item output consuming water and a seed.
@@ -68,7 +68,7 @@ mods.botania.elven_trade.recipeBuilder()
 
 
 // Magnet:
-// Add or remove items from the magnet blacklist
+// Add or remove items from the magnet blacklist.
 
 
 mods.botania.magnet.addToBlacklist(item('minecraft:diamond'))
@@ -129,8 +129,8 @@ mods.botania.pure_daisy.recipeBuilder()
 
 
 // Rune Altar:
-// Converts a items inputs into an item ouput at the cost of mana when a Livingrock item is thrown atop the altar and right
-// clicked with a Wand of the Forest.
+// Converts a items inputs into an item output at the cost of mana when a Livingrock item is thrown atop the altar and
+// right clicked with a Wand of the Forest.
 
 mods.botania.rune_altar.removeByInput(ore('runeEarthB'))
 mods.botania.rune_altar.removeByInputs(ore('feather'), ore('string'))

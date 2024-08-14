@@ -23,7 +23,7 @@ public class Exporter {
 
     private static final String INDEX_FILE_NAME = "index.md";
     private static final String NAV_FILE_NAME = "!navigation.md";
-    private static final String PRINT_MOD_DETECTED = "println 'mod \\'%s\\' detected, running script'";
+    private static final String PRINT_MOD_DETECTED = "log.info 'mod \\'%s\\' detected, running script'";
     private static final Pattern CLASS_NAME_PATTERN = Pattern.compile("(?>\\b)(?>[a-zA-Z0-9]+\\.)+([a-zA-Z0-9$]+)");
 
     public static String simpleSignature(Method method) {

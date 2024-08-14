@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: tconstruct
 
-println 'mod \'tconstruct\' detected, running script'
+log.info 'mod \'tconstruct\' detected, running script'
 
 // Alloying:
 // Modifies what fluids can be mixed together in the Smeltery.

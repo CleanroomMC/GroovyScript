@@ -24,6 +24,38 @@ groovyscript.packmode.normal.description=A normal pack mode. Nothing special.
 groovyscript.packmode.hard.name=Hard
 groovyscript.packmode.hard.description=Hard mode. Everything requires at least 50 diamonds and nether stars.
 
+# Info Parser Descriptions
+groovyscript.infoparser.biome=Biome the block being targeted is in
+groovyscript.infoparser.block=Block being targeted or representing the held item
+groovyscript.infoparser.blockstate=BlockState being looked at or representing the held item
+groovyscript.infoparser.creativetab=Creative Tab the targeted ItemStack is contained by, if any
+groovyscript.infoparser.dimension=Dimension type the player is in
+groovyscript.infoparser.enchantment=Enchantments on the held ItemStack
+groovyscript.infoparser.entity=Entity being looked at
+groovyscript.infoparser.fluid=Fluid being looked at in world or being contained in the item being held
+groovyscript.infoparser.item=ItemStack in the player's main hand, offhand, or representing the block being looked at
+groovyscript.infoparser.nbt=NBT data of target, trimmed if it gets too long
+groovyscript.infoparser.oredict=Ore Dicts the held ItemStack is part of
+groovyscript.infoparser.potioneffect=Potion effects for the held item, active potion effects for the entity being looked at, or active potion effects on the player
+groovyscript.infoparser.translation=Translation key for the target
+groovyscript.infoparser.villagercareer=The Villager Career of the villager being targeted
+groovyscript.infoparser.villagerprofession=The Villager Profession of the villager being targeted
+
+# Modded Info Parser Descriptions
+groovyscript.infoparser.aspect=Thaumcraft Aspects contained by the held item, targeted entity, or current player
+groovyscript.infoparser.brew=Botania Brews attached to the held item
+groovyscript.infoparser.compound=Alchemistry Compound of the held item
+groovyscript.infoparser.constellation=Astral Sorcery Constellations for the held item or enabled in the current dimension
+groovyscript.infoparser.element=Alchemistry Element of the held item
+groovyscript.infoparser.gas=Mekanism Gases contained within the targeted ItemStack
+groovyscript.infoparser.herb=Roots Herb of the held item
+groovyscript.infoparser.infusion=Mekanism Infusion Types the targeted stack provides
+groovyscript.infoparser.jeitab=Just Enough Items Categories the target ItemStack is a catalyst for
+groovyscript.infoparser.modifier=Roots Spell Modifiers attached to the held item
+groovyscript.infoparser.spell=Roots Spells attached to the held item
+groovyscript.infoparser.tunnel=Applied Energistics 2 Tunnel Attunement types for the held item
+groovyscript.infoparser.weather=EvilCraft Weather state
+
 
 # Wiki
 groovyscript.wiki.categories=Categories
@@ -156,16 +188,16 @@ groovyscript.wiki.aether_legacy.accessory.accessoryType.value=Sets the type of a
 groovyscript.wiki.aether_legacy.enchanter.title=Enchanter
 groovyscript.wiki.aether_legacy.enchanter.description=Enchanting is a mechanic used to create new items, as well as repair tools, armor, and weapons, using the Altar block.
 groovyscript.wiki.aether_legacy.enchanter.add=Adds an Enchanting recipe in the format `input`, `output`, `time`.
-groovyscript.wiki.aether_legacy.enchanter.time.value=Sets the time the recipe takes to compelte
+groovyscript.wiki.aether_legacy.enchanter.time.value=Sets the time the recipe takes to complete
 
 groovyscript.wiki.aether_legacy.enchanter_fuel.title=Enchanter Fuel
-groovyscript.wiki.aether_legacy.enchanter_fuel.description=By default, the Enchantar (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
+groovyscript.wiki.aether_legacy.enchanter_fuel.description=By default, the Enchanter (Altar) takes Ambrosium Shards as fuel. Using GroovyScript, custom fuels can be added.
 groovyscript.wiki.aether_legacy.enchanter_fuel.add=Adds an Enchanting fuel in the format `item`, `timeGiven`.
 
 groovyscript.wiki.aether_legacy.freezer.title=Freezer
 groovyscript.wiki.aether_legacy.freezer.description=The Freezer is used to turn certain items into frozen versions.
 groovyscript.wiki.aether_legacy.freezer.add=Adds a Freezer recipe in the format `input`, `output`, `time`.
-groovyscript.wiki.aether_legacy.freezer.time.value=Sets the time the recipe takes to compelte
+groovyscript.wiki.aether_legacy.freezer.time.value=Sets the time the recipe takes to complete
 
 groovyscript.wiki.aether_legacy.freezer_fuel.title=Freezer Fuel
 groovyscript.wiki.aether_legacy.freezer_fuel.description= By default, the Freezer takes Icestone as fuel. Using GroovyScript, custom fuels can be added.
@@ -390,6 +422,21 @@ groovyscript.wiki.avaritia.extreme_crafting.title=Extreme Crafting
 groovyscript.wiki.avaritia.extreme_crafting.description=A normal crafting table, by 9x9 instead.
 groovyscript.wiki.avaritia.extreme_crafting.addShaped=Adds a shaped crafting recipe in the format `output`, `input`
 groovyscript.wiki.avaritia.extreme_crafting.addShapeless=Adds a shapeless crafting recipe in the format `output`, `input`
+
+
+# Atum 2
+groovyscript.wiki.atum.kiln.title=Kiln
+groovyscript.wiki.atum.kiln.description=Smelts an input item into an output itemstack and giving experience similar to a Furnace, but can process up to 4 stacks simultaneously. Makes a copy of the vanilla furnace recipes, excluding entries on a blacklist.
+groovyscript.wiki.atum.kiln.experience.value=Sets the experience gained by taking the output item out of the Kiln
+
+groovyscript.wiki.atum.quern.title=Quern
+groovyscript.wiki.atum.quern.description=Converts an input item into an output itemstack after a given number of rotations, which are done via a player right clicking the Quern.
+groovyscript.wiki.atum.quern.rotations.value=Sets the amount of rotation required to convert the input into the output
+
+groovyscript.wiki.atum.spinning_wheel.title=Spinning Wheel
+groovyscript.wiki.atum.spinning_wheel.description=Converts three input items into an output itemstack after a given number of rotations for each input item, items are inserted by interacting with the top, rotations are increased by interacting with the top, and output items are extracted by interacting with the spool side.
+groovyscript.wiki.atum.spinning_wheel.rotations.value=Sets the amount of rotation required to convert the input into the output
+
 
 # Better With Mods
 groovyscript.wiki.betterwithmods.anvil_crafting.title=Anvil Crafting
@@ -617,10 +664,16 @@ groovyscript.wiki.botania.pure_daisy.input.required=either an IBlockState or Str
 groovyscript.wiki.botania.pure_daisy.time.value=Sets the duration the recipe takes to complete
 
 groovyscript.wiki.botania.rune_altar.title=Rune Altar
-groovyscript.wiki.botania.rune_altar.description=Converts a items inputs into an item ouput at the cost of mana when a Livingrock item is thrown atop the altar and right clicked with a Wand of the Forest.
+groovyscript.wiki.botania.rune_altar.description=Converts a items inputs into an item output at the cost of mana when a Livingrock item is thrown atop the altar and right clicked with a Wand of the Forest.
 groovyscript.wiki.botania.rune_altar.add=Adds recipes in the format `output`, `mana`, `inputs`
 groovyscript.wiki.botania.rune_altar.input.required=that `input` IIngredients cannot contain Botania's Livingrock Item
 groovyscript.wiki.botania.rune_altar.mana.value=Sets the mana cost of processing the recipe
+
+
+# Botanic Additions
+groovyscript.wiki.botanicadds.gaia_plate.title=Gaia Plate
+groovyscript.wiki.botanicadds.gaia_plate.description=Converts an number of input items into an output itemstack, consuming a given amount of mana when dropped in-world atop a Gaia Agglomeration Plate as part of a multiblock structure.
+groovyscript.wiki.botanicadds.gaia_plate.mana.value=Sets the mana cost of processing the recipe
 
 
 # Calculator
@@ -707,6 +760,27 @@ groovyscript.wiki.compactmachines3.miniaturization.shape.value=Sets the structur
 groovyscript.wiki.compactmachines3.miniaturization.ticks.value=Sets the time in ticks the recipe takes to process before dropping the output item
 groovyscript.wiki.compactmachines3.miniaturization.keyMap.value=Sets the IBlockState, specific NBT, if the metadata is checked, and a representative itemstack for each `char` key
 groovyscript.wiki.compactmachines3.miniaturization.symmetrical.value=Sets if the recipe does not have to test all 4 rotations to determine if the multiblock is valid
+
+
+# Cyclic
+groovyscript.wiki.cyclicmagic.dehydrator.title=DeHydrator
+groovyscript.wiki.cyclicmagic.dehydrator.description=Converts an input itemstack into an output itemstack.
+groovyscript.wiki.cyclicmagic.dehydrator.time.value=Sets the amount of time in ticks the recipe takes to process
+groovyscript.wiki.cyclicmagic.dehydrator.water.value=Sets the amount of water produced by the DeHydrator on completing a recipe
+
+groovyscript.wiki.cyclicmagic.hydrator.title=Hydrator
+groovyscript.wiki.cyclicmagic.hydrator.description=Converts up to 4 input itemstacks and some amount of water into an output itemstack.
+groovyscript.wiki.cyclicmagic.hydrator.water.value=Sets the amount of water consumed by the Hydrator to complete a recipe
+
+groovyscript.wiki.cyclicmagic.melter.title=Melter
+groovyscript.wiki.cyclicmagic.melter.description=Converts up to 4 input itemstacks into an output itemstack, while being placed above lava.
+
+groovyscript.wiki.cyclicmagic.packager.title=Packager
+groovyscript.wiki.cyclicmagic.packager.description=Converts up to 6 input itemstacks into an output itemstack.
+
+groovyscript.wiki.cyclicmagic.solidifier.title=Solidifier
+groovyscript.wiki.cyclicmagic.solidifier.description=Converts up to 4 input itemstacks and an input fluidstack into an output itemstack.
+
 
 # Draconic Evolution
 groovyscript.wiki.draconicevolution.energy_core.title=Energy Core
@@ -886,6 +960,13 @@ groovyscript.wiki.extendedcrafting.table_crafting.addShapeless0=Adds a shapeless
 groovyscript.wiki.extendedcrafting.table_crafting.addShapeless1=Adds a shapeless crafting recipe in the format `tier`, `output`, `input`
 groovyscript.wiki.extendedcrafting.table_crafting.tier.value=Sets the tier of table required, with 0 indicating any table size that can fit the recipe
 
+
+# Extra Botany
+groovyscript.wiki.extrabotany.pedestal.title=Livingrock Pedestal
+groovyscript.wiki.extrabotany.pedestal.description=Converts an input item into an output itemstack when placed inside a Livingrock Pedestal and interacted with by an Extra Botany Hammer.
+groovyscript.wiki.extrabotany.pedestal.add=Adds recipes in the format `input`, `output`
+
+
 # Extra Utilities 2
 groovyscript.wiki.extrautils2.crusher.title=Crusher
 groovyscript.wiki.extrautils2.crusher.description=Converts an input itemstack into an output itemstack with a chance of an additional itemstack output, consuming energy.
@@ -925,7 +1006,7 @@ groovyscript.wiki.extrautils2.resonator.description=Converts and input itemstack
 groovyscript.wiki.extrautils2.resonator.energy.value=Sets the total Grid Power required for the recipe in 1/100ths of a single GP (int 1000 = 10 GP)
 groovyscript.wiki.extrautils2.resonator.ownerTag.value=Sets if the output itemstack should gain an NBT tag attaching the player who placed the Resonator to the itemstack. Notably used for Red Coal, to determine the bonus burn time from Grid Power
 groovyscript.wiki.extrautils2.resonator.requirementText.value=Sets the text in JEI displaying an additional requirement for the recipe to run
-groovyscript.wiki.extrautils2.resonator.shouldProgress.value=Sets the function used to determine if the recipe should run, with the Closure taking 3 paramenters, `TileEntity resonator`, `int frequency`, `ItemStack input` and returning a `boolean`
+groovyscript.wiki.extrautils2.resonator.shouldProgress.value=Sets the function used to determine if the recipe should run, with the Closure taking 3 parameters, `TileEntity resonator`, `int frequency`, `ItemStack input` and returning a `boolean`
 
 # Immersive Engineering
 groovyscript.wiki.immersiveengineering.alloy_kiln.title=Alloy Kiln
@@ -1119,7 +1200,7 @@ groovyscript.wiki.inspirations.cauldron.dye.value=Sets the dye color fluid requi
 groovyscript.wiki.inspirations.cauldron.type.value=Sets what type of recipe is being processed
 groovyscript.wiki.inspirations.cauldron.sound.value=Sets the sound played when the recipe is crafted
 groovyscript.wiki.inspirations.cauldron.levels.value=Sets the level of fluid in the cauldron, where each bottle is a single level
-groovyscript.wiki.inspirations.cauldron.boiling.value=Sets if the cauldon must be boiling, requiring fire or another heat source beneath
+groovyscript.wiki.inspirations.cauldron.boiling.value=Sets if the cauldron must be boiling, requiring fire or another heat source beneath
 groovyscript.wiki.inspirations.cauldron.inputPotion.value=Sets the input potion type
 groovyscript.wiki.inspirations.cauldron.outputPotion.value=Sets the output potion type
 groovyscript.wiki.inspirations.cauldron.removeByFluidInput=Removes all recipes with the given fluid input
@@ -1157,6 +1238,12 @@ groovyscript.wiki.jei.catalyst.removeByType=Removes all catalyst items from the 
 groovyscript.wiki.jei.category.title=Categories
 groovyscript.wiki.jei.category.description=Modify the Categories visible in JEI, each of which contain recipes and are associated with specific blocks, typically machines.
 groovyscript.wiki.jei.category.note0=Hidden Categories will still take up load time, and recipes contained within can still be processed. This only prevents seeing Categories.
+groovyscript.wiki.jei.category.annotation=Note that `classes.GenericRecipeCategory` must be defined elsewhere, and this example presumes certain fields and methods exist.
+groovyscript.wiki.jei.category.id.value=Sets the ID of the Category, which must be unique among all other Categories
+groovyscript.wiki.jei.category.wrapper.value=Sets the `IRecipeWrapper`s used by the Category to generate entries
+groovyscript.wiki.jei.category.catalyst.value=Sets the catalyst ingredients of the Category, which must belong to a class that has ingredient handling in JEI
+groovyscript.wiki.jei.category.category.value=Sets the function used to generate the category. Must be a Function accepting a single input parameter `IGuiHelper` and creating the class, which itself must extend `IRecipeCategory`
+groovyscript.wiki.jei.category.add=Adds a new Category to JEI in the format `id`, `category`, `catalsyts`, `wrappers`
 groovyscript.wiki.jei.category.hideCategory=Hides the given category from JEI
 groovyscript.wiki.jei.category.hideAll=Hides all categories from JEI
 
@@ -1247,7 +1334,7 @@ groovyscript.wiki.mekanism.injection_chamber.annotation=Always uses 200 gas
 groovyscript.wiki.mekanism.injection_chamber.add=Adds recipes in the format `ingredient`, `gasInput`, `output`
 
 groovyscript.wiki.mekanism.metallurgic_infuser.title=Metallurgic Infuser
-groovyscript.wiki.mekanism.metallurgic_infuser.description=Converts and input itemstack and a varible amount of an infusion type into an output itemstack.
+groovyscript.wiki.mekanism.metallurgic_infuser.description=Converts and input itemstack and a variable amount of an infusion type into an output itemstack.
 groovyscript.wiki.mekanism.metallurgic_infuser.add0=Adds recipes in the format `ingredient`, `infuseType`, `infuseAmount`, `output`
 groovyscript.wiki.mekanism.metallurgic_infuser.add1=Adds recipes in the format `ingredient`, `infuseType`, `infuseAmount`, `output`
 groovyscript.wiki.mekanism.metallurgic_infuser.infuse.value=Sets the Infusion type the recipe uses
@@ -1294,6 +1381,13 @@ groovyscript.wiki.mekanism.washer.description=Converts an input gasstack into an
 groovyscript.wiki.mekanism.washer.add=Adds recipes in the format `input`, `output`
 
 
+# Mystical Agriculture
+groovyscript.wiki.mysticalagriculture.reprocessor.title=Seed Reprocessor
+groovyscript.wiki.mysticalagriculture.reprocessor.description=Converts an input itemstack into an output itemstack, taking a set amount of time based on the machine and consuming fuel.
+#groovyscript.wiki.mysticalagriculture.reprocessor.exact.value=Sets an unknown boolean. Doesn't appear to have an effect
+#groovyscript.wiki.mysticalagriculture.reprocessor.amount.value=Sets the amount of items required to complete the recipe in the normal Reprocessor. Doesn't work
+
+
 # Nature's Aura
 groovyscript.wiki.naturesaura.altar.title=Natural Altar Infusion
 groovyscript.wiki.naturesaura.altar.description=Converts an input itemstack into an itemstack in a multiblock structure, with an optional catalyst block, costing aura and taking a configurable duration.
@@ -1324,6 +1418,28 @@ groovyscript.wiki.naturesaura.spawning.time.value=Sets the time the recipe takes
 groovyscript.wiki.naturesaura.spawning.entity.value=Sets the entity spawned
 groovyscript.wiki.naturesaura.spawning.removeByEntity=Removes all Altar of Birthing recipes that summon the given entity
 groovyscript.wiki.naturesaura.spawning.removeByName=Removes the Altar of Birthing recipe with the given name
+
+
+# Primal Tech
+groovyscript.wiki.primal_tech.clay_kiln.title=Clay Kiln
+groovyscript.wiki.primal_tech.clay_kiln.description=Converts an input item into an output itemstack after a given amount of time. Requires the block below to be Minecraft Fire or a Primal Tech Flame Grilled Wopper. Takes some time to heat up before beginning to smelt items.
+groovyscript.wiki.primal_tech.clay_kiln.add=Adds recipes in the format `output`, `input`, `cookTime`
+groovyscript.wiki.primal_tech.clay_kiln.cookTime.value=Sets the time in ticks for the recipe to complete after the Clay Kiln is heated up enough
+
+groovyscript.wiki.primal_tech.stone_anvil.title=Stone Anvil
+groovyscript.wiki.primal_tech.stone_anvil.description=Converts an input item into an output itemstack after being interacted with by a player using a Stone Mallet.
+groovyscript.wiki.primal_tech.stone_anvil.add=Adds recipes in the format `output`, `input`
+
+groovyscript.wiki.primal_tech.water_saw.title=Water Saw
+groovyscript.wiki.primal_tech.water_saw.description=Converts an input item into an output itemstack after a given amount of time. Requires the block below it to be a water source block, and the block below and behind it flowing water.
+groovyscript.wiki.primal_tech.water_saw.add=Adds recipes in the format `output`, `input`, `choppingTime`
+groovyscript.wiki.primal_tech.water_saw.choppingTime.value=Sets the time in ticks for the recipe to complete
+
+groovyscript.wiki.primal_tech.wooden_basin.title=Wooden Basin
+groovyscript.wiki.primal_tech.wooden_basin.description=Converts up to 4 items and 1000mb of fluid into an output itemstack.
+groovyscript.wiki.primal_tech.wooden_basin.note0=The recipe requires items to be inserted in a specific order, which is displayed in JEI as top, left, right, bottom. Consider only one type of item to avoid issues.
+groovyscript.wiki.primal_tech.wooden_basin.add=Adds recipes in the format `output`, `fluid`, `inputs`
+
 
 # ProdigyTech
 groovyscript.wiki.prodigytech.atomic_reshaper.title=Atomic Reshaper
@@ -1429,8 +1545,7 @@ groovyscript.wiki.pyrotech.kiln.title=Kiln
 groovyscript.wiki.pyrotech.kiln.description=Converts an item into a new one by burning it. Has a chance to fail
 groovyscript.wiki.pyrotech.kiln.burnTime.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.kiln.failureChance.value=Sets the chance to fail the recipe
-groovyscript.wiki.pyrotech.kiln.failureOutputs.value=Sets the output when the recipe failed
-groovyscript.wiki.pyrotech.kiln.failureOutput.value=
+groovyscript.wiki.pyrotech.kiln.failureOutput.value=Sets the output when the recipe failed
 groovyscript.wiki.pyrotech.kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
 
 groovyscript.wiki.pyrotech.soaking_pot.title=Soaking Pot
@@ -1519,7 +1634,7 @@ groovyscript.wiki.projecte.entity_randomizer.streamMobs=Iterates through every e
 groovyscript.wiki.projecte.entity_randomizer.streamPeacefuls=Iterates through every entry in the peacefuls list
 
 groovyscript.wiki.projecte.transmutation.title=World Transmutation
-groovyscript.wiki.projecte.transmutation.description=Converts an input blockstate into an output blockstate when right-clicked with by a Philosopher's Stone, with the abity to be converted into a different output blockstate when holding shift.
+groovyscript.wiki.projecte.transmutation.description=Converts an input blockstate into an output blockstate when right-clicked with by a Philosopher's Stone, with the ability to be converted into a different output blockstate when holding shift.
 groovyscript.wiki.projecte.transmutation.input.value=Sets the input blockstate
 groovyscript.wiki.projecte.transmutation.output.value=Sets the normal output blockstate
 groovyscript.wiki.projecte.transmutation.altOutput.value=Sets the shift output blockstate
@@ -1622,7 +1737,7 @@ groovyscript.wiki.roots.predicates.above_or_below.required=that only at most one
 groovyscript.wiki.roots.predicates.properties.required=that each property must be a valid property of the provided `blockstate`
 
 groovyscript.wiki.roots.pyre.title=Pyre
-groovyscript.wiki.roots.pyre.description=Converts 5 input items into the ouput after a period of time when the Pyre is lit on fire.
+groovyscript.wiki.roots.pyre.description=Converts 5 input items into the output after a period of time when the Pyre is lit on fire.
 groovyscript.wiki.roots.pyre.burnTime.value=Sets the time in ticks for the recipe to process
 groovyscript.wiki.roots.pyre.xp.value=Sets the XP given when the recipe finishes in levels
 groovyscript.wiki.roots.pyre.removeByName=Removes the Pyre recipe with the given name
@@ -1837,6 +1952,13 @@ groovyscript.wiki.thaumcraft.warp.description=Determines if holding an item or e
 groovyscript.wiki.thaumcraft.warp.addWarp=Adds Warp to the given item in the format `item`, `amount`
 groovyscript.wiki.thaumcraft.warp.removeWarp=Removes Warp from the given item
 
+# The Aurorian
+groovyscript.wiki.theaurorian.moonlight_forge.title=Moonlight Forge
+groovyscript.wiki.theaurorian.moonlight_forge.description=Combines two items to get a third item. Only works at night, and works faster the higher it is placed in the world.
+groovyscript.wiki.theaurorian.moonlight_forge.removeByInput=Removes a recipe by the input item and the catalyst item
+groovyscript.wiki.theaurorian.scrapper.title=Scrapper
+groovyscript.wiki.theaurorian.scrapper.description=Turns an input item into an output item. Can be sped up by placing a Crystal on top of it. The crystal has a chance to break every time a recipe is executed.
+
 # Thermal Expansion
 groovyscript.wiki.thermalexpansion.energy.value=Sets the energy cost of the recipe
 
@@ -2004,7 +2126,7 @@ groovyscript.wiki.thermalexpansion.refinery_potion.chance.value=Sets the chance 
 groovyscript.wiki.thermalexpansion.sawmill.title=Sawmill
 groovyscript.wiki.thermalexpansion.sawmill.description=Converts an input itemstack into an output itemstack and optional output itemstack with a chance, costing power and taking time based on the power cost.
 groovyscript.wiki.thermalexpansion.sawmill.note0=The valid items and fluid output while the Resin Funnel Augment is installed is controlled by the Arboreal Extractor device.
-groovyscript.wiki.thermalexpansion.sawmill.add=Adds recipes in the format `energy`, `input`, `outputItem`, `secondayOutput`, `chance`
+groovyscript.wiki.thermalexpansion.sawmill.add=Adds recipes in the format `energy`, `input`, `outputItem`, `secondaryOutput`, `chance`
 groovyscript.wiki.thermalexpansion.sawmill.chance.value=Sets the chance the second output itemstack is created
 
 groovyscript.wiki.thermalexpansion.smelter.title=Induction Smelter
@@ -2077,7 +2199,7 @@ groovyscript.wiki.woot.mob_config.removeByEntity=Removes all configuration for t
 
 groovyscript.wiki.woot.policy.title=Policy
 groovyscript.wiki.woot.policy.description=Controls what entities can be farmed for what items via an entity blacklist, mod blacklist, item output blacklist, item output mod blacklist, and a mob whitelist.
-groovyscript.wiki.woot.policy.note=If the whitelist contains any entities, any entities not in the whitelist are banned (rendering EntityModBlacklist and EntityBlacklist superflous). GenerateOnlyList contains all entities which cannot be captured via shard, meaning the controller would need to be obtained a different way.
+groovyscript.wiki.woot.policy.note=If the whitelist contains any entities, any entities not in the whitelist are banned (rendering EntityModBlacklist and EntityBlacklist superfluous). GenerateOnlyList contains all entities which cannot be captured via shard, meaning the controller would need to be obtained a different way.
 groovyscript.wiki.woot.policy.addToEntityBlacklist=Prevents the given entity from being captured and spawned
 groovyscript.wiki.woot.policy.addToEntityModBlacklist=Prevents entities from the given mod from being captured and spawned
 groovyscript.wiki.woot.policy.addToEntityWhitelist=Prevents all entities not on the list from being spawned, overriding EntityBlacklist and EntityModBlacklist

@@ -1,11 +1,38 @@
+// additional gradle configuration
+
+minecraft {
+    injectedTags.put 'GROOVY_VERSION', groovy_version
+
+    if (project.debug_use_examples_folder.toBoolean()) {
+        extraRunJvmArguments.add('-Dgroovyscript.use_examples_folder=true')
+    }
+    if (project.debug_run_ls.toBoolean()) {
+        extraRunJvmArguments.add('-Dgroovyscript.run_ls=true')
+    }
+    if (project.debug_generate_examples.toBoolean()) {
+        extraRunJvmArguments.add('-Dgroovyscript.generate_examples=true')
+    }
+    if (project.debug_generate_wiki.toBoolean()) {
+        extraRunJvmArguments.add('-Dgroovyscript.generate_wiki=true')
+    }
+    if (project.debug_generate_and_crash.toBoolean()) {
+        extraRunJvmArguments.add('-Dgroovyscript.generate_and_crash=true')
+    }
+    if (project.debug_log_missing_lang_keys.toBoolean()) {
+        extraRunJvmArguments.add('-Dgroovyscript.log_missing_lang_keys=true')
+    }
+
+    //extraTweakClasses << "${modGroup}.LaunchTweaker"
+}
+
 configurations {
-    lsp4j
-    implementation.extendsFrom(lsp4j)
+    specialEmbed
+    implementation.extendsFrom(specialEmbed)
 }
 
 jar {
     from provider {
-        configurations.lsp4j.collect {
+        configurations.specialEmbed.collect {
             it.isDirectory() ? it : zipTree(it)
         }
     }, {

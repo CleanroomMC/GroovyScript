@@ -38,7 +38,7 @@ public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, Lis
     }
 
     /**
-     * Called by {@link JeiPlugin#onRuntimeAvailable}
+     * Called by {@link JeiPlugin#afterRuntimeAvailable()}
      */
     @GroovyBlacklist
     public void applyRemovals(IRecipeRegistry recipeRegistry) {

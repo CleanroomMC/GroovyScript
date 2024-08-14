@@ -31,10 +31,8 @@ public class Squeezer extends ForestryRegistry<ISqueezerRecipe> {
         restoreFromBackup().forEach(SqueezerRecipeManagerAccessor.getRecipes()::add);
     }
 
-    public ISqueezerRecipe add(FluidStack output, IIngredient remnant, int time, int remnantChance, IIngredient... inputs) {
-        ISqueezerRecipe recipe = new SqueezerRecipe(time, NonNullList.from(ItemStack.EMPTY, Arrays.stream(inputs).map(i -> i.getMatchingStacks()[0]).toArray(ItemStack[]::new)), output, remnant.getMatchingStacks()[0], remnantChance);
-        add(recipe);
-        return recipe;
+    public ISqueezerRecipe add(FluidStack output, ItemStack remnant, int time, int remnantChance, IIngredient... inputs) {
+        return recipeBuilder().chance(remnantChance).time(time).output(remnant).fluidOutput(output).input(inputs).register();
     }
 
     public void add(ISqueezerRecipe recipe) {

@@ -25,9 +25,7 @@ public class Still extends ForestryRegistry<IStillRecipe> {
     }
 
     public IStillRecipe add(FluidStack output, int time, FluidStack input) {
-        IStillRecipe recipe = new StillRecipe(time, input, output);
-        add(recipe);
-        return recipe;
+        return recipeBuilder().time(time).fluidOutput(output).fluidInput(input).register();
     }
 
     public void add(IStillRecipe recipe) {
