@@ -124,9 +124,9 @@ public class Category extends VirtualizedRegistry<String> {
         private final List<? extends IRecipeWrapper> wrappers;
 
         public CustomCategory(String id,
-                       Function<IGuiHelper, ? extends IRecipeCategory<? extends IRecipeWrapper>> category,
-                       List<?> catalysts,
-                       List<? extends IRecipeWrapper> wrappers) {
+                              Function<IGuiHelper, ? extends IRecipeCategory<? extends IRecipeWrapper>> category,
+                              List<?> catalysts,
+                              List<? extends IRecipeWrapper> wrappers) {
             this.id = id;
             this.category = category;
             this.catalysts = catalysts;
