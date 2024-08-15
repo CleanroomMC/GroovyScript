@@ -47,6 +47,8 @@ public abstract class FluidStackMixin implements IIngredient, INbtIngredient, IN
     protected Closure<Object> transformer;
     @Unique
     protected Closure<Object> nbtMatcher;
+    @Unique
+    protected String groovyScript$mark;
 
     @Override
     public IIngredient exactCopy() {
@@ -178,5 +180,16 @@ public abstract class FluidStackMixin implements IIngredient, INbtIngredient, IN
     @Override
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @Nullable
+    @Override
+    public String getMark() {
+        return groovyScript$mark;
+    }
+
+    @Override
+    public void setMark(String mark) {
+        this.groovyScript$mark = mark;
     }
 }
