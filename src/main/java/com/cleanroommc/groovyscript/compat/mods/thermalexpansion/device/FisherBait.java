@@ -9,9 +9,10 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.FisherManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.github.bsideup.jabel.Desugar;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Objects;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class FisherBait extends VirtualizedRegistry<FisherBait.FisherRecipe> {
@@ -67,9 +68,45 @@ public class FisherBait extends VirtualizedRegistry<FisherBait.FisherRecipe> {
         FisherManagerAccessor.getBaitMap().clear();
     }
 
-    @Desugar
-    public record FisherRecipe(ComparableItemStack bait, int multiplier) {
+    @SuppressWarnings("ClassCanBeRecord")
+    public static final class FisherRecipe {
 
+        private final ComparableItemStack bait;
+        private final int multiplier;
+
+        public FisherRecipe(ComparableItemStack bait, int multiplier) {
+            this.bait = bait;
+            this.multiplier = multiplier;
+        }
+
+        public ComparableItemStack bait() {
+            return bait;
+        }
+
+        public int multiplier() {
+            return multiplier;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (FisherRecipe) obj;
+            return Objects.equals(this.bait, that.bait) &&
+                   this.multiplier == that.multiplier;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(bait, multiplier);
+        }
+
+        @Override
+        public String toString() {
+            return "FisherRecipe[" +
+                   "bait=" + bait + ", " +
+                   "multiplier=" + multiplier + ']';
+        }
     }
 
 }

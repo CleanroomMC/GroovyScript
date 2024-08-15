@@ -13,13 +13,13 @@ import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.TapperManagerAcc
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.github.bsideup.jabel.Desugar;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RegistryDescription(
@@ -155,14 +155,86 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
         TapperManagerAccessor.getBlockMap().clear();
     }
 
-    @Desugar
-    public record TapperItemRecipe(ItemWrapper itemWrapper, FluidStack fluidStack) {
+    @SuppressWarnings("ClassCanBeRecord")
+    public static final class TapperItemRecipe {
 
+        private final ItemWrapper itemWrapper;
+        private final FluidStack fluidStack;
+
+        public TapperItemRecipe(ItemWrapper itemWrapper, FluidStack fluidStack) {
+            this.itemWrapper = itemWrapper;
+            this.fluidStack = fluidStack;
+        }
+
+        public ItemWrapper itemWrapper() {
+            return itemWrapper;
+        }
+
+        public FluidStack fluidStack() {
+            return fluidStack;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (TapperItemRecipe) obj;
+            return Objects.equals(this.itemWrapper, that.itemWrapper) &&
+                   Objects.equals(this.fluidStack, that.fluidStack);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(itemWrapper, fluidStack);
+        }
+
+        @Override
+        public String toString() {
+            return "TapperItemRecipe[" +
+                   "itemWrapper=" + itemWrapper + ", " +
+                   "fluidStack=" + fluidStack + ']';
+        }
     }
 
-    @Desugar
-    public record TapperBlockRecipe(BlockWrapper blockWrapper, FluidStack fluidStack) {
+    @SuppressWarnings("ClassCanBeRecord")
+    public static final class TapperBlockRecipe {
 
+        private final BlockWrapper blockWrapper;
+        private final FluidStack fluidStack;
+
+        public TapperBlockRecipe(BlockWrapper blockWrapper, FluidStack fluidStack) {
+            this.blockWrapper = blockWrapper;
+            this.fluidStack = fluidStack;
+        }
+
+        public BlockWrapper blockWrapper() {
+            return blockWrapper;
+        }
+
+        public FluidStack fluidStack() {
+            return fluidStack;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (TapperBlockRecipe) obj;
+            return Objects.equals(this.blockWrapper, that.blockWrapper) &&
+                   Objects.equals(this.fluidStack, that.fluidStack);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(blockWrapper, fluidStack);
+        }
+
+        @Override
+        public String toString() {
+            return "TapperBlockRecipe[" +
+                   "blockWrapper=" + blockWrapper + ", " +
+                   "fluidStack=" + fluidStack + ']';
+        }
     }
 
 }

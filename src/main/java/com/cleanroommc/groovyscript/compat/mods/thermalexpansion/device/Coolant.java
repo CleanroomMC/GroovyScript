@@ -9,10 +9,11 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CoolantManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.github.bsideup.jabel.Desugar;
 import mezz.jei.api.IGuiHelper;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Objects;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES,
                      admonition = @Admonition(value = "groovyscript.wiki.thermalexpansion.coolant.note0", type = Admonition.Type.WARNING))
@@ -85,9 +86,53 @@ public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
         CoolantManagerAccessor.getCoolantFactorMap().clear();
     }
 
-    @Desugar
-    public record CoolantRecipe(String fluid, int rf, int factor) {
+    @SuppressWarnings("ClassCanBeRecord")
+    public static final class CoolantRecipe {
 
+        private final String fluid;
+        private final int rf;
+        private final int factor;
+
+        public CoolantRecipe(String fluid, int rf, int factor) {
+            this.fluid = fluid;
+            this.rf = rf;
+            this.factor = factor;
+        }
+
+        public String fluid() {
+            return fluid;
+        }
+
+        public int rf() {
+            return rf;
+        }
+
+        public int factor() {
+            return factor;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (CoolantRecipe) obj;
+            return Objects.equals(this.fluid, that.fluid) &&
+                   this.rf == that.rf &&
+                   this.factor == that.factor;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(fluid, rf, factor);
+        }
+
+        @Override
+        public String toString() {
+            return "CoolantRecipe[" +
+                   "fluid=" + fluid + ", " +
+                   "rf=" + rf + ", " +
+                   "factor=" + factor + ']';
+        }
     }
 
 }
