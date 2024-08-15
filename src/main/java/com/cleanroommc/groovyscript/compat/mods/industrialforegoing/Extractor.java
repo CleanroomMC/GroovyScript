@@ -36,9 +36,9 @@ public class Extractor extends VirtualizedRegistry<ExtractorEntry> {
     @MethodDescription(description = "groovyscript.wiki.industrialforegoing.extractor.add1", type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:stone'), fluid('water') * 100, 1"))
     public ExtractorEntry add(ItemStack input, FluidStack output, float breakChance) {
         if (IngredientHelper.overMaxSize(input, 1)) {
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Fluid Extractor recipe").error();
-            msg.add("Stack size of input must be 1");
-            msg.post();
+            GroovyLog.msg("Error adding Fluid Extractor recipe").error()
+                     .add("Stack size of input must be 1")
+                     .post();
             return null;
         }
         ExtractorEntry recipe = new ExtractorEntry(input, output, breakChance);

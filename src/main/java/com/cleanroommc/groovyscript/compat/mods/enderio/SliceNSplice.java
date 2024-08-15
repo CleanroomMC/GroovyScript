@@ -141,7 +141,9 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
             int inputSize = input.getRealSize();
             output.trim();
             msg.add(inputSize < 1 || inputSize > 6, () -> "Must have 1 - 6 inputs, but found " + input.size());
-            msg.add(IngredientHelper.overMaxSize(input, 1), "Each input must have a stack size of 1");
+            for (IIngredient ingredient : input) {
+                msg.add(IngredientHelper.overMaxSize(ingredient, 1), "Input {} must have a stack size of 1", ingredient);
+            }
             msg.add(output.size() != 1, () -> "Must have exactly 1 output, but found " + output.size());
             validateFluids(msg);
             if (energy <= 0) energy = 5000;

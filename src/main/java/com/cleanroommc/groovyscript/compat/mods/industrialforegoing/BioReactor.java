@@ -34,9 +34,9 @@ public class BioReactor extends VirtualizedRegistry<IReactorEntry> {
     @MethodDescription(description = "groovyscript.wiki.industrialforegoing.bio_reactor.add1", type = MethodDescription.Type.ADDITION)
     public IReactorEntry add(ItemStack input, @Nullable Predicate<NBTTagCompound> nbtCheck) {
         if (IngredientHelper.overMaxSize(input, 1)) {
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Bioreactor recipe").error();
-            msg.add("Input stack size must be 1");
-            msg.post();
+            GroovyLog.msg("Error adding Bioreactor recipe").error()
+                     .add("Input stack size must be 1")
+                     .post();
             return null;
         }
         IReactorEntry recipe = new BioReactorEntry(input, nbtCheck);

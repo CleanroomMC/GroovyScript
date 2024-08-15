@@ -21,9 +21,9 @@ public class FreezerFuel extends ForgeRegistryWrapper<AetherFreezableFuel> {
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:packed_ice'), 1000"))
     public void add(ItemStack fuel, int timeGiven) {
         if (IngredientHelper.overMaxSize(fuel, 1)) {
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Freezer Fuel").error();
-            msg.add("Fuel must have stack size of 1, got {}", fuel.getCount());
-            msg.post();
+            GroovyLog.msg("Error adding Freezer Fuel").error()
+                     .add("Fuel must have stack size of 1, got {}", fuel.getCount())
+                     .post();
             return;
         }
         AetherFreezableFuel freezableFuel = new AetherFreezableFuel(fuel, timeGiven);

@@ -168,8 +168,12 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding EnderIO Vat recipe").error();
             msg.add(IngredientHelper.isEmpty(input), () -> "fluid input must not be empty");
             msg.add(IngredientHelper.isEmpty(output), () -> "fluid output must not be empty");
-            msg.add(IngredientHelper.overMaxSize(itemInputs1, 1), "Each input in the first slot must have a stack size of 1");
-            msg.add(IngredientHelper.overMaxSize(itemInputs2, 1), "Each input in the second slot must have a stack size of 1");
+            for (IIngredient ingredient : itemInputs1) {
+                msg.add(IngredientHelper.overMaxSize(ingredient, 1), "First slot input {} must have a stack size of 1", ingredient);
+            }
+            for (IIngredient ingredient : itemInputs2) {
+                msg.add(IngredientHelper.overMaxSize(ingredient, 1), "Second slot input {} must have a stack size of 1", ingredient);
+            }
 
             if (energy <= 0) energy = 5000;
             if (baseMultiplier <= 0) baseMultiplier = 1;

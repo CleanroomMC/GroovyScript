@@ -203,6 +203,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
             validateItems(msg, 4, 4, 1, 1);
             validateFluids(msg);
             msg.add(mainInput == null, "mainInput must be defined");
+            msg.add(IngredientHelper.overMaxSize(mainInput, 1), "mainInput must have a stack size of 1");
             msg.add(energyPerStand < 0, "energyPerStand must be a non negative integer, yet it was {}", energyPerStand);
             msg.add(time <= 0, "time must be an integer greater than 0, yet it was {}", time);
             msg.add(red < 0 || red > 1, "red must be a float between 0 and 1, yet it was {}", red);

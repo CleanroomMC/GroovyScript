@@ -34,9 +34,9 @@ public class OreRaw extends VirtualizedRegistry<OreFluidEntryRaw> {
     })
     public OreFluidEntryRaw add(OreDictIngredient ore, FluidStack input, FluidStack output) {
         if (IngredientHelper.overMaxSize(ore, 1)) {
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Ore Washer recipe").error();
-            msg.add("Stack size of input ore must be 1");
-            msg.post();
+            GroovyLog.msg("Error adding Ore Washer recipe").error()
+                     .add("Stack size of input ore must be 1")
+                     .post();
             return null;
         }
         return add(ore.getOreDict(), input, output);

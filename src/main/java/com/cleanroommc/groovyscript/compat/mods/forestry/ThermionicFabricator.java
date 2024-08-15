@@ -162,8 +162,10 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
             validateItems(msg, 0, 0, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);
             Carpenter.validatePattern(msg, pattern, keys);
-            msg.add(IngredientHelper.overMaxSize(keys.values(), 1), "Each grid input must have a stack size of 1");
-            msg.add(IngredientHelper.overMaxSize(catalyst, 1), "Catalyst must have a stack size of 1");
+            for (IIngredient ingredient : keys.values()) {
+                msg.add(IngredientHelper.overMaxSize(ingredient, 1), "Grid input {} must have a stack size of 1", ingredient);
+            }
+            msg.add(IngredientHelper.overMaxSize(catalyst, 1), "Box must have a stack size of 1, got {}", catalyst.getAmount());
         }
 
         @Override
