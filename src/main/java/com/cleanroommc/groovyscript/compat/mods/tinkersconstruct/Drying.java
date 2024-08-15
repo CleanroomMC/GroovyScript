@@ -126,7 +126,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // More than 1 item cannot be placed
             return 1;
         }

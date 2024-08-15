@@ -139,7 +139,7 @@ public class Rituals extends VirtualizedRegistry<RitualBase> {
             }
 
             @Override
-            protected int getMaxInput() {
+            protected int getMaxItemInput() {
                 // More than 1 item cannot be placed in each slot
                 return 1;
             }

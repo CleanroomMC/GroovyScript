@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 import betterwithmods.api.tile.IHopperFilter;
 import betterwithmods.common.BWRegistry;
 import betterwithmods.common.registry.HopperFilter;
-import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -126,10 +125,7 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
             validateItems(msg, 0, Integer.MAX_VALUE, 0, 0);
             validateFluids(msg);
             msg.add(IngredientHelper.isEmpty(filter), "filter must be defined");
-            // Ignores stack size
-            if (IngredientHelper.overMaxSize(filter, 1)) {
-                msg.add("Filter must have stack size of 1, got {}", filter.getAmount());
-            }
+            msg.add(IngredientHelper.overMaxSize(filter, 1), "Filter must have stack size of 1, got {}", filter.getAmount());
         }
 
         @Override

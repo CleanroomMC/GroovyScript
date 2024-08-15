@@ -49,7 +49,7 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // PT modifies the recipe to only consume 1 item
             return 1;
         }

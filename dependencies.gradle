@@ -35,6 +35,7 @@ final def mod_dependencies = [
         'shadowfacts-forgelin-248453:2785465'                 : [project.debug_alchemistry, project.debug_industrial_foregoing],
         'ae2-extended-life-570458:4553942'                    : [project.debug_applied_energistics_2, project.debug_lazy_ae2],
         'arcane-archives-311357:3057332'                      : [project.debug_arcane_archives],
+        'guidebook-253874:2989594'                            : [project.debug_arcane_archives],
         'mystical_lib-277064:3483816'                         : [project.debug_arcane_archives, project.debug_roots],
         'astralsorcery-sorcery-241721:3044416'                : [project.debug_astral],
         'baubles-227083:2518667'                              : [project.debug_astral, project.debug_botania, project.debug_botanic_additions, project.debug_essentialcraft_4, project.debug_extra_botany, project.debug_thaum],

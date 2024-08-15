@@ -5,10 +5,10 @@ import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.helper.ingredient.FluidStackList;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Collection;
-import java.util.Objects;
 
 public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
@@ -166,7 +165,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     }
 
     @GroovyBlacklist
-    protected int getMaxInput() {
+    protected int getMaxItemInput() {
         return Integer.MAX_VALUE;
     }
 
@@ -177,9 +176,10 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         msg.add(input.size() < minInput || input.size() > maxInput, () -> getRequiredString(minInput, maxInput, "item input") + ", but found " + input.size());
         msg.add(output.size() < minOutput || output.size() > maxOutput, () -> getRequiredString(minOutput, maxOutput, "item output") + ", but found " + output.size());
         if (GroovyScriptConfig.compat.checkInputStackCounts) {
-            int maxAmountProvided = input.stream().filter(Objects::nonNull).mapToInt(IResourceStack::getAmount).max().orElse(0);
-            int maxAmountAllowed = getMaxInput();
-            msg.add(maxAmountProvided > maxAmountAllowed, "Expected stack sizes of inputs = {} or less, got {}", maxAmountAllowed, maxAmountProvided);
+            int maxAmountAllowed = getMaxItemInput();
+            for (IIngredient ingredient : input) {
+                msg.add(IngredientHelper.overMaxSize(ingredient, maxAmountAllowed), "Expected stack size of {} for {}, got {}", maxAmountAllowed, ingredient, ingredient.getAmount());
+            }
         }
     }
 

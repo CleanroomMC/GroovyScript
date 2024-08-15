@@ -185,7 +185,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // More than 1 item cannot be placed on the Empowerer or Display Stands
             return 1;
         }

@@ -147,7 +147,7 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // The recipe correctly requires an increased amount of input items, but only consumes 1
             return 1;
         }

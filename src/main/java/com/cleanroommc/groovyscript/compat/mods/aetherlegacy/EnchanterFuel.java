@@ -20,7 +20,6 @@ public class EnchanterFuel extends ForgeRegistryWrapper<AetherEnchantmentFuel> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:blaze_rod'), 1000"))
     public void add(ItemStack fuel, int timeGiven) {
-        // Ignores stack size
         if (IngredientHelper.overMaxSize(fuel, 1)) {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Enchanter Fuel").error();
             msg.add("Fuel must have stack size of 1, got {}", fuel.getCount());

@@ -111,8 +111,7 @@ public class Centrifuge extends ForestryRegistry<ICentrifugeRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

@@ -150,7 +150,7 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // Uses blocks to craft
             return 1;
         }

@@ -142,8 +142,7 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

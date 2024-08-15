@@ -126,7 +126,7 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // Uses blocks to craft
             return 1;
         }

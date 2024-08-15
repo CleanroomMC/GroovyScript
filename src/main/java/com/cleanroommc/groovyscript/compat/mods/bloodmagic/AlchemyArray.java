@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeAlchemyArray;
-import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -189,7 +188,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // More than 1 item cannot be placed in the Ashes's slots
             return 1;
         }

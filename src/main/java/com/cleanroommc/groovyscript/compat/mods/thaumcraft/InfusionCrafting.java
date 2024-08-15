@@ -197,7 +197,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // More than 1 item cannot be placed in each pedestal
             return 1;
         }

@@ -159,8 +159,7 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

@@ -115,7 +115,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // Each slot of Apothecary can only contain 1 item
             return 1;
         }

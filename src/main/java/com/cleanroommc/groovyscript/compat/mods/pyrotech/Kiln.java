@@ -116,8 +116,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

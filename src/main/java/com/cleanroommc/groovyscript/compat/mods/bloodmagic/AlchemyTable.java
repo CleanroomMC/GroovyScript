@@ -172,8 +172,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

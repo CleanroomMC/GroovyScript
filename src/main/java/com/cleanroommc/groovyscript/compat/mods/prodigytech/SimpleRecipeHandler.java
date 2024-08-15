@@ -41,7 +41,7 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // PT modifies the recipe to only consume 1 item
             return 1;
         }

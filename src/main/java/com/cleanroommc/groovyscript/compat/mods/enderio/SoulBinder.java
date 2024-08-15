@@ -166,7 +166,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // More than 1 item cannot be placed in the machine's slots
             return 1;
         }

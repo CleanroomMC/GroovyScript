@@ -82,8 +82,7 @@ public class RedstoneExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Va
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

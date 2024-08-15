@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.prodigytech;
 
-import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
@@ -53,9 +52,9 @@ public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
     public void add(IIngredient x) {
         if (IngredientHelper.overMaxSize(x, 1)) {
             // PT modifies the recipe to only consume 1 item
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Primordialis Reactor fuel").error();
-            msg.add("Expected input stack size of 1");
-            msg.post();
+            GroovyLog.msg("Error adding Primordialis Reactor fuel").error()
+                    .add("Expected input stack size of 1")
+                    .post();
             return;
         }
 

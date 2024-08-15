@@ -89,8 +89,7 @@ public class ScientificCalculator extends VirtualizedRegistry<CalculatorRecipe> 
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

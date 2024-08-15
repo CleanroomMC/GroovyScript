@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.prodigytech;
 
-import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
@@ -36,10 +35,9 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @MethodDescription(example = @Example("item('minecraft:cobblestone'), 50"), type = MethodDescription.Type.ADDITION)
     public void addExplosive(IIngredient explosive, int power) {
         if (IngredientHelper.overMaxSize(explosive, 1)) {
-            // Ignores input stack size
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Explosion Furnace Explosive").error();
-            msg.add("Expected input stack size of 1");
-            msg.post();
+            GroovyLog.msg("Error adding Explosion Furnace Explosive").error()
+                    .add("Expected input stack size of 1")
+                    .post();
             return;
         }
 
@@ -50,7 +48,6 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @MethodDescription(example = @Example("ore('gunpowder')"))
     public boolean removeExplosive(IIngredient explosive) {
         for (ItemStack it : explosive.getMatchingStacks()) {
-            // Ignores input stack size
             ExplosionFurnaceManager.Explosive externalExplosive = ExplosionFurnaceManager.findExplosive(it);
             if (externalExplosive == null) continue;
             EFAdditiveRecipe recipe = new EFAdditiveExplosive(explosive, externalExplosive.getPower());
@@ -69,10 +66,9 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @MethodDescription(example = @Example("item('minecraft:stone'), 50"), type = MethodDescription.Type.ADDITION)
     public void addDampener(IIngredient dampener, int power) {
         if (IngredientHelper.overMaxSize(dampener, 1)) {
-            // Ignores input stack size
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Explosion Furnace Dampener").error();
-            msg.add("Expected input stack size of 1");
-            msg.post();
+            GroovyLog.msg("Error adding Explosion Furnace Dampener").error()
+                    .add("Expected input stack size of 1")
+                    .post();
             return;
         }
 

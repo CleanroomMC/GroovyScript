@@ -160,7 +160,7 @@ public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.Plast
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // PnC modifies the recipe to only consume 1 item
             return 1;
         }

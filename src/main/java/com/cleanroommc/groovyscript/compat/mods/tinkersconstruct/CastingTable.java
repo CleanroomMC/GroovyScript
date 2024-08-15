@@ -145,7 +145,7 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // More than 1 item cannot be placed
             return 1;
         }

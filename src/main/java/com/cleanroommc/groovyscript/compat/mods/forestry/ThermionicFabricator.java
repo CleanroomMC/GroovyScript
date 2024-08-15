@@ -1,10 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.forestry;
 
-import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.core.mixin.forestry.FabricatorRecipeManagerAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
@@ -22,7 +20,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
 
@@ -165,7 +162,6 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
             validateItems(msg, 0, 0, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);
             Carpenter.validatePattern(msg, pattern, keys);
-            // ignores input stack size on both catalyst and grid
             msg.add(IngredientHelper.overMaxSize(keys.values(), 1), "Each grid input must have a stack size of 1");
             msg.add(IngredientHelper.overMaxSize(catalyst, 1), "Catalyst must have a stack size of 1");
         }

@@ -149,7 +149,7 @@ public class Squeezer extends VirtualizedRegistry<IRecipe<IngredientRecipeCompon
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // More than 1 item cannot be placed (normal), ignores input stack size (mechanical)
             return 1;
         }

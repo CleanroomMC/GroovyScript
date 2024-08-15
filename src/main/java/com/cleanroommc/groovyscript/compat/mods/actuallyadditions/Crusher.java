@@ -104,8 +104,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

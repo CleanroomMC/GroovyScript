@@ -147,7 +147,7 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // Uses blocks to craft
             return 1;
         }

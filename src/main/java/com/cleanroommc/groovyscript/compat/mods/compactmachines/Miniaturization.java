@@ -172,7 +172,7 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // GS's code throws the quantity away
             return 1;
         }

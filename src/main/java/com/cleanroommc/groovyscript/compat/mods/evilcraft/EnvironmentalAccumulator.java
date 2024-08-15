@@ -166,8 +166,7 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

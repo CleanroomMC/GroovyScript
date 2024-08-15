@@ -82,8 +82,7 @@ public class GlowstoneExtractor extends VirtualizedRegistry<DefaultSonarRecipe.V
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

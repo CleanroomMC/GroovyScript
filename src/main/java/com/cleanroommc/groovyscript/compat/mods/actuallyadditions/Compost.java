@@ -111,8 +111,7 @@ public class Compost extends VirtualizedRegistry<CompostRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

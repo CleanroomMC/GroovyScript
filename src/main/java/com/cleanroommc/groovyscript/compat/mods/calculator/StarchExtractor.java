@@ -82,8 +82,7 @@ public class StarchExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Valu
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

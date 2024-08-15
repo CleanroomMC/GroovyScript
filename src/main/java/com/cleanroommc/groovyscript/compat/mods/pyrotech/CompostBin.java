@@ -85,7 +85,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // The composting bin won't accept any item that has a stack size of more than 1
             return 1;
         }

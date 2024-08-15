@@ -105,8 +105,7 @@ public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

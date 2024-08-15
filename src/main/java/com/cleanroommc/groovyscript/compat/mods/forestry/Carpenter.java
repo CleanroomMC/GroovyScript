@@ -200,7 +200,6 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
             validateFluids(msg, 0, 1, 0, 0);
             validateItems(msg, 0, 0, 1, 1);
             validatePattern(msg, pattern, keys);
-            // ignores input stack size on both box and grid
             msg.add(IngredientHelper.overMaxSize(keys.values(), 1), "Each grid input must have a stack size of 1");
             msg.add(IngredientHelper.overMaxSize(box, 1), "Box must have a stack size of 1");
             if (GroovyScriptConfig.compat.checkInputStackCounts) {

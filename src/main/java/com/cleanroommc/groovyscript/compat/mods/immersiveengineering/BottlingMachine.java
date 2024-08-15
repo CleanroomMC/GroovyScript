@@ -119,7 +119,7 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
     public static class RecipeBuilder extends AbstractRecipeBuilder<BottlingMachineRecipe> {
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // Recipe cannot be executed
             return 1;
         }

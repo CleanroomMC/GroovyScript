@@ -101,7 +101,7 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // The recipe requires X inputs, but only consumes 1 anyway
             return 1;
         }

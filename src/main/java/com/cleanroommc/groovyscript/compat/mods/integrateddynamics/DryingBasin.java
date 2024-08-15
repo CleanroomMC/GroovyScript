@@ -135,7 +135,7 @@ public class DryingBasin extends VirtualizedRegistry<IRecipe<IngredientAndFluidS
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // More than 1 item cannot be placed (normal), ignores input stack size (mechanical)
             return 1;
         }

@@ -138,8 +138,7 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 

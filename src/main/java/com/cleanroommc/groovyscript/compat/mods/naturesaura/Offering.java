@@ -126,7 +126,7 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
+        protected int getMaxItemInput() {
             // Offering Table's capacity
             return 16;
         }

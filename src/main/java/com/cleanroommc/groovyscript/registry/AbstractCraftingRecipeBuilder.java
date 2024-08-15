@@ -170,11 +170,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         }
         int finalRowWidth = rowWidth;
         msg.add(rowWidth > width, () -> "At least one row has a row length of " + finalRowWidth + ", but maximum is " + width);
-
-        if (GroovyScriptConfig.compat.checkInputStackCounts) {
-            int maxAmountProvided = ingredients.stream().mapToInt(IResourceStack::getAmount).max().orElse(0);
-            msg.add(maxAmountProvided > 1, "All crafting slot inputs must have a size of 1, got {}", maxAmountProvided);
-        }
+        checkStackSizes(msg, ingredients);
 
         if (checkedChars.isEmpty()) {
             msg.add("Matrix must not be empty");
@@ -186,6 +182,14 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         }
         if (msg.postIfNotEmpty()) return null;
         return recipeCreator.createRecipe(rowWidth, keyBasedMatrix.length, ingredients);
+    }
+
+    protected void checkStackSizes(GroovyLog.Msg msg, Collection<IIngredient> ingredients) {
+        if (GroovyScriptConfig.compat.checkInputStackCounts) {
+            for (IIngredient ingredient : ingredients) {
+                msg.add(IngredientHelper.overMaxSize(ingredient, 1), "Expected stack size 1 for {}, got {}", ingredient.toString(), ingredient.getAmount());
+            }
+        }
     }
 
     @GroovyBlacklist

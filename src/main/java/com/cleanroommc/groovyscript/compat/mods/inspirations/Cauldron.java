@@ -348,8 +348,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         }
 
         @Override
-        protected int getMaxInput() {
-            // Ignores input stack size
+        protected int getMaxItemInput() {
             return 1;
         }
 
