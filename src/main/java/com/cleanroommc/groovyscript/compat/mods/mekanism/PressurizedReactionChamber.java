@@ -29,16 +29,9 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
         return new RecipeBuilder();
     }
 
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public PressurizedRecipe add(IIngredient inputSolid, FluidStack inputFluid, GasStack inputGas, ItemStack outputSolid, GasStack outputGas, double energy, int duration) {
-        PressurizedRecipe r = null;
-        for (ItemStack item : inputSolid.getMatchingStacks()) {
-            PressurizedRecipe recipe = new PressurizedRecipe(item, inputFluid, inputGas, outputSolid, outputGas, energy, duration);
-            if (r == null) r = recipe;
-            recipeRegistry.put(recipe);
-            addScripted(recipe);
-        }
-        return r;
+        return recipeBuilder().duration(duration).energy(energy).gasOutput(outputGas).gasInput(inputGas).fluidInput(inputFluid).output(outputSolid).input(inputSolid).register();
     }
 
     @MethodDescription(example = @Example("ore('logWood'), fluid('water'), gas('oxygen')"))

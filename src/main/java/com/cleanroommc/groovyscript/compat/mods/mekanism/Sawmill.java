@@ -26,38 +26,19 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.sawmill.add0")
+    @MethodDescription(description = "groovyscript.wiki.mekanism.sawmill.add0", type = MethodDescription.Type.ADDITION)
     public SawmillRecipe add(IIngredient ingredient, ItemStack output) {
         return add(ingredient, output, null, 0.0);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.mekanism.sawmill.add1")
+    @MethodDescription(description = "groovyscript.wiki.mekanism.sawmill.add1", type = MethodDescription.Type.ADDITION)
     public SawmillRecipe add(IIngredient ingredient, ItemStack output, ItemStack secondary) {
         return add(ingredient, output, secondary, 1.0);
     }
 
     @MethodDescription(description = "groovyscript.wiki.mekanism.sawmill.add2", type = MethodDescription.Type.ADDITION, example = @Example(value = "item('minecraft:diamond_block'), item('minecraft:diamond') * 9, item('minecraft:clay_ball'), 0.7", commented = true))
     public SawmillRecipe add(IIngredient ingredient, ItemStack output, ItemStack secondary, double chance) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Sawmill recipe").error();
-        msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
-        if (msg.postIfNotEmpty()) return null;
-
-        boolean withSecondary = !IngredientHelper.isEmpty(secondary);
-        if (withSecondary) {
-            if (chance <= 0) chance = 1;
-        }
-
-        SawmillRecipe recipe1 = null;
-        for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            SawmillRecipe recipe;
-            ChanceOutput chanceOutput = withSecondary ? new ChanceOutput(output, secondary, chance) : new ChanceOutput(output);
-            recipe = new SawmillRecipe(new ItemStackInput(itemStack), chanceOutput);
-            if (recipe1 == null) recipe1 = recipe;
-            recipeRegistry.put(recipe);
-            addScripted(recipe);
-        }
-        return recipe1;
+        return recipeBuilder().extra(secondary).chance(chance).output(output).input(ingredient).register();
     }
 
     @MethodDescription(example = @Example("item('minecraft:ladder')"))
@@ -117,7 +98,7 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable SawmillRecipe register() {
             if (!validate()) return null;
-            ChanceOutput chanceOutput = extra.isEmpty()
+            ChanceOutput chanceOutput = IngredientHelper.isEmpty(extra)
                                         ? new ChanceOutput(output.get(0))
                                         : new ChanceOutput(output.get(0), extra, chance);
             SawmillRecipe recipe = null;

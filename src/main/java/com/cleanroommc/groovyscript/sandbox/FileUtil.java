@@ -20,11 +20,24 @@ public class FileUtil {
         if (File.separatorChar != '/') {
             longerThanRootPath = longerThanRootPath.replace('/', File.separatorChar);
         }
+        return relativizeInternal(fixDriveCase(rootPath), fixDriveCase(longerThanRootPath));
+    }
+
+    private static String relativizeInternal(String rootPath, String longerThanRootPath) {
         int index = longerThanRootPath.indexOf(rootPath);
         if (index < 0) {
             throw new IllegalArgumentException("The path '" + longerThanRootPath + "' does not contain the root path '" + rootPath + "'");
         }
         return longerThanRootPath.substring(index + rootPath.length() + 1);
+    }
+
+    // sometimes the paths passed to relativize() have a lower case drive letter
+    public static String fixDriveCase(String path) {
+        if (path == null || path.length() < 2) return path;
+        if (Character.isLowerCase(path.charAt(0)) && path.charAt(1) == ':') {
+            return Character.toUpperCase(path.charAt(0)) + ":" + path.substring(2);
+        }
+        return path;
     }
 
     public static String getParent(String path) {

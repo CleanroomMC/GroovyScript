@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.google.common.collect.Lists;
+import com.lothrazar.cyclicmagic.CyclicContent;
 import com.lothrazar.cyclicmagic.block.hydrator.RecipeHydrate;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +27,11 @@ public class Hydrator extends VirtualizedRegistry<RecipeHydrate> {
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return CyclicContent.hydrator.enabled();
     }
 
     @Override

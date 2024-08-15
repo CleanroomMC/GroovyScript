@@ -17,6 +17,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 
 @RegistryDescription
@@ -38,21 +39,13 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public RecipeTartaricForge add(NonNullList<Ingredient> input, ItemStack output, double minimumSouls, double soulDrain) {
-        double minimum;
-        if (minimumSouls < soulDrain) {
-            GroovyLog.msg("Warning creating Blood Magic Tartaric Forge recipe")
-                    .add("minimumSouls should be greater than soulDrain, yet minimumSouls was {} and soulDrain was {}", minimumSouls, soulDrain)
-                    .add("set minimumSouls equal to soulDrain")
-                    .warn()
-                    .post();
-            minimum = soulDrain;
-        } else {
-            minimum = minimumSouls;
-        }
-        RecipeTartaricForge recipe = new RecipeTartaricForge(input, output, minimum, soulDrain);
-        add(recipe);
-        return recipe;
+    public RecipeTartaricForge add(Collection<IIngredient> input, ItemStack output, double minimumSouls, double soulDrain) {
+        return recipeBuilder()
+                .soulDrain(soulDrain)
+                .minimumSouls(minimumSouls)
+                .output(output)
+                .input(input)
+                .register();
     }
 
     public void add(RecipeTartaricForge recipe) {

@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedField;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedMethod;
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.MethodNode;
@@ -22,63 +23,74 @@ import java.util.List;
 public class GroovyCodeFactory {
 
     public static final String MC_CLASS = "net.minecraft.";
+    public static final boolean spongeForgeLoaded = Loader.isModLoaded("spongeforge");
 
     private GroovyCodeFactory() {
     }
 
-    public static PrivilegedAction<CachedField[]> makeFieldsHook(CachedClass cachedClass) {
-        return () -> Arrays.stream(cachedClass.getTheClass().getDeclaredFields())
-                .filter(f -> ReflectionUtils.checkCanSetAccessible(f, CachedClass.class))
-                .filter(GroovySecurityManager.INSTANCE::isValid)
-                .map(!FMLLaunchHandler.isDeobfuscatedEnvironment() && cachedClass.getName().startsWith(MC_CLASS) ?
-                     f -> makeField(cachedClass, f) :
-                     CachedField::new)
-                .toArray(CachedField[]::new);
+    public static boolean shouldRemap(CachedClass cachedClass) {
+        return !spongeForgeLoaded && !FMLLaunchHandler.isDeobfuscatedEnvironment() && cachedClass.getName().startsWith(MC_CLASS);
     }
 
-    private static CachedField makeField(CachedClass cachedClass, Field field) {
-        String deobfName = GroovyDeobfMapper.getDeobfField(cachedClass.getTheClass(), field.getName());
-        return deobfName == null ?
-               new CachedField(field) :
-               new RemappedCachedField(field, deobfName);
+    public static PrivilegedAction<CachedField[]> makeFieldsHook(CachedClass cachedClass) {
+        return () -> {
+            final boolean remap = shouldRemap(cachedClass);
+            return Arrays.stream(cachedClass.getTheClass().getDeclaredFields())
+                         .filter(f -> ReflectionUtils.checkCanSetAccessible(f, CachedClass.class))
+                         .filter(GroovySecurityManager.INSTANCE::isValid)
+                         .map(f -> makeField(cachedClass, f, remap))
+                         .toArray(CachedField[]::new);
+        };
+    }
+
+    private static CachedField makeField(CachedClass cachedClass, Field field, boolean tryRemap) {
+        if (tryRemap) {
+            String deobfName = GroovyDeobfMapper.getDeobfField(cachedClass.getTheClass(), field.getName());
+            if (deobfName != null) {
+                return new RemappedCachedField(field, deobfName);
+            }
+        }
+        return new CachedField(field);
     }
 
     public static PrivilegedAction<CachedConstructor[]> makeConstructorsHook(CachedClass cachedClass) {
         return () -> Arrays.stream(cachedClass.getTheClass().getDeclaredConstructors())
-                .filter(c -> !c.isSynthetic()) // GROOVY-9245: exclude inner class ctors
-                .filter(c -> ReflectionUtils.checkCanSetAccessible(c, CachedClass.class))
-                .filter(c -> !c.isAnnotationPresent(GroovyBlacklist.class))
-                .map(c -> new CachedConstructor(cachedClass, c))
-                .toArray(CachedConstructor[]::new);
+                           .filter(c -> !c.isSynthetic()) // GROOVY-9245: exclude inner class ctors
+                           .filter(c -> ReflectionUtils.checkCanSetAccessible(c, CachedClass.class))
+                           .filter(c -> !c.isAnnotationPresent(GroovyBlacklist.class))
+                           .map(c -> new CachedConstructor(cachedClass, c))
+                           .toArray(CachedConstructor[]::new);
     }
 
     public static PrivilegedAction<CachedMethod[]> makeMethodsHook(CachedClass cachedClass) {
         return () -> {
             try {
+                final boolean remap = shouldRemap(cachedClass);
                 return Arrays.stream(cachedClass.getTheClass().getDeclaredMethods())
-                        .filter(m -> m.getName().indexOf('+') < 0) // no synthetic JDK 5+ methods
-                        .filter(m -> ReflectionUtils.checkCanSetAccessible(m, CachedClass.class))
-                        .filter(GroovySecurityManager.INSTANCE::isValid)
-                        .map(!FMLLaunchHandler.isDeobfuscatedEnvironment() && cachedClass.getName().startsWith(MC_CLASS) ?
-                             m -> makeMethod(cachedClass, m) :
-                             m -> new CachedMethod(cachedClass, m))
-                        .toArray(CachedMethod[]::new);
+                             .filter(m -> m.getName().indexOf('+') < 0) // no synthetic JDK 5+ methods
+                             .filter(m -> ReflectionUtils.checkCanSetAccessible(m, CachedClass.class))
+                             .filter(GroovySecurityManager.INSTANCE::isValid)
+                             .map(m -> makeMethod(cachedClass, m, remap))
+                             .distinct()
+                             .toArray(CachedMethod[]::new);
             } catch (LinkageError e) {
                 return CachedMethod.EMPTY_ARRAY;
             }
         };
     }
 
-    private static CachedMethod makeMethod(CachedClass cachedClass, Method method) {
-        String deobfName = GroovyDeobfMapper.getDeobfMethod(cachedClass.getTheClass(), method.getName());
-        return deobfName == null ?
-               new CachedMethod(cachedClass, method) :
-               new RemappedCachedMethod(cachedClass, method, deobfName);
+    private static CachedMethod makeMethod(CachedClass cachedClass, Method method, boolean tryRemap) {
+        if (tryRemap) {
+            String deobfName = GroovyDeobfMapper.getDeobfMethod(cachedClass.getTheClass(), method.getName());
+            if (deobfName != null) {
+                return new RemappedCachedMethod(cachedClass, method, deobfName);
+            }
+        }
+        return new CachedMethod(cachedClass, method);
     }
 
     /**
-     * This bad boy is responsible for remapping overriden methods.
-     * Called via Mixin
+     * This bad boy is responsible for remapping overriden methods. Called via Mixin
      */
     public static void remapOverrides(ClassNode classNode) {
         if (FMLLaunchHandler.isDeobfuscatedEnvironment()) return;
@@ -98,7 +110,8 @@ public class GroovyCodeFactory {
      * Copies a method node with a new name
      */
     private static MethodNode copyRemappedMethodNode(String name, MethodNode original) {
-        MethodNode copy = new MethodNode(name, original.getModifiers(), original.getReturnType(), original.getParameters(), original.getExceptions(), original.getCode());
+        MethodNode copy = new MethodNode(name, original.getModifiers(), original.getReturnType(), original.getParameters(),
+                                         original.getExceptions(), original.getCode());
         copy.setAnnotationDefault(original.hasDefaultValue());
         copy.setColumnNumber(original.getColumnNumber());
         copy.setDeclaringClass(original.getDeclaringClass());

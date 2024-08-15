@@ -51,7 +51,8 @@ public class RunConfig {
         JsonObject packmode = new JsonObject();
         packmode.add("values", new JsonArray());
         packmode.addProperty("default", "");
-        packmode.addProperty("_comment", "By default the packmode is not synced with the packmode mod. You can enable integration, but you can no longer change packmode on the fly.");
+        packmode.addProperty("_comment",
+                             "By default the packmode is not synced with the packmode mod. You can enable integration, but you can no longer change packmode on the fly.");
         packmode.addProperty("integratePackmodeMod", false);
         json.add("packmode", packmode);
         return json;
@@ -155,7 +156,10 @@ public class RunConfig {
         JsonObject jsonLoaders = JsonHelper.getJsonObject(json, "loaders");
         List<Pair<String, String>> pathsList = new ArrayList<>();
 
-        GroovyLog.Msg errorMsg = GroovyLog.msg("Fatal while parsing runConfig.json").add("Files should NOT be ran in multiple loaders!").logToMc().fatal();
+        GroovyLog.Msg errorMsg = GroovyLog.msg("Fatal while parsing runConfig.json")
+                                          .add("Files should NOT be ran in multiple loaders!")
+                                          .logToMc()
+                                          .fatal();
 
         for (Map.Entry<String, JsonElement> entry : jsonLoaders.entrySet()) {
             JsonArray loader = (JsonArray) entry.getValue();
@@ -219,11 +223,11 @@ public class RunConfig {
     public String getPackId() {
         if (this.invalidPackId && !this.warnedAboutInvalidPackId) {
             GroovyLog.msg("Fatal error while trying to use the pack id")
-                    .add("specified pack id is invalid or empty ('{}')", this.packId)
-                    .add("pack id must only contain lower case letters and underscores")
-                    .add("see https://groovyscript-docs.readthedocs.io/en/latest/getting_started/#run-config for more info")
-                    .fatal()
-                    .post();
+                     .add("specified pack id is invalid or empty ('{}')", this.packId)
+                     .add("pack id must only contain lower case letters and underscores")
+                     .add("see https://cleanroommc.com/groovy-script/getting_started/run_config for more info")
+                     .fatal()
+                     .post();
             this.warnedAboutInvalidPackId = true;
         }
         return packId;

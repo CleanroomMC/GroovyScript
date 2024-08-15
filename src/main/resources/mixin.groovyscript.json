@@ -29,6 +29,7 @@
     "groovy.Java8Mixin",
     "groovy.MetaClassImplMixin",
     "groovy.ModuleNodeAccessor",
+    "groovy.ModuleNodeMixin",
     "loot.LoadTableEventMixin",
     "loot.LootPoolAccessor",
     "loot.LootTableAccessor",
@@ -36,6 +37,6 @@
   ],
   "client": [
     "DefaultResourcePackAccessor",
-    "GuiCreateWorldMixin",
+    "GuiCreateWorldMixin"
   ]
 }

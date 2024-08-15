@@ -1,4 +1,4 @@
-//version: 1718246243
+//version: 1720840170
 /*
  * DO NOT CHANGE THIS FILE!
  * Also, you may replace this file at any time if there is an update available.
@@ -33,9 +33,9 @@ plugins {
     id 'base'
     id 'eclipse'
     id 'maven-publish'
-    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.7'
-    id 'com.gtnewhorizons.retrofuturagradle' version '1.3.33'
-    id 'net.darkhax.curseforgegradle' version '1.1.18' apply false
+    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.8'
+    id 'com.gtnewhorizons.retrofuturagradle' version '1.4.0'
+    id 'net.darkhax.curseforgegradle' version '1.1.24' apply false
     id 'com.modrinth.minotaur' version '2.8.7' apply false
     id 'com.diffplug.spotless' version '6.13.0' apply false
     id 'com.palantir.git-version' version '3.0.0' apply false
@@ -69,6 +69,7 @@ propertyDefaultIfUnset("includeMCVersionJar", false)
 propertyDefaultIfUnset("autoUpdateBuildScript", false)
 propertyDefaultIfUnset("modArchivesBaseName", project.modId)
 propertyDefaultIfUnsetWithEnvVar("developmentEnvironmentUserName", "Developer", "DEV_USERNAME")
+propertyDefaultIfUnset("additionalJavaArguments", "")
 propertyDefaultIfUnset("enableJava17RunTasks", false)
 propertyDefaultIfUnset("generateGradleTokenClass", "")
 propertyDefaultIfUnset("gradleTokenModId", "")
@@ -77,8 +78,10 @@ propertyDefaultIfUnset("gradleTokenVersion", "")
 propertyDefaultIfUnset("useSrcApiPath", false)
 propertyDefaultIfUnset("includeWellKnownRepositories", true)
 propertyDefaultIfUnset("includeCommonDevEnvMods", true)
+propertyDefaultIfUnset("stripForgeRequirements", false)
 propertyDefaultIfUnset("noPublishedSources", false)
 propertyDefaultIfUnset("forceEnableMixins", false)
+propertyDefaultIfUnset("mixinConfigRefmap", "mixins.${project.modId}.refmap.json")
 propertyDefaultIfUnsetWithEnvVar("enableCoreModDebug", false, "CORE_MOD_DEBUG")
 propertyDefaultIfUnset("generateMixinConfig", true)
 propertyDefaultIfUnset("usesShadowedDependencies", false)
@@ -119,7 +122,7 @@ if (!getFile(targetPackageJava).exists() && !getFile(targetPackageScala).exists(
 
 if (apiPackage) {
     final String endApiPath = modGroupPath + '/' + apiPackagePath
-    if (useSrcApiPath) {
+    if (useSrcApiPath.toBoolean()) {
         targetPackageJava = 'src/api/java/' + endApiPath
         targetPackageScala = 'src/api/scala/' + endApiPath
         targetPackageKotlin = 'src/api/kotlin/' + endApiPath
@@ -382,6 +385,10 @@ minecraft {
         ])
     }
 
+    if (additionalJavaArguments.size() != 0) {
+        extraRunJvmArguments.addAll(additionalJavaArguments.split(';'))
+    }
+
     if (enableJava17RunTasks.toBoolean()) {
         lwjgl3Version = "3.3.2"
     }
@@ -520,7 +527,7 @@ dependencies {
         // should use 2.8.6 but 2.8.9+ has a vulnerability fix
         annotationProcessor 'com.google.code.gson:gson:2.8.9'
 
-        mixinProviderSpec = modUtils.enableMixins(mixinProviderSpec, "mixins.${modId}.refmap.json")
+        mixinProviderSpec = modUtils.enableMixins(mixinProviderSpec, mixinConfigRefmap)
         api (mixinProviderSpec) {
             transitive = false
         }
@@ -560,6 +567,10 @@ dependencies {
     annotationProcessor 'org.jetbrains:annotations:24.1.0'
     patchedMinecraft('net.minecraft:launchwrapper:1.17.2') {
         transitive = false
+    }
+
+    if ((usesMixins.toBoolean() || forceEnableMixins.toBoolean()) && stripForgeRequirements.toBoolean()) {
+        runtimeOnlyNonPublishable 'com.cleanroommc:strip-latest-forge-requirements:1.0'
     }
 
     if (includeCommonDevEnvMods.toBoolean()) {
@@ -695,7 +706,6 @@ tasks.register('generateAssets') {
         if (usesMixins.toBoolean() && generateMixinConfig.toBoolean()) {
             def mixinConfigFile = getFile("src/main/resources/mixins.${modId}.json")
             if (!mixinConfigFile.exists()) {
-                def mixinConfigRefmap = "mixins.${modId}.refmap.json"
 
                 mixinConfigFile.text = """{
   "package": "${modGroup}.${mixinsPackage}",
@@ -999,7 +1009,7 @@ abstract class RunHotswappableMinecraftTask extends RunMinecraftTask {
 
         if (project.usesMixins.toBoolean()) {
             this.extraJvmArgs.addAll(project.provider(() -> {
-                def mixinCfg = project.configurations.detachedConfiguration(project.dependencies.create(project.mixinProviderSpec))
+                def mixinCfg = project.configurations.detachedConfiguration(project.dependencies.create('zone.rong:mixinbooter:9.1'))
                 mixinCfg.canBeConsumed = false
                 mixinCfg.canBeResolved = true
                 mixinCfg.transitive = false
@@ -1225,6 +1235,30 @@ if (cfApiKey.isPresent() || deploymentDebug.toBoolean()) {
             for (artifact in getSecondaryArtifacts()) {
                 def additionalFile = mainFile.withAdditionalFile(artifact)
                 additionalFile.changelog = changelogRaw
+            }
+        }
+        doLast {
+            // No File IDs in Debug Mode
+            if (!deploymentDebug.toBoolean()) {
+                def list = []
+                for (def artifact : tasks.curseforge.getUploadArtifacts()) {
+                    list.add(artifact)
+                    for (def additionalArtifact : artifact.getAdditionalArtifacts()) {
+                        list.add(additionalArtifact)
+                    }
+                }
+                def summary = "## CurseForge Build Summary (Mod ${modName} | Project ID ${curseForgeProjectId})"
+                for (def artifact : list) {
+                    def fileId = artifact.getCurseFileId()
+                    def fileName = artifact.getArtifact().getSingleFile().name
+                    println("Uploaded File ${fileName}, With File ID: ${fileId}")
+                    summary = summary + "\n  - File: ${fileName} | File ID: ${fileId}"
+                }
+                println(summary)
+                def stepSummary = providers.environmentVariable("GITHUB_STEP_SUMMARY")
+                if (stepSummary.isPresent()) {
+                    file(stepSummary.get()).write(summary)
+                }
             }
         }
     }

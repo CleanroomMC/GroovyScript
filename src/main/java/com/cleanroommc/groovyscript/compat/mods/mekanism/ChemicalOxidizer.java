@@ -29,19 +29,7 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "ore('dustGold'), gas('gold')", commented = true))
     public OxidationRecipe add(IIngredient ingredient, GasStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Oxidizer recipe").error();
-        msg.add(IngredientHelper.isEmpty(ingredient), () -> "input must not be empty");
-        msg.add(Mekanism.isEmpty(output), () -> "output must not be empty");
-        if (msg.postIfNotEmpty()) return null;
-
-        OxidationRecipe recipe1 = null;
-        for (ItemStack itemStack : ingredient.getMatchingStacks()) {
-            OxidationRecipe recipe = new OxidationRecipe(itemStack, output);
-            if (recipe1 == null) recipe1 = recipe;
-            recipeRegistry.put(recipe);
-            addScripted(recipe);
-        }
-        return recipe1;
+        return recipeBuilder().gasOutput(output).input(ingredient).register();
     }
 
     @MethodDescription(example = @Example("ore('dustSulfur')"))

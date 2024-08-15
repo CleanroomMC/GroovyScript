@@ -25,16 +25,7 @@ public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuser
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('copper') * 10, gas('iron'), gas('gold') * 15", commented = true))
     public ChemicalInfuserRecipe add(GasStack leftInput, GasStack rightInput, GasStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Chemical Infuser recipe").error();
-        msg.add(Mekanism.isEmpty(leftInput), () -> "left gas input must not be empty");
-        msg.add(Mekanism.isEmpty(rightInput), () -> "right gas input must not be empty");
-        msg.add(Mekanism.isEmpty(output), () -> "gas output must not be empty");
-        if (msg.postIfNotEmpty()) return null;
-
-        ChemicalInfuserRecipe recipe = new ChemicalInfuserRecipe(leftInput, rightInput, output);
-        addScripted(recipe);
-        recipeRegistry.put(recipe);
-        return recipe;
+        return recipeBuilder().gasInput(leftInput, rightInput).gasOutput(output).register();
     }
 
     @MethodDescription(example = @Example("gas('hydrogen'), gas('chlorine')"))

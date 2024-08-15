@@ -26,15 +26,7 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('water'), gas('hydrogen')", commented = true))
     public WasherRecipe add(GasStack input, GasStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Washer recipe").error();
-        msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
-        msg.add(Mekanism.isEmpty(output), () -> "output must not be empty");
-        if (msg.postIfNotEmpty()) return null;
-
-        WasherRecipe recipe = new WasherRecipe(input, output);
-        recipeRegistry.put(recipe);
-        addScripted(recipe);
-        return recipe;
+        return recipeBuilder().gasOutput(output).gasInput(input).register();
     }
 
     @MethodDescription(example = @Example("gas('iron')"))

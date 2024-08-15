@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: primal_tech
 
-println 'mod \'primal_tech\' detected, running script'
+log.info 'mod \'primal_tech\' detected, running script'
 
 // Clay Kiln:
 // Converts an input item into an output itemstack after a given amount of time. Requires the block below to be Minecraft

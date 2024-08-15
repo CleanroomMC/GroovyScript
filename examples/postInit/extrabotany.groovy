@@ -2,10 +2,11 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: extrabotany
 
-println 'mod \'extrabotany\' detected, running script'
+log.info 'mod \'extrabotany\' detected, running script'
 
-// groovyscript.wiki.extrabotany.pedestal.title:
-// groovyscript.wiki.extrabotany.pedestal.description
+// Livingrock Pedestal:
+// Converts an input item into an output itemstack when placed inside a Livingrock Pedestal and interacted with by an Extra
+// Botany Hammer.
 
 mods.extrabotany.pedestal.removeByInput(item('minecraft:cobblestone'))
 mods.extrabotany.pedestal.removeByOutput(item('minecraft:flint'))

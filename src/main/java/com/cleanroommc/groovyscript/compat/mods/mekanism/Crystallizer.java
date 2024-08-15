@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.GasRecipeBuilder;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.recipe.VirtualizedMekanismRegistry;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import mekanism.api.gas.GasStack;
 import mekanism.common.recipe.RecipeHandler;
 import mekanism.common.recipe.inputs.GasInput;
@@ -27,15 +26,7 @@ public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = "gas('cleanGold'), item('minecraft:gold_ingot')", commented = true))
     public CrystallizerRecipe add(GasStack input, ItemStack output) {
-        GroovyLog.Msg msg = GroovyLog.msg("Error adding Mekanism Crystallizer recipe").error();
-        msg.add(Mekanism.isEmpty(input), () -> "input must not be empty");
-        msg.add(IngredientHelper.isEmpty(output), () -> "output must not be empty");
-        if (msg.postIfNotEmpty()) return null;
-
-        CrystallizerRecipe recipe = new CrystallizerRecipe(input, output);
-        recipeRegistry.put(recipe);
-        addScripted(recipe);
-        return recipe;
+        return recipeBuilder().gasInput(input).output(output).register();
     }
 
     @MethodDescription(example = @Example("gas('cleanGold')"))

@@ -26,9 +26,7 @@ public class Moistener extends ForestryRegistry<IMoistenerRecipe> {
     }
 
     public IMoistenerRecipe add(ItemStack output, IIngredient input, int time) {
-        IMoistenerRecipe recipe = new MoistenerRecipe(input.getMatchingStacks()[0], output, time);
-        add(recipe);
-        return recipe;
+        return recipeBuilder().time(time).output(output).input(input).register();
     }
 
     public void add(IMoistenerRecipe recipe) {
