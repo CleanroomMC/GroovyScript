@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * A interface for the GroovyScript logger. The log is separate to Minecraft's normal and debug log.
+ * An interface for the GroovyScript logger. The log is separate to Minecraft's normal and debug log.
  * The generated log file can be found at "[Minecraft instance]/groovy.log".
  * All logging methods format its content similarly to how C does it.
  * Curly braces in the msg parameter get replaced with the given arguments.
@@ -270,6 +270,19 @@ public interface GroovyLog {
         Msg add(boolean condition, String msg, Object... args);
 
         /**
+         * Adds a sub message to this message with exactly one parameter, but only if the given condition is true. The arg {@link Supplier}
+         * is invoked if the condition is true.
+         *
+         * @param condition sub message will only be added if this is true
+         * @param msg       sub message
+         * @param arg       sub message argument
+         * @return this
+         */
+        default Msg add(boolean condition, String msg, Supplier<Object> arg) {
+            return add(condition, msg, (Object) arg);
+        }
+
+        /**
          * Adds a sub message to this message, but only if the given condition is true.
          * For convenience.
          *
@@ -290,8 +303,8 @@ public interface GroovyLog {
         Msg add(boolean condition, Consumer<Msg> msgBuilder);
 
         /**
-         * Adds an exception to the message. The exception will always be logged at last.
-         * The exception counts as a sub message. This message can only have one message at a time.
+         * Adds an exception to the message. The exception will always be logged at last. The exception counts as a sub message. This
+         * message can only have one message at a time.
          *
          * @param throwable exception.
          * @return this

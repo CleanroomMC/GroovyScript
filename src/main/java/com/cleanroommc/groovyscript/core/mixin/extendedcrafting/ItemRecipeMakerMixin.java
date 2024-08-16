@@ -4,12 +4,14 @@ import com.blakebr0.extendedcrafting.config.ModConfig;
 import com.blakebr0.extendedcrafting.item.ItemRecipeMaker;
 import com.blakebr0.extendedcrafting.lib.IExtendedTable;
 import com.blakebr0.extendedcrafting.tile.TileEnderCrafter;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.google.common.base.Joiner;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -28,6 +30,7 @@ public abstract class ItemRecipeMakerMixin {
 
     @Inject(method = "setClipboard", at = @At("HEAD"), cancellable = true)
     public void setClipboard(IExtendedTable table, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+        if (!GroovyScriptConfig.compat.extendedCraftingRecipeMakerMakesGrsRecipes) return;
         if (Desktop.isDesktopSupported()) {
             boolean ender = table instanceof TileEnderCrafter;
             StringBuilder string = (new StringBuilder("mods.extendedcrafting.")).append(ender ? "EnderCrafting" : "TableCrafting");
@@ -54,13 +57,13 @@ public abstract class ItemRecipeMakerMixin {
         cir.setReturnValue(false);
     }
 
+    @Unique
     public String groovyscript$makeItemArrayShapeless(IExtendedTable table) {
         StringBuilder builder = new StringBuilder();
         boolean isEmpty = true;
         for (ItemStack stack : table.getMatrix()) {
             if (!stack.isEmpty()) {
-                builder.append(groovyscript$makeItem(stack))
-                        .append(", ");
+                builder.append(groovyscript$makeItem(stack)).append(", ");
                 isEmpty = false;
             }
         }
@@ -68,6 +71,7 @@ public abstract class ItemRecipeMakerMixin {
         return builder.delete(builder.length() - 2, builder.length()).toString();
     }
 
+    @Unique
     public String groovyscript$makeItemArrayShaped(IExtendedTable table, boolean removeEmpties) {
         List<List<String>> matrix = new ArrayList<>();
         int row = 0;

@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import groovy.lang.*;
@@ -24,9 +23,6 @@ public abstract class MetaClassImplMixin {
     protected abstract Object doInvokeMethod(Class sender, Object object, String methodName, Object[] originalArguments, boolean isCallToSuper, boolean fromInsideClass);
 
     @Shadow
-    protected MetaClassRegistry registry;
-
-    @Shadow
     protected abstract Object invokeMissingMethod(Object instance, String methodName, Object[] arguments, RuntimeException original, boolean isCallToSuper);
 
     @Shadow
@@ -47,6 +43,8 @@ public abstract class MetaClassImplMixin {
     @Shadow
     @Final
     private MetaMethod[] additionalMetaMethods;
+
+    @Shadow protected MetaClassRegistry registry;
 
     @Inject(method = "<init>(Ljava/lang/Class;[Lgroovy/lang/MetaMethod;)V", at = @At("TAIL"))
     public void removeBlacklistedAdditional(Class<?> theClass, MetaMethod[] add, CallbackInfo ci) {
@@ -132,7 +130,7 @@ public abstract class MetaClassImplMixin {
         } else if (!isCallToSuper && object instanceof IDynamicGroovyProperty dynamicGroovyProperty) {
             // TODO remove in 1.2.0
             value = dynamicGroovyProperty.getProperty(methodName);
-        } else if (object.getClass().getClassLoader() instanceof GroovyClassLoader) {
+        } else if (object instanceof GroovyObject) {
             value = GroovyScript.getSandbox().getBindings().get(methodName);
         }
 

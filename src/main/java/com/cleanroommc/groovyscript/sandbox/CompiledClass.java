@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.File;
@@ -44,6 +45,12 @@ class CompiledClass {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    protected void ensureLoaded(GroovyClassLoader classLoader, String basePath) {
+        if (this.clazz == null) {
+            this.clazz = classLoader.defineClass(this.name, this.data);
         }
     }
 

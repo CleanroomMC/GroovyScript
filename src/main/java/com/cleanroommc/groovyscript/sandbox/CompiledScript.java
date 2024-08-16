@@ -47,15 +47,13 @@ class CompiledScript extends CompiledClass {
         for (CompiledClass comp : this.innerClasses) {
             if (comp.clazz == null) {
                 if (comp.readData(basePath)) {
-                    comp.clazz = classLoader.defineClass(comp.name, comp.data);
+                    comp.ensureLoaded(classLoader, basePath);
                 } else {
                     GroovyLog.get().error("Error loading inner class {} for class {}", comp.name, this.name);
                 }
             }
         }
-        if (this.clazz == null) {
-            this.clazz = classLoader.defineClass(this.name, this.data);
-        }
+        super.ensureLoaded(classLoader, basePath);
     }
 
     @NotNull
