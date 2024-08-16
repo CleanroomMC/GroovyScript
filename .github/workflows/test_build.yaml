@@ -8,7 +8,6 @@ on:
   push:
     branches:
       - master
-      - crl-debug
     paths-ignore:
       - '.github/**' # Release GHA file, please change this when you change the file name
       - 'LICENSE' 
