@@ -58,7 +58,7 @@ public class InvokerHelperVisitor extends ClassVisitor implements Opcodes {
             super.visitFrame(type, nLocal, remapEntries(nLocal, local), nStack, remapEntries(nStack, stack));
         }
 
-        private Object[] remapEntries(int n, Object[] entries) {
+        private static Object[] remapEntries(int n, Object[] entries) {
             for (int i = 0; i < n; i++) {
                 if (entries[i] instanceof String) {
                     Object[] newEntries = new Object[n];
