@@ -31,7 +31,8 @@ public abstract class ModuleNodeMixin {
             // can happen with traits
             return;
         }
-        try(String rel = FileUtil.relativize(GroovyScript.getScriptPath(), script);){
+        try{
+            String rel = FileUtil.relativize(GroovyScript.getScriptPath(), script);
             int i = rel.lastIndexOf(File.separatorChar);
             if (i >= 0) {
                 // inject correct package declaration into script
