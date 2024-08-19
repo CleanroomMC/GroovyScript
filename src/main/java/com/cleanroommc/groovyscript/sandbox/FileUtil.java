@@ -14,10 +14,7 @@ public class FileUtil {
     public static boolean isRelative(String rootPath, String longerThanRootPath) {
         longerThanRootPath = fixPathSeparatorChar(longerThanRootPath);
         int index = longerThanRootPath.indexOf(rootPath);
-        if (index < 0) {
-            return false;
-        }
-        return true;
+        return index >= 0;
     }
 
     public static String relativize(String rootPath, String longerThanRootPath) {
