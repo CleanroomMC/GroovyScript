@@ -26,21 +26,17 @@ public abstract class ModuleNodeMixin {
     public void init(SourceUnit context, CallbackInfo ci) {
         // auto set package name
         String script = context.getName();
-        if (!RunConfig.isGroovyFile(script)) {
-            // probably not a script file
+        if (!RunConfig.isGroovyFile(script) || !FileUtil.isRelative(GroovyScript.getScriptPath(), script)) {
+            // probably not a script file or not a groovyscript groovy script
             // can happen with traits
             return;
         }
-        try{
-            String rel = FileUtil.relativize(GroovyScript.getScriptPath(), script);
-            int i = rel.lastIndexOf(File.separatorChar);
-            if (i >= 0) {
-                // inject correct package declaration into script
-                String packageName = rel.substring(0, i).replace(File.separatorChar, '.') + '.';
-                this.packageNode = new PackageNode(packageName);
-            }
-        }catch(Throwable ignored){
-            // Not a groovyscript groovy script
+        String rel = FileUtil.relativize(GroovyScript.getScriptPath(), script);
+        int i = rel.lastIndexOf(File.separatorChar);
+        if (i >= 0) {
+            // inject correct package declaration into script
+            String packageName = rel.substring(0, i).replace(File.separatorChar, '.') + '.';
+            this.packageNode = new PackageNode(packageName);
         }
     }
 

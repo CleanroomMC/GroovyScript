@@ -11,15 +11,17 @@ import java.nio.file.Files;
 
 public class FileUtil {
 
-    public static String relativize(String rootPath, String longerThanRootPath) {
-        try {
-            longerThanRootPath = URLDecoder.decode(longerThanRootPath, "UTF-8");
-        } catch (UnsupportedEncodingException ignored) {
+    public static boolean isRelative(String rootPath, String longerThanRootPath) {
+        longerThanRootPath = fixPathSeparatorChar(longerThanRootPath);
+        int index = longerThanRootPath.indexOf(rootPath);
+        if (index < 0) {
+            return false;
         }
+        return true;
+    }
 
-        if (File.separatorChar != '/') {
-            longerThanRootPath = longerThanRootPath.replace('/', File.separatorChar);
-        }
+    public static String relativize(String rootPath, String longerThanRootPath) {
+        longerThanRootPath = fixPathSeparatorChar(longerThanRootPath);
         return relativizeInternal(fixDriveCase(rootPath), fixDriveCase(longerThanRootPath));
     }
 
@@ -29,6 +31,18 @@ public class FileUtil {
             throw new IllegalArgumentException("The path '" + longerThanRootPath + "' does not contain the root path '" + rootPath + "'");
         }
         return longerThanRootPath.substring(index + rootPath.length() + 1);
+    }
+
+    private static String fixPathSeparatorChar(String path) {
+        try {
+            path = URLDecoder.decode(path, "UTF-8");
+        } catch (UnsupportedEncodingException ignored) {
+        }
+
+        if (File.separatorChar != '/') {
+            path = path.replace('/', File.separatorChar);
+        }
+        return path;
     }
 
     // sometimes the paths passed to relativize() have a lower case drive letter
