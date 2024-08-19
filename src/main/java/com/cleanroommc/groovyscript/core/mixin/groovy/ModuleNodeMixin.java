@@ -31,12 +31,15 @@ public abstract class ModuleNodeMixin {
             // can happen with traits
             return;
         }
-        String rel = FileUtil.relativize(GroovyScript.getScriptPath(), script);
-        int i = rel.lastIndexOf(File.separatorChar);
-        if (i >= 0) {
-            // inject correct package declaration into script
-            String packageName = rel.substring(0, i).replace(File.separatorChar, '.') + '.';
-            this.packageNode = new PackageNode(packageName);
+        try(String rel = FileUtil.relativize(GroovyScript.getScriptPath(), script);){
+            int i = rel.lastIndexOf(File.separatorChar);
+            if (i >= 0) {
+                // inject correct package declaration into script
+                String packageName = rel.substring(0, i).replace(File.separatorChar, '.') + '.';
+                this.packageNode = new PackageNode(packageName);
+            }
+        }catch(Throwable ignored){
+            // Not a groovyscript groovy script
         }
     }
 
