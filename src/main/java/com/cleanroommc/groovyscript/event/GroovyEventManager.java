@@ -73,7 +73,8 @@ public enum GroovyEventManager {
     }
 
     public void listen(EventPriority priority, EventBusType eventBusType, Class<? extends Event> eventClass, Closure<?> eventListener) {
-        listen(priority, eventBusType, eventClass, event -> ClosureHelper.call(eventListener, event));
+        listen(priority, eventBusType, eventClass,
+               event -> ClosureHelper.call(ClosureHelper.withEnvironment(eventListener, event, true)));
     }
 
     @GroovyBlacklist
