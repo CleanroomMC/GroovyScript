@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @IFMLLoadingPlugin.Name("GroovyScript-Core")
+@IFMLLoadingPlugin.SortingIndex(Integer.MIN_VALUE + 10)
 @IFMLLoadingPlugin.MCVersion(ForgeVersion.mcVersion)
 public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
@@ -35,6 +36,7 @@ public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
     @Override
     public void injectData(Map<String, Object> data) {
         source = (File) data.getOrDefault("coremodLocation", null);
+        SideOnlyConfig.init();
     }
 
     @Override

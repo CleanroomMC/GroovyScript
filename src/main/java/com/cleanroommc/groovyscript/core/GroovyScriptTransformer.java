@@ -2,40 +2,120 @@ package com.cleanroommc.groovyscript.core;
 
 import com.cleanroommc.groovyscript.core.visitors.*;
 import net.minecraft.launchwrapper.IClassTransformer;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import org.objectweb.asm.*;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
+
+import java.util.*;
 
 public class GroovyScriptTransformer implements IClassTransformer {
 
     @Override
-    public byte[] transform(String name, String transformedName, byte[] classBytes) {
+    public byte[] transform(String name, String transformedName, byte[] bytes) {
+        if (bytes == null) return null;
         switch (name) {
             case InvokerHelperVisitor.CLASS_NAME: {
                 ClassWriter classWriter = new ClassWriter(0);
-                new ClassReader(classBytes).accept(new InvokerHelperVisitor(classWriter), 0);
+                new ClassReader(bytes).accept(new InvokerHelperVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
             case CachedClassMethodsVisitor.CLASS_NAME: {
                 ClassWriter classWriter = new ClassWriter(0);
-                new ClassReader(classBytes).accept(new CachedClassMethodsVisitor(classWriter), 0);
+                new ClassReader(bytes).accept(new CachedClassMethodsVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
             case CachedClassFieldsVisitor.CLASS_NAME: {
                 ClassWriter classWriter = new ClassWriter(0);
-                new ClassReader(classBytes).accept(new CachedClassFieldsVisitor(classWriter), 0);
+                new ClassReader(bytes).accept(new CachedClassFieldsVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
             case CachedClassConstructorsVisitor.CLASS_NAME: {
                 ClassWriter classWriter = new ClassWriter(0);
-                new ClassReader(classBytes).accept(new CachedClassConstructorsVisitor(classWriter), 0);
+                new ClassReader(bytes).accept(new CachedClassConstructorsVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
             case StaticVerifierVisitor.CLASS_NAME: {
                 ClassWriter classWriter = new ClassWriter(0);
-                new ClassReader(classBytes).accept(new StaticVerifierVisitor(classWriter), 0);
+                new ClassReader(bytes).accept(new StaticVerifierVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
         }
-        return classBytes;
+        return transformSideOnly(transformedName, bytes);
+    }
+
+    private byte[] transformSideOnly(String className, byte[] bytes) {
+        Set<String> bannedProperties = SideOnlyConfig.getRemovedProperties(FMLLaunchHandler.side(), className);
+        if (bannedProperties == null) return bytes;
+
+        ClassNode classNode = new ClassNode();
+        ClassReader classReader = new ClassReader(bytes);
+        classReader.accept(classNode, 0);
+
+        classNode.fields.removeIf(field -> bannedProperties.contains(field.name));
+
+        LambdaGatherer lambdaGatherer = new LambdaGatherer();
+        Iterator<MethodNode> methods = classNode.methods.iterator();
+        while (methods.hasNext()) {
+            MethodNode method = methods.next();
+            if (bannedProperties.contains(method.name + "()")) {
+                methods.remove();
+                lambdaGatherer.accept(method);
+            }
+        }
+
+        // remove dynamic synthetic lambda methods that are inside of removed methods
+        for (List<Handle> dynamicLambdaHandles = lambdaGatherer.getDynamicLambdaHandles(); !dynamicLambdaHandles.isEmpty(); dynamicLambdaHandles = lambdaGatherer.getDynamicLambdaHandles()) {
+            lambdaGatherer = new LambdaGatherer();
+            methods = classNode.methods.iterator();
+            while (methods.hasNext()) {
+                MethodNode method = methods.next();
+                if ((method.access & Opcodes.ACC_SYNTHETIC) == 0) continue;
+                for (Handle dynamicLambdaHandle : dynamicLambdaHandles) {
+                    if (method.name.equals(dynamicLambdaHandle.getName()) && method.desc.equals(dynamicLambdaHandle.getDesc())) {
+                        methods.remove();
+                        lambdaGatherer.accept(method);
+                    }
+                }
+            }
+        }
+        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        classNode.accept(writer);
+        return writer.toByteArray();
+    }
+
+    private static class LambdaGatherer extends MethodVisitor {
+
+        private static final Handle META_FACTORY = new Handle(Opcodes.H_INVOKESTATIC, "java/lang/invoke/LambdaMetafactory", "metafactory",
+                                                              "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;",
+                                                              false);
+        private final List<Handle> dynamicLambdaHandles = new ArrayList<Handle>();
+
+        public LambdaGatherer() {
+            super(Opcodes.ASM5);
+        }
+
+        public void accept(MethodNode method) {
+            ListIterator<AbstractInsnNode> insnNodeIterator = method.instructions.iterator();
+            while (insnNodeIterator.hasNext()) {
+                AbstractInsnNode insnNode = insnNodeIterator.next();
+                if (insnNode.getType() == AbstractInsnNode.INVOKE_DYNAMIC_INSN) {
+                    insnNode.accept(this);
+                }
+            }
+        }
+
+        @Override
+        public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
+            if (META_FACTORY.equals(bsm)) {
+                Handle dynamicLambdaHandle = (Handle) bsmArgs[1];
+                dynamicLambdaHandles.add(dynamicLambdaHandle);
+            }
+        }
+
+        public List<Handle> getDynamicLambdaHandles() {
+            return dynamicLambdaHandles;
+        }
     }
 }

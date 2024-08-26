@@ -1,0 +1,7 @@
+{
+  "server": {
+    "com.cleanroommc.groovyscript.NormalClass": [
+      "failingMethod()"
+    ]
+  }
+}
