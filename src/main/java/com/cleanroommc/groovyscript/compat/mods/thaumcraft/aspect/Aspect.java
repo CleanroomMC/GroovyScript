@@ -117,7 +117,7 @@ public class Aspect extends VirtualizedRegistry<thaumcraft.api.aspects.Aspect> {
         @RecipeBuilderRegistrationMethod
         public thaumcraft.api.aspects.Aspect register() {
             try {
-                thaumcraft.api.aspects.Aspect aspect = new thaumcraft.api.aspects.Aspect(tag, chatColor, components.getAspects(), image, blend);
+                thaumcraft.api.aspects.Aspect aspect = new thaumcraft.api.aspects.Aspect(tag, chatColor, components.size() == 0 ? null : components.getAspects(), image, blend);
                 ModSupport.THAUMCRAFT.get().aspect.add(aspect);
                 return aspect;
             } catch (IllegalArgumentException e) {
