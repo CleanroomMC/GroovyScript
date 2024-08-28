@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.File;
@@ -48,7 +47,7 @@ class CompiledClass {
         }
     }
 
-    protected void ensureLoaded(GroovyClassLoader classLoader, String basePath) {
+    protected void ensureLoaded(CachedClassLoader classLoader, String basePath) {
         if (this.clazz == null) {
             this.clazz = classLoader.defineClass(this.name, this.data);
         }
@@ -88,8 +87,6 @@ class CompiledClass {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("name", name)
-                .toString();
+        return new ToStringBuilder(this).append("name", name).toString();
     }
 }

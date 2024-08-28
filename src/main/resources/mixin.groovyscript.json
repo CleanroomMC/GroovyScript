@@ -25,7 +25,6 @@
     "groovy.ClassCollectorMixin",
     "groovy.ClosureMixin",
     "groovy.CompUnitClassGenMixin",
-    "groovy.GroovyClassLoaderAccessor",
     "groovy.GroovyClassLoaderMixin",
     "groovy.Java8Mixin",
     "groovy.MetaClassImplMixin",
