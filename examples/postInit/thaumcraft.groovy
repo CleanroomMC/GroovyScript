@@ -49,11 +49,17 @@ mods.thaumcraft.arcane_workbench.shapelessBuilder()
 // mods.thaumcraft.aspect.removeAll()
 
 mods.thaumcraft.aspect.aspectBuilder()
-    .tag('humor')
+    .tag('clay')
+    .chatColor(14013676)
+    .image(resource('placeholdername:textures/items/clay_2.png'))
+    .register()
+
+mods.thaumcraft.aspect.aspectBuilder()
+    .tag('snack')
     .chatColor(14013676)
     .component(aspect('cognitio'))
-    .component('perditio')
-    .image(resource('thaumcraft:textures/aspects/humor.png'))
+    .component('clay')
+    .image(resource('placeholdername:textures/items/snack.png'))
     .register()
 
 
