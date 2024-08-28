@@ -1,7 +1,6 @@
-package com.cleanroommc.groovyscript.sandbox.security;
+package com.cleanroommc.groovyscript.sandbox.meta;
 
-import com.cleanroommc.groovyscript.sandbox.ClassScriptMetaClass;
-import com.cleanroommc.groovyscript.sandbox.ScriptMetaClass;
+import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import groovy.lang.GroovyObject;
 import groovy.lang.MetaClass;
 import groovy.lang.MetaClassRegistry;
@@ -21,6 +20,9 @@ public class GrSMetaClassCreationHandle extends MetaClassRegistry.MetaClassCreat
     protected MetaClass createNormalMetaClass(Class theClass, MetaClassRegistry registry) {
         if (!GroovySecurityManager.INSTANCE.isValid(theClass)) {
             return new BlackListedMetaClass(theClass);
+        }
+        if (theClass == Class.class) {
+            return new ClassMetaClass(registry, theClass);
         }
         if (Script.class.isAssignableFrom(theClass)) {
             return new ScriptMetaClass(registry, theClass);

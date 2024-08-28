@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.sandbox.meta;
 
 import groovy.lang.MetaClassImpl;
 import groovy.lang.MetaClassRegistry;

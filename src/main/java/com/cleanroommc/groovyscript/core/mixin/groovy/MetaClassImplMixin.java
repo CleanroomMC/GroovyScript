@@ -2,7 +2,7 @@ package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
-import com.cleanroommc.groovyscript.sandbox.ClassScriptMetaClass;
+import com.cleanroommc.groovyscript.sandbox.meta.ClassMetaClass;
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import groovy.lang.*;
 import org.codehaus.groovy.runtime.metaclass.MetaClassRegistryImpl;
@@ -99,8 +99,8 @@ public abstract class MetaClassImplMixin {
 
     @Inject(method = "invokeStaticMissingMethod", at = @At("HEAD"), cancellable = true)
     public void invokeStaticMissingMethod(Class<?> sender, String methodName, Object[] arguments, CallbackInfoReturnable<Object> cir) {
-        if ((Object) this instanceof ClassScriptMetaClass csmc) {
-            csmc.invokeStaticMissingMethod(sender, methodName, arguments, cir);
+        if ((Object) this instanceof ClassMetaClass cmc) {
+            cmc.invokeStaticMissingMethod(sender, methodName, arguments, cir);
         }
     }
 
