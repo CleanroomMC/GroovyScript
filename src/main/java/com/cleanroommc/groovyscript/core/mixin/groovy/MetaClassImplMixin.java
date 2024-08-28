@@ -2,9 +2,9 @@ package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
+import com.cleanroommc.groovyscript.sandbox.ClassScriptMetaClass;
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import groovy.lang.*;
-import org.codehaus.groovy.reflection.CachedClass;
 import org.codehaus.groovy.runtime.metaclass.MetaClassRegistryImpl;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.*;
@@ -20,19 +20,15 @@ import java.util.Map;
 public abstract class MetaClassImplMixin {
 
     @Shadow
-    protected abstract Object doInvokeMethod(Class sender, Object object, String methodName, Object[] originalArguments, boolean isCallToSuper, boolean fromInsideClass);
+    protected abstract Object doInvokeMethod(Class<?> sender, Object object, String methodName, Object[] originalArguments,
+                                             boolean isCallToSuper, boolean fromInsideClass);
 
     @Shadow
-    protected abstract Object invokeMissingMethod(Object instance, String methodName, Object[] arguments, RuntimeException original, boolean isCallToSuper);
+    protected abstract Object invokeMissingMethod(Object instance, String methodName, Object[] arguments, RuntimeException original,
+                                                  boolean isCallToSuper);
 
     @Shadow
     protected abstract MetaProperty getMetaProperty(String name, boolean useStatic);
-
-    @Shadow
-    protected abstract MetaMethod[] getNewMetaMethods(CachedClass c);
-
-    @Shadow
-    public abstract CachedClass getTheCachedClass();
 
     @Mutable
     @Shadow
@@ -74,8 +70,11 @@ public abstract class MetaClassImplMixin {
         }
     }
 
-    @Inject(method = "invokeMethod(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Object;ZZ)Ljava/lang/Object;", at = @At("HEAD"), cancellable = true)
-    public void invokeMethod(Class<?> sender, Object object, String methodName, Object[] arguments, boolean isCallToSuper, boolean fromInsideClass, CallbackInfoReturnable<Object> cir) {
+    @Inject(method = "invokeMethod(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Object;ZZ)Ljava/lang/Object;",
+            at = @At("HEAD"),
+            cancellable = true)
+    public void invokeMethod(Class<?> sender, Object object, String methodName, Object[] arguments, boolean isCallToSuper,
+                             boolean fromInsideClass, CallbackInfoReturnable<Object> cir) {
         try {
             cir.setReturnValue(doInvokeMethod(sender, object, methodName, arguments, isCallToSuper, fromInsideClass));
         } catch (MissingMethodException mme) {
@@ -84,7 +83,8 @@ public abstract class MetaClassImplMixin {
     }
 
     @Inject(method = "invokeMissingProperty", at = @At("HEAD"), cancellable = true)
-    public void invokeMissingProperty(Object instance, String propertyName, Object optionalValue, boolean isGetter, CallbackInfoReturnable<Object> cir) {
+    public void invokeMissingProperty(Object instance, String propertyName, Object optionalValue, boolean isGetter,
+                                      CallbackInfoReturnable<Object> cir) {
         if (instance instanceof IDynamicGroovyProperty) {
             if (isGetter) {
                 Object prop = ((IDynamicGroovyProperty) instance).getProperty(propertyName);
@@ -99,16 +99,9 @@ public abstract class MetaClassImplMixin {
 
     @Inject(method = "invokeStaticMissingMethod", at = @At("HEAD"), cancellable = true)
     public void invokeStaticMissingMethod(Class<?> sender, String methodName, Object[] arguments, CallbackInfoReturnable<Object> cir) {
-        if (sender.getSuperclass() != Script.class && "main".equals(methodName)) {
-            cir.setReturnValue(null);
+        if ((Object) this instanceof ClassScriptMetaClass csmc) {
+            csmc.invokeStaticMissingMethod(sender, methodName, arguments, cir);
         }
-    }
-
-    @Inject(method = "invokeStaticMissingProperty", at = @At("HEAD"), cancellable = true)
-    public void invokeStaticMissingProperty(Object instance, String propertyName, Object optionalValue, boolean isGetter, CallbackInfoReturnable<Object> cir) {
-        if (!isGetter) return;
-        Object o = GroovyScript.getSandbox().getBindings().get(propertyName);
-        if (o != null) cir.setReturnValue(o);
     }
 
     /**
@@ -116,8 +109,8 @@ public abstract class MetaClassImplMixin {
      * @reason class scripts being unable to use bindings and this method calling closures improperly
      */
     @Overwrite
-    private Object invokePropertyOrMissing(Object object, String methodName, Object[] originalArguments,
-                                           boolean fromInsideClass, boolean isCallToSuper) {
+    private Object invokePropertyOrMissing(Object object, String methodName, Object[] originalArguments, boolean fromInsideClass,
+                                           boolean isCallToSuper) {
         MetaProperty metaProperty = getMetaProperty(methodName, false);
 
         Object value = null;
@@ -134,15 +127,8 @@ public abstract class MetaClassImplMixin {
             value = GroovyScript.getSandbox().getBindings().get(methodName);
         }
 
-        if (value instanceof Closure) {
-            Closure<?> closure = (Closure<?>) value;
+        if (value instanceof Closure<?> closure) {
             return closure.call(originalArguments);
-            /*MetaClass metaClass = closure.getMetaClass();
-            try {
-                return metaClass.invokeMethod(closure.getClass(), closure, DO_CALL_METHOD, originalArguments, false, fromInsideClass);
-            } catch (MissingMethodException mme) {
-                // fall through -- "doCall" is not intrinsic to Closure
-            }*/
         }
 
         if (value != null && !(value instanceof Map) && !methodName.equals("call")) {
