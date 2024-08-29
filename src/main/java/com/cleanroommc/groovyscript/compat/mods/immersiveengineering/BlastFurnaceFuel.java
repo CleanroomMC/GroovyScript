@@ -24,7 +24,7 @@ public class BlastFurnaceFuel extends StandardListRegistry<BlastFurnaceRecipe.Bl
     }
 
     @Override
-    public Collection<BlastFurnaceRecipe.BlastFurnaceFuel> getRegistry() {
+    public Collection<BlastFurnaceRecipe.BlastFurnaceFuel> getRecipes() {
         return BlastFurnaceRecipe.blastFuels;
     }
 

@@ -27,7 +27,7 @@ public class MechanicalSqueezer extends StandardListRegistry<IRecipe<IngredientR
     }
 
     @Override
-    public Collection<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> getRegistry() {
+    public Collection<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DurationRecipeProperties>> getRecipes() {
         return BlockMechanicalSqueezer.getInstance().getRecipeRegistry().allRecipes();
     }
 

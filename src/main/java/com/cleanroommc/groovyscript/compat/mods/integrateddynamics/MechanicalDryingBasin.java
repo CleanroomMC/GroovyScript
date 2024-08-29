@@ -26,7 +26,7 @@ public class MechanicalDryingBasin extends StandardListRegistry<IRecipe<Ingredie
     }
 
     @Override
-    public Collection<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> getRegistry() {
+    public Collection<IRecipe<IngredientAndFluidStackRecipeComponent, IngredientAndFluidStackRecipeComponent, DurationRecipeProperties>> getRecipes() {
         return BlockMechanicalDryingBasin.getInstance().getRecipeRegistry().allRecipes();
     }
 

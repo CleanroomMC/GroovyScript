@@ -28,7 +28,7 @@ public class CombinationCrafting extends StandardListRegistry<CombinationRecipe>
     }
 
     @Override
-    public Collection<CombinationRecipe> getRegistry() {
+    public Collection<CombinationRecipe> getRecipes() {
         return CombinationRecipeManager.getInstance().getRecipes();
     }
 

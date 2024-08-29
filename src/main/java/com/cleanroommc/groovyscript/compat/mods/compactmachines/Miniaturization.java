@@ -31,7 +31,7 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
     }
 
     @Override
-    public Collection<MultiblockRecipe> getRegistry() {
+    public Collection<MultiblockRecipe> getRecipes() {
         return MultiblockRecipes.getRecipes();
     }
 

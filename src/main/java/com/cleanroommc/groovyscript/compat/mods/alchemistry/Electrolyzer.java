@@ -20,7 +20,7 @@ import java.util.Collection;
 public class Electrolyzer extends StandardListRegistry<ElectrolyzerRecipe> {
 
     @Override
-    public Collection<ElectrolyzerRecipe> getRegistry() {
+    public Collection<ElectrolyzerRecipe> getRecipes() {
         return ModRecipes.INSTANCE.getElectrolyzerRecipes();
     }
 

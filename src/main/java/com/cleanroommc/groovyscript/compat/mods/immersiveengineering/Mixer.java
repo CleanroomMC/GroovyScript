@@ -26,7 +26,7 @@ public class Mixer extends StandardListRegistry<MixerRecipe> {
     }
 
     @Override
-    public Collection<MixerRecipe> getRegistry() {
+    public Collection<MixerRecipe> getRecipes() {
         return MixerRecipe.recipeList;
     }
 

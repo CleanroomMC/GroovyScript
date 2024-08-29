@@ -37,7 +37,7 @@ public class BloodInfuser extends StandardListRegistry<IRecipe<IngredientFluidSt
     }
 
     @Override
-    public Collection<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> getRegistry() {
+    public Collection<IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties>> getRecipes() {
         return org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().allRecipes();
     }
 

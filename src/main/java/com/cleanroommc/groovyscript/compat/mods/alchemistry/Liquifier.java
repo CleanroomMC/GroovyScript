@@ -18,7 +18,7 @@ import java.util.Collection;
 public class Liquifier extends StandardListRegistry<LiquifierRecipe> {
 
     @Override
-    public Collection<LiquifierRecipe> getRegistry() {
+    public Collection<LiquifierRecipe> getRecipes() {
         return ModRecipes.INSTANCE.getLiquifierRecipes();
     }
 

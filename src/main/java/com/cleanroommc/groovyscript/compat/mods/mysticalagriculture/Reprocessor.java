@@ -25,7 +25,7 @@ public class Reprocessor extends StandardListRegistry<ReprocessorRecipe> {
     }
 
     @Override
-    public Collection<ReprocessorRecipe> getRegistry() {
+    public Collection<ReprocessorRecipe> getRecipes() {
         return ReprocessorManager.getRecipes();
     }
 

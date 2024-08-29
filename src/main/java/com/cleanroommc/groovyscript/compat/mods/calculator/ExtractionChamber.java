@@ -28,7 +28,7 @@ public class ExtractionChamber extends StandardListRegistry<CalculatorRecipe> {
     }
 
     @Override
-    public Collection<CalculatorRecipe> getRegistry() {
+    public Collection<CalculatorRecipe> getRecipes() {
         return ExtractionChamberRecipes.instance().getRecipes();
     }
 

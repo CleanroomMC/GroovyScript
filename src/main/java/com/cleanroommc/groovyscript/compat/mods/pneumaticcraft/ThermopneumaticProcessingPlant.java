@@ -25,7 +25,7 @@ public class ThermopneumaticProcessingPlant extends StandardListRegistry<IThermo
     }
 
     @Override
-    public Collection<IThermopneumaticProcessingPlantRecipe> getRegistry() {
+    public Collection<IThermopneumaticProcessingPlantRecipe> getRecipes() {
         return BasicThermopneumaticProcessingPlantRecipe.recipes;
     }
 

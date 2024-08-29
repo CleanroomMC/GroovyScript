@@ -20,7 +20,7 @@ public class Extractor extends StandardListRegistry<ExtractorEntry> {
     }
 
     @Override
-    public Collection<ExtractorEntry> getRegistry() {
+    public Collection<ExtractorEntry> getRecipes() {
         return ExtractorEntry.EXTRACTOR_ENTRIES;
     }
 

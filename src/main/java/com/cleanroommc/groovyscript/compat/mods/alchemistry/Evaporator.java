@@ -18,7 +18,7 @@ import java.util.Collection;
 public class Evaporator extends StandardListRegistry<EvaporatorRecipe> {
 
     @Override
-    public Collection<EvaporatorRecipe> getRegistry() {
+    public Collection<EvaporatorRecipe> getRecipes() {
         return ModRecipes.INSTANCE.getEvaporatorRecipes();
     }
 

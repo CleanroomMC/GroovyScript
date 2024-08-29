@@ -22,7 +22,7 @@ public class PureDaisy extends StandardListRegistry<RecipePureDaisy> {
     }
 
     @Override
-    public Collection<RecipePureDaisy> getRegistry() {
+    public Collection<RecipePureDaisy> getRecipes() {
         return BotaniaAPI.pureDaisyRecipes;
     }
 

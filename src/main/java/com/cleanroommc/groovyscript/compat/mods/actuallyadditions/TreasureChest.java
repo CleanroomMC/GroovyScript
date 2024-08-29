@@ -21,7 +21,7 @@ public class TreasureChest extends StandardListRegistry<TreasureChestLoot> {
     }
 
     @Override
-    public Collection<TreasureChestLoot> getRegistry() {
+    public Collection<TreasureChestLoot> getRecipes() {
         return ActuallyAdditionsAPI.TREASURE_CHEST_LOOT;
     }
 

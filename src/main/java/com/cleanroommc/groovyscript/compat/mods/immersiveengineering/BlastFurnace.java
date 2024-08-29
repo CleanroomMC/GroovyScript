@@ -24,7 +24,7 @@ public class BlastFurnace extends StandardListRegistry<BlastFurnaceRecipe> {
     }
 
     @Override
-    public Collection<BlastFurnaceRecipe> getRegistry() {
+    public Collection<BlastFurnaceRecipe> getRecipes() {
         return BlastFurnaceRecipe.recipeList;
     }
 

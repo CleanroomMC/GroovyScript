@@ -25,7 +25,7 @@ public class OilGen extends StandardListRegistry<OilGenRecipe> {
     }
 
     @Override
-    public Collection<OilGenRecipe> getRegistry() {
+    public Collection<OilGenRecipe> getRecipes() {
         return ActuallyAdditionsAPI.OIL_GENERATOR_RECIPES;
     }
 

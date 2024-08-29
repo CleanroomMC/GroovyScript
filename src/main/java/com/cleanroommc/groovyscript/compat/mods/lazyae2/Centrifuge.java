@@ -25,13 +25,13 @@ public class Centrifuge extends StandardListRegistry<PurifyRecipe> {
     }
 
     @Override
-    public Collection<PurifyRecipe> getRegistry() {
+    public Collection<PurifyRecipe> getRecipes() {
         return LibNine.PROXY.getRecipeManager().getRecipeList(PurifyRecipe.class).recipes();
     }
 
     @MethodDescription(example = @Example("item('appliedenergistics2:material')"))
     public void removeByInput(IIngredient input) {
-        getRegistry().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (Arrays.stream(input.getMatchingStacks()).anyMatch(recipe.input().getMatcher())) {
                 addBackup(recipe);
                 return true;
@@ -42,7 +42,7 @@ public class Centrifuge extends StandardListRegistry<PurifyRecipe> {
 
     @MethodDescription(example = @Example("item('appliedenergistics2:material:4')"))
     public void removeByOutput(IIngredient output) {
-        getRegistry().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput().getOutput())) {
                 addBackup(recipe);
                 return true;

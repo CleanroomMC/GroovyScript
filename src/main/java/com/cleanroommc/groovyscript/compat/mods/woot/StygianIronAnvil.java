@@ -30,7 +30,7 @@ public class StygianIronAnvil extends StandardListRegistry<IAnvilRecipe> {
     }
 
     @Override
-    public Collection<IAnvilRecipe> getRegistry() {
+    public Collection<IAnvilRecipe> getRecipes() {
         return Woot.anvilManager.getRecipes();
     }
 

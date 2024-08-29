@@ -24,7 +24,7 @@ public class StoneSeparator extends StandardListRegistry<CalculatorRecipe> {
     }
 
     @Override
-    public Collection<CalculatorRecipe> getRegistry() {
+    public Collection<CalculatorRecipe> getRecipes() {
         return StoneSeparatorRecipes.instance().getRecipes();
     }
 

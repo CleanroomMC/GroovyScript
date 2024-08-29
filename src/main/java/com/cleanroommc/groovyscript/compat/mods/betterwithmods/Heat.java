@@ -20,7 +20,7 @@ import java.util.List;
 public class Heat extends StandardListRegistry<BWMHeatRegistry.HeatSource> {
 
     @Override
-    public Collection<BWMHeatRegistry.HeatSource> getRegistry() {
+    public Collection<BWMHeatRegistry.HeatSource> getRecipes() {
         return BWMHeatRegistryAccessor.getHEAT_SOURCES();
     }
 

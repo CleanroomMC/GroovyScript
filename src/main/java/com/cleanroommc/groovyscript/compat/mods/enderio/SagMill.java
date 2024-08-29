@@ -29,7 +29,7 @@ public class SagMill extends StandardListRegistry<Recipe> {
     }
 
     @Override
-    public Collection<Recipe> getRegistry() {
+    public Collection<Recipe> getRecipes() {
         return SagMillRecipeManager.getInstance().getRecipes();
     }
 

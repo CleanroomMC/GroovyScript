@@ -24,7 +24,7 @@ public class GlowstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.
     }
 
     @Override
-    public Collection<DefaultSonarRecipe.Value> getRegistry() {
+    public Collection<DefaultSonarRecipe.Value> getRecipes() {
         return GlowstoneExtractorRecipes.instance().getRecipes();
     }
 

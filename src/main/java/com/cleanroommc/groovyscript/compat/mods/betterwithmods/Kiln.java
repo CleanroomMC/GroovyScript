@@ -27,7 +27,7 @@ public class Kiln extends StandardListRegistry<KilnRecipe> {
     }
 
     @Override
-    public Collection<KilnRecipe> getRegistry() {
+    public Collection<KilnRecipe> getRecipes() {
         return BWRegistry.KILN.getRecipes();
     }
 

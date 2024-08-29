@@ -25,7 +25,7 @@ public class Grindstone extends StandardListRegistry<GrindstoneRecipe> {
     }
 
     @Override
-    public Collection<GrindstoneRecipe> getRegistry() {
+    public Collection<GrindstoneRecipe> getRecipes() {
         return GrindstoneRecipeRegistry.recipes;
     }
 

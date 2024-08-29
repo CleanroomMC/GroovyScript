@@ -26,7 +26,7 @@ public class Distillation extends StandardListRegistry<DistillationRecipe> {
     }
 
     @Override
-    public Collection<DistillationRecipe> getRegistry() {
+    public Collection<DistillationRecipe> getRecipes() {
         return DistillationRecipe.recipeList;
     }
 

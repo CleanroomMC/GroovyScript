@@ -36,7 +36,7 @@ public class BloodAltar extends StandardListRegistry<RecipeBloodAltar> {
     }
 
     @Override
-    public Collection<RecipeBloodAltar> getRegistry() {
+    public Collection<RecipeBloodAltar> getRecipes() {
         return ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes();
     }
 

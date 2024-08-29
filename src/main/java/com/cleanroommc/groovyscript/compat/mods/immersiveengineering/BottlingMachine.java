@@ -26,7 +26,7 @@ public class BottlingMachine extends StandardListRegistry<BottlingMachineRecipe>
     }
 
     @Override
-    public Collection<BottlingMachineRecipe> getRegistry() {
+    public Collection<BottlingMachineRecipe> getRecipes() {
         return BottlingMachineRecipe.recipeList;
     }
 

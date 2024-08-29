@@ -28,7 +28,7 @@ public class Crusher extends StandardListRegistry<CrusherRecipe> {
     }
 
     @Override
-    public Collection<CrusherRecipe> getRegistry() {
+    public Collection<CrusherRecipe> getRecipes() {
         return CrusherRecipe.recipeList;
     }
 

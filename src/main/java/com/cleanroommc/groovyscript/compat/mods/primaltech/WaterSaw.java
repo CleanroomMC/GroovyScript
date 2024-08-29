@@ -25,7 +25,7 @@ public class WaterSaw extends StandardListRegistry<WaterSawRecipes> {
     }
 
     @Override
-    public Collection<WaterSawRecipes> getRegistry() {
+    public Collection<WaterSawRecipes> getRecipes() {
         return WaterSawRecipesAccessor.getRecipes();
     }
 

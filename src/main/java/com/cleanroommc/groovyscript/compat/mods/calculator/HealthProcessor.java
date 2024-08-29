@@ -24,7 +24,7 @@ public class HealthProcessor extends StandardListRegistry<DefaultSonarRecipe.Val
     }
 
     @Override
-    public Collection<DefaultSonarRecipe.Value> getRegistry() {
+    public Collection<DefaultSonarRecipe.Value> getRecipes() {
         return HealthProcessorRecipes.instance().getRecipes();
     }
 

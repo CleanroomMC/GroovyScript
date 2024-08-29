@@ -24,7 +24,7 @@ public class RedstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.V
     }
 
     @Override
-    public Collection<DefaultSonarRecipe.Value> getRegistry() {
+    public Collection<DefaultSonarRecipe.Value> getRecipes() {
         return RedstoneExtractorRecipes.instance().getRecipes();
     }
 

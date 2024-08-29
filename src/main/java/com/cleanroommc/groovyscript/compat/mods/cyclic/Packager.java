@@ -34,7 +34,7 @@ public class Packager extends StandardListRegistry<RecipePackager> {
     }
 
     @Override
-    public Collection<RecipePackager> getRegistry() {
+    public Collection<RecipePackager> getRecipes() {
         return RecipePackager.recipes;
     }
 

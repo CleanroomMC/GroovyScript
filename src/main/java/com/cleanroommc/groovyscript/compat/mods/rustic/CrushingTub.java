@@ -26,7 +26,7 @@ public class CrushingTub extends StandardListRegistry<ICrushingTubRecipe> {
     }
 
     @Override
-    public Collection<ICrushingTubRecipe> getRegistry() {
+    public Collection<ICrushingTubRecipe> getRecipes() {
         return Recipes.crushingTubRecipes;
     }
 

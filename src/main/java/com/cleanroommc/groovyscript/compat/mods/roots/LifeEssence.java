@@ -16,7 +16,7 @@ import java.util.Collection;
 public class LifeEssence extends StandardListRegistry<Class<? extends EntityLivingBase>> {
 
     @Override
-    public Collection<Class<? extends EntityLivingBase>> getRegistry() {
+    public Collection<Class<? extends EntityLivingBase>> getRecipes() {
         return ModRecipes.getLifeEssenceList();
     }
 

@@ -30,7 +30,7 @@ public class Dehydrator extends StandardListRegistry<RecipeDeHydrate> {
     }
 
     @Override
-    public Collection<RecipeDeHydrate> getRegistry() {
+    public Collection<RecipeDeHydrate> getRecipes() {
         return RecipeDeHydrate.recipes;
     }
 

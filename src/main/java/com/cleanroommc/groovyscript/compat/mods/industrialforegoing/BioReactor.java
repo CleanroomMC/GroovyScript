@@ -18,7 +18,7 @@ import java.util.Collection;
 public class BioReactor extends StandardListRegistry<IReactorEntry> {
 
     @Override
-    public Collection<IReactorEntry> getRegistry() {
+    public Collection<IReactorEntry> getRecipes() {
         return BioReactorEntry.BIO_REACTOR_ENTRIES;
     }
 

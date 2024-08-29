@@ -25,7 +25,7 @@ public class ClayKiln extends StandardListRegistry<ClayKilnRecipes> {
     }
 
     @Override
-    public Collection<ClayKilnRecipes> getRegistry() {
+    public Collection<ClayKilnRecipes> getRecipes() {
         return ClayKilnRecipesAccessor.getRecipes();
     }
 

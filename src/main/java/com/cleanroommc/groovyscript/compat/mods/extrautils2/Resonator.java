@@ -27,7 +27,7 @@ import java.util.Collection;
 public class Resonator extends StandardListRegistry<IResonatorRecipe> {
 
     @Override
-    public Collection<IResonatorRecipe> getRegistry() {
+    public Collection<IResonatorRecipe> getRecipes() {
         return TileResonator.resonatorRecipes;
     }
 

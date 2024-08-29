@@ -24,7 +24,7 @@ public class StarchExtractor extends StandardListRegistry<DefaultSonarRecipe.Val
     }
 
     @Override
-    public Collection<DefaultSonarRecipe.Value> getRegistry() {
+    public Collection<DefaultSonarRecipe.Value> getRecipes() {
         return StarchExtractorRecipes.instance().getRecipes();
     }
 

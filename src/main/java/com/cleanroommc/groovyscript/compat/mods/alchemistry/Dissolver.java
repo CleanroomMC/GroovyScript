@@ -25,7 +25,7 @@ public class Dissolver extends StandardListRegistry<DissolverRecipe> {
     }
 
     @Override
-    public Collection<DissolverRecipe> getRegistry() {
+    public Collection<DissolverRecipe> getRecipes() {
         return ModRecipes.INSTANCE.getDissolverRecipes();
     }
 

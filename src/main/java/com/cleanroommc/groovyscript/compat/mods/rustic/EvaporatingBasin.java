@@ -21,7 +21,7 @@ public class EvaporatingBasin extends StandardListRegistry<IEvaporatingBasinReci
     }
 
     @Override
-    public Collection<IEvaporatingBasinRecipe> getRegistry() {
+    public Collection<IEvaporatingBasinRecipe> getRecipes() {
         return Recipes.evaporatingRecipes;
     }
 

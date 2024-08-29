@@ -25,7 +25,7 @@ public class Combiner extends StandardListRegistry<CombinerRecipe> {
     }
 
     @Override
-    public Collection<CombinerRecipe> getRegistry() {
+    public Collection<CombinerRecipe> getRecipes() {
         return ModRecipes.INSTANCE.getCombinerRecipes();
     }
 

@@ -16,7 +16,7 @@ import java.util.Collection;
 public class SludgeRefiner extends StandardListRegistry<SludgeEntry> {
 
     @Override
-    public Collection<SludgeEntry> getRegistry() {
+    public Collection<SludgeEntry> getRecipes() {
         return SludgeEntry.SLUDGE_RECIPES;
     }
 

@@ -33,7 +33,7 @@ public class TableCrafting extends StandardListRegistry<ITieredRecipe> {
     }
 
     @Override
-    public Collection<ITieredRecipe> getRegistry() {
+    public Collection<ITieredRecipe> getRecipes() {
         return TableRecipeManager.getInstance().getRecipes();
     }
 

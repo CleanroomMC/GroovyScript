@@ -27,7 +27,7 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
     }
 
     @Override
-    public Collection<RecipeRuneAltar> getRegistry() {
+    public Collection<RecipeRuneAltar> getRecipes() {
         return BotaniaAPI.runeAltarRecipes;
     }
 

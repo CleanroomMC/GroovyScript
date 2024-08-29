@@ -30,7 +30,7 @@ public class CastingTable extends StandardListRegistry<ICastingRecipe> {
     }
 
     @Override
-    public Collection<ICastingRecipe> getRegistry() {
+    public Collection<ICastingRecipe> getRecipes() {
         return TinkerRegistryAccessor.getTableCastRegistry();
     }
 

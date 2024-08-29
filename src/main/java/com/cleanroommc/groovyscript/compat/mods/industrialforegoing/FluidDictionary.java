@@ -13,7 +13,7 @@ import java.util.Collection;
 public class FluidDictionary extends StandardListRegistry<FluidDictionaryEntry> {
 
     @Override
-    public Collection<FluidDictionaryEntry> getRegistry() {
+    public Collection<FluidDictionaryEntry> getRecipes() {
         return FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES;
     }
 

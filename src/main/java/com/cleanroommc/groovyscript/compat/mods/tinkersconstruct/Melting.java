@@ -25,7 +25,7 @@ public class Melting extends StandardListRegistry<MeltingRecipe> {
     }
 
     @Override
-    public Collection<MeltingRecipe> getRegistry() {
+    public Collection<MeltingRecipe> getRecipes() {
         return TinkerRegistryAccessor.getMeltingRegistry();
     }
 

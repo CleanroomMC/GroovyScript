@@ -26,7 +26,7 @@ public class Compost extends StandardListRegistry<CompostRecipe> {
     }
 
     @Override
-    public Collection<CompostRecipe> getRegistry() {
+    public Collection<CompostRecipe> getRecipes() {
         return ActuallyAdditionsAPI.COMPOST_RECIPES;
     }
 

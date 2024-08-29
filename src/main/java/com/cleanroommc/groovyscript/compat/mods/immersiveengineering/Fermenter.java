@@ -24,7 +24,7 @@ public class Fermenter extends StandardListRegistry<FermenterRecipe> {
     }
 
     @Override
-    public Collection<FermenterRecipe> getRegistry() {
+    public Collection<FermenterRecipe> getRecipes() {
         return FermenterRecipe.recipeList;
     }
 

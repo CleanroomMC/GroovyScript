@@ -20,7 +20,7 @@ public class OreRaw extends StandardListRegistry<OreFluidEntryRaw> {
     }
 
     @Override
-    public Collection<OreFluidEntryRaw> getRegistry() {
+    public Collection<OreFluidEntryRaw> getRecipes() {
         return OreFluidEntryRaw.ORE_RAW_ENTRIES;
     }
 

@@ -39,7 +39,7 @@ public class Squeezer extends StandardListRegistry<IRecipe<IngredientRecipeCompo
     }
 
     @Override
-    public Collection<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> getRegistry() {
+    public Collection<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> getRecipes() {
         return BlockSqueezer.getInstance().getRecipeRegistry().allRecipes();
     }
 

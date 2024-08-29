@@ -35,7 +35,7 @@ public class AnvilCrafting extends StandardListRegistry<IRecipe> {
     }
 
     @Override
-    public Collection<IRecipe> getRegistry() {
+    public Collection<IRecipe> getRecipes() {
         return AnvilCraftingManager.ANVIL_CRAFTING;
     }
 

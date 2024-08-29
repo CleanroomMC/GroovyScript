@@ -30,7 +30,7 @@ public class TartaricForge extends StandardListRegistry<RecipeTartaricForge> {
     }
 
     @Override
-    public Collection<RecipeTartaricForge> getRegistry() {
+    public Collection<RecipeTartaricForge> getRecipes() {
         return ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes();
     }
 

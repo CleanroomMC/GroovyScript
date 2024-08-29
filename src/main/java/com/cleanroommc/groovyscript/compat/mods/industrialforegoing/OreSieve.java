@@ -20,7 +20,7 @@ public class OreSieve extends StandardListRegistry<OreFluidEntrySieve> {
     }
 
     @Override
-    public Collection<OreFluidEntrySieve> getRegistry() {
+    public Collection<OreFluidEntrySieve> getRecipes() {
         return OreFluidEntrySieve.ORE_FLUID_SIEVE;
     }
 

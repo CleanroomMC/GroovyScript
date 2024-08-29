@@ -22,7 +22,7 @@ public class Scrapper extends StandardListRegistry<ScrapperRecipe> {
     }
 
     @Override
-    public Collection<ScrapperRecipe> getRegistry() {
+    public Collection<ScrapperRecipe> getRecipes() {
         return ScrapperRecipeHandler.allRecipes;
     }
 

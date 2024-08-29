@@ -33,7 +33,7 @@ public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
     }
 
     @Override
-    public Collection<ExplosionRecipe> getRegistry() {
+    public Collection<ExplosionRecipe> getRecipes() {
         return this.explosionRecipes;
     }
 

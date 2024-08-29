@@ -34,7 +34,7 @@ public class PlasticMixer extends StandardListRegistry<PlasticMixerRegistry.Plas
     }
 
     @Override
-    public Collection<PlasticMixerRegistry.PlasticMixerRecipe> getRegistry() {
+    public Collection<PlasticMixerRegistry.PlasticMixerRecipe> getRecipes() {
         return getInstance().getRecipes();
     }
 

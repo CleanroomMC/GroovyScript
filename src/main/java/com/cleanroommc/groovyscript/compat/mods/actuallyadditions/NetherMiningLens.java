@@ -24,7 +24,7 @@ public class NetherMiningLens extends StandardListRegistry<WeightedOre> {
     }
 
     @Override
-    public Collection<WeightedOre> getRegistry() {
+    public Collection<WeightedOre> getRecipes() {
         return ActuallyAdditionsAPI.NETHERRACK_ORES;
     }
 

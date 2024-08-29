@@ -25,13 +25,13 @@ public class Etcher extends StandardListRegistry<EtchRecipe> {
     }
 
     @Override
-    public Collection<EtchRecipe> getRegistry() {
+    public Collection<EtchRecipe> getRecipes() {
         return LibNine.PROXY.getRecipeManager().getRecipeList(EtchRecipe.class).recipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:diamond')"))
     public void removeByInput(IIngredient input) {
-        getRegistry().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (recipe.input().getInputs().stream().anyMatch(x -> Arrays.stream(input.getMatchingStacks()).anyMatch(x))) {
                 addBackup(recipe);
                 return true;
@@ -42,7 +42,7 @@ public class Etcher extends StandardListRegistry<EtchRecipe> {
 
     @MethodDescription(example = @Example("item('appliedenergistics2:material:22')"))
     public void removeByOutput(IIngredient output) {
-        getRegistry().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput().getOutput())) {
                 addBackup(recipe);
                 return true;

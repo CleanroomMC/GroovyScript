@@ -35,7 +35,7 @@ public class AlchemyTable extends StandardListRegistry<RecipeAlchemyTable> {
     }
 
     @Override
-    public Collection<RecipeAlchemyTable> getRegistry() {
+    public Collection<RecipeAlchemyTable> getRecipes() {
         return ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes();
     }
 

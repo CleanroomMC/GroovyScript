@@ -23,7 +23,7 @@ public class Fountain extends StandardListRegistry<FluidRarityRegistry.FluidRari
     }
 
     @Override
-    public Collection<FluidRarityRegistry.FluidRarityEntry> getRegistry() {
+    public Collection<FluidRarityRegistry.FluidRarityEntry> getRecipes() {
         return ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList();
     }
 

@@ -25,7 +25,7 @@ public class BrewRecipe extends StandardListRegistry<RecipeBrew> {
     }
 
     @Override
-    public Collection<RecipeBrew> getRegistry() {
+    public Collection<RecipeBrew> getRecipes() {
         return BotaniaAPI.brewRecipes;
     }
 

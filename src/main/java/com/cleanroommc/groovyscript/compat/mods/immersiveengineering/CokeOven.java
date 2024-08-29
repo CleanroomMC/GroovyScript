@@ -24,7 +24,7 @@ public class CokeOven extends StandardListRegistry<CokeOvenRecipe> {
     }
 
     @Override
-    public Collection<CokeOvenRecipe> getRegistry() {
+    public Collection<CokeOvenRecipe> getRecipes() {
         return CokeOvenRecipe.recipeList;
     }
 

@@ -25,7 +25,7 @@ public class Saw extends StandardListRegistry<SawRecipe> {
     }
 
     @Override
-    public Collection<SawRecipe> getRegistry() {
+    public Collection<SawRecipe> getRecipes() {
         return BWRegistry.WOOD_SAW.getRecipes();
     }
 

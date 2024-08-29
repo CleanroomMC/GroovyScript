@@ -28,7 +28,7 @@ public class AtomicReconstructor extends StandardListRegistry<LensConversionReci
     }
 
     @Override
-    public Collection<LensConversionRecipe> getRegistry() {
+    public Collection<LensConversionRecipe> getRecipes() {
         return ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES;
     }
 

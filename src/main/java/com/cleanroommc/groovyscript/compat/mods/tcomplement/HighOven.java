@@ -31,7 +31,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
     }
 
     @Override
-    public Collection<MeltingRecipe> getRegistry() {
+    public Collection<MeltingRecipe> getRecipes() {
         return TCompRegistryAccessor.getHighOvenOverrides();
     }
 
@@ -105,7 +105,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
         @Override
-        public Collection<IMixRecipe> getRegistry() {
+        public Collection<IMixRecipe> getRecipes() {
             return TCompRegistryAccessor.getMixRegistry();
         }
 
@@ -255,7 +255,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
         @Override
-        public Collection<IHeatRecipe> getRegistry() {
+        public Collection<IHeatRecipe> getRecipes() {
             return TCompRegistryAccessor.getHeatRegistry();
         }
 
@@ -349,7 +349,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
         @Override
-        public Collection<HighOvenFuel> getRegistry() {
+        public Collection<HighOvenFuel> getRecipes() {
             return TCompRegistryAccessor.getHighOvenFuels();
         }
 

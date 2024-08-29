@@ -31,7 +31,7 @@ public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
     }
 
     @Override
-    public Collection<BurningRecipe> getRegistry() {
+    public Collection<BurningRecipe> getRecipes() {
         return this.burningRecipes;
     }
 

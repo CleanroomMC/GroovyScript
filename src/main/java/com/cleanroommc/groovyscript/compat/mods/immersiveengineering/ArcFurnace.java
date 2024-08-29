@@ -28,7 +28,7 @@ public class ArcFurnace extends StandardListRegistry<ArcFurnaceRecipe> {
     }
 
     @Override
-    public Collection<ArcFurnaceRecipe> getRegistry() {
+    public Collection<ArcFurnaceRecipe> getRecipes() {
         return ArcFurnaceRecipe.recipeList;
     }
 

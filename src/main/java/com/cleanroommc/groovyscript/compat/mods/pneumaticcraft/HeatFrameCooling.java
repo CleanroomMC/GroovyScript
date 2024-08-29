@@ -23,7 +23,7 @@ public class HeatFrameCooling extends StandardListRegistry<HeatFrameCoolingRecip
     }
 
     @Override
-    public Collection<HeatFrameCoolingRecipe> getRegistry() {
+    public Collection<HeatFrameCoolingRecipe> getRecipes() {
         return HeatFrameCoolingRecipe.recipes;
     }
 

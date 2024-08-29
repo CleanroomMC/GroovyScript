@@ -25,7 +25,7 @@ public class ManaInfusion extends StandardListRegistry<RecipeManaInfusion> {
     }
 
     @Override
-    public Collection<RecipeManaInfusion> getRegistry() {
+    public Collection<RecipeManaInfusion> getRecipes() {
         return BotaniaAPI.manaInfusionRecipes;
     }
 

@@ -35,7 +35,7 @@ public class EnvironmentalAccumulator extends StandardListRegistry<IRecipe<Envir
     }
 
     @Override
-    public Collection<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> getRegistry() {
+    public Collection<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> getRecipes() {
         return org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes();
     }
 

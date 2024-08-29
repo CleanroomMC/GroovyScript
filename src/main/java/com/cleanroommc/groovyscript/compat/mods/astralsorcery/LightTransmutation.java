@@ -19,7 +19,7 @@ import java.util.Collection;
 public class LightTransmutation extends StandardListRegistry<LightOreTransmutations.Transmutation> {
 
     @Override
-    public Collection<LightOreTransmutations.Transmutation> getRegistry() {
+    public Collection<LightOreTransmutations.Transmutation> getRecipes() {
         if (LightOreTransmutationsAccessor.getRegisteredTransmutations() == null) {
             throw new IllegalStateException("Astral Sorcery Light Transmutation getRegisteredTransmutations() is not yet initialized!");
         }
@@ -37,7 +37,7 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
                                                     @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
-        getRegistry().add(recipe);
+        getRecipes().add(recipe);
         return recipe;
     }
 
@@ -45,13 +45,13 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
                                                     @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
-        getRegistry().add(recipe);
+        getRecipes().add(recipe);
         return recipe;
     }
 
     @MethodDescription(example = @Example("blockstate('minecraft:sandstone')"))
     public void removeByInput(IBlockState block) {
-        getRegistry().removeIf(rec -> {
+        getRecipes().removeIf(rec -> {
             if (rec.matchesInput(block)) {
                 addBackup(rec);
                 return true;
@@ -67,7 +67,7 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
 
     @MethodDescription(example = @Example("blockstate('minecraft:cake')"))
     public void removeByOutput(IBlockState block) {
-        getRegistry().removeIf(rec -> {
+        getRecipes().removeIf(rec -> {
             if (rec.matchesOutput(block)) {
                 addBackup(rec);
                 return true;

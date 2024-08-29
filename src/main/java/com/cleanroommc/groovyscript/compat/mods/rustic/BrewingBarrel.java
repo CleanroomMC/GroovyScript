@@ -25,7 +25,7 @@ public class BrewingBarrel extends StandardListRegistry<IBrewingBarrelRecipe> {
     }
 
     @Override
-    public Collection<IBrewingBarrelRecipe> getRegistry() {
+    public Collection<IBrewingBarrelRecipe> getRecipes() {
         return Recipes.brewingRecipes;
     }
 

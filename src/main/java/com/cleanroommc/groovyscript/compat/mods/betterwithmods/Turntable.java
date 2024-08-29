@@ -30,7 +30,7 @@ public class Turntable extends StandardListRegistry<TurntableRecipe> {
     }
 
     @Override
-    public Collection<TurntableRecipe> getRegistry() {
+    public Collection<TurntableRecipe> getRecipes() {
         return BWRegistry.TURNTABLE.getRecipes();
     }
 

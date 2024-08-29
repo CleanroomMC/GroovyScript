@@ -17,7 +17,7 @@ import java.util.Collection;
 public class Pedestal extends StandardListRegistry<RecipePedestal> {
 
     @Override
-    public Collection<RecipePedestal> getRegistry() {
+    public Collection<RecipePedestal> getRecipes() {
         return ExtraBotanyAPI.pedestalRecipes;
     }
 

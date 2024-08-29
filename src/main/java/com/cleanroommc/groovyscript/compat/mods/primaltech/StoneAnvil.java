@@ -25,7 +25,7 @@ public class StoneAnvil extends StandardListRegistry<StoneAnvilRecipes> {
     }
 
     @Override
-    public Collection<StoneAnvilRecipes> getRegistry() {
+    public Collection<StoneAnvilRecipes> getRecipes() {
         return StoneAnvilRecipesAccessor.getRecipes();
     }
 

@@ -19,7 +19,7 @@ import java.util.Collection;
 public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> {
 
     @Override
-    public Collection<LiquidInteraction> getRegistry() {
+    public Collection<LiquidInteraction> getRecipes() {
         if (LiquidInteractionAccessor.getRegisteredInteractions() == null) {
             throw new IllegalStateException("Astral Sorcery Chalice Interaction getRegisteredInteractions() is not yet initialized!");
         }
@@ -36,13 +36,13 @@ public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> 
     public LiquidInteraction add(int probability, FluidStack component1, FluidStack component2, LiquidInteraction.FluidInteractionAction action) {
         LiquidInteraction recipe = new LiquidInteraction(probability, component1, component2, action);
         addScripted(recipe);
-        getRegistry().add(recipe);
+        getRecipes().add(recipe);
         return recipe;
     }
 
     @MethodDescription
     public void removeByInput(Fluid fluid1, Fluid fluid2) {
-        getRegistry().removeIf(rec -> {
+        getRecipes().removeIf(rec -> {
             if ((rec.getComponent1().getFluid().equals(fluid1) && rec.getComponent2().getFluid().equals(fluid2)) ||
                 (rec.getComponent1().getFluid().equals(fluid2) && rec.getComponent2().getFluid().equals(fluid1))) {
                 addBackup(rec);
@@ -59,7 +59,7 @@ public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> 
 
     @MethodDescription
     public void removeByInput(Fluid fluid) {
-        getRegistry().removeIf(rec -> {
+        getRecipes().removeIf(rec -> {
             if ((rec.getComponent1().getFluid().equals(fluid) || rec.getComponent2().getFluid().equals(fluid))) {
                 addBackup(rec);
                 return true;
@@ -75,7 +75,7 @@ public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> 
 
     @MethodDescription(example = @Example("item('minecraft:ice')"))
     public void removeByOutput(ItemStack output) {
-        getRegistry().removeIf(rec -> {
+        getRecipes().removeIf(rec -> {
             if (((LiquidInteractionAccessor) rec).getFluidInteractionAction().getOutputForMatching().isItemEqual(output)) {
                 addBackup(rec);
                 return true;

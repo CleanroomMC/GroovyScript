@@ -34,7 +34,7 @@ public class Solidifier extends StandardListRegistry<RecipeSolidifier> {
     }
 
     @Override
-    public Collection<RecipeSolidifier> getRegistry() {
+    public Collection<RecipeSolidifier> getRecipes() {
         return RecipeSolidifier.recipes;
     }
 

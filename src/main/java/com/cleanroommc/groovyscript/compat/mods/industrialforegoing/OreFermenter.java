@@ -19,7 +19,7 @@ public class OreFermenter extends StandardListRegistry<OreFluidEntryFermenter> {
     }
 
     @Override
-    public Collection<OreFluidEntryFermenter> getRegistry() {
+    public Collection<OreFluidEntryFermenter> getRecipes() {
         return OreFluidEntryFermenter.ORE_FLUID_FERMENTER;
     }
 

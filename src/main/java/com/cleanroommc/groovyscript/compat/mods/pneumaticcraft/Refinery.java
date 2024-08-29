@@ -25,7 +25,7 @@ public class Refinery extends StandardListRegistry<RefineryRecipe> {
     }
 
     @Override
-    public Collection<RefineryRecipe> getRegistry() {
+    public Collection<RefineryRecipe> getRecipes() {
         return RefineryRecipe.recipes;
     }
 

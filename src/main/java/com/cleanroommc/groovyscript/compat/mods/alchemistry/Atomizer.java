@@ -19,7 +19,7 @@ import java.util.Collection;
 public class Atomizer extends StandardListRegistry<AtomizerRecipe> {
 
     @Override
-    public Collection<AtomizerRecipe> getRegistry() {
+    public Collection<AtomizerRecipe> getRecipes() {
         return ModRecipes.INSTANCE.getAtomizerRecipes();
     }
 

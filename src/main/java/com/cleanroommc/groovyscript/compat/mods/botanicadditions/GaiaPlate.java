@@ -26,7 +26,7 @@ public class GaiaPlate extends StandardListRegistry<GaiaPlateRecipes.RecipeGaiaP
     }
 
     @Override
-    public Collection<GaiaPlateRecipes.RecipeGaiaPlate> getRegistry() {
+    public Collection<GaiaPlateRecipes.RecipeGaiaPlate> getRecipes() {
         return GaiaPlateRecipes.gaiaRecipes;
     }
 

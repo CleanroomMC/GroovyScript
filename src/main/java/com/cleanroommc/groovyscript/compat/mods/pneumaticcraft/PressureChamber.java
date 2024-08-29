@@ -26,7 +26,7 @@ public class PressureChamber extends StandardListRegistry<IPressureChamberRecipe
     }
 
     @Override
-    public Collection<IPressureChamberRecipe> getRegistry() {
+    public Collection<IPressureChamberRecipe> getRecipes() {
         return PressureChamberRecipe.recipes;
     }
 

@@ -33,7 +33,7 @@ public class FabricationChamber extends StandardListRegistry<FabricationSonarRec
     }
 
     @Override
-    public Collection<FabricationSonarRecipe> getRegistry() {
+    public Collection<FabricationSonarRecipe> getRecipes() {
         return FabricationChamberRecipes.instance().getRecipes();
     }
 

@@ -30,7 +30,7 @@ public class Squeezer extends StandardListRegistry<SqueezerRecipe> {
     }
 
     @Override
-    public Collection<SqueezerRecipe> getRegistry() {
+    public Collection<SqueezerRecipe> getRecipes() {
         return SqueezerRecipe.recipeList;
     }
 

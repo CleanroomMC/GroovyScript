@@ -34,7 +34,7 @@ public class Melter extends StandardListRegistry<RecipeMelter> {
     }
 
     @Override
-    public Collection<RecipeMelter> getRegistry() {
+    public Collection<RecipeMelter> getRecipes() {
         return RecipeMelter.recipes;
     }
 

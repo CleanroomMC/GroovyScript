@@ -21,7 +21,7 @@ public class BallOfFur extends StandardListRegistry<BallOfFurReturn> {
     }
 
     @Override
-    public Collection<BallOfFurReturn> getRegistry() {
+    public Collection<BallOfFurReturn> getRecipes() {
         return ActuallyAdditionsAPI.BALL_OF_FUR_RETURN_ITEMS;
     }
 

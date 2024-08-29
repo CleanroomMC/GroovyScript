@@ -24,7 +24,7 @@ public class ConductorMast extends StandardListRegistry<DefaultSonarRecipe.Value
     }
 
     @Override
-    public Collection<DefaultSonarRecipe.Value> getRegistry() {
+    public Collection<DefaultSonarRecipe.Value> getRecipes() {
         return ConductorMastRecipes.instance().getRecipes();
     }
 

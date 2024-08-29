@@ -34,7 +34,7 @@ public class EnderCrafting extends StandardListRegistry<IRecipe> {
     }
 
     @Override
-    public Collection<IRecipe> getRegistry() {
+    public Collection<IRecipe> getRecipes() {
         return EnderCrafterRecipeManager.getInstance().getRecipes();
     }
 

@@ -34,7 +34,7 @@ public class Hydrator extends StandardListRegistry<RecipeHydrate> {
     }
 
     @Override
-    public Collection<RecipeHydrate> getRegistry() {
+    public Collection<RecipeHydrate> getRecipes() {
         return RecipeHydrate.recipes;
     }
 

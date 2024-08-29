@@ -24,7 +24,7 @@ public class ElvenTrade extends StandardListRegistry<RecipeElvenTrade> {
     }
 
     @Override
-    public Collection<RecipeElvenTrade> getRegistry() {
+    public Collection<RecipeElvenTrade> getRecipes() {
         return BotaniaAPI.elvenTradeRecipes;
     }
 

@@ -23,7 +23,7 @@ public class AlloyKiln extends StandardListRegistry<AlloyRecipe> {
     }
 
     @Override
-    public Collection<AlloyRecipe> getRegistry() {
+    public Collection<AlloyRecipe> getRecipes() {
         return AlloyRecipe.recipeList;
     }
 

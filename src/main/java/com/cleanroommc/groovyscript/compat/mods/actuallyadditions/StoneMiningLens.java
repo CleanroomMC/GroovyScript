@@ -24,7 +24,7 @@ public class StoneMiningLens extends StandardListRegistry<WeightedOre> {
     }
 
     @Override
-    public Collection<WeightedOre> getRegistry() {
+    public Collection<WeightedOre> getRecipes() {
         return ActuallyAdditionsAPI.STONE_ORES;
     }
 

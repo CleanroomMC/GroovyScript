@@ -25,7 +25,7 @@ public class CompressionCrafting extends StandardListRegistry<CompressorRecipe> 
     }
 
     @Override
-    public Collection<CompressorRecipe> getRegistry() {
+    public Collection<CompressorRecipe> getRecipes() {
         return CompressorRecipeManager.getInstance().getRecipes();
     }
 

@@ -25,7 +25,7 @@ public class Hopper extends StandardListRegistry<HopperInteractions.HopperRecipe
     }
 
     @Override
-    public Collection<HopperInteractions.HopperRecipe> getRegistry() {
+    public Collection<HopperInteractions.HopperRecipe> getRecipes() {
         return HopperInteractions.RECIPES;
     }
 

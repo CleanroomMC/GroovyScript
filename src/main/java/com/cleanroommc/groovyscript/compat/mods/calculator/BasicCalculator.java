@@ -24,7 +24,7 @@ public class BasicCalculator extends StandardListRegistry<CalculatorRecipe> {
     }
 
     @Override
-    public Collection<CalculatorRecipe> getRegistry() {
+    public Collection<CalculatorRecipe> getRecipes() {
         return CalculatorRecipes.instance().getRecipes();
     }
 

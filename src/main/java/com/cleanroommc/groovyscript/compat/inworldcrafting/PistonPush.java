@@ -33,7 +33,7 @@ public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe
     }
 
     @Override
-    public Collection<PistonPushRecipe> getRegistry() {
+    public Collection<PistonPushRecipe> getRecipes() {
         return this.pistonPushRecipes;
     }
 

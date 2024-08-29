@@ -23,7 +23,7 @@ public class Drying extends StandardListRegistry<DryingRecipe> {
     }
 
     @Override
-    public Collection<DryingRecipe> getRegistry() {
+    public Collection<DryingRecipe> getRecipes() {
         return TinkerRegistryAccessor.getDryingRegistry();
     }
 

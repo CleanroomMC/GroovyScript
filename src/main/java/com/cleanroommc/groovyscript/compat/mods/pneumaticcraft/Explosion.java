@@ -27,7 +27,7 @@ public class Explosion extends StandardListRegistry<ExplosionCraftingRecipe> {
     }
 
     @Override
-    public Collection<ExplosionCraftingRecipe> getRegistry() {
+    public Collection<ExplosionCraftingRecipe> getRecipes() {
         return ExplosionCraftingRecipe.recipes;
     }
 

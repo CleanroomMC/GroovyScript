@@ -22,7 +22,7 @@ public class MoonlightForge extends StandardListRegistry<MoonlightForgeRecipe> {
     }
 
     @Override
-    public Collection<MoonlightForgeRecipe> getRegistry() {
+    public Collection<MoonlightForgeRecipe> getRecipes() {
         return MoonlightForgeRecipeHandler.allRecipes;
     }
 

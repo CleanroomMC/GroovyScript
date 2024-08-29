@@ -22,7 +22,7 @@ public class Alloying extends StandardListRegistry<AlloyRecipe> {
     }
 
     @Override
-    public Collection<AlloyRecipe> getRegistry() {
+    public Collection<AlloyRecipe> getRecipes() {
         return TinkerRegistryAccessor.getAlloyRegistry();
     }
 

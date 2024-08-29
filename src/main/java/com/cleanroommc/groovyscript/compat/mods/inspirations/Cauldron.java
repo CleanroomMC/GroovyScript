@@ -135,7 +135,7 @@ public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
     }
 
     @Override
-    public Collection<ICauldronRecipe> getRegistry() {
+    public Collection<ICauldronRecipe> getRecipes() {
         return InspirationsRegistryAccessor.getCauldronRecipes();
     }
 

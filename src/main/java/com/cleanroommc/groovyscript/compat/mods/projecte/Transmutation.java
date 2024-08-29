@@ -26,7 +26,7 @@ public class Transmutation extends StandardListRegistry<WorldTransmutations.Entr
     }
 
     @Override
-    public Collection<WorldTransmutations.Entry> getRegistry() {
+    public Collection<WorldTransmutations.Entry> getRecipes() {
         return WorldTransmutations.getWorldTransmutations();
     }
 

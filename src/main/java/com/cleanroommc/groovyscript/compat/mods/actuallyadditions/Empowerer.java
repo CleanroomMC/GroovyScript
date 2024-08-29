@@ -30,7 +30,7 @@ public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
     }
 
     @Override
-    public Collection<EmpowererRecipe> getRegistry() {
+    public Collection<EmpowererRecipe> getRecipes() {
         return ActuallyAdditionsAPI.EMPOWERER_RECIPES;
     }
 

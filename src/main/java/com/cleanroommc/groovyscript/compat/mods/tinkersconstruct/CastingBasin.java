@@ -30,7 +30,7 @@ public class CastingBasin extends StandardListRegistry<ICastingRecipe> {
     }
 
     @Override
-    public Collection<ICastingRecipe> getRegistry() {
+    public Collection<ICastingRecipe> getRecipes() {
         return TinkerRegistryAccessor.getBasinCastRegistry();
     }
 

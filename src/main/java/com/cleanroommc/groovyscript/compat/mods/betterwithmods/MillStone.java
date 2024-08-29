@@ -25,7 +25,7 @@ public class MillStone extends StandardListRegistry<MillRecipe> {
     }
 
     @Override
-    public Collection<MillRecipe> getRegistry() {
+    public Collection<MillRecipe> getRecipes() {
         return BWRegistry.MILLSTONE.getRecipes();
     }
 

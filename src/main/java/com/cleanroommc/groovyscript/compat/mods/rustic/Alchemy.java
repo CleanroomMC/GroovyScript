@@ -27,7 +27,7 @@ public class Alchemy extends StandardListRegistry<ICondenserRecipe> {
     }
 
     @Override
-    public Collection<ICondenserRecipe> getRegistry() {
+    public Collection<ICondenserRecipe> getRecipes() {
         return Recipes.condenserRecipes;
     }
 

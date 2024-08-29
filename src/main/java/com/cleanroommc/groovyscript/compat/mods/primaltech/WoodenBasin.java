@@ -34,7 +34,7 @@ public class WoodenBasin extends StandardListRegistry<WoodenBasinRecipes> {
     }
 
     @Override
-    public Collection<WoodenBasinRecipes> getRegistry() {
+    public Collection<WoodenBasinRecipes> getRecipes() {
         return WoodenBasinRecipesAccessor.getRecipes();
     }
 

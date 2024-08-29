@@ -22,7 +22,7 @@ public class SagMillGrinding extends StandardListRegistry<GrindingBall> {
     }
 
     @Override
-    public Collection<GrindingBall> getRegistry() {
+    public Collection<GrindingBall> getRecipes() {
         return SagMillRecipeManager.getInstance().getBalls();
     }
 

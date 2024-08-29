@@ -25,7 +25,7 @@ public class Apothecary extends StandardListRegistry<RecipePetals> {
     }
 
     @Override
-    public Collection<RecipePetals> getRegistry() {
+    public Collection<RecipePetals> getRecipes() {
         return BotaniaAPI.petalRecipes;
     }
 

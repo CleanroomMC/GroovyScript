@@ -30,7 +30,7 @@ public class Crucible extends StandardListRegistry<CookingPotRecipe> {
     }
 
     @Override
-    public Collection<CookingPotRecipe> getRegistry() {
+    public Collection<CookingPotRecipe> getRecipes() {
         return BWRegistry.CRUCIBLE.getRecipes();
     }
 
