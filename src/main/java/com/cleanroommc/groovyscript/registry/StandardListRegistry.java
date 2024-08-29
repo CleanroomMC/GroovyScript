@@ -12,6 +12,10 @@ import java.util.Collection;
 /**
  * Boilerplate code for a registry where the registry is a mutable Collection that stores recipes of type {@link R}.
  * Will automatically handle {@link #add(R)}, {@link #remove(R)}, {@link #removeAll()}, {@link #streamRecipes()}, and {@link #onReload()}.
+ * <p>
+ * Note that {@link R} should <i>not</i> register itself on initialization, or the recipe may be added to the recipe list multiple times.
+ *
+ * @param <R> the recipe type being stored and reloaded
  */
 public abstract class StandardListRegistry<R> extends VirtualizedRegistry<R> {
 
