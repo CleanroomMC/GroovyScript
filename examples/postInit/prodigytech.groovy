@@ -29,8 +29,8 @@ mods.prodigytech.atomic_reshaper.recipeBuilder()
 // Uses an explosive, a dampener, and an optional reagent to convert items. The power value of all recipes, all explosives,
 // and all dampeners should be close to avoid an efficiency loss.
 
-// mods.prodigytech.explosion_furnace.removeAll()
 mods.prodigytech.explosion_furnace.removeByOutput(item('prodigytech:ferramic_ingot'))
+// mods.prodigytech.explosion_furnace.removeAll()
 
 mods.prodigytech.explosion_furnace.recipeBuilder()
     .input(ore('ingotGold'), item('minecraft:diamond'))
