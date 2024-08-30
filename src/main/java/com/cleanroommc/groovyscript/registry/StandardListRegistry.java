@@ -37,10 +37,12 @@ public abstract class StandardListRegistry<R> extends VirtualizedRegistry<R> {
         getRecipes().addAll(restoreFromBackup());
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.add_to_list", priority = 500)
     public boolean add(R recipe) {
         return recipe != null && getRecipes().add(recipe) && addScripted(recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.remove_from_list", priority = 500)
     public boolean remove(R recipe) {
         return recipe != null && getRecipes().removeIf(r -> r == recipe) && addBackup(recipe);
     }

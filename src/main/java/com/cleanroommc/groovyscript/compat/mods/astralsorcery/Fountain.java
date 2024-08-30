@@ -38,34 +38,22 @@ public class Fountain extends StandardListRegistry<FluidRarityRegistry.FluidRari
         }
     }
 
-    @Override
     @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add0", type = MethodDescription.Type.ADDITION)
-    public boolean add(FluidRarityRegistry.FluidRarityEntry entry) {
-        return super.add(entry);
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add1", type = MethodDescription.Type.ADDITION)
     public void add(FluidStack fluid, int rarity, int guaranteedAmt, int addRand) {
         this.add(fluid.getFluid(), rarity, guaranteedAmt, addRand);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add2", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add1", type = MethodDescription.Type.ADDITION)
     public void add(Fluid fluid, int rarity, int guaranteedAmt, int addRand) {
         this.add(FluidRarityEntryAccessor.createFluidRarityEntry(fluid, rarity, guaranteedAmt, addRand));
     }
 
-    @Override
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove0")
-    public boolean remove(FluidRarityRegistry.FluidRarityEntry entry) {
-        return super.remove(entry);
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove1",example = @Example("fluid('lava')"))
+    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove0", example = @Example("fluid('lava')"))
     public void remove(FluidStack entry) {
         this.remove(entry.getFluid());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove2")
+    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove1")
     public void remove(Fluid entry) {
         ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().removeIf(fluidRarityEntry -> {
             if (fluidRarityEntry.fluid != null && fluidRarityEntry.fluid.equals(entry)) {

@@ -77,6 +77,9 @@ groovyscript.wiki.recipe_builder_note=Don't know what a builder is? Check [the b
 groovyscript.wiki.required_mods.title=Required Mods
 groovyscript.wiki.required_mods.desc=This compat requires the following mods to be loaded
 groovyscript.wiki.not_fully_documented=This compat is not fully documented. Some or all of its features are not present on the wiki. View the source code to gain an accurate understanding of the compat.
+groovyscript.wiki.add_to_list=Add the given recipe to the recipe list
+groovyscript.wiki.remove_from_list=Removes the given recipe from the recipe list
+
 
 groovyscript.wiki.requires=Requires %s.
 groovyscript.wiki.default=(Default `%s`).
@@ -313,16 +316,14 @@ groovyscript.wiki.astralsorcery.constellation.removeAll=Removes all Constellatio
 
 groovyscript.wiki.astralsorcery.fountain.title=Fountain
 groovyscript.wiki.astralsorcery.fountain.description=Adds virtual aquifers that can be accessed via the Evershifting Fountain's Necromantic Prime.
-groovyscript.wiki.astralsorcery.fountain.add0=Adds an existing `FluidRarityEntry` to the registry
+groovyscript.wiki.astralsorcery.fountain.add0=Adds recipes in the format `fluid`, `rarity`, `guaranteedAmt`, `addRand`
 groovyscript.wiki.astralsorcery.fountain.add1=Adds recipes in the format `fluid`, `rarity`, `guaranteedAmt`, `addRand`
-groovyscript.wiki.astralsorcery.fountain.add2=Adds recipes in the format `fluid`, `rarity`, `guaranteedAmt`, `addRand`
 groovyscript.wiki.astralsorcery.fountain.variance.value=Sets the maximum amount of additional fluid that can be generated in a chunk
 groovyscript.wiki.astralsorcery.fountain.minimumAmount.value=Sets the minimum amount of fluid in a chunk
 groovyscript.wiki.astralsorcery.fountain.fluid.value=Sets the fluid being generated
 groovyscript.wiki.astralsorcery.fountain.rarity.value=Sets the frequency the fluid generates in a chunk
-groovyscript.wiki.astralsorcery.fountain.remove0=Removes an existing `FluidRarityEntry`
-groovyscript.wiki.astralsorcery.fountain.remove1=Removes an entry matching the given `FluidStack`
-groovyscript.wiki.astralsorcery.fountain.remove2=Removes an entry matching the given `Fluid`
+groovyscript.wiki.astralsorcery.fountain.remove0=Removes an entry matching the given `FluidStack`
+groovyscript.wiki.astralsorcery.fountain.remove1=Removes an entry matching the given `Fluid`
 
 groovyscript.wiki.astralsorcery.grindstone.title=Grindstone
 groovyscript.wiki.astralsorcery.grindstone.description=Converts an item into an itemstack with a chance of getting twice the amount after right clicking the grindstone based on weight.
