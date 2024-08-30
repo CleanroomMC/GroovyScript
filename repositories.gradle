@@ -1,11 +1,11 @@
 // Add any additional repositories for your dependencies here
 
 repositories {
-    maven {
-        // used for EnderIO
-        url 'http://maven.tterrag.com/'
-        allowInsecureProtocol = true
-    }
+//    maven {
+//        // formerly used for EnderIO, currently unused
+//        url 'http://maven.tterrag.com/'
+//        allowInsecureProtocol = true
+//    }
     maven {
         // used for TechReborn
         name 'Mod Maven'
