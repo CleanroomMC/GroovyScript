@@ -35,7 +35,7 @@ public class LifeEssence extends StandardListRegistry<Class<? extends EntityLivi
         return remove(entity.getClass());
     }
 
-    @MethodDescription
+    @MethodDescription(example = @Example("entity('minecraft:sheep')"))
     public boolean remove(EntityEntry entity) {
         return remove((Class<? extends EntityLivingBase>) entity.getEntityClass());
     }
