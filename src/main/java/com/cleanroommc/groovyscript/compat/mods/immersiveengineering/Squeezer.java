@@ -50,7 +50,7 @@ public class Squeezer extends StandardListRegistry<SqueezerRecipe> {
                     .post();
             return;
         }
-        if (!SqueezerRecipe.recipeList.removeIf(recipe -> {
+        if (!getRecipes().removeIf(recipe -> {
             if (fluidOutput.isFluidEqual(recipe.fluidOutput)) {
                 addBackup(recipe);
                 return true;
@@ -73,7 +73,7 @@ public class Squeezer extends StandardListRegistry<SqueezerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        List<SqueezerRecipe> recipes = SqueezerRecipe.recipeList.stream().filter(r -> fluidOutput.isFluidEqual(r.fluidOutput) && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
+        List<SqueezerRecipe> recipes = getRecipes().stream().filter(r -> fluidOutput.isFluidEqual(r.fluidOutput) && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
         for (SqueezerRecipe recipe : recipes) {
             remove(recipe);
         }
@@ -95,7 +95,7 @@ public class Squeezer extends StandardListRegistry<SqueezerRecipe> {
         }
         // "Condition 'r.itemOutput != null' is always 'true'" is a lie. It can be null, and if it is it *will* throw an NPE if we don't check against it.
         @SuppressWarnings("ConstantValue")
-        List<SqueezerRecipe> recipes = SqueezerRecipe.recipeList.stream().filter(r -> r != null && r.itemOutput != null && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
+        List<SqueezerRecipe> recipes = getRecipes().stream().filter(r -> r != null && r.itemOutput != null && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
         for (SqueezerRecipe recipe : recipes) {
             remove(recipe);
         }

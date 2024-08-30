@@ -39,7 +39,7 @@ public class Combiner extends StandardListRegistry<CombinerRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:glowstone')"))
     public boolean removeByOutput(IIngredient output) {
-        return ModRecipes.INSTANCE.getCombinerRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
                 addBackup(r);
                 return true;
@@ -50,7 +50,7 @@ public class Combiner extends StandardListRegistry<CombinerRecipe> {
 
     @MethodDescription(example = @Example("element('carbon')"))
     public boolean removeByInput(IIngredient input) {
-        return ModRecipes.INSTANCE.getCombinerRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInputs()) {
                 if (input.test(itemstack)) {
                     addBackup(r);

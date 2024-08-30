@@ -67,7 +67,7 @@ public class TableCrafting extends StandardListRegistry<ITieredRecipe> {
 
     @MethodDescription(example = @Example("item('extendedcrafting:singularity_ultimate')"))
     public boolean removeByOutput(ItemStack stack) {
-        return TableRecipeManager.getInstance().getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (recipe != null && recipe.getRecipeOutput().isItemEqual(stack)) {
                 addBackup(recipe);
                 return true;

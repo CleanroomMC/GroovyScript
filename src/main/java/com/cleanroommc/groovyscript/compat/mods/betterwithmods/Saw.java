@@ -31,7 +31,7 @@ public class Saw extends StandardListRegistry<SawRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:pumpkin')"))
     public boolean removeByOutput(IIngredient output) {
-        return BWRegistry.WOOD_SAW.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -44,7 +44,7 @@ public class Saw extends StandardListRegistry<SawRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:vine')"))
     public boolean removeByInput(IIngredient input) {
-        return BWRegistry.WOOD_SAW.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInput().getMatchingStacks()) {
                 if (input.test(itemstack)) {
                     addBackup(r);

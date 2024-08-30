@@ -43,7 +43,7 @@ public class AtomicReconstructor extends StandardListRegistry<LensConversionReci
 
     @MethodDescription(description = "groovyscript.wiki.removeByOre", example = @Example("item('minecraft:diamond')"))
     public boolean removeByInput(IIngredient input) {
-        return ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
             if (found) {
                 addBackup(recipe);
@@ -54,7 +54,7 @@ public class AtomicReconstructor extends StandardListRegistry<LensConversionReci
 
     @MethodDescription(example = @Example("item('actuallyadditions:block_crystal')"))
     public boolean removeByOutput(ItemStack output) {
-        return ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
             if (matches) {
                 addBackup(recipe);

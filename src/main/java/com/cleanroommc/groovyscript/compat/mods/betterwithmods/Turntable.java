@@ -36,7 +36,7 @@ public class Turntable extends StandardListRegistry<TurntableRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:clay_ball')"))
     public boolean removeByOutput(IIngredient output) {
-        return BWRegistry.TURNTABLE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -49,7 +49,7 @@ public class Turntable extends StandardListRegistry<TurntableRecipe> {
 
     @MethodDescription(example = @Example("item('betterwithmods:unfired_pottery')"))
     public boolean removeByInput(IIngredient input) {
-        return BWRegistry.TURNTABLE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInput().getMatchingStacks()) {
                 if (input.test(itemstack)) {
                     addBackup(r);

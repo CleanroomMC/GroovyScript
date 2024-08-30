@@ -41,7 +41,7 @@ public class NetherMiningLens extends StandardListRegistry<WeightedOre> {
 
     @MethodDescription(example = @Example("'oreQuartz'"))
     public boolean removeByOre(String oreName) {
-        return ActuallyAdditionsAPI.NETHERRACK_ORES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean found = oreName.equals(recipe.name);
             if (found) {
                 addBackup(recipe);

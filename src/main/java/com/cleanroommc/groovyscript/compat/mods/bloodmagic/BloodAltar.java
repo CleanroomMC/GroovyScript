@@ -53,7 +53,7 @@ public class BloodAltar extends StandardListRegistry<RecipeBloodAltar> {
 
     @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public boolean removeByInput(IIngredient input) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean removeRecipe = recipe.getInput().test(IngredientHelper.toItemStack(input));
             if (removeRecipe) {
                 addBackup(recipe);
@@ -72,7 +72,7 @@ public class BloodAltar extends StandardListRegistry<RecipeBloodAltar> {
 
     @MethodDescription(example = @Example("item('bloodmagic:slate:4')"))
     public boolean removeByOutput(ItemStack output) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
             if (matches) {
                 addBackup(recipe);

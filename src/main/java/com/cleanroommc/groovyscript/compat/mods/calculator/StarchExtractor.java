@@ -30,7 +30,7 @@ public class StarchExtractor extends StandardListRegistry<DefaultSonarRecipe.Val
 
     @MethodDescription(example = @Example("item('minecraft:apple')"))
     public boolean removeByInput(IIngredient input) {
-        return StarchExtractorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {

@@ -30,7 +30,7 @@ public class FlawlessCalculator extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:obsidian')"))
     public boolean removeByInput(IIngredient input) {
-        return FlawlessCalculatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -45,7 +45,7 @@ public class FlawlessCalculator extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public boolean removeByOutput(IIngredient output) {
-        return FlawlessCalculatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {

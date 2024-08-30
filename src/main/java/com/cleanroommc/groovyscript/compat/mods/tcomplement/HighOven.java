@@ -51,7 +51,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
     }
 
     public boolean removeByOutput(FluidStack output) {
-        if (TCompRegistryAccessor.getHighOvenOverrides().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.output.isFluidEqual(output);
             if (found) addBackup(recipe);
             return found;
@@ -66,7 +66,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
 
     public boolean removeByInput(IIngredient input) {
         NonNullList<ItemStack> list = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
-        if (TCompRegistryAccessor.getHighOvenOverrides().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.input.matches(list).isPresent();
             if (found) addBackup(recipe);
             list.clear();
@@ -83,7 +83,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
 
     public boolean removeByInputAndOutput(IIngredient input, FluidStack output) {
         NonNullList<ItemStack> list = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
-        if (TCompRegistryAccessor.getHighOvenOverrides().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.input.matches(list).isPresent() && recipe.output.isFluidEqual(output);
             if (found) addBackup(recipe);
             list.clear();
@@ -124,7 +124,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
         public boolean removeByInput(FluidStack input) {
-            if (TCompRegistryAccessor.getMixRegistry().removeIf(recipe -> {
+            if (getRecipes().removeIf(recipe -> {
                 HighOvenFilter recipe1 = (recipe instanceof HighOvenFilter) ? (HighOvenFilter) recipe : null;
                 boolean found = recipe1 != null && recipe1.getInput().isFluidEqual(input);
                 if (found) addBackup(recipe);
@@ -139,7 +139,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
         public boolean removeByInputAndOutput(FluidStack input, FluidStack output) {
-            if (TCompRegistryAccessor.getMixRegistry().removeIf(recipe -> {
+            if (getRecipes().removeIf(recipe -> {
                 HighOvenFilter recipe1 = (recipe instanceof HighOvenFilter) ? (HighOvenFilter) recipe : null;
                 boolean found = recipe1 != null && recipe1.getInput().isFluidEqual(input) && recipe1.getOutput().isFluidEqual(output);
                 if (found) addBackup(recipe);
@@ -154,7 +154,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
         public boolean removeByAdditives(Map<MixAdditive, IIngredient> additives) {
-            if (TCompRegistryAccessor.getMixRegistry().removeIf(recipe -> {
+            if (getRecipes().removeIf(recipe -> {
                 MixRecipe recipe1 = (recipe instanceof MixRecipe) ? (MixRecipe) recipe : null;
                 if (recipe1 != null) {
                     for (Map.Entry<MixAdditive, IIngredient> entry : additives.entrySet()) {
@@ -266,7 +266,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
         public boolean removeByInput(FluidStack input) {
-            if (TCompRegistryAccessor.getHeatRegistry().removeIf(recipe -> {
+            if (getRecipes().removeIf(recipe -> {
                 boolean found = recipe.getInput().isFluidEqual(input);
                 if (found) addBackup(recipe);
                 return found;
@@ -280,7 +280,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
         public boolean removeByOutput(FluidStack output) {
-            if (TCompRegistryAccessor.getHeatRegistry().removeIf(recipe -> {
+            if (getRecipes().removeIf(recipe -> {
                 boolean found = recipe.getOutput().isFluidEqual(output);
                 if (found) addBackup(recipe);
                 return found;
@@ -294,7 +294,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
         public boolean removeByInputAndOutput(FluidStack input, FluidStack output) {
-            if (TCompRegistryAccessor.getHeatRegistry().removeIf(recipe -> {
+            if (getRecipes().removeIf(recipe -> {
                 boolean found = recipe.getInput().isFluidEqual(input) && recipe.getOutput().isFluidEqual(output);
                 if (found) addBackup(recipe);
                 return found;
@@ -360,7 +360,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
         public boolean removeByItem(IIngredient item) {
-            if (TCompRegistryAccessor.getHighOvenFuels().removeIf(recipe -> {
+            if (getRecipes().removeIf(recipe -> {
                 boolean found = recipe.matches(item.getMatchingStacks()[0]);
                 if (found) addBackup(recipe);
                 return found;

@@ -30,7 +30,7 @@ public class ProcessingChamber extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:circuitdamaged:4')"))
     public boolean removeByInput(IIngredient input) {
-        return ProcessingChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -45,7 +45,7 @@ public class ProcessingChamber extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:circuitboard:1')"))
     public boolean removeByOutput(IIngredient output) {
-        return ProcessingChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {

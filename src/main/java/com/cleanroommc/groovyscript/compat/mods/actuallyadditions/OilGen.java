@@ -51,7 +51,7 @@ public class OilGen extends StandardListRegistry<OilGenRecipe> {
 
     @MethodDescription(example = @Example("'refinedcanolaoil'"))
     public boolean removeByInput(String fluid) {
-        return ActuallyAdditionsAPI.OIL_GENERATOR_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean found = fluid.equals(recipe.fluidName);
             if (found) {
                 addBackup(recipe);

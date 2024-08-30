@@ -49,7 +49,7 @@ public class ArcFurnace extends StandardListRegistry<ArcFurnaceRecipe> {
                     .post();
             return;
         }
-        List<ArcFurnaceRecipe> recipes = ArcFurnaceRecipe.recipeList.stream().filter(r -> r.output != null && r.output.isItemEqual(output)).collect(Collectors.toList());
+        List<ArcFurnaceRecipe> recipes = getRecipes().stream().filter(r -> r.output != null && r.output.isItemEqual(output)).collect(Collectors.toList());
         for (ArcFurnaceRecipe recipe : recipes) {
             remove(recipe);
         }
@@ -70,7 +70,7 @@ public class ArcFurnace extends StandardListRegistry<ArcFurnaceRecipe> {
                     .post();
             return;
         }
-        List<ArcFurnaceRecipe> recipes = ArcFurnaceRecipe.recipeList.stream()
+        List<ArcFurnaceRecipe> recipes = getRecipes().stream()
                 .filter(r -> ImmersiveEngineering.areIngredientsEquals(r.input, main) &&
                              (inputAndAdditives.stream().anyMatch(check -> Arrays.stream(r.additives).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check)))))
                 .collect(Collectors.toList());

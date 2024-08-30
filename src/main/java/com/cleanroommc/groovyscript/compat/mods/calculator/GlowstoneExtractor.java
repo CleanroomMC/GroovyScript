@@ -30,7 +30,7 @@ public class GlowstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.
 
     @MethodDescription(example = @Example("item('minecraft:glowstone')"))
     public boolean removeByInput(IIngredient input) {
-        return GlowstoneExtractorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {

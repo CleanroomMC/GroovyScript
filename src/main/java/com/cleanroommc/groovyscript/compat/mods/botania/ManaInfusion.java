@@ -36,7 +36,7 @@ public class ManaInfusion extends StandardListRegistry<RecipeManaInfusion> {
 
     @MethodDescription(example = @Example("item('botania:managlass')"))
     public boolean removeByOutput(ItemStack output) {
-        if (BotaniaAPI.manaInfusionRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
             if (found) addBackup(recipe);
             return found;
@@ -51,7 +51,7 @@ public class ManaInfusion extends StandardListRegistry<RecipeManaInfusion> {
 
     @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public boolean removeByInput(IIngredient input) {
-        if (BotaniaAPI.manaInfusionRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getInput() instanceof ItemStack ? input.test((ItemStack) recipe.getInput())
                                                                    : (input instanceof OreDictIngredient && ((OreDictIngredient) input).getOreDict().equals(recipe.getInput()));
             if (found) addBackup(recipe);
@@ -67,7 +67,7 @@ public class ManaInfusion extends StandardListRegistry<RecipeManaInfusion> {
 
     @MethodDescription(example = @Example("blockstate('botania:alchemycatalyst')"))
     public boolean removeByCatalyst(IBlockState catalyst) {
-        if (BotaniaAPI.manaInfusionRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             if (recipe.getCatalyst() == null) return false;
             boolean found = recipe.getCatalyst().equals(catalyst);
             if (found) addBackup(recipe);

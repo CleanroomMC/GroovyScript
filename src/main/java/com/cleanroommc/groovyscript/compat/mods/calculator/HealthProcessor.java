@@ -30,7 +30,7 @@ public class HealthProcessor extends StandardListRegistry<DefaultSonarRecipe.Val
 
     @MethodDescription(example = @Example("item('minecraft:blaze_rod')"))
     public boolean removeByInput(IIngredient input) {
-        return HealthProcessorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {

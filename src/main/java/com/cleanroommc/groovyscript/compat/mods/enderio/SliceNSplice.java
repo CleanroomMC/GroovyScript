@@ -57,7 +57,7 @@ public class SliceNSplice extends StandardListRegistry<IManyToOneRecipe> {
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('enderio:item_material:40')"))
     public void remove(ItemStack output) {
         int count = 0;
-        Iterator<IManyToOneRecipe> iter = SliceAndSpliceRecipeManager.getInstance().getRecipes().iterator();
+        Iterator<IManyToOneRecipe> iter = getRecipes().iterator();
         while (iter.hasNext()) {
             IManyToOneRecipe recipe = iter.next();
             if (OreDictionary.itemMatches(output, recipe.getOutput(), false)) {
@@ -75,7 +75,7 @@ public class SliceNSplice extends StandardListRegistry<IManyToOneRecipe> {
     public void removeByInput(List<ItemStack> input) {
         IRecipe recipe = SliceAndSpliceRecipeManager.getInstance().getRecipeForInputs(RecipeLevel.IGNORE, RecipeUtils.getMachineInputs(input));
         if (recipe instanceof IManyToOneRecipe) {
-            SliceAndSpliceRecipeManager.getInstance().getRecipes().remove(recipe);
+            getRecipes().remove(recipe);
             addBackup((IManyToOneRecipe) recipe);
         } else {
             GroovyLog.get().error("No EnderIO Slice'n'Splice recipe found for " + input);

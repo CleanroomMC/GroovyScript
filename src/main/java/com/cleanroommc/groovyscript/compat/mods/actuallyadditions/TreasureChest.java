@@ -33,7 +33,7 @@ public class TreasureChest extends StandardListRegistry<TreasureChestLoot> {
 
     @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
     public boolean removeByOutput(ItemStack output) {
-        return ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.returnItem, output);
             if (matches) {
                 addBackup(recipe);

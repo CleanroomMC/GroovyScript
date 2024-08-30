@@ -34,7 +34,7 @@ public class ExtractionChamber extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:dirt')"))
     public boolean removeByInput(IIngredient input) {
-        return ExtractionChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -49,7 +49,7 @@ public class ExtractionChamber extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:smallstone')"))
     public boolean removeByOutput(IIngredient output) {
-        return ExtractionChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {

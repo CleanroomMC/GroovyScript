@@ -35,7 +35,7 @@ public class BasicCalculator extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:cobblestone')"))
     public boolean removeByInput(IIngredient input) {
-        return CalculatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -50,7 +50,7 @@ public class BasicCalculator extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:reinforcedironingot')"))
     public boolean removeByOutput(IIngredient output) {
-        return CalculatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {

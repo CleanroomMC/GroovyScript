@@ -32,7 +32,7 @@ public class OreFermenter extends StandardListRegistry<OreFluidEntryFermenter> {
 
     @MethodDescription(example = @Example("fluid('if.ore_fluid_raw').withNbt([Ore: 'oreRedstone'])"))
     public boolean removeByInput(IIngredient input) {
-        return OreFluidEntryFermenter.ORE_FLUID_FERMENTER.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getInput())) {
                 addBackup(recipe);
                 return true;
@@ -43,7 +43,7 @@ public class OreFermenter extends StandardListRegistry<OreFluidEntryFermenter> {
 
     @MethodDescription(example = @Example(value = "fluid('if.ore_fluid_fermented').withNbt([Ore: 'oreRedstone'])", commented = true))
     public boolean removeByOutput(IIngredient output) {
-        return OreFluidEntryFermenter.ORE_FLUID_FERMENTER.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput())) {
                 addBackup(recipe);
                 return true;

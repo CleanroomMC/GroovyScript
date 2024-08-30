@@ -33,7 +33,7 @@ public class SagMillGrinding extends StandardListRegistry<GrindingBall> {
 
     @MethodDescription(example = @Example("item('minecraft:flint')"))
     public boolean remove(ItemStack grindingBall) {
-        for (GrindingBall ball : SagMillRecipeManager.getInstance().getBalls()) {
+        for (GrindingBall ball : getRecipes()) {
             if (ball.isInput(grindingBall)) {
                 remove(ball);
                 return true;

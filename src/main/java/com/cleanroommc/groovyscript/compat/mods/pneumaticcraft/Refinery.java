@@ -31,7 +31,7 @@ public class Refinery extends StandardListRegistry<RefineryRecipe> {
 
     @MethodDescription(example = @Example("fluid('kerosene')"))
     public boolean removeByOutput(IIngredient output) {
-        return RefineryRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (Arrays.stream(entry.outputs).anyMatch(output::test)) {
                 addBackup(entry);
                 return true;
@@ -42,7 +42,7 @@ public class Refinery extends StandardListRegistry<RefineryRecipe> {
 
     @MethodDescription(example = @Example(value = "fluid('oil')", commented = true))
     public boolean removeByInput(IIngredient input) {
-        return RefineryRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (input.test(entry.input)) {
                 addBackup(entry);
                 return true;

@@ -46,7 +46,7 @@ public class CombinationCrafting extends StandardListRegistry<CombinationRecipe>
 
     @MethodDescription(example = @Example(value = "item('minecraft:gold_ingot')", commented = true))
     public boolean removeByOutput(ItemStack output) {
-        return CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getOutput().equals(output)) {
                 addBackup(r);
                 return true;
@@ -57,7 +57,7 @@ public class CombinationCrafting extends StandardListRegistry<CombinationRecipe>
 
     @MethodDescription(example = @Example(value = "item('minecraft:pumpkin')", commented = true))
     public boolean removeByInput(ItemStack input) {
-        return CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getInput().equals(input)) {
                 addBackup(r);
                 return true;

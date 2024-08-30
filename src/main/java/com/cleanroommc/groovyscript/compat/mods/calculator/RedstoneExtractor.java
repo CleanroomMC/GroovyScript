@@ -30,7 +30,7 @@ public class RedstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.V
 
     @MethodDescription(example = @Example("item('minecraft:redstone_block')"))
     public boolean removeByInput(IIngredient input) {
-        return RedstoneExtractorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {

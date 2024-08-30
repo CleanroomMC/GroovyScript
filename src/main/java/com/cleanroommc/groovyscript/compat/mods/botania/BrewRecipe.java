@@ -31,7 +31,7 @@ public class BrewRecipe extends StandardListRegistry<RecipeBrew> {
 
     @MethodDescription(example = @Example("'speed'"))
     public boolean removeByOutput(String brew) {
-        if (BotaniaAPI.brewRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getBrew().getKey().equals(brew);
             if (found) addBackup(recipe);
             return found;
@@ -53,7 +53,7 @@ public class BrewRecipe extends StandardListRegistry<RecipeBrew> {
     public boolean removeByInput(IIngredient... inputs) {
         List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
                                                                                                : i.getMatchingStacks()[0]).collect(Collectors.toList());
-        if (BotaniaAPI.brewRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> (i instanceof String || o instanceof String)
                                                                                                        ? i.equals(o)
                                                                                                        : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));

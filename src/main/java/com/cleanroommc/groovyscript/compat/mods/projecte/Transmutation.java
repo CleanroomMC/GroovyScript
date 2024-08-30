@@ -32,7 +32,7 @@ public class Transmutation extends StandardListRegistry<WorldTransmutations.Entr
 
     @MethodDescription(example = @Example("blockstate('minecraft:wool')"))
     public boolean removeByInput(IBlockState input) {
-        return WorldTransmutations.getWorldTransmutations().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (input.equals(r.input)) {
                 addBackup(r);
                 return true;
@@ -43,7 +43,7 @@ public class Transmutation extends StandardListRegistry<WorldTransmutations.Entr
 
     @MethodDescription(example = @Example("blockstate('minecraft:dirt')"))
     public boolean removeByOutput(IBlockState output) {
-        return WorldTransmutations.getWorldTransmutations().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.equals(r.outputs.getKey()) || output.equals(r.outputs.getValue())) {
                 addBackup(r);
                 return true;

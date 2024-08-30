@@ -30,7 +30,7 @@ public class ReassemblyChamber extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:circuitdamaged:12')"))
     public boolean removeByInput(IIngredient input) {
-        return ReassemblyChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -45,7 +45,7 @@ public class ReassemblyChamber extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:circuitboard:13')"))
     public boolean removeByOutput(IIngredient output) {
-        return ReassemblyChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {

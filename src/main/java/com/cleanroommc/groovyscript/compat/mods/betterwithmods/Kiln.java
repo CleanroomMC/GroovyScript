@@ -33,7 +33,7 @@ public class Kiln extends StandardListRegistry<KilnRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:brick')"))
     public boolean removeByOutput(IIngredient output) {
-        return BWRegistry.KILN.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -46,7 +46,7 @@ public class Kiln extends StandardListRegistry<KilnRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:end_stone')"))
     public boolean removeByInput(IIngredient input) {
-        return BWRegistry.KILN.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInput().getMatchingStacks()) {
                 if (input.test(itemstack)) {
                     addBackup(r);

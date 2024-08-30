@@ -28,7 +28,7 @@ public class MoonlightForge extends StandardListRegistry<MoonlightForgeRecipe> {
 
     @MethodDescription(example = @Example("item('theaurorian:moonstonesword'), item('theaurorian:aurorianiteingot')"))
     public boolean removeByInput(IIngredient input, IIngredient catalyst) {
-        return MoonlightForgeRecipeHandler.allRecipes.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (input.test(r.getInput1()) && catalyst.test(r.getInput2())) {
                 addBackup(r);
                 return true;
@@ -39,7 +39,7 @@ public class MoonlightForge extends StandardListRegistry<MoonlightForgeRecipe> {
 
     @MethodDescription(example = @Example("item('theaurorian:queenschipper')"))
     public boolean removeByOutput(IIngredient output) {
-        return MoonlightForgeRecipeHandler.allRecipes.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
                 addBackup(r);
                 return true;

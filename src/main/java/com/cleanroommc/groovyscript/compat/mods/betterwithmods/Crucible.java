@@ -36,7 +36,7 @@ public class Crucible extends StandardListRegistry<CookingPotRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByOutput(ItemStack output) {
-        return BWRegistry.CRUCIBLE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (ItemHandlerHelper.canItemStacksStack(itemstack, output)) {
                     addBackup(r);
@@ -49,7 +49,7 @@ public class Crucible extends StandardListRegistry<CookingPotRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByInput(ItemStack input) {
-        return BWRegistry.CRUCIBLE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (Ingredient ingredient : r.getInputs()) {
                 if (ingredient.test(input)) {
                     addBackup(r);

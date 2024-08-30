@@ -28,7 +28,7 @@ public class MagicianTable extends StandardListRegistry<MagicianTableRecipe> {
 
     @MethodDescription(example = @Example("item('essentialcraft:genitem')"))
     public boolean removeByOutput(IIngredient x) {
-        return MagicianTableRecipes.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (x.test(r.getRecipeOutput())) {
                 addBackup(r);
                 return true;

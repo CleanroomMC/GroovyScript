@@ -34,7 +34,7 @@ public class Cauldron extends StandardListRegistry<CookingPotRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByOutput(IIngredient output) {
-        return BWRegistry.CAULDRON.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -47,7 +47,7 @@ public class Cauldron extends StandardListRegistry<CookingPotRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByInput(IIngredient input) {
-        return BWRegistry.CAULDRON.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (Ingredient ingredient : r.getInputs()) {
                 for (ItemStack item : ingredient.getMatchingStacks()) {
                     if (input.test(item)) {

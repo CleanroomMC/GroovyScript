@@ -35,7 +35,7 @@ public class Alloying extends StandardListRegistry<AlloyRecipe> {
 
     @MethodDescription(example = @Example("fluid('pigiron')"))
     public boolean removeByOutput(FluidStack output) {
-        if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getResult().isFluidEqual(output);
             if (found) addBackup(recipe);
             return found;
@@ -51,7 +51,7 @@ public class Alloying extends StandardListRegistry<AlloyRecipe> {
     @MethodDescription(description = "groovyscript.wiki.tconstruct.alloying.removeByInputs", example = @Example("fluid('cobalt')*2,fluid('ardite')*2"))
     public boolean removeByInputs(FluidStack... inputs) {
         List<FluidStack> list = Arrays.asList(inputs);
-        if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.matches(list) > 0;
             if (found) addBackup(recipe);
             return found;
@@ -67,7 +67,7 @@ public class Alloying extends StandardListRegistry<AlloyRecipe> {
     @MethodDescription(example = @Example("fluid('knightslime')*72,fluid('iron')*72,fluid('stone')*144,fluid('purpleslime')*125"))
     public boolean removeByInputsAndOutput(FluidStack output, FluidStack... inputs) {
         List<FluidStack> list = Arrays.asList(inputs);
-        if (TinkerRegistryAccessor.getAlloyRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getResult().isFluidEqual(output) && recipe.matches(list) > 0;
             if (found) addBackup(recipe);
             return found;

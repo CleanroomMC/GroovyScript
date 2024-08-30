@@ -31,9 +31,9 @@ public class Fountain extends StandardListRegistry<FluidRarityRegistry.FluidRari
     public void afterScriptLoad() {
         // If the rarity list is empty, generating new chunks will cause a NPE. To prevent this, we add a "water" entry that will always have 0mb inside,
         // which causes it to be marked as empty, and thus not be interactable.
-        if (((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().isEmpty()) {
+        if (getRecipes().isEmpty()) {
             FluidRarityRegistry.FluidRarityEntry errorBlocker = FluidRarityEntryAccessor.createFluidRarityEntry("water", 1, 0, 0);
-            ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().add(errorBlocker);
+            getRecipes().add(errorBlocker);
             addScripted(errorBlocker);
         }
     }
@@ -55,7 +55,7 @@ public class Fountain extends StandardListRegistry<FluidRarityRegistry.FluidRari
 
     @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove1")
     public void remove(Fluid entry) {
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().removeIf(fluidRarityEntry -> {
+        getRecipes().removeIf(fluidRarityEntry -> {
             if (fluidRarityEntry.fluid != null && fluidRarityEntry.fluid.equals(entry)) {
                 addBackup(fluidRarityEntry);
                 return true;

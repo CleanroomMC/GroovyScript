@@ -46,7 +46,7 @@ public class StygianIronAnvil extends StandardListRegistry<IAnvilRecipe> {
     public void afterScriptLoad() {
         // Recalculate valid base items
         ((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().clear();
-        Woot.anvilManager.getRecipes().forEach(x -> {
+        getRecipes().forEach(x -> {
             if (((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().contains(x.getBaseItem())) return;
             ((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().add(x.getBaseItem());
         });
@@ -54,7 +54,7 @@ public class StygianIronAnvil extends StandardListRegistry<IAnvilRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:iron_bars')"))
     public boolean removeByBase(ItemStack base) {
-        return Woot.anvilManager.getRecipes().removeIf(x -> {
+        return getRecipes().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getBaseItem(), base)) {
                 addBackup(x);
                 return true;
@@ -65,7 +65,7 @@ public class StygianIronAnvil extends StandardListRegistry<IAnvilRecipe> {
 
     @MethodDescription(example = @Example("item('woot:stygianironplate')"))
     public boolean removeByOutput(ItemStack output) {
-        return Woot.anvilManager.getRecipes().removeIf(x -> {
+        return getRecipes().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getCopyOutput(), output)) {
                 addBackup(x);
                 return true;

@@ -44,7 +44,7 @@ public class Reprocessor extends StandardListRegistry<ReprocessorRecipe> {
 
     @MethodDescription(example = @Example("item('mysticalagriculture:stone_seeds')"))
     public boolean removeByInput(IIngredient input) {
-        return ReprocessorManager.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getInput())) {
                 addBackup(recipe);
                 return true;
@@ -55,7 +55,7 @@ public class Reprocessor extends StandardListRegistry<ReprocessorRecipe> {
 
     @MethodDescription(example = @Example("item('mysticalagriculture:dirt_essence')"))
     public boolean removeByOutput(IIngredient output) {
-        return ReprocessorManager.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput())) {
                 addBackup(recipe);
                 return true;

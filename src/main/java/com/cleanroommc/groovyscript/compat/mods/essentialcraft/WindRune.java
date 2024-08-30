@@ -30,7 +30,7 @@ public class WindRune extends StandardListRegistry<WindImbueRecipe> {
     public boolean removeByInput(IIngredient x) {
         ItemStack[] stacks = x.getMatchingStacks();
         if (stacks.length == 0) return false;
-        return WindImbueRecipe.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.input.test(stacks[0])) {
                 addBackup(r);
                 return true;
@@ -41,7 +41,7 @@ public class WindRune extends StandardListRegistry<WindImbueRecipe> {
 
     @MethodDescription(example = @Example("item('essentialcraft:air_potion')"))
     public boolean removeByOutput(IIngredient x) {
-        return WindImbueRecipe.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (x.test(r.result)) {
                 addBackup(r);
                 return true;

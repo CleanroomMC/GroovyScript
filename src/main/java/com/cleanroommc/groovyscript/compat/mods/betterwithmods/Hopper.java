@@ -31,7 +31,7 @@ public class Hopper extends StandardListRegistry<HopperInteractions.HopperRecipe
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByOutput(IIngredient output) {
-        return HopperInteractions.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -44,7 +44,7 @@ public class Hopper extends StandardListRegistry<HopperInteractions.HopperRecipe
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByInput(IIngredient input) {
-        return HopperInteractions.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack item : r.getInputs().getMatchingStacks()) {
                 if (input.test(item)) {
                     addBackup(r);

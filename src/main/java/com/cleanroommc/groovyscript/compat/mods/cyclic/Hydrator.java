@@ -40,7 +40,7 @@ public class Hydrator extends StandardListRegistry<RecipeHydrate> {
 
     @MethodDescription(example = @Example("item('minecraft:dirt')"))
     public boolean removeByInput(IIngredient input) {
-        return RecipeHydrate.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (recipe.getRecipeInput().stream().anyMatch(input)) {
                 addBackup(recipe);
                 return true;
@@ -51,7 +51,7 @@ public class Hydrator extends StandardListRegistry<RecipeHydrate> {
 
     @MethodDescription(example = @Example("item('minecraft:clay_ball')"))
     public boolean removeByOutput(IIngredient output) {
-        return RecipeHydrate.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getRecipeOutput())) {
                 addBackup(recipe);
                 return true;

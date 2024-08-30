@@ -64,7 +64,7 @@ public class CokeOven extends StandardListRegistry<CokeOvenRecipe> {
                     .post();
             return;
         }
-        if (!CokeOvenRecipe.recipeList.removeIf(recipe -> {
+        if (!getRecipes().removeIf(recipe -> {
             if (ApiUtils.stackMatchesObject(input, recipe.input)) {
                 addBackup(recipe);
                 return true;

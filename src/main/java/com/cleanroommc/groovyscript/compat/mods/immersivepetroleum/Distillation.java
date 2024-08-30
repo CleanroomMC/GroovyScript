@@ -35,7 +35,7 @@ public class Distillation extends StandardListRegistry<DistillationRecipe> {
             @Example(value = "fluid('lubricant')", commented = true)
     })
     public void removeByOutput(IIngredient output) {
-        DistillationRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getItemOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -54,7 +54,7 @@ public class Distillation extends StandardListRegistry<DistillationRecipe> {
 
     @MethodDescription(example = @Example("fluid('oil')"))
     public void removeByInput(IIngredient input) {
-        DistillationRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidInputs()) {
                 if (input.test(fluidStack)) {
                     addBackup(r);

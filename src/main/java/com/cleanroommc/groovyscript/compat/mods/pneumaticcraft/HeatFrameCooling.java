@@ -29,7 +29,7 @@ public class HeatFrameCooling extends StandardListRegistry<HeatFrameCoolingRecip
 
     @MethodDescription(example = @Example("item('minecraft:obsidian')"))
     public boolean removeByOutput(IIngredient output) {
-        return HeatFrameCoolingRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (output.test(entry.output)) {
                 addBackup(entry);
                 return true;
@@ -40,7 +40,7 @@ public class HeatFrameCooling extends StandardListRegistry<HeatFrameCoolingRecip
 
     @MethodDescription(example = @Example("item('minecraft:water_bucket')"))
     public boolean removeByInput(IIngredient input) {
-        return HeatFrameCoolingRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (entry.input.getStacks().stream().anyMatch(input)) {
                 addBackup(entry);
                 return true;

@@ -32,7 +32,7 @@ public class GaiaPlate extends StandardListRegistry<GaiaPlateRecipes.RecipeGaiaP
 
     @MethodDescription(example = @Example("item('botanicadds:gaiasteel_ingot')"))
     public boolean removeByOutput(IIngredient output) {
-        return GaiaPlateRecipes.gaiaRecipes.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
                 addBackup(r);
                 return true;
@@ -43,7 +43,7 @@ public class GaiaPlate extends StandardListRegistry<GaiaPlateRecipes.RecipeGaiaP
 
     @MethodDescription(example = @Example("item('botania:manaresource')"))
     public boolean removeByInput(IIngredient input) {
-        return GaiaPlateRecipes.gaiaRecipes.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (Object ingredient : r.getInputs()) {
                 if ((ingredient instanceof String s && (input instanceof OreDictIngredient ore && ore.getOreDict().equals(s) || OreDictionary.getOres(s, false).stream().anyMatch(input))) ||
                     (ingredient instanceof ItemStack is && input.test(is))) {

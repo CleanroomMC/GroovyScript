@@ -36,7 +36,7 @@ public class Pedestal extends StandardListRegistry<RecipePedestal> {
 
     @MethodDescription(example = @Example("item('minecraft:cobblestone')"))
     public boolean removeByInput(IIngredient input) {
-        return ExtraBotanyAPI.pedestalRecipes.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (input.test(r.getInput())) {
                 addBackup(r);
                 return true;
@@ -47,7 +47,7 @@ public class Pedestal extends StandardListRegistry<RecipePedestal> {
 
     @MethodDescription(example = @Example("item('minecraft:flint')"))
     public boolean removeByOutput(IIngredient output) {
-        return ExtraBotanyAPI.pedestalRecipes.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
                 addBackup(r);
                 return true;

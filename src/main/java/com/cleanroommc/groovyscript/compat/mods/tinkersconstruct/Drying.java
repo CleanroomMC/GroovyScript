@@ -37,7 +37,7 @@ public class Drying extends StandardListRegistry<DryingRecipe> {
     @MethodDescription
     public boolean removeByInput(IIngredient input) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
-        if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.input.matches(matching).isPresent();
             if (found) addBackup(recipe);
             return found;
@@ -52,7 +52,7 @@ public class Drying extends StandardListRegistry<DryingRecipe> {
 
     @MethodDescription
     public boolean removeByOutput(ItemStack output) {
-        if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = ItemStack.areItemStacksEqual(recipe.output, output);
             if (found) addBackup(recipe);
             return found;
@@ -68,7 +68,7 @@ public class Drying extends StandardListRegistry<DryingRecipe> {
     @MethodDescription
     public boolean removeByInputAndOutput(IIngredient input, ItemStack output) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
-        if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.input.matches(matching).isPresent() && ItemStack.areItemStacksEqual(recipe.output, output);
             if (found) addBackup(recipe);
             return found;

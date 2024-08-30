@@ -30,7 +30,7 @@ public class StoneSeparator extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:gold_ore')"))
     public boolean removeByInput(IIngredient input) {
-        return StoneSeparatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -45,7 +45,7 @@ public class StoneSeparator extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:reinforcedironingot')"))
     public boolean removeByOutput(IIngredient output) {
-        return StoneSeparatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {

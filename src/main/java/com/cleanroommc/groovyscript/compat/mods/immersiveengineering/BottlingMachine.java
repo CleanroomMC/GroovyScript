@@ -51,7 +51,7 @@ public class BottlingMachine extends StandardListRegistry<BottlingMachineRecipe>
                     .post();
             return;
         }
-        if (!BottlingMachineRecipe.recipeList.removeIf(recipe -> {
+        if (!getRecipes().removeIf(recipe -> {
             if (ApiUtils.stackMatchesObject(output, recipe.output, true)) {
                 addBackup(recipe);
                 return true;
@@ -74,7 +74,7 @@ public class BottlingMachine extends StandardListRegistry<BottlingMachineRecipe>
                 .postIfNotEmpty()) {
             return;
         }
-        List<BottlingMachineRecipe> recipes = BottlingMachineRecipe.recipeList.stream().filter(r -> ApiUtils.stackMatchesObject(input, r.input) && inputFluid.isFluidEqual(r.fluidInput)).collect(Collectors.toList());
+        List<BottlingMachineRecipe> recipes = getRecipes().stream().filter(r -> ApiUtils.stackMatchesObject(input, r.input) && inputFluid.isFluidEqual(r.fluidInput)).collect(Collectors.toList());
         for (BottlingMachineRecipe recipe : recipes) {
             remove(recipe);
         }

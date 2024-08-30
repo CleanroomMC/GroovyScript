@@ -36,12 +36,12 @@ public class EvaporatingBasin extends StandardListRegistry<IEvaporatingBasinReci
     @Override
     public void afterScriptLoad() {
         Recipes.evaporatingRecipesMap.clear();
-        Recipes.evaporatingRecipes.forEach(recipe -> Recipes.evaporatingRecipesMap.put(recipe.getFluid(), recipe));
+        getRecipes().forEach(recipe -> Recipes.evaporatingRecipesMap.put(recipe.getFluid(), recipe));
     }
 
     @MethodDescription(example = @Example(value = "item('rustic:dust_tiny_iron')", commented = true))
     public boolean removeByOutput(IIngredient output) {
-        return Recipes.evaporatingRecipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (output.test(entry.getOutput())) {
                 addBackup(entry);
                 return true;
@@ -52,7 +52,7 @@ public class EvaporatingBasin extends StandardListRegistry<IEvaporatingBasinReci
 
     @MethodDescription(example = @Example("fluid('ironberryjuice')"))
     public boolean removeByInput(IIngredient input) {
-        return Recipes.evaporatingRecipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (input.test(entry.getInput())) {
                 addBackup(entry);
                 return true;

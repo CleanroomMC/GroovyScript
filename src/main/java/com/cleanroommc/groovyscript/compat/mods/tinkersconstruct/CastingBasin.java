@@ -36,7 +36,7 @@ public class CastingBasin extends StandardListRegistry<ICastingRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:iron_block')"))
     public boolean removeByOutput(ItemStack output) {
-        if (TinkerRegistryAccessor.getBasinCastRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = ItemStack.areItemStacksEqual(recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER), output);
             if (found) addBackup(recipe);
             return found;
@@ -51,7 +51,7 @@ public class CastingBasin extends StandardListRegistry<ICastingRecipe> {
 
     @MethodDescription(example = @Example("fluid('clay')"))
     public boolean removeByInput(FluidStack input) {
-        if (TinkerRegistryAccessor.getBasinCastRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getFluid(ItemStack.EMPTY, input.getFluid()).isFluidEqual(input);
             if (found) addBackup(recipe);
             return found;
@@ -67,7 +67,7 @@ public class CastingBasin extends StandardListRegistry<ICastingRecipe> {
     @MethodDescription(example = @Example("item('minecraft:planks:0')"))
     public boolean removeByCast(IIngredient cast) {
         ItemStack castStack = cast.getMatchingStacks()[0];
-        if (TinkerRegistryAccessor.getBasinCastRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.matches(castStack, recipe.getFluid(castStack, FluidRegistry.WATER).getFluid());
             if (found) addBackup(recipe);
             return found;

@@ -40,7 +40,7 @@ public class Solidifier extends StandardListRegistry<RecipeSolidifier> {
 
     @MethodDescription(example = {@Example("item('minecraft:bucket')"), @Example("fluid('water')"),})
     public boolean removeByInput(IIngredient input) {
-        return RecipeSolidifier.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getFluidIngredient()) || recipe.getRecipeInput().stream().anyMatch(input)) {
                 addBackup(recipe);
                 return true;
@@ -51,7 +51,7 @@ public class Solidifier extends StandardListRegistry<RecipeSolidifier> {
 
     @MethodDescription(example = @Example("item('cyclicmagic:crystallized_obsidian')"))
     public boolean removeByOutput(IIngredient output) {
-        return RecipeSolidifier.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getRecipeOutput())) {
                 addBackup(recipe);
                 return true;

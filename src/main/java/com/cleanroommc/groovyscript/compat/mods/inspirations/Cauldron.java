@@ -141,31 +141,31 @@ public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:ghast_tear')"))
     public void removeByInput(IIngredient input) {
-        for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
+        for (ICauldronRecipe recipe : getRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, input, null, null, null))
                 .collect(Collectors.toList())) {
             addBackup(recipe);
-            InspirationsRegistryAccessor.getCauldronRecipes().remove(recipe);
+            getRecipes().remove(recipe);
         }
     }
 
     @MethodDescription(example = @Example("item('minecraft:piston')"))
     public void removeByOutput(ItemStack output) {
-        for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
+        for (ICauldronRecipe recipe : getRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, null, output, null, null))
                 .collect(Collectors.toList())) {
             addBackup(recipe);
-            InspirationsRegistryAccessor.getCauldronRecipes().remove(recipe);
+            getRecipes().remove(recipe);
         }
     }
 
     @MethodDescription
     public void removeByFluidInput(Fluid input) {
-        for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
+        for (ICauldronRecipe recipe : getRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, null, null, input, null))
                 .collect(Collectors.toList())) {
             addBackup(recipe);
-            InspirationsRegistryAccessor.getCauldronRecipes().remove(recipe);
+            getRecipes().remove(recipe);
         }
     }
 
@@ -176,11 +176,11 @@ public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
 
     @MethodDescription
     public void removeByFluidOutput(Fluid output) {
-        for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
+        for (ICauldronRecipe recipe : getRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, null, null, null, output))
                 .collect(Collectors.toList())) {
             addBackup(recipe);
-            InspirationsRegistryAccessor.getCauldronRecipes().remove(recipe);
+            getRecipes().remove(recipe);
         }
     }
 

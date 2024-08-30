@@ -40,7 +40,7 @@ public class Packager extends StandardListRegistry<RecipePackager> {
 
     @MethodDescription(example = @Example("item('minecraft:grass')"))
     public boolean removeByInput(IIngredient input) {
-        return RecipePackager.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (recipe.getInput().stream().anyMatch(input)) {
                 addBackup(recipe);
                 return true;
@@ -51,7 +51,7 @@ public class Packager extends StandardListRegistry<RecipePackager> {
 
     @MethodDescription(example = @Example("item('minecraft:melon_block')"))
     public boolean removeByOutput(IIngredient output) {
-        return RecipePackager.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getRecipeOutput())) {
                 addBackup(recipe);
                 return true;

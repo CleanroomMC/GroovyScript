@@ -28,7 +28,7 @@ public class RadiatingChamber extends StandardListRegistry<RadiatingChamberRecip
 
     @MethodDescription(example = @Example("item('essentialcraft:genitem', 42)"))
     public boolean removeByOutput(IIngredient x) {
-        return RadiatingChamberRecipes.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (x.test(r.getRecipeOutput())) {
                 addBackup(r);
                 return true;

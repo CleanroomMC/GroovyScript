@@ -80,7 +80,7 @@ public class Melter extends StandardListRegistry<MeltingRecipe> {
 
     public boolean removeByInput(IIngredient input) {
         NonNullList<ItemStack> list = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
-        if (TCompRegistryAccessor.getMeltingOverrides().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.input.matches(list).isPresent();
             list.clear();
             if (found) addBackup(recipe);
@@ -96,7 +96,7 @@ public class Melter extends StandardListRegistry<MeltingRecipe> {
     }
 
     public boolean removeByOutput(FluidStack stack) {
-        if (TCompRegistryAccessor.getMeltingOverrides().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.output.isFluidEqual(stack);
             if (found) addBackup(recipe);
             return found;
@@ -111,7 +111,7 @@ public class Melter extends StandardListRegistry<MeltingRecipe> {
 
     public boolean removeByInputAndOutput(IIngredient input, FluidStack output) {
         NonNullList<ItemStack> list = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
-        if (TCompRegistryAccessor.getMeltingOverrides().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.output.isFluidEqual(output) && recipe.input.matches(list).isPresent();
             list.clear();
             if (found) addBackup(recipe);

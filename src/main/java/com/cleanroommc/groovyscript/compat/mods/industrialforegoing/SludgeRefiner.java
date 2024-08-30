@@ -36,7 +36,7 @@ public class SludgeRefiner extends StandardListRegistry<SludgeEntry> {
 
     @MethodDescription(example = @Example("item('minecraft:clay_ball')"))
     public boolean removeByOutput(IIngredient output) {
-        return SludgeEntry.SLUDGE_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getStack())) {
                 addBackup(recipe);
                 return true;

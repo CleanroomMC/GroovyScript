@@ -37,9 +37,9 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public void removeByInput(ItemStack input) {
-        for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : MultiblockRecipes.getRecipes().stream().filter(r -> r.getCatalystStack().isItemEqual(input)).collect(Collectors.toList())) {
+        for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : getRecipes().stream().filter(r -> r.getCatalystStack().isItemEqual(input)).collect(Collectors.toList())) {
             addBackup(recipe);
-            MultiblockRecipes.getRecipes().removeIf(r -> r == recipe);
+            getRecipes().removeIf(r -> r == recipe);
         }
     }
 
@@ -50,9 +50,9 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
 
     @MethodDescription(example = @Example("item('compactmachines3:machine:3')"))
     public void removeByOutput(ItemStack output) {
-        for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : MultiblockRecipes.getRecipes().stream().filter(r -> r.getTargetStack().isItemEqual(output)).collect(Collectors.toList())) {
+        for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : getRecipes().stream().filter(r -> r.getTargetStack().isItemEqual(output)).collect(Collectors.toList())) {
             addBackup(recipe);
-            MultiblockRecipes.getRecipes().removeIf(r -> r == recipe);
+            getRecipes().removeIf(r -> r == recipe);
         }
     }
 

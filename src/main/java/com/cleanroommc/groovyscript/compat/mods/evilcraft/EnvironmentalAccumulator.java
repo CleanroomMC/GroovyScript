@@ -41,7 +41,7 @@ public class EnvironmentalAccumulator extends StandardListRegistry<IRecipe<Envir
 
     @MethodDescription(example = @Example("item('evilcraft:exalted_crafter:1')"))
     public boolean removeByInput(ItemStack input) {
-        return org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
                 addBackup(r);
                 return true;
@@ -52,7 +52,7 @@ public class EnvironmentalAccumulator extends StandardListRegistry<IRecipe<Envir
 
     @MethodDescription(example = @Example("item('evilcraft:exalted_crafter:2')"))
     public boolean removeByOutput(ItemStack input) {
-        return org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getOutput().getIngredient().test(input)) {
                 addBackup(r);
                 return true;

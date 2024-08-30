@@ -49,7 +49,7 @@ public class SagMill extends StandardListRegistry<Recipe> {
         if (recipe == null) {
             GroovyLog.get().error("Can't find EnderIO Sag Mill recipe for input " + input);
         } else {
-            SagMillRecipeManager.getInstance().getRecipes().remove(recipe);
+            getRecipes().remove(recipe);
             addBackup(recipe);
         }
     }

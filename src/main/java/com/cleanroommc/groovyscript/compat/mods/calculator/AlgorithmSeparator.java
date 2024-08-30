@@ -30,7 +30,7 @@ public class AlgorithmSeparator extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:tanzaniteleaves')"))
     public boolean removeByInput(IIngredient input) {
-        return AlgorithmSeparatorRecipes.instance().getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             for (ISonarRecipeObject recipeInput : recipe.inputs()) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -45,7 +45,7 @@ public class AlgorithmSeparator extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:weakeneddiamond')"))
     public boolean removeByOutput(IIngredient output) {
-        return AlgorithmSeparatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {

@@ -46,7 +46,7 @@ public class Mixer extends StandardListRegistry<MixerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        if (!MixerRecipe.recipeList.removeIf(recipe -> {
+        if (!getRecipes().removeIf(recipe -> {
             if (recipe.fluidOutput.isFluidEqual(fluidOutput)) {
                 addBackup(recipe);
                 return true;
@@ -68,7 +68,7 @@ public class Mixer extends StandardListRegistry<MixerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        List<MixerRecipe> recipes = MixerRecipe.recipeList.stream().filter(r -> r.itemInputs.length == itemInputs.length &&
+        List<MixerRecipe> recipes = getRecipes().stream().filter(r -> r.itemInputs.length == itemInputs.length &&
                                                                                 Arrays.stream(itemInputs).anyMatch(check -> Arrays.stream(r.itemInputs).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check))))
                 .collect(Collectors.toList());
         for (MixerRecipe recipe : recipes) {
@@ -91,7 +91,7 @@ public class Mixer extends StandardListRegistry<MixerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        List<MixerRecipe> recipes = MixerRecipe.recipeList.stream().filter(r -> fluidInput.isFluidEqual(r.fluidInput) &&
+        List<MixerRecipe> recipes = getRecipes().stream().filter(r -> fluidInput.isFluidEqual(r.fluidInput) &&
                                                                                 r.itemInputs.length == itemInput.length &&
                                                                                 Arrays.stream(itemInput).anyMatch(check -> Arrays.stream(r.itemInputs).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check))))
                 .collect(Collectors.toList());

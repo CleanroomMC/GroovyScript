@@ -38,7 +38,7 @@ public class Atomizer extends StandardListRegistry<AtomizerRecipe> {
 
     @MethodDescription(example = @Example(value = "item('alchemistry:compound:7')", commented = true))
     public boolean removeByOutput(IIngredient output) {
-        return ModRecipes.INSTANCE.getAtomizerRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
                 addBackup(r);
                 return true;
@@ -49,7 +49,7 @@ public class Atomizer extends StandardListRegistry<AtomizerRecipe> {
 
     @MethodDescription(example = @Example("fluid('water')"))
     public boolean removeByInput(FluidStack input) {
-        return ModRecipes.INSTANCE.getAtomizerRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getInput().isFluidEqual(input)) {
                 addBackup(r);
                 return true;

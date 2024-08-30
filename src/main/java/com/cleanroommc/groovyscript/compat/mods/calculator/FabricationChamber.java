@@ -39,7 +39,7 @@ public class FabricationChamber extends StandardListRegistry<FabricationSonarRec
 
     @MethodDescription(example = @Example("item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1])"))
     public boolean removeByInput(IIngredient input) {
-        return FabricationChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -54,7 +54,7 @@ public class FabricationChamber extends StandardListRegistry<FabricationSonarRec
 
     @MethodDescription(example = @Example("item('calculator:calculatorassembly')"))
     public boolean removeByOutput(IIngredient output) {
-        return FabricationChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {

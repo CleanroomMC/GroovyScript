@@ -38,7 +38,7 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
 
     @MethodDescription(example = @Example("item('botania:rune:1')"))
     public boolean removeByOutput(IIngredient output) {
-        if (BotaniaAPI.runeAltarRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = output.test(recipe.getOutput());
             if (found) addBackup(recipe);
             return found;
@@ -55,7 +55,7 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
     public boolean removeByInput(IIngredient... inputs) {
         List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
                                                                                                : i.getMatchingStacks()[0]).collect(Collectors.toList());
-        if (BotaniaAPI.runeAltarRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> (i instanceof String || o instanceof String)
                                                                                                        ? i.equals(o)
                                                                                                        : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));

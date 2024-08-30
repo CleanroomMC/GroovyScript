@@ -39,7 +39,7 @@ public class MillStone extends StandardListRegistry<MillRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:blaze_powder')"))
     public boolean removeByOutput(IIngredient output) {
-        return BWRegistry.MILLSTONE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -52,7 +52,7 @@ public class MillStone extends StandardListRegistry<MillRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:netherrack')"))
     public boolean removeByInput(IIngredient input) {
-        return BWRegistry.MILLSTONE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (Ingredient ingredient : r.getInputs()) {
                 for (ItemStack item : ingredient.getMatchingStacks()) {
                     if (input.test(item)) {

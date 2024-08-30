@@ -43,7 +43,7 @@ public class Fermenter extends StandardListRegistry<FermenterRecipe> {
                     .error()
                     .post();
         }
-        if (!FermenterRecipe.recipeList.removeIf(recipe -> {
+        if (!getRecipes().removeIf(recipe -> {
             if (recipe.fluidOutput.isFluidEqual(fluidOutput)) {
                 addBackup(recipe);
                 return true;
@@ -67,7 +67,7 @@ public class Fermenter extends StandardListRegistry<FermenterRecipe> {
         }
         FermenterRecipe recipe = FermenterRecipe.findRecipe(input);
         if (recipe != null) {
-            FermenterRecipe.recipeList.remove(recipe);
+            getRecipes().remove(recipe);
             addBackup(recipe);
         } else {
             GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")

@@ -57,7 +57,7 @@ public class TartaricForge extends StandardListRegistry<RecipeTartaricForge> {
     @MethodDescription
     public boolean removeByInput(NonNullList<IIngredient> input) {
         // Filters down to only recipes which have inputs that match all the input IIngredients (NOTE: a recipe with ABCD would match an input of AB)
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean removeRecipe = false;
             for (IIngredient match : input) {
                 boolean foundInputMatch = false;
@@ -83,7 +83,7 @@ public class TartaricForge extends StandardListRegistry<RecipeTartaricForge> {
 
     @MethodDescription(example = @Example("item('bloodmagic:demon_crystal')"))
     public boolean removeByOutput(ItemStack output) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getTartaricForgeRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
             if (matches) {
                 addBackup(recipe);

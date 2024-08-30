@@ -39,7 +39,7 @@ public class Dissolver extends StandardListRegistry<DissolverRecipe> {
 
     @MethodDescription(example = @Example("item('alchemistry:compound:1')"))
     public boolean removeByInput(IIngredient input) {
-        return ModRecipes.INSTANCE.getDissolverRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInputs()) {
                 if (input.test(itemstack)) {
                     addBackup(r);

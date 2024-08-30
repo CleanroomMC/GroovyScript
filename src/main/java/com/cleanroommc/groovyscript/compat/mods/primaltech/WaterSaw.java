@@ -40,7 +40,7 @@ public class WaterSaw extends StandardListRegistry<WaterSawRecipes> {
 
     @MethodDescription(example = @Example("item('minecraft:log')"))
     public boolean removeByInput(IIngredient input) {
-        return WaterSawRecipesAccessor.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getInput())) {
                 addBackup(recipe);
                 return true;
@@ -51,7 +51,7 @@ public class WaterSaw extends StandardListRegistry<WaterSawRecipes> {
 
     @MethodDescription(example = @Example("item('minecraft:planks:1')"))
     public boolean removeByOutput(IIngredient output) {
-        return WaterSawRecipesAccessor.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput())) {
                 addBackup(recipe);
                 return true;

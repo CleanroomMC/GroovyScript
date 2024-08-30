@@ -28,7 +28,7 @@ public class Scrapper extends StandardListRegistry<ScrapperRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:iron_sword')"))
     public boolean removeByInput(IIngredient input) {
-        return ScrapperRecipeHandler.allRecipes.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (input.test(r.getInput())) {
                 addBackup(r);
                 return true;
@@ -39,7 +39,7 @@ public class Scrapper extends StandardListRegistry<ScrapperRecipe> {
 
     @MethodDescription(example = @Example("item('theaurorian:scrapaurorianite')"))
     public boolean removeByOutput(IIngredient output) {
-        return ScrapperRecipeHandler.allRecipes.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
                 addBackup(r);
                 return true;

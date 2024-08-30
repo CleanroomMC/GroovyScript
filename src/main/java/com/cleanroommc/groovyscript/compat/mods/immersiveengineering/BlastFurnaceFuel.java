@@ -44,7 +44,7 @@ public class BlastFurnaceFuel extends StandardListRegistry<BlastFurnaceRecipe.Bl
                     .post();
             return;
         }
-        List<BlastFurnaceRecipe.BlastFurnaceFuel> recipes = BlastFurnaceRecipe.blastFuels.stream().filter(r -> r.input.matches(input)).collect(Collectors.toList());
+        List<BlastFurnaceRecipe.BlastFurnaceFuel> recipes = getRecipes().stream().filter(r -> r.input.matches(input)).collect(Collectors.toList());
         for (BlastFurnaceRecipe.BlastFurnaceFuel recipe : recipes) {
             remove(recipe);
         }

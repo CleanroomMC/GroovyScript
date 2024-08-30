@@ -43,7 +43,7 @@ public class Crusher extends StandardListRegistry<CrusherRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:bone')"))
     public boolean removeByInput(IIngredient input) {
-        return ActuallyAdditionsAPI.CRUSHER_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
             if (found) {
                 addBackup(recipe);
@@ -54,7 +54,7 @@ public class Crusher extends StandardListRegistry<CrusherRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:sugar')"))
     public boolean removeByOutput(ItemStack output) {
-        return ActuallyAdditionsAPI.CRUSHER_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutputOne(), output);
             if (matches) {
                 addBackup(recipe);

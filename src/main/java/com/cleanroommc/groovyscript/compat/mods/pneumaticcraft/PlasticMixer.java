@@ -42,7 +42,7 @@ public class PlasticMixer extends StandardListRegistry<PlasticMixerRegistry.Plas
     public void afterScriptLoad() {
         getInstance().getValidFluids().clear();
         getInstance().getValidItems().clear();
-        for (PlasticMixerRegistry.PlasticMixerRecipe recipe : getInstance().getRecipes()) {
+        for (PlasticMixerRegistry.PlasticMixerRecipe recipe : getRecipes()) {
             getInstance().getValidFluids().add(recipe.getFluidStack().getFluid().getName());
             getInstance().getValidItems().put(recipe.getItemStack().getItem(), recipe.allowMelting());
         }
@@ -50,7 +50,7 @@ public class PlasticMixer extends StandardListRegistry<PlasticMixerRegistry.Plas
 
     @MethodDescription(example = @Example(value = "fluid('plastic')", commented = true))
     public boolean removeByFluid(IIngredient fluid) {
-        return getInstance().getRecipes().removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (fluid.test(entry.getFluidStack())) {
                 addBackup(entry);
                 return true;
@@ -61,7 +61,7 @@ public class PlasticMixer extends StandardListRegistry<PlasticMixerRegistry.Plas
 
     @MethodDescription(example = @Example(value = "item('pneumaticcraft:plastic')", commented = true))
     public boolean removeByItem(IIngredient item) {
-        return getInstance().getRecipes().removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (item.test(entry.getItemStack())) {
                 addBackup(entry);
                 return true;

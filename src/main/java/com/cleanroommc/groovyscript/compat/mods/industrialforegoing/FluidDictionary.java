@@ -42,7 +42,7 @@ public class FluidDictionary extends StandardListRegistry<FluidDictionaryEntry> 
 
     @MethodDescription
     public boolean removeByInput(String fluid) {
-        return FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (fluid.equals(recipe.getFluidOrigin())) {
                 addBackup(recipe);
                 return true;
@@ -58,7 +58,7 @@ public class FluidDictionary extends StandardListRegistry<FluidDictionaryEntry> 
 
     @MethodDescription
     public boolean removeByOutput(String fluid) {
-        return FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (fluid.equals(recipe.getFluidResult())) {
                 addBackup(recipe);
                 return true;

@@ -33,7 +33,7 @@ public class PrecisionChamber extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:clay')"))
     public boolean removeByInput(IIngredient input) {
-        return PrecisionChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -48,7 +48,7 @@ public class PrecisionChamber extends StandardListRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:soil')"))
     public boolean removeByOutput(IIngredient output) {
-        return PrecisionChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {

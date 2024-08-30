@@ -32,7 +32,7 @@ public class CrushingTub extends StandardListRegistry<ICrushingTubRecipe> {
 
     @MethodDescription(example = {@Example("fluid('ironberryjuice')"), @Example("item('minecraft:sugar')")})
     public boolean removeByOutput(IIngredient output) {
-        return Recipes.crushingTubRecipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (output.test(entry.getResult()) || output.test(entry.getByproduct())) {
                 addBackup(entry);
                 return true;
@@ -43,7 +43,7 @@ public class CrushingTub extends StandardListRegistry<ICrushingTubRecipe> {
 
     @MethodDescription(example = @Example("item('rustic:wildberries')"))
     public boolean removeByInput(IIngredient input) {
-        return Recipes.crushingTubRecipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (input.test(entry.getInput())) {
                 addBackup(entry);
                 return true;

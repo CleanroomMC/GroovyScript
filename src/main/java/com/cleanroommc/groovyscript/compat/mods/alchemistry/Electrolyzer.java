@@ -34,7 +34,7 @@ public class Electrolyzer extends StandardListRegistry<ElectrolyzerRecipe> {
 
     @MethodDescription(example = @Example("element('chlorine')"))
     public boolean removeByOutput(IIngredient output) {
-        return ModRecipes.INSTANCE.getElectrolyzerRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -47,7 +47,7 @@ public class Electrolyzer extends StandardListRegistry<ElectrolyzerRecipe> {
 
     @MethodDescription(example = @Example(value = "fluid('water')", commented = true))
     public boolean removeByInput(FluidStack input) {
-        return ModRecipes.INSTANCE.getElectrolyzerRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getInput().isFluidEqual(input)) {
                 addBackup(r);
                 return true;

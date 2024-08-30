@@ -39,7 +39,7 @@ public class Melting extends StandardListRegistry<MeltingRecipe> {
     @MethodDescription
     public boolean removeByInput(IIngredient input) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
-        if (TinkerRegistryAccessor.getMeltingRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.input.matches(matching).isPresent();
             if (found) addBackup(recipe);
             return found;
@@ -54,7 +54,7 @@ public class Melting extends StandardListRegistry<MeltingRecipe> {
 
     @MethodDescription
     public boolean removeByOutput(FluidStack output) {
-        if (TinkerRegistryAccessor.getMeltingRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getResult().isFluidEqual(output);
             if (found) addBackup(recipe);
             return found;
@@ -70,7 +70,7 @@ public class Melting extends StandardListRegistry<MeltingRecipe> {
     @MethodDescription
     public boolean removeByInputAndOutput(IIngredient input, FluidStack output) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
-        if (TinkerRegistryAccessor.getMeltingRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.input.matches(matching).isPresent() && recipe.getResult().isFluidEqual(output);
             if (found) addBackup(recipe);
             return found;

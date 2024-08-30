@@ -42,7 +42,7 @@ public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
 
     @MethodDescription(example = @Example("item('actuallyadditions:item_crystal')"))
     public boolean removeByInput(IIngredient input) {
-        return ActuallyAdditionsAPI.EMPOWERER_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
             if (found) {
                 addBackup(recipe);
@@ -53,7 +53,7 @@ public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
 
     @MethodDescription(example = @Example("item('actuallyadditions:item_misc:24')"))
     public boolean removeByOutput(ItemStack output) {
-        return ActuallyAdditionsAPI.EMPOWERER_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
             if (matches) {
                 addBackup(recipe);

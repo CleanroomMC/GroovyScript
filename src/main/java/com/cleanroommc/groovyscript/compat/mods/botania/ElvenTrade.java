@@ -55,7 +55,7 @@ public class ElvenTrade extends StandardListRegistry<RecipeElvenTrade> {
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('botania:dreamwood')"))
     public boolean removeByOutputs(ItemStack... outputs) {
-        if (BotaniaAPI.elvenTradeRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = Arrays.stream(outputs).allMatch(output -> recipe.getOutputs().stream().anyMatch(o -> ItemStack.areItemStacksEqual(o, output)));
             if (found) addBackup(recipe);
             return found;
@@ -72,7 +72,7 @@ public class ElvenTrade extends StandardListRegistry<RecipeElvenTrade> {
     public boolean removeByInputs(IIngredient... inputs) {
         List<Object> converted = Arrays.asList(convertIngredients(inputs));
         List<IIngredient> list = Arrays.asList(inputs);
-        if (BotaniaAPI.elvenTradeRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getInputs().stream().allMatch(input -> input instanceof String ? converted.contains(input)
                                                                                                   : list.stream().anyMatch(i -> i.test((ItemStack) input)));
             if (found) addBackup(recipe);

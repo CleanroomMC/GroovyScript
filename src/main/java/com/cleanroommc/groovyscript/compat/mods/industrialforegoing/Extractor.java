@@ -38,7 +38,7 @@ public class Extractor extends StandardListRegistry<ExtractorEntry> {
 
     @MethodDescription(example = @Example("item('minecraft:log2:1')"))
     public boolean removeByInput(IIngredient input) {
-        return ExtractorEntry.EXTRACTOR_ENTRIES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getItemStack())) {
                 addBackup(recipe);
                 return true;
@@ -49,7 +49,7 @@ public class Extractor extends StandardListRegistry<ExtractorEntry> {
 
     @MethodDescription(example = @Example(value = "fluid('latex')", commented = true))
     public boolean removeByOutput(IIngredient output) {
-        return ExtractorEntry.EXTRACTOR_ENTRIES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getFluidStack())) {
                 addBackup(recipe);
                 return true;

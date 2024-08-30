@@ -56,7 +56,7 @@ public class AlchemyTable extends StandardListRegistry<RecipeAlchemyTable> {
     @MethodDescription(example = @Example("item('minecraft:nether_wart'), item('minecraft:gunpowder')"))
     public boolean removeByInput(NonNullList<IIngredient> input) {
         // Filters down to only recipes which have inputs that match all the input IIngredients (NOTE: a recipe with ABCD would match an input of AB)
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean removeRecipe = false;
             for (IIngredient match : input) {
                 boolean foundInputMatch = false;
@@ -82,7 +82,7 @@ public class AlchemyTable extends StandardListRegistry<RecipeAlchemyTable> {
 
     @MethodDescription(example = @Example("item('minecraft:sand')"))
     public boolean removeByOutput(ItemStack output) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
             if (matches) {
                 addBackup(recipe);

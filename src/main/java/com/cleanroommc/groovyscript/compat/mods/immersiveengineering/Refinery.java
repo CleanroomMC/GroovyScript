@@ -43,7 +43,7 @@ public class Refinery extends StandardListRegistry<RefineryRecipe> {
                     .post();
             return;
         }
-        if (!RefineryRecipe.recipeList.removeIf(recipe -> {
+        if (!getRecipes().removeIf(recipe -> {
             if (recipe.output.isFluidEqual(fluidOutput)) {
                 addBackup(recipe);
                 return true;
@@ -66,7 +66,7 @@ public class Refinery extends StandardListRegistry<RefineryRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        List<RefineryRecipe> recipes = RefineryRecipe.recipeList.stream().filter(r -> (r.input0.isFluidEqual(input0) && r.input1.isFluidEqual(input1)) || (r.input0.isFluidEqual(input1) && r.input1.isFluidEqual(input0))).collect(Collectors.toList());
+        List<RefineryRecipe> recipes = getRecipes().stream().filter(r -> (r.input0.isFluidEqual(input0) && r.input1.isFluidEqual(input1)) || (r.input0.isFluidEqual(input1) && r.input1.isFluidEqual(input0))).collect(Collectors.toList());
         for (RefineryRecipe recipe : recipes) {
             remove(recipe);
         }

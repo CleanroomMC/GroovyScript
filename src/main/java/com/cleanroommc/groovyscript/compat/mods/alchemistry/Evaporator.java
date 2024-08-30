@@ -37,7 +37,7 @@ public class Evaporator extends StandardListRegistry<EvaporatorRecipe> {
 
     @MethodDescription(example = @Example("item('alchemistry:mineral_salt')"))
     public boolean removeByOutput(IIngredient output) {
-        return ModRecipes.INSTANCE.getEvaporatorRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
                 addBackup(r);
                 return true;
@@ -48,7 +48,7 @@ public class Evaporator extends StandardListRegistry<EvaporatorRecipe> {
 
     @MethodDescription(example = @Example("fluid('lava')"))
     public boolean removeByInput(FluidStack input) {
-        return ModRecipes.INSTANCE.getEvaporatorRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getInput().isFluidEqual(input)) {
                 addBackup(r);
                 return true;

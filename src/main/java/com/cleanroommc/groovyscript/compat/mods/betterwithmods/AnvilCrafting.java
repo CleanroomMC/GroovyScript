@@ -41,7 +41,7 @@ public class AnvilCrafting extends StandardListRegistry<IRecipe> {
 
     @MethodDescription(example = @Example("item('betterwithmods:steel_block')"))
     public boolean removeByOutput(IIngredient output) {
-        return AnvilCraftingManager.ANVIL_CRAFTING.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.test(r.getRecipeOutput())) {
                 addBackup(r);
                 return true;
@@ -52,7 +52,7 @@ public class AnvilCrafting extends StandardListRegistry<IRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:redstone')"))
     public boolean removeByInput(IIngredient input) {
-        return AnvilCraftingManager.ANVIL_CRAFTING.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (Ingredient ingredient : r.getIngredients()) {
                 for (ItemStack item : ingredient.getMatchingStacks()) {
                     if (input.test(item)) {

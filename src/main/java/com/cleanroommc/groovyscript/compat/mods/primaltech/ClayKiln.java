@@ -40,7 +40,7 @@ public class ClayKiln extends StandardListRegistry<ClayKilnRecipes> {
 
     @MethodDescription(example = @Example("item('minecraft:gravel')"))
     public boolean removeByInput(IIngredient input) {
-        return ClayKilnRecipesAccessor.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getInput())) {
                 addBackup(recipe);
                 return true;
@@ -51,7 +51,7 @@ public class ClayKiln extends StandardListRegistry<ClayKilnRecipes> {
 
     @MethodDescription(example = @Example("item('primal_tech:charcoal_block')"))
     public boolean removeByOutput(IIngredient output) {
-        return ClayKilnRecipesAccessor.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput())) {
                 addBackup(recipe);
                 return true;

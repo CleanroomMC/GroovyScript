@@ -44,7 +44,7 @@ public class Alchemy extends StandardListRegistry<ICondenserRecipe> {
 
     @MethodDescription(example = @Example("item('rustic:elixir').withNbt(['ElixirEffects': [['Effect': 'minecraft:night_vision', 'Duration': 3600, 'Amplifier': 0]]])"))
     public boolean removeByOutput(IIngredient output) {
-        return Recipes.condenserRecipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (output.test(entry.getResult())) {
                 addBackup(entry);
                 return true;
@@ -55,7 +55,7 @@ public class Alchemy extends StandardListRegistry<ICondenserRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:sugar')"))
     public boolean removeByInput(IIngredient input) {
-        return Recipes.condenserRecipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (entry.getInputs().stream().flatMap(Collection::stream).anyMatch(input)) {
                 addBackup(entry);
                 return true;

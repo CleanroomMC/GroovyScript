@@ -49,7 +49,7 @@ public class WoodenBasin extends StandardListRegistry<WoodenBasinRecipes> {
 
     @MethodDescription(example = {@Example("fluid('lava')"), @Example(value = "item('minecraft:cobblestone')", commented = true)})
     public boolean removeByInput(IIngredient input) {
-        return WoodenBasinRecipesAccessor.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getFluidStack()) ||
                 Arrays.stream(recipe.getInputs()).anyMatch(x -> {
                     if (x instanceof ItemStack is) return input.test(is);
@@ -65,7 +65,7 @@ public class WoodenBasin extends StandardListRegistry<WoodenBasinRecipes> {
 
     @MethodDescription(example = @Example(value = "item('minecraft:obsidian')", commented = true))
     public boolean removeByOutput(IIngredient output) {
-        return WoodenBasinRecipesAccessor.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput())) {
                 addBackup(recipe);
                 return true;

@@ -32,7 +32,7 @@ public class MechanicalDryingBasin extends StandardListRegistry<IRecipe<Ingredie
 
     @MethodDescription
     public boolean removeByInput(ItemStack input) {
-        return BlockMechanicalDryingBasin.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
                 addBackup(r);
                 return true;
@@ -43,7 +43,7 @@ public class MechanicalDryingBasin extends StandardListRegistry<IRecipe<Ingredie
 
     @MethodDescription
     public boolean removeByOutput(ItemStack input) {
-        return BlockMechanicalDryingBasin.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getOutput().getIngredient().test(input)) {
                 addBackup(r);
                 return true;
