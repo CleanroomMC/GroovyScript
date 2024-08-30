@@ -20,8 +20,10 @@
 package net.prominic.groovyls.compiler.ast;
 
 import com.cleanroommc.groovyscript.helper.BetterList;
+import it.unimi.dsi.fastutil.Hash;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
+import net.prominic.groovyls.util.GroovyLSUtils;
 import net.prominic.lsp.utils.Positions;
 import net.prominic.lsp.utils.Ranges;
 import org.codehaus.groovy.ast.*;
@@ -39,31 +41,15 @@ import java.util.stream.Collectors;
 
 public class ASTNodeVisitor extends ClassCodeVisitorSupport {
 
-    private static class ASTLookupKey {
-
-        public ASTLookupKey(ASTNode node) {
-            this.node = node;
-        }
-
-        private final ASTNode node;
-
-        @Override
-        public boolean equals(Object o) {
-            // some ASTNode subclasses, like ClassNode, override equals() with
-            // comparisons that are not strict. we need strict.
-            return o instanceof ASTLookupKey other && node == other.node;
-        }
-
-        @Override
-        public int hashCode() {
-            return node.hashCode();
-        }
-    }
-
     private static class ASTNodeLookupData {
 
         public ASTNode parent;
         public URI uri;
+
+        public ASTNodeLookupData(ASTNode node, URI uri) {
+            this.parent = node;
+            this.uri = uri;
+        }
     }
 
     private SourceUnit sourceUnit;
@@ -74,19 +60,29 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
     }
 
     private final BetterList<ASTNode> stack = new BetterList<>();
+    private final Map<URI, ModuleNode> modules = new Object2ObjectOpenHashMap<>();
     private final Map<URI, List<ASTNode>> nodesByURI = new Object2ObjectOpenHashMap<>();
     private final Map<URI, List<ClassNode>> classNodesByURI = new Object2ObjectOpenHashMap<>();
-    private final Map<ASTLookupKey, ASTNodeLookupData> lookup = new Object2ObjectOpenHashMap<>();
+    private final Map<ASTNode, ASTNodeLookupData> lookup = new Object2ObjectOpenCustomHashMap<>(new Hash.Strategy<>() {
+
+        @Override
+        public int hashCode(ASTNode o) {
+            return o.hashCode();
+        }
+
+        @Override
+        public boolean equals(ASTNode a, ASTNode b) {
+            return a == b;
+        }
+    });
 
     private void pushASTNode(ASTNode node) {
         if (!(node instanceof AnnotatedNode an && an.isSynthetic())) {
             URI uri = sourceUnit.getSource().getURI();
             nodesByURI.get(uri).add(node);
 
-            ASTNodeLookupData data = new ASTNodeLookupData();
-            data.uri = uri;
-            data.parent = stack.peekLast();
-            lookup.put(new ASTLookupKey(node), data);
+            ASTNodeLookupData data = new ASTNodeLookupData(stack.peekLast(), uri);
+            lookup.put(node, data);
         }
         stack.add(node);
     }
@@ -132,7 +128,7 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
                 // also, do this first because it's the fastest comparison
                 return false;
             }
-            Range range = GroovyLanguageServerUtils.astNodeToRange(node);
+            Range range = GroovyLSUtils.astNodeToRange(node);
             if (range == null) {
                 return false;
             }
@@ -144,8 +140,7 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
             }
             return result;
         }).sorted((n1, n2) -> {
-            int result = Positions.COMPARATOR.reversed().compare(nodeToRange.get(n1).getStart(),
-                                                                 nodeToRange.get(n2).getStart());
+            int result = Positions.COMPARATOR.reversed().compare(nodeToRange.get(n1).getStart(), nodeToRange.get(n2).getStart());
             if (result != 0) {
                 return result;
             }
@@ -177,7 +172,7 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
         if (child == null) {
             return null;
         }
-        ASTNodeLookupData data = lookup.get(new ASTLookupKey(child));
+        ASTNodeLookupData data = lookup.get(child);
         if (data == null) {
             return null;
         }
@@ -196,11 +191,19 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
     }
 
     public URI getURI(ASTNode node) {
-        ASTNodeLookupData data = lookup.get(new ASTLookupKey(node));
-        if (data == null) {
-            return null;
-        }
+        ASTNodeLookupData data = lookup.get(node);
+        if (data == null) return null;
         return data.uri;
+    }
+
+    public ModuleNode getModule(ASTNode node) {
+        ASTNodeLookupData data = lookup.get(node);
+        if (data == null) return null;
+        return modules.get(data.uri);
+    }
+
+    public ModuleNode getModule(URI uri) {
+        return modules.get(uri);
     }
 
     public void visitCompilationUnit(CompilationUnit unit) {
@@ -215,9 +218,7 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
             // clear all old nodes so that they may be replaced
             List<ASTNode> nodes = nodesByURI.remove(uri);
             if (nodes != null) {
-                nodes.forEach(node -> {
-                    lookup.remove(new ASTLookupKey(node));
-                });
+                nodes.forEach(lookup::remove);
             }
             classNodesByURI.remove(uri);
         });
@@ -238,6 +239,7 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
         stack.clear();
         ModuleNode moduleNode = unit.getAST();
         if (moduleNode != null) {
+            modules.put(uri, moduleNode);
             visitModule(moduleNode);
         }
         sourceUnit = null;

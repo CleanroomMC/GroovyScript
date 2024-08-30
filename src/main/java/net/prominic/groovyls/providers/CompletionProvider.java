@@ -24,14 +24,16 @@ import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.classgraph.*;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.FieldInfo;
+import io.github.classgraph.MethodInfo;
+import io.github.classgraph.MethodParameterInfo;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
 import net.prominic.groovyls.compiler.util.GroovyReflectionUtils;
 import net.prominic.groovyls.util.CompletionItemFactory;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
-import net.prominic.groovyls.util.URIUtils;
+import net.prominic.groovyls.util.GroovyLSUtils;
 import org.codehaus.groovy.ast.*;
 import org.codehaus.groovy.ast.expr.*;
 import org.codehaus.groovy.ast.stmt.BlockStatement;
@@ -43,43 +45,45 @@ import org.jetbrains.annotations.NotNull;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
-public class CompletionProvider {
+public class CompletionProvider extends DocProvider {
 
-    private final ASTContext astContext;
+    private static final String[] keywords = {"def", "assert", "if", "for", "else", "while", "switch", "case", "break", "continue",
+                                              "return", "transient", "import", "class", "extends", "implements", "enum", "try", "catch",
+                                              "finally", "throw", "new", "in", "as", "instanceof", "super", "this", "null", "true", "false",
+                                              "void", "byte", "short", "int", "long", "float", "double", "boolean", "private", "public",
+                                              "protected"};
+
     //private int maxItemCount = 1000;
-    private boolean isIncomplete = false;
+    private final boolean isIncomplete = false;
 
-    public CompletionProvider(ASTContext astContext) {
-        this.astContext = astContext;
+    public CompletionProvider(URI doc, ASTContext astContext) {
+        super(doc, astContext);
     }
 
-    public CompletableFuture<Either<List<CompletionItem>, CompletionList>> provideCompletion(
-            TextDocumentIdentifier textDocument, Position position, CompletionContext context) {
-        URI uri = URIUtils.toUri(textDocument.getUri());
+    public CompletableFuture<Either<List<CompletionItem>, CompletionList>> provideCompletionFuture(TextDocumentIdentifier textDocument,
+                                                                                                   Position position,
+                                                                                                   CompletionContext context) {
+        return future(Either.forRight(provideCompletion(textDocument, position, context)));
+    }
 
+    public CompletionList provideCompletion(TextDocumentIdentifier textDocument, Position position, CompletionContext context) {
         Completions items = new Completions(1000);
 
-        ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
+        ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(doc, position.getLine(), position.getCharacter());
         if (offsetNode == null || populateItemsFromNode(position, offsetNode, items)) {
             populateKeywords(items);
         }
-
-        return CompletableFuture.completedFuture(items.getResult(this.isIncomplete));
+        return new CompletionList(this.isIncomplete || items.reachedLimit(), items);
     }
 
     private void populateKeywords(Completions items) {
-        items.addAll(new String[]{"def", "assert", "if", "for", "else", "while", "switch", "case", "break", "continue", "return",
-                                  "transient", "import", "class", "extends", "implements", "enum", "try", "catch", "finally", "throw", "new", "in", "as",
-                                  "instanceof", "super", "this", "null", "true", "false", "void", "byte", "short", "int", "long", "float", "double", "boolean",
-                                  "private", "public", "protected"},
-                     s -> {
-                         var item = new CompletionItem(s);
-                         item.setKind(CompletionItemKind.Keyword);
-                         item.setSortText("zzz" + s);
-                         return item;
-                     });
+        items.addAll(keywords, s -> {
+            var item = new CompletionItem(s);
+            item.setKind(CompletionItemKind.Keyword);
+            item.setSortText("zzz" + s);
+            return item;
+        });
     }
 
     private boolean populateItemsFromNode(Position position, ASTNode offsetNode, Completions items) {
@@ -118,7 +122,9 @@ public class CompletionProvider {
     private boolean populateItemsFromConstantExpression(ConstantExpression node, ASTNode parent, Completions items) {
         if (node.getType().getTypeClass() == String.class) {
             ASTNode parentParent = astContext.getVisitor().getParent(parent);
-            if (parentParent instanceof MethodCallExpression expr && expr.getArguments() instanceof ArgumentListExpression args && !args.getExpressions().isEmpty()) {
+            if (parentParent instanceof MethodCallExpression expr &&
+                    expr.getArguments() instanceof ArgumentListExpression args &&
+                    !args.getExpressions().isEmpty()) {
                 ObjectMapper<?> goh = GroovyASTUtils.getGohOfNode(expr, astContext);
                 if (goh != null && goh.getCompleter() != null) {
                     int index = -1;
@@ -136,154 +142,120 @@ public class CompletionProvider {
         return true;
     }
 
-    private void populateItemsFromStaticMethodCallExpression(StaticMethodCallExpression methodCallExpr, Position position, Completions items) {
+    private void populateItemsFromStaticMethodCallExpression(StaticMethodCallExpression methodCallExpr, Position position,
+                                                             Completions items) {
         Set<String> existingNames = new ObjectOpenHashSet<>();
         populateItemsFromGlobalScope(methodCallExpr.getMethod(), existingNames, items);
     }
 
-    private static void populateItemsFromGameObjects(String memberNamePrefix,
-                                                     Set<String> existingNames, Completions items) {
-        ObjectMapperManager.getObjectMappers().stream()
-                .filter(handler -> {
-                    if (handler.getName().startsWith(memberNamePrefix) && !existingNames.contains(handler.getName())) {
-                        existingNames.add(handler.getName());
-                        return true;
+    private static void populateItemsFromGameObjects(String memberNamePrefix, Set<String> existingNames, Completions items) {
+        ObjectMapperManager.getObjectMappers().stream().filter(handler -> {
+            if (handler.getName().startsWith(memberNamePrefix) && !existingNames.contains(handler.getName())) {
+                existingNames.add(handler.getName());
+                return true;
+            }
+            return false;
+        }).forEach(handler -> {
+            for (Class<?>[] paramTypes : handler.getParamTypes()) {
+                var completionItem = CompletionItemFactory.createCompletion(CompletionItemKind.Method, handler.getName());
+                completionItem.setDetail("(global scope)");
+                StringBuilder builder = new StringBuilder().append('(');
+                for (int i = 0; i < paramTypes.length; i++) {
+                    var parameter = paramTypes[i];
+                    builder.append(parameter.getSimpleName());
+                    if (i < paramTypes.length - 1) {
+                        builder.append(",");
                     }
-                    return false;
-                }).forEach(handler -> {
-                    for (Class<?>[] paramTypes : handler.getParamTypes()) {
-                        var completionItem = CompletionItemFactory.createCompletion(CompletionItemKind.Method, handler.getName());
-                        completionItem.setDetail("(global scope)");
-                        StringBuilder builder = new StringBuilder().append('(');
-                        for (int i = 0; i < paramTypes.length; i++) {
-                            var parameter = paramTypes[i];
-                            builder.append(parameter.getSimpleName());
-                            if (i < paramTypes.length - 1) {
-                                builder.append(",");
-                            }
-                        }
-                        builder.append(") -> ");
-                        builder.append(handler.getReturnType().getSimpleName());
-                        CompletionItemLabelDetails details = new CompletionItemLabelDetails();
-                        details.setDetail(builder.toString());
-                        completionItem.setLabelDetails(details);
-                        items.add(completionItem);
-                    }
-                });
+                }
+                builder.append(") -> ");
+                builder.append(handler.getReturnType().getSimpleName());
+                CompletionItemLabelDetails details = new CompletionItemLabelDetails();
+                details.setDetail(builder.toString());
+                completionItem.setLabelDetails(details);
+                items.add(completionItem);
+            }
+        });
     }
 
-    private void populateItemsFromPropertyExpression(PropertyExpression propExpr, Position position,
-                                                     Completions items) {
-        Range propertyRange = GroovyLanguageServerUtils.astNodeToRange(propExpr.getProperty());
-        if (propertyRange == null) {
-            return;
-        }
+    private void populateItemsFromPropertyExpression(PropertyExpression propExpr, Position position, Completions items) {
+        Range propertyRange = GroovyLSUtils.astNodeToRange(propExpr.getProperty());
+        if (propertyRange == null) return;
         String memberName = getMemberName(propExpr.getPropertyAsString(), propertyRange, position);
         populateItemsFromExpression(propExpr.getObjectExpression(), memberName, items);
     }
 
-    private void populateItemsFromMethodCallExpression(MethodCallExpression methodCallExpr, Position position,
-                                                       Completions items) {
-        Range methodRange = GroovyLanguageServerUtils.astNodeToRange(methodCallExpr.getMethod());
-        if (methodRange == null) {
-            return;
-        }
+    private void populateItemsFromMethodCallExpression(MethodCallExpression methodCallExpr, Position position, Completions items) {
+        Range methodRange = GroovyLSUtils.astNodeToRange(methodCallExpr.getMethod());
+        if (methodRange == null) return;
         String memberName = getMemberName(methodCallExpr.getMethodAsString(), methodRange, position);
         populateItemsFromExpression(methodCallExpr.getObjectExpression(), memberName, items);
     }
 
     private void populateItemsFromImportNode(ImportNode importNode, Position position, Completions items) {
-        Range importRange = GroovyLanguageServerUtils.astNodeToRange(importNode);
-        if (importRange == null) {
-            return;
-        }
+        Range importRange = GroovyLSUtils.astNodeToRange(importNode);
+        if (importRange == null) return;
         // skip the "import " at the beginning
         importRange.setStart(new Position(importRange.getEnd().getLine(),
                                           importRange.getEnd().getCharacter() - importNode.getType().getName().length()));
         String importText = getMemberName(importNode.getType().getName(), importRange, position);
 
-        ModuleNode enclosingModule = (ModuleNode) GroovyASTUtils.getEnclosingNodeOfType(importNode, ModuleNode.class,
-                                                                                        astContext);
+        ModuleNode enclosingModule = getModule();
+        if (enclosingModule == null) return;
         String enclosingPackageName = enclosingModule.getPackageName();
-        List<String> importNames = enclosingModule.getImports().stream()
-                .map(ImportNode::getClassName).collect(Collectors.toList());
-
-        List<CompletionItem> localClassItems = astContext.getVisitor().getClassNodes().stream().filter(classNode -> {
+        items.addAll(astContext.getVisitor().getClassNodes(), classNode -> {
             String packageName = classNode.getPackageName();
-            if (packageName == null || packageName.length() == 0 || packageName.equals(enclosingPackageName)) {
-                return false;
+            if (packageName == null || packageName.isEmpty() || packageName.equals(enclosingPackageName)) {
+                return null;
             }
             String className = classNode.getName();
             String classNameWithoutPackage = classNode.getNameWithoutPackage();
-            if (!className.startsWith(importText) && !classNameWithoutPackage.startsWith(importText)) {
-                return false;
+            if ((!className.startsWith(importText) && !classNameWithoutPackage.startsWith(importText)) ||
+                    GroovyLSUtils.hasImport(enclosingModule, className)) {
+                return null;
             }
-            if (importNames.contains(className)) {
-                return false;
-            }
-            return true;
-        }).map(classNode -> {
             CompletionItem item = CompletionItemFactory.createCompletion(classNode, classNode.getName(), astContext);
             item.setTextEdit(Either.forLeft(new TextEdit(importRange, classNode.getName())));
             if (classNode.getNameWithoutPackage().startsWith(importText)) {
                 item.setSortText(classNode.getNameWithoutPackage());
             }
             return item;
-        }).collect(Collectors.toList());
-        items.addAll(localClassItems);
+        });
 
-        List<ClassInfo> classes = astContext.getLanguageServerContext().getScanResult().getAllClasses();
-        List<PackageInfo> packages = astContext.getLanguageServerContext().getScanResult().getPackageInfo();
-
-        List<CompletionItem> packageItems = packages.stream().filter(packageInfo -> {
-            String packageName = packageInfo.getName();
-            if (packageName.startsWith(importText)) {
-                return true;
-            }
-            return false;
-        }).map(packageInfo -> {
-            CompletionItem item = CompletionItemFactory.createCompletion(CompletionItemKind.Module, packageInfo.getName());
-            item.setTextEdit(Either.forLeft(new TextEdit(importRange, packageInfo.getName())));
+        // scan packages
+        items.addAll(astContext.getLanguageServerContext().getScanResult().getPackageInfo(), p -> {
+            String packageName = p.getName();
+            if (!packageName.startsWith(importText)) return null;
+            CompletionItem item = CompletionItemFactory.createCompletion(CompletionItemKind.Module, p.getName());
+            item.setTextEdit(Either.forLeft(new TextEdit(importRange, p.getName())));
             return item;
-        }).collect(Collectors.toList());
-        items.addAll(packageItems);
+        });
 
-        List<CompletionItem> classItems = classes.stream().filter(classInfo -> {
-            String packageName = classInfo.getPackageName();
-            if (packageName == null || packageName.length() == 0 || packageName.equals(enclosingPackageName)) {
-                return false;
+        // scan all classes
+        items.addAll(astContext.getLanguageServerContext().getScanResult().getAllClasses(), c -> {
+            String packageName = c.getPackageName();
+            if (packageName == null || packageName.isEmpty() || packageName.equals(enclosingPackageName)) {
+                return null;
             }
-            String className = classInfo.getName();
-            String classNameWithoutPackage = classInfo.getSimpleName();
-            if (!className.startsWith(importText) && !classNameWithoutPackage.startsWith(importText)) {
-                return false;
+            String className = c.getName();
+            String classNameWithoutPackage = c.getSimpleName();
+            if ((!className.startsWith(importText) && !classNameWithoutPackage.startsWith(importText)) ||
+                    !GroovyLSUtils.hasImport(enclosingModule, className)) {
+                return null;
             }
-            if (importNames.contains(className)) {
-                return false;
-            }
-            return true;
-        }).map(classInfo -> {
-            CompletionItem item = CompletionItemFactory.createCompletion(classInfoToCompletionItemKind(classInfo), classInfo.getName());
-
-            item.setTextEdit(Either.forLeft(new TextEdit(importRange, classInfo.getName())));
-            if (classInfo.getSimpleName().startsWith(importText)) {
-                item.setSortText(classInfo.getSimpleName());
+            CompletionItem item = CompletionItemFactory.createCompletion(classInfoToCompletionItemKind(c), c.getName());
+            item.setTextEdit(Either.forLeft(new TextEdit(importRange, c.getName())));
+            if (c.getSimpleName().startsWith(importText)) {
+                item.setSortText(c.getSimpleName());
             }
             return item;
-        }).collect(Collectors.toList());
-        items.addAll(classItems);
+        });
     }
 
     private void populateItemsFromClassNode(ClassNode classNode, Position position, Completions items) {
         ASTNode parentNode = astContext.getVisitor().getParent(classNode);
-        if (!(parentNode instanceof ClassNode)) {
-            return;
-        }
-        ClassNode parentClassNode = (ClassNode) parentNode;
-        Range classRange = GroovyLanguageServerUtils.astNodeToRange(classNode);
-        if (classRange == null) {
-            return;
-        }
+        if (!(parentNode instanceof ClassNode parentClassNode)) return;
+        Range classRange = GroovyLSUtils.astNodeToRange(classNode);
+        if (classRange == null) return;
         String className = getMemberName(classNode.getUnresolvedName(), classRange, position);
         if (classNode.equals(parentClassNode.getUnresolvedSuperClass())) {
             populateTypes(classNode, className, new HashSet<>(), true, false, false, items);
@@ -292,86 +264,60 @@ public class CompletionProvider {
         }
     }
 
-    private void populateItemsFromConstructorCallExpression(ConstructorCallExpression constructorCallExpr,
-                                                            Position position, Completions items) {
-        Range typeRange = GroovyLanguageServerUtils.astNodeToRange(constructorCallExpr.getType());
-        if (typeRange == null) {
-            return;
-        }
+    private void populateItemsFromConstructorCallExpression(ConstructorCallExpression constructorCallExpr, Position position,
+                                                            Completions items) {
+        Range typeRange = GroovyLSUtils.astNodeToRange(constructorCallExpr.getType());
+        if (typeRange == null) return;
         String typeName = getMemberName(constructorCallExpr.getType().getNameWithoutPackage(), typeRange, position);
         populateTypes(constructorCallExpr, typeName, new HashSet<>(), true, false, false, items);
     }
 
-    private void populateItemsFromVariableExpression(VariableExpression varExpr, Position position,
-                                                     Completions items) {
-        Range varRange = GroovyLanguageServerUtils.astNodeToRange(varExpr);
-        if (varRange == null) {
-            return;
-        }
+    private void populateItemsFromVariableExpression(VariableExpression varExpr, Position position, Completions items) {
+        Range varRange = GroovyLSUtils.astNodeToRange(varExpr);
+        if (varRange == null) return;
         String memberName = getMemberName(varExpr.getName(), varRange, position);
         populateItemsFromScope(varExpr, memberName, items);
     }
 
-    private void populateItemsFromPropertiesAndFields(List<PropertyNode> properties, List<FieldNode> fields,
-                                                      String memberNamePrefix, Set<String> existingNames, Completions items) {
-        List<CompletionItem> propItems = properties.stream().filter(property -> {
-            String name = property.getName();
-            // sometimes, a property and a field will have the same name
-            if (name.startsWith(memberNamePrefix) && !existingNames.contains(name)) {
-                existingNames.add(name);
-                return true;
-            }
-            return false;
-        }).map(property -> {
-            CompletionItem item = CompletionItemFactory.createCompletion(property, property.getName(), astContext);
-
-            if (!property.isDynamicTyped()) {
-                item.setDetail(property.getType().getNameWithoutPackage());
+    private void populateItemsFromPropertiesAndFields(List<PropertyNode> properties, List<FieldNode> fields, String memberNamePrefix,
+                                                      Set<String> existingNames, Completions items) {
+        items.addAll(properties, p -> {
+            String name = p.getName();
+            if (!name.startsWith(memberNamePrefix) || existingNames.contains(name)) return null;
+            existingNames.add(name);
+            CompletionItem item = CompletionItemFactory.createCompletion(p, p.getName(), astContext);
+            if (!p.isDynamicTyped()) {
+                item.setDetail(p.getType().getNameWithoutPackage());
             }
             return item;
-        }).collect(Collectors.toList());
-        items.addAll(propItems);
-        List<CompletionItem> fieldItems = fields.stream().filter(field -> {
-            String name = field.getName();
-            // sometimes, a property and a field will have the same name
-            if (name.startsWith(memberNamePrefix) && !existingNames.contains(name)) {
-                existingNames.add(name);
-                return true;
-            }
-            return false;
-        }).map(field -> {
-            CompletionItem item = CompletionItemFactory.createCompletion(field, field.getName(), astContext);
-
-            if (!field.isDynamicTyped()) {
-                item.setDetail(field.getType().getNameWithoutPackage());
+        });
+        items.addAll(fields, f -> {
+            String name = f.getName();
+            if (!name.startsWith(memberNamePrefix) || existingNames.contains(name)) return null;
+            existingNames.add(name);
+            CompletionItem item = CompletionItemFactory.createCompletion(f, f.getName(), astContext);
+            if (!f.isDynamicTyped()) {
+                item.setDetail(f.getType().getNameWithoutPackage());
             }
             return item;
-        }).collect(Collectors.toList());
-        items.addAll(fieldItems);
+        });
     }
 
-    private void populateItemsFromMethods(List<MethodNode> methods, String memberNamePrefix, Set<String> existingNames,
-                                          Completions items) {
-        List<CompletionItem> methodItems = methods.stream()
-                .filter(method -> {
-                    String methodName = method.getName();
-                    // overloads can cause duplicates
-                    if (methodName.startsWith(memberNamePrefix) && !existingNames.contains(methodName)) {
-                        existingNames.add(methodName);
-                        return !method.getDeclaringClass().isResolved() ||
-                               (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) != 0 ||
-                               GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext).isPresent();
-                    }
-                    return false;
-                }).map(method -> {
-                    CompletionItem item = CompletionItemFactory.createCompletion(method, method.getName(), astContext);
+    private void populateItemsFromMethods(List<MethodNode> methods, String memberNamePrefix, Set<String> existingNames, Completions items) {
+        items.addAll(methods, method -> {
+            String name = method.getName();
+            if (!name.startsWith(memberNamePrefix) || existingNames.contains(name)) return null;
+            existingNames.add(name);
+            if (method.getDeclaringClass().isResolved() &&
+                    (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) == 0 &&
+                    !GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext).isPresent()) {
+                return null;
+            }
 
-                    var details = getMethodNodeDetails(method);
-                    item.setLabelDetails(details);
-
-                    return item;
-                }).collect(Collectors.toList());
-        items.addAll(methodItems);
+            CompletionItem item = CompletionItemFactory.createCompletion(method, method.getName(), astContext);
+            item.setLabelDetails(getMethodNodeDetails(method));
+            return item;
+        });
     }
 
     @NotNull
@@ -429,81 +375,74 @@ public class CompletionProvider {
         populateItemsFromMethods(methods, memberNamePrefix, existingNames, items);
     }
 
-    private void populateItemsFromGlobalScope(String memberNamePrefix,
-                                              Set<String> existingNames, List<CompletionItem> items) {
-        astContext.getLanguageServerContext().getSandbox().getBindings().forEach((variableName, value) -> {
-            if (!variableName.startsWith(memberNamePrefix) || existingNames.contains(variableName)) {
-                return;
-            }
-            existingNames.add(variableName);
-            if (value instanceof ObjectMapper<?> goh) {
+    private void populateItemsFromGlobalScope(String memberNamePrefix, Set<String> existingNames, Completions items) {
+        items.addAll(astContext.getLanguageServerContext().getSandbox().getBindings().entrySet(), entry -> {
+            String name = entry.getKey();
+            if (!name.startsWith(memberNamePrefix) || existingNames.contains(name)) return null;
+            existingNames.add(name);
+            if (entry.getValue() instanceof ObjectMapper<?> goh) {
                 for (MethodNode method : goh.getMethodNodes()) {
                     var item = CompletionItemFactory.createCompletion(method, goh.getName(), astContext);
                     item.setLabelDetails(getMethodNodeDetails(method));
+                    // TODO
                     items.add(item);
                 }
-            } else if (value instanceof Closure<?> closure) {
-                MethodNode method = GroovyASTUtils.methodNodeOfClosure(variableName, closure);
-                var item = CompletionItemFactory.createCompletion(method, variableName, astContext);
+                return null;
+            } else if (entry.getValue() instanceof Closure<?> closure) {
+                MethodNode method = GroovyASTUtils.methodNodeOfClosure(name, closure);
+                var item = CompletionItemFactory.createCompletion(method, name, astContext);
                 item.setLabelDetails(getMethodNodeDetails(method));
-                items.add(item);
+                return item;
             } else {
-                var item = CompletionItemFactory.createCompletion(CompletionItemKind.Variable, variableName);
+                var item = CompletionItemFactory.createCompletion(CompletionItemKind.Variable, name);
                 item.setDetail("(global scope)");
-                items.add(item);
+                return item;
             }
         });
 
-        List<CompletionItem> staticMethodItems = astContext.getLanguageServerContext().getSandbox().getStaticImports().stream()
-                .map(staticImport -> astContext.getLanguageServerContext().getScanResult().getClassInfo(staticImport.getName()))
-                .filter(Objects::nonNull)
-                .flatMap(classInfo -> classInfo.getMethodInfo().stream().filter(ClassMemberInfo::isStatic))
-                .filter(methodInfo -> {
-                    String methodName = methodInfo.getName();
-                    if (methodName.startsWith(memberNamePrefix) && !existingNames.contains(methodName)) {
-                        existingNames.add(methodName);
-                        return GroovyReflectionUtils.resolveMethodFromMethodInfo(methodInfo, astContext).isPresent();
-                    }
-                    return false;
-                })
-                .map(methodInfo -> {
-                    var item = CompletionItemFactory.createCompletion(CompletionItemKind.Method, methodInfo.getName());
-
-                    var details = getMethodInfoDetails(methodInfo);
-                    item.setLabelDetails(details);
-                    return item;
-                })
-                .collect(Collectors.toList());
-        items.addAll(staticMethodItems);
+        ModuleNode enclosingModule = getModule();
+        if (enclosingModule == null) return;
+        items.addAll(enclosingModule.getStaticStarImports().values(), in -> {
+            String name = in.getClassName();
+            if (name == null) return null;
+            // TODO use meta class?
+            ClassInfo info = astContext.getLanguageServerContext().getScanResult().getClassInfo(name);
+            if (info == null) return null;
+            for (MethodInfo m : info.getMethodInfo()) {
+                if (!m.isStatic() || !m.getName().startsWith(memberNamePrefix) || existingNames.contains(m.getName())) continue;
+                existingNames.add(m.getName());
+                if (!GroovyReflectionUtils.resolveMethodFromMethodInfo(m, astContext).isPresent()) continue;
+                var item = CompletionItemFactory.createCompletion(CompletionItemKind.Method, m.getName());
+                item.setLabelDetails(getMethodInfoDetails(m));
+                items.add(item);
+            }
+            for (FieldInfo m : info.getFieldInfo()) {
+                if (!m.isStatic() || !m.getName().startsWith(memberNamePrefix) || existingNames.contains(m.getName())) continue;
+                existingNames.add(m.getName());
+                var item = CompletionItemFactory.createCompletion(CompletionItemKind.Field, m.getName());
+                items.add(item);
+            }
+            return null;
+        });
     }
 
-    private void populateItemsFromVariableScope(VariableScope variableScope, String memberNamePrefix,
-                                                Set<String> existingNames, Completions items) {
+    private void populateItemsFromVariableScope(VariableScope variableScope, String memberNamePrefix, Set<String> existingNames,
+                                                Completions items) {
         //populateItemsFromGameObjects(memberNamePrefix, existingNames, items);
         populateItemsFromGlobalScope(memberNamePrefix, existingNames, items);
-
-        List<CompletionItem> variableItems = variableScope.getDeclaredVariables().values().stream().filter(variable -> {
-
+        items.addAll(variableScope.getDeclaredVariables().values(), variable -> {
             String variableName = variable.getName();
-            // overloads can cause duplicates
-            if (variableName.startsWith(memberNamePrefix) && !existingNames.contains(variableName)) {
-                existingNames.add(variableName);
-                return true;
-            }
-            return false;
-        }).map(variable -> {
+            if (!variableName.startsWith(memberNamePrefix) || existingNames.contains(variableName)) return null;
             var item = CompletionItemFactory.createCompletion((ASTNode) variable, variable.getName(), astContext);
-
             if (!variable.isDynamicTyped()) {
                 item.setDetail(variable.getType().getName());
             }
             return item;
-        }).collect(Collectors.toList());
-        items.addAll(variableItems);
+        });
     }
 
     private void populateItemsFromScope(ASTNode node, String namePrefix, Completions items) {
-        Set<String> existingNames = new HashSet<>();
+        Set<String> existingNames = new ObjectOpenHashSet<>();
         ASTNode current = node;
         ASTNode child = null;
         boolean isInClosure = false;
@@ -544,7 +483,8 @@ public class CompletionProvider {
                                 }
                             }
                             if (classNode != null) {
-                                populateItemsFromPropertiesAndFields(classNode.getProperties(), classNode.getFields(), namePrefix, existingNames, items);
+                                populateItemsFromPropertiesAndFields(classNode.getProperties(), classNode.getFields(), namePrefix,
+                                                                     existingNames, items);
                                 populateItemsFromMethods(classNode.getMethods(), namePrefix, existingNames, items);
                             }
                         }
@@ -561,8 +501,7 @@ public class CompletionProvider {
         populateTypes(node, namePrefix, existingNames, items);
     }
 
-    private void populateTypes(ASTNode offsetNode, String namePrefix, Set<String> existingNames,
-                               Completions items) {
+    private void populateTypes(ASTNode offsetNode, String namePrefix, Set<String> existingNames, Completions items) {
         populateTypes(offsetNode, namePrefix, existingNames, true, true, true, items);
     }
 
@@ -570,66 +509,52 @@ public class CompletionProvider {
                                boolean includeInterfaces, boolean includeEnums, Completions items) {
         Range addImportRange = GroovyASTUtils.findAddImportRange(offsetNode, astContext);
 
-        ModuleNode enclosingModule = (ModuleNode) GroovyASTUtils.getEnclosingNodeOfType(offsetNode, ModuleNode.class,
-                                                                                        astContext);
+        ModuleNode enclosingModule = getModule();
         String enclosingPackageName = enclosingModule.getPackageName();
-        List<String> importNames = enclosingModule.getImports().stream().map(importNode -> importNode.getClassName())
-                .collect(Collectors.toList());
-
-        List<CompletionItem> localClassItems = astContext.getVisitor().getClassNodes().stream().filter(classNode -> {
-            if (items.reachedLimit()) return false;
+        items.addAll(astContext.getVisitor().getClassNodes(), classNode -> {
+            if (!includeEnums && classNode.isEnum()) return null;
+            if (!includeInterfaces && classNode.isInterface()) return null;
+            if (!includeClasses && (!classNode.isInterface() && !classNode.isEnum())) return null;
             String classNameWithoutPackage = classNode.getNameWithoutPackage();
             String className = classNode.getName();
-            if (classNameWithoutPackage.startsWith(namePrefix) && !existingNames.contains(className)) {
-                existingNames.add(className);
-                return true;
-            }
-            return false;
-        }).map(classNode -> {
-            String className = classNode.getName();
+            if (!classNameWithoutPackage.startsWith(namePrefix) || existingNames.contains(className)) return null;
+            existingNames.add(className);
             String packageName = classNode.getPackageName();
             CompletionItem item = CompletionItemFactory.createCompletion(classNode, classNode.getNameWithoutPackage(), astContext);
             item.setDetail(packageName);
-            if (packageName != null && !packageName.equals(enclosingPackageName) && !importNames.contains(className)) {
+            if (packageName != null && !packageName.equals(enclosingPackageName) && !GroovyLSUtils.hasImport(enclosingModule, className)) {
                 List<TextEdit> additionalTextEdits = new ArrayList<>();
                 TextEdit addImportEdit = createAddImportTextEdit(className, addImportRange);
                 additionalTextEdits.add(addImportEdit);
                 item.setAdditionalTextEdits(additionalTextEdits);
             }
             return item;
-        }).collect(Collectors.toList());
-        items.addAll(localClassItems);
+        });
 
-        List<ClassInfo> classes = astContext.getLanguageServerContext().getScanResult().getAllClasses();
-
-        List<CompletionItem> classItems = classes.stream().filter(classInfo -> {
-            if (items.reachedLimit()) return false;
+        items.addAll(astContext.getLanguageServerContext().getScanResult().getAllClasses(), classInfo -> {
+            if (!includeEnums && classInfo.isEnum()) return null;
+            if (!includeInterfaces && classInfo.isInterface()) return null;
+            if (!includeClasses && (!classInfo.isInterface() && !classInfo.isEnum())) return null;
             String className = classInfo.getName();
             String classNameWithoutPackage = classInfo.getSimpleName();
-            if (classNameWithoutPackage.startsWith(namePrefix) && !existingNames.contains(className)) {
-                existingNames.add(className);
-                return true;
-            }
-            return false;
-        }).map(classInfo -> {
-            String className = classInfo.getName();
+            if (!classNameWithoutPackage.startsWith(namePrefix) || existingNames.contains(className)) return null;
+            existingNames.add(className);
             String packageName = classInfo.getPackageName();
-            CompletionItem item = CompletionItemFactory.createCompletion(classInfoToCompletionItemKind(classInfo), classInfo.getSimpleName());
+            CompletionItem item = CompletionItemFactory.createCompletion(classInfoToCompletionItemKind(classInfo),
+                                                                         classInfo.getSimpleName());
             item.setDetail(packageName);
-            if (packageName != null && !packageName.equals(enclosingPackageName) && !importNames.contains(className)) {
+            if (packageName != null && !packageName.equals(enclosingPackageName) && !GroovyLSUtils.hasImport(enclosingModule, className)) {
                 List<TextEdit> additionalTextEdits = new ArrayList<>();
                 TextEdit addImportEdit = createAddImportTextEdit(className, addImportRange);
                 additionalTextEdits.add(addImportEdit);
                 item.setAdditionalTextEdits(additionalTextEdits);
             }
             return item;
-        }).collect(Collectors.toList());
-        items.addAll(classItems);
+        });
     }
 
     private String getMemberName(String memberName, Range range, Position position) {
-        if (position.getLine() == range.getStart().getLine()
-            && position.getCharacter() > range.getStart().getCharacter()) {
+        if (position.getLine() == range.getStart().getLine() && position.getCharacter() > range.getStart().getCharacter()) {
             int length = position.getCharacter() - range.getStart().getCharacter();
             if (length > 0 && length <= memberName.length()) {
                 return memberName.substring(0, length).trim();
@@ -649,13 +574,6 @@ public class CompletionProvider {
     }
 
     private TextEdit createAddImportTextEdit(String className, Range range) {
-        TextEdit edit = new TextEdit();
-        StringBuilder builder = new StringBuilder();
-        builder.append("import ");
-        builder.append(className);
-        builder.append("\n");
-        edit.setNewText(builder.toString());
-        edit.setRange(range);
-        return edit;
+        return new TextEdit(range, "import " + className + "\n");
     }
 }

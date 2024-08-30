@@ -6,21 +6,27 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FileUtil {
 
+    private static final Pattern p = Pattern.compile("^(file:/*)?([a-z])(:/.*)$");
+
     public static String relativize(String rootPath, String longerThanRootPath) {
-        try {
-            longerThanRootPath = URLDecoder.decode(longerThanRootPath, "UTF-8");
-        } catch (UnsupportedEncodingException ignored) {
-        }
+        longerThanRootPath = fixUri(longerThanRootPath, true);
+        rootPath = fixPath(rootPath);
 
         if (File.separatorChar != '/') {
             longerThanRootPath = longerThanRootPath.replace('/', File.separatorChar);
         }
-        return relativizeInternal(fixDriveCase(rootPath), fixDriveCase(longerThanRootPath));
+        return relativizeInternal(rootPath, longerThanRootPath);
     }
 
     private static String relativizeInternal(String rootPath, String longerThanRootPath) {
@@ -31,13 +37,37 @@ public class FileUtil {
         return longerThanRootPath.substring(index + rootPath.length() + 1);
     }
 
-    // sometimes the paths passed to relativize() have a lower case drive letter
-    public static String fixDriveCase(String path) {
-        if (path == null || path.length() < 2) return path;
-        if (Character.isLowerCase(path.charAt(0)) && path.charAt(1) == ':') {
-            return Character.toUpperCase(path.charAt(0)) + ":" + path.substring(2);
+    public static URI fixUri(URI uri) {
+        return fixUri(uri.toString());
+    }
+
+    public static URI fixUri(String uri) {
+        return URI.create(fixUri(uri, true));
+    }
+
+    public static String fixUri(String uri, boolean reEncode) {
+        try {
+            String s = uri, uri1;
+            boolean decoded = false;
+            boolean c;
+            do {
+                uri1 = s;
+                s = URLDecoder.decode(uri1, StandardCharsets.UTF_8.displayName());
+                c = !uri1.equals(s); // something was decoded
+                decoded |= c;
+            } while (c); // try to decode again to remove any possible nested decodings
+            s = fixPath(s);
+            if (decoded && reEncode) s = URLEncoder.encode(s, StandardCharsets.UTF_8.displayName());
+            return s;
+        } catch (UnsupportedEncodingException e) {
+            return uri;
         }
-        return path;
+    }
+
+    public static String fixPath(String uri) {
+        Matcher matcher = p.matcher(uri);
+        if (!matcher.matches()) return uri;
+        return matcher.replaceFirst("$1" + matcher.group(2).toUpperCase(Locale.ENGLISH) + "$3");
     }
 
     public static String getParent(String path) {

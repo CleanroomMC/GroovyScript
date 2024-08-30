@@ -20,16 +20,17 @@
 package net.prominic.groovyls;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.sandbox.FileUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.prominic.groovyls.compiler.ILanguageServerContext;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
 import net.prominic.groovyls.compiler.control.GroovyLSCompilationUnit;
 import net.prominic.groovyls.config.ICompilationUnitFactory;
 import net.prominic.groovyls.providers.*;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
-import net.prominic.groovyls.util.URIUtils;
+import net.prominic.groovyls.util.GroovyLSUtils;
 import net.prominic.lsp.utils.Positions;
 import org.codehaus.groovy.GroovyBugError;
 import org.codehaus.groovy.ast.ASTNode;
@@ -61,9 +62,9 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     private LanguageClient languageClient;
 
     private Path workspaceRoot;
-    private ICompilationUnitFactory compilationUnitFactory;
+    private final ICompilationUnitFactory compilationUnitFactory;
     private final ILanguageServerContext languageServerContext;
-    private Map<URI, List<Diagnostic>> prevDiagnosticsByFile;
+    private Map<URI, PublishDiagnosticsParams> prevDiagnosticsByFile;
 
     public GroovyServices(ICompilationUnitFactory factory, ILanguageServerContext languageServerContext) {
         compilationUnitFactory = factory;
@@ -85,7 +86,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     @Override
     public void didOpen(DidOpenTextDocumentParams params) {
         languageServerContext.getFileContentsTracker().didOpen(params);
-        URI uri = URIUtils.toUri(params.getTextDocument().getUri());
+        URI uri = FileUtil.fixUri(params.getTextDocument().getUri());
 
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
@@ -95,7 +96,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     @Override
     public void didChange(DidChangeTextDocumentParams params) {
         languageServerContext.getFileContentsTracker().didChange(params);
-        URI uri = URIUtils.toUri(params.getTextDocument().getUri());
+        URI uri = FileUtil.fixUri(params.getTextDocument().getUri());
 
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
@@ -105,7 +106,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     @Override
     public void didClose(DidCloseTextDocumentParams params) {
         languageServerContext.getFileContentsTracker().didClose(params);
-        URI uri = URIUtils.toUri(params.getTextDocument().getUri());
+        URI uri = FileUtil.fixUri(params.getTextDocument().getUri());
 
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
@@ -119,8 +120,8 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
     @Override
     public void didChangeWatchedFiles(DidChangeWatchedFilesParams params) {
-        Set<URI> urisWithChanges = params.getChanges().stream().map(fileEvent -> URIUtils.toUri(fileEvent.getUri()))
-                .collect(Collectors.toSet());
+        Set<URI> urisWithChanges = params.getChanges().stream().map(fileEvent -> FileUtil.fixUri(fileEvent.getUri())).collect(
+                Collectors.toSet());
 
         for (URI uri : urisWithChanges) {
             var unit = compilationUnitFactory.create(workspaceRoot, uri);
@@ -131,10 +132,9 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
     @Override
     public void didChangeConfiguration(DidChangeConfigurationParams params) {
-        if (!(params.getSettings() instanceof JsonObject)) {
+        if (!(params.getSettings() instanceof JsonObject settings)) {
             return;
         }
-        JsonObject settings = (JsonObject) params.getSettings();
         this.updateClasspath(settings);
     }
 
@@ -160,7 +160,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
     @Override
     public CompletableFuture<Hover> hover(HoverParams params) {
-        URI uri = URIUtils.toUri(params.getTextDocument().getUri());
+        URI uri = FileUtil.fixUri(params.getTextDocument().getUri());
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
         var visitor = compileAndVisitAST(unit, uri);
@@ -169,7 +169,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
             return CompletableFuture.completedFuture(null);
         }
 
-        HoverProvider provider = new HoverProvider(new ASTContext(visitor, languageServerContext));
+        HoverProvider provider = new HoverProvider(uri, new ASTContext(visitor, languageServerContext));
         return provider.provideHover(params.getTextDocument(), params.getPosition());
     }
 
@@ -177,25 +177,25 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams params) {
         TextDocumentIdentifier textDocument = params.getTextDocument();
         Position position = params.getPosition();
-        URI uri = URIUtils.toUri(textDocument.getUri());
+        URI uri = FileUtil.fixUri(textDocument.getUri());
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
         var visitor = compileAndVisitAST(unit, uri);
+        if (visitor == null) return CompletableFuture.completedFuture(Either.forLeft(Collections.emptyList()));
 
         String originalSource = null;
         ASTNode offsetNode = visitor.getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
         if (offsetNode == null) {
             originalSource = languageServerContext.getFileContentsTracker().getContents(uri);
-            VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(
-                    textDocument.getUri(), 1);
+            VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(textDocument.getUri(), 1);
             int offset = Positions.getOffset(originalSource, position);
             String lineBeforeOffset = originalSource.substring(offset - position.getCharacter(), offset);
             Matcher matcher = PATTERN_CONSTRUCTOR_CALL.matcher(lineBeforeOffset);
             TextDocumentContentChangeEvent changeEvent = null;
             if (matcher.matches()) {
-                changeEvent = new TextDocumentContentChangeEvent(new Range(position, position), 0, "a()");
+                changeEvent = new TextDocumentContentChangeEvent(new Range(position, position), "a()");
             } else {
-                changeEvent = new TextDocumentContentChangeEvent(new Range(position, position), 0, "a");
+                changeEvent = new TextDocumentContentChangeEvent(new Range(position, position), "a");
             }
             DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(versionedTextDocument,
                                                                                           Collections.singletonList(changeEvent));
@@ -212,14 +212,12 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
         CompletableFuture<Either<List<CompletionItem>, CompletionList>> result = null;
         try {
-            CompletionProvider provider = new CompletionProvider(new ASTContext(visitor, languageServerContext));
-            result = provider.provideCompletion(params.getTextDocument(), params.getPosition(), params.getContext());
+            CompletionProvider provider = new CompletionProvider(uri, new ASTContext(visitor, languageServerContext));
+            result = provider.provideCompletionFuture(params.getTextDocument(), params.getPosition(), params.getContext());
         } finally {
             if (originalSource != null) {
-                VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(
-                        textDocument.getUri(), 1);
-                TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent(null, 0,
-                                                                                                originalSource);
+                VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(textDocument.getUri(), 1);
+                TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent(null, originalSource);
                 DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(versionedTextDocument,
                                                                                               Collections.singletonList(changeEvent));
                 didChange(didChangeParams);
@@ -230,14 +228,13 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     }
 
     @Override
-    public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(
-            DefinitionParams params) {
-        URI uri = URIUtils.toUri(params.getTextDocument().getUri());
+    public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(DefinitionParams params) {
+        URI uri = FileUtil.fixUri(params.getTextDocument().getUri());
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
         var visitor = compileAndVisitAST(unit, uri);
 
-        DefinitionProvider provider = new DefinitionProvider(new ASTContext(visitor, languageServerContext));
+        DefinitionProvider provider = new DefinitionProvider(uri, new ASTContext(visitor, languageServerContext));
         return provider.provideDefinition(params.getTextDocument(), params.getPosition());
     }
 
@@ -245,7 +242,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     public CompletableFuture<SignatureHelp> signatureHelp(SignatureHelpParams params) {
         TextDocumentIdentifier textDocument = params.getTextDocument();
         Position position = params.getPosition();
-        URI uri = URIUtils.toUri(textDocument.getUri());
+        URI uri = FileUtil.fixUri(textDocument.getUri());
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
         var visitor = compileAndVisitAST(unit, uri);
@@ -254,10 +251,8 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
         ASTNode offsetNode = visitor.getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
         if (offsetNode == null) {
             originalSource = languageServerContext.getFileContentsTracker().getContents(uri);
-            VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(
-                    textDocument.getUri(), 1);
-            TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent(
-                    new Range(position, position), 0, ")");
+            VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(textDocument.getUri(), 1);
+            TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent(new Range(position, position), ")");
             DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(versionedTextDocument,
                                                                                           Collections.singletonList(changeEvent));
             // if the offset node is null, there is probably a syntax error.
@@ -272,14 +267,12 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
         }
 
         try {
-            SignatureHelpProvider provider = new SignatureHelpProvider(new ASTContext(visitor, languageServerContext));
+            SignatureHelpProvider provider = new SignatureHelpProvider(uri, new ASTContext(visitor, languageServerContext));
             return provider.provideSignatureHelp(params.getTextDocument(), params.getPosition());
         } finally {
             if (originalSource != null) {
-                VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(
-                        textDocument.getUri(), 1);
-                TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent(null, 0,
-                                                                                                originalSource);
+                VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(textDocument.getUri(), 1);
+                TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent(null, originalSource);
                 DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(versionedTextDocument,
                                                                                               Collections.singletonList(changeEvent));
                 didChange(didChangeParams);
@@ -288,58 +281,58 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
     }
 
     @Override
-    public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> typeDefinition(
-            TypeDefinitionParams params) {
-        URI uri = URIUtils.toUri(params.getTextDocument().getUri());
+    public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> typeDefinition(TypeDefinitionParams params) {
+        URI uri = FileUtil.fixUri(params.getTextDocument().getUri());
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
         var visitor = compileAndVisitAST(unit, uri);
 
-        TypeDefinitionProvider provider = new TypeDefinitionProvider(new ASTContext(visitor, languageServerContext));
+        TypeDefinitionProvider provider = new TypeDefinitionProvider(uri, new ASTContext(visitor, languageServerContext));
         return provider.provideTypeDefinition(params.getTextDocument(), params.getPosition());
     }
 
     @Override
     public CompletableFuture<List<? extends Location>> references(ReferenceParams params) {
-        URI uri = URIUtils.toUri(params.getTextDocument().getUri());
+        URI uri = FileUtil.fixUri(params.getTextDocument().getUri());
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
         var visitor = compileAndVisitAST(unit, uri);
 
-        ReferenceProvider provider = new ReferenceProvider(new ASTContext(visitor, languageServerContext));
+        ReferenceProvider provider = new ReferenceProvider(uri, new ASTContext(visitor, languageServerContext));
         return provider.provideReferences(params.getTextDocument(), params.getPosition());
     }
 
     @Override
-    public CompletableFuture<List<Either<SymbolInformation, DocumentSymbol>>> documentSymbol(
-            DocumentSymbolParams params) {
-        URI uri = URIUtils.toUri(params.getTextDocument().getUri());
+    public CompletableFuture<List<Either<SymbolInformation, DocumentSymbol>>> documentSymbol(DocumentSymbolParams params) {
+        URI uri = FileUtil.fixUri(params.getTextDocument().getUri());
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
         var visitor = compileAndVisitAST(unit, uri);
 
-        DocumentSymbolProvider provider = new DocumentSymbolProvider(new ASTContext(visitor, languageServerContext));
-        return provider.provideDocumentSymbols(params.getTextDocument());
+        DocumentSymbolProvider provider = new DocumentSymbolProvider(uri, new ASTContext(visitor, languageServerContext));
+        return provider.provideDocumentSymbolsFuture(params.getTextDocument());
     }
 
     @Override
-    public CompletableFuture<Either<List<? extends SymbolInformation>, List<? extends WorkspaceSymbol>>> symbol(WorkspaceSymbolParams params) {
+    public CompletableFuture<Either<List<? extends SymbolInformation>, List<? extends WorkspaceSymbol>>> symbol(
+            WorkspaceSymbolParams params) {
         var unit = compilationUnitFactory.create(workspaceRoot, null);
 
         var visitor = compileAndVisitAST(unit, null);
 
         WorkspaceSymbolProvider provider = new WorkspaceSymbolProvider(new ASTContext(visitor, languageServerContext));
-        return provider.provideWorkspaceSymbols(params.getQuery()).thenApply(Either::forLeft);
+        return provider.provideWorkspaceSymbols(params.getQuery()).thenApply(Either::forRight);
     }
 
     @Override
     public CompletableFuture<WorkspaceEdit> rename(RenameParams params) {
-        URI uri = URIUtils.toUri(params.getTextDocument().getUri());
+        URI uri = FileUtil.fixUri(params.getTextDocument().getUri());
         var unit = compilationUnitFactory.create(workspaceRoot, uri);
 
         var visitor = compileAndVisitAST(unit, uri);
 
-        RenameProvider provider = new RenameProvider(new ASTContext(visitor, languageServerContext), languageServerContext.getFileContentsTracker());
+        RenameProvider provider = new RenameProvider(uri, new ASTContext(visitor, languageServerContext),
+                                                     languageServerContext.getFileContentsTracker());
         return provider.provideRename(params);
     }
 
@@ -349,46 +342,46 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
         } catch (GroovyBugError | Exception e) {
             GroovyScript.LOGGER.error("Unexpected exception in language server when compiling Groovy.", e);
         } finally {
-            Set<PublishDiagnosticsParams> diagnostics = handleErrorCollector(compilationUnit.getErrorCollector());
-            diagnostics.stream().forEach(languageClient::publishDiagnostics);
+            for (PublishDiagnosticsParams diag : handleErrorCollector(compilationUnit.getErrorCollector())) {
+                languageClient.publishDiagnostics(diag);
+            }
         }
 
         return null;
     }
 
-    private Set<PublishDiagnosticsParams> handleErrorCollector(ErrorCollector collector) {
-        Map<URI, List<Diagnostic>> diagnosticsByFile = new HashMap<>();
+    private Iterable<PublishDiagnosticsParams> handleErrorCollector(ErrorCollector collector) {
+        Map<URI, PublishDiagnosticsParams> diagnosticsByFile = new Object2ObjectOpenHashMap<>();
 
         List<? extends Message> errors = collector.getErrors();
         if (errors != null) {
-            errors.stream().filter((Object message) -> message instanceof SyntaxErrorMessage)
-                    .forEach((Object message) -> {
-                        SyntaxErrorMessage syntaxErrorMessage = (SyntaxErrorMessage) message;
-                        SyntaxException cause = syntaxErrorMessage.getCause();
-                        Range range = GroovyLanguageServerUtils.syntaxExceptionToRange(cause);
-                        Diagnostic diagnostic = new Diagnostic();
-                        diagnostic.setRange(range);
-                        diagnostic.setSeverity(DiagnosticSeverity.Error);
-                        diagnostic.setMessage(cause.getMessage());
-                        URI uri = Paths.get(cause.getSourceLocator()).toUri();
-                        diagnosticsByFile.computeIfAbsent(uri, (key) -> new ArrayList<>()).add(diagnostic);
-                    });
+            for (Message m : errors) {
+                if (m instanceof SyntaxErrorMessage sem) {
+                    SyntaxException cause = sem.getCause();
+                    if (!GroovyLSUtils.hasValidRange(cause)) continue;
+                    Range range = GroovyLSUtils.syntaxExceptionToRange(cause);
+                    Diagnostic diagnostic = new Diagnostic();
+                    diagnostic.setRange(range);
+                    diagnostic.setMessage(cause.getOriginalMessage());
+                    diagnostic.setSeverity(DiagnosticSeverity.Error); // TODO source location
+                    URI uri = Paths.get(cause.getSourceLocator()).toUri();
+                    diagnosticsByFile.computeIfAbsent(uri, (key) -> new PublishDiagnosticsParams(key.toString(),
+                                                                                                 new ArrayList<>())).getDiagnostics().add(
+                            diagnostic);
+                }
+            }
         }
-
-        Set<PublishDiagnosticsParams> result = diagnosticsByFile.entrySet().stream()
-                .map(entry -> new PublishDiagnosticsParams(entry.getKey().toString(), entry.getValue()))
-                .collect(Collectors.toSet());
 
         if (prevDiagnosticsByFile != null) {
             for (URI key : prevDiagnosticsByFile.keySet()) {
                 if (!diagnosticsByFile.containsKey(key)) {
                     // send an empty list of diagnostics for files that had
                     // diagnostics previously or they won't be cleared
-                    result.add(new PublishDiagnosticsParams(key.toString(), new ArrayList<>()));
+                    diagnosticsByFile.put(key, new PublishDiagnosticsParams(key.toString(), Collections.emptyList()));
                 }
             }
         }
         prevDiagnosticsByFile = diagnosticsByFile;
-        return result;
+        return diagnosticsByFile.values();
     }
 }

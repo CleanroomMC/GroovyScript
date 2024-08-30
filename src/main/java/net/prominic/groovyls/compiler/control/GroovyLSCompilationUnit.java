@@ -39,13 +39,12 @@ import java.util.stream.Collectors;
 public class GroovyLSCompilationUnit extends CompilationUnit {
 
     private final ILanguageServerContext languageServerContext;
-    @Nullable
-    private ASTNodeVisitor visitor;
+    @Nullable private ASTNodeVisitor visitor;
 
-    @Nullable
-    private URI previousContext;
+    @Nullable private URI previousContext;
 
-    public GroovyLSCompilationUnit(CompilerConfiguration config, CodeSource security, GroovyClassLoader loader, ILanguageServerContext languageServerContext) {
+    public GroovyLSCompilationUnit(CompilerConfiguration config, CodeSource security, GroovyClassLoader loader,
+                                   ILanguageServerContext languageServerContext) {
         super(config, security, loader);
         this.languageServerContext = languageServerContext;
         this.errorCollector = new LanguageServerErrorCollector(config);
@@ -58,8 +57,8 @@ public class GroovyLSCompilationUnit extends CompilationUnit {
     public void removeSources(Collection<SourceUnit> sourceUnitsToRemove) {
         for (SourceUnit sourceUnit : sourceUnitsToRemove) {
             if (sourceUnit.getAST() != null) {
-                List<String> sourceUnitClassNames = sourceUnit.getAST().getClasses().stream()
-                        .map(classNode -> classNode.getName()).collect(Collectors.toList());
+                List<String> sourceUnitClassNames = sourceUnit.getAST().getClasses().stream().map(classNode -> classNode.getName()).collect(
+                        Collectors.toList());
                 final List<GroovyClass> generatedClasses = getClasses();
                 generatedClasses.removeIf(groovyClass -> sourceUnitClassNames.contains(groovyClass.getName()));
             }

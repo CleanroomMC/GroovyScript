@@ -8,7 +8,7 @@ import org.eclipse.lsp4j.*;
 public class CompletionItemFactory {
 
     public static CompletionItem createCompletion(ASTNode node, String label, ASTContext astContext) {
-        var completionItem = createCompletion(GroovyLanguageServerUtils.astNodeToCompletionItemKind(node), label);
+        var completionItem = createCompletion(GroovyLSUtils.astNodeToCompletionItemKind(node), label);
 
         if (node instanceof AnnotatedNode annotatedNode) {
             var documentation = astContext.getLanguageServerContext().getDocumentationFactory().getDocumentation(annotatedNode, astContext);

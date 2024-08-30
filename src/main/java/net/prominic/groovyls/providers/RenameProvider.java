@@ -19,6 +19,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
+import net.prominic.groovyls.compiler.ast.ASTContext;
+import net.prominic.groovyls.compiler.util.GroovyASTUtils;
+import net.prominic.groovyls.util.FileContentsTracker;
+import net.prominic.groovyls.util.GroovyLSUtils;
+import net.prominic.lsp.utils.Ranges;
+import org.codehaus.groovy.ast.ASTNode;
+import org.codehaus.groovy.ast.ClassNode;
+import org.codehaus.groovy.ast.MethodNode;
+import org.codehaus.groovy.ast.PropertyNode;
+import org.codehaus.groovy.ast.expr.ConstantExpression;
+import org.codehaus.groovy.ast.expr.VariableExpression;
+import org.eclipse.lsp4j.*;
+import org.eclipse.lsp4j.jsonrpc.messages.Either;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,44 +42,16 @@ import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.prominic.groovyls.compiler.ast.ASTContext;
-import net.prominic.groovyls.util.URIUtils;
-import org.codehaus.groovy.ast.ASTNode;
-import org.codehaus.groovy.ast.ClassNode;
-import org.codehaus.groovy.ast.MethodNode;
-import org.codehaus.groovy.ast.PropertyNode;
-import org.codehaus.groovy.ast.expr.ConstantExpression;
-import org.codehaus.groovy.ast.expr.VariableExpression;
-import org.eclipse.lsp4j.Position;
-import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.RenameFile;
-import org.eclipse.lsp4j.RenameParams;
-import org.eclipse.lsp4j.ResourceOperation;
-import org.eclipse.lsp4j.TextDocumentEdit;
-import org.eclipse.lsp4j.TextDocumentIdentifier;
-import org.eclipse.lsp4j.TextEdit;
-import org.eclipse.lsp4j.VersionedTextDocumentIdentifier;
-import org.eclipse.lsp4j.WorkspaceEdit;
-import org.eclipse.lsp4j.jsonrpc.messages.Either;
+public class RenameProvider extends DocProvider {
 
-import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
-import net.prominic.groovyls.compiler.util.GroovyASTUtils;
-import net.prominic.groovyls.util.FileContentsTracker;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
-import net.prominic.lsp.utils.Ranges;
+    private final FileContentsTracker files;
 
-public class RenameProvider {
-
-    private final ASTContext astContext;
-    private FileContentsTracker files;
-
-    public RenameProvider(ASTContext astContext, FileContentsTracker files) {
-        this.astContext = astContext;
+    public RenameProvider(URI doc, ASTContext astContext, FileContentsTracker files) {
+        super(doc, astContext);
         this.files = files;
     }
 
     public CompletableFuture<WorkspaceEdit> provideRename(RenameParams renameParams) {
-        TextDocumentIdentifier textDocument = renameParams.getTextDocument();
         Position position = renameParams.getPosition();
         String newName = renameParams.getNewName();
 
@@ -73,7 +59,7 @@ public class RenameProvider {
         List<Either<TextDocumentEdit, ResourceOperation>> documentChanges = new ArrayList<>();
         WorkspaceEdit workspaceEdit = new WorkspaceEdit(documentChanges);
 
-        URI documentURI = URIUtils.toUri(textDocument.getUri());
+        URI documentURI = doc;
         ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(documentURI, position.getLine(), position.getCharacter());
         if (offsetNode == null) {
             return CompletableFuture.completedFuture(workspaceEdit);
@@ -91,7 +77,7 @@ public class RenameProvider {
                 // can't find the text? skip it
                 return;
             }
-            Range range = GroovyLanguageServerUtils.astNodeToRange(node);
+            Range range = GroovyLSUtils.astNodeToRange(node);
             if (range == null) {
                 // can't find the range? skip it
                 return;
@@ -102,8 +88,7 @@ public class RenameProvider {
             end.setCharacter(start.getCharacter() + contents.length());
 
             TextEdit textEdit = null;
-            if (node instanceof ClassNode) {
-                ClassNode classNode = (ClassNode) node;
+            if (node instanceof ClassNode classNode) {
                 textEdit = createTextEditToRenameClassNode(classNode, newName, contents, range);
                 if (textEdit != null && astContext.getVisitor().getParent(classNode) == null) {
                     String newURI = uri.toString();
@@ -116,11 +101,9 @@ public class RenameProvider {
                     renameFile.setNewUri(newURI);
                     documentChanges.add(Either.forRight(renameFile));
                 }
-            } else if (node instanceof MethodNode) {
-                MethodNode methodNode = (MethodNode) node;
+            } else if (node instanceof MethodNode methodNode) {
                 textEdit = createTextEditToRenameMethodNode(methodNode, newName, contents, range);
-            } else if (node instanceof PropertyNode) {
-                PropertyNode propNode = (PropertyNode) node;
+            } else if (node instanceof PropertyNode propNode) {
                 textEdit = createTextEditToRenamePropertyNode(propNode, newName, contents, range);
             } else if (node instanceof ConstantExpression || node instanceof VariableExpression) {
                 textEdit = new TextEdit();
@@ -150,7 +133,7 @@ public class RenameProvider {
     }
 
     private String getPartialNodeText(URI uri, ASTNode node) {
-        Range range = GroovyLanguageServerUtils.astNodeToRange(node);
+        Range range = GroovyLSUtils.astNodeToRange(node);
         if (range == null) {
             return null;
         }
@@ -166,7 +149,7 @@ public class RenameProvider {
         // need to find it manually
         String className = classNode.getNameWithoutPackage();
         int dollarIndex = className.indexOf('$');
-        if (dollarIndex != 01) {
+        if (dollarIndex != 1) {
             // it's an inner class, so remove the outer name prefix
             className = className.substring(dollarIndex + 1);
         }
@@ -211,8 +194,7 @@ public class RenameProvider {
         return textEdit;
     }
 
-    private TextEdit createTextEditToRenamePropertyNode(PropertyNode propNode, String newName, String text,
-                                                        Range range) {
+    private TextEdit createTextEditToRenamePropertyNode(PropertyNode propNode, String newName, String text, Range range) {
         // the AST doesn't give us access to the name location, so we
         // need to find it manually
         Pattern propPattern = Pattern.compile("\\b" + propNode.getName() + "\\b");

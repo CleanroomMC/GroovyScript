@@ -60,7 +60,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     private final File cacheRoot;
     private final File scriptRoot;
-    private final ImportCustomizer importCustomizer = new ImportCustomizer();
     private final Map<List<StackTraceElement>, AtomicInteger> storedExceptions;
     private final Map<String, CompiledScript> index = new Object2ObjectOpenHashMap<>();
 
@@ -74,9 +73,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
         registerBinding("Log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
 
-        this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
-        registerStaticImports(GroovyHelper.class, MathHelper.class);
-        this.importCustomizer.addImports("net.minecraft.world.World",
+        getImportCustomizer().addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
+        getImportCustomizer().addImports("net.minecraft.world.World",
                                          "net.minecraft.block.state.IBlockState",
                                          "net.minecraft.block.Block",
                                          "net.minecraft.block.SoundType",
@@ -327,7 +325,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
     protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
         config.addCompilationCustomizers(new GroovyScriptCompiler());
         config.addCompilationCustomizers(new GroovyScriptEarlyCompiler());
-        config.addCompilationCustomizers(this.importCustomizer);
     }
 
     @Override
@@ -376,10 +373,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @Nullable
     public LoadStage getCurrentLoader() {
         return currentLoadStage;
-    }
-
-    public ImportCustomizer getImportCustomizer() {
-        return importCustomizer;
     }
 
     public File getScriptRoot() {

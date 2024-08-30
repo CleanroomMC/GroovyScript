@@ -19,13 +19,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
-import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 import net.prominic.groovyls.compiler.ast.ASTContext;
-import net.prominic.groovyls.util.URIUtils;
+import net.prominic.groovyls.compiler.util.GroovyASTUtils;
+import net.prominic.groovyls.util.GroovyLSUtils;
 import org.codehaus.groovy.ast.ASTNode;
 import org.eclipse.lsp4j.Location;
 import org.eclipse.lsp4j.LocationLink;
@@ -33,22 +29,20 @@ import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
-import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
-import net.prominic.groovyls.compiler.util.GroovyASTUtils;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-public class TypeDefinitionProvider {
+public class TypeDefinitionProvider extends DocProvider {
 
-    private final ASTContext astContext;
-
-    public TypeDefinitionProvider(ASTContext astContext) {
-        this.astContext = astContext;
+    public TypeDefinitionProvider(URI doc, ASTContext astContext) {
+        super(doc, astContext);
     }
 
     public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> provideTypeDefinition(
             TextDocumentIdentifier textDocument, Position position) {
-        URI uri = URIUtils.toUri(textDocument.getUri());
-        ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
+        ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(doc, position.getLine(), position.getCharacter());
         if (offsetNode == null) {
             return CompletableFuture.completedFuture(Either.forLeft(Collections.emptyList()));
         }
@@ -60,10 +54,10 @@ public class TypeDefinitionProvider {
 
         URI definitionURI = astContext.getVisitor().getURI(definitionNode);
         if (definitionURI == null) {
-            definitionURI = uri;
+            definitionURI = doc;
         }
 
-        Location location = GroovyLanguageServerUtils.astNodeToLocation(definitionNode, definitionURI);
+        Location location = GroovyLSUtils.astNodeToLocation(definitionNode, definitionURI);
         if (location == null) {
             return CompletableFuture.completedFuture(Either.forLeft(Collections.emptyList()));
         }
