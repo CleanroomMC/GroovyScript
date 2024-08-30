@@ -1122,6 +1122,62 @@ groovyscript.wiki.immersivepetroleum.reservoir.dimensionBlacklist.value=Sets if 
 groovyscript.wiki.immersivepetroleum.reservoir.removeByName=Removes the Reservoir entry with the given name
 
 
+# Immersive Technology
+groovyscript.wiki.immersivetech.boiler.title=Boiler
+groovyscript.wiki.immersivetech.boiler.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure when the multiblock has had its heat value increased enough by fuel.
+groovyscript.wiki.immersivetech.boiler.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.boiler_fuel.title=Boiler Fuel
+groovyscript.wiki.immersivetech.boiler_fuel.description=Converts an input fluidstack into heat for the Boiler multiblock structure over a given amount of time.
+groovyscript.wiki.immersivetech.boiler_fuel.heat.value=Sets the total heat gained by the Boiler
+groovyscript.wiki.immersivetech.boiler_fuel.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.cooling_tower.title=Cooling Tower
+groovyscript.wiki.immersivetech.cooling_tower.description=Converts up to two input fluidstacks into up to three output fluidstacks after a given amount of time in a multiblock structure.
+groovyscript.wiki.immersivetech.cooling_tower.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.distiller.title=Distiller
+groovyscript.wiki.immersivetech.distiller.description=Converts an input fluidstack into an output fluidstack and has a chance to output an itemstack after a given amount of time in a multiblock structure.
+groovyscript.wiki.immersivetech.distiller.time.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.immersivetech.distiller.chance.value=Sets the chance the output itemstack with be output
+groovyscript.wiki.immersivetech.distiller.energy.value=Sets the energy used in total IF consumed by the recipe
+
+groovyscript.wiki.immersivetech.electrolytic_crucible_battery.title=Electrolytic Crucible Battery
+groovyscript.wiki.immersivetech.electrolytic_crucible_battery.description=Converts an input fluidstack into up to three output fluidstacks after a given amount of time and energy in a multiblock structure.
+groovyscript.wiki.immersivetech.electrolytic_crucible_battery.time.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.immersivetech.electrolytic_crucible_battery.energy.value=Sets the energy used in total IF consumed by the recipe
+
+groovyscript.wiki.immersivetech.gas_turbine.title=Gas Turbine
+groovyscript.wiki.immersivetech.gas_turbine.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure, producing power for an adjacent Alternator multiblock.
+groovyscript.wiki.immersivetech.gas_turbine.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.heat_exchanger.title=Heat Exchanger
+groovyscript.wiki.immersivetech.heat_exchanger.description=Converts up to two input fluidstacks into up to two output fluidstacks after a given amount of time in a multiblock structure.
+groovyscript.wiki.immersivetech.heat_exchanger.time.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.immersivetech.heat_exchanger.energy.value=Sets the energy used in total IF consumed by the recipe
+
+groovyscript.wiki.immersivetech.high_pressure_steam_turbine.title=High-Pressure Steam Turbine
+groovyscript.wiki.immersivetech.high_pressure_steam_turbine.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure, producing power for an adjacent Alternator multiblock.
+groovyscript.wiki.immersivetech.high_pressure_steam_turbine.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.melting_crucible.title=Melting Crucible
+groovyscript.wiki.immersivetech.melting_crucible.description=Converts an input itemstack into an output fluidstack after a given amount of time and energy in a multiblock structure.
+groovyscript.wiki.immersivetech.melting_crucible.time.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.immersivetech.melting_crucible.energy.value=Sets the energy used in total IF consumed by the recipe
+
+groovyscript.wiki.immersivetech.radiator.title=Radiator
+groovyscript.wiki.immersivetech.radiator.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure.
+groovyscript.wiki.immersivetech.radiator.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.solar_tower.title=Solar Tower
+groovyscript.wiki.immersivetech.solar_tower.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure, with the time being able to be sped up via Solar Reflector multiblocks.
+groovyscript.wiki.immersivetech.solar_tower.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.steam_turbine.title=Steam Turbine
+groovyscript.wiki.immersivetech.steam_turbine.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure, producing power for an adjacent Alternator multiblock.
+groovyscript.wiki.immersivetech.steam_turbine.time.value=Sets the time in ticks the recipe takes to process
+
+
 # Industrial Foregoing
 groovyscript.wiki.industrialforegoing.bio_reactor.title=Bioreactor
 groovyscript.wiki.industrialforegoing.bio_reactor.description=Converts an input item into Biofuel, with the amount of Biofuel generated being based on the number of concurrent conversion processes inside the Bioreactor.
