@@ -150,8 +150,13 @@ public class Registry {
 
     private String documentMethodDescriptionType(MethodDescription.Type type) {
         StringBuilder out = new StringBuilder();
-        for (Method method : methods.get(type)) out.append(examples(method));
-        if (!methods.get(type).isEmpty()) out.append("\n");
+        var hasExamples = false;
+        for (var entry : methods.get(type)) {
+            var examples = examples(entry);
+            out.append(examples);
+            if (!hasExamples && !examples.isEmpty()) hasExamples = true;
+        }
+        if (hasExamples) out.append("\n");
         return out.toString();
     }
 
