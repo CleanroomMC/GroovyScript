@@ -11,6 +11,7 @@ import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,6 +25,7 @@ public class Registry {
     private final String reference;
     private final Class<?> registryClass;
     private final RegistryDescription description;
+    private final Map<String, String> types;
     private final List<Method> recipeBuilderMethods;
     private final EnumMap<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
     private final List<String> imports;
@@ -35,6 +37,7 @@ public class Registry {
         this.reference = String.format("mods.%s.%s", mod.getModId(), registry.getName());
         this.registryClass = registry.getClass();
         this.description = registryClass.getAnnotation(RegistryDescription.class);
+        this.types = generateTypes(registryClass);
 
         List<Method> recipeBuilderMethods = new ArrayList<>();
         Map<MethodDescription.Type, List<Method>> methods = new EnumMap<>(MethodDescription.Type.class);
@@ -61,6 +64,23 @@ public class Registry {
         this.recipeBuilderMethods = sortGrSRecipeBuilderDescriptionMethods(recipeBuilderMethods);
         methods.forEach((k, v) -> this.methods.put(k, sortGrSMethodDescriptionMethods(v)));
         this.imports = imports;
+    }
+
+    /**
+     * @return gathers the generic information and pairs the generic type symbol with the type being used as the generic.
+     */
+    private static Map<String, String> generateTypes(Class<?> registryClass) {
+        var types = new HashMap<String, String>();
+        if (registryClass.getGenericSuperclass() instanceof ParameterizedType parameterizedType) {
+            if (parameterizedType.getRawType() instanceof Class<?> typeClass) {
+                var parameters = typeClass.getTypeParameters();
+                var args = parameterizedType.getActualTypeArguments();
+                for (int i = 0; i < parameters.length && i < args.length; i++) {
+                    types.put(parameters[i].toString(), args[i].getTypeName());
+                }
+            }
+        }
+        return types;
     }
 
     private static List<Method> sortGrSRecipeBuilderDescriptionMethods(List<Method> methods) {
@@ -298,7 +318,7 @@ public class Registry {
         return String.format("- %s:\n\n%s",
                              Documentation.translate(lang),
                              new CodeBlockBuilder()
-                                     .line(methodExample(method, Exporter.simpleSignature(method)))
+                                     .line(methodExample(method, Exporter.simpleSignature(method, types)))
                                      .indentation(1)
                                      .toString());
     }
