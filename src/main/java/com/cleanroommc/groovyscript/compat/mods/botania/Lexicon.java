@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.botania.recipe.PageChange;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -33,13 +34,11 @@ public class Lexicon {
             category = RegistryDescription.Category.ENTRIES,
             priority = 2100
     )
-    public static class Category extends VirtualizedRegistry<LexiconCategory> {
+    public static class Category extends StandardListRegistry<LexiconCategory> {
 
         @Override
-        @GroovyBlacklist
-        public void onReload() {
-            removeScripted().forEach(BotaniaAPI.getAllCategories()::remove);
-            BotaniaAPI.getAllCategories().addAll(restoreFromBackup());
+        public Collection<LexiconCategory> getRecipes() {
+            return BotaniaAPI.getAllCategories();
         }
 
         @MethodDescription(description = "groovyscript.wiki.botania.category.add0", type = MethodDescription.Type.ADDITION, example = @Example("'first', resource('minecraft:textures/items/clay_ball.png'), 100"))
@@ -54,19 +53,6 @@ public class Lexicon {
         @MethodDescription(description = "groovyscript.wiki.botania.category.add1", type = MethodDescription.Type.ADDITION, example = @Example("'test', resource('minecraft:textures/items/apple.png')"))
         public LexiconCategory add(String name, ResourceLocation icon) {
             return add(name, icon, 5);
-        }
-
-        public void add(LexiconCategory category) {
-            if (category == null) return;
-            addScripted(category);
-            BotaniaAPI.addCategory(category);
-        }
-
-        public boolean remove(LexiconCategory category) {
-            if (category == null) return false;
-            addBackup(category);
-            BotaniaAPI.getAllCategories().remove(category);
-            return true;
         }
 
         @MethodDescription(description = "groovyscript.wiki.botania.category.removeCategory", example = @Example("'botania.category.alfhomancy'"))
@@ -88,13 +74,7 @@ public class Lexicon {
 
         @MethodDescription(description = "groovyscript.wiki.streamRecipes", type = MethodDescription.Type.QUERY)
         public SimpleObjectStream<LexiconCategory> streamCategories() {
-            return new SimpleObjectStream<>(BotaniaAPI.getAllCategories()).setRemover(this::remove);
-        }
-
-        @MethodDescription(priority = 2000, example = @Example(commented = true))
-        public void removeAll() {
-            BotaniaAPI.getAllCategories().forEach(this::addBackup);
-            BotaniaAPI.getAllCategories().clear();
+            return streamRecipes();
         }
 
     }

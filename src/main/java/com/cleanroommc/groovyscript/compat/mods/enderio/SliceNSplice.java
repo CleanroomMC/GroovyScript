@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -9,26 +8,30 @@ import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.ManyToOneRecipe;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeUtils;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import crazypants.enderio.base.recipe.*;
-import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
 import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 @RegistryDescription
-public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
+public class SliceNSplice extends StandardListRegistry<IManyToOneRecipe> {
 
     public SliceNSplice() {
         super(Alias.generateOfClassAnd(SliceNSplice.class, "SliceAndSplice"));
+    }
+
+    @Override
+    public Collection<IManyToOneRecipe> getRecipes() {
+        return SliceAndSpliceRecipeManager.getInstance().getRecipes();
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), null, item('minecraft:clay')).input(null, item('minecraft:clay'), null).output(item('minecraft:gold_ingot')).energy(1000).xp(5)"))
@@ -45,22 +48,10 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
                 .register();
     }
 
-    public void add(IManyToOneRecipe recipe) {
-        SliceAndSpliceRecipeManager.getInstance().addRecipe(recipe);
-        addScripted(recipe);
-    }
-
     public void add(Recipe recipe) {
         BasicManyToOneRecipe r = new BasicManyToOneRecipe(recipe);
         SliceAndSpliceRecipeManager.getInstance().addRecipe(r);
         addScripted(r);
-    }
-
-    public boolean remove(IManyToOneRecipe recipe) {
-        if (recipe == null) return false;
-        SagMillRecipeManager.getInstance().getRecipes().remove((Recipe) recipe);
-        addBackup(recipe);
-        return true;
     }
 
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('enderio:item_material:40')"))
@@ -89,25 +80,6 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         } else {
             GroovyLog.get().error("No EnderIO Slice'n'Splice recipe found for " + input);
         }
-    }
-
-    @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(SliceAndSpliceRecipeManager.getInstance().getRecipes()::remove);
-        restoreFromBackup().forEach(SliceAndSpliceRecipeManager.getInstance().getRecipes()::add);
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IManyToOneRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(SliceAndSpliceRecipeManager.getInstance().getRecipes())
-                .setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        SliceAndSpliceRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
-        SliceAndSpliceRecipeManager.getInstance().getRecipes().clear();
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})

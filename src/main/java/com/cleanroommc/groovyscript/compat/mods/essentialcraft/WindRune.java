@@ -4,16 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import essentialcraft.api.WindImbueRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
+public class WindRune extends StandardListRegistry<WindImbueRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).espe(500)"))
     public WindRune.RecipeBuilder recipeBuilder() {
@@ -21,9 +22,8 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(WindImbueRecipe::removeRecipe);
-        WindImbueRecipe.RECIPES.addAll(restoreFromBackup());
+    public Collection<WindImbueRecipe> getRecipes() {
+        return WindImbueRecipe.RECIPES;
     }
 
     @MethodDescription(example = @Example("item('minecraft:diamond')"))
@@ -47,20 +47,6 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
                 return true;
             }
             return false;
-        });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        WindImbueRecipe.RECIPES.forEach(this::addBackup);
-        WindImbueRecipe.RECIPES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<WindImbueRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(WindImbueRecipe.RECIPES).setRemover(r -> {
-            addBackup(r);
-            return WindImbueRecipe.RECIPES.remove(r);
         });
     }
 
