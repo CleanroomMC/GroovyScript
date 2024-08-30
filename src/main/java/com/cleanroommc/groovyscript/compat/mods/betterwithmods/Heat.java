@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
         admonition = @Admonition("groovyscript.wiki.betterwithmods.heat.note0")
 )
 public class Heat extends StandardListRegistry<BWMHeatRegistry.HeatSource> {
