@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls;
 
+import com.cleanroommc.groovyscript.sandbox.FileUtil;
 import net.prominic.groovyls.compiler.ILanguageServerContext;
 import net.prominic.groovyls.config.ICompilationUnitFactory;
 import org.eclipse.lsp4j.*;
@@ -42,7 +43,7 @@ public class GroovyLanguageServer implements LanguageServer, LanguageClientAware
     public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
         String rootUriString = params.getRootUri();
         if (rootUriString != null) {
-            URI uri = URI.create(params.getRootUri());
+            URI uri = URI.create(FileUtil.fixUriString(rootUriString));
             Path workspaceRoot = Paths.get(uri);
             groovyServices.setWorkspaceRoot(workspaceRoot);
         }

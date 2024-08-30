@@ -23,8 +23,6 @@ import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.ErrorCollector;
 
-import java.io.Serial;
-
 /**
  * A special ErrorCollector for language servers that can clear all errors and does not throw exceptions.
  */

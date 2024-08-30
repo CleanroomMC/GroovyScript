@@ -15,9 +15,10 @@ public class GroovyScriptLanguageServerContext implements ILanguageServerContext
 
     private final FileContentsTracker fileContentsTracker = new FileContentsTracker();
 
-    private ScanResult scanResult = new ClassGraph()
+    private final ScanResult scanResult = new ClassGraph()
             .enableClassInfo()
             .enableMethodInfo()
+            .enableFieldInfo()
             .enableSystemJarsAndModules()
             .overrideClassLoaders(Launch.classLoader)
             .acceptPaths("*")

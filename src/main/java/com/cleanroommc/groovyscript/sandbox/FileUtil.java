@@ -1,31 +1,53 @@
 package com.cleanroommc.groovyscript.sandbox;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class FileUtil {
 
-    private static final Pattern p = Pattern.compile("^(file:/*)?([a-z])(:/.*)$");
+    private static final Char2ObjectOpenHashMap<String> encodings = new Char2ObjectOpenHashMap<>();
+
+    static {
+        encodings.put(' ', "%20");
+        encodings.put('!', "%21");
+        encodings.put('"', "%22");
+        encodings.put('#', "%23");
+        encodings.put('$', "%24");
+        encodings.put('%', "%25");
+        encodings.put('&', "%26");
+        encodings.put('\'', "%27");
+        encodings.put('(', "%28");
+        encodings.put(')', "%29");
+        encodings.put('+', "%2B");
+        encodings.put(',', "%2C");
+        //encodings.put(':', "%3F"); // do not encode :
+        encodings.put(';', "%3B");
+        encodings.put('<', "%3C");
+        encodings.put('=', "%3D");
+        encodings.put('>', "%3E");
+        encodings.put('?', "%3F");
+        encodings.put('@', "%40");
+        encodings.put('[', "%5B");
+        encodings.put(']', "%5D");
+        encodings.put('{', "%7B");
+        encodings.put('|', "%7C");
+        encodings.put('}', "%7D");
+        if (File.separatorChar != '/') {
+            encodings.put('\\', "/");
+        }
+    }
 
     public static String relativize(String rootPath, String longerThanRootPath) {
-        longerThanRootPath = fixUri(longerThanRootPath, true);
-        rootPath = fixPath(rootPath);
-
-        if (File.separatorChar != '/') {
-            longerThanRootPath = longerThanRootPath.replace('/', File.separatorChar);
-        }
+        longerThanRootPath = encodeURI(fixPath(decodeURI(longerThanRootPath)));
+        rootPath = encodeURI(rootPath);
         return relativizeInternal(rootPath, longerThanRootPath);
     }
 
@@ -35,39 +57,6 @@ public class FileUtil {
             throw new IllegalArgumentException("The path '" + longerThanRootPath + "' does not contain the root path '" + rootPath + "'");
         }
         return longerThanRootPath.substring(index + rootPath.length() + 1);
-    }
-
-    public static URI fixUri(URI uri) {
-        return fixUri(uri.toString());
-    }
-
-    public static URI fixUri(String uri) {
-        return URI.create(fixUri(uri, true));
-    }
-
-    public static String fixUri(String uri, boolean reEncode) {
-        try {
-            String s = uri, uri1;
-            boolean decoded = false;
-            boolean c;
-            do {
-                uri1 = s;
-                s = URLDecoder.decode(uri1, StandardCharsets.UTF_8.displayName());
-                c = !uri1.equals(s); // something was decoded
-                decoded |= c;
-            } while (c); // try to decode again to remove any possible nested decodings
-            s = fixPath(s);
-            if (decoded && reEncode) s = URLEncoder.encode(s, StandardCharsets.UTF_8.displayName());
-            return s;
-        } catch (UnsupportedEncodingException e) {
-            return uri;
-        }
-    }
-
-    public static String fixPath(String uri) {
-        Matcher matcher = p.matcher(uri);
-        if (!matcher.matches()) return uri;
-        return matcher.replaceFirst("$1" + matcher.group(2).toUpperCase(Locale.ENGLISH) + "$3");
     }
 
     public static String getParent(String path) {
@@ -127,5 +116,128 @@ public class FileUtil {
             }
         }
         return b;
+    }
+
+    public static URI fixUri(URI uri) {
+        String scheme = uri.getScheme();
+        return URI.create(scheme + ':' + fixUriString(uri.getRawPath()));
+    }
+
+    public static URI fixUri(String uri) {
+        return URI.create(fixUriString(uri));
+    }
+
+    public static String fixUriString(String uri) {
+        return encodeURI(fixPath(decodeURI(uri)));
+    }
+
+    public static String fixPath(String uri) {
+        int i = 0, s = 0;
+        if (uri.startsWith("file:")) i = 5;
+        while (uri.charAt(i + s) == '/') s++;
+        i += s;
+        char c = uri.charAt(i);
+        if (uri.length() <= i + 1 || !Character.isLowerCase(c)) return uri;
+        int d = 1;
+        if (uri.charAt(i + 1) != ':') {
+            if (uri.length() <= i + 3 || uri.charAt(i + 1) != '%' || uri.charAt(i + 2) != '3' || uri.charAt(i + 3) != 'F') return uri;
+            d = 3;
+        }
+        StringBuilder builder = new StringBuilder();
+        s -= Math.min(s, 3); // max 3 '/' after file:
+        if (i > 0) builder.append(uri, 0, i - s);
+        builder.append(Character.toUpperCase(uri.charAt(i + d - 1)));
+        builder.append(uri, i + d, uri.length());
+        return builder.toString();
+    }
+
+    public static String decodeURI(String s) {
+        Charset charset = StandardCharsets.UTF_8;
+        boolean needToChange = false;
+        int numChars = s.length();
+        StringBuilder sb = new StringBuilder(numChars > 500 ? numChars / 2 : numChars);
+        int i = 0;
+
+        char c;
+        byte[] bytes = null;
+        while (i < numChars) {
+            c = s.charAt(i);
+            switch (c) {
+                case '+':
+                    sb.append(' ');
+                    i++;
+                    needToChange = true;
+                    break;
+                case '%':
+                    /*
+                     * Starting with this instance of %, process all consecutive substrings of the form %xy. Each
+                     * substring %xy will yield a byte. Convert all consecutive  bytes obtained this way to whatever
+                     * character(s) they represent in the provided encoding.
+                     */
+
+                    try {
+
+                        // (numChars-i)/3 is an upper bound for the number
+                        // of remaining bytes
+                        if (bytes == null) bytes = new byte[(numChars - i) / 3];
+                        int pos = 0;
+
+                        while (((i + 2) < numChars) && (c == '%')) {
+                            int v = parseFromHex(s.charAt(i + 1), s.charAt(i + 2));//Integer.parseInt(s, i + 1, i + 3, 16);
+                            if (v < 0) {
+                                throw new IllegalArgumentException(
+                                        "URLDecoder: Illegal hex characters in escape " + "(%) pattern - negative value");
+                            }
+                            bytes[pos++] = (byte) v;
+                            i += 3;
+                            if (i < numChars) c = s.charAt(i);
+                        }
+
+                        // A trailing, incomplete byte encoding such as
+                        // "%x" will cause an exception to be thrown
+
+                        if ((i < numChars) && (c == '%')) {
+                            throw new IllegalArgumentException("URLDecoder: Incomplete trailing escape (%) pattern");
+                        }
+
+                        sb.append(new String(bytes, 0, pos, charset));
+                    } catch (NumberFormatException e) {
+                        throw new IllegalArgumentException("URLDecoder: Illegal hex characters in escape (%) pattern - " + e.getMessage());
+                    }
+                    needToChange = true;
+                    break;
+                default:
+                    if (c == File.separatorChar && File.separatorChar != '/') {
+                        needToChange = true;
+                        c = '/';
+                    }
+                    sb.append(c);
+                    i++;
+                    break;
+            }
+        }
+
+        return (needToChange ? sb.toString() : s);
+    }
+
+    private static int parseFromHex(char c0, char c1) {
+        return Character.digit(c0, 16) * 16 + Character.digit(c1, 16);
+    }
+
+    public static String encodeURI(String s) {
+        if (s == null || s.isEmpty()) return s;
+        boolean needToChange = false;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            String rep = encodings.get(c);
+            if (rep != null) {
+                builder.append(rep);
+                needToChange = true;
+            } else {
+                builder.append(c);
+            }
+        }
+        return needToChange ? builder.toString() : s;
     }
 }
