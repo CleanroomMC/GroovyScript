@@ -17,7 +17,6 @@ mods.immersiveengineering.alloy_kiln.recipeBuilder()
     .register()
 
 
-
 // Arc Furnace:
 // Converts 1 input itemstack with up to 4 additional inputs into an output itemstack and an optional 'slag' itemstack,
 // taking time and using rf power.
@@ -36,7 +35,6 @@ mods.immersiveengineering.arc_furnace.recipeBuilder()
     .register()
 
 
-
 // Blast Furnace:
 // Converts an input itemstack into an output itemstack and an optional 'slag' itemstack, taking time and consuming fuel
 // (based on Blast Furnace Fuels).
@@ -53,7 +51,6 @@ mods.immersiveengineering.blast_furnace.recipeBuilder()
     .register()
 
 
-
 // Blast Furnace Fuel:
 // Allows an item to be used in the Blast Furnace as a fuel for the given number of ticks.
 
@@ -64,7 +61,6 @@ mods.immersiveengineering.blast_furnace_fuel.recipeBuilder()
     .input(item('minecraft:clay'))
     .time(100)
     .register()
-
 
 
 // Blueprint Crafting:
@@ -83,7 +79,6 @@ mods.immersiveengineering.blueprint_crafting.recipeBuilder()
     .register()
 
 
-
 // Bottling Machine:
 // Converts an input itemstack and fluidstack into an output itemstack.
 
@@ -96,7 +91,6 @@ mods.immersiveengineering.bottling_machine.recipeBuilder()
     .fluidInput(fluid('water'))
     .output(item('minecraft:clay'))
     .register()
-
 
 
 // Coke Oven:
@@ -112,7 +106,6 @@ mods.immersiveengineering.coke_oven.recipeBuilder()
     .time(100)
     .creosote(50)
     .register()
-
 
 
 // Crusher:
@@ -135,7 +128,6 @@ mods.immersiveengineering.crusher.recipeBuilder()
     .secondaryOutput(item('minecraft:gold_ingot'), 0.3)
     .energy(100)
     .register()
-
 
 
 // Excavator:
@@ -165,7 +157,6 @@ mods.immersiveengineering.excavator.recipeBuilder()
     .register()
 
 
-
 // Fermenter:
 // Converts an input itemstack into an output fluidstack with an optional output itemstack, consuming power.
 
@@ -179,7 +170,6 @@ mods.immersiveengineering.fermenter.recipeBuilder()
     .fluidOutput(fluid('water'))
     .energy(100)
     .register()
-
 
 
 // Metal Press:
@@ -200,7 +190,6 @@ mods.immersiveengineering.metal_press.recipeBuilder()
     .register()
 
 
-
 // Mixer:
 // Converts any number of input itemstacks and a fluidstack into an output fluidstack, consuming power.
 
@@ -217,7 +206,6 @@ mods.immersiveengineering.mixer.recipeBuilder()
     .register()
 
 
-
 // Refinery:
 // Converts 2 input fluidstacks into an output fluidstack, consuming power.
 
@@ -230,7 +218,6 @@ mods.immersiveengineering.refinery.recipeBuilder()
     .fluidOutput(fluid('lava'))
     .energy(100)
     .register()
-
 
 
 // Squeezer:
@@ -259,6 +246,5 @@ mods.immersiveengineering.squeezer.recipeBuilder()
     .fluidOutput(fluid('water'))
     .energy(100)
     .register()
-
 
 

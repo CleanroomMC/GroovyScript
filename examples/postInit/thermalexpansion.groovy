@@ -268,7 +268,6 @@ mods.thermalexpansion.factorizer.recipeBuilder()
     .register()
 
 
-
 // Aquatic Entangler:
 // Controls what itemstacks can be gained and how likely each is to be obtained.
 

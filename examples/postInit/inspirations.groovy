@@ -22,7 +22,6 @@ mods.inspirations.anvil_smashing.recipeBuilder()
     .register()
 
 
-
 // Cauldron:
 // Converts up to 1 itemstack and up to 1 fluid into up to 1 itemstack or up to 1 fluid, with a boiling boolean and
 // variable amount of fluid consumed or produced.

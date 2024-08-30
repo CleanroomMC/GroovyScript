@@ -60,7 +60,6 @@ mods.thaumcraft.aspect.aspectBuilder()
 // Entity/Block Aspects:
 // Controls what Aspects are attached to entities or items.
 
-
 mods.thaumcraft.aspect_helper.aspectBuilder()
     .object(item('minecraft:stone'))
     .stripAspects()
@@ -81,7 +80,6 @@ mods.thaumcraft.aspect_helper.aspectBuilder()
     .register()
 
 
-
 // Crucible:
 // Combines an item with any number of Aspects to drop an output itemstack, potentially requiring a specific research to be
 // completed.
@@ -95,7 +93,6 @@ mods.thaumcraft.crucible.recipeBuilder()
     .output(item('minecraft:gold_ingot'))
     .aspect(aspect('metallum') * 10)
     .register()
-
 
 
 // Dust Trigger:
@@ -137,7 +134,6 @@ mods.thaumcraft.infusion_crafting.recipeBuilder()
     .input(crystal('ordo'))
     .instability(10)
     .register()
-
 
 
 // Lootbag:
@@ -191,7 +187,6 @@ mods.thaumcraft.smelting_bonus.recipeBuilder()
     .input(ore('stone'))
     .output(item('minecraft:obsidian'))
     .register()
-
 
 
 // Warp:

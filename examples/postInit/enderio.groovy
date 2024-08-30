@@ -61,7 +61,6 @@ mods.enderio.enchanter.recipeBuilder()
     .register()
 
 
-
 // Fluid Coolant:
 // Create a Coolant with a given coolant rate that produces power with a Fuel while in a Combustion Generator.
 
@@ -153,7 +152,6 @@ mods.enderio.slice_n_splice.recipeBuilder()
     .register()
 
 
-
 // Soulbinder:
 // Converts an input itemstack into an output itemstack, requiring one of several entities in soul vials, using energy and
 // giving XP. Must have a unique name. To function properly, the input entities must be allowed in Soul Vials.
@@ -204,7 +202,6 @@ mods.enderio.tank.recipeBuilder()
     .input(item('minecraft:diamond'))
     .fluidOutput(fluid('fire_water') * 8000)
     .register()
-
 
 
 // Vat:
