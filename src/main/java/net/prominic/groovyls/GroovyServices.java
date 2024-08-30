@@ -31,7 +31,7 @@ import net.prominic.groovyls.compiler.control.GroovyLSCompilationUnit;
 import net.prominic.groovyls.config.ICompilationUnitFactory;
 import net.prominic.groovyls.providers.*;
 import net.prominic.groovyls.util.GroovyLSUtils;
-import net.prominic.lsp.utils.Positions;
+import net.prominic.groovyls.util.Positions;
 import org.codehaus.groovy.GroovyBugError;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.control.ErrorCollector;
@@ -358,8 +358,8 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
             for (Message m : errors) {
                 if (m instanceof SyntaxErrorMessage sem) {
                     SyntaxException cause = sem.getCause();
-                    if (!GroovyLSUtils.hasValidRange(cause)) continue;
                     Range range = GroovyLSUtils.syntaxExceptionToRange(cause);
+                    if (range == null) continue;
                     Diagnostic diagnostic = new Diagnostic();
                     diagnostic.setRange(range);
                     diagnostic.setMessage(cause.getOriginalMessage());

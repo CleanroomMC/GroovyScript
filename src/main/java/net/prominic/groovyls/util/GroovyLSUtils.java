@@ -31,46 +31,32 @@ public class GroovyLSUtils {
     /**
      * Converts a Groovy position to a LSP position. May return null if the Groovy line is -1
      */
-    public static Position createGroovyPosition(int groovyLine, int groovyColumn) {
-        if (groovyLine == -1) {
-            return null;
-        }
-        if (groovyColumn == -1) {
-            groovyColumn = 0;
-        }
-        int lspLine = groovyLine;
-        if (lspLine > 0) {
-            lspLine--;
-        }
-        int lspColumn = groovyColumn;
-        if (lspColumn > 0) {
-            lspColumn--;
-        }
-        return new Position(lspLine, lspColumn);
+    public static Position createGroovyPosition(int line, int column) {
+        if (line < 0) return null;
+        if (column < 0) {
+            column = 0;
+        } else if (column > 0) column--;
+        if (line > 0) line--;
+        return new Position(line, column);
     }
 
     public static Range syntaxExceptionToRange(SyntaxException exception) {
-        return new Range(createGroovyPosition(exception.getStartLine(), exception.getStartColumn()),
-                         createGroovyPosition(exception.getEndLine(), exception.getEndColumn()));
+        return rangeOf(exception.getStartLine(), exception.getStartColumn(), exception.getEndLine(), exception.getEndColumn());
     }
 
-    public static boolean hasValidRange(SyntaxException exception) {
-        return exception.getStartLine() >= 0 && exception.getEndLine() >= 0;
+    public static Range rangeOf(int startLine, int startCol, int endLine, int endCol) {
+        Position start = createGroovyPosition(startLine, startCol);
+        if (start == null) return null;
+        Position end = createGroovyPosition(endLine, endCol);
+        if (end == null) end = start;
+        return new Range(start, end);
     }
 
     /**
      * Converts a Groovy AST node to an LSP range. May return null if the node's start line is -1
      */
     public static Range astNodeToRange(ASTNode node) {
-        Position start = createGroovyPosition(node.getLineNumber(), node.getColumnNumber());
-        if (start == null) {
-            return null;
-        }
-        Position end = createGroovyPosition(node.getLastLineNumber(), node.getLastColumnNumber());
-        if (end == null) {
-            end = start;
-        }
-        return new Range(start, end);
+        return rangeOf(node.getLineNumber(), node.getColumnNumber(), node.getLastLineNumber(), node.getLastColumnNumber());
     }
 
     public static CompletionItemKind astNodeToCompletionItemKind(ASTNode node) {

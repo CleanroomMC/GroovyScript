@@ -308,9 +308,9 @@ public class CompletionProvider extends DocProvider {
             String name = method.getName();
             if (!name.startsWith(memberNamePrefix) || existingNames.contains(name)) return null;
             existingNames.add(name);
-            if (method.getDeclaringClass().isResolved() &&
-                    (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) == 0 &&
-                    !GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext).isPresent()) {
+            if ((method.getDeclaringClass().isResolved() &&
+                    (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) == 0) ||
+                    GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext) == null) {
                 return null;
             }
 
@@ -411,7 +411,7 @@ public class CompletionProvider extends DocProvider {
             for (MethodInfo m : info.getMethodInfo()) {
                 if (!m.isStatic() || !m.getName().startsWith(memberNamePrefix) || existingNames.contains(m.getName())) continue;
                 existingNames.add(m.getName());
-                if (!GroovyReflectionUtils.resolveMethodFromMethodInfo(m, astContext).isPresent()) continue;
+                if (GroovyReflectionUtils.resolveMethodFromMethodInfo(m, astContext) == null) continue;
                 var item = CompletionItemFactory.createCompletion(CompletionItemKind.Method, m.getName());
                 item.setLabelDetails(getMethodInfoDetails(m));
                 items.add(item);

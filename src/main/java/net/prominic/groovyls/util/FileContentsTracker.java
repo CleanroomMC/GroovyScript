@@ -20,7 +20,6 @@
 package net.prominic.groovyls.util;
 
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
-import net.prominic.lsp.utils.Positions;
 import org.eclipse.lsp4j.*;
 
 import java.io.BufferedReader;

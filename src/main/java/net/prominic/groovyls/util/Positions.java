@@ -17,7 +17,7 @@
 // No warranty of merchantability or fitness of any kind.
 // Use this software at your own risk.
 ////////////////////////////////////////////////////////////////////////////////
-package net.prominic.lsp.utils;
+package net.prominic.groovyls.util;
 
 import org.eclipse.lsp4j.Position;
 
