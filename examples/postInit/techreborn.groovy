@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: techreborn
 
-println 'mod \'techreborn\' detected, running script'
+log.info 'mod \'techreborn\' detected, running script'
 
 // Alloy Smelter:
 // Converts two itemstack inputs into an itemstack output after a given process time, consuming energy per tick.
