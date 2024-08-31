@@ -6,7 +6,18 @@ import java.lang.annotation.Target;
 import java.util.EnumSet;
 
 /**
- * Used by {@link Property Properties} to determine what are valid values for the {@link Property}.
+ * Used for comparisons by {@link Property Properties} to determine what are valid values for the {@link Property}.
+ * <p>
+ * Fully written out, it uses the array {@link #types()} to store the types being tracked,
+ * and the corresponding element to store what the value being compared against is.
+ * <p>
+ * However, to improve the ease of use, some information can be assumed by default and are thus optional.
+ * <br>If {@link #types()} is empty, elements that do not match the default value will be checked.
+ * <br>If any of {@link #gt()}, {@link #gte()}, {@link #eq()}, {@link #lte()}, {@link #lt()}, {@link #not()}, or {@link #unique()} elements match the default value,
+ * which is {@code 0} for the {@link #gt()}, {@link #gte()}, {@link #eq()}, {@link #lte()}, and {@link #lt()} elements and
+ * an empty string ({@code ""}) for both {@link #not()} and {@link #unique()} elements,
+ * they can also be omitted.
+ * <br>If they are omitted, {@link #types()} will need to contain all relevant {@link Type Types}.
  *
  * @see Property#comp()
  */
