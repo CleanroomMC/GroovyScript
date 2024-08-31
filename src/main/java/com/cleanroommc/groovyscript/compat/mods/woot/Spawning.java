@@ -99,8 +99,8 @@ public class Spawning extends VirtualizedRegistry<Pair<WootMobName, SpawnRecipe>
                 .setRemover(x -> remove(x.getKey()));
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "6")})
-    @Property(property = "fluidInput", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "6")})
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 6))
+    @Property(property = "fluidInput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 6))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ISpawnRecipe> {
 
         @Property(requirement = "groovyscript.wiki.woot.spawning.modifying.required")

@@ -96,11 +96,11 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
         boolean run(TileEntity resonator, int frequency, ItemStack input);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IResonatorRecipe> {
 
-        @Property(valid = @Comp(value = "100", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 100))
         private int energy;
         @Property
         private boolean ownerTag;

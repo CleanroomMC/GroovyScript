@@ -86,7 +86,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
     }
 
     @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay')).fluidInput(fluid('milk'), fluid('lava'))"), requirement = {
-            @Property(property = "fluidInput", valid = @Comp("2")),
+            @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 2)),
             @Property(property = "output")
     })
     public RecipeBuilder recipeBuilderMix() {
@@ -116,7 +116,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).levels(2)"), requirement = {
             @Property(property = "input"),
             @Property(property = "output"),
-            @Property(property = "inputPotion", valid = {@Comp("0"), @Comp("1")}),
+            @Property(property = "inputPotion", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1)),
             @Property(property = "boiling"),
             @Property(property = "levels")
     })
@@ -214,26 +214,25 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("1"), needsOverride = true)
-    @Property(property = "output", valid = @Comp("1"), needsOverride = true)
-    @Property(property = "fluidInput", valid = @Comp("1"), needsOverride = true)
-    @Property(property = "fluidOutput", valid = @Comp("1"), needsOverride = true)
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1), needsOverride = true)
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1), needsOverride = true)
+    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1), needsOverride = true)
+    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1), needsOverride = true)
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICauldronRecipe> {
 
         @Property(needsOverride = true)
         private RecipeType type;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), needsOverride = true)
         private PotionType inputPotion;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), needsOverride = true)
         private PotionType outputPotion;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), needsOverride = true)
         private EnumDyeColor dye;
         @Property(needsOverride = true)
         private Boolean boiling;
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE),
-                           @Comp(value = "`InspirationsRegistry.getCauldronMax()`", type = Comp.Type.LTE)}, needsOverride = true)
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "less than or equal to `InspirationsRegistry.getCauldronMax()`"), needsOverride = true)
         private int levels;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), needsOverride = true)
         private SoundEvent sound;
 
         public static RecipeMatch recipeMatchFromIngredient(IIngredient ingredient, int amount) {

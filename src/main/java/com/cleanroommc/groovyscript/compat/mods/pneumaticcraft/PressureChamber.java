@@ -75,8 +75,8 @@ public class PressureChamber extends VirtualizedRegistry<IPressureChamberRecipe>
         return new SimpleObjectStream<>(PressureChamberRecipe.recipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "Integer.MAX_VALUE")})
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "Integer.MAX_VALUE")})
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = Integer.MAX_VALUE))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = Integer.MAX_VALUE))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IPressureChamberRecipe> {
 
         @Property

@@ -113,8 +113,8 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
         return new SimpleObjectStream<>(BotaniaAPI.elvenTradeRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "99")})
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "99")})
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 99))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 99))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeElvenTrade> {
 
         @Override

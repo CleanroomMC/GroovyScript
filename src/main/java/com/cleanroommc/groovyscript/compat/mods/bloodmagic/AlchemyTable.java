@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
+import WayofTime.bloodmagic.altar.AltarTier;
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeAlchemyTable;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
@@ -127,15 +128,15 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
     }
 
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 6))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeAlchemyTable> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int syphon;
-        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
         private int ticks;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LT, value = "AltarTier.MAXTIERS")})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "less than AltarTier.MAXTIERS"))
         private int minimumTier;
 
         @RecipeBuilderMethodDescription

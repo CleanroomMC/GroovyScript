@@ -90,10 +90,10 @@ public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> {
     }
 
     @Property(property = "name")
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "10")})
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 10))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SummonCreatureRecipe> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private Class<? extends EntityLivingBase> entity;
 
         @RecipeBuilderMethodDescription

@@ -122,13 +122,13 @@ public class Smelter extends VirtualizedRegistry<SmelterRecipe> {
         SmelterManagerAccessor.getRecipeMap().clear();
     }
 
-    @Property(property = "input", valid = @Comp("2"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 2))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SmelterRecipe> {
 
-        @Property(defaultValue = "SmelterManager.DEFAULT_ENERGY", valid = @Comp(value = "0", type = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "SmelterManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT, gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = SmelterManager.DEFAULT_ENERGY;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "100")})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 100))
         private int chance;
 
         @RecipeBuilderMethodDescription

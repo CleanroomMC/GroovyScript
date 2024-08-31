@@ -91,21 +91,21 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
     }
 
 
-    @Property(property = "input", valid = {@Comp(value = "4", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 4, lte = 5))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<EmpowererRecipe> {
 
         @Property
         private IIngredient mainInput;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int energyPerStand;
-        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
         private int time;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
         private float red;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
         private float green;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
         private float blue;
 
         @RecipeBuilderMethodDescription

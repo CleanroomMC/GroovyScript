@@ -116,17 +116,17 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeBloodAltar> {
 
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LT, value = "AltarTier.MAXTIERS")})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "less than AltarTier.MAXTIERS"))
         private int minimumTier;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int syphon;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int consumeRate;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int drainRate;
 
         @RecipeBuilderMethodDescription

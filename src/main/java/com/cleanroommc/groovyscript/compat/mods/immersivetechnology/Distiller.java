@@ -97,16 +97,16 @@ public class Distiller extends VirtualizedRegistry<DistillerRecipe> {
         DistillerRecipe.recipeList.clear();
     }
 
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<DistillerRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private float chance;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int time;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int energy;
 
         @RecipeBuilderMethodDescription

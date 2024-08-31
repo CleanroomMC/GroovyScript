@@ -140,9 +140,9 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExcavatorHandler.MineralMix> {
 
-        @Property(valid = @Comp("chances"))
+        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "exactly chances"))
         private final List<String> ores = new ArrayList<>();
-        @Property(valid = @Comp("ores"))
+        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "exactly ores"))
         private final FloatArrayList chances = new FloatArrayList();
         @Property
         private final List<Integer> dimensions = new ArrayList<>();
@@ -150,7 +150,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         private String name;
         @Property
         private int weight;
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
         private float fail;
         @Property
         private boolean blacklist = true;

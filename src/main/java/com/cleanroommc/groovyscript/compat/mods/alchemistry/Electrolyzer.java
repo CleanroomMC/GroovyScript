@@ -98,13 +98,13 @@ public class Electrolyzer extends VirtualizedRegistry<ElectrolyzerRecipe> {
         ModRecipes.INSTANCE.getElectrolyzerRecipes().clear();
     }
 
-    @Property(property = "input", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "4", type = Comp.Type.LTE)})
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 4))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ElectrolyzerRecipe> {
 
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 2))
         private final IntArrayList chance = new IntArrayList();
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "100", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 100))
         private int consumptionChance;
 
         @RecipeBuilderMethodDescription

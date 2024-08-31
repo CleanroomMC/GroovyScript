@@ -181,9 +181,9 @@ public class Category extends VirtualizedRegistry<String> {
         private final List<Object> catalyst = new ArrayList<>();
         @Property
         private final List<IRecipeWrapper> wrapper = new ArrayList<>();
-        @Property(valid = @Comp(value = "empty", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "empty"))
         private String id;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private Function<IGuiHelper, ? extends IRecipeCategory<? extends IRecipeWrapper>> category;
 
         @RecipeBuilderMethodDescription

@@ -93,8 +93,8 @@ public class Crucible extends VirtualizedRegistry<CookingPotRecipe> {
         BWRegistry.CRUCIBLE.getRecipes().clear();
     }
 
-    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)})
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 9))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 9))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CookingPotRecipe> {
 
         @Property(defaultValue = "1")

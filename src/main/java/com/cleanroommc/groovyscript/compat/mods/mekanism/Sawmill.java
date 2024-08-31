@@ -61,13 +61,13 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         return found;
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SawmillRecipe> {
 
         @Property(defaultValue = "ItemStack.EMPTY")
         private ItemStack extra = ItemStack.EMPTY;
-        @Property(defaultValue = "1.0", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        @Property(defaultValue = "1.0", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
         private double chance = 1.0;
 
         @RecipeBuilderMethodDescription

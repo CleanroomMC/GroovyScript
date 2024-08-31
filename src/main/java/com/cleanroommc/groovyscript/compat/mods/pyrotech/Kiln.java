@@ -66,16 +66,16 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         }
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<KilnPitRecipe> {
 
         @Property
         private final ItemStackList failureOutput = new ItemStackList();
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
         private int burnTime;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private float failureChance;
 
         @RecipeBuilderMethodDescription

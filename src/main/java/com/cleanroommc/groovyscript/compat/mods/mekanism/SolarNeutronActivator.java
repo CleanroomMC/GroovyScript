@@ -44,8 +44,8 @@ public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeut
         return false;
     }
 
-    @Property(property = "gasInput", valid = @Comp("1"))
-    @Property(property = "gasOutput", valid = @Comp("1"))
+    @Property(property = "gasInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "gasOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends GasRecipeBuilder<SolarNeutronRecipe> {
 
         @Override

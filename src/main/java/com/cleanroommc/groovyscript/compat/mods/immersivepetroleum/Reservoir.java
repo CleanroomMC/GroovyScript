@@ -90,7 +90,7 @@ public class Reservoir extends VirtualizedRegistry<Pair<PumpjackHandler.Reservoi
     }
 
 
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<PumpjackHandler.ReservoirType> {
 
         @Property
@@ -101,11 +101,11 @@ public class Reservoir extends VirtualizedRegistry<Pair<PumpjackHandler.Reservoi
         private String name;
         @Property
         private int weight;
-        @Property(valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "maxSize", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 1, unique = "less than or equal to maxSize"))
         private int minSize;
-        @Property(valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "minSize", type = Comp.Type.GTE)})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 1, unique = "greater than or equal to minSize"))
         private int maxSize;
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
         private int replenishRate;
         @Property
         private boolean dimensionBlacklist = true;

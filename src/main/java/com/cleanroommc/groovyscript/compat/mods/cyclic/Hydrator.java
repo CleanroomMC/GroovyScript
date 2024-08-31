@@ -88,11 +88,11 @@ public class Hydrator extends VirtualizedRegistry<RecipeHydrate> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 6))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeHydrate> {
 
-        @Property(defaultValue = "25", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(defaultValue = "25", comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int water = 25;
 
         @RecipeBuilderMethodDescription

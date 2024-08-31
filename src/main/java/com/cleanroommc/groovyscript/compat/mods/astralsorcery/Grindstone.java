@@ -95,13 +95,13 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
         GrindstoneRecipeRegistry.recipes.clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<GrindstoneRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int weight;
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
         private float secondaryChance;
 
         @RecipeBuilderMethodDescription

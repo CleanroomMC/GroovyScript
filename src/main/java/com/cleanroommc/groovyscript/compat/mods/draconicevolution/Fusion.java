@@ -65,15 +65,15 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "54")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 54))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IFusionRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private ItemStack catalyst;
-        @Property(defaultValue = "1000000", valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(defaultValue = "1000000", comp = @Comp(types = Comp.Type.GT, gt = 0))
         private long energy = 1000000;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "3")})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 3))
         private int tier;
 
         @RecipeBuilderMethodDescription

@@ -105,8 +105,8 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         RefineryRecipe.recipeList.clear();
     }
 
-    @Property(property = "fluidInput", valid = @Comp("2"))
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 2))
+    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RefineryRecipe> {
 
         @Property

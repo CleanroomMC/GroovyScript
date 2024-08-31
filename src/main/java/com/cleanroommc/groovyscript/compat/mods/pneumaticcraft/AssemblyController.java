@@ -135,11 +135,11 @@ public class AssemblyController extends VirtualizedRegistry<AssemblyRecipe> {
         LASER
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AssemblyRecipe> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private ItemStack programStack;
 
         @RecipeBuilderMethodDescription(field = "programStack")

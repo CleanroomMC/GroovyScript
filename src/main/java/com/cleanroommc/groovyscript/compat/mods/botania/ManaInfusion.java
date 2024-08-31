@@ -106,11 +106,11 @@ public class ManaInfusion extends VirtualizedRegistry<RecipeManaInfusion> {
         return new SimpleObjectStream<>(BotaniaAPI.manaInfusionRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeManaInfusion> {
 
-        @Property(defaultValue = "100", valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(defaultValue = "100", comp = @Comp(types = Comp.Type.GTE, gte = 1))
         protected int mana = 100;
         @Property
         protected IBlockState catalyst;

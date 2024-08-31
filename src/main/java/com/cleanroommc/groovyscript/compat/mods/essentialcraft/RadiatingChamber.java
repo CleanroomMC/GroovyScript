@@ -51,20 +51,20 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
         });
     }
 
-    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RadiatingChamberRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
         private int time;
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"), defaultValue = "1.0f")
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1), defaultValue = "1.0f")
         private float mruPerTick = 1.0f;
 
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0.0f"), @Comp(type = Comp.Type.LTE, value = "2.0f")})
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 2))
         private float lowerBalance;
 
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0.0f"), @Comp(type = Comp.Type.LTE, value = "2.0f")}, defaultValue = "2.0f")
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 2), defaultValue = "2.0f")
         private float upperBalance = 2.0f;
 
         @RecipeBuilderMethodDescription

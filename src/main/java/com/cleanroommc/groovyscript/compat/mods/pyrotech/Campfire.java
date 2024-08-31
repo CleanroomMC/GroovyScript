@@ -63,12 +63,12 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         }
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<CampfireRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
         private int duration;
 
         @RecipeBuilderMethodDescription

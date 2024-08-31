@@ -91,14 +91,14 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
                 .setRemover(this::backupAndRemove);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp(value = "1", type = Comp.Type.GTE))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.GTE, gte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AtomicReshaperManager.AtomicReshaperRecipe> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE), defaultValue = "Config.atomicReshaperProcessTime")
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1), defaultValue = "Config.atomicReshaperProcessTime")
         private int time = Config.atomicReshaperProcessTime;
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
         private int primordium;
 
         private final List<Integer> outputWeights = new ArrayList<>();

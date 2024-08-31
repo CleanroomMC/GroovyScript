@@ -110,13 +110,13 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
         SliceAndSpliceRecipeManager.getInstance().getRecipes().clear();
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 6))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
 
-        @Property(valid = @Comp(value = "0",type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private float xp;
-        @Property(valid = @Comp(value = "0",type = Comp.Type.GT))
+        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
         private int energy;
 
         @RecipeBuilderMethodDescription

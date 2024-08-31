@@ -72,11 +72,11 @@ public class Energizer extends VirtualizedRegistry<EnergizeRecipe> {
         recipes().clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<EnergizeRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
         private int energy;
 
         @RecipeBuilderMethodDescription

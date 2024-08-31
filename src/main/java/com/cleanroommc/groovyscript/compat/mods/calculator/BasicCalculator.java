@@ -89,8 +89,8 @@ public class BasicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("2"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 2))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
         @Override

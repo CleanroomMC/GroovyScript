@@ -123,14 +123,14 @@ public class Drops extends VirtualizedRegistry<Object> {
                target.getSizeMap().values().containsAll(sizes);
     }
 
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ItemStack> {
 
-        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private WootMobName name;
-        @Property(valid = @Comp("4"))
+        @Property(comp = @Comp(types = Comp.Type.EQ, eq = 4))
         private final List<Integer> chance = new ArrayList<>();
-        @Property(valid = @Comp("4"))
+        @Property(comp = @Comp(types = Comp.Type.EQ, eq = 4))
         private final List<Integer> size = new ArrayList<>();
 
         @RecipeBuilderMethodDescription

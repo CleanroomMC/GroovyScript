@@ -88,7 +88,7 @@ public class Pacifist extends VirtualizedRegistry<PacifistEntry> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<PacifistEntry> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private Class<? extends Entity> entity;
 
         @RecipeBuilderMethodDescription

@@ -107,8 +107,8 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getAlloyRegistry()).setRemover(this::remove);
     }
 
-    @Property(property = "fluidInput", valid = {@Comp(value = "2", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 2, lte = Integer.MAX_VALUE))
+    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<AlloyRecipe> {
 
         @Override

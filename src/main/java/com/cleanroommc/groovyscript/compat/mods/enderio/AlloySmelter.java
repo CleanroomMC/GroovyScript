@@ -173,13 +173,13 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
     }
 
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "3")})
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "energy", valid = @Comp(type = Comp.Type.GT, value = "0"))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 3))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "energy", comp = @Comp(types = Comp.Type.GT, gt = 0))
     @Property(property = "level")
     public static class RecipeBuilder extends EnderIORecipeBuilder<Void> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private float xp;
 
         @RecipeBuilderMethodDescription

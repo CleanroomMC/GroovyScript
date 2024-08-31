@@ -13,7 +13,7 @@ import net.minecraft.item.crafting.IRecipe;
 
 public interface AnvilRecipeBuilder {
 
-    @Property(property = "ingredientMatrix", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "16", type = Comp.Type.LTE)})
+    @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 16))
     class Shaped extends AbstractCraftingRecipeBuilder.AbstractShaped<IRecipe> {
 
         public Shaped() {
@@ -43,7 +43,7 @@ public interface AnvilRecipeBuilder {
         }
     }
 
-    @Property(property = "ingredients", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "16", type = Comp.Type.LTE)})
+    @Property(property = "ingredients", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 16))
     class Shapeless extends AbstractCraftingRecipeBuilder.AbstractShapeless<IRecipe> {
 
         public Shapeless() {

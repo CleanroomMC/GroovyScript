@@ -102,11 +102,11 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         BlastFurnaceRecipe.recipeList.clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlastFurnaceRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int time;
         @Property
         private ItemStack slag;

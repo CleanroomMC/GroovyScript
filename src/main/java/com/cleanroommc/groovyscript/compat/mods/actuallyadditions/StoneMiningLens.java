@@ -80,9 +80,9 @@ public class StoneMiningLens extends VirtualizedRegistry<WeightedOre> {
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<WeightedOre> {
 
-        @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private String ore;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int weight;
 
         @RecipeBuilderMethodDescription

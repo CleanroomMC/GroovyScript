@@ -52,13 +52,13 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
         }
     }
 
-    @Property(property = "input", valid = @Comp(type = Comp.Type.EQ, value = "4"))
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 4))
+    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<BarrelRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
         private int duration;
 
         @RecipeBuilderMethodDescription

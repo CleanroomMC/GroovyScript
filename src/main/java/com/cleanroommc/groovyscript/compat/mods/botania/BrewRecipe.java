@@ -99,10 +99,10 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
         return new SimpleObjectStream<>(BotaniaAPI.brewRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 6))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeBrew> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         protected vazkii.botania.api.brew.Brew brew;
 
         @RecipeBuilderMethodDescription(field = "brew")

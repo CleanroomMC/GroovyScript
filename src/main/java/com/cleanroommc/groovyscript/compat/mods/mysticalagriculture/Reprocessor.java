@@ -91,11 +91,11 @@ public class Reprocessor extends VirtualizedRegistry<ReprocessorRecipe> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ReprocessorRecipe> {
 
-//        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"), defaultValue = "1")
+//        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0), defaultValue = "1")
 //        private int amount = 1;
 //        @Property
 //        private boolean exact;

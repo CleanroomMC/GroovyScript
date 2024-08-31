@@ -118,11 +118,11 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
 
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipePureDaisy> {
 
-        @Property(defaultValue = "RecipePureDaisy.DEFAULT_TIME (150)", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(defaultValue = "RecipePureDaisy.DEFAULT_TIME (150)", comp = @Comp(types = Comp.Type.GTE, gte = 0))
         protected int time = RecipePureDaisy.DEFAULT_TIME;
-        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.NOT, not = "null"))
         protected IBlockState output;
-        @Property(ignoresInheritedMethods = true, requirement = "groovyscript.wiki.botania.pure_daisy.input.required", valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, requirement = "groovyscript.wiki.botania.pure_daisy.input.required", comp = @Comp(types = Comp.Type.NOT, not = "null"))
         protected Object input;
 
         @RecipeBuilderMethodDescription

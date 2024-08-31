@@ -163,8 +163,8 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         BlueprintCraftingRecipe.recipeList.clear();
     }
 
-    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = Integer.MAX_VALUE))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlueprintCraftingRecipe> {
 
         @Property

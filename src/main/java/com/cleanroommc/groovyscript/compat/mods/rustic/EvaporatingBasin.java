@@ -82,8 +82,8 @@ public class EvaporatingBasin extends VirtualizedRegistry<IEvaporatingBasinRecip
         return new SimpleObjectStream<>(Recipes.evaporatingRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IEvaporatingBasinRecipe> {
 
         @Property(defaultValue = "fluidInput amount")

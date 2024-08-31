@@ -113,9 +113,9 @@ public class BottlingMachine extends VirtualizedRegistry<BottlingMachineRecipe> 
         BottlingMachineRecipe.recipeList.clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BottlingMachineRecipe> {
 
         @Override

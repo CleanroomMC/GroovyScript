@@ -68,16 +68,16 @@ public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
         SagMillRecipeManager.getInstance().getBalls().clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<GrindingBall> {
 
-        @Property(defaultValue = "1", valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT, gt = 0))
         private float chance = 1;
-        @Property(defaultValue = "1", valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT, gt = 0))
         private float power = 1;
-        @Property(defaultValue = "1", valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT, gt = 0))
         private float grinding = 1;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
         private int duration;
 
         @RecipeBuilderMethodDescription

@@ -220,11 +220,11 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
         }
 
         @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "name")
-        @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"),
-                                                                                                          @Comp(type = Comp.Type.LTE, value = "5")})
+        @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "input",
+                                                                             comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 5))
         public static class RecipeBuilder extends AbstractRecipeBuilder<SpellBase.SpellRecipe> {
 
-            @com.cleanroommc.groovyscript.api.documentation.annotations.Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+            @com.cleanroommc.groovyscript.api.documentation.annotations.Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
             private SpellBase spell;
 
             public RecipeBuilder() {

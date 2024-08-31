@@ -26,14 +26,14 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         super(name, instance);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
     public class RecipeBuilder extends AbstractRecipeBuilder<SimpleRecipe> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
         private int time = getDefaultTime();
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.LTE), defaultValue = "1.0f")
+        @Property(comp = @Comp(types = Comp.Type.LTE, lte = 1), defaultValue = "1.0f")
         private float secondaryChance = 1.0f;
 
         @RecipeBuilderMethodDescription

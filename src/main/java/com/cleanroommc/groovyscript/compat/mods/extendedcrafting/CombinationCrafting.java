@@ -108,15 +108,15 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
         return new RecipeBuilder();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CombinationRecipe> {
 
         @Property
         private final NonNullList<IIngredient> pedestals = NonNullList.create();
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private long cost;
-        @Property(defaultValue = "ModConfig.confCraftingCoreRFRate", valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(defaultValue = "ModConfig.confCraftingCoreRFRate", comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int perTick = ModConfig.confCraftingCoreRFRate;
 
         @RecipeBuilderMethodDescription

@@ -59,7 +59,7 @@ public class Predicates extends NamedRegistry {
 
         @Property(requirement = "groovyscript.wiki.roots.predicates.properties.required")
         private final Collection<String> properties = new ArrayList<>();
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private IBlockState blockstate;
         @Property(requirement = "groovyscript.wiki.roots.predicates.above_or_below.required")
         private boolean above;

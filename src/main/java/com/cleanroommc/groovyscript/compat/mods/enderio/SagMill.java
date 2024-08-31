@@ -80,9 +80,9 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
         SagMillRecipeManager.getInstance().getRecipes().clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "4")})
-    @Property(property = "energy", valid = @Comp(type = Comp.Type.GT, value = "0"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 4))
+    @Property(property = "energy", comp = @Comp(types = Comp.Type.GT, gt = 0))
     @Property(property = "level")
     public static class RecipeBuilder extends EnderIORecipeBuilder<Recipe> {
 

@@ -73,7 +73,7 @@ public class XpFluid extends VirtualizedRegistry<Pair<Fluid, Integer>> {
                 .setRemover(x -> remove(x.getKey()));
     }
 
-    @Property(property = "fluidInput", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+    @Property(property = "fluidInput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<Pair<FluidStack, Integer>> {
 
         @Property

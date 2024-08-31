@@ -88,12 +88,12 @@ public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
     }
 
 
-    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<OilGenRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int amount;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int time;
 
         @Override

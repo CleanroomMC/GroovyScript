@@ -104,12 +104,12 @@ public class RunicShearEntity extends VirtualizedRegistry<RunicShearEntityRecipe
     }
 
     @Property(property = "name")
-    @Property(property = "output", valid = @Comp(type = Comp.Type.GTE, value = "1"))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.GTE, gte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RunicShearEntityRecipe> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private Class<? extends EntityLivingBase> entity;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private int cooldown;
         @Property
         private Function<EntityLivingBase, ItemStack> functionMap;

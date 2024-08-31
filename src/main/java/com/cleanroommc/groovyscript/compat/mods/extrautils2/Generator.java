@@ -247,15 +247,15 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
 
     }
 
-    @Property(property = "input", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
-    @Property(property = "fluidInput", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 2))
+    @Property(property = "fluidInput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IMachineRecipe> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private Machine generator;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
         private int energy;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
         private int energyPerTick;
 
         @RecipeBuilderMethodDescription

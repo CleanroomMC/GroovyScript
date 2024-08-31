@@ -77,12 +77,12 @@ public class BoilerFuel extends VirtualizedRegistry<BoilerRecipe.BoilerFuelRecip
         BoilerRecipe.fuelList.clear();
     }
 
-    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BoilerRecipe.BoilerFuelRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int time;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private double heat;
 
         @RecipeBuilderMethodDescription

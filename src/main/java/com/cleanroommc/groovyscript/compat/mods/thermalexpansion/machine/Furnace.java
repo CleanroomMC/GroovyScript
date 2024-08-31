@@ -113,11 +113,11 @@ public class Furnace extends VirtualizedRegistry<FurnaceRecipe> {
         FurnaceManagerAccessor.getRecipeMap().clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
 
-        @Property(defaultValue = "FurnaceManager.DEFAULT_ENERGY", valid = @Comp(value = "0", type = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "FurnaceManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT, gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = FurnaceManager.DEFAULT_ENERGY;
 
         @RecipeBuilderMethodDescription

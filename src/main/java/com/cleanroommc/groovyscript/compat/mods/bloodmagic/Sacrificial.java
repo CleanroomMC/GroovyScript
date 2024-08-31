@@ -91,9 +91,9 @@ public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Inte
 
     public static class RecipeBuilder {
 
-        @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private ResourceLocation entity;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int value;
 
         @RecipeBuilderMethodDescription

@@ -91,19 +91,19 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> {
 
-        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemSpeed", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemSpeed", comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private double processingspeed = EnvironmentalAccumulatorConfig.defaultProcessItemSpeed;
-        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultTickCooldown", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultTickCooldown", comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int cooldowntime = EnvironmentalAccumulatorConfig.defaultTickCooldown;
-        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemTickCount", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemTickCount", comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int duration = EnvironmentalAccumulatorConfig.defaultProcessItemTickCount;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private WeatherType inputWeather;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private WeatherType outputWeather;
 
         @RecipeBuilderMethodDescription

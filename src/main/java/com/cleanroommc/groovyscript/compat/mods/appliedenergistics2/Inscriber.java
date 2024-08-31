@@ -62,11 +62,11 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
     }
 
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IInscriberRecipe> {
 
-        @Property(defaultValue = "InscriberProcessType.PRESS", valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(defaultValue = "InscriberProcessType.PRESS", comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private InscriberProcessType type = InscriberProcessType.PRESS;
         @Property(defaultValue = "ItemStack.EMPTY", requirement = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required")
         private ItemStack top = ItemStack.EMPTY;

@@ -83,7 +83,7 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
         BWRegistry.WOOD_SAW.getRecipes().clear();
     }
 
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)})
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 9))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SawRecipe> {
 
         @Property

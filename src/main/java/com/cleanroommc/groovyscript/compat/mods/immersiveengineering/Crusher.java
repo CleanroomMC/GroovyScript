@@ -104,15 +104,15 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         CrusherRecipe.recipeList.clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrusherRecipe> {
 
-        @Property(valid = @Comp("secondaryOutputChances"))
+        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "exactly secondaryOutputChances"))
         private final List<ItemStack> secondaryOutputItems = new ArrayList<>();
-        @Property(valid = @Comp("secondaryOutputItems"))
+        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "exactly secondaryOutputItems"))
         private final FloatArrayList secondaryOutputChances = new FloatArrayList();
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int energy;
 
         @RecipeBuilderMethodDescription(field = {"secondaryOutputItems", "secondaryOutputChances"})

@@ -140,15 +140,15 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
         InsolatorManagerAccessor.getRecipeMap().clear();
     }
 
-    @Property(property = "input", valid = @Comp("2"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
+    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 2))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<InsolatorRecipe> {
 
-        @Property(defaultValue = "InsolatorManager.DEFAULT_ENERGY", valid = @Comp(value = "0", type = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "InsolatorManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT, gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = InsolatorManager.DEFAULT_ENERGY;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int water;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int chance;
         @Property(defaultValue = "InsolatorManager.Type.STANDARD")
         private InsolatorManager.Type type = InsolatorManager.Type.STANDARD;
