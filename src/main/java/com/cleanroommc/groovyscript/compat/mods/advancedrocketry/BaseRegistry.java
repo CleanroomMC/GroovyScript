@@ -1,11 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderRegistrationMethod;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
@@ -15,15 +17,15 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.stream.Collectors;
 
-public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
+public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
 
     protected abstract Class<?> getMachineClass();
 
+    @Override
     @Nonnull
     @SuppressWarnings("unchecked")
-    protected List<IRecipe> getRecipeList() {
+    public Collection<IRecipe> getRecipes() {
         Class<?> clazz = getMachineClass();
         RecipesMachine registry = RecipesMachine.getInstance();
         List<IRecipe> recipes = registry.getRecipes(clazz);
@@ -36,28 +38,8 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
         return recipes;
     }
 
-    @Override
-    public void onReload() {
-        List<IRecipe> recipes = getRecipeList();
-        recipes.addAll(restoreFromBackup());
-        recipes.removeAll(removeScripted());
-    }
-
-    public void addRecipe(IRecipe r) {
-        getRecipeList().add(r);
-        addScripted(r);
-    }
-
-    public boolean removeRecipe(IRecipe r) {
-        if (getRecipeList().remove(r)) {
-            addBackup(r);
-            return true;
-        }
-        return false;
-    }
-
     public boolean removeByFluidInput(FluidStack fluidStack) {
-        return getRecipeList().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             List<FluidStack> inputFluid = r.getFluidIngredients();
             if (inputFluid.stream().anyMatch(fluidIn -> fluidIn.isFluidEqual(fluidStack))) {
                 addBackup(r);
@@ -71,7 +53,7 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
         if (inputItem instanceof FluidStack) {
             return removeByFluidInput((FluidStack) inputItem);
         }
-        return getRecipeList().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             List<List<ItemStack>> input = r.getIngredients();
             if (input.stream().anyMatch(itemStacks -> itemStacks.stream().anyMatch(inputItem))) {
                 addBackup(r);
@@ -82,7 +64,7 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
     }
 
     public boolean removeByFluidOutput(FluidStack fluidStack) {
-        return getRecipeList().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             List<FluidStack> outputFluid = r.getFluidOutputs();
             if (outputFluid.stream().anyMatch(fluidOut -> fluidOut.isFluidEqual(fluidStack))) {
                 addBackup(r);
@@ -96,7 +78,7 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
         if (outputItem instanceof FluidStack) {
             return removeByFluidInput((FluidStack) outputItem);
         }
-        return getRecipeList().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             List<ItemStack> output = r.getOutput();
             if (output.stream().anyMatch(outputItem)) {
                 addBackup(r);
@@ -104,20 +86,6 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        List<IRecipe> recipes = getRecipeList();
-        recipes.forEach(this::addBackup);
-        recipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IRecipe> streamRecipes() {
-        List<IRecipe> recipes = getRecipeList();
-        return new SimpleObjectStream<>(recipes)
-                .setRemover(this::removeRecipe);
     }
 
     public abstract static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
@@ -186,7 +154,7 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
 
             RecipesMachine.Recipe r = new RecipesMachine.Recipe(outputs, inputs, fluidOutputs, fluidInput, time, power, oredicts);
             if (outputSize > 0) r.setMaxOutputSize(outputSize);
-            getRegistry().addRecipe(r);
+            getRegistry().add(r);
             return r;
         }
     }
