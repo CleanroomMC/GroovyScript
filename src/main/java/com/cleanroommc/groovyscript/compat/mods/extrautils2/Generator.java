@@ -315,9 +315,9 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
             com.rwtema.extrautils2.api.machine.RecipeBuilder builder = com.rwtema.extrautils2.api.machine.RecipeBuilder.newbuilder(generator);
             builder.setRFRate(energy, energyPerTick);
             if (!input.isEmpty()) {
-                builder.setItemInput(XUMachineGenerators.INPUT_ITEM, Arrays.stream(input.get(0).getMatchingStacks()).collect(Collectors.toList()), input.get(0).getAmount());
+                builder.setItemInput(XUMachineGenerators.INPUT_ITEM, Arrays.asList(input.get(0).getMatchingStacks()), input.get(0).getAmount());
                 if (input.size() == 2) {
-                    builder.setItemInput(MachineInitAccessor.getSLOT_SLIME_SECONDARY(), Arrays.stream(input.get(1).getMatchingStacks()).collect(Collectors.toList()), input.get(1).getAmount());
+                    builder.setItemInput(MachineInitAccessor.getSLOT_SLIME_SECONDARY(), Arrays.asList(input.get(1).getMatchingStacks()), input.get(1).getAmount());
                 }
             }
 

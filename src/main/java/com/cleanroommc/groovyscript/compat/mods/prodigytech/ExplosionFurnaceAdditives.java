@@ -49,7 +49,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         return false;
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAllExplosives() {
         ExplosionFurnaceManager.EXPLOSIVES.getAllContent().forEach(r ->
                                                                            addBackup(new EFAdditiveExplosive(new ItemsIngredient(r.getMatchingStacks()), r.getPower())));
@@ -74,7 +74,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         return false;
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAllDampeners() {
         ExplosionFurnaceManager.DAMPENERS.getAllContent().forEach(r ->
                                                                           addBackup(new EFAdditiveDampener(new ItemsIngredient(r.getMatchingStacks()), r.getDampening())));

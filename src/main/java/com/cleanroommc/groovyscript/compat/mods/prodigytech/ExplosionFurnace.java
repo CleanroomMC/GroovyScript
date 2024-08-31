@@ -54,7 +54,7 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
         });
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         ExplosionFurnaceManager.RECIPES.forEach(this::addBackup);
         ExplosionFurnaceManager.removeAllRecipes();
