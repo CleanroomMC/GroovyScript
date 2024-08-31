@@ -350,7 +350,7 @@ public class Builder {
             this.firstAnnotation = annotations.get(0);
         }
 
-        private static String parse(Comp comp) {
+        private static String parseComparisonRequirements(Comp comp) {
             return Arrays.stream(comp.types()).sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
                 case GT -> comp.gt();
                 case GTE -> comp.gte();
@@ -409,7 +409,7 @@ public class Builder {
             if (!comparison.isPresent()) {
                 Optional<Comp> comp = annotations.stream().map(Property::comp).filter(x -> x.types().length != 0).findFirst();
                 if (!comp.isPresent()) return "";
-                return FieldDocumentation.parse(comp.get());
+                return FieldDocumentation.parseComparisonRequirements(comp.get());
             }
             return Arrays.stream(comparison.get())
                     .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
