@@ -1,7 +1,8 @@
-package com.cleanroommc.groovyscript.sandbox.security;
+package com.cleanroommc.groovyscript.sandbox.meta;
 
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
 
+import com.cleanroommc.groovyscript.sandbox.security.SandboxSecurityException;
 import groovy.lang.*;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.control.CompilationUnit;

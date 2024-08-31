@@ -257,13 +257,14 @@ public class GroovyScriptSandbox extends GroovySandbox {
      * it. Groovy will then try to compile the script again. If we already compiled the class we just stop the compilation process.
      */
     @ApiStatus.Internal
-    public Class<?> onRecompileClass(GroovyClassLoader classLoader, URL source, String className) {
+    public Class<?> onRecompileClass(URL source, String className) {
         String path = source.toExternalForm();
-        CompiledScript cs = this.index.get(FileUtil.relativize(this.scriptRoot.getPath(), path));
+        String rel = FileUtil.relativize(this.scriptRoot.getPath(), path);
+        CompiledScript cs = this.index.get(rel);
         Class<?> c = null;
         if (cs != null) {
             if (cs.clazz == null && cs.readData(this.cacheRoot.getPath())) {
-                cs.ensureLoaded(classLoader, this.cacheRoot.getPath());
+                cs.ensureLoaded(getClassLoader(), this.cacheRoot.getPath());
             }
             c = cs.clazz;
         }
@@ -281,7 +282,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             if (!comp.checkPreprocessors(this.scriptRoot)) {
                 return GroovyLog.class; // failed preprocessor check
             }
-            comp.ensureLoaded(engine.getGroovyClassLoader(), this.cacheRoot.getPath());
+            comp.ensureLoaded(getClassLoader(), this.cacheRoot.getPath());
 
         } else if (!ENABLE_CACHE || (comp == null || comp.clazz == null || lastModified > comp.lastEdited)) {
             // class is not loaded and class bytes don't exist yet or script has been edited
@@ -312,7 +313,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             if (!comp.checkPreprocessors(this.scriptRoot)) {
                 return GroovyLog.class; // failed preprocessor check
             }
-            comp.ensureLoaded(engine.getGroovyClassLoader(), this.cacheRoot.getPath());
+            comp.ensureLoaded(getClassLoader(), this.cacheRoot.getPath());
         }
         return comp.clazz;
     }
@@ -389,6 +390,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
     @ApiStatus.Internal
     public boolean deleteScriptCache() {
         this.index.clear();
+        getClassLoader().clearCache();
         try {
             FileUtils.cleanDirectory(this.cacheRoot);
             return true;
