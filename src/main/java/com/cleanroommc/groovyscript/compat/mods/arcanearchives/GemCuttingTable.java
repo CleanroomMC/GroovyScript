@@ -92,7 +92,7 @@ public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> {
         }
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = Integer.MAX_VALUE))
+    @Property(property = "input", comp = @Comp(gte = 1))
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IGCTRecipe> {
 

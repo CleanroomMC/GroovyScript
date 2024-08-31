@@ -96,8 +96,8 @@ public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
     }
 
     @Property(property = "fluidInput", comp = @Comp(eq = 1))
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = Integer.MAX_VALUE))
-    @Property(property = "fluidOutput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = Integer.MAX_VALUE))
+    @Property(property = "output", comp = @Comp(types = Comp.Type.GTE))
+    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.GTE))
     public static class RecipeBuilder extends AbstractRecipeBuilder<DistillationRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))

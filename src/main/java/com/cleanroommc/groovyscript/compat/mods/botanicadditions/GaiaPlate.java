@@ -82,7 +82,7 @@ public class GaiaPlate extends VirtualizedRegistry<GaiaPlateRecipes.RecipeGaiaPl
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = Integer.MAX_VALUE))
+    @Property(property = "output", comp = @Comp(gte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<GaiaPlateRecipes.RecipeGaiaPlate> {
 
         @Property(defaultValue = "1", comp = @Comp(gte = 1))

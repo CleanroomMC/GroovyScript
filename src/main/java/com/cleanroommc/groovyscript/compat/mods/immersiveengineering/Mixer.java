@@ -133,7 +133,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         MixerRecipe.recipeList.clear();
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = Integer.MAX_VALUE))
+    @Property(property = "input", comp = @Comp(gte = 1))
     @Property(property = "output", comp = @Comp(eq = 1))
     @Property(property = "fluidInput", comp = @Comp(eq = 1))
     @Property(property = "fluidOutput", comp = @Comp(eq = 1))
