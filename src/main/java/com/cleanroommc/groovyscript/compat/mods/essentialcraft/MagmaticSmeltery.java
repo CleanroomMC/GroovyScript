@@ -62,7 +62,7 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
         @Property(comp = @Comp(eq = 1))
         private String output;
 
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 0xffffff))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, unique = "groovyscript.wiki.essentialcraft.magmatic_smeltery.color.required"))
         private int color;
 
         @Property(comp = @Comp(gte = 1), defaultValue = "1")

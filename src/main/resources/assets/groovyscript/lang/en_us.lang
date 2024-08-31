@@ -892,6 +892,7 @@ groovyscript.wiki.essentialcraft.magmatic_smeltery.title=Magmatic Smeltery
 groovyscript.wiki.essentialcraft.magmatic_smeltery.description=A machine used to quadruple ores using MRU and lava. Also adds the same recipes for Magmatic Furnace, which is used to double ores using MRU.
 groovyscript.wiki.essentialcraft.magmatic_smeltery.note0=Magmatic Smeltery does not have a JEI handler. This means its recipes will not be displayed in JEI and have to be tested manually.
 groovyscript.wiki.essentialcraft.magmatic_smeltery.color.value=Sets the overlay color for the Magmatic Alloy item of this ore
+groovyscript.wiki.essentialcraft.magmatic_smeltery.color.required=less than or equal to the hexadecimal number `0xffffff`
 groovyscript.wiki.essentialcraft.magmatic_smeltery.input.value=Sets the OreDict name of the input item
 groovyscript.wiki.essentialcraft.magmatic_smeltery.factor.value=Sets the output factor of the recipe. Magmatic Furnace will smelt the input item into this many Magmatic Alloys, Magmatic Smeltery will give double this many Magmatic Alloys, and Alloys will always be smelted into 2x of the output item
 groovyscript.wiki.essentialcraft.magmatic_smeltery.output.value=Sets the OreDict name of the output item
