@@ -66,21 +66,19 @@ public @interface Comp {
      * </table>
      */
     enum Type {
-        GT(">", "greater_than"),
-        GTE(">=", "greater_than_or_equal_to"),
-        EQ("==", "equal_to"),
-        LTE("<=", "less_than_or_equal_to"),
-        LT("<", "less_than"),
-        NOT("!=", "not");
-
-        private static final String baseLocalizationPath = "groovyscript.wiki.";
+        GT(">", "groovyscript.wiki.greater_than"),
+        GTE(">=", "groovyscript.wiki.greater_than_or_equal_to"),
+        EQ("==", "groovyscript.wiki.equal_to"),
+        LTE("<=", "groovyscript.wiki.less_than_or_equal_to"),
+        LT("<", "groovyscript.wiki.less_than"),
+        NOT("!=", "groovyscript.wiki.not");
 
         private final String symbol;
         private final String key;
 
         Type(String symbol, String key) {
             this.symbol = symbol;
-            this.key = baseLocalizationPath + key;
+            this.key = key;
         }
 
         public String getSymbol() {
