@@ -108,8 +108,8 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
         return new RecipeBuilder();
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CombinationRecipe> {
 
         @Property

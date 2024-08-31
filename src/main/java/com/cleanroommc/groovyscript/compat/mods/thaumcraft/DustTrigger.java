@@ -114,9 +114,9 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
 
         @Property
         private String research;
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.thaumcraft.dust_trigger.target.required"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.thaumcraft.dust_trigger.target.required"))
         private String ore;
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.thaumcraft.dust_trigger.target.required"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.thaumcraft.dust_trigger.target.required"))
         private Block target;
         @Property
         private ItemStack output;

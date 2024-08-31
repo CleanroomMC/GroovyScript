@@ -90,13 +90,13 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<LensConversionRecipe> {
 
         @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT))
         private int energyUse = 1;
-        @Property(defaultValue = "ActuallyAdditionsAPI.lensDefaultConversion", comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(defaultValue = "ActuallyAdditionsAPI.lensDefaultConversion", comp = @Comp(not = "null"))
         private Lens type = ActuallyAdditionsAPI.lensDefaultConversion;
 
         @RecipeBuilderMethodDescription

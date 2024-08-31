@@ -100,10 +100,10 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
     }
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = Integer.MAX_VALUE))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IAnvilRecipe> {
 
-        @Property(defaultValue = "ItemStack.EMPTY", comp = @Comp(types = Comp.Type.NOT, not = "isEmpty"))
+        @Property(defaultValue = "ItemStack.EMPTY", comp = @Comp(not = "isEmpty"))
         private ItemStack base = ItemStack.EMPTY;
         @Property
         private boolean preserveBase;

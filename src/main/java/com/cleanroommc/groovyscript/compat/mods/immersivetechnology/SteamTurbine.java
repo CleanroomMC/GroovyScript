@@ -90,8 +90,8 @@ public class SteamTurbine extends VirtualizedRegistry<SteamTurbineRecipe> {
         SteamTurbineRecipe.recipeList.clear();
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SteamTurbineRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))

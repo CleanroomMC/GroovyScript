@@ -130,7 +130,7 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
 
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 4))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeTartaricForge> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))

@@ -102,8 +102,8 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
         BlastFurnaceRecipe.recipeList.clear();
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlastFurnaceRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))

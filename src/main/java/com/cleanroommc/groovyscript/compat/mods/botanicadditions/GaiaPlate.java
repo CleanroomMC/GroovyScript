@@ -81,11 +81,11 @@ public class GaiaPlate extends VirtualizedRegistry<GaiaPlateRecipes.RecipeGaiaPl
         GaiaPlateRecipes.gaiaRecipes.clear();
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
     @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = Integer.MAX_VALUE))
     public static class RecipeBuilder extends AbstractRecipeBuilder<GaiaPlateRecipes.RecipeGaiaPlate> {
 
-        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(defaultValue = "1", comp = @Comp(gte = 1))
         private int mana = 1;
 
         @RecipeBuilderMethodDescription

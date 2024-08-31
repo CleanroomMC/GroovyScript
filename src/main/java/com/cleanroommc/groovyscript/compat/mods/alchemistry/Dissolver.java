@@ -79,17 +79,17 @@ public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
         ModRecipes.INSTANCE.getDissolverRecipes().clear();
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<DissolverRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         private final List<ProbabilityGroup> probabilityGroup = new ArrayList<>();
         @Property
         private boolean reversible;
         @Property
         private boolean relativeProbability;
-        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(defaultValue = "1", comp = @Comp(gte = 1))
         private int rolls = 1;
 
         @RecipeBuilderMethodDescription(field = "probabilityGroup")

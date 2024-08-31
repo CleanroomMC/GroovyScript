@@ -135,16 +135,16 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     }
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 5))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ArcFurnaceRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GT))
         private int time;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private IIngredient mainInput;
         @Property(comp = @Comp(types = Comp.Type.GT))
         private int energyPerTick;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private ItemStack slag = ItemStack.EMPTY;
         @Property
         private String specialRecipeType;

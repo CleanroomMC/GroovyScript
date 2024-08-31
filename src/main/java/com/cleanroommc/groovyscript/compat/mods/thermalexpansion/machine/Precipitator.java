@@ -107,7 +107,7 @@ public class Precipitator extends VirtualizedRegistry<PrecipitatorRecipe> {
         PrecipitatorManagerAccessor.getRecipeMap().clear();
     }
 
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<PrecipitatorRecipe> {
 
         @Property(defaultValue = "PrecipitatorManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")

@@ -80,9 +80,9 @@ public class Transmutation extends VirtualizedRegistry<WorldTransmutations.Entry
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<WorldTransmutations.Entry> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), ignoresInheritedMethods = true)
+        @Property(comp = @Comp(not = "null"), ignoresInheritedMethods = true)
         IBlockState input;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), ignoresInheritedMethods = true)
+        @Property(comp = @Comp(not = "null"), ignoresInheritedMethods = true)
         IBlockState output;
         @Property
         IBlockState altOutput;

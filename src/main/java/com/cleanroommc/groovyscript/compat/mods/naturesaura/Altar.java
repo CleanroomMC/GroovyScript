@@ -106,15 +106,15 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         return new SimpleObjectStream<>(NaturesAuraAPI.ALTAR_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AltarRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), defaultValue = "IIngredient.EMPTY")
+        @Property(comp = @Comp(not = "null"), defaultValue = "IIngredient.EMPTY")
         private IIngredient catalyst = IIngredient.EMPTY;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         private int aura;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         private int time;
 
         @RecipeBuilderMethodDescription

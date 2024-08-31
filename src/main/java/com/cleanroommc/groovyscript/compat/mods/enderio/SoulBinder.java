@@ -83,8 +83,8 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
         ((SimpleRecipeGroupHolderAccessor) MachineRecipeRegistry.instance.getRecipeHolderssForMachine(MachineRecipeRegistry.SOULBINDER)).getRecipes().clear();
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BasicSoulBinderRecipe> {
 
         @Property(ignoresInheritedMethods = true)
@@ -93,7 +93,7 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
         private int xp;
         @Property(comp = @Comp(types = Comp.Type.GT))
         private int energy;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         private final NNList<ResourceLocation> entities = new NNList<>();
         private final List<String> entityErrors = new ArrayList<>();
 

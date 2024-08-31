@@ -114,10 +114,10 @@ public class Rituals extends VirtualizedRegistry<RitualBase> {
         }
 
         @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "name")
-        @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 5))
+        @com.cleanroommc.groovyscript.api.documentation.annotations.Property(property = "input", comp = @Comp(eq = 5))
         public static class RecipeBuilder extends AbstractRecipeBuilder<RitualBase.RitualRecipe> {
 
-            @com.cleanroommc.groovyscript.api.documentation.annotations.Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+            @com.cleanroommc.groovyscript.api.documentation.annotations.Property(comp = @Comp(not = "null"))
             private RitualBase ritual;
 
             public RecipeBuilder() {

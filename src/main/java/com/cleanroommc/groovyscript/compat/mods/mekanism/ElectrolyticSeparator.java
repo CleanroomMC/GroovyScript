@@ -46,8 +46,8 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
         return false;
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "gasOutput", comp = @Comp(types = Comp.Type.EQ, eq = 2))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "gasOutput", comp = @Comp(eq = 2))
     public static class RecipeBuilder extends GasRecipeBuilder<SeparatorRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GT))

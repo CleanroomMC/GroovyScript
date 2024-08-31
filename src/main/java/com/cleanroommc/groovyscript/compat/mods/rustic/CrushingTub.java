@@ -73,8 +73,8 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
         return new SimpleObjectStream<>(Recipes.crushingTubRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICrushingTubRecipe> {
 
         @Property

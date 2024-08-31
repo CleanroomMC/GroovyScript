@@ -116,8 +116,8 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeBloodAltar> {
 
         @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, unique = "groovyscript.wiki.bloodmagic.max_tier.required"))

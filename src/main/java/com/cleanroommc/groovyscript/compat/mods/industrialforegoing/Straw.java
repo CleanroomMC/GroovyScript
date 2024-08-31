@@ -44,11 +44,11 @@ public class Straw extends ForgeRegistryWrapper<StrawHandler> {
                 .register();
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<StrawHandler> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         private final Collection<PotionEffect> effect = new ArrayList<>();
 
         @RecipeBuilderMethodDescription

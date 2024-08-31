@@ -94,7 +94,7 @@ public class FabricationChamber extends VirtualizedRegistry<FabricationSonarReci
     }
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = Integer.MAX_VALUE))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<FabricationSonarRecipe> {
 
         @Override

@@ -112,7 +112,7 @@ public class FlowerGeneration extends VirtualizedRegistry<FlowerRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<FlowerRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private IBlockState flower;
         @Property
         private final List<Ingredient> allowedSoils = new ArrayList<>();

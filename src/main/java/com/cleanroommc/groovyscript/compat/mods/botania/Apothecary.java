@@ -107,7 +107,7 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
     }
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 20))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipePetals> {
 
         @Override

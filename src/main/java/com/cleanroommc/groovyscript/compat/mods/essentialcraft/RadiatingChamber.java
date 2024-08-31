@@ -52,13 +52,13 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
     }
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RadiatingChamberRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         private int time;
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1), defaultValue = "1.0f")
+        @Property(comp = @Comp(gte = 1), defaultValue = "1.0f")
         private float mruPerTick = 1.0f;
 
         @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 2))

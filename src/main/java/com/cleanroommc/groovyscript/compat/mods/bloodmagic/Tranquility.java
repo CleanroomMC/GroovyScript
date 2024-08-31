@@ -136,7 +136,7 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
         private IBlockState blockstate;
         @Property
         private Block block;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private EnumTranquilityType tranquility;
         @Property(comp = @Comp(types = Comp.Type.GTE))
         private double value;

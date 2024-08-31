@@ -102,7 +102,7 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 6))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeBrew> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         protected vazkii.botania.api.brew.Brew brew;
 
         @RecipeBuilderMethodDescription(field = "brew")

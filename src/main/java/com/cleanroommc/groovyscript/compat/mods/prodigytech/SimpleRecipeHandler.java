@@ -27,11 +27,11 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
         super(name, instance);
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<SimpleRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1), defaultValue = "(default time for this machine in the mod's config)")
+        @Property(comp = @Comp(gte = 1), defaultValue = "(default time for this machine in the mod's config)")
         private int time = getDefaultTime();
 
         @RecipeBuilderMethodDescription

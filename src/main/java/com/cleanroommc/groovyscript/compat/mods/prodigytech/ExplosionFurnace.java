@@ -67,13 +67,13 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
     }
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExplosionFurnaceManager.ExplosionFurnaceRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         private int craftPerReagent = 1;
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         private int power;
 
         @RecipeBuilderMethodDescription

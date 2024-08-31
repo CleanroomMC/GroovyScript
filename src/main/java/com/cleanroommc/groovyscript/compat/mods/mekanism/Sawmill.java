@@ -61,8 +61,8 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         return found;
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SawmillRecipe> {
 
         @Property(defaultValue = "ItemStack.EMPTY")

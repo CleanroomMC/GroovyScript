@@ -100,9 +100,9 @@ public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
 
     public class RecipeBuilder implements IRecipeBuilder<EntityMeltingRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private FluidStack output;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private ResourceLocation input;
 
         @RecipeBuilderMethodDescription(field = "output")

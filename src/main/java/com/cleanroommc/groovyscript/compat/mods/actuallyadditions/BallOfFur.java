@@ -69,7 +69,7 @@ public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BallOfFurReturn> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))

@@ -100,7 +100,7 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
     @Property(property = "input", value = "groovyscript.wiki.betterwithmods.hopper_filters.filtered.value", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = Integer.MAX_VALUE))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IHopperFilter> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private IIngredient filter;
 
         @RecipeBuilderMethodDescription

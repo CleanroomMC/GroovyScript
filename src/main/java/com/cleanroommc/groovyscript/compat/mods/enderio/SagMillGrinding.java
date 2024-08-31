@@ -68,7 +68,7 @@ public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
         SagMillRecipeManager.getInstance().getBalls().clear();
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<GrindingBall> {
 
         @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT))

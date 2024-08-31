@@ -90,8 +90,8 @@ public class Boiler extends VirtualizedRegistry<BoilerRecipe> {
         BoilerRecipe.recipeList.clear();
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BoilerRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))

@@ -86,8 +86,8 @@ public class WaterSaw extends VirtualizedRegistry<WaterSawRecipes> {
         WaterSawRecipesAccessor.getRecipes().clear();
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<WaterSawRecipes> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))

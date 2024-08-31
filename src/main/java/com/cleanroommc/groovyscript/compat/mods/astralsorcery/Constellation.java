@@ -249,7 +249,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         private final List<Point2PointConnection> connections = new ArrayList<>();
         @Property(comp = @Comp(types = Comp.Type.GTE)) // TODO note that this is only if type is MINOR
         private final List<MoonPhase> phases = new ArrayList<>();
-        @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private String name;
         @Property(defaultValue = "Major: #2843CC, Weak: #432CB0, Minor: #5D197F")
         private Color color;
@@ -384,7 +384,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         private final List<ConstellationMapEffectRegistry.EnchantmentMapEffect> enchantmentEffect = new ArrayList<>();
         @Property(comp = @Comp(types = Comp.Type.GTE)) // TODO note that this is only if other is empty
         private final List<ConstellationMapEffectRegistry.PotionMapEffect> potionEffect = new ArrayList<>();
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private IConstellation constellation;
 
         @RecipeBuilderMethodDescription
@@ -426,7 +426,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
 
         @Property
         private final List<IIngredient> items = new ArrayList<>();
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private IConstellation constellation;
         @Property
         private boolean doStrip;

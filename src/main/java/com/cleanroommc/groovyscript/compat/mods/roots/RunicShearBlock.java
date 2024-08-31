@@ -96,14 +96,14 @@ public class RunicShearBlock extends VirtualizedRegistry<RunicShearRecipe> {
     }
 
     @Property(property = "name")
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RunicShearRecipe> {
 
         @Property
         private ItemStack displayItem;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private BlockStatePredicate state;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private IBlockState replacementState;
 
         @RecipeBuilderMethodDescription

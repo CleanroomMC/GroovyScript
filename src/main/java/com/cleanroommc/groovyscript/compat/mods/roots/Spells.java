@@ -224,7 +224,7 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
                                                                              comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 5))
         public static class RecipeBuilder extends AbstractRecipeBuilder<SpellBase.SpellRecipe> {
 
-            @com.cleanroommc.groovyscript.api.documentation.annotations.Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+            @com.cleanroommc.groovyscript.api.documentation.annotations.Property(comp = @Comp(not = "null"))
             private SpellBase spell;
 
             public RecipeBuilder() {

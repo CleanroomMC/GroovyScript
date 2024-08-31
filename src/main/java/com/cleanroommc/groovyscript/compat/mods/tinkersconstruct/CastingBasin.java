@@ -106,13 +106,13 @@ public class CastingBasin extends VirtualizedRegistry<ICastingRecipe> {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getBasinCastRegistry()).setRemover(this::remove);
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<ICastingRecipe> {
 
         @Property
         private IIngredient cast;
-        @Property(defaultValue = "200", comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(defaultValue = "200", comp = @Comp(gte = 1))
         private int time = 200;
         @Property
         private boolean consumesCast;

@@ -44,8 +44,8 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
         return false;
     }
 
-    @Property(property = "gasInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "gasOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "gasInput", comp = @Comp(eq = 1))
+    @Property(property = "gasOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends GasRecipeBuilder<WasherRecipe> {
 
         @Override

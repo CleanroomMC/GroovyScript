@@ -108,7 +108,7 @@ public class Alloying extends VirtualizedRegistry<AlloyRecipe> {
     }
 
     @Property(property = "fluidInput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 2, lte = Integer.MAX_VALUE))
-    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<AlloyRecipe> {
 
         @Override

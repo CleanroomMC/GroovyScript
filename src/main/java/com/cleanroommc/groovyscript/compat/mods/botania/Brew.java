@@ -64,19 +64,19 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
 
     public static class BrewBuilder extends AbstractRecipeBuilder<vazkii.botania.api.brew.Brew> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), priority = 100)
+        @Property(comp = @Comp(not = "null"), priority = 100)
         protected String key;
         @Property(ignoresInheritedMethods = true, priority = 200)
         protected String name;
-        @Property(defaultValue = "0xFFFFFF", comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(defaultValue = "0xFFFFFF", comp = @Comp(not = "null"))
         protected int color = 0xFFFFFF;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         protected int cost;
         @Property(defaultValue = "true", priority = 1100)
         protected boolean canInfuseIncense = true;
         @Property(defaultValue = "true", priority = 1200)
         protected boolean canInfuseBloodPendant = true;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         protected final List<PotionEffect> effects = new ArrayList<>();
 
         @RecipeBuilderMethodDescription

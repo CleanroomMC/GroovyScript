@@ -88,10 +88,10 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
     }
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 8))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeMortar> {
 
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.advancedmortars.mortar.types.required"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.advancedmortars.mortar.types.required"))
         private final List<String> types = new ArrayList<>();
         @Property
         private int duration;

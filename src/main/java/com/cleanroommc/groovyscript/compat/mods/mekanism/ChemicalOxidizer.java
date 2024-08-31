@@ -52,8 +52,8 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
         return found;
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "gasOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "gasOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends GasRecipeBuilder<OxidationRecipe> {
 
         @Override

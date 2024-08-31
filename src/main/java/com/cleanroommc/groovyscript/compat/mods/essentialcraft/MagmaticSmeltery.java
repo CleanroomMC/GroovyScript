@@ -56,16 +56,16 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
 
     public static class RecipeBuilder implements IRecipeBuilder<OreSmeltingRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.EQ, eq = 1))
+        @Property(comp = @Comp(eq = 1))
         private String input;
 
-        @Property(comp = @Comp(types = Comp.Type.EQ, eq = 1))
+        @Property(comp = @Comp(eq = 1))
         private String output;
 
         @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 0xffffff))
         private int color;
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1), defaultValue = "1")
+        @Property(comp = @Comp(gte = 1), defaultValue = "1")
         private int factor = 1;
 
         @RecipeBuilderMethodDescription

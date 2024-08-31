@@ -90,8 +90,8 @@ public class MeltingCrucible extends VirtualizedRegistry<MeltingCrucibleRecipe> 
         MeltingCrucibleRecipe.recipeList.clear();
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MeltingCrucibleRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))

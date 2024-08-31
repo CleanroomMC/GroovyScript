@@ -86,7 +86,7 @@ public class AnimalHarvestFish extends VirtualizedRegistry<AnimalHarvestFishReci
     }
 
     @Property(property = "name")
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AnimalHarvestFishRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GT))

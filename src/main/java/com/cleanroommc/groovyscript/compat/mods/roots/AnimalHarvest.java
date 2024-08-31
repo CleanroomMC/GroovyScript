@@ -84,7 +84,7 @@ public class AnimalHarvest extends VirtualizedRegistry<AnimalHarvestRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<AnimalHarvestRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private Class<? extends EntityLivingBase> entity;
 
         @RecipeBuilderMethodDescription

@@ -90,7 +90,7 @@ public class Reservoir extends VirtualizedRegistry<Pair<PumpjackHandler.Reservoi
     }
 
 
-    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<PumpjackHandler.ReservoirType> {
 
         @Property
@@ -105,7 +105,7 @@ public class Reservoir extends VirtualizedRegistry<Pair<PumpjackHandler.Reservoi
         private int minSize;
         @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 1, unique = "groovyscript.wiki.immersivepetroleum.reservoir.minSize.required"))
         private int maxSize;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         private int replenishRate;
         @Property
         private boolean dimensionBlacklist = true;

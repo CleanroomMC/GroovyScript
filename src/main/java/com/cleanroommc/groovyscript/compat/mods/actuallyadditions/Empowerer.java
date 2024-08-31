@@ -92,7 +92,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
 
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 4, lte = 5))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<EmpowererRecipe> {
 
         @Property

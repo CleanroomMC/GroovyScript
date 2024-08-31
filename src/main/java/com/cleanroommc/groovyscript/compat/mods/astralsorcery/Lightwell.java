@@ -104,9 +104,9 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
 
     public static class RecipeBuilder implements IRecipeBuilder<WellLiquefaction.LiquefactionEntry> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private ItemStack catalyst;
-        @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private Fluid output;
         @Property(comp = @Comp(types = Comp.Type.GTE))
         private float productionMultiplier;

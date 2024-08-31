@@ -140,7 +140,7 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
         InsolatorManagerAccessor.getRecipeMap().clear();
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 2))
+    @Property(property = "input", comp = @Comp(eq = 2))
     @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<InsolatorRecipe> {
 

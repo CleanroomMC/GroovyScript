@@ -29,7 +29,7 @@ import java.util.Map;
 
 public abstract class AbstractCraftingRecipeBuilder<R> {
 
-    @Property(value = "groovyscript.wiki.craftingrecipe.output.value", comp = @Comp(types = Comp.Type.NOT, not = "null"), priority = 700, hierarchy = 20)
+    @Property(value = "groovyscript.wiki.craftingrecipe.output.value", comp = @Comp(not = "null"), priority = 700, hierarchy = 20)
     protected ItemStack output;
     @Property(value = "groovyscript.wiki.name.value", priority = 100, hierarchy = 20)
     protected ResourceLocation name;
@@ -219,7 +219,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         protected final List<String> errors = new ArrayList<>();
         @Property(value = "groovyscript.wiki.craftingrecipe.mirrored.value", hierarchy = 20)
         protected boolean mirrored;
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.craftingrecipe.matrix.required"), priority = 200, hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", comp = @Comp(unique = "groovyscript.wiki.craftingrecipe.matrix.required"), priority = 200, hierarchy = 20)
         protected String[] keyBasedMatrix;
         @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value",
                   comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE, Comp.Type.UNI},

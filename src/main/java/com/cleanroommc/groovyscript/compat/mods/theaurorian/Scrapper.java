@@ -74,8 +74,8 @@ public class Scrapper extends VirtualizedRegistry<ScrapperRecipe> {
         return new SimpleObjectStream<>(ScrapperRecipeHandler.allRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ScrapperRecipe> {
 
         @Override

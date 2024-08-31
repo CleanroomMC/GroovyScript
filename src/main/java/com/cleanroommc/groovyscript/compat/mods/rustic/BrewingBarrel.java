@@ -72,8 +72,8 @@ public class BrewingBarrel extends VirtualizedRegistry<IBrewingBarrelRecipe> {
         return new SimpleObjectStream<>(Recipes.brewingRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IBrewingBarrelRecipe> {
 
         @Override

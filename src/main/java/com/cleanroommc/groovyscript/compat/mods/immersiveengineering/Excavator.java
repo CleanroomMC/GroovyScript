@@ -140,9 +140,9 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExcavatorHandler.MineralMix> {
 
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.immersiveengineering.excavator.chances.required"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.immersiveengineering.excavator.chances.required"))
         private final List<String> ores = new ArrayList<>();
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.immersiveengineering.excavator.ores.required"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.immersiveengineering.excavator.ores.required"))
         private final FloatArrayList chances = new FloatArrayList();
         @Property
         private final List<Integer> dimensions = new ArrayList<>();

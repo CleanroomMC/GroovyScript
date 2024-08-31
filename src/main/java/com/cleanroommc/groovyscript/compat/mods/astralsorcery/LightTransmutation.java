@@ -114,11 +114,11 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightOreTransmutations.Transmutation> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null or input"))
+        @Property(comp = @Comp(not = "null or input"))
         private Block inBlock;
-        @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.NOT, not = "null or inBlock"))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null or inBlock"))
         private IBlockState input;
-        @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private IBlockState output;
         @Property(comp = @Comp(types = Comp.Type.GTE))
         private double cost;

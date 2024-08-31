@@ -86,7 +86,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
     }
 
     @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay')).fluidInput(fluid('milk'), fluid('lava'))"), requirement = {
-            @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 2)),
+            @Property(property = "fluidInput", comp = @Comp(eq = 2)),
             @Property(property = "output")
     })
     public RecipeBuilder recipeBuilderMix() {
@@ -214,26 +214,26 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1), needsOverride = true)
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1), needsOverride = true)
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1), needsOverride = true)
-    @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1), needsOverride = true)
+    @Property(property = "input", comp = @Comp(eq = 1), needsOverride = true)
+    @Property(property = "output", comp = @Comp(eq = 1), needsOverride = true)
+    @Property(property = "fluidInput", comp = @Comp(eq = 1), needsOverride = true)
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1), needsOverride = true)
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICauldronRecipe> {
 
         @Property(needsOverride = true)
         private RecipeType type;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), needsOverride = true)
+        @Property(comp = @Comp(not = "null"), needsOverride = true)
         private PotionType inputPotion;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), needsOverride = true)
+        @Property(comp = @Comp(not = "null"), needsOverride = true)
         private PotionType outputPotion;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), needsOverride = true)
+        @Property(comp = @Comp(not = "null"), needsOverride = true)
         private EnumDyeColor dye;
         @Property(needsOverride = true)
         private Boolean boiling;
         @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI},
                                unique = "groovyscript.wiki.inspirations.cauldron.levels.required"), needsOverride = true)
         private int levels;
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), needsOverride = true)
+        @Property(comp = @Comp(not = "null"), needsOverride = true)
         private SoundEvent sound;
 
         public static RecipeMatch recipeMatchFromIngredient(IIngredient ingredient, int amount) {

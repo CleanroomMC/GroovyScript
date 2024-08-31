@@ -105,7 +105,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
     @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeRuneAltar> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         protected int mana;
 
         @RecipeBuilderMethodDescription

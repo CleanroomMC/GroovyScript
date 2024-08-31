@@ -73,7 +73,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         return new SimpleObjectStream<>(RefineryRecipe.recipes).setRemover(this::remove);
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
     @Property(property = "fluidOutput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 2, lte = 4))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RefineryRecipe> {
 

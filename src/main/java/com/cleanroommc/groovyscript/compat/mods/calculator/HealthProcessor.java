@@ -69,10 +69,10 @@ public class HealthProcessor extends VirtualizedRegistry<DefaultSonarRecipe.Valu
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<DefaultSonarRecipe.Value> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(comp = @Comp(gte = 1))
         private int value;
 
         @RecipeBuilderMethodDescription

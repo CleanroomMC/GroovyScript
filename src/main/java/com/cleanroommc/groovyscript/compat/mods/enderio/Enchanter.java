@@ -98,17 +98,17 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
     public static class RecipeBuilder implements IRecipeBuilder<EnchanterRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private Enchantment enchantment;
-        @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private IIngredient input;
         @Property(comp = @Comp(types = Comp.Type.GT))
         private int amount;
         @Property(defaultValue = "1")
         private double costMultiplier = 1;
-        @Property(defaultValue = "ore('gemLapis')", comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(defaultValue = "ore('gemLapis')", comp = @Comp(not = "null"))
         private IIngredient lapis = new OreDictIngredient("gemLapis");
-        @Property(defaultValue = "item('minecraft:writable_book')", comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(defaultValue = "item('minecraft:writable_book')", comp = @Comp(not = "null"))
         private IIngredient book = IngredientHelper.toIIngredient(new ItemStack(Items.WRITABLE_BOOK));
 
         @RecipeBuilderMethodDescription

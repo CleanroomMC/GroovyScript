@@ -85,8 +85,8 @@ public class Atomizer extends VirtualizedRegistry<AtomizerRecipe> {
         ModRecipes.INSTANCE.getAtomizerRecipes().clear();
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AtomizerRecipe> {
 
         @Property

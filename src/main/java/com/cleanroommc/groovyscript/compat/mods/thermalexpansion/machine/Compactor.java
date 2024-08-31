@@ -144,8 +144,8 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         Arrays.stream(CompactorManager.Mode.values()).forEach(this::removeByMode);
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompactorRecipe> {
 
         @Property(defaultValue = "CompactorManager.Mode.ALL")

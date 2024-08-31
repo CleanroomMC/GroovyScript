@@ -124,7 +124,7 @@ public class Transmutation extends VirtualizedRegistry<TransmutationRecipe> {
     @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TransmutationRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private BlockStatePredicate start;
         @Property
         private IBlockState state;

@@ -41,7 +41,7 @@ public interface ArcaneRecipeBuilder {
     @Property(property = "replace")
     class Shaped extends AbstractCraftingRecipeBuilder.AbstractShaped<IRecipe> implements ArcaneRecipeBuilder {
 
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.thaumcraft.arcane_workbench.aspects.required"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.thaumcraft.arcane_workbench.aspects.required"))
         protected final AspectList aspects = new AspectList();
         @Property
         protected String researchKey = "";
@@ -108,7 +108,7 @@ public interface ArcaneRecipeBuilder {
     class Shapeless extends AbstractCraftingRecipeBuilder.AbstractShapeless<IRecipe> implements ArcaneRecipeBuilder {
 
 
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.thaumcraft.arcane_workbench.aspects.required"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.thaumcraft.arcane_workbench.aspects.required"))
         protected final AspectList aspects = new AspectList();
         @Property
         protected String researchKey = "";

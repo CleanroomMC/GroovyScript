@@ -66,10 +66,10 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
     }
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 54))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IFusionRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private ItemStack catalyst;
         @Property(defaultValue = "1000000", comp = @Comp(types = Comp.Type.GT))
         private long energy = 1000000;

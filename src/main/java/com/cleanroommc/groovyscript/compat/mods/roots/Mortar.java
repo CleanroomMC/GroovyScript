@@ -102,7 +102,7 @@ public class Mortar extends VirtualizedRegistry<MortarRecipe> {
 
     @Property(property = "name")
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 5))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MortarRecipe> {
 
         @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))

@@ -94,7 +94,7 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
 
     public static class FountainChanceHelper implements IRecipeBuilder<FluidRarityRegistry.FluidRarityEntry> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private Fluid fluid;
         @Property(comp = @Comp(types = Comp.Type.GTE))
         private int rarity;

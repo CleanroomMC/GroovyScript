@@ -147,7 +147,7 @@ public class LaserDrill extends VirtualizedRegistry<Pair<LaserDrillEntry.LaserDr
                 .setRemover(this::remove);
     }
 
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<LaserDrillEntry.LaserDrillEntryExtended> {
 
         @Property
@@ -158,9 +158,9 @@ public class LaserDrill extends VirtualizedRegistry<Pair<LaserDrillEntry.LaserDr
         private int lensMeta;
         @Property(comp = @Comp(types = Comp.Type.GT))
         private int weight;
-        @Property(comp = @Comp(types = Comp.Type.LTE, lte = 255))
+        @Property(comp = @Comp(lte = 255))
         private int minY;
-        @Property(defaultValue = "255", comp = @Comp(types = Comp.Type.LTE, lte = 255))
+        @Property(defaultValue = "255", comp = @Comp(lte = 255))
         private int maxY = 255;
 
         @RecipeBuilderMethodDescription

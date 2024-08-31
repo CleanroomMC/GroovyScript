@@ -91,8 +91,8 @@ public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.Plast
         return new SimpleObjectStream<>(getInstance().getRecipes()).setRemover(this::remove);
     }
 
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<PlasticMixerRegistry.PlasticMixerRecipe> {
 
         @Property

@@ -164,7 +164,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
     }
 
     @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = Integer.MAX_VALUE))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlueprintCraftingRecipe> {
 
         @Property

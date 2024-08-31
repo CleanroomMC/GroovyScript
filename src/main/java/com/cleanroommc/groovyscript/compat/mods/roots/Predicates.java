@@ -59,11 +59,11 @@ public class Predicates extends NamedRegistry {
 
         @Property(comp = @Comp(unique = "groovyscript.wiki.roots.predicates.properties.required"))
         private final Collection<String> properties = new ArrayList<>();
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private IBlockState blockstate;
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.roots.predicates.above_or_below.required"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.roots.predicates.above_or_below.required"))
         private boolean above;
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.roots.predicates.above_or_below.required"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.roots.predicates.above_or_below.required"))
         private boolean below;
 
         @RecipeBuilderMethodDescription

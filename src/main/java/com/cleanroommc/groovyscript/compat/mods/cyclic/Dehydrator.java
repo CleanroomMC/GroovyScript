@@ -83,8 +83,8 @@ public class Dehydrator extends VirtualizedRegistry<RecipeDeHydrate> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeDeHydrate> {
 
         @Property(defaultValue = "100", comp = @Comp(types = Comp.Type.GTE))

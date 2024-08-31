@@ -64,11 +64,11 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
     }
 
 
-    @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MetallurgicInfuserRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(comp = @Comp(not = "null"))
         private InfuseType infuse;
         @Property(comp = @Comp(types = Comp.Type.GT))
         private int amount;

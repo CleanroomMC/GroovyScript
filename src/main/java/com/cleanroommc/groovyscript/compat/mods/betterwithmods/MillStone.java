@@ -99,7 +99,7 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
 
         @Property
         private SoundEvent soundEvent;
-        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GTE, gte = 1))
+        @Property(defaultValue = "1", comp = @Comp(gte = 1))
         private int ticks = 1;
         @Property(defaultValue = "1")
         private int priority = 1;

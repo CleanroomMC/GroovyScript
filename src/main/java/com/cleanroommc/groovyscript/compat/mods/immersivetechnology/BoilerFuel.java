@@ -77,7 +77,7 @@ public class BoilerFuel extends VirtualizedRegistry<BoilerRecipe.BoilerFuelRecip
         BoilerRecipe.fuelList.clear();
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BoilerRecipe.BoilerFuelRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))

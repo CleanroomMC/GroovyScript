@@ -107,13 +107,13 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         return new RecipeBuilder();
     }
 
-    @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "input", comp = @Comp(types = Comp.Type.NOT, not = "null"))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "input", comp = @Comp(not = "null"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompressorRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))
         private int inputCount;
-        @Property(defaultValue = "IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack())", comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(defaultValue = "IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack())", comp = @Comp(not = "null"))
         private IIngredient catalyst = IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack());
         @Property
         private boolean consumeCatalyst;
