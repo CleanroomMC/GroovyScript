@@ -354,7 +354,21 @@ public class Builder {
         }
 
         private static String parseComparisonRequirements(Comp comp) {
-            return Arrays.stream(comp.types()).sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
+            var typeSet = EnumSet.noneOf(Comp.Type.class);
+
+            if (comp.types().length == 0) {
+                if (comp.gt() != 0) typeSet.add(Comp.Type.GT);
+                if (comp.gte() != 0) typeSet.add(Comp.Type.GTE);
+                if (comp.lt() != 0) typeSet.add(Comp.Type.LT);
+                if (comp.lte() != 0) typeSet.add(Comp.Type.LTE);
+                if (comp.eq() != 0) typeSet.add(Comp.Type.EQ);
+                if (!comp.not().isEmpty()) typeSet.add(Comp.Type.NOT);
+                if (!comp.unique().isEmpty()) typeSet.add(Comp.Type.UNI);
+            } else {
+                typeSet.addAll(Arrays.asList(comp.types()));
+            }
+
+            return typeSet.stream().sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
                 case GT -> comp.gt();
                 case GTE -> comp.gte();
                 case EQ -> comp.eq();
@@ -401,16 +415,15 @@ public class Builder {
             return annotations.stream().filter(x -> !x.value().isEmpty()).findFirst().map(Property::value).orElse("");
         }
 
-        @SuppressWarnings("deprecation")
         public boolean hasComparison() {
-            return annotations.stream().anyMatch(x -> x.comp().types().length != 0 || x.valid().length != 0);
+            return true; //annotations.stream().anyMatch(x -> x.comp().types().length != 0 || x.valid().length != 0);
         }
 
         @SuppressWarnings({"deprecation", "SimplifyOptionalCallChains"})
         public String getComparison() {
             Optional<Comp[]> comparison = annotations.stream().map(Property::valid).filter(valid -> valid.length != 0).findFirst();
             if (!comparison.isPresent()) {
-                Optional<Comp> comp = annotations.stream().map(Property::comp).filter(x -> x.types().length != 0).findFirst();
+                Optional<Comp> comp = annotations.stream().map(Property::comp).findFirst();
                 if (!comp.isPresent()) return "";
                 return FieldDocumentation.parseComparisonRequirements(comp.get());
             }

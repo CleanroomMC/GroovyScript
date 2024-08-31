@@ -88,43 +88,80 @@ public @interface Property {
      * <br>- a number: Would indicate comparing directly against the number.
      * <br>- an array or list: Would indicate comparing against the length of the array/list.
      * <br>- another object: Would use to indicate {@code not null} is required.
+     * <p>
+     * <p>
+     * Here is a quick shortcut table to better understand what the logic is:
      *
      * <table>
      *  <tr>
      *   <th>validation</th>
      *   <th>code</th>
+     *   <th>logic</th>
+     *  </tr>
+     *  <tr>
+     *   <td><code>N/A</code></td>
+     *   <td><code>@Comp</code></td>
+     *   <td>no validation is applied</td>
      *  </tr>
      *  <tr>
      *   <td><code>x == 1</code></td>
-     *   <td><code>@Comp(types = Comp.Type.EQ, eq = 1)</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {@link Comp.Type#EQ EQ}, {@link Comp#eq eq} = 1)</code></td>
+     *   <td>types checks eq, eq is set to 1</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x == 1</code></td>
+     *   <td><code>@Comp({@link Comp#eq eq} = 1)</code></td>
+     *   <td>if no types, non-default values are checked, eq is not 0</td>
      *  </tr>
      *  <tr>
      *   <td><code>x > 0</code></td>
-     *   <td><code>@Comp(types = Comp.Type.GT, gt = 0)</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {@link Comp.Type#GT GT}, {@link Comp#gt gt} = 0)</code></td>
+     *   <td>types checks gt, gt is set to 0</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x > 0</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {@link Comp.Type#GT GT})</code></td>
+     *   <td>types checks gt, gt defaults to 0</td>
      *  </tr>
      *  <tr>
      *   <td><code>x >= 0</code></td>
-     *   <td><code>@Comp(types = Comp.Type.GTE, gte = 0)</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {@link Comp.Type#GTE GTE}, {@link Comp#gte gte} = 0)</code></td>
+     *   <td>types checks gte, gte is set to 0</td>
      *  </tr>
      *  <tr>
      *   <td><code>x != 1</code></td>
-     *   <td><code>@Comp(types = Comp.Type.NOT, not = "1")</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {@link Comp.Type#NOT NOT}, {@link Comp#not not} = "1")</code></td>
+     *   <td>types checks not, not is set to "1"</td>
      *  </tr>
      *  <tr>
      *   <td><code>x != null</code></td>
-     *   <td><code>@Comp(type = Comp.Type.NOT, not = "null")</code></td>
+     *   <td><code>@Comp({@link Comp#not not} = "null")</code></td>
+     *   <td>if no types, non-default values are checked, not isn't empty</td>
      *  </tr>
      *  <tr>
      *   <td><code>x >= 0 && x <= 5</code></td>
-     *   <td><code>@Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 5)</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {{@link Comp.Type#GTE GTE}, {@link Comp.Type#LTE LTE}}, {@link Comp#gte gte} = 0, {@link Comp#lte lte} = 5)</code></td>
+     *   <td>types checks gte and lte, gte is set to 0 and lte is set to 5</td>
      *  </tr>
      *  <tr>
      *   <td><code>x > 0 && x <= 2</code></td>
-     *   <td><code>@Comp(types = {Comp.Type.GT, Comp.Type.LTE}, gt = 0, lte = 2)</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {{@link Comp.Type#GT GT}, {@link Comp.Type#LTE LTE}}, {@link Comp#lte lte} = 2)</code></td>
+     *   <td>types checks gte and lte, gte defaults to 0 and lte is set to 2</td>
      *  </tr>
      *  <tr>
      *   <td><code>complex logic</code></td>
-     *   <td><code>@Comp(types = Comp.Type.UNI, unique = "complex logic")</code></td>
+     *   <td><code>@Comp({@link Comp#unique unique} = "complex logic")</code></td>
+     *   <td>if no types, non-default values are checked, unique isn't empty</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x >= 0 && complex logic</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {{@link Comp.Type#GTE GTE}, {@link Comp.Type#UNI UNI}}, {@link Comp#unique unique} = "complex logic")</code></td>
+     *   <td>types checks gte and unique, gte defaults to 0 and unique is set to "complex logic"</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x >= 1 && x <= 9 && complex logic</code></td>
+     *   <td><code>@Comp({@link Comp#gte gte} = 1, {@link Comp#lte lte} = 9, {@link Comp#unique unique} = "complex logic")</code></td>
+     *   <td>if no types, non-default values are checked, gte isn't 0, lte isn't 0, and unique isn't empty</td>
      *  </tr>
      * </table>
      *
