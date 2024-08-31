@@ -330,6 +330,14 @@ public class Builder {
 
     private static class FieldDocumentation implements Comparable<FieldDocumentation> {
 
+        private static final Function<List<String>, String> SERIAL_COMMA_LIST = list -> {
+            int last = list.size() - 1;
+            if (last < 1) return String.join("", list);
+            var and = " " + I18n.format("groovyscript.wiki.and") + " ";
+            if (last == 1) return String.join(and, list);
+            return String.join("," + and, String.join(", ", list.subList(0, last)), list.get(last));
+        };
+
         private final Field field;
         private final String langLocation;
         private final List<Property> annotations;
@@ -351,7 +359,7 @@ public class Builder {
                 case LT -> comp.lt();
                 case NOT -> comp.not();
                 case UNI -> Documentation.translate(comp.unique());
-            })).collect(Collectors.joining(String.format(" %s ", I18n.format("groovyscript.wiki.and"))));
+            })).collect(Collectors.collectingAndThen(Collectors.toList(), SERIAL_COMMA_LIST));
         }
 
         public Field getField() {
