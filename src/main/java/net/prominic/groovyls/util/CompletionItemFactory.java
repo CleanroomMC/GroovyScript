@@ -28,9 +28,6 @@ public class CompletionItemFactory {
         if (kind == CompletionItemKind.Method) {
             item.setInsertTextFormat(InsertTextFormat.Snippet);
             item.setInsertText(label + "($0)");
-        } else if (kind == CompletionItemKind.Property || kind == CompletionItemKind.Field) {
-            item.setInsertTextFormat(InsertTextFormat.Snippet);
-            item.setInsertText(label + ".$0");
         }
         return item;
     }
