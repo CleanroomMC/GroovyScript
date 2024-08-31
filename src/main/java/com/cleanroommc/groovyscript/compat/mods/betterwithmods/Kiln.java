@@ -85,7 +85,7 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
         BWRegistry.KILN.getRecipes().clear();
     }
 
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 3))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<KilnRecipe> {
 
         @Property

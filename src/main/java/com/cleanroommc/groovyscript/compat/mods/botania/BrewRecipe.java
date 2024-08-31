@@ -99,7 +99,7 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
         return new SimpleObjectStream<>(BotaniaAPI.brewRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 6))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 6))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeBrew> {
 
         @Property(comp = @Comp(not = "null"))

@@ -90,7 +90,7 @@ public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> {
     }
 
     @Property(property = "name")
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 10))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 10))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SummonCreatureRecipe> {
 
         @Property(comp = @Comp(not = "null"))

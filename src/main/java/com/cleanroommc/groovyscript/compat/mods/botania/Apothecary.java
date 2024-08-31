@@ -106,7 +106,7 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
         return new SimpleObjectStream<>(BotaniaAPI.petalRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 20))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 20))
     @Property(property = "output", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipePetals> {
 

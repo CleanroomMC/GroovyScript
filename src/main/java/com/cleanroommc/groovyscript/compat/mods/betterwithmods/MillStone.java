@@ -93,8 +93,8 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
         BWRegistry.MILLSTONE.getRecipes().clear();
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 3))
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 3))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 3))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MillRecipe> {
 
         @Property

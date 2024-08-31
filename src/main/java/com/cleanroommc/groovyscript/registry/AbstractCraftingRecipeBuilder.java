@@ -221,10 +221,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         protected boolean mirrored;
         @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", comp = @Comp(unique = "groovyscript.wiki.craftingrecipe.matrix.required"), priority = 200, hierarchy = 20)
         protected String[] keyBasedMatrix;
-        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value",
-                  comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE, Comp.Type.UNI},
-                               gte = 1, lte = 9, unique = "groovyscript.wiki.craftingrecipe.matrix.required"),
-                  priority = 200, hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value", comp = @Comp(gte = 1, lte = 9, unique = "groovyscript.wiki.craftingrecipe.matrix.required"), priority = 200, hierarchy = 20)
         protected List<List<IIngredient>> ingredientMatrix;
 
         public AbstractShaped(int width, int height) {
@@ -306,7 +303,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
     public abstract static class AbstractShapeless<T> extends AbstractCraftingRecipeBuilder<T> {
 
         @Property(value = "groovyscript.wiki.craftingrecipe.ingredients.value",
-                  comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 9), priority = 250, hierarchy = 20)
+                  comp = @Comp(gte = 1, lte = 9), priority = 250, hierarchy = 20)
         protected final List<IIngredient> ingredients = new ArrayList<>();
 
         public AbstractShapeless(int width, int height) {

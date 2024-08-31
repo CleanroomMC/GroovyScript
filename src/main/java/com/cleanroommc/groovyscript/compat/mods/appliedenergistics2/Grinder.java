@@ -72,7 +72,7 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 3))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IGrinderRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GT))

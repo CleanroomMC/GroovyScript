@@ -88,7 +88,7 @@ public class Melter extends VirtualizedRegistry<RecipeMelter> {
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 4))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 4))
     @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeMelter> {
 

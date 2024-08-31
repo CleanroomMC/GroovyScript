@@ -92,7 +92,7 @@ public class Reprocessor extends VirtualizedRegistry<ReprocessorRecipe> {
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ReprocessorRecipe> {
 
 //        @Property(comp = @Comp(gt = 0), defaultValue = "1")

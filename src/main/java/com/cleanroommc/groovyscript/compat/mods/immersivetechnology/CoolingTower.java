@@ -90,8 +90,8 @@ public class CoolingTower extends VirtualizedRegistry<CoolingTowerRecipe> {
         CoolingTowerRecipe.recipeList.clear();
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
-    @Property(property = "fluidOutput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 3))
+    @Property(property = "fluidInput", comp = @Comp(gte = 1, lte = 2))
+    @Property(property = "fluidOutput", comp = @Comp(gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CoolingTowerRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE))

@@ -86,7 +86,7 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
         return new SimpleObjectStream<>(Recipes.condenserRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 1, unique = "groovyscript.wiki.rustic.alchemy.input.required"))
+    @Property(property = "input", comp = @Comp(gte = 1, unique = "groovyscript.wiki.rustic.alchemy.input.required"))
     @Property(property = "fluidInput", defaultValue = "fluid('water') * 125", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
     @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICondenserRecipe> {

@@ -128,7 +128,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
     }
 
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 6))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 6))
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeAlchemyTable> {
 

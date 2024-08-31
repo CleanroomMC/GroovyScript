@@ -104,9 +104,9 @@ public class AnalysingChamber extends VirtualizedRegistry<CalculatorRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 6))
+        @Property(comp = @Comp(gte = 1, lte = 6))
         private int slot;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 20000))
+        @Property(comp = @Comp(gte = 1, lte = 20000))
         private int location;
 
         @RecipeBuilderMethodDescription
