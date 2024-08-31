@@ -33,8 +33,9 @@ public abstract class StandardListRegistry<R> extends VirtualizedRegistry<R> {
     @GroovyBlacklist
     @ApiStatus.Internal
     public void onReload() {
-        getRecipes().removeAll(removeScripted());
-        getRecipes().addAll(restoreFromBackup());
+        var recipes = getRecipes();
+        recipes.removeAll(removeScripted());
+        recipes.addAll(restoreFromBackup());
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.add_to_list", priority = 500)
@@ -49,8 +50,9 @@ public abstract class StandardListRegistry<R> extends VirtualizedRegistry<R> {
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        getRecipes().forEach(this::addBackup);
-        getRecipes().clear();
+        var recipes = getRecipes();
+        recipes.forEach(this::addBackup);
+        recipes.clear();
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
