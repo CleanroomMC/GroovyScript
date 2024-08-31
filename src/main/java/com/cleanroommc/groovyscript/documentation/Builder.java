@@ -354,21 +354,7 @@ public class Builder {
         }
 
         private static String parseComparisonRequirements(Comp comp) {
-            var typeSet = EnumSet.noneOf(Comp.Type.class);
-
-            if (comp.types().length == 0) {
-                if (comp.gt() != 0) typeSet.add(Comp.Type.GT);
-                if (comp.gte() != 0) typeSet.add(Comp.Type.GTE);
-                if (comp.lt() != 0) typeSet.add(Comp.Type.LT);
-                if (comp.lte() != 0) typeSet.add(Comp.Type.LTE);
-                if (comp.eq() != 0) typeSet.add(Comp.Type.EQ);
-                if (!comp.not().isEmpty()) typeSet.add(Comp.Type.NOT);
-                if (!comp.unique().isEmpty()) typeSet.add(Comp.Type.UNI);
-            } else {
-                typeSet.addAll(Arrays.asList(comp.types()));
-            }
-
-            return typeSet.stream().sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
+            return Comp.Type.getUsedTypes(comp).stream().sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
                 case GT -> comp.gt();
                 case GTE -> comp.gte();
                 case EQ -> comp.eq();

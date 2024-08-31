@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.api.documentation.annotations;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.EnumSet;
 
 /**
  * Used by {@link Property Properties} to determine what are valid values for the {@link Property}.
@@ -128,6 +129,27 @@ public @interface Comp {
         Type(String symbol, String key) {
             this.symbol = symbol;
             this.key = key;
+        }
+
+        /**
+         * Creates an EnumSet based on the given {@link Comp}.
+         * If {@link Comp#types()} has any elements, the types contained will be used.
+         * Otherwise, any non-default values for the individual elements will be used.
+         *
+         * @param comp the {@link Comp} instance to be parsed
+         * @return a set containing the types that are used in the Comp
+         */
+        public static EnumSet<Type> getUsedTypes(Comp comp) {
+            if (comp.types().length > 0) return EnumSet.of(comp.types()[0], comp.types());
+            var usedTypes = EnumSet.noneOf(Comp.Type.class);
+            if (comp.gt() != 0) usedTypes.add(Comp.Type.GT);
+            if (comp.gte() != 0) usedTypes.add(Comp.Type.GTE);
+            if (comp.eq() != 0) usedTypes.add(Comp.Type.EQ);
+            if (comp.lte() != 0) usedTypes.add(Comp.Type.LTE);
+            if (comp.lt() != 0) usedTypes.add(Comp.Type.LT);
+            if (!comp.not().isEmpty()) usedTypes.add(Comp.Type.NOT);
+            if (!comp.unique().isEmpty()) usedTypes.add(Comp.Type.UNI);
+            return usedTypes;
         }
 
         public String getSymbol() {
