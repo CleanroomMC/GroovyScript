@@ -15,8 +15,8 @@ import java.util.Map;
 public class Aspect extends VirtualizedRegistry<thaumcraft.api.aspects.Aspect> {
 
     @RecipeBuilderDescription(example = {
-            @Example(".tag('clay').chatColor(14013676).image(resource('placeholdername:textures/items/clay_2.png'))"),
-            @Example(".tag('snack').chatColor(14013676).component(aspect('cognitio')).component('clay').image(resource('placeholdername:textures/items/snack.png'))")
+            @Example(".tag('clay').chatColor(0xD5D4EC).image(resource('placeholdername:textures/items/clay_2.png'))"),
+            @Example(".tag('snack').chatColor(0xD5D4EC).component(aspect('cognitio')).component('clay').image(resource('placeholdername:textures/items/snack.png'))")
     })
     public AspectBuilder aspectBuilder() {
         return new AspectBuilder();
