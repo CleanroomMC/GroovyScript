@@ -275,15 +275,18 @@ public class Builder {
                     out.append(fieldDocumentation.getDescription());
 
                     if (fieldDocumentation.hasComparison()) {
-                        out.append(" ").append(I18n.format("groovyscript.wiki.requires", fieldDocumentation.getComparison()));
+                        var value = fieldDocumentation.getComparison();
+                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
                     }
 
                     if (fieldDocumentation.hasRequirement()) {
-                        out.append(" ").append(I18n.format("groovyscript.wiki.requires", fieldDocumentation.getRequirement()));
+                        var value = fieldDocumentation.getRequirement();
+                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
                     }
 
                     if (fieldDocumentation.hasDefaultValue()) {
-                        out.append(" ").append(I18n.format("groovyscript.wiki.default", fieldDocumentation.getDefaultValue()));
+                        var value = fieldDocumentation.getDefaultValue();
+                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.default", value));
                     }
 
                     out.append("\n\n");
