@@ -178,6 +178,52 @@ groovyscript.wiki.advancedmortars.mortar.duration.value=Sets how many interactio
 groovyscript.wiki.advancedmortars.mortar.secondaryOutput.value=Sets the additional output itemstack
 groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the chance of the additional output itemstack being output
 
+# Advanced Rocketry
+groovyscript.wiki.advancedrocketry.admonition.weights=The 'chances' used with the recipe outputs are actually output weights. For example, setting 'chance' to 0.1 will set the output's chance to 1, unless other outputs add up to the weight of 0.9. The output chances will also not do anything unless 'outputSize' is set to a number greater than 0.
+groovyscript.wiki.advancedrocketry.admonition.input_slots=The recipes performed in this machine can have more than 9 inputs, but this makes the JEI handler overflow when displaying the recipe and breaks the tooltips.
+groovyscript.wiki.advancedrocketry.admonition.output_slots=The recipes performed in this machine can have more than 9 outputs, but this makes the JEI handler overflow when displaying the recipe and breaks the tooltips.
+groovyscript.wiki.advancedrocketry.admonition.hatch_count_6=The Precision Assembler can support up to 6 input and output hatches. Each hatch can store either 1 type of fluid or up to 4 types of input or output items. Groovyscript will not add the recipe if it requires more than 6 hatches (i.e., has 6 fluid inputs and an output).
+groovyscript.wiki.advancedrocketry.admonition.hatch_count_11=The Electric Arc Furnace can support up to 11 input and output hatches. Each hatch can store either 1 type of fluid or up to 4 types of input or output items. Groovyscript will not add the recipe if it requires more than 11 hatches (i.e., has 11 fluid inputs and an output).
+groovyscript.wiki.advancedrocketry.output.value=Sets the item outputs of the recipe. The version with two arguments can be used to add weighted outputs
+groovyscript.wiki.advancedrocketry.time.value=Sets the time needed to perform the recipe in ticks
+groovyscript.wiki.advancedrocketry.power.value=Sets the power consumed by the recipe in RF/t
+groovyscript.wiki.advancedrocketry.outputSize.value=Sets the maximum amount of outputs produced by each recipe
+groovyscript.wiki.advancedrocketry.input.required=either `input` or `fluidInput` to be non-null
+groovyscript.wiki.advancedrocketry.output.required=either `output` or `fluidOutput` to be non-null
+groovyscript.wiki.advancedrocketry.input.block=`input` to be a block
+
+groovyscript.wiki.advancedrocketry.centrifuge.title=Centrifuge
+groovyscript.wiki.advancedrocketry.centrifuge.description=Converts an input fluid into up to 12 output items and up to 4 output fluids, consuming RF
+
+groovyscript.wiki.advancedrocketry.chemical_reactor.title=Chemical Reactor
+groovyscript.wiki.advancedrocketry.chemical_reactor.description=Converts up to 2 fluids and 8 input items into up to 1 fluid and up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.crystallizer.title=Crystallizer
+groovyscript.wiki.advancedrocketry.crystallizer.description=Converts up to 4 input items into up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.cutting_machine.title=Cutting Machine
+groovyscript.wiki.advancedrocketry.cutting_machine.description=Converts up to 4 input items into up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.electric_arc_furnace.title=Electric Arc Furnace
+groovyscript.wiki.advancedrocketry.electric_arc_furnace.description=Converts input items and fluids into output items and fluids, consuming RF
+
+groovyscript.wiki.advancedrocketry.electrolyser.title=Electrolyser
+groovyscript.wiki.advancedrocketry.electrolyser.description=Converts an input fluid into up to 2 output fluids, consuming RF
+
+groovyscript.wiki.advancedrocketry.lathe.title=Lathe
+groovyscript.wiki.advancedrocketry.lathe.description=Converts up to 4 input items into up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.precision_assembler.title=Precision Assembler
+groovyscript.wiki.advancedrocketry.precision_assembler.description=Converts input items and fluids into output items and fluids, consuming RF
+
+groovyscript.wiki.advancedrocketry.precision_laser_etcher.title=Precision Laser Etcher
+groovyscript.wiki.advancedrocketry.precision_laser_etcher.description=Converts up to 4 input items into up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.rolling_machine.title=Rolling Machine
+groovyscript.wiki.advancedrocketry.rolling_machine.description=Consumes up to 1 input fluid and up to 4 input items into up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.small_plate_presser.title=Small Plate Presser
+groovyscript.wiki.advancedrocketry.small_plate_presser.description=Converts a block right below it into output items when powered by redstone
 
 # Aether Legacy
 groovyscript.wiki.aether_legacy.accessory.title=Accessory

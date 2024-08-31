@@ -237,7 +237,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         private SoundEvent sound;
 
         public static RecipeMatch recipeMatchFromIngredient(IIngredient ingredient, int amount) {
-            return RecipeMatch.of(Arrays.stream(ingredient.getMatchingStacks()).collect(Collectors.toList()), amount, 1);
+            return RecipeMatch.of(Arrays.asList(ingredient.getMatchingStacks()), amount, 1);
         }
 
         public static RecipeMatch recipeMatchFromIngredient(IIngredient ingredient) {
