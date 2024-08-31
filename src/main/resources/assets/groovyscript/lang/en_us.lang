@@ -116,6 +116,7 @@ groovyscript.wiki.equal_to=exactly %s
 groovyscript.wiki.greater_than_or_equal_to=greater than or equal to %s
 groovyscript.wiki.greater_than=greater than %s
 groovyscript.wiki.not=not %s
+groovyscript.wiki.unique=%s
 groovyscript.wiki.and=and
 
 # Actually Additions

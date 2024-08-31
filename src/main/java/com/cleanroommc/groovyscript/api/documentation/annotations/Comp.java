@@ -6,9 +6,8 @@ import java.lang.annotation.Target;
 
 /**
  * Used by {@link Property Properties} to determine what are valid values for the {@link Property}.
- * Frequently used in an array containing two entries, indicating minimum and maximum bounds.
  *
- * @see Property#valid()
+ * @see Property#comp()
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ /* No targets allowed */})
@@ -16,13 +15,57 @@ public @interface Comp {
 
     /**
      * @return the method of comparison
+     * @deprecated use {@link #types()} instead
      */
+    @Deprecated
     Type type() default Type.EQ;
 
     /**
      * @return the value that {@link #type()} compares with
+     * @deprecated use {@link #lt()}, {@link #lte()}, {@link #gte()}, {@link #gt()}, {@link #eq()}, {@link #not()}, or {@link #unique()} instead
      */
-    String value();
+    @Deprecated
+    String value() default "";
+
+    /**
+     * @return an array of types to compare with
+     */
+    Type[] types() default {};
+
+    /**
+     * @return if {@link #types()} contains {@link Comp.Type#LT}, the value used to represent less than
+     */
+    int lt() default 0;
+
+    /**
+     * @return if {@link #types()} contains {@link Comp.Type#LTE}, the value used to represent less than or equal to
+     */
+    int lte() default 0;
+
+    /**
+     * @return if {@link #types()} contains {@link Comp.Type#GTE}, the value used to represent greater than or equal to
+     */
+    int gte() default 0;
+
+    /**
+     * @return if {@link #types()} contains {@link Comp.Type#GT}, the value used to represent greater than
+     */
+    int gt() default 0;
+
+    /**
+     * @return if {@link #types()} contains {@link Comp.Type#EQ}, the value used to represent equal to
+     */
+    int eq() default 0;
+
+    /**
+     * @return if {@link #types()} contains {@link Comp.Type#NOT}, the value used to represent not equal to
+     */
+    String not() default "";
+
+    /**
+     * @return if {@link #types()} contains {@link Comp.Type#UNI}, the lang key used to represent the unique description
+     */
+    String unique() default "";
 
     /**
      * Used to determine the type of comparison. Contains a symbol representation and a localization key.
@@ -63,6 +106,11 @@ public @interface Comp {
      *   <th>!=</th>
      *   <th>groovyscript.wiki.not</th>
      *  </tr>
+     *  <tr>
+     *   <th>UNI</th>
+     *   <th>!?</th>
+     *   <th>groovyscript.wiki.unique</th>
+     *  </tr>
      * </table>
      */
     enum Type {
@@ -71,7 +119,8 @@ public @interface Comp {
         EQ("==", "groovyscript.wiki.equal_to"),
         LTE("<=", "groovyscript.wiki.less_than_or_equal_to"),
         LT("<", "groovyscript.wiki.less_than"),
-        NOT("!=", "groovyscript.wiki.not");
+        NOT("!=", "groovyscript.wiki.not"),
+        UNI("!?", "groovyscript.wiki.unique");
 
         private final String symbol;
         private final String key;

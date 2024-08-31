@@ -342,6 +342,18 @@ public class Builder {
             this.firstAnnotation = annotations.get(0);
         }
 
+        private static String parse(Comp comp) {
+            return Arrays.stream(comp.types()).sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
+                case GT -> comp.gt();
+                case GTE -> comp.gte();
+                case EQ -> comp.eq();
+                case LTE -> comp.lte();
+                case LT -> comp.lt();
+                case NOT -> comp.not();
+                case UNI -> Documentation.translate(comp.unique());
+            })).collect(Collectors.joining(String.format(" %s ", I18n.format("groovyscript.wiki.and"))));
+        }
+
         public Field getField() {
             return field;
         }
@@ -378,13 +390,19 @@ public class Builder {
             return annotations.stream().filter(x -> !x.value().isEmpty()).findFirst().map(Property::value).orElse("");
         }
 
+        @SuppressWarnings("deprecation")
         public boolean hasComparison() {
-            return annotations.stream().anyMatch(x -> x.valid().length != 0);
+            return annotations.stream().anyMatch(x -> x.comp().types().length != 0 || x.valid().length != 0);
         }
 
+        @SuppressWarnings({"deprecation", "SimplifyOptionalCallChains"})
         public String getComparison() {
             Optional<Comp[]> comparison = annotations.stream().map(Property::valid).filter(valid -> valid.length != 0).findFirst();
-            if (!comparison.isPresent()) return "";
+            if (!comparison.isPresent()) {
+                Optional<Comp> comp = annotations.stream().map(Property::comp).filter(x -> x.types().length != 0).findFirst();
+                if (!comp.isPresent()) return "";
+                return FieldDocumentation.parse(comp.get());
+            }
             return Arrays.stream(comparison.get())
                     .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
                     .map(x -> Documentation.translate(x.type().getKey(), x.value()))

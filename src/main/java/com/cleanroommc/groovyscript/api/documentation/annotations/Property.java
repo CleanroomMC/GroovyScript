@@ -30,7 +30,7 @@ import java.lang.reflect.Field;
  *     </li>
  *     <li>{@link #property()} either contains nothing if {@link Property} was created attached to a field, or the relevant {@link Field#getName()} string.</li>
  *     <li>{@link #defaultValue()} a string containing the default value of the property. If empty, defaults to {@code null}.</li>
- *     <li>{@link #valid()} is an array of {@link Comp} that indicates the requirements of the {@link Property} to pass validation.</li>
+ *     <li>{@link #comp()} is a {@link Comp} that indicates the requirements of the {@link Property} to pass validation.</li>
  *     <li>{@link #requirement()} is a localization key that states the requirements for the property to pass validation provided the requirements are too
  *     complex to represent via {@link #valid()}.</li>
  *     <li>{@link #ignoresInheritedMethods()} if this {@link Property} annotation requires any methods targeting the {@link Property} to not be inherited methods.</li>
@@ -79,6 +79,12 @@ public @interface Property {
     String defaultValue() default "";
 
     /**
+     * @deprecated {@link #comp()}
+     */
+    @Deprecated
+    Comp[] valid() default {};
+
+    /**
      * The primary way to document properties, supplemented by {@link #requirement()}.
      * The three main ways this element is used is to refer to:
      * <br>- a number: Would indicate comparing directly against the number.
@@ -92,32 +98,44 @@ public @interface Property {
      *  </tr>
      *  <tr>
      *   <td><code>x == 1</code></td>
-     *   <td><code>valid = @Comp("1")</code></td>
-     *  </tr>
-     *  <tr>
-     *   <td><code>x != 1</code></td>
-     *   <td><code>valid = @Comp(value = "1", type = Comp.Type.NOT)</code></td>
-     *  </tr>
-     *  <tr>
-     *   <td><code>x != null</code></td>
-     *   <td><code>valid = @Comp(value = "null", type = Comp.Type.NOT)</code></td>
+     *   <td><code>@Comp(types = Comp.Type.EQ, eq = 1)</code></td>
      *  </tr>
      *  <tr>
      *   <td><code>x > 0</code></td>
-     *   <td><code>valid = @Comp(value = "0", type = Comp.Type.GT)</code></td>
+     *   <td><code>@Comp(types = Comp.Type.GT, gt = 0)</code></td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x >= 0</code></td>
+     *   <td><code>@Comp(types = Comp.Type.GTE, gte = 0)</code></td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x != 1</code></td>
+     *   <td><code>@Comp(types = Comp.Type.NOT, not = "1")</code></td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x != null</code></td>
+     *   <td><code>@Comp(type = Comp.Type.NOT, not = "null")</code></td>
      *  </tr>
      *  <tr>
      *   <td><code>x >= 0 && x <= 5</code></td>
-     *   <td><code>valid = {{@literal @}Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)}</code></td>
+     *   <td><code>@Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 5)</code></td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x > 0 && x <= 2</code></td>
+     *   <td><code>@Comp(types = {Comp.Type.GT, Comp.Type.LTE}, gt = 0, lte = 2)</code></td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>complex logic</code></td>
+     *   <td><code>@Comp(types = Comp.Type.UNI, unique = "complex logic")</code></td>
      *  </tr>
      * </table>
      *
-     * @return an array of {@link Comp} entries indicating valid values for the property to be.
+     * @return a {@link Comp} indicating valid values for the property to be.
      */
-    Comp[] valid() default {};
+    Comp comp() default @Comp;
 
     /**
-     * A localization key to declare validation requirements that are too complex to represent in {@link #valid()}.
+     * A localization key to declare validation requirements that are too complex to represent in {@link #comp()}.
      *
      * @return a string describing the valid value(s) for the field to be to pass validation
      */
