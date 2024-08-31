@@ -165,7 +165,7 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
             Map<Integer, String> oredicts = new HashMap<>();
             for (int i = 0; i < input.size(); i++) {
                 IIngredient in = input.get(i);
-                inputs.add(Arrays.stream(in.getMatchingStacks()).collect(Collectors.toList()));
+                inputs.add(Arrays.asList(in.getMatchingStacks()));
                 if (in instanceof OreDictIngredient) {
                     oredicts.put(i, ((OreDictIngredient) in).getOreDict());
                 }
