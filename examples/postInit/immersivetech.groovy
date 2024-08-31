@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: immersivetech
 
-println 'mod \'immersivetech\' detected, running script'
+log.info 'mod \'immersivetech\' detected, running script'
 
 // Boiler:
 // Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure when the
