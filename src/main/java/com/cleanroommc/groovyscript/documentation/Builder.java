@@ -353,8 +353,8 @@ public class Builder {
             this.firstAnnotation = annotations.get(0);
         }
 
-        private static String parseComparisonRequirements(Comp comp) {
-            return Comp.Type.getUsedTypes(comp).stream().sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
+        private static String parseComparisonRequirements(Comp comp, EnumSet<Comp.Type> usedTypes) {
+            return usedTypes.stream().sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
                 case GT -> comp.gt();
                 case GTE -> comp.gte();
                 case EQ -> comp.eq();
@@ -409,9 +409,13 @@ public class Builder {
         public String getComparison() {
             Optional<Comp[]> comparison = annotations.stream().map(Property::valid).filter(valid -> valid.length != 0).findFirst();
             if (!comparison.isPresent()) {
-                Optional<Comp> comp = annotations.stream().map(Property::comp).findFirst();
-                if (!comp.isPresent()) return "";
-                return FieldDocumentation.parseComparisonRequirements(comp.get());
+                for (var property : annotations) {
+                    var usedTypes = Comp.Type.getUsedTypes(property.comp());
+                    if (!usedTypes.isEmpty()) {
+                        return FieldDocumentation.parseComparisonRequirements(property.comp(), usedTypes);
+                    }
+                }
+                return "";
             }
             return Arrays.stream(comparison.get())
                     .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
