@@ -89,9 +89,9 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IMachineRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int energy;
-        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(comp = @Comp(types = Comp.Type.GT))
         private int time;
 
         @RecipeBuilderMethodDescription

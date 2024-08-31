@@ -96,11 +96,11 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
 
         @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private Fluid fluid;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int rarity;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int minimumAmount;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int variance;
 
         @RecipeBuilderMethodDescription

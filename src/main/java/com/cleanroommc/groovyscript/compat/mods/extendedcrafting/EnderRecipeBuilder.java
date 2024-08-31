@@ -29,7 +29,7 @@ public interface EnderRecipeBuilder {
 
     class Shaped extends AbstractCraftingRecipeBuilder.AbstractShaped<IRecipe> implements EnderRecipeBuilder {
 
-        @Property(defaultValue = "ModConfig.confEnderTimeRequired", comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(defaultValue = "ModConfig.confEnderTimeRequired", comp = @Comp(types = Comp.Type.GTE))
         protected int time = ModConfig.confEnderTimeRequired;
 
         public Shaped() {
@@ -83,7 +83,7 @@ public interface EnderRecipeBuilder {
 
     class Shapeless extends AbstractCraftingRecipeBuilder.AbstractShapeless<IRecipe> implements EnderRecipeBuilder {
 
-        @Property(defaultValue = "ModConfig.confEnderTimeRequired", comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(defaultValue = "ModConfig.confEnderTimeRequired", comp = @Comp(types = Comp.Type.GTE))
         protected int time = ModConfig.confEnderTimeRequired;
 
         public Shapeless() {

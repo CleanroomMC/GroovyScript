@@ -92,7 +92,7 @@ public class Hydrator extends VirtualizedRegistry<RecipeHydrate> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeHydrate> {
 
-        @Property(defaultValue = "25", comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(defaultValue = "25", comp = @Comp(types = Comp.Type.GTE))
         private int water = 25;
 
         @RecipeBuilderMethodDescription

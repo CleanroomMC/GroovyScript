@@ -90,7 +90,7 @@ public class WaterSaw extends VirtualizedRegistry<WaterSawRecipes> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<WaterSawRecipes> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int choppingTime;
 
         @RecipeBuilderMethodDescription

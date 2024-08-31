@@ -94,7 +94,7 @@ public class SolarTower extends VirtualizedRegistry<SolarTowerRecipe> {
     @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SolarTowerRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int time;
 
         @RecipeBuilderMethodDescription

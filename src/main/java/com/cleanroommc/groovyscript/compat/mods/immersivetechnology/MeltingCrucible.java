@@ -94,9 +94,9 @@ public class MeltingCrucible extends VirtualizedRegistry<MeltingCrucibleRecipe> 
     @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MeltingCrucibleRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int time;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int energy;
 
         @RecipeBuilderMethodDescription

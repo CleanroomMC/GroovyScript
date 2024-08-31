@@ -120,7 +120,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         private IBlockState input;
         @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private IBlockState output;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private double cost;
         @Property
         private ItemStack outStack;

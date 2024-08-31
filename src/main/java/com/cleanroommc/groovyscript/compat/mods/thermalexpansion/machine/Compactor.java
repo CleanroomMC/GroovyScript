@@ -150,7 +150,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
 
         @Property(defaultValue = "CompactorManager.Mode.ALL")
         CompactorManager.Mode mode = CompactorManager.Mode.ALL;
-        @Property(defaultValue = "CompactorManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT, gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "CompactorManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = CompactorManager.DEFAULT_ENERGY;
 
         @RecipeBuilderMethodDescription

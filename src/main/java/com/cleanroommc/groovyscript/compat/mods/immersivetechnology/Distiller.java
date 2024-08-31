@@ -99,14 +99,14 @@ public class Distiller extends VirtualizedRegistry<DistillerRecipe> {
 
     @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<DistillerRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private float chance;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int time;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int energy;
 
         @RecipeBuilderMethodDescription

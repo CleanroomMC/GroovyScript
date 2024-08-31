@@ -154,11 +154,11 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExtruderRecipe> {
 
-        @Property(defaultValue = "ExtruderManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT, gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "ExtruderManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = ExtruderManager.DEFAULT_ENERGY;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int fluidHot;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int fluidCold;
         @Property
         private boolean sedimentary;

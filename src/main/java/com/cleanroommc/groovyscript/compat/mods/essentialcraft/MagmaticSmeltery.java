@@ -62,7 +62,7 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
         @Property(comp = @Comp(types = Comp.Type.EQ, eq = 1))
         private String output;
 
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 0xffffff))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 0xffffff))
         private int color;
 
         @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1), defaultValue = "1")

@@ -105,17 +105,17 @@ public class Mortar extends VirtualizedRegistry<MortarRecipe> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MortarRecipe> {
 
-        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
         private float red1 = 1.0F;
-        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
         private float green1 = 1.0F;
-        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
         private float blue1 = 1.0F;
-        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
         private float red2 = 1.0F;
-        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
         private float green2 = 1.0F;
-        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+        @Property(defaultValue = "1.0f", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
         private float blue2 = 1.0F;
         @Property(defaultValue = "true")
         private boolean generate = true;

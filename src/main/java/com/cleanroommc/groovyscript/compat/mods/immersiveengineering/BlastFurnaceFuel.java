@@ -86,7 +86,7 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
     @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlastFurnaceRecipe.BlastFurnaceFuel> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int time;
 
         @RecipeBuilderMethodDescription

@@ -229,7 +229,7 @@ public class AltarRecipeBuilder {
         protected String name;
         @Property(defaultValue = "1")
         protected int starlightRequired = 1;
-        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0), defaultValue = "1")
+        @Property(comp = @Comp(types = Comp.Type.GT), defaultValue = "1")
         protected int craftingTickTime = 1;
         @Property(needsOverride = true)
         protected IConstellation requiredConstellation;

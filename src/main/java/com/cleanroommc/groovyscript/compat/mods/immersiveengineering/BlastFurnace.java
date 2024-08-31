@@ -106,7 +106,7 @@ public class BlastFurnace extends VirtualizedRegistry<BlastFurnaceRecipe> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlastFurnaceRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int time;
         @Property
         private ItemStack slag;

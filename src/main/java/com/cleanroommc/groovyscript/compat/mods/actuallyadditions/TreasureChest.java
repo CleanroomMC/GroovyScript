@@ -73,11 +73,11 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TreasureChestLoot> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int weight;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "groovyscript.wiki.actuallyadditions.treasure_chest.min.required"))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, unique = "groovyscript.wiki.actuallyadditions.treasure_chest.min.required"))
         private int min;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "groovyscript.wiki.actuallyadditions.treasure_chest.max.required"))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, unique = "groovyscript.wiki.actuallyadditions.treasure_chest.max.required"))
         private int max;
 
         @RecipeBuilderMethodDescription

@@ -53,7 +53,7 @@ public class Aspect extends VirtualizedRegistry<thaumcraft.api.aspects.Aspect> {
         private String tag;
         @Property
         private int chatColor;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 2))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 2))
         private final AspectList components = new AspectList();
         @Property
         private ResourceLocation image;

@@ -96,15 +96,15 @@ public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
     }
 
     @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = Integer.MAX_VALUE))
-    @Property(property = "fluidOutput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = Integer.MAX_VALUE))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = Integer.MAX_VALUE))
+    @Property(property = "fluidOutput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = Integer.MAX_VALUE))
     public static class RecipeBuilder extends AbstractRecipeBuilder<DistillationRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private final FloatArrayList chance = new FloatArrayList();
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int time;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int energy;
 
         @RecipeBuilderMethodDescription(field = {"output", "chance"})

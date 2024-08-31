@@ -94,7 +94,7 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<LensConversionRecipe> {
 
-        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT))
         private int energyUse = 1;
         @Property(defaultValue = "ActuallyAdditionsAPI.lensDefaultConversion", comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private Lens type = ActuallyAdditionsAPI.lensDefaultConversion;

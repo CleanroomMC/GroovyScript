@@ -150,7 +150,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         private String name;
         @Property
         private int weight;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
         private float fail;
         @Property
         private boolean blacklist = true;

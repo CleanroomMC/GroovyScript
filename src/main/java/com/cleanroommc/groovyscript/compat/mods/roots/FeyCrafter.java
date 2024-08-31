@@ -92,7 +92,7 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<FeyCraftingRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int xp;
 
         @RecipeBuilderMethodDescription

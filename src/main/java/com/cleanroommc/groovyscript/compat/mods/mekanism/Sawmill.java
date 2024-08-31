@@ -67,7 +67,7 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
 
         @Property(defaultValue = "ItemStack.EMPTY")
         private ItemStack extra = ItemStack.EMPTY;
-        @Property(defaultValue = "1.0", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+        @Property(defaultValue = "1.0", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
         private double chance = 1.0;
 
         @RecipeBuilderMethodDescription

@@ -64,7 +64,7 @@ public class Quern extends ForgeRegistryWrapper<IQuernRecipe> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IQuernRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(comp = @Comp(types = Comp.Type.GT))
         private int rotations;
 
         @RecipeBuilderMethodDescription

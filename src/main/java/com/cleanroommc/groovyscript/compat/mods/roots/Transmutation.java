@@ -121,7 +121,7 @@ public class Transmutation extends VirtualizedRegistry<TransmutationRecipe> {
     }
 
     @Property(property = "name")
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TransmutationRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))

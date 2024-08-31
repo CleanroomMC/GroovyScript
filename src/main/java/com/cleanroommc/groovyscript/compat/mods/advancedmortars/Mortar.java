@@ -87,7 +87,7 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
                 .collect(Collectors.toList());
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 8))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 8))
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeMortar> {
 

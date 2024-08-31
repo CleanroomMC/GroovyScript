@@ -156,7 +156,7 @@ public class LaserDrill extends VirtualizedRegistry<Pair<LaserDrillEntry.LaserDr
         private final List<Biome> blacklist = new ArrayList<>();
         @Property
         private int lensMeta;
-        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(comp = @Comp(types = Comp.Type.GT))
         private int weight;
         @Property(comp = @Comp(types = Comp.Type.LTE, lte = 255))
         private int minY;

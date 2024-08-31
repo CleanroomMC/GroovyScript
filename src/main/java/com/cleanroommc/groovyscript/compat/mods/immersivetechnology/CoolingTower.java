@@ -94,7 +94,7 @@ public class CoolingTower extends VirtualizedRegistry<CoolingTowerRecipe> {
     @Property(property = "fluidOutput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CoolingTowerRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int time;
 
         @RecipeBuilderMethodDescription

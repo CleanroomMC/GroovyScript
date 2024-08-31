@@ -97,9 +97,9 @@ public class FurnacePyrolysis extends VirtualizedRegistry<FurnaceRecipe> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
 
-        @Property(defaultValue = "FurnaceManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT, gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "FurnaceManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = FurnaceManager.DEFAULT_ENERGY;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int creosote;
 
         @RecipeBuilderMethodDescription

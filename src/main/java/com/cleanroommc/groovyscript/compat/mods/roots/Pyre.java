@@ -92,7 +92,7 @@ public class Pyre extends VirtualizedRegistry<PyreCraftingRecipe> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<PyreCraftingRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int xp;
         @Property(defaultValue = "200")
         private int burnTime = 200;

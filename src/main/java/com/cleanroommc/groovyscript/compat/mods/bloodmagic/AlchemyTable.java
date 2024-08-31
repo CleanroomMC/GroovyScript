@@ -132,11 +132,11 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeAlchemyTable> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int syphon;
-        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(comp = @Comp(types = Comp.Type.GT))
         private int ticks;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "groovyscript.wiki.bloodmagic.max_tier.required"))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, unique = "groovyscript.wiki.bloodmagic.max_tier.required"))
         private int minimumTier;
 
         @RecipeBuilderMethodDescription

@@ -134,7 +134,7 @@ public class Brewer extends VirtualizedRegistry<BrewerRecipe> {
     @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BrewerRecipe> {
 
-        @Property(defaultValue = "BrewerManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT, gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "BrewerManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = BrewerManager.DEFAULT_ENERGY;
 
         @RecipeBuilderMethodDescription

@@ -133,9 +133,9 @@ public class TartaricForge extends VirtualizedRegistry<RecipeTartaricForge> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeTartaricForge> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private double minimumSouls;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private double soulDrain;
 
         @RecipeBuilderMethodDescription

@@ -95,11 +95,11 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> {
 
-        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemSpeed", comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemSpeed", comp = @Comp(types = Comp.Type.GTE))
         private double processingspeed = EnvironmentalAccumulatorConfig.defaultProcessItemSpeed;
-        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultTickCooldown", comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultTickCooldown", comp = @Comp(types = Comp.Type.GTE))
         private int cooldowntime = EnvironmentalAccumulatorConfig.defaultTickCooldown;
-        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemTickCount", comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemTickCount", comp = @Comp(types = Comp.Type.GTE))
         private int duration = EnvironmentalAccumulatorConfig.defaultProcessItemTickCount;
         @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private WeatherType inputWeather;

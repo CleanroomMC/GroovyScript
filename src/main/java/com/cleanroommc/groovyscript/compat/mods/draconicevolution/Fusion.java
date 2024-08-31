@@ -71,9 +71,9 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
 
         @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private ItemStack catalyst;
-        @Property(defaultValue = "1000000", comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(defaultValue = "1000000", comp = @Comp(types = Comp.Type.GT))
         private long energy = 1000000;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 3))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 3))
         private int tier;
 
         @RecipeBuilderMethodDescription

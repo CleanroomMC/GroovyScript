@@ -96,7 +96,7 @@ public class Charger extends VirtualizedRegistry<ChargerRecipe> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ChargerRecipe> {
 
-        @Property(defaultValue = "ChargerManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT, gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "ChargerManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = ChargerManager.DEFAULT_ENERGY;
 
         @RecipeBuilderMethodDescription

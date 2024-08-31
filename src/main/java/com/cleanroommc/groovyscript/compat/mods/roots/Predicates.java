@@ -57,7 +57,7 @@ public class Predicates extends NamedRegistry {
 
     public static class StateBuilder extends AbstractRecipeBuilder<MatchingStates> {
 
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.roots.predicates.properties.required"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.roots.predicates.properties.required"))
         private final Collection<String> properties = new ArrayList<>();
         @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private IBlockState blockstate;

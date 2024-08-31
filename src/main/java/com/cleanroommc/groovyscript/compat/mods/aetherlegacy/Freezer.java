@@ -42,7 +42,7 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AetherFreezable> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private int time;
 
         @RecipeBuilderMethodDescription

@@ -105,7 +105,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
     }
 
     @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
     @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<FermenterRecipe> {
 

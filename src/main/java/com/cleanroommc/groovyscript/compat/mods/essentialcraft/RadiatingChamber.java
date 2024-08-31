@@ -61,10 +61,10 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
         @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1), defaultValue = "1.0f")
         private float mruPerTick = 1.0f;
 
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 2))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 2))
         private float lowerBalance;
 
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 2), defaultValue = "2.0f")
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 2), defaultValue = "2.0f")
         private float upperBalance = 2.0f;
 
         @RecipeBuilderMethodDescription

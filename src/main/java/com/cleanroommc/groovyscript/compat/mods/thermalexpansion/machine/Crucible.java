@@ -113,7 +113,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
     @Property(property = "fluidOutput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrucibleRecipe> {
 
-        @Property(defaultValue = "CrucibleManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT, gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "CrucibleManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = CrucibleManager.DEFAULT_ENERGY;
 
         @RecipeBuilderMethodDescription

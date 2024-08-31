@@ -150,7 +150,7 @@ public class Reactant extends VirtualizedRegistry<ReactantManager.Reaction> {
     @Property(property = "fluidInput", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ReactantManager.Reaction> {
 
-        @Property(defaultValue = "ReactantManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(defaultValue = "ReactantManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT))
         private int energy = ReactantManager.DEFAULT_ENERGY;
 
         @RecipeBuilderMethodDescription

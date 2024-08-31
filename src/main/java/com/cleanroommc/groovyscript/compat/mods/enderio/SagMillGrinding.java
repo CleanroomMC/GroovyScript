@@ -71,13 +71,13 @@ public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
     @Property(property = "input", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<GrindingBall> {
 
-        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT))
         private float chance = 1;
-        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT))
         private float power = 1;
-        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT))
         private float grinding = 1;
-        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(comp = @Comp(types = Comp.Type.GT))
         private int duration;
 
         @RecipeBuilderMethodDescription

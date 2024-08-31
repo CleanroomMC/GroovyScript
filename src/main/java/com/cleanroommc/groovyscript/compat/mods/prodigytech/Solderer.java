@@ -96,7 +96,7 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SoldererManager.SoldererRecipe> {
 

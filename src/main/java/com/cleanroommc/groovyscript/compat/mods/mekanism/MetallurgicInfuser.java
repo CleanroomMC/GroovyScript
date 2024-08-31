@@ -70,7 +70,7 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
 
         @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private InfuseType infuse;
-        @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
+        @Property(comp = @Comp(types = Comp.Type.GT))
         private int amount;
 
         @RecipeBuilderMethodDescription

@@ -108,9 +108,9 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         private ItemStack catalyst;
         @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private Fluid output;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private float productionMultiplier;
-        @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
+        @Property(comp = @Comp(types = Comp.Type.GTE))
         private float shatterMultiplier;
         @Property
         private Color color;
