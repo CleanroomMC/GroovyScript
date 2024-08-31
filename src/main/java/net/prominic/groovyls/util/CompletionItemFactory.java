@@ -1,6 +1,7 @@
 package net.prominic.groovyls.util;
 
 import net.prominic.groovyls.compiler.ast.ASTContext;
+import net.prominic.groovyls.compiler.documentation.DocumentationFactory;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.AnnotatedNode;
 import org.eclipse.lsp4j.*;
@@ -11,10 +12,14 @@ public class CompletionItemFactory {
         var completionItem = createCompletion(GroovyLSUtils.astNodeToCompletionItemKind(node), label);
 
         if (node instanceof AnnotatedNode annotatedNode) {
-            var documentation = astContext.getLanguageServerContext().getDocumentationFactory().getDocumentation(annotatedNode, astContext);
-
+            DocumentationFactory docs = astContext.getLanguageServerContext().getDocumentationFactory();
+            var documentation = docs.getDocumentation(annotatedNode, astContext);
             if (documentation != null) {
                 completionItem.setDocumentation(new MarkupContent(MarkupKind.MARKDOWN, documentation));
+            }
+            var sortText = docs.getSortText(annotatedNode, astContext);
+            if (sortText != null) {
+                completionItem.setSortText(sortText);
             }
         }
 

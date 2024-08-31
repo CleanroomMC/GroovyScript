@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.server;
 import com.cleanroommc.groovyscript.api.IGroovyContainer;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.Registry;
 import net.prominic.groovyls.compiler.ast.ASTContext;
@@ -41,5 +42,13 @@ public class GroovyScriptDocumentationProvider implements IDocumentationProvider
         }
 
         return builder.length() == 0 ? null : builder.toString();
+    }
+
+    @Override
+    public @Nullable String getSortText(AnnotatedNode node, ASTContext context) {
+        return node instanceof MethodNode methodNode &&
+                       !methodNode.getDeclaringClass().getAnnotations(ClassHelper.makeCached(RegistryDescription.class)).isEmpty() &&
+                       !methodNode.getAnnotations(ClassHelper.makeCached(MethodDescription.class)).isEmpty() ?
+               "!!!" + methodNode.getName() : null;
     }
 }

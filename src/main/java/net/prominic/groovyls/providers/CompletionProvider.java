@@ -52,10 +52,9 @@ public class CompletionProvider extends DocProvider {
                                               "return", "transient", "import", "class", "extends", "implements", "enum", "try", "catch",
                                               "finally", "throw", "new", "in", "as", "instanceof", "super", "this", "null", "true", "false",
                                               "void", "byte", "short", "int", "long", "float", "double", "boolean", "private", "public",
-                                              "protected"};
-
-    //private int maxItemCount = 1000;
-    private final boolean isIncomplete = false;
+                                              "protected", "abstract", "char", "const", "default", "do", "final", "goto", "interface",
+                                              "native", "non-sealed", "package", "permits", "record", "sealed", "static", "strictfp",
+                                              "synchronized", "threadsafe", "throws", "trait", "var", "yields"};
 
     public CompletionProvider(URI doc, ASTContext astContext) {
         super(doc, astContext);
@@ -74,7 +73,7 @@ public class CompletionProvider extends DocProvider {
         if (offsetNode == null || populateItemsFromNode(position, offsetNode, items)) {
             populateKeywords(items);
         }
-        return new CompletionList(this.isIncomplete || items.reachedLimit(), items);
+        return new CompletionList(items.reachedLimit(), items);
     }
 
     private void populateKeywords(Completions items) {
@@ -146,35 +145,6 @@ public class CompletionProvider extends DocProvider {
                                                              Completions items) {
         Set<String> existingNames = new ObjectOpenHashSet<>();
         populateItemsFromGlobalScope(methodCallExpr.getMethod(), existingNames, items);
-    }
-
-    private static void populateItemsFromGameObjects(String memberNamePrefix, Set<String> existingNames, Completions items) {
-        ObjectMapperManager.getObjectMappers().stream().filter(handler -> {
-            if (handler.getName().startsWith(memberNamePrefix) && !existingNames.contains(handler.getName())) {
-                existingNames.add(handler.getName());
-                return true;
-            }
-            return false;
-        }).forEach(handler -> {
-            for (Class<?>[] paramTypes : handler.getParamTypes()) {
-                var completionItem = CompletionItemFactory.createCompletion(CompletionItemKind.Method, handler.getName());
-                completionItem.setDetail("(global scope)");
-                StringBuilder builder = new StringBuilder().append('(');
-                for (int i = 0; i < paramTypes.length; i++) {
-                    var parameter = paramTypes[i];
-                    builder.append(parameter.getSimpleName());
-                    if (i < paramTypes.length - 1) {
-                        builder.append(",");
-                    }
-                }
-                builder.append(") -> ");
-                builder.append(handler.getReturnType().getSimpleName());
-                CompletionItemLabelDetails details = new CompletionItemLabelDetails();
-                details.setDetail(builder.toString());
-                completionItem.setLabelDetails(details);
-                items.add(completionItem);
-            }
-        });
     }
 
     private void populateItemsFromPropertyExpression(PropertyExpression propExpr, Position position, Completions items) {
@@ -287,7 +257,9 @@ public class CompletionProvider extends DocProvider {
             existingNames.add(name);
             CompletionItem item = CompletionItemFactory.createCompletion(p, p.getName(), astContext);
             if (!p.isDynamicTyped()) {
-                item.setDetail(p.getType().getNameWithoutPackage());
+                var details = new CompletionItemLabelDetails();
+                details.setDetail("  " + p.getType().getNameWithoutPackage());
+                item.setLabelDetails(details);
             }
             return item;
         });
@@ -297,7 +269,9 @@ public class CompletionProvider extends DocProvider {
             existingNames.add(name);
             CompletionItem item = CompletionItemFactory.createCompletion(f, f.getName(), astContext);
             if (!f.isDynamicTyped()) {
-                item.setDetail(f.getType().getNameWithoutPackage());
+                var details = new CompletionItemLabelDetails();
+                details.setDetail("  " + f.getType().getNameWithoutPackage());
+                item.setLabelDetails(details);
             }
             return item;
         });
@@ -308,8 +282,8 @@ public class CompletionProvider extends DocProvider {
             String name = method.getName();
             if (!name.startsWith(memberNamePrefix) || existingNames.contains(name)) return null;
             existingNames.add(name);
-            if ((method.getDeclaringClass().isResolved() &&
-                    (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) == 0) ||
+            if (method.getDeclaringClass().isResolved() &&
+                    (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) == 0 &&
                     GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext) == null) {
                 return null;
             }
