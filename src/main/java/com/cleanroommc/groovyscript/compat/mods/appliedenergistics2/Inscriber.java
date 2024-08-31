@@ -68,9 +68,9 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
 
         @Property(defaultValue = "InscriberProcessType.PRESS", comp = @Comp(types = Comp.Type.NOT, not = "null"))
         private InscriberProcessType type = InscriberProcessType.PRESS;
-        @Property(defaultValue = "ItemStack.EMPTY", requirement = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required")
+        @Property(defaultValue = "ItemStack.EMPTY", comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required"))
         private ItemStack top = ItemStack.EMPTY;
-        @Property(defaultValue = "ItemStack.EMPTY", requirement = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required")
+        @Property(defaultValue = "ItemStack.EMPTY", comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required"))
         private ItemStack bottom = ItemStack.EMPTY;
 
 

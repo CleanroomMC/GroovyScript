@@ -103,9 +103,9 @@ public class Spawning extends VirtualizedRegistry<Pair<WootMobName, SpawnRecipe>
     @Property(property = "fluidInput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 6))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ISpawnRecipe> {
 
-        @Property(requirement = "groovyscript.wiki.woot.spawning.modifying.required")
+        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.woot.spawning.modifying.required"))
         private boolean defaultSpawnRecipe;
-        @Property(ignoresInheritedMethods = true, requirement = "groovyscript.wiki.woot.spawning.modifying.required")
+        @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.woot.spawning.modifying.required"))
         private WootMobName name;
         //@Property
         //private boolean efficiency;

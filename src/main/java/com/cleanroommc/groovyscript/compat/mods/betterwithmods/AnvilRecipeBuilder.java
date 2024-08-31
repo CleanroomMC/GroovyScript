@@ -13,7 +13,8 @@ import net.minecraft.item.crafting.IRecipe;
 
 public interface AnvilRecipeBuilder {
 
-    @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 16))
+    @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE, Comp.Type.UNI},
+                                                          gte = 1, lte = 16, unique = "groovyscript.wiki.craftingrecipe.matrix.required"))
     class Shaped extends AbstractCraftingRecipeBuilder.AbstractShaped<IRecipe> {
 
         public Shaped() {

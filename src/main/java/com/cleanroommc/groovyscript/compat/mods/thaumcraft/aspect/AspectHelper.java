@@ -301,9 +301,9 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
 
     public static class AspectHelperBuilder {
 
-        @Property(requirement = "groovyscript.wiki.thaumcraft.aspect_helper.target.required")
+        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.thaumcraft.aspect_helper.target.required"))
         private EntityEntry entity;
-        @Property(requirement = "groovyscript.wiki.thaumcraft.aspect_helper.target.required")
+        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.thaumcraft.aspect_helper.target.required"))
         private IIngredient object;
         @Property
         private final List<AspectStack> aspects = new ArrayList<>();

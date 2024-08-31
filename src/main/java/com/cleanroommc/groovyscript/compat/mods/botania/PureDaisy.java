@@ -122,7 +122,8 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         protected int time = RecipePureDaisy.DEFAULT_TIME;
         @Property(ignoresInheritedMethods = true, comp = @Comp(types = Comp.Type.NOT, not = "null"))
         protected IBlockState output;
-        @Property(ignoresInheritedMethods = true, requirement = "groovyscript.wiki.botania.pure_daisy.input.required", comp = @Comp(types = Comp.Type.NOT, not = "null"))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(types = {Comp.Type.NOT, Comp.Type.UNI},
+                                                               not = "null", unique = "groovyscript.wiki.botania.pure_daisy.input.required"))
         protected Object input;
 
         @RecipeBuilderMethodDescription

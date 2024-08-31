@@ -11,7 +11,8 @@ import morph.avaritia.recipe.extreme.IExtremeRecipe;
 
 public interface ExtremeRecipeBuilder {
 
-    @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 81))
+    @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE, Comp.Type.UNI},
+                                                          gte = 1, lte = 81, unique = "groovyscript.wiki.craftingrecipe.matrix.required"))
     class Shaped extends AbstractCraftingRecipeBuilder.AbstractShaped<IExtremeRecipe> {
 
         public Shaped() {

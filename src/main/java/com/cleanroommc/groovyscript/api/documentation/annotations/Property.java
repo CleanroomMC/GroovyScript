@@ -31,8 +31,6 @@ import java.lang.reflect.Field;
  *     <li>{@link #property()} either contains nothing if {@link Property} was created attached to a field, or the relevant {@link Field#getName()} string.</li>
  *     <li>{@link #defaultValue()} a string containing the default value of the property. If empty, defaults to {@code null}.</li>
  *     <li>{@link #comp()} is a {@link Comp} that indicates the requirements of the {@link Property} to pass validation.</li>
- *     <li>{@link #requirement()} is a localization key that states the requirements for the property to pass validation provided the requirements are too
- *     complex to represent via {@link #valid()}.</li>
  *     <li>{@link #ignoresInheritedMethods()} if this {@link Property} annotation requires any methods targeting the {@link Property} to not be inherited methods.</li>
  *     <li>{@link #needsOverride()} if this {@link Property} annotation needs another {@link Property} annotation with this element set to {@code true} to function.
  *     Used in wrapper classes, such as {@link com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder AbstractRecipeBuilder}, where some or all of the fields may not be needed in subclasses.</li>
@@ -85,7 +83,7 @@ public @interface Property {
     Comp[] valid() default {};
 
     /**
-     * The primary way to document properties, supplemented by {@link #requirement()}.
+     * The primary way to document properties.
      * The three main ways this element is used is to refer to:
      * <br>- a number: Would indicate comparing directly against the number.
      * <br>- an array or list: Would indicate comparing against the length of the array/list.
@@ -135,10 +133,9 @@ public @interface Property {
     Comp comp() default @Comp;
 
     /**
-     * A localization key to declare validation requirements that are too complex to represent in {@link #comp()}.
-     *
-     * @return a string describing the valid value(s) for the field to be to pass validation
+     * @deprecated use {@link #comp()} instead, via {@code @Comp(types = Comp.Type.UNI, unique = "lang-key-here")}
      */
+    @Deprecated
     String requirement() default "";
 
     /**

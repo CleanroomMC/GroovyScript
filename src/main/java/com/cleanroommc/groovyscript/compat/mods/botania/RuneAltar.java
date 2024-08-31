@@ -101,7 +101,7 @@ public class RuneAltar extends VirtualizedRegistry<RecipeRuneAltar> {
         return new SimpleObjectStream<>(BotaniaAPI.runeAltarRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", requirement = "groovyscript.wiki.botania.rune_altar.input.required", comp = @Comp(types = Comp.Type.EQ, eq = 1))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.EQ, Comp.Type.UNI}, eq = 1, unique = "groovyscript.wiki.botania.rune_altar.input.required"))
     @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeRuneAltar> {
 

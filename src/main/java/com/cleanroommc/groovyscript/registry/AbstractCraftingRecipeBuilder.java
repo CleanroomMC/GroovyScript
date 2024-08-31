@@ -219,10 +219,12 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         protected final List<String> errors = new ArrayList<>();
         @Property(value = "groovyscript.wiki.craftingrecipe.mirrored.value", hierarchy = 20)
         protected boolean mirrored;
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", priority = 200, hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.craftingrecipe.matrix.required"), priority = 200, hierarchy = 20)
         protected String[] keyBasedMatrix;
-        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required",
-                  comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 9), priority = 200, hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value",
+                  comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE, Comp.Type.UNI},
+                               gte = 1, lte = 9, unique = "groovyscript.wiki.craftingrecipe.matrix.required"),
+                  priority = 200, hierarchy = 20)
         protected List<List<IIngredient>> ingredientMatrix;
 
         public AbstractShaped(int width, int height) {

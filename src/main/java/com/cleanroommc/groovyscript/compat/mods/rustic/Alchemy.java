@@ -86,7 +86,7 @@ public class Alchemy extends VirtualizedRegistry<ICondenserRecipe> {
         return new SimpleObjectStream<>(Recipes.condenserRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 3))
+    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 1, unique = "less than or equal to 2 or 3"))
     @Property(property = "fluidInput", defaultValue = "fluid('water') * 125", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
     @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICondenserRecipe> {

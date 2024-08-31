@@ -49,7 +49,7 @@ public class Aspect extends VirtualizedRegistry<thaumcraft.api.aspects.Aspect> {
 
     public static class AspectBuilder {
 
-        @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), requirement = "groovyscript.wiki.thaumcraft.aspect.tag.required")
+        @Property(comp = @Comp(types = {Comp.Type.NOT, Comp.Type.UNI}, not = "null", unique = "groovyscript.wiki.thaumcraft.aspect.tag.required"))
         private String tag;
         @Property
         private int chatColor;

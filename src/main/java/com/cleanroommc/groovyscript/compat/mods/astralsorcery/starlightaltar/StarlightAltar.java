@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
 
     @RecipeBuilderDescription(priority = 100, requirement = {
-            @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 9)),
+            @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE, Comp.Type.UNI},
+                                                                  gte = 1, lte = 9, unique = "groovyscript.wiki.craftingrecipe.matrix.required")),
             @Property(property = "starlightRequired", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 1000))
     }, example = @Example(".output(item('minecraft:water_bucket')).row('   ').row(' B ').row('   ').key('B', item('minecraft:bucket')).starlight(500).craftTime(10)"))
     public static AltarRecipeBuilder.Shaped discoveryRecipeBuilder() {
@@ -24,7 +25,8 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
     }
 
     @RecipeBuilderDescription(priority = 200, requirement = {
-            @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 13)),
+            @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE, Comp.Type.UNI},
+                                                                  gte = 1, lte = 13, unique = "groovyscript.wiki.craftingrecipe.matrix.required")),
             @Property(property = "starlightRequired", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 2000))
     })
     public static AltarRecipeBuilder.Shaped attunementRecipeBuilder() {
@@ -32,7 +34,8 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
     }
 
     @RecipeBuilderDescription(priority = 300, requirement = {
-            @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 21)),
+            @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE, Comp.Type.UNI},
+                                                                  gte = 1, lte = 21, unique = "groovyscript.wiki.craftingrecipe.matrix.required")),
             @Property(property = "starlightRequired", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 4000))
     }, example = @Example(".output(item('minecraft:pumpkin')).matrix('ss ss', 's   s', '  d  ', 's   s', 'ss ss').key('s', item('minecraft:pumpkin_seeds')).key('d', ore('dirt'))"))
     public static AltarRecipeBuilder.Shaped constellationRecipeBuilder() {
@@ -40,7 +43,8 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
     }
 
     @RecipeBuilderDescription(priority = 400, requirement = {
-            @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 25)),
+            @Property(property = "ingredientMatrix", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE, Comp.Type.UNI},
+                                                                  gte = 1, lte = 25, unique = "groovyscript.wiki.craftingrecipe.matrix.required")),
             @Property(property = "outerIngredients", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 0, lte = 24)),
             @Property(property = "starlightRequired", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, gte = 1, lte = 8000)),
             @Property(property = "requiredConstellation")
