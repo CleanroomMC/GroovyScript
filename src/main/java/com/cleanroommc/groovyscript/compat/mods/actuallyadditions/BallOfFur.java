@@ -72,7 +72,7 @@ public class BallOfFur extends VirtualizedRegistry<BallOfFurReturn> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BallOfFurReturn> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int weight;
 
         @RecipeBuilderMethodDescription

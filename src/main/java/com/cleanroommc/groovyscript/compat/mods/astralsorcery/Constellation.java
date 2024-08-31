@@ -245,9 +245,9 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
 
     public static class ConstellationBuilder {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private final List<Point2PointConnection> connections = new ArrayList<>();
-        @Property(comp = @Comp(types = Comp.Type.GTE)) // TODO note that this is only if type is MINOR
+        @Property(comp = @Comp(gte = 0)) // TODO note that this is only if type is MINOR
         private final List<MoonPhase> phases = new ArrayList<>();
         @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private String name;
@@ -380,9 +380,9 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
 
     public static class ConstellationMapEffectBuilder {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE)) // TODO note that this is only if other is empty
+        @Property(comp = @Comp(gte = 0)) // TODO note that this is only if other is empty
         private final List<ConstellationMapEffectRegistry.EnchantmentMapEffect> enchantmentEffect = new ArrayList<>();
-        @Property(comp = @Comp(types = Comp.Type.GTE)) // TODO note that this is only if other is empty
+        @Property(comp = @Comp(gte = 0)) // TODO note that this is only if other is empty
         private final List<ConstellationMapEffectRegistry.PotionMapEffect> potionEffect = new ArrayList<>();
         @Property(comp = @Comp(not = "null"))
         private IConstellation constellation;

@@ -63,7 +63,7 @@ public class LiquidFuel extends VirtualizedRegistry<Pair<String, Integer>> {
                 .setRemover(x -> remove(x.getKey()));
     }
 
-    @Property(property = "fluidInput", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
+    @Property(property = "fluidInput", comp = @Comp(gte = 0, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<Pair<FluidStack, Integer>> {
 
         @Property

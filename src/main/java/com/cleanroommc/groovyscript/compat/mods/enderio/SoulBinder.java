@@ -89,9 +89,9 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
 
         @Property(ignoresInheritedMethods = true)
         private String name;
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int xp;
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int energy;
         @Property(comp = @Comp(gte = 1))
         private final NNList<ResourceLocation> entities = new NNList<>();

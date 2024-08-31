@@ -94,7 +94,7 @@ public class SteamTurbine extends VirtualizedRegistry<SteamTurbineRecipe> {
     @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SteamTurbineRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
 
         @RecipeBuilderMethodDescription

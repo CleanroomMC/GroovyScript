@@ -118,7 +118,7 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
 
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipePureDaisy> {
 
-        @Property(defaultValue = "RecipePureDaisy.DEFAULT_TIME (150)", comp = @Comp(types = Comp.Type.GTE))
+        @Property(defaultValue = "RecipePureDaisy.DEFAULT_TIME (150)", comp = @Comp(gte = 0))
         protected int time = RecipePureDaisy.DEFAULT_TIME;
         @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         protected IBlockState output;

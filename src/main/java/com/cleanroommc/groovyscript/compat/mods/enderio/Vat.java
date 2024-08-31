@@ -102,9 +102,9 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         private FluidStack output;
         @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private FluidStack input;
-        @Property(defaultValue = "1", comp = @Comp(types = Comp.Type.GT))
+        @Property(defaultValue = "1", comp = @Comp(gt = 0))
         private float baseMultiplier = 1;
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int energy;
 
         @RecipeBuilderMethodDescription

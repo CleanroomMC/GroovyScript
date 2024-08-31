@@ -87,9 +87,9 @@ public class Dehydrator extends VirtualizedRegistry<RecipeDeHydrate> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeDeHydrate> {
 
-        @Property(defaultValue = "100", comp = @Comp(types = Comp.Type.GTE))
+        @Property(defaultValue = "100", comp = @Comp(gte = 0))
         private int water = 100;
-        @Property(defaultValue = "10", comp = @Comp(types = Comp.Type.GTE))
+        @Property(defaultValue = "10", comp = @Comp(gte = 0))
         private int time = 10;
 
         @RecipeBuilderMethodDescription

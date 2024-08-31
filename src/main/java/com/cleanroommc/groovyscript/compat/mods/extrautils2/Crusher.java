@@ -89,11 +89,11 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
     @Property(property = "output", comp = @Comp(gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IMachineRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int energy;
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int time;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float chance;
 
         @RecipeBuilderMethodDescription

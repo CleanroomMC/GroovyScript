@@ -114,9 +114,9 @@ public class SliceNSplice extends VirtualizedRegistry<IManyToOneRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private float xp;
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int energy;
 
         @RecipeBuilderMethodDescription

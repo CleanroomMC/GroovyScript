@@ -89,6 +89,9 @@ public @interface Property {
      * <br>- an array or list: Would indicate comparing against the length of the array/list.
      * <br>- another object: Would use to indicate {@code not null} is required.
      * <p>
+     * In almost all cases, the {@link Comp#types()} element can be assumed due to the values of the desired
+     * elements being set to a non-default value. For the int elements, the default value is {@link Integer#MIN_VALUE},
+     * and for the String elements, the default value is an empty string.
      * <p>
      * Here is a quick shortcut table to better understand what the logic is:
      *
@@ -111,7 +114,7 @@ public @interface Property {
      *  <tr>
      *   <td><code>x == 1</code></td>
      *   <td><code>@Comp({@link Comp#eq eq} = 1)</code></td>
-     *   <td>if no types, non-default values are checked, eq is not 0</td>
+     *   <td>^1</td>
      *  </tr>
      *  <tr>
      *   <td><code>x > 0</code></td>
@@ -120,8 +123,8 @@ public @interface Property {
      *  </tr>
      *  <tr>
      *   <td><code>x > 0</code></td>
-     *   <td><code>@Comp({@link Comp#types types} = {@link Comp.Type#GT GT})</code></td>
-     *   <td>types checks gt, gt defaults to 0</td>
+     *   <td><code>@Comp({@link Comp#gt gt} = 0)</code></td>
+     *   <td>^1</td>
      *  </tr>
      *  <tr>
      *   <td><code>x >= 0</code></td>
@@ -136,7 +139,7 @@ public @interface Property {
      *  <tr>
      *   <td><code>x != null</code></td>
      *   <td><code>@Comp({@link Comp#not not} = "null")</code></td>
-     *   <td>if no types, non-default values are checked, not isn't empty</td>
+     *   <td>^1</td>
      *  </tr>
      *  <tr>
      *   <td><code>x >= 0 && x <= 5</code></td>
@@ -145,25 +148,27 @@ public @interface Property {
      *  </tr>
      *  <tr>
      *   <td><code>x > 0 && x <= 2</code></td>
-     *   <td><code>@Comp({@link Comp#types types} = {{@link Comp.Type#GT GT}, {@link Comp.Type#LTE LTE}}, {@link Comp#lte lte} = 2)</code></td>
-     *   <td>types checks gte and lte, gte defaults to 0 and lte is set to 2</td>
+     *   <td><code>@Comp({@link Comp#gt gt} = 0, {@link Comp#lte lte} = 2)</code></td>
+     *   <td>^1</td>
      *  </tr>
      *  <tr>
      *   <td><code>complex logic</code></td>
      *   <td><code>@Comp({@link Comp#unique unique} = "complex logic")</code></td>
-     *   <td>if no types, non-default values are checked, unique isn't empty</td>
+     *   <td>^1</td>
      *  </tr>
      *  <tr>
      *   <td><code>x >= 0 && complex logic</code></td>
-     *   <td><code>@Comp({@link Comp#types types} = {{@link Comp.Type#GTE GTE}, {@link Comp.Type#UNI UNI}}, {@link Comp#unique unique} = "complex logic")</code></td>
-     *   <td>types checks gte and unique, gte defaults to 0 and unique is set to "complex logic"</td>
+     *   <td><code>@Comp({@link Comp#gte gte} = 0, {@link Comp#unique unique} = "complex logic")</code></td>
+     *   <td>^1</td>
      *  </tr>
      *  <tr>
      *   <td><code>x >= 1 && x <= 9 && complex logic</code></td>
      *   <td><code>@Comp({@link Comp#gte gte} = 1, {@link Comp#lte lte} = 9, {@link Comp#unique unique} = "complex logic")</code></td>
-     *   <td>if no types, non-default values are checked, gte isn't 0, lte isn't 0, and unique isn't empty</td>
+     *   <td>^1</td>
      *  </tr>
      * </table>
+     *
+     * ^1 = if types is empty, any non-default values are used
      *
      * @return a {@link Comp} indicating valid values for the property to be.
      */

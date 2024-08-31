@@ -101,13 +101,13 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BasicInfusionRecipe> {
 
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float consumption = 0.05F;
         @Property
         private boolean chalice = true;
         @Property
         private boolean consumeMultiple;
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int time = 200;
 
 

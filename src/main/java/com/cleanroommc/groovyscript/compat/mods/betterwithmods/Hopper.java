@@ -86,10 +86,10 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
 
     @Property(property = "name", value = "groovyscript.wiki.betterwithmods.hopper.name.value", comp = @Comp(not = "null"))
     @Property(property = "input", comp = @Comp(eq = 1))
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 2))
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<HopperInteractions.HopperRecipe> {
 
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 2))
+        @Property(comp = @Comp(gte = 0, lte = 2))
         protected final ItemStackList inWorldItemOutput = new ItemStackList();
 
         @RecipeBuilderMethodDescription

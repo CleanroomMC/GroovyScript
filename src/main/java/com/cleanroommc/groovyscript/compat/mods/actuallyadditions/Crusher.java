@@ -94,7 +94,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
     @Property(property = "output", comp = @Comp(gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrusherRecipe> {
 
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 100))
+        @Property(comp = @Comp(gte = 0, lte = 100))
         private int chance;
 
         @RecipeBuilderMethodDescription

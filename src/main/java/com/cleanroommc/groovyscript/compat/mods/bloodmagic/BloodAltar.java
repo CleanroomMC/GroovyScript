@@ -120,13 +120,13 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeBloodAltar> {
 
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, unique = "groovyscript.wiki.bloodmagic.max_tier.required"))
+        @Property(comp = @Comp(gte = 0, unique = "groovyscript.wiki.bloodmagic.max_tier.required"))
         private int minimumTier;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int syphon;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int consumeRate;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int drainRate;
 
         @RecipeBuilderMethodDescription

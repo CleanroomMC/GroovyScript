@@ -88,7 +88,7 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
         BWRegistry.TURNTABLE.getRecipes().clear();
     }
 
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 2))
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TurntableRecipe> {
 
         @Property

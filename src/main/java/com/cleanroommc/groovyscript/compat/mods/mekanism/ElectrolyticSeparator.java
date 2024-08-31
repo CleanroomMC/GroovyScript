@@ -50,7 +50,7 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
     @Property(property = "gasOutput", comp = @Comp(eq = 2))
     public static class RecipeBuilder extends GasRecipeBuilder<SeparatorRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private double energy;
 
         @RecipeBuilderMethodDescription

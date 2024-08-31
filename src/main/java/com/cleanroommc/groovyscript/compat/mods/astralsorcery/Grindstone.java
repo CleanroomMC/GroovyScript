@@ -99,9 +99,9 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<GrindstoneRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int weight;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float secondaryChance;
 
         @RecipeBuilderMethodDescription

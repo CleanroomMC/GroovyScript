@@ -115,12 +115,12 @@ public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
     }
 
     @Property(property = "fluidInput", comp = @Comp(eq = 2))
-    @Property(property = "output", comp = @Comp(types = Comp.Type.GTE))
+    @Property(property = "output", comp = @Comp(gte = 0))
     public static class RecipeBuilder extends AbstractRecipeBuilder<LiquidInteraction> {
 
         @Property(comp = @Comp(eq = 2))
         private final FloatArrayList chances = new FloatArrayList();
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private final IntArrayList probabilities = new IntArrayList();
 
         @RecipeBuilderMethodDescription(field = {"output", "probabilities"})

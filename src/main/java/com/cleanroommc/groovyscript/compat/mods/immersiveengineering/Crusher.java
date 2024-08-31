@@ -112,7 +112,7 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
         private final List<ItemStack> secondaryOutputItems = new ArrayList<>();
         @Property(comp = @Comp(unique = "groovyscript.wiki.immersiveengineering.crusher.secondaryOutputChances.required"))
         private final FloatArrayList secondaryOutputChances = new FloatArrayList();
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int energy;
 
         @RecipeBuilderMethodDescription(field = {"secondaryOutputItems", "secondaryOutputChances"})

@@ -99,11 +99,11 @@ public class BloodInfuser extends VirtualizedRegistry<IRecipe<IngredientFluidSta
 
         private static final Fluid bloodFluid = FluidRegistry.getFluid("evilcraftblood");
 
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 3))
+        @Property(comp = @Comp(gte = 0, lte = 3))
         private int tier;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int duration;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private float xp;
 
         @RecipeBuilderMethodDescription

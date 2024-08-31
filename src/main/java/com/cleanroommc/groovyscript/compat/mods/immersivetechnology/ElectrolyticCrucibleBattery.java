@@ -95,9 +95,9 @@ public class ElectrolyticCrucibleBattery extends VirtualizedRegistry<Electrolyti
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ElectrolyticCrucibleBatteryRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int energy;
 
 

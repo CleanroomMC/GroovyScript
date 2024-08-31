@@ -78,7 +78,7 @@ public class Explosion extends VirtualizedRegistry<ExplosionCraftingRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExplosionCraftingRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int lossRate;
 
         @RecipeBuilderMethodDescription

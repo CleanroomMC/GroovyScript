@@ -72,7 +72,7 @@ public class ThermopneumaticProcessingPlant extends VirtualizedRegistry<IThermop
         return new SimpleObjectStream<>(BasicThermopneumaticProcessingPlantRecipe.recipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
+    @Property(property = "input", comp = @Comp(gte = 0, lte = 1))
     @Property(property = "fluidInput", comp = @Comp(eq = 1))
     @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IThermopneumaticProcessingPlantRecipe> {

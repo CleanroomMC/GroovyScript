@@ -102,7 +102,7 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         private Enchantment enchantment;
         @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private IIngredient input;
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int amount;
         @Property(defaultValue = "1")
         private double costMultiplier = 1;

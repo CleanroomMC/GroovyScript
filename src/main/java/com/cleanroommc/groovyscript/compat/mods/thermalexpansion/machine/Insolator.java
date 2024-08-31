@@ -144,11 +144,11 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
     @Property(property = "output", comp = @Comp(gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<InsolatorRecipe> {
 
-        @Property(defaultValue = "InsolatorManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "InsolatorManager.DEFAULT_ENERGY", comp = @Comp(gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = InsolatorManager.DEFAULT_ENERGY;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int water;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int chance;
         @Property(defaultValue = "InsolatorManager.Type.STANDARD")
         private InsolatorManager.Type type = InsolatorManager.Type.STANDARD;

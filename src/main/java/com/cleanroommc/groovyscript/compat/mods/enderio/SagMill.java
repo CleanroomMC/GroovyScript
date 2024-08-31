@@ -82,7 +82,7 @@ public class SagMill extends VirtualizedRegistry<Recipe> {
 
     @Property(property = "input", comp = @Comp(eq = 1))
     @Property(property = "output", comp = @Comp(gte = 1, lte = 4))
-    @Property(property = "energy", comp = @Comp(types = Comp.Type.GT))
+    @Property(property = "energy", comp = @Comp(gt = 0))
     @Property(property = "level")
     public static class RecipeBuilder extends EnderIORecipeBuilder<Recipe> {
 

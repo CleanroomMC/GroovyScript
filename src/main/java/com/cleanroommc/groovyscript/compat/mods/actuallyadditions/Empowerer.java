@@ -97,15 +97,15 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
 
         @Property
         private IIngredient mainInput;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int energyPerStand;
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int time;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float red;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float green;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float blue;
 
         @RecipeBuilderMethodDescription

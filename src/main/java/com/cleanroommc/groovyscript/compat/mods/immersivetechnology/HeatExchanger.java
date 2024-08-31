@@ -93,9 +93,9 @@ public class HeatExchanger extends VirtualizedRegistry<HeatExchangerRecipe> {
     @Property(property = "fluidOutput", comp = @Comp(gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<HeatExchangerRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int energy;
 
 

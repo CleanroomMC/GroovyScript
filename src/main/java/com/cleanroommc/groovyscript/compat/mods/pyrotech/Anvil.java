@@ -72,7 +72,7 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<AnvilRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int hits;
 
         @Property

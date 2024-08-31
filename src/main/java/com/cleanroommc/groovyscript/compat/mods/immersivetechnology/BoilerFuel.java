@@ -80,9 +80,9 @@ public class BoilerFuel extends VirtualizedRegistry<BoilerRecipe.BoilerFuelRecip
     @Property(property = "fluidInput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BoilerRecipe.BoilerFuelRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private double heat;
 
         @RecipeBuilderMethodDescription

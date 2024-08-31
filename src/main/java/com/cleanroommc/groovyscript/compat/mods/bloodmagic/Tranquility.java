@@ -138,7 +138,7 @@ public class Tranquility extends VirtualizedRegistry<Pair<IBlockState, Tranquili
         private Block block;
         @Property(comp = @Comp(not = "null"))
         private EnumTranquilityType tranquility;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private double value;
 
         @RecipeBuilderMethodDescription

@@ -12,12 +12,15 @@ import java.util.EnumSet;
  * and the corresponding element to store what the value being compared against is.
  * <p>
  * However, to improve the ease of use, some information can be assumed by default and are thus optional.
- * <br>If {@link #types()} is empty, elements that do not match the default value will be checked.
- * <br>If any of {@link #gt()}, {@link #gte()}, {@link #eq()}, {@link #lte()}, {@link #lt()}, {@link #not()}, or {@link #unique()} elements match the default value,
- * which is {@code 0} for the {@link #gt()}, {@link #gte()}, {@link #eq()}, {@link #lte()}, and {@link #lt()} elements and
- * an empty string ({@code ""}) for both {@link #not()} and {@link #unique()} elements,
- * they can also be omitted.
- * <br>If they are omitted, {@link #types()} will need to contain all relevant {@link Type Types}.
+ * <p>
+ * If {@link #types()} is empty, elements that do not match the default value will be checked.
+ * This means that in most cases {@link #types()} does not need to be declared.
+ * <br>
+ * The only exception is if any of {@link #gt()}, {@link #gte()}, {@link #eq()}, {@link #lte()}, {@link #lt()},
+ * {@link #not()}, or {@link #unique()} elements match the default value,
+ * which is {@link Integer#MIN_VALUE} for the {@link #gt()}, {@link #gte()}, {@link #eq()}, {@link #lte()}, and {@link #lt()} elements and
+ * an empty string ({@code ""}) for both {@link #not()} and {@link #unique()} elements.
+ * In this situation, {@link #types()} will need to contain all relevant {@link Type Types}.
  *
  * @see Property#comp()
  */
@@ -40,37 +43,55 @@ public @interface Comp {
     String value() default "";
 
     /**
-     * @return an array of types to compare with
+     * @return an array of types to compare with. In most cases, this can be assumed.
      */
     Type[] types() default {};
 
     /**
-     * @return if {@link #types()} contains {@link Comp.Type#LT}, the value used to represent less than
+     * The value represent less than.
+     * Enabled either via being set to a non-default value, or by adding {@link Comp.Type#LT} to the {@link #types()} element.
+     *
+     * @return if enabled, the value used to represent less than
      */
-    int lt() default 0;
+    int lt() default Integer.MIN_VALUE;
 
     /**
-     * @return if {@link #types()} contains {@link Comp.Type#LTE}, the value used to represent less than or equal to
+     * The value represent less than or equal to.
+     * Enabled either via being set to a non-default value, or by adding {@link Comp.Type#LTE} to the {@link #types()} element.
+     *
+     * @return if enabled, the value used to represent less than or equal to
      */
-    int lte() default 0;
+    int lte() default Integer.MIN_VALUE;
 
     /**
-     * @return if {@link #types()} contains {@link Comp.Type#GTE}, the value used to represent greater than or equal to
+     * The value represent greater than or equal to.
+     * Enabled either via being set to a non-default value, or by adding {@link Comp.Type#GTE} to the {@link #types()} element.
+     *
+     * @return if enabled, the value used to represent greater than or equal to
      */
-    int gte() default 0;
+    int gte() default Integer.MIN_VALUE;
 
     /**
-     * @return if {@link #types()} contains {@link Comp.Type#GT}, the value used to represent greater than
+     * The value represent greater than.
+     * Enabled either via being set to a non-default value, or by adding {@link Comp.Type#GT} to the {@link #types()} element.
+     *
+     * @return if enabled, the value used to represent greater than
      */
-    int gt() default 0;
+    int gt() default Integer.MIN_VALUE;
 
     /**
-     * @return if {@link #types()} contains {@link Comp.Type#EQ}, the value used to represent equal to
+     * The value represent equal to.
+     * Enabled either via being set to a non-default value, or by adding {@link Comp.Type#EQ} to the {@link #types()} element.
+     *
+     * @return if enabled, the value used to represent equal to
      */
-    int eq() default 0;
+    int eq() default Integer.MIN_VALUE;
 
     /**
-     * @return if {@link #types()} contains {@link Comp.Type#NOT}, the value used to represent not equal to
+     * The value represent not equal to.
+     * Enabled either via being set to a non-default value, or by adding {@link Comp.Type#NOT} to the {@link #types()} element.
+     *
+     * @return if enabled, the value used to represent not equal to
      */
     String not() default "";
 
@@ -153,11 +174,11 @@ public @interface Comp {
         public static EnumSet<Type> getUsedTypes(Comp comp) {
             if (comp.types().length > 0) return EnumSet.of(comp.types()[0], comp.types());
             var usedTypes = EnumSet.noneOf(Comp.Type.class);
-            if (comp.gt() != 0) usedTypes.add(Comp.Type.GT);
-            if (comp.gte() != 0) usedTypes.add(Comp.Type.GTE);
-            if (comp.eq() != 0) usedTypes.add(Comp.Type.EQ);
-            if (comp.lte() != 0) usedTypes.add(Comp.Type.LTE);
-            if (comp.lt() != 0) usedTypes.add(Comp.Type.LT);
+            if (comp.gt() != Integer.MIN_VALUE) usedTypes.add(Comp.Type.GT);
+            if (comp.gte() != Integer.MIN_VALUE) usedTypes.add(Comp.Type.GTE);
+            if (comp.eq() != Integer.MIN_VALUE) usedTypes.add(Comp.Type.EQ);
+            if (comp.lte() != Integer.MIN_VALUE) usedTypes.add(Comp.Type.LTE);
+            if (comp.lt() != Integer.MIN_VALUE) usedTypes.add(Comp.Type.LT);
             if (!comp.not().isEmpty()) usedTypes.add(Comp.Type.NOT);
             if (!comp.unique().isEmpty()) usedTypes.add(Comp.Type.UNI);
             return usedTypes;

@@ -64,7 +64,7 @@ public class Kiln extends ForgeRegistryWrapper<IKilnRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IKilnRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private float experience;
 
         @RecipeBuilderMethodDescription

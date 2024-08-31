@@ -45,7 +45,7 @@ public interface TableRecipeBuilder {
     class Shaped extends AbstractCraftingRecipeBuilder.AbstractShaped<ITieredRecipe> implements TableRecipeBuilder {
 
         // 0 = any table it fits in, 1-4 specifically that tier of table
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 4))
+        @Property(comp = @Comp(gte = 0, lte = 4))
         int tier;
 
         public Shaped() {
@@ -93,7 +93,7 @@ public interface TableRecipeBuilder {
     class Shapeless extends AbstractCraftingRecipeBuilder.AbstractShapeless<ITieredRecipe> implements TableRecipeBuilder {
 
         // 0 = any table it fits in, 1-4 specifically that tier of table
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 4))
+        @Property(comp = @Comp(gte = 0, lte = 4))
         int tier;
 
         public Shapeless() {

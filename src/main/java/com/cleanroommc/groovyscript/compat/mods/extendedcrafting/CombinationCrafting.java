@@ -114,9 +114,9 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
 
         @Property
         private final NonNullList<IIngredient> pedestals = NonNullList.create();
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private long cost;
-        @Property(defaultValue = "ModConfig.confCraftingCoreRFRate", comp = @Comp(types = Comp.Type.GTE))
+        @Property(defaultValue = "ModConfig.confCraftingCoreRFRate", comp = @Comp(gte = 0))
         private int perTick = ModConfig.confCraftingCoreRFRate;
 
         @RecipeBuilderMethodDescription

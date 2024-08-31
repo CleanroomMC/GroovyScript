@@ -97,13 +97,13 @@ public class RefineryPotion extends VirtualizedRegistry<RefineryRecipe> {
     }
 
     @Property(property = "fluidInput", comp = @Comp(eq = 1))
-    @Property(property = "output", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1))
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 1))
     @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RefineryRecipe> {
 
-        @Property(defaultValue = "RefineryManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "RefineryManager.DEFAULT_ENERGY", comp = @Comp(gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = RefineryManager.DEFAULT_ENERGY;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 100))
+        @Property(comp = @Comp(gte = 0, lte = 100))
         private int chance;
 
         @RecipeBuilderMethodDescription

@@ -99,9 +99,9 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
     @Property(property = "output", comp = @Comp(gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<PulverizerRecipe> {
 
-        @Property(defaultValue = "PulverizerManager.DEFAULT_ENERGY", comp = @Comp(types = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "PulverizerManager.DEFAULT_ENERGY", comp = @Comp(gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = PulverizerManager.DEFAULT_ENERGY;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 100))
+        @Property(comp = @Comp(gte = 0, lte = 100))
         private int chance;
 
         @RecipeBuilderMethodDescription

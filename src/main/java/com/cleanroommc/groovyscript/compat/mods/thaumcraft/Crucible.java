@@ -125,7 +125,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
         @Property
         private String researchKey;
-        @Property(comp = @Comp(types = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private final AspectList aspects = new AspectList();
         @Property(comp = @Comp(not = "null"))
         private IIngredient catalyst;

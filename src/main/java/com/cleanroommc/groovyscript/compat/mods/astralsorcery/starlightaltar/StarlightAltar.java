@@ -41,7 +41,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
 
     @RecipeBuilderDescription(priority = 400, requirement = {
             @Property(property = "ingredientMatrix", comp = @Comp(gte = 1, lte = 25, unique = "groovyscript.wiki.craftingrecipe.matrix.required")),
-            @Property(property = "outerIngredients", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 24)),
+            @Property(property = "outerIngredients", comp = @Comp(gte = 0, lte = 24)),
             @Property(property = "starlightRequired", comp = @Comp(gte = 1, lte = 8000)),
             @Property(property = "requiredConstellation")
     }, example = @Example(".output(item('astralsorcery:itemrockcrystalsimple').setSize(300).setPurity(50).setCutting(50)).matrix('sssss', 'sgggs', 'sgdgs', 'sgggs', 'sssss').key('s', item('minecraft:pumpkin')).key('g', ore('treeLeaves')).key('d', item('minecraft:diamond_block')).outerInput(item('astralsorcery:blockmarble')).outerInput(ore('ingotAstralStarmetal')).outerInput(fluid('astralsorcery.liquidstarlight') * 1000).outerInput(ore('treeSapling')).constellation(constellation('discidia'))"))

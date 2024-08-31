@@ -116,7 +116,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).levels(2)"), requirement = {
             @Property(property = "input"),
             @Property(property = "output"),
-            @Property(property = "inputPotion", comp = @Comp(types = {Comp.Type.GTE, Comp.Type.LTE}, lte = 1)),
+            @Property(property = "inputPotion", comp = @Comp(gte = 0, lte = 1)),
             @Property(property = "boiling"),
             @Property(property = "levels")
     })
@@ -230,8 +230,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         private EnumDyeColor dye;
         @Property(needsOverride = true)
         private Boolean boiling;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI},
-                               unique = "groovyscript.wiki.inspirations.cauldron.levels.required"), needsOverride = true)
+        @Property(comp = @Comp(gte = 0, unique = "groovyscript.wiki.inspirations.cauldron.levels.required"), needsOverride = true)
         private int levels;
         @Property(comp = @Comp(not = "null"), needsOverride = true)
         private SoundEvent sound;

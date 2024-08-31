@@ -75,7 +75,7 @@ public class Kiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         private final ItemStackList failureOutput = new ItemStackList();
         @Property(comp = @Comp(gte = 1))
         private int burnTime;
-        @Property(comp = @Comp(types = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private float failureChance;
 
         @RecipeBuilderMethodDescription
