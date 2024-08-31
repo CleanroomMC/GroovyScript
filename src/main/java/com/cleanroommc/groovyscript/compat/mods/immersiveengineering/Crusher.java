@@ -108,9 +108,9 @@ public class Crusher extends VirtualizedRegistry<CrusherRecipe> {
     @Property(property = "output", comp = @Comp(types = Comp.Type.EQ, eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrusherRecipe> {
 
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "exactly secondaryOutputChances"))
+        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.immersiveengineering.crusher.secondaryOutputItems.required"))
         private final List<ItemStack> secondaryOutputItems = new ArrayList<>();
-        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "exactly secondaryOutputItems"))
+        @Property(comp = @Comp(types = Comp.Type.UNI, unique = "groovyscript.wiki.immersiveengineering.crusher.secondaryOutputChances.required"))
         private final FloatArrayList secondaryOutputChances = new FloatArrayList();
         @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int energy;

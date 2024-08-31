@@ -230,7 +230,8 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         private EnumDyeColor dye;
         @Property(needsOverride = true)
         private Boolean boiling;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "less than or equal to `InspirationsRegistry.getCauldronMax()`"), needsOverride = true)
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI},
+                               gte = 0, unique = "groovyscript.wiki.inspirations.cauldron.levels.required"), needsOverride = true)
         private int levels;
         @Property(comp = @Comp(types = Comp.Type.NOT, not = "null"), needsOverride = true)
         private SoundEvent sound;

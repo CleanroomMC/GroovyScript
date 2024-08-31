@@ -101,9 +101,9 @@ public class Reservoir extends VirtualizedRegistry<Pair<PumpjackHandler.Reservoi
         private String name;
         @Property
         private int weight;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 1, unique = "less than or equal to maxSize"))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 1, unique = "groovyscript.wiki.immersivepetroleum.reservoir.maxSize.required"))
         private int minSize;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 1, unique = "greater than or equal to minSize"))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 1, unique = "groovyscript.wiki.immersivepetroleum.reservoir.minSize.required"))
         private int maxSize;
         @Property(comp = @Comp(types = Comp.Type.GTE, gte = 1))
         private int replenishRate;

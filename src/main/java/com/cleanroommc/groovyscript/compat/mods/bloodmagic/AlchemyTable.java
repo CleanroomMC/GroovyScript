@@ -136,7 +136,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         private int syphon;
         @Property(comp = @Comp(types = Comp.Type.GT, gt = 0))
         private int ticks;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "less than AltarTier.MAXTIERS"))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "groovyscript.wiki.bloodmagic.max_tier.required"))
         private int minimumTier;
 
         @RecipeBuilderMethodDescription

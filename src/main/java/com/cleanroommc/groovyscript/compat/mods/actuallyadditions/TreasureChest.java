@@ -75,9 +75,9 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
 
         @Property(comp = @Comp(types = Comp.Type.GTE, gte = 0))
         private int weight;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "less than or equal to max"))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "groovyscript.wiki.actuallyadditions.treasure_chest.min.required"))
         private int min;
-        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "greater than or equal to min"))
+        @Property(comp = @Comp(types = {Comp.Type.GTE, Comp.Type.UNI}, gte = 0, unique = "groovyscript.wiki.actuallyadditions.treasure_chest.max.required"))
         private int max;
 
         @RecipeBuilderMethodDescription
