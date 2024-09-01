@@ -24,6 +24,7 @@ import net.prominic.groovyls.compiler.ILanguageServerContext;
 import net.prominic.groovyls.config.ICompilationUnitFactory;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 import java.nio.file.Path;
@@ -36,7 +37,12 @@ public class GroovyLanguageServer implements LanguageServer, LanguageClientAware
     private final GroovyServices groovyServices;
 
     public GroovyLanguageServer(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
-        this.groovyServices = new GroovyServices(compilationUnitFactory, languageServerContext);
+        this.groovyServices = createGroovyServices(compilationUnitFactory, languageServerContext);
+    }
+
+    @NotNull
+    protected GroovyServices createGroovyServices(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
+        return new GroovyServices(compilationUnitFactory, languageServerContext);
     }
 
     @Override

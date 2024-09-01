@@ -4,11 +4,18 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.prominic.groovyls.GroovyLanguageServer;
+import net.prominic.groovyls.GroovyServices;
+import net.prominic.groovyls.compiler.ILanguageServerContext;
+import net.prominic.groovyls.config.ICompilationUnitFactory;
+import org.eclipse.lsp4j.InitializeParams;
+import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.services.LanguageClient;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.net.ServerSocket;
+import java.util.concurrent.CompletableFuture;
 
 public class GroovyScriptLanguageServer extends GroovyLanguageServer {
 
@@ -36,5 +43,21 @@ public class GroovyScriptLanguageServer extends GroovyLanguageServer {
 
     public GroovyScriptLanguageServer(File root, GroovyScriptLanguageServerContext languageServerContext) {
         super(new GroovyScriptCompilationUnitFactory(root, languageServerContext), languageServerContext);
+    }
+
+    @Override
+    public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
+        return super.initialize(params).thenApply(initializeResult -> {
+            var groovyScriptCapabilities = new GroovyScriptCapabilities();
+            groovyScriptCapabilities.setTextureDecorationProvider(true);
+
+            initializeResult.getCapabilities().setExperimental(groovyScriptCapabilities);
+            return initializeResult;
+        });
+    }
+
+    @Override
+    protected @NotNull GroovyServices createGroovyServices(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
+        return new GroovyScriptServices(compilationUnitFactory, languageServerContext);
     }
 }

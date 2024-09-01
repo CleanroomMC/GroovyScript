@@ -54,8 +54,9 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
     private final Completer completer;
     private final String documentation;
     private List<MethodNode> methodNodes;
+    private TextureBinder<T> textureBinder;
 
-    private ObjectMapper(String name, GroovyContainer<?> mod, IObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation) {
+    private ObjectMapper(String name, GroovyContainer<?> mod, IObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation, TextureBinder<T> textureBinder) {
         super(null);
         this.name = name;
         this.mod = mod;
@@ -65,6 +66,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         this.paramTypes = paramTypes;
         this.completer = completer;
         this.documentation = documentation;
+        this.textureBinder = textureBinder;
     }
 
     T invoke(String s, Object... args) {
@@ -146,6 +148,14 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         return methodNodes;
     }
 
+    public TextureBinder<T> getTextureBinder() {
+        return textureBinder;
+    }
+
+    public void setTextureBinder(TextureBinder<T> textureBinder) {
+        this.textureBinder = textureBinder;
+    }
+
     /**
      * A helper class to create {@link ObjectMapper}s.
      *
@@ -161,6 +171,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         private final List<Class<?>[]> paramTypes = new ArrayList<>();
         private Completer completer;
         private String documentation;
+        private TextureBinder textureBinder;
 
         @ApiStatus.Internal
         public Builder(String name, Class<T> returnType) {
@@ -323,6 +334,11 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             return documentation("returns a " + mod + type);
         }
 
+        public Builder<T> textureBinder(TextureBinder<T> textureBinder) {
+            this.textureBinder = textureBinder;
+            return this;
+        }
+
         /**
          * Registers the mapper.
          *
@@ -338,7 +354,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             if (this.defaultValue == null) this.defaultValue = () -> null;
             this.documentation = IDocumented.toJavaDoc(this.documentation);
             ObjectMapper<T> goh = new ObjectMapper<>(this.name, this.mod, this.handler, this.defaultValue,
-                                                     this.returnType, this.paramTypes, this.completer, this.documentation);
+                                                     this.returnType, this.paramTypes, this.completer, this.documentation, this.textureBinder);
             ObjectMapperManager.registerObjectMapper(this.mod, goh);
         }
     }

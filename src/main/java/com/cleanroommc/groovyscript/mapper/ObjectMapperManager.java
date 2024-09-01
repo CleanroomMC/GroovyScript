@@ -16,6 +16,7 @@ import groovy.lang.ExpandoMetaClass;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
@@ -92,6 +93,7 @@ public class ObjectMapperManager {
                 .defaultValue(() -> ItemStack.EMPTY)
                 .completer(ForgeRegistries.ITEMS)
                 .docOfType("item stack")
+                .textureBinder(itemStack -> TileEntityItemStackRenderer.instance.renderByItem(itemStack))
                 .register();
         ObjectMapper.builder("liquid", FluidStack.class)
                 .parser(ObjectMappers::parseFluidStack)

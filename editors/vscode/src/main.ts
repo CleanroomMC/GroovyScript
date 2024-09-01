@@ -2,6 +2,8 @@ import * as net from "net";
 import * as lc from "vscode-languageclient/node";
 import * as vscode from "vscode";
 import { extensionStatusBar } from "./gui/extensionStatusBarProvider";
+import { TextureDecorationFeature, TextureDecorationMiddleware } from "./features/textureDecoration";
+import { FeatureClient } from "vscode-languageclient/node";
 
 let client: lc.LanguageClient;
 let outputChannel = vscode.window.createOutputChannel("GroovyScript Language Server");
@@ -37,7 +39,9 @@ async function startClient() {
 		traceOutputChannel,
 	};
 
-	client = new lc.LanguageClient("groovyscript", "GroovyScript", serverOptions, clientOptions)
+	client = new lc.LanguageClient("groovyscript", "GroovyScript", serverOptions, clientOptions);
+
+	registerFeatures();
 
 	try {
 		await client.start();
@@ -49,6 +53,10 @@ async function startClient() {
 
 	extensionStatusBar.running();
 	outputChannel.appendLine("Connected to GroovyScript Language Server");
+}
+
+function registerFeatures() {
+	client.registerFeature(new TextureDecorationFeature(<FeatureClient<TextureDecorationMiddleware>>client));
 }
 
 async function stopClient() {
