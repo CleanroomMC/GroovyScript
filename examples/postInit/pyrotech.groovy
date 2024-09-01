@@ -76,7 +76,7 @@ mods.pyrotech.brick_kiln.recipeBuilder()
 mods.pyrotech.brick_kiln.add('clay_to_iron_brick', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone'))
 
 // Refractory Oven:
-// When powered by burning fuel convert convert items.
+// When powered by burning fuel can convert items.
 
 mods.pyrotech.brick_oven.removeByInput(item('minecraft:porkchop'))
 mods.pyrotech.brick_oven.removeByOutput(item('minecraft:cooked_porkchop'))
@@ -93,7 +93,7 @@ mods.pyrotech.brick_oven.recipeBuilder()
 mods.pyrotech.brick_oven.add('apple_to_dirt_brick', item('minecraft:apple'), item('minecraft:dirt'), 1000)
 
 // Campfire:
-// Can cook food.
+// When powered by burning logs can convert items.
 
 mods.pyrotech.campfire.removeByInput(item('minecraft:porkchop'))
 mods.pyrotech.campfire.removeByOutput(item('minecraft:cooked_porkchop'))
@@ -192,8 +192,8 @@ mods.pyrotech.drying_rack.recipeBuilder()
 
 mods.pyrotech.drying_rack.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200)
 
-// groovyscript.wiki.pyrotech.pit_kiln.title:
-// groovyscript.wiki.pyrotech.pit_kiln.description.
+// Pit Kiln:
+// Converts an item into a new one by burning it. Has a chance to fail.
 
 mods.pyrotech.pit_kiln.removeByOutput(item('pyrotech:bucket_clay'))
 // mods.pyrotech.pit_kiln.removeAll()
@@ -247,7 +247,7 @@ mods.pyrotech.stone_kiln.recipeBuilder()
 mods.pyrotech.stone_kiln.add('clay_to_iron_stone', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone'))
 
 // Stone Oven:
-// Can cook food.
+// When powered by burning fuel can convert items.
 
 mods.pyrotech.stone_oven.removeByInput(item('minecraft:porkchop'))
 mods.pyrotech.stone_oven.removeByOutput(item('minecraft:cooked_porkchop'))
