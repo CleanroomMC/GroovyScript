@@ -48,8 +48,7 @@ export class TextureDecorationFeature extends TextDocumentLanguageFeature<boolea
     }
     initialize(capabilities: ServerCapabilities, documentSelector: DocumentSelector): void {
         const [id, options] = this.getRegistration(documentSelector, capabilities.experimental.textureDecorationProvider);
-        if (!id || !options)
-        {
+        if (!id || !options) {
             return;
         }
         this.register({ id: id, registerOptions: options });
@@ -65,18 +64,15 @@ export class TextureDecorationFeature extends TextDocumentLanguageFeature<boolea
                         textDocument: client.code2ProtocolConverter.asTextDocumentIdentifier(document),
                     };
 
-                    return client.sendRequest(TextureDecorationRequest.type, requestParams, token).then((result) =>
-                    {
-                        if (token.isCancellationRequested)
-                        {
+                    return client.sendRequest(TextureDecorationRequest.type, requestParams, token).then((result) => {
+                        if (token.isCancellationRequested) {
                             return null;
                         }
                         return result.map<TextureDecorationInformation>(decoration => ({
                             range: decoration.range,
-                            textureUri: client.protocol2CodeConverter.asUri(decoration.textureUri).toString(),
+                            textureUri: client.protocol2CodeConverter.asUri(decoration.textureUri).toString(true),
                         }));
-                    }, (error) =>
-                    {
+                    }, (error) => {
                         return client.handleFailedRequest(TextureDecorationRequest.type, token, error, null);
                     });
                 };
@@ -89,5 +85,5 @@ export class TextureDecorationFeature extends TextDocumentLanguageFeature<boolea
 
         return [registerTextureDecorationProvider(this._client.protocol2CodeConverter.asDocumentSelector(selector), provider), provider];
     }
-    
+
 }

@@ -1,4 +1,4 @@
-import { DocumentSelector, Disposable, window as vWindow, workspace as vWorkspace, CancellationTokenSource, TextEditor, TextDocument, languages, DecorationOptions } from "vscode";
+import { DocumentSelector, Disposable, window as vWindow, workspace as vWorkspace, CancellationTokenSource, TextEditor, TextDocument, languages, DecorationOptions, Uri } from "vscode";
 import { TextureDecorationInformation, TextureDecorationProvider } from "../features/textureDecoration";
 
 export function registerTextureDecorationProvider(selector: DocumentSelector, provider: TextureDecorationProvider): Disposable {
@@ -10,7 +10,7 @@ export function registerTextureDecorationProvider(selector: DocumentSelector, pr
         cancellationSource = new CancellationTokenSource();
     }
 
-    const changedActiveTextEditor = vWindow.onDidChangeActiveTextEditor(async editor => {
+    const editorChangedHandler = async (editor: TextEditor | undefined): Promise<void> => {
         if (editor && languages.match(selector, editor.document)) {
             cancel();
             const result = await provider.provideTextureDecoration(editor.document, cancellationSource.token);
@@ -19,7 +19,10 @@ export function registerTextureDecorationProvider(selector: DocumentSelector, pr
                 decorate(editor, result);
             }
         }
-    });
+    };
+    const changedActiveTextEditor = vWindow.onDidChangeActiveTextEditor(editorChangedHandler);
+
+    editorChangedHandler(vWindow.activeTextEditor);
 
     const changedDocumentText = vWorkspace.onDidChangeTextDocument(async event => {
         if (vWindow.activeTextEditor?.document === event.document && languages.match(selector, event.document)) {
@@ -42,9 +45,7 @@ function decorate(textEditor: TextEditor, decorations: TextureDecorationInformat
         range: decoration.range,
         renderOptions: {
             before: {
-                contentIconPath: decoration.textureUri,
-                height: '16px',
-                width: '16px'
+                contentIconPath: Uri.parse(decoration.textureUri, true),
             }
         }
     })))

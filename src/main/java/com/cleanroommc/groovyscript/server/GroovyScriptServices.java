@@ -8,19 +8,18 @@ import net.prominic.groovyls.GroovyServices;
 import net.prominic.groovyls.compiler.ILanguageServerContext;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.config.ICompilationUnitFactory;
-import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class GroovyScriptServices extends GroovyServices {
+public class GroovyScriptServices extends GroovyServices implements GroovyScriptFeaturesService {
 
     public GroovyScriptServices(ICompilationUnitFactory factory, ILanguageServerContext languageServerContext) {
         super(factory, languageServerContext);
     }
 
-    @JsonRequest(value = "groovyScript/textureDecoration", useSegment = false)
+    @Override
     public CompletableFuture<List<TextureDecorationInformation>> textureDecoration(TextureDecorationParams params) {
         URI uri = FileUtil.fixUri(params.getTextDocument().getUri());
         var unit = compilationUnitFactory.create(workspaceRoot, uri);

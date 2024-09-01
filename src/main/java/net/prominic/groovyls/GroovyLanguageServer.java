@@ -32,17 +32,17 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
-public class GroovyLanguageServer implements LanguageServer, LanguageClientAware {
+public class GroovyLanguageServer<T extends GroovyServices> implements LanguageServer, LanguageClientAware {
 
-    private final GroovyServices groovyServices;
+    protected final T groovyServices;
 
     public GroovyLanguageServer(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
         this.groovyServices = createGroovyServices(compilationUnitFactory, languageServerContext);
     }
 
     @NotNull
-    protected GroovyServices createGroovyServices(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
-        return new GroovyServices(compilationUnitFactory, languageServerContext);
+    protected T createGroovyServices(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
+        return (T) new GroovyServices(compilationUnitFactory, languageServerContext);
     }
 
     @Override
