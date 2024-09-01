@@ -29,9 +29,9 @@ public class Centrifuge extends BaseRegistry {
         return super.removeByInput(input);
     }
 
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "12")}, value = "groovyscript.wiki.advancedrocketry.output.value")
-    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "4")})
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(lte = 12), value = "groovyscript.wiki.advancedrocketry.output.value")
+    @Property(property = "fluidOutput", comp = @Comp(lte = 4))
     public static class RecipeBuilder extends BaseRegistry.MultiblockRecipeBuilder {
 
         @Override

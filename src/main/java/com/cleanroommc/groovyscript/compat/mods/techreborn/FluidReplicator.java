@@ -60,14 +60,14 @@ public class FluidReplicator extends VirtualizedRegistry<FluidReplicatorRecipe> 
         return new SimpleObjectStream<>(FluidReplicatorRecipeList.recipes).setRemover(this::remove);
     }
 
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<FluidReplicatorRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int matter;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int perTick;
 
         @RecipeBuilderMethodDescription

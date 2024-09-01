@@ -15,7 +15,6 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
 
@@ -191,9 +190,9 @@ public abstract class BaseRegistry extends VirtualizedRegistry<IRecipe> {
         }
     }
 
-    @Property(property = "power", valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.power.value", hierarchy = 5)
-    @Property(property = "time", valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.time.value", hierarchy = 5)
-    @Property(property = "outputSize", valid = @Comp(type = Comp.Type.GTE, value = "1"), value = "groovyscript.wiki.advancedrocketry.outputSize.value", hierarchy = 5)
+    @Property(property = "power", comp = @Comp(gte = 1), value = "groovyscript.wiki.advancedrocketry.power.value", hierarchy = 5)
+    @Property(property = "time", comp = @Comp(gte = 1), value = "groovyscript.wiki.advancedrocketry.time.value", hierarchy = 5)
+    @Property(property = "outputSize", comp = @Comp(gte = 1), value = "groovyscript.wiki.advancedrocketry.outputSize.value", hierarchy = 5)
     public abstract static class MultiblockRecipeBuilder extends RecipeBuilder {
 
         @RecipeBuilderMethodDescription
