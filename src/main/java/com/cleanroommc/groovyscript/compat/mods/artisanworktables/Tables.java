@@ -25,7 +25,10 @@ import net.minecraftforge.fml.common.Loader;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RegistryDescription(admonition = @Admonition(type = Admonition.Type.DANGER, value = "groovyscript.wiki.artisanworktables.ctcrash"))
+@RegistryDescription(admonition = {
+        @Admonition(type = Admonition.Type.INFO, value = "groovyscript.wiki.artisanworktables.tabletypes"),
+        @Admonition(type = Admonition.Type.DANGER, value = "groovyscript.wiki.artisanworktables.ctcrash")
+})
 public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
 
     @Override

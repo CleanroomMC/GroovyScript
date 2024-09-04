@@ -327,7 +327,6 @@ groovyscript.wiki.arcanearchives.gem_cutting_table.note0=While more than 8 items
 # Artisan's Worktables
 groovyscript.wiki.artisanworktables.tables.title=Artisan's Worktables
 groovyscript.wiki.artisanworktables.tables.description=15 themed crafting tables with 3x3 and 5x5 grids, optional fluid input, optional tool input, extra item inputs and outputs, weighted outputs, and experience costs
-groovyscript.wiki.artisanworktables.tables.tableName.value=The name of table. The valid options are: basic, blacksmith, carpenter, chef, chemist, designer, engineer, farmer, jeweler, mage, mason, potter, scribe, tailor, tanner
 groovyscript.wiki.artisanworktables.tables.name.value=Sets the name of the recipe
 groovyscript.wiki.artisanworktables.tables.level.value=Sets the minimum experience level the player needs to execute this recipe
 groovyscript.wiki.artisanworktables.tables.tools.value=Sets the tools that the recipe requires
@@ -346,6 +345,7 @@ groovyscript.wiki.artisanworktables.tables.gridInput.value=Sets the grid input (
 groovyscript.wiki.artisanworktables.tables.key.value=Sets the input matrix keys (only for shaped recipes)
 groovyscript.wiki.artisanworktables.tables.secondaryinputs.value=Sets the secondary inputs for the recipe
 
+groovyscript.wiki.artisanworktables.tabletypes=The recipe builders require the name of the table as an argument. The valid options are: basic, blacksmith, carpenter, chef, chemist, designer, engineer, farmer, jeweler, mage, mason, potter, scribe, tailor, tanner.
 groovyscript.wiki.artisanworktables.ctcrash=Attempting to put anything into a table's inventory when CraftTweaker is not installed will cause a server crash. To fix it, disable vanilla crafting recipes from all tables (see: `artisanworktables/module.Worktables.cfg > ENABLE_VANILLA_CRAFTING`).
 
 
