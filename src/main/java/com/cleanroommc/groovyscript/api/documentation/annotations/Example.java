@@ -93,4 +93,12 @@ public @interface Example {
      */
     int priority() default 1000;
 
+    /**
+     * Some property holders (i.e. RecipeBuilderDescription) insert additional data into examples by default. If the property is raw,
+     * this data will not be inserted.
+     *
+     * @return true if this example is 'raw'
+     */
+    boolean raw() default false;
+
 }

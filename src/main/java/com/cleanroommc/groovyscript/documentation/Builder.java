@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.chars.Char2CharMap;
 import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -72,8 +73,21 @@ public class Builder {
                     .collect(Collectors.toList());
 
             if (!annotations.isEmpty()) {
-                fields.putIfAbsent(field.getName(), new FieldDocumentation(field, annotations, langLocation));
+                fields.putIfAbsent(field.getName(), new FieldDocumentation(field, annotations, langLocation, ""));
             }
+        }
+
+        // Also find properties not attached to a field, with rawProperty = true. These have to be attached to the class
+        // since there isn't, well, a field to attach them to.
+        List<Property> virtualProperties = getPropertyAnnotationsFromClassRecursive(builderClass).stream()
+                .filter(Property::virtual)
+                .sorted((left, right) -> ComparisonChain.start().compare(left.hierarchy(), right.hierarchy()).result())
+                .collect(Collectors.toList());
+        Set<String> virtualFieldNames = new HashSet<>();
+        for (Property p : virtualProperties) if (p.virtual()) virtualFieldNames.add(p.property());
+        for (String s : virtualFieldNames) {
+            List<Property> annotations = virtualProperties.stream().filter(r -> r.property().equals(s)).collect(Collectors.toList());
+            fields.putIfAbsent(s, new FieldDocumentation(null, annotations, langLocation, s));
         }
 
         return fields;
@@ -296,10 +310,10 @@ public class Builder {
 
                     out.append("\n\n");
 
-                    List<RecipeBuilderMethod> recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
+                    List<RecipeBuilderMethod> recipeBuilderMethods = methods.get(fieldDocumentation.getFieldName());
 
                     if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
-                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), reference);
+                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getFieldName(), reference);
                     } else {
                         out.append(new CodeBlockBuilder()
                                            .line(recipeBuilderMethods.stream()
@@ -321,7 +335,9 @@ public class Builder {
 
         if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
 
-        out.append(reference).append(".").append(builderMethod.getName()).append("()");
+        out.append(reference);
+
+        if (!example.raw()) out.append(".").append(builderMethod.getName()).append("()");
 
         if (!example.value().isEmpty() || !registrationMethods.isEmpty()) out.append("\n");
 
@@ -338,20 +354,18 @@ public class Builder {
 
     private static class FieldDocumentation implements Comparable<FieldDocumentation> {
 
-        private final Field field;
+        private final @Nullable Field field;
+        private final String nullFieldName;
         private final String langLocation;
         private final List<Property> annotations;
         private final Property firstAnnotation;
 
-        public FieldDocumentation(Field field, List<Property> annotations, String langLocation) {
+        public FieldDocumentation(@Nullable Field field, List<Property> annotations, String langLocation, String nullFieldName) {
             this.field = field;
             this.langLocation = langLocation;
             this.annotations = annotations;
             this.firstAnnotation = annotations.get(0);
-        }
-
-        public Field getField() {
-            return field;
+            this.nullFieldName = nullFieldName;
         }
 
         public Property getAnnotation() {
@@ -367,7 +381,7 @@ public class Builder {
                     .map(Property::value)
                     .filter(value -> !value.isEmpty())
                     .findFirst()
-                    .orElse(String.format("%s.%s.value", langLocation, field.getName()));
+                    .orElse(String.format("%s.%s.value", langLocation, field != null ? field.getName() : nullFieldName));
         }
 
         public boolean hasDefaultValue() {
@@ -379,7 +393,7 @@ public class Builder {
                     .filter(x -> !x.defaultValue().isEmpty())
                     .findFirst()
                     .map(Property::defaultValue)
-                    .orElse(defaultValueConverter(getField().getType()));
+                    .orElse(field != null ? defaultValueConverter(field.getType()) : "unknown");
         }
 
         public String getValue() {
@@ -422,7 +436,8 @@ public class Builder {
 
         private String getFieldTypeInlineCode() {
             //return "`#!groovy " + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
-            return "`" + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
+            if (field == null) return "";
+            return "`" + Exporter.simpleSignature(field.getAnnotatedType().getType().getTypeName()) + "`. ";
         }
 
         public String getDescription() {
@@ -433,9 +448,19 @@ public class Builder {
         public int compareTo(@NotNull FieldDocumentation comp) {
             return ComparisonChain.start()
                     .compare(this.priority(), comp.priority())
-                    .compare(this.getField().getName().length(), comp.getField().getName().length())
-                    .compare(this.getField().getName(), comp.getField().getName(), String::compareToIgnoreCase)
+                    .compare(this.getFieldLength(), comp.getFieldLength())
+                    .compare(this.getFieldName(), comp.getFieldName(), String::compareToIgnoreCase)
                     .result();
+        }
+
+        public int getFieldLength() {
+            if (field == null) return 0;
+            return field.getName().length();
+        }
+
+        public String getFieldName() {
+            if (field == null) return nullFieldName;
+            return field.getName();
         }
 
     }

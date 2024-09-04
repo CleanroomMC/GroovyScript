@@ -155,6 +155,13 @@ public @interface Property {
      */
     int priority() default 1000;
 
+    /**
+     * Defines whether this property is 'virtual', as in, the builder class does not have a field with the same name as this property.
+     * Mainly used when the changed value is stored deeply inside the builder class and not as one of its fields.
+     *
+     * @return True if the property is virtual
+     */
+    boolean virtual() default false;
 
     /**
      * Wrapper to allow repeatable instances of {@link Property}.
