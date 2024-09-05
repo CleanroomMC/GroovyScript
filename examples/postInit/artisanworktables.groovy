@@ -8,8 +8,8 @@ log.info 'mod \'artisanworktables\' detected, running script'
 // 15 themed crafting tables with 3x3 and 5x5 grids, optional fluid input, optional tool input, extra item inputs and
 // outputs, weighted outputs, and experience costs.
 
-mods.artisanworktables.tables
-    .shapedBuilder('mason')
+mods.artisanworktables.tables.shapedBuilder()
+    .type('mason')
     .matrix('AAA',
             'A A',
             'BBB')
@@ -19,8 +19,8 @@ mods.artisanworktables.tables
     .output(item('minecraft:furnace'))
     .register()
 
-mods.artisanworktables.tables
-    .shapedBuilder('mage')
+mods.artisanworktables.tables.shapedBuilder()
+    .type('mage')
     .tool(item('minecraft:iron_sword'), 20)
     .matrix([[item('minecraft:iron_ingot')],
             [item('minecraft:diamond')]])
@@ -30,8 +30,8 @@ mods.artisanworktables.tables
     .output(item('minecraft:clay'), item('minecraft:nether_star'))
     .register()
 
-mods.artisanworktables.tables
-    .shapelessBuilder('basic')
+mods.artisanworktables.tables.shapelessBuilder()
+    .type('basic')
     .gridInput(item('minecraft:coal'), item('minecraft:iron_ingot'))
     .output(item('minecraft:clay'))
     .maximumTier(1)

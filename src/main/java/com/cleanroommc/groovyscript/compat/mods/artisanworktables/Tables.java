@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.artisanworktables;
 
-import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -31,11 +30,15 @@ import java.util.stream.Collectors;
 })
 public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
 
+    private RecipeRegistry getRegistry(IArtisanRecipe r) {
+        String[] split = r.getName().split(":");
+        return ArtisanAPI.getWorktableRecipeRegistry(split[0]);
+    }
+
     @Override
     public void onReload() {
         removeScripted().forEach(r -> {
-            String[] split = r.getName().split(":");
-            RecipeRegistry rr = ArtisanAPI.getWorktableRecipeRegistry(split[0]);
+            RecipeRegistry rr = getRegistry(r);
             ((RecipeRegistryAccessor) rr).getRecipeList().remove(r);
             ((RecipeRegistryAccessor) rr).getRecipeMap().remove(r.getName());
         });
@@ -43,32 +46,30 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
 
     public void add(IArtisanRecipe recipe) {
         addScripted(recipe);
-        String[] split = recipe.getName().split(":");
-        RecipeRegistry rr = ArtisanAPI.getWorktableRecipeRegistry(split[0]);
-        GroovyScript.LOGGER.info("Adding recipe {} into registry {}", recipe, rr);
+        RecipeRegistry rr = getRegistry(recipe);
         rr.addRecipe(recipe);
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(raw = true, value = ".shapedBuilder('mason').matrix('AAA', 'A A', 'BBB').key('A', item('minecraft:iron_ingot')).key('B', item('minecraft:stone')).fluidInput(fluid('lava') * 250).output(item('minecraft:furnace'))"),
-            @Example(raw = true, value = ".shapedBuilder('mage').tool(item('minecraft:iron_sword'), 20).matrix([[item('minecraft:iron_ingot')], [item('minecraft:diamond')]]).input(item('minecraft:coal') * 2, item('minecraft:stone') * 32).level(10).consumeExperience(false).output(item('minecraft:clay'), item('minecraft:nether_star'))")
+            @Example(value = ".type('mason').matrix('AAA', 'A A', 'BBB').key('A', item('minecraft:iron_ingot')).key('B', item('minecraft:stone')).fluidInput(fluid('lava') * 250).output(item('minecraft:furnace'))"),
+            @Example(value = ".type('mage').tool(item('minecraft:iron_sword'), 20).matrix([[item('minecraft:iron_ingot')], [item('minecraft:diamond')]]).input(item('minecraft:coal') * 2, item('minecraft:stone') * 32).level(10).consumeExperience(false).output(item('minecraft:clay'), item('minecraft:nether_star'))")
     })
-    public ArtisanRecipeBuilder shapedBuilder(String name) {
-        return new ArtisanRecipeBuilder(name, true);
+    public ArtisanRecipeBuilder shapedBuilder() {
+        return new ArtisanRecipeBuilder(true);
     }
 
-    @RecipeBuilderDescription(example = @Example(raw = true, value = ".shapelessBuilder('basic').gridInput(item('minecraft:coal'), item('minecraft:iron_ingot')).output(item('minecraft:clay')).maximumTier(1).minimumTier(1)"))
-    public ArtisanRecipeBuilder shapelessBuilder(String name) {
-        return new ArtisanRecipeBuilder(name, false);
+    @RecipeBuilderDescription(example = @Example(value = ".type('basic').gridInput(item('minecraft:coal'), item('minecraft:iron_ingot')).output(item('minecraft:clay')).maximumTier(1).minimumTier(1)"))
+    public ArtisanRecipeBuilder shapelessBuilder() {
+        return new ArtisanRecipeBuilder(false);
     }
 
-    static class ArtisanRecipeData {
+    private static class ArtisanRecipeData {
         List<IIngredient> ingredients;
         int width;
         int height;
     }
 
-    static class ShapedGridBuilder extends AbstractCraftingRecipeBuilder.AbstractShaped<ArtisanRecipeData> {
+    private static class ShapedGridBuilder extends AbstractCraftingRecipeBuilder.AbstractShaped<ArtisanRecipeData> {
         public ShapedGridBuilder() {
             super(5, 5);
         }
@@ -99,7 +100,7 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         }
     }
 
-    static class ShapelessGridBuilder extends AbstractCraftingRecipeBuilder.AbstractShapeless<ArtisanRecipeData> {
+    private static class ShapelessGridBuilder extends AbstractCraftingRecipeBuilder.AbstractShapeless<ArtisanRecipeData> {
 
         public ShapelessGridBuilder() {
             super(5, 5);
@@ -124,7 +125,8 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
     @Property(property = "gridInput", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "25", type = Comp.Type.LTE)}, virtual = true, defaultValue = "empty")
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}, value = "groovyscript.wiki.artisanworktables.tables.secondaryinputs.value")
     public static class ArtisanRecipeBuilder extends AbstractRecipeBuilder<IArtisanRecipe> {
-        private final String registryName;
+        @Property
+        private String type = "";
         private final boolean shaped;
         private final List<String> issues = new ArrayList<>();
 
@@ -158,7 +160,7 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         @Property(defaultValue = "empty", valid = @Comp(type = Comp.Type.LTE, value = "3"))
         private final List<ExtraOutputChancePair> extraOutputs = new ArrayList<>();
 
-        @Property(defaultValue = "the lowest tier that can hold all inputs of this recipe")
+        @Property(defaultValue = "0")
         private int minimumTier = 0;
 
         @Property(defaultValue = "2")
@@ -167,20 +169,27 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         @Property
         private boolean hidden = false;
 
+        private ArtisanRecipeData data = null;
+
         private final AbstractCraftingRecipeBuilder<ArtisanRecipeData> gridBuilder;
 
-        private String makeArtisanName() {
-            return this.registryName + ':' + this.name;
-        }
-
-        public ArtisanRecipeBuilder(String name, boolean shaped) {
-            this.registryName = name;
+        public ArtisanRecipeBuilder(boolean shaped) {
             this.shaped = shaped;
             if (shaped) {
                 this.gridBuilder = new ShapedGridBuilder();
             } else {
                 this.gridBuilder = new ShapelessGridBuilder();
             }
+        }
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder type(String type) {
+            if (ArtisanAPI.getWorktableNames().contains(type)) {
+                this.type = type;
+            } else {
+                issues.add("Unknown table type: " + type);
+            }
+            return this;
         }
 
         @RecipeBuilderMethodDescription
@@ -203,6 +212,11 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder mirrored() {
+            return mirrored(true);
+        }
+
         @RecipeBuilderMethodDescription(field = "requirements")
         public ArtisanRecipeBuilder requirement(IRequirementBuilder matchRequirementBuilder) {
             ResourceLocation location = matchRequirementBuilder.getResourceLocation();
@@ -218,15 +232,25 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         }
 
         @RecipeBuilderMethodDescription(field = "tools")
-        public ArtisanRecipeBuilder tool(IIngredient tool, int durability) {
-            tools.add(new ToolEntry(ArtisanIngredient.from(tool.toMcIngredient()), durability));
+        public ArtisanRecipeBuilder tool(ToolEntry te) {
+            tools.add(te);
             return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "tools")
+        public ArtisanRecipeBuilder tool(IIngredient tool, int durability) {
+            return tool(new ToolEntry(ArtisanIngredient.from(tool.toMcIngredient()), durability));
         }
 
         @RecipeBuilderMethodDescription
         public ArtisanRecipeBuilder consumeSecondaryIngredients(boolean consume) {
             consumeSecondaryIngredients = consume;
             return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "consumeSecondaryIngredients")
+        public ArtisanRecipeBuilder retainSecondaryIngredients() {
+            return consumeSecondaryIngredients(false);
         }
 
         @RecipeBuilderMethodDescription
@@ -247,15 +271,25 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "consumeExperience")
+        public ArtisanRecipeBuilder retainExperience() {
+            return consumeExperience(false);
+        }
+
         @RecipeBuilderMethodDescription
         public ArtisanRecipeBuilder output(ItemStack stack) {
             return output(stack, 1);
         }
 
         @RecipeBuilderMethodDescription
-        public ArtisanRecipeBuilder output(ItemStack stack, int weight) {
-            output.add(new OutputWeightPair(ArtisanItemStack.from(stack), weight));
+        public ArtisanRecipeBuilder output(OutputWeightPair owp) {
+            output.add(owp);
             return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder output(ItemStack stack, int weight) {
+            return output(new OutputWeightPair(ArtisanItemStack.from(stack), weight));
         }
 
         @RecipeBuilderMethodDescription(field = "extraOutputs")
@@ -264,9 +298,14 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         }
 
         @RecipeBuilderMethodDescription(field = "extraOutputs")
-        public ArtisanRecipeBuilder extraOutput(ItemStack stack, float chance) {
-            extraOutputs.add(new ExtraOutputChancePair(ArtisanItemStack.from(stack), chance));
+        public ArtisanRecipeBuilder extraOutput(ExtraOutputChancePair eocp) {
+            extraOutputs.add(eocp);
             return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "extraOutputs")
+        public ArtisanRecipeBuilder extraOutput(ItemStack stack, float chance) {
+            return extraOutput(new ExtraOutputChancePair(ArtisanItemStack.from(stack), chance));
         }
 
         @RecipeBuilderMethodDescription
@@ -374,39 +413,13 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         public IArtisanRecipe register() {
             if (!validate()) return null;
 
-            ArtisanRecipeData data = this.gridBuilder.register();
-            if (data == null) return null;
-
-            EnumTier tier = RecipeTierCalculator.calculateTier(
-                    this.registryName,
-                    data.width,
-                    data.height,
-                    this.tools.size(),
-                    this.input.size(),
-                    this.fluidInput.isEmpty() ? null : this.fluidInput.get(0)
-            );
-            // weird cornercase that the mod doesn't handle
-            if (!shaped && data.ingredients.size() > 9 && tier != null) {
-                if (data.ingredients.size() <= 25) tier = EnumTier.WORKSHOP;
-                else tier = null;
-            }
-            GroovyLog.Msg message =
-                    GroovyLog.msg("Error adding Artisan Worktables recipe").error()
-                    .add(tier == null, "Unable to calculate the table tier");
-            if (tier != null) {
-                int tierNeeded = tier.getId();
-                message.add(tierNeeded > maximumTier, "The recipe requires at least tier {}, but maximumTier was set to {}", tierNeeded, maximumTier);
-                minimumTier = Math.max(minimumTier, tierNeeded);
-            }
-            if (message.postIfNotEmpty()) return null;
-
             // The mod expects three Nonnull ExtraOutputChancePairs... yuck
             ExtraOutputChancePair[] extraOutputs = new ExtraOutputChancePair[3];
             Arrays.fill(extraOutputs, new ExtraOutputChancePair(ArtisanItemStack.EMPTY, 0));
             for (int i = 0; i < this.extraOutputs.size(); i++) extraOutputs[i] = this.extraOutputs.get(i);
 
             IArtisanRecipe recipe = new ArtisanRecipe(
-                    this.makeArtisanName(),
+                    type + ':' + name,
                     requirements,
                     output,
                     tools.toArray(new ToolEntry[0]),
@@ -440,9 +453,9 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
                 name = RecipeName.generate("groovyscript_");
             }
 
-            validateItems(msg, 0, 9, 0, 0);
+            validateItems(msg, 0, 9, 0, 0);  // this validation is for secondary inputs, not grid inputs
             validateFluids(msg, 0, 1, 0, 0);
-            msg.add(!ArtisanAPI.getWorktableNames().contains(registryName), "Unknown table: {}", registryName);
+            msg.add(type.isEmpty(), "Table type must be set");
             msg.add(experience < 0, "Expected experience >= 0, but got {}", experience);
             msg.add(level < 0, "Expected level >= 0, but got {}", level);
             msg.add(extraOutputs.size() > 3, "Expected at most 3 secondary outputs, but got {}", extraOutputs.size());
@@ -451,6 +464,32 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
             msg.add(maximumTier < 0 || maximumTier > 2, "Maximum tier must be between 0 and 2, but got {}", maximumTier);
             msg.add(minimumTier > maximumTier, "Maximum tier must be greater than or equal to Minimum tier");
             msg.add(output.isEmpty(), "Weighted outputs can't be empty");
+
+            data = this.gridBuilder.register();
+            if (data == null) {
+                msg.add("Error generating the recipe grid");
+            } else {
+                EnumTier tier = RecipeTierCalculator.calculateTier(
+                        this.type,
+                        data.width,
+                        data.height,
+                        this.tools.size(),
+                        this.input.size(),
+                        this.fluidInput.isEmpty() ? null : this.fluidInput.get(0)
+                );
+                // weird cornercase that the mod doesn't handle
+                if (!shaped && data.ingredients.size() > 9 && tier != null) {
+                    if (data.ingredients.size() <= 25) tier = EnumTier.WORKSHOP;
+                    else tier = null;
+                }
+                msg.add(tier == null, "Unable to calculate the table tier");
+                if (tier != null) {
+                    int tierNeeded = tier.getId();
+                    msg.add(tierNeeded > maximumTier, "The recipe requires at least tier {}, but maximumTier was set to {}", tierNeeded, maximumTier);
+                    minimumTier = Math.max(minimumTier, tierNeeded);
+                }
+            }
+
             for (String s : issues) msg.add(s);
         }
     }
