@@ -117,7 +117,7 @@ public class Apothecary extends VirtualizedRegistry<RecipePetals> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateFluids(msg, 0, 0, 0, 0);
+            validateFluids(msg);
             validateItems(msg, 1, 20, 1, 1);
         }
 

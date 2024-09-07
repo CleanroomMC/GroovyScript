@@ -418,8 +418,8 @@ public class Lexicon {
 
             @Override
             public void validate(GroovyLog.Msg msg) {
-                validateFluids(msg, 0, 0, 0, 0);
-                validateItems(msg, 0, 0, 0, 0);
+                validateFluids(msg);
+                validateItems(msg);
                 msg.add(name == null, "expected a valid name, got " + name);
                 msg.add(pages.size() < 1, "entry must have at least 1 page, got " + pages.size());
                 msg.add(category == null, "expected a valid category, got " + category);

@@ -124,7 +124,7 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateFluids(msg, 0, 0, 0, 0);
+            validateFluids(msg);
             validateItems(msg, 1, 99, 1, 99);
         }
 

@@ -162,8 +162,8 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 0, 0, 0, 0);
-            validateFluids(msg, 0, 0, 0, 0);
+            validateItems(msg);
+            validateFluids(msg);
             msg.add(key == null, "key must be defined");
             msg.add(BotaniaAPI.brewMap.containsKey(key), "must have a unique key for brew, got " + key);
             msg.add(cost < 1, "cost must be at least 1, got " + cost);

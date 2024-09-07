@@ -166,8 +166,8 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 0, 0, 0, 0);
-            validateFluids(msg, 0, 0, 0, 0);
+            validateItems(msg);
+            validateFluids(msg);
             msg.add(time < 0, "time must be at least 1, got " + time);
             msg.add(output == null, "output must be defined");
             msg.add(input == null || !(input instanceof String || input instanceof IBlockState), "expected IBlockState or String input, got {}", input);
