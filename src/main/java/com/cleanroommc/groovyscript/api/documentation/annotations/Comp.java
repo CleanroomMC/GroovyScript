@@ -25,7 +25,7 @@ import java.util.EnumSet;
  * @see Property#comp()
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ /* No targets allowed */})
+@Target({}) // No targets allowed
 public @interface Comp {
 
     /**

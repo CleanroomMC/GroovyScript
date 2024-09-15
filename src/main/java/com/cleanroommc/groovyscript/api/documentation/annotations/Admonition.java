@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * <a href="https://squidfunk.github.io/mkdocs-material/reference/admonitions">Admonition for Material for MkDocs</a>.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ /* No targets allowed */})
+@Target({}) // No targets allowed
 public @interface Admonition {
 
     /**
@@ -86,6 +86,7 @@ public @interface Admonition {
      * <br>- {@link #EXAMPLE Example}: Indicates an example of some code in practice.
      */
     enum Type {
+
         /**
          * Indicates a generic comment - the most common type of Admonition.
          */
