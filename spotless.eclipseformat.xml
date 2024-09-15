@@ -261,7 +261,7 @@
         <setting id="org.eclipse.jdt.core.formatter.keep_then_statement_on_same_line" value="true"/>
         <setting id="org.eclipse.jdt.core.formatter.keep_imple_if_on_one_line" value="false"/>
         <setting id="org.eclipse.jdt.core.formatter.keep_else_statement_on_same_line" value="true"/>
-        <setting id="org.eclipse.jdt.core.formatter.compact_else_if" value="true"/>
+        <setting id="org.eclipse.jdt.core.formatter.compact_else_if" value="false"/>
         <setting id="org.eclipse.jdt.core.formatter.keep_simple_for_body_on_same_line" value="true"/>
         <setting id="org.eclipse.jdt.core.formatter.keep_simple_while_body_on_same_line" value="true"/>
         <setting id="org.eclipse.jdt.core.formatter.keep_simple_do_while_body_on_same_line" value="true"/>
@@ -328,7 +328,7 @@
         <setting id="org.eclipse.jdt.core.formatter.wrap_before_conditional_operator" value="false"/>
         <setting id="org.eclipse.jdt.core.formatter.alignment_for_assignment" value="0"/>
         <setting id="org.eclipse.jdt.core.formatter.wrap_before_assignment_operator" value="false"/>
-        <setting id="org.eclipse.jdt.core.formatter.alignment_for_expressions_in_array_initializer" value="50"/>
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_expressions_in_array_initializer" value="48"/>
         <setting id="org.eclipse.jdt.core.formatter.alignment_for_expressions_in_for_loop_header" value="2"/>
         <setting id="org.eclipse.jdt.core.formatter.alignment_for_compact_if" value="16"/>
         <setting id="org.eclipse.jdt.core.formatter.alignment_for_compact_loops" value="16"/>
