@@ -323,9 +323,9 @@
         <setting id="org.eclipse.jdt.core.formatter.wrap_before_bitwise_operator" value="false"/>
         <setting id="org.eclipse.jdt.core.formatter.alignment_for_logical_operator" value="0"/>
         <setting id="org.eclipse.jdt.core.formatter.wrap_before_logical_operator" value="false"/>
-        <setting id="org.eclipse.jdt.core.formatter.alignment_for_conditional_expression" value="0"/>
-        <setting id="org.eclipse.jdt.core.formatter.alignment_for_conditional_expression_chain" value="0"/>
-        <setting id="org.eclipse.jdt.core.formatter.wrap_before_conditional_operator" value="false"/>
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_conditional_expression" value="48"/>
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_conditional_expression_chain" value="48"/>
+        <setting id="org.eclipse.jdt.core.formatter.wrap_before_conditional_operator" value="true"/>
         <setting id="org.eclipse.jdt.core.formatter.alignment_for_assignment" value="0"/>
         <setting id="org.eclipse.jdt.core.formatter.wrap_before_assignment_operator" value="false"/>
         <setting id="org.eclipse.jdt.core.formatter.alignment_for_expressions_in_array_initializer" value="48"/>
