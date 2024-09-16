@@ -50,7 +50,9 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         rr.addRecipe(recipe);
     }
 
-    @RecipeBuilderDescription(example = {
+    @RecipeBuilderDescription(
+            requirement = @Property(property = "gridInput", needsOverride = true),
+            example = {
             @Example(value = ".type('mason').matrix('AAA', 'A A', 'BBB').key('A', item('minecraft:iron_ingot')).key('B', item('minecraft:stone')).fluidInput(fluid('lava') * 250).output(item('minecraft:furnace'))"),
             @Example(value = ".type('mage').tool(item('minecraft:iron_sword'), 20).matrix([[item('minecraft:iron_ingot')], [item('minecraft:diamond')]]).input(item('minecraft:coal') * 2, item('minecraft:stone') * 32).level(10).consumeExperience(false).output(item('minecraft:clay'), item('minecraft:nether_star'))")
     })
@@ -58,7 +60,13 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         return new ArtisanRecipeBuilder(true);
     }
 
-    @RecipeBuilderDescription(example = @Example(value = ".type('basic').gridInput(item('minecraft:coal'), item('minecraft:iron_ingot')).output(item('minecraft:clay')).maximumTier(1).minimumTier(1)"))
+    @RecipeBuilderDescription(
+            requirement = {
+                    @Property(property = "matrix", needsOverride = true),
+                    @Property(property = "key", needsOverride = true),
+                    @Property(property = "mirrored", needsOverride = true)
+            },
+            example = @Example(value = ".type('basic').gridInput(item('minecraft:coal'), item('minecraft:iron_ingot')).output(item('minecraft:clay')).maximumTier(1).minimumTier(1)"))
     public ArtisanRecipeBuilder shapelessBuilder() {
         return new ArtisanRecipeBuilder(false);
     }
