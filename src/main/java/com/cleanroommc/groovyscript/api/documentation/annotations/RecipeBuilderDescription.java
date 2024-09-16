@@ -51,11 +51,4 @@ public @interface RecipeBuilderDescription {
      */
     int priority() default 1000;
 
-    /**
-     * The properties that should not be documented in this recipe builder, even though they exist in the class.
-     *
-     * @return the array of skipped properties
-     */
-    String[] skippedProperties() default {};
-
 }

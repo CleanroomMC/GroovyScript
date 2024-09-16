@@ -292,7 +292,6 @@ public class Builder {
         fields.values().stream()
                 .sorted()
                 .filter(FieldDocumentation::isUsed)
-                .filter(d -> Arrays.stream(annotation.skippedProperties()).noneMatch(u -> u.equals(d.getFieldName())))
                 .forEach(fieldDocumentation -> {
 
                     out.append(fieldDocumentation.getDescription());

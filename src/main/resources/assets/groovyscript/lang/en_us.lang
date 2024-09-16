@@ -332,7 +332,7 @@ groovyscript.wiki.artisanworktables.tables.name.value=Sets the name of the recip
 groovyscript.wiki.artisanworktables.tables.level.value=Sets the minimum experience level the player needs to execute this recipe
 groovyscript.wiki.artisanworktables.tables.tools.value=Sets the tools that the recipe requires
 groovyscript.wiki.artisanworktables.tables.hidden.value=Sets whether this recipe should be hidden from JEI
-groovyscript.wiki.artisanworktables.tables.mirrored.value=Sets whether this recipe can be mirrored
+groovyscript.wiki.artisanworktables.tables.mirrored.value=Sets whether this recipe can be mirrored (only for shaped recipes)
 groovyscript.wiki.artisanworktables.tables.experience.value=Sets the minimum amount of experience the player needs to execute this recipe
 groovyscript.wiki.artisanworktables.tables.maximumTier.value=Sets the maximum table tier that works with this recipe (0 = worktable, 2 = workstation, 3 = workshop)
 groovyscript.wiki.artisanworktables.tables.minimumTier.value=Sets the minimum table tier that works with this recipe (0 = worktable, 2 = workstation, 3 = workshop). Groovyscript will automatically increase the minimum tier to the lowest tier that can hold all input ingredients of the recipe
@@ -341,9 +341,9 @@ groovyscript.wiki.artisanworktables.tables.requirements.value=Sets the additiona
 groovyscript.wiki.artisanworktables.tables.output.value=Sets the weights for the main output that is produced by the recipe
 groovyscript.wiki.artisanworktables.tables.consumeExperience.value=Sets whether the recipe will consume the experience, if level or experience is greater than 0
 groovyscript.wiki.artisanworktables.tables.consumeSecondaryIngredients.value=Sets whether the secondary ingredients of the recipe are consumed
-groovyscript.wiki.artisanworktables.tables.matrix.value=Sets the input matrix
-groovyscript.wiki.artisanworktables.tables.gridInput.value=Sets the grid input
-groovyscript.wiki.artisanworktables.tables.key.value=Sets the input matrix keys
+groovyscript.wiki.artisanworktables.tables.matrix.value=Sets the input matrix (only for shaped recipes)
+groovyscript.wiki.artisanworktables.tables.gridInput.value=Sets the grid input (only for shapeless recipes)
+groovyscript.wiki.artisanworktables.tables.key.value=Sets the input matrix keys (only for shaped recipes)
 groovyscript.wiki.artisanworktables.tables.secondaryinputs.value=Sets the secondary inputs for the recipe
 
 groovyscript.wiki.artisanworktables.ctcrash=Attempting to put anything into a table's inventory when CraftTweaker is not installed will cause a server crash. To fix it, disable vanilla crafting recipes from all tables (see: `artisanworktables/module.Worktables.cfg > ENABLE_VANILLA_CRAFTING`).
