@@ -210,7 +210,7 @@ public class TextureDecorationProvider {
         }
 
         public String getUri() {
-            return "file://" + getFile().getAbsolutePath();
+            return getFile().toURI().toString();
         }
 
         private @NotNull File getFile() {
