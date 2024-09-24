@@ -51,27 +51,21 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
     }
 
     @RecipeBuilderDescription(
-            requirement = @Property(property = "gridInput", needsOverride = true),
             example = {
             @Example(value = ".type('mason').matrix('AAA', 'A A', 'BBB').key('A', item('minecraft:iron_ingot')).key('B', item('minecraft:stone')).fluidInput(fluid('lava') * 250).output(item('minecraft:furnace'))"),
             @Example(value = ".type('mage').tool(item('minecraft:iron_sword'), 20).matrix([[item('minecraft:iron_ingot')], [item('minecraft:diamond')]]).input(item('minecraft:coal') * 2, item('minecraft:stone') * 32).level(10).consumeExperience(false).output(item('minecraft:clay'), item('minecraft:nether_star'))")
     })
     public ArtisanRecipeBuilder shapedBuilder() {
-        return new ArtisanRecipeBuilder(true);
+        return new ShapelessArtisanRecipeBuilder();
     }
 
     @RecipeBuilderDescription(
-            requirement = {
-                    @Property(property = "matrix", needsOverride = true),
-                    @Property(property = "key", needsOverride = true),
-                    @Property(property = "mirrored", needsOverride = true)
-            },
             example = @Example(value = ".type('basic').gridInput(item('minecraft:coal'), item('minecraft:iron_ingot')).output(item('minecraft:clay')).maximumTier(1).minimumTier(1)"))
     public ArtisanRecipeBuilder shapelessBuilder() {
-        return new ArtisanRecipeBuilder(false);
+        return new ShapedArtisanRecipeBuilder();
     }
 
-    private static class ArtisanRecipeData {
+    protected static class ArtisanRecipeData {
         List<IIngredient> ingredients;
         int width;
         int height;
@@ -132,17 +126,14 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
     @Property(property = "key", defaultValue = "' ' = IIngredient.EMPTY", virtual = true)
     @Property(property = "gridInput", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "25", type = Comp.Type.LTE)}, virtual = true, defaultValue = "empty")
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}, value = "groovyscript.wiki.artisanworktables.tables.secondaryinputs.value")
-    public static class ArtisanRecipeBuilder extends AbstractRecipeBuilder<IArtisanRecipe> {
+    public static abstract class ArtisanRecipeBuilder extends AbstractRecipeBuilder<IArtisanRecipe> {
         @Property
         private String type = "";
-        private final boolean shaped;
+
         private final List<String> issues = new ArrayList<>();
 
         @Property
         private String name = "";
-
-        @Property
-        private boolean mirrored = false;
 
         @Property(defaultValue = "empty")
         private final Map<ResourceLocation, IRequirement> requirements = new HashMap<>();
@@ -169,7 +160,7 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         private final List<ExtraOutputChancePair> extraOutputs = new ArrayList<>();
 
         @Property(defaultValue = "0")
-        private int minimumTier = 0;
+        protected int minimumTier = 0;
 
         @Property(defaultValue = "2")
         private int maximumTier = 2;
@@ -177,17 +168,12 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         @Property
         private boolean hidden = false;
 
-        private ArtisanRecipeData data = null;
+        protected ArtisanRecipeData data = null;
 
-        private final AbstractCraftingRecipeBuilder<ArtisanRecipeData> gridBuilder;
+        protected final AbstractCraftingRecipeBuilder<ArtisanRecipeData> gridBuilder;
 
-        public ArtisanRecipeBuilder(boolean shaped) {
-            this.shaped = shaped;
-            if (shaped) {
-                this.gridBuilder = new ShapedGridBuilder();
-            } else {
-                this.gridBuilder = new ShapelessGridBuilder();
-            }
+        protected ArtisanRecipeBuilder(AbstractCraftingRecipeBuilder<ArtisanRecipeData> gridBuilder) {
+            this.gridBuilder = gridBuilder;
         }
 
         @RecipeBuilderMethodDescription
@@ -209,20 +195,6 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
         @RecipeBuilderMethodDescription
         public ArtisanRecipeBuilder name(ResourceLocation name) {
             return this.name(name.toString());
-        }
-
-        @RecipeBuilderMethodDescription
-        public ArtisanRecipeBuilder mirrored(boolean mirrored) {
-            if (!shaped) {
-                issues.add("Shapeless recipes cannot be mirrored");
-            }
-            this.mirrored = mirrored;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public ArtisanRecipeBuilder mirrored() {
-            return mirrored(true);
         }
 
         @RecipeBuilderMethodDescription(field = "requirements")
@@ -339,81 +311,10 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription
-        public ArtisanRecipeBuilder gridInput(IIngredient input) {
-            if (this.shaped) {
-                issues.add("Grid Input can only be used for shapeless recipes");
-                return this;
-            }
+        protected abstract IRecipeMatrixMatcher getRecipeMatcher();
 
-            ((ShapelessGridBuilder) this.gridBuilder).input(input);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public ArtisanRecipeBuilder gridInput(IIngredient... inputs) {
-            for (IIngredient ing : inputs) gridInput(ing);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public ArtisanRecipeBuilder gridInput(Collection<IIngredient> inputs) {
-            for (IIngredient ing : inputs) gridInput(ing);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public ArtisanRecipeBuilder key(char c, IIngredient input) {
-            if (!this.shaped) {
-                issues.add("Input key can only be used for shaped recipes");
-                return this;
-            }
-
-            ((ShapedGridBuilder) this.gridBuilder).key(c, input);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public ArtisanRecipeBuilder key(String c, IIngredient input) {
-            if (!this.shaped) {
-                issues.add("Input key can only be used for shaped recipes");
-                return this;
-            }
-
-            ((ShapedGridBuilder) this.gridBuilder).key(c, input);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public ArtisanRecipeBuilder matrix(String... strings) {
-            if (!this.shaped) {
-                issues.add("Input matrix can only be used for shaped recipes");
-                return this;
-            }
-
-            ((ShapedGridBuilder) this.gridBuilder).matrix(strings);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "matrix")
-        public ArtisanRecipeBuilder shape(String... strings) {
-            return matrix(strings);
-        }
-
-        @RecipeBuilderMethodDescription
-        public ArtisanRecipeBuilder matrix(List<List<IIngredient>> matrix) {
-            if (!this.shaped) {
-                issues.add("Input matrix can only be used for shaped recipes");
-                return this;
-            }
-
-            ((ShapedGridBuilder) this.gridBuilder).matrix(matrix);
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "matrix")
-        public ArtisanRecipeBuilder shape(List<List<IIngredient>> matrix) {
-            return matrix(matrix);
+        protected boolean getMirrored() {
+            return false;
         }
 
         @RecipeBuilderRegistrationMethod
@@ -439,8 +340,8 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
                     level,
                     consumeExperience,
                     extraOutputs,
-                    shaped ? IRecipeMatrixMatcher.SHAPED : IRecipeMatrixMatcher.SHAPELESS,
-                    mirrored,
+                    getRecipeMatcher(),
+                    getMirrored(),
                     data.width,
                     data.height,
                     minimumTier,
@@ -485,11 +386,6 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
                         this.input.size(),
                         this.fluidInput.isEmpty() ? null : this.fluidInput.get(0)
                 );
-                // weird cornercase that the mod doesn't handle
-                if (!shaped && data.ingredients.size() > 9 && tier != null) {
-                    if (data.ingredients.size() <= 25) tier = EnumTier.WORKSHOP;
-                    else tier = null;
-                }
                 msg.add(tier == null, "Unable to calculate the table tier");
                 if (tier != null) {
                     int tierNeeded = tier.getId();
@@ -499,6 +395,115 @@ public class Tables extends VirtualizedRegistry<IArtisanRecipe> {
             }
 
             for (String s : issues) msg.add(s);
+        }
+    }
+
+    public static class ShapedArtisanRecipeBuilder extends ArtisanRecipeBuilder {
+        @Property
+        private boolean mirrored = false;
+
+        public ShapedArtisanRecipeBuilder() {
+            super(new ShapedGridBuilder());
+        }
+
+        @Override
+        protected boolean getMirrored() {
+            return mirrored;
+        }
+
+        @Override
+        protected IRecipeMatrixMatcher getRecipeMatcher() {
+            return IRecipeMatrixMatcher.SHAPED;
+        }
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder mirrored(boolean mirrored) {
+            this.mirrored = mirrored;
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder mirrored() {
+            return mirrored(true);
+        }
+
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder key(char c, IIngredient input) {
+            ((ShapedGridBuilder) this.gridBuilder).key(c, input);
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder key(String c, IIngredient input) {
+            ((ShapedGridBuilder) this.gridBuilder).key(c, input);
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder matrix(String... strings) {
+            ((ShapedGridBuilder) this.gridBuilder).matrix(strings);
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "matrix")
+        public ArtisanRecipeBuilder shape(String... strings) {
+            return matrix(strings);
+        }
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder matrix(List<List<IIngredient>> matrix) {
+            ((ShapedGridBuilder) this.gridBuilder).matrix(matrix);
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "matrix")
+        public ArtisanRecipeBuilder shape(List<List<IIngredient>> matrix) {
+            return matrix(matrix);
+        }
+
+    }
+
+    public static class ShapelessArtisanRecipeBuilder extends ArtisanRecipeBuilder {
+
+        public ShapelessArtisanRecipeBuilder() {
+            super(new ShapelessGridBuilder());
+        }
+
+        @Override
+        protected IRecipeMatrixMatcher getRecipeMatcher() {
+            return IRecipeMatrixMatcher.SHAPELESS;
+        }
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder gridInput(IIngredient input) {
+            ((ShapelessGridBuilder) this.gridBuilder).input(input);
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder gridInput(IIngredient... inputs) {
+            for (IIngredient ing : inputs) gridInput(ing);
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public ArtisanRecipeBuilder gridInput(Collection<IIngredient> inputs) {
+            for (IIngredient ing : inputs) gridInput(ing);
+            return this;
+        }
+
+        @Override
+        public void validate(GroovyLog.Msg msg) {
+            super.validate(msg);
+            // weird cornercase that the mod doesn't handle
+            if (data.ingredients.size() > 9) {
+                if (data.ingredients.size() <= 25) {
+                    minimumTier = Math.max(minimumTier, EnumTier.WORKSHOP.getId());
+                } else {
+                    msg.add("More than 25 components supplied to a shapeless recipe");
+                }
+            }
         }
     }
 
