@@ -134,9 +134,9 @@ public class ModSupport {
         return Collections.unmodifiableList(containerList);
     }
 
-    private ModSupport() {
-    }
+    private ModSupport() {}
 
+    @GroovyBlacklist
     @ApiStatus.Internal
     public void setup(ASMDataTable dataTable) {
         for (ASMDataTable.ASMData data : dataTable.getAll(GroovyPlugin.class.getName().replace('.', '/'))) {
@@ -153,6 +153,7 @@ public class ModSupport {
         }
     }
 
+    @GroovyBlacklist
     private void registerContainer(GroovyPlugin container) {
         if (container instanceof GroovyContainer) {
             GroovyScript.LOGGER.error("GroovyPlugin must not extend {}", GroovyContainer.class.getSimpleName());
@@ -183,6 +184,7 @@ public class ModSupport {
         externalPluginClasses.add(container.getClass());
     }
 
+    @GroovyBlacklist
     void registerContainer(GroovyContainer<?> container) {
         if (containerList.contains(container) || containers.containsKey(container.getModId())) {
             throw new IllegalStateException("Container already present!");
