@@ -268,7 +268,7 @@ public class GroovyASTUtils {
         } else if (node instanceof ConstructorCallExpression expression) {
             return expression.getType();
         } else if (node instanceof MethodCallExpression expression) {
-            ObjectMapper<?> goh = getGohOfNode(expression, context);
+            ObjectMapper<?> goh = getMapperOfNode(expression, context);
             if (goh != null) {
                 return ClassHelper.makeCached(goh.getReturnType());
             }
@@ -450,7 +450,7 @@ public class GroovyASTUtils {
         return method;
     }
 
-    public static ObjectMapper<?> getGohOfNode(MethodCallExpression expr, ASTContext context) {
+    public static ObjectMapper<?> getMapperOfNode(MethodCallExpression expr, ASTContext context) {
         if (expr.isImplicitThis()) {
             return ObjectMapperManager.getObjectMapper(expr.getMethodAsString());
         }

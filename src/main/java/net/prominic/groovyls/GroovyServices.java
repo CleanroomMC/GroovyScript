@@ -61,9 +61,9 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
     private LanguageClient languageClient;
 
-    private Path workspaceRoot;
-    private final ICompilationUnitFactory compilationUnitFactory;
-    private final ILanguageServerContext languageServerContext;
+    protected Path workspaceRoot;
+    protected final ICompilationUnitFactory compilationUnitFactory;
+    protected final ILanguageServerContext languageServerContext;
     private Map<URI, PublishDiagnosticsParams> prevDiagnosticsByFile;
 
     public GroovyServices(ICompilationUnitFactory factory, ILanguageServerContext languageServerContext) {
@@ -336,7 +336,8 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
         return provider.provideRename(params);
     }
 
-    private @Nullable ASTNodeVisitor compileAndVisitAST(GroovyLSCompilationUnit compilationUnit, URI context) {
+    @Nullable
+    protected ASTNodeVisitor compileAndVisitAST(GroovyLSCompilationUnit compilationUnit, URI context) {
         try {
             return compilationUnit.recompileAndVisitASTIfContextChanged(context);
         } catch (GroovyBugError | Exception e) {

@@ -24,6 +24,7 @@ import net.prominic.groovyls.compiler.ILanguageServerContext;
 import net.prominic.groovyls.config.ICompilationUnitFactory;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 import java.nio.file.Path;
@@ -31,12 +32,17 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
-public class GroovyLanguageServer implements LanguageServer, LanguageClientAware {
+public class GroovyLanguageServer<T extends GroovyServices> implements LanguageServer, LanguageClientAware {
 
-    private final GroovyServices groovyServices;
+    protected final T groovyServices;
 
     public GroovyLanguageServer(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
-        this.groovyServices = new GroovyServices(compilationUnitFactory, languageServerContext);
+        this.groovyServices = createGroovyServices(compilationUnitFactory, languageServerContext);
+    }
+
+    @NotNull
+    protected T createGroovyServices(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
+        return (T) new GroovyServices(compilationUnitFactory, languageServerContext);
     }
 
     @Override

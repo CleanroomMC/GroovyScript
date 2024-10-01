@@ -18,10 +18,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionType;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextFormatting;
@@ -84,6 +86,7 @@ public class ObjectMapperManager {
                 .parser((s, args) -> s.contains(WILDCARD) ? Result.some(OreDictWildcardIngredient.of(s)) : Result.some(new OreDictIngredient(s)))
                 .completerOfNames(OreDictionaryAccessor::getIdToName)
                 .docOfType("ore dict entry")
+                .textureBinder(TextureBinder.of(i -> i.getMatchingStacks()[0], TextureBinder.ofItem()))
                 .register();
         ObjectMapper.builder("item", ItemStack.class)
                 .parser(ObjectMappers::parseItemStack)
@@ -92,20 +95,24 @@ public class ObjectMapperManager {
                 .defaultValue(() -> ItemStack.EMPTY)
                 .completer(ForgeRegistries.ITEMS)
                 .docOfType("item stack")
+                .textureBinder(TextureBinder.ofItem())
                 .register();
         ObjectMapper.builder("liquid", FluidStack.class)
                 .parser(ObjectMappers::parseFluidStack)
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
                 .docOfType("fluid stack")
+                .textureBinder(TextureBinder.ofFluid())
                 .register();
         ObjectMapper.builder("fluid", FluidStack.class)
                 .parser(ObjectMappers::parseFluidStack)
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
+                .textureBinder(TextureBinder.ofFluid())
                 .register();
         ObjectMapper.builder("block", Block.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.BLOCKS))
                 .completer(ForgeRegistries.BLOCKS)
                 .docOfType("block")
+                .textureBinder(TextureBinder.of(ItemStack::new, TextureBinder.ofItem()))
                 .register();
         ObjectMapper.builder("blockstate", IBlockState.class)
                 .parser(ObjectMappers::parseBlockState)
@@ -124,6 +131,7 @@ public class ObjectMapperManager {
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.POTIONS))
                 .completer(ForgeRegistries.POTIONS)
                 .docOfType("potion")
+                .textureBinder(TextureBinder.of(potion -> PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionType.REGISTRY.getObject(potion.getRegistryName())), TextureBinder.ofItem()))
                 .register();
         ObjectMapper.builder("potionType", PotionType.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.POTION_TYPES))
@@ -197,9 +205,23 @@ public class ObjectMapperManager {
      */
     @Nullable
     public static Object getGameObject(String name, String mainArg, Object... args) {
+        return getGameObject(false, name, mainArg, args);
+    }
+
+    /**
+     * Finds the game object handle and invokes it. Called by injected calls via the groovy script transformer.
+     *
+     * @param name    game object handler name (method name)
+     * @param mainArg main argument
+     * @param args    extra arguments
+     * @param silent if error messages should be logged
+     * @return game object or null
+     */
+    @Nullable
+    public static Object getGameObject(boolean silent, String name, String mainArg, Object... args) {
         ObjectMapper<?> objectMapper = handlers.get(name);
         if (objectMapper != null) {
-            return objectMapper.invoke(mainArg, args);
+            return objectMapper.invokeWithDefault(silent, mainArg, args);
         }
         return null;
     }
