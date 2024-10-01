@@ -96,13 +96,6 @@ public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
         @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int time;
 
-        @Override
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder fluidInput(FluidStack fluid) {
-            this.fluidInput.add(fluid);
-            return this;
-        }
-
         @RecipeBuilderMethodDescription
         public RecipeBuilder amount(int amount) {
             this.amount = amount;
