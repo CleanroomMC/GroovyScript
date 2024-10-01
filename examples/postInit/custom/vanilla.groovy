@@ -203,8 +203,8 @@ oredict.add('ingotGold', item('minecraft:nether_star'))
 oredict.add('netherStar', item('minecraft:gold_ingot'))
 oredict.remove('netherStar', item('minecraft:nether_star'))
 
-oredict.clear('plankWood') // Note that any recipes using this oredict will silently die
-oredict.removeAll('ingotIron')
+//oredict.clear('plankWood') // Note that any recipes using this oredict will silently die
+//oredict.removeAll('ingotIron')
 //oredict.removeAll()
 
 
