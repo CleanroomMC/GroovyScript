@@ -150,7 +150,8 @@ mods.actuallyadditions.oil_gen.recipeBuilder()
     .register()
 
 mods.actuallyadditions.oil_gen.recipeBuilder()
-    .fluidInput(fluid('lava') * 50)
+    .fluidInput(fluid('lava'))
+    .amount(50)
     .time(100)
     .register()
 

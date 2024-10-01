@@ -18,7 +18,7 @@ public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('water')).amount(1000).time(50)"),
-            @Example(".fluidInput(fluid('lava') * 50).time(100)")
+            @Example(".fluidInput(fluid('lava')).amount(50).time(100)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -97,10 +97,9 @@ public class OilGen extends VirtualizedRegistry<OilGenRecipe> {
         private int time;
 
         @Override
-        @RecipeBuilderMethodDescription(field = {"fluidInput", "amount"})
+        @RecipeBuilderMethodDescription
         public RecipeBuilder fluidInput(FluidStack fluid) {
             this.fluidInput.add(fluid);
-            if (this.amount == 0) this.amount = fluid.amount;
             return this;
         }
 
