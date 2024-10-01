@@ -1,5 +1,5 @@
 import { DocumentSelector, Disposable, window as vWindow, workspace as vWorkspace, CancellationTokenSource, TextEditor, TextDocument, languages, DecorationOptions, Uri } from "vscode";
-import { TextureDecorationInformation, TextureDecorationProvider } from "../features/textureDecoration";
+import { TextureDecorationInformation, TextureDecorationProvider } from "../features/TextureDecoration";
 
 export function registerTextureDecorationProvider(selector: DocumentSelector, provider: TextureDecorationProvider): Disposable {
     let cancellationSource = new CancellationTokenSource();

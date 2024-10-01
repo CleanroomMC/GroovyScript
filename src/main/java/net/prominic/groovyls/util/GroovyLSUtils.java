@@ -59,6 +59,10 @@ public class GroovyLSUtils {
         return rangeOf(node.getLineNumber(), node.getColumnNumber(), node.getLastLineNumber(), node.getLastColumnNumber());
     }
 
+    public static Range astNodeToRange(ASTNode start, ASTNode end) {
+        return rangeOf(start.getLineNumber(), start.getColumnNumber(), end.getLastLineNumber(), end.getLastColumnNumber());
+    }
+
     public static CompletionItemKind astNodeToCompletionItemKind(ASTNode node) {
         if (node instanceof ClassNode classNode) {
             if (classNode.isInterface()) {

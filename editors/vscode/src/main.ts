@@ -2,7 +2,7 @@ import * as net from "net";
 import * as lc from "vscode-languageclient/node";
 import * as vscode from "vscode";
 import { extensionStatusBar } from "./gui/extensionStatusBarProvider";
-import { TextureDecorationFeature, TextureDecorationMiddleware } from "./features/textureDecoration";
+import { TextureDecorationFeature, TextureDecorationMiddleware } from "./features/TextureDecoration";
 import { FeatureClient } from "vscode-languageclient/node";
 
 let client: lc.LanguageClient;

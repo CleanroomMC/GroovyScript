@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.server.features.textureDecoration;
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.mapper.TextureBinder;
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.prominic.groovyls.compiler.ast.ASTContext;
@@ -11,10 +12,7 @@ import net.prominic.groovyls.util.GroovyLSUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.codehaus.groovy.GroovyBugError;
 import org.codehaus.groovy.ast.ASTNode;
-import org.codehaus.groovy.ast.expr.ArgumentListExpression;
-import org.codehaus.groovy.ast.expr.ConstantExpression;
-import org.codehaus.groovy.ast.expr.Expression;
-import org.codehaus.groovy.ast.expr.MethodCallExpression;
+import org.codehaus.groovy.ast.expr.*;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -28,9 +26,13 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class TextureDecorationProvider {
+
+    private static final int ICON_W = 16, ICON_H = 16;
+    private static final int ICON_X = 0, ICON_Y = 0;
 
     private final String cacheRoot = FileUtil.makePath(FileUtil.getMinecraftHome(), "cache", "groovy", "textureDecorations");
 
@@ -44,45 +46,64 @@ public class TextureDecorationProvider {
     }
 
     public CompletableFuture<List<TextureDecorationInformation>> provideTextureDecorations(TextDocumentIdentifier textDocument) {
+        Set<MethodCallExpression> mappers = new ObjectOpenHashSet<>();
         for (ASTNode node : context.getVisitor().getNodes()) {
-            if (node instanceof MethodCallExpression expression && expression.getArguments() instanceof ArgumentListExpression args && !args.getExpressions().isEmpty()) {
-                ObjectMapper<?> goh;
-                try {
-                    goh = GroovyASTUtils.getGohOfNode(expression, context);
-                } catch (GroovyBugError e) {
-                    continue;
+            ASTNode start;
+            MethodCallExpression call;
+            if (node instanceof PropertyExpression prop) {
+                if (prop.getObjectExpression() instanceof MethodCallExpression mc) {
+                    start = prop;
+                    call = mc;
+                } else continue;
+            } else if (node instanceof MethodCallExpression method) {
+                if (method.getObjectExpression() instanceof MethodCallExpression mc) {
+                    start = method;
+                    call = mc;
+                } else {
+                    start = method;
+                    call = method;
                 }
-                if (goh == null) continue;
-
-                if (!args.getExpressions().stream().allMatch(e -> e instanceof ConstantExpression))
-                    continue;
-
-                var binder = goh.getTextureBinder();
-                if (binder == null) continue;
-
-                var additionalArgs = new Object[args.getExpressions().size() - 1];
-                for (int i = 0; i < additionalArgs.length; i++) {
-                    if (args.getExpressions().get(i + 1) instanceof ConstantExpression argExpression)
-                        additionalArgs[i] = argExpression.getValue();
-                }
-
-                var bindable = goh.doCall(args.getExpressions().get(0).getText(), additionalArgs);
-
-                if (bindable == null) continue;
-
-                var textureName = computeTextureName(goh.getName(), args.getExpressions());
-
-                var decoration = new TextureDecoration(textureName, binder, bindable, GroovyLSUtils.astNodeToRange(expression));
-
-                var textureFile = decoration.getFile();
-
-                if (!textureFile.getParentFile().mkdirs() && textureFile.exists()) {
-                    decorationInformations.add(new TextureDecorationInformation(decoration.getRange(), decoration.getUri()));
-                    continue;
-                }
-
-                decorations.add(decoration);
+            } else continue;
+            if (mappers.contains(call) ||
+                !(call.getArguments() instanceof ArgumentListExpression args) ||
+                args.getExpressions().isEmpty()) continue;
+            ObjectMapper<?> mapper;
+            try {
+                mapper = GroovyASTUtils.getMapperOfNode(call, context);
+            } catch (GroovyBugError e) {
+                continue;
             }
+            if (mapper == null) continue;
+            mappers.add(call);
+
+            if (!args.getExpressions().stream().allMatch(e -> e instanceof ConstantExpression))
+                continue;
+
+            var binder = mapper.getTextureBinder();
+            if (binder == null) continue;
+
+            var additionalArgs = new Object[args.getExpressions().size() - 1];
+            for (int i = 0; i < additionalArgs.length; i++) {
+                if (args.getExpressions().get(i + 1) instanceof ConstantExpression argExpression)
+                    additionalArgs[i] = argExpression.getValue();
+            }
+
+            var bindable = mapper.doCall(args.getExpressions().get(0).getText(), additionalArgs);
+
+            if (bindable == null) continue;
+
+            var textureName = computeTextureName(mapper.getName(), args.getExpressions());
+
+            var decoration = new TextureDecoration(textureName, binder, bindable, GroovyLSUtils.astNodeToRange(start, call));
+
+            var textureFile = decoration.getFile();
+
+            if (!textureFile.getParentFile().mkdirs() && textureFile.exists()) {
+                decorationInformations.add(new TextureDecorationInformation(decoration.getRange(), decoration.getUri()));
+                continue;
+            }
+
+            decorations.add(decoration);
         }
 
         if (decorations.isEmpty())
@@ -114,7 +135,7 @@ public class TextureDecorationProvider {
         GlStateManager.bindTexture(texture);
         GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
         GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 16, 16, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, ICON_W, ICON_H, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
         GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, texture, 0);
@@ -122,7 +143,7 @@ public class TextureDecorationProvider {
         var renderBuffer = GL30.glGenRenderbuffers();
 
         GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, renderBuffer);
-        GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL30.GL_DEPTH_COMPONENT32F, 16, 16);
+        GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL30.GL_DEPTH_COMPONENT32F, ICON_W, ICON_H);
         GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, 0);
 
         GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, renderBuffer);
@@ -133,15 +154,15 @@ public class TextureDecorationProvider {
 
         GL11.glDrawBuffer(GL30.GL_COLOR_ATTACHMENT0);
 
-        GlStateManager.viewport(0, 0, 16, 16);
+        GlStateManager.viewport(0, 0, ICON_W, ICON_H);
 
         GL11.glDrawBuffer(GL30.GL_COLOR_ATTACHMENT0);
         GlStateManager.matrixMode(GL11.GL_PROJECTION);
         GlStateManager.loadIdentity();
-        GlStateManager.ortho(0.0D, 16.0D, 16.0D, 0.0D, 1000.0D, 21000.0D);
+        GlStateManager.ortho(0.0D, ICON_W, ICON_H, 0.0D, 1000.0D, 21000.0D);
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
         GlStateManager.loadIdentity();
-        GlStateManager.translate(0.0F, 0.0F, -2000.0F);
+        GlStateManager.translate(ICON_X, ICON_Y, -2000.0F);
         GlStateManager.enableDepth();
         GlStateManager.depthMask(true);
         GlStateManager.depthFunc(GL11.GL_LEQUAL);
@@ -151,14 +172,14 @@ public class TextureDecorationProvider {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        var buffer = BufferUtils.createByteBuffer(16 * 16 * 4);
+        var buffer = BufferUtils.createByteBuffer(ICON_W * ICON_H * 4);
 
         for (TextureDecoration decoration : decorations) {
             GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
             decoration.render();
 
-            GL11.glReadPixels(0, 0, 16, 16, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+            GL11.glReadPixels(0, 0, ICON_W, ICON_H, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
             saveImage(decoration.getFile(), buffer);
             buffer.rewind();
@@ -176,15 +197,15 @@ public class TextureDecorationProvider {
     }
 
     private static void saveImage(File file, ByteBuffer buffer) {
-        var image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-        for (int y = 0; y < 16; y++) {
-            for (int x = 0; x < 16; x++) {
+        var image = new BufferedImage(ICON_W, ICON_H, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < ICON_H; y++) {
+            for (int x = 0; x < ICON_W; x++) {
                 int r = buffer.get() & 0xFF;
                 int g = buffer.get() & 0xFF;
                 int b = buffer.get() & 0xFF;
                 int a = buffer.get() & 0xFF;
                 int color = (a << 24) | (r << 16) | (g << 8) | b;
-                image.setRGB(x, 15 - y, color); // Flip the y-coordinate to correct the image orientation
+                image.setRGB(x, ICON_H - 1 - y, color); // Flip the y-coordinate to correct the image orientation
             }
         }
 

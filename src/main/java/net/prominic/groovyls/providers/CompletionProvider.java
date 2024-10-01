@@ -20,7 +20,6 @@
 package net.prominic.groovyls.providers;
 
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
-import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
@@ -124,7 +123,7 @@ public class CompletionProvider extends DocProvider {
             if (parentParent instanceof MethodCallExpression expr &&
                     expr.getArguments() instanceof ArgumentListExpression args &&
                     !args.getExpressions().isEmpty()) {
-                ObjectMapper<?> goh = GroovyASTUtils.getGohOfNode(expr, astContext);
+                ObjectMapper<?> goh = GroovyASTUtils.getMapperOfNode(expr, astContext);
                 if (goh != null && goh.getCompleter() != null) {
                     int index = -1;
                     for (int i = 0; i < args.getExpressions().size(); i++) {
