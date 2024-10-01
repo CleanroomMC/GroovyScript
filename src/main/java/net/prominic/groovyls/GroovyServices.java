@@ -76,6 +76,10 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
         compilationUnitFactory.invalidateCompilationUnit();
     }
 
+    public boolean isInGroovyWorkspace(URI uri) {
+        return FileUtil.relativizeNullable(workspaceRoot.toString(), uri.toString()) != null;
+    }
+
     @Override
     public void connect(LanguageClient client) {
         languageClient = client;
@@ -338,6 +342,9 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
     @Nullable
     protected ASTNodeVisitor compileAndVisitAST(GroovyLSCompilationUnit compilationUnit, URI context) {
+        if (!isInGroovyWorkspace(context)) {
+            return null;
+        }
         try {
             return compilationUnit.recompileAndVisitASTIfContextChanged(context);
         } catch (GroovyBugError | Exception e) {
