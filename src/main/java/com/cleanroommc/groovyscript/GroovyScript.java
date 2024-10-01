@@ -22,7 +22,7 @@ import com.cleanroommc.groovyscript.network.NetworkUtils;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.*;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
-import com.cleanroommc.groovyscript.sandbox.security.GrSMetaClassCreationHandle;
+import com.cleanroommc.groovyscript.sandbox.meta.GrSMetaClassCreationHandle;
 import com.cleanroommc.groovyscript.server.GroovyScriptLanguageServerImpl;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -106,6 +106,7 @@ public class GroovyScript {
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
         GroovySystem.getMetaClassRegistry().setMetaClassCreationHandle(GrSMetaClassCreationHandle.INSTANCE);
+        GroovySystem.getMetaClassRegistry().getMetaClassCreationHandler().setDisableCustomMetaClassLookup(true);
         GroovyDeobfMapper.init();
         LinkGeneratorHooks.init();
         ReloadableRegistryManager.init();

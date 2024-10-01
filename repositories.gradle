@@ -1,9 +1,15 @@
 // Add any additional repositories for your dependencies here
 
 repositories {
+//    maven {
+//        // formerly used for EnderIO, currently unused
+//        url 'http://maven.tterrag.com/'
+//        allowInsecureProtocol = true
+//    }
     maven {
-        url 'http://maven.tterrag.com/'
-        allowInsecureProtocol = true
+        // used for TechReborn
+        name 'Mod Maven'
+        url 'https://modmaven.dev'
     }
     maven {
         url 'https://mvnrepository.com/artifact/org.apache.groovy/groovy'

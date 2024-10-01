@@ -18,7 +18,7 @@ public class GroovyClassLoaderMixin {
     @Inject(method = "recompile", at = @At("HEAD"), cancellable = true)
     public void onRecompile(URL source, String className, Class<?> oldClass, CallbackInfoReturnable<Class<?>> cir) {
         if (source != null && oldClass == null) {
-            Class<?> c = GroovyScript.getSandbox().onRecompileClass((GroovyClassLoader) (Object) this, source, className);
+            Class<?> c = GroovyScript.getSandbox().onRecompileClass(source, className);
             if (c != null) {
                 cir.setReturnValue(c);
             }

@@ -178,6 +178,52 @@ groovyscript.wiki.advancedmortars.mortar.duration.value=Sets how many interactio
 groovyscript.wiki.advancedmortars.mortar.secondaryOutput.value=Sets the additional output itemstack
 groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the chance of the additional output itemstack being output
 
+# Advanced Rocketry
+groovyscript.wiki.advancedrocketry.admonition.weights=The 'chances' used with the recipe outputs are actually output weights. For example, setting 'chance' to 0.1 will set the output's chance to 1, unless other outputs add up to the weight of 0.9. The output chances will also not do anything unless 'outputSize' is set to a number greater than 0.
+groovyscript.wiki.advancedrocketry.admonition.input_slots=The recipes performed in this machine can have more than 9 inputs, but this makes the JEI handler overflow when displaying the recipe and breaks the tooltips.
+groovyscript.wiki.advancedrocketry.admonition.output_slots=The recipes performed in this machine can have more than 9 outputs, but this makes the JEI handler overflow when displaying the recipe and breaks the tooltips.
+groovyscript.wiki.advancedrocketry.admonition.hatch_count_6=The Precision Assembler can support up to 6 input and output hatches. Each hatch can store either 1 type of fluid or up to 4 types of input or output items. Groovyscript will not add the recipe if it requires more than 6 hatches (i.e., has 6 fluid inputs and an output).
+groovyscript.wiki.advancedrocketry.admonition.hatch_count_11=The Electric Arc Furnace can support up to 11 input and output hatches. Each hatch can store either 1 type of fluid or up to 4 types of input or output items. Groovyscript will not add the recipe if it requires more than 11 hatches (i.e., has 11 fluid inputs and an output).
+groovyscript.wiki.advancedrocketry.output.value=Sets the item outputs of the recipe. The version with two arguments can be used to add weighted outputs
+groovyscript.wiki.advancedrocketry.time.value=Sets the time needed to perform the recipe in ticks
+groovyscript.wiki.advancedrocketry.power.value=Sets the power consumed by the recipe in RF/t
+groovyscript.wiki.advancedrocketry.outputSize.value=Sets the maximum amount of outputs produced by each recipe
+groovyscript.wiki.advancedrocketry.input.required=either `input` or `fluidInput` to be non-null
+groovyscript.wiki.advancedrocketry.output.required=either `output` or `fluidOutput` to be non-null
+groovyscript.wiki.advancedrocketry.input.block=`input` to be a block
+
+groovyscript.wiki.advancedrocketry.centrifuge.title=Centrifuge
+groovyscript.wiki.advancedrocketry.centrifuge.description=Converts an input fluid into up to 12 output items and up to 4 output fluids, consuming RF
+
+groovyscript.wiki.advancedrocketry.chemical_reactor.title=Chemical Reactor
+groovyscript.wiki.advancedrocketry.chemical_reactor.description=Converts up to 2 fluids and 8 input items into up to 1 fluid and up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.crystallizer.title=Crystallizer
+groovyscript.wiki.advancedrocketry.crystallizer.description=Converts up to 4 input items into up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.cutting_machine.title=Cutting Machine
+groovyscript.wiki.advancedrocketry.cutting_machine.description=Converts up to 4 input items into up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.electric_arc_furnace.title=Electric Arc Furnace
+groovyscript.wiki.advancedrocketry.electric_arc_furnace.description=Converts input items and fluids into output items and fluids, consuming RF
+
+groovyscript.wiki.advancedrocketry.electrolyser.title=Electrolyser
+groovyscript.wiki.advancedrocketry.electrolyser.description=Converts an input fluid into up to 2 output fluids, consuming RF
+
+groovyscript.wiki.advancedrocketry.lathe.title=Lathe
+groovyscript.wiki.advancedrocketry.lathe.description=Converts up to 4 input items into up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.precision_assembler.title=Precision Assembler
+groovyscript.wiki.advancedrocketry.precision_assembler.description=Converts input items and fluids into output items and fluids, consuming RF
+
+groovyscript.wiki.advancedrocketry.precision_laser_etcher.title=Precision Laser Etcher
+groovyscript.wiki.advancedrocketry.precision_laser_etcher.description=Converts up to 4 input items into up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.rolling_machine.title=Rolling Machine
+groovyscript.wiki.advancedrocketry.rolling_machine.description=Consumes up to 1 input fluid and up to 4 input items into up to 4 output items, consuming RF
+
+groovyscript.wiki.advancedrocketry.small_plate_presser.title=Small Plate Presser
+groovyscript.wiki.advancedrocketry.small_plate_presser.description=Converts a block right below it into output items when powered by redstone
 
 # Aether Legacy
 groovyscript.wiki.aether_legacy.accessory.title=Accessory
@@ -1122,6 +1168,62 @@ groovyscript.wiki.immersivepetroleum.reservoir.dimensionBlacklist.value=Sets if 
 groovyscript.wiki.immersivepetroleum.reservoir.removeByName=Removes the Reservoir entry with the given name
 
 
+# Immersive Technology
+groovyscript.wiki.immersivetech.boiler.title=Boiler
+groovyscript.wiki.immersivetech.boiler.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure when the multiblock has had its heat value increased enough by fuel.
+groovyscript.wiki.immersivetech.boiler.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.boiler_fuel.title=Boiler Fuel
+groovyscript.wiki.immersivetech.boiler_fuel.description=Converts an input fluidstack into heat for the Boiler multiblock structure over a given amount of time.
+groovyscript.wiki.immersivetech.boiler_fuel.heat.value=Sets the total heat gained by the Boiler
+groovyscript.wiki.immersivetech.boiler_fuel.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.cooling_tower.title=Cooling Tower
+groovyscript.wiki.immersivetech.cooling_tower.description=Converts up to two input fluidstacks into up to three output fluidstacks after a given amount of time in a multiblock structure.
+groovyscript.wiki.immersivetech.cooling_tower.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.distiller.title=Distiller
+groovyscript.wiki.immersivetech.distiller.description=Converts an input fluidstack into an output fluidstack and has a chance to output an itemstack after a given amount of time in a multiblock structure.
+groovyscript.wiki.immersivetech.distiller.time.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.immersivetech.distiller.chance.value=Sets the chance the output itemstack with be output
+groovyscript.wiki.immersivetech.distiller.energy.value=Sets the energy used in total IF consumed by the recipe
+
+groovyscript.wiki.immersivetech.electrolytic_crucible_battery.title=Electrolytic Crucible Battery
+groovyscript.wiki.immersivetech.electrolytic_crucible_battery.description=Converts an input fluidstack into up to three output fluidstacks after a given amount of time and energy in a multiblock structure.
+groovyscript.wiki.immersivetech.electrolytic_crucible_battery.time.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.immersivetech.electrolytic_crucible_battery.energy.value=Sets the energy used in total IF consumed by the recipe
+
+groovyscript.wiki.immersivetech.gas_turbine.title=Gas Turbine
+groovyscript.wiki.immersivetech.gas_turbine.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure, producing power for an adjacent Alternator multiblock.
+groovyscript.wiki.immersivetech.gas_turbine.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.heat_exchanger.title=Heat Exchanger
+groovyscript.wiki.immersivetech.heat_exchanger.description=Converts up to two input fluidstacks into up to two output fluidstacks after a given amount of time in a multiblock structure.
+groovyscript.wiki.immersivetech.heat_exchanger.time.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.immersivetech.heat_exchanger.energy.value=Sets the energy used in total IF consumed by the recipe
+
+groovyscript.wiki.immersivetech.high_pressure_steam_turbine.title=High-Pressure Steam Turbine
+groovyscript.wiki.immersivetech.high_pressure_steam_turbine.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure, producing power for an adjacent Alternator multiblock.
+groovyscript.wiki.immersivetech.high_pressure_steam_turbine.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.melting_crucible.title=Melting Crucible
+groovyscript.wiki.immersivetech.melting_crucible.description=Converts an input itemstack into an output fluidstack after a given amount of time and energy in a multiblock structure.
+groovyscript.wiki.immersivetech.melting_crucible.time.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.immersivetech.melting_crucible.energy.value=Sets the energy used in total IF consumed by the recipe
+
+groovyscript.wiki.immersivetech.radiator.title=Radiator
+groovyscript.wiki.immersivetech.radiator.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure.
+groovyscript.wiki.immersivetech.radiator.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.solar_tower.title=Solar Tower
+groovyscript.wiki.immersivetech.solar_tower.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure, with the time being able to be sped up via Solar Reflector multiblocks.
+groovyscript.wiki.immersivetech.solar_tower.time.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.immersivetech.steam_turbine.title=Steam Turbine
+groovyscript.wiki.immersivetech.steam_turbine.description=Converts an input fluidstack into an output fluidstack after a given amount of time in a multiblock structure, producing power for an adjacent Alternator multiblock.
+groovyscript.wiki.immersivetech.steam_turbine.time.value=Sets the time in ticks the recipe takes to process
+
+
 # Industrial Foregoing
 groovyscript.wiki.industrialforegoing.bio_reactor.title=Bioreactor
 groovyscript.wiki.industrialforegoing.bio_reactor.description=Converts an input item into Biofuel, with the amount of Biofuel generated being based on the number of concurrent conversion processes inside the Bioreactor.
@@ -1509,8 +1611,20 @@ groovyscript.wiki.pyrotech.barrel.description=Over time converts a fluid with fo
 groovyscript.wiki.pyrotech.barrel.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.barrel.add=Adds recipes in the format `name`, `input1`, `input2`, `input3`, `input4`, `fluidInput`, `fluidOutput`, `duration`
 
+groovyscript.wiki.pyrotech.brick_kiln.title=Refractory Kiln
+groovyscript.wiki.pyrotech.brick_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
+groovyscript.wiki.pyrotech.brick_kiln.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.brick_kiln.failureChance.value=Sets the chance to fail the recipe
+groovyscript.wiki.pyrotech.brick_kiln.failureOutput.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.brick_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+
+groovyscript.wiki.pyrotech.brick_oven.title=Refractory Oven
+groovyscript.wiki.pyrotech.brick_oven.description=When powered by burning fuel can convert items
+groovyscript.wiki.pyrotech.brick_oven.duration.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.brick_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`
+
 groovyscript.wiki.pyrotech.campfire.title=Campfire
-groovyscript.wiki.pyrotech.campfire.description=Can cook food
+groovyscript.wiki.pyrotech.campfire.description=When powered by burning logs can convert items
 groovyscript.wiki.pyrotech.campfire.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.campfire.add=Adds recipes in the format `name`, `input`, `output`, `duration`
 
@@ -1539,12 +1653,26 @@ groovyscript.wiki.pyrotech.drying_rack.description=Converts an item over time in
 groovyscript.wiki.pyrotech.drying_rack.dryTime.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`
 
-groovyscript.wiki.pyrotech.kiln.title=Kiln
-groovyscript.wiki.pyrotech.kiln.description=Converts an item into a new one by burning it. Has a chance to fail
-groovyscript.wiki.pyrotech.kiln.burnTime.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.kiln.failureChance.value=Sets the chance to fail the recipe
-groovyscript.wiki.pyrotech.kiln.failureOutput.value=Sets the output when the recipe failed
-groovyscript.wiki.pyrotech.kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+groovyscript.wiki.pyrotech.pit_kiln.title=Pit Kiln
+groovyscript.wiki.pyrotech.pit_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
+groovyscript.wiki.pyrotech.pit_kiln.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.pit_kiln.failureChance.value=Sets the chance to fail the recipe
+groovyscript.wiki.pyrotech.pit_kiln.failureOutput.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.pit_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+
+groovyscript.wiki.pyrotech.oven.note0=Stone and Refractory Oven includes some recipes from the Furnace Registry that can't be removed here, you have to use `furnace.add` or `furnace.remove` to manipulate those recipes directly
+
+groovyscript.wiki.pyrotech.stone_kiln.title=Stone Kiln
+groovyscript.wiki.pyrotech.stone_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
+groovyscript.wiki.pyrotech.stone_kiln.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.stone_kiln.failureChance.value=Sets the chance to fail the recipe
+groovyscript.wiki.pyrotech.stone_kiln.failureOutput.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.stone_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+
+groovyscript.wiki.pyrotech.stone_oven.title=Stone Oven
+groovyscript.wiki.pyrotech.stone_oven.description=When powered by burning fuel can convert items
+groovyscript.wiki.pyrotech.stone_oven.duration.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.stone_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`
 
 groovyscript.wiki.pyrotech.soaking_pot.title=Soaking Pot
 groovyscript.wiki.pyrotech.soaking_pot.description=Converts an item into a new one by soaking it in a liquid. Can require a campfire
@@ -1806,6 +1934,147 @@ groovyscript.wiki.rustic.crushing_tub.byproduct.value=Sets the itemstack output 
 groovyscript.wiki.rustic.evaporating_basin.title=Drying Basin
 groovyscript.wiki.rustic.evaporating_basin.description=Converts fluids into itemstacks over time.
 groovyscript.wiki.rustic.evaporating_basin.time.value=Sets the time in ticks the recipe will take
+
+
+# Tech Reborn
+groovyscript.wiki.techreborn.alloy_smelter.title=Alloy Smelter
+groovyscript.wiki.techreborn.alloy_smelter.description=Converts two itemstack inputs into an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.alloy_smelter.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.alloy_smelter.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.assembling_machine.title=Assembling Machine
+groovyscript.wiki.techreborn.assembling_machine.description=Converts two itemstack inputs into an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.assembling_machine.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.assembling_machine.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.blast_furnace.title=Industrial Blast Furnace
+groovyscript.wiki.techreborn.blast_furnace.description=Converts one or two itemstack inputs into one or two itemstack outputs after a given process time, requiring at least a given amount of heat and consuming energy per tick.
+groovyscript.wiki.techreborn.blast_furnace.note0=Heat is increased by applying Kanthal and Nichrome Coils, improving the quality of the Machine Casing, and filling the center of the multiblock with lava.
+groovyscript.wiki.techreborn.blast_furnace.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.blast_furnace.perTick.value=Sets the power consumed per tick
+groovyscript.wiki.techreborn.blast_furnace.neededHeat.value=Sets the heat required for the recipe to be crafted
+
+groovyscript.wiki.techreborn.centrifuge.title=Industrial Centrifuge
+groovyscript.wiki.techreborn.centrifuge.description=Converts one or two itemstack inputs into up to four an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.centrifuge.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.centrifuge.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.chemical_reactor.title=Chemical Reactor
+groovyscript.wiki.techreborn.chemical_reactor.description=Converts two itemstack inputs into an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.chemical_reactor.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.chemical_reactor.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.compressor.title=Compressor
+groovyscript.wiki.techreborn.compressor.description=Converts an itemstack input into an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.compressor.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.compressor.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.diesel_generator.title=Diesel Generator
+groovyscript.wiki.techreborn.diesel_generator.description=Converts a fluidstack input into power, at a given rate per tick.
+groovyscript.wiki.techreborn.diesel_generator.energy.value=Sets the total amount of energy generated from a bucket
+groovyscript.wiki.techreborn.diesel_generator.perTick.value=Sets the FE generated per tick
+
+groovyscript.wiki.techreborn.distillation_tower.title=Distillation Tower
+groovyscript.wiki.techreborn.distillation_tower.description=Converts one or two itemstack inputs into up to four an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.distillation_tower.oreDict.value=Sets if the recipe matches based on the oredict of inputs
+groovyscript.wiki.techreborn.distillation_tower.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.distillation_tower.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.extractor.title=Extractor
+groovyscript.wiki.techreborn.extractor.description=Converts an itemstack input into an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.extractor.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.extractor.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.fluid_replicator.title=Fluid Replicator
+groovyscript.wiki.techreborn.fluid_replicator.description=Converts a configurable amount of UU-Matter into a output fluidstack of 1000mb after a given process time, replicating a fluid source block placed in-world and consuming energy per tick.
+groovyscript.wiki.techreborn.fluid_replicator.matter.value=Sets the amount of UU-Matter consumed to create a bucket of the fluid
+groovyscript.wiki.techreborn.fluid_replicator.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.fluid_replicator.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.fusion_reactor.title=Fusion Reactor
+groovyscript.wiki.techreborn.fusion_reactor.description=Converts two itemstack inputs into an itemstack output after a given process time, requiring a cost to start the recipe and either generating or consuming power while the recipe runs.
+groovyscript.wiki.techreborn.fusion_reactor.size.value=Sets the minimum size required to start the recipe
+groovyscript.wiki.techreborn.fusion_reactor.start.value=Sets the amount of power consumed to
+groovyscript.wiki.techreborn.fusion_reactor.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.fusion_reactor.perTick.value=Sets the FE consumed or generated per tick
+
+groovyscript.wiki.techreborn.gas_turbine.title=Gas Turbine
+groovyscript.wiki.techreborn.gas_turbine.description=Converts a fluidstack input into power, at a given rate per tick.
+groovyscript.wiki.techreborn.gas_turbine.energy.value=Sets the total amount of energy generated from a bucket
+groovyscript.wiki.techreborn.gas_turbine.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.grinder.title=Grinder
+groovyscript.wiki.techreborn.grinder.description=Converts an itemstack input into an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.grinder.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.grinder.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.implosion_compressor.title=Implosion Compressor
+groovyscript.wiki.techreborn.implosion_compressor.description=Converts two itemstack inputs into up to two itemstack outputs after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.implosion_compressor.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.implosion_compressor.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.industrial_electrolyzer.title=Industrial Electrolyzer
+groovyscript.wiki.techreborn.industrial_electrolyzer.description=Converts up to two itemstack inputs into up to four itemstack outputs after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.industrial_electrolyzer.oreDict.value=Sets if the recipe matches based on the oredict of inputs
+groovyscript.wiki.techreborn.industrial_electrolyzer.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.industrial_electrolyzer.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.industrial_grinder.title=Industrial Grinder
+groovyscript.wiki.techreborn.industrial_grinder.description=Converts an itemstack input and fluidstack input into up to four itemstack outputs after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.industrial_grinder.oreDict.value=Sets if the recipe matches based on the oredict of inputs
+groovyscript.wiki.techreborn.industrial_grinder.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.industrial_grinder.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.industrial_sawmill.title=Sawmill
+groovyscript.wiki.techreborn.industrial_sawmill.description=Converts an itemstack input and fluidstack output into three itemstack outputs after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.industrial_sawmill.oreDict.value=Sets if the recipe matches based on the oredict of inputs
+groovyscript.wiki.techreborn.industrial_sawmill.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.industrial_sawmill.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.plasma_generator.title=Plasma Generator
+groovyscript.wiki.techreborn.plasma_generator.description=Converts a fluidstack input into power, at a given rate per tick.
+groovyscript.wiki.techreborn.plasma_generator.energy.value=Sets the total amount of energy generated from a bucket
+groovyscript.wiki.techreborn.plasma_generator.perTick.value=Sets the FE generated per tick
+
+groovyscript.wiki.techreborn.plate_bending_machine.title=Plate Bending Machine
+groovyscript.wiki.techreborn.plate_bending_machine.description=Converts an itemstack input into an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.plate_bending_machine.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.plate_bending_machine.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.rolling_machine.title=Rolling Machine
+groovyscript.wiki.techreborn.rolling_machine.description=Converts a custom crafting recipe into an output itemstack.
+groovyscript.wiki.techreborn.rolling_machine.addShaped=Adds a shaped crafting recipe in the format `output`, `input`
+groovyscript.wiki.techreborn.rolling_machine.addShapeless=Adds a shapeless crafting recipe in the format `output`, `input`
+
+groovyscript.wiki.techreborn.scrapbox.title=Scrapbox
+groovyscript.wiki.techreborn.scrapbox.description=Converts a scrapbox into a random itemstack output, either via manual player interaction or via a machine with a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.scrapbox.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.scrapbox.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.semi_fluid_generator.title=Semi-Fluid Generator
+groovyscript.wiki.techreborn.semi_fluid_generator.description=Converts a fluidstack input into power, at a given rate per tick.
+groovyscript.wiki.techreborn.semi_fluid_generator.energy.value=Sets the total amount of energy generated from a bucket
+groovyscript.wiki.techreborn.semi_fluid_generator.perTick.value=Sets the FE generated per tick
+
+groovyscript.wiki.techreborn.solid_canning_machine.title=Solid Canning Machine
+groovyscript.wiki.techreborn.solid_canning_machine.description=Converts two itemstack inputs into an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.solid_canning_machine.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.solid_canning_machine.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.thermal_generator.title=Thermal Generator
+groovyscript.wiki.techreborn.thermal_generator.description=Converts a fluidstack input into power, at a given rate per tick.
+groovyscript.wiki.techreborn.thermal_generator.energy.value=Sets the total amount of energy generated from a bucket
+groovyscript.wiki.techreborn.thermal_generator.perTick.value=Sets the FE generated per tick
+
+groovyscript.wiki.techreborn.vacuum_freezer.title=Vacuum Freezer
+groovyscript.wiki.techreborn.vacuum_freezer.description=Converts an itemstack input into an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.vacuum_freezer.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.vacuum_freezer.perTick.value=Sets the power consumed per tick
+
+groovyscript.wiki.techreborn.wire_mill.title=Wire Mill
+groovyscript.wiki.techreborn.wire_mill.description=Converts an itemstack input into an itemstack output after a given process time, consuming energy per tick.
+groovyscript.wiki.techreborn.wire_mill.time.value=Sets the time in ticks the recipe takes to complete
+groovyscript.wiki.techreborn.wire_mill.perTick.value=Sets the power consumed per tick
 
 
 # Tinkers
