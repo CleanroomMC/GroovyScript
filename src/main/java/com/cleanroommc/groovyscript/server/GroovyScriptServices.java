@@ -30,7 +30,7 @@ public class GroovyScriptServices extends GroovyServices implements GroovyScript
             return CompletableFuture.completedFuture(null);
         }
 
-        var provider = new TextureDecorationProvider(new ASTContext(visitor, languageServerContext));
-        return provider.provideTextureDecorations(params.getTextDocument());
+        var provider = new TextureDecorationProvider(uri, new ASTContext(visitor, languageServerContext));
+        return provider.provideTextureDecorations();
     }
 }

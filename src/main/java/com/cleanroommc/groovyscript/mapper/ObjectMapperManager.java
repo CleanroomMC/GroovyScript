@@ -205,9 +205,23 @@ public class ObjectMapperManager {
      */
     @Nullable
     public static Object getGameObject(String name, String mainArg, Object... args) {
+        return getGameObject(false, name, mainArg, args);
+    }
+
+    /**
+     * Finds the game object handle and invokes it. Called by injected calls via the groovy script transformer.
+     *
+     * @param name    game object handler name (method name)
+     * @param mainArg main argument
+     * @param args    extra arguments
+     * @param silent if error messages should be logged
+     * @return game object or null
+     */
+    @Nullable
+    public static Object getGameObject(boolean silent, String name, String mainArg, Object... args) {
         ObjectMapper<?> objectMapper = handlers.get(name);
         if (objectMapper != null) {
-            return objectMapper.invoke(mainArg, args);
+            return objectMapper.invokeWithDefault(silent, mainArg, args);
         }
         return null;
     }

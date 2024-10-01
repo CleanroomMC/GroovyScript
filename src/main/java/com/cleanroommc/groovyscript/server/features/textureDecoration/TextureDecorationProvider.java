@@ -3,18 +3,19 @@ package com.cleanroommc.groovyscript.server.features.textureDecoration;
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.mapper.TextureBinder;
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
+import net.prominic.groovyls.providers.DocProvider;
 import net.prominic.groovyls.util.GroovyLSUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.codehaus.groovy.GroovyBugError;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.expr.*;
 import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -23,31 +24,33 @@ import org.lwjgl.opengl.GL30;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-public class TextureDecorationProvider {
+public class TextureDecorationProvider extends DocProvider {
 
     private static final int ICON_W = 16, ICON_H = 16;
     private static final int ICON_X = 0, ICON_Y = 0;
+    private static final Map<String, TextureDecoration> textures = new Object2ObjectOpenHashMap<>();
 
     private final String cacheRoot = FileUtil.makePath(FileUtil.getMinecraftHome(), "cache", "groovy", "textureDecorations");
 
-    private final ASTContext context;
 
-    private final List<TextureDecoration> decorations = new ArrayList<>();
-    private final List<TextureDecorationInformation> decorationInformations = new ArrayList<>();
-
-    public TextureDecorationProvider(ASTContext context) {
-        this.context = context;
+    public TextureDecorationProvider(URI doc, ASTContext context) {
+        super(doc, context);
     }
 
-    public CompletableFuture<List<TextureDecorationInformation>> provideTextureDecorations(TextDocumentIdentifier textDocument) {
+    public CompletableFuture<List<TextureDecorationInformation>> provideTextureDecorations() {
+        List<TextureDecorationInformation> decorationInformations = new ArrayList<>();
+        List<TextureDecoration> queueDeco = new ArrayList<>();
+        List<Range> queueRange = new ArrayList<>();
         Set<MethodCallExpression> mappers = new ObjectOpenHashSet<>();
-        for (ASTNode node : context.getVisitor().getNodes()) {
+        for (ASTNode node : getNodes()) {
             ASTNode start;
             MethodCallExpression call;
             if (node instanceof PropertyExpression prop) {
@@ -69,53 +72,63 @@ public class TextureDecorationProvider {
                 args.getExpressions().isEmpty()) continue;
             ObjectMapper<?> mapper;
             try {
-                mapper = GroovyASTUtils.getMapperOfNode(call, context);
+                mapper = GroovyASTUtils.getMapperOfNode(call, astContext);
             } catch (GroovyBugError e) {
                 continue;
             }
             if (mapper == null) continue;
             mappers.add(call);
 
-            if (!args.getExpressions().stream().allMatch(e -> e instanceof ConstantExpression))
+            if (!args.getExpressions().stream().allMatch(e -> e instanceof ConstantExpression)) {
                 continue;
+            }
 
             var binder = mapper.getTextureBinder();
             if (binder == null) continue;
 
-            var additionalArgs = new Object[args.getExpressions().size() - 1];
-            for (int i = 0; i < additionalArgs.length; i++) {
-                if (args.getExpressions().get(i + 1) instanceof ConstantExpression argExpression)
-                    additionalArgs[i] = argExpression.getValue();
+            var textureName = computeTextureName(mapper.getName(), args.getExpressions());
+            var uri = getURIForDecoration(textureName);
+            var decoration = textures.get(uri);
+
+            if (decoration == null) {
+                var bindable = getObjectWithConstArgs(mapper, args);
+                if (bindable == null) continue;
+                decoration = new TextureDecoration(textureName, binder, bindable, uri);
+                textures.put(uri, decoration);
             }
 
-            var bindable = mapper.doCall(args.getExpressions().get(0).getText(), additionalArgs);
-
-            if (bindable == null) continue;
-
-            var textureName = computeTextureName(mapper.getName(), args.getExpressions());
-
-            var decoration = new TextureDecoration(textureName, binder, bindable, GroovyLSUtils.astNodeToRange(start, call));
-
-            var textureFile = decoration.getFile();
-
-            if (!textureFile.getParentFile().mkdirs() && textureFile.exists()) {
-                decorationInformations.add(new TextureDecorationInformation(decoration.getRange(), decoration.getUri()));
+            var range = GroovyLSUtils.astNodeToRange(start, call);
+            if (decoration.isFileExists()) {
+                decorationInformations.add(new TextureDecorationInformation(range, uri));
                 continue;
             }
-
-            decorations.add(decoration);
+            if (!decoration.queued) {
+                decoration.queued = true;
+                queueDeco.add(decoration);
+                queueRange.add(range);
+            }
         }
 
-        if (decorations.isEmpty())
+        if (queueDeco.isEmpty()) {
             return CompletableFuture.completedFuture(decorationInformations);
+        }
 
         var future = new CompletableFuture<List<TextureDecorationInformation>>();
 
         Minecraft.getMinecraft()
-                .addScheduledTask(this::render)
+                .addScheduledTask(() -> render(queueDeco, queueRange, decorationInformations))
                 .addListener(() -> future.complete(decorationInformations), Runnable::run);
 
         return future;
+    }
+
+    private static <T> T getObjectWithConstArgs(ObjectMapper<T> mapper, ArgumentListExpression args) {
+        var additionalArgs = new Object[args.getExpressions().size() - 1];
+        for (int i = 0; i < additionalArgs.length; i++) {
+            if (args.getExpressions().get(i + 1) instanceof ConstantExpression argExpression)
+                additionalArgs[i] = argExpression.getValue();
+        }
+        return mapper.invoke(true, args.getExpressions().get(0).getText(), additionalArgs);
     }
 
     private String computeTextureName(String name, List<Expression> expressions) {
@@ -126,8 +139,8 @@ public class TextureDecorationProvider {
         return DigestUtils.sha1Hex(sb.toString());
     }
 
-
-    private void render() {
+    private void render(List<TextureDecoration> queueDeco, List<Range> queueRange,
+                        List<TextureDecorationInformation> decorationInformations) {
         var framebuffer = GL30.glGenFramebuffers();
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebuffer);
 
@@ -174,7 +187,9 @@ public class TextureDecorationProvider {
 
         var buffer = BufferUtils.createByteBuffer(ICON_W * ICON_H * 4);
 
-        for (TextureDecoration decoration : decorations) {
+        for (int i = 0; i < queueDeco.size(); i++) {
+            TextureDecoration decoration = queueDeco.get(i);
+            Range range = queueRange.get(i);
             GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
             decoration.render();
@@ -184,7 +199,9 @@ public class TextureDecorationProvider {
             saveImage(decoration.getFile(), buffer);
             buffer.rewind();
 
-            decorationInformations.add(new TextureDecorationInformation(decoration.getRange(), decoration.getUri()));
+            decoration.fileExists = true;
+            decoration.queued = false;
+            decorationInformations.add(new TextureDecorationInformation(range, decoration.getUri()));
         }
 
         GlStateManager.enableAlpha();
@@ -216,34 +233,42 @@ public class TextureDecorationProvider {
         }
     }
 
+    private String getURIForDecoration(String name) {
+        return FileUtil.makeFile(cacheRoot, name + ".png").toURI().toString();
+    }
+
     private class TextureDecoration {
 
         private final String name;
+        private final String uri;
         private final TextureBinder<?> binder;
         private final Object bindable;
-        private final Range range;
+        private boolean fileExists;
+        private boolean queued;
 
-        private TextureDecoration(String name, TextureBinder<?> binder, Object bindable, Range range) {
+        private TextureDecoration(String name, TextureBinder<?> binder, Object bindable, String uri) {
             this.name = name;
             this.binder = binder;
             this.bindable = bindable;
-            this.range = range;
+            this.uri = uri;
+            File file = getFile();
+            this.fileExists = !file.getParentFile().mkdirs() && file.exists();
         }
 
         public String getUri() {
-            return getFile().toURI().toString();
+            return uri;
         }
 
         private @NotNull File getFile() {
             return FileUtil.makeFile(cacheRoot, name + ".png");
         }
 
-        public Range getRange() {
-            return range;
-        }
-
         public void render() {
             ((TextureBinder) binder).accept(bindable);
+        }
+
+        public boolean isFileExists() {
+            return fileExists;
         }
     }
 }
