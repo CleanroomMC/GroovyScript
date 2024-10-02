@@ -1,21 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.immersivetechnology;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import mctmods.immersivetechnology.api.crafting.HighPressureSteamTurbineRecipe;
 import mctmods.immersivetechnology.common.Config;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class HighPressureSteamTurbine extends VirtualizedRegistry<HighPressureSteamTurbineRecipe> {
+public class HighPressureSteamTurbine extends StandardListRegistry<HighPressureSteamTurbineRecipe> {
 
     @Override
     public boolean isEnabled() {
@@ -31,31 +30,13 @@ public class HighPressureSteamTurbine extends VirtualizedRegistry<HighPressureSt
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        HighPressureSteamTurbineRecipe.recipeList.removeAll(removeScripted());
-        HighPressureSteamTurbineRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(HighPressureSteamTurbineRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            HighPressureSteamTurbineRecipe.recipeList.add(recipe);
-        }
-    }
-
-    public boolean remove(HighPressureSteamTurbineRecipe recipe) {
-        if (HighPressureSteamTurbineRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<HighPressureSteamTurbineRecipe> getRecipes() {
+        return HighPressureSteamTurbineRecipe.recipeList;
     }
 
     @MethodDescription(example = @Example("fluid('highpressuresteam')"))
     public void removeByInput(IIngredient input) {
-        HighPressureSteamTurbineRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidInputs()) {
                 if (input.test(fluidStack)) {
                     addBackup(r);
@@ -68,7 +49,7 @@ public class HighPressureSteamTurbine extends VirtualizedRegistry<HighPressureSt
 
     @MethodDescription(example = @Example(value = "fluid('steam')",commented = true))
     public void removeByOutput(IIngredient output) {
-        HighPressureSteamTurbineRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidOutputs()) {
                 if (output.test(fluidStack)) {
                     addBackup(r);
@@ -77,17 +58,6 @@ public class HighPressureSteamTurbine extends VirtualizedRegistry<HighPressureSt
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<HighPressureSteamTurbineRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(HighPressureSteamTurbineRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        HighPressureSteamTurbineRecipe.recipeList.forEach(this::addBackup);
-        HighPressureSteamTurbineRecipe.recipeList.clear();
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))

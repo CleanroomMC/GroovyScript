@@ -1,28 +1,26 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class OreFermenter extends VirtualizedRegistry<OreFluidEntryFermenter> {
+public class OreFermenter extends StandardListRegistry<OreFluidEntryFermenter> {
 
     public OreFermenter() {
         super(Alias.generateOfClass(OreFermenter.class).andGenerate("Fermentation"));
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        OreFluidEntryFermenter.ORE_FLUID_FERMENTER.removeAll(removeScripted());
-        OreFluidEntryFermenter.ORE_FLUID_FERMENTER.addAll(restoreFromBackup());
+    public Collection<OreFluidEntryFermenter> getRecipes() {
+        return OreFluidEntryFermenter.ORE_FLUID_FERMENTER;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("fluid('if.ore_fluid_raw').withNbt(['Ore': 'oreGold']), fluid('if.ore_fluid_fermented').withNbt(['Ore': 'oreGold']) * 2"))
@@ -32,22 +30,9 @@ public class OreFermenter extends VirtualizedRegistry<OreFluidEntryFermenter> {
         return recipe;
     }
 
-    public void add(OreFluidEntryFermenter recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        OreFluidEntryFermenter.ORE_FLUID_FERMENTER.add(recipe);
-    }
-
-    public boolean remove(OreFluidEntryFermenter recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        OreFluidEntryFermenter.ORE_FLUID_FERMENTER.remove(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("fluid('if.ore_fluid_raw').withNbt([Ore: 'oreRedstone'])"))
     public boolean removeByInput(IIngredient input) {
-        return OreFluidEntryFermenter.ORE_FLUID_FERMENTER.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getInput())) {
                 addBackup(recipe);
                 return true;
@@ -58,25 +43,13 @@ public class OreFermenter extends VirtualizedRegistry<OreFluidEntryFermenter> {
 
     @MethodDescription(example = @Example(value = "fluid('if.ore_fluid_fermented').withNbt([Ore: 'oreRedstone'])", commented = true))
     public boolean removeByOutput(IIngredient output) {
-        return OreFluidEntryFermenter.ORE_FLUID_FERMENTER.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput())) {
                 addBackup(recipe);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        OreFluidEntryFermenter.ORE_FLUID_FERMENTER.forEach(this::addBackup);
-        OreFluidEntryFermenter.ORE_FLUID_FERMENTER.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<OreFluidEntryFermenter> streamRecipes() {
-        return new SimpleObjectStream<>(OreFluidEntryFermenter.ORE_FLUID_FERMENTER)
-                .setRemover(this::remove);
     }
 
 }

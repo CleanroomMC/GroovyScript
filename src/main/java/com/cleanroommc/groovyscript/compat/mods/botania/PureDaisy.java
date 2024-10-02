@@ -1,20 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipePureDaisy;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
+public class PureDaisy extends StandardListRegistry<RecipePureDaisy> {
 
     @RecipeBuilderDescription(example = @Example(".input(ore('plankWood')).output(blockstate('minecraft:clay')).time(5)"))
     public RecipeBuilder recipeBuilder() {
@@ -22,10 +22,8 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(BotaniaAPI.pureDaisyRecipes::remove);
-        BotaniaAPI.pureDaisyRecipes.addAll(restoreFromBackup());
+    public Collection<RecipePureDaisy> getRecipes() {
+        return BotaniaAPI.pureDaisyRecipes;
     }
 
     @MethodDescription(description = "groovyscript.wiki.botania.pure_daisy.add0", type = MethodDescription.Type.ADDITION)
@@ -38,21 +36,9 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
         return recipeBuilder().output(output).input(input).register();
     }
 
-    public void add(RecipePureDaisy recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        BotaniaAPI.pureDaisyRecipes.add(recipe);
-    }
-
-    public boolean remove(RecipePureDaisy recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        return BotaniaAPI.pureDaisyRecipes.remove(recipe);
-    }
-
     @MethodDescription(example = @Example("blockstate('botania:livingrock')"))
     public boolean removeByOutput(IBlockState output) {
-        if (BotaniaAPI.pureDaisyRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getOutputState().equals(output);
             if (found) addBackup(recipe);
             return found;
@@ -67,7 +53,7 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
 
     @MethodDescription
     public boolean removeByInput(String input) {
-        if (BotaniaAPI.pureDaisyRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getInput() instanceof String && recipe.getInput().equals(input);
             if (found) addBackup(recipe);
             return found;
@@ -87,7 +73,7 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
 
     @MethodDescription(example = @Example("blockstate('minecraft:water')"))
     public boolean removeByInput(IBlockState input) {
-        if (BotaniaAPI.pureDaisyRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = (recipe.getInput() instanceof IBlockState && recipe.getInput().equals(input)) || (recipe.getInput() instanceof Block && recipe.getInput() == input.getBlock());
             if (found) addBackup(recipe);
             return found;
@@ -103,17 +89,6 @@ public class PureDaisy extends VirtualizedRegistry<RecipePureDaisy> {
     @MethodDescription
     public boolean removeByInput(Block input) {
         return removeByInput(input.getDefaultState());
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BotaniaAPI.pureDaisyRecipes.forEach(this::addBackup);
-        BotaniaAPI.pureDaisyRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipePureDaisy> streamRecipes() {
-        return new SimpleObjectStream<>(BotaniaAPI.pureDaisyRecipes).setRemover(this::remove);
     }
 
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipePureDaisy> {

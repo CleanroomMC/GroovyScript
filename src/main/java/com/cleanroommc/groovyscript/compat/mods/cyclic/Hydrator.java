@@ -1,13 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.cyclic;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.google.common.collect.Lists;
 import com.lothrazar.cyclicmagic.CyclicContent;
 import com.lothrazar.cyclicmagic.block.hydrator.RecipeHydrate;
@@ -15,11 +13,12 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Hydrator extends VirtualizedRegistry<RecipeHydrate> {
+public class Hydrator extends StandardListRegistry<RecipeHydrate> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay'))"),
@@ -35,28 +34,13 @@ public class Hydrator extends VirtualizedRegistry<RecipeHydrate> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        RecipeHydrate.recipes.removeAll(removeScripted());
-        RecipeHydrate.recipes.addAll(restoreFromBackup());
-    }
-
-    public void add(RecipeHydrate recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        RecipeHydrate.recipes.add(recipe);
-    }
-
-    public boolean remove(RecipeHydrate recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        RecipeHydrate.recipes.remove(recipe);
-        return true;
+    public Collection<RecipeHydrate> getRecipes() {
+        return RecipeHydrate.recipes;
     }
 
     @MethodDescription(example = @Example("item('minecraft:dirt')"))
     public boolean removeByInput(IIngredient input) {
-        return RecipeHydrate.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (recipe.getRecipeInput().stream().anyMatch(input)) {
                 addBackup(recipe);
                 return true;
@@ -67,25 +51,13 @@ public class Hydrator extends VirtualizedRegistry<RecipeHydrate> {
 
     @MethodDescription(example = @Example("item('minecraft:clay_ball')"))
     public boolean removeByOutput(IIngredient output) {
-        return RecipeHydrate.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getRecipeOutput())) {
                 addBackup(recipe);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        RecipeHydrate.recipes.forEach(this::addBackup);
-        RecipeHydrate.recipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeHydrate> streamRecipes() {
-        return new SimpleObjectStream<>(RecipeHydrate.recipes)
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})

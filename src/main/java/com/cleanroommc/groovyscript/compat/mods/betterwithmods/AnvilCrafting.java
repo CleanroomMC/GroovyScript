@@ -7,14 +7,15 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
+public class AnvilCrafting extends StandardListRegistry<IRecipe> {
 
     public AnvilCrafting() {
         super(Alias.generateOfClass(AnvilCrafting.class).andGenerate("SoulforgedSteelAnvil"));
@@ -34,30 +35,13 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> AnvilCraftingManager.ANVIL_CRAFTING.removeIf(r -> r == recipe));
-        AnvilCraftingManager.ANVIL_CRAFTING.addAll(restoreFromBackup());
-    }
-
-    public IRecipe add(IRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            AnvilCraftingManager.ANVIL_CRAFTING.add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(IRecipe recipe) {
-        if (AnvilCraftingManager.ANVIL_CRAFTING.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<IRecipe> getRecipes() {
+        return AnvilCraftingManager.ANVIL_CRAFTING;
     }
 
     @MethodDescription(example = @Example("item('betterwithmods:steel_block')"))
     public boolean removeByOutput(IIngredient output) {
-        return AnvilCraftingManager.ANVIL_CRAFTING.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.test(r.getRecipeOutput())) {
                 addBackup(r);
                 return true;
@@ -68,7 +52,7 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:redstone')"))
     public boolean removeByInput(IIngredient input) {
-        return AnvilCraftingManager.ANVIL_CRAFTING.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (Ingredient ingredient : r.getIngredients()) {
                 for (ItemStack item : ingredient.getMatchingStacks()) {
                     if (input.test(item)) {
@@ -79,17 +63,6 @@ public class AnvilCrafting extends VirtualizedRegistry<IRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(AnvilCraftingManager.ANVIL_CRAFTING).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        AnvilCraftingManager.ANVIL_CRAFTING.forEach(this::addBackup);
-        AnvilCraftingManager.ANVIL_CRAFTING.clear();
     }
 
 }

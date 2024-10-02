@@ -463,7 +463,6 @@ mods.techreborn.rolling_machine.shapelessBuilder()
     .register()
 
 
-
 // Scrapbox:
 // Converts a scrapbox into a random itemstack output, either via manual player interaction or via a machine with a given
 // process time, consuming energy per tick.

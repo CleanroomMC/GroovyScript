@@ -1,23 +1,21 @@
 package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.crafting.AlloyRecipe;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
+public class AlloyKiln extends StandardListRegistry<AlloyRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), ore('ingotGold')).output(item('minecraft:clay'))"))
     public RecipeBuilder recipeBuilder() {
@@ -25,18 +23,8 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        removeScripted().forEach(recipe -> AlloyRecipe.recipeList.removeIf(r -> r == recipe));
-        AlloyRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(AlloyRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            AlloyRecipe.recipeList.add(recipe);
-        }
+    public Collection<AlloyRecipe> getRecipes() {
+        return AlloyRecipe.recipeList;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -44,14 +32,6 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
         AlloyRecipe recipe = new AlloyRecipe(output, ImmersiveEngineering.toIngredientStack(input0), ImmersiveEngineering.toIngredientStack(input1), time);
         add(recipe);
         return recipe;
-    }
-
-    public boolean remove(AlloyRecipe recipe) {
-        if (AlloyRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example("item('immersiveengineering:metal:6')"))
@@ -91,17 +71,6 @@ public class AlloyKiln extends VirtualizedRegistry<AlloyRecipe> {
                     .error()
                     .post();
         }
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<AlloyRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(AlloyRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        AlloyRecipe.recipeList.forEach(this::addBackup);
-        AlloyRecipe.recipeList.clear();
     }
 
     @Property(property = "input", valid = @Comp("2"))

@@ -2,39 +2,27 @@ package com.cleanroommc.groovyscript.compat.mods.betterwithmods;
 
 import betterwithmods.common.registry.block.recipe.BlockIngredient;
 import betterwithmods.common.registry.heat.BWMHeatRegistry;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.betterwithmods.BWMHeatRegistryAccessor;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
         admonition = @Admonition("groovyscript.wiki.betterwithmods.heat.note0")
 )
-public class Heat extends VirtualizedRegistry<BWMHeatRegistry.HeatSource> {
+public class Heat extends StandardListRegistry<BWMHeatRegistry.HeatSource> {
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(recipe -> BWMHeatRegistryAccessor.getHEAT_SOURCES().removeIf(r -> r == recipe));
-        BWMHeatRegistryAccessor.getHEAT_SOURCES().addAll(restoreFromBackup());
-    }
-
-    public void add(BWMHeatRegistry.HeatSource heatSource) {
-        BWMHeatRegistryAccessor.getHEAT_SOURCES().add(heatSource);
-        addScripted(heatSource);
-    }
-
-    public boolean remove(BWMHeatRegistry.HeatSource heatSource) {
-        if (!BWMHeatRegistryAccessor.getHEAT_SOURCES().remove(heatSource)) return false;
-        addBackup(heatSource);
-        return true;
+    public Collection<BWMHeatRegistry.HeatSource> getRecipes() {
+        return BWMHeatRegistryAccessor.getHEAT_SOURCES();
     }
 
     @MethodDescription(type = MethodDescription.Type.VALUE)

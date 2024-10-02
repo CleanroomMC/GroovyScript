@@ -1,21 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.immersivetechnology;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import mctmods.immersivetechnology.api.crafting.BoilerRecipe;
 import mctmods.immersivetechnology.common.Config;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
-public class BoilerFuel extends VirtualizedRegistry<BoilerRecipe.BoilerFuelRecipe> {
+public class BoilerFuel extends StandardListRegistry<BoilerRecipe.BoilerFuelRecipe> {
 
     @Override
     public boolean isEnabled() {
@@ -31,31 +30,13 @@ public class BoilerFuel extends VirtualizedRegistry<BoilerRecipe.BoilerFuelRecip
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        BoilerRecipe.fuelList.removeAll(removeScripted());
-        BoilerRecipe.fuelList.addAll(restoreFromBackup());
-    }
-
-    public void add(BoilerRecipe.BoilerFuelRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            BoilerRecipe.fuelList.add(recipe);
-        }
-    }
-
-    public boolean remove(BoilerRecipe.BoilerFuelRecipe recipe) {
-        if (BoilerRecipe.fuelList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<BoilerRecipe.BoilerFuelRecipe> getRecipes() {
+        return BoilerRecipe.fuelList;
     }
 
     @MethodDescription(example = @Example("fluid('biodiesel')"))
     public void removeByInput(IIngredient input) {
-        BoilerRecipe.fuelList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidInputs()) {
                 if (input.test(fluidStack)) {
                     addBackup(r);
@@ -64,17 +45,6 @@ public class BoilerFuel extends VirtualizedRegistry<BoilerRecipe.BoilerFuelRecip
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<BoilerRecipe.BoilerFuelRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(BoilerRecipe.fuelList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BoilerRecipe.fuelList.forEach(this::addBackup);
-        BoilerRecipe.fuelList.clear();
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))

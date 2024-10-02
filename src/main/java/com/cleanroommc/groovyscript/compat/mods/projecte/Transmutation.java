@@ -1,20 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.projecte;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import moze_intel.projecte.utils.WorldTransmutations;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Transmutation extends VirtualizedRegistry<WorldTransmutations.Entry> {
+public class Transmutation extends StandardListRegistry<WorldTransmutations.Entry> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(blockstate('minecraft:end_stone')).output(blockstate('minecraft:diamond_block'), blockstate('minecraft:gold_block'))"),
@@ -26,28 +26,13 @@ public class Transmutation extends VirtualizedRegistry<WorldTransmutations.Entry
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        WorldTransmutations.getWorldTransmutations().removeAll(removeScripted());
-        WorldTransmutations.getWorldTransmutations().addAll(restoreFromBackup());
-    }
-
-    public void add(WorldTransmutations.Entry recipe) {
-        addScripted(recipe);
-        WorldTransmutations.getWorldTransmutations().add(recipe);
-    }
-
-    public boolean remove(WorldTransmutations.Entry recipe) {
-        if (WorldTransmutations.getWorldTransmutations().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<WorldTransmutations.Entry> getRecipes() {
+        return WorldTransmutations.getWorldTransmutations();
     }
 
     @MethodDescription(example = @Example("blockstate('minecraft:wool')"))
     public boolean removeByInput(IBlockState input) {
-        return WorldTransmutations.getWorldTransmutations().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (input.equals(r.input)) {
                 addBackup(r);
                 return true;
@@ -58,24 +43,13 @@ public class Transmutation extends VirtualizedRegistry<WorldTransmutations.Entry
 
     @MethodDescription(example = @Example("blockstate('minecraft:dirt')"))
     public boolean removeByOutput(IBlockState output) {
-        return WorldTransmutations.getWorldTransmutations().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.equals(r.outputs.getKey()) || output.equals(r.outputs.getValue())) {
                 addBackup(r);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<WorldTransmutations.Entry> streamRecipes() {
-        return new SimpleObjectStream<>(WorldTransmutations.getWorldTransmutations()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        WorldTransmutations.getWorldTransmutations().forEach(this::addBackup);
-        WorldTransmutations.getWorldTransmutations().clear();
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<WorldTransmutations.Entry> {
