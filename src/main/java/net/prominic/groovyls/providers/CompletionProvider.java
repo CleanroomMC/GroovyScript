@@ -26,6 +26,7 @@ import groovy.lang.DelegatesTo;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.FieldInfo;
 import io.github.classgraph.MethodInfo;
+import io.github.classgraph.MethodParameterInfo;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
@@ -298,14 +299,13 @@ public class CompletionProvider extends DocProvider {
         builder.append("(");
         var parameters = node.getParameters();
         for (int i = 0; i < parameters.length; i++) {
+            boolean last = i == parameters.length - 1;
             if (parameters[i].isDynamicTyped()) {
                 builder.append("?");
             } else {
-                appendType(parameters[i].getType(), builder, display);
+                appendType(parameters[i].getType(), builder, display, last);
             }
-            if (i < parameters.length - 1) {
-                builder.append(", ");
-            }
+            if (!last) builder.append(", ");
         }
         builder.append(")");
         if (!includeReturn) return builder.toString();
@@ -317,6 +317,10 @@ public class CompletionProvider extends DocProvider {
     }
 
     public static StringBuilder appendType(ClassNode type, StringBuilder builder, boolean display) {
+        return appendType(type, builder, display, false);
+    }
+
+    public static StringBuilder appendType(ClassNode type, StringBuilder builder, boolean display, boolean maybeVarargs) {
         boolean isArray = type.getComponentType() != null;
         if (isArray) type = type.getComponentType();
         if (type.isGenericsPlaceHolder()) {
@@ -331,14 +335,18 @@ public class CompletionProvider extends DocProvider {
             if (bound == null || bound.equals(type)) {
                 // type has no bound (just T f.e.)
                 builder.append(gt.getName());
-                if (isArray) builder.append("[]");
+                if (isArray) {
+                    builder.append(maybeVarargs ? "..." : "[]");
+                }
                 return builder;
             }
             type = bound;
         }
         builder.append(display ? type.getNameWithoutPackage() : type.getName());
         appendGenerics(type, builder, display);
-        if (isArray) builder.append("[]");
+        if (isArray) {
+            builder.append(maybeVarargs ? "..." : "[]");
+        }
         return builder;
     }
 
@@ -363,13 +371,9 @@ public class CompletionProvider extends DocProvider {
         builder.append("(");
         var parameters = node.getParameterInfo();
         for (int i = 0; i < parameters.length; i++) {
-            var parameter = parameters[i];
-            builder.append(display ?
-                           parameter.getTypeSignatureOrTypeDescriptor().toStringWithSimpleNames() :
-                           parameter.getTypeDescriptor().toString()); // don't use generic types
-            if (i < parameters.length - 1) {
-                builder.append(", ");
-            }
+            boolean last = i == parameters.length - 1;
+            appendParameter(parameters[i], builder, display, last);
+            if (!last) builder.append(", ");
         }
         builder.append(")");
         if (!includeReturn) return builder.toString();
@@ -381,6 +385,16 @@ public class CompletionProvider extends DocProvider {
             builder.append(ret);
         }
         return builder.toString();
+    }
+
+    public static StringBuilder appendParameter(MethodParameterInfo param, StringBuilder builder, boolean display, boolean maybeVarargs) {
+        builder.append(display ?
+                       param.getTypeSignatureOrTypeDescriptor().toStringWithSimpleNames() :
+                       param.getTypeDescriptor().toString()); // don't use generic types
+        if (maybeVarargs && builder.charAt(builder.length() - 1) == ']' && builder.charAt(builder.length() - 2) == '[') {
+            builder.delete(builder.length() - 2, builder.length()).append("...");
+        }
+        return builder;
     }
 
     @NotNull
