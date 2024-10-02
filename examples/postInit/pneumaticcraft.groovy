@@ -109,7 +109,6 @@ mods.pneumaticcraft.liquid_fuel.recipeBuilder()
     .register()
 
 
-
 // Plastic Mixer:
 // Converts a fluidstack and an item with a variable damage value into each other, requiring temperature to operate the
 // process, optionally consuming dye, and allowing either only melting or only solidifying.
@@ -210,6 +209,5 @@ mods.pneumaticcraft.xp_fluid.recipeBuilder()
     .fluidInput(fluid('lava'))
     .ratio(5)
     .register()
-
 
 

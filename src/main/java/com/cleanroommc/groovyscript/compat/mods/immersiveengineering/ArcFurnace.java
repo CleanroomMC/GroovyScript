@@ -1,28 +1,26 @@
 package com.cleanroommc.groovyscript.compat.mods.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.crafting.ArcFurnaceRecipe;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
+public class ArcFurnace extends StandardListRegistry<ArcFurnaceRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".mainInput(item('minecraft:diamond')).input(item('minecraft:diamond'), ore('ingotGold')).output(item('minecraft:clay')).time(100).energyPerTick(100).slag(item('minecraft:gold_nugget'))"))
     public RecipeBuilder recipeBuilder() {
@@ -30,18 +28,8 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        removeScripted().forEach(r -> ArcFurnaceRecipe.recipeList.removeIf(recipe -> recipe == r));
-        ArcFurnaceRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(ArcFurnaceRecipe recipe) {
-        if (recipe != null) {
-            ArcFurnaceRecipe.recipeList.add(recipe);
-            addScripted(recipe);
-        }
+    public Collection<ArcFurnaceRecipe> getRecipes() {
+        return ArcFurnaceRecipe.recipeList;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -50,14 +38,6 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
         ArcFurnaceRecipe recipe = ArcFurnaceRecipe.addRecipe(output, ImmersiveEngineering.toIngredientStack(input), slag, time, energyPerTick, inputs);
         addScripted(recipe);
         return recipe;
-    }
-
-    public boolean remove(ArcFurnaceRecipe recipe) {
-        if (ArcFurnaceRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example("item('immersiveengineering:metal:7')"))
@@ -69,7 +49,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
                     .post();
             return;
         }
-        List<ArcFurnaceRecipe> recipes = ArcFurnaceRecipe.recipeList.stream().filter(r -> r.output != null && r.output.isItemEqual(output)).collect(Collectors.toList());
+        List<ArcFurnaceRecipe> recipes = getRecipes().stream().filter(r -> r.output != null && r.output.isItemEqual(output)).collect(Collectors.toList());
         for (ArcFurnaceRecipe recipe : recipes) {
             remove(recipe);
         }
@@ -90,7 +70,7 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
                     .post();
             return;
         }
-        List<ArcFurnaceRecipe> recipes = ArcFurnaceRecipe.recipeList.stream()
+        List<ArcFurnaceRecipe> recipes = getRecipes().stream()
                 .filter(r -> ImmersiveEngineering.areIngredientsEquals(r.input, main) &&
                              (inputAndAdditives.stream().anyMatch(check -> Arrays.stream(r.additives).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check)))))
                 .collect(Collectors.toList());
@@ -121,17 +101,6 @@ public class ArcFurnace extends VirtualizedRegistry<ArcFurnaceRecipe> {
     @MethodDescription
     public void removeByInput(IIngredient... inputAndAdditives) {
         removeByInput(new ArrayList<>(Arrays.asList(inputAndAdditives)));
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ArcFurnaceRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ArcFurnaceRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ArcFurnaceRecipe.recipeList.forEach(this::addBackup);
-        ArcFurnaceRecipe.recipeList.clear();
     }
 
     @Property(property = "input", comp = @Comp(gte = 0, lte = 5))

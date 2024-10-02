@@ -4,17 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import me.desht.pneumaticcraft.common.recipes.RefineryRecipe;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 @RegistryDescription
-public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
+public class Refinery extends StandardListRegistry<RefineryRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('water') * 1000).fluidOutput(fluid('lava') * 750, fluid('lava') * 250, fluid('lava') * 100, fluid('lava') * 50)"),
@@ -25,24 +25,13 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
     }
 
     @Override
-    public void onReload() {
-        RefineryRecipe.recipes.removeAll(removeScripted());
-        RefineryRecipe.recipes.addAll(restoreFromBackup());
-    }
-
-    public void add(RefineryRecipe recipe) {
-        RefineryRecipe.recipes.add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(RefineryRecipe recipe) {
-        addBackup(recipe);
-        return RefineryRecipe.recipes.remove(recipe);
+    public Collection<RefineryRecipe> getRecipes() {
+        return RefineryRecipe.recipes;
     }
 
     @MethodDescription(example = @Example("fluid('kerosene')"))
     public boolean removeByOutput(IIngredient output) {
-        return RefineryRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (Arrays.stream(entry.outputs).anyMatch(output::test)) {
                 addBackup(entry);
                 return true;
@@ -53,24 +42,13 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
 
     @MethodDescription(example = @Example(value = "fluid('oil')", commented = true))
     public boolean removeByInput(IIngredient input) {
-        return RefineryRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (input.test(entry.input)) {
                 addBackup(entry);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        RefineryRecipe.recipes.forEach(this::addBackup);
-        RefineryRecipe.recipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RefineryRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(RefineryRecipe.recipes).setRemover(this::remove);
     }
 
     @Property(property = "fluidInput", comp = @Comp(eq = 1))

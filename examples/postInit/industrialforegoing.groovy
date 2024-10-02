@@ -115,4 +115,3 @@ mods.industrialforegoing.straw.recipeBuilder()
     .register()
 
 
-

@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderR
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.MeltingRecipeAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
@@ -18,7 +19,7 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
 
     @Property(defaultValue = "300", comp = @Comp(gte = 1))
     private int temp = 300;
-    private final MeltingRecipeRegistry registry;
+    private final StandardListRegistry<MeltingRecipe> registry;
     private final String recipeName;
 
     public static RecipeMatch recipeMatchFromIngredient(IIngredient ingredient, int amount) {
@@ -30,7 +31,7 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
         return recipeMatchFromIngredient(ingredient, 1);
     }
 
-    public MeltingRecipeBuilder(MeltingRecipeRegistry registry, String recipeName) {
+    public MeltingRecipeBuilder(StandardListRegistry<MeltingRecipe> registry, String recipeName) {
         this.registry = registry;
         this.recipeName = recipeName;
     }

@@ -1,24 +1,23 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipeBrew;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
+public class BrewRecipe extends StandardListRegistry<RecipeBrew> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), ore('ingotGold'), ore('gemDiamond')).brew(brew('absorption'))"))
     public RecipeBuilder recipeBuilder() {
@@ -26,27 +25,13 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(BotaniaAPI.brewRecipes::remove);
-        BotaniaAPI.brewRecipes.addAll(restoreFromBackup());
-    }
-
-    public void add(RecipeBrew recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        BotaniaAPI.brewRecipes.add(recipe);
-    }
-
-    public boolean remove(RecipeBrew recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        return BotaniaAPI.brewRecipes.remove(recipe);
+    public Collection<RecipeBrew> getRecipes() {
+        return BotaniaAPI.brewRecipes;
     }
 
     @MethodDescription(example = @Example("'speed'"))
     public boolean removeByOutput(String brew) {
-        if (BotaniaAPI.brewRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getBrew().getKey().equals(brew);
             if (found) addBackup(recipe);
             return found;
@@ -68,7 +53,7 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
     public boolean removeByInput(IIngredient... inputs) {
         List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
                                                                                                : i.getMatchingStacks()[0]).collect(Collectors.toList());
-        if (BotaniaAPI.brewRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> (i instanceof String || o instanceof String)
                                                                                                        ? i.equals(o)
                                                                                                        : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));
@@ -86,17 +71,6 @@ public class BrewRecipe extends VirtualizedRegistry<RecipeBrew> {
     @MethodDescription(description = "groovyscript.wiki.removeByInput")
     public boolean removeByInputs(IIngredient... inputs) {
         return removeByInput(inputs);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BotaniaAPI.brewRecipes.forEach(this::addBackup);
-        BotaniaAPI.brewRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeBrew> streamRecipes() {
-        return new SimpleObjectStream<>(BotaniaAPI.brewRecipes).setRemover(this::remove);
     }
 
     @Property(property = "input", comp = @Comp(gte = 1, lte = 6))

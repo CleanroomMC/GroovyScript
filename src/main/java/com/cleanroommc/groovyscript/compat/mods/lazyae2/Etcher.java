@@ -5,7 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import io.github.phantamanta44.libnine.LibNine;
 import io.github.phantamanta44.threng.recipe.EtchRecipe;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RegistryDescription
-public class Etcher extends VirtualizedRegistry<EtchRecipe> {
+public class Etcher extends StandardListRegistry<EtchRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockGlass')).top(item('minecraft:diamond')).bottom(item('minecraft:clay')).output(item('minecraft:diamond') * 5)"),
@@ -24,29 +24,14 @@ public class Etcher extends VirtualizedRegistry<EtchRecipe> {
         return new RecipeBuilder();
     }
 
-    private static Collection<EtchRecipe> recipes() {
-        return LibNine.PROXY.getRecipeManager().getRecipeList(EtchRecipe.class).recipes();
-    }
-
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipes()::remove);
-        restoreFromBackup().forEach(recipes()::add);
-    }
-
-    public void add(EtchRecipe recipe) {
-        recipes().add(recipe);
-        addScripted(recipe);
-    }
-
-    public void remove(EtchRecipe recipe) {
-        recipes().remove(recipe);
-        addBackup(recipe);
+    public Collection<EtchRecipe> getRecipes() {
+        return LibNine.PROXY.getRecipeManager().getRecipeList(EtchRecipe.class).recipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:diamond')"))
     public void removeByInput(IIngredient input) {
-        recipes().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (recipe.input().getInputs().stream().anyMatch(x -> Arrays.stream(input.getMatchingStacks()).anyMatch(x))) {
                 addBackup(recipe);
                 return true;
@@ -57,19 +42,13 @@ public class Etcher extends VirtualizedRegistry<EtchRecipe> {
 
     @MethodDescription(example = @Example("item('appliedenergistics2:material:22')"))
     public void removeByOutput(IIngredient output) {
-        recipes().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput().getOutput())) {
                 addBackup(recipe);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        recipes().forEach(this::addBackup);
-        recipes().clear();
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

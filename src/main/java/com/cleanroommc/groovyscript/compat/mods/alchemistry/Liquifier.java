@@ -6,20 +6,20 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> {
+public class Liquifier extends StandardListRegistry<LiquifierRecipe> {
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> ModRecipes.INSTANCE.getLiquifierRecipes().removeIf(r -> r == recipe));
-        ModRecipes.INSTANCE.getLiquifierRecipes().addAll(restoreFromBackup());
+    public Collection<LiquifierRecipe> getRecipes() {
+        return ModRecipes.INSTANCE.getLiquifierRecipes();
     }
 
     @RecipeBuilderDescription(example = {
@@ -35,25 +35,9 @@ public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> {
         return recipeBuilder().input(input).fluidOutput(output).register();
     }
 
-    public LiquifierRecipe add(LiquifierRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ModRecipes.INSTANCE.getLiquifierRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(LiquifierRecipe recipe) {
-        if (ModRecipes.INSTANCE.getLiquifierRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
     @MethodDescription(example = @Example(value = "fluid('water')", commented = true))
     public boolean removeByOutput(FluidStack output) {
-        return ModRecipes.INSTANCE.getLiquifierRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getOutput().isFluidEqual(output)) {
                 addBackup(r);
                 return true;
@@ -64,24 +48,13 @@ public class Liquifier extends VirtualizedRegistry<LiquifierRecipe> {
 
     @MethodDescription(example = @Example("element('water')"))
     public boolean removeByInput(IIngredient input) {
-        return ModRecipes.INSTANCE.getLiquifierRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (input.test(r.getInput())) {
                 addBackup(r);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<LiquifierRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ModRecipes.INSTANCE.getLiquifierRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ModRecipes.INSTANCE.getLiquifierRecipes().forEach(this::addBackup);
-        ModRecipes.INSTANCE.getLiquifierRecipes().clear();
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

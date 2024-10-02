@@ -25,7 +25,6 @@ mods.primal_tech.clay_kiln.recipeBuilder()
     .register()
 
 
-
 // Stone Anvil:
 // Converts an input item into an output itemstack after being interacted with by a player using a Stone Mallet.
 
@@ -42,7 +41,6 @@ mods.primal_tech.stone_anvil.recipeBuilder()
     .input(item('minecraft:gold_ingot'))
     .output(item('minecraft:diamond') * 4)
     .register()
-
 
 
 // Water Saw:
@@ -66,7 +64,6 @@ mods.primal_tech.water_saw.recipeBuilder()
     .register()
 
 
-
 // Wooden Basin:
 // Converts up to 4 items and 1000mb of fluid into an output itemstack.
 
@@ -86,6 +83,5 @@ mods.primal_tech.wooden_basin.recipeBuilder()
     .fluidInput(fluid('water'))
     .output(item('minecraft:diamond') * 4)
     .register()
-
 
 

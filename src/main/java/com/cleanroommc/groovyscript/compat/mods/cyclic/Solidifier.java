@@ -1,13 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.cyclic;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.google.common.collect.Lists;
 import com.lothrazar.cyclicmagic.CyclicContent;
 import com.lothrazar.cyclicmagic.block.solidifier.RecipeSolidifier;
@@ -15,11 +13,12 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Solidifier extends VirtualizedRegistry<RecipeSolidifier> {
+public class Solidifier extends StandardListRegistry<RecipeSolidifier> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).fluidInput(fluid('water') * 175).output(item('minecraft:gold_ingot') * 3)"),
@@ -35,28 +34,13 @@ public class Solidifier extends VirtualizedRegistry<RecipeSolidifier> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        RecipeSolidifier.recipes.removeAll(removeScripted());
-        RecipeSolidifier.recipes.addAll(restoreFromBackup());
-    }
-
-    public void add(RecipeSolidifier recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        RecipeSolidifier.recipes.add(recipe);
-    }
-
-    public boolean remove(RecipeSolidifier recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        RecipeSolidifier.recipes.remove(recipe);
-        return true;
+    public Collection<RecipeSolidifier> getRecipes() {
+        return RecipeSolidifier.recipes;
     }
 
     @MethodDescription(example = {@Example("item('minecraft:bucket')"), @Example("fluid('water')"),})
     public boolean removeByInput(IIngredient input) {
-        return RecipeSolidifier.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getFluidIngredient()) || recipe.getRecipeInput().stream().anyMatch(input)) {
                 addBackup(recipe);
                 return true;
@@ -67,25 +51,13 @@ public class Solidifier extends VirtualizedRegistry<RecipeSolidifier> {
 
     @MethodDescription(example = @Example("item('cyclicmagic:crystallized_obsidian')"))
     public boolean removeByOutput(IIngredient output) {
-        return RecipeSolidifier.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getRecipeOutput())) {
                 addBackup(recipe);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        RecipeSolidifier.recipes.forEach(this::addBackup);
-        RecipeSolidifier.recipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeSolidifier> streamRecipes() {
-        return new SimpleObjectStream<>(RecipeSolidifier.recipes)
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", comp = @Comp(gte = 1, lte = 4))

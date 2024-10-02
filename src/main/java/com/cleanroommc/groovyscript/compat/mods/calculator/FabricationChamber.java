@@ -4,10 +4,9 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -17,12 +16,13 @@ import sonar.calculator.mod.common.recipes.FabricationSonarRecipe;
 import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class FabricationChamber extends VirtualizedRegistry<FabricationSonarRecipe> {
+public class FabricationChamber extends StandardListRegistry<FabricationSonarRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1])).output(item('minecraft:diamond'))"),
@@ -33,27 +33,13 @@ public class FabricationChamber extends VirtualizedRegistry<FabricationSonarReci
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(FabricationChamberRecipes.instance().getRecipes()::remove);
-        restoreFromBackup().forEach(FabricationChamberRecipes.instance().getRecipes()::add);
-    }
-
-    public void add(FabricationSonarRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        FabricationChamberRecipes.instance().getRecipes().add(recipe);
-    }
-
-    public boolean remove(FabricationSonarRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        FabricationChamberRecipes.instance().getRecipes().remove(recipe);
-        return true;
+    public Collection<FabricationSonarRecipe> getRecipes() {
+        return FabricationChamberRecipes.instance().getRecipes();
     }
 
     @MethodDescription(example = @Example("item('calculator:circuitboard:8').withNbt([Stable: 0, Analysed: 1])"))
     public boolean removeByInput(IIngredient input) {
-        return FabricationChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -68,7 +54,7 @@ public class FabricationChamber extends VirtualizedRegistry<FabricationSonarReci
 
     @MethodDescription(example = @Example("item('calculator:calculatorassembly')"))
     public boolean removeByOutput(IIngredient output) {
-        return FabricationChamberRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {
@@ -79,18 +65,6 @@ public class FabricationChamber extends VirtualizedRegistry<FabricationSonarReci
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        FabricationChamberRecipes.instance().getRecipes().forEach(this::addBackup);
-        FabricationChamberRecipes.instance().getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<FabricationSonarRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(FabricationChamberRecipes.instance().getRecipes())
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", comp = @Comp(gte = 1))

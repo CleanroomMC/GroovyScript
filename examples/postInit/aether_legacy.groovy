@@ -16,7 +16,6 @@ mods.aether_legacy.accessory.recipeBuilder()
     .register()
 
 
-
 // Enchanter:
 // Enchanting is a mechanic used to create new items, as well as repair tools, armor, and weapons, using the Altar block.
 
@@ -28,7 +27,6 @@ mods.aether_legacy.enchanter.recipeBuilder()
     .output(item('minecraft:diamond'))
     .time(200)
     .register()
-
 
 
 // Enchanter Fuel:
@@ -50,7 +48,6 @@ mods.aether_legacy.freezer.recipeBuilder()
     .output(item('minecraft:dirt'))
     .time(200)
     .register()
-
 
 
 // Freezer Fuel:

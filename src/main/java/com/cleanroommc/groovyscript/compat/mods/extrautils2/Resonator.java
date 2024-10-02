@@ -4,9 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import com.rwtema.extrautils2.api.resonator.IResonatorRecipe;
 import com.rwtema.extrautils2.crafting.ResonatorRecipe;
@@ -25,25 +24,16 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RegistryDescription
-public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
+public class Resonator extends StandardListRegistry<IResonatorRecipe> {
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> TileResonator.resonatorRecipes.removeIf(r -> r == recipe));
-        TileResonator.resonatorRecipes.addAll(restoreFromBackup());
-    }
-
-    public IResonatorRecipe add(IResonatorRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            TileResonator.resonatorRecipes.add(recipe);
-        }
-        return recipe;
+    public Collection<IResonatorRecipe> getRecipes() {
+        return TileResonator.resonatorRecipes;
     }
 
     @MethodDescription(example = @Example("item('extrautils2:ingredients:4')"))
     public boolean removeByOutput(ItemStack output) {
-        return TileResonator.resonatorRecipes.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (ItemHandlerHelper.canItemStacksStack(r.getOutput(), output)) {
                 addBackup(r);
                 return true;
@@ -54,32 +44,13 @@ public class Resonator extends VirtualizedRegistry<IResonatorRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:quartz_block')"))
     public boolean removeByInput(IIngredient input) {
-        return TileResonator.resonatorRecipes.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (input.test(r.getInputs().get(0))) {
                 addBackup(r);
                 return true;
             }
             return false;
         });
-    }
-
-    public boolean remove(IResonatorRecipe recipe) {
-        if (TileResonator.resonatorRecipes.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IResonatorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(TileResonator.resonatorRecipes).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        TileResonator.resonatorRecipes.forEach(this::addBackup);
-        TileResonator.resonatorRecipes.clear();
     }
 
     @RecipeBuilderDescription(example = {

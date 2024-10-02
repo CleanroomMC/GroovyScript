@@ -5,7 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import io.github.phantamanta44.libnine.LibNine;
 import io.github.phantamanta44.threng.recipe.EnergizeRecipe;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RegistryDescription
-public class Energizer extends VirtualizedRegistry<EnergizeRecipe> {
+public class Energizer extends StandardListRegistry<EnergizeRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockGlass')).energy(50).output(item('minecraft:diamond'))"),
@@ -24,29 +24,14 @@ public class Energizer extends VirtualizedRegistry<EnergizeRecipe> {
         return new RecipeBuilder();
     }
 
-    private static Collection<EnergizeRecipe> recipes() {
-        return LibNine.PROXY.getRecipeManager().getRecipeList(EnergizeRecipe.class).recipes();
-    }
-
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipes()::remove);
-        restoreFromBackup().forEach(recipes()::add);
-    }
-
-    public void add(EnergizeRecipe recipe) {
-        recipes().add(recipe);
-        addScripted(recipe);
-    }
-
-    public void remove(EnergizeRecipe recipe) {
-        recipes().remove(recipe);
-        addBackup(recipe);
+    public Collection<EnergizeRecipe> getRecipes() {
+        return LibNine.PROXY.getRecipeManager().getRecipeList(EnergizeRecipe.class).recipes();
     }
 
     @MethodDescription(example = @Example(value = "item('appliedenergistics2:material')", commented = true))
     public void removeByInput(IIngredient input) {
-        recipes().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (Arrays.stream(input.getMatchingStacks()).anyMatch(recipe.input().getMatcher())) {
                 addBackup(recipe);
                 return true;
@@ -57,19 +42,13 @@ public class Energizer extends VirtualizedRegistry<EnergizeRecipe> {
 
     @MethodDescription(example = @Example("item('appliedenergistics2:material:1')"))
     public void removeByOutput(IIngredient output) {
-        recipes().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput().getOutput())) {
                 addBackup(recipe);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        recipes().forEach(this::addBackup);
-        recipes().clear();
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

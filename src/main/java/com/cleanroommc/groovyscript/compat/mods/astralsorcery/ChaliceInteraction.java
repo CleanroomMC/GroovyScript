@@ -1,27 +1,25 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.LiquidInteractionAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.ApiStatus;
 
-import java.util.List;
+import java.util.Collection;
 
 @RegistryDescription
-public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
+public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> {
 
-    private static List<LiquidInteraction> getRegistry() {
+    @Override
+    public Collection<LiquidInteraction> getRecipes() {
         if (LiquidInteractionAccessor.getRegisteredInteractions() == null) {
             throw new IllegalStateException("Astral Sorcery Chalice Interaction getRegisteredInteractions() is not yet initialized!");
         }
@@ -33,34 +31,18 @@ public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
         return new RecipeBuilder();
     }
 
-    @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        removeScripted().forEach(getRegistry()::remove);
-        restoreFromBackup().forEach(getRegistry()::add);
-    }
-
-    private void add(LiquidInteraction recipe) {
-        addScripted(recipe);
-        getRegistry().add(recipe);
-    }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public LiquidInteraction add(int probability, FluidStack component1, FluidStack component2, LiquidInteraction.FluidInteractionAction action) {
         LiquidInteraction recipe = new LiquidInteraction(probability, component1, component2, action);
         addScripted(recipe);
-        getRegistry().add(recipe);
+        getRecipes().add(recipe);
         return recipe;
-    }
-
-    private boolean remove(LiquidInteraction recipe) {
-        return getRegistry().removeIf(rec -> rec.equals(recipe));
     }
 
     @MethodDescription
     public void removeByInput(Fluid fluid1, Fluid fluid2) {
-        getRegistry().removeIf(rec -> {
+        getRecipes().removeIf(rec -> {
             if ((rec.getComponent1().getFluid().equals(fluid1) && rec.getComponent2().getFluid().equals(fluid2)) ||
                 (rec.getComponent1().getFluid().equals(fluid2) && rec.getComponent2().getFluid().equals(fluid1))) {
                 addBackup(rec);
@@ -77,7 +59,7 @@ public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
 
     @MethodDescription
     public void removeByInput(Fluid fluid) {
-        getRegistry().removeIf(rec -> {
+        getRecipes().removeIf(rec -> {
             if ((rec.getComponent1().getFluid().equals(fluid) || rec.getComponent2().getFluid().equals(fluid))) {
                 addBackup(rec);
                 return true;
@@ -93,25 +75,13 @@ public class ChaliceInteraction extends VirtualizedRegistry<LiquidInteraction> {
 
     @MethodDescription(example = @Example("item('minecraft:ice')"))
     public void removeByOutput(ItemStack output) {
-        getRegistry().removeIf(rec -> {
+        getRecipes().removeIf(rec -> {
             if (((LiquidInteractionAccessor) rec).getFluidInteractionAction().getOutputForMatching().isItemEqual(output)) {
                 addBackup(rec);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<LiquidInteraction> streamRecipes() {
-        return new SimpleObjectStream<>(getRegistry())
-                .setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        getRegistry().forEach(this::addBackup);
-        getRegistry().clear();
     }
 
     @Property(property = "fluidInput", comp = @Comp(eq = 2))

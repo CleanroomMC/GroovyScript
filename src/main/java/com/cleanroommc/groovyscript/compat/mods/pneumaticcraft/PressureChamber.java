@@ -4,9 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import me.desht.pneumaticcraft.api.recipe.IPressureChamberRecipe;
 import me.desht.pneumaticcraft.api.recipe.ItemIngredient;
 import me.desht.pneumaticcraft.common.recipes.PressureChamberRecipe;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @RegistryDescription
-public class PressureChamber extends VirtualizedRegistry<IPressureChamberRecipe> {
+public class PressureChamber extends StandardListRegistry<IPressureChamberRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay') * 3).output(item('minecraft:gold_ingot')).pressure(4)"),
@@ -27,24 +26,13 @@ public class PressureChamber extends VirtualizedRegistry<IPressureChamberRecipe>
     }
 
     @Override
-    public void onReload() {
-        PressureChamberRecipe.recipes.removeAll(removeScripted());
-        PressureChamberRecipe.recipes.addAll(restoreFromBackup());
-    }
-
-    public void add(IPressureChamberRecipe recipe) {
-        PressureChamberRecipe.recipes.add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(IPressureChamberRecipe recipe) {
-        addBackup(recipe);
-        return PressureChamberRecipe.recipes.remove(recipe);
+    public Collection<IPressureChamberRecipe> getRecipes() {
+        return PressureChamberRecipe.recipes;
     }
 
     @MethodDescription(example = @Example("item('minecraft:diamond')"))
     public boolean removeByOutput(IIngredient output) {
-        return PressureChamberRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (entry.getResult().stream().anyMatch(output)) {
                 addBackup(entry);
                 return true;
@@ -55,24 +43,13 @@ public class PressureChamber extends VirtualizedRegistry<IPressureChamberRecipe>
 
     @MethodDescription(example = @Example("item('minecraft:iron_block')"))
     public boolean removeByInput(IIngredient input) {
-        return PressureChamberRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (entry.getInput().stream().map(ItemIngredient::getStacks).flatMap(Collection::stream).anyMatch(input)) {
                 addBackup(entry);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        PressureChamberRecipe.recipes.forEach(this::addBackup);
-        PressureChamberRecipe.recipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IPressureChamberRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(PressureChamberRecipe.recipes).setRemover(this::remove);
     }
 
     @Property(property = "input", comp = @Comp(gte = 1))

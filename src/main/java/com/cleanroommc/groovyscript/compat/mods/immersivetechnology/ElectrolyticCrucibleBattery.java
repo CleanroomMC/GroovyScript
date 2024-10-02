@@ -1,21 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.immersivetechnology;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import mctmods.immersivetechnology.api.crafting.ElectrolyticCrucibleBatteryRecipe;
 import mctmods.immersivetechnology.common.Config;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class ElectrolyticCrucibleBattery extends VirtualizedRegistry<ElectrolyticCrucibleBatteryRecipe> {
+public class ElectrolyticCrucibleBattery extends StandardListRegistry<ElectrolyticCrucibleBatteryRecipe> {
 
     @Override
     public boolean isEnabled() {
@@ -31,31 +30,13 @@ public class ElectrolyticCrucibleBattery extends VirtualizedRegistry<Electrolyti
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        ElectrolyticCrucibleBatteryRecipe.recipeList.removeAll(removeScripted());
-        ElectrolyticCrucibleBatteryRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(ElectrolyticCrucibleBatteryRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ElectrolyticCrucibleBatteryRecipe.recipeList.add(recipe);
-        }
-    }
-
-    public boolean remove(ElectrolyticCrucibleBatteryRecipe recipe) {
-        if (ElectrolyticCrucibleBatteryRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<ElectrolyticCrucibleBatteryRecipe> getRecipes() {
+        return ElectrolyticCrucibleBatteryRecipe.recipeList;
     }
 
     @MethodDescription(example = @Example("fluid('moltensalt')"))
     public void removeByInput(IIngredient input) {
-        ElectrolyticCrucibleBatteryRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidInputs()) {
                 if (input.test(fluidStack)) {
                     addBackup(r);
@@ -68,7 +49,7 @@ public class ElectrolyticCrucibleBattery extends VirtualizedRegistry<Electrolyti
 
     @MethodDescription(example = @Example(value = "fluid('chlorine')", commented = true))
     public void removeByOutput(IIngredient output) {
-        ElectrolyticCrucibleBatteryRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidOutputs()) {
                 if (output.test(fluidStack)) {
                     addBackup(r);
@@ -77,17 +58,6 @@ public class ElectrolyticCrucibleBattery extends VirtualizedRegistry<Electrolyti
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ElectrolyticCrucibleBatteryRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ElectrolyticCrucibleBatteryRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ElectrolyticCrucibleBatteryRecipe.recipeList.forEach(this::addBackup);
-        ElectrolyticCrucibleBatteryRecipe.recipeList.clear();
     }
 
     @Property(property = "fluidInput", comp = @Comp(eq = 1))

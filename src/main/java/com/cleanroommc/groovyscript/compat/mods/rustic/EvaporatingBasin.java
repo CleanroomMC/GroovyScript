@@ -5,18 +5,24 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import org.jetbrains.annotations.Nullable;
 import rustic.common.crafting.IEvaporatingBasinRecipe;
 import rustic.common.crafting.Recipes;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class EvaporatingBasin extends VirtualizedRegistry<IEvaporatingBasinRecipe> {
+public class EvaporatingBasin extends StandardListRegistry<IEvaporatingBasinRecipe> {
 
     public EvaporatingBasin() {
         super(Alias.generateOfClass(EvaporatingBasin.class).andGenerate("DryingBasin"));
+    }
+
+    @Override
+    public Collection<IEvaporatingBasinRecipe> getRecipes() {
+        return Recipes.evaporatingRecipes;
     }
 
     @RecipeBuilderDescription(example = {
@@ -28,30 +34,14 @@ public class EvaporatingBasin extends VirtualizedRegistry<IEvaporatingBasinRecip
     }
 
     @Override
-    public void onReload() {
-        Recipes.evaporatingRecipes.removeAll(removeScripted());
-        Recipes.evaporatingRecipes.addAll(restoreFromBackup());
-    }
-
-    @Override
     public void afterScriptLoad() {
         Recipes.evaporatingRecipesMap.clear();
-        Recipes.evaporatingRecipes.forEach(recipe -> Recipes.evaporatingRecipesMap.put(recipe.getFluid(), recipe));
-    }
-
-    public void add(IEvaporatingBasinRecipe recipe) {
-        Recipes.evaporatingRecipes.add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(IEvaporatingBasinRecipe recipe) {
-        addBackup(recipe);
-        return Recipes.evaporatingRecipes.remove(recipe);
+        getRecipes().forEach(recipe -> Recipes.evaporatingRecipesMap.put(recipe.getFluid(), recipe));
     }
 
     @MethodDescription(example = @Example(value = "item('rustic:dust_tiny_iron')", commented = true))
     public boolean removeByOutput(IIngredient output) {
-        return Recipes.evaporatingRecipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (output.test(entry.getOutput())) {
                 addBackup(entry);
                 return true;
@@ -62,24 +52,13 @@ public class EvaporatingBasin extends VirtualizedRegistry<IEvaporatingBasinRecip
 
     @MethodDescription(example = @Example("fluid('ironberryjuice')"))
     public boolean removeByInput(IIngredient input) {
-        return Recipes.evaporatingRecipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (input.test(entry.getInput())) {
                 addBackup(entry);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        Recipes.evaporatingRecipes.forEach(this::addBackup);
-        Recipes.evaporatingRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IEvaporatingBasinRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(Recipes.evaporatingRecipes).setRemover(this::remove);
     }
 
     @Property(property = "output", comp = @Comp(eq = 1))

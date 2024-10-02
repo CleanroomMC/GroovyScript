@@ -4,14 +4,15 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import me.desht.pneumaticcraft.common.recipes.HeatFrameCoolingRecipe;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class HeatFrameCooling extends VirtualizedRegistry<HeatFrameCoolingRecipe> {
+public class HeatFrameCooling extends StandardListRegistry<HeatFrameCoolingRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot'))"),
@@ -22,24 +23,13 @@ public class HeatFrameCooling extends VirtualizedRegistry<HeatFrameCoolingRecipe
     }
 
     @Override
-    public void onReload() {
-        HeatFrameCoolingRecipe.recipes.removeAll(removeScripted());
-        HeatFrameCoolingRecipe.recipes.addAll(restoreFromBackup());
-    }
-
-    public void add(HeatFrameCoolingRecipe recipe) {
-        HeatFrameCoolingRecipe.recipes.add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(HeatFrameCoolingRecipe recipe) {
-        addBackup(recipe);
-        return HeatFrameCoolingRecipe.recipes.remove(recipe);
+    public Collection<HeatFrameCoolingRecipe> getRecipes() {
+        return HeatFrameCoolingRecipe.recipes;
     }
 
     @MethodDescription(example = @Example("item('minecraft:obsidian')"))
     public boolean removeByOutput(IIngredient output) {
-        return HeatFrameCoolingRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (output.test(entry.output)) {
                 addBackup(entry);
                 return true;
@@ -50,24 +40,13 @@ public class HeatFrameCooling extends VirtualizedRegistry<HeatFrameCoolingRecipe
 
     @MethodDescription(example = @Example("item('minecraft:water_bucket')"))
     public boolean removeByInput(IIngredient input) {
-        return HeatFrameCoolingRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (entry.input.getStacks().stream().anyMatch(input)) {
                 addBackup(entry);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        HeatFrameCoolingRecipe.recipes.forEach(this::addBackup);
-        HeatFrameCoolingRecipe.recipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<HeatFrameCoolingRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(HeatFrameCoolingRecipe.recipes).setRemover(this::remove);
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

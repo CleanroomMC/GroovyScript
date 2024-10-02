@@ -1,24 +1,29 @@
 package com.cleanroommc.groovyscript.compat.mods.enderio;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import crazypants.enderio.base.recipe.sagmill.GrindingBall;
 import crazypants.enderio.base.recipe.sagmill.SagMillRecipeManager;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
+public class SagMillGrinding extends StandardListRegistry<GrindingBall> {
 
     public SagMillGrinding() {
         super(Alias.generateOfClassAnd(SagMillGrinding.class, "Grinding"));
+    }
+
+    @Override
+    public Collection<GrindingBall> getRecipes() {
+        return SagMillRecipeManager.getInstance().getBalls();
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay_ball')).chance(6.66).power(0.001).grinding(3.33).duration(10000)"))
@@ -26,46 +31,15 @@ public class SagMillGrinding extends VirtualizedRegistry<GrindingBall> {
         return new RecipeBuilder();
     }
 
-    public void add(GrindingBall recipe) {
-        SagMillRecipeManager.getInstance().addBall(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(GrindingBall recipe) {
-        if (recipe == null) return false;
-        SagMillRecipeManager.getInstance().getBalls().remove(recipe);
-        addBackup(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("item('minecraft:flint')"))
     public boolean remove(ItemStack grindingBall) {
-        for (GrindingBall ball : SagMillRecipeManager.getInstance().getBalls()) {
+        for (GrindingBall ball : getRecipes()) {
             if (ball.isInput(grindingBall)) {
                 remove(ball);
                 return true;
             }
         }
         return false;
-    }
-
-    @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(SagMillRecipeManager.getInstance().getBalls()::remove);
-        restoreFromBackup().forEach(SagMillRecipeManager.getInstance().getBalls()::add);
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<GrindingBall> streamRecipes() {
-        return new SimpleObjectStream<>(SagMillRecipeManager.getInstance().getBalls())
-                .setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        SagMillRecipeManager.getInstance().getBalls().forEach(this::addBackup);
-        SagMillRecipeManager.getInstance().getBalls().clear();
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

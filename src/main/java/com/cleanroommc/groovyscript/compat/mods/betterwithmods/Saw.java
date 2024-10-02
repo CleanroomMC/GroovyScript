@@ -7,16 +7,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class Saw extends VirtualizedRegistry<SawRecipe> {
+public class Saw extends StandardListRegistry<SawRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:gold_ingot') * 16)"))
         @RecipeBuilderMethodDescription
@@ -25,30 +25,13 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> BWRegistry.WOOD_SAW.getRecipes().removeIf(r -> r == recipe));
-        BWRegistry.WOOD_SAW.getRecipes().addAll(restoreFromBackup());
-    }
-
-    public SawRecipe add(SawRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            BWRegistry.WOOD_SAW.getRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(SawRecipe recipe) {
-        if (BWRegistry.WOOD_SAW.getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<SawRecipe> getRecipes() {
+        return BWRegistry.WOOD_SAW.getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:pumpkin')"))
     public boolean removeByOutput(IIngredient output) {
-        return BWRegistry.WOOD_SAW.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -61,7 +44,7 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:vine')"))
     public boolean removeByInput(IIngredient input) {
-        return BWRegistry.WOOD_SAW.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInput().getMatchingStacks()) {
                 if (input.test(itemstack)) {
                     addBackup(r);
@@ -70,17 +53,6 @@ public class Saw extends VirtualizedRegistry<SawRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<SawRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(BWRegistry.WOOD_SAW.getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BWRegistry.WOOD_SAW.getRecipes().forEach(this::addBackup);
-        BWRegistry.WOOD_SAW.getRecipes().clear();
     }
 
     @Property(property = "output", comp = @Comp(gte = 1, lte = 9))

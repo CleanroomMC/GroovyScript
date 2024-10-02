@@ -1,19 +1,19 @@
 package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.recipe.TreasureChestLoot;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
+public class TreasureChest extends StandardListRegistry<TreasureChestLoot> {
 
     @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay')).weight(50).min(16).max(32)"))
     public RecipeBuilder recipeBuilder() {
@@ -21,10 +21,8 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(ActuallyAdditionsAPI.TREASURE_CHEST_LOOT::remove);
-        ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.addAll(restoreFromBackup());
+    public Collection<TreasureChestLoot> getRecipes() {
+        return ActuallyAdditionsAPI.TREASURE_CHEST_LOOT;
     }
 
     public TreasureChestLoot add(ItemStack returnItem, int chance, int minAmount, int maxAmount) {
@@ -33,22 +31,9 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
         return recipe;
     }
 
-    public void add(TreasureChestLoot recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.add(recipe);
-    }
-
-    public boolean remove(TreasureChestLoot recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.remove(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
     public boolean removeByOutput(ItemStack output) {
-        return ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.returnItem, output);
             if (matches) {
                 addBackup(recipe);
@@ -56,19 +41,6 @@ public class TreasureChest extends VirtualizedRegistry<TreasureChestLoot> {
             return matches;
         });
     }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.forEach(this::addBackup);
-        ActuallyAdditionsAPI.TREASURE_CHEST_LOOT.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<TreasureChestLoot> streamRecipes() {
-        return new SimpleObjectStream<>(ActuallyAdditionsAPI.TREASURE_CHEST_LOOT)
-                .setRemover(this::remove);
-    }
-
 
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TreasureChestLoot> {

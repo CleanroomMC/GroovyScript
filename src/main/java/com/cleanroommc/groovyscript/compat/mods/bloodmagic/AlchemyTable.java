@@ -3,21 +3,20 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 import WayofTime.bloodmagic.altar.AltarTier;
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeAlchemyTable;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.bloodmagic.BloodMagicRecipeRegistrarAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 
 @RegistryDescription(
@@ -26,7 +25,7 @@ import java.util.Collections;
                                  hasTitle = true,
                                  value = "groovyscript.wiki.bloodmagic.alchemy_table.note0")
 )
-public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
+public class AlchemyTable extends StandardListRegistry<RecipeAlchemyTable> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond'), item('minecraft:diamond')).output(item('minecraft:clay')).ticks(100).minimumTier(2).syphon(500)"),
@@ -37,10 +36,8 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes()::remove);
-        restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes()::add);
+    public Collection<RecipeAlchemyTable> getRecipes() {
+        return ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -48,19 +45,6 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
         RecipeAlchemyTable recipe = new RecipeAlchemyTable(input, output, syphon, ticks, minimumTier);
         add(recipe);
         return recipe;
-    }
-
-    public void add(RecipeAlchemyTable recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().add(recipe);
-    }
-
-    public boolean remove(RecipeAlchemyTable recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().remove(recipe);
-        return true;
     }
 
     @MethodDescription
@@ -73,7 +57,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
     @MethodDescription(example = @Example("item('minecraft:nether_wart'), item('minecraft:gunpowder')"))
     public boolean removeByInput(NonNullList<IIngredient> input) {
         // Filters down to only recipes which have inputs that match all the input IIngredients (NOTE: a recipe with ABCD would match an input of AB)
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean removeRecipe = false;
             for (IIngredient match : input) {
                 boolean foundInputMatch = false;
@@ -99,7 +83,7 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
 
     @MethodDescription(example = @Example("item('minecraft:sand')"))
     public boolean removeByOutput(ItemStack output) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
             if (matches) {
                 addBackup(recipe);
@@ -114,19 +98,6 @@ public class AlchemyTable extends VirtualizedRegistry<RecipeAlchemyTable> {
                 .post();
         return false;
     }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().forEach(this::addBackup);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeAlchemyTable> streamRecipes() {
-        return new SimpleObjectStream<>(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyRecipes())
-                .setRemover(this::remove);
-    }
-
 
     @Property(property = "input", comp = @Comp(gte = 1, lte = 6))
     @Property(property = "output", comp = @Comp(eq = 1))

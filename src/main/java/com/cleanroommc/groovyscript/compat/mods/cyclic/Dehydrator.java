@@ -1,20 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.cyclic;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.lothrazar.cyclicmagic.CyclicContent;
 import com.lothrazar.cyclicmagic.block.dehydrator.RecipeDeHydrate;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Dehydrator extends VirtualizedRegistry<RecipeDeHydrate> {
+public class Dehydrator extends StandardListRegistry<RecipeDeHydrate> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay'))"),
@@ -30,28 +30,13 @@ public class Dehydrator extends VirtualizedRegistry<RecipeDeHydrate> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        RecipeDeHydrate.recipes.removeAll(removeScripted());
-        RecipeDeHydrate.recipes.addAll(restoreFromBackup());
-    }
-
-    public void add(RecipeDeHydrate recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        RecipeDeHydrate.recipes.add(recipe);
-    }
-
-    public boolean remove(RecipeDeHydrate recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        RecipeDeHydrate.recipes.remove(recipe);
-        return true;
+    public Collection<RecipeDeHydrate> getRecipes() {
+        return RecipeDeHydrate.recipes;
     }
 
     @MethodDescription(example = @Example("item('minecraft:clay')"))
     public boolean removeByInput(IIngredient input) {
-        return RecipeDeHydrate.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getRecipeInput())) {
                 addBackup(recipe);
                 return true;
@@ -62,25 +47,13 @@ public class Dehydrator extends VirtualizedRegistry<RecipeDeHydrate> {
 
     @MethodDescription(example = @Example("item('minecraft:deadbush')"))
     public boolean removeByOutput(IIngredient output) {
-        return RecipeDeHydrate.recipes.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getRecipeOutput())) {
                 addBackup(recipe);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        RecipeDeHydrate.recipes.forEach(this::addBackup);
-        RecipeDeHydrate.recipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeDeHydrate> streamRecipes() {
-        return new SimpleObjectStream<>(RecipeDeHydrate.recipes)
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

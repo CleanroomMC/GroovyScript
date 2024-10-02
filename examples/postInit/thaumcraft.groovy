@@ -49,17 +49,22 @@ mods.thaumcraft.arcane_workbench.shapelessBuilder()
 // mods.thaumcraft.aspect.removeAll()
 
 mods.thaumcraft.aspect.aspectBuilder()
-    .tag('humor')
-    .chatColor(14013676)
+    .tag('clay')
+    .chatColor(0xD5D4EC)
+    .image(resource('placeholdername:textures/items/clay_2.png'))
+    .register()
+
+mods.thaumcraft.aspect.aspectBuilder()
+    .tag('snack')
+    .chatColor(0xD5D4EC)
     .component(aspect('cognitio'))
-    .component('perditio')
-    .image(resource('thaumcraft:textures/aspects/humor.png'))
+    .component('clay')
+    .image(resource('placeholdername:textures/items/snack.png'))
     .register()
 
 
 // Entity/Block Aspects:
 // Controls what Aspects are attached to entities or items.
-
 
 mods.thaumcraft.aspect_helper.aspectBuilder()
     .object(item('minecraft:stone'))
@@ -81,7 +86,6 @@ mods.thaumcraft.aspect_helper.aspectBuilder()
     .register()
 
 
-
 // Crucible:
 // Combines an item with any number of Aspects to drop an output itemstack, potentially requiring a specific research to be
 // completed.
@@ -95,7 +99,6 @@ mods.thaumcraft.crucible.recipeBuilder()
     .output(item('minecraft:gold_ingot'))
     .aspect(aspect('metallum') * 10)
     .register()
-
 
 
 // Dust Trigger:
@@ -137,7 +140,6 @@ mods.thaumcraft.infusion_crafting.recipeBuilder()
     .input(crystal('ordo'))
     .instability(10)
     .register()
-
 
 
 // Lootbag:
@@ -191,7 +193,6 @@ mods.thaumcraft.smelting_bonus.recipeBuilder()
     .input(ore('stone'))
     .output(item('minecraft:obsidian'))
     .register()
-
 
 
 // Warp:
