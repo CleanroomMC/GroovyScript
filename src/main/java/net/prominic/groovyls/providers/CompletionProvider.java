@@ -252,7 +252,7 @@ public class CompletionProvider extends DocProvider {
                                                       Set<String> existingNames, Completions items) {
         items.addAll(properties, p -> {
             String name = p.getName();
-            if (!name.startsWith(memberNamePrefix) || existingNames.contains(name)) return null;
+            if (!p.isPublic() || !name.startsWith(memberNamePrefix) || existingNames.contains(name)) return null;
             existingNames.add(name);
             CompletionItem item = CompletionItemFactory.createCompletion(p, p.getName(), astContext);
             if (!p.isDynamicTyped()) {
@@ -264,7 +264,7 @@ public class CompletionProvider extends DocProvider {
         });
         items.addAll(fields, f -> {
             String name = f.getName();
-            if (!name.startsWith(memberNamePrefix) || existingNames.contains(name)) return null;
+            if (!f.isPublic() || !name.startsWith(memberNamePrefix) || existingNames.contains(name)) return null;
             existingNames.add(name);
             CompletionItem item = CompletionItemFactory.createCompletion(f, f.getName(), astContext);
             if (!f.isDynamicTyped()) {
