@@ -18,7 +18,7 @@ public class OilGen extends StandardListRegistry<OilGenRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('water')).amount(1000).time(50)"),
-            @Example(".fluidInput(fluid('lava') * 50).time(100)")
+            @Example(".fluidInput(fluid('lava')).amount(50).time(100)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -67,14 +67,6 @@ public class OilGen extends StandardListRegistry<OilGenRecipe> {
         private int amount;
         @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
         private int time;
-
-        @Override
-        @RecipeBuilderMethodDescription(field = {"fluidInput", "amount"})
-        public RecipeBuilder fluidInput(FluidStack fluid) {
-            this.fluidInput.add(fluid);
-            if (this.amount == 0) this.amount = fluid.amount;
-            return this;
-        }
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder amount(int amount) {
