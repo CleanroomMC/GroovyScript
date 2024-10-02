@@ -47,13 +47,12 @@ import java.util.concurrent.CompletableFuture;
 
 public class CompletionProvider extends DocProvider {
 
-    private static final String[] keywords = {"def", "assert", "if", "for", "else", "while", "switch", "case", "break", "continue",
-                                              "return", "transient", "import", "class", "extends", "implements", "enum", "try", "catch",
-                                              "finally", "throw", "new", "in", "as", "instanceof", "super", "this", "null", "true", "false",
-                                              "void", "byte", "short", "int", "long", "float", "double", "boolean", "private", "public",
-                                              "protected", "abstract", "char", "const", "default", "do", "final", "goto", "interface",
-                                              "native", "non-sealed", "package", "permits", "record", "sealed", "static", "strictfp",
+    private static final String[] keywords = {"assert", "case", "break", "continue", "transient", "extends ", "implements ", "enum", "try ", "catch",
+                                              "finally", "instanceof ", "super", "private", "public", "protected", "abstract", "const", "default", "goto",
+                                              "interface", "native", "non-sealed", "package ", "permits", "record", "sealed", "static", "strictfp",
                                               "synchronized", "threadsafe", "throws", "trait", "var", "yields"};
+    private static final String[] popularKeywords = {"def ", "else ", "return", "import ", "class", "this", "null", "true", "false", "void", "byte",
+                                                     "short", "int", "long", "float", "double", "boolean", "char", "throw ", "new", "in ", "as ", "final "};
 
     public CompletionProvider(URI doc, ASTContext astContext) {
         super(doc, astContext);
@@ -76,12 +75,13 @@ public class CompletionProvider extends DocProvider {
     }
 
     private void populateKeywords(Completions items) {
-        items.addAll(keywords, s -> {
-            var item = new CompletionItem(s);
-            item.setKind(CompletionItemKind.Keyword);
-            item.setSortText("zzz" + s);
-            return item;
-        });
+        items.add(CompletionItemFactory.createKeywordCompletion("if", true, " ($1) $0"));
+        items.add(CompletionItemFactory.createKeywordCompletion("for", true, " ($1) $0"));
+        items.add(CompletionItemFactory.createKeywordCompletion("while", true, " ($1) $0"));
+        items.add(CompletionItemFactory.createKeywordCompletion("do", false, " ($1)"));
+        items.add(CompletionItemFactory.createKeywordCompletion("switch", true, " ($1) $0"));
+        items.addAll(popularKeywords, s -> CompletionItemFactory.createKeywordCompletion(s, true));
+        items.addAll(keywords, s -> CompletionItemFactory.createKeywordCompletion(s, false));
     }
 
     private boolean populateItemsFromNode(Position position, ASTNode offsetNode, Completions items) {
