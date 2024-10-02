@@ -119,7 +119,7 @@ public class ManaInfusion extends StandardListRegistry<RecipeManaInfusion> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateFluids(msg, 0, 0, 0, 0);
+            validateFluids(msg);
             validateItems(msg, 1, 1, 1, 1);
             msg.add(mana < 1, "Mana amount must be at least 1, got " + mana);
         }

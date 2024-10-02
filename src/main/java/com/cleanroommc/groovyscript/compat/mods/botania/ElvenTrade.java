@@ -97,7 +97,7 @@ public class ElvenTrade extends StandardListRegistry<RecipeElvenTrade> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateFluids(msg, 0, 0, 0, 0);
+            validateFluids(msg);
             validateItems(msg, 1, 99, 1, 99);
         }
 

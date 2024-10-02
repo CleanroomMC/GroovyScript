@@ -95,7 +95,7 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateFluids(msg, 0, 0, 0, 0);
+            validateFluids(msg);
             validateItems(msg, 1, 20, 1, 1);
             msg.add(input.stream().anyMatch(x -> x.test(new ItemStack(Item.getItemFromBlock(ModBlocks.livingrock), 1, 0))),
                     "input cannot contain a livingrock item");

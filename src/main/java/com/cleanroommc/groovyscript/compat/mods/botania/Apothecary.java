@@ -91,7 +91,7 @@ public class Apothecary extends StandardListRegistry<RecipePetals> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateFluids(msg, 0, 0, 0, 0);
+            validateFluids(msg);
             validateItems(msg, 1, 20, 1, 1);
         }
 
