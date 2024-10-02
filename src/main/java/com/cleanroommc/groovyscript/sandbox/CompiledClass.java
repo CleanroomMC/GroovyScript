@@ -47,6 +47,12 @@ class CompiledClass {
         }
     }
 
+    protected void ensureLoaded(CachedClassLoader classLoader, String basePath) {
+        if (this.clazz == null) {
+            this.clazz = classLoader.defineClass(this.name, this.data);
+        }
+    }
+
     public boolean readData(String basePath) {
         if (this.data != null && GroovyScriptSandbox.ENABLE_CACHE) return true;
         File file = getDataFile(basePath);
@@ -81,8 +87,6 @@ class CompiledClass {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("name", name)
-                .toString();
+        return new ToStringBuilder(this).append("name", name).toString();
     }
 }

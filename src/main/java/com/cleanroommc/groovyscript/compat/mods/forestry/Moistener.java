@@ -99,7 +99,7 @@ public class Moistener extends ForestryRegistry<IMoistenerRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateFluids(msg, 0, 0, 0, 0);
+            validateFluids(msg);
             validateItems(msg, 1, 1, 1, 1);
         }
 

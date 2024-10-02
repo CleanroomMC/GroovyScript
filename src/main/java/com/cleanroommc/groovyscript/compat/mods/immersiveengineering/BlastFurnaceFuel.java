@@ -5,18 +5,18 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.BlastFurnaceFuel> {
+public class BlastFurnaceFuel extends StandardListRegistry<BlastFurnaceRecipe.BlastFurnaceFuel> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).time(100)"))
     public static RecipeBuilder recipeBuilder() {
@@ -24,16 +24,8 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> BlastFurnaceRecipe.blastFuels.removeIf(r -> r == recipe));
-        BlastFurnaceRecipe.blastFuels.addAll(restoreFromBackup());
-    }
-
-    public void add(BlastFurnaceRecipe.BlastFurnaceFuel recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            BlastFurnaceRecipe.blastFuels.add(recipe);
-        }
+    public Collection<BlastFurnaceRecipe.BlastFurnaceFuel> getRecipes() {
+        return BlastFurnaceRecipe.blastFuels;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -41,14 +33,6 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
         BlastFurnaceRecipe.BlastFurnaceFuel recipe = new BlastFurnaceRecipe.BlastFurnaceFuel(ImmersiveEngineering.toIngredientStack(input), time);
         add(recipe);
         return recipe;
-    }
-
-    public boolean remove(BlastFurnaceRecipe.BlastFurnaceFuel recipe) {
-        if (BlastFurnaceRecipe.blastFuels.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example("item('immersiveengineering:material:6')"))
@@ -60,7 +44,7 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
                     .post();
             return;
         }
-        List<BlastFurnaceRecipe.BlastFurnaceFuel> recipes = BlastFurnaceRecipe.blastFuels.stream().filter(r -> r.input.matches(input)).collect(Collectors.toList());
+        List<BlastFurnaceRecipe.BlastFurnaceFuel> recipes = getRecipes().stream().filter(r -> r.input.matches(input)).collect(Collectors.toList());
         for (BlastFurnaceRecipe.BlastFurnaceFuel recipe : recipes) {
             remove(recipe);
         }
@@ -70,17 +54,6 @@ public class BlastFurnaceFuel extends VirtualizedRegistry<BlastFurnaceRecipe.Bla
                     .error()
                     .post();
         }
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<BlastFurnaceRecipe.BlastFurnaceFuel> streamRecipes() {
-        return new SimpleObjectStream<>(BlastFurnaceRecipe.blastFuels).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BlastFurnaceRecipe.blastFuels.forEach(this::addBackup);
-        BlastFurnaceRecipe.blastFuels.clear();
     }
 
     @Property(property = "input", valid = @Comp("1"))

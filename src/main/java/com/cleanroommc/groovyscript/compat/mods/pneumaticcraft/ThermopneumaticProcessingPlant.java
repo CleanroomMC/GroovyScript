@@ -4,16 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import me.desht.pneumaticcraft.api.recipe.IThermopneumaticProcessingPlantRecipe;
 import me.desht.pneumaticcraft.common.recipes.BasicThermopneumaticProcessingPlantRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class ThermopneumaticProcessingPlant extends VirtualizedRegistry<IThermopneumaticProcessingPlantRecipe> {
+public class ThermopneumaticProcessingPlant extends StandardListRegistry<IThermopneumaticProcessingPlantRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay') * 3).fluidInput(fluid('water') * 100).fluidOutput(fluid('kerosene') * 100).pressure(4).requiredTemperature(323)"),
@@ -24,24 +25,13 @@ public class ThermopneumaticProcessingPlant extends VirtualizedRegistry<IThermop
     }
 
     @Override
-    public void onReload() {
-        BasicThermopneumaticProcessingPlantRecipe.recipes.removeAll(removeScripted());
-        BasicThermopneumaticProcessingPlantRecipe.recipes.addAll(restoreFromBackup());
-    }
-
-    public void add(IThermopneumaticProcessingPlantRecipe recipe) {
-        BasicThermopneumaticProcessingPlantRecipe.recipes.add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(IThermopneumaticProcessingPlantRecipe recipe) {
-        addBackup(recipe);
-        return BasicThermopneumaticProcessingPlantRecipe.recipes.remove(recipe);
+    public Collection<IThermopneumaticProcessingPlantRecipe> getRecipes() {
+        return BasicThermopneumaticProcessingPlantRecipe.recipes;
     }
 
     @MethodDescription(example = @Example("fluid('lpg')"))
     public boolean removeByOutput(IIngredient output) {
-        return BasicThermopneumaticProcessingPlantRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (entry instanceof BasicThermopneumaticProcessingPlantRecipe recipe && output.test(recipe.getOutputLiquid())) {
                 addBackup(entry);
                 return true;
@@ -52,24 +42,13 @@ public class ThermopneumaticProcessingPlant extends VirtualizedRegistry<IThermop
 
     @MethodDescription(example = {@Example("item('minecraft:coal')"), @Example("fluid('diesel')")})
     public boolean removeByInput(IIngredient input) {
-        return BasicThermopneumaticProcessingPlantRecipe.recipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (entry instanceof BasicThermopneumaticProcessingPlantRecipe recipe && (input.test(recipe.getInputLiquid()) || input.test(recipe.getInputItem()))) {
                 addBackup(entry);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BasicThermopneumaticProcessingPlantRecipe.recipes.forEach(this::addBackup);
-        BasicThermopneumaticProcessingPlantRecipe.recipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IThermopneumaticProcessingPlantRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(BasicThermopneumaticProcessingPlantRecipe.recipes).setRemover(this::remove);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})

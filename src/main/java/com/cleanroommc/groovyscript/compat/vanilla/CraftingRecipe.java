@@ -1,12 +1,10 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.IMarkable;
 import com.cleanroommc.groovyscript.core.mixin.InventoryCraftingAccess;
 import com.cleanroommc.groovyscript.core.mixin.SlotCraftingAccess;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
@@ -22,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toCollection;
 
 public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe, ICraftingRecipe {
 
@@ -49,23 +49,19 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
 
     @Override
     public @NotNull ItemStack getCraftingResult(@NotNull InventoryCrafting inv) {
-        ItemStack result = output.copy();
-        if (recipeFunction != null) {
-            MatchList matchList = getMatchingList(inv);
-            Object2ObjectOpenHashMap<String, ItemStack> marks = new Object2ObjectOpenHashMap<>();
-            for (SlotMatchResult matchResult : matchList) {
-                if (matchResult.getRecipeIngredient() instanceof IMarkable markable) {
-                    if (!input.isEmpty() && markable.hasMark()) {
-                        marks.put(markable.getMark(), matchResult.getGivenInput().copy());
-                    }
-                }
-            }
-            result = ClosureHelper.call(recipeFunction, result, marks, new CraftingInfo(inv, getPlayerFromInventory(inv)));
-            if (result == null) {
-                result = ItemStack.EMPTY;
-            }
+        ItemStack output = this.output.copy();
+
+        if (recipeFunction == null || input.isEmpty()) return output;
+
+        InputList inputs = new InputList();
+        for (SlotMatchResult slotMatchResult : getMatchingList(inv)) {
+            ItemStack givenInput = slotMatchResult.getGivenInput();
+            inputs.add(givenInput);
         }
-        return result;
+
+        // Call recipe function
+        ItemStack recipeFunctionResult = ClosureHelper.call(recipeFunction, output, inputs, new CraftingInfo(inv, getPlayerFromInventory(inv)));
+        return recipeFunctionResult == null ? output : recipeFunctionResult;
     }
 
     @Override
@@ -155,11 +151,43 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         }
 
         public ItemStack getGivenInput() {
-            return givenInput;
+            // Copy mark from recipeIngredient to givenInput
+            ItemStackMixinExpansion itemStack = ItemStackMixinExpansion.of(givenInput);
+            String mark = recipeIngredient.getMark();
+            if (mark != null) itemStack.setMark(mark);
+            return itemStack.grs$getItemStack();
         }
 
         public int getSlotIndex() {
             return slotIndex;
+        }
+    }
+
+    public static class InputList extends ArrayList<ItemStack> {
+
+        // groovy [] operator
+        @Nullable
+        public ItemStack getAt(String mark) {
+            return findMarked(mark);
+        }
+
+        @Nullable
+        public ItemStack findMarked(String mark) {
+            if (isEmpty()) return null;
+            for (ItemStack itemStack : this) {
+                if (mark.equals(ItemStackMixinExpansion.of(itemStack).getMark())) {
+                    return itemStack;
+                }
+            }
+            return null;
+        }
+
+        public ItemStack findMarkedOrEmpty(String mark) {
+            if (isEmpty()) return ItemStack.EMPTY;
+            for (ItemStack itemStack : this) {
+                if (mark.equals(ItemStackMixinExpansion.of(itemStack).getMark())) return itemStack;
+            }
+            return ItemStack.EMPTY;
         }
     }
 

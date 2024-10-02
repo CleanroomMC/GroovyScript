@@ -4,15 +4,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import lykrast.prodigytech.common.recipe.ExplosionFurnaceManager;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManager.ExplosionFurnaceRecipe> {
+public class ExplosionFurnace extends StandardListRegistry<ExplosionFurnaceManager.ExplosionFurnaceRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('ingotGold'), item('minecraft:diamond')).craftPerReagent(8).power(160).output(item('minecraft:emerald_block'))"),
@@ -23,47 +24,21 @@ public class ExplosionFurnace extends VirtualizedRegistry<ExplosionFurnaceManage
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(this::remove);
-        restoreFromBackup().forEach(ExplosionFurnaceManager::addRecipe);
-    }
-
-    private boolean remove(ExplosionFurnaceManager.ExplosionFurnaceRecipe recipe) {
-        return ExplosionFurnaceManager.RECIPES.removeIf(recipe::equals);
-    }
-
-    private boolean backupAndRemove(ExplosionFurnaceManager.ExplosionFurnaceRecipe recipe) {
-        if (remove(recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<ExplosionFurnaceManager.ExplosionFurnaceRecipe> getRecipes() {
+        return ExplosionFurnaceManager.RECIPES;
     }
 
     public void addRecipe(ExplosionFurnaceManager.ExplosionFurnaceRecipe x) {
-        addScripted(x);
-        ExplosionFurnaceManager.addRecipe(x);
+        add(x);
     }
 
     @MethodDescription(example = @Example("item('prodigytech:ferramic_ingot')"))
     public void removeByOutput(ItemStack output) {
-        ExplosionFurnaceManager.RECIPES.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             if (!r.getOutput().isItemEqual(output)) return false;
             addBackup(r);
             return true;
         });
-    }
-
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
-    public void removeAll() {
-        ExplosionFurnaceManager.RECIPES.forEach(this::addBackup);
-        ExplosionFurnaceManager.removeAllRecipes();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ExplosionFurnaceManager.ExplosionFurnaceRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ExplosionFurnaceManager.RECIPES)
-                .setRemover(this::backupAndRemove);
     }
 
     @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})

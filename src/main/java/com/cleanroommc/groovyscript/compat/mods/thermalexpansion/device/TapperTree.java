@@ -8,11 +8,11 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.TapperManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.github.bsideup.jabel.Desugar;
 import net.minecraft.block.state.IBlockState;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
+import java.util.Objects;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class TapperTree extends VirtualizedRegistry<TapperTree.TapperTreeEntry> {
@@ -93,9 +93,45 @@ public class TapperTree extends VirtualizedRegistry<TapperTree.TapperTreeEntry> 
         TapperManagerAccessor.getLeafMap().clear();
     }
 
-    @Desugar
-    public record TapperTreeEntry(BlockWrapper log, BlockWrapper leaf) {
+    @SuppressWarnings("ClassCanBeRecord")
+    public static final class TapperTreeEntry {
 
+        private final BlockWrapper log;
+        private final BlockWrapper leaf;
+
+        public TapperTreeEntry(BlockWrapper log, BlockWrapper leaf) {
+            this.log = log;
+            this.leaf = leaf;
+        }
+
+        public BlockWrapper log() {
+            return log;
+        }
+
+        public BlockWrapper leaf() {
+            return leaf;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (TapperTreeEntry) obj;
+            return Objects.equals(this.log, that.log) &&
+                   Objects.equals(this.leaf, that.leaf);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(log, leaf);
+        }
+
+        @Override
+        public String toString() {
+            return "TapperTreeEntry[" +
+                   "log=" + log + ", " +
+                   "leaf=" + leaf + ']';
+        }
     }
 
 }

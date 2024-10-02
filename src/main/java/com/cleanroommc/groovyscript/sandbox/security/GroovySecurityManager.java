@@ -67,7 +67,6 @@ public class GroovySecurityManager {
         // mod specific
         banPackage("com.cleanroommc.groovyscript.command");
         banPackage("com.cleanroommc.groovyscript.core");
-        banPackage("com.cleanroommc.groovyscript.registry");
         banPackage("com.cleanroommc.groovyscript.sandbox");
         banPackage("com.cleanroommc.groovyscript.server");
     }

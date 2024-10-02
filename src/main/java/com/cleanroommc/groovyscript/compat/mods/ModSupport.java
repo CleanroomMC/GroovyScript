@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.cleanroommc.groovyscript.compat.mods.actuallyadditions.ActuallyAdditions;
 import com.cleanroommc.groovyscript.compat.mods.advancedmortars.AdvancedMortars;
+import com.cleanroommc.groovyscript.compat.mods.advancedrocketry.AdvancedRocketry;
 import com.cleanroommc.groovyscript.compat.mods.aetherlegacy.Aether;
 import com.cleanroommc.groovyscript.compat.mods.alchemistry.Alchemistry;
 import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnergistics2;
@@ -31,6 +32,7 @@ import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
 import com.cleanroommc.groovyscript.compat.mods.immersivepetroleum.ImmersivePetroleum;
+import com.cleanroommc.groovyscript.compat.mods.immersivetechnology.ImmersiveTechnology;
 import com.cleanroommc.groovyscript.compat.mods.industrialforegoing.IndustrialForegoing;
 import com.cleanroommc.groovyscript.compat.mods.inspirations.Inspirations;
 import com.cleanroommc.groovyscript.compat.mods.integrateddynamics.IntegratedDynamics;
@@ -47,6 +49,7 @@ import com.cleanroommc.groovyscript.compat.mods.pyrotech.PyroTech;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
 import com.cleanroommc.groovyscript.compat.mods.rustic.Rustic;
 import com.cleanroommc.groovyscript.compat.mods.tcomplement.TinkersComplement;
+import com.cleanroommc.groovyscript.compat.mods.techreborn.TechReborn;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
 import com.cleanroommc.groovyscript.compat.mods.theaurorian.TheAurorian;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
@@ -76,6 +79,7 @@ public class ModSupport {
 
     public static final GroovyContainer<ActuallyAdditions> ACTUALLY_ADDITIONS = new InternalModContainer<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
     public static final GroovyContainer<AdvancedMortars> ADVANCED_MORTARS = new InternalModContainer<>("advancedmortars", "Advanced Mortars", AdvancedMortars::new);
+    public static final GroovyContainer<AdvancedRocketry> ADVANCED_ROCKETRY = new InternalModContainer<>("advancedrocketry", "Advanced Rocketry", AdvancedRocketry::new);
     public static final GroovyContainer<Aether> AETHER = new InternalModContainer<>("aether_legacy", "Aether Legacy", Aether::new, "aether");
     public static final GroovyContainer<Alchemistry> ALCHEMISTRY = new InternalModContainer<>("alchemistry", "Alchemistry", Alchemistry::new);
     public static final GroovyContainer<AppliedEnergistics2> APPLIED_ENERGISTICS_2 = new InternalModContainer<>("appliedenergistics2", "Applied Energistics 2", AppliedEnergistics2::new, "ae2");
@@ -101,6 +105,7 @@ public class ModSupport {
     public static final GroovyContainer<Forestry> FORESTRY = new InternalModContainer<>("forestry", "Forestry", Forestry::new);
     public static final GroovyContainer<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new InternalModContainer<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
     public static final GroovyContainer<ImmersivePetroleum> IMMERSIVE_PETROLEUM = new InternalModContainer<>("immersivepetroleum", "Immersive Petroleum", ImmersivePetroleum::new);
+    public static final GroovyContainer<ImmersiveTechnology> IMMERSIVE_TECHNOLOGY = new InternalModContainer<>("immersivetech", "Immersive Technology", ImmersiveTechnology::new);
     public static final GroovyContainer<IC2> INDUSTRIALCRAFT = new InternalModContainer<>("ic2", "Industrial Craft 2", IC2::new, "industrialcraft");
     public static final GroovyContainer<IndustrialForegoing> INDUSTRIAL_FOREGOING = new InternalModContainer<>("industrialforegoing", "Industrial Foregoing", IndustrialForegoing::new);
     public static final GroovyContainer<Inspirations> INSPIRATIONS = new InternalModContainer<>("inspirations", "Inspirations", Inspirations::new);
@@ -117,6 +122,7 @@ public class ModSupport {
     public static final GroovyContainer<PyroTech> PYROTECH = new InternalModContainer<>("pyrotech", "Pyrotech", PyroTech::new);
     public static final GroovyContainer<Roots> ROOTS = new InternalModContainer<>("roots", "Roots 3", Roots::new);
     public static final GroovyContainer<Rustic> RUSTIC = new InternalModContainer<>("rustic", "Rustic", Rustic::new);
+    public static final GroovyContainer<TechReborn> TECH_REBORN = new InternalModContainer<>("techreborn", "Tech Reborn", TechReborn::new);
     public static final GroovyContainer<Thaumcraft> THAUMCRAFT = new InternalModContainer<>("thaumcraft", "Thaumcraft", Thaumcraft::new, "tc", "thaum");
     public static final GroovyContainer<TheAurorian> THE_AURORIAN = new InternalModContainer<>("theaurorian", "The Aurorian", TheAurorian::new, "aurorian");
     public static final GroovyContainer<ThermalExpansion> THERMAL_EXPANSION = new InternalModContainer<>("thermalexpansion", "Thermal Expansion", ThermalExpansion::new, "thermal");

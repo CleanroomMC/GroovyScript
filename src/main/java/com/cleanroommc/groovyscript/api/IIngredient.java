@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 /**
  * Base ingredient class for every ingredient. Most useful for item stacks and ore dicts.
  */
-public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
+public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMarkable {
 
     @Override
     IIngredient exactCopy();
@@ -62,6 +62,7 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
      * An empty ingredient with stack size 0, that matches empty item stacks
      */
     IIngredient EMPTY = new IIngredient() {
+
         @Override
         public int getAmount() {
             return 0;
@@ -94,6 +95,16 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
         @Override
         public boolean test(ItemStack stack) {
             return stack.isEmpty();
+        }
+
+        @Nullable
+        @Override
+        public String getMark() {
+            return null;
+        }
+
+        @Override
+        public void setMark(String mark) {
         }
     };
 
@@ -139,6 +150,16 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack> {
         @Override
         public boolean test(ItemStack stack) {
             return true;
+        }
+
+        @Nullable
+        @Override
+        public String getMark() {
+            return null;
+        }
+
+        @Override
+        public void setMark(String mark) {
         }
     };
 }

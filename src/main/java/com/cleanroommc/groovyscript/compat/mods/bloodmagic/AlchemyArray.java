@@ -2,22 +2,22 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeAlchemyArray;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.bloodmagic.BloodMagicRecipeRegistrarAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
+public class AlchemyArray extends StandardListRegistry<RecipeAlchemyArray> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).catalyst(item('bloodmagic:slate:1')).output(item('minecraft:gold_ingot')).texture('bloodmagic:textures/models/AlchemyArrays/LightSigil.png')"),
@@ -28,10 +28,8 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes()::remove);
-        restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes()::add);
+    public Collection<RecipeAlchemyArray> getRecipes() {
+        return ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes();
     }
 
     @MethodDescription(description = "groovyscript.wiki.bloodmagic.alchemy_array.add0", type = MethodDescription.Type.ADDITION)
@@ -58,22 +56,9 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
                 .register();
     }
 
-    public void add(RecipeAlchemyArray recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().add(recipe);
-    }
-
-    public boolean remove(RecipeAlchemyArray recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().remove(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("item('bloodmagic:component:13')"))
     public boolean removeByInput(IIngredient input) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
             if (found) {
                 addBackup(recipe);
@@ -92,7 +77,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
 
     @MethodDescription(example = @Example("item('bloodmagic:slate:2')"))
     public boolean removeByCatalyst(IIngredient catalyst) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getCatalyst().test(IngredientHelper.toItemStack(catalyst));
             if (found) {
                 addBackup(recipe);
@@ -111,7 +96,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
 
     @MethodDescription(example = @Example("item('bloodmagic:component:7'), item('bloodmagic:slate:1')"))
     public boolean removeByInputAndCatalyst(IIngredient input, IIngredient catalyst) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean removeRecipe = recipe.getInput().test(IngredientHelper.toItemStack(input)) && recipe.getCatalyst().test(IngredientHelper.toItemStack(catalyst));
             if (removeRecipe) {
                 addBackup(recipe);
@@ -130,7 +115,7 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
 
     @MethodDescription(example = @Example("item('bloodmagic:sigil_void')"))
     public boolean removeByOutput(ItemStack output) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean matches = recipe.getOutput().isItemEqual(output);
             if (matches) {
                 addBackup(recipe);
@@ -146,19 +131,6 @@ public class AlchemyArray extends VirtualizedRegistry<RecipeAlchemyArray> {
                 .post();
         return false;
     }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().forEach(this::addBackup);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeAlchemyArray> streamRecipes() {
-        return new SimpleObjectStream<>(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAlchemyArrayRecipes())
-                .setRemover(this::remove);
-    }
-
 
     @Property(property = "input", valid = @Comp("1"))
     @Property(property = "output", valid = @Comp("1"))

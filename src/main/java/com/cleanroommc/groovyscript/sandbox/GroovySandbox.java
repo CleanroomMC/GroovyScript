@@ -37,6 +37,7 @@ public abstract class GroovySandbox {
     private final ThreadLocal<Boolean> running = ThreadLocal.withInitial(() -> false);
     private final Map<String, Object> bindings = new Object2ObjectOpenHashMap<>();
     private final Set<Class<?>> staticImports = new HashSet<>();
+    private final CachedClassLoader ccl = new CachedClassLoader();
 
     protected GroovySandbox(URL[] scriptEnvironment) {
         if (scriptEnvironment == null || scriptEnvironment.length == 0) {
@@ -82,7 +83,7 @@ public abstract class GroovySandbox {
     }
 
     protected GroovyScriptEngine createScriptEngine() {
-        GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment);
+        GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment, this.ccl);
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
         config.setSourceEncoding("UTF-8");
         engine.setConfig(config);
@@ -103,11 +104,11 @@ public abstract class GroovySandbox {
         Binding binding = createBindings();
         Set<File> executedClasses = new ObjectOpenHashSet<>();
 
-        running.set(true);
+        this.running.set(true);
         try {
             load(engine, binding, executedClasses, true);
         } finally {
-            running.set(false);
+            this.running.set(false);
             postRun();
             setCurrentScript(null);
         }
@@ -155,13 +156,11 @@ public abstract class GroovySandbox {
             // the superclass of class files is Object
             if (clazz.getSuperclass() != Script.class && shouldRunFile(classFile)) {
                 executedClasses.add(classFile);
-                Script script = InvokerHelper.createScript(clazz, binding);
-                if (run) runScript(script);
             }
         }
     }
 
-    protected void runScript(Script script){
+    protected void runScript(Script script) {
         setCurrentScript(script.getClass().getName());
         script.run();
         setCurrentScript(null);
@@ -225,6 +224,10 @@ public abstract class GroovySandbox {
 
     protected void setCurrentScript(String currentScript) {
         this.currentScript = currentScript;
+    }
+
+    public CachedClassLoader getClassLoader() {
+        return ccl;
     }
 
     public static String getRelativePath(String source) {

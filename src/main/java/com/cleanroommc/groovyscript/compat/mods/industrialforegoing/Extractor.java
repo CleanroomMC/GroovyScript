@@ -1,31 +1,29 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.extractor.ExtractorEntry;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Extractor extends VirtualizedRegistry<ExtractorEntry> {
+public class Extractor extends StandardListRegistry<ExtractorEntry> {
 
     public Extractor() {
         super(Alias.generateOfClass(Extractor.class).andGenerate("TreeFluidExtractor"));
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        ExtractorEntry.EXTRACTOR_ENTRIES.removeAll(removeScripted());
-        ExtractorEntry.EXTRACTOR_ENTRIES.addAll(restoreFromBackup());
+    public Collection<ExtractorEntry> getRecipes() {
+        return ExtractorEntry.EXTRACTOR_ENTRIES;
     }
 
     @MethodDescription(description = "groovyscript.wiki.industrialforegoing.extractor.add0", type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:clay'), fluid('lava') * 50"))
@@ -46,22 +44,9 @@ public class Extractor extends VirtualizedRegistry<ExtractorEntry> {
         return recipe;
     }
 
-    public void add(ExtractorEntry recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ExtractorEntry.EXTRACTOR_ENTRIES.add(recipe);
-    }
-
-    public boolean remove(ExtractorEntry recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ExtractorEntry.EXTRACTOR_ENTRIES.remove(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("item('minecraft:log2:1')"))
     public boolean removeByInput(IIngredient input) {
-        return ExtractorEntry.EXTRACTOR_ENTRIES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getItemStack())) {
                 addBackup(recipe);
                 return true;
@@ -72,25 +57,13 @@ public class Extractor extends VirtualizedRegistry<ExtractorEntry> {
 
     @MethodDescription(example = @Example(value = "fluid('latex')", commented = true))
     public boolean removeByOutput(IIngredient output) {
-        return ExtractorEntry.EXTRACTOR_ENTRIES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getFluidStack())) {
                 addBackup(recipe);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ExtractorEntry.EXTRACTOR_ENTRIES.forEach(this::addBackup);
-        ExtractorEntry.EXTRACTOR_ENTRIES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ExtractorEntry> streamRecipes() {
-        return new SimpleObjectStream<>(ExtractorEntry.EXTRACTOR_ENTRIES)
-                .setRemover(this::remove);
     }
 
 }

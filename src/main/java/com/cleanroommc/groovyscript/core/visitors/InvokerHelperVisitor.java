@@ -52,5 +52,28 @@ public class InvokerHelperVisitor extends ClassVisitor implements Opcodes {
             }
             super.visitMethodInsn(opcode, owner, name, desc, itf);
         }
+
+        @Override
+        public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
+            super.visitFrame(type, nLocal, remapEntries(nLocal, local), nStack, remapEntries(nStack, stack));
+        }
+
+        private static Object[] remapEntries(int n, Object[] entries) {
+            for (int i = 0; i < n; i++) {
+                if (entries[i] instanceof String) {
+                    Object[] newEntries = new Object[n];
+                    if (i > 0) {
+                        System.arraycopy(entries, 0, newEntries, 0, i);
+                    }
+                    do {
+                        Object t = entries[i];
+                        if (LINKED_HASH_MAP_TYPE.equals(t)) t = FAST_UTIL_MAP_TYPE;
+                        newEntries[i++] = t;
+                    } while (i < n);
+                    return newEntries;
+                }
+            }
+            return entries;
+        }
     }
 }

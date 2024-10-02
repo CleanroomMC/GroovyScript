@@ -42,13 +42,19 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> getRegistry().removeVariation(pair.getValue(), pair.getKey()));
-        restoreFromBackup().forEach(pair -> getRegistry().addVariation(pair.getKey(), CarvingUtils.variationFor(pair.getValue(), 0)));
-
         groupStorage.restoreFromBackup().forEach(group -> getRegistry().addGroup(CarvingUtils.getDefaultGroupFor(group)));
         groupStorage.removeScripted().forEach(getRegistry()::removeGroup);
 
-        soundStorage.restoreFromBackup().forEach(pair -> getRegistry().setVariationSound(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(pair -> {
+            if (getRegistry().getGroup(pair.getKey()) != null) getRegistry().removeVariation(pair.getValue(), pair.getKey());
+        });
+        restoreFromBackup().forEach(pair -> {
+            if (getRegistry().getGroup(pair.getKey()) != null) getRegistry().addVariation(pair.getKey(), CarvingUtils.variationFor(pair.getValue(), 0));
+        });
+
+        soundStorage.restoreFromBackup().forEach(pair -> {
+            if (getRegistry().getGroup(pair.getKey()) != null) getRegistry().setVariationSound(pair.getKey(), pair.getValue());
+        });
     }
 
     @MethodDescription(example = {@Example("'demo', item('minecraft:diamond_block')"),

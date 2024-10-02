@@ -27,18 +27,18 @@ import java.nio.file.Path;
 import java.util.List;
 
 public interface ICompilationUnitFactory {
-	/**
-	 * If this factory would normally reuse an existing compilation unit, forces
-	 * the creation of a new one.
-	 */
-	public void invalidateCompilationUnit();
 
-	public List<String> getAdditionalClasspathList();
+    /**
+     * If this factory would normally reuse an existing compilation unit, forces the creation of a new one.
+     */
+    void invalidateCompilationUnit();
 
-	public void setAdditionalClasspathList(List<String> classpathList);
+    List<String> getAdditionalClasspathList();
 
-	/**
-	 * Returns a compilation unit.
-	 */
+    void setAdditionalClasspathList(List<String> classpathList);
+
+    /**
+     * Returns a compilation unit.
+     */
     GroovyLSCompilationUnit create(Path workspaceRoot, @Nullable URI context);
 }

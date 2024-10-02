@@ -11,11 +11,15 @@ import net.minecraft.client.resources.I18n;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -24,15 +28,30 @@ public class Exporter {
     private static final String INDEX_FILE_NAME = "index.md";
     private static final String NAV_FILE_NAME = "!navigation.md";
     private static final String PRINT_MOD_DETECTED = "log.info 'mod \\'%s\\' detected, running script'";
-    private static final Pattern CLASS_NAME_PATTERN = Pattern.compile("(?>\\b)(?>[a-zA-Z0-9]+\\.)+([a-zA-Z0-9$]+)");
+    private static final Pattern CLASS_NAME_PATTERN = Pattern.compile("(?>\\b)(?>[a-zA-Z0-9_]+\\.)+([a-zA-Z0-9_$]+)");
 
     public static String simpleSignature(Method method) {
-        String signature = Arrays.stream(method.getAnnotatedParameterTypes()).map(x -> simpleSignature(x.getType().getTypeName())).collect(Collectors.joining(", "));
-        return method.isVarArgs() ? convertVarArgs(signature) : signature;
+        return adjustVarArgs(method, signature(method, Exporter::simpleSignature));
+    }
+
+    public static String simpleSignature(Method method, Map<String, String> types) {
+        return adjustVarArgs(method, signature(method, param -> Exporter.simpleSignature(types.getOrDefault(param, param))));
+    }
+
+    private static String signature(Method method, Function<String, String> parseParameterFunction) {
+        return Arrays.stream(method.getAnnotatedParameterTypes())
+                .map(AnnotatedType::getType)
+                .map(Type::getTypeName)
+                .map(parseParameterFunction)
+                .collect(Collectors.joining(", "));
     }
 
     public static String simpleSignature(String name) {
         return CLASS_NAME_PATTERN.matcher(name).replaceAll("$1").replaceAll("\\$", ".");
+    }
+
+    private static String adjustVarArgs(Method method, String signature) {
+        return method.isVarArgs() ? convertVarArgs(signature) : signature;
     }
 
     private static String convertVarArgs(String name) {

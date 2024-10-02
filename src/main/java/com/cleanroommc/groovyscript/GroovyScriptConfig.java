@@ -23,5 +23,8 @@ public class GroovyScriptConfig {
         @Config.Comment("Validate input stack sizes when adding recipes, i.e. disallow adding recipes with input stack size > 1 when the machine's code doesn't check for input count. Disable if you want to write such recipes anyway.")
         public boolean checkInputStackCounts = true;
 
+        @Config.Name("ExtendedCrafting recipe maker makes grs recipes")
+        @Config.Comment("If this is true, the recipe maker from ExtendedCrafting will produce a script for GroovyScript instead of CraftTweaker.")
+        public boolean extendedCraftingRecipeMakerMakesGrsRecipes = true;
     }
 }

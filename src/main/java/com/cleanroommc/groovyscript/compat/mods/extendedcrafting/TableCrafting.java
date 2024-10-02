@@ -7,14 +7,14 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
+public class TableCrafting extends StandardListRegistry<ITieredRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".output(item('minecraft:stone') * 64).matrix('DLLLLLDDD', '  DNIGIND', 'DDDNIGIND', '  DLLLLLD').key('D', item('minecraft:diamond')).key('L', item('minecraft:redstone')).key('N', item('minecraft:stone')).key('I', item('minecraft:iron_ingot')).key('G', item('minecraft:gold_ingot')).tierUltimate()"),
@@ -33,9 +33,8 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> TableRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe));
-        TableRecipeManager.getInstance().getRecipes().addAll(restoreFromBackup());
+    public Collection<ITieredRecipe> getRecipes() {
+        return TableRecipeManager.getInstance().getRecipes();
     }
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.table_crafting.addShaped0", type = MethodDescription.Type.ADDITION)
@@ -66,17 +65,9 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
                 .register();
     }
 
-    public ITieredRecipe add(ITieredRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            TableRecipeManager.getInstance().getRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
     @MethodDescription(example = @Example("item('extendedcrafting:singularity_ultimate')"))
     public boolean removeByOutput(ItemStack stack) {
-        return TableRecipeManager.getInstance().getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (recipe != null && recipe.getRecipeOutput().isItemEqual(stack)) {
                 addBackup(recipe);
                 return true;
@@ -85,22 +76,4 @@ public class TableCrafting extends VirtualizedRegistry<ITieredRecipe> {
         });
     }
 
-    public boolean remove(ITieredRecipe recipe) {
-        if (TableRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ITieredRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(TableRecipeManager.getInstance().getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        TableRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
-        TableRecipeManager.getInstance().getRecipes().clear();
-    }
 }

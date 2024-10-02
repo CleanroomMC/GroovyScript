@@ -3,9 +3,8 @@ package com.cleanroommc.groovyscript.compat.mods.evilcraft;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.cyclops.cyclopscore.recipe.custom.api.IRecipe;
 import org.cyclops.evilcraft.Configs;
@@ -15,10 +14,11 @@ import org.cyclops.evilcraft.core.recipe.custom.EnvironmentalAccumulatorRecipePr
 import org.cyclops.evilcraft.core.weather.WeatherType;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Locale;
 
 @RegistryDescription
-public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> {
+public class EnvironmentalAccumulator extends StandardListRegistry<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> {
 
     @Override
     public boolean isEnabled() {
@@ -35,31 +35,13 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes()::remove);
-        restoreFromBackup().forEach(org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes()::add);
-    }
-
-    public void add(IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> recipe) {
-        this.add(recipe, true);
-    }
-
-    public void add(IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> recipe, boolean add) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        if (add) org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().add(recipe);
-    }
-
-    public boolean remove(IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().remove(recipe);
-        return true;
+    public Collection<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> getRecipes() {
+        return org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes();
     }
 
     @MethodDescription(example = @Example("item('evilcraft:exalted_crafter:1')"))
     public boolean removeByInput(ItemStack input) {
-        return org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getInput().getIngredient().test(input)) {
                 addBackup(r);
                 return true;
@@ -70,25 +52,13 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
 
     @MethodDescription(example = @Example("item('evilcraft:exalted_crafter:2')"))
     public boolean removeByOutput(ItemStack input) {
-        return org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getOutput().getIngredient().test(input)) {
                 addBackup(r);
                 return true;
             }
             return false;
         });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().forEach(this::addBackup);
-        org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> streamRecipes() {
-        return new SimpleObjectStream<>(org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().allRecipes())
-                .setRemover(this::remove);
     }
 
     @Property(property = "input", valid = @Comp("1"))
@@ -191,7 +161,7 @@ public class EnvironmentalAccumulator extends VirtualizedRegistry<IRecipe<Enviro
                             new EnvironmentalAccumulatorRecipeComponent(output.get(0), outputWeather),
                             new EnvironmentalAccumulatorRecipeProperties(duration, cooldowntime, processingspeed)
                     );
-            ModSupport.EVILCRAFT.get().environmentalAccumulator.add(recipe, false);
+            ModSupport.EVILCRAFT.get().environmentalAccumulator.addScripted(recipe);
             return recipe;
         }
     }

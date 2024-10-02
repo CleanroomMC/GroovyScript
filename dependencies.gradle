@@ -29,6 +29,8 @@
 final def mod_dependencies = [
         'actually-additions-228404:3117927'                   : [project.debug_actually_additions],
         'advancedmortars-283777:2780626'                      : [project.debug_adv_mortars],
+        'advanced-rocketry-236542:4671856'                    : [project.debug_advanced_rocketry],
+        'libvulpes-236541:3801015'                            : [project.debug_advanced_rocketry],
         'aether-255308:3280119'                               : [project.debug_aether],
         'alchemistry-293425:3186612'                          : [project.debug_alchemistry],
         'alchemylib-293426:2761706'                           : [project.debug_alchemistry],
@@ -67,8 +69,9 @@ final def mod_dependencies = [
         'extrabotany-299086:3112313'                          : [project.debug_extra_botany],
         'extra-utilities-2-225561:2678374'                    : [project.debug_extra_utilities_2],
         'forestry-59751:2918418'                              : [project.debug_forestry],
-        'immersive_engineering-231951:2974106'                : [project.debug_immersive_engineering, project.debug_immersive_petroleum],
+        'immersive_engineering-231951:2974106'                : [project.debug_immersive_engineering, project.debug_immersive_petroleum, project.debug_immersive_technology],
         'immersive-petroleum-268250:3382321'                  : [project.debug_immersive_petroleum],
+        'mct-immersive-technology-359407:5108047'             : [project.debug_immersive_technology],
         // WARNING: experimental must be placed before classic, otherwise you will crash when debugging either. Check FluidGenerator compat to confirm
         'industrialcraft_experimental-242638:3838713'         : [project.debug_industrial_craft_2_experimental],
         'industrialcraft_classic-242942:3093607'              : [project.debug_industrial_craft_2_classic],
@@ -94,6 +97,8 @@ final def mod_dependencies = [
         'prodigytech-297414:2769520'                          : [project.debug_prodigytech],
         'roots-246183:3905074'                                : [project.debug_roots],
         'rustic-256141:3107974'                               : [project.debug_rustic],
+        'reborncore-237903:3330308'                           : [project.debug_tech_reborn],
+        'techreborn-233564:2966851'                           : [project.debug_tech_reborn],
         'thaumcraft-223628:2629023'                           : [project.debug_thaum],
         'cofh_core-69162:2920433'                             : [project.debug_thermal],
         'cofh_world-271384:2920434'                           : [project.debug_thermal],
@@ -110,6 +115,8 @@ dependencies {
 
     // TODO: check if there is anything to exclude
     specialEmbed "io.github.classgraph:classgraph:4.8.165"
+    // have to include compileOnly for if any mods we're adding compat for shade an older version of classgraph, such as Reborn Core.
+    compileOnly "io.github.classgraph:classgraph:4.8.165"
 
     specialEmbed("org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1") {
         exclude group: 'com.google.guava', module: 'guava'
@@ -152,6 +159,11 @@ dependencies {
 
     if (project.debug_pyrotech.toBoolean()) {
         runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
+    }
+
+    compileOnly rfg.deobf('TechReborn:TechReborn-ModCompatibility-1.12.2:1.4.0.76:universal')
+    if (project.debug_tech_reborn.toBoolean()) {
+        runtimeOnly rfg.deobf('TechReborn:TechReborn-ModCompatibility-1.12.2:1.4.0.76:universal')
     }
 
     runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'

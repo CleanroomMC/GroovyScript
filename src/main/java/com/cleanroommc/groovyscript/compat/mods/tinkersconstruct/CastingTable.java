@@ -1,15 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -17,8 +15,10 @@ import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
+public class CastingTable extends StandardListRegistry<ICastingRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('lava') * 50).output(item('minecraft:diamond')).coolingTime(750).consumesCast(true).cast(ore('gemEmerald'))"))
     public RecipeBuilder recipeBuilder() {
@@ -30,28 +30,13 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(TinkerRegistryAccessor.getTableCastRegistry()::remove);
-        restoreFromBackup().forEach(TinkerRegistryAccessor.getTableCastRegistry()::add);
-    }
-
-    public void add(ICastingRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        TinkerRegistryAccessor.getTableCastRegistry().add(recipe);
-    }
-
-    public boolean remove(ICastingRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        TinkerRegistryAccessor.getTableCastRegistry().remove(recipe);
-        return true;
+    public Collection<ICastingRecipe> getRecipes() {
+        return TinkerRegistryAccessor.getTableCastRegistry();
     }
 
     @MethodDescription(example = @Example("item('minecraft:gold_ingot')"))
     public boolean removeByOutput(ItemStack output) {
-        if (TinkerRegistryAccessor.getTableCastRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getResult(ItemStack.EMPTY, FluidRegistry.WATER).isItemEqual(output);
             if (found) addBackup(recipe);
             return found;
@@ -66,7 +51,7 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
 
     @MethodDescription(example = @Example("fluid('iron')"))
     public boolean removeByInput(FluidStack input) {
-        if (TinkerRegistryAccessor.getTableCastRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getFluid(ItemStack.EMPTY, input.getFluid()).isFluidEqual(input);
             if (found) addBackup(recipe);
             return found;
@@ -81,7 +66,7 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:bucket')"))
     public boolean removeByCast(IIngredient cast) {
-        if (TinkerRegistryAccessor.getTableCastRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.matches(cast.getMatchingStacks()[0], recipe.getFluid(cast.getMatchingStacks()[0], FluidRegistry.WATER).getFluid());
             if (found) addBackup(recipe);
             return found;
@@ -92,17 +77,6 @@ public class CastingTable extends VirtualizedRegistry<ICastingRecipe> {
                 .error()
                 .post();
         return false;
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        TinkerRegistryAccessor.getTableCastRegistry().forEach(this::addBackup);
-        TinkerRegistryAccessor.getTableCastRegistry().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ICastingRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(TinkerRegistryAccessor.getTableCastRegistry()).setRemover(this::remove);
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))

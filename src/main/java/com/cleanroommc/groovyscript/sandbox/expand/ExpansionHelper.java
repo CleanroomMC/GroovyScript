@@ -3,6 +3,8 @@ package com.cleanroommc.groovyscript.sandbox.expand;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.Hidden;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
+import com.cleanroommc.groovyscript.sandbox.meta.Getter;
+import com.cleanroommc.groovyscript.sandbox.meta.Setter;
 import groovy.lang.*;
 import groovy.transform.Internal;
 import org.apache.groovy.util.BeanUtils;

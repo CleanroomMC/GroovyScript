@@ -6,19 +6,19 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Crucible extends VirtualizedRegistry<CookingPotRecipe> {
+public class Crucible extends StandardListRegistry<CookingPotRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).heat(2)"),
@@ -30,30 +30,13 @@ public class Crucible extends VirtualizedRegistry<CookingPotRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> BWRegistry.CRUCIBLE.getRecipes().removeIf(r -> r == recipe));
-        BWRegistry.CRUCIBLE.getRecipes().addAll(restoreFromBackup());
-    }
-
-    public CookingPotRecipe add(CookingPotRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            BWRegistry.CRUCIBLE.getRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(CookingPotRecipe recipe) {
-        if (BWRegistry.CRUCIBLE.getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<CookingPotRecipe> getRecipes() {
+        return BWRegistry.CRUCIBLE.getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByOutput(ItemStack output) {
-        return BWRegistry.CRUCIBLE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (ItemHandlerHelper.canItemStacksStack(itemstack, output)) {
                     addBackup(r);
@@ -66,7 +49,7 @@ public class Crucible extends VirtualizedRegistry<CookingPotRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByInput(ItemStack input) {
-        return BWRegistry.CRUCIBLE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (Ingredient ingredient : r.getInputs()) {
                 if (ingredient.test(input)) {
                     addBackup(r);
@@ -80,17 +63,6 @@ public class Crucible extends VirtualizedRegistry<CookingPotRecipe> {
     @MethodDescription
     public boolean removeByInput(IIngredient input) {
         return removeByInput(IngredientHelper.toItemStack(input));
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CookingPotRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(BWRegistry.CRUCIBLE.getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BWRegistry.CRUCIBLE.getRecipes().forEach(this::addBackup);
-        BWRegistry.CRUCIBLE.getRecipes().clear();
     }
 
     @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)})

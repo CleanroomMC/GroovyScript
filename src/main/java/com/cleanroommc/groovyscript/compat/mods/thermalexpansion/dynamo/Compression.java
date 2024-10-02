@@ -7,9 +7,10 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.core.mixin.thermalexpansion.CompressionManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.github.bsideup.jabel.Desugar;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Objects;
 
 @RegistryDescription
 public class Compression extends VirtualizedRegistry<Compression.CompressionRecipe> {
@@ -79,9 +80,45 @@ public class Compression extends VirtualizedRegistry<Compression.CompressionReci
         CompressionManagerAccessor.getFuelMap().clear();
     }
 
-    @Desugar
-    public record CompressionRecipe(String fluid, int energy) {
+    @SuppressWarnings("ClassCanBeRecord")
+    public static final class CompressionRecipe {
 
+        private final String fluid;
+        private final int energy;
+
+        public CompressionRecipe(String fluid, int energy) {
+            this.fluid = fluid;
+            this.energy = energy;
+        }
+
+        public String fluid() {
+            return fluid;
+        }
+
+        public int energy() {
+            return energy;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (CompressionRecipe) obj;
+            return Objects.equals(this.fluid, that.fluid) &&
+                   this.energy == that.energy;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(fluid, energy);
+        }
+
+        @Override
+        public String toString() {
+            return "CompressionRecipe[" +
+                   "fluid=" + fluid + ", " +
+                   "energy=" + energy + ']';
+        }
     }
 
 }

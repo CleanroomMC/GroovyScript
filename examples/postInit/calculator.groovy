@@ -21,7 +21,7 @@ mods.calculator.algorithm_separator.recipeBuilder()
 // Takes a non-analysed Circuit and analyses it, converting it into usable Stable or Analysed Circuit. Will produce power
 // and item outputs based on randomly generated NBT data.
 
-mods.calculator.analysing_chamber.removeByInput(item('sonarcore:reinforceddirtblock'))
+mods.calculator.analysing_chamber.removeByOutput(item('sonarcore:reinforceddirtblock'))
 // mods.calculator.analysing_chamber.removeAll()
 
 mods.calculator.analysing_chamber.recipeBuilder()

@@ -4,16 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import essentialcraft.api.RadiatingChamberRecipe;
 import essentialcraft.api.RadiatingChamberRecipes;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe> {
+public class RadiatingChamber extends StandardListRegistry<RadiatingChamberRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:nether_star'), item('minecraft:stone')).output(item('minecraft:beacon')).time(100).mruPerTick(10.0f).upperBalance(1.5f).lowerBalance(0.25f)"))
     public RadiatingChamber.RecipeBuilder recipeBuilder() {
@@ -21,33 +22,18 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(RadiatingChamberRecipes::removeRecipe);
-        restoreFromBackup().forEach(RadiatingChamberRecipes::addRecipe);
+    public Collection<RadiatingChamberRecipe> getRecipes() {
+        return RadiatingChamberRecipes.RECIPES;
     }
 
     @MethodDescription(example = @Example("item('essentialcraft:genitem', 42)"))
     public boolean removeByOutput(IIngredient x) {
-        return RadiatingChamberRecipes.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (x.test(r.getRecipeOutput())) {
                 addBackup(r);
                 return true;
             }
             return false;
-        });
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        RadiatingChamberRecipes.RECIPES.forEach(this::addBackup);
-        RadiatingChamberRecipes.RECIPES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RadiatingChamberRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(RadiatingChamberRecipes.RECIPES).setRemover(r -> {
-            addBackup(r);
-            return RadiatingChamberRecipes.RECIPES.remove(r);
         });
     }
 

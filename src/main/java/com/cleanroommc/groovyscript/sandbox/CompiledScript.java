@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,19 +42,17 @@ class CompiledScript extends CompiledClass {
         return comp;
     }
 
-    public void ensureLoaded(GroovyClassLoader classLoader, String basePath) {
+    public void ensureLoaded(CachedClassLoader classLoader, String basePath) {
         for (CompiledClass comp : this.innerClasses) {
             if (comp.clazz == null) {
                 if (comp.readData(basePath)) {
-                    comp.clazz = classLoader.defineClass(comp.name, comp.data);
+                    comp.ensureLoaded(classLoader, basePath);
                 } else {
                     GroovyLog.get().error("Error loading inner class {} for class {}", comp.name, this.name);
                 }
             }
         }
-        if (this.clazz == null) {
-            this.clazz = classLoader.defineClass(this.name, this.data);
-        }
+        super.ensureLoaded(classLoader, basePath);
     }
 
     @NotNull
@@ -82,7 +79,8 @@ class CompiledScript extends CompiledClass {
     }
 
     public static CompiledScript fromJson(JsonObject json, String scriptRoot, String cacheRoot) {
-        CompiledScript cs = new CompiledScript(json.get("path").getAsString(), JsonHelper.getString(json, null, "name"), json.get("lm").getAsLong());
+        CompiledScript cs = new CompiledScript(json.get("path").getAsString(), JsonHelper.getString(json, null, "name"),
+                                               json.get("lm").getAsLong());
         if (new File(scriptRoot, cs.path).exists()) {
             if (json.has("inner")) {
                 for (JsonElement element : json.getAsJsonArray("inner")) {
@@ -111,18 +109,16 @@ class CompiledScript extends CompiledClass {
     }
 
     public boolean checkPreprocessors(File basePath) {
-        return this.preprocessors == null ||
-               this.preprocessors.isEmpty() ||
-               Preprocessor.validatePreprocessor(new File(basePath, this.path), this.preprocessors);
+        return this.preprocessors == null || this.preprocessors.isEmpty() || Preprocessor.validatePreprocessor(
+                new File(basePath, this.path), this.preprocessors);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("name", name)
-                .append("path", path)
-                .append("innerClasses", innerClasses)
-                .append("lastEdited", lastEdited)
-                .toString();
+        return new ToStringBuilder(this).append("name", name)
+                                        .append("path", path)
+                                        .append("innerClasses", innerClasses)
+                                        .append("lastEdited", lastEdited)
+                                        .toString();
     }
 }

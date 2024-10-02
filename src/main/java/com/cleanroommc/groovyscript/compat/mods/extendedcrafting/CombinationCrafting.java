@@ -8,10 +8,9 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
@@ -22,24 +21,15 @@ import java.util.Collection;
 @RegistryDescription(
         admonition = @Admonition(value = "groovyscript.wiki.extendedcrafting.combination_crafting.note0", type = Admonition.Type.INFO, format = Admonition.Format.STANDARD)
 )
-public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> {
+public class CombinationCrafting extends StandardListRegistry<CombinationRecipe> {
 
     public CombinationCrafting() {
         super(Alias.generateOfClassAnd(CombinationCrafting.class, "Combination"));
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe));
-        CombinationRecipeManager.getInstance().getRecipes().addAll(restoreFromBackup());
-    }
-
-    public CombinationRecipe add(CombinationRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            CombinationRecipeManager.getInstance().getRecipes().add(recipe);
-        }
-        return recipe;
+    public Collection<CombinationRecipe> getRecipes() {
+        return CombinationRecipeManager.getInstance().getRecipes();
     }
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.combination_crafting.add0", type = MethodDescription.Type.ADDITION)
@@ -49,12 +39,14 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.combination_crafting.add1", type = MethodDescription.Type.ADDITION)
     public CombinationRecipe add(ItemStack output, long cost, int perTick, Ingredient input, NonNullList<Ingredient> pedestals) {
-        return add(new CombinationRecipe(output, cost, perTick, input, pedestals));
+        CombinationRecipe recipe = new CombinationRecipe(output, cost, perTick, input, pedestals);
+        add(recipe);
+        return recipe;
     }
 
     @MethodDescription(example = @Example(value = "item('minecraft:gold_ingot')", commented = true))
     public boolean removeByOutput(ItemStack output) {
-        return CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getOutput().equals(output)) {
                 addBackup(r);
                 return true;
@@ -65,7 +57,7 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
 
     @MethodDescription(example = @Example(value = "item('minecraft:pumpkin')", commented = true))
     public boolean removeByInput(ItemStack input) {
-        return CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getInput().equals(input)) {
                 addBackup(r);
                 return true;
@@ -78,27 +70,6 @@ public class CombinationCrafting extends VirtualizedRegistry<CombinationRecipe> 
     public boolean removeByInput(IIngredient input) {
         return removeByInput(IngredientHelper.toItemStack(input));
     }
-
-    public boolean remove(CombinationRecipe recipe) {
-        if (CombinationRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CombinationRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(CombinationRecipeManager.getInstance().getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        CombinationRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
-        CombinationRecipeManager.getInstance().getRecipes().clear();
-    }
-
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:pumpkin')).pedestals(item('minecraft:pumpkin') * 8).output(item('minecraft:diamond') * 2).cost(100).perTick(100)"),

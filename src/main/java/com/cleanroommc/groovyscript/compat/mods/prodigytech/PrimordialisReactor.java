@@ -68,7 +68,7 @@ public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
         return removeRecipeBase(x);
     }
 
-    @MethodDescription(example = @Example(priority = 2000, commented = true))
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         PrimordialisReactorManager.getAllEntries().forEach(r -> addBackup(new ItemsIngredient(r)));
         PrimordialisReactorManager.getAllOreEntries().forEach(r -> addBackup(new OreDictIngredient(r)));

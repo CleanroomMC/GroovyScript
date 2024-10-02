@@ -1,22 +1,21 @@
 package com.cleanroommc.groovyscript.compat.mods.immersivepetroleum;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import flaxbeard.immersivepetroleum.api.crafting.DistillationRecipe;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
+public class Distillation extends StandardListRegistry<DistillationRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('water') * 100).fluidOutput(fluid('water') * 50, fluid('lava') * 30).output(item('minecraft:diamond'), 0.5).output(item('minecraft:clay'), 0.2).output(item('minecraft:diamond'), 0.1).output(item('minecraft:clay'), 0.5).output(item('minecraft:diamond') * 5, 0.01).time(5).energy(1000)"),
@@ -27,26 +26,8 @@ public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        removeScripted().forEach(recipe -> DistillationRecipe.recipeList.removeIf(r -> r == recipe));
-        DistillationRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(DistillationRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            DistillationRecipe.recipeList.add(recipe);
-        }
-    }
-
-    public boolean remove(DistillationRecipe recipe) {
-        if (DistillationRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<DistillationRecipe> getRecipes() {
+        return DistillationRecipe.recipeList;
     }
 
     @MethodDescription(example = {
@@ -54,7 +35,7 @@ public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
             @Example(value = "fluid('lubricant')", commented = true)
     })
     public void removeByOutput(IIngredient output) {
-        DistillationRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getItemOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -73,7 +54,7 @@ public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
 
     @MethodDescription(example = @Example("fluid('oil')"))
     public void removeByInput(IIngredient input) {
-        DistillationRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidInputs()) {
                 if (input.test(fluidStack)) {
                     addBackup(r);
@@ -82,17 +63,6 @@ public class Distillation extends VirtualizedRegistry<DistillationRecipe> {
             }
             return false;
         });
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<DistillationRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(DistillationRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        DistillationRecipe.recipeList.forEach(this::addBackup);
-        DistillationRecipe.recipeList.clear();
     }
 
     @Property(property = "fluidInput", valid = @Comp("1"))
