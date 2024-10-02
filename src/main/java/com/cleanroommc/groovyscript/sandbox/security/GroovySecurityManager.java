@@ -52,13 +52,16 @@ public class GroovySecurityManager {
         banPackage("groovy.grape");
         banPackage("groovy.beans");
         banPackage("groovy.cli");
-        banPackage("groovyjarjar");
+        banPackage("groovyjarjarantlr4.");
+        banPackage("groovyjarjarasm.");
+        banPackage("groovyjarjarpicocli.");
         banPackage("sun."); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
         banPackage("javax.net");
         banPackage("javax.security");
         banPackage("javax.script");
         banPackage("org.spongepowered");
         banPackage("zone.rong.mixinbooter");
+        banPackage("net.minecraftforge.gradle");
         banClasses(Runtime.class, ClassLoader.class, Scanner.class);
         banClasses(GroovyScriptEngine.class, Eval.class, GroovyMain.class, GroovySocketServer.class, GroovyShell.class, GroovyClassLoader.class);
         banMethods(System.class, "exit", "gc", "setSecurityManager");

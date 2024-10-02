@@ -24,6 +24,7 @@ public class GroovyScriptLanguageServerContext implements ILanguageServerContext
             .acceptPaths("*")
             .rejectClasses(GroovySecurityManager.INSTANCE.getBannedClasses().stream().map(Class::getName).toArray(String[]::new))
             .rejectPackages(GroovySecurityManager.INSTANCE.getBannedPackages().stream().toArray(String[]::new))
+            .rejectPackages("scala.", "akka.")
             .acceptClasses(GroovySecurityManager.INSTANCE.getWhiteListedClasses().stream().map(Class::getName).toArray(String[]::new))
             .scan();
 
