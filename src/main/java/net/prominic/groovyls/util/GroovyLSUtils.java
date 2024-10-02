@@ -114,7 +114,8 @@ public class GroovyLSUtils {
         Range location = astNodeToRange(node);
         if (location == null) return null;
         SymbolKind symbolKind = astNodeToSymbolKind(node);
-        // TODO add method and field children
+        // methods and fields could be added as children here,
+        // but we already iterate over every ast node in the script
         return new DocumentSymbol(node.getName(), symbolKind, location, location, parentName);
     }
 
