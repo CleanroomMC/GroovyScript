@@ -3,6 +3,9 @@ package com.cleanroommc.groovyscript.sandbox;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,15 +48,25 @@ public class FileUtil {
         }
     }
 
+    @NotNull
     public static String relativize(String rootPath, String longerThanRootPath) {
         longerThanRootPath = encodeURI(fixPath(decodeURI(longerThanRootPath)));
         rootPath = encodeURI(rootPath);
-        return relativizeInternal(rootPath, longerThanRootPath);
+        return relativizeInternal(rootPath, longerThanRootPath, false);
     }
 
-    private static String relativizeInternal(String rootPath, String longerThanRootPath) {
+    @Nullable
+    public static String relativizeNullable(String rootPath, String longerThanRootPath) {
+        longerThanRootPath = encodeURI(fixPath(decodeURI(longerThanRootPath)));
+        rootPath = encodeURI(rootPath);
+        return relativizeInternal(rootPath, longerThanRootPath, true);
+    }
+
+    @Contract("_,_,false -> !null")
+    private static String relativizeInternal(String rootPath, String longerThanRootPath, boolean nullable) {
         int index = longerThanRootPath.indexOf(rootPath);
         if (index < 0) {
+            if (nullable) return null;
             throw new IllegalArgumentException("The path '" + longerThanRootPath + "' does not contain the root path '" + rootPath + "'");
         }
         return longerThanRootPath.substring(index + rootPath.length() + 1);

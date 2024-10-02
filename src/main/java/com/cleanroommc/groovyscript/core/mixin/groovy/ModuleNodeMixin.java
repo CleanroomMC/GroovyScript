@@ -26,12 +26,12 @@ public abstract class ModuleNodeMixin {
     public void init(SourceUnit context, CallbackInfo ci) {
         // auto set package name
         String script = context.getName();
-        if (!RunConfig.isGroovyFile(script)) {
+        String rel;
+        if (!RunConfig.isGroovyFile(script) || (rel = FileUtil.relativizeNullable(GroovyScript.getScriptPath(), script)) == null) {
             // probably not a script file
             // can happen with traits
             return;
         }
-        String rel = FileUtil.relativize(GroovyScript.getScriptPath(), script);
         int i = rel.lastIndexOf(File.separatorChar);
         if (i >= 0) {
             // inject correct package declaration into script
@@ -43,7 +43,8 @@ public abstract class ModuleNodeMixin {
     @Inject(method = "setPackage", at = @At("HEAD"), cancellable = true)
     public void setPackage(PackageNode packageNode, CallbackInfo ci) {
         if (this.packageNode == null || this.context == null) return;
-        if (!RunConfig.isGroovyFile(this.context.getName())) {
+        String rel;
+        if (!RunConfig.isGroovyFile(this.context.getName()) || (rel = FileUtil.relativizeNullable(GroovyScript.getScriptPath(), this.context.getName())) == null) {
             // probably not a script file
             // can happen with traits
             return;
@@ -52,7 +53,6 @@ public abstract class ModuleNodeMixin {
         String cur = this.packageNode.getName();
         String newName = packageNode.getName();
         if (!cur.equals(newName)) {
-            String rel = FileUtil.relativize(GroovyScript.getScriptPath(), this.context.getName());
             GroovyLog.get().error("Expected package {} but got {} in script {}", cur, newName, rel);
         }
         if (this.packageNode.getAnnotations() != null) {
