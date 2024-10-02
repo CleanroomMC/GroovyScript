@@ -1,5 +1,5 @@
-import { CancellationToken, Disposable, languages, ProviderResult, TextDocument, Range as VRange } from 'vscode';
-import { ClientCapabilities, DocumentColorOptions, DocumentSelector, DynamicFeature, ensure, FeatureClient, MessageDirection, PartialResultParams, ProtocolRequestType, RequestHandler, ServerCapabilities, StaticRegistrationOptions, TextDocumentIdentifier, TextDocumentLanguageFeature, TextDocumentRegistrationOptions, WorkDoneProgressOptions, WorkDoneProgressParams } from 'vscode-languageclient';
+import { CancellationToken, Disposable, ProviderResult, TextDocument, Range as VRange } from 'vscode';
+import { ClientCapabilities, DocumentColorOptions, DocumentSelector, ensure, FeatureClient, MessageDirection, PartialResultParams, ProtocolRequestType, RequestHandler, ServerCapabilities, StaticRegistrationOptions, TextDocumentIdentifier, TextDocumentLanguageFeature, TextDocumentRegistrationOptions, WorkDoneProgressOptions, WorkDoneProgressParams } from 'vscode-languageclient';
 import { registerTextureDecorationProvider } from '../languageProviders/TextureDecorationLanguageProvider';
 
 export interface TextureDecorationParams extends WorkDoneProgressParams, PartialResultParams {
@@ -12,6 +12,7 @@ export interface TextureDecorationParams extends WorkDoneProgressParams, Partial
 export interface TextureDecorationInformation {
     range: VRange;
     textureUri: string;
+    tooltips: string[];
 }
 
 export interface TextureDecorationOptions extends WorkDoneProgressOptions {
@@ -71,6 +72,7 @@ export class TextureDecorationFeature extends TextDocumentLanguageFeature<boolea
                         return result.map<TextureDecorationInformation>(decoration => ({
                             range: decoration.range,
                             textureUri: client.protocol2CodeConverter.asUri(decoration.textureUri).toString(true),
+                            tooltips: decoration.tooltips
                         }));
                     }, (error) => {
                         return client.handleFailedRequest(TextureDecorationRequest.type, token, error, null);

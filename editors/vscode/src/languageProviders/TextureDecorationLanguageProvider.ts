@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { DocumentSelector, Disposable, window as vWindow, workspace as vWorkspace, CancellationTokenSource, TextEditor, TextDocument, languages, DecorationOptions, Uri } from "vscode";
+import { DocumentSelector, Disposable, window as vWindow, workspace as vWorkspace, CancellationTokenSource, TextEditor, languages, DecorationOptions, Uri } from "vscode";
 import { TextureDecorationInformation, TextureDecorationProvider } from "../features/TextureDecoration";
 
 export function registerTextureDecorationProvider(selector: DocumentSelector, provider: TextureDecorationProvider): Disposable {
@@ -54,6 +54,7 @@ function removeDecoration(textEditor: TextEditor) {
 function decorate(textEditor: TextEditor, decorations: TextureDecorationInformation[]) {
     textEditor.setDecorations(decorationStyle, decorations.map<DecorationOptions>(decoration => ({
         range: decoration.range,
+        hoverMessage: decoration.tooltips,
         renderOptions: {
             before: {
                 contentIconPath: Uri.parse(decoration.textureUri, true),

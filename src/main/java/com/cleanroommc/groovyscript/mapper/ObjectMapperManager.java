@@ -86,7 +86,7 @@ public class ObjectMapperManager {
                 .parser((s, args) -> s.contains(WILDCARD) ? Result.some(OreDictWildcardIngredient.of(s)) : Result.some(new OreDictIngredient(s)))
                 .completerOfNames(OreDictionaryAccessor::getIdToName)
                 .docOfType("ore dict entry")
-                .textureBinder(TextureBinder.of(i -> i.getMatchingStacks()[0], TextureBinder.ofItem()))
+                .textureBinder(TextureBinder.of(i -> Arrays.asList(i.getMatchingStacks()), TextureBinder.ofItem(), i -> String.format("![](${item('%s')}) %s", i.getItem().getRegistryName(), i.getDisplayName())))
                 .register();
         ObjectMapper.builder("item", ItemStack.class)
                 .parser(ObjectMappers::parseItemStack)

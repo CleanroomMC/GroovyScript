@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.server.features.textureDecoration;
 
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.mapper.TextureBinder;
+import com.cleanroommc.groovyscript.mapper.TextureTooltip;
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -17,6 +18,7 @@ import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.expr.*;
 import org.eclipse.lsp4j.Range;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public class TextureDecorationProvider extends DocProvider {
 
@@ -99,8 +102,11 @@ public class TextureDecorationProvider extends DocProvider {
 
             var range = GroovyLSUtils.astNodeToRange(start, call);
             if (decoration.isFileExists()) {
-                decorationInformations.add(new TextureDecorationInformation(range, uri));
-                continue;
+                var tooltips = new ArrayList<>(decoration.render());
+                if (formatTooltips(tooltips, null)) {
+                    decorationInformations.add(new TextureDecorationInformation(range, uri, tooltips));
+                    continue;
+                }
             }
             if (!decoration.queued) {
                 decoration.queued = true;
@@ -190,18 +196,14 @@ public class TextureDecorationProvider extends DocProvider {
         for (int i = 0; i < queueDeco.size(); i++) {
             TextureDecoration decoration = queueDeco.get(i);
             Range range = queueRange.get(i);
-            GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-            decoration.render();
+            var tooltipStrings = new ArrayList<>(render(buffer, decoration.getFile(), decoration::render));
 
-            GL11.glReadPixels(0, 0, ICON_W, ICON_H, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-
-            saveImage(decoration.getFile(), buffer);
-            buffer.rewind();
+            formatTooltips(tooltipStrings, buffer);
 
             decoration.fileExists = true;
             decoration.queued = false;
-            decorationInformations.add(new TextureDecorationInformation(range, decoration.getUri()));
+            decorationInformations.add(new TextureDecorationInformation(range, decoration.getUri(), tooltipStrings));
         }
 
         GlStateManager.enableAlpha();
@@ -211,6 +213,46 @@ public class TextureDecorationProvider extends DocProvider {
         GlStateManager.deleteTexture(texture);
         GL30.glDeleteRenderbuffers(renderBuffer);
         GL30.glDeleteFramebuffers(framebuffer);
+    }
+
+    private boolean formatTooltips(ArrayList<String> tooltipStrings, @Nullable ByteBuffer buffer) {
+        for (int j = 0; j < tooltipStrings.size(); j++) {
+            var str = tooltipStrings.get(j);
+            var tooltip = new TextureTooltip(str);
+
+            for (var embedding : tooltip.getEmbeddings()) {
+                var embeddingDeco = new TextureDecoration(embedding.getTextureName(), embedding.getTextureBinder(), embedding.getContext(), getURIForDecoration(embedding.getTextureName()));
+
+                if (!embeddingDeco.isFileExists()) {
+                    if (buffer == null) {
+                        return false;
+                    }
+                    render(buffer, embeddingDeco.getFile(), embeddingDeco::render);
+                }
+
+                var before = embedding.getStart() == 0 ? "" : str.substring(0, embedding.getStart());
+                var after = embedding.getEnd() == str.length() - 1 ? "" : str.substring(embedding.getEnd());
+
+                str = before + embeddingDeco.getUri() + after;
+            }
+
+            tooltipStrings.set(j, str);
+        }
+
+        return true;
+    }
+
+    private static List<String> render(ByteBuffer buffer, File outputFile, Supplier<List<String>> renderer) {
+        GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+        var tooltips = renderer.get();
+
+        GL11.glReadPixels(0, 0, ICON_W, ICON_H, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+        saveImage(outputFile, buffer);
+        buffer.rewind();
+
+        return tooltips;
     }
 
     private static void saveImage(File file, ByteBuffer buffer) {
@@ -263,8 +305,8 @@ public class TextureDecorationProvider extends DocProvider {
             return FileUtil.makeFile(cacheRoot, name + ".png");
         }
 
-        public void render() {
-            ((TextureBinder) binder).accept(bindable);
+        public List<String> render() {
+            return (List<String>) ((TextureBinder) binder).apply(bindable);
         }
 
         public boolean isFileExists() {
