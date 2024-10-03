@@ -96,17 +96,17 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
                 .setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 0, lte = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SoldererManager.SoldererRecipe> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         private int time = Config.soldererProcessTime;
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         private int gold;
 
-        @Property(valid = @Comp("1"))
+        @Property(comp = @Comp(eq = 1))
         private IIngredient pattern;
 
         @RecipeBuilderMethodDescription

@@ -51,8 +51,8 @@ public class Refinery extends StandardListRegistry<RefineryRecipe> {
         });
     }
 
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.GTE, value = "2"), @Comp(type = Comp.Type.LTE, value = "4")})
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(gte = 2, lte = 4))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RefineryRecipe> {
 
         @Property(defaultValue = "373")

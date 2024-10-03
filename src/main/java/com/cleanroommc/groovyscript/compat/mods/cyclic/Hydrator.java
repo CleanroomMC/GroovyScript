@@ -1,5 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods.cyclic;
 
+
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -60,11 +62,11 @@ public class Hydrator extends StandardListRegistry<RecipeHydrate> {
         });
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 6))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeHydrate> {
 
-        @Property(defaultValue = "25", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(defaultValue = "25", comp = @Comp(gte = 0))
         private int water = 25;
 
         @RecipeBuilderMethodDescription

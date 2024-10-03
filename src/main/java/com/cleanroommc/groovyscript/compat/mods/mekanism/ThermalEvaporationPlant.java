@@ -45,8 +45,8 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         return false;
     }
 
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ThermalEvaporationRecipe> {
 
         @Override

@@ -73,10 +73,10 @@ public class BrewRecipe extends StandardListRegistry<RecipeBrew> {
         return removeByInput(inputs);
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 6))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeBrew> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         protected vazkii.botania.api.brew.Brew brew;
 
         @RecipeBuilderMethodDescription(field = "brew")

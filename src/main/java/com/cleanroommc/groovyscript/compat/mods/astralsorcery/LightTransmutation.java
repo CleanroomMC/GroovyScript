@@ -83,13 +83,13 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightOreTransmutations.Transmutation> {
 
-        @Property(valid = {@Comp(value = "null", type = Comp.Type.NOT), @Comp(value = "input", type = Comp.Type.NOT)})
+        @Property(comp = @Comp(not = "null or input"))
         private Block inBlock;
-        @Property(ignoresInheritedMethods = true, valid = {@Comp(value = "null", type = Comp.Type.NOT), @Comp(value = "inBlock", type = Comp.Type.NOT)})
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null or inBlock"))
         private IBlockState input;
-        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private IBlockState output;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private double cost;
         @Property
         private ItemStack outStack;

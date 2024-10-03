@@ -42,14 +42,14 @@ public class TreasureChest extends StandardListRegistry<TreasureChestLoot> {
         });
     }
 
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TreasureChestLoot> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int weight;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "max")})
+        @Property(comp = @Comp(gte = 0, unique = "groovyscript.wiki.actuallyadditions.treasure_chest.min.required"))
         private int min;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.GTE, value = "min")})
+        @Property(comp = @Comp(gte = 0, unique = "groovyscript.wiki.actuallyadditions.treasure_chest.max.required"))
         private int max;
 
         @RecipeBuilderMethodDescription

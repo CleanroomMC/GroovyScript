@@ -82,19 +82,19 @@ public class CompressionCrafting extends StandardListRegistry<CompressorRecipe> 
         return new RecipeBuilder();
     }
 
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "input", valid = @Comp(type = Comp.Type.NOT, value = "null"))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "input", comp = @Comp(not = "null"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompressorRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int inputCount;
-        @Property(defaultValue = "IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack())", valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(defaultValue = "IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack())", comp = @Comp(not = "null"))
         private IIngredient catalyst = IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack());
         @Property
         private boolean consumeCatalyst;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int powerCost;
-        @Property(defaultValue = "ModConfig.confCompressorRFRate", valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(defaultValue = "ModConfig.confCompressorRFRate", comp = @Comp(gte = 0))
         private int powerRate = ModConfig.confCompressorRFRate;
 
         @Override

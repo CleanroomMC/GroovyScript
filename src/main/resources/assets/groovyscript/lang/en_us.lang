@@ -119,6 +119,7 @@ groovyscript.wiki.equal_to=exactly %s
 groovyscript.wiki.greater_than_or_equal_to=greater than or equal to %s
 groovyscript.wiki.greater_than=greater than %s
 groovyscript.wiki.not=not %s
+groovyscript.wiki.unique=%s
 groovyscript.wiki.and=and
 
 # Actually Additions
@@ -168,7 +169,9 @@ groovyscript.wiki.actuallyadditions.treasure_chest.title=Treasure Chest
 groovyscript.wiki.actuallyadditions.treasure_chest.description=A weighted item, with a weight to obtain and a minimum and maximum amount. Obtained via right-clicking a Treasure Chest spawning randomly on the sea floor.
 groovyscript.wiki.actuallyadditions.treasure_chest.weight.value=Sets how likely this loot is to be rolled
 groovyscript.wiki.actuallyadditions.treasure_chest.min.value=Sets the minimum stack size given when rolled
+groovyscript.wiki.actuallyadditions.treasure_chest.min.required=less than or equal to the size of max
 groovyscript.wiki.actuallyadditions.treasure_chest.max.value=Sets the maximum stack size given when rolled
+groovyscript.wiki.actuallyadditions.treasure_chest.max.required=greater than or equal to the size of min
 
 # Advanced Mortars
 groovyscript.wiki.advancedmortars.mortar.title=Mortar
@@ -543,6 +546,8 @@ groovyscript.wiki.betterwithmods.turntable.outputBlock.value=Sets the blockstate
 
 
 # Blood Magic
+groovyscript.wiki.bloodmagic.max_tier.required=less than `AltarTier.MAXTIERS`, which is determined by the config option `enableTierSixEvenThoughThereIsNoContent`
+
 groovyscript.wiki.bloodmagic.alchemy_array.title=Alchemy Array
 groovyscript.wiki.bloodmagic.alchemy_array.description=Converts two items into an output itemstack by using Arcane Ashes in-world. Has a configurable texture for the animation.
 groovyscript.wiki.bloodmagic.alchemy_array.add0=Adds recipes in the format `input`, `catalyst`, `output`, `circleTexture`
@@ -934,6 +939,7 @@ groovyscript.wiki.essentialcraft.magmatic_smeltery.title=Magmatic Smeltery
 groovyscript.wiki.essentialcraft.magmatic_smeltery.description=A machine used to quadruple ores using MRU and lava. Also adds the same recipes for Magmatic Furnace, which is used to double ores using MRU.
 groovyscript.wiki.essentialcraft.magmatic_smeltery.note0=Magmatic Smeltery does not have a JEI handler. This means its recipes will not be displayed in JEI and have to be tested manually.
 groovyscript.wiki.essentialcraft.magmatic_smeltery.color.value=Sets the overlay color for the Magmatic Alloy item of this ore
+groovyscript.wiki.essentialcraft.magmatic_smeltery.color.required=less than or equal to the hexadecimal number `0xffffff`
 groovyscript.wiki.essentialcraft.magmatic_smeltery.input.value=Sets the OreDict name of the input item
 groovyscript.wiki.essentialcraft.magmatic_smeltery.factor.value=Sets the output factor of the recipe. Magmatic Furnace will smelt the input item into this many Magmatic Alloys, Magmatic Smeltery will give double this many Magmatic Alloys, and Alloys will always be smelted into 2x of the output item
 groovyscript.wiki.essentialcraft.magmatic_smeltery.output.value=Sets the OreDict name of the output item
@@ -1101,7 +1107,9 @@ groovyscript.wiki.immersiveengineering.crusher.description=Converts an input ite
 groovyscript.wiki.immersiveengineering.crusher.add=Adds recipes in the format `output`, `input`, `energy`
 groovyscript.wiki.immersiveengineering.crusher.energy.value=Sets the amount of power consumed to complete the recipe
 groovyscript.wiki.immersiveengineering.crusher.secondaryOutputItems.value=Sets the additional items output by the recipe, if any
+groovyscript.wiki.immersiveengineering.crusher.secondaryOutputItems.required=exactly equal to the number of elements in `secondaryOutputChances`
 groovyscript.wiki.immersiveengineering.crusher.secondaryOutputChances.value=Sets the chance of the respective additional items output by the recipe
+groovyscript.wiki.immersiveengineering.crusher.secondaryOutputChances.required=exactly equal to the number of elements in `secondaryOutputItems`
 
 groovyscript.wiki.immersiveengineering.excavator.title=Excavator
 groovyscript.wiki.immersiveengineering.excavator.description=Adds a Mineral Mix with the given name, weight, fail chance, ores, and allowed dimensions. A Mineral Mix can be mined by an Excavator Multiblock and scanned via a Core Sample Drill.
@@ -1109,10 +1117,12 @@ groovyscript.wiki.immersiveengineering.excavator.note0=Reloading will not change
 groovyscript.wiki.immersiveengineering.excavator.add=Adds entries in the format `name`, `mineralWeight`, `failChance`, `ores`, `chances`
 groovyscript.wiki.immersiveengineering.excavator.blacklist.value=Sets if the `dimensions` property indicates allowed dimensions (false) or blocked dimensions (true)
 groovyscript.wiki.immersiveengineering.excavator.chances.value=Sets the chance a given block output will contain the corresponding entry in ores
+groovyscript.wiki.immersiveengineering.excavator.chances.required=exactly equal to the number of elements in `ores`
 groovyscript.wiki.immersiveengineering.excavator.dimensions.value=Sets the list of dimension ids the vein can generate in (if `blacklist` is false) or are prevented from generating in (if `blacklist` is true)
 groovyscript.wiki.immersiveengineering.excavator.fail.value=Sets the chance that a given mining attempt with output nothing instead of an ore
 groovyscript.wiki.immersiveengineering.excavator.name.value=Sets the unique name of the vein
 groovyscript.wiki.immersiveengineering.excavator.ores.value=Sets the valid oredicts output
+groovyscript.wiki.immersiveengineering.excavator.ores.required=exactly equal to the number of elements in `chances`
 groovyscript.wiki.immersiveengineering.excavator.weight.value=Sets the weight the Mineral Mix has to spawn in its allowed dimensions
 groovyscript.wiki.immersiveengineering.excavator.removeByMineral=Removes the Mineral Mix entry with the given name
 groovyscript.wiki.immersiveengineering.excavator.removeByOres=Removes all Mineral Mix entries containing any of the given ores
@@ -1161,7 +1171,9 @@ groovyscript.wiki.immersivepetroleum.reservoir.name.value=Sets the name of the r
 groovyscript.wiki.immersivepetroleum.reservoir.biomes.value=Sets the list of biome names the vein can generate in (if `biomeBlacklist` is false) or are prevented from generating in (if `biomeBlacklist` is true)
 groovyscript.wiki.immersivepetroleum.reservoir.weight.value=Sets the weight the reservoir has to spawn in its allowed dimensions
 groovyscript.wiki.immersivepetroleum.reservoir.maxSize.value=Sets the maximum size the reservoir can be, in mb
+groovyscript.wiki.immersivepetroleum.reservoir.maxSize.required=greater than or equal to the number of elements in `minSize`
 groovyscript.wiki.immersivepetroleum.reservoir.minSize.value=Sets the minimum size the reservoir can be, in mb
+groovyscript.wiki.immersivepetroleum.reservoir.minSize.required=less than or equal to the number of elements in `maxSize`
 groovyscript.wiki.immersivepetroleum.reservoir.dimensions.value=Sets the list of dimension ids the vein can generate in (if `dimensionBlacklist` is false) or are prevented from generating in (if `dimensionBlacklist` is true)
 groovyscript.wiki.immersivepetroleum.reservoir.replenishRate.value=Sets the rate at which the reservoir is refilled, in
 groovyscript.wiki.immersivepetroleum.reservoir.biomeBlacklist.value=Sets if the `biomes` property indicates allowed biomes (false) or blocked biomes (true)
@@ -1301,6 +1313,7 @@ groovyscript.wiki.inspirations.cauldron.dye.value=Sets the dye color fluid requi
 groovyscript.wiki.inspirations.cauldron.type.value=Sets what type of recipe is being processed
 groovyscript.wiki.inspirations.cauldron.sound.value=Sets the sound played when the recipe is crafted
 groovyscript.wiki.inspirations.cauldron.levels.value=Sets the level of fluid in the cauldron, where each bottle is a single level
+groovyscript.wiki.inspirations.cauldron.levels.required=less than or equal to `InspirationsRegistry.getCauldronMax()`, which is determined by the config option `biggerCauldron`
 groovyscript.wiki.inspirations.cauldron.boiling.value=Sets if the cauldron must be boiling, requiring fire or another heat source beneath
 groovyscript.wiki.inspirations.cauldron.inputPotion.value=Sets the input potion type
 groovyscript.wiki.inspirations.cauldron.outputPotion.value=Sets the output potion type
@@ -1919,6 +1932,7 @@ groovyscript.wiki.roots.transmutation.removeByOutput1=Removes the Transmutation 
 # Rustic
 groovyscript.wiki.rustic.alchemy.title=Alchemy Condenser
 groovyscript.wiki.rustic.alchemy.description=Converts some number of input itemstacks and a fluidstack into a single output stack after a time in a small multiblock structure, with a basic and advanced tier.
+groovyscript.wiki.rustic.alchemy.input.required=less than or equal to 2 if advanced is false and less than or equal to 3 if advanced is true
 groovyscript.wiki.rustic.alchemy.advanced.value=Sets if the recipe occurs in the normal Condenser or the Advanced Condenser
 groovyscript.wiki.rustic.alchemy.bottle.value=Sets the itemstack used in the bottle slot
 groovyscript.wiki.rustic.alchemy.effect.value=Sets the potion effect the output potion contains, if output is not set

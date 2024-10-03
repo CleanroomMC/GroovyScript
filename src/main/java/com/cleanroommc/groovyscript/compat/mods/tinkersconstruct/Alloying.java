@@ -80,8 +80,8 @@ public class Alloying extends StandardListRegistry<AlloyRecipe> {
         return false;
     }
 
-    @Property(property = "fluidInput", valid = {@Comp(value = "2", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(gte = 2))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<AlloyRecipe> {
 
         @Override

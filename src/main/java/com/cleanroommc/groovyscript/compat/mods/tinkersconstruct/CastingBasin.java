@@ -80,13 +80,13 @@ public class CastingBasin extends StandardListRegistry<ICastingRecipe> {
         return false;
     }
 
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<ICastingRecipe> {
 
         @Property
         private IIngredient cast;
-        @Property(defaultValue = "200", valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(defaultValue = "200", comp = @Comp(gte = 1))
         private int time = 200;
         @Property
         private boolean consumesCast;

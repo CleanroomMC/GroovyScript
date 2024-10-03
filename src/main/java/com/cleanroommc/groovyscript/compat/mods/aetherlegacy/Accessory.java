@@ -50,7 +50,7 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
         return new RecipeBuilder();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AetherAccessory> {
 
         @Property

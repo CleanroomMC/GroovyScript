@@ -61,19 +61,19 @@ public class EnvironmentalAccumulator extends StandardListRegistry<IRecipe<Envir
         });
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> {
 
-        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemSpeed", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemSpeed", comp = @Comp(gte = 0))
         private double processingspeed = EnvironmentalAccumulatorConfig.defaultProcessItemSpeed;
-        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultTickCooldown", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultTickCooldown", comp = @Comp(gte = 0))
         private int cooldowntime = EnvironmentalAccumulatorConfig.defaultTickCooldown;
-        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemTickCount", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(defaultValue = "EnvironmentalAccumulatorConfig.defaultProcessItemTickCount", comp = @Comp(gte = 0))
         private int duration = EnvironmentalAccumulatorConfig.defaultProcessItemTickCount;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private WeatherType inputWeather;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private WeatherType outputWeather;
 
         @RecipeBuilderMethodDescription

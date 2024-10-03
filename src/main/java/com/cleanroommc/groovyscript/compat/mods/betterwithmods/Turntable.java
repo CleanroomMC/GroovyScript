@@ -60,7 +60,7 @@ public class Turntable extends StandardListRegistry<TurntableRecipe> {
         });
     }
 
-    @Property(property = "output", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TurntableRecipe> {
 
         @Property

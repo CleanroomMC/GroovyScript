@@ -52,8 +52,8 @@ public class PressureChamber extends StandardListRegistry<IPressureChamberRecipe
         });
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "Integer.MAX_VALUE")})
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "Integer.MAX_VALUE")})
+    @Property(property = "input", comp = @Comp(gte = 1))
+    @Property(property = "output", comp = @Comp(gte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IPressureChamberRecipe> {
 
         @Property

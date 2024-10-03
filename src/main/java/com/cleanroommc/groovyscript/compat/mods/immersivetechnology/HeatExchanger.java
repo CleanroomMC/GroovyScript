@@ -59,13 +59,13 @@ public class HeatExchanger extends StandardListRegistry<HeatExchangerRecipe> {
         });
     }
 
-    @Property(property = "fluidInput", valid = @Comp("2"))
-    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
+    @Property(property = "fluidInput", comp = @Comp(eq = 2))
+    @Property(property = "fluidOutput", comp = @Comp(gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<HeatExchangerRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int energy;
 
 
