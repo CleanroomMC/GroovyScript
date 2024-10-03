@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 public class AltarInputOrder {
 
+    // @formatter:off
     public static final int[][] DISCOVERY = new int[][]{
             {0, 1, 2},
             {3, 4, 5},
@@ -33,6 +34,7 @@ public class AltarInputOrder {
             {17, 6, 7, 8, 18},
             {11, 19, 24, 20, 12}
     };
+    // @formatter:on
 
     public static int[][] getMap(TileAltar.AltarLevel level) {
         return switch (level) {
