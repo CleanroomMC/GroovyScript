@@ -11,8 +11,8 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 
 @RegistryDescription
@@ -34,7 +34,7 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
     }
 
     public LightOreTransmutations.Transmutation add(Block input, IBlockState output,
-                                                    @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
+                                                    @NotNull ItemStack inputDisplay, @NotNull ItemStack outputDisplay, double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
         getRecipes().add(recipe);
@@ -42,7 +42,7 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
     }
 
     public LightOreTransmutations.Transmutation add(IBlockState input, IBlockState output,
-                                                    @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
+                                                    @NotNull ItemStack inputDisplay, @NotNull ItemStack outputDisplay, double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
         getRecipes().add(recipe);

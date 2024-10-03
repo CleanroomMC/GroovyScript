@@ -13,8 +13,8 @@ import forestry.api.genetics.IMutationBuilder;
 import forestry.apiculture.genetics.BeeMutation;
 import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
 import forestry.modules.ForestryModuleUids;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
