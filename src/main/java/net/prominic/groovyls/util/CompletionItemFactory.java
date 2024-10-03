@@ -2,9 +2,7 @@ package net.prominic.groovyls.util;
 
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.documentation.DocumentationFactory;
-import org.codehaus.groovy.ast.ASTNode;
-import org.codehaus.groovy.ast.AnnotatedNode;
-import org.codehaus.groovy.ast.MethodNode;
+import org.codehaus.groovy.ast.*;
 import org.eclipse.lsp4j.*;
 
 public class CompletionItemFactory {
@@ -31,6 +29,13 @@ public class CompletionItemFactory {
             var item = createCompletion(CompletionItemKind.Method, label);
             int params = mn.getParameters() == null ? 0 : mn.getParameters().length;
             item.setInsertTextFormat(InsertTextFormat.Snippet);
+            if (params > 0) {
+                Parameter p = mn.getParameters()[params - 1];
+                ClassNode type = p.getType();
+                if (!p.isDynamicTyped() && type.getComponentType() != null) {
+                    params--; // last arg is array or varargs -> don't count it in
+                }
+            }
             if (params == 0) {
                 item.setInsertText(label + "()");
                 return item;

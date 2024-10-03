@@ -18,6 +18,10 @@ public abstract class DocProvider {
         this.astContext = context;
     }
 
+    public URI getDocUri() {
+        return doc;
+    }
+
     public ModuleNode getModule() {
         return astContext.getVisitor().getModule(doc);
     }
