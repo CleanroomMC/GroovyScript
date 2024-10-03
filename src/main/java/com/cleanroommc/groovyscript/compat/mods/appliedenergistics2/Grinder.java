@@ -89,7 +89,9 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"chance1", "chance2"})
+        @RecipeBuilderMethodDescription(field = {
+                "chance1", "chance2"
+        })
         public RecipeBuilder chance(float chance1, float chance2) {
             this.chance1 = chance1;
             this.chance2 = chance2;
@@ -126,7 +128,10 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable IGrinderRecipe register() {
             if (!validate()) return null;
-            IGrinderRecipeBuilder builder = AEApi.instance().registries().grinder().builder()
+            IGrinderRecipeBuilder builder = AEApi.instance()
+                    .registries()
+                    .grinder()
+                    .builder()
                     .withInput(input.get(0).toMcIngredient().getMatchingStacks()[0])
                     .withOutput(output.get(0))
                     .withTurns(turns);

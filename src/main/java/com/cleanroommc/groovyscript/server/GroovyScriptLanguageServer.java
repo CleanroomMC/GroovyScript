@@ -19,8 +19,7 @@ public class GroovyScriptLanguageServer extends GroovyLanguageServer {
 
         while (true) {
             var server = new GroovyScriptLanguageServer(root, languageServerContext);
-            try (var serverSocket = new ServerSocket(GroovyScriptConfig.languageServerPort);
-                 var socket = serverSocket.accept()) {
+            try (var serverSocket = new ServerSocket(GroovyScriptConfig.languageServerPort); var socket = serverSocket.accept()) {
 
                 GroovyScript.LOGGER.info("Accepted connection from: {}", socket.getInetAddress());
 

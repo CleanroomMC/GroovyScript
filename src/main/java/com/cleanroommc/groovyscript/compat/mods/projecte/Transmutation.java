@@ -79,7 +79,9 @@ public class Transmutation extends StandardListRegistry<WorldTransmutations.Entr
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"output", "altOutput"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "altOutput"
+        })
         public RecipeBuilder output(IBlockState output, IBlockState altOutput) {
             this.output = output;
             this.altOutput = altOutput;
@@ -104,7 +106,9 @@ public class Transmutation extends StandardListRegistry<WorldTransmutations.Entr
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"output", "altOutput"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "altOutput"
+        })
         public RecipeBuilder output(Block output, Block altOutput) {
             this.output = output.getDefaultState();
             this.altOutput = altOutput.getDefaultState();

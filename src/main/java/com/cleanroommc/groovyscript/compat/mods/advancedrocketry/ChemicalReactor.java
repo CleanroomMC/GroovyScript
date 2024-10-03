@@ -13,8 +13,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 })
 public class ChemicalReactor extends BaseRegistry {
     @RecipeBuilderDescription(
-            example = @Example(".input(item('minecraft:chorus_fruit_popped')).fluidInput(fluid('lava') * 500)" +
-                               ".output(item('minecraft:end_rod') * 4).fluidOutput(fluid('water') * 500).power(50).time(100)"))
+            example = @Example(".input(item('minecraft:chorus_fruit_popped')).fluidInput(fluid('lava') * 500)" + ".output(item('minecraft:end_rod') * 4).fluidOutput(fluid('water') * 500).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

@@ -150,8 +150,9 @@ public class EnvironmentalAccumulator extends StandardListRegistry<IRecipe<Envir
         @RecipeBuilderRegistrationMethod
         public @Nullable IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> register() {
             if (!validate()) return null;
-            IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> recipe =
-                    org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance().getRecipeRegistry().registerRecipe(
+            IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> recipe = org.cyclops.evilcraft.block.EnvironmentalAccumulator.getInstance()
+                    .getRecipeRegistry()
+                    .registerRecipe(
                             new EnvironmentalAccumulatorRecipeComponent(input.get(0).toMcIngredient(), inputWeather),
                             new EnvironmentalAccumulatorRecipeComponent(output.get(0), outputWeather),
                             new EnvironmentalAccumulatorRecipeProperties(duration, cooldowntime, processingspeed)

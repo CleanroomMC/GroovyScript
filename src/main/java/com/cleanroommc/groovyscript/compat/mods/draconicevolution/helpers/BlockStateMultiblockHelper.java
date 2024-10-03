@@ -17,7 +17,9 @@ public class BlockStateMultiblockHelper extends MultiBlockHelper {
         }
     }
 
-    @SuppressWarnings({"unused", "EmptyMethod"})
+    @SuppressWarnings({
+            "unused", "EmptyMethod"
+    })
     public void forBlock(BlockStates state, World world, BlockPos pos, BlockPos startPos, int flag) {
     }
 }

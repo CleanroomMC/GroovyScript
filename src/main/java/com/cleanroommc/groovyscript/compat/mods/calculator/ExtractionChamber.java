@@ -99,8 +99,12 @@ public class ExtractionChamber extends StandardListRegistry<CalculatorRecipe> {
 
             List<Object> specialOutput = new ArrayList<>();
             specialOutput.add(output.get(0));
-            specialOutput.add(new ExtractionChamberRecipes.ExtractionChamberOutput(new ItemStack(
-                    isDamaged ? sonar.calculator.mod.Calculator.circuitDamaged : sonar.calculator.mod.Calculator.circuitDirty, 1, 32767)));
+            specialOutput.add(
+                    new ExtractionChamberRecipes.ExtractionChamberOutput(
+                            new ItemStack(
+                                    isDamaged ? sonar.calculator.mod.Calculator.circuitDamaged : sonar.calculator.mod.Calculator.circuitDirty,
+                                    1,
+                                    32767)));
 
             CalculatorRecipe recipe = ExtractionChamberRecipes.instance()
                     .buildDefaultRecipe(Calculator.toSonarRecipeObjectList(input), specialOutput, new ArrayList<>(), false);

@@ -18,9 +18,11 @@ import java.io.File;
 @Mixin(value = ModuleNode.class, remap = false)
 public abstract class ModuleNodeMixin {
 
-    @Shadow private PackageNode packageNode;
+    @Shadow
+    private PackageNode packageNode;
 
-    @Shadow private transient SourceUnit context;
+    @Shadow
+    private transient SourceUnit context;
 
     @Inject(method = "<init>(Lorg/codehaus/groovy/control/SourceUnit;)V", at = @At("TAIL"))
     public void init(SourceUnit context, CallbackInfo ci) {

@@ -21,8 +21,9 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.*;
 
-@RegistryDescription(category = RegistryDescription.Category.ENTRIES,
-                     admonition = @Admonition("groovyscript.wiki.jei.ingredient.note0"))
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
+        admonition = @Admonition("groovyscript.wiki.jei.ingredient.note0"))
 public class Ingredient extends VirtualizedRegistry<Void> {
 
     private final Map<IIngredientType<?>, List<Object>> hiddenIngredients = new Object2ObjectOpenHashMap<>();

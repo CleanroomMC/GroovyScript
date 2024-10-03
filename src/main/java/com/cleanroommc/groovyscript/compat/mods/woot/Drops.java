@@ -30,8 +30,9 @@ public class Drops extends VirtualizedRegistry<Object> {
     @Override
     public void onReload() {
         restoreFromBackup().forEach(drop -> ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops().add(drop));
-        removeScripted().forEach(drop -> ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops()
-                .removeIf(d -> areCustomDropsEqual((CustomDropAccessor) d, (CustomDropAccessor) drop))
+        removeScripted().forEach(
+                drop -> ((CustomDropsRepositoryAccessor) Woot.customDropsRepository).getDrops()
+                        .removeIf(d -> areCustomDropsEqual((CustomDropAccessor) d, (CustomDropAccessor) drop))
         );
     }
 
@@ -110,17 +111,11 @@ public class Drops extends VirtualizedRegistry<Object> {
     }
 
     private boolean areCustomDropsEqual(CustomDropAccessor target, CustomDropAccessor other) {
-        return target.getWootMobName().equals(other.getWootMobName()) &&
-               ItemStack.areItemStacksEqual(target.getItemStack(), other.getItemStack()) &&
-               target.getChanceMap().equals(other.getChanceMap()) &&
-               target.getSizeMap().equals(other.getSizeMap());
+        return target.getWootMobName().equals(other.getWootMobName()) && ItemStack.areItemStacksEqual(target.getItemStack(), other.getItemStack()) && target.getChanceMap().equals(other.getChanceMap()) && target.getSizeMap().equals(other.getSizeMap());
     }
 
     private boolean areCustomDropsEqual(CustomDropAccessor target, WootMobName wootMobName, ItemStack itemStack, List<Integer> chances, List<Integer> sizes) {
-        return target.getWootMobName().equals(wootMobName) &&
-               ItemStack.areItemStacksEqual(target.getItemStack(), itemStack) &&
-               target.getChanceMap().values().containsAll(chances) &&
-               target.getSizeMap().values().containsAll(sizes);
+        return target.getWootMobName().equals(wootMobName) && ItemStack.areItemStacksEqual(target.getItemStack(), itemStack) && target.getChanceMap().values().containsAll(chances) && target.getSizeMap().values().containsAll(sizes);
     }
 
     @Property(property = "output", comp = @Comp(eq = 1))

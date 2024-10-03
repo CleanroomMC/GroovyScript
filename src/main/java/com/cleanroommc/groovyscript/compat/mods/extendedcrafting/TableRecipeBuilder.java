@@ -70,7 +70,8 @@ public interface TableRecipeBuilder {
         @Override
         @RecipeBuilderRegistrationMethod
         public ITieredRecipe register() {
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding shaped Extended Crafting Table recipe").error()
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding shaped Extended Crafting Table recipe")
+                    .error()
                     .add((keyBasedMatrix == null || keyBasedMatrix.length == 0) && (ingredientMatrix == null || ingredientMatrix.isEmpty()), () -> "No matrix was defined")
                     .add(keyBasedMatrix != null && ingredientMatrix != null, () -> "A key based matrix AND a ingredient based matrix was defined. This is not allowed!");
             if (msg.postIfNotEmpty()) return null;

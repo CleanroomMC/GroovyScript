@@ -53,10 +53,12 @@ public class LootPoolBuilder {
     }
 
     public LootPoolBuilder entry(ItemStack stack, int weight) {
-        this.lootEntries.add(new LootEntryBuilder()
-                                     .name(stack.getItem().getRegistryName().getNamespace() + ":" + stack.getMetadata())
-                                     .item(stack)
-                                     .weight(weight).build());
+        this.lootEntries.add(
+                new LootEntryBuilder()
+                        .name(stack.getItem().getRegistryName().getNamespace() + ":" + stack.getMetadata())
+                        .item(stack)
+                        .weight(weight)
+                        .build());
         return this;
     }
 
@@ -133,9 +135,10 @@ public class LootPoolBuilder {
 
     public void register() {
         if (!validate(true)) return;
-        VanillaModule.loot.tables.get(tableName).addPool(
-                new LootPool(lootEntries.toArray(new LootEntry[0]), poolConditions.toArray(new LootCondition[0]), rolls, bonusRolls, name)
-        );
+        VanillaModule.loot.tables.get(tableName)
+                .addPool(
+                        new LootPool(lootEntries.toArray(new LootEntry[0]), poolConditions.toArray(new LootCondition[0]), rolls, bonusRolls, name)
+                );
     }
 
 }

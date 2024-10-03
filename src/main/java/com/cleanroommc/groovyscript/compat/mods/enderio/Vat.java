@@ -125,14 +125,18 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"itemInputs1", "multipliers1"})
+        @RecipeBuilderMethodDescription(field = {
+                "itemInputs1", "multipliers1"
+        })
         public RecipeBuilder itemInputLeft(IIngredient ingredient, float multiplier) {
             itemInputs1.add(ingredient);
             multipliers1.add(multiplier);
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"itemInputs2", "multipliers2"})
+        @RecipeBuilderMethodDescription(field = {
+                "itemInputs2", "multipliers2"
+        })
         public RecipeBuilder itemInputRight(IIngredient ingredient, float multiplier) {
             itemInputs2.add(ingredient);
             multipliers2.add(multiplier);

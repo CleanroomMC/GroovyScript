@@ -104,8 +104,7 @@ public class Magmatic extends VirtualizedRegistry<Magmatic.MagmaticRecipe> {
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (MagmaticRecipe) obj;
-            return Objects.equals(this.fluid, that.fluid) &&
-                   this.energy == that.energy;
+            return Objects.equals(this.fluid, that.fluid) && this.energy == that.energy;
         }
 
         @Override
@@ -115,9 +114,7 @@ public class Magmatic extends VirtualizedRegistry<Magmatic.MagmaticRecipe> {
 
         @Override
         public String toString() {
-            return "MagmaticRecipe[" +
-                   "fluid=" + fluid + ", " +
-                   "energy=" + energy + ']';
+            return "MagmaticRecipe[" + "fluid=" + fluid + ", " + "energy=" + energy + ']';
         }
     }
 

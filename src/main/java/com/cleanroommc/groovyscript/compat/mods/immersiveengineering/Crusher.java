@@ -88,12 +88,16 @@ public class Crusher extends StandardListRegistry<CrusherRecipe> {
         @Property(comp = @Comp(gte = 0))
         private int energy;
 
-        @RecipeBuilderMethodDescription(field = {"secondaryOutputItems", "secondaryOutputChances"})
+        @RecipeBuilderMethodDescription(field = {
+                "secondaryOutputItems", "secondaryOutputChances"
+        })
         public RecipeBuilder secondaryOutput(ItemStack item) {
             return this.secondaryOutput(item, 1);
         }
 
-        @RecipeBuilderMethodDescription(field = {"secondaryOutputItems", "secondaryOutputChances"})
+        @RecipeBuilderMethodDescription(field = {
+                "secondaryOutputItems", "secondaryOutputChances"
+        })
         public RecipeBuilder secondaryOutput(ItemStack item, float chance) {
             this.secondaryOutputItems.add(item);
             this.secondaryOutputChances.add(chance);

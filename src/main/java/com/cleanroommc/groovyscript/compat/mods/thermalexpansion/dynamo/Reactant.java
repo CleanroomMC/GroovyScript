@@ -68,7 +68,9 @@ public class Reactant extends VirtualizedRegistry<ReactantManager.Reaction> {
         return Arrays.asList((new ComparableItemStack(reactant)).hashCode(), fluid.getName().hashCode());
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = {@Example("item('minecraft:gunpowder')"), @Example("item('minecraft:clay')")})
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = {
+            @Example("item('minecraft:gunpowder')"), @Example("item('minecraft:clay')")
+    })
     public boolean addElementalReactant(ItemStack itemStack) {
         return ReactantManagerAccessor.getValidReactantsElemental().add(new ComparableItemStack(itemStack)) && elementalReactantStorage.addScripted(itemStack);
     }

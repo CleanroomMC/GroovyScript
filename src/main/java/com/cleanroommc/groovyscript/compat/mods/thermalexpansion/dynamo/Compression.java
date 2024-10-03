@@ -104,8 +104,7 @@ public class Compression extends VirtualizedRegistry<Compression.CompressionReci
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (CompressionRecipe) obj;
-            return Objects.equals(this.fluid, that.fluid) &&
-                   this.energy == that.energy;
+            return Objects.equals(this.fluid, that.fluid) && this.energy == that.energy;
         }
 
         @Override
@@ -115,9 +114,7 @@ public class Compression extends VirtualizedRegistry<Compression.CompressionReci
 
         @Override
         public String toString() {
-            return "CompressionRecipe[" +
-                   "fluid=" + fluid + ", " +
-                   "energy=" + energy + ']';
+            return "CompressionRecipe[" + "fluid=" + fluid + ", " + "energy=" + energy + ']';
         }
     }
 

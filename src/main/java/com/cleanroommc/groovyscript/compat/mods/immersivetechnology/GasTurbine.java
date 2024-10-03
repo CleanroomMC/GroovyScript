@@ -47,7 +47,7 @@ public class GasTurbine extends StandardListRegistry<GasTurbineRecipe> {
         });
     }
 
-    @MethodDescription(example = @Example(value = "fluid('fluegas')",commented = true))
+    @MethodDescription(example = @Example(value = "fluid('fluegas')", commented = true))
     public void removeByOutput(IIngredient output) {
         getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidOutputs()) {

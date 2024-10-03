@@ -144,7 +144,7 @@ public class LootEntryBuilder {
 
     public LootEntryBuilder enchantRandomly(Enchantment[] enchantments, LootCondition... conditions) {
         List<Enchantment> list = (enchantments != null) ? Lists.newArrayList(enchantments) : null;
-        this.functions.add(new EnchantRandomly((conditions == null)? EMPTY_CONDITIONS : conditions, list));
+        this.functions.add(new EnchantRandomly((conditions == null) ? EMPTY_CONDITIONS : conditions, list));
         return this;
     }
 
@@ -164,7 +164,7 @@ public class LootEntryBuilder {
         out.add(min < 0.0f, () -> "lootingEnchantBonus minimum cannot be less than 0.");
         out.add(max < 0.0f, () -> "lootingEnchantBonus maximum cannot be less than 0.");
         out.add(limit < 0, () -> "lootingEnchantBonus limit cannot be less than 0.");
-        this.functions.add(new LootingEnchantBonus((conditions == null)? EMPTY_CONDITIONS : conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f)), Math.max(limit, 0)));
+        this.functions.add(new LootingEnchantBonus((conditions == null) ? EMPTY_CONDITIONS : conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f)), Math.max(limit, 0)));
         return this;
     }
 
@@ -183,7 +183,7 @@ public class LootEntryBuilder {
     public LootEntryBuilder setDamage(int min, int max, LootCondition... conditions) {
         out.add(min < 0 || min >= 32767, () -> "setDamage minimum cannot be less than 0 or more than 32766.");
         out.add(max < 0 || min >= 32767, () -> "setDamage maximum cannot be less than 0 or more than 32766.");
-        this.functions.add(new SetDamage((conditions == null)? EMPTY_CONDITIONS : conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f))));
+        this.functions.add(new SetDamage((conditions == null) ? EMPTY_CONDITIONS : conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f))));
         return this;
     }
 
@@ -202,7 +202,7 @@ public class LootEntryBuilder {
     public LootEntryBuilder setCount(int min, int max, LootCondition... conditions) {
         out.add(min < 0, () -> "setCount minimum cannot be less than 0.");
         out.add(max < 0, () -> "setCount maximum cannot be less than 0.");
-        this.functions.add(new SetCount((conditions == null)? EMPTY_CONDITIONS : conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f))));
+        this.functions.add(new SetCount((conditions == null) ? EMPTY_CONDITIONS : conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f))));
         return this;
     }
 
@@ -221,7 +221,7 @@ public class LootEntryBuilder {
     public LootEntryBuilder setMetadata(int min, int max, LootCondition... conditions) {
         out.add(min < 0 || min >= 32767, () -> "setMetadata minimum cannot be less than 0 or more than 32766.");
         out.add(max < 0 || min >= 32767, () -> "setMetadata maximum cannot be less than 0 or more than 32766.");
-        this.functions.add(new SetMetadata((conditions == null)? EMPTY_CONDITIONS : conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f))));
+        this.functions.add(new SetMetadata((conditions == null) ? EMPTY_CONDITIONS : conditions, new RandomValueRange(Math.max(min, 0.0f), Math.max(max, 0.0f))));
         return this;
     }
 
@@ -256,7 +256,7 @@ public class LootEntryBuilder {
     }
 
     public LootEntryBuilder setNBT(NBTTagCompound tag, LootCondition... conditions) {
-        this.functions.add(new SetNBT((conditions == null)? EMPTY_CONDITIONS : conditions, tag));
+        this.functions.add(new SetNBT((conditions == null) ? EMPTY_CONDITIONS : conditions, tag));
         return this;
     }
 
@@ -332,9 +332,11 @@ public class LootEntryBuilder {
 
     public void register() {
         if (!validate(true)) return;
-        VanillaModule.loot.tables.get(tableName).getPool(poolName).addEntry(
-                new LootEntryItem(item, weight, quality, functions.toArray(new LootFunction[0]), conditions.toArray(new LootCondition[0]), name)
-        );
+        VanillaModule.loot.tables.get(tableName)
+                .getPool(poolName)
+                .addEntry(
+                        new LootEntryItem(item, weight, quality, functions.toArray(new LootFunction[0]), conditions.toArray(new LootCondition[0]), name)
+                );
     }
 
 }

@@ -79,7 +79,9 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
 
     @MethodDescription
     public void removeByInput(IBlockState input) {
-        for (Map.Entry<IBlockState, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashing().entrySet().stream()
+        for (Map.Entry<IBlockState, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashing()
+                .entrySet()
+                .stream()
                 .filter(r -> r.getKey().equals(input))
                 .collect(Collectors.toList())) {
             addBackup(Pair.of(recipe.getKey(), recipe.getValue()));
@@ -89,7 +91,9 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
 
     @MethodDescription(example = @Example("blockstate('minecraft:packed_ice')"))
     public void removeByInput(Block input) {
-        for (Map.Entry<Block, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashingBlocks().entrySet().stream()
+        for (Map.Entry<Block, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashingBlocks()
+                .entrySet()
+                .stream()
                 .filter(r -> r.getKey().equals(input))
                 .collect(Collectors.toList())) {
             blockStorage.addBackup(Pair.of(recipe.getKey(), recipe.getValue()));
@@ -99,13 +103,17 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
 
     @MethodDescription(example = @Example("blockstate('minecraft:cobblestone')"))
     public void removeByOutput(IBlockState output) {
-        for (Map.Entry<IBlockState, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashing().entrySet().stream()
+        for (Map.Entry<IBlockState, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashing()
+                .entrySet()
+                .stream()
                 .filter(r -> r.getValue().equals(output))
                 .collect(Collectors.toList())) {
             addBackup(Pair.of(recipe.getKey(), recipe.getValue()));
             InspirationsRegistryAccessor.getAnvilSmashing().remove(recipe.getKey(), recipe.getValue());
         }
-        for (Map.Entry<Block, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashingBlocks().entrySet().stream()
+        for (Map.Entry<Block, IBlockState> recipe : InspirationsRegistryAccessor.getAnvilSmashingBlocks()
+                .entrySet()
+                .stream()
                 .filter(r -> r.getValue().equals(output))
                 .collect(Collectors.toList())) {
             blockStorage.addBackup(Pair.of(recipe.getKey(), recipe.getValue()));

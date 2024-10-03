@@ -53,7 +53,7 @@ public class GroovyPropertyContainer {
     protected void addPropertyFieldsOf(Object object, boolean privateToo) {
         boolean staticOnly = false;
         Class<?> clazz;
-        if (object instanceof Class<?> c) {
+        if (object instanceof Class<?>c) {
             clazz = c;
             staticOnly = true;
         } else {
@@ -61,10 +61,7 @@ public class GroovyPropertyContainer {
         }
         for (Field field : clazz.getDeclaredFields()) {
             boolean isStatic = Modifier.isStatic(field.getModifiers());
-            if (!field.isAnnotationPresent(GroovyBlacklist.class) &&
-                INamed.class.isAssignableFrom(field.getType()) &&
-                (!staticOnly || isStatic) &&
-                (privateToo || (Modifier.isPublic(field.getModifiers())))) {
+            if (!field.isAnnotationPresent(GroovyBlacklist.class) && INamed.class.isAssignableFrom(field.getType()) && (!staticOnly || isStatic) && (privateToo || (Modifier.isPublic(field.getModifiers())))) {
                 try {
                     if (!field.isAccessible()) field.setAccessible(true);
                     Object o = field.get(isStatic ? null : object);
@@ -78,4 +75,3 @@ public class GroovyPropertyContainer {
         }
     }
 }
-

@@ -28,21 +28,28 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
 
     @RecipeBuilderDescription(example = {
             @Example(".input(block('minecraft:stone')).output(block('astralsorcery:blockmarble')).cost(100.0).constellation(constellation('armara')).inputDisplayStack(item('minecraft:stone')).outputDisplayStack(item('minecraft:dye:15').withNbt([display:[Name:'Marble']])) "),
-            @Example(".input(blockstate('minecraft:pumpkin')).output(blockstate('minecraft:diamond_block')).cost(0)")})
+            @Example(".input(blockstate('minecraft:pumpkin')).output(blockstate('minecraft:diamond_block')).cost(0)")
+    })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    public LightOreTransmutations.Transmutation add(Block input, IBlockState output,
-                                                    @NotNull ItemStack inputDisplay, @NotNull ItemStack outputDisplay, double cost) {
+    public LightOreTransmutations.Transmutation add(Block input,
+                                                    IBlockState output,
+                                                    @NotNull ItemStack inputDisplay,
+                                                    @NotNull ItemStack outputDisplay,
+                                                    double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
         getRecipes().add(recipe);
         return recipe;
     }
 
-    public LightOreTransmutations.Transmutation add(IBlockState input, IBlockState output,
-                                                    @NotNull ItemStack inputDisplay, @NotNull ItemStack outputDisplay, double cost) {
+    public LightOreTransmutations.Transmutation add(IBlockState input,
+                                                    IBlockState output,
+                                                    @NotNull ItemStack inputDisplay,
+                                                    @NotNull ItemStack outputDisplay,
+                                                    double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
         getRecipes().add(recipe);

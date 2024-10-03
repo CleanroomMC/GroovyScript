@@ -40,7 +40,9 @@ public class ThermopneumaticProcessingPlant extends StandardListRegistry<IThermo
         });
     }
 
-    @MethodDescription(example = {@Example("item('minecraft:coal')"), @Example("fluid('diesel')")})
+    @MethodDescription(example = {
+            @Example("item('minecraft:coal')"), @Example("fluid('diesel')")
+    })
     public boolean removeByInput(IIngredient input) {
         return getRecipes().removeIf(entry -> {
             if (entry instanceof BasicThermopneumaticProcessingPlantRecipe recipe && (input.test(recipe.getInputLiquid()) || input.test(recipe.getInputItem()))) {

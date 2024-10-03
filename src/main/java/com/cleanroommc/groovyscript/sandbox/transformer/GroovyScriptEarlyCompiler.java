@@ -47,9 +47,10 @@ public class GroovyScriptEarlyCompiler extends CompilationCustomizer {
                 if (parts.length > 2) {
                     prop = new PropertyExpression(prop, parts[2]);
                 }
-                Expression expr = new DeclarationExpression(new VariableExpression(imp.getAlias()),
-                                                            Token.newSymbol(Types.ASSIGN, imp.getLineNumber(), 5 + parts[1].length()),
-                                                            prop);
+                Expression expr = new DeclarationExpression(
+                        new VariableExpression(imp.getAlias()),
+                        Token.newSymbol(Types.ASSIGN, imp.getLineNumber(), 5 + parts[1].length()),
+                        prop);
                 scriptStatement.getStatements().add(0, new ExpressionStatement(expr));
                 return true;
             }

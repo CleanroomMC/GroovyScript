@@ -65,7 +65,9 @@ public class SagMill extends StandardListRegistry<Recipe> {
         @Property(defaultValue = "RecipeBonusType.NONE")
         private RecipeBonusType bonusType = RecipeBonusType.NONE;
 
-        @RecipeBuilderMethodDescription(field = {"output", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "chances"
+        })
         public RecipeBuilder output(ItemStack itemStack, float chance) {
             this.output.add(itemStack);
             this.chances.add(Math.max(0, chance));
@@ -73,7 +75,9 @@ public class SagMill extends StandardListRegistry<Recipe> {
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = {"output", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "chances"
+        })
         public AbstractRecipeBuilder<Recipe> output(ItemStack output) {
             return output(output, 1.0f);
         }

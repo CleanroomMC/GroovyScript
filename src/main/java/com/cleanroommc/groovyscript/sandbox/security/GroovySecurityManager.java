@@ -104,8 +104,7 @@ public class GroovySecurityManager {
     }
 
     public boolean isValid(Method method) {
-        return isValidMethod(method.getDeclaringClass(), method.getName()) &&
-               !method.isAnnotationPresent(GroovyBlacklist.class);
+        return isValidMethod(method.getDeclaringClass(), method.getName()) && !method.isAnnotationPresent(GroovyBlacklist.class);
     }
 
     public boolean isValid(MetaMethod method) {
@@ -117,8 +116,7 @@ public class GroovySecurityManager {
     }
 
     public boolean isValid(Class<?> clazz) {
-        return this.whiteListedClasses.contains(clazz) ||
-               (isValidClass(clazz) && isValidPackage(clazz));
+        return this.whiteListedClasses.contains(clazz) || (isValidClass(clazz) && isValidPackage(clazz));
     }
 
     public boolean isValidPackage(Class<?> clazz) {

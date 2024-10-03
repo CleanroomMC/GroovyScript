@@ -67,9 +67,11 @@ public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IIngredient> streamRecipes() {
-        Stream<IIngredient> normalRecipes = PrimordialisReactorManager.getAllEntries().stream()
+        Stream<IIngredient> normalRecipes = PrimordialisReactorManager.getAllEntries()
+                .stream()
                 .map(ItemsIngredient::new);
-        Stream<IIngredient> oreDictRecipes = PrimordialisReactorManager.getAllOreEntries().stream()
+        Stream<IIngredient> oreDictRecipes = PrimordialisReactorManager.getAllOreEntries()
+                .stream()
                 .map(OreDictIngredient::new);
         List<IIngredient> items = Stream.concat(normalRecipes, oreDictRecipes).collect(Collectors.toList());
         return new SimpleObjectStream<>(items).setRemover(this::remove);

@@ -237,8 +237,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
             validateItems(msg, 1, 1, 0, 1);
             if (isFilling) validateFluids(msg, 0, 0, 1, 1);
             else validateFluids(msg, 1, 1, 0, 0);
-            msg.add(msg.hasSubMessages(), "The Tank Recipe Builder requires an input fluid stack if it is draining and " +
-                                          "an output fluid stack if it is filling. This recipe was {}.", isFilling ? "filling" : "draining");
+            msg.add(msg.hasSubMessages(), "The Tank Recipe Builder requires an input fluid stack if it is draining and " + "an output fluid stack if it is filling. This recipe was {}.", isFilling ? "filling" : "draining");
         }
 
         @Override
@@ -247,8 +246,14 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
             if (!validate()) return null;
             Things in = RecipeUtils.toThings(input.get(0));
             Things out = new Things().add(output.getOrEmpty(0));
-            TankMachineRecipe recipe = new TankMachineRecipe(super.name.toString(), isFilling, in, isFilling ? fluidOutput.get(0)
-                                                                                                             : fluidInput.get(0), out, TankMachineRecipe.Logic.NONE, RecipeLevel.IGNORE);
+            TankMachineRecipe recipe = new TankMachineRecipe(
+                    super.name.toString(),
+                    isFilling,
+                    in,
+                    isFilling ? fluidOutput.get(0) : fluidInput.get(0),
+                    out,
+                    TankMachineRecipe.Logic.NONE,
+                    RecipeLevel.IGNORE);
 
             ModSupport.ENDER_IO.get().tank.add(recipe);
             return recipe;

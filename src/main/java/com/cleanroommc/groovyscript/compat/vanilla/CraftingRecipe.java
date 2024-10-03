@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
+
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.core.mixin.InventoryCraftingAccess;
 import com.cleanroommc.groovyscript.core.mixin.SlotCraftingAccess;
@@ -20,8 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.stream.Collectors.toCollection;
 
 public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe, ICraftingRecipe {
 

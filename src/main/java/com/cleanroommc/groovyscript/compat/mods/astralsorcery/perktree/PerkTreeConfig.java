@@ -28,7 +28,9 @@ public class PerkTreeConfig extends VirtualizedRegistry<Closure<Long>> {
 
     @MethodDescription(example = @Example(value = "{ int i, long prev -> prev + 1000L + MathHelper.lfloor(Math.pow(2.0, i / 2.0F + 3)) }", imports = "net.minecraft.util.math.MathHelper"), type = MethodDescription.Type.VALUE)
     public void setXpFunction(Closure<Long> func) {
-        if (!Arrays.equals(func.getParameterTypes(), new Class[]{int.class, long.class})) {
+        if (!Arrays.equals(func.getParameterTypes(), new Class[]{
+                int.class, long.class
+        })) {
             GroovyLog.msg("Warning: Astral Perk xp closures must take the following parameters (int levelNumber, long previousLevelXp)").debug().post();
         }
         this.xpFunction = func;

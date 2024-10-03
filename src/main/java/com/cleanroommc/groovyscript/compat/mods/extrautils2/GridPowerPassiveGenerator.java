@@ -70,8 +70,9 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
         setPowerMultiplier(new ResourceLocation(generator), worldPowerMultiplier);
     }
 
-    @MethodDescription(type = MethodDescription.Type.VALUE,
-                       example = @Example(value = "resource('generators:solar'), { TilePassiveGenerator generator, World world -> 100f }", imports = "com.rwtema.extrautils2.tile.TilePassiveGenerator"))
+    @MethodDescription(
+            type = MethodDescription.Type.VALUE,
+            example = @Example(value = "resource('generators:solar'), { TilePassiveGenerator generator, World world -> 100f }", imports = "com.rwtema.extrautils2.tile.TilePassiveGenerator"))
     public void setPowerLevel(ResourceLocation generator, Closure<Float> powerLevel) {
         if (powerLevel == null) {
             GroovyLog.msg("Extra Utilities 2 Grid Power Passive Generator powerLevel closure must be defined")
@@ -79,7 +80,9 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
                     .post();
             return;
         }
-        if (!Arrays.equals(powerLevel.getParameterTypes(), new Class[]{TilePassiveGenerator.class, World.class})) {
+        if (!Arrays.equals(powerLevel.getParameterTypes(), new Class[]{
+                TilePassiveGenerator.class, World.class
+        })) {
             GroovyLog.msg("Extra Utilities 2 Grid Power Passive Generator powerLevel closure should be a closure with exactly two parameters:")
                     .add("com.rwtema.extrautils2.tile.TilePassiveGenerator generator, net.minecraft.world.World world in that order.")
                     .add("but had {}, {} instead", (Object[]) powerLevel.getParameterTypes())

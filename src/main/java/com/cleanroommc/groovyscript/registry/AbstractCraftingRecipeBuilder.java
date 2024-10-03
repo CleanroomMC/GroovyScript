@@ -255,7 +255,9 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
         public AbstractShaped<T> row(String row) {
             if (this.keyBasedMatrix == null) {
-                this.keyBasedMatrix = new String[]{row};
+                this.keyBasedMatrix = new String[]{
+                        row
+                };
             } else {
                 this.keyBasedMatrix = ArrayUtils.add(this.keyBasedMatrix, row);
             }
@@ -302,8 +304,11 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
 
     public abstract static class AbstractShapeless<T> extends AbstractCraftingRecipeBuilder<T> {
 
-        @Property(value = "groovyscript.wiki.craftingrecipe.ingredients.value",
-                  comp = @Comp(gte = 1, lte = 9), priority = 250, hierarchy = 20)
+        @Property(
+                value = "groovyscript.wiki.craftingrecipe.ingredients.value",
+                comp = @Comp(gte = 1, lte = 9),
+                priority = 250,
+                hierarchy = 20)
         protected final List<IIngredient> ingredients = new ArrayList<>();
 
         public AbstractShapeless(int width, int height) {

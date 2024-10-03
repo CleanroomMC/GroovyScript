@@ -127,7 +127,10 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable IInscriberRecipe register() {
             if (!validate()) return null;
-            IInscriberRecipeBuilder builder = AEApi.instance().registries().inscriber().builder()
+            IInscriberRecipeBuilder builder = AEApi.instance()
+                    .registries()
+                    .inscriber()
+                    .builder()
                     .withInputs(input.stream().flatMap(x -> Arrays.stream(x.toMcIngredient().getMatchingStacks())).collect(Collectors.toList()))
                     .withOutput(output.get(0))
                     .withProcessType(type);

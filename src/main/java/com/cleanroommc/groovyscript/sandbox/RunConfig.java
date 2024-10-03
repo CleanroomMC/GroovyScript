@@ -52,8 +52,9 @@ public class RunConfig {
         JsonObject packmode = new JsonObject();
         packmode.add("values", new JsonArray());
         packmode.addProperty("default", "");
-        packmode.addProperty("_comment",
-                             "By default the packmode is not synced with the packmode mod. You can enable integration, but you can no longer change packmode on the fly.");
+        packmode.addProperty(
+                "_comment",
+                "By default the packmode is not synced with the packmode mod. You can enable integration, but you can no longer change packmode on the fly.");
         packmode.addProperty("integratePackmodeMod", false);
         json.add("packmode", packmode);
         return json;
@@ -85,7 +86,9 @@ public class RunConfig {
     private boolean warnedAboutInvalidPackId;
     private int packmodeConfigState;
 
-    public static final String[] GROOVY_SUFFIXES = {".groovy", ".gvy", ".gy", ".gsh"};
+    public static final String[] GROOVY_SUFFIXES = {
+            ".groovy", ".gvy", ".gy", ".gsh"
+    };
 
     public static boolean isGroovyFile(String path) {
         for (String suffix : GROOVY_SUFFIXES) {
@@ -158,9 +161,9 @@ public class RunConfig {
         List<Pair<String, String>> pathsList = new ArrayList<>();
 
         GroovyLog.Msg errorMsg = GroovyLog.msg("Fatal while parsing runConfig.json")
-                                          .add("Files should NOT be ran in multiple loaders!")
-                                          .logToMc()
-                                          .fatal();
+                .add("Files should NOT be ran in multiple loaders!")
+                .logToMc()
+                .fatal();
 
         for (Map.Entry<String, JsonElement> entry : jsonLoaders.entrySet()) {
             JsonArray loader = (JsonArray) entry.getValue();
@@ -224,11 +227,11 @@ public class RunConfig {
     public String getPackId() {
         if (this.invalidPackId && !this.warnedAboutInvalidPackId) {
             GroovyLog.msg("Fatal error while trying to use the pack id")
-                     .add("specified pack id is invalid or empty ('{}')", this.packId)
-                     .add("pack id must only contain lower case letters and underscores")
-                     .add("see https://cleanroommc.com/groovy-script/getting_started/run_config for more info")
-                     .fatal()
-                     .post();
+                    .add("specified pack id is invalid or empty ('{}')", this.packId)
+                    .add("pack id must only contain lower case letters and underscores")
+                    .add("see https://cleanroommc.com/groovy-script/getting_started/run_config for more info")
+                    .fatal()
+                    .post();
             this.warnedAboutInvalidPackId = true;
         }
         return packId;
@@ -320,7 +323,9 @@ public class RunConfig {
                 continue;
             }
             int pathSize = path.split(separator).length;
-            try (Stream<Path> stream = Files.walk(rootFile.toPath(), isDebug() ? new FileVisitOption[] { FileVisitOption.FOLLOW_LINKS } : new FileVisitOption[0])) {
+            try (Stream<Path> stream = Files.walk(rootFile.toPath(), isDebug() ? new FileVisitOption[]{
+                    FileVisitOption.FOLLOW_LINKS
+            } : new FileVisitOption[0])) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile)
                         //.filter(Preprocessor::validatePreprocessors)

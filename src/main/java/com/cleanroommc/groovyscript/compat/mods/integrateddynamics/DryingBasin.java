@@ -126,19 +126,23 @@ public class DryingBasin extends StandardListRegistry<IRecipe<IngredientAndFluid
 
             if (basic) {
                 ModSupport.INTEGRATED_DYNAMICS.get().dryingBasin.addScripted(
-                        BlockDryingBasin.getInstance().getRecipeRegistry().registerRecipe(
-                                new IngredientAndFluidStackRecipeComponent(itemInput, true, fluidInput.getOrEmpty(0)),
-                                new IngredientAndFluidStackRecipeComponent(output.get(0), fluidOutput.getOrEmpty(0)),
-                                new DurationRecipeProperties(duration)
-                        ));
+                        BlockDryingBasin.getInstance()
+                                .getRecipeRegistry()
+                                .registerRecipe(
+                                        new IngredientAndFluidStackRecipeComponent(itemInput, true, fluidInput.getOrEmpty(0)),
+                                        new IngredientAndFluidStackRecipeComponent(output.get(0), fluidOutput.getOrEmpty(0)),
+                                        new DurationRecipeProperties(duration)
+                                ));
             }
             if (mechanical) {
                 ModSupport.INTEGRATED_DYNAMICS.get().mechanicalDryingBasin.addScripted(
-                        BlockMechanicalDryingBasin.getInstance().getRecipeRegistry().registerRecipe(
-                                new IngredientAndFluidStackRecipeComponent(itemInput, true, fluidInput.getOrEmpty(0)),
-                                new IngredientAndFluidStackRecipeComponent(output.getOrEmpty(0), fluidOutput.getOrEmpty(0)),
-                                new DurationRecipeProperties(duration)
-                        ));
+                        BlockMechanicalDryingBasin.getInstance()
+                                .getRecipeRegistry()
+                                .registerRecipe(
+                                        new IngredientAndFluidStackRecipeComponent(itemInput, true, fluidInput.getOrEmpty(0)),
+                                        new IngredientAndFluidStackRecipeComponent(output.getOrEmpty(0), fluidOutput.getOrEmpty(0)),
+                                        new DurationRecipeProperties(duration)
+                                ));
             }
             return null;
         }

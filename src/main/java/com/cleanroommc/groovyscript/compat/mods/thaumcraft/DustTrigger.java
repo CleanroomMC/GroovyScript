@@ -59,13 +59,11 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         boolean found = false;
         while (it.hasNext()) {
             final IDustTrigger registeredTrigger = it.next();
-            if (trigger instanceof DustTriggerSimple && registeredTrigger instanceof DustTriggerSimple
-                && trigger.equals(registeredTrigger)) {
+            if (trigger instanceof DustTriggerSimple && registeredTrigger instanceof DustTriggerSimple && trigger.equals(registeredTrigger)) {
                 it.remove();
                 addBackup(trigger);
                 found = true;
-            } else if (trigger instanceof DustTriggerOre && registeredTrigger instanceof DustTriggerOre
-                       && trigger.equals(registeredTrigger)) {
+            } else if (trigger instanceof DustTriggerOre && registeredTrigger instanceof DustTriggerOre && trigger.equals(registeredTrigger)) {
                 it.remove();
                 addBackup(trigger);
                 found = true;
@@ -81,12 +79,10 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         while (it.hasNext()) {
             final IDustTrigger trigger = it.next();
             try {
-                if (trigger instanceof DustTriggerSimple && simpleTriggerResult != null
-                    && output.isItemEqual((ItemStack) simpleTriggerResult.get(trigger))) {
+                if (trigger instanceof DustTriggerSimple && simpleTriggerResult != null && output.isItemEqual((ItemStack) simpleTriggerResult.get(trigger))) {
                     it.remove();
                     addBackup(trigger);
-                } else if (trigger instanceof DustTriggerOre && oreTriggerResult != null
-                           && output.isItemEqual((ItemStack) oreTriggerResult.get(trigger))) {
+                } else if (trigger instanceof DustTriggerOre && oreTriggerResult != null && output.isItemEqual((ItemStack) oreTriggerResult.get(trigger))) {
                     it.remove();
                     addBackup(trigger);
                 }

@@ -67,7 +67,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
     private LoadStage currentLoadStage;
 
     public GroovyScriptSandbox(File scriptRoot, File cacheRoot) throws MalformedURLException {
-        super(new URL[]{scriptRoot.toURI().toURL()});
+        super(new URL[]{
+                scriptRoot.toURI().toURL()
+        });
         this.scriptRoot = scriptRoot;
         this.cacheRoot = cacheRoot;
         registerBinding("Mods", ModSupport.INSTANCE);
@@ -76,36 +78,37 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
         this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
         registerStaticImports(GroovyHelper.class, MathHelper.class);
-        this.importCustomizer.addImports("net.minecraft.world.World",
-                                         "net.minecraft.block.state.IBlockState",
-                                         "net.minecraft.block.Block",
-                                         "net.minecraft.block.SoundType",
-                                         "net.minecraft.enchantment.Enchantment",
-                                         "net.minecraft.entity.Entity",
-                                         "net.minecraft.entity.player.EntityPlayer",
-                                         "net.minecraft.init.Biomes",
-                                         "net.minecraft.init.Blocks",
-                                         "net.minecraft.init.Enchantments",
-                                         "net.minecraft.init.Items",
-                                         "net.minecraft.init.MobEffects",
-                                         "net.minecraft.init.PotionTypes",
-                                         "net.minecraft.init.SoundEvents",
-                                         "net.minecraft.item.EnumRarity",
-                                         "net.minecraft.item.Item",
-                                         "net.minecraft.item.ItemStack",
-                                         "net.minecraft.nbt.NBTTagCompound",
-                                         "net.minecraft.nbt.NBTTagList",
-                                         "net.minecraft.tileentity.TileEntity",
-                                         "net.minecraft.util.math.BlockPos",
-                                         "net.minecraft.util.DamageSource",
-                                         "net.minecraft.util.EnumHand",
-                                         "net.minecraft.util.EnumHandSide",
-                                         "net.minecraft.util.EnumFacing",
-                                         "net.minecraft.util.ResourceLocation",
-                                         "net.minecraftforge.fml.common.eventhandler.EventPriority",
-                                         "com.cleanroommc.groovyscript.event.EventBusType",
-                                         "net.minecraftforge.fml.relauncher.Side",
-                                         "net.minecraftforge.fml.relauncher.SideOnly");
+        this.importCustomizer.addImports(
+                "net.minecraft.world.World",
+                "net.minecraft.block.state.IBlockState",
+                "net.minecraft.block.Block",
+                "net.minecraft.block.SoundType",
+                "net.minecraft.enchantment.Enchantment",
+                "net.minecraft.entity.Entity",
+                "net.minecraft.entity.player.EntityPlayer",
+                "net.minecraft.init.Biomes",
+                "net.minecraft.init.Blocks",
+                "net.minecraft.init.Enchantments",
+                "net.minecraft.init.Items",
+                "net.minecraft.init.MobEffects",
+                "net.minecraft.init.PotionTypes",
+                "net.minecraft.init.SoundEvents",
+                "net.minecraft.item.EnumRarity",
+                "net.minecraft.item.Item",
+                "net.minecraft.item.ItemStack",
+                "net.minecraft.nbt.NBTTagCompound",
+                "net.minecraft.nbt.NBTTagList",
+                "net.minecraft.tileentity.TileEntity",
+                "net.minecraft.util.math.BlockPos",
+                "net.minecraft.util.DamageSource",
+                "net.minecraft.util.EnumHand",
+                "net.minecraft.util.EnumHandSide",
+                "net.minecraft.util.EnumFacing",
+                "net.minecraft.util.ResourceLocation",
+                "net.minecraftforge.fml.common.eventhandler.EventPriority",
+                "com.cleanroommc.groovyscript.event.EventBusType",
+                "net.minecraftforge.fml.relauncher.Side",
+                "net.minecraftforge.fml.relauncher.SideOnly");
         this.storedExceptions = new Object2ObjectOpenHashMap<>();
         readIndex();
     }
@@ -239,9 +242,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
         // we need to find the source unit of the compiled class
         SourceUnit trueSource = su.getAST().getUnit().getScriptSourceLocation(mainClassName(clazz.getName()));
         String truePath = trueSource == null ? shortPath : FileUtil.relativize(this.scriptRoot.getPath(), trueSource.getName());
-        if (shortPath.equals(truePath) &&
-            su.getAST().getMainClassName() != null &&
-            !su.getAST().getMainClassName().equals(clazz.getName())) {
+        if (shortPath.equals(truePath) && su.getAST().getMainClassName() != null && !su.getAST().getMainClassName().equals(clazz.getName())) {
             inner = true;
         }
 

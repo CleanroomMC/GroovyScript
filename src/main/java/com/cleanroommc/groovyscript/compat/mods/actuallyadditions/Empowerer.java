@@ -104,7 +104,9 @@ public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
+        @RecipeBuilderMethodDescription(field = {
+                "red", "green", "blue"
+        })
         public RecipeBuilder particleColor(float... color) {
             if (color.length != 3) {
                 GroovyLog.get().warn("Error setting color in Actually Additions Empowerer recipe. color must contain 3 floats, yet it contained {}", color.length);
@@ -116,13 +118,17 @@ public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
+        @RecipeBuilderMethodDescription(field = {
+                "red", "green", "blue"
+        })
         public RecipeBuilder color(float... color) {
             return this.particleColor(color);
         }
 
 
-        @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
+        @RecipeBuilderMethodDescription(field = {
+                "red", "green", "blue"
+        })
         public RecipeBuilder particleColor(int hex) {
             Color color = new Color(hex);
             this.red = color.getRed() / 255.0f;
@@ -132,7 +138,9 @@ public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
         }
 
 
-        @RecipeBuilderMethodDescription(field = {"red", "green", "blue"})
+        @RecipeBuilderMethodDescription(field = {
+                "red", "green", "blue"
+        })
         public RecipeBuilder color(int hex) {
             return this.particleColor(hex);
         }
@@ -188,7 +196,9 @@ public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
                     input.get(3).toMcIngredient(),
                     energyPerStand,
                     time,
-                    new float[]{red, green, blue}
+                    new float[]{
+                            red, green, blue
+                    }
             );
             ModSupport.ACTUALLY_ADDITIONS.get().empowerer.add(recipe);
             return recipe;

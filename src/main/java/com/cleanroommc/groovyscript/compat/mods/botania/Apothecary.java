@@ -59,11 +59,21 @@ public class Apothecary extends StandardListRegistry<RecipePetals> {
 
     @MethodDescription(example = @Example("ore('runeFireB')"))
     public boolean removeByInput(IIngredient... inputs) {
-        List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
-                                                                                               : i.getMatchingStacks()[0]).collect(Collectors.toList());
+        List<Object> converted = Arrays.stream(inputs)
+                .map(
+                        i -> i instanceof OreDictIngredient
+                                ? ((OreDictIngredient) i).getOreDict()
+                                : i.getMatchingStacks()[0])
+                .collect(Collectors.toList());
         if (getRecipes().removeIf(recipe -> {
-            boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> o instanceof String || i instanceof String ? o.equals(i)
-                                                                                                                                                  : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));
+            boolean found = converted.stream()
+                    .allMatch(
+                            o -> recipe.getInputs()
+                                    .stream()
+                                    .anyMatch(
+                                            i -> o instanceof String || i instanceof String
+                                                    ? o.equals(i)
+                                                    : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));
             if (found) addBackup(recipe);
             return found;
         })) return true;
@@ -99,8 +109,14 @@ public class Apothecary extends StandardListRegistry<RecipePetals> {
         @RecipeBuilderRegistrationMethod
         public @Nullable RecipePetals register() {
             if (!validate()) return null;
-            RecipePetals recipe = new RecipePetals(output.get(0), input.stream().map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
-                                                                                                                         : i.getMatchingStacks()[0]).toArray());
+            RecipePetals recipe = new RecipePetals(
+                    output.get(0),
+                    input.stream()
+                            .map(
+                                    i -> i instanceof OreDictIngredient
+                                            ? ((OreDictIngredient) i).getOreDict()
+                                            : i.getMatchingStacks()[0])
+                            .toArray());
             add(recipe);
             return recipe;
         }

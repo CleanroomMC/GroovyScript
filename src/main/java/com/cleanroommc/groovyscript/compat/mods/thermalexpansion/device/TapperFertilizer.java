@@ -92,8 +92,7 @@ public class TapperFertilizer extends VirtualizedRegistry<TapperFertilizer.Tappe
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (TapperRecipe) obj;
-            return Objects.equals(this.bait, that.bait) &&
-                   this.multiplier == that.multiplier;
+            return Objects.equals(this.bait, that.bait) && this.multiplier == that.multiplier;
         }
 
         @Override
@@ -103,9 +102,7 @@ public class TapperFertilizer extends VirtualizedRegistry<TapperFertilizer.Tappe
 
         @Override
         public String toString() {
-            return "TapperRecipe[" +
-                   "bait=" + bait + ", " +
-                   "multiplier=" + multiplier + ']';
+            return "TapperRecipe[" + "bait=" + bait + ", " + "multiplier=" + multiplier + ']';
         }
     }
 

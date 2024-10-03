@@ -36,8 +36,8 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.awt.*;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES

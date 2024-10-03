@@ -101,8 +101,7 @@ public class Steam extends VirtualizedRegistry<Steam.SteamRecipe> {
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (SteamRecipe) obj;
-            return Objects.equals(this.comparableItemStack, that.comparableItemStack) &&
-                   this.energy == that.energy;
+            return Objects.equals(this.comparableItemStack, that.comparableItemStack) && this.energy == that.energy;
         }
 
         @Override
@@ -112,9 +111,7 @@ public class Steam extends VirtualizedRegistry<Steam.SteamRecipe> {
 
         @Override
         public String toString() {
-            return "SteamRecipe[" +
-                   "comparableItemStack=" + comparableItemStack + ", " +
-                   "energy=" + energy + ']';
+            return "SteamRecipe[" + "comparableItemStack=" + comparableItemStack + ", " + "energy=" + energy + ']';
         }
     }
 

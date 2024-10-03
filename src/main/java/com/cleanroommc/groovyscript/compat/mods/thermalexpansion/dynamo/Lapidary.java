@@ -101,8 +101,7 @@ public class Lapidary extends VirtualizedRegistry<Lapidary.LapidaryRecipe> {
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (LapidaryRecipe) obj;
-            return Objects.equals(this.comparableItemStack, that.comparableItemStack) &&
-                   this.energy == that.energy;
+            return Objects.equals(this.comparableItemStack, that.comparableItemStack) && this.energy == that.energy;
         }
 
         @Override
@@ -112,9 +111,7 @@ public class Lapidary extends VirtualizedRegistry<Lapidary.LapidaryRecipe> {
 
         @Override
         public String toString() {
-            return "LapidaryRecipe[" +
-                   "comparableItemStack=" + comparableItemStack + ", " +
-                   "energy=" + energy + ']';
+            return "LapidaryRecipe[" + "comparableItemStack=" + comparableItemStack + ", " + "energy=" + energy + ']';
         }
     }
 

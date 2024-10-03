@@ -30,10 +30,11 @@ public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, Lis
     @GroovyBlacklist
     public void applyAdditions(IModRegistry modRegistry) {
         for (Pair<List<IIngredient>, List<String>> entry : this.getScriptedRecipes()) {
-            modRegistry.addIngredientInfo(entry.getLeft().stream().flatMap(x -> Stream.of(x.getMatchingStacks())).collect(Collectors.toList()),
-                                          // Currently, it is only possible to add VanillaTypes.ITEM. It may be desirable to add the ability to do other types.
-                                          VanillaTypes.ITEM,
-                                          entry.getRight().toArray(new String[0]));
+            modRegistry.addIngredientInfo(
+                    entry.getLeft().stream().flatMap(x -> Stream.of(x.getMatchingStacks())).collect(Collectors.toList()),
+                    // Currently, it is only possible to add VanillaTypes.ITEM. It may be desirable to add the ability to do other types.
+                    VanillaTypes.ITEM,
+                    entry.getRight().toArray(new String[0]));
         }
     }
 

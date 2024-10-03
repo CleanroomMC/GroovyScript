@@ -179,8 +179,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (TapperItemRecipe) obj;
-            return Objects.equals(this.itemWrapper, that.itemWrapper) &&
-                   Objects.equals(this.fluidStack, that.fluidStack);
+            return Objects.equals(this.itemWrapper, that.itemWrapper) && Objects.equals(this.fluidStack, that.fluidStack);
         }
 
         @Override
@@ -190,9 +189,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
 
         @Override
         public String toString() {
-            return "TapperItemRecipe[" +
-                   "itemWrapper=" + itemWrapper + ", " +
-                   "fluidStack=" + fluidStack + ']';
+            return "TapperItemRecipe[" + "itemWrapper=" + itemWrapper + ", " + "fluidStack=" + fluidStack + ']';
         }
     }
 
@@ -220,8 +217,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (TapperBlockRecipe) obj;
-            return Objects.equals(this.blockWrapper, that.blockWrapper) &&
-                   Objects.equals(this.fluidStack, that.fluidStack);
+            return Objects.equals(this.blockWrapper, that.blockWrapper) && Objects.equals(this.fluidStack, that.fluidStack);
         }
 
         @Override
@@ -231,9 +227,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
 
         @Override
         public String toString() {
-            return "TapperBlockRecipe[" +
-                   "blockWrapper=" + blockWrapper + ", " +
-                   "fluidStack=" + fluidStack + ']';
+            return "TapperBlockRecipe[" + "blockWrapper=" + blockWrapper + ", " + "fluidStack=" + fluidStack + ']';
         }
     }
 

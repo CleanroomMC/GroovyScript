@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion;
 
-import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import cofh.thermalexpansion.util.managers.machine.CompactorManager;
 import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.device.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.dynamo.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine.*;

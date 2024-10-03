@@ -33,8 +33,10 @@ public class CuttingMachine extends BaseRegistry {
     }
 
     @Property(property = "input", comp = @Comp(gte = 1, lte = 4))
-    @Property(property = "output", comp = @Comp(gte = 1, lte = 4),
-              value = "groovyscript.wiki.advancedrocketry.output.value")
+    @Property(
+            property = "output",
+            comp = @Comp(gte = 1, lte = 4),
+            value = "groovyscript.wiki.advancedrocketry.output.value")
     public static class RecipeBuilder extends BaseRegistry.MultiblockRecipeBuilder {
 
         @Override

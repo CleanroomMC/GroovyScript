@@ -55,4 +55,3 @@ public class ModPropertyContainer extends GroovyPropertyContainer {
     }
 
 }
-

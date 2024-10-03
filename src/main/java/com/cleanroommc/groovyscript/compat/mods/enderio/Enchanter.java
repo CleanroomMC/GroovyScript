@@ -149,7 +149,8 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
         @Override
         public boolean validate() {
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding EnderIO Enchanter recipe").error()
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding EnderIO Enchanter recipe")
+                    .error()
                     .add(enchantment == null, () -> "enchantment must not be null")
                     .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
                     .add(IngredientHelper.isEmpty(book), () -> "custom book must not be empty")

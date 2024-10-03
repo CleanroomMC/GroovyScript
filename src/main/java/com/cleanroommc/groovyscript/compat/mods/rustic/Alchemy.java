@@ -135,9 +135,14 @@ public class Alchemy extends StandardListRegistry<ICondenserRecipe> {
         public @Nullable ICondenserRecipe register() {
             if (!validate()) return null;
 
-            ICondenserRecipe recipe = new CondenserRecipe(output.get(0), input, modifier, bottle,
-                                                          fluidInput.isEmpty() ? new FluidStack(FluidRegistry.WATER, 125) : fluidInput.getOrEmpty(0),
-                                                          time, advanced);
+            ICondenserRecipe recipe = new CondenserRecipe(
+                    output.get(0),
+                    input,
+                    modifier,
+                    bottle,
+                    fluidInput.isEmpty() ? new FluidStack(FluidRegistry.WATER, 125) : fluidInput.getOrEmpty(0),
+                    time,
+                    advanced);
 
             ModSupport.RUSTIC.get().alchemy.add(recipe);
             return recipe;

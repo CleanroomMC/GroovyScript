@@ -101,8 +101,7 @@ public class Numismatic extends VirtualizedRegistry<Numismatic.NumismaticRecipe>
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (NumismaticRecipe) obj;
-            return Objects.equals(this.comparableItemStack, that.comparableItemStack) &&
-                   this.energy == that.energy;
+            return Objects.equals(this.comparableItemStack, that.comparableItemStack) && this.energy == that.energy;
         }
 
         @Override
@@ -112,9 +111,7 @@ public class Numismatic extends VirtualizedRegistry<Numismatic.NumismaticRecipe>
 
         @Override
         public String toString() {
-            return "NumismaticRecipe[" +
-                   "comparableItemStack=" + comparableItemStack + ", " +
-                   "energy=" + energy + ']';
+            return "NumismaticRecipe[" + "comparableItemStack=" + comparableItemStack + ", " + "energy=" + energy + ']';
         }
     }
 

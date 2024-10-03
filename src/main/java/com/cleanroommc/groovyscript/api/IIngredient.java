@@ -89,7 +89,9 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
 
         @Override
         public ItemStack[] getMatchingStacks() {
-            return new ItemStack[]{ItemStack.EMPTY};
+            return new ItemStack[]{
+                    ItemStack.EMPTY
+            };
         }
 
         @Override

@@ -16,7 +16,9 @@ public class GroovyLootCondition implements LootCondition {
 
     public GroovyLootCondition(Closure<Object> condition) {
         this.condition = condition;
-        if (!Arrays.equals(condition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {
+        if (!Arrays.equals(condition.getParameterTypes(), new Class[]{
+                Random.class, LootContext.class
+        })) {
             GroovyLog.msg("Warning: LootCondition closures must take the following parameters (java.util.Random, net.minecraft.world.storage.loot.LootContext)")
                     .debug()
                     .post();

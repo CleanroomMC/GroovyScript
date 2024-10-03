@@ -56,9 +56,11 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         });
     }
 
-    @MethodDescription(example = {@Example("'demo', item('minecraft:diamond_block')"),
-                                  @Example("'demo', item('chisel:antiblock:3')"),
-                                  @Example("'demo', item('minecraft:sea_lantern')")}, type = MethodDescription.Type.ADDITION)
+    @MethodDescription(example = {
+            @Example("'demo', item('minecraft:diamond_block')"),
+            @Example("'demo', item('chisel:antiblock:3')"),
+            @Example("'demo', item('minecraft:sea_lantern')")
+    }, type = MethodDescription.Type.ADDITION)
     public void addVariation(String groupName, ItemStack item) {
         try {
             getRegistry().addVariation(groupName, CarvingUtils.variationFor(item, 0));
@@ -72,7 +74,9 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         }
     }
 
-    @MethodDescription(example = {@Example("'antiblock', item('chisel:antiblock:3')"), @Example("'antiblock', item('chisel:antiblock:15')")})
+    @MethodDescription(example = {
+            @Example("'antiblock', item('chisel:antiblock:3')"), @Example("'antiblock', item('chisel:antiblock:15')")
+    })
     public void removeVariation(String groupName, ItemStack item) {
         try {
             getRegistry().removeVariation(item, groupName);

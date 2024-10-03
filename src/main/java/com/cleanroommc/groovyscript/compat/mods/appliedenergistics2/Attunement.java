@@ -77,7 +77,8 @@ public class Attunement extends VirtualizedRegistry<Pair<Object, TunnelType>> {
 
     @MethodDescription
     public void removeByItem(ItemStack item) {
-        for (Map.Entry<ItemStack, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getTunnels().entrySet()
+        for (Map.Entry<ItemStack, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getTunnels()
+                .entrySet()
                 .stream()
                 .filter(x -> x.getKey().isItemEqual(item))
                 .collect(Collectors.toList())) {
@@ -88,7 +89,8 @@ public class Attunement extends VirtualizedRegistry<Pair<Object, TunnelType>> {
 
     @MethodDescription
     public void removeByMod(String modid) {
-        for (Map.Entry<String, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getModIdTunnels().entrySet()
+        for (Map.Entry<String, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getModIdTunnels()
+                .entrySet()
                 .stream()
                 .filter(x -> x.getKey().equals(modid))
                 .collect(Collectors.toList())) {
@@ -99,7 +101,8 @@ public class Attunement extends VirtualizedRegistry<Pair<Object, TunnelType>> {
 
     @MethodDescription
     public void removeByCapability(Capability<?> capability) {
-        for (Map.Entry<Capability<?>, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getCapTunnels().entrySet()
+        for (Map.Entry<Capability<?>, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getCapTunnels()
+                .entrySet()
                 .stream()
                 .filter(x -> x.getKey() == capability)
                 .collect(Collectors.toList())) {
@@ -110,21 +113,24 @@ public class Attunement extends VirtualizedRegistry<Pair<Object, TunnelType>> {
 
     @MethodDescription(example = @Example("tunnel('item')"))
     public void removeByTunnel(TunnelType tunnel) {
-        for (Map.Entry<ItemStack, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getTunnels().entrySet()
+        for (Map.Entry<ItemStack, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getTunnels()
+                .entrySet()
                 .stream()
                 .filter(x -> x.getValue() == tunnel)
                 .collect(Collectors.toList())) {
             addBackup(Pair.of(pair.getKey(), pair.getValue()));
             ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getTunnels().entrySet().removeIf(x -> x.getKey().isItemEqual(pair.getKey()));
         }
-        for (Map.Entry<String, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getModIdTunnels().entrySet()
+        for (Map.Entry<String, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getModIdTunnels()
+                .entrySet()
                 .stream()
                 .filter(x -> x.getValue() == tunnel)
                 .collect(Collectors.toList())) {
             addBackup(Pair.of(pair.getKey(), pair.getValue()));
             ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getModIdTunnels().entrySet().removeIf(x -> x.getKey().equals(pair.getKey()));
         }
-        for (Map.Entry<Capability<?>, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getCapTunnels().entrySet()
+        for (Map.Entry<Capability<?>, TunnelType> pair : ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getCapTunnels()
+                .entrySet()
                 .stream()
                 .filter(x -> x.getValue() == tunnel)
                 .collect(Collectors.toList())) {

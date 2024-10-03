@@ -23,10 +23,13 @@ public class GroovyScriptDocumentationProvider implements IDocumentationProvider
         var builder = new StringBuilder();
 
         if (node instanceof MethodNode methodNode && methodNode.getDeclaringClass().implementsInterface(new ClassNode(IScriptReloadable.class))) {
-            ModSupport.getAllContainers().stream()
+            ModSupport.getAllContainers()
+                    .stream()
                     .filter(IGroovyContainer::isLoaded)
                     .map(groovyContainer -> {
-                        var methodRegistry = groovyContainer.get().getRegistries().stream()
+                        var methodRegistry = groovyContainer.get()
+                                .getRegistries()
+                                .stream()
                                 .filter(registry -> registry.getClass().equals(methodNode.getDeclaringClass().getTypeClass()))
                                 .findFirst();
 
@@ -39,7 +42,9 @@ public class GroovyScriptDocumentationProvider implements IDocumentationProvider
                         }
 
                         return null;
-                    }).filter(Objects::nonNull).forEach(builder::append);
+                    })
+                    .filter(Objects::nonNull)
+                    .forEach(builder::append);
         }
 
         return builder.length() == 0 ? null : builder.toString();

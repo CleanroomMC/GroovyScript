@@ -58,12 +58,14 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
     @ApiStatus.Internal
     public void afterScriptLoad() {
         InsolatorManagerAccessor.getValidationSet().clear();
-        InsolatorManagerAccessor.getValidationSet().addAll(
-                InsolatorManagerAccessor.getRecipeMap().values().stream().map(InsolatorRecipe::getPrimaryInput).map(InsolatorManager::convertInput).collect(Collectors.toList())
-        );
-        InsolatorManagerAccessor.getValidationSet().addAll(
-                InsolatorManagerAccessor.getRecipeMap().values().stream().map(InsolatorRecipe::getSecondaryInput).map(InsolatorManager::convertInput).collect(Collectors.toList())
-        );
+        InsolatorManagerAccessor.getValidationSet()
+                .addAll(
+                        InsolatorManagerAccessor.getRecipeMap().values().stream().map(InsolatorRecipe::getPrimaryInput).map(InsolatorManager::convertInput).collect(Collectors.toList())
+                );
+        InsolatorManagerAccessor.getValidationSet()
+                .addAll(
+                        InsolatorManagerAccessor.getRecipeMap().values().stream().map(InsolatorRecipe::getSecondaryInput).map(InsolatorManager::convertInput).collect(Collectors.toList())
+                );
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)

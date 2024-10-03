@@ -49,14 +49,16 @@ public class Player extends NamedRegistry implements IScriptReloadable {
     public void addStartingItem(ItemStack item, int slot) {
         if (slot > 41) {
             GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 41 may cause some items to not be received by the player.")
-                    .warn().post();
+                    .warn()
+                    .post();
         }
         if (slot <= -1) {
             givenItemsAnySlot.add(item == null ? ItemStack.EMPTY : item);
         } else {
             if (givenItemsSlots.get(slot) != null) {
                 GroovyLog.msg("Warning: slot {} has already been occupied by another item.", slot)
-                        .error().post();
+                        .error()
+                        .post();
                 return;
             }
             givenItemsSlots.put(slot, item == null ? ItemStack.EMPTY : item);
@@ -66,7 +68,8 @@ public class Player extends NamedRegistry implements IScriptReloadable {
     public void setStartingItems(boolean isSlotSpecific, ItemStack... items) {
         if (items.length > 41) {
             GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 41 may cause some items to not be received by the player.")
-                    .warn().post();
+                    .warn()
+                    .post();
         }
         if (isSlotSpecific) {
             givenItemsSlots.clear();
@@ -82,7 +85,8 @@ public class Player extends NamedRegistry implements IScriptReloadable {
     public void setStartingItems(boolean isSlotSpecific, List<ItemStack> items) {
         if (items.size() > 41) {
             GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 41 may cause some items to not be received by the player.")
-                    .warn().post();
+                    .warn()
+                    .post();
         }
         if (isSlotSpecific) {
             givenItemsSlots.clear();

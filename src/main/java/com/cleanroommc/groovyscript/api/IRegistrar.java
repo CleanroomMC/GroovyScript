@@ -32,7 +32,7 @@ public interface IRegistrar {
     default void addFieldsOf(Object object) {
         boolean staticOnly = false;
         Class<?> clazz;
-        if (object instanceof Class<?> c) {
+        if (object instanceof Class<?>c) {
             clazz = c;
             staticOnly = true;
         } else {
@@ -40,10 +40,7 @@ public interface IRegistrar {
         }
         for (Field field : clazz.getDeclaredFields()) {
             boolean isStatic = Modifier.isStatic(field.getModifiers());
-            if (!field.isAnnotationPresent(GroovyBlacklist.class) &&
-                INamed.class.isAssignableFrom(field.getType()) &&
-                (!staticOnly || isStatic) &&
-                field.isAccessible()) {
+            if (!field.isAnnotationPresent(GroovyBlacklist.class) && INamed.class.isAssignableFrom(field.getType()) && (!staticOnly || isStatic) && field.isAccessible()) {
                 try {
                     Object o = field.get(isStatic ? null : object);
                     if (o != null) {

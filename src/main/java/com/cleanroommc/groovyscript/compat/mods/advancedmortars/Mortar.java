@@ -166,7 +166,9 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"secondaryOutput", "secondaryOutputChance"})
+        @RecipeBuilderMethodDescription(field = {
+                "secondaryOutput", "secondaryOutputChance"
+        })
         public RecipeBuilder secondaryOutput(ItemStack itemStack, float chance) {
             this.secondaryOutput = itemStack;
             this.secondaryOutputChance = chance;

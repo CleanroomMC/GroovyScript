@@ -165,8 +165,8 @@ public class Spawning extends VirtualizedRegistry<Pair<WootMobName, SpawnRecipe>
             if (!validate()) return null;
 
             SpawnRecipe recipe = defaultSpawnRecipe
-                                 ? ((SpawnRecipeRepositoryAccessor) Woot.spawnRecipeRepository).getDefaultSpawnRecipe()
-                                 : new SpawnRecipe();
+                    ? ((SpawnRecipeRepositoryAccessor) Woot.spawnRecipeRepository).getDefaultSpawnRecipe()
+                    : new SpawnRecipe();
             for (IIngredient item : input) {
                 recipe.addIngredient(item.getMatchingStacks()[0]);
             }

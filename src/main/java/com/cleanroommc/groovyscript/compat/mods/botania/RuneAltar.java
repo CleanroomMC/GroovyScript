@@ -53,12 +53,21 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
 
     @MethodDescription(example = @Example("ore('runeEarthB')"))
     public boolean removeByInput(IIngredient... inputs) {
-        List<Object> converted = Arrays.stream(inputs).map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict()
-                                                                                               : i.getMatchingStacks()[0]).collect(Collectors.toList());
+        List<Object> converted = Arrays.stream(inputs)
+                .map(
+                        i -> i instanceof OreDictIngredient
+                                ? ((OreDictIngredient) i).getOreDict()
+                                : i.getMatchingStacks()[0])
+                .collect(Collectors.toList());
         if (getRecipes().removeIf(recipe -> {
-            boolean found = converted.stream().allMatch(o -> recipe.getInputs().stream().anyMatch(i -> (i instanceof String || o instanceof String)
-                                                                                                       ? i.equals(o)
-                                                                                                       : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));
+            boolean found = converted.stream()
+                    .allMatch(
+                            o -> recipe.getInputs()
+                                    .stream()
+                                    .anyMatch(
+                                            i -> (i instanceof String || o instanceof String)
+                                                    ? i.equals(o)
+                                                    : ItemStack.areItemStacksEqual((ItemStack) i, (ItemStack) o)));
             if (found) addBackup(recipe);
             return found;
         })) return true;
@@ -97,7 +106,8 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
         public void validate(GroovyLog.Msg msg) {
             validateFluids(msg);
             validateItems(msg, 1, 20, 1, 1);
-            msg.add(input.stream().anyMatch(x -> x.test(new ItemStack(Item.getItemFromBlock(ModBlocks.livingrock), 1, 0))),
+            msg.add(
+                    input.stream().anyMatch(x -> x.test(new ItemStack(Item.getItemFromBlock(ModBlocks.livingrock), 1, 0))),
                     "input cannot contain a livingrock item");
             msg.add(mana < 1, "mana must be at least 1, got " + mana);
         }
@@ -106,9 +116,15 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
         @RecipeBuilderRegistrationMethod
         public @Nullable RecipeRuneAltar register() {
             if (!validate()) return null;
-            RecipeRuneAltar recipe = new RecipeRuneAltar(output.get(0), mana, input.stream().map(i -> i instanceof OreDictIngredient
-                                                                                                      ? ((OreDictIngredient) i).getOreDict()
-                                                                                                      : i.getMatchingStacks()[0]).toArray());
+            RecipeRuneAltar recipe = new RecipeRuneAltar(
+                    output.get(0),
+                    mana,
+                    input.stream()
+                            .map(
+                                    i -> i instanceof OreDictIngredient
+                                            ? ((OreDictIngredient) i).getOreDict()
+                                            : i.getMatchingStacks()[0])
+                            .toArray());
             add(recipe);
             return recipe;
         }
