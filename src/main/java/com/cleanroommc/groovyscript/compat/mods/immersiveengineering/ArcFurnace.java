@@ -10,9 +10,9 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class ArcFurnace extends StandardListRegistry<ArcFurnaceRecipe> {
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public ArcFurnaceRecipe add(ItemStack output, IIngredient input, List<IIngredient> additives, @Nonnull ItemStack slag, int time, int energyPerTick) {
+    public ArcFurnaceRecipe add(ItemStack output, IIngredient input, List<IIngredient> additives, @NotNull ItemStack slag, int time, int energyPerTick) {
         Object[] inputs = ArrayUtils.mapToArray(additives, ImmersiveEngineering::toIngredientStack);
         ArcFurnaceRecipe recipe = ArcFurnaceRecipe.addRecipe(output, ImmersiveEngineering.toIngredientStack(input), slag, time, energyPerTick, inputs);
         addScripted(recipe);

@@ -6,10 +6,9 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.util.text.TextFormatting;
+import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.KnowledgeType;
-
-import javax.annotation.Nullable;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES,

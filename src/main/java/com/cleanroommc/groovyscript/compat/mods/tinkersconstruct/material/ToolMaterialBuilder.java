@@ -9,11 +9,11 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
+import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.materials.*;
 import slimeknights.tconstruct.library.traits.ITrait;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;

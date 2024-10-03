@@ -10,9 +10,9 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +35,7 @@ public class Squeezer extends StandardListRegistry<SqueezerRecipe> {
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public SqueezerRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, IIngredient input, int energy) {
+    public SqueezerRecipe add(FluidStack fluidOutput, @NotNull ItemStack itemOutput, IIngredient input, int energy) {
         SqueezerRecipe recipe = new SqueezerRecipe(fluidOutput, itemOutput, ImmersiveEngineering.toIngredientStack(input), energy);
         add(recipe);
         return recipe;

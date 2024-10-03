@@ -10,9 +10,9 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 
 @RegistryDescription
@@ -29,7 +29,7 @@ public class Fermenter extends StandardListRegistry<FermenterRecipe> {
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public FermenterRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, IIngredient input, int energy) {
+    public FermenterRecipe add(FluidStack fluidOutput, @NotNull ItemStack itemOutput, IIngredient input, int energy) {
         FermenterRecipe recipe = new FermenterRecipe(fluidOutput.copy(), itemOutput.copy(), ImmersiveEngineering.toIngredientStack(input), energy);
         add(recipe);
         return recipe;

@@ -10,12 +10,12 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import zmaster587.libVulpes.interfaces.IRecipe;
 import zmaster587.libVulpes.recipe.RecipesMachine;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
@@ -23,7 +23,7 @@ public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
     protected abstract Class<?> getMachineClass();
 
     @Override
-    @Nonnull
+    @NotNull
     @SuppressWarnings("unchecked")
     public Collection<IRecipe> getRecipes() {
         Class<?> clazz = getMachineClass();

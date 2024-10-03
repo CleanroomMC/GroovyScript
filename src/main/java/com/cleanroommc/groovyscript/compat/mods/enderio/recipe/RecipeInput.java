@@ -6,8 +6,7 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import crazypants.enderio.base.recipe.IRecipeInput;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class RecipeInput implements IRecipeInput {
 
@@ -26,7 +25,7 @@ public class RecipeInput implements IRecipeInput {
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IRecipeInput copy() {
         return new RecipeInput(ing);
@@ -37,7 +36,7 @@ public class RecipeInput implements IRecipeInput {
         return ing instanceof FluidStack;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ItemStack getInput() {
         return ing.getMatchingStacks().length == 0 ? ItemStack.EMPTY : ing.getMatchingStacks()[0].copy();
@@ -59,7 +58,7 @@ public class RecipeInput implements IRecipeInput {
     }
 
     @Override
-    public boolean isInput(@Nonnull ItemStack test) {
+    public boolean isInput(@NotNull ItemStack test) {
         return ing.test(test);
     }
 

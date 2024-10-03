@@ -9,9 +9,9 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class BlastFurnace extends StandardListRegistry<BlastFurnaceRecipe> {
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public BlastFurnaceRecipe add(ItemStack output, IIngredient input, int time, @Nonnull ItemStack slag) {
+    public BlastFurnaceRecipe add(ItemStack output, IIngredient input, int time, @NotNull ItemStack slag) {
         BlastFurnaceRecipe recipe = new BlastFurnaceRecipe(output.copy(), ImmersiveEngineering.toIEInput(input), time, IngredientHelper.copy(slag));
         add(recipe);
         return recipe;
