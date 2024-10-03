@@ -77,4 +77,5 @@ public interface IObjectParser<T> {
             return v == null ? Result.error() : Result.some(trueTypeFunction.apply(v));
         };
     }
+
 }

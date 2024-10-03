@@ -189,5 +189,7 @@ public class Transmutation extends VirtualizedRegistry<TransmutationRecipe> {
             ModSupport.ROOTS.get().transmutation.add(super.name, recipe);
             return recipe;
         }
+
     }
+
 }

@@ -62,6 +62,7 @@ public class AltarRecipeBuilder {
 
     private static DiscoveryRecipe discoveryAltar(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, List<Integer> fluidStacks) {
         return new DiscoveryRecipe(registerNative(name, output, inputs)) {
+
             @Override
             public int getPassiveStarlightRequired() {
                 return starlightRequired;
@@ -76,11 +77,13 @@ public class AltarRecipeBuilder {
             public boolean mayDecrement(TileAltar ta, ShapedRecipeSlot slot) {
                 return !fluidStacks.contains(slot.getSlotID());
             }
+
         };
     }
 
     private static AttunementRecipe attunementAltar(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, List<Integer> fluidStacks) {
         AttunementRecipe recipe = new AttunementRecipe(registerNative(name, output, inputs)) {
+
             @Override
             public int getPassiveStarlightRequired() {
                 return starlightRequired;
@@ -100,6 +103,7 @@ public class AltarRecipeBuilder {
             public boolean mayDecrement(TileAltar ta, AttunementAltarSlot slot) {
                 return !fluidStacks.contains(slot.getSlotId());
             }
+
         };
 
         for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
@@ -113,6 +117,7 @@ public class AltarRecipeBuilder {
 
     private static ConstellationRecipe constellationAltar(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, List<Integer> fluidStacks) {
         ConstellationRecipe recipe = new ConstellationRecipe(registerNative(name, output, inputs)) {
+
             @Override
             public int getPassiveStarlightRequired() {
                 return starlightRequired;
@@ -137,6 +142,7 @@ public class AltarRecipeBuilder {
             public boolean mayDecrement(TileAltar ta, ConstellationAtlarSlot slot) {
                 return !fluidStacks.contains(slot.getSlotId());
             }
+
         };
 
         for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
@@ -155,6 +161,7 @@ public class AltarRecipeBuilder {
 
     private static TraitRecipe traitAltar(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, List<Integer> fluidStacks, IConstellation requiredConstellation, ItemHandle[] outerInputs) {
         TraitRecipe recipe = new TraitRecipe(registerNative(name, output, inputs)) {
+
             @Override
             public int getPassiveStarlightRequired() {
                 return starlightRequired;
@@ -184,6 +191,7 @@ public class AltarRecipeBuilder {
             public boolean mayDecrement(TileAltar ta, TraitRecipeSlot slot) {
                 return !fluidStacks.contains(slot.getSlotId());
             }
+
         };
 
         for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
@@ -379,5 +387,7 @@ public class AltarRecipeBuilder {
             ModSupport.ASTRAL_SORCERY.get().altar.add(recipe);
             return recipe;
         }
+
     }
+
 }

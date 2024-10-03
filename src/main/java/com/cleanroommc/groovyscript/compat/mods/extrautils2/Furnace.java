@@ -135,5 +135,7 @@ public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
             ModSupport.EXTRA_UTILITIES_2.get().furnace.add(recipe);
             return recipe;
         }
+
     }
+
 }

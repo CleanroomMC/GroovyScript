@@ -50,6 +50,7 @@ public abstract class CraftingRecipeBuilder {
 
             return recipe;
         }
+
     }
 
     @Property(property = "replace")
@@ -84,5 +85,7 @@ public abstract class CraftingRecipeBuilder {
             ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             return recipe;
         }
+
     }
+
 }

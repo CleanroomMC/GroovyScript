@@ -60,10 +60,12 @@ public class Content extends NamedRegistry {
 
     public CreativeTabs createCreativeTab(String name, ItemStack icon) {
         return new CreativeTabs(name) {
+
             @Override
             public @NotNull ItemStack createIcon() {
                 return icon.copy();
             }
+
         };
     }
 
@@ -78,4 +80,5 @@ public class Content extends NamedRegistry {
     public void setDefaultCreativeTab(CreativeTabs tab) {
         this.defaultTab = tab;
     }
+
 }

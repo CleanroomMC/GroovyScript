@@ -12,6 +12,7 @@ import java.util.Objects;
 public class FurnaceRecipeManager {
 
     public static final ObjectOpenCustomHashSet<ItemStack> inputMap = new ObjectOpenCustomHashSet<>(new Hash.Strategy<>() {
+
         @Override
         public int hashCode(ItemStack o) {
             return Objects.hash(o.getItem(), o.getMetadata());
@@ -21,5 +22,7 @@ public class FurnaceRecipeManager {
         public boolean equals(ItemStack a, ItemStack b) {
             return a == b || (a != null && b != null && OreDictionary.itemMatches(a, b, false));
         }
+
     });
+
 }

@@ -68,5 +68,7 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
             ModSupport.MEKANISM.get().washer.add(recipe);
             return recipe;
         }
+
     }
+
 }

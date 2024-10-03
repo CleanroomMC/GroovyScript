@@ -104,4 +104,5 @@ public abstract class Java8Mixin {
             throw new RuntimeException("Unable to configure class node for class " + classNode.toString(false) + " due to malformed parameterized types", e);
         }
     }
+
 }

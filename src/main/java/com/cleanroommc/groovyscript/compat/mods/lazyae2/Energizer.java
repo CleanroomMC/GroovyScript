@@ -85,6 +85,7 @@ public class Energizer extends StandardListRegistry<EnergizeRecipe> {
             ModSupport.LAZYAE2.get().energizer.add(recipe);
             return recipe;
         }
+
     }
 
 }

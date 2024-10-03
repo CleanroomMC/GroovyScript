@@ -81,5 +81,7 @@ public class Liquifier extends StandardListRegistry<LiquifierRecipe> {
             ModSupport.ALCHEMISTRY.get().liquifier.add(recipe);
             return recipe;
         }
+
     }
+
 }

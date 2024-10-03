@@ -70,4 +70,5 @@ public abstract class ModuleNodeMixin {
         this.packageNode.setSourcePosition(packageNode);
         ci.cancel();
     }
+
 }

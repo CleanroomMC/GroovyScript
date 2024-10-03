@@ -88,6 +88,7 @@ public class AlloySmelter extends AbstractPraescriptumRegistry {
             ModSupport.TECH_REBORN.get().alloySmelter.add(recipe);
             return recipe;
         }
+
     }
 
 }

@@ -83,5 +83,7 @@ public class Pedestal extends StandardListRegistry<RecipePedestal> {
             }
             return recipe;
         }
+
     }
+
 }

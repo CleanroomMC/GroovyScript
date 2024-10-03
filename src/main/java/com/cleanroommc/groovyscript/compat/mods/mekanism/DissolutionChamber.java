@@ -80,5 +80,7 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
             }
             return recipe;
         }
+
     }
+
 }

@@ -13,4 +13,5 @@ public interface ILinkGenerator {
     }
 
     String convert(String location);
+
 }

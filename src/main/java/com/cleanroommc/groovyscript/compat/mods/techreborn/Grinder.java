@@ -88,6 +88,7 @@ public class Grinder extends AbstractPraescriptumRegistry {
             ModSupport.TECH_REBORN.get().grinder.add(recipe);
             return recipe;
         }
+
     }
 
 }

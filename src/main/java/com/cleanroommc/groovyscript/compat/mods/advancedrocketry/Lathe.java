@@ -9,6 +9,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
 public class Lathe extends BaseRegistry {
+
     @RecipeBuilderDescription(
             example = @Example(".input(ore('plankWood')).output(item('minecraft:stick') * 2).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -48,5 +49,7 @@ public class Lathe extends BaseRegistry {
             msg.add(power < 1, "Power must be 1 or greater, got {}", power);
             msg.add(time < 1, "Time must be 1 or greater, got {}", time);
         }
+
     }
+
 }

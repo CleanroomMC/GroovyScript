@@ -191,6 +191,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
         public String toString() {
             return "TapperItemRecipe[" + "itemWrapper=" + itemWrapper + ", " + "fluidStack=" + fluidStack + ']';
         }
+
     }
 
     @SuppressWarnings("ClassCanBeRecord")
@@ -229,6 +230,7 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
         public String toString() {
             return "TapperBlockRecipe[" + "blockWrapper=" + blockWrapper + ", " + "fluidStack=" + fluidStack + ']';
         }
+
     }
 
 }

@@ -75,6 +75,7 @@ public class Centrifuge extends StandardListRegistry<PurifyRecipe> {
             ModSupport.LAZYAE2.get().centrifuge.add(recipe);
             return recipe;
         }
+
     }
 
 }

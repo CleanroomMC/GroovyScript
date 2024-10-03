@@ -30,4 +30,5 @@ public class LambdaClosure<T> extends Closure<T> {
     public T call(Object... arguments) {
         return function.apply(arguments);
     }
+
 }

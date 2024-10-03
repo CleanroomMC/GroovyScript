@@ -31,4 +31,5 @@ public class ItemStackExpansion {
     public static boolean isSame(ItemStack self, ItemStack itemStack, boolean ignoreNbt) {
         return ItemStack.areItemsEqual(self, itemStack) && (ignoreNbt || ItemStack.areItemStackTagsEqual(self, itemStack));
     }
+
 }

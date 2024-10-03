@@ -14,4 +14,5 @@ public interface BeeRootAccessor {
     static List<IBeeMutation> getBeeMutations() {
         throw new AssertionError();
     }
+
 }

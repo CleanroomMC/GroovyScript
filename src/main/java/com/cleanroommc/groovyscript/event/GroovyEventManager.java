@@ -135,5 +135,7 @@ public enum GroovyEventManager {
                 this.listener.accept(event);
             }
         }
+
     }
+
 }

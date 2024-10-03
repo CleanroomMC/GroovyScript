@@ -14,4 +14,5 @@ public class OreDictEntry {
         this.stack = stack.copy();
         this.stack.setTagCompound(null);
     }
+
 }

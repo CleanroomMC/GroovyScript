@@ -255,6 +255,7 @@ public class LaserDrill extends VirtualizedRegistry<Pair<LaserDrillEntry.LaserDr
             ModSupport.INDUSTRIAL_FOREGOING.get().laserDrill.add(recipe, entry);
             return recipe;
         }
+
     }
 
 }

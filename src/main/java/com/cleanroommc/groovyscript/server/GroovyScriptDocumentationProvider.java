@@ -49,4 +49,5 @@ public class GroovyScriptDocumentationProvider implements IDocumentationProvider
 
         return builder.length() == 0 ? null : builder.toString();
     }
+
 }

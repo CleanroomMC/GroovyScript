@@ -37,4 +37,5 @@ public class SCopy implements IPacket {
         GuiScreen.setClipboardString(StringUtils.join(text, ' '));
         return null;
     }
+
 }

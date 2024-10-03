@@ -16,4 +16,5 @@ public class IngredientBlacklist implements IBlacklist {
     public boolean matches(ItemStack itemStack) {
         return ingredient.test(itemStack);
     }
+
 }

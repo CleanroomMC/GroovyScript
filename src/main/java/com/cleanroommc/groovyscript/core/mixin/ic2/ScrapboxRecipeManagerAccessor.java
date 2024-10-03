@@ -11,4 +11,5 @@ public interface ScrapboxRecipeManagerAccessor {
 
     @Accessor
     List<Object> getDrops();
+
 }

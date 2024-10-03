@@ -77,4 +77,5 @@ public class ClassicScrapbox extends Scrapbox {
         }
         return null;
     }
+
 }

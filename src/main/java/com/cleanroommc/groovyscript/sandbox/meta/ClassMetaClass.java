@@ -25,4 +25,5 @@ public class ClassMetaClass extends MetaClassImpl {
             cir.setReturnValue(null);
         }
     }
+
 }

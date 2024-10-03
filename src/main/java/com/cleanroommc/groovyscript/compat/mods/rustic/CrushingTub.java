@@ -90,6 +90,7 @@ public class CrushingTub extends StandardListRegistry<ICrushingTubRecipe> {
             }
             return recipe;
         }
+
     }
 
 }

@@ -96,5 +96,7 @@ public class NetherMiningLens extends StandardListRegistry<WeightedOre> {
             ModSupport.ACTUALLY_ADDITIONS.get().netherMiningLens.add(recipe);
             return recipe;
         }
+
     }
+
 }

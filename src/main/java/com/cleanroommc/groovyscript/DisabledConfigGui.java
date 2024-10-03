@@ -26,4 +26,5 @@ public class DisabledConfigGui implements IModGuiFactory {
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
         return null;
     }
+
 }

@@ -150,10 +150,12 @@ public class ExpansionHelper {
                     metaMethod = new NewInstanceMetaMethod(method);
                 else
                     metaMethod = new NewInstanceMetaMethod(method) {
+
                         @Override
                         public CachedClass getDeclaringClass() {
                             return ReflectionCache.getCachedClass(self.getTheClass());
                         }
+
                     };
             } else {
                 // true static method
@@ -251,6 +253,7 @@ public class ExpansionHelper {
         public CachedClass getOwnerClass() {
             return owner;
         }
+
     }
 
     private static class Property extends MetaBeanProperty implements Hidden {
@@ -266,5 +269,7 @@ public class ExpansionHelper {
         public boolean isHidden() {
             return hidden;
         }
+
     }
+
 }

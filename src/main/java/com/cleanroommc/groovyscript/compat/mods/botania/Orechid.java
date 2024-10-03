@@ -92,4 +92,5 @@ public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
     public SimpleObjectStream<OrechidRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getAllRecipes(), false).setRemover(this::remove);
     }
+
 }

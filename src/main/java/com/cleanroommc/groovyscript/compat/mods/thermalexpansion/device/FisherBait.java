@@ -104,6 +104,7 @@ public class FisherBait extends VirtualizedRegistry<FisherBait.FisherRecipe> {
         public String toString() {
             return "FisherRecipe[" + "bait=" + bait + ", " + "multiplier=" + multiplier + ']';
         }
+
     }
 
 }

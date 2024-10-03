@@ -60,4 +60,5 @@ public class Botania extends GroovyPropertyContainer {
 
         InfoParserRegistry.addInfoParser(InfoParserBrew.instance);
     }
+
 }

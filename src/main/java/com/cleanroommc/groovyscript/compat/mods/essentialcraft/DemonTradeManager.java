@@ -89,4 +89,5 @@ public class DemonTradeManager extends VirtualizedRegistry<DemonTrade> {
     public SimpleObjectStream<DemonTrade> streamRecipes() {
         return new SimpleObjectStream<>(DemonTrade.TRADES).setRemover(this::remove);
     }
+
 }

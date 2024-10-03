@@ -20,4 +20,5 @@ public interface JeiProxyAccessor {
 
     @Accessor
     Textures getTextures();
+
 }

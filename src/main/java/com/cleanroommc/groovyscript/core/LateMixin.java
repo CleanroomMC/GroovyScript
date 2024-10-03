@@ -59,4 +59,5 @@ public class LateMixin implements ILateMixinLoader {
         }
         return Loader.isModLoaded(mod);
     }
+
 }

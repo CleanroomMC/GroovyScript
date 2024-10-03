@@ -224,5 +224,7 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
             ModSupport.THERMAL_EXPANSION.get().refinery.add(recipe);
             return recipe;
         }
+
     }
+
 }

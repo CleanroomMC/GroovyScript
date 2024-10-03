@@ -88,6 +88,7 @@ public interface TableRecipeBuilder {
             }
             return recipe;
         }
+
     }
 
     @Property(property = "ingredients", comp = @Comp(gte = 1, lte = 81))
@@ -133,5 +134,7 @@ public interface TableRecipeBuilder {
             ModSupport.EXTENDED_CRAFTING.get().tableCrafting.add(recipe);
             return recipe;
         }
+
     }
+
 }

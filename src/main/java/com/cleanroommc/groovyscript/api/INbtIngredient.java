@@ -12,4 +12,5 @@ public interface INbtIngredient extends INBTResourceStack {
     default INbtIngredient withNbtExact(Map<String, Object> map) {
         return withNbtExact(NbtHelper.ofMap(map));
     }
+
 }

@@ -221,5 +221,7 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
             }
             return recipe;
         }
+
     }
+
 }

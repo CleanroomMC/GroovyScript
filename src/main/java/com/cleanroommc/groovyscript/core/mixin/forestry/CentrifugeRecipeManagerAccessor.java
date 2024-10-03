@@ -14,4 +14,5 @@ public interface CentrifugeRecipeManagerAccessor {
     static Set<ICentrifugeRecipe> getRecipes() {
         throw new AssertionError();
     }
+
 }

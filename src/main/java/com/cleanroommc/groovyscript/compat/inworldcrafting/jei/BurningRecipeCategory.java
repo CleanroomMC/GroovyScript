@@ -84,5 +84,7 @@ public class BurningRecipeCategory extends BaseCategory<BurningRecipeCategory.Re
             int y = 44;
             minecraft.fontRenderer.drawString(ticksS, x, y, 0x404040);
         }
+
     }
+
 }

@@ -15,4 +15,5 @@ public class RegistryInitializerMixin {
     private static <T extends IForgeRegistryEntry<T>> IForgeRegistry<T> createRegistries(RegistryBuilder<T> instance) {
         return instance.disableSaving().create();
     }
+
 }

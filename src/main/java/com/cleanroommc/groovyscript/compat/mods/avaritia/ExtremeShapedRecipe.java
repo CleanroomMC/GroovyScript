@@ -47,4 +47,5 @@ public class ExtremeShapedRecipe extends morph.avaritia.recipe.extreme.ExtremeSh
     public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull InventoryCrafting inv) {
         return this.groovyRecipe.getRemainingItems(inv);
     }
+
 }

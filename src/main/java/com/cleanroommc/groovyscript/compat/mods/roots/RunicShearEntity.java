@@ -161,5 +161,7 @@ public class RunicShearEntity extends VirtualizedRegistry<RunicShearEntityRecipe
             ModSupport.ROOTS.get().runicShearEntity.add(super.name, recipe);
             return recipe;
         }
+
     }
+
 }

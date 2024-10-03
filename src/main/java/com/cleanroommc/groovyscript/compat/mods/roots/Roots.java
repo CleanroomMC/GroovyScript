@@ -107,4 +107,5 @@ public class Roots extends GroovyPropertyContainer {
         Modifier modifier = ModifierRegistry.get(rl.getValue());
         return modifier == null ? Result.error() : Result.some(modifier);
     }
+
 }

@@ -229,6 +229,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
             }
             return recipe;
         }
+
     }
 
     public static class Recipe {
@@ -254,5 +255,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         public float getExp() {
             return exp;
         }
+
     }
+
 }

@@ -113,6 +113,7 @@ public class Enervation extends VirtualizedRegistry<Enervation.EnervationRecipe>
         public String toString() {
             return "EnervationRecipe[" + "comparableItemStack=" + comparableItemStack + ", " + "energy=" + energy + ']';
         }
+
     }
 
 }

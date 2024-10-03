@@ -103,5 +103,7 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
             PyroTech.stoneOven.add(recipe);
             return recipe;
         }
+
     }
+
 }

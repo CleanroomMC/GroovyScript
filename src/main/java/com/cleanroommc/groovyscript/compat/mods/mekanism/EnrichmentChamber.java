@@ -78,5 +78,7 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
             }
             return recipe;
         }
+
     }
+
 }

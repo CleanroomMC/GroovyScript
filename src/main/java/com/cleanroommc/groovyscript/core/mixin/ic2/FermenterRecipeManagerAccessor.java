@@ -12,4 +12,5 @@ public interface FermenterRecipeManagerAccessor {
 
     @Accessor
     Map<String, IFermenterRecipeManager.FermentationProperty> getFluidMap();
+
 }

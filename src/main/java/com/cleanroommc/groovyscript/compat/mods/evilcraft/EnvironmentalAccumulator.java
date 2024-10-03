@@ -160,5 +160,7 @@ public class EnvironmentalAccumulator extends StandardListRegistry<IRecipe<Envir
             ModSupport.EVILCRAFT.get().environmentalAccumulator.addScripted(recipe);
             return recipe;
         }
+
     }
+
 }

@@ -122,15 +122,18 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     public static class MatchList extends ArrayList<SlotMatchResult> {
 
         public static final MatchList EMPTY = new MatchList() {
+
             @Override
             public boolean add(SlotMatchResult slotMatchResult) {
                 throw new UnsupportedOperationException();
             }
+
         };
 
         public void addMatch(IIngredient ingredient, ItemStack itemStack, int itemSlotIndex) {
             add(new SlotMatchResult(ingredient, itemStack, itemSlotIndex));
         }
+
     }
 
     public static class SlotMatchResult {
@@ -160,6 +163,7 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         public int getSlotIndex() {
             return slotIndex;
         }
+
     }
 
     public static class InputList extends ArrayList<ItemStack> {
@@ -188,6 +192,7 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
             }
             return ItemStack.EMPTY;
         }
+
     }
 
     // TODO
@@ -202,4 +207,5 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         }
         return null;
     }
+
 }

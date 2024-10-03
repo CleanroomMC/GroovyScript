@@ -141,4 +141,5 @@ public class BlastFurnace extends VirtualizedRegistry<MachineRecipe<IRecipeInput
         }
         return list;
     }
+
 }

@@ -247,5 +247,7 @@ public class GroovyDeobfMapper {
 
             return classes.toArray(new String[0]);
         }
+
     }
+
 }

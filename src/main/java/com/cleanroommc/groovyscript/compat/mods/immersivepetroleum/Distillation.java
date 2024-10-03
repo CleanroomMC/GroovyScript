@@ -129,6 +129,7 @@ public class Distillation extends StandardListRegistry<DistillationRecipe> {
             ModSupport.IMMERSIVE_PETROLEUM.get().distillation.add(recipe);
             return recipe;
         }
+
     }
 
 }

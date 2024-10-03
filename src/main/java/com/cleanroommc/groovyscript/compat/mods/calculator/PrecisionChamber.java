@@ -87,5 +87,7 @@ public class PrecisionChamber extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().precisionChamber.add(recipe);
             return recipe;
         }
+
     }
+
 }

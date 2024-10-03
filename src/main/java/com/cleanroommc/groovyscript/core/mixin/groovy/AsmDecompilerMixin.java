@@ -73,4 +73,5 @@ public class AsmDecompilerMixin {
         }
         cir.setReturnValue(stub);
     }
+
 }

@@ -102,6 +102,7 @@ public class HeatExchanger extends StandardListRegistry<HeatExchangerRecipe> {
             ModSupport.IMMERSIVE_TECHNOLOGY.get().heatExchanger.add(recipe);
             return recipe;
         }
+
     }
 
 }

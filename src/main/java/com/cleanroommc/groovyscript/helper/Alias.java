@@ -120,4 +120,5 @@ public class Alias extends ArrayList<String> {
         if (fromFormat == format) return s;
         return fromFormat.to(format, s);
     }
+
 }

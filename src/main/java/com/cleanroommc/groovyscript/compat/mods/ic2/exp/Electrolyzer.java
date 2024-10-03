@@ -112,4 +112,5 @@ public class Electrolyzer extends VirtualizedRegistry<Pair<String, IElectrolyzer
         if (scripted) addScripted(pair);
         return pair;
     }
+
 }

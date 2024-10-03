@@ -12,4 +12,5 @@ public interface FusionRegistryAccessor {
 
     @Accessor
     List<IFusionRecipe> getREGISTRY();
+
 }

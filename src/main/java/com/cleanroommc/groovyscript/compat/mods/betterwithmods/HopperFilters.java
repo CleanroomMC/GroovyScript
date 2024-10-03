@@ -136,6 +136,7 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
             ModSupport.BETTER_WITH_MODS.get().hopperFilters.add(recipe);
             return recipe;
         }
+
     }
 
 }

@@ -134,4 +134,5 @@ public class ShapedArcaneCR extends ShapedArcaneRecipe implements ICraftingRecip
         }
         return craftingRecipe.matches(dummy, worldIn);
     }
+
 }

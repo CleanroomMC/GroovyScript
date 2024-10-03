@@ -44,4 +44,5 @@ public class PackmodeCommand extends CommandBase {
         saveData.setPackmode(Packmode.getPackmode());
         NetworkHandler.sendToPlayer(new SReloadScripts(null, true, true), (EntityPlayerMP) sender);
     }
+
 }

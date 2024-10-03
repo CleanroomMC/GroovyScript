@@ -115,5 +115,7 @@ public class BlastFurnace extends StandardListRegistry<BlastFurnaceRecipe> {
             if (!validate()) return null;
             return ModSupport.IMMERSIVE_ENGINEERING.get().blastFurnace.add(output.get(0), input.get(0), time, slag);
         }
+
     }
+
 }

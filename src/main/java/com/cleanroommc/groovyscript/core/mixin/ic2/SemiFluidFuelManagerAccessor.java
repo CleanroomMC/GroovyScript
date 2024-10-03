@@ -12,4 +12,5 @@ public interface SemiFluidFuelManagerAccessor {
 
     @Accessor
     Map<String, ISemiFluidFuelManager.FuelProperty> getFuelProperties();
+
 }

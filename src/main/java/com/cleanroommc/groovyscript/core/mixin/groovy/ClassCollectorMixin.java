@@ -22,4 +22,5 @@ public class ClassCollectorMixin {
     public void onCreateClass(byte[] code, ClassNode classNode, CallbackInfoReturnable<Class<?>> cir) {
         GroovyScript.getSandbox().onCompileClass(su, su.getName(), cir.getReturnValue(), code, classNode.getName().contains("$"));
     }
+
 }

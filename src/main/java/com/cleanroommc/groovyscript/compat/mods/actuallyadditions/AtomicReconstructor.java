@@ -111,5 +111,7 @@ public class AtomicReconstructor extends StandardListRegistry<LensConversionReci
             ModSupport.ACTUALLY_ADDITIONS.get().atomicReconstructor.add(recipe);
             return recipe;
         }
+
     }
+
 }

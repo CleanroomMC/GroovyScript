@@ -122,6 +122,7 @@ public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> {
             ModSupport.ARCANE_ARCHIVES.get().gemCuttingTable.add(recipe);
             return recipe;
         }
+
     }
 
 }

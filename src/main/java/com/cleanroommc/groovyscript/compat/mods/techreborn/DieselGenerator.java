@@ -78,6 +78,7 @@ public class DieselGenerator extends AbstractGeneratorRegistry {
             ModSupport.TECH_REBORN.get().dieselGenerator.add(recipe);
             return recipe;
         }
+
     }
 
 }

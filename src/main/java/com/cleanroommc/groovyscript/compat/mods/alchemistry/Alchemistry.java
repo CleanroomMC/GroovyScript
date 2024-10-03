@@ -54,4 +54,5 @@ public class Alchemistry extends GroovyPropertyContainer {
         InfoParserRegistry.addInfoParser(InfoParserElement.instance);
         InfoParserRegistry.addInfoParser(InfoParserCompound.instance);
     }
+
 }

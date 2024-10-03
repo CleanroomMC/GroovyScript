@@ -149,5 +149,7 @@ public class Precipitator extends VirtualizedRegistry<PrecipitatorRecipe> {
             ModSupport.THERMAL_EXPANSION.get().precipitator.add(recipe);
             return recipe;
         }
+
     }
+
 }

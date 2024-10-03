@@ -104,6 +104,7 @@ public class TapperFertilizer extends VirtualizedRegistry<TapperFertilizer.Tappe
         public String toString() {
             return "TapperRecipe[" + "bait=" + bait + ", " + "multiplier=" + multiplier + ']';
         }
+
     }
 
 }

@@ -36,4 +36,5 @@ public class GroovyScriptLanguageServer extends GroovyLanguageServer {
     public GroovyScriptLanguageServer(File root, GroovyScriptLanguageServerContext languageServerContext) {
         super(new GroovyScriptCompilationUnitFactory(root, languageServerContext), languageServerContext);
     }
+
 }

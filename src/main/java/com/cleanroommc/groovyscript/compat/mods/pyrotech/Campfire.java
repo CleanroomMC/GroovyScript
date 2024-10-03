@@ -98,5 +98,7 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
             PyroTech.campfire.add(recipe);
             return recipe;
         }
+
     }
+
 }

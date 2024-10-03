@@ -170,5 +170,7 @@ public class Smelter extends VirtualizedRegistry<SmelterRecipe> {
             }
             return recipe;
         }
+
     }
+
 }

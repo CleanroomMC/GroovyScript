@@ -9,4 +9,5 @@ public interface CreativeTabsAccessor {
 
     @Accessor("tabLabel")
     String getTabLabel2();
+
 }

@@ -99,5 +99,7 @@ public class Atomizer extends StandardListRegistry<AtomizerRecipe> {
             ModSupport.ALCHEMISTRY.get().atomizer.add(recipe);
             return recipe;
         }
+
     }
+
 }

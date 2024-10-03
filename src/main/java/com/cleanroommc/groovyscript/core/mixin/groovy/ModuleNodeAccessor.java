@@ -12,4 +12,5 @@ public interface ModuleNodeAccessor {
 
     @Accessor("imports")
     List<ImportNode> getModifiableImports();
+
 }

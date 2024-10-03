@@ -88,5 +88,7 @@ public class Melting extends StandardListRegistry<MeltingRecipe> {
         public RecipeBuilder(Melting melting) {
             super(melting, "Tinkers Construct Melting recipe");
         }
+
     }
+
 }

@@ -58,4 +58,5 @@ public class Setter<T, S> extends MetaMethod implements Hidden {
     public boolean isHidden() {
         return true;
     }
+
 }

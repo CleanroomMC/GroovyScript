@@ -22,11 +22,13 @@ import java.util.stream.Stream;
 public class Builder {
 
     private static final Char2CharMap commaSeparatedParts = new Char2CharArrayMap() {
+
         {
             put(']', '[');
             put('\'', '\'');
             defaultReturnValue(Character.MIN_VALUE);
         }
+
     };
 
     private final String reference;
@@ -524,6 +526,7 @@ public class Builder {
                     .compare(thisSignature, compSignature, String::compareToIgnoreCase)
                     .result();
         }
+
     }
 
 }

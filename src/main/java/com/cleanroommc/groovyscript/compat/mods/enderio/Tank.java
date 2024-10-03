@@ -258,5 +258,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
             ModSupport.ENDER_IO.get().tank.add(recipe);
             return recipe;
         }
+
     }
+
 }

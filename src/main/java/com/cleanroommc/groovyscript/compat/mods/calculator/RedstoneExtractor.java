@@ -78,5 +78,7 @@ public class RedstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.V
             ModSupport.CALCULATOR.get().redstoneExtractor.add(recipe);
             return recipe;
         }
+
     }
+
 }

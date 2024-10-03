@@ -137,5 +137,7 @@ public class Fermenter extends ForestryRegistry<IFermenterRecipe> {
             add(recipe);
             return recipe;
         }
+
     }
+
 }

@@ -19,4 +19,5 @@ public interface SludgeRefinerBlockAccessor {
     static void setOutputs(ArrayList<ItemStackWeightedItem> OUTPUTS) {
         throw new UnsupportedOperationException();
     }
+
 }

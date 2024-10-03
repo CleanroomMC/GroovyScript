@@ -127,4 +127,5 @@ public class Compressor extends VirtualizedRegistry<MachineRecipe<IRecipeInput, 
         }
         return list;
     }
+
 }

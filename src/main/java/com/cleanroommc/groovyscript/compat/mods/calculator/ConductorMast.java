@@ -94,5 +94,7 @@ public class ConductorMast extends StandardListRegistry<DefaultSonarRecipe.Value
             ModSupport.CALCULATOR.get().conductorMast.add(recipe);
             return recipe;
         }
+
     }
+
 }

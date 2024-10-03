@@ -32,4 +32,5 @@ public class AppliedEnergistics2 extends GroovyPropertyContainer {
 
         InfoParserRegistry.addInfoParser(InfoParserTunnel.instance);
     }
+
 }

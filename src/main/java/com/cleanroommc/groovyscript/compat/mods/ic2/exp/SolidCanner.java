@@ -135,4 +135,5 @@ public class SolidCanner extends VirtualizedRegistry<MachineRecipe<ICannerBottle
         }
         return list;
     }
+
 }

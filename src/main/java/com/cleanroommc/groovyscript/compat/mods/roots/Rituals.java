@@ -153,6 +153,9 @@ public class Rituals extends VirtualizedRegistry<RitualBase> {
                 this.ritual.setRecipe(recipe);
                 return recipe;
             }
+
         }
+
     }
+
 }

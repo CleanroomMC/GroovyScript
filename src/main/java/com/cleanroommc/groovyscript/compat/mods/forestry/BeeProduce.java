@@ -113,4 +113,5 @@ public class BeeProduce extends ForestryRegistry<BeeProduct> {
             if (allele instanceof AlleleBeeSpecies) removeAll((AlleleBeeSpecies) allele);
         });
     }
+
 }

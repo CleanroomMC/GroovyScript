@@ -122,6 +122,7 @@ public class Crucible extends StandardListRegistry<CookingPotRecipe> {
             ModSupport.BETTER_WITH_MODS.get().crucible.add(recipe);
             return recipe;
         }
+
     }
 
 }

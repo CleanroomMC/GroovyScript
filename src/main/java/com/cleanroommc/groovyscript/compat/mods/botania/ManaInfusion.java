@@ -139,5 +139,7 @@ public class ManaInfusion extends StandardListRegistry<RecipeManaInfusion> {
             add(recipe);
             return recipe;
         }
+
     }
+
 }

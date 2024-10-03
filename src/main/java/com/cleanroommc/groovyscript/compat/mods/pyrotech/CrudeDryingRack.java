@@ -99,5 +99,7 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
             PyroTech.crudeDryingRack.add(recipe);
             return recipe;
         }
+
     }
+
 }

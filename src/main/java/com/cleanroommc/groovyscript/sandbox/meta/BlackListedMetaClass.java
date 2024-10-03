@@ -216,4 +216,5 @@ public class BlackListedMetaClass implements MetaClass {
     public MetaMethod pickMethod(String methodName, Class[] arguments) {
         return null;
     }
+
 }

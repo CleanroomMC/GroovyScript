@@ -327,6 +327,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
             ModSupport.EXTRA_UTILITIES_2.get().generator.add(generator, recipe);
             return recipe;
         }
+
     }
 
 }

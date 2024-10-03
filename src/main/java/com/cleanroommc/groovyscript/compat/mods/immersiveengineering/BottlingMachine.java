@@ -110,5 +110,7 @@ public class BottlingMachine extends StandardListRegistry<BottlingMachineRecipe>
             ModSupport.IMMERSIVE_ENGINEERING.get().bottlingMachine.add(recipe);
             return recipe;
         }
+
     }
+
 }

@@ -134,5 +134,7 @@ public class SliceNSplice extends StandardListRegistry<IManyToOneRecipe> {
             ModSupport.ENDER_IO.get().sliceNSplice.add(recipe);
             return recipe;
         }
+
     }
+
 }

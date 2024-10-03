@@ -134,5 +134,7 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
             PyroTech.brickKiln.add(recipe);
             return recipe;
         }
+
     }
+
 }

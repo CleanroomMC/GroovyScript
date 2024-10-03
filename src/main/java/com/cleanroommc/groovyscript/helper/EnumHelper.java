@@ -31,4 +31,5 @@ public class EnumHelper {
         Result<T> res = valueOf(clazz, s, caseSensitive);
         return res.hasError() ? null : res.getValue();
     }
+
 }

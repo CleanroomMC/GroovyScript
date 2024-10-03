@@ -35,5 +35,7 @@ public class CachedClassFieldsVisitor extends ClassVisitor implements Opcodes {
             mv.visitFieldInsn(GETFIELD, CLASS_NAME_2 + "$1", "this$0", "L" + CLASS_NAME_2 + ";");
             mv.visitMethodInsn(INVOKESTATIC, "com/cleanroommc/groovyscript/sandbox/transformer/GroovyCodeFactory", "makeFieldsHook", "(L" + CLASS_NAME_2 + ";)Ljava/security/PrivilegedAction;", false);
         }
+
     }
+
 }

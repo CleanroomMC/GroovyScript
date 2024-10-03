@@ -16,6 +16,7 @@ import java.util.Arrays;
 public class BlockStates {
 
     public static final BlockStates ANY = new BlockStates(null) {
+
         @Override
         public boolean matches(IBlockState state, boolean wildCardAir) {
             if (wildCardAir) return state.getBlock().equals(Blocks.AIR);
@@ -26,6 +27,7 @@ public class BlockStates {
         public ItemStack[] transformToStack() {
             return new ItemStack[0];
         }
+
     };
 
     private static BlockStates redstone;
@@ -121,4 +123,5 @@ public class BlockStates {
     public static boolean statesEqual(IBlockState a, IBlockState b) {
         return a.getBlock() == b.getBlock() && a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b);
     }
+
 }

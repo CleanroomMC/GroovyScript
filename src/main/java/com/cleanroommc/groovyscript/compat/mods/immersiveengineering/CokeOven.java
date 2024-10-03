@@ -120,5 +120,7 @@ public class CokeOven extends StandardListRegistry<CokeOvenRecipe> {
             ModSupport.IMMERSIVE_ENGINEERING.get().cokeOven.add(recipe);
             return recipe;
         }
+
     }
+
 }

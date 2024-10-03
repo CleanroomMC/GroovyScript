@@ -134,4 +134,5 @@ public class Melter extends StandardListRegistry<MeltingRecipe> {
     public SimpleObjectStream<IBlacklist> streamBlacklists() {
         return new SimpleObjectStream<>(TCompRegistryAccessor.getMeltingBlacklist()).setRemover(this::removeBlacklist);
     }
+
 }

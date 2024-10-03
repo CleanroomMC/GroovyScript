@@ -139,5 +139,7 @@ public class CastingBasin extends StandardListRegistry<ICastingRecipe> {
             add(recipe);
             return recipe;
         }
+
     }
+
 }

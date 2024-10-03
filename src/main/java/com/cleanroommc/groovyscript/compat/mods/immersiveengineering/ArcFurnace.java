@@ -194,5 +194,7 @@ public class ArcFurnace extends StandardListRegistry<ArcFurnaceRecipe> {
             ModSupport.IMMERSIVE_ENGINEERING.get().arcFurnace.add(recipe);
             return recipe;
         }
+
     }
+
 }

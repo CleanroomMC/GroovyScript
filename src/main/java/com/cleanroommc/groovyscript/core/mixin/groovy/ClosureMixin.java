@@ -16,4 +16,5 @@ public abstract class ClosureMixin<V> extends GroovyObjectSupport {
         // redirect closure call to properly catch and log errors
         cir.setReturnValue(GroovyScript.getSandbox().runClosure((Closure<? extends V>) (Object) this, arguments));
     }
+
 }

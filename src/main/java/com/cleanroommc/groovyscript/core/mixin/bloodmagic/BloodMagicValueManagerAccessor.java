@@ -17,4 +17,5 @@ public interface BloodMagicValueManagerAccessor {
 
     @Accessor
     Map<ResourceLocation, Integer> getSacrificial();
+
 }

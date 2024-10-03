@@ -79,6 +79,7 @@ public class ImplosionCompressor extends AbstractGenericTechRebornRegistry {
             ModSupport.TECH_REBORN.get().implosionCompressor.add(recipe);
             return recipe;
         }
+
     }
 
 }

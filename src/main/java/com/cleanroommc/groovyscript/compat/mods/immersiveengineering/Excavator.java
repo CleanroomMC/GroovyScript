@@ -260,5 +260,7 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
             ModSupport.IMMERSIVE_ENGINEERING.get().excavator.add(recipe, weight);
             return recipe;
         }
+
     }
+
 }

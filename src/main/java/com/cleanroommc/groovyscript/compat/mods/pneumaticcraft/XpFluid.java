@@ -104,6 +104,7 @@ public class XpFluid extends VirtualizedRegistry<Pair<Fluid, Integer>> {
             ModSupport.PNEUMATIC_CRAFT.get().xpFluid.add(fluidInput.get(0), ratio);
             return Pair.of(fluidInput.get(0), ratio);
         }
+
     }
 
 }

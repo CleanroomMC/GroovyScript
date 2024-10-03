@@ -23,4 +23,5 @@ public class ShapedRecipeWrapper extends ShapelessRecipeWrapper<IShapedRecipe> i
     public int getHeight() {
         return recipe.getRecipeHeight();
     }
+
 }

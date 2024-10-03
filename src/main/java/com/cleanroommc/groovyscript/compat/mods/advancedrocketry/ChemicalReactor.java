@@ -12,6 +12,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.input_slots", type = Admonition.Type.WARNING),
 })
 public class ChemicalReactor extends BaseRegistry {
+
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:chorus_fruit_popped')).fluidInput(fluid('lava') * 500)" + ".output(item('minecraft:end_rod') * 4).fluidOutput(fluid('water') * 500).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -55,5 +56,7 @@ public class ChemicalReactor extends BaseRegistry {
             msg.add(power < 1, "Power must be 1 or greater, got {}", power);
             msg.add(time < 1, "Time must be 1 or greater, got {}", time);
         }
+
     }
+
 }

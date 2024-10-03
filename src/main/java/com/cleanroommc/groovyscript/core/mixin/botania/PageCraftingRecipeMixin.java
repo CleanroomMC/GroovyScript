@@ -90,4 +90,5 @@ public abstract class PageCraftingRecipeMixin extends PageRecipe {
             this.renderItemAtGridPos(gui, 2, 0, recipe.getRecipeOutput(), false);
         }
     }
+
 }

@@ -164,5 +164,7 @@ public class Solderer extends VirtualizedRegistry<SoldererManager.SoldererRecipe
 
             return recipe;
         }
+
     }
+
 }

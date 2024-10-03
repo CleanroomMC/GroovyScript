@@ -93,6 +93,7 @@ public class Boiler extends StandardListRegistry<BoilerRecipe> {
             ModSupport.IMMERSIVE_TECHNOLOGY.get().boiler.add(recipe);
             return recipe;
         }
+
     }
 
 }

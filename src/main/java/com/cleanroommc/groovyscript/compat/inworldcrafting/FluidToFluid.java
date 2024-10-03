@@ -107,6 +107,7 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         public void handleRecipeResult(World world, BlockPos pos) {
             world.setBlockState(pos, getOutput().getBlock().getDefaultState());
         }
+
     }
 
     public static class RecipeBuilder extends FluidRecipe.RecipeBuilder<Recipe> {
@@ -135,5 +136,7 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
             VanillaModule.inWorldCrafting.fluidToFluid.add(recipe);
             return recipe;
         }
+
     }
+
 }

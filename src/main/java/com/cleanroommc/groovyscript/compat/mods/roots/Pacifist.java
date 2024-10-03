@@ -124,5 +124,7 @@ public class Pacifist extends VirtualizedRegistry<PacifistEntry> {
             ModSupport.ROOTS.get().pacifist.add(recipe.getRegistryName(), recipe);
             return recipe;
         }
+
     }
+
 }

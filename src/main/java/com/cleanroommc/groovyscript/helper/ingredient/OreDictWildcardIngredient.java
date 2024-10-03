@@ -59,4 +59,5 @@ public class OreDictWildcardIngredient extends ItemsIngredient {
         odwi.matchCondition = matchCondition;
         return odwi;
     }
+
 }

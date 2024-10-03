@@ -65,4 +65,5 @@ public abstract class BaseCategory<T extends IRecipeWrapper> implements IRecipeC
             ((GuiIngredient<?>) ingredient).setBackground(drawable);
         }
     }
+
 }

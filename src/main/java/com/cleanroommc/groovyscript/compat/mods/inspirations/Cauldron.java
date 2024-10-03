@@ -397,5 +397,7 @@ public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
             POTION,
             DYE
         }
+
     }
+
 }

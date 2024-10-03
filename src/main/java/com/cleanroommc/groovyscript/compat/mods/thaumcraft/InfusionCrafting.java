@@ -218,5 +218,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
             ModSupport.THAUMCRAFT.get().infusionCrafting.add(RecipeName.generateRl("infusion_matrix_recipe"), recipe);
             return recipe;
         }
+
     }
+
 }

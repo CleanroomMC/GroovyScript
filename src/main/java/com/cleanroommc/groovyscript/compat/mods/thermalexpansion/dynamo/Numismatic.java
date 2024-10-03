@@ -113,6 +113,7 @@ public class Numismatic extends VirtualizedRegistry<Numismatic.NumismaticRecipe>
         public String toString() {
             return "NumismaticRecipe[" + "comparableItemStack=" + comparableItemStack + ", " + "energy=" + energy + ']';
         }
+
     }
 
 }

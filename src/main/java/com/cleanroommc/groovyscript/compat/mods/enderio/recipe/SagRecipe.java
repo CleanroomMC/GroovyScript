@@ -20,4 +20,5 @@ public class SagRecipe extends Recipe {
     public boolean isValidInput(@NotNull FluidStack fluid) {
         return false;
     }
+
 }

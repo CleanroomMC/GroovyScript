@@ -334,4 +334,5 @@ public class GroovyScript {
         languageServerThread.start();
         return true;
     }
+
 }

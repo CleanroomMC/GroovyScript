@@ -14,4 +14,5 @@ public interface StillRecipeManagerAccessor {
     static Set<IStillRecipe> getRecipes() {
         throw new AssertionError();
     }
+
 }

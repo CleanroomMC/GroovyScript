@@ -12,4 +12,5 @@ public interface AnvilManagerAccessor {
 
     @Accessor
     List<ItemStack> getValidBaseItems();
+
 }

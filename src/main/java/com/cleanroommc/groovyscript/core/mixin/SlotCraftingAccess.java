@@ -10,4 +10,5 @@ public interface SlotCraftingAccess {
 
     @Accessor
     EntityPlayer getPlayer();
+
 }

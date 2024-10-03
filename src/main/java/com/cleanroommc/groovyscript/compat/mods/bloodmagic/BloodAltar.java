@@ -155,5 +155,7 @@ public class BloodAltar extends StandardListRegistry<RecipeBloodAltar> {
             ModSupport.BLOOD_MAGIC.get().bloodAltar.add(recipe);
             return recipe;
         }
+
     }
+
 }

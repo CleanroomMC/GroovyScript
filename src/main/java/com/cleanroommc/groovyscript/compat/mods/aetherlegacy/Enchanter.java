@@ -72,6 +72,7 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
             ModSupport.AETHER.get().enchanter.add(enchantment);
             return enchantment;
         }
+
     }
 
 }

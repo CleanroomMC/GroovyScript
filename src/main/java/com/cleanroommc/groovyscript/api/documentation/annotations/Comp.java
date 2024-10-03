@@ -147,6 +147,7 @@ public @interface Comp {
      * </table>
      */
     enum Type {
+
         GT(">", "groovyscript.wiki.greater_than"),
         GTE(">=", "groovyscript.wiki.greater_than_or_equal_to"),
         EQ("==", "groovyscript.wiki.equal_to"),

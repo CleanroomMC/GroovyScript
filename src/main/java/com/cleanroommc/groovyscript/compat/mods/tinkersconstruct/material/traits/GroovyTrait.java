@@ -20,4 +20,5 @@ public class GroovyTrait extends ModifierTrait implements ITrait {
         else addItem(ingredient.getMatchingStacks()[0], amountNeeded, amountMatched);
         return this;
     }
+
 }

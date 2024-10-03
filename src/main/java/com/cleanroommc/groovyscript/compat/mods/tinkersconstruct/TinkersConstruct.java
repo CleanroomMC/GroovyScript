@@ -52,4 +52,5 @@ public class TinkersConstruct extends GroovyPropertyContainer {
     public static void preInit() {
         MinecraftForge.EVENT_BUS.post(new MaterialRegistryEvent());
     }
+
 }

@@ -67,4 +67,5 @@ public interface IGameObjectParser<T> extends IObjectParser<T> {
             return v == null ? Result.error() : Result.some(trueTypeFunction.apply(v));
         };
     }
+
 }

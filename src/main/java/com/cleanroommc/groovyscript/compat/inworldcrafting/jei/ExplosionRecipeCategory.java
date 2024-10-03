@@ -95,5 +95,7 @@ public class ExplosionRecipeCategory extends BaseCategory<ExplosionRecipeCategor
             }
             return Collections.emptyList();
         }
+
     }
+
 }

@@ -355,5 +355,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
                     this.documentation);
             ObjectMapperManager.registerObjectMapper(this.mod, goh);
         }
+
     }
+
 }

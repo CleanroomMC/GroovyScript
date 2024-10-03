@@ -145,5 +145,7 @@ public class TartaricForge extends StandardListRegistry<RecipeTartaricForge> {
             ModSupport.BLOOD_MAGIC.get().tartaricForge.add(recipe);
             return recipe;
         }
+
     }
+
 }

@@ -17,4 +17,5 @@ public class ClassScriptMetaClass extends ClassMetaClass {
         }
         return super.invokeMissingProperty(instance, propertyName, optionalValue, isGetter);
     }
+
 }

@@ -24,4 +24,5 @@ public class LoaderControllerMixin {
             GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
         }
     }
+
 }

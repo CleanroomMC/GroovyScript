@@ -118,4 +118,5 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
         // that a new version can be built from the updated source file
         unit.removeSources(sourcesToRemove);
     }
+
 }

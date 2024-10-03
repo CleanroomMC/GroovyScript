@@ -110,5 +110,7 @@ public class Grindstone extends StandardListRegistry<GrindstoneRecipe> {
             ModSupport.ASTRAL_SORCERY.get().grindstone.add(recipe);
             return recipe;
         }
+
     }
+
 }

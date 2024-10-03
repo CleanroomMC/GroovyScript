@@ -129,4 +129,5 @@ public class SimpleObjectStream<T> extends AbstractList<T> {
     public Stream<T> stream() {
         throw new UnsupportedOperationException("Is already a stream");
     }
+
 }

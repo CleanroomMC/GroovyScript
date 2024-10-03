@@ -93,5 +93,7 @@ public class TreasureChest extends StandardListRegistry<TreasureChestLoot> {
             ModSupport.ACTUALLY_ADDITIONS.get().treasureChest.add(recipe);
             return recipe;
         }
+
     }
+
 }

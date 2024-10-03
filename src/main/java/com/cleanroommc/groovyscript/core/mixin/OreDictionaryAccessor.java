@@ -36,4 +36,5 @@ public interface OreDictionaryAccessor {
     static Map<Integer, List<Integer>> getStackToId() {
         throw new AssertionError();
     }
+
 }

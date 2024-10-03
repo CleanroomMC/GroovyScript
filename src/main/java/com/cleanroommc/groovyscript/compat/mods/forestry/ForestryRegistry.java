@@ -24,4 +24,5 @@ public abstract class ForestryRegistry<T> extends VirtualizedRegistry<T> {
     public boolean isEnabled() {
         return ForestryAPI.moduleManager.isModuleEnabled("forestry", ForestryModuleUids.FACTORY);
     }
+
 }

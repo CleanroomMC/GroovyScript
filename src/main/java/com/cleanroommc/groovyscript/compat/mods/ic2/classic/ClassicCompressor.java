@@ -139,4 +139,5 @@ public class ClassicCompressor extends Compressor {
 
         return list;
     }
+
 }

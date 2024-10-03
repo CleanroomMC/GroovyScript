@@ -157,4 +157,5 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
         }
 
     }
+
 }

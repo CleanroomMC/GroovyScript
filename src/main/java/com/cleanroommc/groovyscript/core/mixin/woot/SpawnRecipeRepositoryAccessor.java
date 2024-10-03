@@ -16,4 +16,5 @@ public interface SpawnRecipeRepositoryAccessor {
 
     @Accessor
     SpawnRecipe getDefaultSpawnRecipe();
+
 }

@@ -93,6 +93,7 @@ public class SteamTurbine extends StandardListRegistry<SteamTurbineRecipe> {
             ModSupport.IMMERSIVE_TECHNOLOGY.get().steamTurbine.add(recipe);
             return recipe;
         }
+
     }
 
 }

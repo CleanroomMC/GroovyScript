@@ -88,4 +88,5 @@ public class BeeMutations extends ForestryRegistry<IBeeMutation> {
     public SimpleObjectStream<IBeeMutation> streamMutations() {
         return new SimpleObjectStream<>(BeeRootAccessor.getBeeMutations()).setRemover(this::remove);
     }
+
 }

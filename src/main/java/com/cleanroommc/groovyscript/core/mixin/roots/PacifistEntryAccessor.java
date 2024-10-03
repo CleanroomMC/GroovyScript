@@ -10,4 +10,5 @@ public interface PacifistEntryAccessor {
 
     @Accessor
     void setName(ResourceLocation name);
+
 }

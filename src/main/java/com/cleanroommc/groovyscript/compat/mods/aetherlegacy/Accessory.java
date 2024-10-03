@@ -89,6 +89,7 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
             ModSupport.AETHER.get().accessory.add(accessory);
             return accessory;
         }
+
     }
 
 }

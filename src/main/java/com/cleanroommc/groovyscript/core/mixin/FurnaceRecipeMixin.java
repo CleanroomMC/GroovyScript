@@ -15,4 +15,5 @@ public abstract class FurnaceRecipeMixin {
     public void addRecipe(ItemStack input, ItemStack stack, float experience, CallbackInfo ci) {
         FurnaceRecipeManager.inputMap.add(input);
     }
+
 }

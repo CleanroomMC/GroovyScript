@@ -92,6 +92,7 @@ public class Etcher extends StandardListRegistry<EtchRecipe> {
             ModSupport.LAZYAE2.get().etcher.add(recipe);
             return recipe;
         }
+
     }
 
 }

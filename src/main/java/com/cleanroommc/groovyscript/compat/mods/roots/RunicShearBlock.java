@@ -160,5 +160,7 @@ public class RunicShearBlock extends VirtualizedRegistry<RunicShearRecipe> {
             ModSupport.ROOTS.get().runicShearBlock.add(super.name, recipe);
             return recipe;
         }
+
     }
+
 }

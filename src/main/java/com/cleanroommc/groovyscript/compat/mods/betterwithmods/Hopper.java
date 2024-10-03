@@ -107,6 +107,7 @@ public class Hopper extends StandardListRegistry<HopperInteractions.HopperRecipe
             ModSupport.BETTER_WITH_MODS.get().hopper.add(recipe);
             return recipe;
         }
+
     }
 
 }

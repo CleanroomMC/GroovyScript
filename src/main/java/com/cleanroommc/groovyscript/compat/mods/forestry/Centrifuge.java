@@ -124,5 +124,7 @@ public class Centrifuge extends ForestryRegistry<ICentrifugeRecipe> {
             add(recipe);
             return recipe;
         }
+
     }
+
 }

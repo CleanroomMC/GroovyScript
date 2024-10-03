@@ -23,6 +23,7 @@ public class ScriptRunEvent extends Event {
         public Pre(LoadStage loadStage) {
             super(loadStage);
         }
+
     }
 
     /**
@@ -33,5 +34,7 @@ public class ScriptRunEvent extends Event {
         public Post(LoadStage loadStage) {
             super(loadStage);
         }
+
     }
+
 }

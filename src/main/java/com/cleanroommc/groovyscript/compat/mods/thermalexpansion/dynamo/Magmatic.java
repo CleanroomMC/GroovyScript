@@ -116,6 +116,7 @@ public class Magmatic extends VirtualizedRegistry<Magmatic.MagmaticRecipe> {
         public String toString() {
             return "MagmaticRecipe[" + "fluid=" + fluid + ", " + "energy=" + energy + ']';
         }
+
     }
 
 }

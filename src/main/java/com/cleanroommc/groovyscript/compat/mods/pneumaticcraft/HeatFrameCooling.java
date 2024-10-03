@@ -72,6 +72,7 @@ public class HeatFrameCooling extends StandardListRegistry<HeatFrameCoolingRecip
             ModSupport.PNEUMATIC_CRAFT.get().heatFrameCooling.add(recipe);
             return recipe;
         }
+
     }
 
 }

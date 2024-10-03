@@ -100,4 +100,5 @@ public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, I
         RollingMachineRecipe.instance.getRecipeList().forEach((a, b) -> addBackup(Pair.of(a, b)));
         RollingMachineRecipe.instance.getRecipeList().clear();
     }
+
 }

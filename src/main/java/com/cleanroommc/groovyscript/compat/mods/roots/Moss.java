@@ -123,5 +123,7 @@ public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> {
             Moss.reload();
             return Pair.of(input.get(0).getMatchingStacks()[0], output.get(0));
         }
+
     }
+
 }

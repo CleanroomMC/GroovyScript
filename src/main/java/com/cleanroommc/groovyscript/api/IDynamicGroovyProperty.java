@@ -38,4 +38,5 @@ public interface IDynamicGroovyProperty {
      * @return all properties
      */
     Map<String, ?> getProperties();
+
 }

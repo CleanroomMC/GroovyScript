@@ -165,5 +165,7 @@ public class CombinationCrafting extends StandardListRegistry<CombinationRecipe>
             ModSupport.EXTENDED_CRAFTING.get().combinationCrafting.add(recipe);
             return recipe;
         }
+
     }
+
 }

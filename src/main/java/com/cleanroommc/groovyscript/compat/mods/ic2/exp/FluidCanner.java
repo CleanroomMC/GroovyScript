@@ -136,4 +136,5 @@ public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrich
         }
         return list;
     }
+
 }

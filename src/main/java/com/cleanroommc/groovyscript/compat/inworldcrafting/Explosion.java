@@ -97,6 +97,7 @@ public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
             }
             return true;
         }
+
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExplosionRecipe> {
@@ -136,6 +137,7 @@ public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
             VanillaModule.inWorldCrafting.explosion.add(explosionRecipe);
             return explosionRecipe;
         }
+
     }
 
     @GroovyBlacklist
@@ -147,4 +149,5 @@ public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
             }
         }
     }
+
 }

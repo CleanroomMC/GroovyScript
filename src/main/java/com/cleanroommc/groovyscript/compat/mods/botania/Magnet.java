@@ -84,4 +84,5 @@ public class Magnet extends VirtualizedRegistry<MagnetSubject> {
     public boolean removeFromBlacklist(IBlockState state) {
         return removeFromBlacklist(state.getBlock(), state.getBlock().getMetaFromState(state));
     }
+
 }

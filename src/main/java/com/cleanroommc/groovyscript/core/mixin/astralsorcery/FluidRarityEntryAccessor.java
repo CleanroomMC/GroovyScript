@@ -17,4 +17,5 @@ public interface FluidRarityEntryAccessor {
     static FluidRarityRegistry.FluidRarityEntry createFluidRarityEntry(Fluid fluid, int rarity, int guaranteedAmount, int additionalRandomAmount) {
         throw new UnsupportedOperationException();
     }
+
 }

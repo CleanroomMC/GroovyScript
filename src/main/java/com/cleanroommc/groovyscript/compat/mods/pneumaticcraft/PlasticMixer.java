@@ -153,6 +153,7 @@ public class PlasticMixer extends StandardListRegistry<PlasticMixerRegistry.Plas
             ModSupport.PNEUMATIC_CRAFT.get().plasticMixer.add(recipe);
             return recipe;
         }
+
     }
 
 }

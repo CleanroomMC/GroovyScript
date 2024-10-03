@@ -13,4 +13,5 @@ public interface ModifierAccessor {
 
     @Accessor
     Map<CostType, IModifierCost> getCosts();
+
 }

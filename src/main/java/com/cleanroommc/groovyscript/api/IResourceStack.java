@@ -24,4 +24,5 @@ public interface IResourceStack {
     default IResourceStack multiply(Number n) {
         return withAmount(n.intValue());
     }
+
 }

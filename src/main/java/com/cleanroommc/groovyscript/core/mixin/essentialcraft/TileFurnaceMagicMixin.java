@@ -30,4 +30,5 @@ public abstract class TileFurnaceMagicMixin extends TileMRUGeneric {
             ci.cancel();
         }
     }
+
 }

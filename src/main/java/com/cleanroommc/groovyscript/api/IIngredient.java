@@ -108,6 +108,7 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
         @Override
         public void setMark(String mark) {
         }
+
     };
 
     /**
@@ -123,10 +124,12 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
         @Override
         public Ingredient toMcIngredient() {
             return new Ingredient() {
+
                 @Override
                 public boolean apply(@Nullable ItemStack p_apply_1_) {
                     return true;
                 }
+
             };
         }
 
@@ -163,5 +166,7 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
         @Override
         public void setMark(String mark) {
         }
+
     };
+
 }

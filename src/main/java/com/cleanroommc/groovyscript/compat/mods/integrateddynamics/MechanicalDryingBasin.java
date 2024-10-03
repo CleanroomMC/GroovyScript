@@ -51,4 +51,5 @@ public class MechanicalDryingBasin extends StandardListRegistry<IRecipe<Ingredie
             return false;
         });
     }
+
 }

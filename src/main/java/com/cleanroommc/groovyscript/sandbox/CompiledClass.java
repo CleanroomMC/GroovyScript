@@ -89,4 +89,5 @@ class CompiledClass {
     public String toString() {
         return new ToStringBuilder(this).append("name", name).toString();
     }
+
 }

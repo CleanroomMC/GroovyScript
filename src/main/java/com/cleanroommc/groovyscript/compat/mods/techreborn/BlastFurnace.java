@@ -87,6 +87,7 @@ public class BlastFurnace extends AbstractGenericTechRebornRegistry {
             ModSupport.TECH_REBORN.get().blastFurnace.add(recipe);
             return recipe;
         }
+
     }
 
 }

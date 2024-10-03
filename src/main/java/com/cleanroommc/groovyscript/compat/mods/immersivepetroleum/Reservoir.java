@@ -247,5 +247,7 @@ public class Reservoir extends VirtualizedRegistry<Pair<PumpjackHandler.Reservoi
             ModSupport.IMMERSIVE_PETROLEUM.get().reservoir.add(recipe, weight);
             return recipe;
         }
+
     }
+
 }

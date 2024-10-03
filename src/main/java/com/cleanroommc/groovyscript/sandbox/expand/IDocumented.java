@@ -11,4 +11,5 @@ public interface IDocumented {
         if (s.startsWith("/**") && s.endsWith("*/")) return s;
         return "/**\n *" + s.replaceAll("\n", "\n * ") + "\n*/";
     }
+
 }

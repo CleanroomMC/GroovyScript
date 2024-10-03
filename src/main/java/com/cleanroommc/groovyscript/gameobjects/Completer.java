@@ -38,4 +38,5 @@ public interface Completer extends com.cleanroommc.groovyscript.mapper.Completer
             other.complete(paramIndex, items);
         };
     }
+
 }

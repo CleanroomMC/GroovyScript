@@ -88,6 +88,7 @@ public class ChemicalReactor extends AbstractPraescriptumRegistry {
             ModSupport.TECH_REBORN.get().chemicalReactor.add(recipe);
             return recipe;
         }
+
     }
 
 }

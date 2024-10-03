@@ -13,4 +13,5 @@ public interface ClassicCanningMachineRegistryAccessor {
 
     @Accessor("IdToItems")
     Map<Integer, List<ItemWithMeta>> getIdToItems();
+
 }

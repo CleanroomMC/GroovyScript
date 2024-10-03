@@ -100,5 +100,7 @@ public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceReci
             MithrilineFurnaceRecipes.addRecipe(recipe);
             return recipe;
         }
+
     }
+
 }

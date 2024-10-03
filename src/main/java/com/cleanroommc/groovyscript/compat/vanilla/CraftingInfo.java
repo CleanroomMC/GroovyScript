@@ -35,4 +35,5 @@ public class CraftingInfo {
     public World getWorld() {
         return this.world;
     }
+
 }

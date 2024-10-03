@@ -71,4 +71,5 @@ public class CharcoalPile extends ForestryRegistry<ICharcoalPileWall> {
         if (!isEnabled()) return null;
         return new SimpleObjectStream<>(((CharcoalManagerAccessor) TreeManager.charcoalManager).getWalls()).setRemover(this::remove);
     }
+
 }

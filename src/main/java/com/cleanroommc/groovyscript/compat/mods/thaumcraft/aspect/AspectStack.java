@@ -64,4 +64,5 @@ public class AspectStack implements IResourceStack {
     public ItemStack getPhial() {
         return ItemPhial.makeFilledPhial(this.aspect);
     }
+
 }

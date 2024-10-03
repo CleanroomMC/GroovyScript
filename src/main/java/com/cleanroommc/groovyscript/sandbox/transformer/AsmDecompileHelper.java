@@ -97,5 +97,7 @@ public class AsmDecompileHelper {
         public DecompileVisitor() {
             super(Opcodes.ASM5);
         }
+
     }
+
 }

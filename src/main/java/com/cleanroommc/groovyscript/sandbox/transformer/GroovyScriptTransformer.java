@@ -112,4 +112,5 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
         }
         return mce;
     }
+
 }

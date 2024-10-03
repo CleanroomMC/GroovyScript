@@ -90,4 +90,5 @@ public class ForgeRegistryWrapper<T extends IForgeRegistryEntry<T>> extends Name
             return key != null;
         });
     }
+
 }

@@ -86,5 +86,7 @@ public class PistonPushRecipeCategory extends BaseCategory<PistonPushRecipeCateg
                 minecraft.fontRenderer.drawString(I18n.format("groovyscript.recipe.piston_push.min_level", this.pistonPushRecipe.getMinHarvestLevel()), 7, y, 0x404040);
             }
         }
+
     }
+
 }

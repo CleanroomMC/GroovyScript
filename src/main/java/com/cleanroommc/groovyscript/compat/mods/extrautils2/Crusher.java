@@ -147,5 +147,7 @@ public class Crusher extends VirtualizedRegistry<IMachineRecipe> {
             ModSupport.EXTRA_UTILITIES_2.get().crusher.add(recipe);
             return recipe;
         }
+
     }
+
 }

@@ -131,4 +131,5 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
     public Iterator<ItemStack> iterator() {
         return Iterators.unmodifiableIterator(prepareItemStacks().listIterator());
     }
+
 }

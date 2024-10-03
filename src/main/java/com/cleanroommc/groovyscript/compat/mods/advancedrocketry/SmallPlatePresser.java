@@ -51,5 +51,7 @@ public class SmallPlatePresser extends BaseRegistry {
             boolean allBlocks = Arrays.stream(input.get(0).getMatchingStacks()).allMatch(s -> s.getItem() instanceof ItemBlock);
             msg.add(!allBlocks, "All inputs to Small Plate Press recipes must be blocks!");
         }
+
     }
+
 }

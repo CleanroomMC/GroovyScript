@@ -68,5 +68,7 @@ public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeut
             ModSupport.MEKANISM.get().solarNeutronActivator.add(recipe);
             return recipe;
         }
+
     }
+
 }

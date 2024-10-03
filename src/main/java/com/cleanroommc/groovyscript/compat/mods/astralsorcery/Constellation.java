@@ -376,6 +376,7 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             MINOR,
             WEAK
         }
+
     }
 
     public static class ConstellationMapEffectBuilder {
@@ -484,4 +485,5 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         }
 
     }
+
 }

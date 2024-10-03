@@ -138,6 +138,7 @@ public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerReci
             this.type = type;
             this.recipe = recipe;
         }
+
     }
 
     private List<MachineRecipe<IRecipeInput, Collection<ItemStack>>> asList(int type) {
@@ -157,4 +158,5 @@ public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerReci
         }
         return list;
     }
+
 }

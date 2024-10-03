@@ -124,5 +124,7 @@ public class SagMill extends StandardListRegistry<Recipe> {
             ModSupport.ENDER_IO.get().sagMill.add(recipe);
             return recipe;
         }
+
     }
+
 }

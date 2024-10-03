@@ -190,5 +190,7 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
             ModSupport.ASTRAL_SORCERY.get().lightwell.add(recipe);
             return recipe;
         }
+
     }
+
 }

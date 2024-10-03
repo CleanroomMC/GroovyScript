@@ -26,4 +26,5 @@ public interface IRecipeBuilder<T> {
     @Nullable
     @RecipeBuilderRegistrationMethod
     T register();
+
 }

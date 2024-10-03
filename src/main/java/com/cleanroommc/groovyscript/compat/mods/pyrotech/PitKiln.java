@@ -135,5 +135,7 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
             PyroTech.pitKiln.add(recipe);
             return recipe;
         }
+
     }
+
 }

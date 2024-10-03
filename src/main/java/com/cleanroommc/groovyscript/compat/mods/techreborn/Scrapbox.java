@@ -70,6 +70,7 @@ public class Scrapbox extends AbstractGenericTechRebornRegistry {
             ModSupport.TECH_REBORN.get().blastFurnace.add(recipe);
             return recipe;
         }
+
     }
 
 }

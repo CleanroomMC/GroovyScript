@@ -46,4 +46,5 @@ public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
     public List<String> getMixinConfigs() {
         return ImmutableList.of("mixin.groovyscript.json");
     }
+
 }

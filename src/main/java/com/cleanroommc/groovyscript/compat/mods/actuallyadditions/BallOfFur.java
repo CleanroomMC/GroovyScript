@@ -74,5 +74,7 @@ public class BallOfFur extends StandardListRegistry<BallOfFurReturn> {
             ModSupport.ACTUALLY_ADDITIONS.get().ballOfFur.add(recipe);
             return recipe;
         }
+
     }
+
 }

@@ -198,5 +198,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             ModSupport.THAUMCRAFT.get().crucible.add(recipe);
             return recipe;
         }
+
     }
+
 }

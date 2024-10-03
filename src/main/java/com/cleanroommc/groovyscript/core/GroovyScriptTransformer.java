@@ -38,4 +38,5 @@ public class GroovyScriptTransformer implements IClassTransformer {
         }
         return classBytes;
     }
+
 }

@@ -270,6 +270,7 @@ public abstract class FluidRecipe {
                 }
             }
         }
+
     }
 
     public abstract static class RecipeBuilder<T extends FluidRecipe> extends AbstractRecipeBuilder<T> {
@@ -304,5 +305,7 @@ public abstract class FluidRecipe {
                 msg.add("input amount and input chances amount are not equal");
             }
         }
+
     }
+
 }

@@ -30,4 +30,5 @@ public class DummyRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IR
     public ItemStack getRecipeOutput() {
         return ItemStack.EMPTY;
     }
+
 }

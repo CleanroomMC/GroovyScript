@@ -31,4 +31,5 @@ public class ScriptModContainer extends DummyModContainer {
     public boolean registerBus(EventBus bus, LoadController controller) {
         return true;
     }
+
 }

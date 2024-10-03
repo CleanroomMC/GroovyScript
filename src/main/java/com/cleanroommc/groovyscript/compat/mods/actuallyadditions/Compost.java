@@ -104,5 +104,7 @@ public class Compost extends StandardListRegistry<CompostRecipe> {
             ModSupport.ACTUALLY_ADDITIONS.get().compost.add(recipe);
             return recipe;
         }
+
     }
+
 }

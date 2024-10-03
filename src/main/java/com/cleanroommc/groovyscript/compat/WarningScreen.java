@@ -84,4 +84,5 @@ public class WarningScreen extends GuiScreen {
         int buttonY = this.height - 30;
         this.buttonList.add(new GuiButton(0, buttonX, buttonY, I18n.format("gui.toTitle")));
     }
+
 }

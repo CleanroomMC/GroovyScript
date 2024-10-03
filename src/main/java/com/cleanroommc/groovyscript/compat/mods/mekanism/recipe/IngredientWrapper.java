@@ -81,4 +81,5 @@ public class IngredientWrapper {
     private String getDescriptor(IIngredient ingredient) {
         return ingredient.toString();
     }
+
 }

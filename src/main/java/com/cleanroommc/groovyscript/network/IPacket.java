@@ -35,4 +35,5 @@ public interface IPacket extends IMessage {
     default IPacket executeServer(NetHandlerPlayServer handler) {
         return null;
     }
+
 }

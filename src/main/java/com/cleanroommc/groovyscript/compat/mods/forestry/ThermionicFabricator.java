@@ -171,6 +171,7 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
             add(recipe);
             return recipe;
         }
+
     }
 
     public static class Smelting extends ForestryRegistry<IFabricatorSmeltingRecipe> {
@@ -237,5 +238,7 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
         public SimpleObjectStream<IFabricatorSmeltingRecipe> streamRecipes() {
             return new SimpleObjectStream<>(FabricatorSmeltingRecipeManager.recipes).setRemover(this::remove);
         }
+
     }
+
 }

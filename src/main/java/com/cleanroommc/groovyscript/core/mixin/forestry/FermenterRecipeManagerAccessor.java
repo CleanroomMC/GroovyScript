@@ -14,4 +14,5 @@ public interface FermenterRecipeManagerAccessor {
     static Set<IFermenterRecipe> getRecipes() {
         throw new AssertionError();
     }
+
 }

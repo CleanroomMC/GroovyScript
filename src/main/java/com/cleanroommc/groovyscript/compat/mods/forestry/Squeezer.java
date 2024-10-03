@@ -123,5 +123,7 @@ public class Squeezer extends ForestryRegistry<ISqueezerRecipe> {
             add(recipe);
             return recipe;
         }
+
     }
+
 }

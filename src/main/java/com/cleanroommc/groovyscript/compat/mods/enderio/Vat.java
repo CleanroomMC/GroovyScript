@@ -202,6 +202,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
             ModSupport.ENDER_IO.get().vat.add(recipe);
             return recipe;
         }
+
     }
 
     public static class VatRecipeInput extends RecipeInput {
@@ -217,5 +218,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         public float getMulitplier() {
             return multiplier;
         }
+
     }
+
 }

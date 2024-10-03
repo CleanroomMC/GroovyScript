@@ -145,5 +145,7 @@ public class Electrolyzer extends StandardListRegistry<ElectrolyzerRecipe> {
             ModSupport.ALCHEMISTRY.get().electrolyzer.add(recipe);
             return recipe;
         }
+
     }
+
 }

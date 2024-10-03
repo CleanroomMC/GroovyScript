@@ -49,4 +49,5 @@ public class ObjectMapperMetaMethod extends MetaMethod implements IDocumented {
     public String getDocumentation() {
         return this.closure.getDocumentation();
     }
+
 }

@@ -47,4 +47,5 @@ public abstract class EntityItemMixin extends Entity {
         super.onRemovedFromWorld();
         Burning.removeBurningItem((EntityItem) (Object) this);
     }
+
 }

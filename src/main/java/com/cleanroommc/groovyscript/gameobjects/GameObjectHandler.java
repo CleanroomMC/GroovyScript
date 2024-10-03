@@ -106,5 +106,7 @@ public class GameObjectHandler<T> {
         public Builder<T> docOfType(String type) {
             return (Builder<T>) super.docOfType(type);
         }
+
     }
+
 }

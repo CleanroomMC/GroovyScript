@@ -162,4 +162,5 @@ public abstract class MetaClassImplMixin {
 
         return invokeMissingMethod(object, methodName, originalArguments, null, isCallToSuper);
     }
+
 }

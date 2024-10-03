@@ -45,4 +45,5 @@ public class GroovyScriptLanguageServerContext implements ILanguageServerContext
     public DocumentationFactory getDocumentationFactory() {
         return documentationFactory;
     }
+
 }

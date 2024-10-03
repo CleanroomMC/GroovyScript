@@ -11,4 +11,5 @@ public interface MeltingRecipeAccessor {
     static int invokeCalcTemperature(int temp, int timeAmount) {
         throw new AssertionError();
     }
+
 }

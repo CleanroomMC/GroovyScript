@@ -88,6 +88,7 @@ public class Compressor extends AbstractPraescriptumRegistry {
             ModSupport.TECH_REBORN.get().compressor.add(recipe);
             return recipe;
         }
+
     }
 
 }

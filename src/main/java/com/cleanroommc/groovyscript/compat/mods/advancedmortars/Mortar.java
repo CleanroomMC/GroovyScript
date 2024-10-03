@@ -208,6 +208,7 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
             types.stream().map(EnumMortarType::fromName).forEach(enumMortarType -> add(enumMortarType, recipe));
             return recipe;
         }
+
     }
 
 }

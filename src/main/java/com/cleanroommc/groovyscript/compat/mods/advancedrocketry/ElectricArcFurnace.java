@@ -14,6 +14,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.hatch_count_11", type = Admonition.Type.INFO),
 })
 public class ElectricArcFurnace extends BaseRegistry {
+
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:blaze_powder') * 4).output(item('minecraft:blaze_rod')).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -57,5 +58,7 @@ public class ElectricArcFurnace extends BaseRegistry {
             msg.add(power < 1, "Power must be 1 or greater, got {}", power);
             msg.add(time < 1, "Time must be 1 or greater, got {}", time);
         }
+
     }
+
 }

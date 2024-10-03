@@ -47,4 +47,5 @@ public class Completions extends ArrayList<CompletionItem> {
     public Either<List<CompletionItem>, CompletionList> getResult(boolean incomplete) {
         return incomplete || reachedLimit() ? Either.forRight(new CompletionList(true, this)) : Either.forLeft(this);
     }
+
 }

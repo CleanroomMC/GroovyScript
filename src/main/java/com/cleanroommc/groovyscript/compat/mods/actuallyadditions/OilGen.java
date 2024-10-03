@@ -101,5 +101,7 @@ public class OilGen extends StandardListRegistry<OilGenRecipe> {
             ModSupport.ACTUALLY_ADDITIONS.get().oilGen.add(recipe);
             return recipe;
         }
+
     }
+
 }

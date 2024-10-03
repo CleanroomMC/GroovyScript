@@ -110,5 +110,7 @@ public class Fermenter extends StandardListRegistry<FermenterRecipe> {
             ModSupport.IMMERSIVE_ENGINEERING.get().fermenter.add(recipe);
             return recipe;
         }
+
     }
+
 }

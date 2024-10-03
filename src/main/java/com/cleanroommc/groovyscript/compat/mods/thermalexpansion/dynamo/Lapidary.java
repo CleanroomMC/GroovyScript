@@ -113,6 +113,7 @@ public class Lapidary extends VirtualizedRegistry<Lapidary.LapidaryRecipe> {
         public String toString() {
             return "LapidaryRecipe[" + "comparableItemStack=" + comparableItemStack + ", " + "energy=" + energy + ']';
         }
+
     }
 
 }

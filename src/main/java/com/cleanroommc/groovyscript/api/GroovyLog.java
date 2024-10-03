@@ -423,5 +423,7 @@ public interface GroovyLog {
             }
             return false;
         }
+
     }
+
 }

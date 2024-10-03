@@ -192,4 +192,5 @@ public abstract class FluidStackMixin implements IIngredient, INbtIngredient, IN
     public void setMark(String mark) {
         this.groovyScript$mark = mark;
     }
+
 }

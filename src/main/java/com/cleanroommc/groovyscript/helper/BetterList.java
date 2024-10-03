@@ -65,4 +65,5 @@ public class BetterList<K> extends ObjectArrayList<K> {
         }
         return false;
     }
+
 }

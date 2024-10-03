@@ -137,6 +137,7 @@ public class Kiln extends StandardListRegistry<KilnRecipe> {
             ModSupport.BETTER_WITH_MODS.get().kiln.add(recipe);
             return recipe;
         }
+
     }
 
 }

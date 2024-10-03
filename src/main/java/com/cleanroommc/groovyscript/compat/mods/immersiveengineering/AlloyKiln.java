@@ -106,6 +106,7 @@ public class AlloyKiln extends StandardListRegistry<AlloyRecipe> {
             ModSupport.IMMERSIVE_ENGINEERING.get().alloyKiln.add(recipe);
             return recipe;
         }
+
     }
 
 }

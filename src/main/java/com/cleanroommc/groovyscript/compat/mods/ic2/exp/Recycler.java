@@ -73,4 +73,5 @@ public class Recycler extends VirtualizedRegistry<IRecipeInput> {
         Recipes.recyclerWhitelist.add(recipe.getInput());
         addScripted(recipe.getInput());
     }
+
 }

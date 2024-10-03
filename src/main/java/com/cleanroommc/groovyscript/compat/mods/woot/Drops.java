@@ -218,6 +218,7 @@ public class Drops extends VirtualizedRegistry<Object> {
             ModSupport.WOOT.get().drops.add(name, output.get(0), chance, size);
             return null;
         }
+
     }
 
 }

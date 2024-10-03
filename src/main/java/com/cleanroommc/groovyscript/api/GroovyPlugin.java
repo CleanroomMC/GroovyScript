@@ -41,4 +41,5 @@ public interface GroovyPlugin extends IGroovyContainer {
     default boolean isLoaded() {
         return true;
     }
+
 }

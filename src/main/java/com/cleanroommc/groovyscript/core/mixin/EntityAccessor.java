@@ -9,4 +9,5 @@ public interface EntityAccessor {
 
     @Accessor
     int getFire();
+
 }

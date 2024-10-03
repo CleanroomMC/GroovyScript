@@ -105,5 +105,7 @@ public class Moistener extends ForestryRegistry<IMoistenerRecipe> {
             add(recipe);
             return recipe;
         }
+
     }
+
 }

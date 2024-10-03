@@ -173,5 +173,7 @@ public class Meteor extends VirtualizedRegistry<WayofTime.bloodmagic.meteor.Mete
             ModSupport.BLOOD_MAGIC.get().meteor.add(recipe);
             return recipe;
         }
+
     }
+
 }

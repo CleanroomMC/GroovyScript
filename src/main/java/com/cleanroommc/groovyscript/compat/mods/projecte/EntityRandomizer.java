@@ -102,4 +102,5 @@ public class EntityRandomizer extends VirtualizedRegistry<Class<? extends Entity
         removeAllMobs();
         removeAllPeacefuls();
     }
+
 }

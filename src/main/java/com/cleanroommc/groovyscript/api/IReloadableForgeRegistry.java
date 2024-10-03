@@ -52,5 +52,7 @@ public interface IReloadableForgeRegistry<V extends IForgeRegistryEntry<V>> {
         public boolean groovyScript$isDummy() {
             return true;
         }
+
     }
+
 }

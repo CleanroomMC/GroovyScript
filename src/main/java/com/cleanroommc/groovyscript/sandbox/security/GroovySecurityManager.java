@@ -153,4 +153,5 @@ public class GroovySecurityManager {
     public Set<Class<?>> getWhiteListedClasses() {
         return Collections.unmodifiableSet(whiteListedClasses);
     }
+
 }

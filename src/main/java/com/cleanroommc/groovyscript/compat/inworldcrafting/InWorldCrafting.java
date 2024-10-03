@@ -44,4 +44,5 @@ public class InWorldCrafting extends NamedRegistry implements IScriptReloadable 
         world.spawnEntity(entityItem);
         return entityItem;
     }
+
 }

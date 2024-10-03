@@ -140,6 +140,7 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
             ModSupport.APPLIED_ENERGISTICS_2.get().inscriber.add(recipe);
             return recipe;
         }
+
     }
 
 }

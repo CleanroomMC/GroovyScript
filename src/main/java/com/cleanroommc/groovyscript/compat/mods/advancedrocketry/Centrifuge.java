@@ -12,6 +12,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
 })
 public class Centrifuge extends BaseRegistry {
+
     @RecipeBuilderDescription(
             example = @Example(".fluidInput(fluid('lava') * 500).output(item('minecraft:slime_ball'), 0.1f).output(item('minecraft:stone'), 0.9f).fluidOutput(fluid('enrichedlava') * 500).power(50).time(100).outputSize(1)"))
     public RecipeBuilder recipeBuilder() {
@@ -47,5 +48,7 @@ public class Centrifuge extends BaseRegistry {
             msg.add(power < 1, "Power must be 1 or greater, got {}", power);
             msg.add(time < 1, "Time must be 1 or greater, got {}", time);
         }
+
     }
+
 }

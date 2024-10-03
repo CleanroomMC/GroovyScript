@@ -252,4 +252,5 @@ public class ToolMaterialBuilder {
         TinkerRegistry.integrate(new GroovyMaterialIntegration(material));
         return material;
     }
+
 }

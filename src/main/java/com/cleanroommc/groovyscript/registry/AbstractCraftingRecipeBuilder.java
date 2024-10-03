@@ -210,6 +210,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
     public interface IRecipeCreator<T> {
 
         T createRecipe(int width, int height, List<IIngredient> ingredients);
+
     }
 
     public abstract static class AbstractShaped<T> extends AbstractCraftingRecipeBuilder<T> {
@@ -300,6 +301,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
             this.ingredientMatrix = matrix;
             return this;
         }
+
     }
 
     public abstract static class AbstractShapeless<T> extends AbstractCraftingRecipeBuilder<T> {
@@ -336,5 +338,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
                     input(ingredient);
             return this;
         }
+
     }
+
 }

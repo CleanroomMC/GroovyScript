@@ -168,6 +168,7 @@ public class Category extends VirtualizedRegistry<String> {
         public String toString() {
             return "CustomCategory[" + "id=" + id + ", " + "category=" + category + ", " + "catalysts=" + catalysts + ", " + "wrappers=" + wrappers + ']';
         }
+
     }
 
     public static class CategoryBuilder implements IRecipeBuilder<CustomCategory> {
@@ -263,6 +264,7 @@ public class Category extends VirtualizedRegistry<String> {
             ModSupport.JEI.get().category.add(customCategory);
             return customCategory;
         }
+
     }
 
 }

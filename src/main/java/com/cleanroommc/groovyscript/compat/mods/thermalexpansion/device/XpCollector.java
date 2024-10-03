@@ -134,6 +134,7 @@ public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorReci
         public String toString() {
             return "XpCollectorRecipe[" + "catalyst=" + catalyst + ", " + "xp=" + xp + ", " + "factor=" + factor + ']';
         }
+
     }
 
 }

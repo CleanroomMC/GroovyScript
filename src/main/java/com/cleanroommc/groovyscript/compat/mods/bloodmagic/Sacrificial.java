@@ -142,5 +142,7 @@ public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Inte
             ModSupport.BLOOD_MAGIC.get().sacrificial.add(entity, value);
             return Pair.of(entity, value);
         }
+
     }
+
 }

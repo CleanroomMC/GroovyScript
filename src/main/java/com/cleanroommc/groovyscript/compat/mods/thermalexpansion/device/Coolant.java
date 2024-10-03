@@ -132,6 +132,7 @@ public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
         public String toString() {
             return "CoolantRecipe[" + "fluid=" + fluid + ", " + "rf=" + rf + ", " + "factor=" + factor + ']';
         }
+
     }
 
 }

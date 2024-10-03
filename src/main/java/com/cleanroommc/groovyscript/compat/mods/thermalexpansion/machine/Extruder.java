@@ -218,5 +218,7 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
             ModSupport.THERMAL_EXPANSION.get().extruder.add(sedimentary, recipe);
             return recipe;
         }
+
     }
+
 }

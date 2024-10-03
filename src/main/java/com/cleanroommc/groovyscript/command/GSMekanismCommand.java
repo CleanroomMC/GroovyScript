@@ -59,4 +59,5 @@ public class GSMekanismCommand extends CommandTreeBase {
     public @NotNull List<String> getAliases() {
         return Collections.singletonList("mek");
     }
+
 }

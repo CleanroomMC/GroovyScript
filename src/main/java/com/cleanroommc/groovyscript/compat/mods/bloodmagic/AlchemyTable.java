@@ -164,5 +164,7 @@ public class AlchemyTable extends StandardListRegistry<RecipeAlchemyTable> {
             ModSupport.BLOOD_MAGIC.get().alchemyTable.add(recipe);
             return recipe;
         }
+
     }
+
 }

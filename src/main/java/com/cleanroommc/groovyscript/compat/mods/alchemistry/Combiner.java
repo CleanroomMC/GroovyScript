@@ -98,5 +98,7 @@ public class Combiner extends StandardListRegistry<CombinerRecipe> {
             ModSupport.ALCHEMISTRY.get().combiner.add(recipe);
             return recipe;
         }
+
     }
+
 }

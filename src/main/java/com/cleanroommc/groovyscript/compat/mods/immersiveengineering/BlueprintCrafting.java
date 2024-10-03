@@ -197,5 +197,7 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
             ModSupport.IMMERSIVE_ENGINEERING.get().blueprint.add(recipe);
             return recipe;
         }
+
     }
+
 }

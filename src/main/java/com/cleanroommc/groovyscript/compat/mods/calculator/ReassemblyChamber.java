@@ -84,5 +84,7 @@ public class ReassemblyChamber extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().reassemblyChamber.add(recipe);
             return recipe;
         }
+
     }
+
 }

@@ -84,5 +84,7 @@ public class StoneSeparator extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().stoneSeparator.add(recipe);
             return recipe;
         }
+
     }
+
 }

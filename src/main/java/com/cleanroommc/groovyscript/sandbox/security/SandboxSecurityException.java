@@ -11,4 +11,5 @@ public class SandboxSecurityException extends RuntimeException {
     public static SandboxSecurityException format(String msg) {
         return new SandboxSecurityException(msg);
     }
+
 }

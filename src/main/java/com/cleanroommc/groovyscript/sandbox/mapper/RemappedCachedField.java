@@ -17,4 +17,5 @@ public class RemappedCachedField extends CachedField {
     public String getName() {
         return deobfName;
     }
+
 }

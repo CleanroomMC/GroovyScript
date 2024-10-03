@@ -85,5 +85,7 @@ public class StoneAnvil extends StandardListRegistry<StoneAnvilRecipes> {
             }
             return recipe;
         }
+
     }
+
 }

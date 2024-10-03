@@ -9,6 +9,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
 public class PrecisionLaserEtcher extends BaseRegistry {
+
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:blaze_powder') * 4, item('advancedrocketry:wafer')).output(item('advancedrocketry:itemcircuitplate')).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -51,5 +52,7 @@ public class PrecisionLaserEtcher extends BaseRegistry {
             msg.add(power < 1, "Power must be 1 or greater, got {}", power);
             msg.add(time < 1, "Time must be 1 or greater, got {}", time);
         }
+
     }
+
 }

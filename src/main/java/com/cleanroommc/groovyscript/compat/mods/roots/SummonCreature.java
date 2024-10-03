@@ -129,5 +129,7 @@ public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> {
             ModSupport.ROOTS.get().summonCreature.add(super.name, recipe);
             return recipe;
         }
+
     }
+
 }

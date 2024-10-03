@@ -135,5 +135,7 @@ public class BloodInfuser extends StandardListRegistry<IRecipe<IngredientFluidSt
             ModSupport.EVILCRAFT.get().bloodInfuser.addScripted(recipe);
             return recipe;
         }
+
     }
+
 }

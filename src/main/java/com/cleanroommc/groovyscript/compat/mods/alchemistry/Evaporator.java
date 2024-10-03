@@ -81,5 +81,7 @@ public class Evaporator extends StandardListRegistry<EvaporatorRecipe> {
             ModSupport.ALCHEMISTRY.get().evaporator.add(recipe);
             return recipe;
         }
+
     }
+
 }

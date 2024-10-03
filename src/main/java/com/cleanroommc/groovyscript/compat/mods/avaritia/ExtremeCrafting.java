@@ -88,4 +88,5 @@ public class ExtremeCrafting extends VirtualizedRegistry<IExtremeRecipe> {
         AvaritiaRecipeManager.EXTREME_RECIPES.values().forEach(this::addBackup);
         AvaritiaRecipeManager.EXTREME_RECIPES.values().clear();
     }
+
 }

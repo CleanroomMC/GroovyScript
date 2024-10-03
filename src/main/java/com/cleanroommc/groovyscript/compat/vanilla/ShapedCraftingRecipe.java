@@ -91,4 +91,5 @@ public class ShapedCraftingRecipe extends CraftingRecipe implements IShapedRecip
 
         return matches;
     }
+
 }

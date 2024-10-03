@@ -157,5 +157,7 @@ public class StaticVerifierVisitor extends ClassVisitor implements Opcodes {
             mv.visitMaxs(3, 3);
             mv.visitEnd();
         }
+
     }
+
 }

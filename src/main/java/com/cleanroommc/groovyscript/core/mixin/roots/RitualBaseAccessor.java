@@ -12,4 +12,5 @@ public interface RitualBaseAccessor {
 
     @Accessor("disabled")
     void setDisabled(boolean value);
+
 }

@@ -24,4 +24,5 @@ public class EntityMeltingRecipe {
     public static EntityMeltingRecipe fromMapEntry(Map.Entry<ResourceLocation, FluidStack> entry) {
         return new EntityMeltingRecipe(entry.getKey(), entry.getValue());
     }
+
 }

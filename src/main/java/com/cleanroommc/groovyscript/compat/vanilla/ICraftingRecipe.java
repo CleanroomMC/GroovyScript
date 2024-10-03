@@ -11,4 +11,5 @@ public interface ICraftingRecipe {
 
     @Nullable
     Closure<ItemStack> getRecipeFunction();
+
 }

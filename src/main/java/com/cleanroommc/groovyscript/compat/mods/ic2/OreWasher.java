@@ -130,4 +130,5 @@ public class OreWasher extends VirtualizedRegistry<MachineRecipe<IRecipeInput, C
         }
         return list;
     }
+
 }

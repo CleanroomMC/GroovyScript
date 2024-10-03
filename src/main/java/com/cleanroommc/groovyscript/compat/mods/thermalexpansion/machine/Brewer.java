@@ -170,5 +170,7 @@ public class Brewer extends VirtualizedRegistry<BrewerRecipe> {
             }
             return recipe;
         }
+
     }
+
 }

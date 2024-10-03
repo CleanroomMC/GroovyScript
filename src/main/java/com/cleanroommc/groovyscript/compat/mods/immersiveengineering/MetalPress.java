@@ -221,5 +221,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
             ModSupport.IMMERSIVE_ENGINEERING.get().metalPress.add(recipe);
             return recipe;
         }
+
     }
+
 }

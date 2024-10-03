@@ -73,4 +73,5 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
         registry.add(recipe);
         return recipe;
     }
+
 }

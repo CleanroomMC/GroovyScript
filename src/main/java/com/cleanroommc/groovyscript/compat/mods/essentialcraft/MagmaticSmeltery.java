@@ -129,5 +129,7 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
             ModSupport.ESSENTIALCRAFT.get().magmaticSmeltery.addScripted(recipe);
             return recipe;
         }
+
     }
+
 }

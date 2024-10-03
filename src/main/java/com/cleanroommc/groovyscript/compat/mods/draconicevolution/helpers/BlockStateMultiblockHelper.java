@@ -22,4 +22,5 @@ public class BlockStateMultiblockHelper extends MultiBlockHelper {
     })
     public void forBlock(BlockStates state, World world, BlockPos pos, BlockPos startPos, int flag) {
     }
+
 }

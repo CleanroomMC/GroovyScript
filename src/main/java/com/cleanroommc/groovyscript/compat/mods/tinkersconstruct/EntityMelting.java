@@ -156,5 +156,7 @@ public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
             add(recipe);
             return recipe;
         }
+
     }
+
 }

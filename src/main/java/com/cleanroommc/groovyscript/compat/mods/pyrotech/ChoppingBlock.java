@@ -96,5 +96,7 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
             PyroTech.choppingBlock.add(recipe);
             return recipe;
         }
+
     }
+
 }

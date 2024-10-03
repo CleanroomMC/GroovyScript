@@ -97,4 +97,5 @@ public class Sawmill extends VirtualizedRegistry<IMachineRecipeList.RecipeEntry>
             remove(entry);
         }
     }
+
 }

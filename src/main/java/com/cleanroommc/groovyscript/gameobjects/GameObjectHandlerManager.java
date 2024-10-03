@@ -50,4 +50,5 @@ public class GameObjectHandlerManager {
     public static void provideCompletion(String name, int index, Completions items) {
         ObjectMapperManager.provideCompletion(name, index, items);
     }
+
 }

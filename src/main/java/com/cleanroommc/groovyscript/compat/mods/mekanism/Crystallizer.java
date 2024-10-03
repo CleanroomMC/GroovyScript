@@ -68,5 +68,7 @@ public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe
             ModSupport.MEKANISM.get().crystallizer.add(recipe);
             return recipe;
         }
+
     }
+
 }
