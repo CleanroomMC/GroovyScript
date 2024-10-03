@@ -23,6 +23,7 @@ import com.cleanroommc.groovyscript.api.Hidden;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
+import com.cleanroommc.groovyscript.sandbox.Preprocessor;
 import com.cleanroommc.groovyscript.sandbox.expand.IDocumented;
 import groovy.lang.*;
 import groovy.lang.groovydoc.Groovydoc;
@@ -37,7 +38,9 @@ import org.eclipse.lsp4j.Range;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
 
+import java.io.File;
 import java.lang.reflect.Modifier;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -416,7 +419,7 @@ public class GroovyASTUtils {
         return score;
     }
 
-    public static Range findAddImportRange(ASTNode offsetNode, ASTContext context) {
+    public static Range findAddImportRange(URI uri, ASTNode offsetNode, ASTContext context) {
         ModuleNode moduleNode = GroovyASTUtils.getEnclosingNodeOfType(offsetNode, ModuleNode.class, context);
         if (moduleNode == null) {
             return new Range(new Position(0, 0), new Position(0, 0));
@@ -424,13 +427,22 @@ public class GroovyASTUtils {
         ASTNode afterNode = null;
         List<ImportNode> importNodes = moduleNode.getImports();
         if (!importNodes.isEmpty()) {
-            afterNode = importNodes.get(importNodes.size() - 1);
+            // auto added imports don't have a line number,
+            // so we need to iterate all imports and see which one is the most bottom one
+            for (ImportNode node : importNodes) {
+                if (node.getLastLineNumber() < 0) continue;
+                if (afterNode == null || node.getLastLineNumber() > afterNode.getLastLineNumber()) {
+                    afterNode = node;
+                }
+            }
         }
         if (afterNode == null) {
             afterNode = moduleNode.getPackage();
         }
         if (afterNode == null) {
-            return new Range(new Position(0, 0), new Position(0, 0));
+            int line = Preprocessor.getImportStartLine(new File(uri));
+            Position p = new Position(line, 0);
+            return new Range(p, p);
         }
         Range nodeRange = GroovyLSUtils.astNodeToRange(afterNode);
         if (nodeRange == null) {

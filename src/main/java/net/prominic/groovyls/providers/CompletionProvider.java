@@ -554,7 +554,7 @@ public class CompletionProvider extends DocProvider {
 
     private void populateTypes(ASTNode offsetNode, String namePrefix, Set<String> existingNames, boolean includeClasses,
                                boolean includeInterfaces, boolean includeEnums, Completions items) {
-        Range addImportRange = GroovyASTUtils.findAddImportRange(offsetNode, astContext);
+        Range addImportRange = GroovyASTUtils.findAddImportRange(doc, offsetNode, astContext);
 
         ModuleNode enclosingModule = getModule();
         String enclosingPackageName = enclosingModule.getPackageName();
