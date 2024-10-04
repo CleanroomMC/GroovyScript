@@ -23,24 +23,20 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
 import net.prominic.groovyls.util.GroovyNodeToStringUtils;
-import net.prominic.groovyls.util.URIUtils;
 import org.codehaus.groovy.ast.*;
 import org.eclipse.lsp4j.*;
 
 import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 
-public class HoverProvider {
+public class HoverProvider extends DocProvider {
 
-    private final ASTContext astContext;
-
-    public HoverProvider(ASTContext astContext) {
-        this.astContext = astContext;
+    public HoverProvider(URI doc, ASTContext astContext) {
+        super(doc, astContext);
     }
 
     public CompletableFuture<Hover> provideHover(TextDocumentIdentifier textDocument, Position position) {
-        URI uri = URIUtils.toUri(textDocument.getUri());
-        ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
+        ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(doc, position.getLine(), position.getCharacter());
         if (offsetNode == null) {
             return CompletableFuture.completedFuture(null);
         }
@@ -78,14 +74,11 @@ public class HoverProvider {
     }
 
     private String getContent(ASTNode hoverNode) {
-        if (hoverNode instanceof ClassNode) {
-            ClassNode classNode = (ClassNode) hoverNode;
+        if (hoverNode instanceof ClassNode classNode) {
             return GroovyNodeToStringUtils.classToString(classNode, astContext);
-        } else if (hoverNode instanceof MethodNode) {
-            MethodNode methodNode = (MethodNode) hoverNode;
+        } else if (hoverNode instanceof MethodNode methodNode) {
             return GroovyNodeToStringUtils.methodToString(methodNode, astContext);
-        } else if (hoverNode instanceof Variable) {
-            Variable varNode = (Variable) hoverNode;
+        } else if (hoverNode instanceof Variable varNode) {
             return GroovyNodeToStringUtils.variableToString(varNode, astContext);
         } else {
             GroovyScript.LOGGER.warn("*** hover not available for node: {}", hoverNode);

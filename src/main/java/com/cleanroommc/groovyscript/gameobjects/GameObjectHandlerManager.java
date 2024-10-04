@@ -20,7 +20,7 @@ public class GameObjectHandlerManager {
 
     @Nullable
     public static Object getGameObject(String name, String mainArg, Object... args) {
-        return ObjectMapperManager.getGameObject(name, mainArg, args);
+        return ObjectMapperManager.getGameObject(false, name, mainArg, args);
     }
 
     public static boolean hasGameObjectHandler(String key) {

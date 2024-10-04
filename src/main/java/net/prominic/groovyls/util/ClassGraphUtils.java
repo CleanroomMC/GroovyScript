@@ -10,8 +10,7 @@ public class ClassGraphUtils {
     public static @Nullable ClassInfo resolveAllowedClassInfo(ClassNode node, ASTContext context) {
         ClassInfo result = null;
         while (result == null) {
-            if (node.equals(new ClassNode(Object.class)))
-                return null;
+            if (node.equals(new ClassNode(Object.class))) return null;
             result = context.getLanguageServerContext().getScanResult().getClassInfo(node.getName());
             for (ClassNode anInterface : node.getInterfaces()) {
                 result = context.getLanguageServerContext().getScanResult().getClassInfo(anInterface.getName());

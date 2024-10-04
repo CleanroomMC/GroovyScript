@@ -21,9 +21,8 @@ package net.prominic.groovyls.providers;
 
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
+import net.prominic.groovyls.util.GroovyLSUtils;
 import net.prominic.groovyls.util.GroovyNodeToStringUtils;
-import net.prominic.groovyls.util.URIUtils;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.MethodNode;
 import org.codehaus.groovy.ast.Parameter;
@@ -38,18 +37,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class SignatureHelpProvider {
+public class SignatureHelpProvider extends DocProvider {
 
-    private final ASTContext astContext;
-
-    public SignatureHelpProvider(ASTContext astContext) {
-        this.astContext = astContext;
+    public SignatureHelpProvider(URI doc, ASTContext astContext) {
+        super(doc, astContext);
     }
 
-    public CompletableFuture<SignatureHelp> provideSignatureHelp(TextDocumentIdentifier textDocument,
-                                                                 Position position) {
-        URI uri = URIUtils.toUri(textDocument.getUri());
-        ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(uri, position.getLine(), position.getCharacter());
+    public CompletableFuture<SignatureHelp> provideSignatureHelp(TextDocumentIdentifier textDocument, Position position) {
+        ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(doc, position.getLine(), position.getCharacter());
         if (offsetNode == null) {
             return CompletableFuture.completedFuture(new SignatureHelp(Collections.emptyList(), -1, -1));
         }
@@ -57,10 +52,9 @@ public class SignatureHelpProvider {
         MethodCall methodCall = null;
         ASTNode parentNode = astContext.getVisitor().getParent(offsetNode);
 
-        if (offsetNode instanceof ArgumentListExpression) {
+        if (offsetNode instanceof ArgumentListExpression argsList) {
             methodCall = (MethodCall) parentNode;
 
-            ArgumentListExpression argsList = (ArgumentListExpression) offsetNode;
             List<Expression> expressions = argsList.getExpressions();
             activeParamIndex = getActiveParameter(position, expressions);
         }
@@ -78,8 +72,7 @@ public class SignatureHelpProvider {
         for (MethodNode method : methods) {
             List<ParameterInformation> parameters = new ArrayList<>();
             Parameter[] methodParams = method.getParameters();
-            for (int i = 0; i < methodParams.length; i++) {
-                Parameter methodParam = methodParams[i];
+            for (Parameter methodParam : methodParams) {
                 ParameterInformation paramInfo = new ParameterInformation();
                 paramInfo.setLabel(GroovyNodeToStringUtils.variableToString(methodParam, astContext));
                 parameters.add(paramInfo);
@@ -104,15 +97,14 @@ public class SignatureHelpProvider {
     private int getActiveParameter(Position position, List<Expression> expressions) {
         for (int i = 0; i < expressions.size(); i++) {
             Expression expr = expressions.get(i);
-            Range exprRange = GroovyLanguageServerUtils.astNodeToRange(expr);
+            Range exprRange = GroovyLSUtils.astNodeToRange(expr);
             if (exprRange == null) {
                 continue;
             }
             if (position.getLine() < exprRange.getEnd().getLine()) {
                 return i;
             }
-            if (position.getLine() == exprRange.getEnd().getLine()
-                && position.getCharacter() <= exprRange.getEnd().getCharacter()) {
+            if (position.getLine() == exprRange.getEnd().getLine() && position.getCharacter() <= exprRange.getEnd().getCharacter()) {
                 return i;
             }
         }
