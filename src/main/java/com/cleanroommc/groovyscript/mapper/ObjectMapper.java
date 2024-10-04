@@ -54,8 +54,8 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
     private final List<Class<?>[]> paramTypes;
     private final Completer completer;
     private final String documentation;
+    private final TextureBinder<T> textureBinder;
     private List<MethodNode> methodNodes;
-    private TextureBinder<T> textureBinder;
 
     private ObjectMapper(String name, GroovyContainer<?> mod, IObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation, TextureBinder<T> textureBinder) {
         super(null);
@@ -156,12 +156,9 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         return methodNodes;
     }
 
+    @ApiStatus.Experimental
     public TextureBinder<T> getTextureBinder() {
         return textureBinder;
-    }
-
-    public void setTextureBinder(TextureBinder<T> textureBinder) {
-        this.textureBinder = textureBinder;
     }
 
     /**
@@ -342,6 +339,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             return documentation("returns a " + mod + type);
         }
 
+        @ApiStatus.Experimental
         public Builder<T> textureBinder(TextureBinder<T> textureBinder) {
             this.textureBinder = textureBinder;
             return this;

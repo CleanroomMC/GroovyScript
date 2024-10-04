@@ -10,12 +10,19 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * This interface draws objects, so they can be rendered as icons in an ide.
+ *
+ * This is marked as experimental. This class is likely to change and may even be removed in a future update.
+ */
+@ApiStatus.Experimental
 public interface TextureBinder<T> extends Function<T, List<String>> {
 
     static <A, T> TextureBinder<A> of(Function<A, T> mapper, TextureBinder<T> binder) {
