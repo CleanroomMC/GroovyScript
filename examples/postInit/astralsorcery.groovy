@@ -151,6 +151,8 @@ mods.astralsorcery.light_transmutation.recipeBuilder()
     .register()
 
 
+mods.astralsorcery.light_transmutation.setStarmetalReplacementState(blockstate('minecraft:clay'))
+
 // Lightwell:
 // Converts an input item into fluid, with a chance at breaking every time fluid is produced. The amount of fluid produced
 // per interval can be increased via starlight.
