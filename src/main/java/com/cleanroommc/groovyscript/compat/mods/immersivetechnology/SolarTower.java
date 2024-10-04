@@ -1,21 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.immersivetechnology;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import mctmods.immersivetechnology.api.crafting.SolarTowerRecipe;
 import mctmods.immersivetechnology.common.Config;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class SolarTower extends VirtualizedRegistry<SolarTowerRecipe> {
+public class SolarTower extends StandardListRegistry<SolarTowerRecipe> {
 
     @Override
     public boolean isEnabled() {
@@ -31,31 +30,13 @@ public class SolarTower extends VirtualizedRegistry<SolarTowerRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        SolarTowerRecipe.recipeList.removeAll(removeScripted());
-        SolarTowerRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(SolarTowerRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            SolarTowerRecipe.recipeList.add(recipe);
-        }
-    }
-
-    public boolean remove(SolarTowerRecipe recipe) {
-        if (SolarTowerRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<SolarTowerRecipe> getRecipes() {
+        return SolarTowerRecipe.recipeList;
     }
 
     @MethodDescription(example = @Example("fluid('water')"))
     public void removeByInput(IIngredient input) {
-        SolarTowerRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidInputs()) {
                 if (input.test(fluidStack)) {
                     addBackup(r);
@@ -68,7 +49,7 @@ public class SolarTower extends VirtualizedRegistry<SolarTowerRecipe> {
 
     @MethodDescription(example = @Example("fluid('superheatedmoltensodium')"))
     public void removeByOutput(IIngredient output) {
-        SolarTowerRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidOutputs()) {
                 if (output.test(fluidStack)) {
                     addBackup(r);
@@ -79,22 +60,11 @@ public class SolarTower extends VirtualizedRegistry<SolarTowerRecipe> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<SolarTowerRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(SolarTowerRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        SolarTowerRecipe.recipeList.forEach(this::addBackup);
-        SolarTowerRecipe.recipeList.clear();
-    }
-
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SolarTowerRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
 
         @RecipeBuilderMethodDescription

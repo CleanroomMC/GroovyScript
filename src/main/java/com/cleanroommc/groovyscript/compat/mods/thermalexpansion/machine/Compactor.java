@@ -144,13 +144,13 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         Arrays.stream(CompactorManager.Mode.values()).forEach(this::removeByMode);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompactorRecipe> {
 
         @Property(defaultValue = "CompactorManager.Mode.ALL")
         CompactorManager.Mode mode = CompactorManager.Mode.ALL;
-        @Property(defaultValue = "CompactorManager.DEFAULT_ENERGY", valid = @Comp(value = "0", type = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "CompactorManager.DEFAULT_ENERGY", comp = @Comp(gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = CompactorManager.DEFAULT_ENERGY;
 
         @RecipeBuilderMethodDescription

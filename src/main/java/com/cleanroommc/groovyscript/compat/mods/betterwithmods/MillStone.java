@@ -7,21 +7,26 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class MillStone extends VirtualizedRegistry<MillRecipe> {
+public class MillStone extends StandardListRegistry<MillRecipe> {
 
     public MillStone() {
         super(Alias.generateOfClass(MillStone.class).andGenerate("Mill"));
+    }
+
+    @Override
+    public Collection<MillRecipe> getRecipes() {
+        return BWRegistry.MILLSTONE.getRecipes();
     }
 
     @RecipeBuilderDescription(example = {
@@ -32,31 +37,9 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
         return new RecipeBuilder();
     }
 
-    @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> BWRegistry.MILLSTONE.getRecipes().removeIf(r -> r == recipe));
-        BWRegistry.MILLSTONE.getRecipes().addAll(restoreFromBackup());
-    }
-
-    public MillRecipe add(MillRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            BWRegistry.MILLSTONE.getRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(MillRecipe recipe) {
-        if (BWRegistry.MILLSTONE.getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
     @MethodDescription(example = @Example("item('minecraft:blaze_powder')"))
     public boolean removeByOutput(IIngredient output) {
-        return BWRegistry.MILLSTONE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -69,7 +52,7 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:netherrack')"))
     public boolean removeByInput(IIngredient input) {
-        return BWRegistry.MILLSTONE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (Ingredient ingredient : r.getInputs()) {
                 for (ItemStack item : ingredient.getMatchingStacks()) {
                     if (input.test(item)) {
@@ -82,24 +65,13 @@ public class MillStone extends VirtualizedRegistry<MillRecipe> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<MillRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(BWRegistry.MILLSTONE.getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BWRegistry.MILLSTONE.getRecipes().forEach(this::addBackup);
-        BWRegistry.MILLSTONE.getRecipes().clear();
-    }
-
-    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "3", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "3", type = Comp.Type.LTE)})
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 3))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MillRecipe> {
 
         @Property
         private SoundEvent soundEvent;
-        @Property(defaultValue = "1", valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(defaultValue = "1", comp = @Comp(gte = 1))
         private int ticks = 1;
         @Property(defaultValue = "1")
         private int priority = 1;

@@ -28,7 +28,6 @@ mods.extendedcrafting.combination_crafting.recipeBuilder()
     .register()
 
 
-
 // Compression Crafting:
 // Converts any number of a single item into an output itemstack, with a configurable rf cost, consumption per tick amount,
 // catalyst, and if the catalyst is consumed.
@@ -53,7 +52,6 @@ mods.extendedcrafting.compression_crafting.recipeBuilder()
     .output(item('minecraft:diamond') * 2)
     .powerCost(1000)
     .register()
-
 
 
 // Ender Crafting:
@@ -90,7 +88,6 @@ mods.extendedcrafting.ender_crafting.shapelessBuilder()
     .input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond'))
     .time(1)
     .register()
-
 
 
 // Table Crafting:
@@ -154,6 +151,5 @@ mods.extendedcrafting.table_crafting.shapelessBuilder()
     .output(item('minecraft:stone') * 64)
     .input(item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'))
     .register()
-
 
 

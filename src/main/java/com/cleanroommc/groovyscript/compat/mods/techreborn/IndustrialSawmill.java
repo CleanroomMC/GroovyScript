@@ -51,14 +51,14 @@ public class IndustrialSawmill extends AbstractGenericTechRebornRegistry {
         super.removeByOutput(output);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "3")})
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IndustrialSawmillRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int perTick;
         @Property
         private boolean oreDict;

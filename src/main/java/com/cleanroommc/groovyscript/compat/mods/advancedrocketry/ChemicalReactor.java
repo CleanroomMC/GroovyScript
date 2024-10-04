@@ -36,10 +36,10 @@ public class ChemicalReactor extends BaseRegistry {
         return super.removeByInput(input);
     }
 
-    @Property(property = "input", valid = @Comp(type = Comp.Type.LTE, value = "8"), requirement = "groovyscript.wiki.advancedrocketry.input.required")
-    @Property(property = "fluidInput", valid = @Comp(type = Comp.Type.LTE, value = "2"), requirement = "groovyscript.wiki.advancedrocketry.input.required")
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.LTE, value = "4")}, value = "groovyscript.wiki.advancedrocketry.output.value", requirement = "groovyscript.wiki.advancedrocketry.output.required")
-    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.LTE, value = "1")}, requirement = "groovyscript.wiki.advancedrocketry.output.required")
+    @Property(property = "input", comp = @Comp(lte = 8, unique = "groovyscript.wiki.advancedrocketry.input.required"))
+    @Property(property = "fluidInput", comp = @Comp(lte = 2, unique = "groovyscript.wiki.advancedrocketry.input.required"))
+    @Property(property = "output", comp = @Comp(lte = 4, unique = "groovyscript.wiki.advancedrocketry.output.required"), value = "groovyscript.wiki.advancedrocketry.output.value")
+    @Property(property = "fluidOutput", comp = @Comp(lte = 1, unique = "groovyscript.wiki.advancedrocketry.output.required"))
     public static class RecipeBuilder extends BaseRegistry.MultiblockRecipeBuilder {
 
         @Override

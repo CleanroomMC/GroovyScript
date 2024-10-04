@@ -6,9 +6,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import rustic.common.crafting.ICondenserRecipe;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,29 +27,29 @@ public class CondenserRecipe implements ICondenserRecipe {
     private final IIngredient modifier;
     private final List<IIngredient> inputs;
 
-    public CondenserRecipe(@Nonnull ItemStack output, List<IIngredient> inputs) {
+    public CondenserRecipe(@NotNull ItemStack output, List<IIngredient> inputs) {
         this(output, inputs, null);
     }
 
-    public CondenserRecipe(@Nonnull ItemStack output, List<IIngredient> inputs, IIngredient modifier) {
+    public CondenserRecipe(@NotNull ItemStack output, List<IIngredient> inputs, IIngredient modifier) {
         this(output, inputs, modifier, (IIngredient) (Object) new ItemStack(Items.GLASS_BOTTLE));
     }
 
-    public CondenserRecipe(@Nonnull ItemStack output, List<IIngredient> inputs, IIngredient modifier, IIngredient bottle) {
+    public CondenserRecipe(@NotNull ItemStack output, List<IIngredient> inputs, IIngredient modifier, IIngredient bottle) {
         this(output, inputs, modifier, bottle, new FluidStack(FluidRegistry.WATER, 125));
     }
 
-    public CondenserRecipe(@Nonnull ItemStack output, List<IIngredient> inputs, IIngredient modifier, IIngredient bottle, @Nonnull FluidStack fluid) {
+    public CondenserRecipe(@NotNull ItemStack output, List<IIngredient> inputs, IIngredient modifier, IIngredient bottle, @NotNull FluidStack fluid) {
         this(output, inputs, modifier, bottle, fluid, 400);
     }
 
-    public CondenserRecipe(@Nonnull ItemStack output, List<IIngredient> inputs, IIngredient modifier, IIngredient bottle, @Nonnull FluidStack fluid, int time) {
+    public CondenserRecipe(@NotNull ItemStack output, List<IIngredient> inputs, IIngredient modifier, IIngredient bottle, @NotNull FluidStack fluid, int time) {
         this(output, inputs, modifier, bottle, fluid, time, modifier == null && inputs.size() <= 2);
     }
 
     public CondenserRecipe(
-            @Nonnull ItemStack output, List<IIngredient> inputs, IIngredient modifier, IIngredient bottle,
-            @Nonnull FluidStack fluid, int time, boolean advanced) {
+            @NotNull ItemStack output, List<IIngredient> inputs, IIngredient modifier, IIngredient bottle,
+            @NotNull FluidStack fluid, int time, boolean advanced) {
         this.output = output;
         this.fluid = fluid;
         this.bottle = bottle;

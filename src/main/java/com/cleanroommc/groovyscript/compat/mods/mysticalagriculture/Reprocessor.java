@@ -2,19 +2,19 @@ package com.cleanroommc.groovyscript.compat.mods.mysticalagriculture;
 
 import com.blakebr0.mysticalagriculture.crafting.ReprocessorManager;
 import com.blakebr0.mysticalagriculture.crafting.ReprocessorRecipe;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Reprocessor extends VirtualizedRegistry<ReprocessorRecipe> {
+public class Reprocessor extends StandardListRegistry<ReprocessorRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond') * 3)"),
@@ -25,10 +25,8 @@ public class Reprocessor extends VirtualizedRegistry<ReprocessorRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        ReprocessorManager.getRecipes().removeAll(removeScripted());
-        ReprocessorManager.getRecipes().addAll(restoreFromBackup());
+    public Collection<ReprocessorRecipe> getRecipes() {
+        return ReprocessorManager.getRecipes();
     }
 
 //    public ReprocessorRecipe add(IIngredient input, ItemStack output, int amount) {
@@ -44,22 +42,9 @@ public class Reprocessor extends VirtualizedRegistry<ReprocessorRecipe> {
                 .register();
     }
 
-    public void add(ReprocessorRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ReprocessorManager.getRecipes().add(recipe);
-    }
-
-    public boolean remove(ReprocessorRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ReprocessorManager.getRecipes().remove(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("item('mysticalagriculture:stone_seeds')"))
     public boolean removeByInput(IIngredient input) {
-        return ReprocessorManager.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getInput())) {
                 addBackup(recipe);
                 return true;
@@ -70,7 +55,7 @@ public class Reprocessor extends VirtualizedRegistry<ReprocessorRecipe> {
 
     @MethodDescription(example = @Example("item('mysticalagriculture:dirt_essence')"))
     public boolean removeByOutput(IIngredient output) {
-        return ReprocessorManager.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput())) {
                 addBackup(recipe);
                 return true;
@@ -79,23 +64,11 @@ public class Reprocessor extends VirtualizedRegistry<ReprocessorRecipe> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ReprocessorManager.getRecipes().forEach(this::addBackup);
-        ReprocessorManager.getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ReprocessorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ReprocessorManager.getRecipes())
-                .setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ReprocessorRecipe> {
 
-//        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"), defaultValue = "1")
+//        @Property(comp = @Comp(gt = 0), defaultValue = "1")
 //        private int amount = 1;
 //        @Property
 //        private boolean exact;

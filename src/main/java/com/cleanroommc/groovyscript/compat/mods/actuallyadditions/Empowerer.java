@@ -1,14 +1,12 @@
 package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.recipe.EmpowererRecipe;
 import net.minecraft.item.ItemStack;
@@ -16,9 +14,10 @@ import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Collection;
 
 @RegistryDescription
-public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
+public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".mainInput(item('minecraft:clay')).input(item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay'),item('minecraft:clay')).output(item('minecraft:diamond')).time(50).energy(1000).red(0.5).green(0.3).blue(0.2)"),
@@ -31,10 +30,8 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(ActuallyAdditionsAPI.EMPOWERER_RECIPES::remove);
-        ActuallyAdditionsAPI.EMPOWERER_RECIPES.addAll(restoreFromBackup());
+    public Collection<EmpowererRecipe> getRecipes() {
+        return ActuallyAdditionsAPI.EMPOWERER_RECIPES;
     }
 
     public EmpowererRecipe add(Ingredient input, ItemStack output, Ingredient modifier1, Ingredient modifier2, Ingredient modifier3, Ingredient modifier4, int energyPerStand, int time, float[] particleColor) {
@@ -43,22 +40,9 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         return recipe;
     }
 
-    public void add(EmpowererRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ActuallyAdditionsAPI.EMPOWERER_RECIPES.add(recipe);
-    }
-
-    public boolean remove(EmpowererRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ActuallyAdditionsAPI.EMPOWERER_RECIPES.remove(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("item('actuallyadditions:item_crystal')"))
     public boolean removeByInput(IIngredient input) {
-        return ActuallyAdditionsAPI.EMPOWERER_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
             if (found) {
                 addBackup(recipe);
@@ -69,7 +53,7 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
 
     @MethodDescription(example = @Example("item('actuallyadditions:item_misc:24')"))
     public boolean removeByOutput(ItemStack output) {
-        return ActuallyAdditionsAPI.EMPOWERER_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
             if (matches) {
                 addBackup(recipe);
@@ -78,34 +62,21 @@ public class Empowerer extends VirtualizedRegistry<EmpowererRecipe> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ActuallyAdditionsAPI.EMPOWERER_RECIPES.forEach(this::addBackup);
-        ActuallyAdditionsAPI.EMPOWERER_RECIPES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<EmpowererRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ActuallyAdditionsAPI.EMPOWERER_RECIPES)
-                .setRemover(this::remove);
-    }
-
-
-    @Property(property = "input", valid = {@Comp(value = "4", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 4, lte = 5))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<EmpowererRecipe> {
 
         @Property
         private IIngredient mainInput;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int energyPerStand;
-        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(comp = @Comp(gt = 0))
         private int time;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float red;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float green;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float blue;
 
         @RecipeBuilderMethodDescription

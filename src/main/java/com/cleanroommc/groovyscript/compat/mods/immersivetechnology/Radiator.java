@@ -1,21 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.immersivetechnology;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import mctmods.immersivetechnology.api.crafting.RadiatorRecipe;
 import mctmods.immersivetechnology.common.Config;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Radiator extends VirtualizedRegistry<RadiatorRecipe> {
+public class Radiator extends StandardListRegistry<RadiatorRecipe> {
 
     @Override
     public boolean isEnabled() {
@@ -31,31 +30,13 @@ public class Radiator extends VirtualizedRegistry<RadiatorRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        RadiatorRecipe.recipeList.removeAll(removeScripted());
-        RadiatorRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(RadiatorRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            RadiatorRecipe.recipeList.add(recipe);
-        }
-    }
-
-    public boolean remove(RadiatorRecipe recipe) {
-        if (RadiatorRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<RadiatorRecipe> getRecipes() {
+        return RadiatorRecipe.recipeList;
     }
 
     @MethodDescription(example = @Example("fluid('exhauststeam')"))
     public void removeByInput(IIngredient input) {
-        RadiatorRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidInputs()) {
                 if (input.test(fluidStack)) {
                     addBackup(r);
@@ -68,7 +49,7 @@ public class Radiator extends VirtualizedRegistry<RadiatorRecipe> {
 
     @MethodDescription(example = @Example(value = "fluid('distwater')",commented = true))
     public void removeByOutput(IIngredient output) {
-        RadiatorRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidOutputs()) {
                 if (output.test(fluidStack)) {
                     addBackup(r);
@@ -79,22 +60,11 @@ public class Radiator extends VirtualizedRegistry<RadiatorRecipe> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RadiatorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(RadiatorRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        RadiatorRecipe.recipeList.forEach(this::addBackup);
-        RadiatorRecipe.recipeList.clear();
-    }
-
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RadiatorRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
 
         @RecipeBuilderMethodDescription

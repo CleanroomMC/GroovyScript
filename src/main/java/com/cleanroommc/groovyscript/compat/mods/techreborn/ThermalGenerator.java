@@ -32,12 +32,12 @@ public class ThermalGenerator extends AbstractGeneratorRegistry {
         super.removeByInput(input);
     }
 
-    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<Fuel> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private double energy;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private double perTick;
 
         @RecipeBuilderMethodDescription

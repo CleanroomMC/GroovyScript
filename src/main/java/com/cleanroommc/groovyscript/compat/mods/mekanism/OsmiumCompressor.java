@@ -55,9 +55,9 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
         return found;
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "gasInput", defaultValue = "MekanismFluids.LiquidOsmium", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "gasInput", defaultValue = "MekanismFluids.LiquidOsmium", comp = @Comp(gte = 0, lte = 1))
     public static class RecipeBuilder extends GasRecipeBuilder<OsmiumCompressorRecipe> {
 
         @Override

@@ -63,12 +63,12 @@ public abstract class GasRecipeBuilder<T> extends AbstractRecipeBuilder<T> {
     public void validateGases(GroovyLog.Msg msg, int minInput, int maxInput, int minOutput, int maxOutput) {
         gasInput.trim();
         gasOutput.trim();
-        msg.add(gasInput.size() < minInput || gasInput.size() > maxInput, () -> getRequiredString(minInput, maxInput, "gas input") + ", but found " + gasInput.size());
-        msg.add(gasOutput.size() < minOutput || gasOutput.size() > maxOutput, () -> getRequiredString(minOutput, maxOutput, "gas output") + ", but found " + gasOutput.size());
+        validateCustom(msg, gasInput, minInput, maxInput, "gas input");
+        validateCustom(msg, gasOutput, minOutput, maxOutput, "gas output");
     }
 
     public void validateGases(GroovyLog.Msg msg) {
-        validateItems(msg, 0, 0, 0, 0);
+        validateGases(msg, 0, 0, 0, 0);
     }
 
 }

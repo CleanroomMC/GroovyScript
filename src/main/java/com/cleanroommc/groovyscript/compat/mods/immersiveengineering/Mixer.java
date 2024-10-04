@@ -6,19 +6,19 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Mixer extends VirtualizedRegistry<MixerRecipe> {
+public class Mixer extends StandardListRegistry<MixerRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), ore('ingotGold'), ore('ingotGold'), ore('ingotGold')).fluidInput(fluid('water')).fluidOutput(fluid('lava')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
@@ -26,16 +26,8 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> MixerRecipe.recipeList.removeIf(r -> r == recipe));
-        MixerRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(MixerRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            MixerRecipe.recipeList.add(recipe);
-        }
+    public Collection<MixerRecipe> getRecipes() {
+        return MixerRecipe.recipeList;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -46,14 +38,6 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         return recipe;
     }
 
-    public boolean remove(MixerRecipe recipe) {
-        if (MixerRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
     @MethodDescription(example = @Example("fluid('potion').withNbt([Potion:'minecraft:night_vision'])"))
     public void removeByOutput(FluidStack fluidOutput) {
         if (GroovyLog.msg("Error removing Immersive Engineering Mixer recipe")
@@ -62,7 +46,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        if (!MixerRecipe.recipeList.removeIf(recipe -> {
+        if (!getRecipes().removeIf(recipe -> {
             if (recipe.fluidOutput.isFluidEqual(fluidOutput)) {
                 addBackup(recipe);
                 return true;
@@ -84,7 +68,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        List<MixerRecipe> recipes = MixerRecipe.recipeList.stream().filter(r -> r.itemInputs.length == itemInputs.length &&
+        List<MixerRecipe> recipes = getRecipes().stream().filter(r -> r.itemInputs.length == itemInputs.length &&
                                                                                 Arrays.stream(itemInputs).anyMatch(check -> Arrays.stream(r.itemInputs).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check))))
                 .collect(Collectors.toList());
         for (MixerRecipe recipe : recipes) {
@@ -107,7 +91,7 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        List<MixerRecipe> recipes = MixerRecipe.recipeList.stream().filter(r -> fluidInput.isFluidEqual(r.fluidInput) &&
+        List<MixerRecipe> recipes = getRecipes().stream().filter(r -> fluidInput.isFluidEqual(r.fluidInput) &&
                                                                                 r.itemInputs.length == itemInput.length &&
                                                                                 Arrays.stream(itemInput).anyMatch(check -> Arrays.stream(r.itemInputs).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check))))
                 .collect(Collectors.toList());
@@ -122,21 +106,10 @@ public class Mixer extends VirtualizedRegistry<MixerRecipe> {
         }
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<MixerRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(MixerRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        MixerRecipe.recipeList.forEach(this::addBackup);
-        MixerRecipe.recipeList.clear();
-    }
-
-    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MixerRecipe> {
 
         @Property

@@ -3,18 +3,18 @@ package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 import WayofTime.bloodmagic.altar.AltarTier;
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeBloodAltar;
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.bloodmagic.BloodMagicRecipeRegistrarAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 @RegistryDescription(
         admonition = {
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
                             hasTitle = true)
         }
 )
-public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
+public class BloodAltar extends StandardListRegistry<RecipeBloodAltar> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot')).minimumTier(0).drainRate(5).syphon(10).consumeRate(5)"),
@@ -36,10 +36,8 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes()::remove);
-        restoreFromBackup().forEach(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes()::add);
+    public Collection<RecipeBloodAltar> getRecipes() {
+        return ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -53,22 +51,9 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
                 .register();
     }
 
-    public void add(RecipeBloodAltar recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().add(recipe);
-    }
-
-    public boolean remove(RecipeBloodAltar recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().remove(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public boolean removeByInput(IIngredient input) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean removeRecipe = recipe.getInput().test(IngredientHelper.toItemStack(input));
             if (removeRecipe) {
                 addBackup(recipe);
@@ -87,7 +72,7 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
 
     @MethodDescription(example = @Example("item('bloodmagic:slate:4')"))
     public boolean removeByOutput(ItemStack output) {
-        if (((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
             if (matches) {
                 addBackup(recipe);
@@ -104,29 +89,17 @@ public class BloodAltar extends VirtualizedRegistry<RecipeBloodAltar> {
         return false;
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().forEach(this::addBackup);
-        ((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeBloodAltar> streamRecipes() {
-        return new SimpleObjectStream<>(((BloodMagicRecipeRegistrarAccessor) BloodMagicAPI.INSTANCE.getRecipeRegistrar()).getAltarRecipes())
-                .setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeBloodAltar> {
 
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LT, value = "AltarTier.MAXTIERS")})
+        @Property(comp = @Comp(gte = 0, unique = "groovyscript.wiki.bloodmagic.max_tier.required"))
         private int minimumTier;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int syphon;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int consumeRate;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int drainRate;
 
         @RecipeBuilderMethodDescription

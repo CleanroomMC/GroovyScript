@@ -4,16 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import essentialcraft.api.MagicianTableRecipe;
 import essentialcraft.api.MagicianTableRecipes;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.essentialcraft.magician_table.note0", type = Admonition.Type.WARNING))
-public class MagicianTable extends VirtualizedRegistry<MagicianTableRecipe> {
+public class MagicianTable extends StandardListRegistry<MagicianTableRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), ore('ingotGold'), ore('ingotGold'), ore('stickWood'), ore('stickWood')).output(item('minecraft:iron_ingot')).mru(500)"))
     public MagicianTable.RecipeBuilder recipeBuilder() {
@@ -21,14 +22,13 @@ public class MagicianTable extends VirtualizedRegistry<MagicianTableRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(MagicianTableRecipes::removeRecipe);
-        restoreFromBackup().forEach(MagicianTableRecipes::addRecipe);
+    public Collection<MagicianTableRecipe> getRecipes() {
+        return MagicianTableRecipes.RECIPES;
     }
 
     @MethodDescription(example = @Example("item('essentialcraft:genitem')"))
     public boolean removeByOutput(IIngredient x) {
-        return MagicianTableRecipes.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (x.test(r.getRecipeOutput())) {
                 addBackup(r);
                 return true;
@@ -37,25 +37,11 @@ public class MagicianTable extends VirtualizedRegistry<MagicianTableRecipe> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        MagicianTableRecipes.RECIPES.forEach(this::addBackup);
-        MagicianTableRecipes.RECIPES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<MagicianTableRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(MagicianTableRecipes.RECIPES).setRemover(r -> {
-            addBackup(r);
-            return MagicianTableRecipes.RECIPES.remove(r);
-        });
-    }
-
-    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 5))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MagicianTableRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(comp = @Comp(gte = 1))
         private int mru;
 
         @RecipeBuilderMethodDescription

@@ -35,8 +35,8 @@ public class SmallPlatePresser extends BaseRegistry {
         return super.removeByInput(input);
     }
 
-    @Property(property = "input", valid = @Comp("1"), requirement = "groovyscript.wiki.advancedrocketry.input.block")
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1, unique = "groovyscript.wiki.advancedrocketry.input.block"))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends BaseRegistry.RecipeBuilder {
 
         @Override

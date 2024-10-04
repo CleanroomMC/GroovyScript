@@ -11,8 +11,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
 public class CustomEnchanterRecipe extends EnchanterRecipe {
 
     private final Things lapis;
@@ -37,7 +35,7 @@ public class CustomEnchanterRecipe extends EnchanterRecipe {
     }
 
     @Override
-    public boolean isRecipe(@Nonnull RecipeLevel machineLevel, @Nonnull NNList<MachineRecipeInput> inputs) {
+    public boolean isRecipe(@NotNull RecipeLevel machineLevel, @NotNull NNList<MachineRecipeInput> inputs) {
         ItemStack slot0 = MachineRecipeInput.getInputForSlot(0, inputs);
         ItemStack slot1 = MachineRecipeInput.getInputForSlot(1, inputs);
         ItemStack slot2 = MachineRecipeInput.getInputForSlot(2, inputs);
@@ -59,7 +57,7 @@ public class CustomEnchanterRecipe extends EnchanterRecipe {
     }
 
     @Override
-    public boolean isValidInput(@Nonnull RecipeLevel machineLevel, @Nonnull MachineRecipeInput inputs) {
+    public boolean isValidInput(@NotNull RecipeLevel machineLevel, @NotNull MachineRecipeInput inputs) {
         ItemStack slot0 = MachineRecipeInput.getInputForSlot(0, inputs);
         ItemStack slot1 = MachineRecipeInput.getInputForSlot(1, inputs);
         ItemStack slot2 = MachineRecipeInput.getInputForSlot(2, inputs);

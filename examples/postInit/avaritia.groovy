@@ -55,4 +55,3 @@ mods.avaritia.extreme_crafting.shapelessBuilder()
     .register()
 
 
-

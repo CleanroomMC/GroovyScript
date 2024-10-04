@@ -93,13 +93,13 @@ public class FurnacePyrolysis extends VirtualizedRegistry<FurnaceRecipe> {
         FurnaceManagerAccessor.getRecipeMapPyrolysis().clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
 
-        @Property(defaultValue = "FurnaceManager.DEFAULT_ENERGY", valid = @Comp(value = "0", type = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "FurnaceManager.DEFAULT_ENERGY", comp = @Comp(gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = FurnaceManager.DEFAULT_ENERGY;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int creosote;
 
         @RecipeBuilderMethodDescription

@@ -3,10 +3,10 @@ package com.cleanroommc.groovyscript.core.mixin.thermalexpansion;
 import cofh.thermalexpansion.util.managers.machine.CentrifugeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 @Mixin(value = CentrifugeManager.CentrifugeRecipe.class, remap = false)

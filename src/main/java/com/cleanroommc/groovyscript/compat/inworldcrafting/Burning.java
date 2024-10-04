@@ -6,7 +6,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.BurningRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -15,13 +15,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class Burning extends VirtualizedRegistry<Burning.BurningRecipe> {
+public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
 
     private static final Map<EntityItem, BurningRecipe> runningRecipes = new Object2ObjectOpenHashMap<>();
 
@@ -34,28 +31,14 @@ public class Burning extends VirtualizedRegistry<Burning.BurningRecipe> {
     }
 
     @Override
-    public void onReload() {
-        this.burningRecipes.addAll(getBackupRecipes());
-        getScriptedRecipes().forEach(this.burningRecipes::remove);
+    public Collection<BurningRecipe> getRecipes() {
+        return this.burningRecipes;
     }
 
     @Override
     public void afterScriptLoad() {
         super.afterScriptLoad();
         this.burningRecipes.sort(Comparator.comparingInt(BurningRecipe::getTicks));
-    }
-
-    public void add(BurningRecipe burningRecipe) {
-        this.burningRecipes.add(burningRecipe);
-        addScripted(burningRecipe);
-    }
-
-    public boolean remove(BurningRecipe burningRecipe) {
-        if (this.burningRecipes.remove(burningRecipe)) {
-            addBackup(burningRecipe);
-            return true;
-        }
-        return false;
     }
 
     public RecipeBuilder recipeBuilder() {

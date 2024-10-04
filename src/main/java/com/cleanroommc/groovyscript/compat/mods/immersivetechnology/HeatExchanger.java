@@ -1,21 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.immersivetechnology;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import mctmods.immersivetechnology.api.crafting.HeatExchangerRecipe;
 import mctmods.immersivetechnology.common.Config;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class HeatExchanger extends VirtualizedRegistry<HeatExchangerRecipe> {
+public class HeatExchanger extends StandardListRegistry<HeatExchangerRecipe> {
 
     @Override
     public boolean isEnabled() {
@@ -31,31 +30,13 @@ public class HeatExchanger extends VirtualizedRegistry<HeatExchangerRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        HeatExchangerRecipe.recipeList.removeAll(removeScripted());
-        HeatExchangerRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(HeatExchangerRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            HeatExchangerRecipe.recipeList.add(recipe);
-        }
-    }
-
-    public boolean remove(HeatExchangerRecipe recipe) {
-        if (HeatExchangerRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<HeatExchangerRecipe> getRecipes() {
+        return HeatExchangerRecipe.recipeList;
     }
 
     @MethodDescription(example = @Example("fluid('fluegas')"))
     public void removeByInput(IIngredient input) {
-        HeatExchangerRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidInputs()) {
                 if (input.test(fluidStack)) {
                     addBackup(r);
@@ -68,7 +49,7 @@ public class HeatExchanger extends VirtualizedRegistry<HeatExchangerRecipe> {
 
     @MethodDescription(example = @Example("fluid('hot_spring_water')"))
     public void removeByOutput(IIngredient output) {
-        HeatExchangerRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             // would iterate through r.getFluidOutputs() as with the other IE compats, but they forgot to define it so its null.
             if (output.test(r.fluidOutput0) || output.test(r.fluidOutput1)) {
                 addBackup(r);
@@ -78,24 +59,13 @@ public class HeatExchanger extends VirtualizedRegistry<HeatExchangerRecipe> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<HeatExchangerRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(HeatExchangerRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        HeatExchangerRecipe.recipeList.forEach(this::addBackup);
-        HeatExchangerRecipe.recipeList.clear();
-    }
-
-    @Property(property = "fluidInput", valid = @Comp("2"))
-    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
+    @Property(property = "fluidInput", comp = @Comp(eq = 2))
+    @Property(property = "fluidOutput", comp = @Comp(gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<HeatExchangerRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int energy;
 
 

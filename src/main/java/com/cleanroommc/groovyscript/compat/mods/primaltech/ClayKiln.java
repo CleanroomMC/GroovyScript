@@ -5,15 +5,16 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.primal_tech.ClayKilnRecipesAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import primal_tech.recipes.ClayKilnRecipes;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class ClayKiln extends VirtualizedRegistry<ClayKilnRecipes> {
+public class ClayKiln extends StandardListRegistry<ClayKilnRecipes> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).cookTime(50)"),
@@ -24,16 +25,8 @@ public class ClayKiln extends VirtualizedRegistry<ClayKilnRecipes> {
     }
 
     @Override
-    public void onReload() {
-        ClayKilnRecipesAccessor.getRecipes().removeAll(removeScripted());
-        ClayKilnRecipesAccessor.getRecipes().addAll(restoreFromBackup());
-    }
-
-    public void add(ClayKilnRecipes recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ClayKilnRecipesAccessor.getRecipes().add(recipe);
-        }
+    public Collection<ClayKilnRecipes> getRecipes() {
+        return ClayKilnRecipesAccessor.getRecipes();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -45,17 +38,9 @@ public class ClayKiln extends VirtualizedRegistry<ClayKilnRecipes> {
                 .register();
     }
 
-    public boolean remove(ClayKilnRecipes recipe) {
-        if (ClayKilnRecipesAccessor.getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
     @MethodDescription(example = @Example("item('minecraft:gravel')"))
     public boolean removeByInput(IIngredient input) {
-        return ClayKilnRecipesAccessor.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (input.test(recipe.getInput())) {
                 addBackup(recipe);
                 return true;
@@ -66,7 +51,7 @@ public class ClayKiln extends VirtualizedRegistry<ClayKilnRecipes> {
 
     @MethodDescription(example = @Example("item('primal_tech:charcoal_block')"))
     public boolean removeByOutput(IIngredient output) {
-        return ClayKilnRecipesAccessor.getRecipes().removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput())) {
                 addBackup(recipe);
                 return true;
@@ -75,22 +60,11 @@ public class ClayKiln extends VirtualizedRegistry<ClayKilnRecipes> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ClayKilnRecipes> streamRecipes() {
-        return new SimpleObjectStream<>(ClayKilnRecipesAccessor.getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ClayKilnRecipesAccessor.getRecipes().forEach(this::addBackup);
-        ClayKilnRecipesAccessor.getRecipes().clear();
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ClayKilnRecipes> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int cookTime;
 
         @RecipeBuilderMethodDescription

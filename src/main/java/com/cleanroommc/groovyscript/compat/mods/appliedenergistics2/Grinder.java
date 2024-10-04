@@ -71,15 +71,15 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         }
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "3")})
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IGrinderRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int turns;
-        @Property(defaultValue = "1.0f", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        @Property(defaultValue = "1.0f", comp = @Comp(gte = 0, lte = 1))
         private float chance1 = 1.0f;
-        @Property(defaultValue = "1.0f", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+        @Property(defaultValue = "1.0f", comp = @Comp(gte = 0, lte = 1))
         private float chance2 = 1.0f;
 
 

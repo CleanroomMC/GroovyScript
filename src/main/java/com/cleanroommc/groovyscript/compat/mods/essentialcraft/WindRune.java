@@ -4,16 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import essentialcraft.api.WindImbueRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
+public class WindRune extends StandardListRegistry<WindImbueRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).espe(500)"))
     public WindRune.RecipeBuilder recipeBuilder() {
@@ -21,16 +22,15 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(WindImbueRecipe::removeRecipe);
-        WindImbueRecipe.RECIPES.addAll(restoreFromBackup());
+    public Collection<WindImbueRecipe> getRecipes() {
+        return WindImbueRecipe.RECIPES;
     }
 
     @MethodDescription(example = @Example("item('minecraft:diamond')"))
     public boolean removeByInput(IIngredient x) {
         ItemStack[] stacks = x.getMatchingStacks();
         if (stacks.length == 0) return false;
-        return WindImbueRecipe.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.input.test(stacks[0])) {
                 addBackup(r);
                 return true;
@@ -41,7 +41,7 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
 
     @MethodDescription(example = @Example("item('essentialcraft:air_potion')"))
     public boolean removeByOutput(IIngredient x) {
-        return WindImbueRecipe.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (x.test(r.result)) {
                 addBackup(r);
                 return true;
@@ -50,25 +50,11 @@ public class WindRune extends VirtualizedRegistry<WindImbueRecipe> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        WindImbueRecipe.RECIPES.forEach(this::addBackup);
-        WindImbueRecipe.RECIPES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<WindImbueRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(WindImbueRecipe.RECIPES).setRemover(r -> {
-            addBackup(r);
-            return WindImbueRecipe.RECIPES.remove(r);
-        });
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<WindImbueRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(comp = @Comp(gte = 1))
         private int espe;
 
         @RecipeBuilderMethodDescription

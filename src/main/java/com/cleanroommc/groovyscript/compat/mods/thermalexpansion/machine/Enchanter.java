@@ -138,13 +138,13 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         EnchanterManagerAccessor.getRecipeMap().clear();
     }
 
-    @Property(property = "input", valid = @Comp("2"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 2))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<EnchanterRecipe> {
 
-        @Property(defaultValue = "EnchanterManager.DEFAULT_ENERGY[0]", valid = @Comp(value = "0", type = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "EnchanterManager.DEFAULT_ENERGY[0]", comp = @Comp(gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = EnchanterManager.DEFAULT_ENERGY[0];
-        @Property(defaultValue = "EnchanterManager.DEFAULT_EXPERIENCE[0]", valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(defaultValue = "EnchanterManager.DEFAULT_EXPERIENCE[0]", comp = @Comp(gte = 0))
         private int experience = EnchanterManager.DEFAULT_EXPERIENCE[0];
         @Property(defaultValue = "EnchanterManager.Type.STANDARD")
         private EnchanterManager.Type type = EnchanterManager.Type.STANDARD;

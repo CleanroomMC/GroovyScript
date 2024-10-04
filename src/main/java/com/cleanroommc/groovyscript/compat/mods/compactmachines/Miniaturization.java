@@ -3,23 +3,24 @@ package com.cleanroommc.groovyscript.compat.mods.compactmachines;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import org.dave.compactmachines3.miniaturization.MultiblockRecipe;
 import org.dave.compactmachines3.miniaturization.MultiblockRecipes;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachines3.miniaturization.MultiblockRecipe> {
+public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('diamond_rectangle').input(item('minecraft:clay')).output(item('minecraft:clay')).symmetrical().ticks(10).shape([['www', 'www']]).key('w', blockstate('minecraft:diamond_block'))"),
@@ -30,26 +31,15 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> MultiblockRecipes.getRecipes().removeIf(r -> r == recipe));
-        restoreFromBackup().forEach(recipe -> MultiblockRecipes.getRecipes().add(recipe));
-    }
-
-    public void add(org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe) {
-        addScripted(recipe);
-        MultiblockRecipes.getRecipes().add(recipe);
-    }
-
-    public boolean remove(org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe) {
-        addBackup(recipe);
-        return MultiblockRecipes.getRecipes().removeIf(r -> r == recipe);
+    public Collection<MultiblockRecipe> getRecipes() {
+        return MultiblockRecipes.getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public void removeByInput(ItemStack input) {
-        for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : MultiblockRecipes.getRecipes().stream().filter(r -> r.getCatalystStack().isItemEqual(input)).collect(Collectors.toList())) {
+        for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : getRecipes().stream().filter(r -> r.getCatalystStack().isItemEqual(input)).collect(Collectors.toList())) {
             addBackup(recipe);
-            MultiblockRecipes.getRecipes().removeIf(r -> r == recipe);
+            getRecipes().removeIf(r -> r == recipe);
         }
     }
 
@@ -60,25 +50,14 @@ public class Miniaturization extends VirtualizedRegistry<org.dave.compactmachine
 
     @MethodDescription(example = @Example("item('compactmachines3:machine:3')"))
     public void removeByOutput(ItemStack output) {
-        for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : MultiblockRecipes.getRecipes().stream().filter(r -> r.getTargetStack().isItemEqual(output)).collect(Collectors.toList())) {
+        for (org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe : getRecipes().stream().filter(r -> r.getTargetStack().isItemEqual(output)).collect(Collectors.toList())) {
             addBackup(recipe);
-            MultiblockRecipes.getRecipes().removeIf(r -> r == recipe);
+            getRecipes().removeIf(r -> r == recipe);
         }
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        MultiblockRecipes.getRecipes().forEach(this::addBackup);
-        MultiblockRecipes.getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<org.dave.compactmachines3.miniaturization.MultiblockRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(MultiblockRecipes.getRecipes()).setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<org.dave.compactmachines3.miniaturization.MultiblockRecipe> {
 
         @Property(defaultValue = "' ' = air, '_' = air")

@@ -4,9 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.CalculatorRecipe;
@@ -14,9 +13,10 @@ import sonar.calculator.mod.common.recipes.FlawlessCalculatorRecipes;
 import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 @RegistryDescription
-public class FlawlessCalculator extends VirtualizedRegistry<CalculatorRecipe> {
+public class FlawlessCalculator extends StandardListRegistry<CalculatorRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).output(item('minecraft:gold_ingot') * 16)"))
     public RecipeBuilder recipeBuilder() {
@@ -24,27 +24,13 @@ public class FlawlessCalculator extends VirtualizedRegistry<CalculatorRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(FlawlessCalculatorRecipes.instance().getRecipes()::remove);
-        restoreFromBackup().forEach(FlawlessCalculatorRecipes.instance().getRecipes()::add);
-    }
-
-    public void add(CalculatorRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        FlawlessCalculatorRecipes.instance().getRecipes().add(recipe);
-    }
-
-    public boolean remove(CalculatorRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        FlawlessCalculatorRecipes.instance().getRecipes().remove(recipe);
-        return true;
+    public Collection<CalculatorRecipe> getRecipes() {
+        return FlawlessCalculatorRecipes.instance().getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:obsidian')"))
     public boolean removeByInput(IIngredient input) {
-        return FlawlessCalculatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -59,7 +45,7 @@ public class FlawlessCalculator extends VirtualizedRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public boolean removeByOutput(IIngredient output) {
-        return FlawlessCalculatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {
@@ -72,20 +58,8 @@ public class FlawlessCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        FlawlessCalculatorRecipes.instance().getRecipes().forEach(this::addBackup);
-        FlawlessCalculatorRecipes.instance().getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(FlawlessCalculatorRecipes.instance().getRecipes())
-                .setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = @Comp("4"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 4))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
         @Override

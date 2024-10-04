@@ -72,17 +72,17 @@ public class FusionReactor extends VirtualizedRegistry<FusionReactorRecipe> {
         return new SimpleObjectStream<>(FusionReactorRecipeHelper.reactorRecipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("2"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 2))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<FusionReactorRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int start;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
         @Property
         private int perTick;
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "50", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(gte = 0, lte = 50))
         private int size;
 
         @RecipeBuilderMethodDescription

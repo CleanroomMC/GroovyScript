@@ -41,11 +41,11 @@ public interface TableRecipeBuilder {
         return tier(4);
     }
 
-    @Property(property = "ingredientMatrix", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "81", type = Comp.Type.LTE)})
+    @Property(property = "ingredientMatrix", comp = @Comp(gte = 1, lte = 81, unique = "groovyscript.wiki.craftingrecipe.matrix.required"))
     class Shaped extends AbstractCraftingRecipeBuilder.AbstractShaped<ITieredRecipe> implements TableRecipeBuilder {
 
         // 0 = any table it fits in, 1-4 specifically that tier of table
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "4", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(gte = 0, lte = 4))
         int tier;
 
         public Shaped() {
@@ -89,11 +89,11 @@ public interface TableRecipeBuilder {
         }
     }
 
-    @Property(property = "ingredients", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "81", type = Comp.Type.LTE)})
+    @Property(property = "ingredients", comp = @Comp(gte = 1, lte = 81))
     class Shapeless extends AbstractCraftingRecipeBuilder.AbstractShapeless<ITieredRecipe> implements TableRecipeBuilder {
 
         // 0 = any table it fits in, 1-4 specifically that tier of table
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "4", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(gte = 0, lte = 4))
         int tier;
 
         public Shapeless() {

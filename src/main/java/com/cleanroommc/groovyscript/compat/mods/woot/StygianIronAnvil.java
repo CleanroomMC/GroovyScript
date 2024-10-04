@@ -5,16 +5,16 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.woot.AnvilManagerAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import ipsis.Woot;
 import ipsis.woot.crafting.AnvilRecipe;
 import ipsis.woot.crafting.IAnvilRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RegistryDescription(
@@ -23,10 +23,15 @@ import java.util.stream.Collectors;
                 @Admonition(value = "groovyscript.wiki.woot.stygian_iron_anvil.note1", type = Admonition.Type.WARNING)
         }
 )
-public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
+public class StygianIronAnvil extends StandardListRegistry<IAnvilRecipe> {
 
     public StygianIronAnvil() {
         super(Alias.generateOfClassAnd(StygianIronAnvil.class, "Anvil"));
+    }
+
+    @Override
+    public Collection<IAnvilRecipe> getRecipes() {
+        return Woot.anvilManager.getRecipes();
     }
 
     @RecipeBuilderDescription(example = {
@@ -38,35 +43,18 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(Woot.anvilManager.getRecipes()::remove);
-        Woot.anvilManager.getRecipes().addAll(restoreFromBackup());
-    }
-
-    @Override
     public void afterScriptLoad() {
         // Recalculate valid base items
         ((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().clear();
-        Woot.anvilManager.getRecipes().forEach(x -> {
+        getRecipes().forEach(x -> {
             if (((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().contains(x.getBaseItem())) return;
             ((AnvilManagerAccessor) Woot.anvilManager).getValidBaseItems().add(x.getBaseItem());
         });
     }
 
-    public void add(IAnvilRecipe recipe) {
-        Woot.anvilManager.getRecipes().add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(IAnvilRecipe recipe) {
-        Woot.anvilManager.getRecipes().remove(recipe);
-        addBackup(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("item('minecraft:iron_bars')"))
     public boolean removeByBase(ItemStack base) {
-        return Woot.anvilManager.getRecipes().removeIf(x -> {
+        return getRecipes().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getBaseItem(), base)) {
                 addBackup(x);
                 return true;
@@ -77,7 +65,7 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
 
     @MethodDescription(example = @Example("item('woot:stygianironplate')"))
     public boolean removeByOutput(ItemStack output) {
-        return Woot.anvilManager.getRecipes().removeIf(x -> {
+        return getRecipes().removeIf(x -> {
             if (ItemStack.areItemsEqual(x.getCopyOutput(), output)) {
                 addBackup(x);
                 return true;
@@ -86,24 +74,11 @@ public class StygianIronAnvil extends VirtualizedRegistry<IAnvilRecipe> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        Woot.anvilManager.getRecipes().forEach(this::addBackup);
-        Woot.anvilManager.getRecipes().clear();
-    }
-
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<IAnvilRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(Woot.anvilManager.getRecipes())
-                .setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "Integer.MAX_VALUE")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IAnvilRecipe> {
 
-        @Property(defaultValue = "ItemStack.EMPTY", valid = @Comp(value = "isEmpty", type = Comp.Type.NOT))
+        @Property(defaultValue = "ItemStack.EMPTY", comp = @Comp(not = "isEmpty"))
         private ItemStack base = ItemStack.EMPTY;
         @Property
         private boolean preserveBase;

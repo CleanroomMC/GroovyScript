@@ -13,6 +13,18 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import java.util.Collection;
 import java.util.Objects;
 
+/**
+ * Class for controlling the storage of reloadable compat stored in Forge Registries.
+ * <p>
+ * To document this class, the annotation {@link com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription @RegistryDescription}
+ * exists. This annotation <i>must</i> exist for the registry to be documented via GroovyScript.
+ * <p>
+ * Anything that isn't a Forge Registry should be handled via {@link VirtualizedRegistry} or an inheriting class instead.
+ *
+ * @param <T> the forge registry entry being stored and reloaded
+ * @see com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription @RegistryDescription
+ * @see VirtualizedRegistry
+ */
 public class ForgeRegistryWrapper<T extends IForgeRegistryEntry<T>> extends NamedRegistry implements IScriptReloadable {
 
     private final IForgeRegistry<T> registry;

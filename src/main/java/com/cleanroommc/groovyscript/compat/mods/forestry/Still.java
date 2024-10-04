@@ -93,7 +93,7 @@ public class Still extends ForestryRegistry<IStillRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 0, 0, 0, 0);
+            validateItems(msg);
             validateFluids(msg, 1, 1, 1, 1);
         }
 

@@ -5,20 +5,20 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
+public class Squeezer extends StandardListRegistry<SqueezerRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('lava')).energy(100)"),
@@ -30,31 +30,15 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> SqueezerRecipe.recipeList.removeIf(r -> r == recipe));
-        SqueezerRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(SqueezerRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            SqueezerRecipe.recipeList.add(recipe);
-        }
+    public Collection<SqueezerRecipe> getRecipes() {
+        return SqueezerRecipe.recipeList;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public SqueezerRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, IIngredient input, int energy) {
+    public SqueezerRecipe add(FluidStack fluidOutput, @NotNull ItemStack itemOutput, IIngredient input, int energy) {
         SqueezerRecipe recipe = new SqueezerRecipe(fluidOutput, itemOutput, ImmersiveEngineering.toIngredientStack(input), energy);
         add(recipe);
         return recipe;
-    }
-
-    public boolean remove(SqueezerRecipe recipe) {
-        if (SqueezerRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example("fluid('plantoil')"))
@@ -66,7 +50,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
                     .post();
             return;
         }
-        if (!SqueezerRecipe.recipeList.removeIf(recipe -> {
+        if (!getRecipes().removeIf(recipe -> {
             if (fluidOutput.isFluidEqual(recipe.fluidOutput)) {
                 addBackup(recipe);
                 return true;
@@ -89,7 +73,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        List<SqueezerRecipe> recipes = SqueezerRecipe.recipeList.stream().filter(r -> fluidOutput.isFluidEqual(r.fluidOutput) && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
+        List<SqueezerRecipe> recipes = getRecipes().stream().filter(r -> fluidOutput.isFluidEqual(r.fluidOutput) && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
         for (SqueezerRecipe recipe : recipes) {
             remove(recipe);
         }
@@ -111,7 +95,7 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
         // "Condition 'r.itemOutput != null' is always 'true'" is a lie. It can be null, and if it is it *will* throw an NPE if we don't check against it.
         @SuppressWarnings("ConstantValue")
-        List<SqueezerRecipe> recipes = SqueezerRecipe.recipeList.stream().filter(r -> r != null && r.itemOutput != null && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
+        List<SqueezerRecipe> recipes = getRecipes().stream().filter(r -> r != null && r.itemOutput != null && r.itemOutput.isItemEqual(itemOutput)).collect(Collectors.toList());
         for (SqueezerRecipe recipe : recipes) {
             remove(recipe);
         }
@@ -141,20 +125,9 @@ public class Squeezer extends VirtualizedRegistry<SqueezerRecipe> {
         }
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<SqueezerRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(SqueezerRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        SqueezerRecipe.recipeList.forEach(this::addBackup);
-        SqueezerRecipe.recipeList.clear();
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
-    @Property(property = "fluidOutput", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 1))
+    @Property(property = "fluidOutput", comp = @Comp(gte = 0, lte = 1))
     private static class RecipeBuilder extends AbstractRecipeBuilder<SqueezerRecipe> {
 
         @Property

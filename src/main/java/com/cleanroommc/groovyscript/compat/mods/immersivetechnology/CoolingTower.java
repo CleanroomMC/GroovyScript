@@ -1,21 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.immersivetechnology;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import mctmods.immersivetechnology.api.crafting.CoolingTowerRecipe;
 import mctmods.immersivetechnology.common.Config;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class CoolingTower extends VirtualizedRegistry<CoolingTowerRecipe> {
+public class CoolingTower extends StandardListRegistry<CoolingTowerRecipe> {
 
     @Override
     public boolean isEnabled() {
@@ -31,31 +30,13 @@ public class CoolingTower extends VirtualizedRegistry<CoolingTowerRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        CoolingTowerRecipe.recipeList.removeAll(removeScripted());
-        CoolingTowerRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(CoolingTowerRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            CoolingTowerRecipe.recipeList.add(recipe);
-        }
-    }
-
-    public boolean remove(CoolingTowerRecipe recipe) {
-        if (CoolingTowerRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<CoolingTowerRecipe> getRecipes() {
+        return CoolingTowerRecipe.recipeList;
     }
 
     @MethodDescription(example = @Example("fluid('hot_spring_water')"))
     public void removeByInput(IIngredient input) {
-        CoolingTowerRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidInputs()) {
                 if (input.test(fluidStack)) {
                     addBackup(r);
@@ -68,7 +49,7 @@ public class CoolingTower extends VirtualizedRegistry<CoolingTowerRecipe> {
 
     @MethodDescription(example = @Example(value = "fluid('water')", commented = true))
     public void removeByOutput(IIngredient output) {
-        CoolingTowerRecipe.recipeList.removeIf(r -> {
+        getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidOutputs()) {
                 if (output.test(fluidStack)) {
                     addBackup(r);
@@ -79,22 +60,11 @@ public class CoolingTower extends VirtualizedRegistry<CoolingTowerRecipe> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CoolingTowerRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(CoolingTowerRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        CoolingTowerRecipe.recipeList.forEach(this::addBackup);
-        CoolingTowerRecipe.recipeList.clear();
-    }
-
-    @Property(property = "fluidInput", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
-    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "3")})
+    @Property(property = "fluidInput", comp = @Comp(gte = 1, lte = 2))
+    @Property(property = "fluidOutput", comp = @Comp(gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CoolingTowerRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
 
         @RecipeBuilderMethodDescription

@@ -5,18 +5,18 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
+import java.util.Collection;
 
 @RegistryDescription
-public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
+public class Fermenter extends StandardListRegistry<FermenterRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidOutput(fluid('water')).energy(100)"))
     public static RecipeBuilder recipeBuilder() {
@@ -24,31 +24,15 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> FermenterRecipe.recipeList.removeIf(r -> r == recipe));
-        FermenterRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(FermenterRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            FermenterRecipe.recipeList.add(recipe);
-        }
+    public Collection<FermenterRecipe> getRecipes() {
+        return FermenterRecipe.recipeList;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public FermenterRecipe add(FluidStack fluidOutput, @Nonnull ItemStack itemOutput, IIngredient input, int energy) {
+    public FermenterRecipe add(FluidStack fluidOutput, @NotNull ItemStack itemOutput, IIngredient input, int energy) {
         FermenterRecipe recipe = new FermenterRecipe(fluidOutput.copy(), itemOutput.copy(), ImmersiveEngineering.toIngredientStack(input), energy);
         add(recipe);
         return recipe;
-    }
-
-    public boolean remove(FermenterRecipe recipe) {
-        if (FermenterRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example("fluid('ethanol')"))
@@ -59,7 +43,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
                     .error()
                     .post();
         }
-        if (!FermenterRecipe.recipeList.removeIf(recipe -> {
+        if (!getRecipes().removeIf(recipe -> {
             if (recipe.fluidOutput.isFluidEqual(fluidOutput)) {
                 addBackup(recipe);
                 return true;
@@ -83,7 +67,7 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         }
         FermenterRecipe recipe = FermenterRecipe.findRecipe(input);
         if (recipe != null) {
-            FermenterRecipe.recipeList.remove(recipe);
+            getRecipes().remove(recipe);
             addBackup(recipe);
         } else {
             GroovyLog.msg("Error removing Immersive Engineering Fermenter recipe")
@@ -93,20 +77,9 @@ public class Fermenter extends VirtualizedRegistry<FermenterRecipe> {
         }
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<FermenterRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(FermenterRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        FermenterRecipe.recipeList.forEach(this::addBackup);
-        FermenterRecipe.recipeList.clear();
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<FermenterRecipe> {
 
         @Property
