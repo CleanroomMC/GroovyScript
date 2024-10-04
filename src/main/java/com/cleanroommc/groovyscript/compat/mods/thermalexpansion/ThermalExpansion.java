@@ -1,14 +1,12 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion;
 
-import appeng.api.config.TunnelType;
-import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import cofh.thermalexpansion.util.managers.machine.CompactorManager;
 import com.cleanroommc.groovyscript.api.IObjectParser;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.device.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.dynamo.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine.*;
-import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.Locale;
