@@ -23,12 +23,13 @@ import com.cleanroommc.groovyscript.api.Hidden;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
+import com.cleanroommc.groovyscript.sandbox.Preprocessor;
 import com.cleanroommc.groovyscript.sandbox.expand.IDocumented;
 import groovy.lang.*;
 import groovy.lang.groovydoc.Groovydoc;
 import groovy.lang.groovydoc.GroovydocHolder;
 import net.prominic.groovyls.compiler.ast.ASTContext;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
+import net.prominic.groovyls.util.GroovyLSUtils;
 import org.codehaus.groovy.ast.*;
 import org.codehaus.groovy.ast.expr.*;
 import org.codehaus.groovy.ast.stmt.ExpressionStatement;
@@ -37,7 +38,9 @@ import org.eclipse.lsp4j.Range;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
 
+import java.io.File;
 import java.lang.reflect.Modifier;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -50,12 +53,11 @@ public class GroovyASTUtils {
     public static final int EXPANSION_MARKER = 0x01000000;
     public static final int HIDDEN_MARKER = 0x02000000;
 
-    public static ASTNode getEnclosingNodeOfType(ASTNode offsetNode, Class<? extends ASTNode> nodeType,
-                                                 ASTContext context) {
+    public static <T extends ASTNode> T getEnclosingNodeOfType(ASTNode offsetNode, Class<T> nodeType, ASTContext context) {
         ASTNode current = offsetNode;
         while (current != null) {
             if (nodeType.isInstance(current)) {
-                return current;
+                return (T) current;
             }
             current = context.getVisitor().getParent(current);
         }
@@ -67,43 +69,35 @@ public class GroovyASTUtils {
             return null;
         }
         ASTNode parentNode = context.getVisitor().getParent(node);
-        if (node instanceof ExpressionStatement) {
-            ExpressionStatement statement = (ExpressionStatement) node;
+        if (node instanceof ExpressionStatement statement) {
             node = statement.getExpression();
         }
         if (node instanceof ClassNode) {
             return tryToResolveOriginalClassNode((ClassNode) node, strict, context);
-        } else if (node instanceof ConstructorCallExpression) {
-            ConstructorCallExpression callExpression = (ConstructorCallExpression) node;
+        } else if (node instanceof ConstructorCallExpression callExpression) {
             return GroovyASTUtils.getMethodFromCallExpression(callExpression, context);
-        } else if (node instanceof DeclarationExpression) {
-            DeclarationExpression declExpression = (DeclarationExpression) node;
+        } else if (node instanceof DeclarationExpression declExpression) {
             if (!declExpression.isMultipleAssignmentDeclaration()) {
                 ClassNode originType = declExpression.getVariableExpression().getOriginType();
                 return tryToResolveOriginalClassNode(originType, strict, context);
             }
-        } else if (node instanceof ClassExpression) {
-            ClassExpression classExpression = (ClassExpression) node;
+        } else if (node instanceof ClassExpression classExpression) {
             return tryToResolveOriginalClassNode(classExpression.getType(), strict, context);
-        } else if (node instanceof ImportNode) {
-            ImportNode importNode = (ImportNode) node;
+        } else if (node instanceof ImportNode importNode) {
             return tryToResolveOriginalClassNode(importNode.getType(), strict, context);
         } else if (node instanceof MethodNode) {
             return node;
         } else if (node instanceof ConstantExpression && parentNode != null) {
-            if (parentNode instanceof MethodCallExpression) {
-                MethodCallExpression methodCallExpression = (MethodCallExpression) parentNode;
+            if (parentNode instanceof MethodCallExpression methodCallExpression) {
                 return GroovyASTUtils.getMethodFromCallExpression(methodCallExpression, context);
-            } else if (parentNode instanceof PropertyExpression) {
-                PropertyExpression propertyExpression = (PropertyExpression) parentNode;
+            } else if (parentNode instanceof PropertyExpression propertyExpression) {
                 PropertyNode propNode = GroovyASTUtils.getPropertyFromExpression(propertyExpression, context);
                 if (propNode != null) {
                     return propNode;
                 }
                 return GroovyASTUtils.getFieldFromExpression(propertyExpression, context);
             }
-        } else if (node instanceof VariableExpression) {
-            VariableExpression variableExpression = (VariableExpression) node;
+        } else if (node instanceof VariableExpression variableExpression) {
             Variable accessedVariable = variableExpression.getAccessedVariable();
             if (accessedVariable instanceof ASTNode) {
                 return (ASTNode) accessedVariable;
@@ -131,11 +125,9 @@ public class GroovyASTUtils {
         if (definitionNode == null) {
             return null;
         }
-        if (definitionNode instanceof MethodNode) {
-            MethodNode method = (MethodNode) definitionNode;
+        if (definitionNode instanceof MethodNode method) {
             return tryToResolveOriginalClassNode(method.getReturnType(), true, context);
-        } else if (definitionNode instanceof Variable) {
-            Variable variable = (Variable) definitionNode;
+        } else if (definitionNode instanceof Variable variable) {
             return tryToResolveOriginalClassNode(variable.getOriginType(), true, context);
         }
         return null;
@@ -211,17 +203,21 @@ public class GroovyASTUtils {
 
     public static List<FieldNode> getFieldsForLeftSideOfPropertyExpression(ClassNode classNode, Expression expr, ASTContext context) {
         boolean statics = expr instanceof ClassExpression;
-        return collectFields(classNode, new ArrayList<>(), node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
+        return collectFields(classNode, new ArrayList<>(),
+                             node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
     }
 
-    public static List<PropertyNode> getPropertiesForLeftSideOfPropertyExpression(ClassNode classNode, Expression expr, ASTContext context) {
+    public static List<PropertyNode> getPropertiesForLeftSideOfPropertyExpression(ClassNode classNode, Expression expr,
+                                                                                  ASTContext context) {
         boolean statics = expr instanceof ClassExpression;
-        return collectProperties(classNode, new ArrayList<>(), node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
+        return collectProperties(classNode, new ArrayList<>(),
+                                 node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
     }
 
     public static List<MethodNode> getMethodsForLeftSideOfPropertyExpression(ClassNode classNode, Expression expr, ASTContext context) {
         boolean statics = expr instanceof ClassExpression;
-        return collectMethods(classNode, new ArrayList<>(), node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
+        return collectMethods(classNode, new ArrayList<>(),
+                              node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
     }
 
     public static List<FieldNode> collectFields(ClassNode classNode, List<FieldNode> nodes, Predicate<FieldNode> test) {
@@ -264,22 +260,18 @@ public class GroovyASTUtils {
     }
 
     public static ClassNode getTypeOfNode(ASTNode node, ASTContext context) {
-        if (node instanceof BinaryExpression) {
-            BinaryExpression binaryExpr = (BinaryExpression) node;
+        if (node instanceof BinaryExpression binaryExpr) {
             Expression leftExpr = binaryExpr.getLeftExpression();
             if (binaryExpr.getOperation().getText().equals("[") && leftExpr.getType().isArray()) {
                 return leftExpr.getType().getComponentType();
             }
-        } else if (node instanceof ClassExpression) {
-            ClassExpression expression = (ClassExpression) node;
+        } else if (node instanceof ClassExpression expression) {
             // This means it's an expression like this: SomeClass.someProp
             return expression.getType();
-        } else if (node instanceof ConstructorCallExpression) {
-            ConstructorCallExpression expression = (ConstructorCallExpression) node;
+        } else if (node instanceof ConstructorCallExpression expression) {
             return expression.getType();
-        } else if (node instanceof MethodCallExpression) {
-            MethodCallExpression expression = (MethodCallExpression) node;
-            ObjectMapper<?> goh = getGohOfNode(expression, context);
+        } else if (node instanceof MethodCallExpression expression) {
+            ObjectMapper<?> goh = getMapperOfNode(expression, context);
             if (goh != null) {
                 return ClassHelper.makeCached(goh.getReturnType());
             }
@@ -294,33 +286,29 @@ public class GroovyASTUtils {
                 return methodNode.getReturnType();
             }
             return expr.getType();
-        } else if (node instanceof PropertyExpression) {
-            PropertyExpression expression = (PropertyExpression) node;
+        } else if (node instanceof PropertyExpression expression) {
 
             PropertyNode propNode = GroovyASTUtils.getPropertyFromExpression(expression, context);
             if (propNode != null) {
                 return getTypeOfNode(propNode, context);
             }
             return expression.getType();
-        } else if (node instanceof Variable) {
-            Variable var = (Variable) node;
+        } else if (node instanceof Variable var) {
             if (var.getName().equals("this")) {
-                ClassNode enclosingClass = (ClassNode) getEnclosingNodeOfType(node, ClassNode.class, context);
+                ClassNode enclosingClass = getEnclosingNodeOfType(node, ClassNode.class, context);
                 if (enclosingClass != null) {
                     return enclosingClass;
                 }
             } else if (var.isDynamicTyped()) {
                 ASTNode defNode = GroovyASTUtils.getDefinition(node, false, context);
-                if (defNode instanceof Variable) {
-                    Variable defVar = (Variable) defNode;
+                if (defNode instanceof Variable defVar) {
                     if (defVar.hasInitialExpression()) {
                         return getTypeOfNode(defVar.getInitialExpression(), context);
                     } else if (!defVar.isDynamicTyped()) {
                         return defVar.getType();
                     } else {
                         ASTNode declNode = context.getVisitor().getParent(defNode);
-                        if (declNode instanceof DeclarationExpression) {
-                            DeclarationExpression decl = (DeclarationExpression) declNode;
+                        if (declNode instanceof DeclarationExpression decl) {
                             return getTypeOfNode(decl.getRightExpression(), context);
                         }
                     }
@@ -330,8 +318,7 @@ public class GroovyASTUtils {
                 return var.getOriginType();
             }
         }
-        if (node instanceof Expression) {
-            Expression expression = (Expression) node;
+        if (node instanceof Expression expression) {
             return expression.getType();
         }
         return null;
@@ -358,8 +345,8 @@ public class GroovyASTUtils {
             ClassNode constructorType = constructorCallExpr.getType();
             if (constructorType != null) {
                 fillClassNode(constructorType);
-                return constructorType.getDeclaredConstructors().stream().map(constructor -> (MethodNode) constructor)
-                        .collect(Collectors.toList());
+                return constructorType.getDeclaredConstructors().stream().map(constructor -> (MethodNode) constructor).collect(
+                        Collectors.toList());
             }
         } else if (node instanceof StaticMethodCallExpression staticMethodCallExpression) {
             var ownerType = staticMethodCallExpression.getOwnerType();
@@ -377,9 +364,9 @@ public class GroovyASTUtils {
 
     public static MethodNode getMethodFromCallExpression(MethodCall node, ASTContext context, int argIndex) {
         List<MethodNode> possibleMethods = getMethodOverloadsFromCallExpression(node, context);
-        if (!possibleMethods.isEmpty() && node.getArguments() instanceof ArgumentListExpression) {
-            ArgumentListExpression actualArguments = (ArgumentListExpression) node.getArguments();
+        if (!possibleMethods.isEmpty() && node.getArguments() instanceof ArgumentListExpression actualArguments) {
             MethodNode foundMethod = possibleMethods.stream().max(new Comparator<MethodNode>() {
+
                 public int compare(MethodNode m1, MethodNode m2) {
                     Parameter[] p1 = m1.getParameters();
                     Parameter[] p2 = m2.getParameters();
@@ -432,26 +419,32 @@ public class GroovyASTUtils {
         return score;
     }
 
-    public static Range findAddImportRange(ASTNode offsetNode, ASTContext context) {
-        ModuleNode moduleNode = (ModuleNode) GroovyASTUtils.getEnclosingNodeOfType(offsetNode, ModuleNode.class,
-                                                                                   context);
+    public static Range findAddImportRange(URI uri, ASTNode offsetNode, ASTContext context) {
+        ModuleNode moduleNode = GroovyASTUtils.getEnclosingNodeOfType(offsetNode, ModuleNode.class, context);
         if (moduleNode == null) {
             return new Range(new Position(0, 0), new Position(0, 0));
         }
         ASTNode afterNode = null;
-        if (afterNode == null) {
-            List<ImportNode> importNodes = moduleNode.getImports();
-            if (importNodes.size() > 0) {
-                afterNode = importNodes.get(importNodes.size() - 1);
+        List<ImportNode> importNodes = moduleNode.getImports();
+        if (!importNodes.isEmpty()) {
+            // auto added imports don't have a line number,
+            // so we need to iterate all imports and see which one is the most bottom one
+            for (ImportNode node : importNodes) {
+                if (node.getLastLineNumber() < 0) continue;
+                if (afterNode == null || node.getLastLineNumber() > afterNode.getLastLineNumber()) {
+                    afterNode = node;
+                }
             }
         }
         if (afterNode == null) {
             afterNode = moduleNode.getPackage();
         }
         if (afterNode == null) {
-            return new Range(new Position(0, 0), new Position(0, 0));
+            int line = Preprocessor.getImportStartLine(new File(uri));
+            Position p = new Position(line, 0);
+            return new Range(p, p);
         }
-        Range nodeRange = GroovyLanguageServerUtils.astNodeToRange(afterNode);
+        Range nodeRange = GroovyLSUtils.astNodeToRange(afterNode);
         if (nodeRange == null) {
             return new Range(new Position(0, 0), new Position(0, 0));
         }
@@ -460,19 +453,16 @@ public class GroovyASTUtils {
     }
 
     public static MethodNode methodNodeOfClosure(String name, Closure<?> closure) {
-        Class<?> declarer = closure.getThisObject() == null ?
-                            (closure.getOwner() == null ? Object.class : closure.getOwner().getClass()) :
+        Class<?> declarer = closure.getThisObject() == null ? (closure.getOwner() == null ? Object.class : closure.getOwner().getClass()) :
                             closure.getThisObject().getClass();
         MethodNode method = new MethodNode(name, Modifier.PUBLIC, ClassHelper.OBJECT_TYPE,
-                                           ArrayUtils.map(closure.getParameterTypes(),
-                                                          c -> new Parameter(ClassHelper.makeCached(c), ""),
-                                                          new Parameter[closure.getParameterTypes().length]),
-                                           null, null);
+                                           ArrayUtils.map(closure.getParameterTypes(), c -> new Parameter(ClassHelper.makeCached(c), ""),
+                                                          new Parameter[closure.getParameterTypes().length]), null, null);
         method.setDeclaringClass(ClassHelper.makeCached(declarer));
         return method;
     }
 
-    public static ObjectMapper<?> getGohOfNode(MethodCallExpression expr, ASTContext context) {
+    public static ObjectMapper<?> getMapperOfNode(MethodCallExpression expr, ASTContext context) {
         if (expr.isImplicitThis()) {
             return ObjectMapperManager.getObjectMapper(expr.getMethodAsString());
         }
@@ -497,8 +487,7 @@ public class GroovyASTUtils {
                 if (mm.isPrivate()) continue;
                 int m = mm.getModifiers();
                 if (mm instanceof Hidden hidden && hidden.isHidden()) m |= HIDDEN_MARKER;
-                Parameter[] params = ArrayUtils.map(mm.getNativeParameterTypes(),
-                                                    c -> new Parameter(ClassHelper.makeCached(c), ""),
+                Parameter[] params = ArrayUtils.map(mm.getNativeParameterTypes(), c -> new Parameter(ClassHelper.makeCached(c), ""),
                                                     new Parameter[mm.getNativeParameterTypes().length]);
                 MethodNode node = new MethodNode(mm.getName(), m, ClassHelper.makeCached(mm.getReturnType()), params, null, null);
                 node.setDeclaringClass(classNode);

@@ -19,45 +19,37 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.net.ServerSocket;
+import com.cleanroommc.groovyscript.sandbox.FileUtil;
+import net.prominic.groovyls.compiler.ILanguageServerContext;
+import net.prominic.groovyls.config.ICompilationUnitFactory;
+import org.eclipse.lsp4j.*;
+import org.eclipse.lsp4j.services.*;
+import org.jetbrains.annotations.NotNull;
+
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
-import net.prominic.groovyls.compiler.ILanguageServerContext;
-import org.eclipse.lsp4j.*;
-import org.eclipse.lsp4j.jsonrpc.Launcher;
-import org.eclipse.lsp4j.launch.LSPLauncher;
-import org.eclipse.lsp4j.services.LanguageClient;
-import org.eclipse.lsp4j.services.LanguageClientAware;
-import org.eclipse.lsp4j.services.LanguageServer;
-import org.eclipse.lsp4j.services.TextDocumentService;
-import org.eclipse.lsp4j.services.WorkspaceService;
+public class GroovyLanguageServer<T extends GroovyServices> implements LanguageServer, LanguageClientAware {
 
-import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.GroovyScriptConfig;
-
-import net.prominic.groovyls.config.CompilationUnitFactory;
-import net.prominic.groovyls.config.ICompilationUnitFactory;
-
-public class GroovyLanguageServer implements LanguageServer, LanguageClientAware {
-
-    private final GroovyServices groovyServices;
+    protected final T groovyServices;
 
     public GroovyLanguageServer(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
-        this.groovyServices = new GroovyServices(compilationUnitFactory, languageServerContext);
+        this.groovyServices = createGroovyServices(compilationUnitFactory, languageServerContext);
+    }
+
+    @NotNull
+    protected T createGroovyServices(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
+        return (T) new GroovyServices(compilationUnitFactory, languageServerContext);
     }
 
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
         String rootUriString = params.getRootUri();
         if (rootUriString != null) {
-            URI uri = URI.create(params.getRootUri());
+            URI uri = URI.create(FileUtil.fixUriString(rootUriString));
             Path workspaceRoot = Paths.get(uri);
             groovyServices.setWorkspaceRoot(workspaceRoot);
         }
@@ -88,7 +80,8 @@ public class GroovyLanguageServer implements LanguageServer, LanguageClientAware
     }
 
     @Override
-    public void exit() {}
+    public void exit() {
+    }
 
     @Override
     public TextDocumentService getTextDocumentService() {

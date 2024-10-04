@@ -36,6 +36,12 @@
           "default": 25564,
           "title": "Language server port",
           "description": "Port to connect to GroovyScript mod"
+        },
+        "groovyscript.enableIcons": {
+          "type": "boolean",
+          "default": true,
+          "title": "Enable Inline Icons",
+          "description": "Enables preview icons of some global methods like item()"
         }
       }
     },
@@ -62,6 +68,6 @@
   "devDependencies": {
     "@types/node": "^20.11.17",
     "@types/vscode": "^1.81.0",
-    "esbuild": "^0.20.0"
+    "esbuild": "0.20.2"
   }
 }

@@ -12,6 +12,7 @@ import groovy.util.ResourceException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.codehaus.groovy.runtime.InvokerHelper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +37,7 @@ public abstract class GroovySandbox {
     private final URL[] scriptEnvironment;
     private final ThreadLocal<Boolean> running = ThreadLocal.withInitial(() -> false);
     private final Map<String, Object> bindings = new Object2ObjectOpenHashMap<>();
-    private final Set<Class<?>> staticImports = new HashSet<>();
+    private final ImportCustomizer importCustomizer = new ImportCustomizer();
     private final CachedClassLoader ccl = new CachedClassLoader();
 
     protected GroovySandbox(URL[] scriptEnvironment) {
@@ -65,15 +66,6 @@ public abstract class GroovySandbox {
         }
     }
 
-    protected void registerStaticImports(Class<?>... classes) {
-        Objects.requireNonNull(classes);
-        if (classes.length == 0) {
-            throw new IllegalArgumentException("Static imports must not be empty!");
-        }
-
-        Collections.addAll(staticImports, classes);
-    }
-
     protected void startRunning() {
         this.running.set(true);
     }
@@ -86,6 +78,7 @@ public abstract class GroovySandbox {
         GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment, this.ccl);
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
         config.setSourceEncoding("UTF-8");
+        config.addCompilationCustomizers(this.importCustomizer);
         engine.setConfig(config);
         initEngine(engine, config);
         return engine;
@@ -214,8 +207,8 @@ public abstract class GroovySandbox {
         return bindings;
     }
 
-    public Set<Class<?>> getStaticImports() {
-        return staticImports;
+    public ImportCustomizer getImportCustomizer() {
+        return importCustomizer;
     }
 
     public String getCurrentScript() {
