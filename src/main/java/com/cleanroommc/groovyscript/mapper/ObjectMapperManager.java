@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -105,6 +106,7 @@ public class ObjectMapperManager {
         ObjectMapper.builder("block", Block.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.BLOCKS))
                 .completer(ForgeRegistries.BLOCKS)
+                .defaultValue(() -> Blocks.AIR)
                 .docOfType("block")
                 .register();
         ObjectMapper.builder("blockstate", IBlockState.class)
@@ -113,6 +115,7 @@ public class ObjectMapperManager {
                 .addSignature(String.class, int.class)
                 .addSignature(String.class, String[].class)
                 .completer(ForgeRegistries.BLOCKS)
+                .defaultValue(() -> Blocks.AIR.getBlockState().getBaseState())
                 .docOfType("block state")
                 .register();
         ObjectMapper.builder("enchantment", Enchantment.class)
@@ -174,15 +177,18 @@ public class ObjectMapperManager {
         ObjectMapper.builder("creativeTab", CreativeTabs.class)
                 .parser(ObjectMappers::parseCreativeTab)
                 .completerOfNamed(() -> Arrays.asList(CreativeTabs.CREATIVE_TAB_ARRAY), v -> ((CreativeTabsAccessor) v).getTabLabel2())
+                .defaultValue(() -> CreativeTabs.SEARCH)
                 .docOfType("creative tab")
                 .register();
         ObjectMapper.builder("textformat", TextFormatting.class)
                 .parser(ObjectMappers::parseTextFormatting)
                 .completerOfNamed(() -> Arrays.asList(TextFormatting.values()), format -> format.name().toLowerCase(Locale.ROOT).replaceAll("[^a-z]", ""))
+                .defaultValue(() -> TextFormatting.RESET)
                 .docOfType("text format")
                 .register();
         ObjectMapper.builder("nbt", NBTTagCompound.class)
                 .parser(ObjectMappers::parseNBT)
+                .defaultValue(NBTTagCompound::new)
                 .docOfType("nbt tag")
                 .register();
     }

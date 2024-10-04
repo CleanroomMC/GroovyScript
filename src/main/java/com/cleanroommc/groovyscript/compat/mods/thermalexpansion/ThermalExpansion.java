@@ -56,6 +56,7 @@ public class ThermalExpansion extends GroovyPropertyContainer {
                 .mod("thermalexpansion")
                 .parser(IObjectParser.wrapEnum(CompactorManager.Mode.class, false))
                 .completerOfNamed(() -> Arrays.asList(CompactorManager.Mode.values()), v -> v.name().toUpperCase(Locale.ROOT))
+                .defaultValue(() -> CompactorManager.Mode.ALL)
                 .register();
     }
 }
