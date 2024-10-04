@@ -12,6 +12,7 @@ import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnerg
 import com.cleanroommc.groovyscript.compat.mods.arcanearchives.ArcaneArchives;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.atum.Atum;
+import com.cleanroommc.groovyscript.compat.mods.botaniatweaks.BotaniaTweaks;
 import com.cleanroommc.groovyscript.compat.mods.theaurorian.TheAurorian;
 import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
 import com.cleanroommc.groovyscript.compat.mods.betterwithmods.BetterWithMods;
@@ -90,6 +91,7 @@ public class ModSupport {
     public static final GroovyContainer<BetterWithMods> BETTER_WITH_MODS = new InternalModContainer<>("betterwithmods", "Better With Mods", BetterWithMods::new);
     public static final GroovyContainer<BloodMagic> BLOOD_MAGIC = new InternalModContainer<>("bloodmagic", "Blood Magic: Alchemical Wizardry", BloodMagic::new, "bm");
     public static final GroovyContainer<Botania> BOTANIA = new InternalModContainer<>("botania", "Botania", Botania::new);
+    public static final GroovyContainer<BotaniaTweaks> BOTANIA_TWEAKS = new InternalModContainer<>("botania_tweaks", "Botania Tweaks", BotaniaTweaks::new);
     public static final GroovyContainer<BotanicAdditions> BOTANIC_ADDITIONS = new InternalModContainer<>("botanicadds", "Botanic Additions", BotanicAdditions::new);
     public static final GroovyContainer<Calculator> CALCULATOR = new InternalModContainer<>("calculator", "Calculator", Calculator::new);
     public static final GroovyContainer<Chisel> CHISEL = new InternalModContainer<>("chisel", "Chisel", Chisel::new);

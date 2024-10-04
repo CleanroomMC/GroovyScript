@@ -721,6 +721,23 @@ groovyscript.wiki.botania.rune_altar.input.required=that `input` IIngredients ca
 groovyscript.wiki.botania.rune_altar.mana.value=Sets the mana cost of processing the recipe
 
 
+# Botania Tweaks
+groovyscript.wiki.botania_tweaks.agglomeration_plate.title=Agglomeration Plate
+groovyscript.wiki.botania_tweaks.agglomeration_plate.description=Converts any number of input itemstacks into an item output, consuming mana to do so. Occurs in-world above a Terrestrial Agglomeration Plate place on top of a small 3x3 multiblock, of which the center, sides, and corners may be set to require specific blockstates. While the recipe is running, particles will gradually change color until the recipe is finished. Upon finishing the recipe, the center, sides, and corners can each be converted into a replacement blockstate, if a replacement blockstate was set.
+groovyscript.wiki.botania_tweaks.agglomeration_plate.edge.value=Sets the IBlockState of the edges of the structure
+groovyscript.wiki.botania_tweaks.agglomeration_plate.mana.value=Sets the mana cost of processing the recipe
+groovyscript.wiki.botania_tweaks.agglomeration_plate.center.value=Sets the IBlockState of the center of the structure
+groovyscript.wiki.botania_tweaks.agglomeration_plate.colorStart.value=Sets the color hex code at the start of the recipe
+groovyscript.wiki.botania_tweaks.agglomeration_plate.colorEnd.value=Sets the color hex code at the end of the recipe
+groovyscript.wiki.botania_tweaks.agglomeration_plate.corner.value=Sets the IBlockState of the corners of the structure
+groovyscript.wiki.botania_tweaks.agglomeration_plate.edgeReplacement.value=Sets the IBlockState the edges will be replaced with, if not null
+groovyscript.wiki.botania_tweaks.agglomeration_plate.centerReplacement.value=Sets the IBlockState the center will be replaced with, if not null
+groovyscript.wiki.botania_tweaks.agglomeration_plate.cornerReplacement.value=Sets the IBlockState the corners will be replaced with, if not null
+groovyscript.wiki.botania_tweaks.agglomeration_plate.removeByCenter=Removes all recipes with the given center IBlockState
+groovyscript.wiki.botania_tweaks.agglomeration_plate.removeByCorner=Removes all recipes with the given corner IBlockState
+groovyscript.wiki.botania_tweaks.agglomeration_plate.removeByEdge=Removes all recipes with the given edge IBlockState
+
+
 # Botanic Additions
 groovyscript.wiki.botanicadds.gaia_plate.title=Gaia Plate
 groovyscript.wiki.botanicadds.gaia_plate.description=Converts an number of input items into an output itemstack, consuming a given amount of mana when dropped in-world atop a Gaia Agglomeration Plate as part of a multiblock structure.
