@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -11,6 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -18,12 +20,27 @@ import java.util.Collection;
 @RegistryDescription
 public class LightTransmutation extends StandardListRegistry<LightOreTransmutations.Transmutation> {
 
+    private IBlockState replacementState;
+
+    @GroovyBlacklist
+    public IBlockState getReplacementState() {
+        return replacementState;
+    }
+
     @Override
     public Collection<LightOreTransmutations.Transmutation> getRecipes() {
         if (LightOreTransmutationsAccessor.getRegisteredTransmutations() == null) {
             throw new IllegalStateException("Astral Sorcery Light Transmutation getRegisteredTransmutations() is not yet initialized!");
         }
         return LightOreTransmutationsAccessor.getRegisteredTransmutations();
+    }
+
+    @Override
+    @GroovyBlacklist
+    @ApiStatus.Internal
+    public void onReload() {
+        super.onReload();
+        replacementState = null;
     }
 
     @RecipeBuilderDescription(example = {
@@ -79,6 +96,11 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
     @MethodDescription(example = @Example("block('minecraft:lapis_block')"))
     public void removeByOutput(Block block) {
         removeByOutput(block.getDefaultState());
+    }
+
+    @MethodDescription(type = MethodDescription.Type.VALUE, example = @Example("blockstate('minecraft:clay')"))
+    public void setStarmetalReplacementState(IBlockState state) {
+        replacementState = state;
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightOreTransmutations.Transmutation> {

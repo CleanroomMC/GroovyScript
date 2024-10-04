@@ -397,6 +397,7 @@ groovyscript.wiki.astralsorcery.light_transmutation.cost.value=Sets the amount o
 groovyscript.wiki.astralsorcery.light_transmutation.constellation.value=Sets the required Constellation the starlight must be collected from. Must be either a Major or Weak Constellation
 groovyscript.wiki.astralsorcery.light_transmutation.inStack.value=Sets the item representing the input Block or IBlockState in JEI
 groovyscript.wiki.astralsorcery.light_transmutation.outStack.value=Sets the item representing the output IBlockState in JEI
+groovyscript.wiki.astralsorcery.light_transmutation.setStarmetalReplacementState=Sets the IBlockState that Starmetal Ore is converted into when placed beneath a Celestial Crystal Cluster. Useful when the Light Transmutation recipe converting Iron Ore into Starmetal Ore has changed.
 
 groovyscript.wiki.astralsorcery.lightwell.title=Lightwell
 groovyscript.wiki.astralsorcery.lightwell.description=Converts an input item into fluid, with a chance at breaking every time fluid is produced. The amount of fluid produced per interval can be increased via starlight.
