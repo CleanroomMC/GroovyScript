@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.thermalexpansion;
 
+import appeng.api.config.TunnelType;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import cofh.thermalexpansion.util.managers.machine.CompactorManager;
 import com.cleanroommc.groovyscript.api.IObjectParser;
@@ -51,9 +52,8 @@ public class ThermalExpansion extends GroovyPropertyContainer {
     public final XpCollector xpCollector = new XpCollector();
 
     @Override
-    public void initialize(GroovyContainer<?> owner) {
-        ObjectMapper.builder("compactorMode", CompactorManager.Mode.class)
-                .mod("thermalexpansion")
+    public void initialize(GroovyContainer<?> container) {
+        container.objectMapperBuilder("compactorMode", CompactorManager.Mode.class)
                 .parser(IObjectParser.wrapEnum(CompactorManager.Mode.class, false))
                 .completerOfNamed(() -> Arrays.asList(CompactorManager.Mode.values()), v -> v.name().toUpperCase(Locale.ROOT))
                 .defaultValue(() -> CompactorManager.Mode.ALL)
