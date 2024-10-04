@@ -136,8 +136,7 @@ public class ModSupport {
         return Collections.unmodifiableList(containerList);
     }
 
-    private ModSupport() {
-    }
+    private ModSupport() {}
 
     @ApiStatus.Internal
     public void setup(ASMDataTable dataTable) {
@@ -196,19 +195,6 @@ public class ModSupport {
                 throw new IllegalArgumentException("Alias already exists for: " + container.getModId() + " mod.");
             }
         }
-    }
-
-    @Deprecated
-    @Nullable
-    public Object getProperty(String name) {
-        GroovyContainer<?> container = containers.get(name);
-        return container != null ? container.get() : null;
-    }
-
-
-    @Deprecated
-    public @UnmodifiableView Map<String, ? extends GroovyContainer<?>> getProperties() {
-        return containersView;
     }
 
     @GroovyBlacklist
