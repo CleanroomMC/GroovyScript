@@ -93,6 +93,7 @@ final def mod_dependencies = [
         'projecte-226410:2702991'                             : [project.debug_projecte],
         'athenaeum-284350:4633750'                            : [project.debug_pyrotech],
         'pyrotech-306676:4956838'                             : [project.debug_pyrotech],
+        'random-things-59816:2905241'                         : [project.debug_random_things],
         'mystical_world-282940:3460961'                       : [project.debug_roots],
         'patchouli-306770:3162874'                            : [project.debug_roots, project.debug_natures_aura, project.debug_prodigytech],
         'prodigytech-297414:2769520'                          : [project.debug_prodigytech],

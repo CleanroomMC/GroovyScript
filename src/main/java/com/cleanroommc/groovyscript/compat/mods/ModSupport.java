@@ -48,6 +48,7 @@ import com.cleanroommc.groovyscript.compat.mods.primaltech.PrimalTech;
 import com.cleanroommc.groovyscript.compat.mods.prodigytech.ProdigyTech;
 import com.cleanroommc.groovyscript.compat.mods.projecte.ProjectE;
 import com.cleanroommc.groovyscript.compat.mods.pyrotech.PyroTech;
+import com.cleanroommc.groovyscript.compat.mods.randomthings.RandomThings;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
 import com.cleanroommc.groovyscript.compat.mods.rustic.Rustic;
 import com.cleanroommc.groovyscript.compat.mods.tcomplement.TinkersComplement;
@@ -122,6 +123,7 @@ public class ModSupport {
     public static final GroovyContainer<ProdigyTech> PRODIGY_TECH = new InternalModContainer<>("prodigytech", "Prodigy Tech", ProdigyTech::new);
     public static final GroovyContainer<ProjectE> PROJECT_E = new InternalModContainer<>("projecte", "ProjectE", ProjectE::new);
     public static final GroovyContainer<PyroTech> PYROTECH = new InternalModContainer<>("pyrotech", "Pyrotech", PyroTech::new);
+    public static final GroovyContainer<RandomThings> RANDOM_THINGS = new InternalModContainer<>("randomthings", "Random Things", RandomThings::new);
     public static final GroovyContainer<Roots> ROOTS = new InternalModContainer<>("roots", "Roots 3", Roots::new);
     public static final GroovyContainer<Rustic> RUSTIC = new InternalModContainer<>("rustic", "Rustic", Rustic::new);
     public static final GroovyContainer<TechReborn> TECH_REBORN = new InternalModContainer<>("techreborn", "Tech Reborn", TechReborn::new);
