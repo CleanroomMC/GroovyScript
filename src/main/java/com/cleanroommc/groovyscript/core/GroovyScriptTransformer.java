@@ -46,8 +46,11 @@ public class GroovyScriptTransformer implements IClassTransformer {
     }
 
     private byte[] transformSideOnly(String className, byte[] bytes) {
-        Set<String> bannedProperties = SideOnlyConfig.getRemovedProperties(FMLLaunchHandler.side(), className);
+        SideOnlyConfig.MethodSet bannedProperties = SideOnlyConfig.getRemovedProperties(FMLLaunchHandler.side(), className);
         if (bannedProperties == null) return bytes;
+        if (bannedProperties.bannsClass) {
+            throw new RuntimeException(String.format("Attempted to load class %s for invalid side %s", className, FMLLaunchHandler.side().name()));
+        }
 
         ClassNode classNode = new ClassNode();
         ClassReader classReader = new ClassReader(bytes);

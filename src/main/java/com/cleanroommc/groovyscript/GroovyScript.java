@@ -142,12 +142,17 @@ public class GroovyScript {
 
     @ApiStatus.Internal
     public static void initializeRunConfig(File minecraftHome) {
-        GroovyScript.minecraftHome = minecraftHome;
+        try {
+            GroovyScript.minecraftHome = minecraftHome.getCanonicalFile();
+        } catch (IOException e) {
+            GroovyLog.get().errorMC("Failed to canonicalize minecraft home path '" + minecraftHome + "'!");
+            throw new RuntimeException(e);
+        }
         // If we are launching with the environment variable set to use the examples folder, use the examples folder for easy and consistent testing.
         if (Boolean.parseBoolean(System.getProperty("groovyscript.use_examples_folder"))) {
-            scriptPath = new File(minecraftHome.getParentFile(), "examples");
+            scriptPath = new File(GroovyScript.minecraftHome.getParentFile(), "examples");
         } else {
-            scriptPath = new File(minecraftHome, "groovy");
+            scriptPath = new File(GroovyScript.minecraftHome, "groovy");
         }
         try {
             scriptPath = scriptPath.getCanonicalFile();

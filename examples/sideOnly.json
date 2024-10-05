@@ -1,7 +1,10 @@
 {
-  "server": {
-    "com.cleanroommc.groovyscript.NormalClass": [
-      "failingMethod()"
+  "client": {
+    "classes": [
+      "net.minecraftforge.fml.client.config.GuiConfig1"
     ]
+  },
+  "server": {
+
   }
 }
