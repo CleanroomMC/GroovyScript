@@ -69,7 +69,7 @@ public class Imbuing extends StandardListRegistry<ImbuingRecipe> {
             validateFluids(msg);
             msg.add(mainInput == null, "mainInput must be defined");
             var uni = input.stream().distinct().count();
-            msg.add(uni == 3, "each input must be unique, yet only {}/3 of the inputs were unique. mainInput is not considered", uni);
+            msg.add(uni < 3, "each input must be unique, yet only {}/3 of the inputs were unique. mainInput is not considered", uni);
         }
 
         @Override
