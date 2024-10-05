@@ -1,3 +1,5 @@
+// side: client
+
 package classes
 
 import classes.SimpleConversionRecipe
