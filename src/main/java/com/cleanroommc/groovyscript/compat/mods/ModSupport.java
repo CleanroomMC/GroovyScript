@@ -13,6 +13,7 @@ import com.cleanroommc.groovyscript.compat.mods.arcanearchives.ArcaneArchives;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.atum.Atum;
 import com.cleanroommc.groovyscript.compat.mods.botaniatweaks.BotaniaTweaks;
+import com.cleanroommc.groovyscript.compat.mods.futuremc.FutureMC;
 import com.cleanroommc.groovyscript.compat.mods.theaurorian.TheAurorian;
 import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
 import com.cleanroommc.groovyscript.compat.mods.betterwithmods.BetterWithMods;
@@ -105,6 +106,7 @@ public class ModSupport {
     public static final GroovyContainer<ExtraBotany> EXTRA_BOTANY = new InternalModContainer<>("extrabotany", "Extra Botany", ExtraBotany::new);
     public static final GroovyContainer<ExtraUtils2> EXTRA_UTILITIES_2 = new InternalModContainer<>("extrautils2", "Extra Utilities 2", ExtraUtils2::new, "extrautilities2");
     public static final GroovyContainer<Forestry> FORESTRY = new InternalModContainer<>("forestry", "Forestry", Forestry::new);
+    public static final GroovyContainer<FutureMC> FUTURE_MC = new InternalModContainer<>("futuremc", "Future MC", FutureMC::new);
     public static final GroovyContainer<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new InternalModContainer<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
     public static final GroovyContainer<ImmersivePetroleum> IMMERSIVE_PETROLEUM = new InternalModContainer<>("immersivepetroleum", "Immersive Petroleum", ImmersivePetroleum::new);
     public static final GroovyContainer<ImmersiveTechnology> IMMERSIVE_TECHNOLOGY = new InternalModContainer<>("immersivetech", "Immersive Technology", ImmersiveTechnology::new);
