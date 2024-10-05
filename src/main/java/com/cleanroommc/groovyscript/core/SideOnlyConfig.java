@@ -23,7 +23,16 @@ public class SideOnlyConfig {
     private static final Map<String, MethodSet> clientRemovals = new Object2ObjectOpenHashMap<>();
     private static final Map<String, MethodSet> serverRemovals = new Object2ObjectOpenHashMap<>();
 
+    public static void clientOnly(String className, String member) {
+        serverRemovals.computeIfAbsent(className, k -> new MethodSet(false)).add(member);
+    }
+
+    public static void serverOnly(String className, String member) {
+        clientRemovals.computeIfAbsent(className, k -> new MethodSet(false)).add(member);
+    }
+
     static void init() {
+        clientOnly("net.minecraftforge.common.config.Configuration", "setCategoryConfigEntryClass()");
 
         initConfig((File) FMLInjectionData.data()[6]);
     }
@@ -52,10 +61,10 @@ public class SideOnlyConfig {
             return;
         }
         if (json.has("client")) {
-            readConfig(clientRemovals, json.getAsJsonObject("client"));
+            readConfig(serverRemovals, json.getAsJsonObject("client"));
         }
         if (json.has("server")) {
-            readConfig(serverRemovals, json.getAsJsonObject("server"));
+            readConfig(clientRemovals, json.getAsJsonObject("server"));
         }
         for (String key : new String[]{"common", "both", "all"}) {
             if (json.has(key)) {
@@ -97,8 +106,7 @@ public class SideOnlyConfig {
     }
 
     public static MethodSet getRemovedProperties(Side side, String clazz) {
-        // remove server removals on client side and client removals on server side
-        return side.isClient() ? serverRemovals.get(clazz) : clientRemovals.get(clazz);
+        return side.isClient() ? clientRemovals.get(clazz) : serverRemovals.get(clazz);
     }
 
     public static class MethodSet extends ObjectOpenHashSet<String> {
