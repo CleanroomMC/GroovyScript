@@ -56,6 +56,11 @@ public class RedstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.V
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Calculator Redstone Extractor Recipe";
         }

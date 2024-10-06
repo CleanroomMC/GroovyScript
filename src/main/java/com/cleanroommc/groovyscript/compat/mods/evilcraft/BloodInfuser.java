@@ -113,6 +113,11 @@ public class BloodInfuser extends StandardListRegistry<IRecipe<IngredientFluidSt
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);

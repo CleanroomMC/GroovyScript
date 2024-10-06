@@ -64,6 +64,11 @@ public class WindRune extends StandardListRegistry<WindImbueRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Wind Rune Recipe";
         }

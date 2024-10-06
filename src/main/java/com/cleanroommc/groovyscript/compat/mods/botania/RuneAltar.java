@@ -89,6 +89,12 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // Each slot of Apothecary can only contain 1 item
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Botania Rune Altar recipe";
         }

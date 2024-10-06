@@ -46,7 +46,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
      * Changing this number will force the cache to be deleted and every script has to be recompiled.
      * Useful when changes to the compilation process were made.
      */
-    public static final int CACHE_VERSION = 2;
+    public static final int CACHE_VERSION = 3;
     /**
      * Setting this to false will cause compiled classes to never be cached.
      * As a side effect some compilation behaviour might change. Can be useful for debugging.
@@ -271,9 +271,10 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected Class<?> loadScriptClass(GroovyScriptEngine engine, File file) {
-        File relativeFile = this.scriptRoot.toPath().relativize(file.toPath()).toFile();
+        String relativeFileName = FileUtil.relativize(this.scriptRoot.getPath(), file.getPath());
+        File relativeFile = new File(relativeFileName);
         long lastModified = file.lastModified();
-        CompiledScript comp = this.index.get(relativeFile.toString());
+        CompiledScript comp = this.index.get(relativeFileName);
 
         if (ENABLE_CACHE && comp != null && lastModified <= comp.lastEdited && comp.clazz == null && comp.readData(this.cacheRoot.getPath())) {
             // class is not loaded, but the cached class bytes are still valid
@@ -285,8 +286,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
         } else if (!ENABLE_CACHE || (comp == null || comp.clazz == null || lastModified > comp.lastEdited)) {
             // class is not loaded and class bytes don't exist yet or script has been edited
             if (comp == null) {
-                comp = new CompiledScript(relativeFile.toString(), 0);
-                this.index.put(relativeFile.toString(), comp);
+                comp = new CompiledScript(relativeFileName, 0);
+                this.index.put(relativeFileName, comp);
             }
             if (lastModified > comp.lastEdited || comp.preprocessors == null) {
                 // recompile preprocessors if there is no data or script was edited
@@ -303,7 +304,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             Class<?> clazz = super.loadScriptClass(engine, relativeFile);
             if (comp.clazz == null) {
                 // should not happen
-                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback! Index: {}", relativeFile, this.index);
+                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback!", relativeFileName);
                 if (ENABLE_CACHE) comp.clazz = clazz;
             }
         } else {

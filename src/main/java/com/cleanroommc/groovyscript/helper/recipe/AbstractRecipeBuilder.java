@@ -1,12 +1,14 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.helper.ingredient.FluidStackList;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import net.minecraft.item.ItemStack;
@@ -163,11 +165,22 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     }
 
     @GroovyBlacklist
+    protected int getMaxItemInput() {
+        return Integer.MAX_VALUE;
+    }
+
+    @GroovyBlacklist
     public void validateItems(GroovyLog.Msg msg, int minInput, int maxInput, int minOutput, int maxOutput) {
         input.trim();
         output.trim();
         validateCustom(msg, input, minInput, maxInput, "item input");
         validateCustom(msg, output, minOutput, maxOutput, "item output");
+        if (GroovyScriptConfig.compat.checkInputStackCounts) {
+            int maxAmountAllowed = getMaxItemInput();
+            for (IIngredient ingredient : input) {
+                msg.add(IngredientHelper.overMaxSize(ingredient, maxAmountAllowed), "Expected stack size of {} for {}, got {}", maxAmountAllowed, ingredient, ingredient.getAmount());
+            }
+        }
     }
 
     @GroovyBlacklist

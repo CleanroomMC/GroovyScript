@@ -596,6 +596,7 @@ groovyscript.wiki.bloodmagic.sacrificial.value.value=Sets how much Life Essence 
 
 groovyscript.wiki.bloodmagic.tartaric_forge.title=Tartaric Forge
 groovyscript.wiki.bloodmagic.tartaric_forge.description=Converts up to 4 input items into an output itemstack, requiring a Tartaric gem with a minimum amount of souls, and consuming some.
+groovyscript.wiki.bloodmagic.tartaric_forge.note=Tartaric Forge can properly execute recipes that only have 1 input, but they're bugged in JEI. If a recipe only has 1 input, it will be duplicated in the bottom-right slot. This bug is purely visual, and the recipe still works as intended.
 groovyscript.wiki.bloodmagic.tartaric_forge.add=Adds recipes in the format `input`, `output`, `minimumSouls`, `soulDrain`
 groovyscript.wiki.bloodmagic.tartaric_forge.minimumSouls.value=Sets how much Demonic Will is required in the Tartaric Gem to start the craft
 groovyscript.wiki.bloodmagic.tartaric_forge.soulDrain.value=Sets how much Demonic Will is drained from the Tartaric Gem when the craft is completed
@@ -893,6 +894,7 @@ groovyscript.wiki.enderio.fluid_fuel.remove=Removes recipes matching the target 
 
 groovyscript.wiki.enderio.sag_mill.title=Sag Mill
 groovyscript.wiki.enderio.sag_mill.description=Convert an input itemstack into up to 4 output itemstacks with chances, using energy. Output can be boosted by Grinding Balls based on set bonusType. Can be set to require at least SIMPLE, NORMAL, or ENHANCED tiers, or to IGNORE the tier. SIMPLE and IGNORE are effectively the same.
+groovyscript.wiki.enderio.sag_mill.note=EnderIO executes recipes using both its input and its grinding ball slot as inputs, which means it can consume grinding balls as input. This means an item that can be used as an input should not be able to also be used as a grinding ball.
 groovyscript.wiki.enderio.sag_mill.chances.value=Sets the chance the given output of each output slot
 groovyscript.wiki.enderio.sag_mill.bonusType.value=Sets the type of bonus a Grinding Ball can apply
 
