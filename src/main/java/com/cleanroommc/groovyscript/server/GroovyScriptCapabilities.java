@@ -11,4 +11,5 @@ public class GroovyScriptCapabilities {
     public void setTextureDecorationProvider(Boolean textureDecorationProvider) {
         this.textureDecorationProvider = textureDecorationProvider;
     }
+
 }

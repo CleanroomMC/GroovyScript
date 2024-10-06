@@ -32,9 +32,10 @@ public class ProteinReactor extends StandardListRegistry<IReactorEntry> {
     @MethodDescription(description = "groovyscript.wiki.industrialforegoing.protein_reactor.add1", type = MethodDescription.Type.ADDITION)
     public IReactorEntry add(ItemStack input, @Nullable Predicate<NBTTagCompound> nbtCheck) {
         if (IngredientHelper.overMaxSize(input, 1)) {
-            GroovyLog.msg("Error adding Protein Reactor recipe").error()
-                     .add("Input stack size must be 1")
-                     .post();
+            GroovyLog.msg("Error adding Protein Reactor recipe")
+                    .error()
+                    .add("Input stack size must be 1")
+                    .post();
             return null;
         }
         IReactorEntry recipe = new ProteinReactorEntry(input, nbtCheck);

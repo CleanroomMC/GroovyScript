@@ -109,5 +109,7 @@ public class RadiatingChamber extends StandardListRegistry<RadiatingChamberRecip
             RadiatingChamberRecipes.addRecipe(recipe);
             return recipe;
         }
+
     }
+
 }

@@ -45,4 +45,5 @@ public class TextureDecorationParams implements WorkDoneProgressParams, PartialR
     public void setWorkDoneToken(Either<String, Integer> token) {
         this.workDoneToken = token;
     }
+
 }

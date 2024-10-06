@@ -64,9 +64,10 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
     }, type = MethodDescription.Type.ADDITION)
     public void addVariation(String groupName, ItemStack item) {
         if (IngredientHelper.overMaxSize(item, 1)) {
-            GroovyLog.msg("Error adding Chisel Carving").error()
-                     .add("Item must have stack size of 1, got {}", item.getCount())
-                     .post();
+            GroovyLog.msg("Error adding Chisel Carving")
+                    .error()
+                    .add("Item must have stack size of 1, got {}", item.getCount())
+                    .post();
             return;
         }
         try {

@@ -10,7 +10,6 @@ import com.google.common.base.CaseFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.util.ResourceLocation;
@@ -20,14 +19,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RunConfig {
 
@@ -52,8 +46,9 @@ public class RunConfig {
         JsonObject packmode = new JsonObject();
         packmode.add("values", new JsonArray());
         packmode.addProperty("default", "");
-        packmode.addProperty("_comment",
-                             "By default the packmode is not synced with the packmode mod. You can enable integration, but you can no longer change packmode on the fly.");
+        packmode.addProperty(
+                "_comment",
+                "By default the packmode is not synced with the packmode mod. You can enable integration, but you can no longer change packmode on the fly.");
         packmode.addProperty("integratePackmodeMod", false);
         json.add("packmode", packmode);
         return json;
@@ -153,9 +148,9 @@ public class RunConfig {
         List<Pair<String, String>> pathsList = new ArrayList<>();
 
         GroovyLog.Msg errorMsg = GroovyLog.msg("Fatal while parsing runConfig.json")
-                                          .add("Files should NOT be ran in multiple loaders!")
-                                          .logToMc()
-                                          .fatal();
+                .add("Files should NOT be ran in multiple loaders!")
+                .logToMc()
+                .fatal();
 
         for (Map.Entry<String, JsonElement> entry : jsonLoaders.entrySet()) {
             JsonArray loader = (JsonArray) entry.getValue();
@@ -219,11 +214,11 @@ public class RunConfig {
     public String getPackId() {
         if (this.invalidPackId && !this.warnedAboutInvalidPackId) {
             GroovyLog.msg("Fatal error while trying to use the pack id")
-                     .add("specified pack id is invalid or empty ('{}')", this.packId)
-                     .add("pack id must only contain lower case letters and underscores")
-                     .add("see https://cleanroommc.com/groovy-script/getting_started/run_config for more info")
-                     .fatal()
-                     .post();
+                    .add("specified pack id is invalid or empty ('{}')", this.packId)
+                    .add("pack id must only contain lower case letters and underscores")
+                    .add("see https://cleanroommc.com/groovy-script/getting_started/run_config for more info")
+                    .fatal()
+                    .post();
             this.warnedAboutInvalidPackId = true;
         }
         return packId;
@@ -334,4 +329,5 @@ public class RunConfig {
         }
         return valid;
     }
+
 }

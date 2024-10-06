@@ -102,9 +102,12 @@ public class GroovyScriptTransformer implements IClassTransformer {
 
     private static class LambdaGatherer extends MethodVisitor {
 
-        private static final Handle META_FACTORY = new Handle(Opcodes.H_INVOKESTATIC, "java/lang/invoke/LambdaMetafactory", "metafactory",
-                                                              "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;",
-                                                              false);
+        private static final Handle META_FACTORY = new Handle(
+                Opcodes.H_INVOKESTATIC,
+                "java/lang/invoke/LambdaMetafactory",
+                "metafactory",
+                "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;",
+                false);
         private final List<Handle> dynamicLambdaHandles = new ArrayList<Handle>();
 
         public LambdaGatherer() {
@@ -132,6 +135,7 @@ public class GroovyScriptTransformer implements IClassTransformer {
         public List<Handle> getDynamicLambdaHandles() {
             return dynamicLambdaHandles;
         }
+
     }
 
 }

@@ -23,7 +23,9 @@ import java.util.stream.Stream;
  */
 public class SandboxData {
 
-    public static final String[] GROOVY_SUFFIXES = {".groovy", ".gvy", ".gy", ".gsh"};
+    public static final String[] GROOVY_SUFFIXES = {
+            ".groovy", ".gvy", ".gy", ".gsh"
+    };
     private static File minecraftHome;
     private static File scriptPath;
     private static File runConfigFile;
@@ -62,7 +64,9 @@ public class SandboxData {
         resourcesFile = new File(scriptPath, "assets");
         try {
             rootUrl = scriptPath.toURI().toURL();
-            rootUrls = new URL[]{rootUrl};
+            rootUrls = new URL[]{
+                    rootUrl
+            };
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Failed to create URL from script path " + scriptPath);
         }
@@ -145,17 +149,19 @@ public class SandboxData {
             }
             int pathSize = path.split(separator).length;
             try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
-                stream.filter(path1 -> isGroovyFile(path1.toString())).map(Path::toFile)
-                      //.filter(Preprocessor::validatePreprocessors)
-                      .sorted(Comparator.comparing(File::getPath)).forEach(file -> {
-                          if (files.containsKey(file)) {
-                              if (pathSize > files.getInt(file)) {
-                                  files.put(file, pathSize);
-                              }
-                          } else {
-                              files.put(file, pathSize);
-                          }
-                      });
+                stream.filter(path1 -> isGroovyFile(path1.toString()))
+                        .map(Path::toFile)
+                        //.filter(Preprocessor::validatePreprocessors)
+                        .sorted(Comparator.comparing(File::getPath))
+                        .forEach(file -> {
+                            if (files.containsKey(file)) {
+                                if (pathSize > files.getInt(file)) {
+                                    files.put(file, pathSize);
+                                }
+                            } else {
+                                files.put(file, pathSize);
+                            }
+                        });
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -171,4 +177,5 @@ public class SandboxData {
         }
         return false;
     }
+
 }

@@ -9,4 +9,5 @@ public interface GroovyScriptLanguageServer extends LanguageServer {
     default GroovyScriptFeaturesService getGroovyScriptFeaturesService() {
         return null;
     }
+
 }

@@ -69,9 +69,7 @@ public class TextureDecorationProvider extends DocProvider {
                     call = method;
                 }
             } else continue;
-            if (mappers.contains(call) ||
-                !(call.getArguments() instanceof ArgumentListExpression args) ||
-                args.getExpressions().isEmpty()) continue;
+            if (mappers.contains(call) || !(call.getArguments() instanceof ArgumentListExpression args) || args.getExpressions().isEmpty()) continue;
             ObjectMapper<?> mapper;
             try {
                 mapper = GroovyASTUtils.getMapperOfNode(call, astContext);
@@ -144,7 +142,8 @@ public class TextureDecorationProvider extends DocProvider {
         return DigestUtils.sha1Hex(sb.toString());
     }
 
-    private void render(List<TextureDecoration> queueDeco, List<Range> queueRange,
+    private void render(List<TextureDecoration> queueDeco,
+                        List<Range> queueRange,
                         List<TextureDecorationInformation> decorationInformations) {
         var framebuffer = GL30.glGenFramebuffers();
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebuffer);
@@ -311,5 +310,7 @@ public class TextureDecorationProvider extends DocProvider {
         public boolean isFileExists() {
             return fileExists;
         }
+
     }
+
 }

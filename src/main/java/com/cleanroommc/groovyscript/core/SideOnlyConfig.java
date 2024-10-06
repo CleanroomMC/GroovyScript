@@ -22,7 +22,9 @@ public class SideOnlyConfig {
 
     private static final MethodSet CLASS_MARKER = new MethodSet(true);
     private static final Function<String, MethodSet> DEFAULT_METHOD_SET = s -> new MethodSet(false);
-    private static final String[] commonKeys = {"common", "both", "all"};
+    private static final String[] commonKeys = {
+            "common", "both", "all"
+    };
     private static final Map<String, MethodSet> clientRemovals = new Object2ObjectOpenHashMap<>();
     private static final Map<String, MethodSet> serverRemovals = new Object2ObjectOpenHashMap<>();
 
@@ -113,5 +115,7 @@ public class SideOnlyConfig {
         public MethodSet(boolean bansClass) {
             this.bansClass = bansClass;
         }
+
     }
+
 }

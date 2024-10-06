@@ -32,9 +32,10 @@ public class OreSieve extends StandardListRegistry<OreFluidEntrySieve> {
     })
     public OreFluidEntrySieve add(FluidStack input, ItemStack output, ItemStack sieveItem) {
         if (IngredientHelper.overMaxSize(sieveItem, 1)) {
-            GroovyLog.msg("Error adding Fluid Sieving recipe").error()
-                     .add("Sieve item stack size must be 1")
-                     .post();
+            GroovyLog.msg("Error adding Fluid Sieving recipe")
+                    .error()
+                    .add("Sieve item stack size must be 1")
+                    .post();
             return null;
         }
         OreFluidEntrySieve recipe = new OreFluidEntrySieve(input, output, sieveItem);

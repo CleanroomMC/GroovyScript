@@ -50,7 +50,9 @@ public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
         @Property(comp = @Comp(gt = 0, lte = 100, unique = "groovyscript.wiki.magneticraft.sluice_box.chances.required"))
         private final FloatArrayList chances = new FloatArrayList();
 
-        @RecipeBuilderMethodDescription(field = {"output", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "chances"
+        })
         public RecipeBuilder output(ItemStack item, float chance) {
             this.output.add(item);
             this.chances.add(chance);
@@ -58,7 +60,9 @@ public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = {"output", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "chances"
+        })
         public RecipeBuilder output(ItemStack item) {
             return output(item, 1.0f);
         }

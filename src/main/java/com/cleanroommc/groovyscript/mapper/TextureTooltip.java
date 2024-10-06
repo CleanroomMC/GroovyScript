@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class TextureTooltip {
+
     private static final Pattern embeddingPattern = Pattern.compile("(?>\\$\\{(?<mapper>\\w+)\\(['\\\"](?<key>[\\w\\s:-]+)['\\\"]\\)})");
 
     private final String content;
@@ -54,6 +55,7 @@ public class TextureTooltip {
     }
 
     public class Embedding<T> {
+
         private final int start;
         private final int end;
         private final T context;
@@ -87,5 +89,7 @@ public class TextureTooltip {
         public String getTextureName() {
             return textureName;
         }
+
     }
+
 }

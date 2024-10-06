@@ -77,5 +77,7 @@ public class MagicianTable extends StandardListRegistry<MagicianTableRecipe> {
             MagicianTableRecipes.addRecipe(recipe);
             return recipe;
         }
+
     }
+
 }

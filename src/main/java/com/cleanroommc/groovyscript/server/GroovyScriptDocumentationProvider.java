@@ -23,11 +23,13 @@ public class GroovyScriptDocumentationProvider implements IDocumentationProvider
     public @Nullable String getDocumentation(AnnotatedNode node, ASTContext context) {
         var builder = new StringBuilder();
 
-        if (node instanceof MethodNode methodNode &&
-                methodNode.getDeclaringClass().implementsInterface(ClassHelper.makeCached(IScriptReloadable.class))) {
+        if (node instanceof MethodNode methodNode && methodNode.getDeclaringClass().implementsInterface(ClassHelper.makeCached(IScriptReloadable.class))) {
             ModSupport.getAllContainers().stream().filter(IGroovyContainer::isLoaded).map(groovyContainer -> {
-                var methodRegistry = groovyContainer.get().getRegistries().stream().filter(
-                        registry -> registry.getClass().equals(methodNode.getDeclaringClass().getTypeClass())).findFirst();
+                var methodRegistry = groovyContainer.get()
+                        .getRegistries()
+                        .stream()
+                        .filter(registry -> registry.getClass().equals(methodNode.getDeclaringClass().getTypeClass()))
+                        .findFirst();
 
                 if (methodRegistry.isPresent()) {
                     var method = GroovyReflectionUtils.resolveMethodFromMethodNode(methodNode, context);
@@ -46,9 +48,7 @@ public class GroovyScriptDocumentationProvider implements IDocumentationProvider
 
     @Override
     public @Nullable String getSortText(AnnotatedNode node, ASTContext context) {
-        return node instanceof MethodNode methodNode &&
-                       !methodNode.getDeclaringClass().getAnnotations(ClassHelper.makeCached(RegistryDescription.class)).isEmpty() &&
-                       !methodNode.getAnnotations(ClassHelper.makeCached(MethodDescription.class)).isEmpty() ?
-               "!!!" + methodNode.getName() : null;
+        return node instanceof MethodNode methodNode && !methodNode.getDeclaringClass().getAnnotations(ClassHelper.makeCached(RegistryDescription.class)).isEmpty() && !methodNode.getAnnotations(ClassHelper.makeCached(MethodDescription.class)).isEmpty() ? "!!!" + methodNode.getName() : null;
     }
+
 }
