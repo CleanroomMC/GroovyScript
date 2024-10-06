@@ -136,9 +136,7 @@ public class ManaInfusion extends StandardListRegistry<RecipeManaInfusion> {
             if (!validate()) return null;
             RecipeManaInfusion recipe = new RecipeManaInfusion(
                     output.get(0),
-                    input.get(0) instanceof OreDictIngredient
-                            ? ((OreDictIngredient) input.get(0)).getOreDict()
-                            : input.get(0).getMatchingStacks()[0],
+                    input.get(0) instanceof OreDictIngredient ? ((OreDictIngredient) input.get(0)).getOreDict() : input.get(0).getMatchingStacks()[0],
                     mana);
             if (catalyst != null) recipe.setCatalyst(catalyst);
             add(recipe);
