@@ -99,6 +99,5 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
             PyroTech.compactingBin.add(recipe);
             return recipe;
         }
-
     }
 }

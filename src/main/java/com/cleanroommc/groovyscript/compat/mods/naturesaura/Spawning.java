@@ -164,6 +164,5 @@ public class Spawning extends VirtualizedRegistry<AnimalSpawnerRecipe> {
             ModSupport.NATURES_AURA.get().spawning.add(recipe);
             return recipe;
         }
-
     }
 }

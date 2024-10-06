@@ -155,6 +155,5 @@ public class Pyre extends VirtualizedRegistry<PyreCraftingRecipe> {
             ModSupport.ROOTS.get().pyre.add(super.name, recipe);
             return recipe;
         }
-
     }
 }

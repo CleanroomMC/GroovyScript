@@ -140,6 +140,5 @@ public class Mixer extends StandardListRegistry<MixerRecipe> {
             ModSupport.IMMERSIVE_ENGINEERING.get().mixer.add(recipe);
             return recipe;
         }
-
     }
 }

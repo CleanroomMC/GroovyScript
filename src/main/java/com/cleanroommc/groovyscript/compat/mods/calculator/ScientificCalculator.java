@@ -89,6 +89,5 @@ public class ScientificCalculator extends StandardListRegistry<CalculatorRecipe>
             ModSupport.CALCULATOR.get().scientificCalculator.add(recipe);
             return recipe;
         }
-
     }
 }

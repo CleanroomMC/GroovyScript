@@ -206,6 +206,5 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
             AlloyRecipeManager.getInstance().addRecipe(true, ArrayUtils.mapToList(input, RecipeInput::new, new NNList<>()), output.get(0), energy, xp, level);
             return null;
         }
-
     }
 }

@@ -341,7 +341,6 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
             this.ingredientMatrix = matrix;
             return this;
         }
-
     }
 
     public abstract static class AbstractShapeless<T> extends AbstractCraftingRecipeBuilder<T> {
@@ -382,6 +381,5 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
             }
             return this;
         }
-
     }
 }

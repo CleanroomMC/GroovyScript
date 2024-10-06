@@ -78,6 +78,5 @@ public class SemiFluidGenerator extends AbstractGeneratorRegistry {
             ModSupport.TECH_REBORN.get().semiFluidGenerator.add(recipe);
             return recipe;
         }
-
     }
 }

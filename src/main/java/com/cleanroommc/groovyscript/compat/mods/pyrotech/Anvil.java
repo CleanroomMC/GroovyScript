@@ -155,6 +155,5 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
             PyroTech.anvil.add(recipe);
             return recipe;
         }
-
     }
 }

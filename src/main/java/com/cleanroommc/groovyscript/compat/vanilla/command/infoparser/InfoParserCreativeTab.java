@@ -31,6 +31,5 @@ public class InfoParserCreativeTab extends GenericInfoParser<CreativeTabs> {
         if (tab != null) {
             instance.add(info.getMessages(), tab, info.isPrettyNbt());
         }
-
     }
 }

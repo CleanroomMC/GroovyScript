@@ -182,6 +182,5 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
             ModSupport.BOTANIA.get().brew.add(brew);
             return brew;
         }
-
     }
 }

@@ -99,6 +99,5 @@ public class ExplosionFurnace extends StandardListRegistry<ExplosionFurnaceManag
 
             return recipe;
         }
-
     }
 }

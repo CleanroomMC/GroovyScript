@@ -74,6 +74,5 @@ public class BrewingBarrel extends StandardListRegistry<IBrewingBarrelRecipe> {
             ModSupport.RUSTIC.get().brewingBarrel.add(recipe);
             return recipe;
         }
-
     }
 }

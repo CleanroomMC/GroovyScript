@@ -93,6 +93,5 @@ public class SolarTower extends StandardListRegistry<SolarTowerRecipe> {
             ModSupport.IMMERSIVE_TECHNOLOGY.get().solarTower.add(recipe);
             return recipe;
         }
-
     }
 }

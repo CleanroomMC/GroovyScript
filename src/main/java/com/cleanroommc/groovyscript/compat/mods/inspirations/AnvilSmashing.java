@@ -187,6 +187,5 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
             ModSupport.INSPIRATIONS.get().anvilSmashing.add(inputBlock, output);
             return Pair.of(inputBlock, output);
         }
-
     }
 }

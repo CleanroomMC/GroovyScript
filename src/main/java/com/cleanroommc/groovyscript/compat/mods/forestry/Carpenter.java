@@ -211,6 +211,5 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
             add(recipe);
             return recipe;
         }
-
     }
 }

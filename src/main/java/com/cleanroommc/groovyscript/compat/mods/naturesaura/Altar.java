@@ -169,6 +169,5 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
             ModSupport.NATURES_AURA.get().altar.add(recipe);
             return recipe;
         }
-
     }
 }

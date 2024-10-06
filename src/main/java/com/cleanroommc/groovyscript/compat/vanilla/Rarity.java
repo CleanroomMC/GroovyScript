@@ -95,6 +95,5 @@ public class Rarity extends NamedRegistry {
         public String getName() {
             return name;
         }
-
     }
 }

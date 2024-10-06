@@ -163,7 +163,6 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         public String toString() {
             return "EFAdditiveExplosive[" + "input=" + input + ", " + "value=" + value + ']';
         }
-
     }
 
     @SuppressWarnings("ClassCanBeRecord")
@@ -224,6 +223,5 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         public String toString() {
             return "EFAdditiveDampener[" + "input=" + input + ", " + "value=" + value + ']';
         }
-
     }
 }

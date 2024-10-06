@@ -78,6 +78,5 @@ public class PlasmaGenerator extends AbstractGeneratorRegistry {
             ModSupport.TECH_REBORN.get().plasmaGenerator.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -56,7 +56,6 @@ public class Ingredient extends VirtualizedRegistry<Void> {
             //noinspection unchecked,rawtypes
             ingredientRegistry.addIngredientsAtRuntime(entry.getKey(), ingredientRegistry.getIngredientHelper(entry.getKey()).expandSubtypes((List) entry.getValue()));
         }
-
     }
 
     @Override

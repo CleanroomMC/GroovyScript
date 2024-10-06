@@ -102,6 +102,5 @@ public class IndustrialSawmill extends AbstractGenericTechRebornRegistry {
             ModSupport.TECH_REBORN.get().industrialSawmill.add(recipe);
             return recipe;
         }
-
     }
 }

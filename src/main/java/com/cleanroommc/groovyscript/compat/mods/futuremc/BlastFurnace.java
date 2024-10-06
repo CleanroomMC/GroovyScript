@@ -62,6 +62,5 @@ public class BlastFurnace extends StandardListRegistry<SimpleRecipe> {
             ModSupport.FUTURE_MC.get().blastFurnace.add(recipe);
             return recipe;
         }
-
     }
 }

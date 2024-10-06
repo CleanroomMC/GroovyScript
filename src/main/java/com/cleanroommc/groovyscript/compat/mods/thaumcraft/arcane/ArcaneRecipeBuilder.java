@@ -103,7 +103,6 @@ public interface ArcaneRecipeBuilder {
 
             return recipe;
         }
-
     }
 
     @Property(property = "replace")
@@ -165,6 +164,5 @@ public interface ArcaneRecipeBuilder {
             ReloadableRegistryManager.addRegistryEntry(ForgeRegistries.RECIPES, name, recipe);
             return recipe;
         }
-
     }
 }

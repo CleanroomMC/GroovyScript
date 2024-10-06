@@ -78,6 +78,5 @@ public class ThermalGenerator extends AbstractGeneratorRegistry {
             ModSupport.TECH_REBORN.get().thermalGenerator.add(recipe);
             return recipe;
         }
-
     }
 }

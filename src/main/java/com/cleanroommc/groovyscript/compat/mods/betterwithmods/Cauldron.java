@@ -117,6 +117,5 @@ public class Cauldron extends StandardListRegistry<CookingPotRecipe> {
             ModSupport.BETTER_WITH_MODS.get().cauldron.add(recipe);
             return recipe;
         }
-
     }
 }

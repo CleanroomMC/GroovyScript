@@ -136,6 +136,5 @@ public class Predicates extends NamedRegistry {
             if (below) return new BlockStateBelow(predicate);
             return predicate;
         }
-
     }
 }

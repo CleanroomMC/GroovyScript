@@ -51,6 +51,5 @@ public class RollingMachine extends BaseRegistry {
             msg.add(power < 1, "Power must be 1 or greater, got {}", power);
             msg.add(time < 1, "Time must be 1 or greater, got {}", time);
         }
-
     }
 }

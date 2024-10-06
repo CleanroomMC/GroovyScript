@@ -110,6 +110,5 @@ public class Refinery extends StandardListRegistry<RefineryRecipe> {
             ModSupport.IMMERSIVE_ENGINEERING.get().refinery.add(recipe);
             return recipe;
         }
-
     }
 }

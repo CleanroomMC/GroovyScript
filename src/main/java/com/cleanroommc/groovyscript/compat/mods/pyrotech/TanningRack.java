@@ -115,6 +115,5 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
             PyroTech.tanningRack.add(recipe);
             return recipe;
         }
-
     }
 }

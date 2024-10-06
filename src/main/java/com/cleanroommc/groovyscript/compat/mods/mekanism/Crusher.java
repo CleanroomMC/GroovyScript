@@ -77,6 +77,5 @@ public class Crusher extends VirtualizedMekanismRegistry<CrusherRecipe> {
             }
             return recipe;
         }
-
     }
 }

@@ -159,6 +159,5 @@ public class Squeezer extends StandardListRegistry<SqueezerRecipe> {
             ModSupport.IMMERSIVE_ENGINEERING.get().squeezer.add(recipe);
             return recipe;
         }
-
     }
 }

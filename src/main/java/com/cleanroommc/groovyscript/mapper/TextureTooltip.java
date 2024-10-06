@@ -89,6 +89,5 @@ public class TextureTooltip {
         public String getTextureName() {
             return textureName;
         }
-
     }
 }

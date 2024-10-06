@@ -239,8 +239,6 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
             public ItemStack getReference() {
                 return reference;
             }
-
         }
-
     }
 }

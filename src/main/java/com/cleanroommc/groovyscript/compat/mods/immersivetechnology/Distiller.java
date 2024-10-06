@@ -121,6 +121,5 @@ public class Distiller extends StandardListRegistry<DistillerRecipe> {
             ModSupport.IMMERSIVE_TECHNOLOGY.get().distiller.add(recipe);
             return recipe;
         }
-
     }
 }

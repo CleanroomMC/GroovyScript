@@ -63,6 +63,5 @@ public class Scrapbox extends VirtualizedRegistry<Object> {
             this.id = id;
             return this;
         }
-
     }
 }

@@ -88,6 +88,5 @@ public class WireMill extends AbstractPraescriptumRegistry {
             ModSupport.TECH_REBORN.get().wireMill.add(recipe);
             return recipe;
         }
-
     }
 }

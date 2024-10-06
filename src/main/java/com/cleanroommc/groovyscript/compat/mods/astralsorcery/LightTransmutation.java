@@ -204,6 +204,5 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
             ModSupport.ASTRAL_SORCERY.get().lightTransmutation.add(recipe);
             return recipe;
         }
-
     }
 }

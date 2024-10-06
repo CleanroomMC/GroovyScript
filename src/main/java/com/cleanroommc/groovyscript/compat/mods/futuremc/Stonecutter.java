@@ -62,6 +62,5 @@ public class Stonecutter extends StandardListRegistry<SimpleRecipe> {
             ModSupport.FUTURE_MC.get().stonecutter.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -83,6 +83,5 @@ public class StarchExtractor extends StandardListRegistry<DefaultSonarRecipe.Val
             ModSupport.CALCULATOR.get().starchExtractor.add(recipe);
             return recipe;
         }
-
     }
 }

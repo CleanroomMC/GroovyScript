@@ -53,7 +53,6 @@ public interface RollingMachineRecipeBuilder {
             ModSupport.TECH_REBORN.get().rollingMachine.add(name, recipe);
             return recipe;
         }
-
     }
 
     class Shapeless extends AbstractCraftingRecipeBuilder.AbstractShapeless<IRecipe> implements RollingMachineRecipeBuilder {
@@ -85,6 +84,5 @@ public interface RollingMachineRecipeBuilder {
             ModSupport.TECH_REBORN.get().rollingMachine.add(name, recipe);
             return recipe;
         }
-
     }
 }

@@ -93,6 +93,5 @@ public class CoolingTower extends StandardListRegistry<CoolingTowerRecipe> {
             ModSupport.IMMERSIVE_TECHNOLOGY.get().coolingTower.add(recipe);
             return recipe;
         }
-
     }
 }

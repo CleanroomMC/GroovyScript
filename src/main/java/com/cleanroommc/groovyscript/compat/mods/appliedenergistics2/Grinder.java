@@ -141,6 +141,5 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
             ModSupport.APPLIED_ENERGISTICS_2.get().grinder.add(recipe);
             return recipe;
         }
-
     }
 }

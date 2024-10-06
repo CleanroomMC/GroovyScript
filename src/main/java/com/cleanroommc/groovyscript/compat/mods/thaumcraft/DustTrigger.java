@@ -155,6 +155,5 @@ public class DustTrigger extends VirtualizedRegistry<IDustTrigger> {
                 ModSupport.THAUMCRAFT.get().dustTrigger.add(new DustTriggerSimple(research, target, output));
             }
         }
-
     }
 }

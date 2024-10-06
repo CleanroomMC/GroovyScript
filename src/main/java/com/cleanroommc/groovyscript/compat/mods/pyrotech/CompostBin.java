@@ -116,6 +116,5 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
             PyroTech.compostBin.add(recipe);
             return recipe;
         }
-
     }
 }

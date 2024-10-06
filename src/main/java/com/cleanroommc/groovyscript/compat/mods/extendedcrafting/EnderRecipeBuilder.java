@@ -79,7 +79,6 @@ public interface EnderRecipeBuilder {
             ModSupport.EXTENDED_CRAFTING.get().enderCrafting.add(recipe);
             return recipe;
         }
-
     }
 
     class Shapeless extends AbstractCraftingRecipeBuilder.AbstractShapeless<IRecipe> implements EnderRecipeBuilder {
@@ -121,6 +120,5 @@ public interface EnderRecipeBuilder {
             ModSupport.EXTENDED_CRAFTING.get().enderCrafting.add(recipe);
             return recipe;
         }
-
     }
 }

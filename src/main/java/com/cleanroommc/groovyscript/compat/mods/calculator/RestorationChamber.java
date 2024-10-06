@@ -89,6 +89,5 @@ public class RestorationChamber extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().restorationChamber.add(recipe);
             return recipe;
         }
-
     }
 }

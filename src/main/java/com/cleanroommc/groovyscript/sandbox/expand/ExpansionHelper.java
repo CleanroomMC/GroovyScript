@@ -253,7 +253,6 @@ public class ExpansionHelper {
         public CachedClass getOwnerClass() {
             return owner;
         }
-
     }
 
     private static class Property extends MetaBeanProperty implements Hidden {
@@ -269,6 +268,5 @@ public class ExpansionHelper {
         public boolean isHidden() {
             return hidden;
         }
-
     }
 }

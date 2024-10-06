@@ -106,7 +106,6 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
         public void removeAll() {
             ModSupport.THAUMCRAFT.get().lootBag.removeAll(rarity);
         }
-
     }
 
     public static class InternalLootbag {
@@ -132,6 +131,5 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
         public int getRarity() {
             return rarity;
         }
-
     }
 }

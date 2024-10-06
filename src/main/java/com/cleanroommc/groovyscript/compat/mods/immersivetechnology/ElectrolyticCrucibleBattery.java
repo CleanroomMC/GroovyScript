@@ -104,6 +104,5 @@ public class ElectrolyticCrucibleBattery extends StandardListRegistry<Electrolyt
             ModSupport.IMMERSIVE_TECHNOLOGY.get().electrolyticCrucibleBattery.add(recipe);
             return recipe;
         }
-
     }
 }

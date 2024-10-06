@@ -387,6 +387,5 @@ public class AltarRecipeBuilder {
             ModSupport.ASTRAL_SORCERY.get().altar.add(recipe);
             return recipe;
         }
-
     }
 }

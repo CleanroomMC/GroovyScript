@@ -88,6 +88,5 @@ public class AssemblingMachine extends AbstractPraescriptumRegistry {
             ModSupport.TECH_REBORN.get().assemblingMachine.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -185,6 +185,5 @@ public class AlchemyArray extends StandardListRegistry<RecipeAlchemyArray> {
             ModSupport.BLOOD_MAGIC.get().alchemyArray.add(recipe);
             return recipe;
         }
-
     }
 }

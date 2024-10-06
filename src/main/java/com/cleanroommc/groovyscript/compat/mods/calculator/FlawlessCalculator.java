@@ -89,6 +89,5 @@ public class FlawlessCalculator extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().flawlessCalculator.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -203,6 +203,5 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
             }
             return this;
         }
-
     }
 }

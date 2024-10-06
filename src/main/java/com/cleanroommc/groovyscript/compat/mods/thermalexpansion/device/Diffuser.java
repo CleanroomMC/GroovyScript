@@ -137,6 +137,5 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
         public String toString() {
             return "DiffuserRecipe[" + "stack=" + stack + ", " + "amplifier=" + amplifier + ", " + "duration=" + duration + ']';
         }
-
     }
 }

@@ -72,6 +72,5 @@ public class Campfire extends StandardListRegistry<CampfireRecipe> {
             ModSupport.FUTURE_MC.get().campfire.add(recipe);
             return recipe;
         }
-
     }
 }

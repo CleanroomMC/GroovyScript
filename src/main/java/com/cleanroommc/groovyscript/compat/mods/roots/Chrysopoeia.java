@@ -154,6 +154,5 @@ public class Chrysopoeia extends VirtualizedRegistry<ChrysopoeiaRecipe> {
             ModSupport.ROOTS.get().chrysopoeia.add(super.name, recipe);
             return recipe;
         }
-
     }
 }

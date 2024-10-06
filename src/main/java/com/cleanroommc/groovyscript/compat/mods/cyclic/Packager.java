@@ -87,6 +87,5 @@ public class Packager extends StandardListRegistry<RecipePackager> {
             }
             return recipe;
         }
-
     }
 }

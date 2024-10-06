@@ -62,6 +62,5 @@ public class Packmode {
         public String getPackmode() {
             return packmode;
         }
-
     }
 }

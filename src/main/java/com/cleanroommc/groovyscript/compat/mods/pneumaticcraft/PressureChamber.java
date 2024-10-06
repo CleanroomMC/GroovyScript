@@ -84,6 +84,5 @@ public class PressureChamber extends StandardListRegistry<IPressureChamberRecipe
             ModSupport.PNEUMATIC_CRAFT.get().pressureChamber.add(recipe);
             return recipe;
         }
-
     }
 }

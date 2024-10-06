@@ -88,6 +88,5 @@ public class Extractor extends AbstractPraescriptumRegistry {
             ModSupport.TECH_REBORN.get().extractor.add(recipe);
             return recipe;
         }
-
     }
 }

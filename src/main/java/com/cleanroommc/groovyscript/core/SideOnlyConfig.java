@@ -115,6 +115,5 @@ public class SideOnlyConfig {
         public MethodSet(boolean bansClass) {
             this.bansClass = bansClass;
         }
-
     }
 }

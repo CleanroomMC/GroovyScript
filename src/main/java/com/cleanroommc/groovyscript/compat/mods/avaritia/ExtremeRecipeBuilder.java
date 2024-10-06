@@ -46,7 +46,6 @@ public interface ExtremeRecipeBuilder {
             }
             return recipe;
         }
-
     }
 
     @Property(property = "ingredients", comp = @Comp(gte = 1, lte = 81))
@@ -79,6 +78,5 @@ public interface ExtremeRecipeBuilder {
             ModSupport.AVARITIA.get().extremeCrafting.add(recipe);
             return recipe;
         }
-
     }
 }

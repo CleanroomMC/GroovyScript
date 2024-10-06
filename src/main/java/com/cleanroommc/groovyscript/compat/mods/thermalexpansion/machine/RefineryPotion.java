@@ -139,6 +139,5 @@ public class RefineryPotion extends VirtualizedRegistry<RefineryRecipe> {
             ModSupport.THERMAL_EXPANSION.get().refineryPotion.add(recipe);
             return recipe;
         }
-
     }
 }

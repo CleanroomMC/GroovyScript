@@ -145,6 +145,5 @@ public class LootTablesLoadedEvent extends Event {
         public GroovyLootCondition condition(Closure<Object> condition) {
             return new GroovyLootCondition(condition);
         }
-
     }
 }

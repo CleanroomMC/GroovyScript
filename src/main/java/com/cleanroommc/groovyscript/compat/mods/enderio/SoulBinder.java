@@ -207,6 +207,5 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
             ModSupport.ENDER_IO.get().soulBinder.add(recipe);
             return recipe;
         }
-
     }
 }

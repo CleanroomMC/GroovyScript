@@ -76,7 +76,6 @@ public class Lexicon {
         public SimpleObjectStream<LexiconCategory> streamCategories() {
             return streamRecipes();
         }
-
     }
 
     @RegistryDescription(
@@ -206,7 +205,6 @@ public class Lexicon {
         public PageElvenRecipe createElvenTradePage(String name, RecipeElvenTrade... recipes) {
             return new PageElvenRecipe(name, Arrays.asList(recipes));
         }
-
     }
 
     @RegistryDescription(
@@ -419,8 +417,6 @@ public class Lexicon {
                 add(entry);
                 return entry;
             }
-
         }
-
     }
 }

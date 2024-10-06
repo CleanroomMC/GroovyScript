@@ -101,6 +101,5 @@ public class Crusher extends StandardListRegistry<CrusherRecipe> {
             ModSupport.ACTUALLY_ADDITIONS.get().crusher.add(recipe);
             return recipe;
         }
-
     }
 }

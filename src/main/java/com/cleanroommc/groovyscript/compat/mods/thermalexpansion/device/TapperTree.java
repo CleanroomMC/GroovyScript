@@ -129,6 +129,5 @@ public class TapperTree extends VirtualizedRegistry<TapperTree.TapperTreeEntry> 
         public String toString() {
             return "TapperTreeEntry[" + "log=" + log + ", " + "leaf=" + leaf + ']';
         }
-
     }
 }

@@ -60,6 +60,5 @@ public class Warp extends VirtualizedRegistry<Warp.InternalWarp> {
         public int getWarp() {
             return warp;
         }
-
     }
 }

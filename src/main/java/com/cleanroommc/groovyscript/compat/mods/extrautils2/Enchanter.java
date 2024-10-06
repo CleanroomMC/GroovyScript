@@ -133,6 +133,5 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
             ModSupport.EXTRA_UTILITIES_2.get().enchanter.add(recipe);
             return recipe;
         }
-
     }
 }

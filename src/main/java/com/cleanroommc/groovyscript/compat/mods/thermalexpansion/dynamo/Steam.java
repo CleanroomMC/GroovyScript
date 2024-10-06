@@ -113,6 +113,5 @@ public class Steam extends VirtualizedRegistry<Steam.SteamRecipe> {
         public String toString() {
             return "SteamRecipe[" + "comparableItemStack=" + comparableItemStack + ", " + "energy=" + energy + ']';
         }
-
     }
 }

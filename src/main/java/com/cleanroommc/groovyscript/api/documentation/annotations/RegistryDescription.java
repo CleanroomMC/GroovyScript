@@ -139,7 +139,6 @@ public @interface RegistryDescription {
         public boolean hasFlaws() {
             return this == FLAWED;
         }
-
     }
 
     /**
@@ -168,6 +167,5 @@ public @interface RegistryDescription {
         public String query() {
             return "groovyscript.wiki.query_" + category;
         }
-
     }
 }

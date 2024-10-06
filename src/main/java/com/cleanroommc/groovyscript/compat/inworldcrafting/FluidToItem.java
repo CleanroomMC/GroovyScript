@@ -118,7 +118,6 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
             }
             InWorldCrafting.spawnItem(world, pos, getOutput().copy());
         }
-
     }
 
     public static class RecipeBuilder extends FluidRecipe.RecipeBuilder<FluidToItem.Recipe> {
@@ -161,6 +160,5 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
             VanillaModule.inWorldCrafting.fluidToItem.add(recipe);
             return recipe;
         }
-
     }
 }

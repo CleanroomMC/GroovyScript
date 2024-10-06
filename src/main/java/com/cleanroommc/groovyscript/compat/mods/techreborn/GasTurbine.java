@@ -78,6 +78,5 @@ public class GasTurbine extends AbstractGeneratorRegistry {
             ModSupport.TECH_REBORN.get().gasTurbine.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -106,6 +106,5 @@ public class SagMillGrinding extends StandardListRegistry<GrindingBall> {
             ModSupport.ENDER_IO.get().sagMillGrinding.add(recipe);
             return recipe;
         }
-
     }
 }

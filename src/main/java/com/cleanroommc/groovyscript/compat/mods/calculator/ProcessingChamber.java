@@ -89,6 +89,5 @@ public class ProcessingChamber extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().processingChamber.add(recipe);
             return recipe;
         }
-
     }
 }

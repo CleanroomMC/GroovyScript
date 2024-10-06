@@ -101,6 +101,5 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
 
             return recipe;
         }
-
     }
 }

@@ -196,7 +196,6 @@ public class BlackListedMetaClass implements MetaClass {
                     throw new GroovyRuntimeException("Exception thrown parsing: " + groovyFile + ". Reason: " + e, e);
                 }
             }
-
         }
         return classNode;
     }

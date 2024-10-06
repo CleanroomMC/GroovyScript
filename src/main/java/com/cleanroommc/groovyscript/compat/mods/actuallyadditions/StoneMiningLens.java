@@ -96,6 +96,5 @@ public class StoneMiningLens extends StandardListRegistry<WeightedOre> {
             ModSupport.ACTUALLY_ADDITIONS.get().stoneMiningLens.add(recipe);
             return recipe;
         }
-
     }
 }

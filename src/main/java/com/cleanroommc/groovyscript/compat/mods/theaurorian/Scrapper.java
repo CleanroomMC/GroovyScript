@@ -74,6 +74,5 @@ public class Scrapper extends StandardListRegistry<ScrapperRecipe> {
             }
             return recipe;
         }
-
     }
 }

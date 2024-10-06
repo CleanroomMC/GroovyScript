@@ -89,6 +89,5 @@ public class DistillationTower extends AbstractGenericTechRebornRegistry {
             ModSupport.TECH_REBORN.get().distillationTower.add(recipe);
             return recipe;
         }
-
     }
 }

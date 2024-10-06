@@ -160,6 +160,5 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
             this.cold = out;
             this.huPerMB = huPerMB;
         }
-
     }
 }

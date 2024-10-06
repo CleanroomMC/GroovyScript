@@ -81,6 +81,5 @@ public class Aggregator extends StandardListRegistry<AggRecipe> {
             ModSupport.LAZYAE2.get().aggregator.add(recipe);
             return recipe;
         }
-
     }
 }

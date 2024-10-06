@@ -90,6 +90,5 @@ public class GaiaPlate extends StandardListRegistry<GaiaPlateRecipes.RecipeGaiaP
             ModSupport.BOTANIC_ADDITIONS.get().gaiaPlate.add(recipe);
             return recipe;
         }
-
     }
 }

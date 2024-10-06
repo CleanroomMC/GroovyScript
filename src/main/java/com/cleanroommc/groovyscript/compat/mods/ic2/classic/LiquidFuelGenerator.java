@@ -107,6 +107,5 @@ public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator
             this.time = time;
             this.power = power;
         }
-
     }
 }

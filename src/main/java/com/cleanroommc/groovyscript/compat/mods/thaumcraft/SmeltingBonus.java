@@ -139,6 +139,5 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
                 ModSupport.THAUMCRAFT.get().smeltingBonus.add(in, out, chance);
             }
         }
-
     }
 }

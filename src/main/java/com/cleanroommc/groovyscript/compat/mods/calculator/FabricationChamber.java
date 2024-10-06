@@ -103,6 +103,5 @@ public class FabricationChamber extends StandardListRegistry<FabricationSonarRec
             ModSupport.CALCULATOR.get().fabricationChamber.add(recipe);
             return recipe;
         }
-
     }
 }

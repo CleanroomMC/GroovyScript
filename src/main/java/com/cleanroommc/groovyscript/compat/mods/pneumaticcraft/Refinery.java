@@ -83,6 +83,5 @@ public class Refinery extends StandardListRegistry<RefineryRecipe> {
             ModSupport.PNEUMATIC_CRAFT.get().refinery.add(recipe);
             return recipe;
         }
-
     }
 }

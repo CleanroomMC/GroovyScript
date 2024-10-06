@@ -136,6 +136,5 @@ public class Fountain extends StandardListRegistry<FluidRarityRegistry.FluidRari
             ModSupport.ASTRAL_SORCERY.get().fountain.add(recipe);
             return recipe;
         }
-
     }
 }

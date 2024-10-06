@@ -448,6 +448,5 @@ public class GroovyLogImpl implements GroovyLog {
         public boolean hasMessages() {
             return !this.messages.isEmpty();
         }
-
     }
 }

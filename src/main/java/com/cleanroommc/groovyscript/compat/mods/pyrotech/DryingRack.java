@@ -105,6 +105,5 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
             PyroTech.dryingRack.add(recipe);
             return recipe;
         }
-
     }
 }

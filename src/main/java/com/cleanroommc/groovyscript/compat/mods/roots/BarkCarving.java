@@ -166,6 +166,5 @@ public class BarkCarving extends VirtualizedRegistry<BarkRecipe> {
             ModSupport.ROOTS.get().barkCarving.add(super.name, recipe);
             return recipe;
         }
-
     }
 }

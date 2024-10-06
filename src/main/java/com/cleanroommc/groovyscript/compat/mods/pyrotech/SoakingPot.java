@@ -115,6 +115,5 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
             PyroTech.soakingPot.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -135,6 +135,5 @@ public class GroovyScriptTransformer implements IClassTransformer {
         public List<Handle> getDynamicLambdaHandles() {
             return dynamicLambdaHandles;
         }
-
     }
 }

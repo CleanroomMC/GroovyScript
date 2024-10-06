@@ -93,6 +93,5 @@ public class Radiator extends StandardListRegistry<RadiatorRecipe> {
             ModSupport.IMMERSIVE_TECHNOLOGY.get().radiator.add(recipe);
             return recipe;
         }
-
     }
 }

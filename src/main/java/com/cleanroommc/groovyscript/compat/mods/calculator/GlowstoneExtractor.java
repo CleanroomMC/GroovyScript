@@ -83,6 +83,5 @@ public class GlowstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.
             ModSupport.CALCULATOR.get().glowstoneExtractor.add(recipe);
             return recipe;
         }
-
     }
 }

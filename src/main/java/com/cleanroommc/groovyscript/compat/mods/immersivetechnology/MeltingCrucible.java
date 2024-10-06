@@ -102,6 +102,5 @@ public class MeltingCrucible extends StandardListRegistry<MeltingCrucibleRecipe>
             ModSupport.IMMERSIVE_TECHNOLOGY.get().meltingCrucible.add(recipe);
             return recipe;
         }
-
     }
 }

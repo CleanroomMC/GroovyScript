@@ -27,7 +27,6 @@ public class BlockStates {
         public ItemStack[] transformToStack() {
             return new ItemStack[0];
         }
-
     };
 
     private static BlockStates redstone;

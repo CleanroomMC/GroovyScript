@@ -89,7 +89,6 @@ public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe
             }
             return true;
         }
-
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<PistonPushRecipe> {
@@ -135,7 +134,6 @@ public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe
             VanillaModule.inWorldCrafting.pistonPush.add(pistonPushRecipe);
             return null;
         }
-
     }
 
     @GroovyBlacklist

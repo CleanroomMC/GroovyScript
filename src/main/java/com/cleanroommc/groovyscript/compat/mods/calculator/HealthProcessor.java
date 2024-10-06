@@ -83,6 +83,5 @@ public class HealthProcessor extends StandardListRegistry<DefaultSonarRecipe.Val
             ModSupport.CALCULATOR.get().healthProcessor.add(recipe);
             return recipe;
         }
-
     }
 }

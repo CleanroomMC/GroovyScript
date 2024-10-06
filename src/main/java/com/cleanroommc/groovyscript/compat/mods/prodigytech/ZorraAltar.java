@@ -113,6 +113,5 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
         public String toString() {
             return "ZorraRecipeData[" + "registry=" + registry + ", " + "enchantment=" + enchantment + ", " + "maxLevel=" + maxLevel + ']';
         }
-
     }
 }

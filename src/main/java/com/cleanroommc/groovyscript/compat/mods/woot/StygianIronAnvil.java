@@ -135,6 +135,5 @@ public class StygianIronAnvil extends StandardListRegistry<IAnvilRecipe> {
             ModSupport.WOOT.get().stygianIronAnvil.add(recipe);
             return recipe;
         }
-
     }
 }

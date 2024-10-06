@@ -80,6 +80,5 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
             ModSupport.MEKANISM.get().electrolyticSeparator.add(recipe);
             return recipe;
         }
-
     }
 }

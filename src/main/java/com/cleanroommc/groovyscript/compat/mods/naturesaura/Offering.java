@@ -147,6 +147,5 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
             ModSupport.NATURES_AURA.get().offering.add(recipe);
             return recipe;
         }
-
     }
 }

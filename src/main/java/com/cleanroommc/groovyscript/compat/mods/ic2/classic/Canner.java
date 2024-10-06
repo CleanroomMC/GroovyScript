@@ -343,7 +343,6 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
             this.damageItem = item;
             return this;
         }
-
     }
 
     private enum RecipeType {

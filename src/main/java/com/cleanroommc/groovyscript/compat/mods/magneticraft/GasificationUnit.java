@@ -97,6 +97,5 @@ public class GasificationUnit extends StandardListRegistry<IGasificationUnitReci
             }
             return recipe;
         }
-
     }
 }

@@ -77,6 +77,5 @@ public class VacuumFreezer extends AbstractGenericTechRebornRegistry {
             ModSupport.TECH_REBORN.get().vacuumFreezer.add(recipe);
             return recipe;
         }
-
     }
 }

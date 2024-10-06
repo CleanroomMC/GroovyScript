@@ -103,6 +103,5 @@ public class IndustrialGrinder extends AbstractGenericTechRebornRegistry {
             ModSupport.TECH_REBORN.get().industrialGrinder.add(recipe);
             return recipe;
         }
-
     }
 }

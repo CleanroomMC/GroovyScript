@@ -185,6 +185,5 @@ public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> 
             }
             return recipe;
         }
-
     }
 }

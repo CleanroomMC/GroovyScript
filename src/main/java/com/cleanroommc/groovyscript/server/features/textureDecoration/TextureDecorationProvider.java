@@ -310,6 +310,5 @@ public class TextureDecorationProvider extends DocProvider {
         public boolean isFileExists() {
             return fileExists;
         }
-
     }
 }

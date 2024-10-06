@@ -58,7 +58,6 @@ public interface Result<T> {
         public @NotNull T getValue() {
             return this.value;
         }
-
     }
 
     class Error<T> implements Result<T> {
@@ -83,6 +82,5 @@ public interface Result<T> {
         public @NotNull T getValue() {
             throw new NoSuchElementException();
         }
-
     }
 }

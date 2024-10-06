@@ -226,6 +226,5 @@ public class GroovyFluid extends Fluid {
             fluids.add((GroovyFluid) fluid);
             return fluid;
         }
-
     }
 }

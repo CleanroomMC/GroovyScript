@@ -217,10 +217,8 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
                     ModSupport.THERMAL_EXPANSION.get().insolator.add(recipe1);
                     if (recipe == null) recipe = recipe1;
                 }
-
             }
             return recipe;
         }
-
     }
 }

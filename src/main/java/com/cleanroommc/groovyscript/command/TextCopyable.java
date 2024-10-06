@@ -46,6 +46,5 @@ public class TextCopyable {
             textComponent.setStyle(style);
             return textComponent;
         }
-
     }
 }

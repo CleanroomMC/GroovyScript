@@ -178,6 +178,5 @@ public class Spawning extends VirtualizedRegistry<Pair<WootMobName, SpawnRecipe>
             if (!defaultSpawnRecipe) ModSupport.WOOT.get().spawning.add(name, recipe);
             return recipe;
         }
-
     }
 }

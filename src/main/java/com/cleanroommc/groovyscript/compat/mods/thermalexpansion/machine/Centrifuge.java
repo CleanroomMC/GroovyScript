@@ -161,6 +161,5 @@ public class Centrifuge extends VirtualizedRegistry<CentrifugeRecipe> {
             }
             return recipe;
         }
-
     }
 }

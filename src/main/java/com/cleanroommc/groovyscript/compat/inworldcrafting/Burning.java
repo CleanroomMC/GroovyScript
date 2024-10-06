@@ -74,7 +74,6 @@ public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
         public boolean isValidInput(EntityItem entityItem, ItemStack itemStack) {
             return this.input.test(itemStack) && (this.startCondition == null || ClosureHelper.call(true, this.startCondition, entityItem));
         }
-
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<BurningRecipe> {
@@ -114,7 +113,6 @@ public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
             VanillaModule.inWorldCrafting.burning.add(burningRecipe);
             return burningRecipe;
         }
-
     }
 
     @GroovyBlacklist

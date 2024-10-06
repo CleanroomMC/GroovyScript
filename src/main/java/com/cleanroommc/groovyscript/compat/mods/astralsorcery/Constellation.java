@@ -376,7 +376,6 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             MINOR,
             WEAK
         }
-
     }
 
     public static class ConstellationMapEffectBuilder {
@@ -420,7 +419,6 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             if (!validate()) return;
             ModSupport.ASTRAL_SORCERY.get().constellation.addConstellationMapEffect(constellation, enchantmentEffect, potionEffect);
         }
-
     }
 
     public static class SignatureItemsHelper {
@@ -459,7 +457,6 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
                 GroovyLog.msg("Error modifying Astral Sorcery constellation signature items").add("No constellation specified.").error().post();
             }
         }
-
     }
 
     public static class Point2PointConnection {
@@ -483,6 +480,5 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
             if (o == this) return true;
             return ((p1.equals(other.p1) && p2.equals(other.p2)) || (p2.equals(other.p1) && p1.equals(other.p2)));
         }
-
     }
 }

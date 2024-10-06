@@ -240,6 +240,5 @@ public class Research extends VirtualizedRegistry<ResearchCategory> {
             ModSupport.THAUMCRAFT.get().research.addCategory(category);
             return category;
         }
-
     }
 }

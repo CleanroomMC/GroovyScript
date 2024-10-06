@@ -88,6 +88,5 @@ public class Centrifuge extends AbstractPraescriptumRegistry {
             ModSupport.TECH_REBORN.get().centrifuge.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -184,6 +184,5 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
             ModSupport.ASTRAL_SORCERY.get().infusionAltar.add(recipe);
             return recipe;
         }
-
     }
 }

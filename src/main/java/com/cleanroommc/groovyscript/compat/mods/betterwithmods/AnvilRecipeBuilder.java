@@ -42,7 +42,6 @@ public interface AnvilRecipeBuilder {
             }
             return recipe;
         }
-
     }
 
     @Property(property = "ingredients", comp = @Comp(gte = 1, lte = 16))
@@ -68,6 +67,5 @@ public interface AnvilRecipeBuilder {
             ModSupport.BETTER_WITH_MODS.get().anvilCrafting.add(recipe);
             return recipe;
         }
-
     }
 }

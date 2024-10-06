@@ -107,6 +107,5 @@ public class FluidReplicator extends VirtualizedRegistry<FluidReplicatorRecipe> 
             ModSupport.TECH_REBORN.get().fluidReplicator.add(recipe);
             return recipe;
         }
-
     }
 }

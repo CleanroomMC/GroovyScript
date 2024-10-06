@@ -94,6 +94,5 @@ public class EvaporatingBasin extends StandardListRegistry<IEvaporatingBasinReci
             ModSupport.RUSTIC.get().evaporatingBasin.add(recipe);
             return recipe;
         }
-
     }
 }

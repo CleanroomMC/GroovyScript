@@ -89,6 +89,5 @@ public class AlgorithmSeparator extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().algorithmSeparator.add(recipe);
             return recipe;
         }
-
     }
 }

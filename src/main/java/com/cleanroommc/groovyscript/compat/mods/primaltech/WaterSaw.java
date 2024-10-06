@@ -96,6 +96,5 @@ public class WaterSaw extends StandardListRegistry<WaterSawRecipes> {
             }
             return recipe;
         }
-
     }
 }

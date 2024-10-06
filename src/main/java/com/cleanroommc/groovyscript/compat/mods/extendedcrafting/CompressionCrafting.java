@@ -162,6 +162,5 @@ public class CompressionCrafting extends StandardListRegistry<CompressorRecipe> 
             ModSupport.EXTENDED_CRAFTING.get().compressionCrafting.add(recipe);
             return recipe;
         }
-
     }
 }

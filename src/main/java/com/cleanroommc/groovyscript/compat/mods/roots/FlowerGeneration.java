@@ -177,6 +177,5 @@ public class FlowerGeneration extends VirtualizedRegistry<FlowerRecipe> {
             ModSupport.ROOTS.get().flowerGeneration.add(super.name, recipe);
             return recipe;
         }
-
     }
 }

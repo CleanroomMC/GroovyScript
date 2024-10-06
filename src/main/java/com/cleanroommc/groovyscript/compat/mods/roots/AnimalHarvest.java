@@ -119,6 +119,5 @@ public class AnimalHarvest extends VirtualizedRegistry<AnimalHarvestRecipe> {
             ModSupport.ROOTS.get().animalHarvest.add(super.name, recipe);
             return recipe;
         }
-
     }
 }

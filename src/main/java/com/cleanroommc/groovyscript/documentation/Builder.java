@@ -28,7 +28,6 @@ public class Builder {
             put('\'', '\'');
             defaultReturnValue(Character.MIN_VALUE);
         }
-
     };
 
     private final String reference;
@@ -482,7 +481,6 @@ public class Builder {
                     .compare(this.getField().getName(), comp.getField().getName(), String::compareToIgnoreCase)
                     .result();
         }
-
     }
 
 
@@ -526,6 +524,5 @@ public class Builder {
                     .compare(thisSignature, compSignature, String::compareToIgnoreCase)
                     .result();
         }
-
     }
 }

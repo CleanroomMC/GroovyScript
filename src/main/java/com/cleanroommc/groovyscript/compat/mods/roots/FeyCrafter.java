@@ -133,6 +133,5 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
             ModSupport.ROOTS.get().feyCrafter.add(super.name, recipe);
             return recipe;
         }
-
     }
 }

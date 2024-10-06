@@ -68,6 +68,5 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
             ModSupport.MEKANISM.get().thermalEvaporationPlant.add(recipe);
             return recipe;
         }
-
     }
 }

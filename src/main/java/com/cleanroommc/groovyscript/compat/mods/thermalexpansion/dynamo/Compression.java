@@ -116,6 +116,5 @@ public class Compression extends VirtualizedRegistry<Compression.CompressionReci
         public String toString() {
             return "CompressionRecipe[" + "fluid=" + fluid + ", " + "energy=" + energy + ']';
         }
-
     }
 }

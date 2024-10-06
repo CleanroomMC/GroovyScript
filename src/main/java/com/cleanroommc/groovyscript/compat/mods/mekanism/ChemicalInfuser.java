@@ -68,6 +68,5 @@ public class ChemicalInfuser extends VirtualizedMekanismRegistry<ChemicalInfuser
             ModSupport.MEKANISM.get().chemicalInfuser.add(recipe);
             return recipe;
         }
-
     }
 }

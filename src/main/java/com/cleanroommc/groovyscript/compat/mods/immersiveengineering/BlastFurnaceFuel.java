@@ -94,6 +94,5 @@ public class BlastFurnaceFuel extends StandardListRegistry<BlastFurnaceRecipe.Bl
             ModSupport.IMMERSIVE_ENGINEERING.get().blastFurnaceFuel.add(recipe);
             return recipe;
         }
-
     }
 }

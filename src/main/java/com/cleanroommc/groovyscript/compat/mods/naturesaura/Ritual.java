@@ -159,6 +159,5 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
             ModSupport.NATURES_AURA.get().ritual.add(recipe);
             return recipe;
         }
-
     }
 }

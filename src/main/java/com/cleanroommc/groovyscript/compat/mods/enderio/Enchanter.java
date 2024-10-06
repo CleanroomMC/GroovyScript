@@ -169,6 +169,5 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
             ModSupport.ENDER_IO.get().enchanter.add(recipe);
             return recipe;
         }
-
     }
 }

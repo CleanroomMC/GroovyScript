@@ -139,6 +139,5 @@ public class Turntable extends StandardListRegistry<TurntableRecipe> {
             ModSupport.BETTER_WITH_MODS.get().turntable.add(recipe);
             return recipe;
         }
-
     }
 }

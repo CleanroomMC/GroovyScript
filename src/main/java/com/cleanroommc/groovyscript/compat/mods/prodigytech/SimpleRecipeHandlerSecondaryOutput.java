@@ -85,7 +85,6 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
             }
             return recipe;
         }
-
     }
 
     @RegistryDescription
@@ -105,7 +104,6 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         public boolean removeByInput(IIngredient input) {
             return super.removeByInput(input);
         }
-
     }
 
     @RegistryDescription
@@ -125,6 +123,5 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         public boolean removeByInput(IIngredient input) {
             return super.removeByInput(input);
         }
-
     }
 }

@@ -129,6 +129,5 @@ public class MillStone extends StandardListRegistry<MillRecipe> {
             ModSupport.BETTER_WITH_MODS.get().millStone.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -103,6 +103,5 @@ public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
             PyroTech.brickOven.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -226,6 +226,5 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
             ModSupport.MEKANISM.get().infusion.removeByType(type);
             return this;
         }
-
     }
 }

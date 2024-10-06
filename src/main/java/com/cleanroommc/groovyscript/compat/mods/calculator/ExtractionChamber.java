@@ -117,6 +117,5 @@ public class ExtractionChamber extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().extractionChamber.add(recipe);
             return recipe;
         }
-
     }
 }

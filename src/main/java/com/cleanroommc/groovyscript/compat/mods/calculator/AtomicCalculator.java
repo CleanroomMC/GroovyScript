@@ -89,6 +89,5 @@ public class AtomicCalculator extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().atomicCalculator.add(recipe);
             return recipe;
         }
-
     }
 }

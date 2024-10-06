@@ -200,6 +200,5 @@ public class AgglomerationPlate extends StandardListRegistry<AgglomerationRecipe
             ModSupport.BOTANIA_TWEAKS.get().agglomerationPlate.add(recipe);
             return recipe;
         }
-
     }
 }

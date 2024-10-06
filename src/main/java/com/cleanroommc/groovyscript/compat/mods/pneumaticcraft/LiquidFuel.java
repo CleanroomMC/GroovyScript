@@ -94,6 +94,5 @@ public class LiquidFuel extends VirtualizedRegistry<Pair<String, Integer>> {
             ModSupport.PNEUMATIC_CRAFT.get().liquidFuel.add(fluidInput.get(0), pressure);
             return Pair.of(fluidInput.get(0), pressure);
         }
-
     }
 }

@@ -153,6 +153,5 @@ public class Dissolver extends StandardListRegistry<DissolverRecipe> {
             ModSupport.ALCHEMISTRY.get().dissolver.add(recipe);
             return recipe;
         }
-
     }
 }

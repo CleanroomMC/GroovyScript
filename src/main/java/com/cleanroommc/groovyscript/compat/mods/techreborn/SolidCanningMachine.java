@@ -88,6 +88,5 @@ public class SolidCanningMachine extends AbstractPraescriptumRegistry {
             ModSupport.TECH_REBORN.get().solidCanningMachine.add(recipe);
             return recipe;
         }
-
     }
 }

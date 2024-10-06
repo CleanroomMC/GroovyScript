@@ -243,7 +243,6 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         public String toString() {
             return location;
         }
-
     }
 
     @Property(property = "input", comp = @Comp(gte = 0, lte = 2))
@@ -327,6 +326,5 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
             ModSupport.EXTRA_UTILITIES_2.get().generator.add(generator, recipe);
             return recipe;
         }
-
     }
 }

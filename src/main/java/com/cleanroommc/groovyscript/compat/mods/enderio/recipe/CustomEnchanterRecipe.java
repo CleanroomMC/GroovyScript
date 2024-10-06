@@ -49,7 +49,6 @@ public class CustomEnchanterRecipe extends EnchanterRecipe {
         } else {
             return false;
         }
-
     }
 
     private int getLevelForStackSize(int size) {

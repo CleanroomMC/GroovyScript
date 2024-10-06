@@ -151,6 +151,5 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
             }
             return recipe;
         }
-
     }
 }

@@ -128,6 +128,5 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
             add(recipe);
             return recipe;
         }
-
     }
 }

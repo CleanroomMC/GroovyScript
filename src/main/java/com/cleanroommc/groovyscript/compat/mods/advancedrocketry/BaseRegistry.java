@@ -159,7 +159,6 @@ public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
             getRegistry().add(r);
             return r;
         }
-
     }
 
     @Property(property = "power", comp = @Comp(gte = 1), value = "groovyscript.wiki.advancedrocketry.power.value", hierarchy = 5)
@@ -196,6 +195,5 @@ public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
         public RecipeBuilder output(ItemStack output, float chance) {
             return super.output(output, chance);
         }
-
     }
 }

@@ -141,6 +141,5 @@ public class Fusion extends VirtualizedRegistry<IFusionRecipe> {
             ModSupport.DRACONIC_EVOLUTION.get().fusion.add(recipe);
             return recipe;
         }
-
     }
 }

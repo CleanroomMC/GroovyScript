@@ -22,7 +22,6 @@ public class FurnaceRecipeManager {
         public boolean equals(ItemStack a, ItemStack b) {
             return a == b || (a != null && b != null && OreDictionary.itemMatches(a, b, false));
         }
-
     });
 
 }

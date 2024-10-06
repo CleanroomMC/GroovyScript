@@ -118,6 +118,5 @@ public class AttributeModifierPerkBuilder {
             this.mode = PerkAttributeModifier.Mode.STACKING_MULTIPLY;
             return this;
         }
-
     }
 }

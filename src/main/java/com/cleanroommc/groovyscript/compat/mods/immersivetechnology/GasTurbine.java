@@ -93,6 +93,5 @@ public class GasTurbine extends StandardListRegistry<GasTurbineRecipe> {
             ModSupport.IMMERSIVE_TECHNOLOGY.get().gasTurbine.add(recipe);
             return recipe;
         }
-
     }
 }

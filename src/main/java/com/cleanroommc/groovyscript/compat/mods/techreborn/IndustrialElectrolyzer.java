@@ -89,6 +89,5 @@ public class IndustrialElectrolyzer extends AbstractGenericTechRebornRegistry {
             ModSupport.TECH_REBORN.get().industrialElectrolyzer.add(recipe);
             return recipe;
         }
-
     }
 }

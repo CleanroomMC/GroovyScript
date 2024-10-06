@@ -93,6 +93,5 @@ public class HighPressureSteamTurbine extends StandardListRegistry<HighPressureS
             ModSupport.IMMERSIVE_TECHNOLOGY.get().highPressureSteamTurbine.add(recipe);
             return recipe;
         }
-
     }
 }

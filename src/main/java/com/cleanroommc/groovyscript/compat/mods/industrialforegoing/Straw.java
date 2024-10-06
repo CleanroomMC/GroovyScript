@@ -101,6 +101,5 @@ public class Straw extends ForgeRegistryWrapper<StrawHandler> {
             ModSupport.INDUSTRIAL_FOREGOING.get().straw.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -185,7 +185,6 @@ public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer
             this.input = input;
             this.energy = energy;
         }
-
     }
 
     private RecipeType getFromEntry(IElectrolyzerRecipeList.RecipeEntry entry) {

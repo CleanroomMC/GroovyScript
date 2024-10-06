@@ -89,6 +89,5 @@ public class WindRune extends StandardListRegistry<WindImbueRecipe> {
             ModSupport.ESSENTIALCRAFT.get().windRune.addScripted(recipe);
             return recipe;
         }
-
     }
 }

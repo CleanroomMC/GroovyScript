@@ -136,6 +136,5 @@ public class Transmutation extends StandardListRegistry<WorldTransmutations.Entr
             ModSupport.PROJECT_E.get().transmutation.add(recipe);
             return recipe;
         }
-
     }
 }

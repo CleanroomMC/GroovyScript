@@ -132,6 +132,5 @@ public class Aspect extends VirtualizedRegistry<thaumcraft.api.aspects.Aspect> {
             }
             return null;
         }
-
     }
 }

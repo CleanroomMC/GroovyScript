@@ -94,6 +94,5 @@ public class BasicCalculator extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().basicCalculator.add(recipe);
             return recipe;
         }
-
     }
 }

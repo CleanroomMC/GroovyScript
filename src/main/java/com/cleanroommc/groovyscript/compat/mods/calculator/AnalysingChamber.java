@@ -130,6 +130,5 @@ public class AnalysingChamber extends StandardListRegistry<CalculatorRecipe> {
             ModSupport.CALCULATOR.get().analysingChamber.add(recipe);
             return recipe;
         }
-
     }
 }

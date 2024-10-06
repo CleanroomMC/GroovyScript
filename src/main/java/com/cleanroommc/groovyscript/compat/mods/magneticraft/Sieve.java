@@ -110,6 +110,5 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
             }
             return recipe;
         }
-
     }
 }

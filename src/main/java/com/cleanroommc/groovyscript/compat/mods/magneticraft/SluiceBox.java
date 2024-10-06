@@ -99,6 +99,5 @@ public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
             }
             return recipe;
         }
-
     }
 }

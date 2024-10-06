@@ -88,6 +88,5 @@ public class PlateBendingMachine extends AbstractPraescriptumRegistry {
             ModSupport.TECH_REBORN.get().plateBendingMachine.add(recipe);
             return recipe;
         }
-
     }
 }

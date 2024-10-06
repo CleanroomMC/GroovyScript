@@ -191,6 +191,5 @@ public class Resonator extends StandardListRegistry<IResonatorRecipe> {
             ModSupport.EXTRA_UTILITIES_2.get().resonator.add(recipe);
             return recipe;
         }
-
     }
 }

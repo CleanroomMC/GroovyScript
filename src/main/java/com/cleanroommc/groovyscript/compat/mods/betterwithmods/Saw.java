@@ -118,6 +118,5 @@ public class Saw extends StandardListRegistry<SawRecipe> {
             ModSupport.BETTER_WITH_MODS.get().saw.add(recipe);
             return recipe;
         }
-
     }
 }

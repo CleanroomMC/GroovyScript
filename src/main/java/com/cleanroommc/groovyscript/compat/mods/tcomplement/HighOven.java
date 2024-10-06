@@ -245,9 +245,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
                 add(recipe);
                 return recipe;
             }
-
         }
-
     }
 
     public static class Heating extends StandardListRegistry<IHeatRecipe> {
@@ -341,9 +339,7 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
                 add(recipe);
                 return recipe;
             }
-
         }
-
     }
 
     public static class Fuel extends StandardListRegistry<HighOvenFuel> {
@@ -409,8 +405,6 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
                 add(fuel);
                 return fuel;
             }
-
         }
-
     }
 }

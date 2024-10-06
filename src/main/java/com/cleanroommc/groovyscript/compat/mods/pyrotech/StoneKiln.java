@@ -134,6 +134,5 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
             PyroTech.stoneKiln.add(recipe);
             return recipe;
         }
-
     }
 }

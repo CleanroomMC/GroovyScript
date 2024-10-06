@@ -137,6 +137,5 @@ public class Crusher extends StandardListRegistry<CrusherRecipe> {
             ModSupport.IMMERSIVE_ENGINEERING.get().crusher.add(recipe);
             return recipe;
         }
-
     }
 }

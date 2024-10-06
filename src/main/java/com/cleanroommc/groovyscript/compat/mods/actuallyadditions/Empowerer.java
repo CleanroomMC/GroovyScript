@@ -210,6 +210,5 @@ public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
             ModSupport.ACTUALLY_ADDITIONS.get().empowerer.add(recipe);
             return recipe;
         }
-
     }
 }

@@ -152,6 +152,5 @@ public class Alchemy extends StandardListRegistry<ICondenserRecipe> {
             ModSupport.RUSTIC.get().alchemy.add(recipe);
             return recipe;
         }
-
     }
 }

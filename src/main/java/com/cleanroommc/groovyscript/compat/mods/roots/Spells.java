@@ -259,9 +259,7 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
                 this.spell.setRecipe(recipe);
                 return recipe;
             }
-
         }
-
     }
 
     public static class CostBuilder extends AbstractRecipeBuilder<Map<CostType, IModifierCost>> {
@@ -313,6 +311,5 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
             if (list.isEmpty()) return epicsquid.roots.modifiers.Cost.noCost();
             return epicsquid.roots.modifiers.Cost.of(list.toArray(new IModifierCost[0]));
         }
-
     }
 }
