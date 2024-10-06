@@ -1,11 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.Alias;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -29,6 +31,12 @@ public class OreRaw extends StandardListRegistry<OreFluidEntryRaw> {
             @Example("ore('stone'), fluid('water') * 1000, fluid('lava') * 50")
     })
     public OreFluidEntryRaw add(OreDictIngredient ore, FluidStack input, FluidStack output) {
+        if (IngredientHelper.overMaxSize(ore, 1)) {
+            GroovyLog.msg("Error adding Ore Washer recipe").error()
+                     .add("Stack size of input ore must be 1")
+                     .post();
+            return null;
+        }
         return add(ore.getOreDict(), input, output);
     }
 

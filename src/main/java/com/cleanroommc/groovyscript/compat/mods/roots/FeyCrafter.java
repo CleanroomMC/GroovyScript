@@ -112,6 +112,11 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateName();
             validateItems(msg, 5, 5, 1, 1);

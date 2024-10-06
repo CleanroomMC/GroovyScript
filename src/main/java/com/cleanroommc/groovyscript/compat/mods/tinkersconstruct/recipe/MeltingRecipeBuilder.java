@@ -55,6 +55,12 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
     }
 
     @Override
+    protected int getMaxItemInput() {
+        // More than 1 item cannot be placed
+        return 1;
+    }
+
+    @Override
     public void validate(GroovyLog.Msg msg) {
         validateItems(msg, 1, 1, 0, 0);
         validateFluids(msg, 0, 0, 1, 1);

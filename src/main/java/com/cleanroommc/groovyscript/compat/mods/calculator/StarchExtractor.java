@@ -56,6 +56,11 @@ public class StarchExtractor extends StandardListRegistry<DefaultSonarRecipe.Val
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Calculator Starch Extractor Recipe";
         }

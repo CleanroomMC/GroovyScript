@@ -22,8 +22,8 @@ import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
 import com.cleanroommc.groovyscript.compat.mods.botanicadditions.BotanicAdditions;
 import com.cleanroommc.groovyscript.compat.mods.calculator.Calculator;
 import com.cleanroommc.groovyscript.compat.mods.chisel.Chisel;
-import com.cleanroommc.groovyscript.compat.mods.cyclic.Cyclic;
 import com.cleanroommc.groovyscript.compat.mods.compactmachines.CompactMachines;
+import com.cleanroommc.groovyscript.compat.mods.cyclic.Cyclic;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolution;
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
 import com.cleanroommc.groovyscript.compat.mods.essentialcraft.EssentialCraft;
@@ -54,6 +54,7 @@ import com.cleanroommc.groovyscript.compat.mods.rustic.Rustic;
 import com.cleanroommc.groovyscript.compat.mods.tcomplement.TinkersComplement;
 import com.cleanroommc.groovyscript.compat.mods.techreborn.TechReborn;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
+import com.cleanroommc.groovyscript.compat.mods.theaurorian.TheAurorian;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.mods.woot.Woot;
@@ -200,19 +201,6 @@ public class ModSupport {
                 throw new IllegalArgumentException("Alias already exists for: " + container.getModId() + " mod.");
             }
         }
-    }
-
-    @Deprecated
-    @Nullable
-    public Object getProperty(String name) {
-        GroovyContainer<?> container = containers.get(name);
-        return container != null ? container.get() : null;
-    }
-
-
-    @Deprecated
-    public @UnmodifiableView Map<String, ? extends GroovyContainer<?>> getProperties() {
-        return containersView;
     }
 
     @GroovyBlacklist

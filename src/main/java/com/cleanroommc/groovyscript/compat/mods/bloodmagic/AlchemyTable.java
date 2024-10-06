@@ -144,6 +144,11 @@ public class AlchemyTable extends StandardListRegistry<RecipeAlchemyTable> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Blood Magic Alchemy Table recipe";
         }
