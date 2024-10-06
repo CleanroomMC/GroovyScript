@@ -10,6 +10,7 @@ import com.cout970.magneticraft.api.MagneticraftApi;
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import kotlin.Pair;
+import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -18,8 +19,9 @@ import java.util.Collection;
 public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
 
     @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).chances(0.5)"),
-            @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).chances(0.5, 0.3, 0.2, 0.1)")
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay'))"),
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'), 0.5)"),
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay'), 0.5).output(item('minecraft:clay'), 0.3).output(item('minecraft:clay'), 0.2).output(item('minecraft:clay'), 0.1)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -49,26 +51,17 @@ public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
         @Property("groovyscript.wiki.magneticraft.oreDict.value")
         private boolean oreDict;
 
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder chances(float chance) {
+        @RecipeBuilderMethodDescription(field = {"output", "chances"})
+        public RecipeBuilder output(ItemStack item, float chance) {
+            this.output.add(item);
             this.chances.add(chance);
             return this;
         }
 
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder chances(float... chances) {
-            for (float chance : chances) {
-                chances(chance);
-            }
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder chances(Collection<Float> chances) {
-            for (float chance : chances) {
-                chances(chance);
-            }
-            return this;
+        @Override
+        @RecipeBuilderMethodDescription(field = {"output", "chances"})
+        public RecipeBuilder output(ItemStack item) {
+            return output(item, 1.0f);
         }
 
         @RecipeBuilderMethodDescription

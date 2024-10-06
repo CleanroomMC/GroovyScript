@@ -176,15 +176,21 @@ mods.magneticraft.sluice_box.removeByOutput(item('minecraft:cobblestone'))
 // mods.magneticraft.sluice_box.removeAll()
 
 mods.magneticraft.sluice_box.recipeBuilder()
+    .input(item('minecraft:gold_ingot'))
+    .output(item('minecraft:clay'))
+    .register()
+
+mods.magneticraft.sluice_box.recipeBuilder()
     .input(item('minecraft:clay'))
-    .output(item('minecraft:diamond'))
-    .chances(0.5)
+    .output(item('minecraft:diamond'), 0.5)
     .register()
 
 mods.magneticraft.sluice_box.recipeBuilder()
     .input(item('minecraft:diamond'))
-    .output(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'))
-    .chances(0.5, 0.3, 0.2, 0.1)
+    .output(item('minecraft:clay'), 0.5)
+    .output(item('minecraft:clay'), 0.3)
+    .output(item('minecraft:clay'), 0.2)
+    .output(item('minecraft:clay'), 0.1)
     .register()
 
 
