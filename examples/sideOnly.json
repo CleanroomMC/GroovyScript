@@ -1,0 +1,10 @@
+{
+  "client": {
+    "classes": [
+      "net.minecraftforge.fml.client.config.GuiConfig1"
+    ]
+  },
+  "server": {
+
+  }
+}

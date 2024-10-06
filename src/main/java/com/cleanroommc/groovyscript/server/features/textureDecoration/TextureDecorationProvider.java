@@ -3,7 +3,7 @@ package com.cleanroommc.groovyscript.server.features.textureDecoration;
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.mapper.TextureBinder;
 import com.cleanroommc.groovyscript.mapper.TextureTooltip;
-import com.cleanroommc.groovyscript.sandbox.FileUtil;
+import com.cleanroommc.groovyscript.sandbox.SandboxData;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
@@ -41,8 +41,7 @@ public class TextureDecorationProvider extends DocProvider {
     private static final int ICON_X = 0, ICON_Y = 0;
     private static final Map<String, TextureDecoration> textures = new Object2ObjectOpenHashMap<>();
 
-    private final String cacheRoot = FileUtil.makePath(FileUtil.getMinecraftHome(), "cache", "groovy", "textureDecorations");
-
+    private final File cacheRoot = new File(SandboxData.getCachePath(), "textureDecorations");
 
     public TextureDecorationProvider(URI doc, ASTContext context) {
         super(doc, context);
@@ -276,7 +275,7 @@ public class TextureDecorationProvider extends DocProvider {
     }
 
     private String getURIForDecoration(String name) {
-        return FileUtil.makeFile(cacheRoot, name + ".png").toURI().toString();
+        return new File(cacheRoot, name + ".png").toURI().toString();
     }
 
     private class TextureDecoration {
@@ -302,7 +301,7 @@ public class TextureDecorationProvider extends DocProvider {
         }
 
         private @NotNull File getFile() {
-            return FileUtil.makeFile(cacheRoot, name + ".png");
+            return new File(cacheRoot, name + ".png");
         }
 
         public List<String> render() {
