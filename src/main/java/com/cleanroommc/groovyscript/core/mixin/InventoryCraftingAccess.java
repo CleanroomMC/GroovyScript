@@ -10,5 +10,4 @@ public interface InventoryCraftingAccess {
 
     @Accessor
     Container getEventHandler();
-
 }

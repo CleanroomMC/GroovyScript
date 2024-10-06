@@ -77,7 +77,6 @@ public class AltarRecipeBuilder {
             public boolean mayDecrement(TileAltar ta, ShapedRecipeSlot slot) {
                 return !fluidStacks.contains(slot.getSlotID());
             }
-
         };
     }
 
@@ -103,7 +102,6 @@ public class AltarRecipeBuilder {
             public boolean mayDecrement(TileAltar ta, AttunementAltarSlot slot) {
                 return !fluidStacks.contains(slot.getSlotId());
             }
-
         };
 
         for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
@@ -142,7 +140,6 @@ public class AltarRecipeBuilder {
             public boolean mayDecrement(TileAltar ta, ConstellationAtlarSlot slot) {
                 return !fluidStacks.contains(slot.getSlotId());
             }
-
         };
 
         for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
@@ -191,7 +188,6 @@ public class AltarRecipeBuilder {
             public boolean mayDecrement(TileAltar ta, TraitRecipeSlot slot) {
                 return !fluidStacks.contains(slot.getSlotId());
             }
-
         };
 
         for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {

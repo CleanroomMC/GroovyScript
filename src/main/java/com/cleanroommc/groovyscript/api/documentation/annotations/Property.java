@@ -228,6 +228,5 @@ public @interface Property {
     @interface Properties {
 
         Property[] value();
-
     }
 }

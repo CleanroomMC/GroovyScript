@@ -18,5 +18,4 @@ public interface PerkLevelManagerAccessor {
 
     @Invoker("ensureLevels")
     void generateLevelMap();
-
 }

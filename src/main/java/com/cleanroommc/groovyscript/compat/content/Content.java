@@ -65,7 +65,6 @@ public class Content extends NamedRegistry {
             public @NotNull ItemStack createIcon() {
                 return icon.copy();
             }
-
         };
     }
 

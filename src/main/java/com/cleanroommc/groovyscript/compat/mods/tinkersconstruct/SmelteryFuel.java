@@ -28,7 +28,6 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
             protected boolean compareRecipe(SmelteryFuelRecipe recipe, SmelteryFuelRecipe recipe2) {
                 return recipe.equals(recipe2);
             }
-
         };
     }
 

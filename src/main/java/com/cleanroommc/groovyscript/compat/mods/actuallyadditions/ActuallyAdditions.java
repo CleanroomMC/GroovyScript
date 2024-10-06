@@ -13,5 +13,4 @@ public class ActuallyAdditions extends GroovyPropertyContainer {
     public final AtomicReconstructor atomicReconstructor = new AtomicReconstructor();
     public final NetherMiningLens netherMiningLens = new NetherMiningLens();
     public final StoneMiningLens stoneMiningLens = new StoneMiningLens();
-
 }

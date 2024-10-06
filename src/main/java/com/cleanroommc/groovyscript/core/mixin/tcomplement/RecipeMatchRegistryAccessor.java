@@ -12,5 +12,4 @@ public interface RecipeMatchRegistryAccessor {
 
     @Accessor
     PriorityQueue<RecipeMatch> getItems();
-
 }

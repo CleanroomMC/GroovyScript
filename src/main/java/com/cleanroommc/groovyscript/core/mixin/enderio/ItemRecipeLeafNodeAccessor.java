@@ -13,5 +13,4 @@ public interface ItemRecipeLeafNodeAccessor<REC> extends IRecipeNode<REC, Item, 
 
     @Accessor
     Int2ObjectOpenHashMap<NNList<REC>> getMap();
-
 }

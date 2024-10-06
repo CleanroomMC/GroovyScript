@@ -12,5 +12,4 @@ public interface ElectrolyzerRecipeManagerAccessor {
 
     @Accessor
     Map<String, IElectrolyzerRecipeManager.ElectrolyzerRecipe> getFluidMap();
-
 }

@@ -50,7 +50,6 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
             this.parent = node;
             this.uri = uri;
         }
-
     }
 
     private SourceUnit sourceUnit;
@@ -75,7 +74,6 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
         public boolean equals(ASTNode a, ASTNode b) {
             return a == b;
         }
-
     });
 
     private void pushASTNode(ASTNode node) {

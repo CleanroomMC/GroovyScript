@@ -11,5 +11,4 @@ public interface IDocumentationProvider {
 
     @Nullable
     String getSortText(AnnotatedNode node, ASTContext context);
-
 }

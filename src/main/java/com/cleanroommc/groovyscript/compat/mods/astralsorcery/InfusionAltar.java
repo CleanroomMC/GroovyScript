@@ -175,7 +175,6 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
                 public int craftingTickTime() {
                     return time;
                 }
-
             };
             recipe.setLiquidStarlightConsumptionChance(consumption);
             recipe.setCanBeSupportedByChalices(chalice);

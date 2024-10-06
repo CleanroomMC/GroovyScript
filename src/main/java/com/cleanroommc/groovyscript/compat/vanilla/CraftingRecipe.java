@@ -127,7 +127,6 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
             public boolean add(SlotMatchResult slotMatchResult) {
                 throw new UnsupportedOperationException();
             }
-
         };
 
         public void addMatch(IIngredient ingredient, ItemStack itemStack, int itemSlotIndex) {

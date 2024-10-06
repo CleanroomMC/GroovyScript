@@ -12,5 +12,4 @@ public interface CharcoalManagerAccessor {
 
     @Accessor
     List<ICharcoalPileWall> getWalls();
-
 }

@@ -238,7 +238,6 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
     public interface IRecipeCreator<T> {
 
         T createRecipe(int width, int height, List<IIngredient> ingredients);
-
     }
 
     public abstract static class AbstractShaped<T> extends AbstractCraftingRecipeBuilder<T> {

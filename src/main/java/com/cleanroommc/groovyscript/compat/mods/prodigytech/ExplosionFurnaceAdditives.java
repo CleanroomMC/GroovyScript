@@ -102,7 +102,6 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         void register();
 
         void unregister();
-
     }
 
     @SuppressWarnings("ClassCanBeRecord")

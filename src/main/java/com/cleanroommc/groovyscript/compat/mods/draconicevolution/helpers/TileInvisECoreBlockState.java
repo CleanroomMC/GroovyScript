@@ -15,5 +15,4 @@ public interface TileInvisECoreBlockState {
      * This should also set default to false, if meta set is not 0 (legacy compat)
      */
     void setMetadata(int metadata);
-
 }

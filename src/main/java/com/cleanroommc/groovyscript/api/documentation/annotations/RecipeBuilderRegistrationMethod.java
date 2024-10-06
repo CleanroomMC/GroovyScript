@@ -28,5 +28,4 @@ public @interface RecipeBuilderRegistrationMethod {
      * @return the method priority
      */
     int priority() default 1000;
-
 }

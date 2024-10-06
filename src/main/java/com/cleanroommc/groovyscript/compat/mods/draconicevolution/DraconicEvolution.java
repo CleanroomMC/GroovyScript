@@ -6,5 +6,4 @@ public class DraconicEvolution extends GroovyPropertyContainer {
 
     public final Fusion fusion = new Fusion();
     public final EnergyCore energyCore = new EnergyCore();
-
 }

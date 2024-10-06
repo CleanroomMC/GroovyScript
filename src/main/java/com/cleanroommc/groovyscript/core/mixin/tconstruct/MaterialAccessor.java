@@ -13,5 +13,4 @@ public interface MaterialAccessor {
 
     @Accessor
     Map<String, List<ITrait>> getTraits();
-
 }

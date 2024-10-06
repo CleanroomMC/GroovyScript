@@ -12,5 +12,4 @@ public interface DefaultResourcePackAccessor {
 
     @Accessor("defaultResourcePacks")
     List<IResourcePack> get();
-
 }

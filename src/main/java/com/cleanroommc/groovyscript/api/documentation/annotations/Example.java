@@ -92,5 +92,4 @@ public @interface Example {
      * @return the example priority (relative to other examples for the same method or Recipe Builder)
      */
     int priority() default 1000;
-
 }

@@ -389,7 +389,6 @@ public class GroovyASTUtils {
                     }
                     return 0;
                 }
-
             }).orElse(null);
             return foundMethod;
         }

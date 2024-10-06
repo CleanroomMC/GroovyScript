@@ -8,5 +8,4 @@ public class NaturesAura extends GroovyPropertyContainer {
     public final Ritual ritual = new Ritual();
     public final Offering offering = new Offering();
     public final Spawning spawning = new Spawning();
-
 }

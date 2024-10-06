@@ -11,5 +11,4 @@ public interface SimpleRecipeGroupHolderAccessor {
 
     @Accessor
     Map<String, IMachineRecipe> getRecipes();
-
 }

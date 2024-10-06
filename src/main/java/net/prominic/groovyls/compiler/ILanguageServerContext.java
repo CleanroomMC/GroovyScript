@@ -14,5 +14,4 @@ public interface ILanguageServerContext {
     FileContentsTracker getFileContentsTracker();
 
     DocumentationFactory getDocumentationFactory();
-
 }

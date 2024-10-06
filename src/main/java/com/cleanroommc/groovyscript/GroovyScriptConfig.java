@@ -26,6 +26,5 @@ public class GroovyScriptConfig {
         @Config.Name("ExtendedCrafting recipe maker makes grs recipes")
         @Config.Comment("If this is true, the recipe maker from ExtendedCrafting will produce a script for GroovyScript instead of CraftTweaker.")
         public boolean extendedCraftingRecipeMakerMakesGrsRecipes = true;
-
     }
 }

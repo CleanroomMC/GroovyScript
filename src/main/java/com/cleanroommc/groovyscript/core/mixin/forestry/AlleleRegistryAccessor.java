@@ -12,5 +12,4 @@ public interface AlleleRegistryAccessor {
 
     @Accessor
     LinkedHashMap<String, IAllele> getAlleleMap();
-
 }

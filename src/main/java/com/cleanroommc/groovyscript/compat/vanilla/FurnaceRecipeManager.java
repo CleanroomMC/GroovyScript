@@ -23,5 +23,4 @@ public class FurnaceRecipeManager {
             return a == b || (a != null && b != null && OreDictionary.itemMatches(a, b, false));
         }
     });
-
 }

@@ -65,7 +65,6 @@ public class Resonator extends StandardListRegistry<IResonatorRecipe> {
     public interface ShouldProgress {
 
         boolean run(TileEntity resonator, int frequency, ItemStack input);
-
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))
@@ -186,7 +185,6 @@ public class Resonator extends StandardListRegistry<IResonatorRecipe> {
                 public boolean shouldProgress(TileEntity resonator, int frequency, ItemStack input) {
                     return shouldProgress == null || ClosureHelper.call(true, shouldProgress, resonator, frequency, input);
                 }
-
             };
             ModSupport.EXTRA_UTILITIES_2.get().resonator.add(recipe);
             return recipe;

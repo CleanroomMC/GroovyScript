@@ -155,7 +155,6 @@ public class ExpansionHelper {
                         public CachedClass getDeclaringClass() {
                             return ReflectionCache.getCachedClass(self.getTheClass());
                         }
-
                     };
             } else {
                 // true static method

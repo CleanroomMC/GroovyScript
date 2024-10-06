@@ -10,5 +10,4 @@ public class EssentialCraft extends GroovyPropertyContainer {
     public final MithrilineFurnace mithrilineFurnace = new MithrilineFurnace();
     public final RadiatingChamber radiatingChamber = new RadiatingChamber();
     public final WindRune windRune = new WindRune();
-
 }

@@ -13,5 +13,4 @@ public interface MixRecipeAccessor {
 
     @Accessor
     Map<MixAdditive, RecipeMatchRegistry> getAdditives();
-
 }
