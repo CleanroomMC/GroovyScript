@@ -46,7 +46,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
      * Changing this number will force the cache to be deleted and every script has to be recompiled.
      * Useful when changes to the compilation process were made.
      */
-    public static final int CACHE_VERSION = 2;
+    public static final int CACHE_VERSION = 3;
     /**
      * Setting this to false will cause compiled classes to never be cached.
      * As a side effect some compilation behaviour might change. Can be useful for debugging.
@@ -60,55 +60,51 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     private final File cacheRoot;
     private final File scriptRoot;
-    private final ImportCustomizer importCustomizer = new ImportCustomizer();
     private final Map<List<StackTraceElement>, AtomicInteger> storedExceptions;
     private final Map<String, CompiledScript> index = new Object2ObjectOpenHashMap<>();
 
     private LoadStage currentLoadStage;
 
-    public GroovyScriptSandbox(File scriptRoot, File cacheRoot) throws MalformedURLException {
-        super(new URL[]{
-                scriptRoot.toURI().toURL()
-        });
-        this.scriptRoot = scriptRoot;
-        this.cacheRoot = cacheRoot;
+    @ApiStatus.Internal
+    public GroovyScriptSandbox() {
+        super(SandboxData.getRootUrls());
+        this.scriptRoot = SandboxData.getScriptFile();
+        this.cacheRoot = SandboxData.getCachePath();
         registerBinding("Mods", ModSupport.INSTANCE);
         registerBinding("Log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
 
-        this.importCustomizer.addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
-        registerStaticImports(GroovyHelper.class, MathHelper.class);
-        this.importCustomizer.addImports(
-                "net.minecraft.world.World",
-                "net.minecraft.block.state.IBlockState",
-                "net.minecraft.block.Block",
-                "net.minecraft.block.SoundType",
-                "net.minecraft.enchantment.Enchantment",
-                "net.minecraft.entity.Entity",
-                "net.minecraft.entity.player.EntityPlayer",
-                "net.minecraft.init.Biomes",
-                "net.minecraft.init.Blocks",
-                "net.minecraft.init.Enchantments",
-                "net.minecraft.init.Items",
-                "net.minecraft.init.MobEffects",
-                "net.minecraft.init.PotionTypes",
-                "net.minecraft.init.SoundEvents",
-                "net.minecraft.item.EnumRarity",
-                "net.minecraft.item.Item",
-                "net.minecraft.item.ItemStack",
-                "net.minecraft.nbt.NBTTagCompound",
-                "net.minecraft.nbt.NBTTagList",
-                "net.minecraft.tileentity.TileEntity",
-                "net.minecraft.util.math.BlockPos",
-                "net.minecraft.util.DamageSource",
-                "net.minecraft.util.EnumHand",
-                "net.minecraft.util.EnumHandSide",
-                "net.minecraft.util.EnumFacing",
-                "net.minecraft.util.ResourceLocation",
-                "net.minecraftforge.fml.common.eventhandler.EventPriority",
-                "com.cleanroommc.groovyscript.event.EventBusType",
-                "net.minecraftforge.fml.relauncher.Side",
-                "net.minecraftforge.fml.relauncher.SideOnly");
+        getImportCustomizer().addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
+        getImportCustomizer().addImports("net.minecraft.world.World",
+                                         "net.minecraft.block.state.IBlockState",
+                                         "net.minecraft.block.Block",
+                                         "net.minecraft.block.SoundType",
+                                         "net.minecraft.enchantment.Enchantment",
+                                         "net.minecraft.entity.Entity",
+                                         "net.minecraft.entity.player.EntityPlayer",
+                                         "net.minecraft.init.Biomes",
+                                         "net.minecraft.init.Blocks",
+                                         "net.minecraft.init.Enchantments",
+                                         "net.minecraft.init.Items",
+                                         "net.minecraft.init.MobEffects",
+                                         "net.minecraft.init.PotionTypes",
+                                         "net.minecraft.init.SoundEvents",
+                                         "net.minecraft.item.EnumRarity",
+                                         "net.minecraft.item.Item",
+                                         "net.minecraft.item.ItemStack",
+                                         "net.minecraft.nbt.NBTTagCompound",
+                                         "net.minecraft.nbt.NBTTagList",
+                                         "net.minecraft.tileentity.TileEntity",
+                                         "net.minecraft.util.math.BlockPos",
+                                         "net.minecraft.util.DamageSource",
+                                         "net.minecraft.util.EnumHand",
+                                         "net.minecraft.util.EnumHandSide",
+                                         "net.minecraft.util.EnumFacing",
+                                         "net.minecraft.util.ResourceLocation",
+                                         "net.minecraftforge.fml.common.eventhandler.EventPriority",
+                                         "com.cleanroommc.groovyscript.event.EventBusType",
+                                         "net.minecraftforge.fml.relauncher.Side",
+                                         "net.minecraftforge.fml.relauncher.SideOnly");
         this.storedExceptions = new Object2ObjectOpenHashMap<>();
         readIndex();
     }
@@ -242,7 +238,9 @@ public class GroovyScriptSandbox extends GroovySandbox {
         // we need to find the source unit of the compiled class
         SourceUnit trueSource = su.getAST().getUnit().getScriptSourceLocation(mainClassName(clazz.getName()));
         String truePath = trueSource == null ? shortPath : FileUtil.relativize(this.scriptRoot.getPath(), trueSource.getName());
-        if (shortPath.equals(truePath) && su.getAST().getMainClassName() != null && !su.getAST().getMainClassName().equals(clazz.getName())) {
+        if (shortPath.equals(truePath) &&
+            su.getAST().getMainClassName() != null &&
+            !su.getAST().getMainClassName().equals(clazz.getName())) {
             inner = true;
         }
 
@@ -274,9 +272,10 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     @Override
     protected Class<?> loadScriptClass(GroovyScriptEngine engine, File file) {
-        File relativeFile = this.scriptRoot.toPath().relativize(file.toPath()).toFile();
+        String relativeFileName = FileUtil.relativize(this.scriptRoot.getPath(), file.getPath());
+        File relativeFile = new File(relativeFileName);
         long lastModified = file.lastModified();
-        CompiledScript comp = this.index.get(relativeFile.toString());
+        CompiledScript comp = this.index.get(relativeFileName);
 
         if (ENABLE_CACHE && comp != null && lastModified <= comp.lastEdited && comp.clazz == null && comp.readData(this.cacheRoot.getPath())) {
             // class is not loaded, but the cached class bytes are still valid
@@ -288,8 +287,8 @@ public class GroovyScriptSandbox extends GroovySandbox {
         } else if (!ENABLE_CACHE || (comp == null || comp.clazz == null || lastModified > comp.lastEdited)) {
             // class is not loaded and class bytes don't exist yet or script has been edited
             if (comp == null) {
-                comp = new CompiledScript(relativeFile.toString(), 0);
-                this.index.put(relativeFile.toString(), comp);
+                comp = new CompiledScript(relativeFileName, 0);
+                this.index.put(relativeFileName, comp);
             }
             if (lastModified > comp.lastEdited || comp.preprocessors == null) {
                 // recompile preprocessors if there is no data or script was edited
@@ -306,7 +305,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             Class<?> clazz = super.loadScriptClass(engine, relativeFile);
             if (comp.clazz == null) {
                 // should not happen
-                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback! Index: {}", relativeFile, this.index);
+                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback!", relativeFileName);
                 if (ENABLE_CACHE) comp.clazz = clazz;
             }
         } else {
@@ -329,7 +328,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
     protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
         config.addCompilationCustomizers(new GroovyScriptCompiler());
         config.addCompilationCustomizers(new GroovyScriptEarlyCompiler());
-        config.addCompilationCustomizers(this.importCustomizer);
     }
 
     @Override
@@ -380,10 +378,6 @@ public class GroovyScriptSandbox extends GroovySandbox {
         return currentLoadStage;
     }
 
-    public ImportCustomizer getImportCustomizer() {
-        return importCustomizer;
-    }
-
     public File getScriptRoot() {
         return scriptRoot;
     }
@@ -400,5 +394,4 @@ public class GroovyScriptSandbox extends GroovySandbox {
             return false;
         }
     }
-
 }

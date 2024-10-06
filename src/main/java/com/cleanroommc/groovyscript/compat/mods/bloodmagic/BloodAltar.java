@@ -133,6 +133,11 @@ public class BloodAltar extends StandardListRegistry<RecipeBloodAltar> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Blood Magic Blood Altar recipe";
         }

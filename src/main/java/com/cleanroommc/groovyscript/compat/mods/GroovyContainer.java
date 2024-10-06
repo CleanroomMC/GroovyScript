@@ -1,9 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IGroovyContainer;
 import com.cleanroommc.groovyscript.api.INamed;
-import com.cleanroommc.groovyscript.api.IRegistrar;
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -22,28 +20,6 @@ public abstract class GroovyContainer<T extends GroovyPropertyContainer> impleme
     @Override
     public String toString() {
         return getContainerName();
-    }
-
-    /**
-     * @deprecated Use {@link #addProperty(INamed)} and {@link #addPropertiesOfFields(Object, boolean)} from this class instead.
-     */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
-    @GroovyBlacklist
-    public IRegistrar getVirtualizedRegistrar() {
-        return getRegistrar();
-    }
-
-    /**
-     * @deprecated Use {@link #addProperty(INamed)} and {@link #addPropertiesOfFields(Object, boolean)} from this class instead.
-     */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
-    @GroovyBlacklist
-    public IRegistrar getRegistrar() {
-        if (!isLoaded()) return null;
-        T t = get();
-        return t::addProperty;
     }
 
     /**

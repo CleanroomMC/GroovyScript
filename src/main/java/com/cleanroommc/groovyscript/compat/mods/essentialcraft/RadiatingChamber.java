@@ -78,8 +78,13 @@ public class RadiatingChamber extends StandardListRegistry<RadiatingChamberRecip
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
-            return "Error adding Magician Table Recipe";
+            return "Error adding Radiating Chamber Recipe";
         }
 
         @Override
@@ -104,7 +109,5 @@ public class RadiatingChamber extends StandardListRegistry<RadiatingChamberRecip
             RadiatingChamberRecipes.addRecipe(recipe);
             return recipe;
         }
-
     }
-
 }

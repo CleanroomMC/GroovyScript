@@ -83,6 +83,12 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed in each slot
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);

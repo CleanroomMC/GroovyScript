@@ -91,6 +91,12 @@ public class Grindstone extends StandardListRegistry<GrindstoneRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Astral Sorcery Grindstone recipe";
         }

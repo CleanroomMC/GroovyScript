@@ -36,15 +36,23 @@ public class GroovyLogImpl implements GroovyLog {
 
     private static final Logger logger = LogManager.getLogger("GroovyLog");
     private final Path logFilePath;
-    private final PrintWriter printWriter;
+    private PrintWriter printWriter;
     private final DateFormat timeFormat = new SimpleDateFormat("[HH:mm:ss]");
     private List<String> errors = new ArrayList<>();
 
     private GroovyLogImpl() {
         File minecraftHome = (File) FMLInjectionData.data()[6];
         File logFile = new File(minecraftHome, "logs" + File.separator + getLogFileName());
-        logFilePath = logFile.toPath();
-        PrintWriter tempWriter;
+        this.logFilePath = logFile.toPath();
+        this.printWriter = setupLog(logFile);
+    }
+
+    public void cleanLog() {
+        this.printWriter = setupLog(this.logFilePath.toFile());
+    }
+
+    private PrintWriter setupLog(File logFile) {
+        PrintWriter writer;
         try {
             // delete file if it exists
             if (logFile.exists() && !logFile.isDirectory()) {
@@ -53,15 +61,15 @@ public class GroovyLogImpl implements GroovyLog {
             // create file
             Files.createFile(logFilePath);
             // create writer which automatically flushes on write
-            tempWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(logFile.toPath()))), true);
+            writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(logFile.toPath()))), true);
         } catch (IOException e) {
-            e.printStackTrace();
-            tempWriter = new PrintWriter(System.out);
+            GroovyScript.LOGGER.throwing(e);
+            writer = new PrintWriter(System.out);
         }
-        this.printWriter = tempWriter;
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        writeLogLine("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
-        writeLogLine("GroovyScript version: " + GroovyScript.VERSION);
+        writer.println("============  GroovyLog  ====  " + dateFormat.format(new Date()) + "  ============");
+        writer.println("GroovyScript version: " + GroovyScript.VERSION);
+        return writer;
     }
 
     private static String getLogFileName() {
@@ -86,7 +94,7 @@ public class GroovyLogImpl implements GroovyLog {
     }
 
     @Override
-    public Path getLogFilerPath() {
+    public Path getLogFilePath() {
         return logFilePath;
     }
 
@@ -243,9 +251,8 @@ public class GroovyLogImpl implements GroovyLog {
     }
 
     /**
-     * Logs an exception to the groovy log AND Minecraft's log.
-     * It does NOT throw the exception!
-     * The stacktrace for the groovy log will be stripped for better readability.
+     * Logs an exception to the groovy log AND Minecraft's log. It does NOT throw the exception! The stacktrace for the groovy log will be
+     * stripped for better readability.
      *
      * @param throwable exception
      */
@@ -285,7 +292,14 @@ public class GroovyLogImpl implements GroovyLog {
     }
 
     private String formatLine(String level, String msg) {
-        return timeFormat.format(new Date()) + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : " [SERVER/") + level + "]" + " [" + getSource() + "]: " + msg;
+        return timeFormat.format(new Date()) +
+                (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : " [SERVER/") +
+                level +
+                "]" +
+                " [" +
+                getSource() +
+                "]: " +
+                msg;
     }
 
     private String getSource() {
@@ -322,8 +336,7 @@ public class GroovyLogImpl implements GroovyLog {
         private final List<String> messages = new ArrayList<>();
         private Level level = Level.INFO;
         private boolean logToMcLog;
-        @Nullable
-        private Throwable throwable;
+        @Nullable private Throwable throwable;
 
         private MsgImpl(String msg, Object... data) {
             this.mainMsg = GroovyLog.format(msg, data);
@@ -345,7 +358,7 @@ public class GroovyLogImpl implements GroovyLog {
             if (condition) {
                 if (args != null && args.length > 0) {
                     for (int i = 0; i < args.length; i++) {
-                        if (args[i] instanceof Supplier<?>s) {
+                        if (args[i] instanceof Supplier<?> s) {
                             args[i] = s.get();
                         }
                     }
@@ -441,7 +454,5 @@ public class GroovyLogImpl implements GroovyLog {
         public boolean hasMessages() {
             return !this.messages.isEmpty();
         }
-
     }
-
 }

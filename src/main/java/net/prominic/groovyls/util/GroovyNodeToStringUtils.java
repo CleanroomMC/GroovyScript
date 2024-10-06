@@ -20,16 +20,8 @@
 package net.prominic.groovyls.util;
 
 import net.prominic.groovyls.compiler.ast.ASTContext;
-import org.codehaus.groovy.ast.ASTNode;
-import org.codehaus.groovy.ast.ClassNode;
-import org.codehaus.groovy.ast.ConstructorNode;
-import org.codehaus.groovy.ast.FieldNode;
-import org.codehaus.groovy.ast.MethodNode;
-import org.codehaus.groovy.ast.Parameter;
-import org.codehaus.groovy.ast.Variable;
-
-import net.prominic.groovyls.compiler.ast.ASTNodeVisitor;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
+import org.codehaus.groovy.ast.*;
 
 public class GroovyNodeToStringUtils {
 
@@ -72,12 +64,11 @@ public class GroovyNodeToStringUtils {
     }
 
     public static String constructorToString(ConstructorNode constructorNode, ASTContext astContext) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(constructorNode.getDeclaringClass().getName());
-        builder.append("(");
-        builder.append(parametersToString(constructorNode.getParameters(), astContext));
-        builder.append(")");
-        return builder.toString();
+        String builder = constructorNode.getDeclaringClass().getName() +
+                "(" +
+                parametersToString(constructorNode.getParameters(), astContext) +
+                ")";
+        return builder;
     }
 
     public static String methodToString(MethodNode methodNode, ASTContext astContext) {
@@ -126,8 +117,7 @@ public class GroovyNodeToStringUtils {
 
     public static String variableToString(Variable variable, ASTContext astContext) {
         StringBuilder builder = new StringBuilder();
-        if (variable instanceof FieldNode) {
-            FieldNode fieldNode = (FieldNode) variable;
+        if (variable instanceof FieldNode fieldNode) {
             if (fieldNode.isPublic()) {
                 builder.append("public ");
             }

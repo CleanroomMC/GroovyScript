@@ -18,6 +18,7 @@ import org.codehaus.groovy.ast.Parameter;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -53,9 +54,10 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
     private final List<Class<?>[]> paramTypes;
     private final Completer completer;
     private final String documentation;
+    private final TextureBinder<T> textureBinder;
     private List<MethodNode> methodNodes;
 
-    private ObjectMapper(String name, GroovyContainer<?> mod, IObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation) {
+    private ObjectMapper(String name, GroovyContainer<?> mod, IObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation, TextureBinder<T> textureBinder) {
         super(null);
         this.name = name;
         this.mod = mod;
@@ -65,26 +67,34 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         this.paramTypes = paramTypes;
         this.completer = completer;
         this.documentation = documentation;
+        this.textureBinder = textureBinder;
     }
 
-    T invoke(String s, Object... args) {
+    @Nullable
+    public T invoke(boolean silent, String s, Object... args) {
         Result<T> t = Objects.requireNonNull(handler.parse(s, args), "Object mapper must return a non null result!");
         if (t.hasError()) {
-            if (this.mod == null) {
-                GroovyLog.get().error("Can't find {} for name {}!", name, s);
-            } else {
-                GroovyLog.get().error("Can't find {} {} for name {}!", mod, name, s);
+            if (!silent) {
+                if (this.mod == null) {
+                    GroovyLog.get().error("Can't find {} for name {}!", name, s);
+                } else {
+                    GroovyLog.get().error("Can't find {} {} for name {}!", mod, name, s);
+                }
+                if (t.getError() != null && !t.getError().isEmpty()) {
+                    GroovyLog.get().error(" - reason: {}", t.getError());
+                }
             }
-            if (t.getError() != null && !t.getError().isEmpty()) {
-                GroovyLog.get().error(" - reason: {}", t.getError());
-            }
-            t = this.defaultValue.get();
-            return t == null || t.hasError() ? null : t.getValue();
+            return null;
         }
         return Objects.requireNonNull(t.getValue(), "Object mapper result must contain a non-null value!");
     }
 
-    T invokeDefault() {
+    public T invokeWithDefault(boolean silent, String s, Object... args) {
+        T t = invoke(silent, s, args);
+        return t != null ? t : invokeDefault();
+    }
+
+    public T invokeDefault() {
         Result<T> t = this.defaultValue.get();
         return t == null || t.hasError() ? null : t.getValue();
     }
@@ -116,7 +126,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
     }
 
     public T doCall(String s, Object... args) {
-        return invoke(s, args);
+        return invokeWithDefault(false, s, args);
     }
 
     public T doCall() {
@@ -132,23 +142,23 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         if (methodNodes == null) {
             this.methodNodes = new ArrayList<>();
             for (Class<?>[] paramType : this.paramTypes) {
-                Parameter[] params = ArrayUtils.map(
-                        paramType,
-                        c -> new Parameter(ClassHelper.makeCached(c), ""),
-                        new Parameter[paramType.length]);
-                MethodNode node = new MethodNode(
-                        this.name,
-                        Modifier.PUBLIC | Modifier.FINAL,
-                        ClassHelper.makeCached(this.returnType),
-                        params,
-                        null,
-                        null);
-                node.setDeclaringClass(this.mod != null ? ClassHelper.makeCached(this.mod.get().getClass()) : ClassHelper.makeCached(ObjectMapperManager.class));
+                Parameter[] params = ArrayUtils.map(paramType, c -> new Parameter(ClassHelper.makeCached(c), ""),
+                                                    new Parameter[paramType.length]);
+                MethodNode node = new MethodNode(this.name, Modifier.PUBLIC | Modifier.FINAL,
+                                                 ClassHelper.makeCached(this.returnType), params, null, null);
+                node.setDeclaringClass(this.mod != null ?
+                                       ClassHelper.makeCached(this.mod.get().getClass()) :
+                                       ClassHelper.makeCached(ObjectMapperManager.class));
                 node.setNodeMetaData(GroovydocHolder.DOC_COMMENT, new Groovydoc(this.documentation, node));
                 this.methodNodes.add(node);
             }
         }
         return methodNodes;
+    }
+
+    @ApiStatus.Experimental
+    public TextureBinder<T> getTextureBinder() {
+        return textureBinder;
     }
 
     /**
@@ -166,6 +176,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         private final List<Class<?>[]> paramTypes = new ArrayList<>();
         private Completer completer;
         private String documentation;
+        private TextureBinder textureBinder;
 
         @ApiStatus.Internal
         public Builder(String name, Class<T> returnType) {
@@ -328,6 +339,12 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             return documentation("returns a " + mod + type);
         }
 
+        @ApiStatus.Experimental
+        public Builder<T> textureBinder(TextureBinder<T> textureBinder) {
+            this.textureBinder = textureBinder;
+            return this;
+        }
+
         /**
          * Registers the mapper.
          *
@@ -339,23 +356,12 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
                 throw new IllegalArgumentException("Tried to register ObjectMapper for mod " + this.mod + ", but it's not loaded");
             Objects.requireNonNull(this.handler, () -> "The ObjectMapper function must no be null");
             Objects.requireNonNull(this.returnType, () -> "The ObjectMapper return type must not be null");
-            if (this.paramTypes.isEmpty()) this.paramTypes.add(new Class[]{
-                    String.class
-            });
+            if (this.paramTypes.isEmpty()) this.paramTypes.add(new Class[]{String.class});
             if (this.defaultValue == null) this.defaultValue = () -> null;
             this.documentation = IDocumented.toJavaDoc(this.documentation);
-            ObjectMapper<T> goh = new ObjectMapper<>(
-                    this.name,
-                    this.mod,
-                    this.handler,
-                    this.defaultValue,
-                    this.returnType,
-                    this.paramTypes,
-                    this.completer,
-                    this.documentation);
+            ObjectMapper<T> goh = new ObjectMapper<>(this.name, this.mod, this.handler, this.defaultValue,
+                                                     this.returnType, this.paramTypes, this.completer, this.documentation, this.textureBinder);
             ObjectMapperManager.registerObjectMapper(this.mod, goh);
         }
-
     }
-
 }

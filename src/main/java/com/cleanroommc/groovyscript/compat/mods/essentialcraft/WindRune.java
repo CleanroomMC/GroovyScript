@@ -64,6 +64,11 @@ public class WindRune extends StandardListRegistry<WindImbueRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Wind Rune Recipe";
         }
@@ -84,7 +89,5 @@ public class WindRune extends StandardListRegistry<WindImbueRecipe> {
             ModSupport.ESSENTIALCRAFT.get().windRune.addScripted(recipe);
             return recipe;
         }
-
     }
-
 }

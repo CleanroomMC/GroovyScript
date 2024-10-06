@@ -38,22 +38,47 @@ public class Preprocessor {
 
     public static List<String> parsePreprocessors(File file) {
         List<String> preprocessors = new ArrayList<>();
+        parsePreprocessors(file, preprocessors);
+        return preprocessors.isEmpty() ? Collections.emptyList() : preprocessors;
+    }
+
+    public static int getImportStartLine(File file) {
+        return parsePreprocessors(file, new ArrayList<>());
+    }
+
+    private static int parsePreprocessors(File file, List<String> preprocessors) {
+        int lines = 0;
+        int empty = 0;
+        boolean lastEmpty = false;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             boolean isComment = false;
             String line;
             while ((line = br.readLine()) != null) {
+                lines++;
                 line = line.trim();
-                if (line.isEmpty()) continue;
+                if (!lastEmpty) empty = 0;
+                if (line.isEmpty()) {
+                    empty++;
+                    lastEmpty = true;
+                    continue;
+                }
+                lastEmpty = false;
                 if (line.startsWith("/*")) {
-                    isComment = true;
-                    line = line.substring(2).trim();
+                    if (line.endsWith("*/")) {
+                        line = line.substring(2, line.length() - 2).trim();
+                    } else if (line.contains("*/")) {
+                        return preprocessors.isEmpty() ? 0 : lines - empty - 1;
+                    } else {
+                        isComment = true;
+                        line = line.substring(2).trim();
+                    }
                     if (line.isEmpty()) continue;
                 }
                 if (line.startsWith("//")) {
                     line = line.substring(2).trim();
                     if (line.isEmpty()) continue;
                 } else if (!isComment) {
-                    return preprocessors.isEmpty() ? Collections.emptyList() : preprocessors;
+                    return preprocessors.isEmpty() ? 0 : lines - empty - 1;
                 }
                 if (isComment && line.endsWith("*/")) {
                     isComment = false;
@@ -66,7 +91,7 @@ public class Preprocessor {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return preprocessors.isEmpty() ? Collections.emptyList() : preprocessors;
+        return preprocessors.isEmpty() ? 0 : lines - empty - 1;
     }
 
     public static boolean validatePreprocessor(File file, List<String> preprocessors) {

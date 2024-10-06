@@ -16,6 +16,7 @@ import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
 import com.cleanroommc.groovyscript.compat.mods.betterwithmods.BetterWithMods;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
+import com.cleanroommc.groovyscript.compat.mods.botaniatweaks.BotaniaTweaks;
 import com.cleanroommc.groovyscript.compat.mods.botanicadditions.BotanicAdditions;
 import com.cleanroommc.groovyscript.compat.mods.calculator.Calculator;
 import com.cleanroommc.groovyscript.compat.mods.chisel.Chisel;
@@ -29,6 +30,7 @@ import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCraftin
 import com.cleanroommc.groovyscript.compat.mods.extrabotany.ExtraBotany;
 import com.cleanroommc.groovyscript.compat.mods.extrautils2.ExtraUtils2;
 import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
+import com.cleanroommc.groovyscript.compat.mods.futuremc.FutureMC;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
 import com.cleanroommc.groovyscript.compat.mods.immersivepetroleum.ImmersivePetroleum;
@@ -38,6 +40,7 @@ import com.cleanroommc.groovyscript.compat.mods.inspirations.Inspirations;
 import com.cleanroommc.groovyscript.compat.mods.integrateddynamics.IntegratedDynamics;
 import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mods.lazyae2.LazyAE2;
+import com.cleanroommc.groovyscript.compat.mods.magneticraft.Magneticraft;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
 import com.cleanroommc.groovyscript.compat.mods.mysticalagriculture.MysticalAgriculture;
 import com.cleanroommc.groovyscript.compat.mods.naturesaura.NaturesAura;
@@ -62,8 +65,6 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
 
@@ -90,6 +91,7 @@ public class ModSupport {
     public static final GroovyContainer<BetterWithMods> BETTER_WITH_MODS = new InternalModContainer<>("betterwithmods", "Better With Mods", BetterWithMods::new);
     public static final GroovyContainer<BloodMagic> BLOOD_MAGIC = new InternalModContainer<>("bloodmagic", "Blood Magic: Alchemical Wizardry", BloodMagic::new, "bm");
     public static final GroovyContainer<Botania> BOTANIA = new InternalModContainer<>("botania", "Botania", Botania::new);
+    public static final GroovyContainer<BotaniaTweaks> BOTANIA_TWEAKS = new InternalModContainer<>("botania_tweaks", "Botania Tweaks", BotaniaTweaks::new);
     public static final GroovyContainer<BotanicAdditions> BOTANIC_ADDITIONS = new InternalModContainer<>("botanicadds", "Botanic Additions", BotanicAdditions::new);
     public static final GroovyContainer<Calculator> CALCULATOR = new InternalModContainer<>("calculator", "Calculator", Calculator::new);
     public static final GroovyContainer<Chisel> CHISEL = new InternalModContainer<>("chisel", "Chisel", Chisel::new);
@@ -103,6 +105,7 @@ public class ModSupport {
     public static final GroovyContainer<ExtraBotany> EXTRA_BOTANY = new InternalModContainer<>("extrabotany", "Extra Botany", ExtraBotany::new);
     public static final GroovyContainer<ExtraUtils2> EXTRA_UTILITIES_2 = new InternalModContainer<>("extrautils2", "Extra Utilities 2", ExtraUtils2::new, "extrautilities2");
     public static final GroovyContainer<Forestry> FORESTRY = new InternalModContainer<>("forestry", "Forestry", Forestry::new);
+    public static final GroovyContainer<FutureMC> FUTURE_MC = new InternalModContainer<>("futuremc", "Future MC", FutureMC::new);
     public static final GroovyContainer<ImmersiveEngineering> IMMERSIVE_ENGINEERING = new InternalModContainer<>("immersiveengineering", "Immersive Engineering", ImmersiveEngineering::new, "ie");
     public static final GroovyContainer<ImmersivePetroleum> IMMERSIVE_PETROLEUM = new InternalModContainer<>("immersivepetroleum", "Immersive Petroleum", ImmersivePetroleum::new);
     public static final GroovyContainer<ImmersiveTechnology> IMMERSIVE_TECHNOLOGY = new InternalModContainer<>("immersivetech", "Immersive Technology", ImmersiveTechnology::new);
@@ -111,6 +114,7 @@ public class ModSupport {
     public static final GroovyContainer<Inspirations> INSPIRATIONS = new InternalModContainer<>("inspirations", "Inspirations", Inspirations::new);
     public static final GroovyContainer<IntegratedDynamics> INTEGRATED_DYNAMICS = new InternalModContainer<>("integrateddynamics", "Integrated Dynamics", IntegratedDynamics::new, "id");
     public static final GroovyContainer<JustEnoughItems> JEI = new InternalModContainer<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
+    public static final GroovyContainer<Magneticraft> MAGNETICRAFT = new InternalModContainer<>("magneticraft", "Magneticraft", Magneticraft::new);
     public static final GroovyContainer<Mekanism> MEKANISM = new InternalModContainer<>("mekanism", "Mekanism", Mekanism::new);
     public static final GroovyContainer<MysticalAgriculture> MYSTICAL_AGRICULTURE = new InternalModContainer<>("mysticalagriculture", "Mystical Agriculture", MysticalAgriculture::new);
     public static final GroovyContainer<LazyAE2> LAZYAE2 = new InternalModContainer<>("threng", "LazyAE2", LazyAE2::new, "lazyae2");
@@ -134,9 +138,9 @@ public class ModSupport {
         return Collections.unmodifiableList(containerList);
     }
 
-    private ModSupport() {
-    }
+    private ModSupport() {}
 
+    @GroovyBlacklist
     @ApiStatus.Internal
     public void setup(ASMDataTable dataTable) {
         for (ASMDataTable.ASMData data : dataTable.getAll(GroovyPlugin.class.getName().replace('.', '/'))) {
@@ -153,6 +157,7 @@ public class ModSupport {
         }
     }
 
+    @GroovyBlacklist
     private void registerContainer(GroovyPlugin container) {
         if (container instanceof GroovyContainer) {
             GroovyScript.LOGGER.error("GroovyPlugin must not extend {}", GroovyContainer.class.getSimpleName());
@@ -183,6 +188,7 @@ public class ModSupport {
         externalPluginClasses.add(container.getClass());
     }
 
+    @GroovyBlacklist
     void registerContainer(GroovyContainer<?> container) {
         if (containerList.contains(container) || containers.containsKey(container.getModId())) {
             throw new IllegalStateException("Container already present!");
@@ -194,19 +200,6 @@ public class ModSupport {
                 throw new IllegalArgumentException("Alias already exists for: " + container.getModId() + " mod.");
             }
         }
-    }
-
-    @Deprecated
-    @Nullable
-    public Object getProperty(String name) {
-        GroovyContainer<?> container = containers.get(name);
-        return container != null ? container.get() : null;
-    }
-
-
-    @Deprecated
-    public @UnmodifiableView Map<String, ? extends GroovyContainer<?>> getProperties() {
-        return containersView;
     }
 
     @GroovyBlacklist

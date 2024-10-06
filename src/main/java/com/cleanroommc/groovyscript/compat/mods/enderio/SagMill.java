@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-@RegistryDescription
+@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.enderio.sag_mill.note", type = Admonition.Type.WARNING))
 public class SagMill extends StandardListRegistry<Recipe> {
 
     public SagMill() {
@@ -98,6 +98,11 @@ public class SagMill extends StandardListRegistry<Recipe> {
         public RecipeBuilder bonusTypeChance() {
             this.bonusType = RecipeBonusType.CHANCE_ONLY;
             return this;
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

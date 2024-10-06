@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-@RegistryDescription
+@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.enderio.sag_mill.note", type = Admonition.Type.WARNING))
 public class SagMillGrinding extends StandardListRegistry<GrindingBall> {
 
     public SagMillGrinding() {
@@ -76,6 +76,11 @@ public class SagMillGrinding extends StandardListRegistry<GrindingBall> {
         public RecipeBuilder duration(int duration) {
             this.duration = duration;
             return this;
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

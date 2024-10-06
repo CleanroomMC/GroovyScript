@@ -319,6 +319,11 @@ public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             if (type == null) {
                 msg.add("type must be defined");

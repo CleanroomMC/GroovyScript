@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.api;
 
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,17 +18,6 @@ public interface GroovyPlugin extends IGroovyContainer {
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
     default @Nullable GroovyPropertyContainer createGroovyPropertyContainer() {
-        return createModPropertyContainer();
-    }
-
-    /**
-     * @deprecated use {@link #createGroovyPropertyContainer()} instead
-     */
-    @GroovyBlacklist
-    @ApiStatus.OverrideOnly
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.2.0")
-    default @Nullable ModPropertyContainer createModPropertyContainer() {
         return null;
     }
 

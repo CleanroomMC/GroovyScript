@@ -106,6 +106,12 @@ public class DryingBasin extends StandardListRegistry<IRecipe<IngredientAndFluid
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed (normal), ignores input stack size (mechanical)
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 0, 1, 0, 1);
             validateFluids(msg, 0, 1, 0, 1);

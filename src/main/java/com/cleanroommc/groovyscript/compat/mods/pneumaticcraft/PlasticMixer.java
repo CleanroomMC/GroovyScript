@@ -139,6 +139,12 @@ public class PlasticMixer extends StandardListRegistry<PlasticMixerRegistry.Plas
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // PnC modifies the recipe to only consume 1 item
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 0, 0, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);

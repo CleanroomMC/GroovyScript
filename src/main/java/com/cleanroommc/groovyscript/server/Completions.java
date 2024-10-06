@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.server;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class Completions extends ArrayList<CompletionItem> {
         return size() >= this.limit;
     }
 
-    public <V> void addAll(Iterable<V> values, Function<V, CompletionItem> toCompletionItem) {
+    public <V> void addAll(Iterable<V> values, Function<V, @Nullable CompletionItem> toCompletionItem) {
         for (V v : values) {
             if (reachedLimit()) break;
             CompletionItem item = toCompletionItem.apply(v);
@@ -34,7 +35,7 @@ public class Completions extends ArrayList<CompletionItem> {
         }
     }
 
-    public <V> void addAll(V[] values, Function<V, CompletionItem> toCompletionItem) {
+    public <V> void addAll(V[] values, Function<V, @Nullable CompletionItem> toCompletionItem) {
         for (V v : values) {
             if (reachedLimit()) break;
             CompletionItem item = toCompletionItem.apply(v);

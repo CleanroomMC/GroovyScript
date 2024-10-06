@@ -77,6 +77,11 @@ public class Energizer extends StandardListRegistry<EnergizeRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         @RecipeBuilderRegistrationMethod
         public @Nullable EnergizeRecipe register() {
             if (!validate()) return null;

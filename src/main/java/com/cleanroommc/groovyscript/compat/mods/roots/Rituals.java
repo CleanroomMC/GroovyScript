@@ -139,6 +139,12 @@ public class Rituals extends VirtualizedRegistry<RitualBase> {
             }
 
             @Override
+            protected int getMaxItemInput() {
+                // More than 1 item cannot be placed in each slot
+                return 1;
+            }
+
+            @Override
             public void validate(GroovyLog.Msg msg) {
                 validateItems(msg, 5, 5, 0, 0);
                 validateFluids(msg);

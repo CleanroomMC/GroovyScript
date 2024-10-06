@@ -49,6 +49,12 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // PT modifies the recipe to only consume 1 item
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 2);
             validateFluids(msg);
@@ -79,7 +85,6 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
             }
             return recipe;
         }
-
     }
 
     @RegistryDescription
@@ -99,7 +104,6 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         public boolean removeByInput(IIngredient input) {
             return super.removeByInput(input);
         }
-
     }
 
     @RegistryDescription
@@ -119,7 +123,5 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         public boolean removeByInput(IIngredient input) {
             return super.removeByInput(input);
         }
-
     }
-
 }

@@ -24,10 +24,10 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.ErrorCollector;
 
 /**
- * A special ErrorCollector for language servers that can clear all errors and
- * does not throw exceptions.
+ * A special ErrorCollector for language servers that can clear all errors and does not throw exceptions.
  */
 public class LanguageServerErrorCollector extends ErrorCollector {
+
     private static final long serialVersionUID = 1L;
 
     public LanguageServerErrorCollector(CompilerConfiguration configuration) {

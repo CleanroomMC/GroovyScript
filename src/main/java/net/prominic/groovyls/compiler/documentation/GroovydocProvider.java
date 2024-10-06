@@ -68,6 +68,11 @@ public class GroovydocProvider implements IDocumentationProvider {
                 trim();
     }
 
+    @Override
+    public @Nullable String getSortText(AnnotatedNode node, ASTContext context) {
+        return null;
+    }
+
     private static void appendLine(StringBuilder markdownBuilder, String line) {
         line = reformatLine(line);
         if (line.length() == 0) {

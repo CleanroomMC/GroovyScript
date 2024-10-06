@@ -56,6 +56,11 @@ public class GlowstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Calculator Glowstone Extractor Recipe";
         }

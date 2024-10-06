@@ -52,6 +52,11 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Aether Freezer Recipe";
         }

@@ -63,6 +63,11 @@ public class AlgorithmSeparator extends StandardListRegistry<CalculatorRecipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Calculator Algorithm Separator Recipe";
         }

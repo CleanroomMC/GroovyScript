@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.techreborn;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class TechReborn extends ModPropertyContainer {
+public class TechReborn extends GroovyPropertyContainer {
 
     public final AlloySmelter alloySmelter = new AlloySmelter();
     public final AssemblingMachine assemblingMachine = new AssemblingMachine();
@@ -30,34 +30,5 @@ public class TechReborn extends ModPropertyContainer {
     public final ThermalGenerator thermalGenerator = new ThermalGenerator();
     public final VacuumFreezer vacuumFreezer = new VacuumFreezer();
     public final WireMill wireMill = new WireMill();
-
-    public TechReborn() {
-        addRegistry(alloySmelter);
-        addRegistry(assemblingMachine);
-        addRegistry(blastFurnace);
-        addRegistry(centrifuge);
-        addRegistry(chemicalReactor);
-        addRegistry(compressor);
-        addRegistry(dieselGenerator);
-        addRegistry(distillationTower);
-        addRegistry(extractor);
-        addRegistry(fluidReplicator);
-        addRegistry(fusionReactor);
-        addRegistry(gasTurbine);
-        addRegistry(grinder);
-        addRegistry(implosionCompressor);
-        addRegistry(industrialElectrolyzer);
-        addRegistry(industrialGrinder);
-        addRegistry(industrialSawmill);
-        addRegistry(plasmaGenerator);
-        addRegistry(plateBendingMachine);
-        addRegistry(rollingMachine);
-        addRegistry(scrapbox);
-        addRegistry(semiFluidGenerator);
-        addRegistry(solidCanningMachine);
-        addRegistry(thermalGenerator);
-        addRegistry(vacuumFreezer);
-        addRegistry(wireMill);
-    }
 
 }

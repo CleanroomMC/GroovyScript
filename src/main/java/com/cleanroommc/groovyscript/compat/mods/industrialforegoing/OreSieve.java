@@ -1,11 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.helper.Alias;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -29,6 +31,12 @@ public class OreSieve extends StandardListRegistry<OreFluidEntrySieve> {
             @Example("fluid('lava') * 5, item('minecraft:gold_ingot'), item('minecraft:clay')")
     })
     public OreFluidEntrySieve add(FluidStack input, ItemStack output, ItemStack sieveItem) {
+        if (IngredientHelper.overMaxSize(sieveItem, 1)) {
+            GroovyLog.msg("Error adding Fluid Sieving recipe").error()
+                     .add("Sieve item stack size must be 1")
+                     .post();
+            return null;
+        }
         OreFluidEntrySieve recipe = new OreFluidEntrySieve(input, output, sieveItem);
         add(recipe);
         return recipe;

@@ -88,10 +88,8 @@ public class JeiPlugin implements IModPlugin {
             for (IRecipeCategory<?> category : recipeRegistry.getRecipeCategories()) {
                 GroovyLog.get().getWriter().println(" - " + category.getUid());
             }
-            sender.sendMessage(
-                    new TextComponentString("JEI Categories has been logged to the ")
-                            .appendSibling(GSCommand.getTextForFile("Groovy Log", GroovyLog.get().getLogFilerPath().toString(), new TextComponentString("Click to open GroovyScript log"))));
+            sender.sendMessage(new TextComponentString("JEI Categories has been logged to the ")
+                                       .appendSibling(GSCommand.getTextForFile("Groovy Log", GroovyLog.get().getLogFilePath().toString(), new TextComponentString("Click to open GroovyScript log"))));
         });
     }
-
 }

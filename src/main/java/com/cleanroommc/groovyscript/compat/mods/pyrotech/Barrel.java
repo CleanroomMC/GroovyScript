@@ -74,6 +74,12 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed in each slot
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 4, 4, 0, 0);
             validateFluids(msg, 1, 1, 1, 1);

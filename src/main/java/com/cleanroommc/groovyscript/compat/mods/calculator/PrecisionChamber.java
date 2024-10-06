@@ -66,6 +66,11 @@ public class PrecisionChamber extends StandardListRegistry<CalculatorRecipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Calculator Precision Chamber Recipe";
         }

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
@@ -18,6 +19,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.chars.CharOpenHashSet;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
@@ -29,13 +31,20 @@ import java.util.Map;
 
 public abstract class AbstractCraftingRecipeBuilder<R> {
 
-    @Property(value = "groovyscript.wiki.craftingrecipe.output.value", comp = @Comp(not = "null"), priority = 700, hierarchy = 20)
+    @Property(value = "groovyscript.wiki.craftingrecipe.output.value",
+              comp = @Comp(not = "null"),
+              priority = 700,
+              hierarchy = 20)
     protected ItemStack output;
     @Property(value = "groovyscript.wiki.name.value", priority = 100, hierarchy = 20)
     protected ResourceLocation name;
-    @Property(value = "groovyscript.wiki.craftingrecipe.recipeFunction.value", priority = 1500, hierarchy = 20)
+    @Property(value = "groovyscript.wiki.craftingrecipe.recipeFunction.value",
+              priority = 1500,
+              hierarchy = 20)
     protected Closure<ItemStack> recipeFunction;
-    @Property(value = "groovyscript.wiki.craftingrecipe.recipeAction.value", priority = 1550, hierarchy = 20)
+    @Property(value = "groovyscript.wiki.craftingrecipe.recipeAction.value",
+              priority = 1550,
+              hierarchy = 20)
     protected Closure<Void> recipeAction;
     @Property(value = "groovyscript.wiki.craftingrecipe.replace.value", needsOverride = true, hierarchy = 20)
     protected byte replace;
@@ -111,9 +120,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         } else if (replace == 2) {
             if (name == null) {
                 GroovyLog.msg("Error replacing Minecraft Crafting recipe")
-                        .add("Name must not be null when replacing by name")
-                        .error()
-                        .post();
+                         .add("Name must not be null when replacing by name").error().post();
                 return;
             }
             ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, name);
@@ -134,7 +141,8 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
 
     @GroovyBlacklist
     @Nullable
-    protected <T> T validateShape(GroovyLog.Msg msg, List<String> errors, String[] keyBasedMatrix, Char2ObjectOpenHashMap<IIngredient> keyMap, IRecipeCreator<T> recipeCreator) {
+    protected <T> T validateShape(GroovyLog.Msg msg, List<String> errors, String[] keyBasedMatrix,
+                                  Char2ObjectOpenHashMap<IIngredient> keyMap, IRecipeCreator<T> recipeCreator) {
         List<IIngredient> ingredients = new ArrayList<>();
         if (keyBasedMatrix.length > height) {
             msg.add("Defined matrix has %d rows, but should only have %d rows", keyBasedMatrix.length, height);
@@ -168,6 +176,8 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         }
         int finalRowWidth = rowWidth;
         msg.add(rowWidth > width, () -> "At least one row has a row length of " + finalRowWidth + ", but maximum is " + width);
+        checkStackSizes(msg, ingredients);
+
         if (checkedChars.isEmpty()) {
             msg.add("Matrix must not be empty");
         } else if (checkedChars.size() == 1) {
@@ -178,6 +188,16 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         }
         if (msg.postIfNotEmpty()) return null;
         return recipeCreator.createRecipe(rowWidth, keyBasedMatrix.length, ingredients);
+    }
+
+    protected void checkStackSizes(GroovyLog.Msg msg, Collection<IIngredient> ingredients) {
+        if (GroovyScriptConfig.compat.checkInputStackCounts) {
+            for (IIngredient ingredient : ingredients) {
+                if (!(ingredient instanceof FluidStack)) {
+                    msg.add(IngredientHelper.overMaxSize(ingredient, 1), "Expected stack size 1 for {}, got {}", ingredient.toString(), ingredient.getAmount());
+                }
+            }
+        }
     }
 
     @GroovyBlacklist
@@ -210,19 +230,26 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
     public interface IRecipeCreator<T> {
 
         T createRecipe(int width, int height, List<IIngredient> ingredients);
-
     }
 
     public abstract static class AbstractShaped<T> extends AbstractCraftingRecipeBuilder<T> {
 
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value", defaultValue = "' ' = IIngredient.EMPTY", priority = 210, hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.keyMap.value",
+                  defaultValue = "' ' = IIngredient.EMPTY",
+                  priority = 210,
+                  hierarchy = 20)
         protected final Char2ObjectOpenHashMap<IIngredient> keyMap = new Char2ObjectOpenHashMap<>();
         protected final List<String> errors = new ArrayList<>();
-        @Property(value = "groovyscript.wiki.craftingrecipe.mirrored.value", hierarchy = 20)
-        protected boolean mirrored;
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", comp = @Comp(unique = "groovyscript.wiki.craftingrecipe.matrix.required"), priority = 200, hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.mirrored.value", hierarchy = 20) protected boolean mirrored;
+        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value",
+                  comp = @Comp(unique = "groovyscript.wiki.craftingrecipe.matrix.required"),
+                  priority = 200,
+                  hierarchy = 20)
         protected String[] keyBasedMatrix;
-        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value", comp = @Comp(gte = 1, lte = 9, unique = "groovyscript.wiki.craftingrecipe.matrix.required"), priority = 200, hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value",
+                  comp = @Comp(gte = 1, lte = 9, unique = "groovyscript.wiki.craftingrecipe.matrix.required"),
+                  priority = 200,
+                  hierarchy = 20)
         protected List<List<IIngredient>> ingredientMatrix;
 
         public AbstractShaped(int width, int height) {
@@ -256,9 +283,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         @RecipeBuilderMethodDescription(field = "keyBasedMatrix")
         public AbstractShaped<T> row(String row) {
             if (this.keyBasedMatrix == null) {
-                this.keyBasedMatrix = new String[]{
-                        row
-                };
+                this.keyBasedMatrix = new String[]{row};
             } else {
                 this.keyBasedMatrix = ArrayUtils.add(this.keyBasedMatrix, row);
             }
@@ -301,16 +326,14 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
             this.ingredientMatrix = matrix;
             return this;
         }
-
     }
 
     public abstract static class AbstractShapeless<T> extends AbstractCraftingRecipeBuilder<T> {
 
-        @Property(
-                value = "groovyscript.wiki.craftingrecipe.ingredients.value",
-                comp = @Comp(gte = 1, lte = 9),
-                priority = 250,
-                hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.ingredients.value",
+                  comp = @Comp(gte = 1, lte = 9),
+                  priority = 250,
+                  hierarchy = 20)
         protected final List<IIngredient> ingredients = new ArrayList<>();
 
         public AbstractShapeless(int width, int height) {
@@ -325,20 +348,22 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
 
         @RecipeBuilderMethodDescription(field = "ingredients")
         public AbstractShapeless<T> input(IIngredient... ingredients) {
-            if (ingredients != null)
-                for (IIngredient ingredient : ingredients)
+            if (ingredients != null) {
+                for (IIngredient ingredient : ingredients) {
                     input(ingredient);
+                }
+            }
             return this;
         }
 
         @RecipeBuilderMethodDescription(field = "ingredients")
         public AbstractShapeless<T> input(Collection<IIngredient> ingredients) {
-            if (ingredients != null && !ingredients.isEmpty())
-                for (IIngredient ingredient : ingredients)
+            if (ingredients != null && !ingredients.isEmpty()) {
+                for (IIngredient ingredient : ingredients) {
                     input(ingredient);
+                }
+            }
             return this;
         }
-
     }
-
 }

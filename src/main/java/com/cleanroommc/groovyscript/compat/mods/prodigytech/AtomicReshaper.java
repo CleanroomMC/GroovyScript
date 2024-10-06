@@ -147,6 +147,12 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // The recipe correctly requires an increased amount of input items, but only consumes 1
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, Integer.MAX_VALUE);
             validateFluids(msg);
@@ -190,7 +196,5 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
 
             return recipe;
         }
-
     }
-
 }

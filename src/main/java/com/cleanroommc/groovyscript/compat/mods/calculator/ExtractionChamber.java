@@ -82,6 +82,11 @@ public class ExtractionChamber extends StandardListRegistry<CalculatorRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Calculator Extraction Chamber Recipe";
         }

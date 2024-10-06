@@ -52,9 +52,8 @@ public class RunConfig {
         JsonObject packmode = new JsonObject();
         packmode.add("values", new JsonArray());
         packmode.addProperty("default", "");
-        packmode.addProperty(
-                "_comment",
-                "By default the packmode is not synced with the packmode mod. You can enable integration, but you can no longer change packmode on the fly.");
+        packmode.addProperty("_comment",
+                             "By default the packmode is not synced with the packmode mod. You can enable integration, but you can no longer change packmode on the fly.");
         packmode.addProperty("integratePackmodeMod", false);
         json.add("packmode", packmode);
         return json;
@@ -86,17 +85,10 @@ public class RunConfig {
     private boolean warnedAboutInvalidPackId;
     private int packmodeConfigState;
 
-    public static final String[] GROOVY_SUFFIXES = {
-            ".groovy", ".gvy", ".gy", ".gsh"
-    };
+    public static final String[] GROOVY_SUFFIXES = SandboxData.GROOVY_SUFFIXES;
 
     public static boolean isGroovyFile(String path) {
-        for (String suffix : GROOVY_SUFFIXES) {
-            if (path.endsWith(suffix)) {
-                return true;
-            }
-        }
-        return false;
+        return SandboxData.isGroovyFile(path);
     }
 
     public RunConfig(JsonObject json) {
@@ -161,9 +153,9 @@ public class RunConfig {
         List<Pair<String, String>> pathsList = new ArrayList<>();
 
         GroovyLog.Msg errorMsg = GroovyLog.msg("Fatal while parsing runConfig.json")
-                .add("Files should NOT be ran in multiple loaders!")
-                .logToMc()
-                .fatal();
+                                          .add("Files should NOT be ran in multiple loaders!")
+                                          .logToMc()
+                                          .fatal();
 
         for (Map.Entry<String, JsonElement> entry : jsonLoaders.entrySet()) {
             JsonArray loader = (JsonArray) entry.getValue();
@@ -227,11 +219,11 @@ public class RunConfig {
     public String getPackId() {
         if (this.invalidPackId && !this.warnedAboutInvalidPackId) {
             GroovyLog.msg("Fatal error while trying to use the pack id")
-                    .add("specified pack id is invalid or empty ('{}')", this.packId)
-                    .add("pack id must only contain lower case letters and underscores")
-                    .add("see https://cleanroommc.com/groovy-script/getting_started/run_config for more info")
-                    .fatal()
-                    .post();
+                     .add("specified pack id is invalid or empty ('{}')", this.packId)
+                     .add("pack id must only contain lower case letters and underscores")
+                     .add("see https://cleanroommc.com/groovy-script/getting_started/run_config for more info")
+                     .fatal()
+                     .post();
             this.warnedAboutInvalidPackId = true;
         }
         return packId;
@@ -304,46 +296,13 @@ public class RunConfig {
         if (this.classes.containsKey(loader)) {
             paths.addAll(this.classes.get(loader));
         }
-        return getSortedFilesOf(root, paths);
+        return SandboxData.getSortedFilesOf(root, paths);
     }
 
     public Collection<File> getSortedFiles(File root, String loader) {
         List<String> paths = loaderPaths.get(loader);
         if (paths == null || paths.isEmpty()) return Collections.emptyList();
-        return getSortedFilesOf(root, paths);
-    }
-
-    private Collection<File> getSortedFilesOf(File root, Collection<String> paths) {
-        Object2IntLinkedOpenHashMap<File> files = new Object2IntLinkedOpenHashMap<>();
-        String separator = getSeparator();
-
-        for (String path : paths) {
-            File rootFile = new File(root, path);
-            if (!rootFile.exists()) {
-                continue;
-            }
-            int pathSize = path.split(separator).length;
-            try (Stream<Path> stream = Files.walk(rootFile.toPath(), isDebug() ? new FileVisitOption[]{
-                    FileVisitOption.FOLLOW_LINKS
-            } : new FileVisitOption[0])) {
-                stream.filter(path1 -> isGroovyFile(path1.toString()))
-                        .map(Path::toFile)
-                        //.filter(Preprocessor::validatePreprocessors)
-                        .sorted(Comparator.comparing(File::getPath))
-                        .forEach(file -> {
-                            if (files.containsKey(file)) {
-                                if (pathSize > files.getInt(file)) {
-                                    files.put(file, pathSize);
-                                }
-                            } else {
-                                files.put(file, pathSize);
-                            }
-                        });
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return new ArrayList<>(files.keySet());
+        return SandboxData.getSortedFilesOf(root, paths);
     }
 
     private static String sanitizePath(String path) {
@@ -375,5 +334,4 @@ public class RunConfig {
         }
         return valid;
     }
-
 }

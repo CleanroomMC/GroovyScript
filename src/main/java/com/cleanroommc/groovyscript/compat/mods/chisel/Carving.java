@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -62,6 +63,12 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
             @Example("'demo', item('minecraft:sea_lantern')")
     }, type = MethodDescription.Type.ADDITION)
     public void addVariation(String groupName, ItemStack item) {
+        if (IngredientHelper.overMaxSize(item, 1)) {
+            GroovyLog.msg("Error adding Chisel Carving").error()
+                     .add("Item must have stack size of 1, got {}", item.getCount())
+                     .post();
+            return;
+        }
         try {
             getRegistry().addVariation(groupName, CarvingUtils.variationFor(item, 0));
             addScripted(Pair.of(groupName, item));

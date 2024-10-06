@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.core.mixin;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.compat.vanilla.ItemStackMixinExpansion;
 import com.cleanroommc.groovyscript.compat.vanilla.ItemStackTransformer;
 import net.minecraft.item.ItemStack;
@@ -22,26 +23,31 @@ public abstract class ItemStackMixin implements ItemStackMixinExpansion {
     @Unique
     protected String groovyScript$mark;
 
+    @GroovyBlacklist
     @Override
     public ItemStack grs$getItemStack() {
         return (ItemStack) (Object) this;
     }
 
+    @GroovyBlacklist
     @Override
     public ItemStackTransformer grs$getTransformer() {
         return groovyScript$transformer;
     }
 
+    @GroovyBlacklist
     @Override
     public Predicate<ItemStack> grs$getMatcher() {
         return groovyScript$matchCondition;
     }
 
+    @GroovyBlacklist
     @Override
     public Predicate<NBTTagCompound> grs$getNbtMatcher() {
         return groovyScript$nbtMatcher;
     }
 
+    @GroovyBlacklist
     @Override
     public void grs$setTransformer(ItemStackTransformer transformer) {
         if (grs$getItemStack() != ItemStack.EMPTY) {
@@ -49,6 +55,7 @@ public abstract class ItemStackMixin implements ItemStackMixinExpansion {
         }
     }
 
+    @GroovyBlacklist
     @Override
     public void grs$setMatcher(Predicate<ItemStack> matcher) {
         if (grs$getItemStack() != ItemStack.EMPTY) {
@@ -56,6 +63,7 @@ public abstract class ItemStackMixin implements ItemStackMixinExpansion {
         }
     }
 
+    @GroovyBlacklist
     @Override
     public void grs$setNbtMatcher(Predicate<NBTTagCompound> nbtMatcher) {
         if (grs$getItemStack() != ItemStack.EMPTY) {
@@ -63,12 +71,14 @@ public abstract class ItemStackMixin implements ItemStackMixinExpansion {
         }
     }
 
+    @GroovyBlacklist
     @Nullable
     @Override
     public String grs$getMark() {
         return groovyScript$mark;
     }
 
+    @GroovyBlacklist
     @Override
     public void grs$setMark(String mark) {
         this.groovyScript$mark = mark;

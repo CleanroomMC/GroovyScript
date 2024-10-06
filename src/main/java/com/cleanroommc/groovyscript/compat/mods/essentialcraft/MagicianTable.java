@@ -51,6 +51,11 @@ public class MagicianTable extends StandardListRegistry<MagicianTableRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Magician Table Recipe";
         }
@@ -72,7 +77,5 @@ public class MagicianTable extends StandardListRegistry<MagicianTableRecipe> {
             MagicianTableRecipes.addRecipe(recipe);
             return recipe;
         }
-
     }
-
 }

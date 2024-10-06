@@ -148,6 +148,12 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Astral Infusion recipe";
         }

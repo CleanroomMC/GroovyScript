@@ -100,6 +100,11 @@ public class CokeOven extends StandardListRegistry<CokeOvenRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Immersive Engineering Coke Oven recipe";
         }

@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.INBTResourceStack;
 import com.cleanroommc.groovyscript.api.INbtIngredient;
@@ -35,8 +36,10 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
 
     void grs$setTransformer(ItemStackTransformer transformer);
 
+    @GroovyBlacklist
     void grs$setNbtMatcher(Predicate<NBTTagCompound> matcher);
 
+    @GroovyBlacklist
     void grs$setMatcher(Predicate<ItemStack> matcher);
 
     @Nullable
@@ -44,6 +47,7 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
 
     void grs$setMark(String mark);
 
+    @GroovyBlacklist
     default boolean grs$isEmpty() {
         return grs$getItemStack().isEmpty();
     }

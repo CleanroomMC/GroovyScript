@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.WellLiquefactionAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
@@ -177,6 +178,7 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
             }
             if (this.output == null) out.add("No output specified.").error();
             if (this.catalyst == null) out.add("No catalyst specified.").error();
+            if (IngredientHelper.overMaxSize(this.catalyst, 1)) out.add("Catalyst must have a stack size of 1.").error();
 
             out.postIfNotEmpty();
             return out.getLevel() != Level.ERROR;

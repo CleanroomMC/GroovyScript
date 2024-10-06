@@ -75,7 +75,7 @@ public interface GroovyLog {
      *
      * @return the locations of this log file
      */
-    Path getLogFilerPath();
+    Path getLogFilePath();
 
     /**
      * Formats and logs a {@link Msg} object to this log.

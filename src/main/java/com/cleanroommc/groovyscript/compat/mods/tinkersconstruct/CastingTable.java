@@ -119,6 +119,12 @@ public class CastingTable extends StandardListRegistry<ICastingRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateFluids(msg, 1, 1, 0, 0);
             validateItems(msg, 0, 0, 1, 1);
@@ -128,17 +134,10 @@ public class CastingTable extends StandardListRegistry<ICastingRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable ICastingRecipe register() {
             if (!validate()) return null;
-            CastingRecipe recipe = new CastingRecipe(
-                    output.get(0),
-                    cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast) : null,
-                    fluidInput.get(0),
-                    time,
-                    consumesCast,
-                    false);
+            CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast)
+                                                                                 : null, fluidInput.get(0), time, consumesCast, false);
             add(recipe);
             return recipe;
         }
-
     }
-
 }

@@ -122,6 +122,12 @@ public class Kiln extends StandardListRegistry<KilnRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // Uses blocks to craft
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 0, 0, 1, 3);
             validateFluids(msg);

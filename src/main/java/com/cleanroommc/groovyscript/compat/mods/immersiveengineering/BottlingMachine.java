@@ -92,6 +92,12 @@ public class BottlingMachine extends StandardListRegistry<BottlingMachineRecipe>
     public static class RecipeBuilder extends AbstractRecipeBuilder<BottlingMachineRecipe> {
 
         @Override
+        protected int getMaxItemInput() {
+            // Recipe cannot be executed
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Immersive Engineering Bottling recipe";
         }
