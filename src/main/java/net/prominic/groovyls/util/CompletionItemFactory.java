@@ -77,4 +77,5 @@ public class CompletionItemFactory {
         }
         return item;
     }
+
 }

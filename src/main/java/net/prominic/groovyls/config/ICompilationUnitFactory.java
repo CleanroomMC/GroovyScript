@@ -41,4 +41,5 @@ public interface ICompilationUnitFactory {
      * Returns a compilation unit.
      */
     GroovyLSCompilationUnit create(Path workspaceRoot, @Nullable URI context);
+
 }

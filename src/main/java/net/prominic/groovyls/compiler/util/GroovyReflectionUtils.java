@@ -1,15 +1,12 @@
 package net.prominic.groovyls.compiler.util;
 
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
-import com.google.common.collect.Iterators;
 import io.github.classgraph.MethodInfo;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import org.codehaus.groovy.ast.MethodNode;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.function.Function;
 
 public class GroovyReflectionUtils {
@@ -17,9 +14,7 @@ public class GroovyReflectionUtils {
     @Nullable
     public static Method resolveMethodFromMethodNode(MethodNode methodNode, ASTContext context) {
         for (Method m : methodNode.getDeclaringClass().getTypeClass().getMethods()) {
-            if (!GroovySecurityManager.INSTANCE.isValid(m) ||
-                    !methodNode.getName().equals(m.getName()) ||
-                    methodNode.getParameters().length != m.getParameterCount()) {
+            if (!GroovySecurityManager.INSTANCE.isValid(m) || !methodNode.getName().equals(m.getName()) || methodNode.getParameters().length != m.getParameterCount()) {
                 continue;
             }
             if (matchesParams(m.getParameterTypes(), methodNode.getParameters(), p -> p.getType().getTypeClass())) {
@@ -32,14 +27,17 @@ public class GroovyReflectionUtils {
     @Nullable
     public static Method resolveMethodFromMethodInfo(MethodInfo methodInfo, ASTContext context) {
         for (Method m : methodInfo.getClassInfo().loadClass().getMethods()) {
-            if (!GroovySecurityManager.INSTANCE.isValid(m) ||
-                    !methodInfo.getName().equals(m.getName()) ||
-                    methodInfo.getParameterInfo().length != m.getParameterCount()) {
+            if (!GroovySecurityManager.INSTANCE.isValid(m) || !methodInfo.getName().equals(m.getName()) || methodInfo.getParameterInfo().length != m.getParameterCount()) {
                 continue;
             }
-            if (matchesParams(m.getParameterTypes(), methodInfo.getParameterInfo(),
-                              p -> context.getLanguageServerContext().getScanResult().loadClass(
-                                      p.getTypeSignatureOrTypeDescriptor().toString(), true))) {
+            if (matchesParams(
+                    m.getParameterTypes(),
+                    methodInfo.getParameterInfo(),
+                    p -> context.getLanguageServerContext()
+                            .getScanResult()
+                            .loadClass(
+                                    p.getTypeSignatureOrTypeDescriptor().toString(),
+                                    true))) {
                 return m;
             }
         }
@@ -52,4 +50,5 @@ public class GroovyReflectionUtils {
         }
         return true;
     }
+
 }

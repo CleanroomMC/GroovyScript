@@ -45,12 +45,12 @@ public class DocumentationFactory {
             }
         }
         if (node instanceof MethodNode mn) {
-            if (node.getDeclaringClass().isDerivedFrom(ClassHelper.makeCached(GroovyPropertyContainer.class)) ||
-                    node.getDeclaringClass().isDerivedFrom(ClassHelper.makeCached(ModSupport.class))) {
+            if (node.getDeclaringClass().isDerivedFrom(ClassHelper.makeCached(GroovyPropertyContainer.class)) || node.getDeclaringClass().isDerivedFrom(ClassHelper.makeCached(ModSupport.class))) {
                 return "z" + mn.getName();
             }
             if (this.lastSortedMethods.contains(mn.getName())) return "zz" + mn.getName();
         }
         return null;
     }
+
 }

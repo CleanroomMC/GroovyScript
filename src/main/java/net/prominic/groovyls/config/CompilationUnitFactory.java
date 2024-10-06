@@ -105,8 +105,10 @@ public class CompilationUnitFactory extends CompilationUnitFactoryBase {
         return compilationUnit;
     }
 
-    protected void addDirectoryToCompilationUnit(Path dirPath, GroovyLSCompilationUnit compilationUnit,
-                                                 FileContentsTracker fileContentsTracker, Set<URI> changedUris) {
+    protected void addDirectoryToCompilationUnit(Path dirPath,
+                                                 GroovyLSCompilationUnit compilationUnit,
+                                                 FileContentsTracker fileContentsTracker,
+                                                 Set<URI> changedUris) {
         try {
             if (Files.exists(dirPath)) {
                 Files.walk(dirPath).forEach((filePath) -> {
@@ -140,4 +142,5 @@ public class CompilationUnitFactory extends CompilationUnitFactoryBase {
             addOpenFileToCompilationUnit(uri, contents, compilationUnit);
         });
     }
+
 }

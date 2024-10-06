@@ -103,4 +103,5 @@ public class FileContentsTracker {
     public void setContents(URI uri, String contents) {
         openFiles.put(uri, contents);
     }
+
 }

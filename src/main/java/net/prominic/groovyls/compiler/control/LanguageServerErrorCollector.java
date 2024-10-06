@@ -47,4 +47,5 @@ public class LanguageServerErrorCollector extends ErrorCollector {
     protected void failIfErrors() throws CompilationFailedException {
         // don't fail
     }
+
 }

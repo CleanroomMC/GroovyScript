@@ -102,4 +102,5 @@ public class GroovyLanguageServer<T extends GroovyServices> implements LanguageS
     public void connect(LanguageClient client) {
         groovyServices.connect(client);
     }
+
 }

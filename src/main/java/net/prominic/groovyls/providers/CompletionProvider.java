@@ -47,12 +47,68 @@ import java.util.concurrent.CompletableFuture;
 
 public class CompletionProvider extends DocProvider {
 
-    private static final String[] keywords = {"assert", "case", "break", "continue", "transient", "extends ", "implements ", "enum", "try ", "catch",
-                                              "finally", "instanceof ", "super", "private", "public", "protected", "abstract", "const", "default", "goto",
-                                              "interface", "native", "non-sealed", "package ", "permits", "record", "sealed", "static", "strictfp",
-                                              "synchronized", "threadsafe", "throws", "trait", "var", "yields"};
-    private static final String[] popularKeywords = {"def ", "else ", "return", "import ", "class", "this", "null", "true", "false", "void", "byte",
-                                                     "short", "int", "long", "float", "double", "boolean", "char", "throw ", "new", "in ", "as ", "final "};
+    private static final String[] keywords = {
+            "assert",
+            "case",
+            "break",
+            "continue",
+            "transient",
+            "extends ",
+            "implements ",
+            "enum",
+            "try ",
+            "catch",
+            "finally",
+            "instanceof ",
+            "super",
+            "private",
+            "public",
+            "protected",
+            "abstract",
+            "const",
+            "default",
+            "goto",
+            "interface",
+            "native",
+            "non-sealed",
+            "package ",
+            "permits",
+            "record",
+            "sealed",
+            "static",
+            "strictfp",
+            "synchronized",
+            "threadsafe",
+            "throws",
+            "trait",
+            "var",
+            "yields"
+    };
+    private static final String[] popularKeywords = {
+            "def ",
+            "else ",
+            "return",
+            "import ",
+            "class",
+            "this",
+            "null",
+            "true",
+            "false",
+            "void",
+            "byte",
+            "short",
+            "int",
+            "long",
+            "float",
+            "double",
+            "boolean",
+            "char",
+            "throw ",
+            "new",
+            "in ",
+            "as ",
+            "final "
+    };
 
     public CompletionProvider(URI doc, ASTContext astContext) {
         super(doc, astContext);
@@ -120,9 +176,7 @@ public class CompletionProvider extends DocProvider {
     private boolean populateItemsFromConstantExpression(ConstantExpression node, ASTNode parent, Completions items) {
         if (node.getType().getTypeClass() == String.class) {
             ASTNode parentParent = astContext.getVisitor().getParent(parent);
-            if (parentParent instanceof MethodCallExpression expr &&
-                expr.getArguments() instanceof ArgumentListExpression args &&
-                !args.getExpressions().isEmpty()) {
+            if (parentParent instanceof MethodCallExpression expr && expr.getArguments() instanceof ArgumentListExpression args && !args.getExpressions().isEmpty()) {
                 // TODO completions in file()
                 ObjectMapper<?> goh = GroovyASTUtils.getMapperOfNode(expr, astContext);
                 if (goh != null && goh.getCompleter() != null) {
@@ -141,7 +195,8 @@ public class CompletionProvider extends DocProvider {
         return true;
     }
 
-    private void populateItemsFromStaticMethodCallExpression(StaticMethodCallExpression methodCallExpr, Position position,
+    private void populateItemsFromStaticMethodCallExpression(StaticMethodCallExpression methodCallExpr,
+                                                             Position position,
                                                              Completions items) {
         Set<String> existingNames = new ObjectOpenHashSet<>();
         populateItemsFromGlobalScope(methodCallExpr.getMethod(), existingNames, items);
@@ -163,8 +218,10 @@ public class CompletionProvider extends DocProvider {
         Range importRange = GroovyLSUtils.astNodeToRange(importNode);
         if (importRange == null) return;
         // skip the "import " at the beginning
-        importRange.setStart(new Position(importRange.getEnd().getLine(),
-                                          importRange.getEnd().getCharacter() - importNode.getType().getName().length()));
+        importRange.setStart(
+                new Position(
+                        importRange.getEnd().getLine(),
+                        importRange.getEnd().getCharacter() - importNode.getType().getName().length()));
         String importText = getMemberName(importNode.getType().getName(), importRange, position);
 
         ModuleNode enclosingModule = getModule();
@@ -177,8 +234,7 @@ public class CompletionProvider extends DocProvider {
             }
             String className = classNode.getName();
             String classNameWithoutPackage = classNode.getNameWithoutPackage();
-            if ((!className.startsWith(importText) && !classNameWithoutPackage.startsWith(importText)) ||
-                GroovyLSUtils.hasImport(enclosingModule, className)) {
+            if ((!className.startsWith(importText) && !classNameWithoutPackage.startsWith(importText)) || GroovyLSUtils.hasImport(enclosingModule, className)) {
                 return null;
             }
             CompletionItem item = CompletionItemFactory.createCompletion(classNode, classNode.getName(), astContext);
@@ -231,7 +287,8 @@ public class CompletionProvider extends DocProvider {
         }
     }
 
-    private void populateItemsFromConstructorCallExpression(ConstructorCallExpression constructorCallExpr, Position position,
+    private void populateItemsFromConstructorCallExpression(ConstructorCallExpression constructorCallExpr,
+                                                            Position position,
                                                             Completions items) {
         Range typeRange = GroovyLSUtils.astNodeToRange(constructorCallExpr.getType());
         if (typeRange == null) return;
@@ -246,8 +303,10 @@ public class CompletionProvider extends DocProvider {
         populateItemsFromScope(varExpr, memberName, items);
     }
 
-    private void populateItemsFromPropertiesAndFields(List<PropertyNode> properties, List<FieldNode> fields,
-                                                      Set<String> existingNames, Completions items) {
+    private void populateItemsFromPropertiesAndFields(List<PropertyNode> properties,
+                                                      List<FieldNode> fields,
+                                                      Set<String> existingNames,
+                                                      Completions items) {
         items.addAll(properties, p -> {
             String name = p.getName();
             if (!p.isPublic() || existingNames.contains(name)) return null;
@@ -279,9 +338,7 @@ public class CompletionProvider extends DocProvider {
             String name = getDescriptor(method, true, false, false);
             if (!method.isPublic() || existingNames.contains(name)) return null;
             existingNames.add(name);
-            if (method.getDeclaringClass().isResolved() &&
-                (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) == 0 &&
-                GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext) == null) {
+            if (method.getDeclaringClass().isResolved() && (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) == 0 && GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext) == null) {
                 return null;
             }
 
@@ -375,9 +432,7 @@ public class CompletionProvider extends DocProvider {
         }
         builder.append(")");
         if (!includeReturn) return builder.toString();
-        var ret = display ?
-                  node.getTypeSignatureOrTypeDescriptor().getResultType().toStringWithSimpleNames() :
-                  node.getTypeDescriptor().getResultType().toString();
+        var ret = display ? node.getTypeSignatureOrTypeDescriptor().getResultType().toStringWithSimpleNames() : node.getTypeDescriptor().getResultType().toString();
         if (!ret.equals("void")) {
             if (display) builder.append(" -> ");
             builder.append(ret);
@@ -386,9 +441,7 @@ public class CompletionProvider extends DocProvider {
     }
 
     public static StringBuilder appendParameter(MethodParameterInfo param, StringBuilder builder, boolean display, boolean maybeVarargs) {
-        builder.append(display ?
-                       param.getTypeSignatureOrTypeDescriptor().toStringWithSimpleNames() :
-                       param.getTypeDescriptor().toString()); // don't use generic types
+        builder.append(display ? param.getTypeSignatureOrTypeDescriptor().toStringWithSimpleNames() : param.getTypeDescriptor().toString()); // don't use generic types
         if (maybeVarargs && builder.charAt(builder.length() - 1) == ']' && builder.charAt(builder.length() - 2) == '[') {
             builder.delete(builder.length() - 2, builder.length()).append("...");
         }
@@ -428,7 +481,7 @@ public class CompletionProvider extends DocProvider {
             String name = entry.getKey();
             if (!name.toLowerCase(Locale.ENGLISH).contains(memberNamePrefix) || existingNames.contains(name)) return null;
             existingNames.add(name);
-            if (entry.getValue() instanceof ObjectMapper<?> goh) {
+            if (entry.getValue() instanceof ObjectMapper<?>goh) {
                 for (MethodNode method : goh.getMethodNodes()) {
                     var item = CompletionItemFactory.createCompletion(method, goh.getName(), astContext);
                     item.setLabelDetails(getMethodNodeDetails(method));
@@ -436,7 +489,7 @@ public class CompletionProvider extends DocProvider {
                     items.add(item);
                 }
                 return null;
-            } else if (entry.getValue() instanceof Closure<?> closure) {
+            } else if (entry.getValue() instanceof Closure<?>closure) {
                 MethodNode method = GroovyASTUtils.methodNodeOfClosure(name, closure);
                 var item = CompletionItemFactory.createCompletion(method, name, astContext);
                 item.setLabelDetails(getMethodNodeDetails(method));
@@ -475,7 +528,9 @@ public class CompletionProvider extends DocProvider {
         });
     }
 
-    private void populateItemsFromVariableScope(VariableScope variableScope, String memberNamePrefix, Set<String> existingNames,
+    private void populateItemsFromVariableScope(VariableScope variableScope,
+                                                String memberNamePrefix,
+                                                Set<String> existingNames,
                                                 Completions items) {
         populateItemsFromGlobalScope(memberNamePrefix, existingNames, items);
         items.addAll(variableScope.getDeclaredVariables().values(), variable -> {
@@ -531,8 +586,11 @@ public class CompletionProvider extends DocProvider {
                                 }
                             }
                             if (classNode != null) {
-                                populateItemsFromPropertiesAndFields(classNode.getProperties(), classNode.getFields(),
-                                                                     existingNames, items);
+                                populateItemsFromPropertiesAndFields(
+                                        classNode.getProperties(),
+                                        classNode.getFields(),
+                                        existingNames,
+                                        items);
                                 populateItemsFromMethods(classNode.getMethods(), existingNames, items);
                             }
                         }
@@ -552,8 +610,13 @@ public class CompletionProvider extends DocProvider {
         populateTypes(offsetNode, namePrefix, existingNames, true, true, true, items);
     }
 
-    private void populateTypes(ASTNode offsetNode, String namePrefix, Set<String> existingNames, boolean includeClasses,
-                               boolean includeInterfaces, boolean includeEnums, Completions items) {
+    private void populateTypes(ASTNode offsetNode,
+                               String namePrefix,
+                               Set<String> existingNames,
+                               boolean includeClasses,
+                               boolean includeInterfaces,
+                               boolean includeEnums,
+                               Completions items) {
         Range addImportRange = GroovyASTUtils.findAddImportRange(doc, offsetNode, astContext);
 
         ModuleNode enclosingModule = getModule();
@@ -587,8 +650,9 @@ public class CompletionProvider extends DocProvider {
             if (!classNameWithoutPackage.startsWith(namePrefix) || existingNames.contains(className)) return null;
             existingNames.add(className);
             String packageName = classInfo.getPackageName();
-            CompletionItem item = CompletionItemFactory.createCompletion(classInfoToCompletionItemKind(classInfo),
-                                                                         classInfo.getSimpleName());
+            CompletionItem item = CompletionItemFactory.createCompletion(
+                    classInfoToCompletionItemKind(classInfo),
+                    classInfo.getSimpleName());
             item.setDetail(packageName);
             boolean hasImport = GroovyLSUtils.hasImport(enclosingModule, className);
             // sort imported classes higher
@@ -626,4 +690,5 @@ public class CompletionProvider extends DocProvider {
     private TextEdit createAddImportTextEdit(String className, Range range) {
         return new TextEdit(range, "import " + className + "\n");
     }
+
 }

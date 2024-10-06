@@ -36,4 +36,5 @@ public class StringReaderSourceWithURI extends StringReaderSource {
     public URI getURI() {
         return uri;
     }
+
 }

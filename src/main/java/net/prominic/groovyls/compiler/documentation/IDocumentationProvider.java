@@ -6,7 +6,10 @@ import org.jetbrains.annotations.Nullable;
 
 public interface IDocumentationProvider {
 
-    @Nullable String getDocumentation(AnnotatedNode node, ASTContext context);
+    @Nullable
+    String getDocumentation(AnnotatedNode node, ASTContext context);
 
-    @Nullable String getSortText(AnnotatedNode node, ASTContext context);
+    @Nullable
+    String getSortText(AnnotatedNode node, ASTContext context);
+
 }

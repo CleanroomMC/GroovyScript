@@ -56,4 +56,5 @@ public class ReferenceProvider extends DocProvider {
 
         return CompletableFuture.completedFuture(locations);
     }
+
 }

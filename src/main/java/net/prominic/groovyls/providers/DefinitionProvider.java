@@ -41,7 +41,8 @@ public class DefinitionProvider extends DocProvider {
     }
 
     public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> provideDefinition(
-            TextDocumentIdentifier textDocument, Position position) {
+                                                                                                               TextDocumentIdentifier textDocument,
+                                                                                                               Position position) {
         ASTNode offsetNode = astContext.getVisitor().getNodeAtLineAndColumn(doc, position.getLine(), position.getCharacter());
         if (offsetNode == null) {
             return CompletableFuture.completedFuture(Either.forLeft(Collections.emptyList()));
@@ -64,4 +65,5 @@ public class DefinitionProvider extends DocProvider {
 
         return CompletableFuture.completedFuture(Either.forLeft(Collections.singletonList(location)));
     }
+
 }

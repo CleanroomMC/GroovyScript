@@ -33,4 +33,5 @@ public abstract class DocProvider {
     public <T> CompletableFuture<T> future(T t) {
         return CompletableFuture.completedFuture(t);
     }
+
 }
