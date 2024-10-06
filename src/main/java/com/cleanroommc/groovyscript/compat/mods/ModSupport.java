@@ -12,13 +12,11 @@ import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnerg
 import com.cleanroommc.groovyscript.compat.mods.arcanearchives.ArcaneArchives;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.atum.Atum;
-import com.cleanroommc.groovyscript.compat.mods.botaniatweaks.BotaniaTweaks;
-import com.cleanroommc.groovyscript.compat.mods.futuremc.FutureMC;
-import com.cleanroommc.groovyscript.compat.mods.theaurorian.TheAurorian;
 import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
 import com.cleanroommc.groovyscript.compat.mods.betterwithmods.BetterWithMods;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
+import com.cleanroommc.groovyscript.compat.mods.botaniatweaks.BotaniaTweaks;
 import com.cleanroommc.groovyscript.compat.mods.botanicadditions.BotanicAdditions;
 import com.cleanroommc.groovyscript.compat.mods.calculator.Calculator;
 import com.cleanroommc.groovyscript.compat.mods.chisel.Chisel;
@@ -32,6 +30,7 @@ import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCraftin
 import com.cleanroommc.groovyscript.compat.mods.extrabotany.ExtraBotany;
 import com.cleanroommc.groovyscript.compat.mods.extrautils2.ExtraUtils2;
 import com.cleanroommc.groovyscript.compat.mods.forestry.Forestry;
+import com.cleanroommc.groovyscript.compat.mods.futuremc.FutureMC;
 import com.cleanroommc.groovyscript.compat.mods.ic2.IC2;
 import com.cleanroommc.groovyscript.compat.mods.immersiveengineering.ImmersiveEngineering;
 import com.cleanroommc.groovyscript.compat.mods.immersivepetroleum.ImmersivePetroleum;
@@ -65,8 +64,6 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
 
