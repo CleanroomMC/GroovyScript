@@ -14,6 +14,10 @@ import java.util.Random;
 
 public class GroovyLootFunction extends LootFunction {
 
+    private static final Class<?>[] CLOSURE_CLASSES = {
+            ItemStack.class, Random.class, LootContext.class
+    };
+
     private final Closure<Object> function;
 
     public GroovyLootFunction(Closure<Object> function) {
@@ -23,9 +27,7 @@ public class GroovyLootFunction extends LootFunction {
     public GroovyLootFunction(LootCondition[] conditions, Closure<Object> function) {
         super(conditions);
         this.function = function;
-        if (!Arrays.equals(function.getParameterTypes(), new Class[]{
-                ItemStack.class, Random.class, LootContext.class
-        })) {
+        if (!Arrays.equals(function.getParameterTypes(), CLOSURE_CLASSES)) {
             GroovyLog.msg("Warning: LootFunction closures must take the following parameters (net.minecraft.item.ItemStack, java.util.Random, net.minecraft.world.storage.loot.LootContext)")
                     .debug()
                     .post();
