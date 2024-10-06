@@ -46,7 +46,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
      * Changing this number will force the cache to be deleted and every script has to be recompiled.
      * Useful when changes to the compilation process were made.
      */
-    public static final int CACHE_VERSION = 2;
+    public static final int CACHE_VERSION = 3;
     /**
      * Setting this to false will cause compiled classes to never be cached.
      * As a side effect some compilation behaviour might change. Can be useful for debugging.
