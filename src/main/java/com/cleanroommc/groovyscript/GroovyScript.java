@@ -100,7 +100,7 @@ public class GroovyScript {
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
         if (!SandboxData.isInitialised()) {
-            LOGGER.throwing(new IllegalStateException("Sandbox data should have been initialised by now, but isn't! Try Initialising again."));
+            LOGGER.throwing(new IllegalStateException("Sandbox data should have been initialised by now, but isn't! Trying to initialize again."));
             SandboxData.initialize((File) FMLInjectionData.data()[6], LOGGER);
         }
         MinecraftForge.EVENT_BUS.register(this);
