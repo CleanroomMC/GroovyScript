@@ -200,19 +200,6 @@ public class ModSupport {
         }
     }
 
-    @Deprecated
-    @Nullable
-    public Object getProperty(String name) {
-        GroovyContainer<?> container = containers.get(name);
-        return container != null ? container.get() : null;
-    }
-
-
-    @Deprecated
-    public @UnmodifiableView Map<String, ? extends GroovyContainer<?>> getProperties() {
-        return containersView;
-    }
-
     @GroovyBlacklist
     @ApiStatus.Internal
     public static void init() {
