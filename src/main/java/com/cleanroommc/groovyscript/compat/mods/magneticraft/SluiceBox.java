@@ -72,8 +72,8 @@ public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, Integer.MAX_VALUE);
             validateFluids(msg);
-            msg.add(output.size() != chances.size(), "output and chances must be the same length, yet output was {} and chances was {}", output.size(), chances.size());
             chances.trim();
+            msg.add(output.size() != chances.size(), "output and chances must be the same length, yet output was {} and chances was {}", output.size(), chances.size());
             for (float chance : chances.elements()) {
                 msg.add(chance <= 0 || chance > 1, "each chance value must be a float greater than 0 and less than or equal to 1, yet a chance value was {}", chance);
             }

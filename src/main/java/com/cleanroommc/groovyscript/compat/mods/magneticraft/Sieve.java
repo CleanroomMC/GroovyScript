@@ -9,6 +9,8 @@ import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cout970.magneticraft.api.MagneticraftApi;
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe;
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
+import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -17,9 +19,9 @@ import java.util.Collection;
 public class Sieve extends StandardListRegistry<ISieveRecipe> {
 
     @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).duration(50).primaryChance(0.5)"),
-            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond'), item('minecraft:clay')).duration(50).primaryChance(0.05).secondaryChance(0.5)"),
-            @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).duration(1).chance(0.5, 0.5, 0.5)")
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'), 0.5).duration(50)"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond'), 0.05).output(item('minecraft:clay')).duration(50)"),
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay'), 0.5).output(item('minecraft:clay'), 0.5).output(item('minecraft:clay'), 0.5).duration(1)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -44,14 +46,10 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
     @Property(property = "output", comp = @Comp(gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ISieveRecipe> {
 
+        @Property(comp = @Comp(gt = 0, lte = 100, unique = "groovyscript.wiki.magneticraft.sieve.chances.required"))
+        private final FloatArrayList chances = new FloatArrayList();
         @Property(comp = @Comp(gt = 0))
         private float duration;
-        @Property(comp = @Comp(gt = 0, lte = 1))
-        private float primaryChance;
-        @Property(comp = @Comp(gt = 0, lte = 1))
-        private float secondaryChance;
-        @Property(comp = @Comp(gt = 0, lte = 1))
-        private float tertiaryChance;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder duration(float duration) {
@@ -59,30 +57,17 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"primaryChance", "secondaryChance", "tertiaryChance"})
-        public RecipeBuilder chance(float primaryChance, float secondaryChance, float tertiaryChance) {
-            this.primaryChance = primaryChance;
-            this.secondaryChance = secondaryChance;
-            this.tertiaryChance = tertiaryChance;
+        @RecipeBuilderMethodDescription(field = {"output", "chances"})
+        public RecipeBuilder output(ItemStack item, float chance) {
+            this.output.add(item);
+            this.chances.add(chance);
             return this;
         }
 
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder primaryChance(float primaryChance) {
-            this.primaryChance = primaryChance;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder secondaryChance(float secondaryChance) {
-            this.secondaryChance = secondaryChance;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder tertiaryChance(float tertiaryChance) {
-            this.tertiaryChance = tertiaryChance;
-            return this;
+        @Override
+        @RecipeBuilderMethodDescription(field = {"output", "chances"})
+        public RecipeBuilder output(ItemStack item) {
+            return output(item, 1.0f);
         }
 
         @Override
@@ -94,9 +79,11 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 3);
             validateFluids(msg);
-            msg.add(output.size() >= 1 && primaryChance <= 0 && primaryChance > 1, "primaryChance must be a float greater than 0 and less than or equal to 1, yet it was {}", primaryChance);
-            msg.add(output.size() >= 2 && secondaryChance <= 0 && secondaryChance > 1, "secondaryChance must be a float greater than 0 and less than or equal to 1, yet it was {}", secondaryChance);
-            msg.add(output.size() >= 3 && tertiaryChance <= 0 && tertiaryChance > 1, "tertiaryChance must be a float greater than 0 and less than or equal to 1, yet it was {}", tertiaryChance);
+            chances.trim();
+            msg.add(output.size() != chances.size(), "output and chances must be the same length, yet output was {} and chances was {}", output.size(), chances.size());
+            for (float chance : chances.elements()) {
+                msg.add(chance <= 0 || chance > 1, "each chance value must be a float greater than 0 and less than or equal to 1, yet a chance value was {}", chance);
+            }
             msg.add(duration <= 0, "duration must be a float greater than 0, yet it was {}", duration);
         }
 
@@ -105,6 +92,9 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
         public @Nullable ISieveRecipe register() {
             if (!validate()) return null;
             ISieveRecipe recipe = null;
+            float primaryChance = chances.size() >= 1 ? chances.getFloat(0) : 0;
+            float secondaryChance = chances.size() >= 2 ? chances.getFloat(1) : 0;
+            float tertiaryChance = chances.size() >= 3 ? chances.getFloat(2) : 0;
             if (input.get(0) instanceof OreDictIngredient ore) {
                 recipe = MagneticraftApi.getSieveRecipeManager().createRecipe(ore.getMatchingStacks()[0], output.get(0), primaryChance, output.getOrEmpty(1), secondaryChance, output.getOrEmpty(2), tertiaryChance, duration, true);
                 ModSupport.MAGNETICRAFT.get().sieve.add(recipe);

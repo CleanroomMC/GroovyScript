@@ -1466,13 +1466,12 @@ groovyscript.wiki.magneticraft.refinery.duration.value=Sets the time in ticks th
 groovyscript.wiki.magneticraft.sieve.title=Sieve
 groovyscript.wiki.magneticraft.sieve.description=Converts an input itemstack into up to three output itemstacks, each with a separate chance in a Sieve Multiblock.
 groovyscript.wiki.magneticraft.sieve.duration.value=Sets the time in ticks the recipe takes to process
-groovyscript.wiki.magneticraft.sieve.primaryChance.value=Sets the chance of the first output itemstack to be created
-groovyscript.wiki.magneticraft.sieve.tertiaryChance.value=Sets the chance of the third output itemstack to be created
-groovyscript.wiki.magneticraft.sieve.secondaryChance.value=Sets the chance of the second output itemstack to be created
+groovyscript.wiki.magneticraft.sieve.chances.value=Sets the chance of the corresponding output itemstack to be created
+groovyscript.wiki.magneticraft.sieve.chances.required=must have the same number of elements as there are outputs
 
 groovyscript.wiki.magneticraft.sluice_box.title=Sluice Box
 groovyscript.wiki.magneticraft.sluice_box.description=Converts an input itemstack into any number of output itemstacks each with a given chance. Consumes a bucket of water per batch, and can be crafted 10 at a time in a Sluice Box.
-groovyscript.wiki.magneticraft.sluice_box.chances.value=Sets the chance of the corresponding output itemstack
+groovyscript.wiki.magneticraft.sluice_box.chances.value=Sets the chance of the corresponding output itemstack to be created
 groovyscript.wiki.magneticraft.sluice_box.chances.required=must have the same number of elements as there are outputs
 
 groovyscript.wiki.magneticraft.thermopile.title=Thermopile
