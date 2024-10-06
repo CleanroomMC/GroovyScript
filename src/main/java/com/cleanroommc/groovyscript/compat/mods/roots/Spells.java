@@ -228,8 +228,7 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
             @com.cleanroommc.groovyscript.api.documentation.annotations.Property(comp = @Comp(not = "null"))
             private SpellBase spell;
 
-            public RecipeBuilder() {
-            }
+            public RecipeBuilder() {}
 
             public RecipeBuilder(SpellBase spell) {
                 this.spell = spell;

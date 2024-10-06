@@ -84,7 +84,9 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
             this.maxLevel = maxLevel;
         }
 
-        public String registry() { return registry; }
+        public String registry() {
+            return registry;
+        }
 
         public Enchantment enchantment() {
             return enchantment;

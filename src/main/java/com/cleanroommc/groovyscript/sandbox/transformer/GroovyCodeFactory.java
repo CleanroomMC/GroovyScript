@@ -25,8 +25,7 @@ public class GroovyCodeFactory {
     public static final String MC_CLASS = "net.minecraft.";
     public static final boolean spongeForgeLoaded = Loader.isModLoaded("spongeforge");
 
-    private GroovyCodeFactory() {
-    }
+    private GroovyCodeFactory() {}
 
     public static boolean shouldRemap(CachedClass cachedClass) {
         return !spongeForgeLoaded && !FMLLaunchHandler.isDeobfuscatedEnvironment() && cachedClass.getName().startsWith(MC_CLASS);

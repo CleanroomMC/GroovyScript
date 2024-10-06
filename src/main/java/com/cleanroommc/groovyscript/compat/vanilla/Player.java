@@ -108,6 +108,5 @@ public class Player extends NamedRegistry implements IScriptReloadable {
 
     @Override
     @GroovyBlacklist
-    public void afterScriptLoad() {
-    }
+    public void afterScriptLoad() {}
 }

@@ -8,8 +8,7 @@ import java.util.Collection;
 
 public class GasStackList extends ArrayList<GasStack> {
 
-    public GasStackList() {
-    }
+    public GasStackList() {}
 
     public GasStackList(Collection<GasStack> collection) {
         super(collection);

@@ -63,8 +63,7 @@ public class BlackListedMetaClass implements MetaClass {
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     @Override
     public List<MetaProperty> getProperties() {

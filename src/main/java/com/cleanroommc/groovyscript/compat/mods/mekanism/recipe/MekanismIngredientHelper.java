@@ -18,8 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class MekanismIngredientHelper {
 
-    private MekanismIngredientHelper() {
-    }
+    private MekanismIngredientHelper() {}
 
     public static IIngredient optionalIngredient(IIngredient ingredient) {
         return ingredient != null ? ingredient : IIngredient.ANY;

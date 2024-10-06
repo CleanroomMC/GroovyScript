@@ -69,8 +69,7 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
         }
 
         @Override
-        public void setAmount(int amount) {
-        }
+        public void setAmount(int amount) {}
 
         @Override
         public boolean isEmpty() {
@@ -106,8 +105,7 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
         }
 
         @Override
-        public void setMark(String mark) {
-        }
+        public void setMark(String mark) {}
 
     };
 
@@ -149,8 +147,7 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
         }
 
         @Override
-        public void setAmount(int amount) {
-        }
+        public void setAmount(int amount) {}
 
         @Override
         public boolean test(ItemStack stack) {
@@ -164,8 +161,7 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
         }
 
         @Override
-        public void setMark(String mark) {
-        }
+        public void setMark(String mark) {}
 
     };
 

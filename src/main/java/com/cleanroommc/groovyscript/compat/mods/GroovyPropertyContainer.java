@@ -47,8 +47,7 @@ public class GroovyPropertyContainer {
      */
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
-    public void initialize(GroovyContainer<?> owner) {
-    }
+    public void initialize(GroovyContainer<?> owner) {}
 
     protected void addPropertyFieldsOf(Object object, boolean privateToo) {
         boolean staticOnly = false;
