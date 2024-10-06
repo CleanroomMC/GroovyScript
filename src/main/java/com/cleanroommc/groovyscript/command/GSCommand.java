@@ -29,17 +29,6 @@ import java.util.List;
 
 public class GSCommand extends CommandTreeBase {
 
-    public static void runReload(EntityPlayerMP player, MinecraftServer server) {
-        if (server.isDedicatedServer()) {
-            player.sendMessage(new TextComponentString("Reloading in multiplayer is currently not allowed to avoid desync."));
-            return;
-        }
-        GroovyLog.get().info("========== Reloading Groovy scripts ==========");
-        long time = GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
-        GroovyScript.postScriptRunResult(player, false, true, false, time);
-        NetworkHandler.sendToPlayer(new SReloadScripts(null, false, true), player);
-    }
-
     public GSCommand() {
         addSubcommand(new SimpleCommand("log", (server, sender, args) -> postLogFiles(sender)));
 
@@ -70,26 +59,36 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new InfoLookingCommand());
         addSubcommand(new InfoSelfCommand());
 
-        addSubcommand(new SimpleCommand("wiki", (server, sender, args) -> sender.sendMessage(
-                new TextComponentString("GroovyScript wiki").setStyle(new Style().setColor(TextFormatting.GOLD).setHoverEvent(
-                        new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                       new TextComponentString("Click to open wiki in browser"))).setClickEvent(
-                        new ClickEvent(ClickEvent.Action.OPEN_URL, "https://cleanroommc.com/groovy-script/")))), "doc", "docs",
-                                        "documentation"));
+        addSubcommand(
+                new SimpleCommand(
+                        "wiki",
+                        (server, sender, args) -> sender.sendMessage(
+                                new TextComponentString("GroovyScript wiki").setStyle(
+                                        new Style().setColor(TextFormatting.GOLD)
+                                                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to open wiki in browser")))
+                                                .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://cleanroommc.com/groovy-script/")))),
+                        "doc",
+                        "docs",
+                        "documentation"));
 
         addSubcommand(new SimpleCommand("generateWiki", (server, sender, args) -> {
             Documentation.generateWiki();
             sender.sendMessage(
                     new TextComponentString("Generated a local version of the Groovyscript wiki has been generated to the ").appendSibling(
-                            getTextForFile("Wiki Folder", Documentation.WIKI.toPath().toString(),
-                                           new TextComponentString("Click to open the generated GroovyScript wiki folder"))));
+                            getTextForFile(
+                                    "Wiki Folder",
+                                    Documentation.WIKI.toPath().toString(),
+                                    new TextComponentString("Click to open the generated GroovyScript wiki folder"))));
         }, "generateDoc", "generateDocs", "generateDocumentation"));
 
         addSubcommand(new SimpleCommand("generateExamples", (server, sender, args) -> {
             Documentation.generateExamples();
-            sender.sendMessage(new TextComponentString("Generated examples for the enabled Groovyscript compat to the ").appendSibling(
-                    getTextForFile("Examples Folder", Documentation.EXAMPLES.toPath().toString(),
-                                   new TextComponentString("Click to open the Groovyscript examples folder"))));
+            sender.sendMessage(
+                    new TextComponentString("Generated examples for the enabled Groovyscript compat to the ").appendSibling(
+                            getTextForFile(
+                                    "Examples Folder",
+                                    Documentation.EXAMPLES.toPath().toString(),
+                                    new TextComponentString("Click to open the Groovyscript examples folder"))));
         }));
 
         addSubcommand(new SimpleCommand("creativeTabs", (server, sender, args) -> {
@@ -97,9 +96,12 @@ public class GSCommand extends CommandTreeBase {
             for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
                 GroovyLog.get().getWriter().println(" - " + tab.getTabLabel());
             }
-            sender.sendMessage(new TextComponentString("Creative tabs has been logged to the ").appendSibling(
-                    GSCommand.getTextForFile("Groovy Log", GroovyLog.get().getLogFilePath().toString(),
-                                             new TextComponentString("Click to open GroovyScript log"))));
+            sender.sendMessage(
+                    new TextComponentString("Creative tabs has been logged to the ").appendSibling(
+                            GSCommand.getTextForFile(
+                                    "Groovy Log",
+                                    GroovyLog.get().getLogFilePath().toString(),
+                                    new TextComponentString("Click to open GroovyScript log"))));
         }));
 
         addSubcommand(new SimpleCommand("deleteScriptCache", (server, sender, args) -> {
@@ -129,6 +131,34 @@ public class GSCommand extends CommandTreeBase {
         }
     }
 
+    public static void runReload(EntityPlayerMP player, MinecraftServer server) {
+        if (server.isDedicatedServer()) {
+            player.sendMessage(new TextComponentString("Reloading in multiplayer is currently not allowed to avoid desync."));
+            return;
+        }
+        GroovyLog.get().info("========== Reloading Groovy scripts ==========");
+        long time = GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
+        GroovyScript.postScriptRunResult(player, false, true, false, time);
+        NetworkHandler.sendToPlayer(new SReloadScripts(null, false, true), player);
+    }
+
+    public static void postLogFiles(ICommandSender sender) {
+        sender.sendMessage(getTextForFile("Groovy Log", GroovyLog.get().getLogFilePath().toString(), new TextComponentString("Click to open GroovyScript log")));
+        sender.sendMessage(getTextForFile("Minecraft Log", GroovyLog.get().getLogFilePath().getParent().toString() + File.separator + "latest.log", new TextComponentString("Click to open Minecraft log")));
+    }
+
+    public static ITextComponent getTextForFile(String name, String path, ITextComponent hoverText) {
+        return new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + name))
+                .setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path)).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText)));
+    }
+
+    public static boolean hasArgument(String[] args, String arg) {
+        for (String a : args) {
+            if (a.equals(arg)) return true;
+        }
+        return false;
+    }
+
     @Override
     @NotNull
     public String getName() {
@@ -145,24 +175,5 @@ public class GSCommand extends CommandTreeBase {
     @NotNull
     public String getUsage(@NotNull ICommandSender sender) {
         return "/grs []";
-    }
-
-    public static void postLogFiles(ICommandSender sender) {
-        sender.sendMessage(getTextForFile("Groovy Log", GroovyLog.get().getLogFilePath().toString(), new TextComponentString("Click to open GroovyScript log")));
-        sender.sendMessage(getTextForFile("Minecraft Log", GroovyLog.get().getLogFilePath().getParent().toString() + File.separator + "latest.log", new TextComponentString("Click to open Minecraft log")));
-    }
-
-    public static ITextComponent getTextForFile(String name, String path, ITextComponent hoverText) {
-        return new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + name))
-                .setStyle(new Style()
-                                  .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path))
-                                  .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText)));
-    }
-
-    public static boolean hasArgument(String[] args, String arg) {
-        for (String a : args) {
-            if (a.equals(arg)) return true;
-        }
-        return false;
     }
 }
