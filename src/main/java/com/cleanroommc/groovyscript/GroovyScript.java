@@ -52,6 +52,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,7 +62,6 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -86,12 +86,8 @@ public class GroovyScript {
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
-    private static File minecraftHome;
-    private static File scriptPath;
-    private static File runConfigFile;
-    private static File resourcesFile;
-    private static RunConfig runConfig;
     private static GroovyScriptSandbox sandbox;
+    private static RunConfig runConfig;
     private static ModContainer scriptMod;
     private static Thread languageServerThread;
 
@@ -102,6 +98,10 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
+        if (!SandboxData.isInitialised()) {
+            LOGGER.throwing(new IllegalStateException("Sandbox data should have been initialised by now, but isn't! Try Initialising again."));
+            SandboxData.initialize((File) FMLInjectionData.data()[6], LOGGER);
+        }
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
@@ -110,11 +110,7 @@ public class GroovyScript {
         GroovyDeobfMapper.init();
         LinkGeneratorHooks.init();
         ReloadableRegistryManager.init();
-        try {
-            sandbox = new GroovyScriptSandbox(scriptPath, FileUtil.makeFile(FileUtil.getMinecraftHome(), "cache", "groovy"));
-        } catch (MalformedURLException e) {
-            throw new IllegalStateException("Error initializing sandbox!");
-        }
+        GroovyScript.sandbox = new GroovyScriptSandbox();
         ModSupport.INSTANCE.setup(event.getASMHarvestedData());
 
         if (NetworkUtils.isDedicatedClient()) {
@@ -143,26 +139,7 @@ public class GroovyScript {
 
     @ApiStatus.Internal
     public static void initializeRunConfig(File minecraftHome) {
-        try {
-            GroovyScript.minecraftHome = minecraftHome.getCanonicalFile();
-        } catch (IOException e) {
-            GroovyLog.get().errorMC("Failed to canonicalize minecraft home path '" + minecraftHome + "'!");
-            throw new RuntimeException(e);
-        }
-        // If we are launching with the environment variable set to use the examples folder, use the examples folder for easy and consistent testing.
-        if (Boolean.parseBoolean(System.getProperty("groovyscript.use_examples_folder"))) {
-            scriptPath = new File(GroovyScript.minecraftHome.getParentFile(), "examples");
-        } else {
-            scriptPath = new File(GroovyScript.minecraftHome, "groovy");
-        }
-        try {
-            scriptPath = scriptPath.getCanonicalFile();
-        } catch (IOException e) {
-            GroovyLog.get().error("Failed to canonicalize groovy script path '" + scriptPath + "'!");
-            GroovyLog.get().exception(e);
-        }
-        runConfigFile = new File(scriptPath, "runConfig.json");
-        resourcesFile = new File(scriptPath, "assets");
+        SandboxData.initialize(minecraftHome, LOGGER);
         reloadRunConfig(true);
     }
 
@@ -229,40 +206,28 @@ public class GroovyScript {
 
     @NotNull
     public static File getMinecraftHome() {
-        if (minecraftHome == null) {
-            throw new IllegalStateException("GroovyScript is not yet loaded!");
-        }
-        return minecraftHome;
+        return SandboxData.getMinecraftHome();
     }
 
     @NotNull
     public static File getScriptFile() {
-        if (scriptPath == null) {
-            throw new IllegalStateException("GroovyScript is not yet loaded!");
-        }
-        return scriptPath;
+        return SandboxData.getScriptFile();
     }
 
     @NotNull
     public static File getResourcesFile() {
-        if (resourcesFile == null) {
-            throw new IllegalStateException("GroovyScript is not yet loaded!");
-        }
-        return resourcesFile;
+        return SandboxData.getResourcesFile();
     }
 
     @NotNull
     public static File getRunConfigFile() {
-        if (runConfigFile == null) {
-            throw new IllegalStateException("GroovyScript is not yet loaded!");
-        }
-        return runConfigFile;
+        return SandboxData.getRunConfigFile();
     }
 
     @NotNull
     public static GroovyScriptSandbox getSandbox() {
         if (sandbox == null) {
-            throw new IllegalStateException("GroovyScript is not yet loaded!");
+            throw new IllegalStateException("GroovyScript is not yet loaded or failed to load!");
         }
         return sandbox;
     }
@@ -277,11 +242,11 @@ public class GroovyScript {
 
     @ApiStatus.Internal
     public static void reloadRunConfig(boolean init) {
-        JsonElement element = JsonHelper.loadJson(runConfigFile);
+        JsonElement element = JsonHelper.loadJson(getRunConfigFile());
         if (element == null || !element.isJsonObject()) element = new JsonObject();
         JsonObject json = element.getAsJsonObject();
         if (runConfig == null) {
-            if (!Files.exists(runConfigFile.toPath())) {
+            if (!Files.exists(getRunConfigFile().toPath())) {
                 json = RunConfig.createDefaultJson();
                 runConfig = createRunConfig(json);
             } else {
@@ -292,8 +257,8 @@ public class GroovyScript {
     }
 
     private static RunConfig createRunConfig(JsonObject json) {
-        JsonHelper.saveJson(runConfigFile, json);
-        File main = new File(scriptPath.getPath() + File.separator + "postInit" + File.separator + "main.groovy");
+        JsonHelper.saveJson(getRunConfigFile(), json);
+        File main = new File(getScriptFile().getPath() + File.separator + "postInit" + File.separator + "main.groovy");
         if (!Files.exists(main.toPath())) {
             try {
                 main.getParentFile().mkdirs();

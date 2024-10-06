@@ -4,8 +4,6 @@ import com.cleanroommc.groovyscript.core.visitors.*;
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.*;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -17,8 +15,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class GroovyScriptTransformer implements IClassTransformer {
-
-    private static final Logger LOG = LogManager.getLogger("GroovyScript-Core");
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
@@ -63,7 +59,7 @@ public class GroovyScriptTransformer implements IClassTransformer {
 
         // prevent banning of classes which are blacklisted for groovy
         if (!GroovySecurityManager.INSTANCE.isValid(classNode)) {
-            LOG.warn("Tried to remove class '{}', but class is blacklisted for groovy. Skipping this class...", className);
+            GroovyScriptCore.LOG.warn("Tried to remove class '{}', but class is blacklisted for groovy. Skipping this class...", className);
             return bytes;
         }
 

@@ -65,10 +65,11 @@ public class GroovyScriptSandbox extends GroovySandbox {
 
     private LoadStage currentLoadStage;
 
-    public GroovyScriptSandbox(File scriptRoot, File cacheRoot) throws MalformedURLException {
-        super(new URL[]{scriptRoot.toURI().toURL()});
-        this.scriptRoot = scriptRoot;
-        this.cacheRoot = cacheRoot;
+    @ApiStatus.Internal
+    public GroovyScriptSandbox() {
+        super(SandboxData.getRootUrls());
+        this.scriptRoot = SandboxData.getScriptFile();
+        this.cacheRoot = SandboxData.getCachePath();
         registerBinding("Mods", ModSupport.INSTANCE);
         registerBinding("Log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);

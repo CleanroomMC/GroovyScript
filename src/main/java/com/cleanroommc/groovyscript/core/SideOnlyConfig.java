@@ -1,13 +1,13 @@
 package com.cleanroommc.groovyscript.core;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.sandbox.SandboxData;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.File;
@@ -37,17 +37,11 @@ public class SideOnlyConfig {
     static void init() {
         clientOnly("net.minecraftforge.common.config.Configuration", "setCategoryConfigEntryClass()");
 
-        initConfig((File) FMLInjectionData.data()[6]);
+        initConfig();
     }
 
-    private static void initConfig(File minecraftHome) {
-        File scriptPath;
-        if (Boolean.parseBoolean(System.getProperty("groovyscript.use_examples_folder"))) {
-            scriptPath = new File(minecraftHome.getParentFile(), "examples");
-        } else {
-            scriptPath = new File(minecraftHome, "groovy");
-        }
-        File sideOnlyConfig = new File(scriptPath, "sideOnly.json");
+    private static void initConfig() {
+        File sideOnlyConfig = new File(SandboxData.getScriptFile(), "sideOnly.json");
         JsonObject json;
         try {
             if (!sideOnlyConfig.isFile()) return;
