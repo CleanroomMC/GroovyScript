@@ -1434,6 +1434,54 @@ groovyscript.wiki.threng.etcher.top.value=Sets the top slot of the recipe
 groovyscript.wiki.threng.etcher.bottom.value=Sets the bottom slot of the recipe
 
 
+# Magneticraft
+groovyscript.wiki.magneticraft.crushing_table.title=Crushing Table
+groovyscript.wiki.magneticraft.crushing_table.description=Converts an input itemstack into an output itemstack when placed on top of the Crushing Table and interacted with by a Hammer which has
+
+groovyscript.wiki.magneticraft.gasification_unit.title=Gasification Unit
+groovyscript.wiki.magneticraft.gasification_unit.description=Converts an input itemstack into either an output itemstack, an output fluidstack, or both in a Gasification Unit block.
+groovyscript.wiki.magneticraft.gasification_unit.duration.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.magneticraft.gasification_unit.minTemperature.value=Sets the minimum temperature required to process the recipe
+
+groovyscript.wiki.magneticraft.grinder.title=Grinder
+groovyscript.wiki.magneticraft.grinder.description=Converts an input itemstack into an output itemstack with a chance at a second itemstack in a Grinder Multiblock.
+groovyscript.wiki.magneticraft.grinder.ticks.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.magneticraft.grinder.chance.value=Sets the chance the output itemstack will be created
+
+groovyscript.wiki.magneticraft.hydraulic_press.title=Hydraulic Press
+groovyscript.wiki.magneticraft.hydraulic_press.description=Converts an input itemstack into an output itemstack when set to a given mode in a Hydraulic Press Multiblock.
+groovyscript.wiki.magneticraft.hydraulic_press.mode.value=Sets the mode the Hydraulic Press need to be set on
+groovyscript.wiki.magneticraft.hydraulic_press.ticks.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.magneticraft.hydraulic_press.removeByMode=Removes all entries with the given mode
+
+groovyscript.wiki.magneticraft.oil_heater.title=Oil Heater
+groovyscript.wiki.magneticraft.oil_heater.description=Converts an input fluidstack into an output fluidstack in a Oil Heater Multiblock.
+groovyscript.wiki.magneticraft.oil_heater.duration.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.magneticraft.oil_heater.minTemperature.value=Sets the minimum temperature required to process the recipe
+
+groovyscript.wiki.magneticraft.refinery.title=Refinery
+groovyscript.wiki.magneticraft.refinery.description=Converts an input fluidstack into up to three output fluidstacks in a Refinery Multiblock.
+groovyscript.wiki.magneticraft.refinery.duration.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.magneticraft.sieve.title=Sieve
+groovyscript.wiki.magneticraft.sieve.description=Converts an input itemstack into up to three output itemstacks, each with a separate chance in a Sieve Multiblock.
+groovyscript.wiki.magneticraft.sieve.duration.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.magneticraft.sieve.chances.value=Sets the chance of the corresponding output itemstack to be created
+groovyscript.wiki.magneticraft.sieve.chances.required=must have the same number of elements as there are outputs
+
+groovyscript.wiki.magneticraft.sluice_box.title=Sluice Box
+groovyscript.wiki.magneticraft.sluice_box.description=Converts an input itemstack into any number of output itemstacks each with a given chance. Consumes a bucket of water per batch, and can be crafted 10 at a time in a Sluice Box.
+groovyscript.wiki.magneticraft.sluice_box.chances.value=Sets the chance of the corresponding output itemstack to be created
+groovyscript.wiki.magneticraft.sluice_box.chances.required=must have the same number of elements as there are outputs
+
+groovyscript.wiki.magneticraft.thermopile.title=Thermopile
+groovyscript.wiki.magneticraft.thermopile.description=The Thermopile generates energy from temperature differences modified by the thermal resistances of the block. This lets you generate energy when placed on either side of a Thermopile.
+groovyscript.wiki.magneticraft.thermopile.state.value=Sets the IBlockState being used
+groovyscript.wiki.magneticraft.thermopile.temperature.value=Sets the temperature of the block
+groovyscript.wiki.magneticraft.thermopile.conductivity.value=Sets the thermal resistance of the block
+
+
+
 # Mekanism
 groovyscript.wiki.mekanism.gasInput.value=Sets the gas inputs of the recipe
 groovyscript.wiki.mekanism.gasOutput.value=Sets the gas outputs of the recipe

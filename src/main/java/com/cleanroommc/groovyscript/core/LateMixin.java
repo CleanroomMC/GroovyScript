@@ -29,7 +29,7 @@ public class LateMixin implements ILateMixinLoader {
             "industrialforegoing",
             "inspirations",
             "jei",
-            "techreborn",
+            "magneticraft",
             "mekanism",
             "pneumaticcraft",
             "primal_tech",
@@ -38,6 +38,7 @@ public class LateMixin implements ILateMixinLoader {
             "roots",
             "tcomplement",
             "tconstruct",
+            "techreborn",
             "thermalexpansion",
             "woot"
     );
