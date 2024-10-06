@@ -13,6 +13,7 @@ import com.cleanroommc.groovyscript.compat.mods.arcanearchives.ArcaneArchives;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.atum.Atum;
 import com.cleanroommc.groovyscript.compat.mods.botaniatweaks.BotaniaTweaks;
+import com.cleanroommc.groovyscript.compat.mods.magneticraft.Magneticraft;
 import com.cleanroommc.groovyscript.compat.mods.theaurorian.TheAurorian;
 import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
 import com.cleanroommc.groovyscript.compat.mods.betterwithmods.BetterWithMods;
@@ -113,6 +114,7 @@ public class ModSupport {
     public static final GroovyContainer<Inspirations> INSPIRATIONS = new InternalModContainer<>("inspirations", "Inspirations", Inspirations::new);
     public static final GroovyContainer<IntegratedDynamics> INTEGRATED_DYNAMICS = new InternalModContainer<>("integrateddynamics", "Integrated Dynamics", IntegratedDynamics::new, "id");
     public static final GroovyContainer<JustEnoughItems> JEI = new InternalModContainer<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
+    public static final GroovyContainer<Magneticraft> MAGNETICRAFT = new InternalModContainer<>("magneticraft", "Magneticraft", Magneticraft::new);
     public static final GroovyContainer<Mekanism> MEKANISM = new InternalModContainer<>("mekanism", "Mekanism", Mekanism::new);
     public static final GroovyContainer<MysticalAgriculture> MYSTICAL_AGRICULTURE = new InternalModContainer<>("mysticalagriculture", "Mystical Agriculture", MysticalAgriculture::new);
     public static final GroovyContainer<LazyAE2> LAZYAE2 = new InternalModContainer<>("threng", "LazyAE2", LazyAE2::new, "lazyae2");
