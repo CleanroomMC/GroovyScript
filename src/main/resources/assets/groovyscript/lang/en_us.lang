@@ -1079,6 +1079,26 @@ groovyscript.wiki.extrautils2.resonator.ownerTag.value=Sets if the output itemst
 groovyscript.wiki.extrautils2.resonator.requirementText.value=Sets the text in JEI displaying an additional requirement for the recipe to run
 groovyscript.wiki.extrautils2.resonator.shouldProgress.value=Sets the function used to determine if the recipe should run, with the Closure taking 3 parameters, `TileEntity resonator`, `int frequency`, `ItemStack input` and returning a `boolean`
 
+
+# Future MC
+groovyscript.wiki.futuremc.blast_furnace.title=Blast Furnace
+groovyscript.wiki.futuremc.blast_furnace.description=Converts an input itemstack into an output itemstack at the cost of burnable fuel.
+
+groovyscript.wiki.futuremc.campfire.title=Campfire
+groovyscript.wiki.futuremc.campfire.description=Converts an input itemstack into an output itemstack when placed on the Campfire.
+groovyscript.wiki.futuremc.campfire.duration.value=Sets the time in ticks the takes to process
+
+groovyscript.wiki.futuremc.smithing.title=Smithing
+groovyscript.wiki.futuremc.smithing.description=Converts two input itemstacks into an output output itemstack in the Smithing Table.
+groovyscript.wiki.futuremc.smithing.note0=Crafting with stackable items may require picking up and placing an input to allow crafting the recipe again.
+
+groovyscript.wiki.futuremc.smoker.title=Smoker
+groovyscript.wiki.futuremc.smoker.description=Converts an input itemstack into an output itemstack at the cost of burnable fuel.
+
+groovyscript.wiki.futuremc.stonecutter.title=Stoenecutter
+groovyscript.wiki.futuremc.stonecutter.description=Converts an input itemstack into an output itemstack via selecting the desired output from the Stonecutter GUI.
+
+
 # Immersive Engineering
 groovyscript.wiki.immersiveengineering.alloy_kiln.title=Alloy Kiln
 groovyscript.wiki.immersiveengineering.alloy_kiln.description=Converts two input itemstacks into an output itemstack, consuming fuel (based on burn time).
