@@ -37,11 +37,11 @@ public class MagicianTable extends StandardListRegistry<MagicianTableRecipe> {
         });
     }
 
-    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 5))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MagicianTableRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(comp = @Comp(gte = 1))
         private int mru;
 
         @RecipeBuilderMethodDescription

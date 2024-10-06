@@ -7,7 +7,6 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.device.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.dynamo.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine.*;
-import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -51,11 +50,11 @@ public class ThermalExpansion extends GroovyPropertyContainer {
     public final XpCollector xpCollector = new XpCollector();
 
     @Override
-    public void initialize(GroovyContainer<?> owner) {
-        ObjectMapper.builder("compactorMode", CompactorManager.Mode.class)
-                .mod("thermalexpansion")
+    public void initialize(GroovyContainer<?> container) {
+        container.objectMapperBuilder("compactorMode", CompactorManager.Mode.class)
                 .parser(IObjectParser.wrapEnum(CompactorManager.Mode.class, false))
                 .completerOfNamed(() -> Arrays.asList(CompactorManager.Mode.values()), v -> v.name().toUpperCase(Locale.ROOT))
+                .defaultValue(() -> CompactorManager.Mode.ALL)
                 .register();
     }
 }

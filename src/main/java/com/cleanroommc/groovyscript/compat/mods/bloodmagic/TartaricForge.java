@@ -99,13 +99,13 @@ public class TartaricForge extends StandardListRegistry<RecipeTartaricForge> {
         return false;
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "4")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 4))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RecipeTartaricForge> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private double minimumSouls;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private double soulDrain;
 
         @RecipeBuilderMethodDescription

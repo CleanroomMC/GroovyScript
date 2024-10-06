@@ -312,13 +312,13 @@ public class Lexicon {
 
         public class EntryBuilder extends AbstractRecipeBuilder<LexiconEntry> {
 
-            @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+            @Property(comp = @Comp(gte = 1))
             protected final List<LexiconPage> pages = new ArrayList<>();
             @Property
             protected final List<ItemStack> extraRecipes = new ArrayList<>();
-            @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
+            @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
             protected String name;
-            @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+            @Property(comp = @Comp(not = "null"))
             protected LexiconCategory category;
             @Property(defaultValue = "BotaniaAPI.basicKnowledge")
             protected KnowledgeType type = BotaniaAPI.basicKnowledge;

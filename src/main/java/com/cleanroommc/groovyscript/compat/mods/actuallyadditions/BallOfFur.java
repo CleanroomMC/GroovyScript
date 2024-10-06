@@ -42,10 +42,10 @@ public class BallOfFur extends StandardListRegistry<BallOfFurReturn> {
         });
     }
 
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BallOfFurReturn> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int weight;
 
         @RecipeBuilderMethodDescription

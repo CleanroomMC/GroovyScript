@@ -81,11 +81,11 @@ public class Drying extends StandardListRegistry<DryingRecipe> {
         return false;
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<DryingRecipe> {
 
-        @Property(defaultValue = "20", valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(defaultValue = "20", comp = @Comp(gte = 1))
         private int time = 20;
 
         @RecipeBuilderMethodDescription

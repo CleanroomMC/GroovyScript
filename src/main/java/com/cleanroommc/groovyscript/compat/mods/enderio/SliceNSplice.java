@@ -82,13 +82,13 @@ public class SliceNSplice extends StandardListRegistry<IManyToOneRecipe> {
         }
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 6))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe> {
 
-        @Property(valid = @Comp(value = "0",type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private float xp;
-        @Property(valid = @Comp(value = "0",type = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int energy;
 
         @RecipeBuilderMethodDescription

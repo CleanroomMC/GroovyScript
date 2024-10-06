@@ -146,11 +146,11 @@ public class Reactant extends VirtualizedRegistry<ReactantManager.Reaction> {
         ReactantManagerAccessor.getReactionMap().clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ReactantManager.Reaction> {
 
-        @Property(defaultValue = "ReactantManager.DEFAULT_ENERGY", valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(defaultValue = "ReactantManager.DEFAULT_ENERGY", comp = @Comp(gt = 0))
         private int energy = ReactantManager.DEFAULT_ENERGY;
 
         @RecipeBuilderMethodDescription

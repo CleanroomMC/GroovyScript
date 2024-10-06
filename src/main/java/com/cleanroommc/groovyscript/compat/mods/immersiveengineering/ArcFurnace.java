@@ -10,9 +10,9 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class ArcFurnace extends StandardListRegistry<ArcFurnaceRecipe> {
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public ArcFurnaceRecipe add(ItemStack output, IIngredient input, List<IIngredient> additives, @Nonnull ItemStack slag, int time, int energyPerTick) {
+    public ArcFurnaceRecipe add(ItemStack output, IIngredient input, List<IIngredient> additives, @NotNull ItemStack slag, int time, int energyPerTick) {
         Object[] inputs = ArrayUtils.mapToArray(additives, ImmersiveEngineering::toIngredientStack);
         ArcFurnaceRecipe recipe = ArcFurnaceRecipe.addRecipe(output, ImmersiveEngineering.toIngredientStack(input), slag, time, energyPerTick, inputs);
         addScripted(recipe);
@@ -103,17 +103,17 @@ public class ArcFurnace extends StandardListRegistry<ArcFurnaceRecipe> {
         removeByInput(new ArrayList<>(Arrays.asList(inputAndAdditives)));
     }
 
-    @Property(property = "input", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 0, lte = 5))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ArcFurnaceRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int time;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private IIngredient mainInput;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int energyPerTick;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private ItemStack slag = ItemStack.EMPTY;
         @Property
         private String specialRecipeType;

@@ -31,7 +31,7 @@ import java.util.Map;
 
 public abstract class AbstractCraftingRecipeBuilder<R> {
 
-    @Property(value = "groovyscript.wiki.craftingrecipe.output.value", valid = @Comp(value = "null", type = Comp.Type.NOT), priority = 700, hierarchy = 20)
+    @Property(value = "groovyscript.wiki.craftingrecipe.output.value", comp = @Comp(not = "null"), priority = 700, hierarchy = 20)
     protected ItemStack output;
     @Property(value = "groovyscript.wiki.name.value", priority = 100, hierarchy = 20)
     protected ResourceLocation name;
@@ -231,10 +231,9 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         protected final List<String> errors = new ArrayList<>();
         @Property(value = "groovyscript.wiki.craftingrecipe.mirrored.value", hierarchy = 20)
         protected boolean mirrored;
-        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", priority = 200, hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.keyBasedMatrix.value", comp = @Comp(unique = "groovyscript.wiki.craftingrecipe.matrix.required"), priority = 200, hierarchy = 20)
         protected String[] keyBasedMatrix;
-        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value", requirement = "groovyscript.wiki.craftingrecipe.matrix.required", valid = {
-                @Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}, priority = 200, hierarchy = 20)
+        @Property(value = "groovyscript.wiki.craftingrecipe.ingredientMatrix.value", comp = @Comp(gte = 1, lte = 9, unique = "groovyscript.wiki.craftingrecipe.matrix.required"), priority = 200, hierarchy = 20)
         protected List<List<IIngredient>> ingredientMatrix;
 
         public AbstractShaped(int width, int height) {
@@ -316,7 +315,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
     public abstract static class AbstractShapeless<T> extends AbstractCraftingRecipeBuilder<T> {
 
         @Property(value = "groovyscript.wiki.craftingrecipe.ingredients.value",
-                  valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)}, priority = 250, hierarchy = 20)
+                  comp = @Comp(gte = 1, lte = 9), priority = 250, hierarchy = 20)
         protected final List<IIngredient> ingredients = new ArrayList<>();
 
         public AbstractShapeless(int width, int height) {

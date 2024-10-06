@@ -99,13 +99,13 @@ public class Spawning extends VirtualizedRegistry<Pair<WootMobName, SpawnRecipe>
                 .setRemover(x -> remove(x.getKey()));
     }
 
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "6")})
-    @Property(property = "fluidInput", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "6")})
+    @Property(property = "input", comp = @Comp(gte = 0, lte = 6))
+    @Property(property = "fluidInput", comp = @Comp(gte = 0, lte = 6))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ISpawnRecipe> {
 
-        @Property(requirement = "groovyscript.wiki.woot.spawning.modifying.required")
+        @Property(comp = @Comp(unique = "groovyscript.wiki.woot.spawning.modifying.required"))
         private boolean defaultSpawnRecipe;
-        @Property(ignoresInheritedMethods = true, requirement = "groovyscript.wiki.woot.spawning.modifying.required")
+        @Property(ignoresInheritedMethods = true, comp = @Comp(unique = "groovyscript.wiki.woot.spawning.modifying.required"))
         private WootMobName name;
         //@Property
         //private boolean efficiency;

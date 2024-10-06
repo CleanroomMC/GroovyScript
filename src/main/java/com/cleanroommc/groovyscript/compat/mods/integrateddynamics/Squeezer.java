@@ -54,12 +54,12 @@ public class Squeezer extends StandardListRegistry<IRecipe<IngredientRecipeCompo
         });
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(gte = 0, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> {
 
-        @Property(value = "groovyscript.wiki.integrateddynamics.squeezer.output.value", ignoresInheritedMethods = true, valid = {
-                @Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "3")})
+        @Property(value = "groovyscript.wiki.integrateddynamics.squeezer.output.value", ignoresInheritedMethods = true,
+                  comp = @Comp(gte = 0, lte = 3))
         private final List<IngredientRecipeComponent> output = new ArrayList<>();
         @Property(value = "groovyscript.wiki.integrateddynamics.squeezer.duration.value", defaultValue = "10")
         private int duration = 10;

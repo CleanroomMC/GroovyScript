@@ -74,9 +74,9 @@ public class WoodenBasin extends StandardListRegistry<WoodenBasinRecipes> {
         });
     }
 
-    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "4", type = Comp.Type.LTE)})
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 4))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<WoodenBasinRecipes> {
 
         @Override

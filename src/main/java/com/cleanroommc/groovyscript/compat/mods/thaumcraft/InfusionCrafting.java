@@ -129,7 +129,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<InfusionRecipe> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private IIngredient mainInput;
         @Property
         private String researchKey;

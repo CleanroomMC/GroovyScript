@@ -98,13 +98,13 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         private final FloatList multipliers2 = new FloatArrayList();
         @Property(value = "groovyscript.wiki.enderio.level.value", defaultValue = "RecipeLevel.IGNORE")
         protected RecipeLevel level = RecipeLevel.IGNORE;
-        @Property(ignoresInheritedMethods = true, valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private FluidStack output;
-        @Property(ignoresInheritedMethods = true, valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private FluidStack input;
-        @Property(defaultValue = "1", valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(defaultValue = "1", comp = @Comp(gt = 0))
         private float baseMultiplier = 1;
-        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(comp = @Comp(gt = 0))
         private int energy;
 
         @RecipeBuilderMethodDescription

@@ -97,10 +97,10 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
         ((HopperFiltersAccessor) BWRegistry.HOPPER_FILTERS).getFILTERS().values().clear();
     }
 
-    @Property(property = "input", value = "groovyscript.wiki.betterwithmods.hopper_filters.filtered.value", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})
+    @Property(property = "input", value = "groovyscript.wiki.betterwithmods.hopper_filters.filtered.value", comp = @Comp(gte = 0))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IHopperFilter> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private IIngredient filter;
 
         @RecipeBuilderMethodDescription

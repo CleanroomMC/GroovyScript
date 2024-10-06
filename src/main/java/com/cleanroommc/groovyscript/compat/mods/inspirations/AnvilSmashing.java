@@ -131,11 +131,11 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<Object> {
 
-        @Property(requirement = "groovyscript.wiki.inspirations.anvil_smashing.input.required")
+        @Property(comp = @Comp(unique = "groovyscript.wiki.inspirations.anvil_smashing.input.required"))
         private IBlockState inputBlockState;
-        @Property(requirement = "groovyscript.wiki.inspirations.anvil_smashing.input.required")
+        @Property(comp = @Comp(unique = "groovyscript.wiki.inspirations.anvil_smashing.input.required"))
         private Block inputBlock;
-        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private IBlockState output;
 
 

@@ -12,6 +12,7 @@ import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnerg
 import com.cleanroommc.groovyscript.compat.mods.arcanearchives.ArcaneArchives;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.atum.Atum;
+import com.cleanroommc.groovyscript.compat.mods.botaniatweaks.BotaniaTweaks;
 import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
 import com.cleanroommc.groovyscript.compat.mods.betterwithmods.BetterWithMods;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
@@ -90,6 +91,7 @@ public class ModSupport {
     public static final GroovyContainer<BetterWithMods> BETTER_WITH_MODS = new InternalModContainer<>("betterwithmods", "Better With Mods", BetterWithMods::new);
     public static final GroovyContainer<BloodMagic> BLOOD_MAGIC = new InternalModContainer<>("bloodmagic", "Blood Magic: Alchemical Wizardry", BloodMagic::new, "bm");
     public static final GroovyContainer<Botania> BOTANIA = new InternalModContainer<>("botania", "Botania", Botania::new);
+    public static final GroovyContainer<BotaniaTweaks> BOTANIA_TWEAKS = new InternalModContainer<>("botania_tweaks", "Botania Tweaks", BotaniaTweaks::new);
     public static final GroovyContainer<BotanicAdditions> BOTANIC_ADDITIONS = new InternalModContainer<>("botanicadds", "Botanic Additions", BotanicAdditions::new);
     public static final GroovyContainer<Calculator> CALCULATOR = new InternalModContainer<>("calculator", "Calculator", Calculator::new);
     public static final GroovyContainer<Chisel> CHISEL = new InternalModContainer<>("chisel", "Chisel", Chisel::new);
@@ -134,9 +136,9 @@ public class ModSupport {
         return Collections.unmodifiableList(containerList);
     }
 
-    private ModSupport() {
-    }
+    private ModSupport() {}
 
+    @GroovyBlacklist
     @ApiStatus.Internal
     public void setup(ASMDataTable dataTable) {
         for (ASMDataTable.ASMData data : dataTable.getAll(GroovyPlugin.class.getName().replace('.', '/'))) {
@@ -153,6 +155,7 @@ public class ModSupport {
         }
     }
 
+    @GroovyBlacklist
     private void registerContainer(GroovyPlugin container) {
         if (container instanceof GroovyContainer) {
             GroovyScript.LOGGER.error("GroovyPlugin must not extend {}", GroovyContainer.class.getSimpleName());
@@ -183,6 +186,7 @@ public class ModSupport {
         externalPluginClasses.add(container.getClass());
     }
 
+    @GroovyBlacklist
     void registerContainer(GroovyContainer<?> container) {
         if (containerList.contains(container) || containers.containsKey(container.getModId())) {
             throw new IllegalStateException("Container already present!");
@@ -194,19 +198,6 @@ public class ModSupport {
                 throw new IllegalArgumentException("Alias already exists for: " + container.getModId() + " mod.");
             }
         }
-    }
-
-    @Deprecated
-    @Nullable
-    public Object getProperty(String name) {
-        GroovyContainer<?> container = containers.get(name);
-        return container != null ? container.get() : null;
-    }
-
-
-    @Deprecated
-    public @UnmodifiableView Map<String, ? extends GroovyContainer<?>> getProperties() {
-        return containersView;
     }
 
     @GroovyBlacklist

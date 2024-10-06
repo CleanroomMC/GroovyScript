@@ -57,8 +57,8 @@ public class Liquifier extends StandardListRegistry<LiquifierRecipe> {
         });
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<LiquifierRecipe> {
 
         @Override

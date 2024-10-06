@@ -55,12 +55,12 @@ public class Hopper extends StandardListRegistry<HopperInteractions.HopperRecipe
         });
     }
 
-    @Property(property = "name", value = "groovyscript.wiki.betterwithmods.hopper.name.value", valid = @Comp(value = "null", type = Comp.Type.NOT))
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+    @Property(property = "name", value = "groovyscript.wiki.betterwithmods.hopper.name.value", comp = @Comp(not = "null"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<HopperInteractions.HopperRecipe> {
 
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(gte = 0, lte = 2))
         protected final ItemStackList inWorldItemOutput = new ItemStackList();
 
         @RecipeBuilderMethodDescription

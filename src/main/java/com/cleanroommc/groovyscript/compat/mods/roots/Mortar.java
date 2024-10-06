@@ -101,21 +101,21 @@ public class Mortar extends VirtualizedRegistry<MortarRecipe> {
     }
 
     @Property(property = "name")
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "5")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 5))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MortarRecipe> {
 
-        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        @Property(defaultValue = "1.0f", comp = @Comp(gte = 0, lte = 1))
         private float red1 = 1.0F;
-        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        @Property(defaultValue = "1.0f", comp = @Comp(gte = 0, lte = 1))
         private float green1 = 1.0F;
-        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        @Property(defaultValue = "1.0f", comp = @Comp(gte = 0, lte = 1))
         private float blue1 = 1.0F;
-        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        @Property(defaultValue = "1.0f", comp = @Comp(gte = 0, lte = 1))
         private float red2 = 1.0F;
-        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        @Property(defaultValue = "1.0f", comp = @Comp(gte = 0, lte = 1))
         private float green2 = 1.0F;
-        @Property(defaultValue = "1.0f", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        @Property(defaultValue = "1.0f", comp = @Comp(gte = 0, lte = 1))
         private float blue2 = 1.0F;
         @Property(defaultValue = "true")
         private boolean generate = true;

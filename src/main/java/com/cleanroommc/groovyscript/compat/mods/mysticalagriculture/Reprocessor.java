@@ -64,11 +64,11 @@ public class Reprocessor extends StandardListRegistry<ReprocessorRecipe> {
         });
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ReprocessorRecipe> {
 
-//        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"), defaultValue = "1")
+//        @Property(comp = @Comp(gt = 0), defaultValue = "1")
 //        private int amount = 1;
 //        @Property
 //        private boolean exact;

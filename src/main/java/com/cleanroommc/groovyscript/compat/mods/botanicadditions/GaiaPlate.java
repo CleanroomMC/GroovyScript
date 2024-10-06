@@ -55,11 +55,11 @@ public class GaiaPlate extends StandardListRegistry<GaiaPlateRecipes.RecipeGaiaP
         });
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<GaiaPlateRecipes.RecipeGaiaPlate> {
 
-        @Property(defaultValue = "1", valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(defaultValue = "1", comp = @Comp(gte = 1))
         private int mana = 1;
 
         @RecipeBuilderMethodDescription

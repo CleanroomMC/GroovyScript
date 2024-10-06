@@ -77,15 +77,15 @@ public class Crusher extends StandardListRegistry<CrusherRecipe> {
         list.forEach(this::addBackup);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrusherRecipe> {
 
-        @Property(valid = @Comp("secondaryOutputChances"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.immersiveengineering.crusher.secondaryOutputItems.required"))
         private final List<ItemStack> secondaryOutputItems = new ArrayList<>();
-        @Property(valid = @Comp("secondaryOutputItems"))
+        @Property(comp = @Comp(unique = "groovyscript.wiki.immersiveengineering.crusher.secondaryOutputChances.required"))
         private final FloatArrayList secondaryOutputChances = new FloatArrayList();
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int energy;
 
         @RecipeBuilderMethodDescription(field = {"secondaryOutputItems", "secondaryOutputChances"})

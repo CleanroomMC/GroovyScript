@@ -49,10 +49,10 @@ mods.prodigytech.explosion_furnace.recipeBuilder()
 // Explosion Furnace Additives:
 // Turn an item into an explosive or into a dampener when inserted into the Explosion Furnace.
 
-// mods.prodigytech.explosion_furnace_additives.removeAllDampeners()
-// mods.prodigytech.explosion_furnace_additives.removeAllExplosives()
 mods.prodigytech.explosion_furnace_additives.removeDampener(ore('dustAsh'))
 mods.prodigytech.explosion_furnace_additives.removeExplosive(ore('gunpowder'))
+// mods.prodigytech.explosion_furnace_additives.removeAllDampeners()
+// mods.prodigytech.explosion_furnace_additives.removeAllExplosives()
 
 mods.prodigytech.explosion_furnace_additives.addDampener(item('minecraft:stone'), 50)
 mods.prodigytech.explosion_furnace_additives.addExplosive(item('minecraft:cobblestone'), 50)

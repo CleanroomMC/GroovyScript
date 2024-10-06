@@ -95,9 +95,9 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
 
     public static class SmeltingBonusBuilder {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private IIngredient in;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private ItemStack out;
         @Property(defaultValue = "0.33F")
         private float chance = 0.33F;

@@ -63,8 +63,8 @@ public class BasicCalculator extends StandardListRegistry<CalculatorRecipe> {
         });
     }
 
-    @Property(property = "input", valid = @Comp("2"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 2))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
         @Override

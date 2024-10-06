@@ -21,7 +21,6 @@ import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.server.command.CommandTreeBase;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -120,19 +119,19 @@ public class GSCommand extends CommandTreeBase {
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public String getName() {
         return "groovyscript";
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public List<String> getAliases() {
         return Arrays.asList("grs", "GroovyScript", "gs");
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public String getUsage(@NotNull ICommandSender sender) {
         return "/grs []";
     }

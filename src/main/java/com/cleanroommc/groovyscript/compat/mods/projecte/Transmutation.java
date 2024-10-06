@@ -54,9 +54,9 @@ public class Transmutation extends StandardListRegistry<WorldTransmutations.Entr
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<WorldTransmutations.Entry> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), ignoresInheritedMethods = true)
+        @Property(comp = @Comp(not = "null"), ignoresInheritedMethods = true)
         IBlockState input;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), ignoresInheritedMethods = true)
+        @Property(comp = @Comp(not = "null"), ignoresInheritedMethods = true)
         IBlockState output;
         @Property
         IBlockState altOutput;

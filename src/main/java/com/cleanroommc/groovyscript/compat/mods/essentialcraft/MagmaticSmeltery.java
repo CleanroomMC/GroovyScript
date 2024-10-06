@@ -56,16 +56,16 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
 
     public static class RecipeBuilder implements IRecipeBuilder<OreSmeltingRecipe> {
 
-        @Property(valid = @Comp("1"))
+        @Property(comp = @Comp(eq = 1))
         private String input;
 
-        @Property(valid = @Comp("1"))
+        @Property(comp = @Comp(eq = 1))
         private String output;
 
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "0xffffff")})
+        @Property(comp = @Comp(gte = 0, unique = "groovyscript.wiki.essentialcraft.magmatic_smeltery.color.required"))
         private int color;
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"), defaultValue = "1")
+        @Property(comp = @Comp(gte = 1), defaultValue = "1")
         private int factor = 1;
 
         @RecipeBuilderMethodDescription

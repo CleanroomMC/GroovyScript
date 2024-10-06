@@ -88,11 +88,11 @@ public class Pyre extends VirtualizedRegistry<PyreCraftingRecipe> {
     }
 
     @Property(property = "name")
-    @Property(property = "input", valid = @Comp("5"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 5))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<PyreCraftingRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int xp;
         @Property(defaultValue = "200")
         private int burnTime = 200;

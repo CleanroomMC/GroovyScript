@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.api.IDynamicGroovyProperty;
 import com.cleanroommc.groovyscript.sandbox.meta.ClassMetaClass;
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import groovy.lang.*;
@@ -40,7 +39,8 @@ public abstract class MetaClassImplMixin {
     @Final
     private MetaMethod[] additionalMetaMethods;
 
-    @Shadow protected MetaClassRegistry registry;
+    @Shadow
+    protected MetaClassRegistry registry;
 
     @Inject(method = "<init>(Ljava/lang/Class;[Lgroovy/lang/MetaMethod;)V", at = @At("TAIL"))
     public void removeBlacklistedAdditional(Class<?> theClass, MetaMethod[] add, CallbackInfo ci) {
@@ -82,21 +82,6 @@ public abstract class MetaClassImplMixin {
         }
     }
 
-    @Inject(method = "invokeMissingProperty", at = @At("HEAD"), cancellable = true)
-    public void invokeMissingProperty(Object instance, String propertyName, Object optionalValue, boolean isGetter,
-                                      CallbackInfoReturnable<Object> cir) {
-        if (instance instanceof IDynamicGroovyProperty) {
-            if (isGetter) {
-                Object prop = ((IDynamicGroovyProperty) instance).getProperty(propertyName);
-                if (prop != null) {
-                    cir.setReturnValue(prop);
-                }
-            } else if (((IDynamicGroovyProperty) instance).setProperty(propertyName, optionalValue)) {
-                cir.setReturnValue(null);
-            }
-        }
-    }
-
     @Inject(method = "invokeStaticMissingMethod", at = @At("HEAD"), cancellable = true)
     public void invokeStaticMissingMethod(Class<?> sender, String methodName, Object[] arguments, CallbackInfoReturnable<Object> cir) {
         if ((Object) this instanceof ClassMetaClass cmc) {
@@ -120,9 +105,6 @@ public abstract class MetaClassImplMixin {
             value = ((Map<?, ?>) object).get(methodName);
         } else if (object instanceof Script) {
             value = ((Script) object).getBinding().getVariables().get(methodName);
-        } else if (!isCallToSuper && object instanceof IDynamicGroovyProperty dynamicGroovyProperty) {
-            // TODO remove in 1.2.0
-            value = dynamicGroovyProperty.getProperty(methodName);
         } else if (object instanceof GroovyObject) {
             value = GroovyScript.getSandbox().getBindings().get(methodName);
         }

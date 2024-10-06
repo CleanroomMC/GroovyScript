@@ -75,12 +75,12 @@ public class AnalysingChamber extends StandardListRegistry<CalculatorRecipe> {
         });
     }
 
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
 
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "6")})
+        @Property(comp = @Comp(gte = 1, lte = 6))
         private int slot;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "20000")})
+        @Property(comp = @Comp(gte = 1, lte = 20000))
         private int location;
 
         @RecipeBuilderMethodDescription

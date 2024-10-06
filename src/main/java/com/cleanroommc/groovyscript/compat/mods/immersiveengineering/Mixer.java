@@ -106,10 +106,10 @@ public class Mixer extends StandardListRegistry<MixerRecipe> {
         }
     }
 
-    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "Integer.MAX_VALUE", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MixerRecipe> {
 
         @Property

@@ -180,13 +180,13 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         return new SimpleObjectStream<>(recipes).setRemover(this::remove);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<MetalPressRecipe> {
 
         @Property
         private int energy;
-        @Property(valid = @Comp(value = "empty", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "empty"))
         private ItemStack mold = ItemStack.EMPTY;
 
         @RecipeBuilderMethodDescription

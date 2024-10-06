@@ -121,10 +121,10 @@ public class Transmutation extends VirtualizedRegistry<TransmutationRecipe> {
     }
 
     @Property(property = "name")
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TransmutationRecipe> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private BlockStatePredicate start;
         @Property
         private IBlockState state;

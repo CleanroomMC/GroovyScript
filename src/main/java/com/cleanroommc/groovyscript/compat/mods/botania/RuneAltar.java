@@ -75,11 +75,11 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
         return removeByInput(inputs);
     }
 
-    @Property(property = "input", requirement = "groovyscript.wiki.botania.rune_altar.input.required", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "2")})
+    @Property(property = "input", comp = @Comp(eq = 1, unique = "groovyscript.wiki.botania.rune_altar.input.required"))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 2))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeRuneAltar> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         protected int mana;
 
         @RecipeBuilderMethodDescription

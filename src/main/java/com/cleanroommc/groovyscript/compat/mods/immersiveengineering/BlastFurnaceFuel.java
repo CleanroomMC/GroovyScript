@@ -56,10 +56,10 @@ public class BlastFurnaceFuel extends StandardListRegistry<BlastFurnaceRecipe.Bl
         }
     }
 
-    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BlastFurnaceRecipe.BlastFurnaceFuel> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
 
         @RecipeBuilderMethodDescription

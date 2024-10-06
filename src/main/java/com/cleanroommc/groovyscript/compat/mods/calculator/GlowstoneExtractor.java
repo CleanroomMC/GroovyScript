@@ -43,10 +43,10 @@ public class GlowstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.
         });
     }
 
-    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<DefaultSonarRecipe.Value> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         private int value;
 
         @RecipeBuilderMethodDescription

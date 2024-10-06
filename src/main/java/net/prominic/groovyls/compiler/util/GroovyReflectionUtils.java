@@ -5,31 +5,51 @@ import com.google.common.collect.Iterators;
 import io.github.classgraph.MethodInfo;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import org.codehaus.groovy.ast.MethodNode;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class GroovyReflectionUtils {
 
-    public static Optional<Method> resolveMethodFromMethodNode(MethodNode methodNode, ASTContext context) {
-        return Arrays.stream(methodNode.getDeclaringClass().getTypeClass().getMethods())
-                .filter(GroovySecurityManager.INSTANCE::isValid)
-                .filter(method -> method.getName().equals(methodNode.getName()) &&
-                                  method.getParameterTypes().length == methodNode.getParameters().length &&
-                                  Iterators.elementsEqual(Arrays.stream(method.getParameterTypes()).iterator(),
-                                                          Arrays.stream(methodNode.getParameters()).map(parameter -> parameter.getType().getTypeClass()).iterator()))
-                .findFirst();
+    @Nullable
+    public static Method resolveMethodFromMethodNode(MethodNode methodNode, ASTContext context) {
+        for (Method m : methodNode.getDeclaringClass().getTypeClass().getMethods()) {
+            if (!GroovySecurityManager.INSTANCE.isValid(m) ||
+                    !methodNode.getName().equals(m.getName()) ||
+                    methodNode.getParameters().length != m.getParameterCount()) {
+                continue;
+            }
+            if (matchesParams(m.getParameterTypes(), methodNode.getParameters(), p -> p.getType().getTypeClass())) {
+                return m;
+            }
+        }
+        return null;
     }
 
-    public static Optional<Method> resolveMethodFromMethodInfo(MethodInfo methodInfo, ASTContext context) {
-        return Arrays.stream(methodInfo.getClassInfo().loadClass().getMethods())
-                .filter(GroovySecurityManager.INSTANCE::isValid)
-                .filter(method -> method.getName().equals(methodInfo.getName()) &&
-                                  method.getParameterTypes().length == methodInfo.getParameterInfo().length &&
-                                  Iterators.elementsEqual(Arrays.stream(method.getParameterTypes()).iterator(),
-                                                          Arrays.stream(methodInfo.getParameterInfo()).map(parameter -> context.getLanguageServerContext().getScanResult()
-                                                                  .loadClass(parameter.getTypeSignatureOrTypeDescriptor().toString(), true)).iterator()))
-                .findFirst();
+    @Nullable
+    public static Method resolveMethodFromMethodInfo(MethodInfo methodInfo, ASTContext context) {
+        for (Method m : methodInfo.getClassInfo().loadClass().getMethods()) {
+            if (!GroovySecurityManager.INSTANCE.isValid(m) ||
+                    !methodInfo.getName().equals(m.getName()) ||
+                    methodInfo.getParameterInfo().length != m.getParameterCount()) {
+                continue;
+            }
+            if (matchesParams(m.getParameterTypes(), methodInfo.getParameterInfo(),
+                              p -> context.getLanguageServerContext().getScanResult().loadClass(
+                                      p.getTypeSignatureOrTypeDescriptor().toString(), true))) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    private static <T> boolean matchesParams(Class<?>[] params, T[] otherParams, Function<T, Class<?>> toClass) {
+        for (int i = 0, n = params.length; i < n; i++) {
+            if (!params[i].equals(toClass.apply(otherParams[i]))) return false;
+        }
+        return true;
     }
 }

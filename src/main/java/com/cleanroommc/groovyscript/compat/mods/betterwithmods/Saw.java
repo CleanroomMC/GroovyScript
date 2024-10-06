@@ -55,7 +55,7 @@ public class Saw extends StandardListRegistry<SawRecipe> {
         });
     }
 
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "9", type = Comp.Type.LTE)})
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 9))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SawRecipe> {
 
         @Property

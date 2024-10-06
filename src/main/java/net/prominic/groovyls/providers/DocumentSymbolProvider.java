@@ -21,8 +21,7 @@ package net.prominic.groovyls.providers;
 
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.util.GroovyASTUtils;
-import net.prominic.groovyls.util.GroovyLanguageServerUtils;
-import net.prominic.groovyls.util.URIUtils;
+import net.prominic.groovyls.util.GroovyLSUtils;
 import org.codehaus.groovy.ast.*;
 import org.eclipse.lsp4j.DocumentSymbol;
 import org.eclipse.lsp4j.SymbolInformation;
@@ -30,48 +29,40 @@ import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
-public class DocumentSymbolProvider {
+public class DocumentSymbolProvider extends DocProvider {
 
-    private final ASTContext astContext;
-
-    public DocumentSymbolProvider(ASTContext astContext) {
-        this.astContext = astContext;
+    public DocumentSymbolProvider(URI doc, ASTContext astContext) {
+        super(doc, astContext);
     }
 
-    public CompletableFuture<List<Either<SymbolInformation, DocumentSymbol>>> provideDocumentSymbols(
+    public CompletableFuture<List<Either<SymbolInformation, DocumentSymbol>>> provideDocumentSymbolsFuture(
             TextDocumentIdentifier textDocument) {
-        URI uri = URIUtils.toUri(textDocument.getUri());
-        List<ASTNode> nodes = astContext.getVisitor().getNodes(uri);
-        List<Either<SymbolInformation, DocumentSymbol>> symbols = nodes.stream().filter(node -> {
-            return node instanceof ClassNode || node instanceof MethodNode || node instanceof FieldNode
-                   || node instanceof PropertyNode;
-        }).map(node -> {
-            if (node instanceof ClassNode) {
-                ClassNode classNode = (ClassNode) node;
-                return GroovyLanguageServerUtils.astNodeToSymbolInformation(classNode, uri, null);
+        return future(provideDocumentSymbols(textDocument));
+    }
+
+    public List<Either<SymbolInformation, DocumentSymbol>> provideDocumentSymbols(TextDocumentIdentifier textDocument) {
+        List<Either<SymbolInformation, DocumentSymbol>> symbols = new ArrayList<>();
+        for (ASTNode node : astContext.getVisitor().getNodes(doc)) {
+            DocumentSymbol symbol = null;
+            if (node instanceof ClassNode classNode) {
+                symbol = GroovyLSUtils.astNodeToSymbolInformation(classNode, doc, null);
+            } else {
+                ClassNode classNode = GroovyASTUtils.getEnclosingNodeOfType(node, ClassNode.class, astContext);
+                if (classNode == null) continue;
+                if (node instanceof MethodNode methodNode) {
+                    symbol = GroovyLSUtils.astNodeToSymbolInformation(methodNode, doc, classNode.getName());
+                } else if (node instanceof PropertyNode propNode) {
+                    symbol = GroovyLSUtils.astNodeToSymbolInformation(propNode, doc, classNode.getName());
+                } else if (node instanceof FieldNode fieldNode) {
+                    symbol = GroovyLSUtils.astNodeToSymbolInformation(fieldNode, doc, classNode.getName());
+                }
             }
-            ClassNode classNode = (ClassNode) GroovyASTUtils.getEnclosingNodeOfType(node, ClassNode.class, astContext);
-            if (node instanceof MethodNode) {
-                MethodNode methodNode = (MethodNode) node;
-                return GroovyLanguageServerUtils.astNodeToSymbolInformation(methodNode, uri, classNode.getName());
-            }
-            if (node instanceof PropertyNode) {
-                PropertyNode propNode = (PropertyNode) node;
-                return GroovyLanguageServerUtils.astNodeToSymbolInformation(propNode, uri, classNode.getName());
-            }
-            if (node instanceof FieldNode) {
-                FieldNode fieldNode = (FieldNode) node;
-                return GroovyLanguageServerUtils.astNodeToSymbolInformation(fieldNode, uri, classNode.getName());
-            }
-            // this should never happen
-            return null;
-        }).filter(symbolInformation -> symbolInformation != null).map(node -> {
-            return Either.<SymbolInformation, DocumentSymbol>forLeft(node);
-        }).collect(Collectors.toList());
-        return CompletableFuture.completedFuture(symbols);
+            if (symbol != null) symbols.add(Either.forRight(symbol));
+        }
+        return symbols;
     }
 }

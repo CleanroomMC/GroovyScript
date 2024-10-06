@@ -52,8 +52,8 @@ public class DissolutionChamber extends VirtualizedMekanismRegistry<DissolutionR
         return found;
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "gasOutput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "gasOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends GasRecipeBuilder<DissolutionRecipe> {
 
         @Override

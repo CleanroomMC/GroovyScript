@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -11,12 +12,20 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 
 @RegistryDescription
 public class LightTransmutation extends StandardListRegistry<LightOreTransmutations.Transmutation> {
+
+    private IBlockState replacementState;
+
+    @GroovyBlacklist
+    public IBlockState getReplacementState() {
+        return replacementState;
+    }
 
     @Override
     public Collection<LightOreTransmutations.Transmutation> getRecipes() {
@@ -24,6 +33,14 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
             throw new IllegalStateException("Astral Sorcery Light Transmutation getRegisteredTransmutations() is not yet initialized!");
         }
         return LightOreTransmutationsAccessor.getRegisteredTransmutations();
+    }
+
+    @Override
+    @GroovyBlacklist
+    @ApiStatus.Internal
+    public void onReload() {
+        super.onReload();
+        replacementState = null;
     }
 
     @RecipeBuilderDescription(example = {
@@ -34,7 +51,7 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
     }
 
     public LightOreTransmutations.Transmutation add(Block input, IBlockState output,
-                                                    @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
+                                                    @NotNull ItemStack inputDisplay, @NotNull ItemStack outputDisplay, double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
         getRecipes().add(recipe);
@@ -42,7 +59,7 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
     }
 
     public LightOreTransmutations.Transmutation add(IBlockState input, IBlockState output,
-                                                    @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
+                                                    @NotNull ItemStack inputDisplay, @NotNull ItemStack outputDisplay, double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
         getRecipes().add(recipe);
@@ -81,15 +98,20 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
         removeByOutput(block.getDefaultState());
     }
 
+    @MethodDescription(type = MethodDescription.Type.VALUE, example = @Example("blockstate('minecraft:clay')"))
+    public void setStarmetalReplacementState(IBlockState state) {
+        replacementState = state;
+    }
+
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightOreTransmutations.Transmutation> {
 
-        @Property(valid = {@Comp(value = "null", type = Comp.Type.NOT), @Comp(value = "input", type = Comp.Type.NOT)})
+        @Property(comp = @Comp(not = "null or input"))
         private Block inBlock;
-        @Property(ignoresInheritedMethods = true, valid = {@Comp(value = "null", type = Comp.Type.NOT), @Comp(value = "inBlock", type = Comp.Type.NOT)})
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null or inBlock"))
         private IBlockState input;
-        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private IBlockState output;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private double cost;
         @Property
         private ItemStack outStack;
