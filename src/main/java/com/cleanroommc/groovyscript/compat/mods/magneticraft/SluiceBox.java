@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cout970.magneticraft.api.MagneticraftApi;
@@ -48,8 +49,6 @@ public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
 
         @Property(comp = @Comp(gt = 0, lte = 100, unique = "groovyscript.wiki.magneticraft.sluice_box.chances.required"))
         private final FloatArrayList chances = new FloatArrayList();
-        @Property("groovyscript.wiki.magneticraft.oreDict.value")
-        private boolean oreDict;
 
         @RecipeBuilderMethodDescription(field = {"output", "chances"})
         public RecipeBuilder output(ItemStack item, float chance) {
@@ -62,18 +61,6 @@ public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
         @RecipeBuilderMethodDescription(field = {"output", "chances"})
         public RecipeBuilder output(ItemStack item) {
             return output(item, 1.0f);
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict(boolean oreDict) {
-            this.oreDict = oreDict;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict() {
-            this.oreDict = !oreDict;
-            return this;
         }
 
         @Override
@@ -97,9 +84,14 @@ public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
         public @Nullable ISluiceBoxRecipe register() {
             if (!validate()) return null;
             ISluiceBoxRecipe recipe = null;
-            for (var stack : input.get(0).getMatchingStacks()) {
-                recipe = MagneticraftApi.getSluiceBoxRecipeManager().createRecipe(stack, output, chances, oreDict);
+            if (input.get(0) instanceof OreDictIngredient ore) {
+                recipe = MagneticraftApi.getSluiceBoxRecipeManager().createRecipe(ore.getMatchingStacks()[0], output, chances, true);
                 ModSupport.MAGNETICRAFT.get().sluiceBox.add(recipe);
+            } else {
+                for (var stack : input.get(0).getMatchingStacks()) {
+                    recipe = MagneticraftApi.getSluiceBoxRecipeManager().createRecipe(stack, output, chances, false);
+                    ModSupport.MAGNETICRAFT.get().sluiceBox.add(recipe);
+                }
             }
             return recipe;
         }

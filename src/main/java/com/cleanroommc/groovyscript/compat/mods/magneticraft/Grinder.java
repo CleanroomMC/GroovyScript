@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cout970.magneticraft.api.MagneticraftApi;
@@ -46,8 +47,6 @@ public class Grinder extends StandardListRegistry<IGrinderRecipe> {
         private float chance;
         @Property(comp = @Comp(gt = 0))
         private float ticks;
-        @Property("groovyscript.wiki.magneticraft.oreDict.value")
-        private boolean oreDict;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder chance(float chance) {
@@ -58,18 +57,6 @@ public class Grinder extends StandardListRegistry<IGrinderRecipe> {
         @RecipeBuilderMethodDescription
         public RecipeBuilder ticks(float ticks) {
             this.ticks = ticks;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict(boolean oreDict) {
-            this.oreDict = oreDict;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict() {
-            this.oreDict = !oreDict;
             return this;
         }
 
@@ -91,9 +78,14 @@ public class Grinder extends StandardListRegistry<IGrinderRecipe> {
         public @Nullable IGrinderRecipe register() {
             if (!validate()) return null;
             IGrinderRecipe recipe = null;
-            for (var stack : input.get(0).getMatchingStacks()) {
-                recipe = MagneticraftApi.getGrinderRecipeManager().createRecipe(stack, output.get(0), output.getOrEmpty(1), chance, ticks, oreDict);
+            if (input.get(0) instanceof OreDictIngredient ore) {
+                recipe = MagneticraftApi.getGrinderRecipeManager().createRecipe(ore.getMatchingStacks()[0], output.get(0), output.getOrEmpty(1), chance, ticks, true);
                 ModSupport.MAGNETICRAFT.get().grinder.add(recipe);
+            } else {
+                for (var stack : input.get(0).getMatchingStacks()) {
+                    recipe = MagneticraftApi.getGrinderRecipeManager().createRecipe(stack, output.get(0), output.getOrEmpty(1), chance, ticks, false);
+                    ModSupport.MAGNETICRAFT.get().grinder.add(recipe);
+                }
             }
             return recipe;
         }

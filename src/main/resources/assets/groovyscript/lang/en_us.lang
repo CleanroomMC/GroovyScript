@@ -1413,8 +1413,6 @@ groovyscript.wiki.threng.etcher.bottom.value=Sets the bottom slot of the recipe
 
 
 # Magneticraft
-groovyscript.wiki.magneticraft.oreDict.value=Sets if the input considers all matching oredicts instead of just the given itemstack
-
 groovyscript.wiki.magneticraft.crushing_table.title=Crushing Table
 groovyscript.wiki.magneticraft.crushing_table.description=Converts an input itemstack into an output itemstack when placed on top of the Crushing Table and interacted with by a Hammer which has
 

@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.magneticraft.GasificationUnitRecipeManagerAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cout970.magneticraft.api.MagneticraftApi;
@@ -54,8 +55,6 @@ public class GasificationUnit extends StandardListRegistry<IGasificationUnitReci
         private float duration;
         @Property
         private float minTemperature;
-        @Property("groovyscript.wiki.magneticraft.oreDict.value")
-        private boolean oreDict;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder duration(float duration) {
@@ -66,18 +65,6 @@ public class GasificationUnit extends StandardListRegistry<IGasificationUnitReci
         @RecipeBuilderMethodDescription
         public RecipeBuilder minTemperature(float minTemperature) {
             this.minTemperature = minTemperature;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict(boolean oreDict) {
-            this.oreDict = oreDict;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict() {
-            this.oreDict = !oreDict;
             return this;
         }
 
@@ -99,9 +86,14 @@ public class GasificationUnit extends StandardListRegistry<IGasificationUnitReci
         public @Nullable IGasificationUnitRecipe register() {
             if (!validate()) return null;
             IGasificationUnitRecipe recipe = null;
-            for (var stack : input.get(0).getMatchingStacks()) {
-                recipe = MagneticraftApi.getGasificationUnitRecipeManager().createRecipe(stack, output.getOrEmpty(0), fluidOutput.getOrEmpty(0), duration, minTemperature, oreDict);
+            if (input.get(0) instanceof OreDictIngredient ore) {
+                recipe = MagneticraftApi.getGasificationUnitRecipeManager().createRecipe(ore.getMatchingStacks()[0], output.getOrEmpty(0), fluidOutput.getOrEmpty(0), duration, minTemperature, true);
                 ModSupport.MAGNETICRAFT.get().gasificationUnit.add(recipe);
+            } else {
+                for (var stack : input.get(0).getMatchingStacks()) {
+                    recipe = MagneticraftApi.getGasificationUnitRecipeManager().createRecipe(stack, output.getOrEmpty(0), fluidOutput.getOrEmpty(0), duration, minTemperature, false);
+                    ModSupport.MAGNETICRAFT.get().gasificationUnit.add(recipe);
+                }
             }
             return recipe;
         }

@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.magneticraft.CrushingTableRecipeManagerAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cout970.magneticraft.api.MagneticraftApi;
@@ -49,21 +50,6 @@ public class CrushingTable extends StandardListRegistry<ICrushingTableRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICrushingTableRecipe> {
 
-        @Property("groovyscript.wiki.magneticraft.oreDict.value")
-        private boolean oreDict;
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict(boolean oreDict) {
-            this.oreDict = oreDict;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict() {
-            this.oreDict = !oreDict;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Magneticraft Crushing Table recipe";
@@ -80,9 +66,14 @@ public class CrushingTable extends StandardListRegistry<ICrushingTableRecipe> {
         public @Nullable ICrushingTableRecipe register() {
             if (!validate()) return null;
             ICrushingTableRecipe recipe = null;
-            for (var stack : input.get(0).getMatchingStacks()) {
-                recipe = MagneticraftApi.getCrushingTableRecipeManager().createRecipe(stack, output.get(0), oreDict);
+            if (input.get(0) instanceof OreDictIngredient ore) {
+                recipe = MagneticraftApi.getCrushingTableRecipeManager().createRecipe(ore.getMatchingStacks()[0], output.get(0), true);
                 ModSupport.MAGNETICRAFT.get().crushingTable.add(recipe);
+            } else {
+                for (var stack : input.get(0).getMatchingStacks()) {
+                    recipe = MagneticraftApi.getCrushingTableRecipeManager().createRecipe(stack, output.get(0), false);
+                    ModSupport.MAGNETICRAFT.get().crushingTable.add(recipe);
+                }
             }
             return recipe;
         }

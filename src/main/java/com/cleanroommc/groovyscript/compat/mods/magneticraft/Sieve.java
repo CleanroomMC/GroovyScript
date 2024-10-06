@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cout970.magneticraft.api.MagneticraftApi;
@@ -51,8 +52,6 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
         private float secondaryChance;
         @Property(comp = @Comp(gt = 0, lte = 1))
         private float tertiaryChance;
-        @Property("groovyscript.wiki.magneticraft.oreDict.value")
-        private boolean oreDict;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder duration(float duration) {
@@ -86,18 +85,6 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict(boolean oreDict) {
-            this.oreDict = oreDict;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict() {
-            this.oreDict = !oreDict;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Magneticraft Sieve recipe";
@@ -118,9 +105,14 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
         public @Nullable ISieveRecipe register() {
             if (!validate()) return null;
             ISieveRecipe recipe = null;
-            for (var stack : input.get(0).getMatchingStacks()) {
-                recipe = MagneticraftApi.getSieveRecipeManager().createRecipe(stack, output.get(0), primaryChance, output.getOrEmpty(1), secondaryChance, output.getOrEmpty(2), tertiaryChance, duration, oreDict);
+            if (input.get(0) instanceof OreDictIngredient ore) {
+                recipe = MagneticraftApi.getSieveRecipeManager().createRecipe(ore.getMatchingStacks()[0], output.get(0), primaryChance, output.getOrEmpty(1), secondaryChance, output.getOrEmpty(2), tertiaryChance, duration, true);
                 ModSupport.MAGNETICRAFT.get().sieve.add(recipe);
+            } else {
+                for (var stack : input.get(0).getMatchingStacks()) {
+                    recipe = MagneticraftApi.getSieveRecipeManager().createRecipe(stack, output.get(0), primaryChance, output.getOrEmpty(1), secondaryChance, output.getOrEmpty(2), tertiaryChance, duration, false);
+                    ModSupport.MAGNETICRAFT.get().sieve.add(recipe);
+                }
             }
             return recipe;
         }

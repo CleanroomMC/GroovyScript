@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.magneticraft.HydraulicPressRecipeManagerAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.cout970.magneticraft.api.MagneticraftApi;
@@ -62,8 +63,6 @@ public class HydraulicPress extends StandardListRegistry<IHydraulicPressRecipe> 
         private float ticks;
         @Property(comp = @Comp(not = "null"))
         private HydraulicPressMode mode = HydraulicPressMode.LIGHT;
-        @Property("groovyscript.wiki.magneticraft.oreDict.value")
-        private boolean oreDict;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder ticks(float ticks) {
@@ -95,18 +94,6 @@ public class HydraulicPress extends StandardListRegistry<IHydraulicPressRecipe> 
             return this;
         }
 
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict(boolean oreDict) {
-            this.oreDict = oreDict;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder oreDict() {
-            this.oreDict = !oreDict;
-            return this;
-        }
-
         @Override
         public String getErrorMsg() {
             return "Error adding Magneticraft Hydraulic Press recipe";
@@ -125,9 +112,14 @@ public class HydraulicPress extends StandardListRegistry<IHydraulicPressRecipe> 
         public @Nullable IHydraulicPressRecipe register() {
             if (!validate()) return null;
             IHydraulicPressRecipe recipe = null;
-            for (var stack : input.get(0).getMatchingStacks()) {
-                recipe = MagneticraftApi.getHydraulicPressRecipeManager().createRecipe(stack, output.get(0), ticks, mode, oreDict);
+            if (input.get(0) instanceof OreDictIngredient ore) {
+                recipe = MagneticraftApi.getHydraulicPressRecipeManager().createRecipe(ore.getMatchingStacks()[0], output.get(0), ticks, mode, true);
                 ModSupport.MAGNETICRAFT.get().hydraulicPress.add(recipe);
+            } else {
+                for (var stack : input.get(0).getMatchingStacks()) {
+                    recipe = MagneticraftApi.getHydraulicPressRecipeManager().createRecipe(stack, output.get(0), ticks, mode, false);
+                    ModSupport.MAGNETICRAFT.get().hydraulicPress.add(recipe);
+                }
             }
             return recipe;
         }
