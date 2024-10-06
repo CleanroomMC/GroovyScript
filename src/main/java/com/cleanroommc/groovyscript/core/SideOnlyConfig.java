@@ -16,19 +16,22 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.function.Function;
 
 public class SideOnlyConfig {
 
     private static final MethodSet CLASS_MARKER = new MethodSet(true);
+    private static final Function<String, MethodSet> DEFAULT_METHOD_SET = s -> new MethodSet(false);
+    private static final String[] commonKeys = {"common", "both", "all"};
     private static final Map<String, MethodSet> clientRemovals = new Object2ObjectOpenHashMap<>();
     private static final Map<String, MethodSet> serverRemovals = new Object2ObjectOpenHashMap<>();
 
     public static void clientOnly(String className, String member) {
-        serverRemovals.computeIfAbsent(className, k -> new MethodSet(false)).add(member);
+        serverRemovals.computeIfAbsent(className, DEFAULT_METHOD_SET).add(member);
     }
 
     public static void serverOnly(String className, String member) {
-        clientRemovals.computeIfAbsent(className, k -> new MethodSet(false)).add(member);
+        clientRemovals.computeIfAbsent(className, DEFAULT_METHOD_SET).add(member);
     }
 
     static void init() {
@@ -66,7 +69,7 @@ public class SideOnlyConfig {
         if (json.has("server")) {
             readConfig(clientRemovals, json.getAsJsonObject("server"));
         }
-        for (String key : new String[]{"common", "both", "all"}) {
+        for (String key : commonKeys) {
             if (json.has(key)) {
                 Map<String, MethodSet> commonRemovals = new Object2ObjectOpenHashMap<>();
                 readConfig(commonRemovals, json.getAsJsonObject(key));
@@ -75,8 +78,8 @@ public class SideOnlyConfig {
                         clientRemovals.put(entry.getKey(), CLASS_MARKER);
                         serverRemovals.put(entry.getKey(), CLASS_MARKER);
                     } else {
-                        clientRemovals.computeIfAbsent(entry.getKey(), k -> new MethodSet(false)).addAll(entry.getValue());
-                        serverRemovals.computeIfAbsent(entry.getKey(), k -> new MethodSet(false)).addAll(entry.getValue());
+                        clientRemovals.computeIfAbsent(entry.getKey(), DEFAULT_METHOD_SET).addAll(entry.getValue());
+                        serverRemovals.computeIfAbsent(entry.getKey(), DEFAULT_METHOD_SET).addAll(entry.getValue());
                     }
                 }
                 break;
@@ -93,7 +96,7 @@ public class SideOnlyConfig {
                 }
                 continue;
             }
-            MethodSet properties = removals.computeIfAbsent(entry.getKey(), k -> new MethodSet(false));
+            MethodSet properties = removals.computeIfAbsent(entry.getKey(), DEFAULT_METHOD_SET);
             if (properties.bannsClass) continue;
             if (entry.getValue().isJsonArray()) {
                 for (JsonElement je : entry.getValue().getAsJsonArray()) {
