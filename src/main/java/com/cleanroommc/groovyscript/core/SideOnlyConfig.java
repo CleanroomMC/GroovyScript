@@ -74,7 +74,7 @@ public class SideOnlyConfig {
                 Map<String, MethodSet> commonRemovals = new Object2ObjectOpenHashMap<>();
                 readConfig(commonRemovals, json.getAsJsonObject(key));
                 for (var entry : commonRemovals.entrySet()) {
-                    if (entry.getValue().bannsClass) {
+                    if (entry.getValue().bansClass) {
                         clientRemovals.put(entry.getKey(), CLASS_MARKER);
                         serverRemovals.put(entry.getKey(), CLASS_MARKER);
                     } else {
@@ -97,7 +97,7 @@ public class SideOnlyConfig {
                 continue;
             }
             MethodSet properties = removals.computeIfAbsent(entry.getKey(), DEFAULT_METHOD_SET);
-            if (properties.bannsClass) continue;
+            if (properties.bansClass) continue;
             if (entry.getValue().isJsonArray()) {
                 for (JsonElement je : entry.getValue().getAsJsonArray()) {
                     properties.add(je.getAsString());
@@ -114,10 +114,10 @@ public class SideOnlyConfig {
 
     public static class MethodSet extends ObjectOpenHashSet<String> {
 
-        public final boolean bannsClass;
+        public final boolean bansClass;
 
-        public MethodSet(boolean bannsClass) {
-            this.bannsClass = bannsClass;
+        public MethodSet(boolean bansClass) {
+            this.bansClass = bansClass;
         }
     }
 }

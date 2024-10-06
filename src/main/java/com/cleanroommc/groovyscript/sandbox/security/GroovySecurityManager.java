@@ -55,8 +55,7 @@ public class GroovySecurityManager {
         banPackage("groovy.beans");
         banPackage("groovy.cli");
         banPackage("groovyjarjar");
-        banPackage(
-                "sun."); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
+        banPackage("sun."); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
         banPackage("javax.net");
         banPackage("javax.security");
         banPackage("javax.script");

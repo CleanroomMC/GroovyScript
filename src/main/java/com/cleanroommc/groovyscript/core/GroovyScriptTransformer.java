@@ -67,7 +67,7 @@ public class GroovyScriptTransformer implements IClassTransformer {
             return bytes;
         }
 
-        if (bannedProperties.bannsClass) {
+        if (bannedProperties.bansClass) {
             throw new RuntimeException(
                     String.format("Attempted to load class %s for invalid side %s", className, FMLLaunchHandler.side().name()));
         }
