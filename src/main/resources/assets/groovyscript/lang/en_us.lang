@@ -126,6 +126,7 @@ groovyscript.wiki.and=and
 groovyscript.wiki.actuallyadditions.atomic_reconstructor.title=Atomic Reconstructor
 groovyscript.wiki.actuallyadditions.atomic_reconstructor.description=The Atomic Reconstructor is a block which uses energy to convert a block or item in front of it into other items.
 groovyscript.wiki.actuallyadditions.atomic_reconstructor.energyUse.value=Sets the amount of power consumed by the recipe
+groovyscript.wiki.actuallyadditions.atomic_reconstructor.type.value=Sets the type of Lens used for the recipe
 
 groovyscript.wiki.actuallyadditions.ball_of_fur.title=Ball of Fur
 groovyscript.wiki.actuallyadditions.ball_of_fur.description=A weighted itemstack output for using a Ball of Fur, dropped by a cat.
