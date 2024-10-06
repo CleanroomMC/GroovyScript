@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SReloadScripts;
+import com.cleanroommc.groovyscript.network.StartLanguageServerPacket;
 import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraft.command.ICommandSender;
@@ -110,10 +111,8 @@ public class GSCommand extends CommandTreeBase {
         }));
 
         addSubcommand(new SimpleCommand("runLS", (server, sender, args) -> {
-            if (GroovyScript.runLanguageServer()) {
-                sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Starting language server"));
-            } else {
-                sender.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Language server is already running"));
+            if (sender instanceof EntityPlayerMP player) {
+                NetworkHandler.sendToPlayer(new StartLanguageServerPacket(), player);
             }
         }, "runLanguageServer"));
 

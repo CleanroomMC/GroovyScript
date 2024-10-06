@@ -23,6 +23,7 @@ public class NetworkHandler {
     public static void init() {
         registerS2C(SReloadScripts.class);
         registerS2C(SCopy.class);
+        registerS2C(StartLanguageServerPacket.class);
         registerC2S(CReload.class);
     }
 

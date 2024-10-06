@@ -20,22 +20,21 @@ public class GroovyScriptLanguageServerImpl extends GroovyLanguageServer<GroovyS
 
     @SuppressWarnings("InfiniteLoopStatement")
     public static void listen(File root) {
-        GroovyLog.get().infoMC("Starting Language server");
+        GroovyScript.doForGroovyScript(() -> GroovyLog.get().infoMC("Starting Language server"));
         var languageServerContext = new GroovyScriptLanguageServerContext();
 
         while (true) {
             var server = new GroovyScriptLanguageServerImpl(root, languageServerContext);
-            try (var serverSocket = new ServerSocket(GroovyScriptConfig.languageServerPort);
-                 var socket = serverSocket.accept()) {
+            try (var serverSocket = new ServerSocket(GroovyScriptConfig.languageServerPort); var socket = serverSocket.accept()) {
 
-                GroovyScript.LOGGER.info("Accepted connection from: {}", socket.getInetAddress());
+                GroovyScript.doForGroovyScript(() -> GroovyScript.LOGGER.info("Accepted connection from: {}", socket.getInetAddress()));
 
                 var launcher = Launcher.createLauncher(server, LanguageClient.class, socket.getInputStream(), socket.getOutputStream());
                 server.connect(launcher.getRemoteProxy());
 
                 launcher.startListening().get();
             } catch (Exception e) {
-                GroovyScript.LOGGER.error("Connection failed", e);
+                GroovyScript.doForGroovyScript(() -> GroovyScript.LOGGER.error("Connection failed", e));
             }
         }
     }
@@ -61,7 +60,8 @@ public class GroovyScriptLanguageServerImpl extends GroovyLanguageServer<GroovyS
     }
 
     @Override
-    protected @NotNull GroovyScriptServices createGroovyServices(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
+    protected @NotNull GroovyScriptServices createGroovyServices(ICompilationUnitFactory compilationUnitFactory,
+                                                                 ILanguageServerContext languageServerContext) {
         return new GroovyScriptServices(compilationUnitFactory, languageServerContext);
     }
 }

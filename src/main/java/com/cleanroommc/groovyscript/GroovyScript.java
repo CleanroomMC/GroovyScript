@@ -86,6 +86,7 @@ public class GroovyScript {
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
+    private static ModContainer grsContainer;
     private static GroovyScriptSandbox sandbox;
     private static RunConfig runConfig;
     private static ModContainer scriptMod;
@@ -127,7 +128,7 @@ public class GroovyScript {
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
         if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) TinkersConstruct.init();
-        if (Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
+        if (event.getSide().isClient() && Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
             runLanguageServer();
         }
     }
@@ -296,10 +297,21 @@ public class GroovyScript {
         }
     }
 
+    @ApiStatus.Internal
     public static boolean runLanguageServer() {
         if (languageServerThread != null) return false;
         languageServerThread = new Thread(() -> GroovyScriptLanguageServerImpl.listen(getSandbox().getScriptRoot()));
         languageServerThread.start();
         return true;
+    }
+
+    public static void doForGroovyScript(Runnable runnable) {
+        ModContainer current = Loader.instance().activeModContainer();
+        if (grsContainer == null) {
+            grsContainer = Loader.instance().getIndexedModList().get(ID);
+        }
+        Loader.instance().setActiveModContainer(grsContainer);
+        runnable.run();
+        Loader.instance().setActiveModContainer(current);
     }
 }
