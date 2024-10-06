@@ -303,7 +303,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
             Class<?> clazz = super.loadScriptClass(engine, relativeFile);
             if (comp.clazz == null) {
                 // should not happen
-                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback! Index: {}", relativeFile, this.index);
+                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback!", relativeFile);
                 if (ENABLE_CACHE) comp.clazz = clazz;
             }
         } else {
