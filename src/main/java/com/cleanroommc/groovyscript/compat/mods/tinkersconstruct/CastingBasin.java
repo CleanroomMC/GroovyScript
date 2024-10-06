@@ -120,6 +120,12 @@ public class CastingBasin extends StandardListRegistry<ICastingRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateFluids(msg, 1, 1, 0, 0);
             validateItems(msg, 0, 0, 1, 1);

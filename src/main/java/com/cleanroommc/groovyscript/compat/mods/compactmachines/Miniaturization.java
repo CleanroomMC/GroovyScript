@@ -151,6 +151,12 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // GS's code throws the quantity away
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateName();
             validateItems(msg, 1, 1, 1, 1);

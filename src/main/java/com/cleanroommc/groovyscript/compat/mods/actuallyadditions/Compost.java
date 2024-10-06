@@ -84,6 +84,11 @@ public class Compost extends StandardListRegistry<CompostRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Actually Additions Compost recipe";
         }

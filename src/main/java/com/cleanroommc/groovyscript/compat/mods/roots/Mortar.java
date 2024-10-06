@@ -243,6 +243,12 @@ public class Mortar extends VirtualizedRegistry<MortarRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed in each slot
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateName();
             validateItems(msg, 1, 5, 1, 1);

@@ -91,6 +91,11 @@ public class AtomicReconstructor extends StandardListRegistry<LensConversionReci
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Actually Additions Atomic Reconstructor recipe";
         }

@@ -1,9 +1,11 @@
 package com.cleanroommc.groovyscript.registry;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
@@ -168,6 +170,8 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         }
         int finalRowWidth = rowWidth;
         msg.add(rowWidth > width, () -> "At least one row has a row length of " + finalRowWidth + ", but maximum is " + width);
+        checkStackSizes(msg, ingredients);
+
         if (checkedChars.isEmpty()) {
             msg.add("Matrix must not be empty");
         } else if (checkedChars.size() == 1) {
@@ -178,6 +182,14 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         }
         if (msg.postIfNotEmpty()) return null;
         return recipeCreator.createRecipe(rowWidth, keyBasedMatrix.length, ingredients);
+    }
+
+    protected void checkStackSizes(GroovyLog.Msg msg, Collection<IIngredient> ingredients) {
+        if (GroovyScriptConfig.compat.checkInputStackCounts) {
+            for (IIngredient ingredient : ingredients) {
+                msg.add(IngredientHelper.overMaxSize(ingredient, 1), "Expected stack size 1 for {}, got {}", ingredient.toString(), ingredient.getAmount());
+            }
+        }
     }
 
     @GroovyBlacklist

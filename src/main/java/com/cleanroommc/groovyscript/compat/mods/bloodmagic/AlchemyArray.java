@@ -160,6 +160,12 @@ public class AlchemyArray extends StandardListRegistry<RecipeAlchemyArray> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed in the Ashes's slots
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Blood Magic Alchemy Array recipe";
         }
@@ -168,6 +174,7 @@ public class AlchemyArray extends StandardListRegistry<RecipeAlchemyArray> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(catalyst == null, "Must have a catalyst ItemStack but didn't find any!");
+            msg.add(IngredientHelper.overMaxSize(catalyst, 1), "Catalyst must have a stack size of 1!");
         }
 
         @Override

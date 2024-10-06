@@ -1,11 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.appliedenergistics2;
 
 import appeng.api.AEApi;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.appliedenergistics2.MatterCannonAmmoRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -27,6 +29,12 @@ public class CannonAmmo extends VirtualizedRegistry<Pair<ItemStack, Double>> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:clay'), 10000"))
     public void add(ItemStack item, double value) {
+        if (IngredientHelper.overMaxSize(item, 1)) {
+            GroovyLog.msg("Error adding Cannon Ammo").error()
+                     .add("Item must have stack size of 1, got {}", item.getCount())
+                     .post();
+            return;
+        }
         addScripted(Pair.of(item, value));
         ((MatterCannonAmmoRegistryAccessor) AEApi.instance().registries().matterCannon()).getDamageModifiers().put(item, value);
     }
