@@ -1,16 +1,24 @@
 package com.cleanroommc.groovyscript.core;
 
 import com.cleanroommc.groovyscript.core.visitors.*;
+import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.*;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class GroovyScriptTransformer implements IClassTransformer {
+
+    private static final Logger LOG = LogManager.getLogger("GroovyScript-Core");
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
@@ -48,13 +56,21 @@ public class GroovyScriptTransformer implements IClassTransformer {
     private byte[] transformSideOnly(String className, byte[] bytes) {
         SideOnlyConfig.MethodSet bannedProperties = SideOnlyConfig.getRemovedProperties(FMLLaunchHandler.side(), className);
         if (bannedProperties == null) return bytes;
-        if (bannedProperties.bannsClass) {
-            throw new RuntimeException(String.format("Attempted to load class %s for invalid side %s", className, FMLLaunchHandler.side().name()));
-        }
 
         ClassNode classNode = new ClassNode();
         ClassReader classReader = new ClassReader(bytes);
         classReader.accept(classNode, 0);
+
+        // prevent banning of classes which are blacklisted for groovy
+        if (!GroovySecurityManager.INSTANCE.isValid(classNode)) {
+            LOG.warn("Tried to remove class '{}', but class is blacklisted for groovy. Skipping this class...", className);
+            return bytes;
+        }
+
+        if (bannedProperties.bannsClass) {
+            throw new RuntimeException(
+                    String.format("Attempted to load class %s for invalid side %s", className, FMLLaunchHandler.side().name()));
+        }
 
         classNode.fields.removeIf(field -> bannedProperties.contains(field.name));
 
@@ -62,7 +78,7 @@ public class GroovyScriptTransformer implements IClassTransformer {
         Iterator<MethodNode> methods = classNode.methods.iterator();
         while (methods.hasNext()) {
             MethodNode method = methods.next();
-            if (bannedProperties.contains(method.name + "()")) {
+            if (bannedProperties.contains(method.name + "()") && GroovySecurityManager.INSTANCE.isValidMethod(className, method.name)) {
                 methods.remove();
                 lambdaGatherer.accept(method);
             }

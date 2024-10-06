@@ -14,6 +14,9 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.runtime.*;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.ClassNode;
 
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
@@ -23,11 +26,13 @@ import java.util.*;
 public class GroovySecurityManager {
 
     public static final GroovySecurityManager INSTANCE = new GroovySecurityManager();
+    private static final String blacklistDesc = Type.getDescriptor(GroovyBlacklist.class);
+
 
     private final List<String> bannedPackages = new ArrayList<>();
-    private final Set<Class<?>> bannedClasses = new ObjectOpenHashSet<>();
-    private final Map<Class<?>, Set<String>> bannedMethods = new Object2ObjectOpenHashMap<>();
-    private final Set<Class<?>> whiteListedClasses = new ObjectOpenHashSet<>();
+    private final Set<String> bannedClasses = new ObjectOpenHashSet<>();
+    private final Map<String, Set<String>> bannedMethods = new Object2ObjectOpenHashMap<>();
+    private final Set<String> whiteListedClasses = new ObjectOpenHashSet<>();
 
     private GroovySecurityManager() {
         initDefaults();
@@ -50,14 +55,16 @@ public class GroovySecurityManager {
         banPackage("groovy.beans");
         banPackage("groovy.cli");
         banPackage("groovyjarjar");
-        banPackage("sun."); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
+        banPackage(
+                "sun."); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
         banPackage("javax.net");
         banPackage("javax.security");
         banPackage("javax.script");
         banPackage("org.spongepowered");
         banPackage("zone.rong.mixinbooter");
         banClasses(Runtime.class, ClassLoader.class, Scanner.class);
-        banClasses(GroovyScriptEngine.class, Eval.class, GroovyMain.class, GroovySocketServer.class, GroovyShell.class, GroovyClassLoader.class);
+        banClasses(GroovyScriptEngine.class, Eval.class, GroovyMain.class, GroovySocketServer.class, GroovyShell.class,
+                   GroovyClassLoader.class);
         banMethods(System.class, "exit", "gc", "setSecurityManager");
         banMethods(Class.class, "getResource", "getResourceAsStream");
         banMethods(String.class, "execute");
@@ -73,7 +80,7 @@ public class GroovySecurityManager {
     }
 
     public void unBanClass(Class<?> clazz) {
-        whiteListedClasses.add(clazz);
+        whiteListedClasses.add(clazz.getName());
     }
 
     public void unBanClasses(Class<?>... classes) {
@@ -87,7 +94,7 @@ public class GroovySecurityManager {
     }
 
     public void banClass(Class<?> clazz) {
-        bannedClasses.add(clazz);
+        bannedClasses.add(clazz.getName());
     }
 
     public void banClasses(Class<?>... classes) {
@@ -97,16 +104,15 @@ public class GroovySecurityManager {
     }
 
     public void banMethods(Class<?> clazz, String... method) {
-        Collections.addAll(bannedMethods.computeIfAbsent(clazz, key -> new ObjectOpenHashSet<>()), method);
+        Collections.addAll(bannedMethods.computeIfAbsent(clazz.getName(), key -> new ObjectOpenHashSet<>()), method);
     }
 
     public void banMethods(Class<?> clazz, Collection<String> method) {
-        bannedMethods.computeIfAbsent(clazz, key -> new ObjectOpenHashSet<>()).addAll(method);
+        bannedMethods.computeIfAbsent(clazz.getName(), key -> new ObjectOpenHashSet<>()).addAll(method);
     }
 
     public boolean isValid(Method method) {
-        return isValidMethod(method.getDeclaringClass(), method.getName()) &&
-               !method.isAnnotationPresent(GroovyBlacklist.class);
+        return isValidMethod(method.getDeclaringClass(), method.getName()) && !method.isAnnotationPresent(GroovyBlacklist.class);
     }
 
     public boolean isValid(MetaMethod method) {
@@ -117,13 +123,18 @@ public class GroovySecurityManager {
         return !field.isAnnotationPresent(GroovyBlacklist.class);
     }
 
-    public boolean isValid(Class<?> clazz) {
-        return this.whiteListedClasses.contains(clazz) ||
-               (isValidClass(clazz) && isValidPackage(clazz));
+    public boolean isValid(ClassNode classNode) {
+        return this.whiteListedClasses.contains(classNode.name) ||
+                (!bannedClasses.contains(classNode.name) &&
+                         !hasBlacklistAnnotation(classNode.visibleAnnotations) &&
+                         isValidPackage(classNode.name));
     }
 
-    public boolean isValidPackage(Class<?> clazz) {
-        String className = clazz.getName();
+    public boolean isValid(Class<?> clazz) {
+        return this.whiteListedClasses.contains(clazz.getName()) || (isValidClass(clazz) && isValidPackage(clazz));
+    }
+
+    public boolean isValidPackage(String className) {
         for (String bannedPackage : bannedPackages) {
             if (className.startsWith(bannedPackage)) {
                 return false;
@@ -132,11 +143,19 @@ public class GroovySecurityManager {
         return true;
     }
 
+    public boolean isValidPackage(Class<?> clazz) {
+        return isValidPackage(clazz.getName());
+    }
+
     public boolean isValidClass(Class<?> clazz) {
-        return !bannedClasses.contains(clazz) && !clazz.isAnnotationPresent(GroovyBlacklist.class);
+        return !bannedClasses.contains(clazz.getName()) && !clazz.isAnnotationPresent(GroovyBlacklist.class);
     }
 
     public boolean isValidMethod(Class<?> receiver, String method) {
+        return isValidMethod(receiver.getName(), method);
+    }
+
+    public boolean isValidMethod(String receiver, String method) {
         Set<String> methods = bannedMethods.get(receiver);
         return methods == null || !methods.contains(method);
     }
@@ -145,15 +164,25 @@ public class GroovySecurityManager {
         return Collections.unmodifiableList(bannedPackages);
     }
 
-    public Set<Class<?>> getBannedClasses() {
+    public Set<String> getBannedClasses() {
         return Collections.unmodifiableSet(bannedClasses);
     }
 
-    public Map<Class<?>, Set<String>> getBannedMethods() {
+    public Map<String, Set<String>> getBannedMethods() {
         return Collections.unmodifiableMap(bannedMethods);
     }
 
-    public Set<Class<?>> getWhiteListedClasses() {
+    public Set<String> getWhiteListedClasses() {
         return Collections.unmodifiableSet(whiteListedClasses);
+    }
+
+    public static boolean hasBlacklistAnnotation(List<AnnotationNode> annotations) {
+        if (annotations == null || annotations.isEmpty()) return false;
+        for (AnnotationNode node : annotations) {
+            if (node.desc.equals(blacklistDesc)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

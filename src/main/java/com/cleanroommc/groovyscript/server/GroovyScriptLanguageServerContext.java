@@ -15,15 +15,15 @@ public class GroovyScriptLanguageServerContext implements ILanguageServerContext
 
     private final FileContentsTracker fileContentsTracker = new FileContentsTracker();
 
-    private ScanResult scanResult = new ClassGraph()
+    private final ScanResult scanResult = new ClassGraph()
             .enableClassInfo()
             .enableMethodInfo()
             .enableSystemJarsAndModules()
             .overrideClassLoaders(Launch.classLoader)
             .acceptPaths("*")
-            .rejectClasses(GroovySecurityManager.INSTANCE.getBannedClasses().stream().map(Class::getName).toArray(String[]::new))
-            .rejectPackages(GroovySecurityManager.INSTANCE.getBannedPackages().stream().toArray(String[]::new))
-            .acceptClasses(GroovySecurityManager.INSTANCE.getWhiteListedClasses().stream().map(Class::getName).toArray(String[]::new))
+            .rejectClasses(GroovySecurityManager.INSTANCE.getBannedClasses().toArray(new String[0]))
+            .rejectPackages(GroovySecurityManager.INSTANCE.getBannedPackages().toArray(new String[0]))
+            .acceptClasses(GroovySecurityManager.INSTANCE.getWhiteListedClasses().toArray(new String[0]))
             .scan();
 
     private final DocumentationFactory documentationFactory = new DocumentationFactory(new GroovyScriptDocumentationProvider(), new GroovydocProvider());
