@@ -78,7 +78,7 @@ public class GroovyScriptTransformer implements IClassTransformer {
         Iterator<MethodNode> methods = classNode.methods.iterator();
         while (methods.hasNext()) {
             MethodNode method = methods.next();
-            if (bannedProperties.contains(method.name + "()") && GroovySecurityManager.INSTANCE.isValidMethod(className, method.name)) {
+            if (bannedProperties.contains(method.name + "()") && GroovySecurityManager.INSTANCE.isValidMethod(classNode, method.name)) {
                 methods.remove();
                 lambdaGatherer.accept(method);
             }

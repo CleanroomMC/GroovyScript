@@ -170,8 +170,10 @@ public class GroovySecurityManager {
 
     public boolean isValidMethod(ClassNode receiver, String method) {
         if (isMethodBannedFromClass(receiver.name, method)) return false;
-        for (String interf : receiver.interfaces) {
-            if (isMethodBannedFromClass(interf, method)) return false;
+        if (receiver.interfaces != null) {
+            for (String interf : receiver.interfaces) {
+                if (isMethodBannedFromClass(interf, method)) return false;
+            }
         }
         // unfortunately can't check all super classes here
         return receiver.name == null || !isMethodBannedFromClass(receiver.superName, method);
