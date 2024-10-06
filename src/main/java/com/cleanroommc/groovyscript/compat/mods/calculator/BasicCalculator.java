@@ -5,9 +5,8 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.CalculatorRecipe;
@@ -15,12 +14,18 @@ import sonar.calculator.mod.common.recipes.CalculatorRecipes;
 import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 @RegistryDescription
-public class BasicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
+public class BasicCalculator extends StandardListRegistry<CalculatorRecipe> {
 
     public BasicCalculator() {
         super(Alias.generateOfClass(BasicCalculator.class).andGenerate("Calculator"));
+    }
+
+    @Override
+    public Collection<CalculatorRecipe> getRecipes() {
+        return CalculatorRecipes.instance().getRecipes();
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), item('minecraft:clay')).output(item('minecraft:gold_ingot'))"))
@@ -28,28 +33,9 @@ public class BasicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         return new RecipeBuilder();
     }
 
-    @Override
-    public void onReload() {
-        removeScripted().forEach(CalculatorRecipes.instance().getRecipes()::remove);
-        restoreFromBackup().forEach(CalculatorRecipes.instance().getRecipes()::add);
-    }
-
-    public void add(CalculatorRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        CalculatorRecipes.instance().getRecipes().add(recipe);
-    }
-
-    public boolean remove(CalculatorRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        CalculatorRecipes.instance().getRecipes().remove(recipe);
-        return true;
-    }
-
     @MethodDescription(example = @Example("item('minecraft:cobblestone')"))
     public boolean removeByInput(IIngredient input) {
-        return CalculatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -64,7 +50,7 @@ public class BasicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
 
     @MethodDescription(example = @Example("item('calculator:reinforcedironingot')"))
     public boolean removeByOutput(IIngredient output) {
-        return CalculatorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeOutput : r.recipeOutputs) {
                 for (ItemStack itemStack : recipeOutput.getJEIValue()) {
                     if (output.test(itemStack)) {
@@ -77,21 +63,14 @@ public class BasicCalculator extends VirtualizedRegistry<CalculatorRecipe> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        CalculatorRecipes.instance().getRecipes().forEach(this::addBackup);
-        CalculatorRecipes.instance().getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CalculatorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(CalculatorRecipes.instance().getRecipes())
-                .setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = @Comp("2"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 2))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CalculatorRecipe> {
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
 
         @Override
         public String getErrorMsg() {

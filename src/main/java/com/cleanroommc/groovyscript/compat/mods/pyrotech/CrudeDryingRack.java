@@ -64,12 +64,12 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
         }
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrudeDryingRackRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(comp = @Comp(gte = 1))
         private int dryTime;
 
         @RecipeBuilderMethodDescription
@@ -81,6 +81,12 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
         @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Crude Drying Rack Recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
         }
 
         @Override

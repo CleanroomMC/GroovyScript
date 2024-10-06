@@ -27,17 +27,23 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
         super(name, instance);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<SimpleRecipe> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE), defaultValue = "(default time for this machine in the mod's config)")
+        @Property(comp = @Comp(gte = 1), defaultValue = "(default time for this machine in the mod's config)")
         private int time = getDefaultTime();
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // PT modifies the recipe to only consume 1 item
+            return 1;
         }
 
         @Override

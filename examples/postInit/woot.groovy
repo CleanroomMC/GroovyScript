@@ -25,7 +25,6 @@ mods.woot.drops.recipeBuilder()
     .register()
 
 
-
 // Mob Config:
 // Control the default values or mob-specific values for a large number of effects, a full list can be found at
 // `ipsis.woot.configuration.EnumConfigKey`. A full list can be viewed on
@@ -83,7 +82,6 @@ mods.woot.spawning.recipeBuilder()
     .defaultSpawnRecipe(true)
     .input(item('minecraft:gold_ingot'), item('minecraft:diamond'))
     .register()
-
 
 
 // Stygian Iron Anvil:

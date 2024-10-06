@@ -4,17 +4,18 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import rustic.common.crafting.CrushingTubRecipe;
 import rustic.common.crafting.ICrushingTubRecipe;
 import rustic.common.crafting.Recipes;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
+public class CrushingTub extends StandardListRegistry<ICrushingTubRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:stone')).fluidOutput(fluid('lava') * 50)"),
@@ -25,24 +26,13 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
     }
 
     @Override
-    public void onReload() {
-        Recipes.crushingTubRecipes.removeAll(removeScripted());
-        Recipes.crushingTubRecipes.addAll(restoreFromBackup());
-    }
-
-    public void add(ICrushingTubRecipe recipe) {
-        Recipes.crushingTubRecipes.add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(ICrushingTubRecipe recipe) {
-        addBackup(recipe);
-        return Recipes.crushingTubRecipes.remove(recipe);
+    public Collection<ICrushingTubRecipe> getRecipes() {
+        return Recipes.crushingTubRecipes;
     }
 
     @MethodDescription(example = {@Example("fluid('ironberryjuice')"), @Example("item('minecraft:sugar')")})
     public boolean removeByOutput(IIngredient output) {
-        return Recipes.crushingTubRecipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (output.test(entry.getResult()) || output.test(entry.getByproduct())) {
                 addBackup(entry);
                 return true;
@@ -53,7 +43,7 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
 
     @MethodDescription(example = @Example("item('rustic:wildberries')"))
     public boolean removeByInput(IIngredient input) {
-        return Recipes.crushingTubRecipes.removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (input.test(entry.getInput())) {
                 addBackup(entry);
                 return true;
@@ -62,19 +52,8 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        Recipes.crushingTubRecipes.forEach(this::addBackup);
-        Recipes.crushingTubRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ICrushingTubRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(Recipes.crushingTubRecipes).setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICrushingTubRecipe> {
 
         @Property
@@ -89,6 +68,11 @@ public class CrushingTub extends VirtualizedRegistry<ICrushingTubRecipe> {
         @Override
         public String getErrorMsg() {
             return "Error adding Rustic Crushing Tub recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

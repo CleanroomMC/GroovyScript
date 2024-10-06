@@ -1,21 +1,21 @@
 package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.recipe.MeltingRecipeBuilder;
 import com.cleanroommc.groovyscript.core.mixin.tconstruct.TinkerRegistryAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.DryingRecipe;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Drying extends VirtualizedRegistry<DryingRecipe> {
+public class Drying extends StandardListRegistry<DryingRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:dirt')).time(45)"))
     public RecipeBuilder recipeBuilder() {
@@ -23,10 +23,8 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(TinkerRegistryAccessor.getDryingRegistry()::remove);
-        restoreFromBackup().forEach(TinkerRegistryAccessor.getDryingRegistry()::add);
+    public Collection<DryingRecipe> getRecipes() {
+        return TinkerRegistryAccessor.getDryingRegistry();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -36,23 +34,10 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return recipe;
     }
 
-    public void add(DryingRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        TinkerRegistryAccessor.getDryingRegistry().add(recipe);
-    }
-
-    public boolean remove(DryingRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        TinkerRegistryAccessor.getDryingRegistry().remove(recipe);
-        return true;
-    }
-
     @MethodDescription
     public boolean removeByInput(IIngredient input) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
-        if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.input.matches(matching).isPresent();
             if (found) addBackup(recipe);
             return found;
@@ -67,7 +52,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
 
     @MethodDescription
     public boolean removeByOutput(ItemStack output) {
-        if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = ItemStack.areItemStacksEqual(recipe.output, output);
             if (found) addBackup(recipe);
             return found;
@@ -83,7 +68,7 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
     @MethodDescription
     public boolean removeByInputAndOutput(IIngredient input, ItemStack output) {
         NonNullList<ItemStack> matching = NonNullList.from(ItemStack.EMPTY, input.getMatchingStacks());
-        if (TinkerRegistryAccessor.getDryingRegistry().removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.input.matches(matching).isPresent() && ItemStack.areItemStacksEqual(recipe.output, output);
             if (found) addBackup(recipe);
             return found;
@@ -96,22 +81,11 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         return false;
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        TinkerRegistryAccessor.getDryingRegistry().forEach(this::addBackup);
-        TinkerRegistryAccessor.getDryingRegistry().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<DryingRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(TinkerRegistryAccessor.getDryingRegistry()).setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public class RecipeBuilder extends AbstractRecipeBuilder<DryingRecipe> {
 
-        @Property(defaultValue = "20", valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(defaultValue = "20", comp = @Comp(gte = 1))
         private int time = 20;
 
         @RecipeBuilderMethodDescription
@@ -123,6 +97,12 @@ public class Drying extends VirtualizedRegistry<DryingRecipe> {
         @Override
         public String getErrorMsg() {
             return "Error adding Tinkers Construct Drying recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
         }
 
         @Override

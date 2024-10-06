@@ -6,9 +6,8 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,16 +18,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
+public class Dissolver extends StandardListRegistry<DissolverRecipe> {
 
     public Dissolver() {
         super(Alias.generateOfClass(Dissolver.class).andGenerate("ChemicalDissolver"));
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> ModRecipes.INSTANCE.getDissolverRecipes().removeIf(r -> r == recipe));
-        ModRecipes.INSTANCE.getDissolverRecipes().addAll(restoreFromBackup());
+    public Collection<DissolverRecipe> getRecipes() {
+        return ModRecipes.INSTANCE.getDissolverRecipes();
     }
 
     @RecipeBuilderDescription(example = {
@@ -39,25 +37,9 @@ public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
         return new RecipeBuilder();
     }
 
-    public DissolverRecipe add(DissolverRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ModRecipes.INSTANCE.getDissolverRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(DissolverRecipe recipe) {
-        if (ModRecipes.INSTANCE.getDissolverRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
     @MethodDescription(example = @Example("item('alchemistry:compound:1')"))
     public boolean removeByInput(IIngredient input) {
-        return ModRecipes.INSTANCE.getDissolverRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInputs()) {
                 if (input.test(itemstack)) {
                     addBackup(r);
@@ -68,28 +50,17 @@ public class Dissolver extends VirtualizedRegistry<DissolverRecipe> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<DissolverRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ModRecipes.INSTANCE.getDissolverRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ModRecipes.INSTANCE.getDissolverRecipes().forEach(this::addBackup);
-        ModRecipes.INSTANCE.getDissolverRecipes().clear();
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<DissolverRecipe> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         private final List<ProbabilityGroup> probabilityGroup = new ArrayList<>();
         @Property
         private boolean reversible;
         @Property
         private boolean relativeProbability;
-        @Property(defaultValue = "1", valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(defaultValue = "1", comp = @Comp(gte = 1))
         private int rolls = 1;
 
         @RecipeBuilderMethodDescription(field = "probabilityGroup")

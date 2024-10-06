@@ -102,11 +102,11 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
         return new SimpleObjectStream<>(NaturesAuraAPI.OFFERING_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<OfferingRecipe> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private IIngredient catalyst;
 
         @RecipeBuilderMethodDescription
@@ -123,6 +123,12 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
         @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_offering_";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // Offering Table's capacity
+            return 16;
         }
 
         @Override

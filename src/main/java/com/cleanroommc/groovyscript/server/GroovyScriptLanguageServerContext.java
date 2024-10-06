@@ -18,11 +18,13 @@ public class GroovyScriptLanguageServerContext implements ILanguageServerContext
     private final ScanResult scanResult = new ClassGraph()
             .enableClassInfo()
             .enableMethodInfo()
+            .enableFieldInfo()
             .enableSystemJarsAndModules()
             .overrideClassLoaders(Launch.classLoader)
             .acceptPaths("*")
             .rejectClasses(GroovySecurityManager.INSTANCE.getBannedClasses().toArray(new String[0]))
             .rejectPackages(GroovySecurityManager.INSTANCE.getBannedPackages().toArray(new String[0]))
+            .rejectPackages("scala.", "akka.")
             .acceptClasses(GroovySecurityManager.INSTANCE.getWhiteListedClasses().toArray(new String[0]))
             .scan();
 

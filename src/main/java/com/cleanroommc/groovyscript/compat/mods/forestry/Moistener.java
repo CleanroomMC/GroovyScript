@@ -93,8 +93,13 @@ public class Moistener extends ForestryRegistry<IMoistenerRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
-            validateFluids(msg, 0, 0, 0, 0);
+            validateFluids(msg);
             validateItems(msg, 1, 1, 1, 1);
         }
 

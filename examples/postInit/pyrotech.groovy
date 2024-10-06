@@ -38,7 +38,7 @@ mods.pyrotech.anvil.recipeBuilder()
     .register()
 
 
-mods.pyrotech.anvil.add('iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9, 'granite', 'hammer')
+mods.pyrotech.anvil.add('iron_to_clay', ore('ingotIron'), item('minecraft:clay_ball'), 9, 'granite', 'hammer')
 
 // Barrel:
 // Over time converts a fluid with four items into a new fluid.
@@ -57,8 +57,43 @@ mods.pyrotech.barrel.recipeBuilder()
 
 mods.pyrotech.barrel.add('iron_dirt_water_to_lava', ore('ingotIron'), ore('ingotIron'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000)
 
+// Refractory Kiln:
+// Converts an item into a new one by burning it. Has a chance to fail.
+
+mods.pyrotech.brick_kiln.removeByOutput(item('pyrotech:bucket_clay'))
+// mods.pyrotech.brick_kiln.removeAll()
+
+mods.pyrotech.brick_kiln.recipeBuilder()
+    .input(item('minecraft:iron_ingot'))
+    .output(item('minecraft:gold_ingot'))
+    .burnTime(400)
+    .failureChance(1f)
+    .failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge'))
+    .name('iron_to_gold_kiln_with_failure_items_brick')
+    .register()
+
+
+mods.pyrotech.brick_kiln.add('clay_to_iron_brick', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone'))
+
+// Refractory Oven:
+// When powered by burning fuel can convert items.
+
+mods.pyrotech.brick_oven.removeByInput(item('minecraft:porkchop'))
+mods.pyrotech.brick_oven.removeByOutput(item('minecraft:cooked_porkchop'))
+// mods.pyrotech.brick_oven.removeAll()
+
+mods.pyrotech.brick_oven.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .output(item('minecraft:emerald'))
+    .duration(400)
+    .name('diamond_campfire_to_emerald_brick')
+    .register()
+
+
+mods.pyrotech.brick_oven.add('apple_to_dirt_brick', item('minecraft:apple'), item('minecraft:dirt'), 1000)
+
 // Campfire:
-// Can cook food.
+// When powered by burning logs can convert items.
 
 mods.pyrotech.campfire.removeByInput(item('minecraft:porkchop'))
 mods.pyrotech.campfire.removeByOutput(item('minecraft:cooked_porkchop'))
@@ -157,13 +192,13 @@ mods.pyrotech.drying_rack.recipeBuilder()
 
 mods.pyrotech.drying_rack.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200)
 
-// Kiln:
+// Pit Kiln:
 // Converts an item into a new one by burning it. Has a chance to fail.
 
-mods.pyrotech.kiln.removeByOutput(item('pyrotech:bucket_clay'))
-// mods.pyrotech.kiln.removeAll()
+mods.pyrotech.pit_kiln.removeByOutput(item('pyrotech:bucket_clay'))
+// mods.pyrotech.pit_kiln.removeAll()
 
-mods.pyrotech.kiln.recipeBuilder()
+mods.pyrotech.pit_kiln.recipeBuilder()
     .input(item('minecraft:iron_ingot'))
     .output(item('minecraft:gold_ingot'))
     .burnTime(400)
@@ -173,7 +208,7 @@ mods.pyrotech.kiln.recipeBuilder()
     .register()
 
 
-mods.pyrotech.kiln.add('clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')])
+mods.pyrotech.pit_kiln.add('clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')])
 
 // Soaking Pot:
 // Converts an item into a new one by soaking it in a liquid. Can require a campfire.
@@ -192,6 +227,41 @@ mods.pyrotech.soaking_pot.recipeBuilder()
 
 
 mods.pyrotech.soaking_pot.add('dirt_to_apple', item('minecraft:dirt'), fluid('water'), item('minecraft:apple'), 1200)
+
+// Stone Kiln:
+// Converts an item into a new one by burning it. Has a chance to fail.
+
+mods.pyrotech.stone_kiln.removeByOutput(item('pyrotech:bucket_clay'))
+// mods.pyrotech.stone_kiln.removeAll()
+
+mods.pyrotech.stone_kiln.recipeBuilder()
+    .input(item('minecraft:iron_ingot'))
+    .output(item('minecraft:gold_ingot'))
+    .burnTime(400)
+    .failureChance(1f)
+    .failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge'))
+    .name('iron_to_gold_kiln_with_failure_items_stone')
+    .register()
+
+
+mods.pyrotech.stone_kiln.add('clay_to_iron_stone', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone'))
+
+// Stone Oven:
+// When powered by burning fuel can convert items.
+
+mods.pyrotech.stone_oven.removeByInput(item('minecraft:porkchop'))
+mods.pyrotech.stone_oven.removeByOutput(item('minecraft:cooked_porkchop'))
+// mods.pyrotech.stone_oven.removeAll()
+
+mods.pyrotech.stone_oven.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .output(item('minecraft:emerald'))
+    .duration(400)
+    .name('diamond_campfire_to_emerald_stone')
+    .register()
+
+
+mods.pyrotech.stone_oven.add('apple_to_dirt_stone', item('minecraft:apple'), item('minecraft:dirt'), 1000)
 
 // Tanning Rack:
 // Converts an item over time into a new one.

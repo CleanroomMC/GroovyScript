@@ -1,21 +1,20 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Collection;
 
 @RegistryDescription
-public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
+public class Grindstone extends StandardListRegistry<GrindstoneRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockDiamond')).output(item('minecraft:clay')).weight(1).secondaryChance(1.0F)"),
@@ -26,16 +25,8 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        removeScripted().forEach(r -> GrindstoneRecipeRegistry.recipes.removeIf(recipe -> r == recipe));
-        restoreFromBackup().forEach(GrindstoneRecipeRegistry::registerGrindstoneRecipe);
-    }
-
-    private void add(GrindstoneRecipe recipe) {
-        addScripted(recipe);
-        GrindstoneRecipeRegistry.registerGrindstoneRecipe(recipe);
+    public Collection<GrindstoneRecipe> getRecipes() {
+        return GrindstoneRecipeRegistry.recipes;
     }
 
     @MethodDescription(description = "groovyscript.wiki.astralsorcery.grindstone.add0", type = MethodDescription.Type.ADDITION)
@@ -50,14 +41,9 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
         return GrindstoneRecipeRegistry.registerGrindstoneRecipe(recipe);
     }
 
-    private boolean remove(GrindstoneRecipe recipe) {
-        addBackup(recipe);
-        return GrindstoneRecipeRegistry.recipes.remove(recipe);
-    }
-
     @MethodDescription(example = @Example("item('minecraft:redstone_ore')"))
     public void removeByInput(ItemStack item) {
-        GrindstoneRecipeRegistry.recipes.removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (recipe.isValid() && recipe.matches(item)) {
                 addBackup(recipe);
                 return true;
@@ -74,7 +60,7 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
 
     @MethodDescription
     public void removeByOutput(ItemStack item) {
-        GrindstoneRecipeRegistry.recipes.removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (recipe.isValid() && recipe.getOutputForMatching().isItemEqual(item)) {
                 addBackup(recipe);
                 return true;
@@ -83,25 +69,13 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<GrindstoneRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(GrindstoneRecipeRegistry.recipes)
-                .setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        GrindstoneRecipeRegistry.recipes.forEach(this::addBackup);
-        GrindstoneRecipeRegistry.recipes.clear();
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<GrindstoneRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int weight;
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float secondaryChance;
 
         @RecipeBuilderMethodDescription
@@ -114,6 +88,12 @@ public class Grindstone extends VirtualizedRegistry<GrindstoneRecipe> {
         public RecipeBuilder secondaryChance(float chance) {
             this.secondaryChance = chance;
             return this;
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
         }
 
         @Override

@@ -64,19 +64,19 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
 
     public static class BrewBuilder extends AbstractRecipeBuilder<vazkii.botania.api.brew.Brew> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), priority = 100)
+        @Property(comp = @Comp(not = "null"), priority = 100)
         protected String key;
         @Property(ignoresInheritedMethods = true, priority = 200)
         protected String name;
-        @Property(defaultValue = "0xFFFFFF", valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(defaultValue = "0xFFFFFF", comp = @Comp(not = "null"))
         protected int color = 0xFFFFFF;
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         protected int cost;
         @Property(defaultValue = "true", priority = 1100)
         protected boolean canInfuseIncense = true;
         @Property(defaultValue = "true", priority = 1200)
         protected boolean canInfuseBloodPendant = true;
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         protected final List<PotionEffect> effects = new ArrayList<>();
 
         @RecipeBuilderMethodDescription
@@ -162,8 +162,8 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 0, 0, 0, 0);
-            validateFluids(msg, 0, 0, 0, 0);
+            validateItems(msg);
+            validateFluids(msg);
             msg.add(key == null, "key must be defined");
             msg.add(BotaniaAPI.brewMap.containsKey(key), "must have a unique key for brew, got " + key);
             msg.add(cost < 1, "cost must be at least 1, got " + cost);

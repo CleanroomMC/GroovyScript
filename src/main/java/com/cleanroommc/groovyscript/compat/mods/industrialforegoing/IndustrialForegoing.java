@@ -1,8 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.industrialforegoing;
 
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
-public class IndustrialForegoing extends ModPropertyContainer {
+public class IndustrialForegoing extends GroovyPropertyContainer {
 
     public final BioReactor bioReactor = new BioReactor();
     public final Extractor extractor = new Extractor();
@@ -14,18 +14,5 @@ public class IndustrialForegoing extends ModPropertyContainer {
     public final ProteinReactor proteinReactor = new ProteinReactor();
     public final SludgeRefiner sludgeRefiner = new SludgeRefiner();
     public final Straw straw = new Straw();
-
-    public IndustrialForegoing() {
-        addRegistry(bioReactor);
-        addRegistry(extractor);
-        addRegistry(fluidDictionary);
-        addRegistry(laserDrill);
-        addRegistry(oreFermenter);
-        addRegistry(oreRaw);
-        addRegistry(oreSieve);
-        addRegistry(proteinReactor);
-        addRegistry(sludgeRefiner);
-        addRegistry(straw);
-    }
 
 }

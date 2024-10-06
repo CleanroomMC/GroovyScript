@@ -44,8 +44,8 @@ public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe
         return false;
     }
 
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "gasInput", valid = @Comp("1"))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "gasInput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends GasRecipeBuilder<CrystallizerRecipe> {
 
         @Override

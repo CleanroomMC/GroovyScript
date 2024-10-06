@@ -6,17 +6,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
+public class CokeOven extends StandardListRegistry<CokeOvenRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).time(100).creosote(50)"))
     public static RecipeBuilder recipeBuilder() {
@@ -24,16 +24,8 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> CokeOvenRecipe.recipeList.removeIf(r -> r == recipe));
-        CokeOvenRecipe.recipeList.addAll(restoreFromBackup());
-    }
-
-    public void add(CokeOvenRecipe recipe) {
-        if (recipe != null) {
-            CokeOvenRecipe.recipeList.add(recipe);
-            addScripted(recipe);
-        }
+    public Collection<CokeOvenRecipe> getRecipes() {
+        return CokeOvenRecipe.recipeList;
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -41,14 +33,6 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         CokeOvenRecipe recipe = new CokeOvenRecipe(output.copy(), ImmersiveEngineering.toIEInput(input), time, creosoteOutput);
         add(recipe);
         return recipe;
-    }
-
-    public boolean remove(CokeOvenRecipe recipe) {
-        if (CokeOvenRecipe.recipeList.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
     }
 
     @MethodDescription(example = @Example("item('immersiveengineering:material:6')"))
@@ -80,7 +64,7 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
                     .post();
             return;
         }
-        if (!CokeOvenRecipe.recipeList.removeIf(recipe -> {
+        if (!getRecipes().removeIf(recipe -> {
             if (ApiUtils.stackMatchesObject(input, recipe.input)) {
                 addBackup(recipe);
                 return true;
@@ -94,24 +78,13 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         }
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CokeOvenRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(CokeOvenRecipe.recipeList).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        CokeOvenRecipe.recipeList.forEach(this::addBackup);
-        CokeOvenRecipe.recipeList.clear();
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CokeOvenRecipe> {
 
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int time;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int creosote;
 
         @RecipeBuilderMethodDescription
@@ -124,6 +97,11 @@ public class CokeOven extends VirtualizedRegistry<CokeOvenRecipe> {
         public RecipeBuilder creosote(int creosote) {
             this.creosote = creosote;
             return this;
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

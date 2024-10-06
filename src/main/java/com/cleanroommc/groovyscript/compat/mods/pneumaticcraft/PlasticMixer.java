@@ -6,11 +6,12 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.pneumaticcraft.PlasticMixerRecipeAccessor;
 import com.cleanroommc.groovyscript.core.mixin.pneumaticcraft.PlasticMixerRegistryAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import me.desht.pneumaticcraft.common.recipes.PlasticMixerRegistry;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 @RegistryDescription(
         admonition = {
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
                 @Admonition(value = "groovyscript.wiki.pneumaticcraft.plastic_mixer.note1", type = Admonition.Type.DANGER)
         }
 )
-public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.PlasticMixerRecipe> {
+public class PlasticMixer extends StandardListRegistry<PlasticMixerRegistry.PlasticMixerRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".fluidInput(fluid('lava') * 100).output(item('minecraft:clay')).allowMelting().allowSolidifying().requiredTemperature(323)"),
@@ -33,34 +34,23 @@ public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.Plast
     }
 
     @Override
-    public void onReload() {
-        getInstance().getRecipes().removeAll(removeScripted());
-        getInstance().getRecipes().addAll(restoreFromBackup());
+    public Collection<PlasticMixerRegistry.PlasticMixerRecipe> getRecipes() {
+        return getInstance().getRecipes();
     }
 
     @Override
     public void afterScriptLoad() {
         getInstance().getValidFluids().clear();
         getInstance().getValidItems().clear();
-        for (PlasticMixerRegistry.PlasticMixerRecipe recipe : getInstance().getRecipes()) {
+        for (PlasticMixerRegistry.PlasticMixerRecipe recipe : getRecipes()) {
             getInstance().getValidFluids().add(recipe.getFluidStack().getFluid().getName());
             getInstance().getValidItems().put(recipe.getItemStack().getItem(), recipe.allowMelting());
         }
     }
 
-    public void add(PlasticMixerRegistry.PlasticMixerRecipe recipe) {
-        getInstance().getRecipes().add(recipe);
-        addScripted(recipe);
-    }
-
-    public boolean remove(PlasticMixerRegistry.PlasticMixerRecipe recipe) {
-        addBackup(recipe);
-        return getInstance().getRecipes().remove(recipe);
-    }
-
     @MethodDescription(example = @Example(value = "fluid('plastic')", commented = true))
     public boolean removeByFluid(IIngredient fluid) {
-        return getInstance().getRecipes().removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (fluid.test(entry.getFluidStack())) {
                 addBackup(entry);
                 return true;
@@ -71,7 +61,7 @@ public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.Plast
 
     @MethodDescription(example = @Example(value = "item('pneumaticcraft:plastic')", commented = true))
     public boolean removeByItem(IIngredient item) {
-        return getInstance().getRecipes().removeIf(entry -> {
+        return getRecipes().removeIf(entry -> {
             if (item.test(entry.getItemStack())) {
                 addBackup(entry);
                 return true;
@@ -80,19 +70,8 @@ public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.Plast
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        getInstance().getRecipes().forEach(this::addBackup);
-        getInstance().getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<PlasticMixerRegistry.PlasticMixerRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(getInstance().getRecipes()).setRemover(this::remove);
-    }
-
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "fluidInput", valid = @Comp("1"))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<PlasticMixerRegistry.PlasticMixerRecipe> {
 
         @Property
@@ -157,6 +136,12 @@ public class PlasticMixer extends VirtualizedRegistry<PlasticMixerRegistry.Plast
         @Override
         public String getErrorMsg() {
             return "Error adding PneumaticCraft Plastic Mixer recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // PnC modifies the recipe to only consume 1 item
+            return 1;
         }
 
         @Override

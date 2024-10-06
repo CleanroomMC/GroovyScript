@@ -4,9 +4,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import sonar.calculator.mod.common.recipes.RedstoneExtractorRecipes;
@@ -14,9 +13,10 @@ import sonar.core.recipes.DefaultSonarRecipe;
 import sonar.core.recipes.ISonarRecipeObject;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 @RegistryDescription
-public class RedstoneExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Value> {
+public class RedstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.Value> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).value(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -24,27 +24,13 @@ public class RedstoneExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Va
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(RedstoneExtractorRecipes.instance().getRecipes()::remove);
-        restoreFromBackup().forEach(RedstoneExtractorRecipes.instance().getRecipes()::add);
-    }
-
-    public void add(DefaultSonarRecipe.Value recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        RedstoneExtractorRecipes.instance().getRecipes().add(recipe);
-    }
-
-    public boolean remove(DefaultSonarRecipe.Value recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        RedstoneExtractorRecipes.instance().getRecipes().remove(recipe);
-        return true;
+    public Collection<DefaultSonarRecipe.Value> getRecipes() {
+        return RedstoneExtractorRecipes.instance().getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:redstone_block')"))
     public boolean removeByInput(IIngredient input) {
-        return RedstoneExtractorRecipes.instance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ISonarRecipeObject recipeInput : r.recipeInputs) {
                 for (ItemStack itemStack : recipeInput.getJEIValue()) {
                     if (input.test(itemStack)) {
@@ -57,28 +43,21 @@ public class RedstoneExtractor extends VirtualizedRegistry<DefaultSonarRecipe.Va
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        RedstoneExtractorRecipes.instance().getRecipes().forEach(this::addBackup);
-        RedstoneExtractorRecipes.instance().getRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<DefaultSonarRecipe.Value> streamRecipes() {
-        return new SimpleObjectStream<>(RedstoneExtractorRecipes.instance().getRecipes())
-                .setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<DefaultSonarRecipe.Value> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         private int value;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder value(int value) {
             this.value = value;
             return this;
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

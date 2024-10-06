@@ -1,22 +1,22 @@
 package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.lens.Lens;
 import de.ellpeck.actuallyadditions.api.recipe.LensConversionRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecipe> {
+public class AtomicReconstructor extends StandardListRegistry<LensConversionRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).energyUse(1000)"),
@@ -28,10 +28,8 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES::remove);
-        ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.addAll(restoreFromBackup());
+    public Collection<LensConversionRecipe> getRecipes() {
+        return ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES;
     }
 
     public LensConversionRecipe add(IIngredient input, ItemStack output, int energy, Lens type) {
@@ -43,22 +41,9 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
                 .register();
     }
 
-    public void add(LensConversionRecipe recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.add(recipe);
-    }
-
-    public boolean remove(LensConversionRecipe recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.remove(recipe);
-        return true;
-    }
-
     @MethodDescription(description = "groovyscript.wiki.removeByOre", example = @Example("item('minecraft:diamond')"))
     public boolean removeByInput(IIngredient input) {
-        return ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean found = recipe.getInput().test(IngredientHelper.toItemStack(input));
             if (found) {
                 addBackup(recipe);
@@ -69,7 +54,7 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
 
     @MethodDescription(example = @Example("item('actuallyadditions:block_crystal')"))
     public boolean removeByOutput(ItemStack output) {
-        return ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean matches = ItemStack.areItemStacksEqual(recipe.getOutput(), output);
             if (matches) {
                 addBackup(recipe);
@@ -78,25 +63,13 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.forEach(this::addBackup);
-        ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<LensConversionRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ActuallyAdditionsAPI.RECONSTRUCTOR_LENS_CONVERSION_RECIPES)
-                .setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<LensConversionRecipe> {
 
-        @Property(defaultValue = "1", valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(defaultValue = "1", comp = @Comp(gt = 0))
         private int energyUse = 1;
-        @Property(defaultValue = "ActuallyAdditionsAPI.lensDefaultConversion", valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(defaultValue = "ActuallyAdditionsAPI.lensDefaultConversion", comp = @Comp(not = "null"))
         private Lens type = ActuallyAdditionsAPI.lensDefaultConversion;
 
         @RecipeBuilderMethodDescription
@@ -115,6 +88,11 @@ public class AtomicReconstructor extends VirtualizedRegistry<LensConversionRecip
         public RecipeBuilder type(Lens type) {
             this.type = type;
             return this;
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

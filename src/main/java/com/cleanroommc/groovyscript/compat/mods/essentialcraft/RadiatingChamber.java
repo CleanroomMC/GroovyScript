@@ -4,16 +4,17 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import essentialcraft.api.RadiatingChamberRecipe;
 import essentialcraft.api.RadiatingChamberRecipes;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe> {
+public class RadiatingChamber extends StandardListRegistry<RadiatingChamberRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:nether_star'), item('minecraft:stone')).output(item('minecraft:beacon')).time(100).mruPerTick(10.0f).upperBalance(1.5f).lowerBalance(0.25f)"))
     public RadiatingChamber.RecipeBuilder recipeBuilder() {
@@ -21,14 +22,13 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(RadiatingChamberRecipes::removeRecipe);
-        restoreFromBackup().forEach(RadiatingChamberRecipes::addRecipe);
+    public Collection<RadiatingChamberRecipe> getRecipes() {
+        return RadiatingChamberRecipes.RECIPES;
     }
 
     @MethodDescription(example = @Example("item('essentialcraft:genitem', 42)"))
     public boolean removeByOutput(IIngredient x) {
-        return RadiatingChamberRecipes.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (x.test(r.getRecipeOutput())) {
                 addBackup(r);
                 return true;
@@ -37,34 +37,20 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        RadiatingChamberRecipes.RECIPES.forEach(this::addBackup);
-        RadiatingChamberRecipes.RECIPES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RadiatingChamberRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(RadiatingChamberRecipes.RECIPES).setRemover(r -> {
-            addBackup(r);
-            return RadiatingChamberRecipes.RECIPES.remove(r);
-        });
-    }
-
-    @Property(property = "input", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 2))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<RadiatingChamberRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(comp = @Comp(gte = 1))
         private int time;
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"), defaultValue = "1.0f")
+        @Property(comp = @Comp(gte = 1), defaultValue = "1.0f")
         private float mruPerTick = 1.0f;
 
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0.0f"), @Comp(type = Comp.Type.LTE, value = "2.0f")})
+        @Property(comp = @Comp(gte = 0, lte = 2))
         private float lowerBalance;
 
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0.0f"), @Comp(type = Comp.Type.LTE, value = "2.0f")}, defaultValue = "2.0f")
+        @Property(comp = @Comp(gte = 0, lte = 2), defaultValue = "2.0f")
         private float upperBalance = 2.0f;
 
         @RecipeBuilderMethodDescription
@@ -92,8 +78,13 @@ public class RadiatingChamber extends VirtualizedRegistry<RadiatingChamberRecipe
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
-            return "Error adding Magician Table Recipe";
+            return "Error adding Radiating Chamber Recipe";
         }
 
         @Override

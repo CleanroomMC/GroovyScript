@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
  *         Can only allow one annotation per field.
  *     </li>
  *     <li>
- *         {@link ElementType#TYPE}: Marks the field targeted by {@link #property()} within the attached class with this {@link Property}.
+ *         {@link ElementType#TYPE}: Marks the field targeted by {@link #property()} within the attached class and any subclasses with this {@link Property}.
  *         Multiple will be wrapped in {@link Properties}.
  *     </li>
  *     <li>
@@ -30,9 +30,7 @@ import java.lang.reflect.Field;
  *     </li>
  *     <li>{@link #property()} either contains nothing if {@link Property} was created attached to a field, or the relevant {@link Field#getName()} string.</li>
  *     <li>{@link #defaultValue()} a string containing the default value of the property. If empty, defaults to {@code null}.</li>
- *     <li>{@link #valid()} is an array of {@link Comp} that indicates the requirements of the {@link Property} to pass validation.</li>
- *     <li>{@link #requirement()} is a localization key that states the requirements for the property to pass validation provided the requirements are too
- *     complex to represent via {@link #valid()}.</li>
+ *     <li>{@link #comp()} is a {@link Comp} that indicates the requirements of the {@link Property} to pass validation.</li>
  *     <li>{@link #ignoresInheritedMethods()} if this {@link Property} annotation requires any methods targeting the {@link Property} to not be inherited methods.</li>
  *     <li>{@link #needsOverride()} if this {@link Property} annotation needs another {@link Property} annotation with this element set to {@code true} to function.
  *     Used in wrapper classes, such as {@link com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder AbstractRecipeBuilder}, where some or all of the fields may not be needed in subclasses.</li>
@@ -79,48 +77,107 @@ public @interface Property {
     String defaultValue() default "";
 
     /**
-     * The primary way to document properties, supplemented by {@link #requirement()}.
+     * @deprecated {@link #comp()}
+     */
+    @Deprecated
+    Comp[] valid() default {};
+
+    /**
+     * The primary way to document properties.
      * The three main ways this element is used is to refer to:
      * <br>- a number: Would indicate comparing directly against the number.
      * <br>- an array or list: Would indicate comparing against the length of the array/list.
      * <br>- another object: Would use to indicate {@code not null} is required.
+     * <p>
+     * In almost all cases, the {@link Comp#types()} element can be assumed due to the values of the desired
+     * elements being set to a non-default value. For the int elements, the default value is {@link Integer#MIN_VALUE},
+     * and for the String elements, the default value is an empty string.
+     * <p>
+     * Here is a quick shortcut table to better understand what the logic is:
      *
      * <table>
      *  <tr>
      *   <th>validation</th>
      *   <th>code</th>
+     *   <th>logic</th>
+     *  </tr>
+     *  <tr>
+     *   <td><code>N/A</code></td>
+     *   <td><code>@Comp</code></td>
+     *   <td>no validation is applied</td>
      *  </tr>
      *  <tr>
      *   <td><code>x == 1</code></td>
-     *   <td><code>valid = @Comp("1")</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {@link Comp.Type#EQ EQ}, {@link Comp#eq eq} = 1)</code></td>
+     *   <td>types checks eq, eq is set to 1</td>
      *  </tr>
      *  <tr>
-     *   <td><code>x != 1</code></td>
-     *   <td><code>valid = @Comp(value = "1", type = Comp.Type.NOT)</code></td>
-     *  </tr>
-     *  <tr>
-     *   <td><code>x != null</code></td>
-     *   <td><code>valid = @Comp(value = "null", type = Comp.Type.NOT)</code></td>
+     *   <td><code>x == 1</code></td>
+     *   <td><code>@Comp({@link Comp#eq eq} = 1)</code></td>
+     *   <td>^1</td>
      *  </tr>
      *  <tr>
      *   <td><code>x > 0</code></td>
-     *   <td><code>valid = @Comp(value = "0", type = Comp.Type.GT)</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {@link Comp.Type#GT GT}, {@link Comp#gt gt} = 0)</code></td>
+     *   <td>types checks gt, gt is set to 0</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x > 0</code></td>
+     *   <td><code>@Comp({@link Comp#gt gt} = 0)</code></td>
+     *   <td>^1</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x >= 0</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {@link Comp.Type#GTE GTE}, {@link Comp#gte gte} = 0)</code></td>
+     *   <td>types checks gte, gte is set to 0</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x != 1</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {@link Comp.Type#NOT NOT}, {@link Comp#not not} = "1")</code></td>
+     *   <td>types checks not, not is set to "1"</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x != null</code></td>
+     *   <td><code>@Comp({@link Comp#not not} = "null")</code></td>
+     *   <td>^1</td>
      *  </tr>
      *  <tr>
      *   <td><code>x >= 0 && x <= 5</code></td>
-     *   <td><code>valid = {{@literal @}Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "5", type = Comp.Type.LTE)}</code></td>
+     *   <td><code>@Comp({@link Comp#types types} = {{@link Comp.Type#GTE GTE}, {@link Comp.Type#LTE LTE}}, {@link Comp#gte gte} = 0, {@link Comp#lte lte} = 5)</code></td>
+     *   <td>types checks gte and lte, gte is set to 0 and lte is set to 5</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x > 0 && x <= 2</code></td>
+     *   <td><code>@Comp({@link Comp#gt gt} = 0, {@link Comp#lte lte} = 2)</code></td>
+     *   <td>^1</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>complex logic</code></td>
+     *   <td><code>@Comp({@link Comp#unique unique} = "complex logic")</code></td>
+     *   <td>^1</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x >= 0 && complex logic</code></td>
+     *   <td><code>@Comp({@link Comp#gte gte} = 0, {@link Comp#unique unique} = "complex logic")</code></td>
+     *   <td>^1</td>
+     *  </tr>
+     *  <tr>
+     *   <td><code>x >= 1 && x <= 9 && complex logic</code></td>
+     *   <td><code>@Comp({@link Comp#gte gte} = 1, {@link Comp#lte lte} = 9, {@link Comp#unique unique} = "complex logic")</code></td>
+     *   <td>^1</td>
      *  </tr>
      * </table>
      *
-     * @return an array of {@link Comp} entries indicating valid values for the property to be.
+     * ^1 = if types is empty, any non-default values are used
+     *
+     * @return a {@link Comp} indicating valid values for the property to be.
      */
-    Comp[] valid() default {};
+    Comp comp() default @Comp;
 
     /**
-     * A localization key to declare validation requirements that are too complex to represent in {@link #valid()}.
-     *
-     * @return a string describing the valid value(s) for the field to be to pass validation
+     * @deprecated use {@link #comp()} instead, via {@code @Comp(types = Comp.Type.UNI, unique = "lang-key-here")}
      */
+    @Deprecated
     String requirement() default "";
 
     /**

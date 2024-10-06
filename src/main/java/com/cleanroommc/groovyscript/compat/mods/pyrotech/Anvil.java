@@ -30,7 +30,7 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 9, 'granite', 'hammer'"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay', ore('ingotIron'), item('minecraft:clay_ball'), 9, 'granite', 'hammer'"))
     public AnvilRecipe add(String name, IIngredient input, ItemStack output, int hits, String tier, String type) {
         AnvilRecipe.EnumTier enumTier = EnumHelper.valueOfNullable(AnvilRecipe.EnumTier.class, tier, false);
         AnvilRecipe.EnumType enumType = EnumHelper.valueOfNullable(AnvilRecipe.EnumType.class, type, false);
@@ -67,12 +67,12 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         }
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<AnvilRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(comp = @Comp(gt = 0))
         private int hits;
 
         @Property
@@ -130,6 +130,12 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
             return "Error adding Pyrotech Anvil Recipe";
         }
 
+        @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
+        }
+        
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);

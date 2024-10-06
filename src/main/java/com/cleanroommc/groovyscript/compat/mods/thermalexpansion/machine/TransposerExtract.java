@@ -113,14 +113,14 @@ public class TransposerExtract extends VirtualizedRegistry<TransposerRecipe> {
         TransposerManagerAccessor.getRecipeMapExtract().clear();
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "1")})
-    @Property(property = "fluidOutput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TransposerRecipe> {
 
-        @Property(defaultValue = "TransposerManager.DEFAULT_ENERGY", valid = @Comp(value = "0", type = Comp.Type.GT), value = "groovyscript.wiki.thermalexpansion.energy.value")
+        @Property(defaultValue = "TransposerManager.DEFAULT_ENERGY", comp = @Comp(gt = 0), value = "groovyscript.wiki.thermalexpansion.energy.value")
         private int energy = TransposerManager.DEFAULT_ENERGY;
-        @Property(valid = {@Comp(type = Comp.Type.GTE, value = "0"), @Comp(type = Comp.Type.LTE, value = "100")})
+        @Property(comp = @Comp(gte = 0, lte = 100))
         private int chance;
 
         @RecipeBuilderMethodDescription

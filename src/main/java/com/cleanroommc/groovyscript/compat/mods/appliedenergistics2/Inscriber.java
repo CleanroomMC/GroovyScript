@@ -62,15 +62,15 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
     }
 
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IInscriberRecipe> {
 
-        @Property(defaultValue = "InscriberProcessType.PRESS", valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(defaultValue = "InscriberProcessType.PRESS", comp = @Comp(not = "null"))
         private InscriberProcessType type = InscriberProcessType.PRESS;
-        @Property(defaultValue = "ItemStack.EMPTY", requirement = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required")
+        @Property(defaultValue = "ItemStack.EMPTY", comp = @Comp(unique = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required"))
         private ItemStack top = ItemStack.EMPTY;
-        @Property(defaultValue = "ItemStack.EMPTY", requirement = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required")
+        @Property(defaultValue = "ItemStack.EMPTY", comp = @Comp(unique = "groovyscript.wiki.appliedenergistics2.inscriber.top_bottom.required"))
         private ItemStack bottom = ItemStack.EMPTY;
 
 
@@ -108,6 +108,12 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
         public RecipeBuilder bottom(ItemStack bottom) {
             this.bottom = bottom;
             return this;
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed in the machine's slots
+            return 1;
         }
 
         @Override

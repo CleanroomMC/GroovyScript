@@ -5,27 +5,42 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.LightOreTransmutationsAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.Collection;
 
 @RegistryDescription
-public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutations.Transmutation> {
+public class LightTransmutation extends StandardListRegistry<LightOreTransmutations.Transmutation> {
 
-    private static List<LightOreTransmutations.Transmutation> getRegistry() {
+    private IBlockState replacementState;
+
+    @GroovyBlacklist
+    public IBlockState getReplacementState() {
+        return replacementState;
+    }
+
+    @Override
+    public Collection<LightOreTransmutations.Transmutation> getRecipes() {
         if (LightOreTransmutationsAccessor.getRegisteredTransmutations() == null) {
             throw new IllegalStateException("Astral Sorcery Light Transmutation getRegisteredTransmutations() is not yet initialized!");
         }
-        return (List<LightOreTransmutations.Transmutation>) LightOreTransmutationsAccessor.getRegisteredTransmutations();
+        return LightOreTransmutationsAccessor.getRegisteredTransmutations();
+    }
+
+    @Override
+    @GroovyBlacklist
+    @ApiStatus.Internal
+    public void onReload() {
+        super.onReload();
+        replacementState = null;
     }
 
     @RecipeBuilderDescription(example = {
@@ -35,42 +50,25 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         return new RecipeBuilder();
     }
 
-    @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        removeScripted().forEach(r -> getRegistry().removeIf(recipe -> r == recipe));
-        restoreFromBackup().forEach(r -> getRegistry().add(r));
-    }
-
-    private void add(LightOreTransmutations.Transmutation recipe) {
-        getRegistry().add(recipe);
-        addScripted(recipe);
-    }
-
     public LightOreTransmutations.Transmutation add(Block input, IBlockState output,
-                                                    @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
+                                                    @NotNull ItemStack inputDisplay, @NotNull ItemStack outputDisplay, double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
-        getRegistry().add(recipe);
+        getRecipes().add(recipe);
         return recipe;
     }
 
     public LightOreTransmutations.Transmutation add(IBlockState input, IBlockState output,
-                                                    @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
+                                                    @NotNull ItemStack inputDisplay, @NotNull ItemStack outputDisplay, double cost) {
         LightOreTransmutations.Transmutation recipe = new LightOreTransmutations.Transmutation(input, output, inputDisplay, outputDisplay, cost);
         addScripted(recipe);
-        getRegistry().add(recipe);
+        getRecipes().add(recipe);
         return recipe;
-    }
-
-    private boolean remove(LightOreTransmutations.Transmutation recipe) {
-        return getRegistry().removeIf(rec -> rec.equals(recipe));
     }
 
     @MethodDescription(example = @Example("blockstate('minecraft:sandstone')"))
     public void removeByInput(IBlockState block) {
-        getRegistry().removeIf(rec -> {
+        getRecipes().removeIf(rec -> {
             if (rec.matchesInput(block)) {
                 addBackup(rec);
                 return true;
@@ -86,7 +84,7 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
 
     @MethodDescription(example = @Example("blockstate('minecraft:cake')"))
     public void removeByOutput(IBlockState block) {
-        getRegistry().removeIf(rec -> {
+        getRecipes().removeIf(rec -> {
             if (rec.matchesOutput(block)) {
                 addBackup(rec);
                 return true;
@@ -100,27 +98,20 @@ public class LightTransmutation extends VirtualizedRegistry<LightOreTransmutatio
         removeByOutput(block.getDefaultState());
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<LightOreTransmutations.Transmutation> streamRecipes() {
-        return new SimpleObjectStream<>(getRegistry())
-                .setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        getRegistry().forEach(this::addBackup);
-        getRegistry().clear();
+    @MethodDescription(type = MethodDescription.Type.VALUE, example = @Example("blockstate('minecraft:clay')"))
+    public void setStarmetalReplacementState(IBlockState state) {
+        replacementState = state;
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightOreTransmutations.Transmutation> {
 
-        @Property(valid = {@Comp(value = "null", type = Comp.Type.NOT), @Comp(value = "input", type = Comp.Type.NOT)})
+        @Property(comp = @Comp(not = "null or input"))
         private Block inBlock;
-        @Property(ignoresInheritedMethods = true, valid = {@Comp(value = "null", type = Comp.Type.NOT), @Comp(value = "inBlock", type = Comp.Type.NOT)})
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null or inBlock"))
         private IBlockState input;
-        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private IBlockState output;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private double cost;
         @Property
         private ItemStack outStack;

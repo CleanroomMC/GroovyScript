@@ -26,14 +26,14 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         super(name, instance);
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 2))
     public class RecipeBuilder extends AbstractRecipeBuilder<SimpleRecipe> {
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         private int time = getDefaultTime();
 
-        @Property(valid = @Comp(value = "1", type = Comp.Type.LTE), defaultValue = "1.0f")
+        @Property(comp = @Comp(lte = 1), defaultValue = "1.0f")
         private float secondaryChance = 1.0f;
 
         @RecipeBuilderMethodDescription
@@ -46,6 +46,12 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         public SimpleRecipeHandlerSecondaryOutput.RecipeBuilder secondaryChance(float secondaryOutput) {
             this.secondaryChance = secondaryOutput;
             return this;
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // PT modifies the recipe to only consume 1 item
+            return 1;
         }
 
         @Override

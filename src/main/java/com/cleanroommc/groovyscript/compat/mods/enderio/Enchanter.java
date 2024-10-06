@@ -98,17 +98,17 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
 
     public static class RecipeBuilder implements IRecipeBuilder<EnchanterRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(comp = @Comp(not = "null"))
         private Enchantment enchantment;
-        @Property(ignoresInheritedMethods = true, valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private IIngredient input;
-        @Property(valid = @Comp(type = Comp.Type.GT, value = "0"))
+        @Property(comp = @Comp(gt = 0))
         private int amount;
         @Property(defaultValue = "1")
         private double costMultiplier = 1;
-        @Property(defaultValue = "ore('gemLapis')", valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(defaultValue = "ore('gemLapis')", comp = @Comp(not = "null"))
         private IIngredient lapis = new OreDictIngredient("gemLapis");
-        @Property(defaultValue = "item('minecraft:writable_book')", valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(defaultValue = "item('minecraft:writable_book')", comp = @Comp(not = "null"))
         private IIngredient book = IngredientHelper.toIIngredient(new ItemStack(Items.WRITABLE_BOOK));
 
         @RecipeBuilderMethodDescription
@@ -153,7 +153,8 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
                     .add(enchantment == null, () -> "enchantment must not be null")
                     .add(IngredientHelper.isEmpty(input), () -> "input must not be empty")
                     .add(IngredientHelper.isEmpty(book), () -> "custom book must not be empty")
-                    .add(IngredientHelper.isEmpty(lapis), () -> "custom lapis must not be empty");
+                    .add(IngredientHelper.isEmpty(lapis), () -> "custom lapis must not be empty")
+                    .add(IngredientHelper.overMaxSize(book, 1), () -> "custom book stack size must be 1");
             if (amount <= 0 && input != null) amount = input.getAmount();
 
             return !msg.postIfNotEmpty();

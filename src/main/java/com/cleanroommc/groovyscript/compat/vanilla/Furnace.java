@@ -29,6 +29,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         if (GroovyLog.msg("Error adding Minecraft Furnace recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input must not be empty")
                 .add(IngredientHelper.isEmpty(output), () -> "Output must not be empty")
+                .add(IngredientHelper.overMaxSize(input, 1), () -> "Input size must be 1")
                 .error()
                 .postIfNotEmpty()) {
             return;

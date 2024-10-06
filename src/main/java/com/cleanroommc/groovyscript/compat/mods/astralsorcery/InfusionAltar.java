@@ -97,17 +97,17 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
         });
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BasicInfusionRecipe> {
 
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float consumption = 0.05F;
         @Property
         private boolean chalice = true;
         @Property
         private boolean consumeMultiple;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int time = 200;
 
 
@@ -145,6 +145,12 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
         }
 
         @Override

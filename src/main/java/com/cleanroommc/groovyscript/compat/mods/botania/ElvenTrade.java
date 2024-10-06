@@ -1,13 +1,11 @@
 package com.cleanroommc.groovyscript.compat.mods.botania;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaAPI;
@@ -18,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
+public class ElvenTrade extends StandardListRegistry<RecipeElvenTrade> {
 
     @RecipeBuilderDescription(example = @Example(".input(ore('ingotGold'), ore('ingotIron')).output(item('botania:manaresource:7'))"))
     public RecipeBuilder recipeBuilder() {
@@ -26,10 +24,8 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(BotaniaAPI.elvenTradeRecipes::remove);
-        BotaniaAPI.elvenTradeRecipes.addAll(restoreFromBackup());
+    public Collection<RecipeElvenTrade> getRecipes() {
+        return BotaniaAPI.elvenTradeRecipes;
     }
 
     protected Object[] convertIngredients(IIngredient[] inputs) {
@@ -57,21 +53,9 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
         return recipeBuilder().input(inputs).output(output).register();
     }
 
-    public void add(RecipeElvenTrade recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        BotaniaAPI.elvenTradeRecipes.add(recipe);
-    }
-
-    public boolean remove(RecipeElvenTrade recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        return BotaniaAPI.elvenTradeRecipes.remove(recipe);
-    }
-
     @MethodDescription(description = "groovyscript.wiki.removeByOutput", example = @Example("item('botania:dreamwood')"))
     public boolean removeByOutputs(ItemStack... outputs) {
-        if (BotaniaAPI.elvenTradeRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = Arrays.stream(outputs).allMatch(output -> recipe.getOutputs().stream().anyMatch(o -> ItemStack.areItemStacksEqual(o, output)));
             if (found) addBackup(recipe);
             return found;
@@ -88,7 +72,7 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
     public boolean removeByInputs(IIngredient... inputs) {
         List<Object> converted = Arrays.asList(convertIngredients(inputs));
         List<IIngredient> list = Arrays.asList(inputs);
-        if (BotaniaAPI.elvenTradeRecipes.removeIf(recipe -> {
+        if (getRecipes().removeIf(recipe -> {
             boolean found = recipe.getInputs().stream().allMatch(input -> input instanceof String ? converted.contains(input)
                                                                                                   : list.stream().anyMatch(i -> i.test((ItemStack) input)));
             if (found) addBackup(recipe);
@@ -102,19 +86,8 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
         return false;
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BotaniaAPI.elvenTradeRecipes.forEach(this::addBackup);
-        BotaniaAPI.elvenTradeRecipes.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<RecipeElvenTrade> streamRecipes() {
-        return new SimpleObjectStream<>(BotaniaAPI.elvenTradeRecipes).setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "99")})
-    @Property(property = "output", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "99")})
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 99))
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 99))
     public class RecipeBuilder extends AbstractRecipeBuilder<RecipeElvenTrade> {
 
         @Override
@@ -124,7 +97,7 @@ public class ElvenTrade extends VirtualizedRegistry<RecipeElvenTrade> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateFluids(msg, 0, 0, 0, 0);
+            validateFluids(msg);
             validateItems(msg, 1, 99, 1, 99);
         }
 

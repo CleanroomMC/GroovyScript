@@ -9,32 +9,24 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
+public class CompressionCrafting extends StandardListRegistry<CompressorRecipe> {
 
     public CompressionCrafting() {
         super(Alias.generateOfClassAnd(CompressionCrafting.class, "Compression"));
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe));
-        CompressorRecipeManager.getInstance().getRecipes().addAll(restoreFromBackup());
-    }
-
-    public CompressorRecipe add(CompressorRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            CompressorRecipeManager.getInstance().getRecipes().add(recipe);
-        }
-        return recipe;
+    public Collection<CompressorRecipe> getRecipes() {
+        return CompressorRecipeManager.getInstance().getRecipes();
     }
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.compression_crafting.add0", type = MethodDescription.Type.ADDITION)
@@ -44,12 +36,14 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
 
     @MethodDescription(description = "groovyscript.wiki.extendedcrafting.compression_crafting.add1", type = MethodDescription.Type.ADDITION)
     public CompressorRecipe add(ItemStack output, IIngredient input, int inputCount, IIngredient catalyst, boolean consumeCatalyst, int powerCost, int powerRate) {
-        return add(new CompressorRecipe(output, input.toMcIngredient(), inputCount, catalyst.toMcIngredient(), consumeCatalyst, powerCost, powerRate));
+        CompressorRecipe recipe = new CompressorRecipe(output, input.toMcIngredient(), inputCount, catalyst.toMcIngredient(), consumeCatalyst, powerCost, powerRate);
+        add(recipe);
+        return recipe;
     }
 
     @MethodDescription(example = @Example("item('extendedcrafting:singularity:6')"))
     public boolean removeByOutput(ItemStack output) {
-        return CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getOutput().equals(output)) {
                 addBackup(r);
                 return true;
@@ -60,7 +54,7 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
 
     @MethodDescription(example = @Example("item('extendedcrafting:material:11')"))
     public boolean removeByCatalyst(IIngredient catalyst) {
-        return CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getCatalyst().equals(catalyst.toMcIngredient())) {
                 addBackup(r);
                 return true;
@@ -71,32 +65,13 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:gold_ingot')"))
     public boolean removeByInput(IIngredient input) {
-        return CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getInput().equals(input.toMcIngredient())) {
                 addBackup(r);
                 return true;
             }
             return false;
         });
-    }
-
-    public boolean remove(CompressorRecipe recipe) {
-        if (CompressorRecipeManager.getInstance().getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<CompressorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(CompressorRecipeManager.getInstance().getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        CompressorRecipeManager.getInstance().getRecipes().forEach(this::addBackup);
-        CompressorRecipeManager.getInstance().getRecipes().clear();
     }
 
     @RecipeBuilderDescription(example = {
@@ -107,19 +82,19 @@ public class CompressionCrafting extends VirtualizedRegistry<CompressorRecipe> {
         return new RecipeBuilder();
     }
 
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "input", valid = @Comp(type = Comp.Type.NOT, value = "null"))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "input", comp = @Comp(not = "null"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompressorRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int inputCount;
-        @Property(defaultValue = "IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack())", valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(defaultValue = "IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack())", comp = @Comp(not = "null"))
         private IIngredient catalyst = IngredientHelper.toIIngredient(ItemSingularity.getCatalystStack());
         @Property
         private boolean consumeCatalyst;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int powerCost;
-        @Property(defaultValue = "ModConfig.confCompressorRFRate", valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(defaultValue = "ModConfig.confCompressorRFRate", comp = @Comp(gte = 0))
         private int powerRate = ModConfig.confCompressorRFRate;
 
         @Override

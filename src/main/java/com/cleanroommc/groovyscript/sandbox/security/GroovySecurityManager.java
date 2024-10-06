@@ -1,6 +1,9 @@
 package com.cleanroommc.groovyscript.sandbox.security;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.IScriptReloadable;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.GroovyClassLoader;
@@ -28,7 +31,6 @@ public class GroovySecurityManager {
     public static final GroovySecurityManager INSTANCE = new GroovySecurityManager();
     private static final String blacklistDesc = Type.getDescriptor(GroovyBlacklist.class);
 
-
     private final List<String> bannedPackages = new ArrayList<>();
     private final Set<String> bannedClasses = new ObjectOpenHashSet<>();
     private final Map<String, Set<String>> bannedMethods = new Object2ObjectOpenHashMap<>();
@@ -54,16 +56,18 @@ public class GroovySecurityManager {
         banPackage("groovy.grape");
         banPackage("groovy.beans");
         banPackage("groovy.cli");
-        banPackage("groovyjarjar");
+        banPackage("groovyjarjarantlr4.");
+        banPackage("groovyjarjarasm.");
+        banPackage("groovyjarjarpicocli.");
         banPackage("sun."); // sun contains so many classes where some of them seem useful and others can break EVERYTHING, so im just gonna ban all because im lazy
         banPackage("javax.net");
         banPackage("javax.security");
         banPackage("javax.script");
         banPackage("org.spongepowered");
         banPackage("zone.rong.mixinbooter");
+        banPackage("net.minecraftforge.gradle");
         banClasses(Runtime.class, ClassLoader.class, Scanner.class);
-        banClasses(GroovyScriptEngine.class, Eval.class, GroovyMain.class, GroovySocketServer.class, GroovyShell.class,
-                   GroovyClassLoader.class);
+        banClasses(GroovyScriptEngine.class, Eval.class, GroovyMain.class, GroovySocketServer.class, GroovyShell.class, GroovyClassLoader.class);
         banMethods(System.class, "exit", "gc", "setSecurityManager");
         banMethods(Class.class, "getResource", "getResourceAsStream");
         banMethods(String.class, "execute");
@@ -73,9 +77,12 @@ public class GroovySecurityManager {
         // mod specific
         banPackage("com.cleanroommc.groovyscript.command");
         banPackage("com.cleanroommc.groovyscript.core");
-        banPackage("com.cleanroommc.groovyscript.registry");
         banPackage("com.cleanroommc.groovyscript.sandbox");
         banPackage("com.cleanroommc.groovyscript.server");
+        banPackage("net.prominic");
+        banMethods(IScriptReloadable.class, "onReload", "afterScriptLoad");
+        banMethods(VirtualizedRegistry.class, "createRecipeStorage");
+        banMethods(GroovyPropertyContainer.class, "initialize");
     }
 
     public void unBanClass(Class<?> clazz) {
@@ -151,12 +158,28 @@ public class GroovySecurityManager {
     }
 
     public boolean isValidMethod(Class<?> receiver, String method) {
-        return isValidMethod(receiver.getName(), method);
+        while (receiver != null && receiver != Object.class) {
+            if (isMethodBannedFromClass(receiver.getName(), method)) return false;
+            for (Class<?> interf : receiver.getInterfaces()) {
+                if (isMethodBannedFromClass(interf.getName(), method)) return false;
+            }
+            receiver = receiver.getSuperclass();
+        }
+        return true;
     }
 
-    public boolean isValidMethod(String receiver, String method) {
+    public boolean isValidMethod(ClassNode receiver, String method) {
+        if (isMethodBannedFromClass(receiver.name, method)) return false;
+        for (String interf : receiver.interfaces) {
+            if (isMethodBannedFromClass(interf, method)) return false;
+        }
+        // unfortunately can't check all super classes here
+        return receiver.name == null || !isMethodBannedFromClass(receiver.superName, method);
+    }
+
+    private boolean isMethodBannedFromClass(String receiver, String method) {
         Set<String> methods = bannedMethods.get(receiver);
-        return methods == null || !methods.contains(method);
+        return methods != null && methods.contains(method);
     }
 
     public List<String> getBannedPackages() {

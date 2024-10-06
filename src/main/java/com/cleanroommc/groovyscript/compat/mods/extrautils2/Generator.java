@@ -247,15 +247,15 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
 
     }
 
-    @Property(property = "input", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
-    @Property(property = "fluidInput", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "1", type = Comp.Type.LTE)})
+    @Property(property = "input", comp = @Comp(gte = 0, lte = 2))
+    @Property(property = "fluidInput", comp = @Comp(gte = 0, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IMachineRecipe> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private Machine generator;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int energy;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private int energyPerTick;
 
         @RecipeBuilderMethodDescription
@@ -315,9 +315,9 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
             com.rwtema.extrautils2.api.machine.RecipeBuilder builder = com.rwtema.extrautils2.api.machine.RecipeBuilder.newbuilder(generator);
             builder.setRFRate(energy, energyPerTick);
             if (!input.isEmpty()) {
-                builder.setItemInput(XUMachineGenerators.INPUT_ITEM, Arrays.stream(input.get(0).getMatchingStacks()).collect(Collectors.toList()), input.get(0).getAmount());
+                builder.setItemInput(XUMachineGenerators.INPUT_ITEM, Arrays.asList(input.get(0).getMatchingStacks()), input.get(0).getAmount());
                 if (input.size() == 2) {
-                    builder.setItemInput(MachineInitAccessor.getSLOT_SLIME_SECONDARY(), Arrays.stream(input.get(1).getMatchingStacks()).collect(Collectors.toList()), input.get(1).getAmount());
+                    builder.setItemInput(MachineInitAccessor.getSLOT_SLIME_SECONDARY(), Arrays.asList(input.get(1).getMatchingStacks()), input.get(1).getAmount());
                 }
             }
 

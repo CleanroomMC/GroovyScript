@@ -106,15 +106,15 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         return new SimpleObjectStream<>(NaturesAuraAPI.ALTAR_RECIPES.entrySet()).setRemover(x -> remove(x.getValue()));
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AltarRecipe> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), defaultValue = "IIngredient.EMPTY")
+        @Property(comp = @Comp(not = "null"), defaultValue = "IIngredient.EMPTY")
         private IIngredient catalyst = IIngredient.EMPTY;
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         private int aura;
-        @Property(valid = @Comp(value = "1", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 1))
         private int time;
 
         @RecipeBuilderMethodDescription
@@ -143,6 +143,12 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         @Override
         public String getRecipeNamePrefix() {
             return "groovyscript_altar_";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
         }
 
         @Override

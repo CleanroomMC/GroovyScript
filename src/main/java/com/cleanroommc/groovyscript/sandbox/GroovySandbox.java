@@ -11,8 +11,8 @@ import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.launchwrapper.Launch;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.codehaus.groovy.runtime.InvokerHelper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +37,8 @@ public abstract class GroovySandbox {
     private final URL[] scriptEnvironment;
     private final ThreadLocal<Boolean> running = ThreadLocal.withInitial(() -> false);
     private final Map<String, Object> bindings = new Object2ObjectOpenHashMap<>();
-    private final Set<Class<?>> staticImports = new HashSet<>();
+    private final ImportCustomizer importCustomizer = new ImportCustomizer();
+    private final CachedClassLoader ccl = new CachedClassLoader();
 
     protected GroovySandbox(URL[] scriptEnvironment) {
         if (scriptEnvironment == null || scriptEnvironment.length == 0) {
@@ -65,15 +66,6 @@ public abstract class GroovySandbox {
         }
     }
 
-    protected void registerStaticImports(Class<?>... classes) {
-        Objects.requireNonNull(classes);
-        if (classes.length == 0) {
-            throw new IllegalArgumentException("Static imports must not be empty!");
-        }
-
-        Collections.addAll(staticImports, classes);
-    }
-
     protected void startRunning() {
         this.running.set(true);
     }
@@ -83,9 +75,10 @@ public abstract class GroovySandbox {
     }
 
     protected GroovyScriptEngine createScriptEngine() {
-        GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment, Launch.classLoader);
+        GroovyScriptEngine engine = new GroovyScriptEngine(this.scriptEnvironment, this.ccl);
         CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT);
         config.setSourceEncoding("UTF-8");
+        config.addCompilationCustomizers(this.importCustomizer);
         engine.setConfig(config);
         initEngine(engine, config);
         return engine;
@@ -156,13 +149,11 @@ public abstract class GroovySandbox {
             // the superclass of class files is Object
             if (clazz.getSuperclass() != Script.class && shouldRunFile(classFile)) {
                 executedClasses.add(classFile);
-                Script script = InvokerHelper.createScript(clazz, binding);
-                if (run) runScript(script);
             }
         }
     }
 
-    protected void runScript(Script script){
+    protected void runScript(Script script) {
         setCurrentScript(script.getClass().getName());
         script.run();
         setCurrentScript(null);
@@ -216,8 +207,8 @@ public abstract class GroovySandbox {
         return bindings;
     }
 
-    public Set<Class<?>> getStaticImports() {
-        return staticImports;
+    public ImportCustomizer getImportCustomizer() {
+        return importCustomizer;
     }
 
     public String getCurrentScript() {
@@ -226,6 +217,10 @@ public abstract class GroovySandbox {
 
     protected void setCurrentScript(String currentScript) {
         this.currentScript = currentScript;
+    }
+
+    public CachedClassLoader getClassLoader() {
+        return ccl;
     }
 
     public static String getRelativePath(String source) {

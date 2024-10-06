@@ -44,6 +44,14 @@ public class Builder {
         this.registrationMethods = gatherRegistrationMethods(builderClass);
     }
 
+    private static List<Property> getPropertyAnnotationsFromClassRecursive(Class<?> clazz) {
+        List<Property> list = new ArrayList<>();
+        Collections.addAll(list, clazz.getAnnotationsByType(Property.class));
+        Class<?> superclass = clazz.getSuperclass();
+        if (superclass != null) list.addAll(getPropertyAnnotationsFromClassRecursive(superclass));
+        return list;
+    }
+
     private static Map<String, FieldDocumentation> gatherFields(Class<?> builderClass, RecipeBuilderDescription annotation, String langLocation) {
         Map<String, FieldDocumentation> fields = new HashMap<>();
         List<Field> allFields = getAllFields(builderClass);
@@ -51,8 +59,8 @@ public class Builder {
             List<Property> annotations = Stream.of(
                             // Attached to the builder method's requirements field, an uncommon location for specific overrides
                             Arrays.stream(annotation.requirement()).filter(r -> r.property().equals(field.getName())),
-                            // Attached to the class, to create/override requirements set in the parent
-                            Arrays.stream(builderClass.getAnnotationsByType(Property.class)).filter(r -> r.property().equals(field.getName())),
+                            // Attached to the class or any parent classes, to create/override requirements set in the parent
+                            getPropertyAnnotationsFromClassRecursive(builderClass).stream().filter(r -> r.property().equals(field.getName())),
                             // Attached to the field, the typical place for property information to be created
                             Arrays.stream(field.getAnnotationsByType(Property.class)).filter(r -> {
                                 if (r.property().isEmpty() || r.property().equals(field.getName())) return true;
@@ -275,15 +283,18 @@ public class Builder {
                     out.append(fieldDocumentation.getDescription());
 
                     if (fieldDocumentation.hasComparison()) {
-                        out.append(" ").append(I18n.format("groovyscript.wiki.requires", fieldDocumentation.getComparison()));
+                        var value = fieldDocumentation.getComparison();
+                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
                     }
 
                     if (fieldDocumentation.hasRequirement()) {
-                        out.append(" ").append(I18n.format("groovyscript.wiki.requires", fieldDocumentation.getRequirement()));
+                        var value = fieldDocumentation.getRequirement();
+                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
                     }
 
                     if (fieldDocumentation.hasDefaultValue()) {
-                        out.append(" ").append(I18n.format("groovyscript.wiki.default", fieldDocumentation.getDefaultValue()));
+                        var value = fieldDocumentation.getDefaultValue();
+                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.default", value));
                     }
 
                     out.append("\n\n");
@@ -330,6 +341,14 @@ public class Builder {
 
     private static class FieldDocumentation implements Comparable<FieldDocumentation> {
 
+        private static final Function<List<String>, String> SERIAL_COMMA_LIST = list -> {
+            int last = list.size() - 1;
+            if (last < 1) return String.join("", list);
+            var and = " " + I18n.format("groovyscript.wiki.and") + " ";
+            if (last == 1) return String.join(and, list);
+            return String.join("," + and, String.join(", ", list.subList(0, last)), list.get(last));
+        };
+
         private final Field field;
         private final String langLocation;
         private final List<Property> annotations;
@@ -340,6 +359,18 @@ public class Builder {
             this.langLocation = langLocation;
             this.annotations = annotations;
             this.firstAnnotation = annotations.get(0);
+        }
+
+        private static String parseComparisonRequirements(Comp comp, EnumSet<Comp.Type> usedTypes) {
+            return usedTypes.stream().sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
+                case GT -> comp.gt();
+                case GTE -> comp.gte();
+                case EQ -> comp.eq();
+                case LTE -> comp.lte();
+                case LT -> comp.lt();
+                case NOT -> comp.not();
+                case UNI -> Documentation.translate(comp.unique());
+            })).collect(Collectors.collectingAndThen(Collectors.toList(), SERIAL_COMMA_LIST));
         }
 
         public Field getField() {
@@ -379,12 +410,21 @@ public class Builder {
         }
 
         public boolean hasComparison() {
-            return annotations.stream().anyMatch(x -> x.valid().length != 0);
+            return true; //annotations.stream().anyMatch(x -> x.comp().types().length != 0 || x.valid().length != 0);
         }
 
+        @SuppressWarnings({"deprecation", "SimplifyOptionalCallChains"})
         public String getComparison() {
             Optional<Comp[]> comparison = annotations.stream().map(Property::valid).filter(valid -> valid.length != 0).findFirst();
-            if (!comparison.isPresent()) return "";
+            if (!comparison.isPresent()) {
+                for (var property : annotations) {
+                    var usedTypes = Comp.Type.getUsedTypes(property.comp());
+                    if (!usedTypes.isEmpty()) {
+                        return FieldDocumentation.parseComparisonRequirements(property.comp(), usedTypes);
+                    }
+                }
+                return "";
+            }
             return Arrays.stream(comparison.get())
                     .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
                     .map(x -> Documentation.translate(x.type().getKey(), x.value()))

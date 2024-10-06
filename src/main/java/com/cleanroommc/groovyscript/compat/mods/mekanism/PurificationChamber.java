@@ -54,9 +54,9 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
         return found;
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
-    @Property(property = "gasInput", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "gasInput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends GasRecipeBuilder<PurificationRecipe> {
 
         @Override

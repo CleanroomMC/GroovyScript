@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
@@ -41,19 +42,31 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
 
     @Override
     public void onReload() {
-        removeScripted().forEach(pair -> getRegistry().removeVariation(pair.getValue(), pair.getKey()));
-        restoreFromBackup().forEach(pair -> getRegistry().addVariation(pair.getKey(), CarvingUtils.variationFor(pair.getValue(), 0)));
-
         groupStorage.restoreFromBackup().forEach(group -> getRegistry().addGroup(CarvingUtils.getDefaultGroupFor(group)));
         groupStorage.removeScripted().forEach(getRegistry()::removeGroup);
 
-        soundStorage.restoreFromBackup().forEach(pair -> getRegistry().setVariationSound(pair.getKey(), pair.getValue()));
+        removeScripted().forEach(pair -> {
+            if (getRegistry().getGroup(pair.getKey()) != null) getRegistry().removeVariation(pair.getValue(), pair.getKey());
+        });
+        restoreFromBackup().forEach(pair -> {
+            if (getRegistry().getGroup(pair.getKey()) != null) getRegistry().addVariation(pair.getKey(), CarvingUtils.variationFor(pair.getValue(), 0));
+        });
+
+        soundStorage.restoreFromBackup().forEach(pair -> {
+            if (getRegistry().getGroup(pair.getKey()) != null) getRegistry().setVariationSound(pair.getKey(), pair.getValue());
+        });
     }
 
     @MethodDescription(example = {@Example("'demo', item('minecraft:diamond_block')"),
                                   @Example("'demo', item('chisel:antiblock:3')"),
                                   @Example("'demo', item('minecraft:sea_lantern')")}, type = MethodDescription.Type.ADDITION)
     public void addVariation(String groupName, ItemStack item) {
+        if (IngredientHelper.overMaxSize(item, 1)) {
+            GroovyLog.msg("Error adding Chisel Carving").error()
+                     .add("Item must have stack size of 1, got {}", item.getCount())
+                     .post();
+            return;
+        }
         try {
             getRegistry().addVariation(groupName, CarvingUtils.variationFor(item, 0));
             addScripted(Pair.of(groupName, item));

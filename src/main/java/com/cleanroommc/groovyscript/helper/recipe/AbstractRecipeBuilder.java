@@ -1,12 +1,14 @@
 package com.cleanroommc.groovyscript.helper.recipe;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.helper.ingredient.FluidStackList;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import net.minecraft.item.ItemStack;
@@ -158,16 +160,27 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     public void validateFluids(GroovyLog.Msg msg, int minFluidInput, int maxFluidInput, int minFluidOutput, int maxFluidOutput) {
         fluidInput.trim();
         fluidOutput.trim();
-        msg.add(fluidInput.size() < minFluidInput || fluidInput.size() > maxFluidInput, () -> getRequiredString(minFluidInput, maxFluidInput, "fluid input") + ", but found " + fluidInput.size());
-        msg.add(fluidOutput.size() < minFluidOutput || fluidOutput.size() > maxFluidOutput, () -> getRequiredString(minFluidOutput, maxFluidOutput, "fluid output") + ", but found " + fluidOutput.size());
+        validateCustom(msg, fluidInput, minFluidInput, maxFluidInput, "fluid input");
+        validateCustom(msg, fluidOutput, minFluidOutput, maxFluidOutput, "fluid output");
+    }
+
+    @GroovyBlacklist
+    protected int getMaxItemInput() {
+        return Integer.MAX_VALUE;
     }
 
     @GroovyBlacklist
     public void validateItems(GroovyLog.Msg msg, int minInput, int maxInput, int minOutput, int maxOutput) {
         input.trim();
         output.trim();
-        msg.add(input.size() < minInput || input.size() > maxInput, () -> getRequiredString(minInput, maxInput, "item input") + ", but found " + input.size());
-        msg.add(output.size() < minOutput || output.size() > maxOutput, () -> getRequiredString(minOutput, maxOutput, "item output") + ", but found " + output.size());
+        validateCustom(msg, input, minInput, maxInput, "item input");
+        validateCustom(msg, output, minOutput, maxOutput, "item output");
+        if (GroovyScriptConfig.compat.checkInputStackCounts) {
+            int maxAmountAllowed = getMaxItemInput();
+            for (IIngredient ingredient : input) {
+                msg.add(IngredientHelper.overMaxSize(ingredient, maxAmountAllowed), "Expected stack size of {} for {}, got {}", maxAmountAllowed, ingredient, ingredient.getAmount());
+            }
+        }
     }
 
     @GroovyBlacklist
@@ -181,8 +194,13 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     }
 
     @GroovyBlacklist
-    public void validateCustom(GroovyLog.Msg msg, Collection<?> collection, int min, int max, String type) {
-        msg.add(collection.size() < min || collection.size() > max, () -> getRequiredString(min, max, type) + ", but found " + collection.size());
+    public static void validateCustom(GroovyLog.Msg msg, Collection<?> collection, int min, int max, String type) {
+        validateCustom(msg, collection.size(), min, max, type);
+    }
+
+    @GroovyBlacklist
+    public static void validateCustom(GroovyLog.Msg msg, int size, int min, int max, String type) {
+        msg.add(size < min || size > max, () -> getRequiredString(min, max, type) + ", but found " + size);
     }
 
     protected static String getRequiredString(int min, int max, String type) {

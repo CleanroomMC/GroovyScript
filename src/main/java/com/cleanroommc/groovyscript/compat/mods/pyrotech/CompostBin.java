@@ -65,12 +65,12 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         }
     }
 
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompostBinRecipe> {
 
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "1"))
+        @Property(comp = @Comp(gte = 1))
         private int compostValue;
 
         @RecipeBuilderMethodDescription
@@ -82,6 +82,12 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Compost Bin Recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // The composting bin won't accept any item that has a stack size of more than 1
+            return 1;
         }
 
         @Override

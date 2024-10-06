@@ -22,8 +22,8 @@ import com.cleanroommc.groovyscript.network.NetworkUtils;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.*;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
-import com.cleanroommc.groovyscript.sandbox.security.GrSMetaClassCreationHandle;
-import com.cleanroommc.groovyscript.server.GroovyScriptLanguageServer;
+import com.cleanroommc.groovyscript.sandbox.meta.GrSMetaClassCreationHandle;
+import com.cleanroommc.groovyscript.server.GroovyScriptLanguageServerImpl;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovySystem;
@@ -106,6 +106,7 @@ public class GroovyScript {
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
         GroovySystem.getMetaClassRegistry().setMetaClassCreationHandle(GrSMetaClassCreationHandle.INSTANCE);
+        GroovySystem.getMetaClassRegistry().getMetaClassCreationHandler().setDisableCustomMetaClassLookup(true);
         GroovyDeobfMapper.init();
         LinkGeneratorHooks.init();
         ReloadableRegistryManager.init();
@@ -332,7 +333,7 @@ public class GroovyScript {
 
     public static boolean runLanguageServer() {
         if (languageServerThread != null) return false;
-        languageServerThread = new Thread(() -> GroovyScriptLanguageServer.listen(getSandbox().getScriptRoot()));
+        languageServerThread = new Thread(() -> GroovyScriptLanguageServerImpl.listen(getSandbox().getScriptRoot()));
         languageServerThread.start();
         return true;
     }

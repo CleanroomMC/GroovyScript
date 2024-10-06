@@ -111,8 +111,13 @@ public class Centrifuge extends ForestryRegistry<ICentrifugeRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
-            validateFluids(msg, 0, 0, 0, 0);
+            validateFluids(msg);
             validateItems(msg, 1, 1, 0, 0);
             msg.add(outputs.isEmpty() || outputs.size() > 9, "Must have 1 - 9 outputs. got {}.", outputs.size());
         }

@@ -129,7 +129,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<InfusionRecipe> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private IIngredient mainInput;
         @Property
         private String researchKey;
@@ -197,9 +197,17 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed in each pedestal
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 100, 1, 1);
             msg.add(IngredientHelper.isEmpty(mainInput), () -> "Main Input must not be empty");
+            // More than 1 item cannot be placed
+            msg.add(IngredientHelper.overMaxSize(mainInput, 1), () -> "Main input amount must be 1");
             if (researchKey == null) {
                 researchKey = "";
             }

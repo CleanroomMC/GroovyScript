@@ -5,17 +5,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
 @RegistryDescription
-public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe> {
+public class Hopper extends StandardListRegistry<HopperInteractions.HopperRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".name('betterwithmods:iron_bar').input(ore('sand')).output(item('minecraft:clay')).inWorldItemOutput(item('minecraft:gold_ingot'))"),
@@ -26,30 +25,13 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> HopperInteractions.RECIPES.removeIf(r -> r == recipe));
-        HopperInteractions.RECIPES.addAll(restoreFromBackup());
-    }
-
-    public HopperInteractions.HopperRecipe add(HopperInteractions.HopperRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            HopperInteractions.RECIPES.add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(HopperInteractions.HopperRecipe recipe) {
-        if (HopperInteractions.RECIPES.removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<HopperInteractions.HopperRecipe> getRecipes() {
+        return HopperInteractions.RECIPES;
     }
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByOutput(IIngredient output) {
-        return HopperInteractions.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -62,7 +44,7 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByInput(IIngredient input) {
-        return HopperInteractions.RECIPES.removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack item : r.getInputs().getMatchingStacks()) {
                 if (input.test(item)) {
                     addBackup(r);
@@ -73,23 +55,12 @@ public class Hopper extends VirtualizedRegistry<HopperInteractions.HopperRecipe>
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<HopperInteractions.HopperRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(HopperInteractions.RECIPES).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        HopperInteractions.RECIPES.forEach(this::addBackup);
-        HopperInteractions.RECIPES.clear();
-    }
-
-    @Property(property = "name", value = "groovyscript.wiki.betterwithmods.hopper.name.value", valid = @Comp(value = "null", type = Comp.Type.NOT))
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+    @Property(property = "name", value = "groovyscript.wiki.betterwithmods.hopper.name.value", comp = @Comp(not = "null"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<HopperInteractions.HopperRecipe> {
 
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+        @Property(comp = @Comp(gte = 0, lte = 2))
         protected final ItemStackList inWorldItemOutput = new ItemStackList();
 
         @RecipeBuilderMethodDescription

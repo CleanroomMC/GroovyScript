@@ -7,53 +7,36 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
+public class Turntable extends StandardListRegistry<TurntableRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:gold_block')).outputBlock(blockstate('minecraft:clay')).output(item('minecraft:gold_ingot') * 5).rotations(5)"),
             @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot')).rotations(2)")
     })
-        @RecipeBuilderMethodDescription
+    @RecipeBuilderMethodDescription
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> BWRegistry.TURNTABLE.getRecipes().removeIf(r -> r == recipe));
-        BWRegistry.TURNTABLE.getRecipes().addAll(restoreFromBackup());
-    }
-
-    public TurntableRecipe add(TurntableRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            BWRegistry.TURNTABLE.getRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(TurntableRecipe recipe) {
-        if (BWRegistry.TURNTABLE.getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<TurntableRecipe> getRecipes() {
+        return BWRegistry.TURNTABLE.getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:clay_ball')"))
     public boolean removeByOutput(IIngredient output) {
-        return BWRegistry.TURNTABLE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -66,7 +49,7 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
 
     @MethodDescription(example = @Example("item('betterwithmods:unfired_pottery')"))
     public boolean removeByInput(IIngredient input) {
-        return BWRegistry.TURNTABLE.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInput().getMatchingStacks()) {
                 if (input.test(itemstack)) {
                     addBackup(r);
@@ -77,18 +60,7 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<TurntableRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(BWRegistry.TURNTABLE.getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BWRegistry.TURNTABLE.getRecipes().forEach(this::addBackup);
-        BWRegistry.TURNTABLE.getRecipes().clear();
-    }
-
-    @Property(property = "output", valid = {@Comp(value = "0", type = Comp.Type.GTE), @Comp(value = "2", type = Comp.Type.LTE)})
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 2))
     public static class RecipeBuilder extends AbstractRecipeBuilder<TurntableRecipe> {
 
         @Property
@@ -144,6 +116,12 @@ public class Turntable extends VirtualizedRegistry<TurntableRecipe> {
         @Override
         public String getErrorMsg() {
             return "Error adding Better With Mods Turntable recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // Uses blocks to craft
+            return 1;
         }
 
         @Override

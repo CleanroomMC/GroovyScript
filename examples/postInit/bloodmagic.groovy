@@ -28,7 +28,6 @@ mods.bloodmagic.alchemy_array.recipeBuilder()
     .register()
 
 
-
 // Alchemy Table:
 // Converts up to 6 input items into an output itemstack, with configurable time, minimum tier of Blood Orb required, and
 // Life Essence drained from the Orb network.
@@ -52,7 +51,6 @@ mods.bloodmagic.alchemy_table.recipeBuilder()
     .tier(5)
     .drain(25000)
     .register()
-
 
 
 // Blood Altar:
@@ -82,7 +80,6 @@ mods.bloodmagic.blood_altar.recipeBuilder()
     .register()
 
 
-
 // Meteor:
 // Throwing an input catalyst atop an activated Mark of the Falling Tower Ritual will spawn a meteor made of the given
 // components, size, explosion strength, and Life Essence cost.
@@ -110,7 +107,6 @@ mods.bloodmagic.meteor.recipeBuilder()
     .register()
 
 
-
 // Sacrificial:
 // How much Life Essence is gained when using the Sacrificial Dagger on a mob.
 
@@ -123,7 +119,6 @@ mods.bloodmagic.sacrificial.recipeBuilder()
     .entity('minecraft:enderman')
     .value(1000)
     .register()
-
 
 
 // Tartaric Forge:
@@ -148,7 +143,6 @@ mods.bloodmagic.tartaric_forge.recipeBuilder()
     .drain(200)
     .minimumSouls(500)
     .register()
-
 
 
 // Tranquility:
@@ -176,6 +170,5 @@ mods.bloodmagic.tranquility.recipeBuilder()
     .tranquility('LAVA')
     .value(500)
     .register()
-
 
 

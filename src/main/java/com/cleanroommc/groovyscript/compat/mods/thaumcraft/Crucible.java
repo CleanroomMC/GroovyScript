@@ -125,9 +125,9 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
 
         @Property
         private String researchKey;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GT))
+        @Property(comp = @Comp(gt = 0))
         private final AspectList aspects = new AspectList();
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private IIngredient catalyst;
 
         @RecipeBuilderMethodDescription
@@ -186,6 +186,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 0, 0, 1, 1);
             msg.add(IngredientHelper.isEmpty(catalyst), () -> "Catalyst must not be empty");
+            msg.add(IngredientHelper.overMaxSize(catalyst, 1), () -> "Catalyst amount must be 1");
             msg.add(aspects.size() == 0, () -> "Aspects must not be empty");
             if (researchKey == null) researchKey = "";
         }

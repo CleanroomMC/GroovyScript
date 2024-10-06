@@ -21,7 +21,6 @@ mods.botania.apothecary.recipeBuilder()
     .register()
 
 
-
 // Brew Effect:
 // Creates a custom brew, but not a recipe for the brew.
 
@@ -66,10 +65,8 @@ mods.botania.elven_trade.recipeBuilder()
     .register()
 
 
-
 // Magnet:
 // Add or remove items from the magnet blacklist.
-
 
 mods.botania.magnet.addToBlacklist(item('minecraft:diamond'))
 
@@ -87,7 +84,6 @@ mods.botania.mana_infusion.recipeBuilder()
     .mana(500)
     .catalyst(blockstate('minecraft:stone'))
     .register()
-
 
 
 // Orechid:
@@ -127,7 +123,6 @@ mods.botania.pure_daisy.recipeBuilder()
     .register()
 
 
-
 // Rune Altar:
 // Converts a items inputs into an item output at the cost of mana when a Livingrock item is thrown atop the altar and
 // right clicked with a Wand of the Forest.
@@ -142,7 +137,6 @@ mods.botania.rune_altar.recipeBuilder()
     .output(item('minecraft:diamond'))
     .mana(500)
     .register()
-
 
 
 // Lexicon Knowledge:
@@ -192,7 +186,5 @@ mods.botania.entry.entryBuilder()
     .knowledgeType(newType)
     .page(mods.botania.lexicon.page.createTextPage('groovy.exampleTextPage'))
     .register()
-
-
 
 

@@ -5,9 +5,8 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.inspirations.InspirationsRegistryAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import knightminer.inspirations.library.InspirationsRegistry;
 import knightminer.inspirations.library.recipe.cauldron.*;
 import net.minecraft.item.EnumDyeColor;
@@ -22,13 +21,14 @@ import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.util.RecipeMatch;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
 @RegistryDescription(
         admonition = @Admonition("groovyscript.wiki.inspirations.cauldron.note")
 )
-public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
+public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
 
     private static boolean checkRecipeMatches(ISimpleCauldronRecipe recipe, IIngredient input, ItemStack output, Object inputState, Object outputState) {
         // Check all relevant parts to determine if we need to match them and if they do match.
@@ -86,7 +86,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
     }
 
     @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay')).fluidInput(fluid('milk'), fluid('lava'))"), requirement = {
-            @Property(property = "fluidInput", valid = @Comp("2")),
+            @Property(property = "fluidInput", comp = @Comp(eq = 2)),
             @Property(property = "output")
     })
     public RecipeBuilder recipeBuilderMix() {
@@ -116,7 +116,7 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).levels(2)"), requirement = {
             @Property(property = "input"),
             @Property(property = "output"),
-            @Property(property = "inputPotion", valid = {@Comp("0"), @Comp("1")}),
+            @Property(property = "inputPotion", comp = @Comp(gte = 0, lte = 1)),
             @Property(property = "boiling"),
             @Property(property = "levels")
     })
@@ -135,50 +135,37 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> InspirationsRegistryAccessor.getCauldronRecipes().remove(recipe));
-        InspirationsRegistryAccessor.getCauldronRecipes().addAll(restoreFromBackup());
-    }
-
-    public void add(ICauldronRecipe recipe) {
-        addScripted(recipe);
-        InspirationsRegistry.addCauldronRecipe(recipe);
-    }
-
-    public boolean remove(ICauldronRecipe recipe) {
-        if (InspirationsRegistryAccessor.getCauldronRecipes().contains(recipe)) return false;
-        addBackup(recipe);
-        InspirationsRegistryAccessor.getCauldronRecipes().remove(recipe);
-        return true;
+    public Collection<ICauldronRecipe> getRecipes() {
+        return InspirationsRegistryAccessor.getCauldronRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:ghast_tear')"))
     public void removeByInput(IIngredient input) {
-        for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
+        for (ICauldronRecipe recipe : getRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, input, null, null, null))
                 .collect(Collectors.toList())) {
             addBackup(recipe);
-            InspirationsRegistryAccessor.getCauldronRecipes().remove(recipe);
+            getRecipes().remove(recipe);
         }
     }
 
     @MethodDescription(example = @Example("item('minecraft:piston')"))
     public void removeByOutput(ItemStack output) {
-        for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
+        for (ICauldronRecipe recipe : getRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, null, output, null, null))
                 .collect(Collectors.toList())) {
             addBackup(recipe);
-            InspirationsRegistryAccessor.getCauldronRecipes().remove(recipe);
+            getRecipes().remove(recipe);
         }
     }
 
     @MethodDescription
     public void removeByFluidInput(Fluid input) {
-        for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
+        for (ICauldronRecipe recipe : getRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, null, null, input, null))
                 .collect(Collectors.toList())) {
             addBackup(recipe);
-            InspirationsRegistryAccessor.getCauldronRecipes().remove(recipe);
+            getRecipes().remove(recipe);
         }
     }
 
@@ -189,11 +176,11 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
 
     @MethodDescription
     public void removeByFluidOutput(Fluid output) {
-        for (ICauldronRecipe recipe : InspirationsRegistryAccessor.getCauldronRecipes().stream()
+        for (ICauldronRecipe recipe : getRecipes().stream()
                 .filter(r -> r instanceof ISimpleCauldronRecipe && checkRecipeMatches((ISimpleCauldronRecipe) r, null, null, null, output))
                 .collect(Collectors.toList())) {
             addBackup(recipe);
-            InspirationsRegistryAccessor.getCauldronRecipes().remove(recipe);
+            getRecipes().remove(recipe);
         }
     }
 
@@ -202,42 +189,29 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         removeByFluidOutput(output.getFluid());
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        InspirationsRegistryAccessor.getCauldronRecipes().forEach(this::addBackup);
-        InspirationsRegistryAccessor.getCauldronRecipes().clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<ICauldronRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(InspirationsRegistryAccessor.getCauldronRecipes())
-                .setRemover(this::remove);
-    }
-
-    @Property(property = "input", valid = @Comp("1"), needsOverride = true)
-    @Property(property = "output", valid = @Comp("1"), needsOverride = true)
-    @Property(property = "fluidInput", valid = @Comp("1"), needsOverride = true)
-    @Property(property = "fluidOutput", valid = @Comp("1"), needsOverride = true)
+    @Property(property = "input", comp = @Comp(eq = 1), needsOverride = true)
+    @Property(property = "output", comp = @Comp(eq = 1), needsOverride = true)
+    @Property(property = "fluidInput", comp = @Comp(eq = 1), needsOverride = true)
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1), needsOverride = true)
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICauldronRecipe> {
 
         @Property(needsOverride = true)
         private RecipeType type;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
+        @Property(comp = @Comp(not = "null"), needsOverride = true)
         private PotionType inputPotion;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
+        @Property(comp = @Comp(not = "null"), needsOverride = true)
         private PotionType outputPotion;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
+        @Property(comp = @Comp(not = "null"), needsOverride = true)
         private EnumDyeColor dye;
         @Property(needsOverride = true)
         private Boolean boiling;
-        @Property(valid = {@Comp(value = "0", type = Comp.Type.GTE),
-                           @Comp(value = "`InspirationsRegistry.getCauldronMax()`", type = Comp.Type.LTE)}, needsOverride = true)
+        @Property(comp = @Comp(gte = 0, unique = "groovyscript.wiki.inspirations.cauldron.levels.required"), needsOverride = true)
         private int levels;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT), needsOverride = true)
+        @Property(comp = @Comp(not = "null"), needsOverride = true)
         private SoundEvent sound;
 
         public static RecipeMatch recipeMatchFromIngredient(IIngredient ingredient, int amount) {
-            return RecipeMatch.of(Arrays.stream(ingredient.getMatchingStacks()).collect(Collectors.toList()), amount, 1);
+            return RecipeMatch.of(Arrays.asList(ingredient.getMatchingStacks()), amount, 1);
         }
 
         public static RecipeMatch recipeMatchFromIngredient(IIngredient ingredient) {
@@ -345,6 +319,11 @@ public class Cauldron extends VirtualizedRegistry<ICauldronRecipe> {
         @Override
         public String getErrorMsg() {
             return "Error adding Inspirations Cauldron recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

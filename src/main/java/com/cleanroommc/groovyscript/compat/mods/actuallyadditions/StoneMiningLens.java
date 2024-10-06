@@ -1,19 +1,19 @@
 package com.cleanroommc.groovyscript.compat.mods.actuallyadditions;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import de.ellpeck.actuallyadditions.api.recipe.WeightedOre;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class StoneMiningLens extends VirtualizedRegistry<WeightedOre> {
+public class StoneMiningLens extends StandardListRegistry<WeightedOre> {
 
     @RecipeBuilderDescription(example = {
             @Example(".ore(ore('blockDiamond')).weight(100)"),
@@ -24,29 +24,14 @@ public class StoneMiningLens extends VirtualizedRegistry<WeightedOre> {
     }
 
     @Override
-    @GroovyBlacklist
-    public void onReload() {
-        removeScripted().forEach(ActuallyAdditionsAPI.STONE_ORES::remove);
-        ActuallyAdditionsAPI.STONE_ORES.addAll(restoreFromBackup());
+    public Collection<WeightedOre> getRecipes() {
+        return ActuallyAdditionsAPI.STONE_ORES;
     }
 
     public WeightedOre add(String oreName, int weight) {
         WeightedOre recipe = new WeightedOre(oreName, weight);
         add(recipe);
         return recipe;
-    }
-
-    public void add(WeightedOre recipe) {
-        if (recipe == null) return;
-        addScripted(recipe);
-        ActuallyAdditionsAPI.STONE_ORES.add(recipe);
-    }
-
-    public boolean remove(WeightedOre recipe) {
-        if (recipe == null) return false;
-        addBackup(recipe);
-        ActuallyAdditionsAPI.STONE_ORES.remove(recipe);
-        return true;
     }
 
     @MethodDescription(example = @Example("ore('oreCoal')"))
@@ -56,7 +41,7 @@ public class StoneMiningLens extends VirtualizedRegistry<WeightedOre> {
 
     @MethodDescription(example = @Example("'oreLapis'"))
     public boolean removeByOre(String oreName) {
-        return ActuallyAdditionsAPI.STONE_ORES.removeIf(recipe -> {
+        return getRecipes().removeIf(recipe -> {
             boolean found = oreName.equals(recipe.name);
             if (found) {
                 addBackup(recipe);
@@ -65,24 +50,11 @@ public class StoneMiningLens extends VirtualizedRegistry<WeightedOre> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ActuallyAdditionsAPI.STONE_ORES.forEach(this::addBackup);
-        ActuallyAdditionsAPI.STONE_ORES.clear();
-    }
-
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<WeightedOre> streamRecipes() {
-        return new SimpleObjectStream<>(ActuallyAdditionsAPI.STONE_ORES)
-                .setRemover(this::remove);
-    }
-
-
     public static class RecipeBuilder extends AbstractRecipeBuilder<WeightedOre> {
 
-        @Property(valid = @Comp(type = Comp.Type.NOT, value = "null"))
+        @Property(comp = @Comp(not = "null"))
         private String ore;
-        @Property(valid = @Comp(type = Comp.Type.GTE, value = "0"))
+        @Property(comp = @Comp(gte = 0))
         private int weight;
 
         @RecipeBuilderMethodDescription

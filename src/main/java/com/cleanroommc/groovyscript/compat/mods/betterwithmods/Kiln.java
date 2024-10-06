@@ -7,16 +7,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 @RegistryDescription
-public class Kiln extends VirtualizedRegistry<KilnRecipe> {
+public class Kiln extends StandardListRegistry<KilnRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).heat(2)"),
@@ -27,30 +27,13 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
     }
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> BWRegistry.KILN.getRecipes().removeIf(r -> r == recipe));
-        BWRegistry.KILN.getRecipes().addAll(restoreFromBackup());
-    }
-
-    public KilnRecipe add(KilnRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            BWRegistry.KILN.getRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(KilnRecipe recipe) {
-        if (BWRegistry.KILN.getRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
+    public Collection<KilnRecipe> getRecipes() {
+        return BWRegistry.KILN.getRecipes();
     }
 
     @MethodDescription(example = @Example("item('minecraft:brick')"))
     public boolean removeByOutput(IIngredient output) {
-        return BWRegistry.KILN.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getOutputs()) {
                 if (output.test(itemstack)) {
                     addBackup(r);
@@ -63,7 +46,7 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:end_stone')"))
     public boolean removeByInput(IIngredient input) {
-        return BWRegistry.KILN.getRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             for (ItemStack itemstack : r.getInput().getMatchingStacks()) {
                 if (input.test(itemstack)) {
                     addBackup(r);
@@ -74,18 +57,7 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<KilnRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(BWRegistry.KILN.getRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        BWRegistry.KILN.getRecipes().forEach(this::addBackup);
-        BWRegistry.KILN.getRecipes().clear();
-    }
-
-    @Property(property = "output", valid = {@Comp(value = "1", type = Comp.Type.GTE), @Comp(value = "3", type = Comp.Type.LTE)})
+    @Property(property = "output", comp = @Comp(gte = 1, lte = 3))
     public static class RecipeBuilder extends AbstractRecipeBuilder<KilnRecipe> {
 
         @Property
@@ -147,6 +119,12 @@ public class Kiln extends VirtualizedRegistry<KilnRecipe> {
         @Override
         public String getErrorMsg() {
             return "Error adding Better With Mods Kiln recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            // Uses blocks to craft
+            return 1;
         }
 
         @Override

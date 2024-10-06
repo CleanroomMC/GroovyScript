@@ -5,7 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import io.github.phantamanta44.libnine.LibNine;
 import io.github.phantamanta44.threng.recipe.AggRecipe;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class Aggregator extends VirtualizedRegistry<AggRecipe> {
+public class Aggregator extends StandardListRegistry<AggRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockGlass'), item('minecraft:diamond')).output(item('minecraft:diamond') * 4)"),
@@ -25,29 +25,14 @@ public class Aggregator extends VirtualizedRegistry<AggRecipe> {
         return new RecipeBuilder();
     }
 
-    private static Collection<AggRecipe> recipes() {
-        return LibNine.PROXY.getRecipeManager().getRecipeList(AggRecipe.class).recipes();
-    }
-
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipes()::remove);
-        restoreFromBackup().forEach(recipes()::add);
-    }
-
-    public void add(AggRecipe recipe) {
-        recipes().add(recipe);
-        addScripted(recipe);
-    }
-
-    public void remove(AggRecipe recipe) {
-        recipes().remove(recipe);
-        addBackup(recipe);
+    public Collection<AggRecipe> getRecipes() {
+        return LibNine.PROXY.getRecipeManager().getRecipeList(AggRecipe.class).recipes();
     }
 
     @MethodDescription(example = @Example("item('appliedenergistics2:material:45')"))
     public void removeByInput(IIngredient input) {
-        recipes().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (recipe.input().getInputs().stream().anyMatch(x -> Arrays.stream(input.getMatchingStacks()).anyMatch(x))) {
                 addBackup(recipe);
                 return true;
@@ -58,7 +43,7 @@ public class Aggregator extends VirtualizedRegistry<AggRecipe> {
 
     @MethodDescription(example = @Example("item('appliedenergistics2:material:7')"))
     public void removeByOutput(IIngredient output) {
-        recipes().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput().getOutput())) {
                 addBackup(recipe);
                 return true;
@@ -67,19 +52,18 @@ public class Aggregator extends VirtualizedRegistry<AggRecipe> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        recipes().forEach(this::addBackup);
-        recipes().clear();
-    }
-
-    @Property(property = "input", valid = {@Comp(type = Comp.Type.GTE, value = "1"), @Comp(type = Comp.Type.LTE, value = "3")})
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 3))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<AggRecipe> {
 
         @Override
         public String getErrorMsg() {
             return "Error adding Lazy AE2 Aggregator recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

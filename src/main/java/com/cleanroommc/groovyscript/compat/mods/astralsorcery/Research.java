@@ -176,13 +176,13 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         private final List<IJournalPage> pages = new ArrayList<>();
         @Property
         private final List<ResearchNode> connections = new ArrayList<>();
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private ResearchProgression category;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private ItemStack node;
-        @Property(ignoresInheritedMethods = true, valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(ignoresInheritedMethods = true, comp = @Comp(not = "null"))
         private String name;
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private Point location;
 
         @RecipeBuilderMethodDescription(field = "category")

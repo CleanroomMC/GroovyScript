@@ -2,7 +2,7 @@ package net.prominic.groovyls.config;
 
 import groovy.lang.GroovyClassLoader;
 import net.prominic.groovyls.compiler.control.GroovyLSCompilationUnit;
-import net.prominic.groovyls.compiler.control.io.StringReaderSourceWithURI;
+import net.prominic.groovyls.compiler.control.StringReaderSourceWithURI;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.SourceUnit;
 

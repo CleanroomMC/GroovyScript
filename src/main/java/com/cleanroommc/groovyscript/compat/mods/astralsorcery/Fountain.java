@@ -1,22 +1,21 @@
 package com.cleanroommc.groovyscript.compat.mods.astralsorcery;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.FluidRarityEntryAccessor;
 import com.cleanroommc.groovyscript.core.mixin.astralsorcery.FluidRarityRegistryAccessor;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Collection;
 
 @RegistryDescription
-public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarityEntry> {
+public class Fountain extends StandardListRegistry<FluidRarityRegistry.FluidRarityEntry> {
 
     @RecipeBuilderDescription(example = @Example(".fluid(fluid('astralsorcery.liquidstarlight')).rarity(10000000).minimumAmount(4000000).variance(1000000)"))
     public FountainChanceHelper chanceHelper() {
@@ -24,54 +23,39 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
     }
 
     @Override
-    @GroovyBlacklist
-    @ApiStatus.Internal
-    public void onReload() {
-        removeScripted().forEach(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList()::remove);
-        restoreFromBackup().forEach(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList()::add);
+    public Collection<FluidRarityRegistry.FluidRarityEntry> getRecipes() {
+        return ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList();
     }
 
     @Override
     public void afterScriptLoad() {
         // If the rarity list is empty, generating new chunks will cause a NPE. To prevent this, we add a "water" entry that will always have 0mb inside,
         // which causes it to be marked as empty, and thus not be interactable.
-        if (((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().isEmpty()) {
+        if (getRecipes().isEmpty()) {
             FluidRarityRegistry.FluidRarityEntry errorBlocker = FluidRarityEntryAccessor.createFluidRarityEntry("water", 1, 0, 0);
-            ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().add(errorBlocker);
+            getRecipes().add(errorBlocker);
             addScripted(errorBlocker);
         }
     }
 
     @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add0", type = MethodDescription.Type.ADDITION)
-    public void add(FluidRarityRegistry.FluidRarityEntry entry) {
-        addScripted(entry);
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().add(entry);
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add1", type = MethodDescription.Type.ADDITION)
     public void add(FluidStack fluid, int rarity, int guaranteedAmt, int addRand) {
         this.add(fluid.getFluid(), rarity, guaranteedAmt, addRand);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add2", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add1", type = MethodDescription.Type.ADDITION)
     public void add(Fluid fluid, int rarity, int guaranteedAmt, int addRand) {
         this.add(FluidRarityEntryAccessor.createFluidRarityEntry(fluid, rarity, guaranteedAmt, addRand));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove0")
-    public boolean remove(FluidRarityRegistry.FluidRarityEntry entry) {
-        addBackup(entry);
-        return ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().removeIf(fluidRarityEntry -> fluidRarityEntry == entry);
-    }
-
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove1",example = @Example("fluid('lava')"))
+    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove0", example = @Example("fluid('lava')"))
     public void remove(FluidStack entry) {
         this.remove(entry.getFluid());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove2")
+    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove1")
     public void remove(Fluid entry) {
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().removeIf(fluidRarityEntry -> {
+        getRecipes().removeIf(fluidRarityEntry -> {
             if (fluidRarityEntry.fluid != null && fluidRarityEntry.fluid.equals(entry)) {
                 addBackup(fluidRarityEntry);
                 return true;
@@ -80,27 +64,15 @@ public class Fountain extends VirtualizedRegistry<FluidRarityRegistry.FluidRarit
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<FluidRarityRegistry.FluidRarityEntry> streamRecipes() {
-        return new SimpleObjectStream<>(((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList())
-                .setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().forEach(this::addBackup);
-        ((FluidRarityRegistryAccessor) FluidRarityRegistry.INSTANCE).getRarityList().clear();
-    }
-
     public static class FountainChanceHelper implements IRecipeBuilder<FluidRarityRegistry.FluidRarityEntry> {
 
-        @Property(valid = @Comp(value = "null", type = Comp.Type.NOT))
+        @Property(comp = @Comp(not = "null"))
         private Fluid fluid;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int rarity;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int minimumAmount;
-        @Property(valid = @Comp(value = "0", type = Comp.Type.GTE))
+        @Property(comp = @Comp(gte = 0))
         private int variance;
 
         @RecipeBuilderMethodDescription

@@ -22,7 +22,6 @@ mods.astralsorcery.chalice_interaction.recipeBuilder()
     .register()
 
 
-
 // Constellation:
 // Create a custom Constellation.
 
@@ -67,7 +66,6 @@ mods.astralsorcery.constellation.signatureItems()
     .register()
 
 
-
 // Fountain:
 // Adds virtual aquifers that can be accessed via the Evershifting Fountain's Necromantic Prime.
 
@@ -80,7 +78,6 @@ mods.astralsorcery.fountain.chanceHelper()
     .minimumAmount(4000000)
     .variance(1000000)
     .register()
-
 
 
 // Grindstone:
@@ -103,7 +100,6 @@ mods.astralsorcery.grindstone.recipeBuilder()
     .output(item('minecraft:cobblestone'))
     .weight(5)
     .register()
-
 
 
 // Infusion Altar:
@@ -155,6 +151,8 @@ mods.astralsorcery.light_transmutation.recipeBuilder()
     .register()
 
 
+mods.astralsorcery.light_transmutation.setStarmetalReplacementState(blockstate('minecraft:clay'))
+
 // Lightwell:
 // Converts an input item into fluid, with a chance at breaking every time fluid is produced. The amount of fluid produced
 // per interval can be increased via starlight.
@@ -178,7 +176,6 @@ mods.astralsorcery.lightwell.recipeBuilder()
     .productionMultiplier(1.0F)
     .shatterMultiplier(15.0F)
     .register()
-
 
 
 // Perk Tree:

@@ -10,6 +10,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+/**
+ * Controls the name and aliases of registries.
+ * <p>
+ * If the empty constructor is used or null is passed in, the method {@link Alias#generateOfClass(Object)} will be called
+ * with {@code this} as the parameter to create the list of aliases.
+ * <p>
+ * If the aliases generated from this are undesired or do not contain all desired aliases, a collection of strings may be passed in instead.
+ * It is suggested to use {@link Alias} to generate this list.
+ * <p>
+ * The name will be the first parameter of the aliases, in lower case form.
+ *
+ * @see Alias
+ */
 public abstract class NamedRegistry implements INamed {
 
     protected final String name;

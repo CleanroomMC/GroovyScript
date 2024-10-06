@@ -5,7 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import io.github.phantamanta44.libnine.LibNine;
 import io.github.phantamanta44.threng.recipe.PurifyRecipe;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RegistryDescription
-public class Centrifuge extends VirtualizedRegistry<PurifyRecipe> {
+public class Centrifuge extends StandardListRegistry<PurifyRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(ore('blockGlass')).output(item('minecraft:diamond'))"),
@@ -24,29 +24,14 @@ public class Centrifuge extends VirtualizedRegistry<PurifyRecipe> {
         return new RecipeBuilder();
     }
 
-    private static Collection<PurifyRecipe> recipes() {
-        return LibNine.PROXY.getRecipeManager().getRecipeList(PurifyRecipe.class).recipes();
-    }
-
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipes()::remove);
-        restoreFromBackup().forEach(recipes()::add);
-    }
-
-    public void add(PurifyRecipe recipe) {
-        recipes().add(recipe);
-        addScripted(recipe);
-    }
-
-    public void remove(PurifyRecipe recipe) {
-        recipes().remove(recipe);
-        addBackup(recipe);
+    public Collection<PurifyRecipe> getRecipes() {
+        return LibNine.PROXY.getRecipeManager().getRecipeList(PurifyRecipe.class).recipes();
     }
 
     @MethodDescription(example = @Example("item('appliedenergistics2:material')"))
     public void removeByInput(IIngredient input) {
-        recipes().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (Arrays.stream(input.getMatchingStacks()).anyMatch(recipe.input().getMatcher())) {
                 addBackup(recipe);
                 return true;
@@ -57,7 +42,7 @@ public class Centrifuge extends VirtualizedRegistry<PurifyRecipe> {
 
     @MethodDescription(example = @Example("item('appliedenergistics2:material:4')"))
     public void removeByOutput(IIngredient output) {
-        recipes().removeIf(recipe -> {
+        getRecipes().removeIf(recipe -> {
             if (output.test(recipe.getOutput().getOutput())) {
                 addBackup(recipe);
                 return true;
@@ -66,19 +51,18 @@ public class Centrifuge extends VirtualizedRegistry<PurifyRecipe> {
         });
     }
 
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        recipes().forEach(this::addBackup);
-        recipes().clear();
-    }
-
-    @Property(property = "input", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<PurifyRecipe> {
 
         @Override
         public String getErrorMsg() {
             return "Error adding Lazy AE2 Centrifuge recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

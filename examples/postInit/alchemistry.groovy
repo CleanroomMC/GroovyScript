@@ -23,7 +23,6 @@ mods.alchemistry.atomizer.recipeBuilder()
     .register()
 
 
-
 // Chemical Combiner:
 // Converts up to 9 input itemstacks into an output itemstack.
 
@@ -110,7 +109,6 @@ mods.alchemistry.evaporator.recipeBuilder()
     .register()
 
 
-
 // Liquifier:
 // Converts an input itemstack into an output fluidstack, consuming a set amount of power.
 
@@ -127,6 +125,5 @@ mods.alchemistry.liquifier.recipeBuilder()
     .input(item('minecraft:magma'))
     .fluidOutput(fluid('lava') * 750)
     .register()
-
 
 

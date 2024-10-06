@@ -29,8 +29,8 @@ mods.prodigytech.atomic_reshaper.recipeBuilder()
 // Uses an explosive, a dampener, and an optional reagent to convert items. The power value of all recipes, all explosives,
 // and all dampeners should be close to avoid an efficiency loss.
 
-// mods.prodigytech.explosion_furnace.removeAll()
 mods.prodigytech.explosion_furnace.removeByOutput(item('prodigytech:ferramic_ingot'))
+// mods.prodigytech.explosion_furnace.removeAll()
 
 mods.prodigytech.explosion_furnace.recipeBuilder()
     .input(ore('ingotGold'), item('minecraft:diamond'))
@@ -49,10 +49,10 @@ mods.prodigytech.explosion_furnace.recipeBuilder()
 // Explosion Furnace Additives:
 // Turn an item into an explosive or into a dampener when inserted into the Explosion Furnace.
 
-// mods.prodigytech.explosion_furnace_additives.removeAllDampeners()
-// mods.prodigytech.explosion_furnace_additives.removeAllExplosives()
 mods.prodigytech.explosion_furnace_additives.removeDampener(ore('dustAsh'))
 mods.prodigytech.explosion_furnace_additives.removeExplosive(ore('gunpowder'))
+// mods.prodigytech.explosion_furnace_additives.removeAllDampeners()
+// mods.prodigytech.explosion_furnace_additives.removeAllExplosives()
 
 mods.prodigytech.explosion_furnace_additives.addDampener(item('minecraft:stone'), 50)
 mods.prodigytech.explosion_furnace_additives.addExplosive(item('minecraft:cobblestone'), 50)

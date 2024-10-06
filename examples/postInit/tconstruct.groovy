@@ -65,7 +65,6 @@ mods.tconstruct.drying.recipeBuilder()
     .register()
 
 
-
 // Entity Melting:
 // Allows mobs to create a bit of fluid when hurt by the Smeltery.
 
@@ -87,7 +86,6 @@ mods.tconstruct.melting.recipeBuilder()
     .fluidOutput(fluid('lava') * 25)
     .time(80)
     .register()
-
 
 
 // Smeltery Fuel:

@@ -6,20 +6,20 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 @RegistryDescription
-public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
+public class Evaporator extends StandardListRegistry<EvaporatorRecipe> {
 
     @Override
-    public void onReload() {
-        removeScripted().forEach(recipe -> ModRecipes.INSTANCE.getEvaporatorRecipes().removeIf(r -> r == recipe));
-        ModRecipes.INSTANCE.getEvaporatorRecipes().addAll(restoreFromBackup());
+    public Collection<EvaporatorRecipe> getRecipes() {
+        return ModRecipes.INSTANCE.getEvaporatorRecipes();
     }
 
     @RecipeBuilderDescription(example = {
@@ -35,25 +35,9 @@ public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
         return recipeBuilder().fluidInput(input).output(output).register();
     }
 
-    public EvaporatorRecipe add(EvaporatorRecipe recipe) {
-        if (recipe != null) {
-            addScripted(recipe);
-            ModRecipes.INSTANCE.getEvaporatorRecipes().add(recipe);
-        }
-        return recipe;
-    }
-
-    public boolean remove(EvaporatorRecipe recipe) {
-        if (ModRecipes.INSTANCE.getEvaporatorRecipes().removeIf(r -> r == recipe)) {
-            addBackup(recipe);
-            return true;
-        }
-        return false;
-    }
-
     @MethodDescription(example = @Example("item('alchemistry:mineral_salt')"))
     public boolean removeByOutput(IIngredient output) {
-        return ModRecipes.INSTANCE.getEvaporatorRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (output.test(r.getOutput())) {
                 addBackup(r);
                 return true;
@@ -64,7 +48,7 @@ public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
 
     @MethodDescription(example = @Example("fluid('lava')"))
     public boolean removeByInput(FluidStack input) {
-        return ModRecipes.INSTANCE.getEvaporatorRecipes().removeIf(r -> {
+        return getRecipes().removeIf(r -> {
             if (r.getInput().isFluidEqual(input)) {
                 addBackup(r);
                 return true;
@@ -73,19 +57,8 @@ public class Evaporator extends VirtualizedRegistry<EvaporatorRecipe> {
         });
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY)
-    public SimpleObjectStream<EvaporatorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(ModRecipes.INSTANCE.getEvaporatorRecipes()).setRemover(this::remove);
-    }
-
-    @MethodDescription(priority = 2000, example = @Example(commented = true))
-    public void removeAll() {
-        ModRecipes.INSTANCE.getEvaporatorRecipes().forEach(this::addBackup);
-        ModRecipes.INSTANCE.getEvaporatorRecipes().clear();
-    }
-
-    @Property(property = "fluidInput", valid = @Comp("1"))
-    @Property(property = "output", valid = @Comp("1"))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<EvaporatorRecipe> {
 
         @Override
