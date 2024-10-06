@@ -81,6 +81,13 @@ mods.magneticraft.hydraulic_press.recipeBuilder()
     .register()
 
 mods.magneticraft.hydraulic_press.recipeBuilder()
+    .input(item('minecraft:gold_ingot'))
+    .output(item('minecraft:diamond'))
+    .ticks(50)
+    .medium()
+    .register()
+
+mods.magneticraft.hydraulic_press.recipeBuilder()
     .input(item('minecraft:diamond'))
     .output(item('minecraft:clay'))
     .ticks(100)

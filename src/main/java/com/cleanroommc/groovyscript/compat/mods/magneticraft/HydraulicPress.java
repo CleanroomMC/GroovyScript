@@ -20,6 +20,7 @@ public class HydraulicPress extends StandardListRegistry<IHydraulicPressRecipe> 
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).ticks(50)"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).ticks(50).medium()"),
             @Example(value = ".input(item('minecraft:diamond')).output(item('minecraft:clay')).ticks(100).mode(HydraulicPressMode.HEAVY)", imports = "com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode")
     })
     public RecipeBuilder recipeBuilder() {
@@ -73,6 +74,24 @@ public class HydraulicPress extends StandardListRegistry<IHydraulicPressRecipe> 
         @RecipeBuilderMethodDescription
         public RecipeBuilder mode(HydraulicPressMode mode) {
             this.mode = mode;
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "mode")
+        public RecipeBuilder light() {
+            this.mode = HydraulicPressMode.LIGHT;
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "mode")
+        public RecipeBuilder medium() {
+            this.mode = HydraulicPressMode.MEDIUM;
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription(field = "mode")
+        public RecipeBuilder heavy() {
+            this.mode = HydraulicPressMode.HEAVY;
             return this;
         }
 
