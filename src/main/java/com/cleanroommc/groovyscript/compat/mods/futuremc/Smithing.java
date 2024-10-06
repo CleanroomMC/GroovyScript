@@ -33,12 +33,12 @@ public class Smithing extends StandardListRegistry<SmithingRecipe> {
             @Example("item('minecraft:diamond_hoe')"), @Example(value = "item('futuremc:netherite_ingot')", commented = true),
     })
     public void removeByInput(IIngredient input) {
-        getRecipes().removeIf(r -> Arrays.stream(r.getInput().getMatchingStacks()).anyMatch(input) && addBackup(r));
+        getRecipes().removeIf(r -> Arrays.stream(r.getInput().getMatchingStacks()).anyMatch(input) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("item('futuremc:netherite_pickaxe')"))
     public void removeByOutput(IIngredient output) {
-        getRecipes().removeIf(r -> output.test(r.getOutput()) && addBackup(r));
+        getRecipes().removeIf(r -> output.test(r.getOutput()) && doAddBackup(r));
     }
 
     @Property(property = "input", comp = @Comp(eq = 2))

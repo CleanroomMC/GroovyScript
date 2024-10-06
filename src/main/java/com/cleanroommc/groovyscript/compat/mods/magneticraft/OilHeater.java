@@ -30,12 +30,12 @@ public class OilHeater extends StandardListRegistry<IOilHeaterRecipe> {
 
     @MethodDescription(example = @Example("fluid('oil')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(r -> input.test(r.getInput()) && addBackup(r));
+        return getRecipes().removeIf(r -> input.test(r.getInput()) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("fluid('steam')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> output.test(r.getOutput()) && addBackup(r));
+        return getRecipes().removeIf(r -> output.test(r.getOutput()) && doAddBackup(r));
     }
 
     @Property(property = "fluidInput", comp = @Comp(eq = 1))

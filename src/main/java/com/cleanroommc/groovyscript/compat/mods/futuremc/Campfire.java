@@ -31,12 +31,12 @@ public class Campfire extends StandardListRegistry<CampfireRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:fish')"))
     public void removeByInput(IIngredient input) {
-        getRecipes().removeIf(r -> Arrays.stream(r.getInput().getMatchingStacks()).anyMatch(input) && addBackup(r));
+        getRecipes().removeIf(r -> Arrays.stream(r.getInput().getMatchingStacks()).anyMatch(input) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("item('minecraft:cooked_mutton')"))
     public void removeByOutput(IIngredient output) {
-        getRecipes().removeIf(r -> output.test(r.getOutput()) && addBackup(r));
+        getRecipes().removeIf(r -> output.test(r.getOutput()) && doAddBackup(r));
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

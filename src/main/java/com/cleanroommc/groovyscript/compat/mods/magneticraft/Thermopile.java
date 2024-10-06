@@ -37,7 +37,7 @@ public class Thermopile extends StandardListRegistry<IThermopileRecipe> {
 
     @MethodDescription(example = @Example("blockstate('minecraft:ice')"))
     public boolean removeByInput(IBlockState input) {
-        return getRecipes().removeIf(r -> input == r.getBlockState() && addBackup(r));
+        return getRecipes().removeIf(r -> input == r.getBlockState() && doAddBackup(r));
     }
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<IThermopileRecipe> {

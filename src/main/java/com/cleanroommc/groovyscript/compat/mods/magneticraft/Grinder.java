@@ -31,12 +31,12 @@ public class Grinder extends StandardListRegistry<IGrinderRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:iron_ore')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(r -> input.test(r.getInput()) && addBackup(r));
+        return getRecipes().removeIf(r -> input.test(r.getInput()) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("item('minecraft:gravel')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> (output.test(r.getPrimaryOutput()) || output.test(r.getSecondaryOutput())) && addBackup(r));
+        return getRecipes().removeIf(r -> (output.test(r.getPrimaryOutput()) || output.test(r.getSecondaryOutput())) && doAddBackup(r));
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

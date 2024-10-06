@@ -38,12 +38,12 @@ public class CrushingTable extends StandardListRegistry<ICrushingTableRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:iron_ore')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(r -> input.test(r.getInput()) && addBackup(r));
+        return getRecipes().removeIf(r -> input.test(r.getInput()) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("item('minecraft:gunpowder')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> output.test(r.getOutput()) && addBackup(r));
+        return getRecipes().removeIf(r -> output.test(r.getOutput()) && doAddBackup(r));
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

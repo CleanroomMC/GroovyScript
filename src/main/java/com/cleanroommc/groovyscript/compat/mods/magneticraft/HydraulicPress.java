@@ -42,17 +42,17 @@ public class HydraulicPress extends StandardListRegistry<IHydraulicPressRecipe> 
 
     @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(r -> input.test(r.getInput()) && addBackup(r));
+        return getRecipes().removeIf(r -> input.test(r.getInput()) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("item('minecraft:cobblestone')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> output.test(r.getOutput()) && addBackup(r));
+        return getRecipes().removeIf(r -> output.test(r.getOutput()) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example(value = "HydraulicPressMode.MEDIUM", imports = "com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode"))
     public boolean removeByMode(HydraulicPressMode mode) {
-        return getRecipes().removeIf(r -> mode == r.getMode() && addBackup(r));
+        return getRecipes().removeIf(r -> mode == r.getMode() && doAddBackup(r));
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

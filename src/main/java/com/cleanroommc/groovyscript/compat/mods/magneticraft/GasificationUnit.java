@@ -38,12 +38,12 @@ public class GasificationUnit extends StandardListRegistry<IGasificationUnitReci
 
     @MethodDescription
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(r -> input.test(r.getInput()) && addBackup(r));
+        return getRecipes().removeIf(r -> input.test(r.getInput()) && doAddBackup(r));
     }
 
     @MethodDescription
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> (output.test(r.getItemOutput()) || output.test(r.getFluidOutput())) && addBackup(r));
+        return getRecipes().removeIf(r -> (output.test(r.getItemOutput()) || output.test(r.getFluidOutput())) && doAddBackup(r));
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

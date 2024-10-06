@@ -34,12 +34,12 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:sand')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(r -> input.test(r.getInput()) && addBackup(r));
+        return getRecipes().removeIf(r -> input.test(r.getInput()) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("item('minecraft:quartz')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> (output.test(r.getPrimary()) || output.test(r.getSecondary()) || output.test(r.getTertiary())) && addBackup(r));
+        return getRecipes().removeIf(r -> (output.test(r.getPrimary()) || output.test(r.getSecondary()) || output.test(r.getTertiary())) && doAddBackup(r));
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

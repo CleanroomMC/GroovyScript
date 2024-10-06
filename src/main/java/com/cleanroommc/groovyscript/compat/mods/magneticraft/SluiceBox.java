@@ -35,12 +35,12 @@ public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:sand')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(r -> input.test(r.getInput()) && addBackup(r));
+        return getRecipes().removeIf(r -> input.test(r.getInput()) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("item('minecraft:cobblestone')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> r.getOutputs().stream().map(Pair::getFirst).anyMatch(output) && addBackup(r));
+        return getRecipes().removeIf(r -> r.getOutputs().stream().map(Pair::getFirst).anyMatch(output) && doAddBackup(r));
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))
